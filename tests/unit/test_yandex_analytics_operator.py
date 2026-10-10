@@ -77,7 +77,23 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "technical_issues",
         # 2026-10-09: суточные пользователи, поисковые входы по страницам, запросы
         "daily_users", "search_landing_pages", "popular_queries",
+        # 2026-10-10: поисковые визиты по дням и поисковым системам
+        "daily_search",
     }
+
+
+def test_popular_queries_ask_for_clicks_and_positions_not_only_shows():
+    """До 2026-10-10 запрашивались только показы — клики не приходили вовсе."""
+    seen = {}
+
+    class Provider(StubProvider):
+        def get_webmaster_report(self, host_id, resource, params=None):
+            seen[resource] = params
+            return super().get_webmaster_report(host_id, resource, params)
+
+    analytics_collect._popular_queries(Provider(), "https:example.com:443")
+    assert seen["popular_queries"]["query_indicator"] == [
+        "TOTAL_SHOWS", "TOTAL_CLICKS", "AVG_SHOW_POSITION", "AVG_CLICK_POSITION"]
 
 
 def test_measured_values_carry_the_sampling_flag():

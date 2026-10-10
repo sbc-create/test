@@ -464,6 +464,17 @@ sources:
       Адрес — только из external_links Shikimori того же ID; перед чтением robots.txt
       проверяется для нашего User-Agent и ИИ-агентов. Проверено: degarashiouji.com и
       ntv.co.jp/hunterhunter — разрешают; v.qq.com — запрещает ClaudeBot, не читается.
+  - id: SRC-YA-WEBMASTER-POPULAR-QUERIES
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/webmaster/doc/ru/reference/host-search-queries-popular
+    retrieved_at: "2026-10-10T08:21:22Z"
+    sha256: c451a5e786cf7383563909bd0f24e568418efaff9f0df4976d0d13166b571b5e
+    purpose: "индикаторы популярных запросов: показы, клики, средние позиции показа и клика"
+    status: approved
+    conclusions:
+      - "query_indicator принимает TOTAL_SHOWS, TOTAL_CLICKS, AVG_SHOW_POSITION, AVG_CLICK_POSITION (ApiQueryIndicator); параметр повторяемый."
+      - "Без TOTAL_CLICKS клики в ответе не приходят: кликабельность по снимкам до 2026-10-10 не измерена, а не равна нулю."
   - id: SRC-YA-METRIKA-DIM-ALL
     kind: official_documentation
     owner: Yandex
@@ -474,3 +485,4 @@ sources:
     status: approved
     conclusions:
       - "ym:s:date и ym:s:isRobot перечислены в справочнике группировок визитов."
+      - "ym:s:<attribution>SearchEngineRoot (поисковая система, например lastsign) перечислена там же — поисковые визиты по дням раздельно для Яндекса и Google."

@@ -166,6 +166,7 @@ metrika:
       # предполагаются.
       date: "ym:s:date"
       is_robot: "ym:s:isRobot"
+      search_engine: "ym:s:lastsignSearchEngineRoot"
       page_url: "ym:pv:URLPath"
     pageview_metrics_used:
       pageviews: "ym:pv:pageviews"
@@ -236,6 +237,7 @@ webmaster:
     search_urls_events: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/events/samples"
     search_urls_events_history: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/events/history"
     popular_queries: "GET /v4/user/{user-id}/hosts/{host-id}/search-queries/popular"
+    popular_queries_indicators: [TOTAL_SHOWS, TOTAL_CLICKS, AVG_SHOW_POSITION, AVG_CLICK_POSITION]
     external_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/external/samples"
     broken_internal_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/internal/broken/samples"
     diagnostics: "GET /v4/user/{user-id}/hosts/{host-id}/diagnostics"

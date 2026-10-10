@@ -100,8 +100,7 @@ WEBMASTER_RESOURCES = (
     # «страница ПОЯВИЛАСЬ в поиске», и `excluded_url_status` пуст. Прежний
     # заголовок приглашал прочитать 1507 появлений как 1507 исключений — а это
     # противоположный вывод о том, индексируется ли сайт.
-    ("excluded_pages", "События страниц в поиске: появления и исключения",
-     "search_urls_events"),
+    ("excluded_pages", "События страниц в поиске: появления и исключения", "search_urls_events"),
     ("external_links", "Внешние ссылки", "external_links"),
     ("technical_issues", "Технические проблемы", "diagnostics"),
 )
@@ -155,7 +154,8 @@ def _разметить_события(resource: str, payload):
     размеченное["samples_by_event"] = dict(sorted(по_событию.items()))
     размеченное["count_note"] = (
         "count — число СОБЫТИЙ в ленте (появления и исключения вместе), а не "
-        "число исключённых страниц; разбор по типу считан по образцам")
+        "число исключённых страниц; разбор по типу считан по образцам"
+    )
     return размеченное
 
 
@@ -302,6 +302,15 @@ def collect_domain(
     return out
 
 
+#: Окно суточных рядов: 14 дней, чтобы день сравнивался с тем же днём прошлой
+#: недели (2026-10-10: при окне 7 дней 01–02.10 для сравнения с 08–09.10 не было).
+DAILY_WINDOW_FROM = "14daysAgo"
+
+#: Индикаторы популярных запросов (SRC-YA-WEBMASTER-POPULAR-QUERIES). До
+#: 2026-10-10 запрашивались только показы — клики не приходили, и кликабельность
+#: не была измерена.
+QUERY_INDICATORS = ["TOTAL_SHOWS", "TOTAL_CLICKS", "AVG_SHOW_POSITION", "AVG_CLICK_POSITION"]
+
 #: Добавлено 2026-10-09 для цели «пользователей в сутки» и разбора поисковых
 #: входов: суточная разбивка с признаком робота и поисковые входы по страницам.
 EXTRA_METRIKA = (
@@ -314,6 +323,11 @@ EXTRA_METRIKA = (
         "search_landing_pages",
         "Поисковые входы по страницам",
         "ym:s:visits × lastsignTrafficSource × startURLPath",
+    ),
+    (
+        "daily_search",
+        "Поисковые визиты и пользователи по дням и поисковым системам",
+        "ym:s:users, ym:s:visits × ym:s:date × lastsignTrafficSource × lastsignSearchEngineRoot",
     ),
 )
 
@@ -331,7 +345,7 @@ def _metrika_daily_and_search(
     try:
         report = provider.get_metrica_report(
             counter_id,
-            date1=date1,
+            date1=DAILY_WINDOW_FROM,
             date2=date2,
             metrics=["ym:s:users", "ym:s:visits"],
             dimensions=["ym:s:date", "ym:s:isRobot"],
@@ -382,6 +396,39 @@ def _metrika_daily_and_search(
                 "search_landing_pages", EXTRA_METRIKA[1][1], exc.reason, EXTRA_METRIKA[1][2]
             )
         )
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=DAILY_WINDOW_FROM,
+            date2=date2,
+            metrics=["ym:s:users", "ym:s:visits"],
+            dimensions=[
+                "ym:s:date",
+                "ym:s:lastsignTrafficSource",
+                "ym:s:lastsignSearchEngineRoot",
+            ],
+            limit=1000,
+        )
+        rows = [
+            r
+            for r in report.get("data") or []
+            if ((r.get("dimensions") or [{}, {}])[1].get("id") == "organic")
+        ]
+        out.append(
+            Measurement(
+                key="daily_search",
+                title=EXTRA_METRIKA[2][1],
+                measured=True,
+                value=rows,
+                source=EXTRA_METRIKA[2][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured("daily_search", EXTRA_METRIKA[2][1], exc.reason, EXTRA_METRIKA[2][2])
+        )
     return out
 
 
@@ -391,7 +438,7 @@ def _popular_queries(provider, host_id: str) -> Measurement:
         payload = provider.get_webmaster_report(
             host_id,
             "popular_queries",
-            {"order_by": "TOTAL_SHOWS", "query_indicator": "TOTAL_SHOWS"},
+            {"order_by": "TOTAL_SHOWS", "query_indicator": QUERY_INDICATORS},
         )
         return Measurement(
             key="popular_queries",
