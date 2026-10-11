@@ -86,14 +86,18 @@ def _закрыть_индекс_в_теле(тело: bytes) -> bytes:
         текст = тело.decode("utf-8")
     except UnicodeDecodeError:
         return тело
-    найдено = _re.search(r'<meta name="robots" content="([^"]*)"\\s*/?>', текст)
+    # Поиск — регулярным выражением с \\s+, а выдаваемый тег берёт значение из
+    # _закрытые_роботы(): проверка проводки режима (indexing-mode-rules) требует,
+    # чтобы значение robots в рантайме вычислялось, а не было зашито строкой.
+    найдено = _re.search(r'<meta\\s+name="robots"\\s+content="([^"]*)"\\s*/?>', текст)
     if найдено:
         if "noindex" in найдено.group(1).lower():
             return тело
         новое = f'<meta name="robots" content="{{_закрытые_роботы(найдено.group(1))}}">'
         return (текст[:найдено.start()] + новое + текст[найдено.end():]).encode("utf-8")
     if "</head>" in текст:
-        return текст.replace("</head>", '<meta name="robots" content="noindex, follow"></head>', 1).encode("utf-8")
+        return текст.replace(
+            "</head>", f'<meta name="robots" content="{{_закрытые_роботы("")}}"></head>', 1).encode("utf-8")
     return тело
 '''
 
