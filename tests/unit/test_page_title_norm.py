@@ -162,12 +162,15 @@ def test_в_строгом_списке_H1_стоят_измеренные_ви�
     по разделам, потому что там один дефект жил в разном коде.
     """
     м = _модуль()
+    # К концу 11.10 — все двенадцать выложенных витрин сети.
+    assert len(м.П7_H1_СТРОГО) == 12
     assert set(м.П7_H1_СТРОГО) == {"lordserials22.info", "lordserial33.biz",
                                    "lordfilm47.space",
                                    "1lordserials1.online", "zonafilm.space",
                                    "zonafilm12.site", "an1mego.site",
                                    "animeg0.site", "an1meg0.site",
-                                   "animedia.icu", "animedia.space"}
+                                   "animedia.icu", "animedia.space",
+                                   "zonafilm.cc"}
 
 
 def test_норма_зовётся_из_замера_раздела():
