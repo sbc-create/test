@@ -39,6 +39,10 @@ MAPPING = {
     "seo-changes.json": "seo-changes.schema.json",
     # Блокеры редактора, не выводимые из данных: без доказательства не принимаются.
     "editor-coverage-blockers.json": "editor-coverage-blockers.schema.json",
+    # Защищённые редакционные поля: по этому реестру решают, возобновлять ли
+    # публикации, поэтому схема требует решения и причины у каждой записи —
+    # поле без решения это чьё-то мнение, а восстанавливать по мнению нельзя.
+    "editorial-protected-fields.json": "editorial-protected-fields.schema.json",
     "editor-run.json": "editor-run.schema.json",
 }
 
