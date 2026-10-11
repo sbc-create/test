@@ -2546,8 +2546,9 @@ def result_holds(
         if outcome in REVIEW_ON_NEW_SOURCES and policy and at and at < policy:
             continue
         urls.add(url)
+        домен = url.split("/")[2] if "//" in url else ""
         if outcome in NETWORK_WIDE or (
-            outcome in IDENTITY_OUTCOMES and shared_catalog_domain(url.split("/")[2] if "//" in url else "")
+            outcome in IDENTITY_OUTCOMES and shared_catalog_domain(домен)
         ):
             slugs.add(url.rsplit("/", 1)[-1])
     return urls, slugs
