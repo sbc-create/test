@@ -11,7 +11,7 @@
 | ручной запуск | `editor-run-manual.service` | `sudo systemctl start editor-run-manual.service`, метка `trigger=systemd-manual`, без шлюза |
 | запуск | `automation/host/editor/editor-run.sh` | `flock` (пересечения исключены), шлюз, Claude Code без интерфейса (`claude -p`), предел 25 мин, запись `var/editor-runs/<run_id>.*`; пропуски шлюза — `var/editor-runs/gate.jsonl` |
 | источники | `automation/local/source_fetch.py` | Shikimori API по ID каталога; официальный сайт по ссылке Shikimori с проверкой robots.txt; MAL не читается (D199) |
-| ход работы | `docs/editor/EDITOR_RUN_PROMPT.md` | ≤ 2 материала Animedia: задание из очереди или из `var/seo-regular/editor-candidates.json` → источник → текст → `prepare` → `publish` → результат → проверка страницы → строка журнала изменений |
+| ход работы | `docs/editor/EDITOR_RUN_PROMPT.md` | ≤ 3 материала (до 2026-10-11 — 2) Animedia: задание из очереди или из `var/seo-regular/editor-candidates.json` → источник → текст → `prepare` → `publish` → результат → проверка страницы → строка журнала изменений |
 | правила текста | `docs/editor/EDITORIAL_RULES.md` | без внутренних слов, без чисел серий у выходящих, сюжет только из синопсиса |
 | проверка | `seo_operator/editor_run.py` | пять следов: выдача задания, чтение источника (журнал моста), результат TEXT_WRITTEN, запись `publish` автора в history.jsonl, текст на публичной странице |
 | статус | `python3 -m seo_operator.cli editor-run-status` | запуски по расписанию и ручные — раздельно; `confirmed` только при полном запуске по расписанию |

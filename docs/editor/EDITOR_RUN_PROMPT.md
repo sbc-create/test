@@ -19,13 +19,14 @@
 * `systemctl`, `sudo`, `ssh` недоступны; состояние службы смотри в ответе
   моста (`environment.code.process_started_at`).
 
-Задача запуска — не больше ДВУХ материалов, только на доменах из поля
+Задача запуска — не больше ТРЁХ материалов (с 2026-10-11; партия из двух
+занимала ~13 мин и ~51 ход из 180), только на доменах из поля
 "domains" файла var/editor-runs/next.json: его пишет шлюз из того же списка, по
 которому выбирает работу, и только у этих сайтов подтверждены источник фактов,
 доставка и показ. Домена нет в "domains" — не публикуй на нём. У Zona и Lords файл
 правок сайта — поле editorial_store в ответе editorial_status, журнал
 публикаций — /srv/sites/lords/runtime/overlays/<домен>/; publish_material идёт
-без expect_generation. Два материала — это ДВА РАЗНЫХ произведения. Одно своё описание
+без expect_generation. Материалы запуска — РАЗНЫЕ произведения. Одно своё описание
 произведения на сеть: если у произведения уже есть наше описание на другом
 домене (history.jsonl хранилищ /srv/sites/animedia/runtime/overlays/<домен>/ и
 /srv/sites/lords/runtime/overlays/<домен>/),
@@ -36,7 +37,7 @@
 
 Все витрины Yummy (yummyani.site, yummyani.org, yummyani7.site, yummyani7.info,
 yummyani.biz) — только задания очереди (снимка каталога у Yummy
-нет, в next.json его адресов не бывает). ОДИН из двух материалов запуска бери
+нет, в next.json его адресов не бывает). ОДИН из материалов запуска бери
 оттуда: editorial_queue_next {"site": "<yummyani.site|yummyani.org>", "owner":
 "<владелец>", "limit": 1, "content_types": ["TITLE_DESCRIPTION"]} — limit строго
 1 (больший limit берёт в аренду чужие задания). Адрес карточки —
