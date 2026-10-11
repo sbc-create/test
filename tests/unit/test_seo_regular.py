@@ -1630,6 +1630,27 @@ def test_result_holds_separate_reasons(tmp_path):
     assert slugs2 == set() and "https://x.ru/title/film-1" not in urls2
 
 
+def test_identity_refusal_closes_the_work_across_the_shared_lords_zona_catalog(tmp_path):
+    """10.10: «Айнали», «Колода карт» и др. отклонялись IDENTITY_UNCLEAR на домене за доменом.
+
+    У Lords/Zona общий снимок поставщика: тот же слаг — та же запись. Вне общего
+    каталога отказ по-прежнему закрывает только свою карточку.
+    """
+    ev = tmp_path / "events.jsonl"
+    now = dt.datetime(2026, 10, 11, 9, 0, tzinfo=dt.timezone.utc)
+    rows = [
+        {"event": "task_registered", "task_id": "z", "canonical_url": "https://zonafilm.space/title/aynali"},
+        {"event": "task_result", "task_id": "z", "outcome": "IDENTITY_UNCLEAR", "at": "2026-10-10T19:00:00Z"},
+        {"event": "task_registered", "task_id": "a", "canonical_url": "https://animedia.icu/title/odin/"},
+        {"event": "task_result", "task_id": "a", "outcome": "IDENTITY_UNCLEAR", "at": "2026-10-10T19:00:00Z"},
+    ]
+    ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    urls, slugs = regular.result_holds(ev, now, policy_changed_at=dt.datetime(2026, 10, 1, tzinfo=dt.timezone.utc))
+    assert "aynali" in slugs, "общий каталог Lords/Zona: произведение закрыто на всех его доменах"
+    assert "odin" not in slugs and "https://animedia.icu/title/odin" in urls
+    assert regular.shared_catalog_domain("lordfilm47.space") and not regular.shared_catalog_domain("animedia.icu")
+
+
 def test_yummy_demand_candidates_pick_thin_or_empty_cards_with_search_entries(tmp_path):
     snap = tmp_path / "analytics-2026-10-10.json"
 

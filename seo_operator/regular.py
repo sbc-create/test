@@ -2488,6 +2488,17 @@ REVIEW_ON_NEW_SOURCES = ("SOURCES_MISSING", "IDENTITY_UNCLEAR")
 #: Исход, который закрывает ПРОИЗВЕДЕНИЕ во всей сети: источник фактов —
 #: свойство произведения, а не карточки. Идентичность — свойство карточки.
 NETWORK_WIDE = ("SOURCES_MISSING",)
+#: ...но у доменов с ОБЩИМ снимком поставщика (Lords и Zona строятся из одного
+#: каталога) карточка с тем же слагом — та же запись поставщика, и отказ в
+#: идентификации повторяется на каждом домене. За 10.10 редактор закрыл 30
+#: заданий Lords/Zona без единого текста, перебирая одни и те же фильмы
+#: («Прекрасный шум», «Айнали», «Колода карт», «Освобождение» …) по доменам.
+IDENTITY_OUTCOMES = ("IDENTITY_UNCLEAR", "IDENTITY_REJECTED")
+
+
+def shared_catalog_domain(domain: str) -> bool:
+    """Домен строится из общего снимка Lords/Zona (по идентификатору ячейки)."""
+    return str(EDITOR_SITES.get(domain, "")).startswith(("lords-", "zona-"))
 SOURCE_POLICY = REPO_ROOT / "config" / "editorial-sources.json"
 
 
@@ -2535,13 +2546,16 @@ def result_holds(
         if outcome in REVIEW_ON_NEW_SOURCES and policy and at and at < policy:
             continue
         urls.add(url)
-        if outcome in NETWORK_WIDE:
+        if outcome in NETWORK_WIDE or (
+            outcome in IDENTITY_OUTCOMES and shared_catalog_domain(url.split("/")[2] if "//" in url else "")
+        ):
             slugs.add(url.rsplit("/", 1)[-1])
     return urls, slugs
 
 
 def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
-    """Слаги, закрытые во всей сети (только «нет источника» у произведения)."""
+    """Слаги, закрытые во всей сети: «нет источника» у произведения и отказ в
+    идентификации на доменах с общим снимком Lords/Zona."""
     return result_holds(events_path, now)[1]
 
 
