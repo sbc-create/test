@@ -200,6 +200,8 @@ def main(argv=None) -> int:
     p.add_argument("action", choices=("discover", "test", "daily", "alerts"))
 
     sub.add_parser("editor-gate", help="лёгкая проверка: нужен ли запуск модели (без модели и сети)")
+    p = sub.add_parser("editor-held", help="закрыт ли адрес прежним отказом в пределах срока удержания")
+    p.add_argument("url")
     sub.add_parser("editor-run-status", help="запуски фонового редактора: по расписанию и ручные")
     p = sub.add_parser("editor-run-verify", help="проверить запуск фонового редактора по следам")
     p.add_argument("--run-id", required=True)
@@ -262,6 +264,23 @@ def main(argv=None) -> int:
                                       ensure_ascii=False, indent=1), encoding="utf-8")
         print(json.dumps({k: v for k, v in decision.items() if k != "next"}, ensure_ascii=False))
         return 10 if decision["run"] else 0
+    if args.command == "editor-held":
+        # Очередь повторяет SOURCES_MISSING через 24 ч и IDENTITY_UNCLEAR через
+        # 72 ч без изменения условий (handoff §15.5); фабрика держит их 14
+        # суток и открывает раньше только при новом реестре источников. Ответ
+        # «held» — повторный сбор фактов не нужен: закрыть тем же исходом.
+        import datetime as _dt
+
+        from seo_operator import regular
+
+        now = _dt.datetime.now(_dt.timezone.utc)
+        urls, slugs = regular.result_holds(regular.SOURCES["queue_events"], now)
+        ключ = args.url.rstrip("/").lower()
+        slug = ключ.rsplit("/", 1)[-1]
+        held = ключ in urls or slug in slugs
+        last = regular.last_outcome(regular.SOURCES["queue_events"], args.url) if held else None
+        print(json.dumps({"url": args.url, "held": held, "last": last}, ensure_ascii=False))
+        return 0
     if args.command == "editor-run-status":
         from seo_operator import editor_run
 

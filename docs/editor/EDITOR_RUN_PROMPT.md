@@ -234,6 +234,12 @@ publish_material (occurrences_in_main_block) и наличие текста на
    результатом или чужой арендой — пропусти и возьми следующий адрес; иначе
    editorial_queue_register (если задания нет) и editorial_queue_next. Список
    пуст или кончился — закончи с итогом NO_TASK.
+   ДО поиска источников: `python3 -m seo_operator.cli editor-held <адрес задания>`.
+   Если `held` = true и `last.outcome` — SOURCES_MISSING, IDENTITY_UNCLEAR или
+   IDENTITY_REJECTED, заверши задание тем же исходом с detail «повтор без
+   изменения условий: прежний отказ <last.at>, реестр источников не менялся;
+   <last.detail>» и бери следующее — очередь повторяет такие задания по таймеру
+   (handoff §15.5), а повторный сбор фактов стоил ~8 из ~50 ходов партии.
 2. Источники (D199, config/editorial-sources.json):
    * editorial_facts {"site", "slug"} — каталог сети;
    * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из

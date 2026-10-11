@@ -1700,3 +1700,18 @@ def test_work_key_joins_transliteration_variants_across_families():
         regular.work_key("taynaya-bitva-za-prestol-silneyshego-printsa-duraleya")
     )
     assert regular.work_key("proschay-lara") != regular.work_key("nevesta-demona")
+
+
+def test_last_outcome_returns_the_latest_result_for_the_url(tmp_path):
+    """editor-held: редактор закрывает повтор известного отказа без нового сбора фактов."""
+    ev = tmp_path / "events.jsonl"
+    rows = [
+        {"event": "task_registered", "task_id": "t", "canonical_url": "https://zonafilm12.site/title/aynali"},
+        {"event": "task_result", "task_id": "t", "outcome": "IDENTITY_UNCLEAR", "at": "2026-10-10T06:00:00Z"},
+        {"event": "task_result", "task_id": "t", "outcome": "SOURCES_MISSING", "at": "2026-10-11T13:38:41Z",
+         "detail": "нет статьи"},
+    ]
+    ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    got = regular.last_outcome(ev, "https://zonafilm12.site/title/aynali/")
+    assert got == {"outcome": "SOURCES_MISSING", "at": "2026-10-11T13:38:41Z", "detail": "нет статьи"}
+    assert regular.last_outcome(ev, "https://zonafilm12.site/title/drugoe") is None

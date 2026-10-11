@@ -2554,6 +2554,31 @@ def result_holds(
     return urls, slugs
 
 
+def last_outcome(events_path: Path, url: str) -> dict | None:
+    """Последний результат задания по адресу: исход, время, пояснение."""
+    ключ = url.rstrip("/").lower()
+    url_of: dict[str, str] = {}
+    last = None
+    try:
+        lines = events_path.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    for line in lines:
+        try:
+            e = json.loads(line)
+        except ValueError:
+            continue
+        if e.get("task_id") and e.get("canonical_url"):
+            url_of[e["task_id"]] = e["canonical_url"]
+        if e.get("event") != "task_result":
+            continue
+        адрес = (url_of.get(e.get("task_id")) or e.get("canonical_url") or "").rstrip("/").lower()
+        if адрес == ключ:
+            last = {"outcome": e.get("outcome"), "at": e.get("at"),
+                    "detail": str(e.get("detail") or "")[:300]}
+    return last
+
+
 def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
     """Слаги, закрытые во всей сети: «нет источника» у произведения и отказ в
     идентификации на доменах с общим снимком Lords/Zona."""
