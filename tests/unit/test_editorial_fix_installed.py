@@ -1,0 +1,268 @@
+"""Проверка установки правки записи правок: отличает установленное от нет.
+
+Повод — ошибка в собственном деле. В первой редакции команды установки шагом
+проверки стоял `post-integration-check.py`. Он печатает «внедрено во всех
+службах» и ДО установки: проверяет он права через живой канал, а не запись
+правок. То есть шаг проверки не проверял ничего, а отчёт по нему выглядел бы
+убедительно — ровно то, что правила проекта называют ошибкой отчёта, а не
+стилистикой.
+
+Проверка обязана быть различающей. Её свойства закрепляются здесь:
+
+* на дереве БЕЗ правки — ненулевой код и названная причина;
+* на дереве С правкой — нулевой;
+* наличия функции недостаточно: функция, которую издатель не зовёт, дефект не
+  закрывает, и текстовая проверка это ловит;
+* «не знаю» не равно «да»: без подтверждения перезапуска код ненулевой.
+
+Проверка только читает. Живой файл витрины подменяется временным, запись не
+выполняется вовсе.
+"""
+from __future__ import annotations
+
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+import pytest
+
+КОРЕНЬ = Path(__file__).resolve().parents[2]
+СЦЕНАРИЙ = КОРЕНЬ / "automation" / "local" / "editorial-fix-installed.py"
+
+
+def _модуль():
+    спец = importlib.util.spec_from_file_location("fix_installed", СЦЕНАРИЙ)
+    м = importlib.util.module_from_spec(спец)
+    sys.modules["fix_installed"] = м
+    спец.loader.exec_module(м)
+    return м
+
+
+ИЗДАТЕЛЬ_С_ПРАВКОЙ = '''
+import json, pathlib
+
+
+class _Реестр:
+    @staticmethod
+    def путь_доставки(s):
+        return ""
+
+
+registry = _Реестр()
+
+
+def _живые_правки(s):
+    живой = pathlib.Path(registry.путь_доставки(s))
+    try:
+        сырое = json.loads(живой.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    if str(сырое.get("site_id") or "") not in ("", s.site_id):
+        return {}
+    записи = сырое.get("overrides") or {}
+    return {str(к): v for к, v in записи.items() if isinstance(v, dict)}
+
+
+def публикация(s):
+    правки = {}
+    for ключ, запись in _живые_правки(s).items():
+        правки[ключ] = запись
+    return правки
+'''
+
+ИЗДАТЕЛЬ_БЕЗ_ПРАВКИ = '''
+class _Реестр:
+    @staticmethod
+    def путь_доставки(s):
+        return ""
+
+
+registry = _Реестр()
+
+
+def публикация(s):
+    return {}
+'''
+
+ИЗДАТЕЛЬ_ФУНКЦИЯ_БЕЗ_ВЫЗОВА = ИЗДАТЕЛЬ_С_ПРАВКОЙ.replace(
+    "    for ключ, запись in _живые_правки(s).items():\n"
+    "        правки[ключ] = запись\n", "    pass\n")
+
+
+def _дерево(корень: Path, издатель: str) -> Path:
+    (корень / "factory" / "qwen").mkdir(parents=True)
+    (корень / "factory" / "cell").mkdir(parents=True)
+    (корень / "factory" / "qwen" / "editorial.py").write_text(
+        издатель, encoding="utf-8")
+    (корень / "factory" / "cell" / "editorial_store.py").write_text(
+        "def собрать(*а, **к):\n    return {}\n", encoding="utf-8")
+    return корень
+
+
+def test_дерево_без_правки_даёт_ненулевой_код(tmp_path, capsys):
+    м = _модуль()
+    дерево = _дерево(tmp_path / "без", ИЗДАТЕЛЬ_БЕЗ_ПРАВКИ)
+    код = м.главное(["--tree", str(дерево), "--skip-service"])
+    вывод = capsys.readouterr().out
+    assert код == 1
+    assert "НЕ подтверждена" in вывод
+    assert "публикации возобновлять нельзя" in вывод
+
+
+def test_дерево_без_правки_называет_причину(tmp_path, capsys):
+    """Отказ без причины бесполезен: непонятно, что делать дальше."""
+    м = _модуль()
+    дерево = _дерево(tmp_path / "без", ИЗДАТЕЛЬ_БЕЗ_ПРАВКИ)
+    м.главное(["--tree", str(дерево), "--skip-service"])
+    вывод = capsys.readouterr().out
+    assert "правка не установлена" in вывод
+    assert "ручные поля исчезнут" in вывод
+
+
+def test_дерево_с_правкой_даёт_нулевой_код(tmp_path, capsys):
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+    код = м.главное(["--tree", str(дерево), "--skip-service"])
+    вывод = capsys.readouterr().out
+    assert код == 0, вывод
+    assert "установлена" in вывод
+
+
+def test_функция_есть_но_издатель_её_не_зовёт(tmp_path, capsys):
+    """Самый коварный случай: правка «на месте», а дефект жив.
+
+    Функция чтения живого файла может лежать в модуле и не вызываться из
+    публикации — тогда состав по-прежнему собирается из одних своих описаний.
+    Проверка наличия строки `_живые_правки` такое пропустила бы.
+    """
+    м = _модуль()
+    дерево = _дерево(tmp_path / "нев", ИЗДАТЕЛЬ_ФУНКЦИЯ_БЕЗ_ВЫЗОВА)
+    код = м.главное(["--tree", str(дерево), "--skip-service"])
+    вывод = capsys.readouterr().out
+    assert код == 1, вывод
+    assert "зовёт _живые_правки" in вывод
+
+
+def test_ручное_поле_и_авторство_проверяются_вызовом(tmp_path, capsys):
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+    м.живой_файл_читается(дерево)
+    вывод = capsys.readouterr().out
+    assert "РУЧНОЕ ПОЛЕ видно издателю" in вывод
+    assert "Ручное название" in вывод
+    assert "авторство ручного поля сохранено" in вывод
+
+
+def test_живой_файл_чужого_сайта_не_принимается(tmp_path):
+    """Правка не должна тащить правки соседней витрины — это cross-site.
+
+    Проверка пользуется той же функцией, что служба, поэтому её отказ от
+    чужого файла здесь тоже измерим.
+    """
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+    sys.path.insert(0, str(дерево))
+    издатель = m = importlib.util.module_from_spec(
+        importlib.util.spec_from_file_location(
+            "_чужой_издатель", дерево / "factory" / "qwen" / "editorial.py"))
+    importlib.util.spec_from_file_location(
+        "_чужой_издатель",
+        дерево / "factory" / "qwen" / "editorial.py").loader.exec_module(m)
+    файл = tmp_path / "чужой.json"
+    файл.write_text(json.dumps({
+        "site_id": "совсем-другая",
+        "overrides": {"слаг": {"fields": {"name": "чужое"}}}}),
+        encoding="utf-8")
+    издатель.registry.путь_доставки = lambda _s, _ф=файл: str(_ф)
+
+    class Витрина:
+        site_id = "проверка"
+        domain = "проверка.test"
+
+    assert издатель._живые_правки(Витрина()) == {}
+    assert м is not None
+
+
+def test_нечитаемый_живой_файл_не_роняет_проверку(tmp_path, capsys):
+    """Отсутствие файла — не повод для исключения: это пустой состав."""
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+    assert м.живой_файл_читается(дерево) in (True, False)
+    assert "живой файл" in capsys.readouterr().out
+
+
+def test_без_подтверждения_перезапуска_код_ненулевой(tmp_path, capsys,
+                                                     monkeypatch):
+    """«Не знаю» не равно «да».
+
+    Если `systemctl` недоступен или не дал времени запуска, правка может
+    лежать на диске, а в памяти работать прежний код. Пропускать такое
+    молча — значит разрешить публикации по непроверенному состоянию.
+    """
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+
+    def нет_systemctl(*_а, **_к):
+        raise FileNotFoundError("systemctl")
+
+    monkeypatch.setattr(м.subprocess, "run", нет_systemctl)
+    код = м.главное(["--tree", str(дерево)])
+    вывод = capsys.readouterr().out
+    assert код == 1
+    assert "systemctl недоступен" in вывод
+
+
+def test_служба_запущенная_до_правки_не_годится(tmp_path, capsys, monkeypatch):
+    """Правка на диске, в памяти прежний код — самый тихий из отказов."""
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+
+    class Итог:
+        returncode = 0
+        stdout = "ActiveEnterTimestamp=Fri 2020-01-01 00:00:00 UTC\n"
+
+    monkeypatch.setattr(м.subprocess, "run", lambda *_а, **_к: Итог())
+    код = м.главное(["--tree", str(дерево)])
+    вывод = capsys.readouterr().out
+    assert код == 1
+    assert "служба запущена ПОСЛЕ правки файлов" in вывод
+
+
+def test_служба_запущенная_после_правки_годится(tmp_path, capsys, monkeypatch):
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+
+    class Итог:
+        returncode = 0
+        stdout = "ActiveEnterTimestamp=Thu 2099-01-01 00:00:00 UTC\n"
+
+    monkeypatch.setattr(м.subprocess, "run", lambda *_а, **_к: Итог())
+    код = м.главное(["--tree", str(дерево)])
+    assert код == 0, capsys.readouterr().out
+
+
+def test_проверка_на_своём_дереве_проходит():
+    """Контрольный случай: в этой ветке правка есть, и проверка это видит."""
+    м = _модуль()
+    assert м.главное(["--tree", str(КОРЕНЬ), "--skip-service"]) == 0
+
+
+@pytest.mark.parametrize("образец,ожидалось", [
+    ("ActiveEnterTimestamp=Thu 2099-01-01 00:00:00 UTC", 0),
+    ("ActiveEnterTimestamp=2099-01-01 00:00:00 UTC", 0),
+    ("ActiveEnterTimestamp=", 1),
+    ("ActiveEnterTimestamp=непонятно что", 1),
+])
+def test_время_запуска_разбирается_или_отказывает(tmp_path, monkeypatch,
+                                                 образец, ожидалось):
+    """Неразобранное время — отказ, а не молчаливое «сойдёт»."""
+    м = _модуль()
+    дерево = _дерево(tmp_path / "с", ИЗДАТЕЛЬ_С_ПРАВКОЙ)
+
+    class Итог:
+        returncode = 0
+        stdout = образец + "\n"
+
+    monkeypatch.setattr(м.subprocess, "run", lambda *_а, **_к: Итог())
+    assert м.главное(["--tree", str(дерево)]) == ожидалось

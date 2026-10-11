@@ -246,14 +246,20 @@ def test_в_списке_стоят_домены_измеренные_как_с�
     assert set(м.ПАГИНАЦИЯ_СТРОГО) == {
         "yummyani.site", "yummyani.org", "yummyani.biz",
         "yummyani7.site", "yummyani7.info",
-        "lordserial33.biz", "an1mego.site", "animedia.icu",
+        "lordserial33.biz", "animedia.icu",
         "zonafilm.space", "lordfilm47.space", "1lordserials1.online",
-        "lordserials22.info", "zonafilm12.site", "animedia.space"}
+        "lordserials22.info", "zonafilm12.site", "animedia.space",
+        # Второй раунд AnimeGo: soft 404 в разделах вида закрыт.
+        "an1mego.site", "animeg0.site", "an1meg0.site"}
     # Состав разделов у каждой витрины — измерение 11.10, а не ожидание.
     #
-    # Каталог и жанр: разделы вида отдают soft 404 на номер за пределом, и
-    # второй раунд этой витрины ещё в прогоне.
-    assert м.ПАГИНАЦИЯ_СТРОГО["an1mego.site"] == ("/catalog/", "/genre/drama/")
+    # AnimeGo после второго раунда (4bdbc3de41dd, e927e67ece81, ddf035bd2eb2):
+    # шесть отвечающих разделов. Фасет года у них ещё расходится — canonical
+    # сбрасывает условие отбора, — и в строгие не идёт.
+    for домен in ("an1mego.site", "animeg0.site", "an1meg0.site"):
+        assert м.ПАГИНАЦИЯ_СТРОГО[домен] == (
+            "/catalog/", "/genre/drama/", "/movies/", "/series/",
+            "/animation/", "/new/"), домен
     # Полный проход по десяти поверхностям прошли семь витрин. Разделы,
     # добавленные им в строгие, взяты из того прохода построчно: отвечающие и
     # пройденные — да, отсутствующие и расходящиеся — нет.

@@ -244,9 +244,18 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/",
                            "/series/", "/animation/", "/anime/", "/dorama/",
                            "/new/", "/year/2024/", "/country/rossiya/"),
-    # AnimeGo: второй раунд ещё в прогоне, разделы вида отдают soft 404 на
-    # номер за пределом — строгими не становятся.
-    "an1mego.site": ("/catalog/", "/genre/drama/"),
+    # AnimeGo, второй раунд: soft 404 в разделах вида закрыт, п.3 держится в
+    # шести отвечающих разделах. Проверено моим проходом по каждой витрине;
+    # фасет года пока расходится и строгим не становится.
+    #   an1mego  build 4bdbc3de41dd-animego-02
+    #   animeg0  build e927e67ece81-animego-03
+    #   an1meg0  build ddf035bd2eb2-animego-04
+    "an1mego.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/"),
+    "animeg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/"),
+    "an1meg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/"),
     # build e0b8dd4f3ed6-zona-03 — тот же разбор `page` в путевых фасетах
     # (прежде build 688983fbd5dd был исправен в четырёх разделах). Проверено
     # моим проходом: расхождений нет.
