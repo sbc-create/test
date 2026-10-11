@@ -637,6 +637,8 @@ def норма_заголовка_страницы(домен: str, где: str,
     "zonafilm.space",        # build c126b7ad28ee-zona-01
     "zonafilm.cc",           # build 4a9d1b97fd3e-zona-02
     "zonafilm12.site",       # build bd8d4d166833-zona-03
+    "animedia.icu",          # build cbaf0a6163e3-animedia-01
+    "animedia.space",        # build e34df6c1f48e-animedia-space
 )
 
 #: Какие витрины УЖЕ отвергают неизвестные и повторяющиеся КЛЮЧИ (§3 п.3).

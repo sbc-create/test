@@ -240,13 +240,14 @@ def test_в_строгом_списке_фильтров_стоят_измере
     assert set(м.ФИЛЬТРЫ_СТРОГО) == {
         "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
         "lordserials22.info", "zonafilm.space", "zonafilm.cc",
-        "zonafilm12.site"}
+        "zonafilm12.site", "animedia.icu", "animedia.space"}
     # Ключи не закрыты ни у одной витрины — список пуст, и это состояние сети,
     # а не забытая строка.
     assert м.КЛЮЧИ_СТРОГО == ()
     # AnimeGo и Animedia ждут правки: их в строгих быть не должно.
-    for домен in ("an1mego.site", "animeg0.site", "an1meg0.site",
-                  "animedia.icu", "animedia.space"):
+    # Три AnimeGo ждут правки: у них пустой фильтр отдаёт 200 с пустым
+    # шаблоном и canonical на /catalog/ — это и п.4, и §1 п.8 (soft 404).
+    for домен in ("an1mego.site", "animeg0.site", "an1meg0.site"):
         assert домен not in м.ФИЛЬТРЫ_СТРОГО, домен
 
 
