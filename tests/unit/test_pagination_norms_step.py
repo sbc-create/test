@@ -248,11 +248,12 @@ def test_в_списке_стоят_домены_измеренные_как_с�
         "yummyani7.site", "yummyani7.info",
         "lordserial33.biz", "an1mego.site", "animedia.icu",
         "zonafilm.space", "lordfilm47.space", "1lordserials1.online",
-        "lordserials22.info"}
+        "lordserials22.info", "zonafilm12.site", "animedia.space"}
     # Три витрины исправны во всех четырёх разделах, остальные — пока только в
     # каталоге и в разделе жанра: у них вид подставляется маршрутом, и правка
     # идёт вторым раундом. Это измерение 11.10, а не ожидание.
-    for домен in ("lordserial33.biz", "animedia.icu", "zonafilm.space"):
+    for домен in ("lordserial33.biz", "animedia.icu", "zonafilm.space",
+                  "zonafilm12.site", "animedia.space"):
         assert м.ПАГИНАЦИЯ_СТРОГО[домен] == (
             "/catalog/", "/genre/drama/", "/movies/", "/series/"), домен
     for домен in ("lordfilm47.space", "1lordserials1.online",
@@ -332,7 +333,8 @@ def test_в_строгом_списке_редиректа_стоят_измер
         "zonafilm.cc", "zonafilm.space", "zonafilm12.site",
         # выложены 11.10: редирект работает и сохраняет параметры
         "lordserial33.biz", "an1mego.site", "animedia.icu",
-        "lordfilm47.space", "1lordserials1.online", "lordserials22.info"}
+        "lordfilm47.space", "1lordserials1.online", "lordserials22.info",
+        "zonafilm12.site", "animedia.space", "animeg0.site", "an1meg0.site"}
 
 
 def test_пустой_шаблон_за_пределом_это_soft_404():

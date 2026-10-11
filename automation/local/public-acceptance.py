@@ -144,7 +144,8 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
                              "zonafilm12.site", "lordserial33.biz",
                              "an1mego.site", "animedia.icu",
                              "lordfilm47.space", "1lordserials1.online",
-                             "lordserials22.info")
+                             "lordserials22.info", "zonafilm12.site",
+                             "animedia.space", "animeg0.site", "an1meg0.site")
 
 #: Какие РАЗДЕЛЫ какого домена норму п.3 уже соблюдают. Строгость — по
 #: разделу, а не по домену целиком: витрина может быть исправлена в каталоге и
@@ -170,6 +171,11 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "1lordserials1.online": ("/catalog/", "/genre/drama/"),
     "lordserials22.info": ("/catalog/", "/genre/drama/"),
     "an1mego.site": ("/catalog/", "/genre/drama/"),
+    # build 688983fbd5dd-zona-03: исправна во всех четырёх разделах
+    "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
+    # build 16cef0ec78af-animedia-space: п.3 исправна всюду; п.8 в разделах
+    # вида даёт soft 404 — это отдельная строка проверки, не п.3
+    "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
 }
 
 #: Разделы, на которых мерятся нормы пагинации. Первый есть у всех семейств
