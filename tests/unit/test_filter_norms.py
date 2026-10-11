@@ -241,9 +241,9 @@ def test_в_строгом_списке_фильтров_стоят_измере
         "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
         "lordserials22.info", "zonafilm.space", "zonafilm.cc",
         "zonafilm12.site", "animedia.icu", "animedia.space"}
-    # Ключи не закрыты ни у одной витрины — список пуст, и это состояние сети,
-    # а не забытая строка.
-    assert м.КЛЮЧИ_СТРОГО == ()
+    # Ключи закрыты пока у одной витрины: раскатка идёт по порядку
+    # Lords → Zona → AnimeGo → Animedia, и список растёт по измерению.
+    assert м.КЛЮЧИ_СТРОГО == ("lordfilm47.space",)
     # AnimeGo и Animedia ждут правки: их в строгих быть не должно.
     # Три AnimeGo ждут правки: у них пустой фильтр отдаёт 200 с пустым
     # шаблоном и canonical на /catalog/ — это и п.4, и §1 п.8 (soft 404).
