@@ -661,6 +661,8 @@ def норма_заголовка_страницы(домен: str, где: str,
     "an1mego.site",          # build fff680fa73cd-animego-02
     "animeg0.site",          # build 68f477f3af1f-animego-03
     "an1meg0.site",          # build 505a08ee1678-animego-04
+    "animedia.icu",          # build 8e466db1866c-animedia-01
+    "animedia.space",        # build a9afff8a1932-animedia-space
 )
 
 

@@ -250,10 +250,11 @@ def test_в_строгом_списке_фильтров_стоят_измере
         "zonafilm12.site",
         # Три AnimeGo закрыты правилом ключей; пустые фильтры у них ещё нет,
         # поэтому в ФИЛЬТРЫ_СТРОГО их по-прежнему не должно быть.
-        "an1mego.site", "animeg0.site", "an1meg0.site"}
-    # Обе Animedia ещё в раскатке ключей.
-    for домен in ("animedia.icu", "animedia.space"):
-        assert домен not in м.КЛЮЧИ_СТРОГО, домен
+        "an1mego.site", "animeg0.site", "an1meg0.site",
+        # Обе Animedia закрыты последними: правило ключей выложено на всех
+        # двенадцати витринах сети.
+        "animedia.icu", "animedia.space"}
+    assert len(м.КЛЮЧИ_СТРОГО) == 12
     # AnimeGo и Animedia ждут правки: их в строгих быть не должно.
     # Три AnimeGo ждут правки: у них пустой фильтр отдаёт 200 с пустым
     # шаблоном и canonical на /catalog/ — это и п.4, и §1 п.8 (soft 404).
