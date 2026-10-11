@@ -243,6 +243,8 @@ publish_material (occurrences_in_main_block) и наличие текста на
    (сроки очереди не согласованы с RESULT_HOLD, handoff §15.5), а повторный сбор фактов стоил ~8 из ~50 ходов партии.
    ОДИН повтор SOURCES_MISSING (`same_in_row` = 1) работай как обычно: по журналу
    очереди 13 из 52 таких заданий дали текст ровно после одного повтора, после двух — ни одного.
+   IDENTITY_UNCLEAR закрывается сразу сознательно: 1 успех из 59 заданий против ~58
+   пустых повторов (automation/local/queue-repeat-audit.py --transitions).
 2. Источники (D199, config/editorial-sources.json):
    * editorial_facts {"site", "slug"} — каталог сети;
    * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из
