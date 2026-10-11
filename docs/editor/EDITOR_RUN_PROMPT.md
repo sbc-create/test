@@ -235,11 +235,14 @@ publish_material (occurrences_in_main_block) и наличие текста на
    editorial_queue_register (если задания нет) и editorial_queue_next. Список
    пуст или кончился — закончи с итогом NO_TASK.
    ДО поиска источников: `python3 -m seo_operator.cli editor-held <адрес задания>`.
-   Если `held` = true и `last.outcome` — SOURCES_MISSING, IDENTITY_UNCLEAR,
-   IDENTITY_REJECTED, PAGE_ABSENT или DELIVERY_UNSUPPORTED, заверши задание тем же исходом с detail «повтор без
+   Если `held` = true и `last.outcome` — IDENTITY_UNCLEAR, IDENTITY_REJECTED,
+   PAGE_ABSENT, DELIVERY_UNSUPPORTED, либо SOURCES_MISSING с `last.same_in_row` ≥ 2,
+   заверши задание тем же исходом с detail «повтор без
    изменения условий: прежний отказ <last.at>, реестр источников не менялся;
    <last.detail>» и бери следующее — очередь повторяет такие задания по таймеру
    (сроки очереди не согласованы с RESULT_HOLD, handoff §15.5), а повторный сбор фактов стоил ~8 из ~50 ходов партии.
+   ОДИН повтор SOURCES_MISSING (`same_in_row` = 1) работай как обычно: по журналу
+   очереди 13 из 52 таких заданий дали текст ровно после одного повтора, после двух — ни одного.
 2. Источники (D199, config/editorial-sources.json):
    * editorial_facts {"site", "slug"} — каталог сети;
    * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из

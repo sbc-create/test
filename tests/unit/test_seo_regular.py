@@ -1713,5 +1713,10 @@ def test_last_outcome_returns_the_latest_result_for_the_url(tmp_path):
     ]
     ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
     got = regular.last_outcome(ev, "https://zonafilm12.site/title/aynali/")
-    assert got == {"outcome": "SOURCES_MISSING", "at": "2026-10-11T13:38:41Z", "detail": "нет статьи"}
+    assert got == {"outcome": "SOURCES_MISSING", "at": "2026-10-11T13:38:41Z", "detail": "нет статьи",
+                   "same_in_row": 1}
+    rows.append({"event": "task_result", "task_id": "t", "outcome": "SOURCES_MISSING",
+                 "at": "2026-10-12T14:00:00Z"})
+    ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
+    assert regular.last_outcome(ev, "https://zonafilm12.site/title/aynali")["same_in_row"] == 2
     assert regular.last_outcome(ev, "https://zonafilm12.site/title/drugoe") is None

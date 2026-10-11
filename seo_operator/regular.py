@@ -2574,8 +2574,10 @@ def last_outcome(events_path: Path, url: str) -> dict | None:
             continue
         адрес = (url_of.get(e.get("task_id")) or e.get("canonical_url") or "").rstrip("/").lower()
         if адрес == ключ:
+            подряд = (last["same_in_row"] + 1
+                      if last and last["outcome"] == e.get("outcome") else 1)
             last = {"outcome": e.get("outcome"), "at": e.get("at"),
-                    "detail": str(e.get("detail") or "")[:300]}
+                    "detail": str(e.get("detail") or "")[:300], "same_in_row": подряд}
     return last
 
 
