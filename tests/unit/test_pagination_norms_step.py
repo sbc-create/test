@@ -256,9 +256,11 @@ def test_в_списке_стоят_домены_измеренные_как_с�
                   "zonafilm12.site", "animedia.space"):
         assert м.ПАГИНАЦИЯ_СТРОГО[домен] == (
             "/catalog/", "/genre/drama/", "/movies/", "/series/"), домен
-    for домен in ("lordfilm47.space", "1lordserials1.online",
-                  "lordserials22.info", "an1mego.site"):
+    for домен in ("1lordserials1.online", "lordserials22.info", "an1mego.site"):
         assert м.ПАГИНАЦИЯ_СТРОГО[домен] == ("/catalog/", "/genre/drama/"), домен
+    # Второй раунд 11.10 добавил разделы вида, включая /animation/.
+    assert м.ПАГИНАЦИЯ_СТРОГО["lordfilm47.space"] == (
+        "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/")
 
 
 # --- п.2 строго по списку и сохранение параметров ---------------------------

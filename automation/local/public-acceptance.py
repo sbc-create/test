@@ -167,7 +167,9 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "lordserial33.biz": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
     "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "lordfilm47.space": ("/catalog/", "/genre/drama/"),
+    # build 43f24902e2b2-lords-01 (второй раунд: разделы вида)
+    "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/",
+                         "/series/", "/animation/"),
     "1lordserials1.online": ("/catalog/", "/genre/drama/"),
     "lordserials22.info": ("/catalog/", "/genre/drama/"),
     "an1mego.site": ("/catalog/", "/genre/drama/"),
@@ -180,8 +182,11 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
 #: Разделы, на которых мерятся нормы пагинации. Первый есть у всех семейств
 #: сети; второй появился с выкладкой разделов жанра 2026-10-11 и у части
 #: витрин ещё отсутствует — отсутствие раздела расхождением не считается.
-РАЗДЕЛЫ_ПАГИНАЦИИ = ("/catalog/", "/genre/drama/", "/movies/",
-                     "/series/")
+РАЗДЕЛЫ_ПАГИНАЦИИ = ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     # Четвёртый раздел вида назван SEO-сессией 11.10 при
+                     # выкладке второго раунда lords-01: у части витрин он
+                     # есть, у части нет, и отсутствие не расхождение.
+                     "/animation/")
 #: Пробы: первая страница параметром, номер за пределом, нулевой,
 #: отрицательный и нечисловой.
 ПРОБЫ_ПАГИНАЦИИ = ("?page=1", "?page=9999", "?page=0", "?page=-1", "?page=abc")
