@@ -246,8 +246,10 @@ def test_в_списке_стоят_домены_измеренные_как_с�
     assert set(м.ПАГИНАЦИЯ_СТРОГО) == {
         "yummyani.site", "yummyani.org", "yummyani.biz",
         "yummyani7.site", "yummyani7.info",
-        # выложено 11.10, build d7d94e8a7509-lords-02, проверено независимо
-        "lordserial33.biz"}
+        # выложены 11.10 и проверены независимо, по одной за выкладку
+        "lordserial33.biz",   # build d7d94e8a7509-lords-02
+        "an1mego.site",       # build 1acf32a2ef9a-animego-02
+        "animedia.icu"}       # build db6142599113-animedia-01
 
 
 # --- п.2 строго по списку и сохранение параметров ---------------------------
@@ -320,5 +322,5 @@ def test_в_строгом_списке_редиректа_стоят_измер
     м = _модуль()
     assert set(м.ПАГИНАЦИЯ_РЕДИРЕКТ_СТРОГО) == {
         "zonafilm.cc", "zonafilm.space", "zonafilm12.site",
-        # выложено 11.10: редирект работает и сохраняет параметры
-        "lordserial33.biz"}
+        # выложены 11.10: редирект работает и сохраняет параметры
+        "lordserial33.biz", "an1mego.site", "animedia.icu"}
