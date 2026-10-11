@@ -165,7 +165,9 @@ def test_в_строгом_списке_H1_стоят_измеренные_ви�
     assert set(м.П7_H1_СТРОГО) == {"lordserials22.info", "lordserial33.biz",
                                    "lordfilm47.space",
                                    "1lordserials1.online", "zonafilm.space",
-                                   "zonafilm12.site", "an1mego.site"}
+                                   "zonafilm12.site", "an1mego.site",
+                                   "animeg0.site", "an1meg0.site",
+                                   "animedia.icu"}
 
 
 def test_норма_зовётся_из_замера_раздела():
