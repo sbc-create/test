@@ -66,7 +66,27 @@ def _save(state: dict) -> None:
     STATE.write_text(json.dumps(state), encoding="utf-8")
 
 
+def latest(argv: list[str]) -> int:
+    """`--latest [YYYY-MM-DD]`: напечатать сохранённый отчёт и выйти.
+
+    Вкладка печатает только в открытое окно, где запущена; если окна нет,
+    отчёт сформирован и сохранён, но никому не показан (11.10: показан не был,
+    состояние вкладки осталось на 10.10). Этой командой отчёт получают сами.
+    Состояние вкладки не меняется: показ «по запросу» не отменяет показ в 10:00.
+    """
+    дни = _available()
+    день = argv[0] if argv else (дни[-1] if дни else None)
+    if день is None or день not in дни:
+        print(f"Отчёта {'за ' + день if день else ''} нет в {REPORTS}. Есть: {', '.join(дни[-5:]) or 'ничего'}.")
+        return 1
+    print(f"=== SEO — ОТЧЁТ за {день} (файл {REPORTS / (день + '.md')}) ===\n")
+    print((REPORTS / f"{день}.md").read_text(encoding="utf-8"), flush=True)
+    return 0
+
+
 def main() -> int:
+    if sys.argv[1:2] == ["--latest"]:
+        return latest(sys.argv[2:])
     sys.stdout.write("\033]0;SEO — ОТЧЁТ\007")
     state = _load()
     now = dt.datetime.now(UTC)

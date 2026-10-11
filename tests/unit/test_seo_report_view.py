@@ -50,3 +50,17 @@ def test_late_report_is_shown_when_it_appears():
     assert view.decide(["2026-10-09"], at("2026-10-09T09:30:00"), "2026-10-08") == {
         "show": "2026-10-09"
     }
+
+
+def test_latest_prints_saved_report_without_touching_state(tmp_path, monkeypatch, capsys):
+    (tmp_path / "2026-10-10.md").write_text("отчёт десятого", encoding="utf-8")
+    (tmp_path / "2026-10-11.md").write_text("отчёт одиннадцатого", encoding="utf-8")
+    состояние = tmp_path / "state.json"
+    monkeypatch.setattr(view, "REPORTS", tmp_path)
+    monkeypatch.setattr(view, "STATE", состояние)
+    assert view.latest([]) == 0
+    assert "отчёт одиннадцатого" in capsys.readouterr().out
+    assert view.latest(["2026-10-10"]) == 0
+    assert "отчёт десятого" in capsys.readouterr().out
+    assert view.latest(["2026-10-01"]) == 1
+    assert not состояние.exists()  # показ по запросу не отменяет показ в 10:00
