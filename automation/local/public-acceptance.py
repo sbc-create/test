@@ -218,22 +218,23 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
                      "/animation/", "/new/", "/year/2024/"),
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                        "/animation/", "/new/"),
-    # build 43f24902e2b2-lords-01 (второй раунд: разделы вида). Полный проход
-    # 11.10 добавил `/new/`; `/anime/` и `/dorama/` у этой витрины нет.
+    # build afae7979678b-lords-01 — выкладка правки фасетов. Проверено моим
+    # проходом: все отвечающие поверхности чисты. `/anime/` и `/dorama/` у
+    # этой витрины нет.
     "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/",
-                         "/series/", "/animation/", "/new/"),
-    # build 392fb7bf0e7f-lords-03 (второй раунд): проверено моим проходом —
-    # build ID совпадает с установленным, п.3 держится в шести отвечающих
-    # разделах (`/anime/` и `/dorama/` у этой витрины отсутствуют).
+                         "/series/", "/animation/", "/new/", "/year/2024/",
+                         "/country/rossiya/"),
+    # build 30c4c5b86808-lords-03 — выкладка правки фасетов. Проверено моим
+    # проходом: расхождений нет (`/anime/` и `/dorama/` у витрины нет).
     "1lordserials1.online": ("/catalog/", "/genre/drama/", "/movies/",
-                             "/series/", "/animation/", "/new/"),
-    # build 5584ef969e23-lords-05 — ТРЕТИЙ выпуск: во втором `section` от
-    # маршрута ещё считался условием отбора. Проверено моим проходом: build ID
-    # совпадает с установленным, п.3 держится во всех восьми отвечающих
-    # разделах, включая `/anime/` и `/dorama/`.
+                             "/series/", "/animation/", "/new/", "/year/2024/",
+                             "/country/rossiya/"),
+    # build 127118f7ab5f-lords-05 — четвёртый выпуск этой витрины за день
+    # (второй: разделы вида; третий: `section` от маршрута; четвёртый:
+    # фасеты). Проверено моим проходом: все десять поверхностей чисты.
     "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/",
                            "/series/", "/animation/", "/anime/", "/dorama/",
-                           "/new/"),
+                           "/new/", "/year/2024/", "/country/rossiya/"),
     # AnimeGo: второй раунд ещё в прогоне, разделы вида отдают soft 404 на
     # номер за пределом — строгими не становятся.
     "an1mego.site": ("/catalog/", "/genre/drama/"),

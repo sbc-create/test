@@ -268,14 +268,14 @@ def test_в_списке_стоят_домены_измеренные_как_с�
         "/anime/", "/dorama/", "/new/", "/year/2024/", "/country/rossiya/")
     assert м.ПАГИНАЦИЯ_СТРОГО["lordserials22.info"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
-        "/anime/", "/dorama/", "/new/")
-    # `/anime/` и `/dorama/` у этих витрин отсутствуют (404).
+        "/anime/", "/dorama/", "/new/", "/year/2024/", "/country/rossiya/")
+    # `/anime/` и `/dorama/` у этих двух витрин отсутствуют (404).
     assert м.ПАГИНАЦИЯ_СТРОГО["1lordserials1.online"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
-        "/new/")
+        "/new/", "/year/2024/", "/country/rossiya/")
     assert м.ПАГИНАЦИЯ_СТРОГО["lordfilm47.space"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
-        "/new/")
+        "/new/", "/year/2024/", "/country/rossiya/")
     assert м.ПАГИНАЦИЯ_СТРОГО["zonafilm.space"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
         "/new/")
@@ -290,10 +290,10 @@ def test_в_списке_стоят_домены_измеренные_как_с�
     # lordserial33.biz после выкладки правки. У витрин, где он ещё
     # расходится, его в строгих быть не должно — иначе дефект окажется
     # записан нормой, а приёмка покраснеет на известном и исправляемом месте.
+    # Все четыре Lords правку фасетов получили и проверены; ждут её AnimeGo
+    # (canonical) и Zona (разбор `page` в путевом маршруте).
     ждут_правку = ("an1mego.site", "animeg0.site", "an1meg0.site",
-                   "zonafilm.space", "zonafilm12.site", "zonafilm.cc",
-                   "lordfilm47.space", "1lordserials1.online",
-                   "lordserials22.info")
+                   "zonafilm.space", "zonafilm12.site", "zonafilm.cc")
     for домен in ждут_правку:
         разделы = м.ПАГИНАЦИЯ_СТРОГО.get(домен, ())
         assert "/year/2024/" not in разделы, домен
