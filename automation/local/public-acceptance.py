@@ -173,8 +173,7 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "an1mego.site": ("/catalog/", "/genre/drama/"),
     # build 688983fbd5dd-zona-03: исправна во всех четырёх разделах
     "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    # build 16cef0ec78af-animedia-space: п.3 исправна всюду; п.8 в разделах
-    # вида даёт soft 404 — это отдельная строка проверки, не п.3
+    # build 4ffa98538631-animedia-space (второй раунд: soft 404 закрыт)
     "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
 }
 
