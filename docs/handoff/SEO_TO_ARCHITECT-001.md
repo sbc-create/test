@@ -466,7 +466,15 @@ animedia.space/rassekaya-nebosvod, an1mego/pozhiratel-zvezd-4) — событи�
 `task_reopened` нет. Причина: `seo_engine/content_operator/editorial_queue.py`
 (корень оператора `wt-editorial-queue-repair-01`, ветка
 `claude/editorial-queue-repair-01`) назначает повтор SOURCES_MISSING через
-`ПОВТОР_ФАКТОВ_Ч = 24`, IDENTITY_UNCLEAR — через 72 ч, без условия. Отбор
+`ПОВТОР_ФАКТОВ_Ч = 24`, IDENTITY_UNCLEAR — через 72 ч.
+**Поправка (измерение Архитектора, automation/local/queue-repeat-audit.py,
+bd31add):** раньше объявленного `next_attempt_at` очередь не выдаёт ни одного
+задания — своё расписание она держит; расходится расписание с RESULT_HOLD:
+SOURCES_MISSING 24 ч против 336, PAGE_ABSENT 6 против 168, IDENTITY_UNCLEAR 72
+против 336, DELIVERY_UNSUPPORTED 72 против 168. Повторно закрыты тем же исходом:
+SOURCES_MISSING 22 задания, SOURCE_UNAVAILABLE 15, PAGE_ABSENT 2. Живой сессии
+на дереве оператора нет — назначение сопровождающего вынесено владельцу.
+До исправления редактор закрывает такие повторы сразу (`editor-held`). Отбор
 кандидатов фабрики держит те же исходы 14 суток и открывает раньше только при
 изменении реестра источников (`regular.RESULT_HOLD`, `REVIEW_ON_NEW_SOURCES`).
 Предложение: повтор SOURCES_MISSING/IDENTITY_UNCLEAR — не раньше 14 суток ИЛИ
