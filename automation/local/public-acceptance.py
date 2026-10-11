@@ -173,10 +173,14 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                            "/animation/", "/anime/", "/dorama/", "/new/",
                            "/year/2024/", "/country/rossiya/"),
+    # `/collection/` — только у Animedia: они единственные выполняют редирект
+    # `?page=1` на поверхности коллекций и сохраняют при нём прочие
+    # параметры (измерено 11.10). У Lords и Zona маршрут коллекции отдаёт
+    # ответ мимо общего пути, и редиректа там нет — правка идёт.
     "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
-                     "/animation/", "/new/", "/year/2024/"),
+                     "/animation/", "/new/", "/year/2024/", "/collection/"),
     "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
-                       "/animation/", "/new/", "/year/2024/"),
+                       "/animation/", "/new/", "/year/2024/", "/collection/"),
     "an1mego.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                      "/animation/", "/new/", "/year/2024/"),
     "animeg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
@@ -233,12 +237,13 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                        "/animation/", "/new/", "/year/2024/",
                        "/country/rossiya/"),
-    # build afae7979678b-lords-01 — выкладка правки фасетов. Проверено моим
-    # проходом: все отвечающие поверхности чисты. `/anime/` и `/dorama/` у
-    # этой витрины нет.
+    # build b732b603a7cb-lords-01 — выкладка правки коллекций (прежде
+    # afae7979678b: фасеты). Проверено моим проходом: все отвечающие
+    # поверхности чисты, на коллекции self-canonical с номером. `/anime/` и
+    # `/dorama/` у этой витрины нет.
     "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/",
                          "/series/", "/animation/", "/new/", "/year/2024/",
-                         "/country/rossiya/"),
+                         "/country/rossiya/", "/collection/"),
     # build 30c4c5b86808-lords-03 — выкладка правки фасетов. Проверено моим
     # проходом: расхождений нет (`/anime/` и `/dorama/` у витрины нет).
     #
@@ -257,12 +262,14 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "1lordserials1.online": ("/catalog/", "/genre/drama/", "/movies/",
                              "/series/", "/animation/", "/new/", "/year/2024/",
                              "/country/rossiya/", "/collection/"),
-    # build 127118f7ab5f-lords-05 — четвёртый выпуск этой витрины за день
-    # (второй: разделы вида; третий: `section` от маршрута; четвёртый:
-    # фасеты). Проверено моим проходом: все десять поверхностей чисты.
+    # build 00db3eb75879-lords-05 — ПЯТЫЙ выпуск этой витрины за день
+    # (разделы вида → `section` от маршрута → фасеты → коллекции). Проверено
+    # моим проходом: все одиннадцать поверхностей чисты, на коллекции
+    # self-canonical с номером, редирект `?page=1` сохраняет параметры.
     "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/",
                            "/series/", "/animation/", "/anime/", "/dorama/",
-                           "/new/", "/year/2024/", "/country/rossiya/"),
+                           "/new/", "/year/2024/", "/country/rossiya/",
+                           "/collection/"),
     # AnimeGo, второй раунд: soft 404 в разделах вида закрыт, п.3 держится в
     # шести отвечающих разделах. Проверено моим проходом по каждой витрине;
     # фасет года пока расходится и строгим не становится.
