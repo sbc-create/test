@@ -456,6 +456,23 @@ zonafilm12.site, yummyani7.site, yummyani7.info. У остальных вось�
 500 в сутки — закроется за ~5 суток или разовым добором владельца); 17 записей
 lords-02 — «источник не отдал»; потерь при сборке — 0.
 
+### 15.5 Очередь повторяет известные отказы по таймеру, а не по изменению условий
+
+Партия 20261011T133503Z закрыла SOURCES_MISSING восемь адресов, закрытых тем же
+исходом 10.10 06:15–11:12 (an1mego/supermedved, lordserials22/igra-v-pohischenie-2,
+zonafilm12/aynali, zonafilm.space/zolotye-peyzazhi-zavtrashnego-dnya,
+lordfilm47/ne-takoy-uzh-neznakomyy, an1meg0/okoldovannyy-nodzomi,
+animedia.space/rassekaya-nebosvod, an1mego/pozhiratel-zvezd-4) — событий
+`task_reopened` нет. Причина: `seo_engine/content_operator/editorial_queue.py`
+(корень оператора `wt-editorial-queue-repair-01`, ветка
+`claude/editorial-queue-repair-01`) назначает повтор SOURCES_MISSING через
+`ПОВТОР_ФАКТОВ_Ч = 24`, IDENTITY_UNCLEAR — через 72 ч, без условия. Отбор
+кандидатов фабрики держит те же исходы 14 суток и открывает раньше только при
+изменении реестра источников (`regular.RESULT_HOLD`, `REVIEW_ON_NEW_SOURCES`).
+Предложение: повтор SOURCES_MISSING/IDENTITY_UNCLEAR — не раньше 14 суток ИЛИ
+при изменении `config/editorial-sources.json` после отказа. Ветка чужая —
+правку не вношу.
+
 ## Чего я не делал
 
 Не менял очередь, реестры, журналы и данные сайтов; не снимал аренды. В мосте
