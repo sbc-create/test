@@ -105,7 +105,7 @@ cherry-pick останавливается конфликтом `modify/delete`,
 ```bash
 cd /home/claude/wt-portable-site-cell-01 \
   && git checkout 3a11718 -- factory/qwen/editorial.py factory/cell/editorial_store.py \
-  && git checkout bfaf482 -- tests/unit/test_editorial_name_field_zona01.py \
+  && git checkout f153006 -- tests/unit/test_editorial_name_field_zona01.py \
        tests/unit/test_editorial_publish_cycle.py \
        tests/unit/test_editorial_overrides_audit.py \
        automation/local/editorial-overrides-audit.py \
@@ -130,7 +130,13 @@ cd /home/claude/wt-portable-site-cell-01 \
 Что делает каждый шаг:
 
 * два `git checkout <sha> -- <файлы>` берут ИМЕННО перечисленные файлы из моей
-  ветки, не сливая её. Чужие коммиты в дереве службы остаются на месте;
+  ветки, не сливая её. Чужие коммиты в дереве службы остаются на месте.
+  Коммиты разные не случайно: `3a11718` — последний, в котором менялась сама
+  правка службы, а `f153006` — текущий, и из него берутся проверки и
+  инструменты. В первой редакции они брались из `bfaf482`, но
+  `editorial-overrides-audit.py` с тех пор получил обратную сверку реестра
+  (живое ручное поле, которого реестр не знает, даёт код 3), и команда
+  поставила бы в дерево службы устаревшую проверку;
 * `git commit` закрепляет их в ветке дерева службы — иначе правка живёт
   незакоммиченной и теряется при следующей работе в этом дереве;
 * `pytest` обязан напечатать **22 passed**. Это те самые проверки, что
