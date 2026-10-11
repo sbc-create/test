@@ -250,29 +250,46 @@ def test_в_списке_стоят_домены_измеренные_как_с�
         "zonafilm.space", "lordfilm47.space", "1lordserials1.online",
         "lordserials22.info", "zonafilm12.site", "animedia.space"}
     # Состав разделов у каждой витрины — измерение 11.10, а не ожидание.
-    for домен in ("animedia.icu", "zonafilm12.site", "animedia.space"):
-        assert м.ПАГИНАЦИЯ_СТРОГО[домен] == (
-            "/catalog/", "/genre/drama/", "/movies/", "/series/"), домен
-    for домен in ("lordserials22.info", "an1mego.site"):
-        assert м.ПАГИНАЦИЯ_СТРОГО[домен] == ("/catalog/", "/genre/drama/"), домен
-    # Второй раунд 11.10 добавил разделы вида, включая /animation/.
-    assert м.ПАГИНАЦИЯ_СТРОГО["lordfilm47.space"] == (
-        "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/")
-    # Полный проход по десяти поверхностям прошли три витрины. Разделы,
-    # добавленные им в строгие, взяты из того прохода построчно.
+    #
+    # Четыре базовых раздела: витрина измерена до того, как в замер попали
+    # остальные шесть поверхностей.
+    assert м.ПАГИНАЦИЯ_СТРОГО["zonafilm12.site"] == (
+        "/catalog/", "/genre/drama/", "/movies/", "/series/")
+    # Каталог и жанр: разделы вида отдают soft 404 на номер за пределом, и
+    # второй раунд этой витрины ещё в прогоне.
+    assert м.ПАГИНАЦИЯ_СТРОГО["an1mego.site"] == ("/catalog/", "/genre/drama/")
+    # Полный проход по десяти поверхностям прошли семь витрин. Разделы,
+    # добавленные им в строгие, взяты из того прохода построчно: отвечающие и
+    # пройденные — да, отсутствующие и расходящиеся — нет.
     assert м.ПАГИНАЦИЯ_СТРОГО["lordserial33.biz"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
         "/anime/", "/dorama/", "/new/")
+    assert м.ПАГИНАЦИЯ_СТРОГО["lordserials22.info"] == (
+        "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
+        "/anime/", "/dorama/", "/new/")
+    # `/anime/` и `/dorama/` у этих витрин отсутствуют (404).
     assert м.ПАГИНАЦИЯ_СТРОГО["1lordserials1.online"] == (
+        "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
+        "/new/")
+    assert м.ПАГИНАЦИЯ_СТРОГО["lordfilm47.space"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
         "/new/")
     assert м.ПАГИНАЦИЯ_СТРОГО["zonafilm.space"] == (
         "/catalog/", "/genre/drama/", "/movies/", "/series/", "/animation/",
         "/new/")
-    # Фасет года в строгие не попал ни у кого: у Lords и AnimeGo его canonical
-    # сбрасывает условие отбора, и это отдельная норма (`норма_фасета`), а не
-    # расхождение п.3. Поставить его сюда значило бы объявить дефект нормой.
+    # Обе Animedia фасет года ТОЖЕ соблюдают: у них canonical сведён к схеме
+    # запроса с тем же составом, и это норма п.1, а не расхождение.
+    for домен in ("animedia.icu", "animedia.space"):
+        assert м.ПАГИНАЦИЯ_СТРОГО[домен] == (
+            "/catalog/", "/genre/drama/", "/movies/", "/series/",
+            "/animation/", "/new/", "/year/2024/"), домен
+    # Фасет года в строгие не попал ни у одной витрины Lords, AnimeGo и Zona:
+    # у Lords и AnimeGo его canonical сбрасывает условие отбора (отдельная
+    # норма `норма_фасета`), у Zona путевой маршрут не разбирает `page`.
+    # Поставить его туда значило бы объявить дефект нормой.
     for домен, разделы in м.ПАГИНАЦИЯ_СТРОГО.items():
+        if домен.startswith("animedia"):
+            continue
         assert "/year/2024/" not in разделы, домен
     # Никакой строгости разделу, которого нет в самом замере.
     for домен, разделы in м.ПАГИНАЦИЯ_СТРОГО.items():

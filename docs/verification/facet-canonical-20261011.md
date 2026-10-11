@@ -110,6 +110,48 @@ canonical первой страницы фасета должен быть ли�
 Фасет года в строгие не попал ни у кого — и тест это сторожит, чтобы дефект не
 был записан нормой.
 
+## 3а. Полный проход по всем одиннадцати витринам
+
+Замер десяти поверхностей на каждой выложенной витрине, включая норму фасета.
+
+| витрина | расхождений | что именно |
+| --- | --- | --- |
+| animedia.icu | **0** | все десять поверхностей чисты, фасет сведён к схеме запроса |
+| animedia.space | **0** | то же |
+| lordserial33.biz | 3 | canonical фасета года и страны, п.3 на `/year/2024/?page=2` |
+| lordfilm47.space | 3 | то же |
+| 1lordserials1.online | 3 | то же |
+| lordserials22.info | 3 | то же |
+| an1mego.site | 5 | то же + п.8 soft 404 в `/movies/`, `/series/`, `/year/` |
+| animeg0.site | 5 | то же |
+| an1meg0.site | 5 | то же |
+| zonafilm.space | 2 | п.8 в путевых фасетах года и страны (`page` не разбирается) |
+| zonafilm12.site | 2 | то же |
+
+Расхождения AnimeGo в `/movies/` и `/series/` — известные, второй раунд этих
+витрин в прогоне у SEO-сессии. Новое здесь — фасеты: у Lords и AnimeGo
+canonical, у Zona разбор номера страницы.
+
+**Обе Animedia проходят весь замер без расхождений.** Это первые витрины сети,
+о которых так можно сказать после расширения перечня до десяти поверхностей:
+прежнее «расхождений 0» означало «в четырёх измеренных разделах».
+
+Строгие списки после этого прохода (`ПАГИНАЦИЯ_СТРОГО`, п.3):
+
+| витрина | разделов строго | добавлено этим проходом |
+| --- | --- | --- |
+| lordserial33.biz | 8 | `/animation/`, `/anime/`, `/dorama/`, `/new/` |
+| lordserials22.info | 8 | шесть разделов (третий выпуск `5584ef969e23-lords-05`) |
+| 1lordserials1.online | 6 | четыре раздела (второй раунд `392fb7bf0e7f-lords-03`) |
+| lordfilm47.space | 6 | `/new/` |
+| zonafilm.space | 6 | `/animation/`, `/new/` |
+| animedia.icu | 7 | `/animation/`, `/new/`, `/year/2024/` |
+| animedia.space | 7 | то же |
+
+Фасет года стал строгим только у Animedia — у них он норму соблюдает. У
+Lords, AnimeGo и Zona он в строгие не внесён, и это сторожит тест: иначе
+дефект оказался бы записан нормой.
+
 ## 4. Что остаётся и за кем
 
 | дефект | где | за кем |
@@ -121,6 +163,13 @@ canonical первой страницы фасета должен быть ли�
 Своих правок в код витрин я не вносил: тот слой ведёт SEO-сессия, и смешивать
 направления в одной выкладке запрещено.
 
+План SEO-сессии после передачи (принят ею в переписке, по одному направлению
+за выпуск): Lords ×4 — одиночный фасет года или страны получает свою страницу
+по образцу раздела жанра, комбинации фильтров остаются каталогом; AnimeGo ×3 —
+то же после выхода текущего второго раунда; Zona — разбор `page` в путевых
+фасетах отдельным выпуском. Animedia по canonical фасетов не трогается.
+Регрессию она строит по составу слагов, как эта мера.
+
 ## 5. Команды и артефакты
 
 ```
@@ -128,6 +177,10 @@ python3 automation/local/public-acceptance.py lordserial33.biz 1lordserials1.onl
     → artifacts/sections-wide-20261011.txt, exit code 1
 python3 automation/local/public-acceptance.py zonafilm.space lordserial33.biz 1lordserials1.online
     → artifacts/facet-canonical-20261011.txt, exit code 1
+python3 automation/local/public-acceptance.py lordfilm47.space lordserials22.info \
+    animedia.icu animedia.space an1mego.site animeg0.site an1meg0.site zonafilm12.site
+    → artifacts/facets-all-20261011.txt, exit code 1
+      (8 доменов проверено, с расхождениями 6)
 python3 -m pytest tests/unit/test_facet_canonical_norm.py tests/unit/test_pagination_norms_step.py -q
     → 35 passed, exit code 0
 ```

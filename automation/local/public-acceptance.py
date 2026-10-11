@@ -162,18 +162,29 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     # в отдельном путевом маршруте; правка за SEO-сессией.
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                        "/animation/", "/new/"),
-    # Ниже — домены, у которых к 11.10 измерены четыре базовых раздела.
-    # Расширяется ровно тем, что пройдено полным проходом.
+    # Ниже — полный проход 11.10 по десяти поверхностям: редирект `?page=1`
+    # выполняется везде, где раздел отвечает. У AnimeGo и Animedia нет
+    # `/country/`, `/anime/` и `/dorama/` (404), поэтому их здесь и нет.
+    "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                         "/animation/", "/new/", "/year/2024/",
+                         "/country/rossiya/"),
+    "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                           "/animation/", "/anime/", "/dorama/", "/new/",
+                           "/year/2024/", "/country/rossiya/"),
+    "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/", "/year/2024/"),
+    "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                       "/animation/", "/new/", "/year/2024/"),
+    "an1mego.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/", "/year/2024/"),
+    "animeg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/", "/year/2024/"),
+    "an1meg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/", "/year/2024/"),
+    # Эти две витрины полного прохода пока не получали: четыре базовых
+    # раздела, не больше.
     "zonafilm.cc": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
     "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
-                         "/animation/"),
-    "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "an1mego.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "animeg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "an1meg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
 }
 
 #: Какие РАЗДЕЛЫ какого домена норму п.3 уже соблюдают. Строгость — по
@@ -199,23 +210,38 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     # второй страницы нет (45 карточек при 48 на странице).
     "lordserial33.biz": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                          "/animation/", "/anime/", "/dorama/", "/new/"),
-    "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
+    # Полный проход 11.10: расхождений нет ни в одном отвечающем разделе,
+    # включая фасет года — у Animedia он сведён к схеме запроса, и норма
+    # фасета это подтверждает (состав цели совпадает).
+    "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                     "/animation/", "/new/", "/year/2024/"),
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                        "/animation/", "/new/"),
-    # build 43f24902e2b2-lords-01 (второй раунд: разделы вида)
+    # build 43f24902e2b2-lords-01 (второй раунд: разделы вида). Полный проход
+    # 11.10 добавил `/new/`; `/anime/` и `/dorama/` у этой витрины нет.
     "lordfilm47.space": ("/catalog/", "/genre/drama/", "/movies/",
-                         "/series/", "/animation/"),
+                         "/series/", "/animation/", "/new/"),
     # build 392fb7bf0e7f-lords-03 (второй раунд): проверено моим проходом —
     # build ID совпадает с установленным, п.3 держится в шести отвечающих
     # разделах (`/anime/` и `/dorama/` у этой витрины отсутствуют).
     "1lordserials1.online": ("/catalog/", "/genre/drama/", "/movies/",
                              "/series/", "/animation/", "/new/"),
-    "lordserials22.info": ("/catalog/", "/genre/drama/"),
+    # build 5584ef969e23-lords-05 — ТРЕТИЙ выпуск: во втором `section` от
+    # маршрута ещё считался условием отбора. Проверено моим проходом: build ID
+    # совпадает с установленным, п.3 держится во всех восьми отвечающих
+    # разделах, включая `/anime/` и `/dorama/`.
+    "lordserials22.info": ("/catalog/", "/genre/drama/", "/movies/",
+                           "/series/", "/animation/", "/anime/", "/dorama/",
+                           "/new/"),
+    # AnimeGo: второй раунд ещё в прогоне, разделы вида отдают soft 404 на
+    # номер за пределом — строгими не становятся.
     "an1mego.site": ("/catalog/", "/genre/drama/"),
     # build 688983fbd5dd-zona-03: исправна во всех четырёх разделах
     "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    # build 4ffa98538631-animedia-space (второй раунд: soft 404 закрыт)
-    "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
+    # build 4ffa98538631-animedia-space (второй раунд: soft 404 закрыт).
+    # Полный проход 11.10: расхождений нет.
+    "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                       "/animation/", "/new/", "/year/2024/"),
 }
 
 #: Разделы, на которых мерятся нормы пагинации. Первый есть у всех семейств
