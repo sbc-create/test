@@ -19,8 +19,13 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "http://127.0.0.1:8847"
 VIEWPORTS = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
-SHOTS = {"home": "/", "catalog": "/recepty/", "recipe": "/recept/syrniki-s-ezhevikoj/",
-         "tag": "/produkty/kurica/", "article": "/sovety/priznaki-gotovnosti/"}
+SHOTS = {
+    "home": "/",
+    "catalog": "/recepty/",
+    "recipe": "/recept/syrniki-s-ezhevikoj/",
+    "tag": "/produkty/kurica/",
+    "article": "/sovety/priznaki-gotovnosti/",
+}
 
 A11Y_JS = r"""
 () => {

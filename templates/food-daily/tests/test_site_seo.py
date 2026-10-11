@@ -245,4 +245,4 @@ def test_no_category_illustration_posing_as_dish(app, site):
     _, html, _ = get(app, site.recipes[0].url)
     assert "img/zavtraki.svg" not in html and "recipe__illo" not in html
     _, html, _ = get(app, "/recepty/")
-    assert '<img' not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
+    assert "<img" not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
