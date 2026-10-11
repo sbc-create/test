@@ -533,6 +533,11 @@ def норма_одного_canonical(тело: str, где: str, шаг) -> Non
     "1lordserials1.online",
     # build d22154d61adc-zona-01: девять поверхностей.
     "zonafilm.space",
+    # build 8bb6dfc20ed9-zona-03: девять поверхностей.
+    "zonafilm12.site",
+    # build b7886f7dab55-animego-02: семь. `/new/` у AnimeGo отвечает 308 в
+    # каталог, `/country/` отсутствует — отсюда и меньше поверхностей.
+    "an1mego.site",
 )
 
 #: Признак номера страницы в заголовке. Шаблон сети — «— страница N», и
