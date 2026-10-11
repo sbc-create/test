@@ -329,9 +329,12 @@ if [ "$rotate_key" = 1 ] || [ "$ROTATED" = 1 ]; then
 fi
 
 if [ "$dry_run" = 0 ]; then
+  # Спрашиваем СРАЗУ, потом ждём: измеренная готовность службы на полном
+  # снимке — 1,0 с, а прежний порядок («сначала sleep 5») добавлял пять секунд
+  # к каждой установке и к каждому повтору на пустом месте.
   for _ in 1 2 3 4 5 6 7 8 9 10 11 12; do
-    sleep 5
     if curl -fsS "http://${BIND}:${PORT}/healthz" >/dev/null 2>&1; then break; fi
+    sleep 5
   done
   curl -fsS "http://${BIND}:${PORT}/healthz" >/dev/null \
     || die "служба не ответила на /healthz за минуту; маршрут nginx не ставлю"
