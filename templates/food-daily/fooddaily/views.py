@@ -4,6 +4,7 @@
 очередей (граница шаблона, factory/contracts/template_boundary.py).
 Источник данных — снимок data/content-snapshot.json.
 """
+
 from __future__ import annotations
 
 import json
@@ -27,38 +28,90 @@ CATEGORIES = {
 }
 
 TAGS = {
-    "tvorog": ("Творог", "product"), "kefir": ("Кефир", "product"), "moloko": ("Молоко", "product"),
-    "yajca": ("Яйца", "product"), "tykva": ("Тыква", "product"), "pshyono": ("Пшено", "product"),
-    "kurica": ("Курица", "product"), "syr": ("Сыр", "product"), "farsh": ("Фарш", "product"),
-    "chechevica": ("Чечевица", "product"), "pomidory": ("Помидоры", "product"), "ris": ("Рис", "product"),
-    "makarony": ("Макароны", "product"), "svinina": ("Свинина", "product"), "ryba": ("Рыба", "product"),
-    "grechka": ("Гречка", "product"), "griby": ("Грибы", "product"), "kapusta": ("Капуста", "product"),
+    "tvorog": ("Творог", "product"),
+    "kefir": ("Кефир", "product"),
+    "moloko": ("Молоко", "product"),
+    "yajca": ("Яйца", "product"),
+    "tykva": ("Тыква", "product"),
+    "pshyono": ("Пшено", "product"),
+    "kurica": ("Курица", "product"),
+    "syr": ("Сыр", "product"),
+    "farsh": ("Фарш", "product"),
+    "chechevica": ("Чечевица", "product"),
+    "pomidory": ("Помидоры", "product"),
+    "ris": ("Рис", "product"),
+    "makarony": ("Макароны", "product"),
+    "svinina": ("Свинина", "product"),
+    "ryba": ("Рыба", "product"),
+    "grechka": ("Гречка", "product"),
+    "griby": ("Грибы", "product"),
+    "kapusta": ("Капуста", "product"),
     "ovoshchi": ("Овощи", "product"),
-    "na-skovorode": ("На сковороде", "method"), "v-duhovke": ("В духовке", "method"), "varka": ("Варка", "method"),
-    "tushenie": ("Тушение", "method"), "na-paru": ("На пару", "method"), "blender": ("С блендером", "method"),
+    "na-skovorode": ("На сковороде", "method"),
+    "v-duhovke": ("В духовке", "method"),
+    "varka": ("Варка", "method"),
+    "tushenie": ("Тушение", "method"),
+    "na-paru": ("На пару", "method"),
+    "blender": ("С блендером", "method"),
     "bez-varki": ("Без варки", "method"),
 }
 
-UNITS = {"g": "г", "kg": "кг", "ml": "мл", "l": "л", "pcs": "шт.", "tbsp": "ст. л.", "tsp": "ч. л.", "cup": "стак.",
-         "clove": "зуб.", "pinch": "щеп.", "bunch": "пучок", "slice": "ломт.", "sprig": "веточка", "can": "банка",
-         "head": "гол.", "leaf": "лист", "piece": "кус.", "pack": "пачка"}
+UNITS = {
+    "g": "г",
+    "kg": "кг",
+    "ml": "мл",
+    "l": "л",
+    "pcs": "шт.",
+    "tbsp": "ст. л.",
+    "tsp": "ч. л.",
+    "cup": "стак.",
+    "clove": "зуб.",
+    "pinch": "щеп.",
+    "bunch": "пучок",
+    "slice": "ломт.",
+    "sprig": "веточка",
+    "can": "банка",
+    "head": "гол.",
+    "leaf": "лист",
+    "piece": "кус.",
+    "pack": "пачка",
+}
 
-TIME_BUCKETS = {"do-20": ("до 20 минут", 0, 20), "do-40": ("до 40 минут", 0, 40), "do-60": ("до часа", 0, 60),
-                "bolshe-chasa": ("больше часа", 61, 10 ** 6)}
+TIME_BUCKETS = {
+    "do-20": ("до 20 минут", 0, 20),
+    "do-40": ("до 40 минут", 0, 40),
+    "do-60": ("до часа", 0, 60),
+    "bolshe-chasa": ("больше часа", 61, 10**6),
+}
 
 # Подборки: правило — по фактам и тегам, не ручной список. Подборка
 # существует, только если в неё попадают ≥3 рецепта.
 COLLECTIONS = {
-    "bystro-do-30-minut": ("Быстро: до 30 минут", "Рецепты, у которых по данным источника на всё уходит не больше получаса.",
-                           lambda r: r.total_minutes is not None and r.total_minutes <= 30),
-    "zavtraki-iz-tvoroga": ("Завтраки из творога", "Сырники, запеканка и ленивые вареники.",
-                            lambda r: "tvorog" in r.tags),
-    "s-kuricej": ("С курицей", "Супы, вторые блюда и салаты, где главный продукт — курица.",
-                  lambda r: "kurica" in r.tags),
-    "osen-s-tykvoj": ("Осенью: с тыквой", "Каши, супы и выпечка к сезону тыквы.",
-                      lambda r: "tykva" in r.tags),
-    "uzhin-na-skovorode": ("Ужин на одной сковороде", "Вторые блюда и гарниры, которые готовятся на плите.",
-                           lambda r: "na-skovorode" in r.tags and r.category in ("vtorye-blyuda", "garniry")),
+    "bystro-do-30-minut": (
+        "Быстро: до 30 минут",
+        "Рецепты, у которых по данным источника на всё уходит не больше получаса.",
+        lambda r: r.total_minutes is not None and r.total_minutes <= 30,
+    ),
+    "zavtraki-iz-tvoroga": (
+        "Завтраки из творога",
+        "Сырники, запеканка и ленивые вареники.",
+        lambda r: "tvorog" in r.tags,
+    ),
+    "s-kuricej": (
+        "С курицей",
+        "Супы, вторые блюда и салаты, где главный продукт — курица.",
+        lambda r: "kurica" in r.tags,
+    ),
+    "osen-s-tykvoj": (
+        "Осенью: с тыквой",
+        "Каши, супы и выпечка к сезону тыквы.",
+        lambda r: "tykva" in r.tags,
+    ),
+    "uzhin-na-skovorode": (
+        "Ужин на одной сковороде",
+        "Вторые блюда и гарниры, которые готовятся на плите.",
+        lambda r: "na-skovorode" in r.tags and r.category in ("vtorye-blyuda", "garniry"),
+    ),
 }
 
 
@@ -113,51 +166,114 @@ class Recipe:
     related: list = field(default_factory=list)
 
     @property
-    def slug(self): return self.raw["slug"]
+    def slug(self):
+        return self.raw["slug"]
+
     @property
-    def url(self): return f"/recept/{self.slug}/"
+    def url(self):
+        return f"/recept/{self.slug}/"
+
     @property
-    def d(self): return self.raw["draft"]
+    def d(self):
+        return self.raw["draft"]
+
     @property
-    def f(self): return self.raw["facts"]
+    def f(self):
+        return self.raw["facts"]
+
     @property
-    def title(self): return self.d["title"]
+    def title(self):
+        return self.d["title"]
+
     @property
-    def category(self): return self.d["category"]
+    def category(self):
+        return self.d["category"]
+
     @property
-    def category_label(self): return CATEGORIES[self.category][0]
+    def category_label(self):
+        return CATEGORIES[self.category][0]
+
     @property
-    def tags(self): return self.d["tags"]
+    def tags(self):
+        return self.d["tags"]
+
     @property
-    def servings(self): return self.f["servings"]
+    def servings(self):
+        return self.f["servings"]
+
     @property
-    def total_minutes(self): return self.f["total_minutes"]
+    def total_minutes(self):
+        return self.f["total_minutes"]
+
     @property
-    def prep_minutes(self): return self.f["prep_minutes"]
+    def prep_minutes(self):
+        return self.f["prep_minutes"]
+
     @property
-    def cook_minutes(self): return self.f["cook_minutes"]
+    def cook_minutes(self):
+        return self.f["cook_minutes"]
+
     @property
-    def published_at(self): return self.raw["published_at"]
+    def published_at(self):
+        return self.raw["published_at"]
+
     @property
-    def updated_at(self): return self.raw["updated_at"]
+    def updated_at(self):
+        return self.raw["updated_at"]
+
     @property
-    def source(self): return self.raw["source"]
+    def source(self):
+        return self.raw["source"]
+
     @property
-    def has_video(self): return any(m["kind"] == "video" for m in self.raw["media"])
+    def has_video(self):
+        return any(m["kind"] == "video" for m in self.raw["media"])
 
     @cached_property
     def ingredients(self) -> list[tuple[Ingredient, str]]:
         out = []
         for row in self.d["ingredients"]:
             fi = self.f["ingredients"][row["fact_index"]]
-            out.append((Ingredient(row["display_name"], fi["quantity"], fi["quantity_max"], fi["unit"], fi["scalable"]),
-                        row.get("group") or ""))
+            out.append(
+                (
+                    Ingredient(
+                        row["display_name"],
+                        fi["quantity"],
+                        fi["quantity_max"],
+                        fi["unit"],
+                        fi["scalable"],
+                    ),
+                    row.get("group") or "",
+                )
+            )
         return out
 
     @property
     def substitutions(self):
         names = {i["fact_index"]: i["display_name"] for i in self.d["ingredients"]}
         return [(names[s["from_index"]], s) for s in self.d["substitutions"]]
+
+    @property
+    def lede(self) -> str:
+        """Первая фраза вступления — для карточки."""
+        intro = self.d["intro"].strip()
+        m = re.match(r"(.+?[.!?])(\s|$)", intro)
+        return (m.group(1) if m else intro)[:160]
+
+    @cached_property
+    def key_ingredients(self) -> list[str]:
+        """Главные продукты блюда: без соли, специй, масла и воды; до трёх."""
+        skip = re.compile(
+            r"^(соль|перец|черн|молот|масло|растительн|сливочное масло|вода|сахар|специи|приправ|зелень|"
+            r"каменная соль|чёрн|душист|прованск|паприка|куркума|зира|сода|уксус)",
+            re.I,
+        )
+        out = []
+        for i, _ in self.ingredients:
+            n = i.name.split("(")[0].strip()
+            if not skip.match(n) and n not in out:
+                out.append(n)
+        return out[:3]
 
     @property
     def time_label(self) -> str:
@@ -196,9 +312,18 @@ class Site:
         if snap["site_id"] != self.cfg["site_id"]:
             raise PermissionError("снимок принадлежит другому сайту")
         self.generated_at = snap["generated_at"]
-        self.recipes = sorted((Recipe(x) for x in snap["items"]),
-                              key=lambda r: (r.published_at or "", r.slug), reverse=True)
+        self.recipes = sorted(
+            (Recipe(x) for x in snap["items"]),
+            key=lambda r: (r.published_at or "", r.slug),
+            reverse=True,
+        )
         self.by_slug = {r.slug: r for r in self.recipes}
+        self.articles = {}
+        for ap in sorted((ROOT / "data" / "articles").glob("*.json")):
+            a = json.loads(ap.read_text())
+            if a["site_id"] != self.cfg["site_id"]:
+                raise PermissionError(f"статья {ap.name} принадлежит другому сайту")
+            self.articles[a["slug"]] = a
         for r in self.recipes:
             r.related = self._related(r)
 
@@ -216,7 +341,11 @@ class Site:
 
     @property
     def indexable(self) -> bool:
-        return self.mode == "production" and bool(self.cfg.get("production_authorized")) and bool(self.cfg["origin"]["production"])
+        return (
+            self.mode == "production"
+            and bool(self.cfg.get("production_authorized"))
+            and bool(self.cfg["origin"]["production"])
+        )
 
     def abs(self, path: str) -> str:
         return self.origin + path
@@ -225,6 +354,7 @@ class Site:
     def _related(self, r: Recipe) -> list[Recipe]:
         def score(o: Recipe) -> float:
             return (2 if o.category == r.category else 0) + len(set(o.tags) & set(r.tags))
+
         cands = [o for o in self.recipes if o.slug != r.slug]
         cands.sort(key=lambda o: (-score(o), o.slug))
         return [o for o in cands if score(o) > 0][:4]
@@ -267,12 +397,44 @@ class Site:
             items = [r for r in items if r.category == category]
         if product:
             p = norm(product)
-            items = [r for r in items if p in r.ingredient_text or p in r.tags or
-                     (len(p) > 4 and p[:-2] in r.ingredient_text)]
+            items = [
+                r
+                for r in items
+                if p in r.ingredient_text or p in r.tags or (len(p) > 4 and p[:-2] in r.ingredient_text)
+            ]
         if time in TIME_BUCKETS:
             _, lo, hi = TIME_BUCKETS[time]
             items = [r for r in items if r.total_minutes is not None and lo <= r.total_minutes <= hi]
         return items
+
+    @staticmethod
+    def tag_path(key: str) -> str:
+        return f"/{'produkty' if TAGS[key][1] == 'product' else 'sposob'}/{key}/"
+
+    def tag_links(self, r: Recipe) -> list[tuple[str, str]]:
+        """Только теги, у которых есть работающая страница — без декоративного текста."""
+        pages = self.tag_pages()
+        return [(self.tag_path(t), TAGS[t][0]) for t in r.tags if t in pages]
+
+    def readiness_by_category(self) -> list[tuple[str, list[tuple[Recipe, str]]]]:
+        out = []
+        for key, (label, _) in CATEGORIES.items():
+            rows = [
+                (r, st["readiness_cue"]) for r in self.category(key) for st in r.d["steps"] if st.get("readiness_cue")
+            ]
+            if rows:
+                out.append((label, rows))
+        return out
+
+    def all_substitutions(self) -> list[tuple[Recipe, str, dict]]:
+        return [(r, name, sub) for r in self.recipes for name, sub in r.substitutions]
+
+    def tag_index(self, kind: str) -> list[tuple[str, str, int, bool]]:
+        return [
+            (self.tag_path(t), TAGS[t][0], len(items), self.tag_indexable(t))
+            for t, items in self.tag_pages().items()
+            if TAGS[t][1] == kind
+        ]
 
     def product_options(self) -> list[tuple[str, str]]:
         return [(t, TAGS[t][0]) for t, items in self.tag_pages().items() if TAGS[t][1] == "product"]
@@ -280,4 +442,4 @@ class Site:
     def page(self, items: list, n: int) -> tuple[list, int, int]:
         per = self.cfg["pagination"]["per_page"]
         pages = max(1, math.ceil(len(items) / per))
-        return items[(n - 1) * per: n * per], n, pages
+        return items[(n - 1) * per : n * per], n, pages

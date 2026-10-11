@@ -168,5 +168,8 @@
   var ff = document.querySelector("[data-autosubmit]");
   if (ff) ff.addEventListener("change", function () { ff.submit(); });
 
+  var pr = document.querySelector("[data-print]");
+  if (pr) { pr.hidden = false; pr.addEventListener("click", function () { window.print(); }); }
+
   syncFav();
 })();

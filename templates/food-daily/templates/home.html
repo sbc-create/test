@@ -42,6 +42,17 @@
 </section>
 {% endif %}
 
+{% if site.articles %}
+<section class="block" aria-labelledby="tips-h">
+  <div class="block__head"><h2 id="tips-h">Советы</h2><a href="/sovety/">Все советы →</a></div>
+  <div class="collections">
+    {% for a in site.articles.values() %}
+    <a class="collection collection--{{ (loop.index + 1) % 4 }}" href="/sovety/{{ a.slug }}/"><span class="collection__title">{{ a.title }}</span><span class="collection__desc">{{ a.description }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
 <section class="block" aria-labelledby="sec-h">
   <div class="block__head"><h2 id="sec-h">Разделы</h2></div>
   <ul class="sections-grid">

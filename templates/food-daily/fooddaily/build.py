@@ -6,6 +6,7 @@
 и статики в var/food-daily/build/<commit>/ + manifest с хешами.
 Неотслеживаемые и чужие файлы в сборку попасть не могут.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -23,10 +24,17 @@ REPO = ROOT.parents[1]
 
 
 def build(commit: str) -> dict:
-    sha = subprocess.run(["git", "rev-parse", commit], cwd=REPO, capture_output=True, text=True, check=True).stdout.strip()
+    sha = subprocess.run(
+        ["git", "rev-parse", commit], cwd=REPO, capture_output=True, text=True, check=True
+    ).stdout.strip()
     out = REPO / "var" / "food-daily" / "build" / sha
     with tempfile.TemporaryDirectory(dir=REPO / "var" / "food-daily") as tmp:
-        tar = subprocess.run(["git", "archive", sha, "templates/food-daily"], cwd=REPO, capture_output=True, check=True).stdout
+        tar = subprocess.run(
+            ["git", "archive", sha, "templates/food-daily"],
+            cwd=REPO,
+            capture_output=True,
+            check=True,
+        ).stdout
         with tarfile.open(fileobj=io.BytesIO(tar)) as t:
             t.extractall(tmp)
         src = Path(tmp) / "templates" / "food-daily"
@@ -49,10 +57,17 @@ def build(commit: str) -> dict:
     for p in sorted(out.rglob("*")):
         if p.is_file() and p.name != "manifest.json":
             files[str(p.relative_to(out))] = hashlib.sha256(p.read_bytes()).hexdigest()
-    manifest = {"site_id": "food-daily", "commit": sha, "files": len(files),
-                "tree_sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(), "hashes": files}
+    manifest = {
+        "site_id": "food-daily",
+        "commit": sha,
+        "files": len(files),
+        "tree_sha256": hashlib.sha256(json.dumps(files, sort_keys=True).encode()).hexdigest(),
+        "hashes": files,
+    }
     (out / "manifest.json").write_text(json.dumps(manifest, indent=1) + "\n")
-    return {k: manifest[k] for k in ("site_id", "commit", "files", "tree_sha256")} | {"path": str(out.relative_to(REPO))}
+    return {k: manifest[k] for k in ("site_id", "commit", "files", "tree_sha256")} | {
+        "path": str(out.relative_to(REPO))
+    }
 
 
 def main(argv=None) -> int:

@@ -6,6 +6,7 @@ config/crawl.yaml), а все ссылки того же хоста записы
 посещённые страницы лежат в catalog-state.json — повторный запуск
 продолжает с места остановки.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -15,7 +16,7 @@ import re
 import time
 import urllib.parse
 
-from .http import REPO, Client, FetchRefused, load_config
+from .http import Client, FetchRefused, load_config
 from .inventory import CRAWL_ROOT, normalize
 from .robots import Robots
 
@@ -42,8 +43,14 @@ class CatalogCrawl:
         if self.state_path.exists():
             self.state = json.loads(self.state_path.read_text())
         else:
-            self.state = {"host": host_cfg["id"], "started_at": _now(), "queue": [self.base + s for s in self.cat["seeds"]],
-                          "visited": {}, "seen_links": 0, "finished": False}
+            self.state = {
+                "host": host_cfg["id"],
+                "started_at": _now(),
+                "queue": [self.base + s for s in self.cat["seeds"]],
+                "visited": {},
+                "seen_links": 0,
+                "finished": False,
+            }
         self.seen: set[str] = set(self.state["visited"]) | set(self.state["queue"])
 
     def _follow(self, url: str) -> bool:
@@ -77,8 +84,20 @@ class CatalogCrawl:
                     self.state["visited"][url] = f"refused: {e}"
                     continue
                 self.state["visited"][url] = r.status
-                log.write(json.dumps({"at": _now(), "event": "catalog_page", "url": url, "status": r.status,
-                                      "final": r.url, "error": r.error}, ensure_ascii=False) + "\n")
+                log.write(
+                    json.dumps(
+                        {
+                            "at": _now(),
+                            "event": "catalog_page",
+                            "url": url,
+                            "status": r.status,
+                            "final": r.url,
+                            "error": r.error,
+                        },
+                        ensure_ascii=False,
+                    )
+                    + "\n"
+                )
                 if r.status != 200:
                     continue
                 for raw in HREF.findall(r.text()):
@@ -89,9 +108,21 @@ class CatalogCrawl:
                     norm = normalize(link)
                     if norm not in recorded:
                         recorded.add(norm)
-                        out.write(json.dumps({"source_url": link, "url": norm, "lastmod": None,
-                                              "discovered_via": "catalog", "sitemap": None, "found_on": url,
-                                              "has_video": False}, ensure_ascii=False) + "\n")
+                        out.write(
+                            json.dumps(
+                                {
+                                    "source_url": link,
+                                    "url": norm,
+                                    "lastmod": None,
+                                    "discovered_via": "catalog",
+                                    "sitemap": None,
+                                    "found_on": url,
+                                    "has_video": False,
+                                },
+                                ensure_ascii=False,
+                            )
+                            + "\n"
+                        )
                         self.state["seen_links"] += 1
                     if self._follow(norm) and norm not in self.seen:
                         self.seen.add(norm)
@@ -103,8 +134,13 @@ class CatalogCrawl:
         self.state["stopped_reason"] = None if self.state["finished"] else "page/time budget"
         self.state["updated_at"] = _now()
         self.save()
-        return {"host": self.h["id"], "pages": len(self.state["visited"]), "queue": len(self.state["queue"]),
-                "links": self.state["seen_links"], "finished": self.state["finished"]}
+        return {
+            "host": self.h["id"],
+            "pages": len(self.state["visited"]),
+            "queue": len(self.state["queue"]),
+            "links": self.state["seen_links"],
+            "finished": self.state["finished"],
+        }
 
 
 def _now() -> str:
@@ -122,8 +158,11 @@ def main(argv=None) -> int:
     client = Client(config=cfg)
     deadline = time.monotonic() + a.max_seconds
     import concurrent.futures as cf
+
     with cf.ThreadPoolExecutor(max_workers=len(hosts) or 1) as ex:
-        futs = {ex.submit(CatalogCrawl(h, client).run, deadline=deadline, max_pages=a.max_pages): h["id"] for h in hosts}
+        futs = {
+            ex.submit(CatalogCrawl(h, client).run, deadline=deadline, max_pages=a.max_pages): h["id"] for h in hosts
+        }
         for f in cf.as_completed(futs):
             try:
                 print(json.dumps(f.result(), ensure_ascii=False), flush=True)

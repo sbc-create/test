@@ -100,11 +100,16 @@ main { padding-bottom: 56px; }
 .grid { display: grid; gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
 .card { position: relative; display: flex; flex-direction: column; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: transform .15s ease; }
 .card:hover { transform: translateY(-2px); }
-.card__link { color: var(--ink); text-decoration: none; display: block; }
-.card__title { font: 600 1.18rem/1.25 var(--display); margin: 12px 16px 4px; }
+.card__link { color: var(--ink); text-decoration: none; display: block; padding: 18px 64px 0 18px; }
+.card { border-top: 6px solid var(--cat, var(--saffron)); }
+.card--zavtraki { --cat: #e3a43a; } .card--supy { --cat: #b8432a; } .card--vtorye-blyuda { --cat: #8f4a2b; }
+.card--garniry { --cat: #a08a3c; } .card--salaty { --cat: #3e6a3a; } .card--zakuski { --cat: #6b3a52; }
+.card__cat { display: block; font-size: .78rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--herb); }
+.card__title { font: 600 1.25rem/1.22 var(--display); margin: 6px 0 6px; overflow-wrap: anywhere; }
+.card__lede { display: block; color: var(--ink-2); font-size: .94rem; line-height: 1.45; }
+.card__ing { margin: 10px 18px 0; font-size: .88rem; color: var(--tomato-ink); font-weight: 600; }
 .card__link:hover .card__title { color: var(--tomato-ink); text-decoration: underline; text-decoration-thickness: 1px; }
-.card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: 4px 16px 16px; font-size: .86rem; color: var(--muted); }
-.card__cat { color: var(--herb); font-weight: 600; }
+.card__meta { display: flex; flex-wrap: wrap; gap: 4px 12px; margin: auto 18px 16px; padding-top: 10px; font-size: .86rem; color: var(--muted); }
 .illo { display: block; aspect-ratio: 4 / 3; background: #f3e1c9; }
 .illo img { width: 100%; height: 100%; object-fit: contain; padding: 10% 18%; }
 .illo--zavtraki { background: #f6dfb5; } .illo--supy { background: #f2cfbd; } .illo--vtorye-blyuda { background: #e9d6c6; }
@@ -137,7 +142,7 @@ main { padding-bottom: 56px; }
 .filters select { font: inherit; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: var(--radius-s); background: var(--card); color: var(--ink); min-height: 44px; }
 .empty { background: var(--paper-2); border-radius: var(--radius); padding: 28px; text-align: center; margin: 12px 0; }
 .empty--404 { margin-top: 28px; }
-.empty__code { font: 700 4rem/1 var(--display); color: var(--saffron); margin: 0; }
+.empty__code { font: 700 4rem/1 var(--display); color: var(--tomato-ink); margin: 0; }
 .empty .search { margin: 16px auto; }
 .result-count { color: var(--muted); }
 .pager { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin: 28px 0 0; }
@@ -146,7 +151,7 @@ main { padding-bottom: 56px; }
 
 /* --- рецепт ------------------------------------------------------------- */
 .recipe__head { display: grid; gap: 4px 36px; grid-template-columns: 1fr; padding-top: 8px; }
-@media (min-width: 900px) { .recipe__head { grid-template-columns: 1.15fr .85fr; } .recipe__illo { grid-column: 2; grid-row: 1 / span 5; } }
+.recipe__head { max-width: 860px; }
 .recipe__kicker { margin: 0; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; font-weight: 700; }
 .recipe__kicker a { color: var(--herb); text-decoration: none; }
 .recipe__title { margin: .1em 0 .2em; }
@@ -224,6 +229,27 @@ main { padding-bottom: 56px; }
 @media (prefers-reduced-motion: reduce) { .card { transition: none; } .card:hover { transform: none; } }
 
 .related .grid { grid-template-columns: repeat(auto-fill, minmax(min(46%, 220px), 1fr)); gap: 12px; }
-.related .card__title { font-size: 1rem; margin: 10px 12px 2px; }
-.related .card__meta { margin: 2px 12px 12px; }
+.related .card__title { font-size: 1.05rem; }
 .sections-grid { margin-bottom: 8px; }
+
+/* теги на странице рецепта — настоящие ссылки */
+.tags { display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0 0 16px; }
+.tags a { display: inline-flex; min-height: 32px; align-items: center; padding: 4px 12px; border-radius: 999px; background: var(--herb-soft); color: var(--herb); text-decoration: none; font-size: .9rem; }
+.tags a:hover { background: var(--herb); color: #fff; }
+.tag-index { list-style: none; padding: 0; display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr)); }
+.tag-index a { display: flex; justify-content: space-between; padding: 14px 16px; background: var(--card); border-radius: var(--radius-s); box-shadow: var(--shadow); text-decoration: none; color: var(--ink); }
+/* советы */
+.article { max-width: 760px; }
+.article h2 { margin-top: 1.4em; }
+.article .lead { font-size: 1.12rem; color: var(--ink-2); }
+.cue-list li { margin-bottom: 10px; }
+.disclosure { font-size: .9rem; color: var(--ink-2); border: 1.5px dashed var(--line); border-radius: var(--radius); padding: 12px 16px; margin-top: 28px; }
+/* печать рецепта */
+@media print {
+  .masthead, .crumbs, .foot, .recipe__actions, .related, .servings, [data-add-list], .fav, .skip, .tags, .cook { display: none !important; }
+  body { background: #fff; font-size: 12pt; }
+  .ingredients, .facts div { box-shadow: none; border: 1px solid #999; }
+  .recipe__body { display: block; }
+  .step { break-inside: avoid; }
+  a { color: #000; text-decoration: none; }
+}

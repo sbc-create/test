@@ -9,6 +9,7 @@
 * повтор задания с тем же idempotency_key возвращает прежнее задание;
 * откат — новая версия, равная по содержимому выбранной старой, а не удаление.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -111,8 +112,10 @@ class Store:
             raise
 
     def audit(self, actor: str, action: str, *, content_id=None, version=None, **detail) -> None:
-        self.db.execute("INSERT INTO audit (at, actor, action, content_id, recipe_version, detail_json) VALUES (?,?,?,?,?,?)",
-                        (now(), actor, action, content_id, version, json.dumps(detail, ensure_ascii=False)))
+        self.db.execute(
+            "INSERT INTO audit (at, actor, action, content_id, recipe_version, detail_json) VALUES (?,?,?,?,?,?)",
+            (now(), actor, action, content_id, version, json.dumps(detail, ensure_ascii=False)),
+        )
 
     # ---- материалы и версии ------------------------------------------
     def ensure_content(self, *, content_id: str, slug: str, dedupe_key: str, kind: str = "recipe") -> sqlite3.Row:
@@ -120,12 +123,23 @@ class Store:
         if row:
             return row
         t = now()
-        self.db.execute("INSERT INTO content VALUES (?,?,?,?,?,0,'ai_draft',NULL,'not_cooked','hidden',?,NULL,?)",
-                        (content_id, SITE_ID, kind, slug, dedupe_key, t, t))
+        self.db.execute(
+            "INSERT INTO content VALUES (?,?,?,?,?,0,'ai_draft',NULL,'not_cooked','hidden',?,NULL,?)",
+            (content_id, SITE_ID, kind, slug, dedupe_key, t, t),
+        )
         return self.db.execute("SELECT * FROM content WHERE content_id=?", (content_id,)).fetchone()
 
-    def add_version(self, content_id: str, payload: dict, *, base_version: int, source_ids: list[str],
-                    producer: dict, actor: str, reason: str) -> int:
+    def add_version(
+        self,
+        content_id: str,
+        payload: dict,
+        *,
+        base_version: int,
+        source_ids: list[str],
+        producer: dict,
+        actor: str,
+        reason: str,
+    ) -> int:
         """Новая версия при совпадении базы; иначе VersionConflict. Тот же
         payload поверх текущей версии — no-op (возвращает текущую)."""
         with self.tx():
@@ -135,8 +149,10 @@ class Store:
             cur = row["current_version"]
             h = digest(payload)
             if cur:
-                last = self.db.execute("SELECT payload_hash FROM versions WHERE content_id=? AND recipe_version=?",
-                                       (content_id, cur)).fetchone()
+                last = self.db.execute(
+                    "SELECT payload_hash FROM versions WHERE content_id=? AND recipe_version=?",
+                    (content_id, cur),
+                ).fetchone()
                 if last and last["payload_hash"] == h:
                     return cur
             if base_version != cur:
@@ -144,38 +160,77 @@ class Store:
             else:
                 conflict = None
                 new = cur + 1
-                self.db.execute("INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                                (content_id, new, SCHEMA_VERSION, cur or None, json.dumps(payload, ensure_ascii=False),
-                                 h, json.dumps(source_ids), json.dumps(producer, ensure_ascii=False), now(), actor, reason))
+                self.db.execute(
+                    "INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                    (
+                        content_id,
+                        new,
+                        SCHEMA_VERSION,
+                        cur or None,
+                        json.dumps(payload, ensure_ascii=False),
+                        h,
+                        json.dumps(source_ids),
+                        json.dumps(producer, ensure_ascii=False),
+                        now(),
+                        actor,
+                        reason,
+                    ),
+                )
                 # любая новая версия снимает редакторское одобрение: проверялась другая
-                self.db.execute("UPDATE content SET current_version=?, review_status='ai_draft', reviewer=NULL, "
-                                "updated_at=? WHERE content_id=?", (new, now(), content_id))
-                self.audit(actor, "version_added", content_id=content_id, version=new, reason=reason, payload_hash=h)
+                self.db.execute(
+                    "UPDATE content SET current_version=?, review_status='ai_draft', reviewer=NULL, "
+                    "updated_at=? WHERE content_id=?",
+                    (new, now(), content_id),
+                )
+                self.audit(
+                    actor,
+                    "version_added",
+                    content_id=content_id,
+                    version=new,
+                    reason=reason,
+                    payload_hash=h,
+                )
         if conflict is not None:
             # журнал конфликта пишется ВНЕ отменённой транзакции, иначе откат стирает и его
-            self.audit(actor, "version_conflict", content_id=content_id, version=conflict, base_version=base_version)
+            self.audit(
+                actor,
+                "version_conflict",
+                content_id=content_id,
+                version=conflict,
+                base_version=base_version,
+            )
             raise VersionConflict(f"{content_id}: база {base_version}, текущая {conflict}")
         return new
 
     def rollback(self, content_id: str, to_version: int, *, actor: str) -> int:
-        old = self.db.execute("SELECT * FROM versions WHERE content_id=? AND recipe_version=?",
-                              (content_id, to_version)).fetchone()
+        old = self.db.execute(
+            "SELECT * FROM versions WHERE content_id=? AND recipe_version=?",
+            (content_id, to_version),
+        ).fetchone()
         if not old:
             raise KeyError(f"{content_id} v{to_version}")
         cur = self.current(content_id)["current_version"]
         payload = json.loads(old["payload_json"])
         payload["_rollback_of"] = to_version
-        return self.add_version(content_id, payload, base_version=cur, source_ids=json.loads(old["source_ids_json"]),
-                                producer={"kind": "rollback", "from_version": to_version}, actor=actor,
-                                reason=f"откат к v{to_version}")
+        return self.add_version(
+            content_id,
+            payload,
+            base_version=cur,
+            source_ids=json.loads(old["source_ids_json"]),
+            producer={"kind": "rollback", "from_version": to_version},
+            actor=actor,
+            reason=f"откат к v{to_version}",
+        )
 
     def set_publish(self, content_id: str, status: str, *, actor: str) -> None:
         assert status in PUBLISH
         with self.tx():
             t = now()
-            self.db.execute("UPDATE content SET publish_status=?, published_at=COALESCE(published_at, CASE WHEN ? IN "
-                            "('preview','published') THEN ? END), updated_at=? WHERE content_id=?",
-                            (status, status, t, t, content_id))
+            self.db.execute(
+                "UPDATE content SET publish_status=?, published_at=COALESCE(published_at, CASE WHEN ? IN "
+                "('preview','published') THEN ? END), updated_at=? WHERE content_id=?",
+                (status, status, t, t, content_id),
+            )
             self.audit(actor, "publish_status", content_id=content_id, status=status)
 
     def set_review(self, content_id: str, status: str, *, reviewer: str, version: int, note: str = "") -> None:
@@ -184,8 +239,10 @@ class Store:
             cur = self.current(content_id)["current_version"]
             if version != cur:
                 raise VersionConflict(f"проверялась v{version}, текущая v{cur}")
-            self.db.execute("UPDATE content SET review_status=?, reviewer=?, updated_at=? WHERE content_id=?",
-                            (status, reviewer, now(), content_id))
+            self.db.execute(
+                "UPDATE content SET review_status=?, reviewer=?, updated_at=? WHERE content_id=?",
+                (status, reviewer, now(), content_id),
+            )
             self.audit(reviewer, "review", content_id=content_id, version=version, status=status, note=note)
 
     def current(self, content_id: str) -> sqlite3.Row:
@@ -194,13 +251,20 @@ class Store:
     def version(self, content_id: str, v: int | None = None) -> dict | None:
         if v is None:
             v = self.current(content_id)["current_version"]
-        row = self.db.execute("SELECT * FROM versions WHERE content_id=? AND recipe_version=?", (content_id, v)).fetchone()
+        row = self.db.execute(
+            "SELECT * FROM versions WHERE content_id=? AND recipe_version=?", (content_id, v)
+        ).fetchone()
         return dict(row) if row else None
 
     def versions(self, content_id: str) -> list[dict]:
-        return [dict(r) for r in self.db.execute(
-            "SELECT recipe_version, parent_version, payload_hash, producer_json, created_at, created_by, reason "
-            "FROM versions WHERE content_id=? ORDER BY recipe_version", (content_id,))]
+        return [
+            dict(r)
+            for r in self.db.execute(
+                "SELECT recipe_version, parent_version, payload_hash, producer_json, created_at, created_by, reason "
+                "FROM versions WHERE content_id=? ORDER BY recipe_version",
+                (content_id,),
+            )
+        ]
 
     def audit_for(self, content_id: str) -> list[dict]:
         return [dict(r) for r in self.db.execute("SELECT * FROM audit WHERE content_id=? ORDER BY id", (content_id,))]

@@ -5,6 +5,7 @@
 атрибуция источника, даты. Исходных текстов шагов в нём нет.
 Публичное чтение работает без БД, без Qwen и без внешних API.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -29,7 +30,13 @@ def publish_preview(st: Store, content_id: str, *, actor: str) -> dict:
     payload = json.loads(st.version(content_id)["payload_json"])
     blockers = publish_blockers(payload)
     if blockers:
-        st.audit(actor, "publish_blocked", content_id=content_id, version=row["current_version"], blockers=blockers)
+        st.audit(
+            actor,
+            "publish_blocked",
+            content_id=content_id,
+            version=row["current_version"],
+            blockers=blockers,
+        )
         return {"content_id": content_id, "published": False, "blockers": blockers}
     st.set_publish(content_id, "preview", actor=actor)
     return {"content_id": content_id, "published": True, "version": row["current_version"]}
@@ -50,22 +57,37 @@ def diff(st: Store, content_id: str, a: int, b: int) -> str:
 
 def snapshot(st: Store) -> dict:
     items = []
-    for row in st.db.execute("SELECT * FROM content WHERE site_id=? AND publish_status IN ('preview','published') "
-                             "ORDER BY published_at DESC, content_id", (SITE_ID,)):
+    for row in st.db.execute(
+        "SELECT * FROM content WHERE site_id=? AND publish_status IN ('preview','published') "
+        "ORDER BY published_at DESC, content_id",
+        (SITE_ID,),
+    ):
         v = st.version(row["content_id"])
         p = json.loads(v["payload_json"])
-        media = [dict(m) for m in st.db.execute(
-            "SELECT media_id, kind, status, path, recipe_version FROM media WHERE content_id=? AND status='ready' "
-            "AND recipe_version=?", (row["content_id"], row["current_version"]))]
-        items.append({
-            "content_id": row["content_id"], "slug": row["slug"], "version": row["current_version"],
-            "published_at": row["published_at"], "updated_at": v["created_at"],
-            "review_status": row["review_status"], "cooking_status": row["cooking_status"],
-            "producer_mode": json.loads(v["producer_json"]).get("mode"),
-            "draft": {k: val for k, val in p["draft"].items() if k != "editor_notes"},
-            "facts": p["facts"], "source": {k: p["source"][k] for k in ("url", "host", "fetched_at")},
-            "media": media,
-        })
+        media = [
+            dict(m)
+            for m in st.db.execute(
+                "SELECT media_id, kind, status, path, recipe_version FROM media WHERE content_id=? AND status='ready' "
+                "AND recipe_version=?",
+                (row["content_id"], row["current_version"]),
+            )
+        ]
+        items.append(
+            {
+                "content_id": row["content_id"],
+                "slug": row["slug"],
+                "version": row["current_version"],
+                "published_at": row["published_at"],
+                "updated_at": v["created_at"],
+                "review_status": row["review_status"],
+                "cooking_status": row["cooking_status"],
+                "producer_mode": json.loads(v["producer_json"]).get("mode"),
+                "draft": {k: val for k, val in p["draft"].items() if k != "editor_notes"},
+                "facts": p["facts"],
+                "source": {k: p["source"][k] for k in ("url", "host", "fetched_at")},
+                "media": media,
+            }
+        )
     snap = {"site_id": SITE_ID, "schema_version": 1, "generated_at": now(), "items": items}
     SNAPSHOT.write_text(json.dumps(snap, ensure_ascii=False, indent=1) + "\n")
     return {"items": len(items), "path": str(SNAPSHOT.relative_to(ROOT))}
@@ -98,7 +120,11 @@ def main(argv=None) -> int:
     st = open_store()
     actor = "food-daily-editorial-cli"
     if a.cmd == "publish-preview":
-        ids = a.content_ids or [r[0] for r in st.db.execute("SELECT content_id FROM content ORDER BY created_at")] if a.all else a.content_ids
+        ids = (
+            a.content_ids or [r[0] for r in st.db.execute("SELECT content_id FROM content ORDER BY created_at")]
+            if a.all
+            else a.content_ids
+        )
         print(json.dumps([publish_preview(st, c, actor=actor) for c in ids], ensure_ascii=False, indent=1))
     elif a.cmd == "unpublish":
         st.set_publish(a.content_id, "hidden", actor=actor)
@@ -111,12 +137,21 @@ def main(argv=None) -> int:
     elif a.cmd == "snapshot":
         print(json.dumps(snapshot(st)))
     else:
-        print(json.dumps({
-            "content": st.db.execute("SELECT count(*) FROM content").fetchone()[0],
-            "publish": dict(st.db.execute("SELECT publish_status, count(*) FROM content GROUP BY 1").fetchall()),
-            "review": dict(st.db.execute("SELECT review_status, count(*) FROM content GROUP BY 1").fetchall()),
-            "cooking": dict(st.db.execute("SELECT cooking_status, count(*) FROM content GROUP BY 1").fetchall()),
-        }, ensure_ascii=False))
+        print(
+            json.dumps(
+                {
+                    "content": st.db.execute("SELECT count(*) FROM content").fetchone()[0],
+                    "publish": dict(
+                        st.db.execute("SELECT publish_status, count(*) FROM content GROUP BY 1").fetchall()
+                    ),
+                    "review": dict(st.db.execute("SELECT review_status, count(*) FROM content GROUP BY 1").fetchall()),
+                    "cooking": dict(
+                        st.db.execute("SELECT cooking_status, count(*) FROM content GROUP BY 1").fetchall()
+                    ),
+                },
+                ensure_ascii=False,
+            )
+        )
     return 0
 
 

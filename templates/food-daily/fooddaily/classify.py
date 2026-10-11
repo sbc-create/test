@@ -8,6 +8,7 @@
 Не считаются отдельными страницами: AMP/print-версии, параметры сортировки
 и пагинация списков (тип `listing_page`, в «прочие» не попадает).
 """
+
 from __future__ import annotations
 
 import collections
@@ -33,14 +34,22 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
         (r"RecipePagesGroup", None, "recipe"),
         (r"VideoTutorialPagesGroup", None, "video"),
         (r"ArticlePagesGroup|JournalPagesGroup", None, "article"),
-        (r"RecipeCategoryPagesGroup|CuisinePagesGroup|CookingMethodPagesGroup|DietPagesGroup", None, "category"),
+        (
+            r"RecipeCategoryPagesGroup|CuisinePagesGroup|CookingMethodPagesGroup|DietPagesGroup",
+            None,
+            "category",
+        ),
         (r"RecipeGroupPagesGroup|EventPagesGroup", None, "tag"),
         (None, r"^/recepty/ingredienty/", "tag"),
-        (None, r"^/recepty/[a-z-]+/ingredienty/", "tag"),          # рубрика × продукт
+        (None, r"^/recepty/[a-z-]+/ingredienty/", "tag"),  # рубрика × продукт
         (None, r"^/recepty/[a-z-]+/[a-z0-9-]+-\d+$", "recipe"),
         (None, r"^/media/", "article"),
         (None, r"^/recepty/[a-z-]+$", "category"),
-        (None, r"^/(wiki|chefs|recepty/chefs|restaurants|instrumenty|artwork|specproekty)/", "other"),
+        (
+            None,
+            r"^/(wiki|chefs|recepty/chefs|restaurants|instrumenty|artwork|specproekty)/",
+            "other",
+        ),
     ],
     "food-ru": [
         (r"/recipes-\d+\.xml", None, "recipe"),
@@ -58,7 +67,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
         (None, r"^/(text)/", "article"),
         (None, r"^/(group)/", "tag"),
         (None, r"^/(news|product|user)/", "other"),
-        (None, r"^/[a-z-]+-\d+$", "category"),                    # рубрики журнала
+        (None, r"^/[a-z-]+-\d+$", "category"),  # рубрики журнала
     ],
     "menunedeli": [
         (r"/recipe-sitemap\d*\.xml", None, "recipe"),
@@ -70,7 +79,11 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     "russianfood": [
         (None, r"^/recipes/recipe\.php\?rid=\d+$", "recipe"),
         (None, r"^/recipes/bytype/\?fid=\d+$", "category"),
-        (None, r"^/recipes/bytype/\?fid=\d+((,|%2C)\d+)+$", "tag"),  # сочетание рубрик (запятая после нормализации — %2C)
+        (
+            None,
+            r"^/recipes/bytype/\?fid=\d+((,|%2C)\d+)+$",
+            "tag",
+        ),  # сочетание рубрик (запятая после нормализации — %2C)
         (None, r"^/themes/(\?theme_id=\d+)?$", "tag"),
         (None, r"^/reading/", "article"),
         (None, r"^/(blogs|forum|entertainment|subscribe|search|users)/", "other"),
@@ -79,7 +92,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     "povar": [
         (None, r"^/recipes/[a-z0-9_]+-\d+\.html$", "recipe"),
         (None, r"^/list/[a-z0-9_]+/$", "category"),
-        (None, r"^/list/[a-z0-9_]+/\d+/$", "listing_page"),         # пагинация рубрики, canonical → 1-я
+        (None, r"^/list/[a-z0-9_]+/\d+/$", "listing_page"),  # пагинация рубрики, canonical → 1-я
         (None, r"^/menu/[a-z0-9_]+/$", "tag"),
         (None, r"^/mostnew/", "listing_page"),
         (None, r"^/(wiki|articles)/", "article"),
@@ -95,7 +108,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     ],
     "povarenok": [
         (None, r"^/recipes/show/\d+/$", "recipe"),
-        (None, r"[?&]searchid=", "listing_page"),                    # отбор внутри рубрики
+        (None, r"[?&]searchid=", "listing_page"),  # отбор внутри рубрики
         (None, r"^/recipes/(dishes/[a-z]+|category/\d+)/$", "category"),
         (None, r"^/recipes/(kitchen|destiny|ingredient)/\d+/?$", "tag"),
         (None, r"/~\d+/$", "listing_page"),
@@ -103,7 +116,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
         (None, r"^/video/", "video"),
     ],
     "edimdoma": [
-        (None, r"[?&]page=\d+", "listing_page"),                  # пагинация лент и тегов
+        (None, r"[?&]page=\d+", "listing_page"),  # пагинация лент и тегов
         (None, r"^/retsepty/\d+-[a-z0-9-]+$", "recipe"),
         (None, r"^/retsepty/tags/\d+-", "tag"),
         (None, r"^/retsepty$", "category"),
@@ -152,19 +165,34 @@ def host_counts(host_id: str, *, export: Path | None = None) -> dict:
         typ, rule = classify(host_id, u, d.get("sitemap"))
         if d.get("has_video") and typ not in ("video",):
             d["sitemap_video"] = True
-        seen[u] = {"url": u, "source_url": d["source_url"], "type": typ, "rule": rule,
-                   "discovered_via": d["discovered_via"], "sitemap": d.get("sitemap"),
-                   "found_on": d.get("found_on"), "lastmod": d.get("lastmod"),
-                   "sitemap_video": d.get("has_video", False),
-                   # поля проверки страницы — заполняются только выборкой verify
-                   "http_status": None, "canonical": None, "indexable": None}
+        seen[u] = {
+            "url": u,
+            "source_url": d["source_url"],
+            "type": typ,
+            "rule": rule,
+            "discovered_via": d["discovered_via"],
+            "sitemap": d.get("sitemap"),
+            "found_on": d.get("found_on"),
+            "lastmod": d.get("lastmod"),
+            "sitemap_video": d.get("has_video", False),
+            # поля проверки страницы — заполняются только выборкой verify
+            "http_status": None,
+            "canonical": None,
+            "indexable": None,
+        }
     c = collections.Counter(v["type"] for v in seen.values())
     if export:
         export.parent.mkdir(parents=True, exist_ok=True)
         with gzip.open(export, "wt") as f:
             for v in seen.values():
                 f.write(json.dumps(v, ensure_ascii=False) + "\n")
-    return {"host": host_id, "raw_records": raw, "unique_urls": len(seen),
-            "pages_counted": len(seen) - c["variant"] - c["listing_page"],
-            **{t: c[t] for t in TYPES}, "listing_page": c["listing_page"], "variant": c["variant"],
-            "with_sitemap_video": sum(1 for v in seen.values() if v["sitemap_video"])}
+    return {
+        "host": host_id,
+        "raw_records": raw,
+        "unique_urls": len(seen),
+        "pages_counted": len(seen) - c["variant"] - c["listing_page"],
+        **{t: c[t] for t in TYPES},
+        "listing_page": c["listing_page"],
+        "variant": c["variant"],
+        "with_sitemap_video": sum(1 for v in seen.values() if v["sitemap_video"]),
+    }

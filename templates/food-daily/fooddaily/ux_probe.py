@@ -8,6 +8,7 @@
 * Тексты, изображения и идентификаторы не сохраняются; скриншоты — только
   в var/ (вне git), для внутреннего сравнения.
 """
+
 from __future__ import annotations
 
 import json
@@ -24,8 +25,10 @@ from .robots import Robots
 
 ROOT = Path(__file__).resolve().parents[1]
 UA = load_config()["user_agent"]
-AD_MARKERS = r"yandex_rtb|Ya\.Context|adfox|googlesyndication|adsbygoogle|adriver|betweendigital|getintent|" \
-             r"mediametrics|relap\.io|smi2|rtb\.|ad-block|data-ad-|\bbanner\b|advert"
+AD_MARKERS = (
+    r"yandex_rtb|Ya\.Context|adfox|googlesyndication|adsbygoogle|adriver|betweendigital|getintent|"
+    r"mediametrics|relap\.io|smi2|rtb\.|ad-block|data-ad-|\bbanner\b|advert"
+)
 VIDEO_MARKERS = r"<video|youtube\.com/embed|rutube\.ru/play|vk\.com/video_ext|dzen\.ru/embed|player\.vimeo"
 
 MEASURE_JS = r"""
@@ -52,7 +55,9 @@ def pick_pages(host_id: str) -> dict:
     pages = {"home": base + "/"}
     sample = json.loads((ROOT / "docs" / "audit" / "verify-sample.json").read_text())["hosts"].get(host_id, {})
     recipes = [r["url"] for r in sample.get("rows", []) if r.get("type") == "recipe" and r.get("status") == 200][:3]
-    cats = [r["url"] for r in sample.get("rows", []) if r.get("type") in ("category", "tag") and r.get("status") == 200][:1]
+    cats = [
+        r["url"] for r in sample.get("rows", []) if r.get("type") in ("category", "tag") and r.get("status") == 200
+    ][:1]
     for i, u in enumerate(recipes):
         pages[f"recipe{i + 1}"] = u
     if cats:
@@ -62,8 +67,15 @@ def pick_pages(host_id: str) -> dict:
 
 def probe(hosts: list[str], extra: dict[str, dict], shots: Path | None) -> dict:
     allowed = allowed_hosts()
-    out = {"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "mode": "js_off_same_host_css_only", "hosts": {}}
-    exe = Path.home() / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+    out = {
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "mode": "js_off_same_host_css_only",
+        "hosts": {},
+    }
+    exe = (
+        Path.home()
+        / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+    )
     with sync_playwright() as p:
         br = p.chromium.launch(executable_path=str(exe) if exe.exists() else None)
         for h in hosts:
@@ -71,8 +83,12 @@ def probe(hosts: list[str], extra: dict[str, dict], shots: Path | None) -> dict:
             rp = CRAWL_ROOT / h / "robots.txt"
             robots = Robots(rp.read_text() if rp.exists() else "")
             host = urllib.parse.urlsplit(pages["home"]).hostname
-            ctx = br.new_context(viewport={"width": 390, "height": 844}, user_agent=UA, java_script_enabled=False,
-                                 locale="ru-RU")
+            ctx = br.new_context(
+                viewport={"width": 390, "height": 844},
+                user_agent=UA,
+                java_script_enabled=False,
+                locale="ru-RU",
+            )
             stats = {"blocked": 0, "loaded": 0}
 
             def make_route(host: str, stats: dict):
@@ -85,7 +101,9 @@ def probe(hosts: list[str], extra: dict[str, dict], shots: Path | None) -> dict:
                         return r.continue_()
                     stats["blocked"] += 1
                     return r.abort()
+
                 return route
+
             ctx.route("**/*", make_route(host, stats))
             page = ctx.new_page()
             res = {}
@@ -102,10 +120,16 @@ def probe(hosts: list[str], extra: dict[str, dict], shots: Path | None) -> dict:
                 html = page.content()
                 m = page.evaluate(MEASURE_JS)
                 ld = re.findall(r'"@type"\s*:\s*"([A-Za-z]+)"', html)
-                res[name] = {"url": url, "status": resp.status if resp else None, "load_s": round(time.time() - t0, 2),
-                             "html_kb": round(len(html.encode()) / 1024), "ad_markers": len(re.findall(AD_MARKERS, html, re.I)),
-                             "video_embeds": len(re.findall(VIDEO_MARKERS, html, re.I)),
-                             "jsonld_types": sorted(set(ld))[:12], **m}
+                res[name] = {
+                    "url": url,
+                    "status": resp.status if resp else None,
+                    "load_s": round(time.time() - t0, 2),
+                    "html_kb": round(len(html.encode()) / 1024),
+                    "ad_markers": len(re.findall(AD_MARKERS, html, re.I)),
+                    "video_embeds": len(re.findall(VIDEO_MARKERS, html, re.I)),
+                    "jsonld_types": sorted(set(ld))[:12],
+                    **m,
+                }
                 if shots and name in ("home", "recipe1"):
                     shots.mkdir(parents=True, exist_ok=True)
                     page.screenshot(path=str(shots / f"{h}-{name}-mobile.png"), full_page=False)
@@ -119,18 +143,48 @@ def probe(hosts: list[str], extra: dict[str, dict], shots: Path | None) -> dict:
 
 def main(argv=None) -> int:
     import argparse
+
     ap = argparse.ArgumentParser()
-    ap.add_argument("--hosts", default="1000-menu,eda-rambler,gastronom,povarenok,povar,iamcook,edimdoma,food-ru,menunedeli,russianfood")
+    ap.add_argument(
+        "--hosts",
+        default="1000-menu,eda-rambler,gastronom,povarenok,povar,iamcook,edimdoma,food-ru,menunedeli,russianfood",
+    )
     ap.add_argument("--out", default=str(ROOT / "docs" / "audit" / "ux-probe.json"))
     a = ap.parse_args(argv)
-    extra = {"bbcgoodfood": {"home": "https://www.bbcgoodfood.com/recipes"},
-             "seriouseats": {"home": "https://www.seriouseats.com/"}}
+    extra = {
+        "bbcgoodfood": {"home": "https://www.bbcgoodfood.com/recipes"},
+        "seriouseats": {"home": "https://www.seriouseats.com/"},
+    }
     res = probe(a.hosts.split(","), extra, REPO / "var" / "food-daily" / "ux-shots")
     Path(a.out).write_text(json.dumps(res, ensure_ascii=False, indent=1) + "\n")
     for h, r in res["hosts"].items():
-        print(h, json.dumps({k: ({kk: v.get(kk) for kk in ("status", "html_kb", "ad_markers", "video_embeds", "y_ingredients",
-                                                            "y_steps", "doc_height", "forms_search", "servings_controls")}
-                                 if isinstance(v, dict) and "url" in v else v) for k, v in r.items()}, ensure_ascii=False))
+        print(
+            h,
+            json.dumps(
+                {
+                    k: (
+                        {
+                            kk: v.get(kk)
+                            for kk in (
+                                "status",
+                                "html_kb",
+                                "ad_markers",
+                                "video_embeds",
+                                "y_ingredients",
+                                "y_steps",
+                                "doc_height",
+                                "forms_search",
+                                "servings_controls",
+                            )
+                        }
+                        if isinstance(v, dict) and "url" in v
+                        else v
+                    )
+                    for k, v in r.items()
+                },
+                ensure_ascii=False,
+            ),
+        )
     return 0
 
 

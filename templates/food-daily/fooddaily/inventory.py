@@ -5,9 +5,12 @@ URL дописываются в urls.jsonl (сырой и нормализова
 обнаружения). Повторный запуск продолжает с первой необработанной карты.
 Тексты страниц здесь не скачиваются — только карты сайта.
 """
+
 from __future__ import annotations
 
 import argparse
+import contextlib
+import gzip
 import json
 import re
 import time
@@ -34,8 +37,7 @@ def normalize(url: str) -> str:
     p = urllib.parse.urlsplit(url.strip())
     q = [(k, v) for k, v in urllib.parse.parse_qsl(p.query, keep_blank_values=True) if not TRACKING.match(k)]
     path = p.path or "/"
-    return urllib.parse.urlunsplit((p.scheme.lower(), (p.hostname or "").lower(), path,
-                                    urllib.parse.urlencode(q), ""))
+    return urllib.parse.urlunsplit((p.scheme.lower(), (p.hostname or "").lower(), path, urllib.parse.urlencode(q), ""))
 
 
 def _local(tag: str) -> str:
@@ -78,8 +80,16 @@ class HostInventory:
     def _load(self) -> dict:
         if self.state_path.exists():
             return json.loads(self.state_path.read_text())
-        return {"host": self.h["id"], "base": self.h["base"], "started_at": _now(),
-                "robots": None, "pending": [], "done": {}, "url_count_raw": 0, "finished": False}
+        return {
+            "host": self.h["id"],
+            "base": self.h["base"],
+            "started_at": _now(),
+            "robots": None,
+            "pending": [],
+            "done": {},
+            "url_count_raw": 0,
+            "finished": False,
+        }
 
     def save(self) -> None:
         tmp = self.state_path.with_suffix(".tmp")
@@ -104,8 +114,15 @@ class HostInventory:
             return
         text = r.text() if r.status == 200 else ""
         sitemaps = re.findall(r"(?im)^\s*sitemap\s*:\s*(\S+)", text)
-        self.state["robots"] = {"url": url, "final_url": r.url, "status": r.status, "error": r.error,
-                                "redirects": r.redirects, "sitemaps": sitemaps, "bytes": len(r.body)}
+        self.state["robots"] = {
+            "url": url,
+            "final_url": r.url,
+            "status": r.status,
+            "error": r.error,
+            "redirects": r.redirects,
+            "sitemaps": sitemaps,
+            "bytes": len(r.body),
+        }
         (self.dir / "robots.txt").write_text(text)
         if not sitemaps:
             sitemaps = [self.h["base"].rstrip("/") + "/sitemap.xml"]
@@ -150,14 +167,17 @@ class HostInventory:
                     continue
                 body = r.body
                 if body[:2] == b"\x1f\x8b":
-                    import gzip
-                    try:
+                    with contextlib.suppress(OSError):
                         body = gzip.decompress(body)
-                    except OSError:
-                        pass
                 kind, entries = parse_sitemap(body) if r.status == 200 else ("http_error", [])
-                rec = {"status": r.status, "kind": kind, "entries": len(entries), "final_url": r.url,
-                       "error": r.error, "redirects": len(r.redirects)}
+                rec = {
+                    "status": r.status,
+                    "kind": kind,
+                    "entries": len(entries),
+                    "final_url": r.url,
+                    "error": r.error,
+                    "redirects": len(r.redirects),
+                }
                 if kind == "sitemapindex":
                     for e in entries:
                         loc = e["loc"]
@@ -165,11 +185,20 @@ class HostInventory:
                             self.state["pending"].append(loc)
                 elif kind == "urlset":
                     for e in entries:
-                        out.write(json.dumps({
-                            "source_url": e["loc"], "url": normalize(e["loc"]),
-                            "lastmod": e.get("lastmod") or None, "discovered_via": "sitemap",
-                            "sitemap": sm, "has_video": e.get("has_video", False),
-                        }, ensure_ascii=False) + "\n")
+                        out.write(
+                            json.dumps(
+                                {
+                                    "source_url": e["loc"],
+                                    "url": normalize(e["loc"]),
+                                    "lastmod": e.get("lastmod") or None,
+                                    "discovered_via": "sitemap",
+                                    "sitemap": sm,
+                                    "has_video": e.get("has_video", False),
+                                },
+                                ensure_ascii=False,
+                            )
+                            + "\n"
+                        )
                     self.state["url_count_raw"] += len(entries)
                 self.state["done"][sm] = rec
                 self.state["pending"].pop(0)
@@ -181,9 +210,13 @@ class HostInventory:
         self.state["finished"] = not self.state["pending"]
         self.state["updated_at"] = _now()
         self.save()
-        return {"host": self.h["id"], "sitemaps_done": len(self.state["done"]),
-                "pending": len(self.state["pending"]), "raw_urls": self.state["url_count_raw"],
-                "finished": self.state["finished"]}
+        return {
+            "host": self.h["id"],
+            "sitemaps_done": len(self.state["done"]),
+            "pending": len(self.state["pending"]),
+            "raw_urls": self.state["url_count_raw"],
+            "finished": self.state["finished"],
+        }
 
 
 def _disk(d: Path) -> int:
@@ -203,17 +236,23 @@ def main(argv=None) -> int:
     cfg = load_config()
     hosts = [h for h in cfg["hosts"] if ((h["id"] in a.host) if a.host else not h.get("ux_only"))]
     import concurrent.futures as cf
+
     client = Client(config=cfg)
     deadline = time.monotonic() + a.max_seconds if a.max_seconds else None
     # разные хосты параллельно, внутри хоста — строго по одному запросу
     with cf.ThreadPoolExecutor(max_workers=len(hosts) or 1) as ex:
-        futs = {ex.submit(HostInventory(h, client).run, max_sitemaps=a.max_sitemaps, deadline=deadline): h["id"]
-                for h in hosts}
+        futs = {
+            ex.submit(HostInventory(h, client).run, max_sitemaps=a.max_sitemaps, deadline=deadline): h["id"]
+            for h in hosts
+        }
         for f in cf.as_completed(futs):
             try:
                 print(json.dumps(f.result(), ensure_ascii=False), flush=True)
             except Exception as e:  # один хост не останавливает остальные
-                print(json.dumps({"host": futs[f], "error": f"{type(e).__name__}: {e}"}, ensure_ascii=False), flush=True)
+                print(
+                    json.dumps({"host": futs[f], "error": f"{type(e).__name__}: {e}"}, ensure_ascii=False),
+                    flush=True,
+                )
     return 0
 
 

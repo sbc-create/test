@@ -8,8 +8,10 @@
 * один запрос на хост одновременно, пауза между запросами, тайм-аут,
   ограниченные повторы, уважение Retry-After, предел размера ответа.
 """
+
 from __future__ import annotations
 
+import contextlib
 import gzip
 import hashlib
 import ipaddress
@@ -25,7 +27,7 @@ from pathlib import Path
 
 import yaml
 
-ROOT = Path(__file__).resolve().parents[1]          # templates/food-daily
+ROOT = Path(__file__).resolve().parents[1]  # templates/food-daily
 REPO = ROOT.parents[1]
 
 
@@ -35,7 +37,7 @@ class FetchRefused(RuntimeError):
 
 @dataclass
 class Response:
-    url: str            # итоговый адрес после редиректов
+    url: str  # итоговый адрес после редиректов
     requested: str
     status: int | None
     headers: dict
@@ -78,8 +80,14 @@ def _public_address(host: str) -> None:
         raise FetchRefused(f"dns: {host}: {exc}") from exc
     for info in infos:
         ip = ipaddress.ip_address(info[4][0])
-        if (ip.is_private or ip.is_loopback or ip.is_link_local or ip.is_reserved
-                or ip.is_multicast or ip.is_unspecified):
+        if (
+            ip.is_private
+            or ip.is_loopback
+            or ip.is_link_local
+            or ip.is_reserved
+            or ip.is_multicast
+            or ip.is_unspecified
+        ):
             raise FetchRefused(f"{host} разрешается в непубличный адрес {ip}")
 
 
@@ -130,8 +138,16 @@ class Client:
             meta = json.loads(cp.with_suffix(".json").read_text())
             self.stats["cache_hits"] += 1
             body = gzip.decompress(cp.with_suffix(".body.gz").read_bytes())
-            return Response(meta["url"], url, meta["status"], meta["headers"],
-                            body, meta["redirects"], meta.get("error"), True)
+            return Response(
+                meta["url"],
+                url,
+                meta["status"],
+                meta["headers"],
+                body,
+                meta["redirects"],
+                meta.get("error"),
+                True,
+            )
         chain: list = []
         current = url
         for _ in range(max_redirects + 1):
@@ -146,11 +162,18 @@ class Client:
             if cp and resp.status is not None and resp.error is None:
                 cp.parent.mkdir(parents=True, exist_ok=True)
                 cp.with_suffix(".body.gz").write_bytes(gzip.compress(resp.body))
-                cp.with_suffix(".json").write_text(json.dumps({
-                    "url": resp.url, "status": resp.status, "headers": resp.headers,
-                    "redirects": chain, "error": resp.error,
-                    "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                }))
+                cp.with_suffix(".json").write_text(
+                    json.dumps(
+                        {
+                            "url": resp.url,
+                            "status": resp.status,
+                            "headers": resp.headers,
+                            "redirects": chain,
+                            "error": resp.error,
+                            "fetched_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                        }
+                    )
+                )
             return resp
         return Response(current, url, None, {}, b"", chain, "too many redirects")
 
@@ -162,44 +185,47 @@ class Client:
                 wait = self._last.get(host, 0) + float(self.lim["min_delay_seconds"]) - time.monotonic()
                 if wait > 0:
                     time.sleep(wait)
-                req = urllib.request.Request(url, headers={
-                    "User-Agent": self.cfg["user_agent"],
-                    "Accept-Encoding": "gzip",
-                    "Accept": "text/html,application/xml,text/xml,*/*;q=0.5",
-                })
+                req = urllib.request.Request(
+                    url,
+                    headers={
+                        "User-Agent": self.cfg["user_agent"],
+                        "Accept-Encoding": "gzip",
+                        "Accept": "text/html,application/xml,text/xml,*/*;q=0.5",
+                    },
+                )
                 self.stats["requests"] += 1
                 try:
                     with self._opener.open(req, timeout=float(self.lim["timeout_seconds"])) as r:
-                        status, headers, body = r.status, {k.lower(): v for k, v in r.headers.items()}, self._read(r)
+                        status, headers, body = (
+                            r.status,
+                            {k.lower(): v for k, v in r.headers.items()},
+                            self._read(r),
+                        )
                 except urllib.error.HTTPError as e:
                     status, headers = e.code, {k.lower(): v for k, v in (e.headers or {}).items()}
                     body = b""
-                    try:
+                    with contextlib.suppress(Exception):  # тело ошибки не обязательно
                         body = self._read(e)
-                    except Exception:  # тело ошибки не обязательно
-                        pass
                 except (urllib.error.URLError, TimeoutError, OSError, ValueError) as e:
                     self._last[host] = time.monotonic()
                     last_err = f"{type(e).__name__}: {e}"
                     self.stats["errors"] += 1
-                    time.sleep(min(2 ** attempt, 30))
+                    time.sleep(min(2**attempt, 30))
                     continue
                 finally:
                     self._last[host] = time.monotonic()
             if headers.get("content-encoding") == "gzip" and body:
-                try:
+                with contextlib.suppress(OSError):
                     body = gzip.decompress(body)
-                except OSError:
-                    pass
             if status in (429, 503) and attempt < attempts:
                 ra = headers.get("retry-after", "")
-                delay = int(ra) if ra.isdigit() else 2 ** attempt * 5
+                delay = int(ra) if ra.isdigit() else 2**attempt * 5
                 if delay > int(self.lim["max_retry_after_seconds"]):
                     return Response(url, url, status, headers, body, error=f"retry-after {delay}s exceeds limit")
                 time.sleep(delay)
                 continue
             if status is not None and 500 <= status < 600 and attempt < attempts:
-                time.sleep(2 ** attempt)
+                time.sleep(2**attempt)
                 continue
             return Response(url, url, status, headers, body)
         return Response(url, url, None, {}, b"", error=last_err or "attempts exhausted")

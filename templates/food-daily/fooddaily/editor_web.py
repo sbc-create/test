@@ -5,6 +5,7 @@ FOOD_DAILY_EDITOR_SECRET) только на петле. Пишущие дейс�
 CSRF-токеном. Редактор работает с собственной БД food-daily; публичные
 страницы её не читают — после изменений снимок пересобирается.
 """
+
 from __future__ import annotations
 
 import html
@@ -20,17 +21,25 @@ STYLE = "/static/css/editor.css"
 
 
 def _page(app, title: str, body: str) -> str:
-    return (f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow">'
-            f'<meta name="viewport" content="width=device-width, initial-scale=1"><title>{html.escape(title)} — редактор</title>'
-            f'<link rel="stylesheet" href="{app.asset("css/editor.css")}"></head><body><header><a href="/redaktor/">'
-            f'Редактор food-daily</a> · <a href="/">сайт</a></header><main>{body}</main></body></html>')
+    return (
+        f'<!doctype html><html lang="ru"><head><meta charset="utf-8"><meta name="robots" content="noindex, nofollow">'
+        f'<meta name="viewport" content="width=device-width, initial-scale=1"><title>{html.escape(title)} — редактор</title>'
+        f'<link rel="stylesheet" href="{app.asset("css/editor.css")}"></head><body><header><a href="/redaktor/">'
+        f'Редактор food-daily</a> · <a href="/">сайт</a></header><main>{body}</main></body></html>'
+    )
 
 
 def handle(h, app, method: str, u: urllib.parse.SplitResult):
     user = app.editor_auth(h.headers.get("Authorization"))
     if not user:
-        return h._send(401, "Требуется вход редактора", {"WWW-Authenticate": 'Basic realm="food-daily editor"',
-                                                        "Content-Type": "text/plain; charset=utf-8"})
+        return h._send(
+            401,
+            "Требуется вход редактора",
+            {
+                "WWW-Authenticate": 'Basic realm="food-daily editor"',
+                "Content-Type": "text/plain; charset=utf-8",
+            },
+        )
     st = open_store()
     parts = [p for p in u.path.split("/") if p][1:]
     if method == "POST":
@@ -49,8 +58,14 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
             elif action == "rollback":
                 msg = f"откат: новая версия v{st.rollback(cid, int(form['to']), actor=f'editor:{user}')}"
             elif action == "review":
-                editorial.review(st, cid, form["status"], reviewer=form["reviewer"].strip(), version=int(form["version"]),
-                                 note=form.get("note", ""))
+                editorial.review(
+                    st,
+                    cid,
+                    form["status"],
+                    reviewer=form["reviewer"].strip(),
+                    version=int(form["version"]),
+                    note=form.get("note", ""),
+                )
                 msg = "решение редактора записано"
             else:
                 msg = "неизвестное действие"
@@ -62,16 +77,21 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
         return h._send(303, "", {"Location": f"/redaktor/{cid}/?msg={urllib.parse.quote(msg)}"})
 
     if not parts:
-        rows = st.db.execute("SELECT c.*, (SELECT count(*) FROM versions v WHERE v.content_id=c.content_id) nv "
-                             "FROM content c ORDER BY c.created_at").fetchall()
+        rows = st.db.execute(
+            "SELECT c.*, (SELECT count(*) FROM versions v WHERE v.content_id=c.content_id) nv "
+            "FROM content c ORDER BY c.created_at"
+        ).fetchall()
         trs = "".join(
             f"<tr><td><a href='/redaktor/{r['content_id']}/'>{html.escape(r['slug'])}</a></td><td>v{r['current_version']}"
             f" / {r['nv']}</td><td>{r['review_status']}</td><td>{r['cooking_status']}</td><td>{r['publish_status']}</td></tr>"
-            for r in rows)
+            for r in rows
+        )
         jobs = dict(st.db.execute("SELECT status, count(*) FROM jobs GROUP BY 1").fetchall())
-        body = (f"<h1>Материалы ({len(rows)})</h1><p>Задания: {html.escape(json.dumps(jobs, ensure_ascii=False))}</p>"
-                "<table><tr><th>slug</th><th>версия</th><th>проверка</th><th>кухня</th><th>публикация</th></tr>"
-                f"{trs}</table>")
+        body = (
+            f"<h1>Материалы ({len(rows)})</h1><p>Задания: {html.escape(json.dumps(jobs, ensure_ascii=False))}</p>"
+            "<table><tr><th>slug</th><th>версия</th><th>проверка</th><th>кухня</th><th>публикация</th></tr>"
+            f"{trs}</table>"
+        )
         return h._send(200, _page(app, "Материалы", body))
     cid = parts[0]
     row = st.current(cid)
@@ -84,19 +104,29 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
     a, b = (int(q.get("a", [0])[0] or 0), int(q.get("b", [0])[0] or 0))
     diff_html = ""
     if a and b:
-        diff_html = f"<h2>Diff v{a} → v{b}</h2><pre>{html.escape(editorial.diff(st, cid, a, b)) or '(нет различий)'}</pre>"
+        diff_html = (
+            f"<h2>Diff v{a} → v{b}</h2><pre>{html.escape(editorial.diff(st, cid, a, b)) or '(нет различий)'}</pre>"
+        )
     csrf = app.csrf(user)
-    vrows = "".join(f"<li>v{v['recipe_version']} · {v['created_at']} · {html.escape(v['created_by'])} · "
-                    f"{html.escape(v['reason'])} · {html.escape(json.loads(v['producer_json']).get('mode', ''))}"
-                    f"<form method=post><input type=hidden name=csrf value={csrf}><input type=hidden name=action value=rollback>"
-                    f"<input type=hidden name=to value={v['recipe_version']}><button>откатить к v{v['recipe_version']}</button>"
-                    f"</form></li>" for v in versions)
-    audit = "".join(f"<li>{e['at']} · {html.escape(e['actor'])} · {html.escape(e['action'])} · "
-                    f"<code>{html.escape(e['detail_json'][:200])}</code></li>" for e in st.audit_for(cid)[-30:])
+    vrows = "".join(
+        f"<li>v{v['recipe_version']} · {v['created_at']} · {html.escape(v['created_by'])} · "
+        f"{html.escape(v['reason'])} · {html.escape(json.loads(v['producer_json']).get('mode', ''))}"
+        f"<form method=post><input type=hidden name=csrf value={csrf}><input type=hidden name=action value=rollback>"
+        f"<input type=hidden name=to value={v['recipe_version']}><button>откатить к v{v['recipe_version']}</button>"
+        f"</form></li>"
+        for v in versions
+    )
+    audit = "".join(
+        f"<li>{e['at']} · {html.escape(e['actor'])} · {html.escape(e['action'])} · "
+        f"<code>{html.escape(e['detail_json'][:200])}</code></li>"
+        for e in st.audit_for(cid)[-30:]
+    )
     blockers = publish_blockers(payload)
     msg = q.get("msg", [""])[0]
     notes = "".join(f"<li>{html.escape(n)}</li>" for n in payload["draft"].get("editor_notes") or [])
-    body = (f"<p class=msg>{html.escape(msg)}</p>" if msg else "") + f"""
+    body = (
+        (f"<p class=msg>{html.escape(msg)}</p>" if msg else "")
+        + f"""
 <h1>{html.escape(payload['draft']['title'])}</h1>
 <p>Статусы: проверка <b>{row['review_status']}</b> ({html.escape(row['reviewer'] or '—')}), кухня <b>{row['cooking_status']}</b>,
 публикация <b>{row['publish_status']}</b>, версия v{row['current_version']}.</p>
@@ -119,4 +149,5 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
 <input name=b size=3 value={row['current_version']}><button>diff</button></form>{diff_html}
 <h2>Черновик (v{row['current_version']})</h2><pre>{html.escape(json.dumps(payload['draft'], ensure_ascii=False, indent=1))}</pre>
 <h2>Журнал</h2><ul>{audit}</ul>"""
+    )
     return h._send(200, _page(app, payload["draft"]["title"], body))

@@ -3,15 +3,17 @@
 {%- endmacro %}
 
 {% macro card(r, heading='h3') -%}
-<article class="card" data-slug="{{ r.slug }}">
+<article class="card card--{{ r.category }}" data-slug="{{ r.slug }}">
   <a class="card__link" href="{{ r.url }}">
-    {{ illo(r.category) }}
-    <{{ heading }} class="card__title">{{ r.title }}</{{ heading }}>
-  </a>
-  <p class="card__meta">
     <span class="card__cat">{{ r.category_label }}</span>
+    <{{ heading }} class="card__title">{{ r.title }}</{{ heading }}>
+    <span class="card__lede">{{ r.lede }}</span>
+  </a>
+  {% if r.key_ingredients %}<p class="card__ing"><span class="sr">Главные продукты: </span>{{ r.key_ingredients | join(' · ') }}</p>{% endif %}
+  <p class="card__meta">
     {% if r.time_label %}<span>{{ r.time_label }}</span>{% endif %}
     {% if r.servings %}<span>{{ r.servings }} порц.</span>{% endif %}
+    <span>{{ r.ingredients | length }} продукт{{ 'а' if r.ingredients|length % 10 in [2,3,4] and r.ingredients|length % 100 not in [12,13,14] else ('' if r.ingredients|length % 10 == 1 and r.ingredients|length % 100 != 11 else 'ов') }}</span>
   </p>
   <button class="fav" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><span class="sr">В избранное: {{ r.title }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
 </article>

@@ -11,11 +11,17 @@
       <div><dt>Порции</dt><dd>{{ r.servings }}</dd></div>
       <div><dt>Шагов</dt><dd>{{ r.d.steps|length }}</dd></div>
     </dl>
+    {% set links = site.tag_links(r) %}
+    {% if links %}
+    <ul class="tags" aria-label="Темы рецепта">
+      {% for href, label in links %}<li><a href="{{ href }}">{{ label }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
     <div class="recipe__actions">
       <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
       <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
+      <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
     </div>
-    <figure class="recipe__illo">{{ illo(r.category, 'hero') }}<figcaption>Иллюстрация раздела «{{ r.category_label }}», не фотография блюда.</figcaption></figure>
   </header>
 
   <div class="recipe__body">

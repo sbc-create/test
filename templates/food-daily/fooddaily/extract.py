@@ -5,6 +5,7 @@
 Внешний HTML — данные, а не команды: ничего из страницы не исполняется и не
 интерпретируется как инструкция.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -17,29 +18,114 @@ from html.parser import HTMLParser
 PARSER_VERSION = "fd-extract/1.3"
 
 UNITS = {
-    "г": "g", "гр": "g", "грамм": "g", "граммов": "g", "кг": "kg", "мл": "ml", "л": "l", "литр": "l",
-    "шт": "pcs", "штука": "pcs", "штуки": "pcs", "штук": "pcs",
-    "ст. л.": "tbsp", "ст.л.": "tbsp", "ст. л": "tbsp", "ст.л": "tbsp", "ст. ложки": "tbsp", "ст. ложка": "tbsp", "столовая ложка": "tbsp", "столовые ложки": "tbsp", "столовых ложек": "tbsp",
-    "ч. л.": "tsp", "ч.л.": "tsp", "ч. л": "tsp", "ч.л": "tsp", "ч. ложки": "tsp", "ч. ложка": "tsp", "чайная ложка": "tsp", "чайные ложки": "tsp", "чайных ложек": "tsp",
-    "стакан": "cup", "стакана": "cup", "стаканов": "cup",
-    "зубчик": "clove", "зубчика": "clove", "зубчиков": "clove",
-    "щепотка": "pinch", "щепотки": "pinch", "пучок": "bunch", "пучка": "bunch", "пучков": "bunch",
-    "ломтик": "slice", "ломтика": "slice", "ломтиков": "slice", "веточка": "sprig", "веточки": "sprig", "веточек": "sprig",
-    "банка": "can", "банки": "can", "банок": "can", "головка": "head", "головки": "head", "головок": "head",
-    "лист": "leaf", "листа": "leaf", "листов": "leaf", "кусок": "piece", "куска": "piece", "кусков": "piece",
-    "стол.л": "tbsp", "стол. л": "tbsp", "чайн.л": "tsp", "чайн. л": "tsp", "ст": "cup",
-    "штучки": "pcs", "пачка": "pack", "пачки": "pack", "пачек": "pack", "упаковка": "pack",
+    "г": "g",
+    "гр": "g",
+    "грамм": "g",
+    "граммов": "g",
+    "кг": "kg",
+    "мл": "ml",
+    "л": "l",
+    "литр": "l",
+    "шт": "pcs",
+    "штука": "pcs",
+    "штуки": "pcs",
+    "штук": "pcs",
+    "ст. л.": "tbsp",
+    "ст.л.": "tbsp",
+    "ст. л": "tbsp",
+    "ст.л": "tbsp",
+    "ст. ложки": "tbsp",
+    "ст. ложка": "tbsp",
+    "столовая ложка": "tbsp",
+    "столовые ложки": "tbsp",
+    "столовых ложек": "tbsp",
+    "ч. л.": "tsp",
+    "ч.л.": "tsp",
+    "ч. л": "tsp",
+    "ч.л": "tsp",
+    "ч. ложки": "tsp",
+    "ч. ложка": "tsp",
+    "чайная ложка": "tsp",
+    "чайные ложки": "tsp",
+    "чайных ложек": "tsp",
+    "стакан": "cup",
+    "стакана": "cup",
+    "стаканов": "cup",
+    "зубчик": "clove",
+    "зубчика": "clove",
+    "зубчиков": "clove",
+    "щепотка": "pinch",
+    "щепотки": "pinch",
+    "пучок": "bunch",
+    "пучка": "bunch",
+    "пучков": "bunch",
+    "ломтик": "slice",
+    "ломтика": "slice",
+    "ломтиков": "slice",
+    "веточка": "sprig",
+    "веточки": "sprig",
+    "веточек": "sprig",
+    "банка": "can",
+    "банки": "can",
+    "банок": "can",
+    "головка": "head",
+    "головки": "head",
+    "головок": "head",
+    "лист": "leaf",
+    "листа": "leaf",
+    "листов": "leaf",
+    "кусок": "piece",
+    "куска": "piece",
+    "кусков": "piece",
+    "стол.л": "tbsp",
+    "стол. л": "tbsp",
+    "чайн.л": "tsp",
+    "чайн. л": "tsp",
+    "ст": "cup",
+    "штучки": "pcs",
+    "пачка": "pack",
+    "пачки": "pack",
+    "пачек": "pack",
+    "упаковка": "pack",
     "по вкусу": "to_taste",
 }
 UNIT_RX = "|".join(sorted((re.escape(u) for u in UNITS), key=len, reverse=True))
 NUM = r"(\d+(?:[.,]\d+)?(?:\s*[-–]\s*\d+(?:[.,]\d+)?)?|\d+\s*/\s*\d+|½|¼|¾|⅓|⅔)"
 FRACTIONS = {"½": 0.5, "¼": 0.25, "¾": 0.75, "⅓": 1 / 3, "⅔": 2 / 3}
 # единицы, которые при пересчёте порций масштабируются как количество
-SCALABLE = {"g", "kg", "ml", "l", "pcs", "tbsp", "tsp", "cup", "clove", "bunch", "slice", "sprig", "can", "head",
-            "leaf", "piece", "pack", "pinch"}
+SCALABLE = {
+    "g",
+    "kg",
+    "ml",
+    "l",
+    "pcs",
+    "tbsp",
+    "tsp",
+    "cup",
+    "clove",
+    "bunch",
+    "slice",
+    "sprig",
+    "can",
+    "head",
+    "leaf",
+    "piece",
+    "pack",
+    "pinch",
+}
 # Единица без числа означает одну: «Соль, щепотка» — это ровно одна щепотка.
-SINGLE_UNIT = {"щепотка": "pinch", "пучок": "bunch", "веточка": "sprig", "зубчик": "clove", "ломтик": "slice",
-               "кусок": "piece", "пачка": "pack", "банка": "can", "головка": "head", "стакан": "cup"}
+SINGLE_UNIT = {
+    "щепотка": "pinch",
+    "пучок": "bunch",
+    "веточка": "sprig",
+    "зубчик": "clove",
+    "ломтик": "slice",
+    "кусок": "piece",
+    "пачка": "pack",
+    "банка": "can",
+    "головка": "head",
+    "стакан": "cup",
+}
 
 
 @dataclass
@@ -64,7 +150,7 @@ class Facts:
     cook_minutes: int | None
     total_minutes: int | None
     ingredients: list[Ingredient]
-    steps: list[str]            # исходный текст шага — только закрытое хранилище
+    steps: list[str]  # исходный текст шага — только закрытое хранилище
     category: str | None
     cuisine: str | None
     keywords: list[str]
@@ -114,8 +200,11 @@ def parse_ingredient(raw: str) -> Ingredient:
             unit = "pcs"
             note = "единица не указана — принята как штуки"
     else:
-        m2 = re.search(r"[,—–:-]?\s*(по вкусу|для подачи|для жарки|для смазывания|по желанию|на кончике ножа)\s*$",
-                       text, re.I)
+        m2 = re.search(
+            r"[,—–:-]?\s*(по вкусу|для подачи|для жарки|для смазывания|по желанию|на кончике ножа)\s*$",
+            text,
+            re.I,
+        )
         m3 = re.search(r"[,—–:-]\s*(" + "|".join(SINGLE_UNIT) + r")\s*$", text, re.I)
         if m3:
             name = text[: m3.start()].strip(" ,—–:-")
@@ -126,7 +215,15 @@ def parse_ingredient(raw: str) -> Ingredient:
             unit = "to_taste"
             note = m2.group(1).lower()
     scalable = unit in SCALABLE and qty is not None
-    return Ingredient(raw=text, name=name, quantity=qty, quantity_max=qmax, unit=unit, scalable=scalable, note=note)
+    return Ingredient(
+        raw=text,
+        name=name,
+        quantity=qty,
+        quantity_max=qmax,
+        unit=unit,
+        scalable=scalable,
+        note=note,
+    )
 
 
 def iso_minutes(v) -> int | None:
@@ -224,9 +321,20 @@ class _Micro(HTMLParser):
 
 
 METHOD_WORDS = {
-    "духовк": "oven", "запек": "oven", "жар": "frying", "обжар": "frying", "вар": "boiling", "отвар": "boiling",
-    "туш": "stewing", "гриль": "grill", "мультиварк": "multicooker", "аэрогрил": "air_fryer", "пар": "steaming",
-    "микроволнов": "microwave", "без варки": "no_cook", "блендер": "blender",
+    "духовк": "oven",
+    "запек": "oven",
+    "жар": "frying",
+    "обжар": "frying",
+    "вар": "boiling",
+    "отвар": "boiling",
+    "туш": "stewing",
+    "гриль": "grill",
+    "мультиварк": "multicooker",
+    "аэрогрил": "air_fryer",
+    "пар": "steaming",
+    "микроволнов": "microwave",
+    "без варки": "no_cook",
+    "блендер": "blender",
 }
 
 
@@ -239,8 +347,9 @@ def extract(page: str, source_url: str, final_url: str | None = None) -> Facts |
     recipe = next((x for x in _jsonld_blocks(page) if _is_recipe(x)), None)
     remarks: list[str] = []
     canonical = None
-    m = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]*href=["\']([^"\']+)', page, re.I) or \
-        re.search(r'<link[^>]+href=["\']([^"\']+)["\'][^>]*rel=["\']canonical', page, re.I)
+    m = re.search(r'<link[^>]+rel=["\']canonical["\'][^>]*href=["\']([^"\']+)', page, re.I) or re.search(
+        r'<link[^>]+href=["\']([^"\']+)["\'][^>]*rel=["\']canonical', page, re.I
+    )
     if m:
         canonical = htmllib.unescape(m.group(1))
     if recipe:
@@ -284,20 +393,37 @@ def extract(page: str, source_url: str, final_url: str | None = None) -> Facts |
         remarks.append(f"нет количества у {len(missing_q)} из {len(ingredients)} ингредиентов")
     if not steps:
         remarks.append("шаги отсутствуют")
-    facts = Facts(source_url=source_url, canonical_url=canonical or final_url, title=title, servings=servings,
-                  servings_raw=sraw, prep_minutes=prep, cook_minutes=cook, total_minutes=total,
-                  ingredients=ingredients, steps=steps, category=category, cuisine=cuisine, keywords=keywords,
-                  method_hints=method_hints(steps), image_present=image_present, extracted_with=how, remarks=remarks)
-    facts.content_hash = hashlib.sha256(json.dumps(
-        [facts.title, [asdict(i) for i in ingredients], steps, servings], ensure_ascii=False).encode()).hexdigest()
+    facts = Facts(
+        source_url=source_url,
+        canonical_url=canonical or final_url,
+        title=title,
+        servings=servings,
+        servings_raw=sraw,
+        prep_minutes=prep,
+        cook_minutes=cook,
+        total_minutes=total,
+        ingredients=ingredients,
+        steps=steps,
+        category=category,
+        cuisine=cuisine,
+        keywords=keywords,
+        method_hints=method_hints(steps),
+        image_present=image_present,
+        extracted_with=how,
+        remarks=remarks,
+    )
+    facts.content_hash = hashlib.sha256(
+        json.dumps([facts.title, [asdict(i) for i in ingredients], steps, servings], ensure_ascii=False).encode()
+    ).hexdigest()
     return facts
 
 
 def is_complete(f: Facts) -> bool:
     """Полный рецепт: название, порции, ≥2 ингредиента с количествами, ≥2 шага."""
     with_q = [i for i in f.ingredients if i.quantity is not None or i.unit == "to_taste"]
-    return bool(f.title and f.servings and len(f.ingredients) >= 2 and len(with_q) == len(f.ingredients)
-                and len(f.steps) >= 2)
+    return bool(
+        f.title and f.servings and len(f.ingredients) >= 2 and len(with_q) == len(f.ingredients) and len(f.steps) >= 2
+    )
 
 
 def _first(v):

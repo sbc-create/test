@@ -1,4 +1,5 @@
 """Извлечение, robots, сетевая политика, задания Qwen, версии и откат."""
+
 import copy
 import json
 
@@ -13,11 +14,19 @@ from fooddaily.store import Store, VersionConflict
 
 
 # --- извлечение ------------------------------------------------------------
-@pytest.mark.parametrize("raw,q,unit", [
-    ("Дрожжевое слоеное тесто, 400 г", 400.0, "g"), ("Мука — 2 стакана", 2.0, "cup"), ("Сахар ½ ст. л.", 0.5, "tbsp"),
-    ("Молоко 1/2 стакана", 0.5, "cup"), ("Соль, щепотка", 1.0, "pinch"), ("Бекон, 5 кусков", 5.0, "piece"),
-    ("Соль по вкусу", None, "to_taste"), ("Яйца - 1 шт", 1.0, "pcs"),
-])
+@pytest.mark.parametrize(
+    "raw,q,unit",
+    [
+        ("Дрожжевое слоеное тесто, 400 г", 400.0, "g"),
+        ("Мука — 2 стакана", 2.0, "cup"),
+        ("Сахар ½ ст. л.", 0.5, "tbsp"),
+        ("Молоко 1/2 стакана", 0.5, "cup"),
+        ("Соль, щепотка", 1.0, "pinch"),
+        ("Бекон, 5 кусков", 5.0, "piece"),
+        ("Соль по вкусу", None, "to_taste"),
+        ("Яйца - 1 шт", 1.0, "pcs"),
+    ],
+)
 def test_ingredient_parsing(raw, q, unit):
     i = parse_ingredient(raw)
     assert (i.quantity, i.unit) == (q, unit)
@@ -48,8 +57,17 @@ def test_robots_dollar_and_specific_group():
 
 
 # --- сетевая политика ------------------------------------------------------------
-@pytest.mark.parametrize("url", ["http://eda.rambler.ru/", "https://evil.example/", "https://eda.rambler.ru:8443/",
-                                 "https://127.0.0.1/", "https://localhost/", "https://169.254.169.254/latest/meta-data"])
+@pytest.mark.parametrize(
+    "url",
+    [
+        "http://eda.rambler.ru/",
+        "https://evil.example/",
+        "https://eda.rambler.ru:8443/",
+        "https://127.0.0.1/",
+        "https://localhost/",
+        "https://169.254.169.254/latest/meta-data",
+    ],
+)
 def test_client_refuses(url):
     with pytest.raises(http.FetchRefused):
         http.Client().check(url)
@@ -89,15 +107,32 @@ def test_good_response_imports_and_repeat_is_noop(tmp_store, record):
     assert tmp_store.db.execute("SELECT count(*) FROM versions").fetchone()[0] == 1
 
 
-@pytest.mark.parametrize("mutate,needle", [
-    (lambda d: d["draft"]["ingredients"][1].update(fact_index=0), "ингредиенты"),
-    (lambda d: d["draft"]["steps"].reverse(), "порядок"),
-    (lambda d: d["draft"]["steps"][1].update(text="Обжарьте сырники по 7 минут с каждой стороны."), "отсутствует в исходных"),
-    (lambda d: d["draft"]["steps"][0].update(text="Смешайте творог с яйцом в миске до однородной массы без комочков совсем."), "дословный"),
-    (lambda d: d["draft"].update(intro="Отличный рецепт, высокий рейтинг у всех читателей сайта и знакомых."), "запрещённое"),
-    (lambda d: d["draft"].update(rating=5), "schema"),
-    (lambda d: d["draft"]["tips"].append({"text": "Совет без пометки проверки", "verified": True}), "schema"),
-])
+@pytest.mark.parametrize(
+    "mutate,needle",
+    [
+        (lambda d: d["draft"]["ingredients"][1].update(fact_index=0), "ингредиенты"),
+        (lambda d: d["draft"]["steps"].reverse(), "порядок"),
+        (
+            lambda d: d["draft"]["steps"][1].update(text="Обжарьте сырники по 7 минут с каждой стороны."),
+            "отсутствует в исходных",
+        ),
+        (
+            lambda d: d["draft"]["steps"][0].update(
+                text="Смешайте творог с яйцом в миске до однородной массы без комочков совсем."
+            ),
+            "дословный",
+        ),
+        (
+            lambda d: d["draft"].update(intro="Отличный рецепт, высокий рейтинг у всех читателей сайта и знакомых."),
+            "запрещённое",
+        ),
+        (lambda d: d["draft"].update(rating=5), "schema"),
+        (
+            lambda d: d["draft"]["tips"].append({"text": "Совет без пометки проверки", "verified": True}),
+            "schema",
+        ),
+    ],
+)
 def test_bad_responses_rejected(tmp_store, record, mutate, needle):
     job = _job(tmp_store, record)
     resp = good_response(job)
@@ -128,7 +163,15 @@ def test_version_conflict_and_rollback(tmp_store, record):
     v2["draft"]["title"] = "Сырники, вторая версия"
     assert st.add_version(cid, v2, base_version=1, source_ids=[], producer={"mode": "test"}, actor="t", reason="r") == 2
     with pytest.raises(VersionConflict):
-        st.add_version(cid, v1, base_version=1, source_ids=[], producer={"mode": "test"}, actor="t", reason="stale")
+        st.add_version(
+            cid,
+            v1,
+            base_version=1,
+            source_ids=[],
+            producer={"mode": "test"},
+            actor="t",
+            reason="stale",
+        )
     v3 = st.rollback(cid, 1, actor="t")
     assert v3 == 3 and json.loads(st.version(cid)["payload_json"])["draft"]["title"] == v1["draft"]["title"]
     assert any(e["action"] == "version_conflict" for e in st.audit_for(cid))
@@ -155,22 +198,44 @@ def test_new_version_drops_approval(tmp_store, record):
 
 
 def test_implausible_quantities_block_publication():
-    payload = {"facts": {"servings": 2, "ingredients": [{"name": "Бульон", "quantity": 400, "quantity_max": None, "unit": "l"}]},
-               "draft": {"editor_notes": []}}
+    payload = {
+        "facts": {
+            "servings": 2,
+            "ingredients": [{"name": "Бульон", "quantity": 400, "quantity_max": None, "unit": "l"}],
+        },
+        "draft": {"editor_notes": []},
+    }
     assert publish_blockers(payload)
 
 
 def test_complete_requires_quantities():
     from fooddaily.extract import Facts, Ingredient
-    f = Facts("u", None, "t", 2, "2", None, None, None,
-              [Ingredient("a", "a", None, None, None, False), Ingredient("b", "b", 1, None, "g", True)],
-              ["s1", "s2"], None, None, [], [], False, "json-ld")
+
+    f = Facts(
+        "u",
+        None,
+        "t",
+        2,
+        "2",
+        None,
+        None,
+        None,
+        [Ingredient("a", "a", None, None, None, False), Ingredient("b", "b", 1, None, "g", True)],
+        ["s1", "s2"],
+        None,
+        None,
+        [],
+        [],
+        False,
+        "json-ld",
+    )
     assert not is_complete(f)
 
 
 # --- изоляция хранилища (отрицательный тест чужого tenant) --------------------
 def test_store_refuses_foreign_site_db(tmp_path):
     import sqlite3
+
     p = tmp_path / "foreign.sqlite3"
     db = sqlite3.connect(p)
     db.execute("CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL)")

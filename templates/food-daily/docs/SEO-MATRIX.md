@@ -12,7 +12,7 @@
 | главная | `/` | себя | index, follow | да | — | уникальные |
 | каталог | `/recepty/`, `/recepty/page/N/` | себя (каждая страница пагинации — свой canonical, rel prev/next) | index, follow | да | BreadcrumbList | «… — страница N» |
 | каталог с фильтрами | `/recepty/?produkt=&vremya=&tip=` | нет | noindex, follow | нет | — | «Подбор рецептов» |
-| раздел | `/recepty/<раздел>/` (+ `page/N/`) | себя | index, follow | да, lastmod = последнее обновление рецептов раздела | BreadcrumbList | «<Раздел>: рецепты» |
+| раздел | `/recepty/<раздел>/` (+ `page/N/`) | себя | index, follow | да, lastmod = последнее обновление рецептов раздела | BreadcrumbList + ItemList (карточки этой страницы) | «<Раздел>: рецепты» |
 | продукт | `/produkty/<тег>/` | себя | index при ≥3 рецептах, noindex,follow при 2; страницы нет при <2 | только индексируемые | BreadcrumbList | «Рецепты: <продукт>» |
 | способ | `/sposob/<тег>/` | себя | так же | так же | BreadcrumbList | «<Способ>: рецепты» |
 | подборка | `/podborki/<id>/` | себя | index (подборка существует при ≥3 рецептах) | да | BreadcrumbList | уникальные |
@@ -21,6 +21,8 @@
 | поиск | `/poisk/?q=` | нет | noindex, follow; `Disallow: /poisk/` | нет | — | «Поиск: …» |
 | избранное, покупки | `/izbrannoe/`, `/spisok-pokupok/` | нет | noindex, follow | нет | — | — |
 | о проекте, контакты | `/o-proekte/`, `/kontakty/` | себя | index | да | — | — |
+| индекс тем | `/produkty/`, `/sposob/` | себя | index | да | BreadcrumbList | «Продукты: рецепты по темам» |
+| советы | `/sovety/`, `/sovety/<slug>/` | себя | index | да, lastmod = `updated` статьи | Article (без автора и изображения) + BreadcrumbList | H1 = заголовок статьи |
 | 404 | любой неизвестный | нет | noindex; код 404 | нет | — | «Такой страницы нет» |
 | редактор | `/redaktor/` | — | Basic Auth, noindex; `Disallow: /redaktor/` | нет | — | — |
 
@@ -86,3 +88,33 @@ Playwright, Chromium headless, локальный preview без троттли�
 отправлялись. Порядок: домен → `origin.production` → `mode: production` +
 `production_authorized` → проверка `tests/test_site_seo.py::test_production_switch`
 на реальном origin → подтверждение прав в Вебмастере → sitemap.
+
+## Реальные примеры URL (preview, 12.10.2026)
+
+| тип | пример | ответ |
+| --- | --- | --- |
+| главная | `/` | 200 |
+| каталог | `/recepty/`, `/recepty/page/2/` | 200; `/recepty/page/1/` → 404, `/recepty/page/9/` → 404 |
+| раздел | `/recepty/supy/`, `/recepty/zavtraki/` | 200 |
+| тег | `/produkty/kurica/`, `/sposob/na-skovorode/` | 200; `/produkty/zzz/` → 404 |
+| подборка | `/podborki/bystro-do-30-minut/` | 200 |
+| рецепт | `/recept/syrniki-s-ezhevikoj/` | 200; в карантине `/recept/tomatnyj-sup-s-zapechennym-percem/` → 404 |
+| совет | `/sovety/priznaki-gotovnosti/` | 200; `/sovety/net-takogo/` → 404 |
+| поиск | `/poisk/?q=творог` | 200, noindex, без canonical |
+| фильтр | `/recepty/?produkt=kurica&vremya=do-60` | 200, noindex, без canonical |
+| без слеша | `/recepty` | 301 → `/recepty/` |
+
+## Теги — ссылки, не текст
+
+На странице рецепта выводятся только теги, у которых есть живая страница
+(`Site.tag_links`); каждая — `<a href>` на `/produkty/<тег>/` или
+`/sposob/<тег>/`. Синонимов нет: один тег на продукт или способ.
+Проверка — `test_recipe_tags_are_links_to_live_pages`.
+
+## Изображения
+
+Иллюстрация раздела больше не выводится ни в карточке рецепта, ни в его
+шапке: она не изображает конкретное блюдо. Карточка отличается содержанием
+(раздел, название, первая фраза, главные продукты, время, порции). Фото и
+нейроиллюстраций конкретных блюд нет: подключённого генератора нет — честное
+состояние «без медиа». Иллюстрации остаются только на плитках разделов.

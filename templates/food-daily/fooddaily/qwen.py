@@ -18,6 +18,7 @@ Open WebUI и сам обращается к фабрике через MCP-мо�
 * нет дословных фрагментов исходника длиной 8 слов и больше;
 * советы и замены помечены verified=false.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -58,12 +59,28 @@ def job_id_for(idem: str) -> str:
 
 def _public_facts(facts: dict) -> dict:
     return {
-        "title": facts["title"], "servings": facts["servings"],
-        "times_minutes": {"prep": facts["prep_minutes"], "cook": facts["cook_minutes"], "total": facts["total_minutes"]},
-        "ingredients": [{"index": i, "name": x["name"], "quantity": x["quantity"], "quantity_max": x["quantity_max"],
-                         "unit": x["unit"], "note": x["note"]} for i, x in enumerate(facts["ingredients"])],
+        "title": facts["title"],
+        "servings": facts["servings"],
+        "times_minutes": {
+            "prep": facts["prep_minutes"],
+            "cook": facts["cook_minutes"],
+            "total": facts["total_minutes"],
+        },
+        "ingredients": [
+            {
+                "index": i,
+                "name": x["name"],
+                "quantity": x["quantity"],
+                "quantity_max": x["quantity_max"],
+                "unit": x["unit"],
+                "note": x["note"],
+            }
+            for i, x in enumerate(facts["ingredients"])
+        ],
         "source_steps": [{"index": i, "text": s} for i, s in enumerate(facts["steps"])],
-        "method_hints": facts["method_hints"], "source_category": facts["category"], "remarks": facts["remarks"],
+        "method_hints": facts["method_hints"],
+        "source_category": facts["category"],
+        "remarks": facts["remarks"],
     }
 
 
@@ -81,7 +98,9 @@ def export(st: Store, record_ids: list[str], *, actor: str = "food-daily-qwen") 
             raise ValueError(f"{rid}: запись неполная или отсутствует — задание не создаётся")
         facts = json.loads(r["facts_json"])
         dedupe = r["dedupe_key"]
-        content = st.db.execute("SELECT content_id, current_version FROM content WHERE dedupe_key=?", (dedupe,)).fetchone()
+        content = st.db.execute(
+            "SELECT content_id, current_version FROM content WHERE dedupe_key=?", (dedupe,)
+        ).fetchone()
         base = content["current_version"] if content else 0
         idem = f"{SITE_ID}|{dedupe}|{r['content_hash']}|{PROMPT_VERSION}|base{base}"
         jid = job_id_for(idem)
@@ -89,16 +108,39 @@ def export(st: Store, record_ids: list[str], *, actor: str = "food-daily-qwen") 
         if existing:
             res.append({"job_id": jid, "status": existing["status"], "reused": True})
             continue
-        job = {"schema_version": 1, "job_id": jid, "site_id": SITE_ID, "kind": "recipe_draft",
-               "prompt_version": PROMPT_VERSION, "base_version": base, "record_id": rid,
-               "source": {"url": r["source_url"], "host": r["host"], "fetched_at": r["fetched_at"]},
-               "instructions": INSTRUCTIONS, "facts": _public_facts(facts), "response_schema": SCHEMA}
+        job = {
+            "schema_version": 1,
+            "job_id": jid,
+            "site_id": SITE_ID,
+            "kind": "recipe_draft",
+            "prompt_version": PROMPT_VERSION,
+            "base_version": base,
+            "record_id": rid,
+            "source": {"url": r["source_url"], "host": r["host"], "fetched_at": r["fetched_at"]},
+            "instructions": INSTRUCTIONS,
+            "facts": _public_facts(facts),
+            "response_schema": SCHEMA,
+        }
         path = out_dir / f"{jid}.json"
         path.write_text(json.dumps(job, ensure_ascii=False, indent=1))
         with st.tx():
-            st.db.execute("INSERT INTO jobs VALUES (?,?,?,?,?,?,?,?,?,0,?,?,?,NULL,NULL,NULL)",
-                          (jid, SITE_ID, "recipe_draft", content["content_id"] if content else None, dedupe, idem, base,
-                           digest(job["facts"]), "queued", now(), now(), str(path)))
+            st.db.execute(
+                "INSERT INTO jobs VALUES (?,?,?,?,?,?,?,?,?,0,?,?,?,NULL,NULL,NULL)",
+                (
+                    jid,
+                    SITE_ID,
+                    "recipe_draft",
+                    content["content_id"] if content else None,
+                    dedupe,
+                    idem,
+                    base,
+                    digest(job["facts"]),
+                    "queued",
+                    now(),
+                    now(),
+                    str(path),
+                ),
+            )
             st.audit(actor, "job_exported", job_id=jid, record_id=rid)
         res.append({"job_id": jid, "status": "queued", "reused": False})
     return res
@@ -110,12 +152,14 @@ TIME_TEMP = re.compile(r"(\d+(?:[.,]\d+)?)\s*(?:–|-)?\s*(?:\d+\s*)?(мин|м�
 
 def _ngrams(text: str, n: int = 8) -> set[tuple]:
     w = [x.lower() for x in WORDS.findall(text)]
-    return {tuple(w[i:i + n]) for i in range(len(w) - n + 1)}
+    return {tuple(w[i : i + n]) for i in range(len(w) - n + 1)}
 
 
 def validate(job: dict, resp: dict) -> list[str]:
-    errs = [f"schema: {e.message} @ {'/'.join(map(str, e.path))}"
-            for e in jsonschema.Draft202012Validator(SCHEMA).iter_errors(resp)]
+    errs = [
+        f"schema: {e.message} @ {'/'.join(map(str, e.path))}"
+        for e in jsonschema.Draft202012Validator(SCHEMA).iter_errors(resp)
+    ]
     if errs:
         return errs
     if resp["job_id"] != job["job_id"]:
@@ -154,7 +198,14 @@ def validate(job: dict, resp: dict) -> list[str]:
         if overlap:
             errs.append(f"шаг {k + 1}: дословный фрагмент исходника «{' '.join(next(iter(overlap)))}»")
     text_all = " ".join([d["intro"], d["title"]] + [t["text"] for t in d["tips"]]).lower()
-    for bad in ("рейтинг", "отзыв", "ккал", "калорийн", "проверено на нашей кухне", "мы приготовили"):
+    for bad in (
+        "рейтинг",
+        "отзыв",
+        "ккал",
+        "калорийн",
+        "проверено на нашей кухне",
+        "мы приготовили",
+    ):
         if bad in text_all:
             errs.append(f"запрещённое утверждение: «{bad}»")
     return errs
@@ -173,15 +224,17 @@ def import_responses(st: Store, inbox: Path, *, actor: str = "food-daily-qwen") 
         job = json.loads(Path(job_row["export_path"]).read_text())
         rh = digest(resp)
         if job_row["status"] == "imported" and job_row["response_hash"] == rh:
-            out["noop"] += 1                      # идемпотентный повтор
+            out["noop"] += 1  # идемпотентный повтор
             continue
         errs = validate(job, resp)
         if resp.get("base_version") != job["base_version"]:
             errs.append(f"base_version {resp.get('base_version')} ≠ {job['base_version']} в задании")
         if errs:
             with st.tx():
-                st.db.execute("UPDATE jobs SET status='rejected', attempts=attempts+1, error=?, updated_at=? WHERE job_id=?",
-                              (json.dumps(errs, ensure_ascii=False), now(), jid))
+                st.db.execute(
+                    "UPDATE jobs SET status='rejected', attempts=attempts+1, error=?, updated_at=? WHERE job_id=?",
+                    (json.dumps(errs, ensure_ascii=False), now(), jid),
+                )
                 st.audit(actor, "job_rejected", job_id=jid, errors=errs[:10])
             out["rejected"] += 1
             out["details"].append({"job_id": jid, "errors": errs})
@@ -192,28 +245,66 @@ def import_responses(st: Store, inbox: Path, *, actor: str = "food-daily-qwen") 
         content_id = "fd-" + hashlib.sha256(job_row["dedupe_key"].encode()).hexdigest()[:12]
         with st.tx():
             st.ensure_content(content_id=content_id, slug=d["slug"], dedupe_key=job_row["dedupe_key"])
-        payload = {"draft": d, "facts": {k: facts[k] for k in ("title", "servings", "servings_raw", "prep_minutes",
-                                                                 "cook_minutes", "total_minutes", "ingredients",
-                                                                 "method_hints", "topic_id")},
-                   "source": {"url": rec["source_url"], "host": rec["host"], "fetched_at": rec["fetched_at"],
-                              "canonical_url": rec["canonical_url"], "content_hash": rec["content_hash"],
-                              "parser_version": rec["parser_version"]},
-                   "job_id": jid, "prompt_version": job["prompt_version"]}
+        payload = {
+            "draft": d,
+            "facts": {
+                k: facts[k]
+                for k in (
+                    "title",
+                    "servings",
+                    "servings_raw",
+                    "prep_minutes",
+                    "cook_minutes",
+                    "total_minutes",
+                    "ingredients",
+                    "method_hints",
+                    "topic_id",
+                )
+            },
+            "source": {
+                "url": rec["source_url"],
+                "host": rec["host"],
+                "fetched_at": rec["fetched_at"],
+                "canonical_url": rec["canonical_url"],
+                "content_hash": rec["content_hash"],
+                "parser_version": rec["parser_version"],
+            },
+            "job_id": jid,
+            "prompt_version": job["prompt_version"],
+        }
         try:
-            v = st.add_version(content_id, payload, base_version=job["base_version"], source_ids=[rec["record_id"]],
-                               producer=resp["producer"], actor=actor, reason=f"черновик по заданию {jid}")
+            v = st.add_version(
+                content_id,
+                payload,
+                base_version=job["base_version"],
+                source_ids=[rec["record_id"]],
+                producer=resp["producer"],
+                actor=actor,
+                reason=f"черновик по заданию {jid}",
+            )
         except VersionConflict as e:
             with st.tx():
-                st.db.execute("UPDATE jobs SET status='conflict', error=?, updated_at=? WHERE job_id=?", (str(e), now(), jid))
+                st.db.execute(
+                    "UPDATE jobs SET status='conflict', error=?, updated_at=? WHERE job_id=?",
+                    (str(e), now(), jid),
+                )
             out["conflict"] += 1
             out["details"].append({"job_id": jid, "conflict": str(e)})
             continue
         with st.tx():
-            st.db.execute("UPDATE jobs SET status='imported', content_id=?, response_hash=?, attempts=attempts+1, "
-                          "cost_json=?, updated_at=? WHERE job_id=?",
-                          (content_id, rh, json.dumps(resp["producer"].get("cost")), now(), jid))
-            st.audit(actor, "job_imported", content_id=content_id, version=v, job_id=jid,
-                     producer=resp["producer"]["mode"])
+            st.db.execute(
+                "UPDATE jobs SET status='imported', content_id=?, response_hash=?, attempts=attempts+1, "
+                "cost_json=?, updated_at=? WHERE job_id=?",
+                (content_id, rh, json.dumps(resp["producer"].get("cost")), now(), jid),
+            )
+            st.audit(
+                actor,
+                "job_imported",
+                content_id=content_id,
+                version=v,
+                job_id=jid,
+                producer=resp["producer"]["mode"],
+            )
         out["accepted"] += 1
     return out
 

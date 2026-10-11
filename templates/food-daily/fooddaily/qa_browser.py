@@ -5,6 +5,7 @@ Playwright (Python) из окружения пользователя; axe-core �
 собственным набором правил ниже и так и называется. Метрики — лабораторные
 (одна машина, без троттлинга сети), полевыми данными не являются.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -18,7 +19,8 @@ from playwright.sync_api import sync_playwright
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "http://127.0.0.1:8847"
 VIEWPORTS = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
-SHOTS = {"home": "/", "catalog": "/recepty/", "recipe": "/recept/syrniki-s-ezhevikoj/"}
+SHOTS = {"home": "/", "catalog": "/recepty/", "recipe": "/recept/syrniki-s-ezhevikoj/",
+         "tag": "/produkty/kurica/", "article": "/sovety/priznaki-gotovnosti/"}
 
 A11Y_JS = r"""
 () => {
@@ -70,22 +72,107 @@ PERF_JS = r"""
 })"""
 
 
+AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
+AXE_PAGES = [
+    "/",
+    "/recepty/",
+    "/recepty/supy/",
+    "/recepty/zavtraki/",
+    "/produkty/kurica/",
+    "/sposob/na-skovorode/",
+    "/podborki/bystro-do-30-minut/",
+    "/recept/syrniki-s-ezhevikoj/",
+    "/recept/plov-s-kuricej/",
+    "/recept/grecheskij-salat/",
+    "/recept/domashnyaya-shaurma/",
+    "/recept/tefteli-v-tomatnom-souse/",
+    "/sovety/priznaki-gotovnosti/",
+    "/poisk/?q=zzz",
+    "/nesushchestvuet/",
+]
+
+KEYBOARD_JS = r"""
+() => {
+  const el = document.activeElement; if (!el || el === document.body) return null;
+  const cs = getComputedStyle(el); const r = el.getBoundingClientRect();
+  return {tag: el.tagName, text: (el.innerText || el.getAttribute('aria-label') || el.value || '').trim().slice(0, 40),
+          outline: cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0, visible: r.width > 0 && r.height > 0};
+}"""
+
+
+def axe_and_keyboard(browser) -> dict:
+    out = {"axe_version": None, "pages": {}, "keyboard": {}}
+    if not AXE.exists():
+        out["status"] = "NOT_RUN: axe-core не установлен (cd templates/food-daily/qa && npm ci)"
+        return out
+    for vname in ("mobile", "desktop"):
+        # bypass_csp — только в тестовом браузере: строгая CSP сайта (script-src 'self') иначе не даёт внедрить axe
+        ctx = browser.new_context(viewport=VIEWPORTS[vname], locale="ru-RU", bypass_csp=True)
+        page = ctx.new_page()
+        for path in AXE_PAGES:
+            page.goto(BASE + path)
+            page.add_script_tag(path=str(AXE))
+            res = page.evaluate("""async () => { const r = await axe.run(document, {runOnly: {type: 'tag',
+                values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']}});
+                return {v: axe.version, violations: r.violations.map(v => ({id: v.id, impact: v.impact,
+                  nodes: v.nodes.length, sample: v.nodes[0] && v.nodes[0].target.join(' ')})), passes: r.passes.length}; }""")
+            out["axe_version"] = res["v"]
+            out["pages"][f"{vname}:{path}"] = {
+                "violations": res["violations"],
+                "passes": res["passes"],
+            }
+        ctx.close()
+    # проход клавиатурой по главной и рецепту: порядок фокуса и видимость обводки
+    ctx = browser.new_context(viewport=VIEWPORTS["desktop"], locale="ru-RU")
+    page = ctx.new_page()
+    for path in ("/", "/recept/syrniki-s-ezhevikoj/"):
+        page.goto(BASE + path)
+        seen = []
+        for _ in range(30):
+            page.keyboard.press("Tab")
+            f = page.evaluate(KEYBOARD_JS)
+            if f:
+                seen.append(f)
+        out["keyboard"][path] = {
+            "steps": len(seen),
+            "without_visible_outline": [x for x in seen if not x["outline"]],
+            "order_head": [f"{x['tag']}:{x['text']}" for x in seen[:12]],
+        }
+    ctx.close()
+    return out
+
+
 def commit() -> str:
     return subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
 
 
 def run(shots_dir: Path | None) -> dict:
-    res: dict = {"base": BASE, "commit_head": commit(), "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-                 "scenarios": {}, "a11y": {}, "contrast": {}, "perf_lab": {}, "console_errors": [], "screenshots": []}
+    res: dict = {
+        "base": BASE,
+        "commit_head": commit(),
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "scenarios": {},
+        "a11y": {},
+        "contrast": {},
+        "perf_lab": {},
+        "console_errors": [],
+        "screenshots": [],
+    }
     S = res["scenarios"]
     with sync_playwright() as p:
         # установленная версия браузера, без скачивания новых
-        exe = Path.home() / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+        exe = (
+            Path.home()
+            / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+        )
         browser = p.chromium.launch(executable_path=str(exe) if exe.exists() else None)
         for vname, vp in VIEWPORTS.items():
             ctx = browser.new_context(viewport=vp, device_scale_factor=1, locale="ru-RU")
             page = ctx.new_page()
-            page.on("console", lambda m, v=vname: m.type == "error" and res["console_errors"].append(f"{v}: {m.text}"))
+            page.on(
+                "console",
+                lambda m, v=vname: m.type == "error" and res["console_errors"].append(f"{v}: {m.text}"),
+            )
             page.on("pageerror", lambda e, v=vname: res["console_errors"].append(f"{v}: {e}"))
             for name, path in SHOTS.items():
                 page.goto(BASE + path, wait_until="load")
@@ -96,7 +183,9 @@ def run(shots_dir: Path | None) -> dict:
                     shots_dir.mkdir(parents=True, exist_ok=True)
                     f = shots_dir / f"{name}-{vname}.png"
                     page.screenshot(path=str(f), full_page=True)
-                    res["screenshots"].append(str(f.resolve().relative_to(ROOT)) if ROOT in f.resolve().parents else str(f))
+                    res["screenshots"].append(
+                        str(f.resolve().relative_to(ROOT)) if ROOT in f.resolve().parents else str(f)
+                    )
             # горизонтальная прокрутка на телефоне недопустима
             for name, path in SHOTS.items():
                 page.goto(BASE + path)
@@ -112,8 +201,12 @@ def run(shots_dir: Path | None) -> dict:
         page.click("[data-servings-control] [data-step='1']")
         page.click("[data-servings-control] [data-step='1']")
         after = page.locator(".ing").nth(1).locator(".ing__amount").inner_text()
-        S["servings_scale_2_to_4"] = {"before": before, "after": after, "ok": before == "190 г" and after == "380 г",
-                                      "time_unchanged": page.locator(".facts").inner_text() == time_before}
+        S["servings_scale_2_to_4"] = {
+            "before": before,
+            "after": after,
+            "ok": before == "190 г" and after == "380 г",
+            "time_unchanged": page.locator(".facts").inner_text() == time_before,
+        }
         # список покупок
         page.click("[data-add-list]")
         page.goto(BASE + "/spisok-pokupok/")
@@ -134,7 +227,11 @@ def run(shots_dir: Path | None) -> dict:
         page.keyboard.press("ArrowRight")
         second = page.locator("[data-cook-count]").inner_text()
         page.keyboard.press("Escape")
-        S["cooking_mode"] = {"first": first, "after_arrow": second, "closed_on_esc": page.locator("[data-cook]").is_hidden()}
+        S["cooking_mode"] = {
+            "first": first,
+            "after_arrow": second,
+            "closed_on_esc": page.locator("[data-cook]").is_hidden(),
+        }
         # фильтры: выбор применяется, сброс и пустой результат
         page.goto(BASE + "/recepty/")
         with page.expect_navigation():
@@ -156,6 +253,7 @@ def run(shots_dir: Path | None) -> dict:
         S["first_tab_skip_link"] = page.evaluate("document.activeElement.className") == "skip"
         # без JS рецепт целиком в HTML
         ctx.close()
+        res["accessibility"] = axe_and_keyboard(browser)
         ctx = browser.new_context(java_script_enabled=False)
         page = ctx.new_page()
         page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")

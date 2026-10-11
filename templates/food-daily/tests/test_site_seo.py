@@ -3,6 +3,7 @@
 Страницы рендерятся тем же App, что обслуживает preview; HTML разбирается
 как есть. Матрица типов страниц — docs/SEO-MATRIX.md.
 """
+
 import copy
 import json
 import re
@@ -10,9 +11,7 @@ from collections import Counter
 
 import pytest
 
-from fooddaily import seo
 from fooddaily.server import App
-from fooddaily.views import CATEGORIES, TAGS, Site
 
 
 def get(app, path, q=None):
@@ -74,7 +73,9 @@ def test_recipe_jsonld_matches_visible(app, site):
         for forbidden in ("aggregateRating", "review", "author", "nutrition", "image", "video"):
             assert forbidden not in ld, (r.slug, forbidden)
         for step in ld["recipeInstructions"]:
-            assert step["text"].replace('"', "&#34;")[:40] in html.replace("&quot;", "&#34;") or step["text"][:40] in html
+            assert (
+                step["text"].replace('"', "&#34;")[:40] in html.replace("&quot;", "&#34;") or step["text"][:40] in html
+            )
         assert ld["recipeYield"].startswith(str(r.servings))
         bc = next(x for x in jsonld(html) if x["@type"] == "BreadcrumbList")
         assert [i["name"] for i in bc["itemListElement"]][-1] == r.title
@@ -148,7 +149,7 @@ def test_no_orphan_recipes(app):
 
 
 def test_tag_pages_thresholds(site):
-    for key, items in site.tag_pages().items():
+    for items in site.tag_pages().values():
         assert len(items) >= site.cfg["seo"]["tag_page_min_items"]
     assert all(len(v[2]) >= 3 for v in site.collections().values())
 
@@ -169,7 +170,15 @@ def test_filters(site):
 def test_no_internal_details_for_reader(app, site):
     for p in [site.recipes[0].url, "/", "/recepty/"]:
         _, html, _ = get(app, p)
-        for bad in ("fdj-", "job_id", "claude/", "ai_draft", "manual_standin", "rec-", "editor_notes"):
+        for bad in (
+            "fdj-",
+            "job_id",
+            "claude/",
+            "ai_draft",
+            "manual_standin",
+            "rec-",
+            "editor_notes",
+        ):
             assert bad not in html, (p, bad)
 
 
@@ -186,7 +195,7 @@ def test_no_fake_video_or_ratings(app, site):
 
 def test_cards_always_have_titles(app):
     _, html, _ = get(app, "/recepty/")
-    cards = re.findall(r'<article class="card".*?</article>', html, re.S)
+    cards = re.findall(r'<article class="card card--[a-z-]+".*?</article>', html, re.S)
     assert cards and all(re.search(r'class="card__title">[^<]{3,}<', c) for c in cards)
 
 
@@ -195,3 +204,45 @@ def test_source_attribution_shows_domain(app, site):
     _, html, _ = get(app, r.url)
     domain = r.source["url"].split("/")[2]
     assert f">{domain}</a>" in html and r.source["url"] in html
+
+
+def test_recipe_tags_are_links_to_live_pages(app, site):
+    found = 0
+    for r in site.recipes:
+        _, html, _ = get(app, r.url)
+        block = re.search(r'<ul class="tags".*?</ul>', html, re.S)
+        if not block:
+            continue
+        for href in re.findall(r'<a href="([^"]+)"', block.group(0)):
+            found += 1
+            assert get(app, href)[0] == 200, href
+    assert found >= 10
+
+
+def test_tag_indexes_and_articles(app, site):
+    for p in ("/produkty/", "/sposob/", "/sovety/"):
+        st, html, _ = get(app, p)
+        assert st == 200 and canonical(html) == app.site.abs(p)
+    for slug, a in site.articles.items():
+        st, html, _ = get(app, f"/sovety/{slug}/")
+        assert st == 200
+        ld = next(x for x in jsonld(html) if x["@type"] == "Article")
+        assert ld["headline"] == a["title"] and a["title"] in html
+        assert "author" not in ld and "image" not in ld
+    assert get(app, "/sovety/net-takogo/")[0] == 404
+
+
+def test_itemlist_matches_visible_cards(app):
+    for p in ("/recepty/supy/", "/produkty/kurica/", "/podborki/bystro-do-30-minut/"):
+        _, html, _ = get(app, p)
+        il = next(x for x in jsonld(html) if x["@type"] == "ItemList")
+        urls = [e["url"].replace(app.site.origin, "") for e in il["itemListElement"]]
+        cards = re.findall(r'<article class="card[^"]*"[^>]*>\s*<a class="card__link" href="([^"]+)"', html)
+        assert urls == cards, p
+
+
+def test_no_category_illustration_posing_as_dish(app, site):
+    _, html, _ = get(app, site.recipes[0].url)
+    assert "img/zavtraki.svg" not in html and "recipe__illo" not in html
+    _, html, _ = get(app, "/recepty/")
+    assert '<img' not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)

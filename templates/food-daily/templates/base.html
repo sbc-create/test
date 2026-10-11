@@ -45,6 +45,7 @@
     <a href="/recepty/{{ key }}/"{% if meta.canonical and ('/recepty/' ~ key ~ '/') in meta.canonical %} aria-current="page"{% endif %}>{{ label }}</a>
     {% endfor %}
     <a href="/podborki/">Подборки</a>
+    <a href="/sovety/">Советы</a>
   </nav>
 </header>
 {% if meta.breadcrumbs and meta.breadcrumbs|length > 1 %}
@@ -60,7 +61,7 @@
 <footer class="foot">
   <div class="wrap foot__row">
     <p class="foot__brand">Будни на кухне</p>
-    <nav aria-label="О сайте"><a href="/o-proekte/">О проекте</a><a href="/kontakty/">Контакты</a><a href="/podborki/">Подборки</a></nav>
+    <nav aria-label="О сайте"><a href="/o-proekte/">О проекте</a><a href="/kontakty/">Контакты</a><a href="/podborki/">Подборки</a><a href="/produkty/">Продукты</a><a href="/sposob/">Способы</a><a href="/sovety/">Советы</a></nav>
     <p class="foot__note">Тексты рецептов подготовлены с помощью ИИ по фактам из открытых источников. Ссылка на источник и отметки о проверке — на странице каждого рецепта.</p>
   </div>
 </footer>
