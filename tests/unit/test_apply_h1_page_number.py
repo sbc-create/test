@@ -16,13 +16,21 @@ ROOT = Path(__file__).resolve().parents[2]
 спец.loader.exec_module(инструмент)
 
 
+ИСТОЧНИК = ROOT / "automation" / "host" / "seo_layer.py"
+
+
+def test_factory_source_is_already_applied_and_tool_reproduces_it():
+    текст = ИСТОЧНИК.read_text(encoding="utf-8")
+    assert инструмент.привести(текст) == (текст, 0)  # копии сайтов синхронизируются из источника
+    до_правки = текст.replace(инструмент.ЗАМЕНА, инструмент.ЯКОРЬ)
+    assert до_правки != текст
+    assert инструмент.привести(до_правки) == (текст, 1)
+
+
 @pytest.fixture()
 def слой(tmp_path):
     путь = tmp_path / "seo_layer.py"
-    shutil.copy(ROOT / "automation" / "host" / "seo_layer.py", путь)
-    новый, n = инструмент.привести(путь.read_text(encoding="utf-8"))
-    assert n == 1
-    путь.write_text(новый, encoding="utf-8")
+    shutil.copy(ИСТОЧНИК, путь)
     спец_с = importlib.util.spec_from_file_location("seo_layer_h1", путь)
     модуль = importlib.util.module_from_spec(спец_с)
     спец_с.loader.exec_module(модуль)
@@ -59,14 +67,11 @@ def test_other_pages_unchanged(слой, путь, титул, код):
     assert h1(тело) == "Каталог"
 
 
-def test_h1_with_number_is_not_doubled_and_rerun_is_a_no_op(слой):
+def test_h1_with_number_is_not_doubled(слой):
     тело = слой.обогатить(страница("Боевики — страница 3 — Сайт", "Боевики — страница 3"),
                           "text/html; charset=utf-8", хост="example.test",
                           путь="/collection/action/?page=3", код=200)
     assert h1(тело) == "Боевики — страница 3"
-    текст = (ROOT / "automation" / "host" / "seo_layer.py").read_text(encoding="utf-8")
-    новый, _ = инструмент.привести(текст)
-    assert инструмент.привести(новый) == (новый, 0)
 
 
 def test_missing_anchor_is_refused():
