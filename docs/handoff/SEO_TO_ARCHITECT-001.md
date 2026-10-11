@@ -431,6 +431,25 @@ spending limit needs to be increased». То же у site-zonafilm-space (про
 нужны) и ограничить число одновременных интерактивных сессий. Порог редактора
 не снижаю: замер его потребления — после первой партии.
 
+### 15.3 http:// отдаёт 200 вместо 301/308 на https (11.10 ~13:15Z)
+
+Запрос `http://<домен>/` без следования перенаправлениям: 200 у animedia.icu,
+animedia.space, an1meg0.site, lordserials22.info, zonafilm.space, zonafilm.cc,
+zonafilm12.site, yummyani7.site, yummyani7.info. У остальных восьми — 301/308
+на https. Дубли http/https по всем адресам; canonical указывает на https и
+смягчает, но не заменяет перенаправление. Правка — серверный блок :80 nginx
+(как у lordfilm47.space: `return 308 https://$host$request_uri;`). Проверка —
+`automation/local`-скрипт не нужен: `curl -sI http://<домен>/` → 308 + Location.
+
+### 15.4 Снимок каталога без жанров у новых записей
+
+У 201 записи lords-02 есть ID аниме-базы, но `genres: []` (checks/lords02_taxonomy.py
+падает на данных и на чистом HEAD 4714e0a); у animedia.icu 189 записей в
+`anime_db_id_without_animation_genre` → допуск `review` → страница отдаёт
+`noindex, follow` (пример: /title/doktor-stoun-novyy-mir-chast-2/). Причина —
+производитель снимка не передаёт жанры новым записям. Нужна правка у
+производителя каталога, а не поимённые исключения.
+
 ## Чего я не делал
 
 Не менял очередь, реестры, журналы и данные сайтов; не снимал аренды. В мосте
