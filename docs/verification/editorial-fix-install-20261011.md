@@ -74,26 +74,90 @@ but this command redirects git to the shared checkout via -C. Refusing to run it
 
 ## 5. Одна команда владельца
 
+### Почему прежняя команда не годится
+
+Первая редакция этого раздела предлагала `git merge --ff-only
+claude/nova-publish-memory-02` в дереве службы и откат через `git reset --hard
+0a5d5d0476d9`. Перед выдачей я проверил её на копии дерева — она непригодна
+по трём причинам, и каждая проверена, а не предположена:
+
+1. **`--ff-only` откажет.** Дерево службы
+   (`/home/claude/wt-portable-site-cell-01`) ушло на ветку
+   `claude/nova-publish-memory-01`, коммит `aa7b7ff`. Он НЕ предок моей ветки:
+   у дерева службы 5 своих коммитов (работа SEO-сессии, включая `a734bb2` —
+   паузу публикаций), у меня 55 своих. Ускоренное слияние невозможно.
+2. **Откат через `git reset --hard` недопустим.** Он в числе жёстких запретов
+   проекта, и не напрасно: SHA `0a5d5d0476d9` в прежней редакции уже устарел,
+   и сброс на него уничтожил бы чужие коммиты, которых тогда не было.
+3. **Слияние ветки целиком смешало бы направления.** К этому часу в ней 55
+   коммитов, включая правки витрин и приёмки. Правка записи правок — одно
+   направление, и устанавливать её надо одним.
+
+Cherry-pick коммита целиком тоже не годится — проверено: `0ce09b5` трогает
+`factory/lords/nova_publish.py`, а в дереве службы этот файл **удалён**, и
+cherry-pick останавливается конфликтом `modify/delete`, то есть вернул бы
+удалённый файл.
+
+### Команда
+
+Доставляются только файлы самой правки и её проверок:
+
 ```bash
-git -C /home/claude/wt-portable-site-cell-01 merge --ff-only claude/nova-publish-memory-02 \
+cd /home/claude/wt-portable-site-cell-01 \
+  && git checkout 3a11718 -- factory/qwen/editorial.py factory/cell/editorial_store.py \
+  && git checkout bfaf482 -- tests/unit/test_editorial_name_field_zona01.py \
+       tests/unit/test_editorial_publish_cycle.py \
+       tests/unit/test_editorial_overrides_audit.py \
+       automation/local/editorial-overrides-audit.py \
+       automation/local/editorial-field-write.py \
+       config/editorial-protected-fields.json \
+  && git commit -m "правка записи редакционных правок: состав из живого файла" \
+       factory/qwen/editorial.py factory/cell/editorial_store.py \
+       tests/unit/test_editorial_name_field_zona01.py \
+       tests/unit/test_editorial_publish_cycle.py \
+       tests/unit/test_editorial_overrides_audit.py \
+       automation/local/editorial-overrides-audit.py \
+       automation/local/editorial-field-write.py \
+       config/editorial-protected-fields.json \
+  && python3 -m pytest tests/unit/test_editorial_name_field_zona01.py \
+       tests/unit/test_editorial_publish_cycle.py \
+       tests/unit/test_editorial_overrides_audit.py -q \
   && sudo systemctl restart site-factory-mcp.service \
-  && python3 /home/claude/wt-nova-publish-memory-02/automation/local/post-integration-check.py \
-  && python3 /home/claude/wt-nova-publish-memory-02/automation/local/editorial-overrides-audit.py
+  && python3 automation/local/post-integration-check.py \
+  && python3 automation/local/editorial-overrides-audit.py
 ```
 
-Первая команда root не требует и чужие правки не затрагивает — `--ff-only`
-отказывается сам, если это не ускоренное слияние. Вторая перечитывает код
-службой. Третья обязана напечатать «внедрено во всех службах». Четвёртая —
-«защищённые поля на месте» и код 0.
+Что делает каждый шаг:
 
-**Ожидаемый результат:** в службе появляется `_живые_правки`, публикация
-описаний перестаёт затирать ручные поля, и паузу публикации на семи доменах
-Lords/Zona можно снять.
+* два `git checkout <sha> -- <файлы>` берут ИМЕННО перечисленные файлы из моей
+  ветки, не сливая её. Чужие коммиты в дереве службы остаются на месте;
+* `git commit` закрепляет их в ветке дерева службы — иначе правка живёт
+  незакоммиченной и теряется при следующей работе в этом дереве;
+* `pytest` обязан напечатать **22 passed**. Это те самые проверки, что
+  замыкают круг публикаций, и запускаются они в том дереве, куда правка легла;
+* `systemctl restart` заставляет службу перечитать код — единственный шаг,
+  требующий root;
+* `post-integration-check.py` обязан напечатать «внедрено во всех службах»;
+* `editorial-overrides-audit.py` — «защищённые поля на месте» и код 0.
 
-**Откат:** `git -C /home/claude/wt-portable-site-cell-01 reset --hard 0a5d5d0476d9`
-плюс `sudo systemctl restart site-factory-mcp.service`. Данные сайтов при этом
-не затрагиваются: правка меняет только код службы. Откат вернёт и прежний
-дефект — то есть он на крайний случай, а не на «если что».
+**Репетиция проведена.** Те же команды выполнены на копии дерева службы
+(`git worktree` от `aa7b7ff`): файлы встают без конфликтов, `_живые_правки`
+появляется, импорт в контексте того дерева проходит, и 22 проверки проходят.
+Копия — одноразовая, в репозиторий не идёт.
+
+**Ожидаемый результат:** публикация описаний перестаёт затирать ручные поля, и
+паузу публикации на семи доменах Lords/Zona можно снять.
+
+**Откат** — без `reset --hard` и без потери чужих коммитов:
+
+```bash
+cd /home/claude/wt-portable-site-cell-01 \
+  && git revert --no-edit HEAD \
+  && sudo systemctl restart site-factory-mcp.service
+```
+
+Данные сайтов откат не затрагивает: правка меняет только код службы. Он
+возвращает и прежний дефект — то есть на крайний случай, а не на «если что».
 
 ## 6. Что остаётся после установки
 
