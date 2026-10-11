@@ -30,13 +30,26 @@ import pytest
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 СЦЕНАРИЙ = КОРЕНЬ / "automation" / "local" / "public-acceptance.py"
 
-СТРАНИЦА_1 = ('<link rel="canonical" href="https://x.test/catalog/"/>'
+#: Заголовки в фикстурах не украшение: норма п.7 требует, чтобы title и
+#: description страницы N>1 несли номер. Страница без них — отдельный случай
+#: («отсутствует»), и строить на нём фикстуру ИСПРАВНОЙ витрины нельзя.
+ЗАГОЛОВОК_1 = ("<title>Каталог — Lordserial</title>"
+               '<meta name="description" content="Каталог на Lordserial.">')
+ЗАГОЛОВОК_2 = ("<title>Каталог — страница 2 — Lordserial</title>"
+               '<meta name="description" '
+               'content="Каталог на Lordserial — страница 2.">')
+
+СТРАНИЦА_1 = (ЗАГОЛОВОК_1
+              + '<link rel="canonical" href="https://x.test/catalog/"/>'
               + "".join(f'<a href="/title/first-{i}">' for i in range(48)))
-СТРАНИЦА_2_НА_СЕБЯ = ('<link rel="canonical" href="https://x.test/catalog/?page=2"/>'
+СТРАНИЦА_2_НА_СЕБЯ = (ЗАГОЛОВОК_2
+                      + '<link rel="canonical" href="https://x.test/catalog/?page=2"/>'
                       + "".join(f'<a href="/title/second-{i}">' for i in range(48)))
-СТРАНИЦА_2_НА_РАЗДЕЛ = ('<link rel="canonical" href="https://x.test/catalog/"/>'
+СТРАНИЦА_2_НА_РАЗДЕЛ = (ЗАГОЛОВОК_2
+                        + '<link rel="canonical" href="https://x.test/catalog/"/>'
                         + "".join(f'<a href="/title/second-{i}">' for i in range(48)))
-СТРАНИЦА_2_ЧУЖОЙ = ('<link rel="canonical" href="https://другой.test/catalog/"/>'
+СТРАНИЦА_2_ЧУЖОЙ = (ЗАГОЛОВОК_2
+                    + '<link rel="canonical" href="https://другой.test/catalog/"/>'
                     + "".join(f'<a href="/title/second-{i}">' for i in range(48)))
 ПУСТО = "<html></html>"
 
