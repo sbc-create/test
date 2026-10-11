@@ -50,7 +50,7 @@
 | повтор задания | `qwen export`/`import` повторно | 0 | тот же `job_id`; повторный импорт — 24 noop |
 | реестры фабрики | `python3 scripts/validate_registries.py` | 0 | |
 | unit-тесты фабрики по затронутым областям | `pytest tests/unit -k "allowlist or network or permission or inventory or registr or unattended or guard or authorization"` | 0 | 650 passed |
-| полный `tests/unit` фабрики | `pytest -q tests/unit` | см. `var/food-daily/logs/repo-unit-full.log` | итог внесён в описание PR |
+| полный `tests/unit` фабрики | `pytest -q tests/unit` | 1 | 2521 passed, 5 skipped, **1 failed**: `test_job_result.py::test_real_pilot_results_are_schema_valid` — требует `artifacts/jobs/pilot-local/*.json`, которые создаёт прогон DLE-пилота `tests/run-all.sh`; в свежем worktree их нет, пилот не запускался. С изменениями food-daily не связано, но и не исправлено |
 | сканер секретов | `python3 scripts/secret_scan.py` | 0 | находок вне tests/ нет |
 
 Не запускалось: axe-core (в worktree `node_modules` — висячая ссылка; вместо него
