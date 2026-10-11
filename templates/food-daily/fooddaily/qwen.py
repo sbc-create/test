@@ -2,9 +2,8 @@
 проверенный импорт ответов.
 
 Живого API «фабрика → Qwen» в проекте нет: Qwen работает на srv-qwen в
-Open WebUI и сам обращается к фабрике через MCP-мост site-factory-mcp
-(ветка claude/launch-lords-101-077-01, factory/qwen/), обратного канала нет
-(docs/QWEN_CONNECTION_CHECKPOINT.md там же). Поэтому здесь — файловый
+Open WebUI и сам обращается к фабрике через MCP-мост site-factory-mcp,
+обратного канала нет. Где живёт мост и что проверено — docs/INTEGRATIONS.md. Поэтому здесь — файловый
 обмен: outbox/<job_id>.json → ответ в inbox/<job_id>.json → `import`.
 Это не живая интеграция и так не называется: producer.mode у ответа
 обязателен и попадает в версию материала.

@@ -70,7 +70,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     "russianfood": [
         (None, r"^/recipes/recipe\.php\?rid=\d+$", "recipe"),
         (None, r"^/recipes/bytype/\?fid=\d+$", "category"),
-        (None, r"^/recipes/bytype/\?fid=[\d,]+$", "tag"),        # сочетание рубрик
+        (None, r"^/recipes/bytype/\?fid=\d+((,|%2C)\d+)+$", "tag"),  # сочетание рубрик (запятая после нормализации — %2C)
         (None, r"^/themes/(\?theme_id=\d+)?$", "tag"),
         (None, r"^/reading/", "article"),
         (None, r"^/(blogs|forum|entertainment|subscribe|search|users)/", "other"),
@@ -79,6 +79,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     "povar": [
         (None, r"^/recipes/[a-z0-9_]+-\d+\.html$", "recipe"),
         (None, r"^/list/[a-z0-9_]+/$", "category"),
+        (None, r"^/list/[a-z0-9_]+/\d+/$", "listing_page"),         # пагинация рубрики, canonical → 1-я
         (None, r"^/menu/[a-z0-9_]+/$", "tag"),
         (None, r"^/mostnew/", "listing_page"),
         (None, r"^/(wiki|articles)/", "article"),
@@ -94,6 +95,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
     ],
     "povarenok": [
         (None, r"^/recipes/show/\d+/$", "recipe"),
+        (None, r"[?&]searchid=", "listing_page"),                    # отбор внутри рубрики
         (None, r"^/recipes/(dishes/[a-z]+|category/\d+)/$", "category"),
         (None, r"^/recipes/(kitchen|destiny|ingredient)/\d+/?$", "tag"),
         (None, r"/~\d+/$", "listing_page"),
@@ -101,6 +103,7 @@ RULES: dict[str, list[tuple[str | None, str | None, str]]] = {
         (None, r"^/video/", "video"),
     ],
     "edimdoma": [
+        (None, r"[?&]page=\d+", "listing_page"),                  # пагинация лент и тегов
         (None, r"^/retsepty/\d+-[a-z0-9-]+$", "recipe"),
         (None, r"^/retsepty/tags/\d+-", "tag"),
         (None, r"^/retsepty$", "category"),

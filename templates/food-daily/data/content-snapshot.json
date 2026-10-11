@@ -1,7 +1,7 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-11T22:00:10Z",
+ "generated_at": "2026-10-11T22:49:24Z",
  "items": [
   {
    "content_id": "fd-00d47e5b9672",
@@ -650,12 +650,12 @@
   {
    "content_id": "fd-2154b0ca14e2",
    "slug": "pyshnye-oladi-na-kefire",
-   "version": 1,
+   "version": 3,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-11T22:49:24Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": null,
    "draft": {
     "title": "Пышные оладьи на кефире",
     "slug": "pyshnye-oladi-na-kefire",

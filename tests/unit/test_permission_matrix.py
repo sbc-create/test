@@ -441,8 +441,11 @@ class TestProfileProperties:
         не пуст, потому что владелец разрешил обращения двумя заданиями:
         автоматизация аналитики Яндекса (API и документация) и центральный
         Secret Hub — read-only проверка выданного токена CDNVideoHub перед
-        сохранением (D88). Проверяется точный состав: незамеченная лишняя
-        строка здесь — это открытый наружу канал.
+        сохранением (D88). Третье задание — TEMPLATE-FOOD-DAILY-01 (ред. 2,
+        2026-10-11): только GET к 14 кулинарным хостам, перечисленным в ТЗ для
+        аудита и пилотного импорта (templates/food-daily/DECISIONS.md FD-01).
+        Проверяется точный состав: незамеченная лишняя строка здесь — это
+        открытый наружу канал.
         """
         assert unattended.inventory_hosts() == set()
         assert unattended.inventory_zones() == set()
@@ -452,6 +455,10 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # TEMPLATE-FOOD-DAILY-01: референсы из ТЗ владельца
+            "www.russianfood.com", "1000.menu", "eda.rambler.ru", "eda.ru", "www.eda.ru",
+            "www.gastronom.ru", "www.povarenok.ru", "povar.ru", "www.iamcook.ru", "www.edimdoma.ru",
+            "food.ru", "menunedeli.ru", "www.bbcgoodfood.com", "www.seriouseats.com",
         }
 
 

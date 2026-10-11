@@ -63,11 +63,12 @@ hosts:
   - id: edimdoma
     base: https://www.edimdoma.ru
     lang: ru
-    # /sitemap.xml → 406 при объявленном UA и любом Accept; пагинация через
-    # query закрыта robots.txt (Disallow: /*?). Только рубрики и теги без query.
+    # /sitemap.xml → 406 при объявленном UA и любом Accept. robots.txt
+    # закрывает /*?, но разрешает *?page= (более длинное правило побеждает),
+    # поэтому пагинация ленты /retsepty?page=N разрешена.
     catalog:
       seeds: [/retsepty]
-      follow: ['^/retsepty$', '^/retsepty/tags/\d+-[a-z0-9-]+$', '^/retsepty/(kategorii|rubriki)/[a-z0-9/-]+$']
+      follow: ['^/retsepty(\?page=\d+)?$', '^/retsepty/tags/\d+-[a-z0-9-]+(\?page=\d+)?$', '^/retsepty/(kategorii|rubriki)/[a-z0-9/-]+$']
       max_pages: 1500
   - id: food-ru
     base: https://food.ru

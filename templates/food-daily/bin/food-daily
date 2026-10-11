@@ -39,6 +39,7 @@ case "${1:-help}" in
   restart) bash "$HERE/bin/food-daily" stop; bash "$HERE/bin/food-daily" start ;;
   status)
     if alive; then echo "работает, pid $(cat "$PIDFILE")"; python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8847/healthz',timeout=3).read().decode())"; else echo "не запущен"; exit 3; fi ;;
-  test) shift; exec python3 -m pytest -q "$HERE/tests" "$@" ;;
+  test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" \
+          --basetemp "$REPO/var/food-daily/pytest" "$HERE/tests" "$@" ;;
   *) sed -n '2,4p' "$0"; echo "команды: inventory catalog counts verify-sample topics import qwen editorial video build editor-init start stop restart status test" ;;
 esac

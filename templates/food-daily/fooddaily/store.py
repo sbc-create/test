@@ -140,17 +140,22 @@ class Store:
                 if last and last["payload_hash"] == h:
                     return cur
             if base_version != cur:
-                self.audit(actor, "version_conflict", content_id=content_id, version=cur, base_version=base_version)
-                raise VersionConflict(f"{content_id}: база {base_version}, текущая {cur}")
-            new = cur + 1
-            self.db.execute("INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?,?,?)",
-                            (content_id, new, SCHEMA_VERSION, cur or None, json.dumps(payload, ensure_ascii=False),
-                             h, json.dumps(source_ids), json.dumps(producer, ensure_ascii=False), now(), actor, reason))
-            # любая новая версия снимает редакторское одобрение: проверялась другая
-            self.db.execute("UPDATE content SET current_version=?, review_status='ai_draft', reviewer=NULL, "
-                            "updated_at=? WHERE content_id=?", (new, now(), content_id))
-            self.audit(actor, "version_added", content_id=content_id, version=new, reason=reason, payload_hash=h)
-            return new
+                conflict = cur
+            else:
+                conflict = None
+                new = cur + 1
+                self.db.execute("INSERT INTO versions VALUES (?,?,?,?,?,?,?,?,?,?,?)",
+                                (content_id, new, SCHEMA_VERSION, cur or None, json.dumps(payload, ensure_ascii=False),
+                                 h, json.dumps(source_ids), json.dumps(producer, ensure_ascii=False), now(), actor, reason))
+                # любая новая версия снимает редакторское одобрение: проверялась другая
+                self.db.execute("UPDATE content SET current_version=?, review_status='ai_draft', reviewer=NULL, "
+                                "updated_at=? WHERE content_id=?", (new, now(), content_id))
+                self.audit(actor, "version_added", content_id=content_id, version=new, reason=reason, payload_hash=h)
+        if conflict is not None:
+            # журнал конфликта пишется ВНЕ отменённой транзакции, иначе откат стирает и его
+            self.audit(actor, "version_conflict", content_id=content_id, version=conflict, base_version=base_version)
+            raise VersionConflict(f"{content_id}: база {base_version}, текущая {conflict}")
+        return new
 
     def rollback(self, content_id: str, to_version: int, *, actor: str) -> int:
         old = self.db.execute("SELECT * FROM versions WHERE content_id=? AND recipe_version=?",
