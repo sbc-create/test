@@ -402,7 +402,9 @@ def test_allowed_domains_cover_gate_and_candidate_sites():
     from seo_operator import regular
 
     got = editor_run.allowed_domains()
-    assert set(regular.EDITOR_SITES) <= set(got) and set(editor_run.EDITOR_DOMAINS) <= set(got)
+    пауза = set(editor_run.PAUSED_PUBLISH)
+    assert set(regular.EDITOR_SITES) - пауза <= set(got) and set(editor_run.EDITOR_DOMAINS) - пауза <= set(got)
+    assert not пауза & set(got)
 
 
 def test_gate_refreshes_when_a_catalog_domain_ran_out(tmp_path, monkeypatch):
@@ -418,14 +420,14 @@ def test_gate_refreshes_when_a_catalog_domain_ran_out(tmp_path, monkeypatch):
         called.append(path)
         path.write_text(json.dumps({"candidates": [
             {"url": "https://yummyani.site/anime/y"},
-            {"url": "https://lordfilm47.space/title/z/"},
+            {"url": "https://animedia.icu/title/z/"},
         ]}), encoding="utf-8")
         return True
 
     monkeypatch.setattr(editor_run, "_refresh_candidates", fake_refresh)
     d = editor_run.gate(NOW, refresh=True, **f)
     assert called, "каталожные домены без кандидатов — пересчёт обязателен"
-    assert "https://lordfilm47.space/title/z/" in [c["url"] for c in d["next"]]
+    assert "https://animedia.icu/title/z/" in [c["url"] for c in d["next"]]
 
 
 def test_gate_does_not_refresh_while_every_catalog_domain_has_work(tmp_path, monkeypatch):
@@ -434,7 +436,20 @@ def test_gate_does_not_refresh_while_every_catalog_domain_has_work(tmp_path, mon
     f = _gate_files(tmp_path)
     f["candidates"].write_text(json.dumps({"candidates": [
         {"url": f"https://{d}/title/a{i}/"} for i, d in enumerate(regular.EDITOR_SITES)
+        if d not in editor_run.PAUSED_PUBLISH
     ]}), encoding="utf-8")
     monkeypatch.setattr(editor_run, "_refresh_candidates",
                         lambda *a, **k: (_ for _ in ()).throw(AssertionError("лишний пересчёт")))
     assert editor_run.gate(NOW, refresh=True, **f)["run"] is True
+
+
+def test_paused_domains_are_not_offered_to_the_editor(tmp_path):
+    """11.10: публикация на Lords/Zona затирала поля editorial-overrides.json — домены на паузе."""
+    f = _gate_files(tmp_path, task_leased=True)
+    f["candidates"].write_text(json.dumps({"candidates": [
+        {"url": "https://zonafilm.space/title/a/"}, {"url": "https://animedia.space/title/b/"}]}),
+        encoding="utf-8")
+    d = editor_run.gate(NOW, **f)
+    assert [c["url"] for c in d["next"]] == ["https://animedia.space/title/b/"]
+    assert "zonafilm.space" not in editor_run.allowed_domains()
+    assert "animedia.space" in editor_run.allowed_domains()

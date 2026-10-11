@@ -586,6 +586,7 @@ def _work(
         i
         for i in items
         if i.get("target_site") in EDITOR_DOMAINS
+        and i.get("target_site") not in PAUSED_PUBLISH
         and i.get("status") == "NEEDS_UPDATE"
         and str(i.get("content_id", "")).replace("request-", "") not in leased
     ]
@@ -598,13 +599,16 @@ def _work(
         cands = json.loads(candidates.read_text(encoding="utf-8")).get("candidates") or []
     except (OSError, ValueError):
         cands = []
-    fresh = [c for c in cands if _key(c.get("url", "")) not in done]
+    fresh = [c for c in cands if _key(c.get("url", "")) not in done
+             and _key(c.get("url", "")).split("/")[2:3] != [] and
+             _key(c.get("url", "")).split("/")[2] not in PAUSED_PUBLISH]
     # Пересчёт и тогда, когда кандидаты кончились лишь у части каталожных
     # доменов: 2026-10-10 у сайтов Lords/Zona было по 2 кандидата, их закрыли
     # к утру, а список не обновлялся, пока оставались кандидаты Yummy, — за
     # день 52 из 56 публикаций пришлись на Yummy, на Lords ни одной.
     # Пересчёт не чаще раза в час (_refresh_candidates).
-    starving = set(regular.EDITOR_SITES) - {_key(c["url"]).split("/")[2] for c in fresh}
+    starving = (set(regular.EDITOR_SITES) - set(PAUSED_PUBLISH)
+                - {_key(c["url"]).split("/")[2] for c in fresh})
     if (not fresh or starving) and refresh and _refresh_candidates(candidates, now):
         # Пересчёт и при открытых заданиях очереди: 2026-10-09 после 17:35 в
         # очереди Yummy было 245 заданий, и исчерпанный список кандидатов не
@@ -650,12 +654,27 @@ def _work(
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
 
 
+#: Домены, где публикация ПРИОСТАНОВЛЕНА, с причиной. 2026-10-11 17:10Z
+#: (Архитектор): установленный в службу MCP factory/qwen/editorial.py собирает
+#: editorial-overrides.json Lords/Zona целиком из своих описаний и затирает
+#: чужие поля — прогон 20261011T125537Z стёр редакционное название
+#: silsila-badalte-rishton-ka на zonafilm.space (восстановлено заявкой
+#: zona-01-edit-5a59f77cae43). Постоянные данные сайта публикация лишь читать
+#: вправе; до установки правки «_живые_правки» (ветка Архитектора) редактор на
+#: этих доменах не публикует. Снимается удалением строки — после установки.
+PAUSED_PUBLISH = {
+    d: "MCP editorial.py затирает поля editorial-overrides.json (установка правки _живые_правки)"
+    for d in ("zonafilm.space", "zonafilm.cc", "zonafilm12.site", "lordfilm47.space",
+              "lordserial33.biz", "1lordserials1.online", "lordserials22.info")
+}
+
+
 def allowed_domains() -> list[str]:
     """Домены, на которых редактор публикует: шлюз (EDITOR_DOMAINS) и кандидаты
-    (regular.EDITOR_SITES). Единственный источник для промпта модели."""
+    (regular.EDITOR_SITES), без приостановленных. Единственный источник для промпта модели."""
     from seo_operator import regular
 
-    return sorted(set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES))
+    return sorted((set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES)) - set(PAUSED_PUBLISH))
 
 
 def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
