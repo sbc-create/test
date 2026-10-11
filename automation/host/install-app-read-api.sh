@@ -10,7 +10,8 @@
 # ------------
 #
 #   /etc/systemd/system/app-read-api-animedia-01.service   служба (только чтение)
-#   /etc/site-factory/secrets/app_client_key               ключ клиента (0640)
+#   /etc/app-read-api/                                     каталог ключа (0710 root:claude)
+#   /etc/app-read-api/client-key                           ключ клиента (0640 root:claude)
 #   /etc/nginx/snippets/app-read-api-animedia-01.conf      маршрут /api/app/v1/
 #   одна строка include в HTTPS-блок /etc/nginx/lords/animedia-01.conf
 #

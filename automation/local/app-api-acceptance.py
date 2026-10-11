@@ -10,9 +10,10 @@
     python3 automation/local/app-api-acceptance.py --base http://127.0.0.1:9180 \\
         --key-file <файл ключа>
 
-    # после установки, снаружи:
-    sudo python3 automation/local/app-api-acceptance.py \\
-        --base https://animedia.icu --key-file /etc/site-factory/secrets/app_client_key
+    # после установки, снаружи (root не нужен: файл ключа доступен учётной
+    # записи службы):
+    python3 automation/local/app-api-acceptance.py \\
+        --base https://animedia.icu --key-file /etc/app-read-api/client-key
 
 Ключ читается из ФАЙЛА и ни в вывод, ни в код возврата не попадает. Инструмент
 только читает: ни одного запроса, меняющего состояние, здесь нет (служба и не
