@@ -245,3 +245,39 @@ def test_установка_с_нуля_тоже_проходит(tmp_path):
     assert "key-created" in п.пути["ROTATION_LOG"].read_text(encoding="utf-8")
     значение = п.пути["KEY_FILE"].read_text(encoding="utf-8").strip()
     assert значение not in вывод, "значение нового ключа напечатано"
+
+
+def test_смена_кода_перезапускает_службу(частичная):
+    """Иначе выложенный файл работает, а процесс — прежний.
+
+    Поймано 2026-10-11: исправление разбора пути скопировалось бы в
+    /usr/local/lib, а служба продолжала бы отвечать прежним кодом — и выглядело
+    бы это как «исправление не помогло».
+    """
+    частичная.прогон()                      # первая установка
+    частичная.журнал.write_text("", encoding="utf-8")
+    код, вывод = частичная.прогон()         # код тот же
+    assert код == 0, вывод
+    assert "перезапуск не нужен" in вывод
+    assert "systemctl restart" not in частичная.журнал.read_text(encoding="utf-8")
+
+    # код изменился — перезапуск обязателен
+    выложенный = частичная.пути["INSTALL_DIR"] / "app-read-api-animedia-01.py"
+    выложенный.write_text("# другой код\n", encoding="utf-8")
+    частичная.журнал.write_text("", encoding="utf-8")
+    код, вывод = частичная.прогон()
+    assert код == 0, вывод
+    assert "потребуется перезапуск" in вывод
+    assert "systemctl restart" in частичная.журнал.read_text(encoding="utf-8")
+
+
+def test_перезапуск_не_делается_дважды(частичная):
+    """При смене кода И повороте ключа перезапуск один, а не два."""
+    частичная.прогон()
+    выложенный = частичная.пути["INSTALL_DIR"] / "app-read-api-animedia-01.py"
+    выложенный.write_text("# другой код\n", encoding="utf-8")
+    частичная.журнал.write_text("", encoding="utf-8")
+    частичная.прогон("--rotate-key")
+    строки = [с for с in частичная.журнал.read_text(encoding="utf-8").splitlines()
+              if "systemctl restart" in с]
+    assert len(строки) == 1, строки

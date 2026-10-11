@@ -254,8 +254,23 @@ fi
 
 # --- код службы в стабильное место ------------------------------------------
 log "код службы ${INSTALLED_SCRIPT}"
+# Смена кода без перезапуска — это выложенный файл при работающем прежнем
+# процессе. Поймано 2026-10-11: исправление разбора пути скопировалось бы, а
+# служба продолжала бы отвечать 404 на `%3A`, и выглядело бы это как
+# «исправление не работает».
+CODE_CHANGED=0
+if [ ! -f "$INSTALLED_SCRIPT" ]; then
+  CODE_CHANGED=1
+elif ! cmp -s "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"; then
+  CODE_CHANGED=1
+fi
 run install -d -m 0755 -o root -g root "$INSTALL_DIR"
 run install -m 0644 -o root -g root "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"
+if [ "$CODE_CHANGED" = 1 ]; then
+  ok "код службы отличался от выложенного — потребуется перезапуск"
+else
+  ok "код службы тот же: перезапуск не нужен"
+fi
 # Контракт рядом с кодом: иначе Documentation юнита указывал бы в снятое дерево.
 run install -m 0644 -o root -g root "${SRC_ROOT}/docs/APP_READ_API.md" \
     "${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md"
@@ -319,6 +334,10 @@ run systemctl enable --now "$UNIT"
 # `enable --now` уже запущенную службу не перезапускает, а ключ читается при
 # старте: без перезапуска поворот ключа ничего бы не изменил, и это выглядело
 # бы успехом.
+if [ "$CODE_CHANGED" = 1 ] && [ "$rotate_key" != 1 ] && [ "$ROTATED" != 1 ]; then
+  run systemctl restart "$UNIT"
+  ok "служба перезапущена: выложен новый код"
+fi
 if [ "$rotate_key" = 1 ] || [ "$ROTATED" = 1 ]; then
   run systemctl restart "$UNIT"
   ok "служба перезапущена: новый ключ прочитан"
