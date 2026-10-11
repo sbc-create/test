@@ -96,7 +96,7 @@ def run(shots_dir: Path | None) -> dict:
                     shots_dir.mkdir(parents=True, exist_ok=True)
                     f = shots_dir / f"{name}-{vname}.png"
                     page.screenshot(path=str(f), full_page=True)
-                    res["screenshots"].append(str(f.relative_to(ROOT)) if ROOT in f.resolve().parents else str(f))
+                    res["screenshots"].append(str(f.resolve().relative_to(ROOT)) if ROOT in f.resolve().parents else str(f))
             # горизонтальная прокрутка на телефоне недопустима
             for name, path in SHOTS.items():
                 page.goto(BASE + path)

@@ -188,3 +188,10 @@ def test_cards_always_have_titles(app):
     _, html, _ = get(app, "/recepty/")
     cards = re.findall(r'<article class="card".*?</article>', html, re.S)
     assert cards and all(re.search(r'class="card__title">[^<]{3,}<', c) for c in cards)
+
+
+def test_source_attribution_shows_domain(app, site):
+    r = site.recipes[0]
+    _, html, _ = get(app, r.url)
+    domain = r.source["url"].split("/")[2]
+    assert f">{domain}</a>" in html and r.source["url"] in html

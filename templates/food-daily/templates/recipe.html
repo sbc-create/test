@@ -71,7 +71,7 @@
 
   <footer class="provenance">
     <h2 class="sr">Происхождение рецепта</h2>
-    <p>Состав, количества и время взяты из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.host }}</a>. Текст шагов и подсказок написан заново с помощью ИИ.</p>
+    <p>Состав, количества и время взяты из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>. Текст шагов и подсказок написан заново с помощью ИИ.</p>
     <p>{% if r.raw.review_status == 'editor_approved' %}Текст проверен редактором.{% else %}Редактор ещё не проверил этот текст.{% endif %}{{ ' ' }}{% if r.raw.cooking_status == 'cooked_by_editor' %}Рецепт приготовлен редакцией.{% else %}Редакция этот рецепт не готовила.{% endif %}</p>
     <p class="provenance__dates">Опубликовано {{ r.published_at[:10] }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at[:10] }}{% endif %}.</p>
   </footer>
