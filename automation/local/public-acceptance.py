@@ -651,7 +651,13 @@ def норма_заголовка_страницы(домен: str, где: str,
 #: стоят POST-формы сообщества, а у AnimeGo нашёлся рабочий фильтр `yf/yt`,
 #: которого не было в перечне. Перенаправление сломало бы второе наверняка.
 КЛЮЧИ_СТРОГО: tuple[str, ...] = (
-    "lordfilm47.space",  # build fbc2b8ab923c-lords-01
+    "lordfilm47.space",      # build fbc2b8ab923c-lords-01
+    "lordserial33.biz",      # build bec2c5440da6-lords-02
+    "1lordserials1.online",  # build 499c932ac5f3-lords-03
+    "lordserials22.info",    # build 51e167addd5f-lords-05
+    "zonafilm.space",        # build 4f087a07d425-zona-01
+    "zonafilm.cc",           # build 7ef9eab81d7b-zona-02
+    "zonafilm12.site",       # build 20380f0b9ffc-zona-03
 )
 
 

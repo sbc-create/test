@@ -241,9 +241,17 @@ def test_в_строгом_списке_фильтров_стоят_измере
         "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
         "lordserials22.info", "zonafilm.space", "zonafilm.cc",
         "zonafilm12.site", "animedia.icu", "animedia.space"}
-    # Ключи закрыты пока у одной витрины: раскатка идёт по порядку
-    # Lords → Zona → AnimeGo → Animedia, и список растёт по измерению.
-    assert м.КЛЮЧИ_СТРОГО == ("lordfilm47.space",)
+    # Ключи закрыты у семи витрин: четыре Lords и три Zona. Раскатка идёт по
+    # порядку Lords → Zona → AnimeGo → Animedia, и список растёт по
+    # измерению: шесть внесены после прохода, где расхождений 0 из 6.
+    assert set(м.КЛЮЧИ_СТРОГО) == {
+        "lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
+        "lordserials22.info", "zonafilm.space", "zonafilm.cc",
+        "zonafilm12.site"}
+    # AnimeGo и Animedia ещё в раскатке — строгими быть не могут.
+    for домен in ("an1mego.site", "animeg0.site", "an1meg0.site",
+                  "animedia.icu", "animedia.space"):
+        assert домен not in м.КЛЮЧИ_СТРОГО, домен
     # AnimeGo и Animedia ждут правки: их в строгих быть не должно.
     # Три AnimeGo ждут правки: у них пустой фильтр отдаёт 200 с пустым
     # шаблоном и canonical на /catalog/ — это и п.4, и §1 п.8 (soft 404).
