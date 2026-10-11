@@ -240,7 +240,10 @@ def test_в_строгом_списке_фильтров_стоят_измере
     assert set(м.ФИЛЬТРЫ_СТРОГО) == {
         "lordserial33.biz", "lordfilm47.space", "1lordserials1.online",
         "lordserials22.info", "zonafilm.space", "zonafilm.cc",
-        "zonafilm12.site", "animedia.icu", "animedia.space"}
+        "zonafilm12.site", "animedia.icu", "animedia.space",
+        # Закрыты 12.10 последними: §3 п.4 держится на всех двенадцати.
+        "an1mego.site", "animeg0.site", "an1meg0.site"}
+    assert len(м.ФИЛЬТРЫ_СТРОГО) == 12
     # Ключи закрыты у семи витрин: четыре Lords и три Zona. Раскатка идёт по
     # порядку Lords → Zona → AnimeGo → Animedia, и список растёт по
     # измерению: шесть внесены после прохода, где расхождений 0 из 6.
@@ -255,11 +258,9 @@ def test_в_строгом_списке_фильтров_стоят_измере
         # двенадцати витринах сети.
         "animedia.icu", "animedia.space"}
     assert len(м.КЛЮЧИ_СТРОГО) == 12
-    # AnimeGo и Animedia ждут правки: их в строгих быть не должно.
-    # Три AnimeGo ждут правки: у них пустой фильтр отдаёт 200 с пустым
-    # шаблоном и canonical на /catalog/ — это и п.4, и §1 п.8 (soft 404).
-    for домен in ("an1mego.site", "animeg0.site", "an1meg0.site"):
-        assert домен not in м.ФИЛЬТРЫ_СТРОГО, домен
+    # Витрин вне строгого списка по §3 п.4 больше нет: Yummy закрывают этот
+    # класс иначе — у них разделы жанров отдают noindex, и норма про
+    # ИНДЕКСИРУЕМУЮ 200 там не нарушается (измерено 12.10, 0 из 15 проб).
 
 
 def test_норма_зовётся_из_проверки_домена():

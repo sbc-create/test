@@ -639,6 +639,11 @@ def норма_заголовка_страницы(домен: str, где: str,
     "zonafilm12.site",       # build bd8d4d166833-zona-03
     "animedia.icu",          # build cbaf0a6163e3-animedia-01
     "animedia.space",        # build e34df6c1f48e-animedia-space
+    # Три AnimeGo закрыты последними, 12.10: пустой год путём и запросом,
+    # неизвестный жанр и нераспознанное значение диапазона — 404.
+    "an1mego.site",          # build ce79e5d97724-animego-02
+    "animeg0.site",          # build c38be3c0193e-animego-03
+    "an1meg0.site",          # build 8868646dc765-animego-04
 )
 
 #: Какие витрины УЖЕ отвергают неизвестные и повторяющиеся КЛЮЧИ (§3 п.3) и
