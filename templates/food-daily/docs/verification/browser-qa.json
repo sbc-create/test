@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8847",
- "commit_head": "361ae67897d08306657fbe03b9eb6140ecdb8b7e",
- "at": "2026-10-11T22:56:12Z",
+ "commit_head": "576a23255f1e80cb3e0187d2362933ae97aace24",
+ "at": "2026-10-11T22:57:13Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -53,61 +53,61 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 164,
+   "lcp_ms": 232,
    "cls": 0,
-   "ttfb_ms": 6,
-   "dom_ms": 37,
+   "ttfb_ms": 49,
+   "dom_ms": 79,
    "bytes": 46558,
    "requests": 7
   },
   "mobile:catalog": {
-   "lcp_ms": 92,
+   "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 24,
-   "dom_ms": 57,
+   "ttfb_ms": 17,
+   "dom_ms": 38,
    "bytes": 15072,
    "requests": 8
   },
   "mobile:recipe": {
-   "lcp_ms": 96,
+   "lcp_ms": 92,
    "cls": 0,
-   "ttfb_ms": 29,
-   "dom_ms": 55,
-   "bytes": 21437,
+   "ttfb_ms": 31,
+   "dom_ms": 72,
+   "bytes": 21440,
    "requests": 4
   },
   "desktop:home": {
-   "lcp_ms": 108,
+   "lcp_ms": 112,
    "cls": 0,
-   "ttfb_ms": 6,
-   "dom_ms": 70,
+   "ttfb_ms": 7,
+   "dom_ms": 68,
    "bytes": 48395,
    "requests": 9
   },
   "desktop:catalog": {
-   "lcp_ms": 76,
+   "lcp_ms": 100,
    "cls": 0,
-   "ttfb_ms": 5,
-   "dom_ms": 26,
+   "ttfb_ms": 6,
+   "dom_ms": 36,
    "bytes": 14077,
    "requests": 8
   },
   "desktop:recipe": {
-   "lcp_ms": 112,
-   "cls": 0.0116,
-   "ttfb_ms": 5,
-   "dom_ms": 60,
-   "bytes": 21437,
+   "lcp_ms": 132,
+   "cls": 0,
+   "ttfb_ms": 7,
+   "dom_ms": 36,
+   "bytes": 21440,
    "requests": 4
   }
  },
  "console_errors": [],
  "screenshots": [
-  "docs/screenshots/361ae67/home-mobile.png",
-  "docs/screenshots/361ae67/catalog-mobile.png",
-  "docs/screenshots/361ae67/recipe-mobile.png",
-  "docs/screenshots/361ae67/home-desktop.png",
-  "docs/screenshots/361ae67/catalog-desktop.png",
-  "docs/screenshots/361ae67/recipe-desktop.png"
+  "docs/screenshots/576a232/home-mobile.png",
+  "docs/screenshots/576a232/catalog-mobile.png",
+  "docs/screenshots/576a232/recipe-mobile.png",
+  "docs/screenshots/576a232/home-desktop.png",
+  "docs/screenshots/576a232/catalog-desktop.png",
+  "docs/screenshots/576a232/recipe-desktop.png"
  ]
 }
