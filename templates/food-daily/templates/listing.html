@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, pager %}
+{% block main %}
+<header class="page-head">
+  <h1>{{ heading }}</h1>
+  <p class="page-head__lead">{{ lead }}</p>
+</header>
+{{ grid(items, 'h2') }}
+{{ pager(base, page, pages) }}
+{% endblock %}

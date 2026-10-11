@@ -56,3 +56,80 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- food-daily: аудит кулинарных референсов (только чтение) ------------
+  # Внесены заданием владельца TEMPLATE-FOOD-DAILY-01, ред. 2 от 2026-10-11,
+  # этап 2: robots.txt, sitemap, выборочные страницы и пилотный импорт фактов
+  # рецептов. Только GET, один запрос на хост, лимиты — templates/food-daily/
+  # config/crawl.yaml. Хосты ровно из ТЗ; eda.ru — проверка редиректа на
+  # eda.rambler.ru, отдельным конкурентом не считается.
+  - ref: food-ref-russianfood
+    host: www.russianfood.com
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-1000-menu
+    host: 1000.menu
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-eda-rambler
+    host: eda.rambler.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-eda-ru
+    host: eda.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-eda-ru-www
+    host: www.eda.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-gastronom
+    host: www.gastronom.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-povarenok
+    host: www.povarenok.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-povar
+    host: povar.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-iamcook
+    host: www.iamcook.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-edimdoma
+    host: www.edimdoma.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-food-ru
+    host: food.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-menunedeli
+    host: menunedeli.ru
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-bbcgoodfood
+    host: www.bbcgoodfood.com
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
+  - ref: food-ref-seriouseats
+    host: www.seriouseats.com
+    purpose: "food-daily: аудит референса, реестр URL из sitemap, извлечение фактов рецептов"
+    methods: [GET]
+    provenance: TEMPLATE-FOOD-DAILY-01 ред. 2 (2026-10-11), этап 2
