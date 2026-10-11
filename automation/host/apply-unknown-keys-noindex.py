@@ -29,7 +29,11 @@ from pathlib import Path
     "lords": ("country", "genre", "kind", "page", "q", "sort", "year", "community", "from", "why"),
     "zona": ("country", "genre", "kind", "page", "q", "sort", "year", "mode", "community", "from", "why"),
     "animego": ("by", "community", "country", "eps", "exclude", "genre", "kind", "mine", "ongoing",
-                "page", "q", "rating", "sort", "type", "view", "why", "year", "from"),
+                "page", "q", "rating", "sort", "type", "view", "why", "year", "from",
+                # yf/yt — диапазон лет GET-формы каталога; читаются циклом по кортежу
+                # (СВОИ_ПАРАМЕТРЫ), поиск зпр.get(...) их не нашёл — нашёл замер
+                # Архитектора 12.10 по формам живой витрины.
+                "yf", "yt"),
     "animedia": ("as", "by", "community", "country", "eps", "exclude", "genre", "kind", "mine", "ongoing",
                  "page", "q", "rating", "sort", "type", "why", "year", "from"),
 }
