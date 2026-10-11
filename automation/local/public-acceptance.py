@@ -158,10 +158,12 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     "1lordserials1.online": ("/catalog/", "/genre/drama/", "/movies/",
                              "/series/", "/animation/", "/new/",
                              "/year/2024/", "/country/rossiya/"),
-    # Zona: фасеты года и страны редирект НЕ выполняют — замер 11.10, причина
-    # в отдельном путевом маршруте; правка за SEO-сессией.
+    # Zona: прежде путевые фасеты редирект НЕ выполняли — маршрут не разбирал
+    # `page` вовсе, и на любое значение отдавал первую страницу. Правка
+    # выложена (build 7da8a06f4f9d-zona-01), проверена моим проходом.
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
-                       "/animation/", "/new/"),
+                       "/animation/", "/new/", "/year/2024/",
+                       "/country/rossiya/"),
     # Ниже — полный проход 11.10 по десяти поверхностям: редирект `?page=1`
     # выполняется везде, где раздел отвечает. У AnimeGo и Animedia нет
     # `/country/`, `/anime/` и `/dorama/` (404), поэтому их здесь и нет.
@@ -181,10 +183,14 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
                      "/animation/", "/new/", "/year/2024/"),
     "an1meg0.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                      "/animation/", "/new/", "/year/2024/"),
-    # Эти две витрины полного прохода пока не получали: четыре базовых
-    # раздела, не больше.
+    # build e0b8dd4f3ed6-zona-03 — тот же разбор `page`, проверено проходом.
+    "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                        "/animation/", "/new/", "/year/2024/",
+                        "/country/rossiya/"),
+    # zonafilm.cc полного прохода пока не получала: четыре базовых раздела.
+    # Её правки (перечень запрошенного в своём слое плюс разбор номера в
+    # артефакте шаблона) ещё идут.
     "zonafilm.cc": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
-    "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
 }
 
 #: Какие РАЗДЕЛЫ какого домена норму п.3 уже соблюдают. Строгость — по
@@ -216,8 +222,11 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     # фасета это подтверждает (состав цели совпадает).
     "animedia.icu": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
                      "/animation/", "/new/", "/year/2024/"),
+    # build 7da8a06f4f9d-zona-01 — разбор `page` в путевых фасетах. Проверено
+    # моим проходом: расхождений нет на всех отвечающих поверхностях.
     "zonafilm.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
-                       "/animation/", "/new/"),
+                       "/animation/", "/new/", "/year/2024/",
+                       "/country/rossiya/"),
     # build afae7979678b-lords-01 — выкладка правки фасетов. Проверено моим
     # проходом: все отвечающие поверхности чисты. `/anime/` и `/dorama/` у
     # этой витрины нет.
@@ -238,8 +247,12 @@ def карточки(тело: str, домен: str, предел: int = 4) -> l
     # AnimeGo: второй раунд ещё в прогоне, разделы вида отдают soft 404 на
     # номер за пределом — строгими не становятся.
     "an1mego.site": ("/catalog/", "/genre/drama/"),
-    # build 688983fbd5dd-zona-03: исправна во всех четырёх разделах
-    "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/"),
+    # build e0b8dd4f3ed6-zona-03 — тот же разбор `page` в путевых фасетах
+    # (прежде build 688983fbd5dd был исправен в четырёх разделах). Проверено
+    # моим проходом: расхождений нет.
+    "zonafilm12.site": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
+                        "/animation/", "/new/", "/year/2024/",
+                        "/country/rossiya/"),
     # build 4ffa98538631-animedia-space (второй раунд: soft 404 закрыт).
     # Полный проход 11.10: расхождений нет.
     "animedia.space": ("/catalog/", "/genre/drama/", "/movies/", "/series/",
