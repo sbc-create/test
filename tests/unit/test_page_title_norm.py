@@ -162,7 +162,8 @@ def test_в_строгом_списке_H1_стоят_измеренные_ви�
     по разделам, потому что там один дефект жил в разном коде.
     """
     м = _модуль()
-    assert set(м.П7_H1_СТРОГО) == {"lordserials22.info", "lordserial33.biz"}
+    assert set(м.П7_H1_СТРОГО) == {"lordserials22.info", "lordserial33.biz",
+                                   "lordfilm47.space"}
 
 
 def test_норма_зовётся_из_замера_раздела():
