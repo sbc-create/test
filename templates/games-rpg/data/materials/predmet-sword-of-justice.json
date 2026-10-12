@@ -1,0 +1,26 @@
+{
+ "slug": "predmet-sword-of-justice",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-9e1cb72fea",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Sword of Justice — меч Андерса",
+ "summary": "Необычный двуручный меч +1: 2d6 + 1 рубящего урона. По данным вики, его носит Anders в Risen Road Toll House; меч можно забрать с тела или получить от него в награду.",
+ "points": [
+  "Редкость: необычный (Uncommon), зачарование +1",
+  "Урон: 2d6 + 1 рубящего",
+  "Где найти: Risen Road Toll House"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-everburn-blade"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

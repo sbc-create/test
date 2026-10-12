@@ -12,5 +12,5 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 | поиск | `/poisk/?q=…` | нет | noindex | нет | — |
 | 404 | `/celeste/` (игра другого сайта), `/baldurs-gate-3/bildy/shadowheart/` (не тот раздел) | нет | 404 | нет | — |
 
-В sitemap 22 URL, все 200, canonical на себя, один H1, уникальные title (тест). Разметка Article/HowTo не используется:
+В sitemap 27 URL (с разделом «Предметы»), все 200, canonical на себя, один H1, уникальные title (тест). Разметка Article/HowTo не используется:
 у материалов нет автора и дат, которые можно было бы честно указать в ней.

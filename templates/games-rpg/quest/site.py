@@ -19,7 +19,14 @@ ABIL_RU = {
     "WIS": "Мудрость",
     "CHA": "Харизма",
 }
-SECTION = {"character": "personazhi", "build": "bildy", "quest": "kvesty", "mechanic": "mehaniki", "version": "versiya"}
+SECTION = {
+    "character": "personazhi",
+    "build": "bildy",
+    "quest": "kvesty",
+    "mechanic": "mehaniki",
+    "item": "predmety",
+    "version": "versiya",
+}
 
 
 def words(s: str) -> list[str]:
@@ -41,6 +48,7 @@ class Entry:
         self.progression = self.src.get("progression", [])
         self.stages = self.src.get("stages", [])
         self.patches = self.src.get("patches", [])
+        self.item = self.src.get("item")
         self.search_text = " ".join([self.title, self.summary, self.src["name"], *self.points, *self.stages])
 
 

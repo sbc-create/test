@@ -135,3 +135,20 @@ def test_no_cross_template_code():
             and p.name != "test_games_rpg.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_price_filter_has_no_false_positive_on_slashing():
+    assert content.FORBIDDEN.search("стоит 120 руб.") and content.FORBIDDEN.search("за 300 рублей")
+    assert content.FORBIDDEN.search("цена 50 руб")
+    assert not content.FORBIDDEN.search("2d6 рубящего урона")
+
+
+def test_items_section_and_passport_from_source(app):
+    s = app.site
+    assert "predmety" in s.sections("baldurs-gate-3")
+    e = s.by_slug["predmet-phalar-aluve"]
+    assert [d["dice"] for d in e.item["damage"]] == ["1d8 + 1", "1d10 + 1"] and e.item["enchantment"] == 1
+    _, html, _ = get(app, e.url)
+    assert '<dd>1d10 + 1 <span lang="en">Slashing</span></dd>' in html
+    _, html, _ = get(app, s.by_slug["predmet-adamantine-splint"].url)
+    assert "<dt>Класс доспеха</dt><dd>18</dd>" in html and "gp" not in html  # цена не показывается
