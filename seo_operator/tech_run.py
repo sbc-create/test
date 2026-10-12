@@ -135,6 +135,10 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
     старше STALE_S) снимается и захватывается заново — один раз.
     """
     now = now or _сейчас()
+    if any(к["run_id"] == run_id for к in _claims(state)):
+        # Один run_id — один захват: verify() и release_worktree() ищут захват
+        # по run_id, и второй захват под тем же именем увёл бы вердикт.
+        raise ValueError(f"run_id {run_id} уже использован захватом")
     замок = _замок(state, задача["id"])
     замок.parent.mkdir(parents=True, exist_ok=True)
     for попытка in (1, 2):

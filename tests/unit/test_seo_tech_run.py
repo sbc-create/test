@@ -180,3 +180,17 @@ def test_cyrillic_check_path_found_in_branch(среда):
     д = _j.loads(очередь.read_text()); д["tasks"][0]["check"] = "checks/проверка_h1.py"; очередь.write_text(_j.dumps(д))
     итог = tech_run.verify("E1", state=среда["state"])
     assert итог["steps"]["check_in_branch"] is True and итог["verdict"] == "VERIFIED", итог
+
+
+def test_run_id_cannot_claim_twice(среда):
+    s = среда["state"]
+    tech_run.claim(среда["задача"], "F1", state=s)
+    tech_run.release_worktree("F1", state=s)
+    with pytest.raises(ValueError):
+        tech_run.claim(среда["задача"], "F1", state=s)
+
+
+def test_wrapper_refuses_before_claim_without_prompt():
+    текст = (ROOT / "automation" / "host" / "editor" / "seo-tech-run.sh").read_text(encoding="utf-8")
+    assert текст.index("test -s docs/seo-tech/SEO_TECH_RUN_PROMPT.md") < текст.index("seo-tech-next")
+    assert 'RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"' in текст

@@ -26,7 +26,13 @@ if ! flock -n 9; then
   exit 75
 fi
 
-RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
+# Задание проверяется ДО захвата: без него прогон съел бы попытку исправной
+# задачи (приёмка Архитектора 12.10, seo-tech-wrapper-audit.py).
+test -s docs/seo-tech/SEO_TECH_RUN_PROMPT.md || { echo "seo-tech-run: нет файла задания" >&2; exit 70; }
+
+# Секунды плюс PID: два прогона в одну секунду не делят один идентификатор
+# (иначе вердикт уходил первой совпавшей задаче — измерено приёмкой).
+RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
 STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 NEXT="$(python3 -m seo_operator.cli seo-tech-next --run-id "$RUN_ID")"
