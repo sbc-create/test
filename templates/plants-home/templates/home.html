@@ -1,11 +1,12 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, light_icon %}
+{% from "_parts.html" import pickform %}
 {% block main %}
-<section class="hero"><h1>Комнатные растения: условия и уход по виду</h1>
-<p class="lead">Свет, полив, температура и частые проблемы — для каждого вида отдельно, по университетскому справочнику. Начните с места, где будет стоять растение.</p></section>
-<section aria-labelledby="h-light"><h2 id="h-light">Сколько света у вас?</h2>
-<ul class="lights">{% for slug, lv in site.lights().items() %}<li><a href="/svet/{{ slug }}/">{{ light_icon(slug) }}<b>{{ lv[1] }}</b><span>{{ lv[2] }}</span>{% set n = site.with_light(slug)|length %}<em>{{ n }} {{ plural(n, 'вид', 'вида', 'видов') }}</em></a></li>{% endfor %}</ul></section>
-<section aria-labelledby="h-cols"><h2 id="h-cols">Подборки</h2>
-<ul class="cols">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span></a></li>{% endfor %}</ul></section>
-<section aria-labelledby="h-all"><div class="head"><h2 id="h-all">Все растения</h2><a href="/katalog/">Каталог с фильтрами</a></div>{{ grid(site.plants) }}</section>
+<div class="split">
+  <section aria-labelledby="h-pick"><h1 id="h-pick">Подберём растение под ваше место</h1>
+  <p class="lead">Три вопроса — и список видов, которым по университетскому справочнику подходят ваши условия.</p>
+  {{ pickform('', '', False, site.lights()) }}</section>
+  <aside class="diag" aria-labelledby="h-diag"><h2 id="h-diag">Растение уже есть, но что-то не так?</h2>
+  <ul>{% for t, ps in site.problems().items() %}<li><a href="/problema/{{ t }}/">{{ PROBLEMS[t][0] }}</a> <span>{{ ps|length }} {{ plural(ps|length, 'вид', 'вида', 'видов') }}</span></li>{% endfor %}</ul>
+  <p><a href="/chto-sluchilos/">Все симптомы по видам</a></p></aside>
+</div>
 {% endblock %}

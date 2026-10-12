@@ -1,4 +1,4 @@
-"""Приёмочные тесты plants-home (вариант plant-catalog)."""
+"""Приёмочные тесты plants-home (вариант pick-and-diagnose)."""
 
 import copy
 import json
@@ -92,9 +92,9 @@ def test_sitemap_urls_200_canonical_unique(app):
 
 def test_toxicity_is_never_invented(app):
     _, html, _ = get(app, "/rastenie/aspidistra-vysokaya/")
-    assert "источник не указывает — это не значит, что растение безопасно" in html
+    assert "источник не указывает — это не значит, что безопасно" in html
     _, html, _ = get(app, "/rastenie/shlyumbergera-dekabrist/")
-    assert "источник указывает, что растение не ядовито" in html
+    assert "не ядовито (по источнику)" in html
     _, html, _ = get(app, "/rastenie/zamiokulkas/")
     assert "средняя (по источнику)" in html
 
@@ -102,7 +102,7 @@ def test_toxicity_is_never_invented(app):
 def test_light_and_problem_pages_list_only_matching_species(app):
     for slug in app.site.lights():
         _, html, _ = get(app, f"/svet/{slug}/")
-        listed = set(re.findall(r'class="pc__t"><a href="/rastenie/([a-z-]+)/"', html))
+        listed = set(re.findall(r'class="row__t"><a href="/rastenie/([a-z-]+)/"', html))
         assert listed == {p.slug for p in app.site.plants if slug in p.light_slugs}
     for tag, ps in app.site.problems().items():
         _, html, _ = get(app, f"/problema/{tag}/")
@@ -112,12 +112,32 @@ def test_light_and_problem_pages_list_only_matching_species(app):
 def test_catalog_filters(app):
     st, html, _ = get(app, "/katalog/", {"svet": ["ten"], "uhod": ["Low"]})
     assert canon(html) is None
-    listed = set(re.findall(r'class="pc__t"><a href="/rastenie/([a-z-]+)/"', html))
+    listed = set(re.findall(r'<th scope="row"><a href="/rastenie/([a-z-]+)/"', html))
     assert listed == {p.slug for p in app.site.filter("ten", "Low")} and listed
     _, html, _ = get(app, "/katalog/", {"svet": ["solnce"], "uhod": ["Medium"]})
     assert 'class="empty"' in html and ">Сбросить</a>" in html
     _, html, _ = get(app, "/katalog/", {"svet": ["luna"]})
     assert "Такого фильтра нет" in html
+
+
+def test_pick_groups_never_call_unknown_safe(app):
+    g = app.site.pick("ten", None, True)
+    assert all(p.poison_note for p in g["nontoxic"]) and all(p.poison for p in g["toxic"])
+    assert all(not p.poison and not p.poison_note for p in g["nodata"])
+    assert {p.slug for grp in g.values() for p in grp} == {p.slug for p in app.site.filter("ten", None)}
+    st, html, _ = get(app, "/podbor/", {"svet": ["ten"], "zhivotnye": ["da"], "submit": ["1"]})
+    assert st == 200 and canon(html) is None and "Это не значит, что растение безопасно" in html
+    _, html, _ = get(app, "/podbor/", {"svet": ["solnce"], "uhod": ["Medium"], "submit": ["1"]})
+    assert 'class="empty"' in html
+
+
+def test_compare_table_sorts(app):
+    _, html, _ = get(app, "/katalog/", {"sort": ["uhod"]})
+    order = re.findall(r'<th scope="row"><a href="/rastenie/([a-z-]+)/"', html)
+    rank = {"Low": 0, "Medium": 1, None: 3}
+    assert [rank[app.site.by_slug[x].maint_en] for x in order] == sorted(
+        rank[app.site.by_slug[x].maint_en] for x in order
+    )
 
 
 def test_404s(app):
@@ -127,7 +147,7 @@ def test_404s(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="plant-catalog"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="pick-and-diagnose"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)

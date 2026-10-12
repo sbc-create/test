@@ -1,4 +1,4 @@
-"""SSR-сервер plants-home (вариант plant-catalog)."""
+"""SSR-сервер plants-home (вариант pick-and-diagnose)."""
 
 from __future__ import annotations
 
@@ -61,6 +61,7 @@ class App:
             if p.is_file()
         }
         self.env.globals.update(
+            SORTS=self.site.SORTS,
             site=self.site,
             LIGHT=LIGHT,
             MAINT=MAINT,
@@ -125,8 +126,10 @@ class App:
             bad = [x for x, ok in ((light, light in lights), (maint, maint in MAINT)) if x and not ok]
             light = light if light in lights else ""
             maint = maint if maint in MAINT else ""
-            filtered = bool(light or maint or bad)
-            items = s.filter(light or None, maint or None)
+            sort = (q.get("sort") or [""])[0]
+            sort = sort if sort in s.SORTS else ""
+            filtered = bool(light or maint or bad or sort)
+            items = s.sort(s.filter(light or None, maint or None), sort or "nazvanie")
             crumbs = [home, ("Каталог", path)]
             meta = Meta(
                 "Каталог комнатных растений"
@@ -141,8 +144,45 @@ class App:
             )
             return (
                 200,
-                self.render("catalog.html", meta, items=items, light=light, maint=maint, bad=bad, lights=lights),
+                self.render(
+                    "catalog.html", meta, items=items, light=light, maint=maint, bad=bad, lights=lights, sort=sort
+                ),
                 {},
+            )
+        if path == "/podbor/":
+            light = (q.get("svet") or [""])[0]
+            maint = (q.get("uhod") or [""])[0]
+            pets = (q.get("zhivotnye") or [""])[0] == "da"
+            lights = s.lights()
+            light = light if light in lights else ""
+            maint = maint if maint in MAINT else ""
+            asked = bool(light or maint or pets or q.get("submit"))
+            crumbs = [home, ("Подбор", path)]
+            meta = Meta(
+                "Подбор комнатного растения по условиям",
+                "Свет, сложность ухода и животные в доме — подбор по справочнику.",
+                None if asked else s.abs(path),
+                not asked,
+                crumbs,
+                [self.crumbs_ld(crumbs)],
+                "pick",
+            )
+            groups = s.pick(light or None, maint or None, pets) if asked else {}
+            return (
+                200,
+                self.render(
+                    "pick.html", meta, light=light, maint=maint, pets=pets, asked=asked, lights=lights, groups=groups
+                ),
+                {},
+            )
+        if path == "/chto-sluchilos/":
+            crumbs = [home, ("Что случилось", path)]
+            return self.page(
+                "diagnose.html",
+                "Что случилось с растением: симптом → вид → что пишет справочник",
+                "Опадают листья или бутоны, гниют корни, вредители — по видам.",
+                path,
+                crumbs,
             )
         m = re.fullmatch(r"/rastenie/([a-z0-9-]+)/", path)
         if m and m.group(1) in s.by_slug:
@@ -271,7 +311,17 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/katalog/", "/svet/", "/problemy/", "/podborki/", "/kak-chitat/", "/istochniki/"]
+        urls = [
+            "/",
+            "/podbor/",
+            "/chto-sluchilos/",
+            "/katalog/",
+            "/svet/",
+            "/problemy/",
+            "/podborki/",
+            "/kak-chitat/",
+            "/istochniki/",
+        ]
         urls += [f"/svet/{x}/" for x in s.lights()]
         urls += [f"/problema/{t}/" for t in s.problems()]
         urls += [f"/podborki/{c}/" for c in s.collections]

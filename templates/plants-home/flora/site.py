@@ -128,6 +128,29 @@ class Site:
     def filter(self, light: str | None, maint: str | None) -> list[Plant]:
         return [p for p in self.plants if (not light or light in p.light_slugs) and (not maint or p.maint_en == maint)]
 
+    SORTS = {"nazvanie": "по названию", "uhod": "сначала простые в уходе", "ten": "сначала переносящие тень"}
+
+    def sort(self, items: list[Plant], key: str) -> list[Plant]:
+        if key == "uhod":
+            order = {"Low": 0, "Medium": 1, "High": 2}
+            return sorted(items, key=lambda p: (order.get(p.maint_en, 3), p.ru_name))
+        if key == "ten":
+            return sorted(
+                items, key=lambda p: ("ten" not in p.light_slugs, "rasseyannyj" not in p.light_slugs, p.ru_name)
+            )
+        return sorted(items, key=lambda p: p.ru_name)
+
+    def pick(self, light: str | None, maint: str | None, pets: bool) -> dict[str, list[Plant]]:
+        """Подбор: группы по тому, что ИСТОЧНИК говорит о ядовитости. Молчание источника — отдельная группа, не «безопасно»."""
+        base = self.filter(light, maint)
+        if not pets:
+            return {"all": base}
+        return {
+            "nontoxic": [p for p in base if p.poison_note],
+            "nodata": [p for p in base if not p.poison and not p.poison_note],
+            "toxic": [p for p in base if p.poison],
+        }
+
     def related(self, p: Plant) -> list[Plant]:
         return [self.by_slug[s] for s in p.related_slugs if s in self.by_slug]
 

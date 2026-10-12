@@ -1,4 +1,4 @@
-/* plants-home (plant-catalog): чек-лист ухода с сохранением отметок и печать. Без JS всё читается. */
+/* plants-home (pick-and-diagnose): чек-лист ухода с сохранением отметок и печать. Без JS всё читается. */
 (function () {
   "use strict";
   var ns = document.body.getAttribute("data-ns") || "ph";
