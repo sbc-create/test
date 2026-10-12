@@ -212,7 +212,7 @@
       },
       "publisher": {
         "provider": null,
-        "publisher_id": null,
+        "publisher_id": "10252",
         "publisher_id_ref": null,
         "note": "Издатель отсюда не назначался и не измерялся: каталог app принадлежит учётной записи витрины, config/site.json сессии недоступен."
       },
@@ -225,7 +225,7 @@
         "note": "build_id animego-02-32f05a208b1e прочитан публично в /healthz 2026-10-03; runtime_path /srv/an1mego-site/app/src/animego-frontend.py. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-12T15:11:09.579533+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -280,7 +280,7 @@
       },
       "publisher": {
         "provider": null,
-        "publisher_id": null,
+        "publisher_id": "10252",
         "publisher_id_ref": null,
         "note": "Издатель отсюда не назначался и не измерялся по той же причине, что у animego-02."
       },
@@ -293,7 +293,7 @@
         "note": "build_id animego-03-9575e2715ff1 прочитан публично в /healthz 2026-10-03; runtime_path /srv/animeg0-site/app/src/animego-frontend.py. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-12T15:11:09.615194+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -378,7 +378,7 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
+        "publisher_id": "10252",
         "publisher_id_ref": "secret://cdnvideohub/yami/publisher-id",
         "note": "Идентификатор не хранится в реестре: приходит из Secret Hub по ссылке и попадает в config/player.json при установке. publisher_id_expected шаблона — 10252; подставлять число соседнего домена нельзя."
       },
@@ -394,7 +394,7 @@
         },
         "note": "проект 33768290 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T11:34:24.955394+00:00"
+      "last_update": "2026-10-12T15:11:09.650800+00:00"
     },
     {
       "site_id": "lords-01",
@@ -571,7 +571,8 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id_ref": null
+        "publisher_id_ref": null,
+        "publisher_id": "10238"
       },
       "data": {
         "database": null,
@@ -582,7 +583,7 @@
         "source_commit": null
       },
       "content_revision": null,
-      "last_update": "2026-09-23T17:25:04.873772+00:00",
+      "last_update": "2026-10-12T15:11:09.721293+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -645,7 +646,7 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
+        "publisher_id": "10238",
         "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
         "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
@@ -687,7 +688,7 @@
         },
         "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T22:47:19Z; домен счётчика по ответу API — lordserials22.info. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T11:34:24.998019+00:00"
+      "last_update": "2026-10-12T15:11:09.763695+00:00"
     },
     {
       "site_id": "lords-06",
