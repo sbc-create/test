@@ -1,14 +1,18 @@
 {
  "base": "http://127.0.0.1:8847",
- "commit_head": "576a23255f1e80cb3e0187d2362933ae97aace24",
- "at": "2026-10-11T22:57:13Z",
+ "commit_head": "59972fa20092390ea3673e6b15c8f391c89c1fb2",
+ "at": "2026-10-11T23:34:02Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
   "mobile:recipe:no_hscroll": true,
+  "mobile:tag:no_hscroll": true,
+  "mobile:article:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:catalog:no_hscroll": true,
   "desktop:recipe:no_hscroll": true,
+  "desktop:tag:no_hscroll": true,
+  "desktop:article:no_hscroll": true,
   "servings_scale_2_to_4": {
    "before": "190 г",
    "after": "380 г",
@@ -39,75 +43,289 @@
   "mobile:home": [],
   "mobile:catalog": [],
   "mobile:recipe": [],
+  "mobile:tag": [],
+  "mobile:article": [],
   "desktop:home": [],
   "desktop:catalog": [],
-  "desktop:recipe": []
+  "desktop:recipe": [],
+  "desktop:tag": [],
+  "desktop:article": []
  },
  "contrast": {
   "mobile:home": [],
   "mobile:catalog": [],
   "mobile:recipe": [],
+  "mobile:tag": [],
+  "mobile:article": [],
   "desktop:home": [],
   "desktop:catalog": [],
-  "desktop:recipe": []
+  "desktop:recipe": [],
+  "desktop:tag": [],
+  "desktop:article": []
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 232,
+   "lcp_ms": 280,
    "cls": 0,
-   "ttfb_ms": 49,
-   "dom_ms": 79,
-   "bytes": 46558,
-   "requests": 7
+   "ttfb_ms": 72,
+   "dom_ms": 276,
+   "bytes": 48605,
+   "requests": 3
   },
   "mobile:catalog": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
    "cls": 0,
-   "ttfb_ms": 17,
+   "ttfb_ms": 21,
    "dom_ms": 38,
-   "bytes": 15072,
-   "requests": 8
+   "bytes": 16416,
+   "requests": 3
   },
   "mobile:recipe": {
-   "lcp_ms": 92,
+   "lcp_ms": 104,
    "cls": 0,
-   "ttfb_ms": 31,
-   "dom_ms": 72,
-   "bytes": 21440,
-   "requests": 4
+   "ttfb_ms": 26,
+   "dom_ms": 55,
+   "bytes": 22502,
+   "requests": 3
+  },
+  "mobile:tag": {
+   "lcp_ms": 60,
+   "cls": 0,
+   "ttfb_ms": 14,
+   "dom_ms": 43,
+   "bytes": 11301,
+   "requests": 3
+  },
+  "mobile:article": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "ttfb_ms": 16,
+   "dom_ms": 59,
+   "bytes": 12882,
+   "requests": 3
   },
   "desktop:home": {
-   "lcp_ms": 112,
+   "lcp_ms": 220,
    "cls": 0,
-   "ttfb_ms": 7,
-   "dom_ms": 68,
-   "bytes": 48395,
+   "ttfb_ms": 5,
+   "dom_ms": 79,
+   "bytes": 53863,
    "requests": 9
   },
   "desktop:catalog": {
    "lcp_ms": 100,
    "cls": 0,
    "ttfb_ms": 6,
-   "dom_ms": 36,
-   "bytes": 14077,
-   "requests": 8
+   "dom_ms": 41,
+   "bytes": 16416,
+   "requests": 3
   },
   "desktop:recipe": {
-   "lcp_ms": 132,
+   "lcp_ms": 128,
+   "cls": 0.0119,
+   "ttfb_ms": 6,
+   "dom_ms": 105,
+   "bytes": 22502,
+   "requests": 3
+  },
+  "desktop:tag": {
+   "lcp_ms": 96,
    "cls": 0,
    "ttfb_ms": 7,
    "dom_ms": 36,
-   "bytes": 21440,
-   "requests": 4
+   "bytes": 11301,
+   "requests": 3
+  },
+  "desktop:article": {
+   "lcp_ms": 80,
+   "cls": 0,
+   "ttfb_ms": 5,
+   "dom_ms": 55,
+   "bytes": 12882,
+   "requests": 3
   }
  },
  "console_errors": [],
  "screenshots": [
-  "docs/screenshots/576a232/home-mobile.png",
-  "docs/screenshots/576a232/catalog-mobile.png",
-  "docs/screenshots/576a232/recipe-mobile.png",
-  "docs/screenshots/576a232/home-desktop.png",
-  "docs/screenshots/576a232/catalog-desktop.png",
-  "docs/screenshots/576a232/recipe-desktop.png"
- ]
+  "docs/screenshots/59972fa/home-mobile.png",
+  "docs/screenshots/59972fa/catalog-mobile.png",
+  "docs/screenshots/59972fa/recipe-mobile.png",
+  "docs/screenshots/59972fa/tag-mobile.png",
+  "docs/screenshots/59972fa/article-mobile.png",
+  "docs/screenshots/59972fa/home-desktop.png",
+  "docs/screenshots/59972fa/catalog-desktop.png",
+  "docs/screenshots/59972fa/recipe-desktop.png",
+  "docs/screenshots/59972fa/tag-desktop.png",
+  "docs/screenshots/59972fa/article-desktop.png"
+ ],
+ "accessibility": {
+  "axe_version": "4.13.0",
+  "pages": {
+   "mobile:/": {
+    "violations": [],
+    "passes": 45
+   },
+   "mobile:/recepty/": {
+    "violations": [],
+    "passes": 36
+   },
+   "mobile:/recepty/supy/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/produkty/kurica/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 32
+   },
+   "mobile:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/": {
+    "violations": [],
+    "passes": 44
+   },
+   "desktop:/recepty/": {
+    "violations": [],
+    "passes": 35
+   },
+   "desktop:/recepty/supy/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/produkty/kurica/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 31
+   },
+   "desktop:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 38
+   }
+  },
+  "keyboard": {
+   "/": {
+    "steps": 30,
+    "without_visible_outline": [
+     {
+      "tag": "INPUT",
+      "text": "",
+      "outline": false,
+      "visible": true
+     }
+    ],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты",
+     "A:Закуски"
+    ]
+   },
+   "/recept/syrniki-s-ezhevikoj/": {
+    "steps": 30,
+    "without_visible_outline": [],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты",
+     "A:Закуски"
+    ]
+   }
+  }
+ }
 }
