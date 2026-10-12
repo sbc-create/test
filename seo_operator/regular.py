@@ -2758,7 +2758,12 @@ def editor_candidates(
                     # по ним путь D200 строит варианты статьи, а без них
                     # редактор закрывал задание IDENTITY_UNCLEAR (zonafilm.space
                     # 12.10: 2 из 2, leyla-i-medzhnun без названия и года).
-                    оценка = float(mine.get("imdb_rating") or 0)
+                    # Порядок — по числу голосов IMDb, а не по оценке: у статьи
+                    # в Википедии (путь D200) тайтл с тысячами голосов, а 8.9 у
+                    # dot-konner-veb-detektiv держалась на единицах — 12.10 оба
+                    # кандидата zonafilm.space закрыты SOURCES_MISSING.
+                    голоса = ((mine.get("ratings_by_source") or {}).get("imdb") or {}).get("votes")
+                    оценка = float(голоса or 0) if голоса else float(mine.get("imdb_rating") or 0) / 100
                 else:
                     continue
                 pool.append((-оценка, -(mine.get("year") or 0), domain, slug, mine, shiki))

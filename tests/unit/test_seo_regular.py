@@ -1625,6 +1625,35 @@ def test_backfill_film_needs_original_name_and_year(tmp_path):
     assert found[0]["film_args"] == ["1", "", "Full", "2021", "movie"]
 
 
+def test_backfill_films_ordered_by_imdb_votes_not_rating(tmp_path):
+    """Высокая оценка на единицах голосов не обгоняет известный фильм (12.10, SOURCES_MISSING 2 из 2)."""
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    база = {"description": None, "original_name": "X", "year": 2020}
+
+    def голоса(n):
+        return {"imdb": {"votes": n}}
+
+    (facts / "z-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    "malo-golosov": {**база, "imdb_rating": 8.9, "external_ids": {"imdb": "1"},
+                                     "ratings_by_source": голоса(12)},
+                    "izvestnyy": {**база, "imdb_rating": 6.5, "external_ids": {"imdb": "2"},
+                                  "ratings_by_source": голоса(48000)},
+                    "bez-golosov": {**база, "imdb_rating": 9.9, "external_ids": {"imdb": "3"}},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = regular.editor_candidates(snap, facts, set(), limit=3, sites={"z.ru": "z"})
+    assert [c["slug"] for c in found] == ["izvestnyy", "malo-golosov", "bez-golosov"]
+
+
 def test_result_holds_separate_reasons(tmp_path):
     """Причины разделены: источник — на произведение, идентичность — на карточку."""
     ev = tmp_path / "events.jsonl"
