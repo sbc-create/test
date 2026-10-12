@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""Накладка редакционных правок до и после публикации: что пропало.
+
+Зачем отдельный инструмент. `editorial-overrides-audit.py` отвечает на вопрос
+«что в файле сейчас» — и этого мало: «в файле только описания» не отличает
+витрину, где других полей не было, от витрины, где их СТЁРЛИ. Доказательство
+потери — сравнение с тем, что было ДО публикации.
+
+Поэтому два шага. `--snapshot` запоминает состояние (ключи, поля по каждому
+ключу, акторы и причины), `--compare` сверяет текущее с запомненным и называет
+ровно то, что исчезло: ключ, поле или авторство. Молчание здесь — тоже ответ,
+но только если снимок существует: без него инструмент отказывает, а не
+печатает «потерь нет».
+
+Это приёмка первой публикации после установки защиты (B004). Поля `name`,
+`original_name` и прочие, которых редактор не ведёт, — главное, что проверяется:
+именно они пропадали, когда издатель собирал файл из одних своих описаний.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from pathlib import Path
+
+#: Где исполнитель держит накладку витрины.
+ШАБЛОН_ПУТИ = "/srv/{repo}/data/editorial-overrides.json"
+#: Куда складывается снимок. Вне репозитория: это рабочая отметка, не артефакт.
+СНИМКИ = Path("/home/claude/wt-portable-site-cell-01/var/editorial-snapshots")
+#: Поля, которые ведёт редактор. Остальные — чужие, и терять их нельзя.
+ПОЛЯ_РЕДАКТОРА = ("description",)
+
+
+def прочитать(путь: Path) -> tuple[dict, str]:
+    """(состояние, причина). Причина непустая — читать было нечего."""
+    if not путь.is_file():
+        return {}, f"нет {путь}"
+    try:
+        данные = json.loads(путь.read_text(encoding="utf-8"))
+    except (ValueError, OSError) as сбой:
+        return {}, f"{путь}: {type(сбой).__name__}: {сбой}"
+    правки = данные.get("overrides") or {}
+    состояние = {}
+    for ключ, запись in правки.items():
+        поля = sorted((запись or {}).get("fields") or {})
+        состояние[str(ключ)] = {
+            "fields": поля,
+            "actor": str((запись or {}).get("actor") or ""),
+            "reason": str((запись or {}).get("reason") or "")[:120],
+        }
+    return состояние, ""
+
+
+def чужие_поля(состояние: dict) -> dict[str, list[str]]:
+    """Ключ → поля, которых редактор не ведёт. Их пропажа и есть дефект."""
+    итог = {}
+    for ключ, запись in состояние.items():
+        чужие = [п for п in запись["fields"] if п not in ПОЛЯ_РЕДАКТОРА]
+        if чужие:
+            итог[ключ] = чужие
+    return итог
+
+
+def главное(аргв=None) -> int:
+    р = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--repo", required=True,
+                   help="каталог витрины в /srv, например zonafilm-space")
+    р.add_argument("--snapshot", action="store_true",
+                   help="запомнить текущее состояние как «до»")
+    р.add_argument("--compare", action="store_true",
+                   help="сверить текущее состояние с запомненным")
+    р.add_argument("--snapshots", type=Path, default=СНИМКИ)
+    р.add_argument("--path", type=Path, default=None,
+                   help="путь к накладке (по умолчанию из шаблона)")
+    опции = р.parse_args(аргв)
+
+    путь = опции.path or Path(ШАБЛОН_ПУТИ.format(repo=опции.repo))
+    сейчас, причина = прочитать(путь)
+    снимок_файл = опции.snapshots / f"{опции.repo}.json"
+
+    if опции.snapshot:
+        if причина:
+            print(f"снимок не сделан: {причина}", file=sys.stderr)
+            return 2
+        опции.snapshots.mkdir(parents=True, exist_ok=True)
+        снимок_файл.write_text(
+            json.dumps({"repo": опции.repo, "path": str(путь),
+                        "state": сейчас}, ensure_ascii=False, indent=1),
+            encoding="utf-8")
+        чужих = чужие_поля(сейчас)
+        print(f"снимок сохранён: {снимок_файл}")
+        print(f"   записей {len(сейчас)}; с чужими полями {len(чужих)}")
+        for ключ, поля in sorted(чужих.items()):
+            print(f"   {ключ}: {', '.join(поля)} "
+                  f"(actor {сейчас[ключ]['actor'] or '—'})")
+        return 0
+
+    if not опции.compare:
+        print("нужен --snapshot или --compare", file=sys.stderr)
+        return 2
+
+    if not снимок_файл.is_file():
+        # Без снимка «потерь нет» было бы утверждением о том, чего не знаем.
+        print(f"сверять не с чем: нет снимка {снимок_файл}", file=sys.stderr)
+        return 2
+    было = (json.loads(снимок_файл.read_text(encoding="utf-8")) or {}).get("state") or {}
+    if причина:
+        print(f"накладка не прочитана: {причина}", file=sys.stderr)
+        return 2
+
+    пропали_ключи = sorted(set(было) - set(сейчас))
+    пропали_поля: list[str] = []
+    сменился_актор: list[str] = []
+    for ключ, запись in было.items():
+        теперь = сейчас.get(ключ)
+        if теперь is None:
+            continue
+        нет = [п for п in запись["fields"] if п not in теперь["fields"]]
+        if нет:
+            пропали_поля.append(f"{ключ}: {', '.join(нет)}")
+        if запись["actor"] and теперь["actor"] != запись["actor"]:
+            сменился_актор.append(
+                f"{ключ}: было {запись['actor']}, стало {теперь['actor'] or '—'}")
+    новые = sorted(set(сейчас) - set(было))
+
+    print(f"накладка: {путь}")
+    print(f"   записей было {len(было)}, стало {len(сейчас)}; новых {len(новые)}")
+    беда = bool(пропали_ключи or пропали_поля or сменился_актор)
+    for имя, перечень in (("пропали записи", пропали_ключи),
+                          ("пропали поля", пропали_поля),
+                          ("подменено авторство", сменился_актор)):
+        if перечень:
+            print(f"   [НЕТ] {имя}: {len(перечень)}")
+            for строка in перечень[:6]:
+                print(f"          {строка}")
+    if not беда:
+        чужих = чужие_поля(сейчас)
+        print("   [ок ] ни одна запись, поле и авторство не пропали")
+        for ключ, поля in sorted(чужих.items()):
+            print(f"          чужое поле на месте — {ключ}: {', '.join(поля)} "
+                  f"(actor {сейчас[ключ]['actor'] or '—'})")
+    return 1 if беда else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(главное())
