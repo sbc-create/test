@@ -463,7 +463,8 @@
       "problem": "В наборе проверок an1mego нет checks/data_chain.py (есть у an1meg0) — поэтому регрессия 31f05ba954a3 (таблица характеристик тайтла потеряла Тип/Эпизоды/Статус) прошла run.sh и вышла на живой сайт; поймал data_chain соседней ячейки.",
       "expected": "data_chain (или эквивалентная проверка характеристик тайтла на синтетическом снимке) в наборе an1mego и animeg0",
       "check": "bash checks/run.sh; проверка падает на 31f05ba954a3",
-      "status": "queued"
+      "status": "verified",
+      "evidence": "Причина глубже, чем отсутствие data_chain: config/player.json у an1mego и animeg0 — root 0600, и ВСЕ стендовые проверки этих ячеек уходили в «ПРОПУЩЕНО» (an1mego run.sh: 25 PASS). checks/stand_root.py: при нечитаемом файле стенд поднимается из копии ячейки с player.json из publisher_id_expected (публичное значение). an1mego 6fd58d9 (+a310918): 124 PASS, пропусков стенда 0; animeg0 (+816699a): 184 PASS, пропусков 0. Выпуск не нужен — меняются только проверки."
     },
     {
       "id": "T024",
@@ -485,6 +486,15 @@
       "problem": "Ячейки семейства исполняют один код, а наборы проверок у них разные (automation/local/family-checks-drift.py, Архитектор 0dea340): lordserial33-biz без activate_scenarios/artifact_contents/manifest_stamp (есть у шести родственников); zonafilm-cc и zonafilm12-site без activate_scenarios; zonafilm-cc без ascii_shell_identifiers/compiles/entrypoint_present, а вместо no_secrets — no_data_or_secrets, проверяющая только имена файлов, не содержимое; animedia-space без compiles; an1mego-site без data_chain (из-за этого регрессия 31f05ba954a3 вышла на живой).",
       "expected": "у каждой ячейки — шаблонные проверки, которые несёт её родня; no_data_or_secrets zonafilm-cc усилена до сканирования содержимого",
       "check": "family-checks-drift.py — 0 потерь; bash checks/run.sh каждой затронутой ячейки rc=0",
+      "status": "queued"
+    },
+    {
+      "id": "T026",
+      "site": "animeg0.site (и прочие AnimeGo)",
+      "repo": "var/site-repos/animeg0-site",
+      "problem": "checks/sections_update.py плавает: после записи снимка ждёт фиксированные 6 с (time.sleep(6)) и затем открывает /title/<slug>/; в полном прогоне 12.10 ~23:45Z получила HTTP-ошибку (страница ещё не перечитана), отдельным запуском и повторным полным — проходит (184 PASS). До stand_root эта проверка не исполнялась вовсе.",
+      "expected": "ожидание перечитывания по признаку (опрос до появления записи с пределом), а не фиксированная пауза",
+      "check": "три полных прогона подряд rc=0",
       "status": "queued"
     }
   ]
