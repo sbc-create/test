@@ -118,6 +118,8 @@ class App:
                 [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
                 "home",
             )
+        if path == "/moi-rasteniya/":
+            return self.mine(q)
         if path == "/katalog/":
             light = (q.get("svet") or [""])[0]
             maint = (q.get("uhod") or [""])[0]
@@ -269,9 +271,45 @@ class App:
             )
         return self.not_found()
 
+    def mine(self, q: dict):
+        """Моя коллекция: без выбора — индексируемая страница-форма; с выбором — noindex без canonical."""
+        s = self.site
+        want = set((q.get("r") or [])[:40])
+        plants = [p for p in s.plants if p.slug in want]
+        crumbs = [("Главная", "/"), ("Мои растения", "/moi-rasteniya/")]
+        meta = Meta(
+            f"Мои растения: {len(plants)} {plural(len(plants), 'вид', 'вида', 'видов')}" if plants else "Мои растения",
+            "Отметьте свои растения — получите сводку по ядовитости и свету и этикетки ухода для печати.",
+            None if want else s.abs("/moi-rasteniya/"),
+            not want,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "mine",
+        )
+        tox = {
+            "known": [p for p in plants if p.poison],
+            "nontoxic": [p for p in plants if not p.poison and p.poison_note],
+            "unknown": [p for p in plants if not p.poison and not p.poison_note],
+        }
+        by_light: dict = {}
+        for p in plants:
+            for slug, label, *_ in p.light:
+                by_light.setdefault((slug, label), []).append(p)
+        body = self.render("mine.html", meta, plants=plants, tox=tox, by_light=by_light, asked=bool(want))
+        return 200, body, {}
+
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/katalog/", "/svet/", "/problemy/", "/podborki/", "/kak-chitat/", "/istochniki/"]
+        urls = [
+            "/",
+            "/moi-rasteniya/",
+            "/katalog/",
+            "/svet/",
+            "/problemy/",
+            "/podborki/",
+            "/kak-chitat/",
+            "/istochniki/",
+        ]
         urls += [f"/svet/{x}/" for x in s.lights()]
         urls += [f"/problema/{t}/" for t in s.problems()]
         urls += [f"/podborki/{c}/" for c in s.collections]

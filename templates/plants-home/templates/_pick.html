@@ -1,0 +1,7 @@
+{% macro pick(selected=[]) %}
+<form class="mine-form" action="/moi-rasteniya/" method="get" data-mine-form>
+  <fieldset><legend>Какие растения есть у вас?</legend>
+  <ul class="mine-pick">{% for p in site.plants %}<li><label><input type="checkbox" name="r" value="{{ p.slug }}"{% if p.slug in selected %} checked{% endif %}><span><b>{{ p.ru_name }}</b> <i lang="la">{{ p.sci }}</i></span></label></li>{% endfor %}</ul></fieldset>
+  <p class="mine-form__go"><button type="submit" class="btn">Собрать мою коллекцию</button> <span class="mine-form__n" data-mine-count aria-live="polite"></span></p>
+</form>
+{% endmacro %}

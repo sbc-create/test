@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% from "_pick.html" import pick %}
+{% block main %}
+{% if plants %}
+<h1>Мои растения</h1>
+<p class="lead">{{ plants|length }} {{ plural(plants|length, 'вид', 'вида', 'видов') }}. Ссылкой на эту страницу можно поделиться — выбор записан в адресе.</p>
+<section class="tox" aria-labelledby="h-tox"><h2 id="h-tox">Ядовитость по данным источника</h2>
+  <dl>
+    {% if tox.known %}<div class="tox__row tox__row--bad"><dt>Указана ядовитость</dt><dd>{% for p in tox.known %}<a href="{{ p.url }}">{{ p.ru_name }}</a> ({{ p.poison }}){% if not loop.last %}, {% endif %}{% endfor %}</dd></div>{% endif %}
+    {% if tox.nontoxic %}<div class="tox__row"><dt>Источник указывает: не ядовито</dt><dd>{% for p in tox.nontoxic %}<a href="{{ p.url }}">{{ p.ru_name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</dd></div>{% endif %}
+    {% if tox.unknown %}<div class="tox__row tox__row--unk"><dt>Источник не указывает</dt><dd>{% for p in tox.unknown %}<a href="{{ p.url }}">{{ p.ru_name }}</a>{% if not loop.last %}, {% endif %}{% endfor %}<br><small>Нет данных — не значит «безопасно».</small></dd></div>{% endif %}
+  </dl>
+</section>
+{% if by_light %}<section aria-labelledby="h-light"><h2 id="h-light">По свету</h2>
+  <ul class="lightgroups">{% for (slug, label), ps in by_light.items() %}<li><a href="/svet/{{ slug }}/"><b>{{ label }}</b></a>: {% for p in ps %}{{ p.ru_name }}{% if not loop.last %}, {% endif %}{% endfor %}</li>{% endfor %}</ul>
+  <p class="note">Вид может попадать в несколько групп: источник называет для него несколько вариантов освещения.</p></section>{% endif %}
+<section aria-labelledby="h-labels"><h2 id="h-labels">Этикетки ухода</h2>
+  <p class="actions"><button type="button" class="btn" data-print hidden>Печать этикеток</button></p>
+  <ul class="labels">{% for p in plants %}<li class="label">
+    <p class="label__name"><b>{{ p.ru_name }}</b> <i lang="la">{{ p.sci }}</i></p>
+    <dl>
+      <div><dt>Свет</dt><dd>{{ p.light|map(attribute=1)|join(', ') or 'нет данных' }}</dd></div>
+      {% for t, items in p.care_by_topic() if t in ('poliv', 'pochva', 'temperatura') %}<div><dt>{{ TOPICS[t] }}</dt><dd>{{ items|map(attribute='text')|join(' ') }}</dd></div>{% endfor %}
+      <div><dt>Ядовитость</dt><dd>{% if p.poison %}{{ p.poison }} (по источнику){% elif p.poison_note %}не ядовито (по источнику){% else %}нет данных — не значит «безопасно»{% endif %}</dd></div>
+    </dl>
+    <p class="label__src"><a href="{{ p.url }}">Карточка вида</a> · по <span lang="en">{{ p.src.publisher }}</span></p>
+  </li>{% endfor %}</ul>
+</section>
+<h2 id="izmenit">Изменить выбор</h2>
+{{ pick(plants|map(attribute='slug')|list) }}
+{% else %}
+<h1>Мои растения</h1>
+{% if asked %}<div class="empty" role="status"><h2>Таких видов в справочнике нет</h2><p>Отметьте растения из списка ниже.</p></div>{% endif %}
+{{ pick() }}
+{% endif %}
+{% endblock %}

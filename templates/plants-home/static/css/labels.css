@@ -1,8 +1,8 @@
-/* plants-home, вариант plant-catalog — «Домашние растения»: гербарий. Бумага слоновой кости, тёмная зелень,
-   терракотовый горшок, латынь курсивом, значки категорий света. Только этот вариант. */
-:root { --bg: #f8f6f0; --card: #fff; --ink: #1b241d; --ink-2: #3d4a3f; --muted: #58645a; --leaf: #24452f; --leaf-2: #e3ecdf;
-  --pot: #b05a2c; --line: #dde3d8; --focus: #b05a2c; --sans: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
-  --serif: "Cormorant Garamond", Georgia, serif; color-scheme: light; }
+/* plants-home, вариант my-collection — «Домашние растения»: моя коллекция. Белый лист, бирюза, графит,
+   этикетки ухода с пунктирной линией отреза. Только этот вариант. */
+:root { --bg: #f2f7f7; --card: #fff; --ink: #142424; --ink-2: #344a4a; --muted: #4c6060; --leaf: #0f5c5c; --leaf-2: #dcefee;
+  --pot: #8f3d1e; --line: #cfdede; --focus: #c26a00; --sans: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
+  --serif: "Nunito Sans", "Segoe UI", system-ui, sans-serif; color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); }
@@ -90,3 +90,27 @@ main { max-width: 1160px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 @media (max-width: 720px) { .find { flex-basis: 100%; max-width: none; margin-left: 0; } body { font-size: 16px; } }
 @media (max-width: 480px) { .calc code { white-space: normal; } }
 @media print { .hd, .crumbs, .ft, .plant__actions, .toc, .check .btn, .skip, #h-rel, #h-rel ~ * { display: none !important; } body { background: #fff; } .care, .pass, .check label { break-inside: avoid; } }
+
+/* ---- вариант C: коллекция и этикетки ---- */
+.mine-form { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 14px 0 24px; }
+.mine-form fieldset { border: 0; margin: 0; padding: 0; min-width: 0; } .mine-form legend { font-weight: 800; font-size: 1.1rem; padding: 0; margin-bottom: 8px; }
+.mine-pick { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); }
+.mine-pick label { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border: 2px solid var(--line); border-radius: 8px; cursor: pointer; min-height: 44px; }
+.mine-pick input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--leaf); }
+.mine-pick label:has(input:checked) { border-color: var(--leaf); background: var(--leaf-2); }
+.mine-pick label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.mine-pick i { color: var(--muted); }
+.mine-form__go { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin: 12px 0 0; } .mine-form__n { font-weight: 700; color: var(--leaf); }
+.tox dl { margin: 0; display: grid; gap: 8px; }
+.tox__row { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--leaf); border-radius: 8px; padding: 8px 12px; }
+.tox__row--bad { border-left-color: #b42318; } .tox__row--unk { border-left-color: var(--focus); }
+.tox dt { font-weight: 800; } .tox dd { margin: 2px 0 0; } .tox a { display: inline-block; min-height: 24px; }
+.lightgroups { padding-left: 1.2em; } .lightgroups a { display: inline-block; min-height: 24px; }
+.labels { list-style: none; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.label { background: var(--card); border: 2px dashed var(--muted); border-radius: 10px; padding: 12px 14px; break-inside: avoid; }
+.label__name { margin: 0 0 6px; font-size: 1.1rem; } .label__name i { display: block; font-size: .9rem; color: var(--muted); }
+.label dl { margin: 0; display: grid; gap: 4px; } .label dt { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; color: var(--leaf); } .label dd { margin: 0 0 4px; font-size: .95rem; }
+.label__src { margin: 6px 0 0; font-size: .88rem; } .label__src a { display: inline-block; min-height: 24px; }
+.links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--leaf); border-radius: 8px; text-decoration: none; font-weight: 700; color: var(--leaf); }
+@media print { .hd, .crumbs, .ft, .mine-form, .actions, #izmenit, .tox, section[aria-labelledby="h-light"], .lead { display: none !important; } .labels { grid-template-columns: 1fr 1fr; } }

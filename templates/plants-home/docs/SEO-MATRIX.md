@@ -17,3 +17,7 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 
 В sitemap 36 URL, все 200, canonical на себя, один H1, уникальные title (тест). Для карточек растений нет подходящего
 типа schema.org без выдумывания полей (Product/Offer — не про уход), поэтому только BreadcrumbList.
+
+## Вариант C (my-collection)
+
+`/moi-rasteniya/` без параметров — index, canonical на себя, в sitemap; с выбором (`?r=`) — noindex без canonical.

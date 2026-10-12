@@ -1,4 +1,4 @@
-"""Браузерная приёмка plants-home (plant-catalog): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка plants-home (my-collection): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,11 +11,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8855"
+BASE = "http://127.0.0.1:8869"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 PLANT = "/rastenie/shlyumbergera-dekabrist/"
 SHOTS = {
+    "mine": "/moi-rasteniya/?r=aloe-vera&r=krassula-ovalnaya&r=sansevieriya-tryohpolosnaya",
     "home": "/",
     "catalog": "/katalog/?svet=ten",
     "plant": PLANT,
@@ -98,6 +99,7 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
+        pg.goto(BASE + "/svet/")  # вариант C: группы освещения — на /svet/, главная занята коллекцией
         with pg.expect_navigation():
             pg.locator(".lights a").last.click()
         A["light_card_opens_category"] = pg.url.endswith("/svet/ten/") and pg.locator(".pc").count() >= 2
@@ -165,6 +167,38 @@ def run(shots: Path | None) -> dict:
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
         )
+        # --- вариант C: моя коллекция ---
+        pg.evaluate("localStorage.clear(); 0")
+        pg.goto(BASE + "/")
+        boxes = pg.locator(".mine-pick input")
+        url_before = pg.url
+        pg.click(".mine-form .btn")
+        A["empty_collection_submit_blocked"] = pg.url == url_before and pg.locator(
+            "[data-mine-count]"
+        ).inner_text().startswith("Отметьте")
+        boxes.nth(0).check()
+        boxes.nth(1).check()
+        A["mine_count_updates"] = pg.locator("[data-mine-count]").inner_text() == "Отмечено: 2"
+        with pg.expect_navigation():
+            pg.click(".mine-form .btn")
+        A["collection_has_two_labels"] = "/moi-rasteniya/" in pg.url and pg.locator(".label").count() == 2
+        A["tox_summary_lists_both"] = pg.locator(".tox a").count() == 2
+        pg.evaluate("window.__printed = 0; window.print = () => { window.__printed++; }; 0")  # «; 0»: не функция
+        pg.click("[data-print]")
+        A["print_labels_calls_print"] = pg.evaluate("window.__printed") == 1
+        pg.emulate_media(media="print")
+        A["print_shows_only_labels"] = (
+            pg.locator(".label").first.is_visible() and not pg.locator(".mine-form").is_visible()
+        )
+        pg.emulate_media(media="screen")
+        pg.goto(BASE + "/katalog/")
+        A["header_link_leads_to_collection"] = "r=" in (pg.locator("[data-mine-link]").get_attribute("href") or "")
+        with pg.expect_navigation():
+            pg.locator("[data-mine-link]").click()
+        A["header_link_opens_collection"] = pg.locator(".label").count() == 2
+        pg.goto(BASE + "/")
+        A["home_form_remembers_collection"] = boxes.nth(0).is_checked() and boxes.nth(1).is_checked()
+        A["storage_namespace_own"] = all(k.startswith("ph-mine:") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()

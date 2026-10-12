@@ -1,7 +1,7 @@
 /* plants-home (plant-catalog): чек-лист ухода с сохранением отметок и печать. Без JS всё читается. */
 (function () {
   "use strict";
-  var ns = document.body.getAttribute("data-ns") || "ph";
+  var ns = document.body.getAttribute("data-ns") || "ph-mine";
   function read(k, d) { try { var v = localStorage.getItem(ns + ":" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function write(k, v) { try { localStorage.setItem(ns + ":" + k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   var work = document.querySelector(".plant[data-slug]");
@@ -25,5 +25,18 @@
   }
   document.querySelectorAll("[data-print]").forEach(function (b) {
     b.hidden = false; b.addEventListener("click", function () { window.print(); });
+  });
+
+  // Моя коллекция: выбор в адресе; дополнительно помним его, чтобы ссылка «Мои растения» вела к коллекции
+  var picked = new URLSearchParams(location.search).getAll("r");
+  if (location.pathname === "/moi-rasteniya/" && picked.length) write("mine", picked);
+  var mine = read("mine", []);
+  if (mine.length) document.querySelectorAll("[data-mine-link]").forEach(function (a) { a.href = "/moi-rasteniya/?" + mine.map(function (s) { return "r=" + encodeURIComponent(s); }).join("&"); });
+  document.querySelectorAll("[data-mine-form]").forEach(function (f) {
+    var boxes = f.querySelectorAll("input[name=r]"), out = f.querySelector("[data-mine-count]");
+    if (!picked.length && mine.length) boxes.forEach(function (b) { b.checked = mine.indexOf(b.value) !== -1; });
+    var upd = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); out.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы одно растение"; };
+    f.addEventListener("change", upd); upd();
+    f.addEventListener("submit", function (e) { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); if (!n) { e.preventDefault(); upd(); boxes[0].focus(); } });
   });
 })();

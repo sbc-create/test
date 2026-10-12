@@ -1,13 +1,13 @@
 site_id: plants-home
 name: "Домашние растения"
-variant_id: plant-catalog        # вариант A: каталог карточек с фильтрами по условиям
+variant_id: my-collection        # вариант C: моя коллекция — сводка токсичности и света, этикетки ухода для печати
 variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
-  preview: "http://127.0.0.1:8855"
+  preview: "http://127.0.0.1:8869"
   production: null               # BLOCKED_INPUT: домен не выбран
-server: {bind: 127.0.0.1, port: 8855}
-storage_namespace: "ph-catalog"
+server: {bind: 127.0.0.1, port: 8869}
+storage_namespace: "ph-mine"
 ads: {adapter: disabled}
 analytics: {adapter: disabled}

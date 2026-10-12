@@ -1,8 +1,8 @@
 template: plants-home
-variant_id: plant-catalog
-branch: claude/template-plants-home
-worktree: /home/claude/wt-template-plants-home
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main
+variant_id: my-collection   # вариант C; A — plant-catalog (8855), B — pick-and-diagnose (8856)
+branch: claude/template-plants-home-c
+worktree: /home/claude/wt-template-plants-home-c
+base_commit: f0f5251   # вариант A (claude/template-plants-home)
 owner_scope:
   write: [templates/plants-home/**]
   shared_files_touched:
@@ -12,11 +12,11 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m flora.server (pid var/plants-home/run/preview.pid)"
-  bind: 127.0.0.1:8855
+  bind: 127.0.0.1:8869
   data: templates/plants-home/data (факты видов, карточки, content.json)
   private: var/plants-home/private (страницы источника, 0700, вне git)
   build: var/plants-home/build/<commit>
   qa_dependencies: templates/plants-home/qa (axe-core 4.13.0, свой lockfile)
-  browser_storage_namespace: "ph-catalog"
+  browser_storage_namespace: "ph-mine"
 network_contracts: []
 shared_with_other_templates: []

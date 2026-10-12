@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, light_icon %}
+{% from "_pick.html" import pick %}
 {% block main %}
-<section class="hero"><h1>Комнатные растения: условия и уход по виду</h1>
-<p class="lead">Свет, полив, температура и частые проблемы — для каждого вида отдельно, по университетскому справочнику. Начните с места, где будет стоять растение.</p></section>
-<section aria-labelledby="h-light"><h2 id="h-light">Сколько света у вас?</h2>
-<ul class="lights">{% for slug, lv in site.lights().items() %}<li><a href="/svet/{{ slug }}/">{{ light_icon(slug) }}<b>{{ lv[1] }}</b><span>{{ lv[2] }}</span>{% set n = site.with_light(slug)|length %}<em>{{ n }} {{ plural(n, 'вид', 'вида', 'видов') }}</em></a></li>{% endfor %}</ul></section>
-<section aria-labelledby="h-cols"><h2 id="h-cols">Подборки</h2>
-<ul class="cols">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span></a></li>{% endfor %}</ul></section>
-<section aria-labelledby="h-all"><div class="head"><h2 id="h-all">Все растения</h2><a href="/katalog/">Каталог с фильтрами</a></div>{{ grid(site.plants) }}</section>
+<section class="hero">
+  <h1>Мои растения: сводка и этикетки ухода</h1>
+  <p class="lead">Отметьте виды, которые у вас растут. Получите сводку — какие из них ядовиты по данным источника, а о каких данных нет, — группы по свету и этикетки ухода для печати. Всё по университетскому справочнику, отдельно для каждого вида.</p>
+</section>
+{{ pick() }}
+<section aria-labelledby="h-more"><h2 id="h-more">Смотреть без выбора</h2>
+<ul class="links"><li><a href="/katalog/">Каталог видов</a></li><li><a href="/svet/">По свету</a></li><li><a href="/problemy/">Проблемы</a></li><li><a href="/kak-chitat/">Как читать карточку</a></li></ul></section>
 {% endblock %}
