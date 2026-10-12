@@ -257,3 +257,9 @@ def test_catalog_contract_v1(app, site):
     for it in data["items"]:
         assert it["path"].startswith("/recept/") and "steps" not in it and it["ingredients"]
     assert "/api/catalog.v1.json" not in app.sitemap()
+
+
+def test_variant_identity_meta(app):
+    _, html, _ = app.route("/", {})
+    assert '<meta name="site-factory-variant-id" content="classic-cards">' in html
+    assert '<meta name="site-factory-variant-version" content="1">' in html

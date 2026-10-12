@@ -1,6 +1,8 @@
 # Конфигурация сайта food-daily. Отдельна от всех других сайтов сети.
 site_id: food-daily
 name: "Будни на кухне"            # рабочее название; торговое обозначение не проверено
+variant_id: classic-cards   # вариант A; вариант B — ветка claude/template-food-daily-b
+variant_version: "1"
 lang: ru
 
 # Режим — отдельный проверяемый переключатель. preview: noindex везде,
