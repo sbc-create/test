@@ -1,0 +1,152 @@
+{
+ "commit_head": "ffdb862533e69038d5724b7dc37792ab3ff037c4",
+ "at": "2026-10-12T22:45:47Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "home_form_opens_plan": true,
+  "plan_base_coal_16_torches": true,
+  "plan_steps_in_order": true,
+  "steps_status_counts": true,
+  "steps_persist_after_reload": true,
+  "storage_uses_variant_namespace": true,
+  "steps_reset_clears": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation_and_form": true,
+  "number_field_blocks_over_max": true,
+  "bad_quantity_400_with_alert": true,
+  "nav_opens_catalogue_table": true,
+  "catalogue_row_opens_entry": true,
+  "uses_row_opens_plan": true,
+  "entry_form_plans_quantity": true,
+  "version_badge_opens_version": true,
+  "entry_no_hscroll_on_phone": true,
+  "ref_jumps_to_source": true,
+  "search_keyboard_results": 4,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "history_back_returns": true,
+  "nojs_plan_computed_on_server": true,
+  "nojs_reset_and_print_hidden": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/planirovshchik/?item=fakel&n=16": [],
+  "mobile:/minecraft/": [],
+  "mobile:/minecraft/predmety/": [],
+  "mobile:/minecraft/predmety/palka/": [],
+  "mobile:/minecraft/resursy/brevno/": [],
+  "mobile:/minecraft/biomy/biom-les/": [],
+  "mobile:/planirovshchik/": [],
+  "mobile:/planirovshchik/?item=fakel&n=0": [],
+  "mobile:/minecraft/resursy/": [],
+  "mobile:/minecraft/biomy/": [],
+  "mobile:/minecraft/predmety/shchit/": [],
+  "mobile:/minecraft/versiya/versiya/": [],
+  "mobile:/kak-my-rabotaem/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=факел": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/planirovshchik/?item=fakel&n=16": [],
+  "desktop:/minecraft/": [],
+  "desktop:/minecraft/predmety/": [],
+  "desktop:/minecraft/predmety/palka/": [],
+  "desktop:/minecraft/resursy/brevno/": [],
+  "desktop:/minecraft/biomy/biom-les/": [],
+  "desktop:/planirovshchik/": [],
+  "desktop:/planirovshchik/?item=fakel&n=0": [],
+  "desktop:/minecraft/resursy/": [],
+  "desktop:/minecraft/biomy/": [],
+  "desktop:/minecraft/predmety/shchit/": [],
+  "desktop:/minecraft/versiya/versiya/": [],
+  "desktop:/kak-my-rabotaem/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=факел": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 132,
+   "cls": 0
+  },
+  "mobile:planner": {
+   "lcp_ms": 88,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:section": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:item": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:resource": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:biome": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "desktop:planner": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:section": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:item": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:resource": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:biome": {
+   "lcp_ms": 60,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:8862/planirovshchik/?item=fakel&n=0",
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8862/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:8862/planirovshchik/?item=fakel&n=0",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8862/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/ffdb862/home-mobile.png",
+  "docs/screenshots/ffdb862/planner-mobile.png",
+  "docs/screenshots/ffdb862/game-mobile.png",
+  "docs/screenshots/ffdb862/section-mobile.png",
+  "docs/screenshots/ffdb862/item-mobile.png",
+  "docs/screenshots/ffdb862/resource-mobile.png",
+  "docs/screenshots/ffdb862/biome-mobile.png",
+  "docs/screenshots/ffdb862/home-desktop.png",
+  "docs/screenshots/ffdb862/planner-desktop.png",
+  "docs/screenshots/ffdb862/game-desktop.png",
+  "docs/screenshots/ffdb862/section-desktop.png",
+  "docs/screenshots/ffdb862/item-desktop.png",
+  "docs/screenshots/ffdb862/resource-desktop.png",
+  "docs/screenshots/ffdb862/biome-desktop.png"
+ ]
+}
