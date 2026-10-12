@@ -1,0 +1,8 @@
+# Хосты plants-home: запрос возможен только к хосту, который есть и здесь, и в inventory/network-allowlist.yaml (GET).
+sources:
+  - host: plants.ces.ncsu.edu
+    role: [university]
+  - host: www.rhs.org.uk
+    role: [organization]
+  - host: www.botanichka.ru
+    role: [reference]

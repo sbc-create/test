@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Проблемы</h1><p class="lead">Проблемы, которые справочник называет у нескольких видов. Что делать — смотрите в карточке своего вида: условия у видов разные.</p>
+<ul class="cols">{% for t, ps in site.problems().items() %}<li><a href="/problema/{{ t }}/"><b>{{ PROBLEMS[t][0] }}</b><span>{{ ps|length }} {{ plural(ps|length, 'вид', 'вида', 'видов') }}</span></a></li>{% endfor %}</ul>
+{% endblock %}

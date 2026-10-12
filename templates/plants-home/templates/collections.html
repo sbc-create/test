@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Подборки</h1>
+<ul class="cols">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span><span class="cols__n">{{ c['items']|length }} {{ plural(c['items']|length, 'вид', 'вида', 'видов') }}</span></a></li>{% endfor %}</ul>
+{% endblock %}

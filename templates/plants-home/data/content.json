@@ -1,0 +1,1940 @@
+{
+ "site_id": "plants-home",
+ "items": [
+  {
+   "slug": "aloe-vera",
+   "ru_name": "Алоэ вера",
+   "summary": "Суккулент для солнечного окна: солнце или полутень, очень дренированная почва, полив только после полного просыхания.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Солнце или полутень."
+    },
+    {
+     "topic": "pochva",
+     "text": "Очень хорошо дренированная почва для суккулентов; в горшке должно быть несколько дренажных отверстий, лучше всего — глиняный."
+    },
+    {
+     "topic": "poliv",
+     "text": "Перед поливом почва должна полностью просохнуть; зимой поливайте реже."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают делением — растение даёт боковые отростки."
+    },
+    {
+     "topic": "cvetenie",
+     "text": "Цветонос появляется у растений не младше трёх лет."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "Избегайте перелива: от него загнивают корни."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Возможен мучнистый червец."
+    },
+    {
+     "tag": "tlya",
+     "text": "Возможна тля."
+    }
+   ],
+   "checklist": [
+    "Горшок с дренажными отверстиями",
+    "Почва просохла перед поливом",
+    "Зимой полив реже"
+   ],
+   "related": [
+    "krassula-ovalnaya",
+    "sansevieriya-tryohpolosnaya"
+   ],
+   "src": "src-28c36172b1",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "c6af62f9d51f0d3d13ecca18685f66505f1d445a0c72ef7b8c33adf10c97a21d",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "aspidistra-vysokaya",
+   "ru_name": "Аспидистра высокая",
+   "summary": "Растение для тёмных мест: предпочитает полутень и тень, прямого солнца не переносит, засухоустойчиво.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Полутень или тень; прямое солнце не переносит."
+    },
+    {
+     "topic": "pochva",
+     "text": "Плодородная хорошо дренированная почва, хотя растение терпит и сухую бедную почву."
+    },
+    {
+     "topic": "poliv",
+     "text": "С весны до осени поливайте регулярно, зимой — скупо."
+    },
+    {
+     "topic": "uhod",
+     "text": "Защищайте от зимних сквозняков и ветра."
+    }
+   ],
+   "problems": [],
+   "checklist": [
+    "Без прямого солнца",
+    "Зимой полив скупой"
+   ],
+   "related": [
+    "zamiokulkas",
+    "hlorofitum-hohlatyj"
+   ],
+   "src": "src-365265ac42",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "a11e06c1da318a7f662c609ac5bb2458a23fee0350382b8aff28ccaede77ce06",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "epipremnum-zolotistyj",
+   "ru_name": "Эпипремнум золотистый",
+   "summary": "Очень простая лиана: яркий рассеянный свет, но долго живёт и при слабом; почва просыхает между поливами.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет; долго выживает при слабом."
+    },
+    {
+     "topic": "poliv",
+     "text": "Хорошо дренированный субстрат должен просыхать между поливами."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Повысить влажность помогут увлажнитель или поддон с мокрой галькой."
+    },
+    {
+     "topic": "podkormka",
+     "text": "Подкармливайте раз в два месяца, кроме зимнего покоя."
+    },
+    {
+     "topic": "uhod",
+     "text": "Иногда протирайте листья мягкой тканью. Подрезайте стебли, чтобы растение было пышнее; побеги легко укореняются в воде."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "От перелива загнивают корни и чернеют края листьев."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Следите за щитовкой."
+    }
+   ],
+   "checklist": [
+    "Субстрат просох",
+    "Подкормка раз в два месяца (не зимой)",
+    "Стебли подрезаны"
+   ],
+   "related": [
+    "filodendron-plyushchevidnyj",
+    "hlorofitum-hohlatyj"
+   ],
+   "src": "src-7b0bb45d1e",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "1b16413751308783da483e24b298bbad6d131c5f7f620542675389b2c0b2c576",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "falenopsis",
+   "ru_name": "Фаленопсис (орхидея-бабочка)",
+   "summary": "Самая распространённая комнатная орхидея: неяркий свет, тепло, высокая влажность, кора вместо земли и полив без застоя воды.",
+   "calc": [
+    {
+     "label": "55 °F в градусах Цельсия",
+     "expr": "(55 - 32) * 5 / 9",
+     "result": "12.8",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Неяркий свет; лучшее место — восточное окно, подойдут и хорошо притенённые западное или южное."
+    },
+    {
+     "topic": "pochva",
+     "text": "Субстрат на основе коры с отличным дренажом; часто используют прозрачные горшки, потому что корни участвуют в фотосинтезе."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте утром тёплой водой, пропуская её через субстрат, затем дайте полностью стечь — растение не должно стоять в воде. Взрослые растения поливают раз в неделю, в жару чаще; между поливами субстрат немного подсыхает."
+    },
+    {
+     "topic": "cvetenie",
+     "text": "Крупноцветковым весенним формам осенью нужна ночная прохлада около 55 °F (около 12,8 °C) примерно неделю, чтобы заложились цветоносы; современным карликовым гибридам она не нужна."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "opadayut-butony",
+     "text": "Бутоны опадают от перемен температуры, влажности, полива, подкормки или места."
+    },
+    {
+     "tag": "korni-gniyut",
+     "text": "Сморщенные листья — признак нехватки воды: субстрат слишком сухой или корни повреждены, часто загнили в мокром субстрате."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Возможна щитовка."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Возможен мучнистый червец."
+    }
+   ],
+   "checklist": [
+    "Вода полностью стекла",
+    "Полив утром",
+    "Субстрат на основе коры"
+   ],
+   "related": [
+    "senpoliya",
+    "shlyumbergera-dekabrist"
+   ],
+   "src": "src-51ad8b14a6",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "39aee2b655d5ee12f687f6a77bfc89d7a377e70a3d3ca3e15ea0487f519caea8",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "fikus-kauchukonosnyj",
+   "ru_name": "Фикус каучуконосный",
+   "summary": "Крупное растение для просторных комнат: яркий рассеянный свет или полутень, тепло выше 55 °F (около 12,8 °C), умеренный полив.",
+   "calc": [
+    {
+     "label": "55 °F в градусах Цельсия",
+     "expr": "(55 - 32) * 5 / 9",
+     "result": "12.8",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет или полутень; защитите от послеполуденного солнца."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Держите при температуре выше 55 °F (около 12,8 °C); растение плохо переносит сквозняки и холод и не любит, когда его переставляют."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте регулярно, но без перелива; в период покоя, с осени до конца зимы, полив сильно сокращают."
+    },
+    {
+     "topic": "pochva",
+     "text": "Сажают в горшечную смесь на основе грунта."
+    },
+    {
+     "topic": "uhod",
+     "text": "Протирайте пыль с листьев влажной мягкой тканью или губкой. Чтобы куст был пышнее, прищипывайте главные ветви; без обрезки он вытягивается в узкое деревце."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "opadayut-listya",
+     "text": "Листья опадают от перелива, падения температуры и сквозняков. Пожелтение и опадание нескольких нижних листьев — норма."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Возможен мучнистый червец."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Возможна щитовка."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Возможен паутинный клещ."
+    }
+   ],
+   "checklist": [
+    "Стоит на одном месте, без сквозняков",
+    "Полив без перелива",
+    "Листья протёрты от пыли"
+   ],
+   "related": [
+    "monstera-delikatesnaya",
+    "filodendron-plyushchevidnyj"
+   ],
+   "src": "src-24f34e09c8",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "4498717bc912f5ee647b25c86d0d00bc6da460882fecbbcac617c2c1262f641b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "filodendron-plyushchevidnyj",
+   "ru_name": "Филодендрон плющевидный",
+   "summary": "Ампельная лиана, которая долго выживает при очень слабом свете; любит слегка влажную почву и опрыскивание.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Предпочитает средний свет, переносит слабый; может долго жить при очень слабом свете."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Обычная комнатная температура."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Терпит сухой воздух, но лучше средняя влажность; любит опрыскивание."
+    },
+    {
+     "topic": "poliv",
+     "text": "Держите почву слегка влажной, зимой поливайте реже."
+    },
+    {
+     "topic": "uhod",
+     "text": "Если дать опору, растение будет взбираться; без неё стебли свисают."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "В переувлажнённой почве возможна корневая гниль."
+    },
+    {
+     "tag": "tlya",
+     "text": "Следите за тлёй."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    }
+   ],
+   "checklist": [
+    "Почва слегка влажная",
+    "Зимой полив реже"
+   ],
+   "related": [
+    "epipremnum-zolotistyj",
+    "monstera-delikatesnaya"
+   ],
+   "src": "src-7aa799a628",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "58c6d5f35984cbfdcd580590d250aadc9b8bf412970470a4c0bf8b54167684d1",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "hlorofitum-hohlatyj",
+   "ru_name": "Хлорофитум хохлатый",
+   "summary": "Неприхотливое ампельное растение: средний свет, переносит тень; не любит прямое солнце и водопроводную воду.",
+   "calc": [
+    {
+     "label": "45 °F в градусах Цельсия",
+     "expr": "(45 - 32) * 5 / 9",
+     "result": "7.2",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Средний уровень света, переносит глубокую тень; прямое солнце не переносит."
+    },
+    {
+     "topic": "poliv",
+     "text": "Лучше всего растёт во влажной почве, но переносит засуху. Не поливайте водопроводной водой: хлор и фтор вызывают ожог кончиков листьев. Зимой полив сокращают."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Держите при температуре выше 45 °F (около 7,2 °C)."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Средняя влажность; повысить её помогут увлажнитель или поддон с мокрой галькой."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Детки появляются при коротком дне — меньше 12 часов света в сутки — не меньше трёх недель. Не перекармливайте: это уменьшает число деток."
+    }
+   ],
+   "problems": [],
+   "checklist": [
+    "Не на прямом солнце",
+    "Вода не из-под крана",
+    "Зимой полив реже"
+   ],
+   "related": [
+    "aspidistra-vysokaya",
+    "epipremnum-zolotistyj"
+   ],
+   "src": "src-6a82d0463c",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "5f0ed64abc2d51d4e0329a17ef216e1b232eee70f5671a8ac132c1ce897f1c6d",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "krassula-ovalnaya",
+   "ru_name": "Крассула овальная (денежное дерево)",
+   "summary": "Суккулент-«деревце»: солнечное место с небольшой тенью после полудня, умеренный полив по сухой почве.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Солнечное место в комнате с небольшой тенью во второй половине дня; нужен яркий свет."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Средняя или прохладная комнатная температура."
+    },
+    {
+     "topic": "pochva",
+     "text": "Хорошо дренированная горшечная смесь с большой долей суглинка."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте умеренно, когда почва сухая; с осени до конца зимы полив сокращают."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Легко размножается листовыми черенками."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "opadayut-listya",
+     "text": "От перелива опадают листья."
+    },
+    {
+     "tag": "korni-gniyut",
+     "text": "От перелива загнивают корни."
+    },
+    {
+     "tag": "tlya",
+     "text": "Иногда бывает тля."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Иногда бывает щитовка."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Иногда бывает паутинный клещ."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Иногда бывает мучнистый червец."
+    }
+   ],
+   "checklist": [
+    "Солнечное место",
+    "Почва сухая перед поливом",
+    "С осени полив реже"
+   ],
+   "related": [
+    "aloe-vera",
+    "shlyumbergera-dekabrist"
+   ],
+   "src": "src-677c7e4715",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "931f5e3bdbb3b072549c6e6a745b2f76046e9435ce96e591297b1b319423a8ef",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "monstera-delikatesnaya",
+   "ru_name": "Монстера деликатесная",
+   "summary": "Крупная лиана: тепло 60–85 °F (около 15,6–29,4 °C), умеренно яркий свет без прямого солнца, высокая влажность и прочная опора.",
+   "calc": [
+    {
+     "label": "60 °F в градусах Цельсия",
+     "expr": "(60 - 32) * 5 / 9",
+     "result": "15.6",
+     "unit": "°C"
+    },
+    {
+     "label": "85 °F в градусах Цельсия",
+     "expr": "(85 - 32) * 5 / 9",
+     "result": "29.4",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "temperatura",
+     "text": "Средняя тёплая температура — 60–85 °F, то есть около 15,6–29,4 °C."
+    },
+    {
+     "topic": "svet",
+     "text": "Умеренно яркий свет без прямого солнца; пёстрым сортам нужно больше света, чем тёмно-зелёным."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте обильно, затем дайте просохнуть верхней четверти–трети почвы."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Нужна высокая влажность: увлажнитель или поддон с мокрой галькой."
+    },
+    {
+     "topic": "uhod",
+     "text": "Нужна прочная опора, иначе стебли ломаются. Обрезку и пересадку делайте весной, пыль с листьев протирайте регулярно."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают отводками или стеблевыми черенками."
+    }
+   ],
+   "problems": [],
+   "checklist": [
+    "Есть опора",
+    "Верх почвы просох перед поливом",
+    "Влажность повышена",
+    "Листья протёрты"
+   ],
+   "related": [
+    "filodendron-plyushchevidnyj",
+    "epipremnum-zolotistyj"
+   ],
+   "src": "src-3337676949",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "05644408caad04f8c6fa8b72d5f27771dda7afd2cfc64f3b107a716c9dfba6d8",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "peperomiya-tupolistnaya",
+   "ru_name": "Пеперомия туполистная",
+   "summary": "Компактное растение для стола: яркий рассеянный свет, подсохшая почва; главная опасность — перелив.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет; несколько месяцев слабого света переносит без вреда. Слишком сильное прямое солнце обжигает листья."
+    },
+    {
+     "topic": "poliv",
+     "text": "Предпочитает подсохшую почву; не переносит ни мокрой, ни пересохшей почвы."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Подходит средняя или низкая влажность воздуха; сквозняки вредны."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают листовыми или стеблевыми черенками."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "Перелив — главная проблема: листья желтеют, корни могут загнить."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    }
+   ],
+   "checklist": [
+    "Почва подсохла перед поливом",
+    "Нет прямого солнца",
+    "Нет сквозняка"
+   ],
+   "related": [
+    "fikus-kauchukonosnyj",
+    "krassula-ovalnaya"
+   ],
+   "src": "src-559d2483d0",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "3ef047682be95ae5c6121ad2e375b69a48261960548d86359494d64f578624fb",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "sansevieriya-tryohpolosnaya",
+   "ru_name": "Сансевиерия трёхполосная (щучий хвост)",
+   "summary": "Очень выносливое растение: прямое солнце 2–6 часов в день, переносит и очень слабый свет; главное — не переливать.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Место, где прямое солнце бывает только часть дня — 2–6 часов; переносит очень слабый свет."
+    },
+    {
+     "topic": "pochva",
+     "text": "Хорошо дренированная почва обязательна."
+    },
+    {
+     "topic": "poliv",
+     "text": "С весны до осени давайте почве просохнуть между поливами; зимой поливайте раз в один-два месяца."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Переносит низкую влажность и прохладу."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают делением или стеблевыми черенками."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "От перелива загнивают корни."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    }
+   ],
+   "checklist": [
+    "Почва просохла",
+    "Зимой полив раз в один-два месяца"
+   ],
+   "related": [
+    "zamiokulkas",
+    "aloe-vera"
+   ],
+   "src": "src-8463ca219d",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7e0cb9568fb7fe8f915568021b9ed257fd756636a88edd2ad07e3dbde8bf94d6",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "senpoliya",
+   "ru_name": "Сенполия (узамбарская фиалка)",
+   "summary": "Цветущее растение для светлого места: яркий рассеянный свет, влажная почва, полив снизу и высокая влажность воздуха.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет."
+    },
+    {
+     "topic": "pochva",
+     "text": "Лучшая смесь — 2 или 3 части сфагнового торфа, 2 части вермикулита и 1 часть перлита; кислотность торфа уравновешивают известью или берут кокосовый субстрат. Розетку сажают выше уровня почвы."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте снизу, не замачивая листья, — иначе появятся пятна; перед следующим поливом верх почвы должен просохнуть. Застой воды на поверхности вызывает гниль."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Нужна высокая влажность: поддон с мокрой галькой или увлажнитель. Сухой воздух и очень холодную воду растение не переносит."
+    },
+    {
+     "topic": "uhod",
+     "text": "Удаляйте засохшие и пожелтевшие листья."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "Возможна гниль розетки и корней; перелив — проблема номер один."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Возможен мучнистый червец."
+    }
+   ],
+   "checklist": [
+    "Полив снизу",
+    "Листья сухие",
+    "Верх почвы просох",
+    "Влажность повышена"
+   ],
+   "related": [
+    "falenopsis",
+    "shlyumbergera-dekabrist"
+   ],
+   "src": "src-78d03500ec",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "01f9f2ac7734dd8cfd18da1a8ff8d991efafa68864e8ee4088555128ce73c598",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "shlyumbergera-dekabrist",
+   "ru_name": "Шлюмбергера (декабрист)",
+   "summary": "Зимнецветущий кактус: яркий рассеянный свет, тепло 70–80 °F (около 21,1–26,7 °C), а для бутонов — прохладные ночи и долгая темнота с середины сентября.",
+   "calc": [
+    {
+     "label": "70 °F в градусах Цельсия",
+     "expr": "(70 - 32) * 5 / 9",
+     "result": "21.1",
+     "unit": "°C"
+    },
+    {
+     "label": "80 °F в градусах Цельсия",
+     "expr": "(80 - 32) * 5 / 9",
+     "result": "26.7",
+     "unit": "°C"
+    },
+    {
+     "label": "55 °F в градусах Цельсия",
+     "expr": "(55 - 32) * 5 / 9",
+     "result": "12.8",
+     "unit": "°C"
+    },
+    {
+     "label": "65 °F в градусах Цельсия",
+     "expr": "(65 - 32) * 5 / 9",
+     "result": "18.3",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет; полное солнце может обесцветить стебли."
+    },
+    {
+     "topic": "pochva",
+     "text": "Влажный, хорошо дренированный рыхлый субстрат с торфом, песком и перлитом."
+    },
+    {
+     "topic": "poliv",
+     "text": "С весны до лета почва влажная, но не мокрая и не пересохшая. Полив сокращают с середины сентября, пока закладываются бутоны, и снова — после цветения."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Обычная температура — 70–80 °F (около 21,1–26,7 °C); любит высокую влажность."
+    },
+    {
+     "topic": "podkormka",
+     "text": "В период роста подкармливайте ежемесячно."
+    },
+    {
+     "topic": "cvetenie",
+     "text": "Для цветения с середины сентября нужны яркий свет днём, ночи 55–65 °F (около 12,8–18,3 °C) и не меньше 13 часов непрерывной темноты каждую ночь. Если не цветёт — скорее всего, осенью мешает искусственный свет. Цветёт с декабря по февраль."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "opadayut-butony",
+     "text": "Бутоны опадают от резких перепадов температуры, сквозняков, сухого воздуха и неправильного полива."
+    },
+    {
+     "tag": "korni-gniyut",
+     "text": "От перелива загнивают корни."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "tlya",
+     "text": "Следите за тлёй."
+    }
+   ],
+   "checklist": [
+    "С середины сентября — 13 часов темноты",
+    "Полив сокращён во время закладки бутонов",
+    "Нет сквозняков"
+   ],
+   "related": [
+    "falenopsis",
+    "senpoliya"
+   ],
+   "src": "src-9a8478aae5",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "deebcf83663ffcc507142eaa1aa0ab1f0e02aa511509b8636153699f22c52f85",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zamiokulkas",
+   "ru_name": "Замиокулькас замиелистный",
+   "summary": "Один из самых неприхотливых: растёт даже при слабом свете, но лучше — при ярком рассеянном. Корневища запасают воду, перелив опасен.",
+   "calc": [
+    {
+     "label": "60 °F в градусах Цельсия",
+     "expr": "(60 - 32) * 5 / 9",
+     "result": "15.6",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Растёт даже при очень слабом свете, лучше всего — при ярком рассеянном. На прямом солнце листья обгорают и буреют."
+    },
+    {
+     "topic": "poliv",
+     "text": "Почва должна просыхать между поливами — застоя воды растение не переносит. Зимой поливайте раз в месяц, летом — два раза в месяц и только если почва полностью просохла."
+    },
+    {
+     "topic": "podkormka",
+     "text": "Сбалансированное жидкое удобрение для комнатных растений — один-два раза в год."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Если летом растение стоит на улице, заносите его, как только температура опустится ниже 60 °F (около 15,6 °C)."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают делением или листовыми черенками."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "shchitovka",
+     "text": "Серьёзных проблем нет, но следите за щитовкой."
+    }
+   ],
+   "checklist": [
+    "Почва полностью просохла",
+    "Не на прямом солнце",
+    "Зимой полив раз в месяц"
+   ],
+   "related": [
+    "sansevieriya-tryohpolosnaya",
+    "aspidistra-vysokaya"
+   ],
+   "src": "src-361be7f8d0",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "abb0ba50e0a1860e7cb2f84e953a3167340f252b1c279c154e4513f1377d4c8a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-24f34e09c8": {
+   "id": "src-24f34e09c8",
+   "url": "https://plants.ces.ncsu.edu/plants/ficus-elastica/",
+   "fetched_at": "2026-10-12T21:27:21Z",
+   "page_sha256": "d92efbe4ecd405a01ce7b1189d61496ea00207b17ae42ad4d5bffc7a46df6a2c",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Ficus elastica",
+   "common_names": [
+    "Indian Rubber Plant",
+    "Rubber Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Layering",
+     "Root Cutting",
+     "Seed"
+    ],
+    "Country Or Region Of Origin:": [
+     "Southeast Asia: Nepal to China and Western Malesia"
+    ],
+    "Habit/Form:": [
+     "Erect",
+     "Rounded"
+    ],
+    "Growth Rate:": [
+     "Rapid"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Clay",
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Alkaline (>8.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "9a, 9b, 10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Problems:": [
+     "Problem for Cats",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ]
+   },
+   "description": [
+    "The Rubber Plant is a broadleaf evergreen, flowering, tree in the Mulberry family typically grown as a popular ornamental house plant in temperate climates. In the wild and left to its own devices, the tree can grow to 100 feet high. When grown indoors, it rarely flowers and it is usually kept to 2 to 10 feet with training or support as needed. Whether indoors or out, Rubber Plant is noted for its foot-long, shiny, attractive leaves, dark green with pink or purple stipules. and variegated forms are available. The genus name comes from the Latin name for the edible fig. The species name refers to the milky sap that once was used to produce rubber.",
+    "Rubber Plant does best in partial shade or low light in dry soil and medium relative humidity with a temperature of greater than 55 degrees F. When grown indoors, plant in a soil-based potting mix under bright indirect light or partial shade and protection from the afternoon sun. Water regularly, but avoid overwatering. Reduce watering altogether when the plant is dormant (from fall to late winter).",
+    "Rubber Plant prefers to remain in one location and do not do well with drafts or cold temperatures. Use a damp soft cloth or sponge to clean dust off of leaves. Prune main branches to encourage a bushier habit, or leave them unpruned to encourage a tall, narrow, more tree-like form. Flowers will appear on either new or old growth. It can become a heavy plant that is best for large spaces. If the leaves are cut, the surface will drip sap. Rubber Plants in the wild are erect with a spreading crown, aerial roots, and initially epiphytic ( a plant that begins as a growth on the surface of another plant).",
+    "The Clemson Cooperative Extension Home and Garden Information Center has a fact sheet on Ficus elastica ."
+   ],
+   "problems": "Overwatering can cause loss of leaves as can temperature drops or cold drafts. It is normal for some bottom leaves to turn yellow and drop. Mealybugs, scales, and spider mites can be problematic."
+  },
+  "src-28c36172b1": {
+   "id": "src-28c36172b1",
+   "url": "https://plants.ces.ncsu.edu/plants/aloe-vera/",
+   "fetched_at": "2026-10-12T21:27:26Z",
+   "page_sha256": "d5c3a48c5f7a52dfc7f1afea332a80700e68cae39d894550a869d0125ef48a91",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Aloe vera",
+   "common_names": [
+    "Aloe",
+    "Aloe Vera",
+    "Barbados Aloe",
+    "Medicinal Aloe",
+    "Medicine Plant",
+    "True Aloe"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division"
+    ],
+    "Country Or Region Of Origin:": [
+     "Arabian Peninsula"
+    ],
+    "Habit/Form:": [
+     "Erect"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Full sun (6 or more hours of direct sunlight a day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Alkaline (>8.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Flower Bloom Time:": [
+     "Spring",
+     "Winter"
+    ],
+    "Problems:": [
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Poisonous through ingestion or dermatitis. Symptoms may include: Abdominal cramping, diarrhea, red urine; skin irritation from latex."
+    ],
+    "Poison Toxic Principle:": [
+     "Anthraquinone glycoside"
+    ],
+    "Causes Contact Dermatitis:": [
+     "Yes"
+    ],
+    "Poison Part:": [
+     "Leaves"
+    ]
+   },
+   "description": [
+    "Aloe Vera is an evergreen succulent plant in the daylily family (Asphodelaceae) native to the Arabian Peninsula that has spread to many other regions and is considered invasive in some counties. The genus name is derived from the Arabic word alloeh , meaning \"bitter and shiny substance. The specific epithet comes from verus meaning \"true\" in Latin.",
+    "It is often grown indoors as a houseplant, but it can be an outdoor perennial in zones 10 and higher. Grow this plant in full sun to partial shade in very well-drained soils suitable for succulents. Allow the soil to completely dry between waterings. The pot used should also have several drainage holes and clay is best. Water less frequently in the winter months. It will grow 2 to 3 feet tall and spread by offsets. Propagation can be done by division.",
+    "The thick leaves contain a gell used in many commercial products. The stem can be broken and the gel applied to the skin and it is safe for most people. The leaves grow in a rosette and once the plant is at least three years old it will send up a stem with tubular orange to yellowish flowers near the tip that bloom from the bottom up. This plant has gained the Royal Horticultural Society's Award of Garden Merit.",
+    "Use this plant as a houseplant. It can be moved outdoors during the summer. In more temperate areas, aloe can be grown in a rock garden, winter garden or drought-tolerant garden."
+   ],
+   "problems": "Mealybugs and aphids are insects that may affect the health of your aloe plant. Diseases include scale, leaf spot, aloe rust, and sooty mold. Overwatering should be avoided, it can lead to the roots rotting."
+  },
+  "src-3337676949": {
+   "id": "src-3337676949",
+   "url": "https://plants.ces.ncsu.edu/plants/monstera-deliciosa/",
+   "fetched_at": "2026-10-12T21:27:23Z",
+   "page_sha256": "27a91a03c913ca35ee73b1218a2c4e0a5039493613d9c5cd15f7accdfa1ca0b9",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Monstera deliciosa",
+   "common_names": [
+    "Ceriman",
+    "Cutleaf Philodendron",
+    "Hurricane Plant",
+    "Mexican Breadfruit",
+    "Split-leaf Philodendron",
+    "Swiss Cheese Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Layering",
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Mexico to Panama"
+    ],
+    "Habit/Form:": [
+     "Climbing"
+    ],
+    "Growth Rate:": [
+     "Rapid"
+    ],
+    "Maintenance:": [
+     "Medium"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "High Organic Matter",
+     "Loam (Silt)"
+    ],
+    "Soil pH:": [
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "6-feet-12 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Problems:": [
+     "Contact Dermatitis",
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Intense burning of mouth, tongue, and throat; nausea, vomiting, difficulty swallowing, drooling, and diarrhea may also occur; contact with cell sap may cause skin irritation. Only if eaten in large quantities."
+    ],
+    "Poison Toxic Principle:": [
+     "Needle-like calcium oxalate crystals; possibly other unidentified toxins"
+    ],
+    "Causes Contact Dermatitis:": [
+     "Yes"
+    ],
+    "Poison Part:": [
+     "Bark",
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Seeds",
+     "Stems"
+    ]
+   },
+   "description": [
+    "Split-leaf philodendron is not actually a philodendron but a woody, perennial, broadleaf evergreen, climbing vine in the arum family (Araceae). It is native from Mexico to Panama and can grow to 70 feet tall, though it stays between 6 to 8 feet in most home environments. In North Carolina it is grown as a houseplant.",
+    "It prefers an average warm temperature of 60 to 85 degrees F, moderate brightness but not direct sunlight, and high humidity. Variegated cultivars will need more sunlight than darker green cultivars. Water this plant thoroughly, then allow the top quarter to one-third part to dry between watering. Using a humidifier or setting in the plant container on a tray of wet pebbles helps increase the humidity in dry interior settings. Sturdy support is necessary to prevent the stems from breaking. Prune or re-pot if needed in the spring and wipe dust off of the leaves regularly. Propagate by layering or stem cutting.",
+    "In its native habitat it starts its life as a terrestrial plant, turning epiphytic once it comes into contact with a sturdy tree it can climb. While It typically does not produce flowers or fruits in interior landscapes, it can produce an edible fruit that is said to taste like a cross between a banana and pineapple."
+   ],
+   "problems": "No significant problems."
+  },
+  "src-361be7f8d0": {
+   "id": "src-361be7f8d0",
+   "url": "https://plants.ces.ncsu.edu/plants/zamioculcas-zamiifolia/",
+   "fetched_at": "2026-10-12T21:27:16Z",
+   "page_sha256": "f254b78b4586befdf49f3d88e6ba4e7ba9a59067d519855c8d28657c931f7b21",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Zamioculcas zamiifolia",
+   "common_names": [
+    "Aroid Palm",
+    "Emerald Palm",
+    "Eternity Plant",
+    "Zanzibar Gem",
+    "Zuzu Plant",
+    "ZZ Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division",
+     "Leaf Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Africa"
+    ],
+    "Habit/Form:": [
+     "Arching",
+     "Erect"
+    ],
+    "Growth Rate:": [
+     "Slow"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Deep shade (Less than 2 hours to no direct sunlight)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "High Organic Matter",
+     "Sand"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "9a, 9b, 10a, 10b"
+    ],
+    "Problems:": [
+     "Problem for Cats",
+     "Problem for Dogs"
+    ],
+    "Poison Severity:": [
+     "Medium"
+    ],
+    "Poison Symptoms:": [
+     "diarrhea, vomiting if leaves are consumed in quantity."
+    ],
+    "Poison Toxic Principle:": [
+     "calcium oxalate"
+    ],
+    "Causes Contact Dermatitis:": [
+     "No"
+    ],
+    "Poison Part:": [
+     "Leaves"
+    ]
+   },
+   "description": [
+    "ZZ plant is a rhizomatous, evergreen herbaceous perennial in the aroid family (Araceae) native to tropical Africa. The pinnate leaves are erect, emerging from a thick, underground rhizome. The species epithet is compounded from the Latin and means “having leaves like Zamia ,” which is an unrelated genus.",
+    "This plant has a slow growth rate, reaching 2 to 4 feet in height and width. In the landscape, ZZ plant needs to be planted in partial to deep shade and highly organic or sandy soil with good drainage. It has bulbous fleshy rhizomes that give rise to glossy leaves that store water and make it highly drought tolerant. As a houseplant, pot it in well-drained potting soil that is watered routinely but allowed to dry out between waterings, as wet feet are not tolerated. Water it only once a month in winter months when it is not actively growing. Water twice monthly in the summer, but only if the soil has dried out completely. Use a balanced liquid houseplant fertilizer once or twice a year. This plant can be treated in much the same way as cactus and other succulent plants. While they will grow in very low levels of light, even in areas with only fluorescent light, they do best with bright indirect sunlight. Scalding and browning of leaves can occur if the plant is placed in direct sunlight. Propagate by division or leaf cutting. This plant has a medium toxicity to cats and dogs.",
+    "ZZ plant is one of the easiest to grow, low-maintenance houseplants and is seen frequently in commercial interiorscapes. In some areas, it may be possible to grow this plant in a container outdoors if it is brought in once the temperature falls below 60 degrees F."
+   ],
+   "problems": "No significant problems, but watch for scale insects."
+  },
+  "src-365265ac42": {
+   "id": "src-365265ac42",
+   "url": "https://plants.ces.ncsu.edu/plants/aspidistra-elatior/",
+   "fetched_at": "2026-10-12T21:27:47Z",
+   "page_sha256": "dd8652abaf305a36641405f8a67add64b1af5a020c39df382a89cf5f8e995e36",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Aspidistra elatior",
+   "common_names": [
+    "Bar Room Plant",
+    "Barroom Plant",
+    "Cast Iron Plant",
+    "Haran",
+    "Iron Plant",
+    "Variegated Cast Iron Plant"
+   ],
+   "attrs": {
+    "Country Or Region Of Origin:": [
+     "Japan"
+    ],
+    "Habit/Form:": [
+     "Clumping",
+     "Erect",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Slow"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Deep shade (Less than 2 hours to no direct sunlight)"
+    ],
+    "Soil Texture:": [
+     "Clay",
+     "High Organic Matter",
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Alkaline (>8.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "7a, 7b, 8a, 8b, 9a, 9b, 10a, 10b, 11a, 11b"
+    ],
+    "Flower Bloom Time:": [
+     "Summer"
+    ]
+   },
+   "description": [
+    "Cast iron plant is an evergreen, rhizomatous perennial reaching up to 2' in upright clumps. It is a good specimen for planting in dense shade. It makes a good evergreen \"hosta substitute\", especially for low light areas as well as indoors in pots. There are some variegated cultivars. It is called barroom plant because of its ability to withstand spittoonish conditions and iron plant due to its ability to withstand neglect. It is frequently utilized in exterior landscapes down south.",
+    "Cast iron plants prefer partial to full shade and are intolerant of direct sun. It needs rich, well-drained soil and is drought tolerant, though it can tolerate dry and nutrient-poor soils as well as a variety of soil textures. Water regularly spring to autumn, during droughts, sparingly in winter. Keep sheltered from winter winds.",
+    "These plants grow well in containers and will spread if planted in the ground within their hardiness zone. They can be used as an accent or groundcover to fill in shady spaces."
+   ],
+   "problems": "There are no serious pest problems. This plant is resistant to damage by deer and is slightly salt tolerant."
+  },
+  "src-51ad8b14a6": {
+   "id": "src-51ad8b14a6",
+   "url": "https://plants.ces.ncsu.edu/plants/phalaenopsis/",
+   "fetched_at": "2026-10-12T21:27:33Z",
+   "page_sha256": "aaec322a9091a3a5dc67d20bd3e4cecc8c3d36c48a8da58e03ccc369fa40c41e",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Phalaenopsis",
+   "common_names": [
+    "Moon Orchid",
+    "Moon Orchids",
+    "Moth Orchid",
+    "Moth Orchids",
+    "Phalaenopsis Orchid",
+    "Phalaenopsis Orchids"
+   ],
+   "attrs": {
+    "Country Or Region Of Origin:": [
+     "Tropical & Subtropical Asia, NE. Australia"
+    ],
+    "Habit/Form:": [
+     "Erect"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Deep shade (Less than 2 hours to no direct sunlight)"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b"
+    ]
+   },
+   "description": [
+    "Moth orchid is an epiphytic, tropical, herbaceous perennial in the orchid family (Orchidaceae). Moth orchids can range from a few inches to 2 feet in height and up to 2 feet (but usually less) in spread. Their region of origin is tropical and subtropical Asia and northeast Australia. The genus name comes from the Greek words phalaina, which means “moth,” and opsis, which means “like” because the flowers look like moths.",
+    "Moth orchids are the most popular and widely available kind of orchid sold as a houseplant. Commercial production is centered in Taiwan and the Netherlands. A modern hybrid, of which there are more than 34,000 registered, may have a dozen or more species in its ancestry and an equal number of hybrid generations. Moth orchids are also crossed with related genera to produce intergeneric hybrids such as Aeridopsis (= Aerides × Phalaenopsis ), Moirara (= Phalaenopsis × Renanthera × Vanda ), Parnataara (= Aerides × Arachnis × Phalaenopsis ), Renanthopsis (= Phalaenopsis × Renanthera ), Rhynchonopsis (= Phalaenopsis × Rhynchostylis ) and Vandaenopsis (= Phalaenopsis × Vanda ). Hybrids previously known as Doritaenopsis (= Doritis × Phalaenopsis ) are Phalaenopsis because the genus Doritis is now treated as a synonym of Phalaenopsis .",
+    "Moth orchids prefer low light, warm temperatures and high humidity. They are winter hardy in USDA Zones 10 to 12 and consequently must be grown as houseplants or greenhouse plants in North Carolina. The best placement in the house is on an east windowsill, but they can grow well on well-shaded west and south windowsills. Since they prefer warm, humid, damp but not soggy conditions, they are planted in pots with a bark-based medium that provides excellent drainage. The roots can photosynthesize, producing a green color from chlorophyll production, so clear plastic pots are often used. Orchids should be watered in the mornings with tepid water by placing plants in a sink and allowing water to flow freely through potting medium and foliage. Let the pot drain completely so that plants do not stand in water. Mature plants should be watered once weekly or more often in the heat of summer. Potting mix should dry some between waterings. If the growing medium is pure sphagnum moss, it can be difficult to rewet. It is better to repot such plants into bark-based orchid growing medium. Plants should be fertilized regularly with a balanced fertilizer twice monthly at half strength or weekly at quarter strength. Orchids need to be repotted approximately every two years after blooms have faded or as new leaves begin to appear. The flower stalk should be cut just above the fist node below the faded flowers; often (but not always) the node will produce a branch with more flowers.",
+    "Moth orchids will flower repeatedly once a year with proper care. The large-flowered, white species and hybrids that flower in spring require a cool, nighttime chill (ca. 55 degrees F for a week) in autumn to initiate flower spikes. The modern dwarf hybrids, which are bred from summer-flowering species, do not require a cool chill to initiate flowers. Flowers can last for four months or more. The showy flowers appearing in long sprays on arching stems are 3 to 6 inches wide in large-flowered hybrids but may be only 1 or 2 inches wide in dwarf cultivars. Traditionally, flowers were only white, pale pink or white with a pink lip, but breakthroughs in breeding are now giving consumers moth orchids in a wider range of colors including, yellow, cream, peachy tones and purple-red, as well as spotted (so-called “harlequin” patterns), splashed and variously patterned flowers. Genetic engineering has resulted in the production of blue-flowered moth orchids, but these are not yet widely available. Instead, consumers are offered moth orchids whose white flowers have been dyed blue, pink, or another color. These orchids, if they rebloom, will produce white flowers."
+   ],
+   "problems": "Scale and mealybugs may appear. Flower bud drop, also known as bud blast, may be caused by changes in temperature, humidity, moisture, fertilizer or location. Botrytis spot on the flowers can be a problem. Shriveled or wrinkled leaves are a sign that the leaves are not getting enough water – either the potting medium is being kept too dry or the plant’s roots are damaged (often rotted by a soggy growing medium)."
+  },
+  "src-559d2483d0": {
+   "id": "src-559d2483d0",
+   "url": "https://plants.ces.ncsu.edu/plants/peperomia-obtusifolia/",
+   "fetched_at": "2026-10-12T21:27:44Z",
+   "page_sha256": "c80d2c0bfadc18beb3e66918d09e73b2db430ce62ec60aa12a3cdcb9460afc32",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Peperomia obtusifolia",
+   "common_names": [
+    "American Rubber Plant",
+    "Baby Rubberplant",
+    "Baby Rubber Plant",
+    "Oval Leaf Peperomia"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Leaf Cutting",
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Florida to Tropical America"
+    ],
+    "Habit/Form:": [
+     "Erect",
+     "Open",
+     "Rounded",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Clay",
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "Less than 12 inches"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ]
+   },
+   "description": [
+    "Baby Rubber Plant is a tropical evergreen herbaceous shrub that is erect and bushy and grows up to 2 feet tall. It is native to South America, and it is a member of the Piperaceae or pepper family. The glossy cupped, obovate leaves on branched, distinct stems and petioles that are usually tinged pink are key ID features. Leaf attachment is a sub-peltate.",
+    "This plant tolerates low light for several months without stress, especially non-variegated cultivars. It is intolerant of wet soil, very dry soil, or very drafty sites. This plant prefers bright indirect light, dry soil, and medium to low relative humidity. Sunlight that is too strong or direct will burn the leaves.",
+    "This plant is commonly used as an interior specimen or desktop plant."
+   ],
+   "problems": "This plant has no serious pest or disease problems. Overwatering is a big problem and causes the leaves to yellow, and it can lead to root rot. Monitor for mealybugs, spider mites, and whiteflies."
+  },
+  "src-677c7e4715": {
+   "id": "src-677c7e4715",
+   "url": "https://plants.ces.ncsu.edu/plants/crassula-ovata/",
+   "fetched_at": "2026-10-12T21:27:28Z",
+   "page_sha256": "32d5a2ddc2baf7d4cdf9b83eccc12b68d4f8ac75b4a94cdbedbbe3e675839dd4",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Crassula ovata",
+   "common_names": [
+    "Baby Jade",
+    "Chinese rubber plant",
+    "Dwarf rubber plant",
+    "Jade Plant",
+    "Jade tree",
+    "Japanese rubber plant",
+    "Lucky Plant",
+    "Money Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Leaf Cutting",
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "South Africa"
+    ],
+    "Habit/Form:": [
+     "Erect",
+     "Multi-stemmed",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Full sun (6 or more hours of direct sunlight a day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry",
+     "Very Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet",
+     "3 feet-6 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "11a, 11b, 12a, 12b"
+    ],
+    "Flower Bloom Time:": [
+     "Spring"
+    ],
+    "Problems:": [
+     "Problem for Cats",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ]
+   },
+   "description": [
+    "Jade plant is a subtropical, broadleaf evergreen, flowering, succulent shrub in the stonecrop family. It is a native of South Africa and a popular, low maintenance, houseplant worldwide. The species name \"ovata\" means egg-shaped referring to the thick, fleshy leaves. As it matures, the plant takes the form of a miniature tree. Tiny pink flowers appear in the spring on plants grown outdoors.The genus name comes from the Latin crassus meaning thick, referring to the thick leaves. The species name means egg-shaped.",
+    "Plant in well-drained potting soil that contains a lot of loam and place the pot in a sunny location indoors that also provides some afternoon shade. Bright light and average to cool indoor temperatures are also essential for good plant health. Water in moderation when the soil is dry and reduce watering from fall to late winter. It does not usually bloom in home environments. If grown outdoors, it should be located in a site with partial shade.",
+    "Propagation is easily achieved by leaf cutting.",
+    "Clemson University Home and Garden Information Center has a factsheet on Jade Plants."
+   ],
+   "problems": "Aphids, scale, spider mites and mealybugs can be occasional problems. Leaf fall and root rot can result from over watering."
+  },
+  "src-6a82d0463c": {
+   "id": "src-6a82d0463c",
+   "url": "https://plants.ces.ncsu.edu/plants/chlorophytum-comosum/",
+   "fetched_at": "2026-10-12T21:27:18Z",
+   "page_sha256": "0065ea0c422996e2e51f273c1b4e8da14ce9d06c1287086014c86decb4218ec3",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Chlorophytum comosum",
+   "common_names": [
+    "Anthericum Comosum",
+    "Chlorophytum",
+    "Ribbon Plant",
+    "Spider Ivy",
+    "Spiderplant",
+    "Spider Plant",
+    "Walking Anthericum"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division"
+    ],
+    "Country Or Region Of Origin:": [
+     "W. Tropical Africa to Cameroon, Ethiopia to S. Africa"
+    ],
+    "Habit/Form:": [
+     "Arching",
+     "Cascading"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Medium"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Deep shade (Less than 2 hours to no direct sunlight)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)"
+    ],
+    "Soil pH:": [
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "9a, 9b, 10a, 10b, 11a, 11b"
+    ],
+    "Flower Bloom Time:": [
+     "Fall",
+     "Spring",
+     "Summer",
+     "Winter"
+    ]
+   },
+   "description": [
+    "Spider plant is an herbaceous perennial houseplant in the Asparagaceae (asparagus) family. Its native region is tropical West Africa to Cameroon and Ethiopia to South Africa.",
+    "It is commonly grown as a houseplant for its adaptability to many conditions. Spider plant prefers medium light levels yet can tolerate deep shade. It is intolerant of direct sunlight. It grows best in moist soil and medium air humidity, though it is tolerant of drought and dry soil. Keep temperatures above 45 degrees F. Avoid watering with tap water as the chlorine and fluorides can cause leaf tip burn. Reduce watering during winter. Use a humidifier or place the plant container on a tray of pebbles with water to increase the humidity. Do not over-fertilize, as this decreases plantlet formation. Spider plant propagates easily by plantlets or division. Stolons and plantlets are light dependent and develop when the mother plant receives short days and long, uninterrupted nights–less than 12 hours of light a day–for at least three weeks.",
+    "Spider plant does particularly well in hanging baskets or other containers where the leaves and stems can cascade down the side."
+   ],
+   "problems": "No significant problems."
+  },
+  "src-78d03500ec": {
+   "id": "src-78d03500ec",
+   "url": "https://plants.ces.ncsu.edu/plants/streptocarpus-ionanthus/",
+   "fetched_at": "2026-10-12T21:27:52Z",
+   "page_sha256": "a7fc30c02218afd59f1133d5bdbfc07e110cce37f80e6c60d4ac95023a8cdb4e",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Streptocarpus ionanthus",
+   "common_names": [
+    "African Violet",
+    "Kenya Violet"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Leaf Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Eastern & South Western Tanzania"
+    ],
+    "Habit/Form:": [
+     "Clumping",
+     "Mounding"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Medium"
+    ],
+    "Light:": [
+     "Deep shade (Less than 2 hours to no direct sunlight)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "Less than 12 inches"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "11a, 11b, 12a, 12b"
+    ],
+    "Flower Bloom Time:": [
+     "Fall",
+     "Spring",
+     "Summer",
+     "Winter"
+    ],
+    "Problems:": [
+     "Frequent Insect Problems"
+    ]
+   },
+   "description": [
+    "African violet is an evergreen, tropical houseplant in the gloxinia family (Gesneriaceae). A popular potted houseplant, its flowers are red, purple, blue, white or pink. The species epithet is compounded from the Greek meaning “having the flower of a violet.”",
+    "As it is rarely grown outdoors, it prefers interior sites with bright, filtered light and moist soil. It requires a highly fertile medium for continued rebloom. It is best grown in a mixture of 2 or 3 parts sphagnum peat moss, 2 parts vermiculite and 1 part perlite. This mixture will allow the water to pass through quickly. Add lime to balance the acidity of the peat moss, or use coir, which is more sustainable than peat moss and has a near-neutral pH. Plant with the crown above the surface with the soil pressed around it. Plants mature in 2 to 5 years. Remove dead or yellowed leaves to maintain a beautiful specimen. Good drainage is essential. Allowing water to sit on the surface can cause the plant to decay. When watering, water from the bottom while keeping the leaves dry to prevent spots or rings, and allow the surface to dry before watering again. It thrives in high humidity, consider setting the plant container on a tray of wet pebbles or using a humidifier to increase in the interior humidity. It is intolerant of dry air or very cold water. Consistent temperatures will also contribute to the plant’s health. If the nighttime temperature is allowed to dip below 60 degrees, the plant will become stunted as temperatures rise and can experience a long recovery period. Maintaining a temperature between 60 and 80 degrees is optimum.",
+    "African violets have five different size classes: micro-miniature, miniature, semi-miniature, standard and large. The flower petals range in type and texture, including single, semi-double, double, frilled and ruffled, star-shaped, wasp-shaped, cup-shaped and bell-shaped. Their two main growth forms are rosette and trailing. There are thousands of cultivars, and each varies in size, habit, leaf color, flower color and flower shape.",
+    "The Clemson Cooperative Extension Home and Garden Information Center has a fact sheet on common African violet diseases and insect pests."
+   ],
+   "problems": "Diseases that may harm African violet are crown and root rot and botrytis blight. Insects that may damage this plant include vine weevil, thrips, mealybugs, cyclamen mites and glasshouse leafhoppers. Overwatering is the number one issue."
+  },
+  "src-7aa799a628": {
+   "id": "src-7aa799a628",
+   "url": "https://plants.ces.ncsu.edu/plants/philodendron-hederaceum/",
+   "fetched_at": "2026-10-12T21:27:42Z",
+   "page_sha256": "c33f5a5ecdf6cb4a614e93025b476f2bf8ee2cd76c8878d012ae9f2a80a0371f",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Philodendron hederaceum",
+   "common_names": [
+    "Heartleaf Philodendron",
+    "Parlor Ivy",
+    "Philodendron",
+    "Sweetheart Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Mexico to Tropical America"
+    ],
+    "Habit/Form:": [
+     "Cascading",
+     "Climbing",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Rapid"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Deep shade (Less than 2 hours to no direct sunlight)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "3 feet-6 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "11a, 11b, 12a, 12b"
+    ],
+    "Problems:": [
+     "Contact Dermatitis",
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Oral irritation, pain and swelling of mouth, tongue and lips, excessive drooling, vomiting, and difficulty swallowing"
+    ],
+    "Poison Toxic Principle:": [
+     "Calcium oxalate crystals"
+    ],
+    "Causes Contact Dermatitis:": [
+     "Yes"
+    ],
+    "Poison Part:": [
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Sap/Juice",
+     "Stems"
+    ]
+   },
+   "description": [
+    "Heartleaf Philodendron is a tropical evergreen trailing or climbing member of the Arum family (Araceae). The plant grows up to 13 feet tall and is grown as a houseplant in temperate climates. The species epithet means ivy-like and likens this plant's climbing, leafy habit to that of English ivy, Hedera helix .",
+    "This plant is desired for its glossy, green leaves on cascading stems. It can survive for long periods in extremely low light. It is distinguished from Epipremnum aureum by the conspicuous stipules on new growth, the messy, falling stipules on older growth, and by the non-grooved petioles. Climbs or trails if given support.",
+    "It refers medium light but will tolerate low light. It prefers average indoor air temperatures and can tolerate dry air although it prefers medium relative humidity and moist soil, and it appreciates misting. Keep soil slightly moist, and slow down on watering in the winter."
+   ],
+   "problems": "This plant has no serious pest or disease problems. Monitor for aphids, spider mites, mealybugs, and scale. Leaf spots may be seen, and root rot can occur in overly wet soil."
+  },
+  "src-7b0bb45d1e": {
+   "id": "src-7b0bb45d1e",
+   "url": "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+   "fetched_at": "2026-10-12T21:27:11Z",
+   "page_sha256": "cbe77061462aa80644c23989084795854138839f97799fd67c810aa4a03bfec6",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Epipremnum aureum",
+   "common_names": [
+    "Devil's Ivy",
+    "Devil's Vine",
+    "Golden Pothos",
+    "Ivy Arum",
+    "Marble Queen",
+    "Pothos",
+    "Taro Vine"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Society Islands"
+    ],
+    "Habit/Form:": [
+     "Climbing",
+     "Creeping",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Deep shade (Less than 2 hours to no direct sunlight)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "High Organic Matter",
+     "Loam (Silt)",
+     "Shallow Rocky"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet",
+     "3 feet-6 feet",
+     "6-feet-12 feet",
+     "12-24 feet",
+     "24-60 feet"
+    ],
+    "Problems:": [
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Medium"
+    ],
+    "Poison Symptoms:": [
+     "Oral irritation, pain and swelling of mouth, tongue, and lips, excessive drooling, vomiting (not horses), difficulty swallowing, skin irritation, diarrhea"
+    ],
+    "Poison Toxic Principle:": [
+     "Calcium oxalate crystals"
+    ],
+    "Causes Contact Dermatitis:": [
+     "Yes"
+    ],
+    "Poison Part:": [
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Seeds",
+     "Stems"
+    ]
+   },
+   "description": [
+    "Pothos is a low-maintenance, herbaceous perennial, broadleaf evergreen houseplant in the arum family (Araceae) grown for its glossy, green or variegated leaves on cascading stems. It is native to the Society Islands. It grows only 6 to 8 feet as a horizontal groundcover, but the trailing and climbing vines can grow as long as 40 feet. This feature makes it well-suited for hanging baskets. As a container plant, it generally retains its juvenile leaf shape. The species epithet is Latin for \"golden.\"",
+    "Pothos is very easy to grow. It prefers bright, indirect light and survives for long periods in low light. Use a humidifier or place the plant container on a tray of wet pebbles to increase humidity, and let the well-drained potting medium dry out between watering. Fertilize every other month except when the plant is dormant in the winter. Wipe down the leaves occasionally with a soft rag to remove any collected dust. Over time, leaves will yellow and fall off, concentrating most of the leaves at the end of the stems. Prune stems back to maintain a bushy habit. Vines easily root in water. They climb by brown aerial roots. If given a support on which to climb and adequate light, the plant will begin to produce large, mature leaves.",
+    "In the recent past, Epipremnum aureum was treated as a cultivar of Epipremnum pinnatum and given the name E. pinnatum ‘Aureum’. After further study, botanists determined that the two have distinctively different vegetative features and should be recognized as separate species. Plants formerly called E. pinnatum 'Aureum' are now correctly called E. aureum .",
+    "It is distinguished from Philodendron hederaceum by the absence of conspicuous free stipules on new growth and by the grooved petioles.",
+    "Indoor vine with glossy, heart-shaped leaves variegated with yellow",
+    "No free stipules on new growth",
+    "Petioles are grooved"
+   ],
+   "problems": "Root rot and blackening of the leaf margins can occur with overwatering. Low light can cause loss of variegation. Monitor for mealybugs and scales."
+  },
+  "src-8463ca219d": {
+   "id": "src-8463ca219d",
+   "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+   "fetched_at": "2026-10-12T21:27:09Z",
+   "page_sha256": "0f3d0c0d337ba01697c0d413ae10778bb1c5f2c2fbe3274395c927cf2547ce58",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Dracaena trifasciata",
+   "common_names": [
+    "Golden Birds Nest",
+    "Good Luck Plant",
+    "Mother-in-law's Tongue",
+    "Snake Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division",
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "West and West Central Africa"
+    ],
+    "Habit/Form:": [
+     "Clumping",
+     "Erect"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Alkaline (>8.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Flower Bloom Time:": [
+     "Spring"
+    ],
+    "Problems:": [
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Toxic if ingested: vomiting (occasionally with blood), depression, nausea, diarrhea, anorexia, hypersalivation, dilated pupils (cats). The sap can cause skin irritation."
+    ],
+    "Poison Toxic Principle:": [
+     "Saponins"
+    ],
+    "Causes Contact Dermatitis:": [
+     "No"
+    ],
+    "Poison Part:": [
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Sap/Juice",
+     "Stems"
+    ]
+   },
+   "description": [
+    "Snake plant is an erect, clumping, broadleaf evergreen, tropical herbaceous perennial in the asparagus family (Asparagaceae). It is native to central Africa. The species epithet means \"having three transverse stripes\" and refers to the pattern of variegation on the leaves (although there may be more than three stripes).",
+    "Place in a location where it will receive direct sunlight only part of the day, 2 to 6 hours, as it will tolerate very low light. Well-drained soil and careful watering are a must; do not overwater, as the roots will rot. In spring to autumn allow the soil to dry between waterings. In winter only water every one to two months. It tolerates low humidity and cool temperatures around 50 degrees. This plant is quite durable, easily grown, and difficult to kill.",
+    "In its native habitat, it blooms in the winter, but as a houseplant, it rarely blooms. Snake plant is grown in containers and is used as ground cover or filler in interior landscape designs."
+   ],
+   "problems": "No significant problems. Monitor for mealybugs and spider mites. Overwatering may cause root rot."
+  },
+  "src-9a8478aae5": {
+   "id": "src-9a8478aae5",
+   "url": "https://plants.ces.ncsu.edu/plants/schlumbergera-x-buckleyi/",
+   "fetched_at": "2026-10-12T21:27:30Z",
+   "page_sha256": "ce1730e39ddaa053fdc7746bbf02ca8061fa807aeaa22c30427d57b621fbc4b4",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Schlumbergera x buckleyi",
+   "common_names": [
+    "Christmas Cactus",
+    "Leaf-Flowering Cactus",
+    "True Christmas Cactus"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Grafting",
+     "Stem Cutting"
+    ],
+    "Habit/Form:": [
+     "Arching",
+     "Rounded",
+     "Weeping"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry"
+    ],
+    "Available Space To Plant:": [
+     "Less than 12 inches",
+     "12 inches-3 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Flower Bloom Time:": [
+     "Winter"
+    ]
+   },
+   "description": [
+    "Christmas cactus is an artificial hybrid of S. russelliana x S. truncata that produces brightly colored flowers during the holiday season. It is an epiphytic cactus and very popular as a houseplant. It measures 6 to 12 inches tall and 12 to 24 inches wide and has a pendulous habit. The hybrid epithet honors William Buckley, who created this hybrid at the Rollisson Nurseries in England in 1840s.",
+    "This cactus prefers bright, indirect light and moist, well-drained, airy potting medium with peat moss, sand, and perlite. The soil should be moist, but not overly wet nor overly dry from spring to summer. Watering should be reduced in mid-September as the buds develop and again after flowering is completed. It also prefers high humidity. The temperature should be maintained at 70 to 80 degrees Fahrenheit. It will also benefit from fertilizing monthly during the growing season. To encourage flowering, indoor plants should be provided bright daytime light, night temperatures of 55 to 65 degrees Fahrenheit, and at least 13 hours of uninterrupted darkness every night in mid-September. If your plant is not flowering, chances are it is receiving artificial light in the autumn. The plant can be propagated by stem cuttings or grafting.",
+    "The green stems are flat, jointed, spineless, and segmented with rounded marginal notches. Each stem is 2.5 inches long and 0.75 inches wide. The flowers are delicate, tubular-shaped, magenta red to pink, measure 3 inches long, and droop down. They bloom on the stem ends from December to February. The fruits are red berries.",
+    "Most of the plants sold in stores today are the sterile hybrids ( S. x buckleyi ) of Christmas cactus ( S. russelliana ) and Thanksgiving cactus ( S. truncata ). There are over 200 cultivars of these plants giving a variety of flower colors.",
+    "The Christmas cactus is used primarily as an indoor ornamental. It can be grown in containers or hanging baskets. It is non-toxic and can be safely used in homes with pets or children."
+   ],
+   "problems": "Monitor for mealybugs, red spider mites, aphids, and soft brown scale. Overwatering can cause root rot. Sudden temperature changes, drafts, low humidity, and improper watering can cause flower buds to drop. Full sun can bleach the stems."
+  }
+ }
+}

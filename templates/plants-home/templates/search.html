@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{% if q %}Поиск: «{{ q }}»{% else %}Поиск растений{% endif %}</h1>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="sq">Растение или проблема</label><input id="sq" name="q" type="search" value="{{ q }}"><button type="submit">Найти</button>{% if q %}<a class="reset" href="/poisk/">Очистить</a>{% endif %}</form>
+{% if not q %}<p class="note">Например: «фикус», «тень», «червец», «Monstera».</p>
+{% elif items %}<p class="count" role="status">Найдено: {{ items|length }}</p>{{ grid(items, 'h2') }}
+{% else %}<div class="empty" role="status"><h2>Ничего не нашлось</h2><p><a class="btn" href="/katalog/">Открыть каталог</a></p></div>{% endif %}
+{% endblock %}

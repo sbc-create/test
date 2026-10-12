@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, light_icon %}
+{% block main %}
+<h1>{{ light_icon(lv[0]) }}{{ lv[1] }}</h1><p class="lead">{{ lv[2]|capitalize }}. Виды, которым по справочнику подходит такое место.</p>
+{{ grid(items, 'h2') }}
+{% endblock %}

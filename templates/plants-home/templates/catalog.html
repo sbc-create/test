@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>Каталог</h1>
+<form class="flt" action="/katalog/" method="get" aria-label="Фильтр каталога">
+  <div><label for="f-l">Свет</label><select id="f-l" name="svet"><option value="">Любой</option>{% for slug, lv in lights.items() %}<option value="{{ slug }}"{% if light == slug %} selected{% endif %}>{{ lv[1] }}</option>{% endfor %}</select></div>
+  <div><label for="f-m">Сложность ухода</label><select id="f-m" name="uhod"><option value="">Любая</option>{% for k, v in MAINT.items() %}<option value="{{ k }}"{% if maint == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select></div>
+  <button type="submit">Показать</button>{% if light or maint %}<a class="reset" href="/katalog/">Сбросить</a>{% endif %}
+</form>
+{% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}. Показаны результаты без него.</p>{% endif %}
+<p class="count" role="status">Найдено: {{ items|length }}</p>
+{% if items %}{{ grid(items, 'h2') }}{% else %}<div class="empty"><h2>По этому сочетанию растений нет</h2><p>Снимите один из фильтров.</p><p><a class="btn" href="/katalog/">Сбросить</a> <a class="btn btn--line" href="/svet/">Подобрать по свету</a></p></div>{% endif %}
+{% endblock %}

@@ -1,0 +1,82 @@
+{
+ "id": "src-7aa799a628",
+ "url": "https://plants.ces.ncsu.edu/plants/philodendron-hederaceum/",
+ "fetched_at": "2026-10-12T21:27:42Z",
+ "page_sha256": "c33f5a5ecdf6cb4a614e93025b476f2bf8ee2cd76c8878d012ae9f2a80a0371f",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Philodendron hederaceum",
+ "common_names": [
+  "Heartleaf Philodendron",
+  "Parlor Ivy",
+  "Philodendron",
+  "Sweetheart Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Mexico to Tropical America"
+  ],
+  "Habit/Form:": [
+   "Cascading",
+   "Climbing",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Rapid"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "3 feet-6 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "11a, 11b, 12a, 12b"
+  ],
+  "Problems:": [
+   "Contact Dermatitis",
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Oral irritation, pain and swelling of mouth, tongue and lips, excessive drooling, vomiting, and difficulty swallowing"
+  ],
+  "Poison Toxic Principle:": [
+   "Calcium oxalate crystals"
+  ],
+  "Causes Contact Dermatitis:": [
+   "Yes"
+  ],
+  "Poison Part:": [
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Sap/Juice",
+   "Stems"
+  ]
+ },
+ "description": [
+  "Heartleaf Philodendron is a tropical evergreen trailing or climbing member of the Arum family (Araceae). The plant grows up to 13 feet tall and is grown as a houseplant in temperate climates. The species epithet means ivy-like and likens this plant's climbing, leafy habit to that of English ivy, Hedera helix .",
+  "This plant is desired for its glossy, green leaves on cascading stems. It can survive for long periods in extremely low light. It is distinguished from Epipremnum aureum by the conspicuous stipules on new growth, the messy, falling stipules on older growth, and by the non-grooved petioles. Climbs or trails if given support.",
+  "It refers medium light but will tolerate low light. It prefers average indoor air temperatures and can tolerate dry air although it prefers medium relative humidity and moist soil, and it appreciates misting. Keep soil slightly moist, and slow down on watering in the winter."
+ ],
+ "problems": "This plant has no serious pest or disease problems. Monitor for aphids, spider mites, mealybugs, and scale. Leaf spots may be seen, and root rot can occur in overly wet soil."
+}

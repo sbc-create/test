@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Источники</h1><p class="lead">Страница справочника для каждого вида. Дата — день чтения.</p>
+<ul class="srclist">{% for p in site.plants %}<li><a href="{{ p.src.url }}" rel="nofollow noopener" lang="en"><i>{{ p.sci }}</i></a> <span>— {{ p.src.publisher }}, прочитан {{ p.src.fetched_at[:10] }}</span></li>{% endfor %}</ul>
+{% endblock %}

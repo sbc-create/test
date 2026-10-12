@@ -1,0 +1,76 @@
+{
+ "id": "src-361be7f8d0",
+ "url": "https://plants.ces.ncsu.edu/plants/zamioculcas-zamiifolia/",
+ "fetched_at": "2026-10-12T21:27:16Z",
+ "page_sha256": "f254b78b4586befdf49f3d88e6ba4e7ba9a59067d519855c8d28657c931f7b21",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Zamioculcas zamiifolia",
+ "common_names": [
+  "Aroid Palm",
+  "Emerald Palm",
+  "Eternity Plant",
+  "Zanzibar Gem",
+  "Zuzu Plant",
+  "ZZ Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Division",
+   "Leaf Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Africa"
+  ],
+  "Habit/Form:": [
+   "Arching",
+   "Erect"
+  ],
+  "Growth Rate:": [
+   "Slow"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "High Organic Matter",
+   "Sand"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "9a, 9b, 10a, 10b"
+  ],
+  "Problems:": [
+   "Problem for Cats",
+   "Problem for Dogs"
+  ],
+  "Poison Severity:": [
+   "Medium"
+  ],
+  "Poison Symptoms:": [
+   "diarrhea, vomiting if leaves are consumed in quantity."
+  ],
+  "Poison Toxic Principle:": [
+   "calcium oxalate"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Leaves"
+  ]
+ },
+ "description": [
+  "ZZ plant is a rhizomatous, evergreen herbaceous perennial in the aroid family (Araceae) native to tropical Africa. The pinnate leaves are erect, emerging from a thick, underground rhizome. The species epithet is compounded from the Latin and means “having leaves like Zamia ,” which is an unrelated genus.",
+  "This plant has a slow growth rate, reaching 2 to 4 feet in height and width. In the landscape, ZZ plant needs to be planted in partial to deep shade and highly organic or sandy soil with good drainage. It has bulbous fleshy rhizomes that give rise to glossy leaves that store water and make it highly drought tolerant. As a houseplant, pot it in well-drained potting soil that is watered routinely but allowed to dry out between waterings, as wet feet are not tolerated. Water it only once a month in winter months when it is not actively growing. Water twice monthly in the summer, but only if the soil has dried out completely. Use a balanced liquid houseplant fertilizer once or twice a year. This plant can be treated in much the same way as cactus and other succulent plants. While they will grow in very low levels of light, even in areas with only fluorescent light, they do best with bright indirect sunlight. Scalding and browning of leaves can occur if the plant is placed in direct sunlight. Propagate by division or leaf cutting. This plant has a medium toxicity to cats and dogs.",
+  "ZZ plant is one of the easiest to grow, low-maintenance houseplants and is seen frequently in commercial interiorscapes. In some areas, it may be possible to grow this plant in a container outdoors if it is brought in once the temperature falls below 60 degrees F."
+ ],
+ "problems": "No significant problems, but watch for scale insects."
+}

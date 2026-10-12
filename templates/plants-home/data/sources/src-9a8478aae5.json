@@ -1,0 +1,62 @@
+{
+ "id": "src-9a8478aae5",
+ "url": "https://plants.ces.ncsu.edu/plants/schlumbergera-x-buckleyi/",
+ "fetched_at": "2026-10-12T21:27:30Z",
+ "page_sha256": "ce1730e39ddaa053fdc7746bbf02ca8061fa807aeaa22c30427d57b621fbc4b4",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Schlumbergera x buckleyi",
+ "common_names": [
+  "Christmas Cactus",
+  "Leaf-Flowering Cactus",
+  "True Christmas Cactus"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Grafting",
+   "Stem Cutting"
+  ],
+  "Habit/Form:": [
+   "Arching",
+   "Rounded",
+   "Weeping"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry"
+  ],
+  "Available Space To Plant:": [
+   "Less than 12 inches",
+   "12 inches-3 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Flower Bloom Time:": [
+   "Winter"
+  ]
+ },
+ "description": [
+  "Christmas cactus is an artificial hybrid of S. russelliana x S. truncata that produces brightly colored flowers during the holiday season. It is an epiphytic cactus and very popular as a houseplant. It measures 6 to 12 inches tall and 12 to 24 inches wide and has a pendulous habit. The hybrid epithet honors William Buckley, who created this hybrid at the Rollisson Nurseries in England in 1840s.",
+  "This cactus prefers bright, indirect light and moist, well-drained, airy potting medium with peat moss, sand, and perlite. The soil should be moist, but not overly wet nor overly dry from spring to summer. Watering should be reduced in mid-September as the buds develop and again after flowering is completed. It also prefers high humidity. The temperature should be maintained at 70 to 80 degrees Fahrenheit. It will also benefit from fertilizing monthly during the growing season. To encourage flowering, indoor plants should be provided bright daytime light, night temperatures of 55 to 65 degrees Fahrenheit, and at least 13 hours of uninterrupted darkness every night in mid-September. If your plant is not flowering, chances are it is receiving artificial light in the autumn. The plant can be propagated by stem cuttings or grafting.",
+  "The green stems are flat, jointed, spineless, and segmented with rounded marginal notches. Each stem is 2.5 inches long and 0.75 inches wide. The flowers are delicate, tubular-shaped, magenta red to pink, measure 3 inches long, and droop down. They bloom on the stem ends from December to February. The fruits are red berries.",
+  "Most of the plants sold in stores today are the sterile hybrids ( S. x buckleyi ) of Christmas cactus ( S. russelliana ) and Thanksgiving cactus ( S. truncata ). There are over 200 cultivars of these plants giving a variety of flower colors.",
+  "The Christmas cactus is used primarily as an indoor ornamental. It can be grown in containers or hanging baskets. It is non-toxic and can be safely used in homes with pets or children."
+ ],
+ "problems": "Monitor for mealybugs, red spider mites, aphids, and soft brown scale. Overwatering can cause root rot. Sudden temperature changes, drafts, low humidity, and improper watering can cause flower buds to drop. Full sun can bleach the stems."
+}

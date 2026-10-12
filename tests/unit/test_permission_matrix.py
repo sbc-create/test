@@ -452,6 +452,8 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # СЕТКА ПРАКТИЧЕСКИХ САЙТОВ (ночь 12–13.10.2026): источники и референсы plants-home
+            "plants.ces.ncsu.edu", "www.rhs.org.uk", "www.botanichka.ru",
         }
 
 
