@@ -131,3 +131,7 @@ commit food-baking); home-practical A от аудита до PR.
 Обновление 23:08Z: food-baking B (#112; oven-bench, 8864; 33 действия PASS, axe 0, 29 URL × 4 — 0). В A исправлена обрезанная
 подсказка поиска (b758e94, ширины 27 URL — 0). Следующие 3 действия: (1) food-weekly B — порт 8865; (2) food-appliances B — 8866;
 (3) итоговый утренний отчёт. Возобновление: `cd /home/claude/wt-template-food-weekly-b`.
+
+Обновление 23:14Z: food-weekly B (#113; agenda-trips, 8865; 26 действий PASS, axe 0, 36 URL × 4 — 0). В A исправлены сокращения
+дней (656d2cc, тест). Следующие 3 действия: (1) food-appliances B — порт 8866; (2) итоговый отчёт; (3) при остатке времени — UX A/B.
+Возобновление: `cd /home/claude/wt-template-food-appliances-b`.
