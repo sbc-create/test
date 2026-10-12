@@ -214,8 +214,8 @@
       "id": "B010",
       "site": "yummyani.biz, yummyani.org, yummyani.site, yummyani7.info, yummyani7.site",
       "status": "blocked",
-      "problem": "D177: config/site.json[publisher_id_expected] = null у пяти Yummy, учёт реестра пуст; run.py Yummy сверку поддерживает («если сайт объявил ожидаемый publisher_id…»), но без объявления она выключена — неверный player.json пройдёт молча. Витрины идентификатор отдают. Один источник (живая страница) — недостаточное основание, значение не подставляем.",
-      "owner_action": "Владелец: подтвердить publisher_id для каждого из пяти доменов Yummy (или решение, что D177 к семейству не применяется). После подтверждения SEO вписывает publisher_id_expected в config/site.json каждой ячейки."
+      "problem": "D177 (три места publisher_id: файл плеера, объявление в config/site.json, учёт реестра) описывает Lords/Zona/AnimeGo. У пяти Yummy своего плеера нет: воспроизведение — верхний поток Next.js, player.json и LORDS_PLAYER_CONFIG отсутствуют по решению (yummyani-org/run.py check_player, docstring). Пустой publisher_id_expected у Yummy ВЕРЕН: объявление без плеера даёт отказ run.py --check (измерено Архитектором: «сайт объявляет publisher_id …, но LORDS_PLAYER_CONFIG не задан»). Идентификатор, который отдают карточки Yummy, приходит из верхнего потока; где он живёт и кем учитывается — не установлено. Поправка 12.10: прежняя формулировка («сверка выключена, вписать значение») была ошибочной — её исполнение сломало бы пять витрин.",
+      "owner_action": "Владелец: указать, где у Yummy задаётся publisher_id (конфигурация верхнего потока Next.js) и каким местом его учитывать. До ответа publisher_id_expected у Yummy НЕ заполняется, реестр по одному источнику не заполняется."
     },
     {
       "id": "B011",
