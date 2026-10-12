@@ -1,7 +1,7 @@
 template: food-baking
 branch: claude/template-food-baking
 worktree: /home/claude/wt-template-food-baking
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main 12.10.2026, не ветка food-daily
+base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main 12.10.2026, не ветка другого шаблона
 owner_scope:
   write: [templates/food-baking/**]
   shared_files_touched:
