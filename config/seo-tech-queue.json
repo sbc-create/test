@@ -315,6 +315,13 @@
       "check": "python3 -m pytest -q tests/unit/test_seo_regular.py",
       "status": "session",
       "evidence": "Наблюдение, не дефект. Не меняется, пока Lords/Zona на паузе (публикует только zonafilm.space)."
+    },
+    {
+      "id": "B015",
+      "site": "lordserials22.site, lordserials22.space, lordserial101.site, lordfilm077.site (lords-06..09)",
+      "problem": "Домены не разрешаются в DNS (socket.getaddrinfo: gaierror, 12.10 ~20:35Z, проверены все домены config/site-cells.json — у остальных 15 живых разрешение есть). В паспорте статус planned. Отсюда 0 посетителей в Метрике за 7 дней у lordserials22.site/.space (cabinet-latest.json 12.10 10:11Z) и отсутствие счётчика у lordfilm077/lordserial101: сайты не опубликованы, а не плохо оптимизированы. SEO-работа по ним до публикации не даёт визитов.",
+      "status": "blocked",
+      "owner_action": "Владелец: решение о запуске lords-06..09 — делегирование доменов и записи DNS (вне manifest фабрика DNS не меняет), затем выделение ячеек и выпуск. До решения SEO по этим четырём не ведётся."
     }
   ]
 }
