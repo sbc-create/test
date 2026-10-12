@@ -364,8 +364,8 @@
       "norm": "как у предыдущей задачи",
       "expected": "description из полей снимка, ≤180",
       "check": "bash checks/run.sh",
-      "status": "session",
-      "evidence": "SEO ведёт в сессии 12.10: правка только в классе ВидАнимеГо (ВидОснова/ВидАнимедиа — ядро, checks/boundaries.py); 2 393 тайтла на витрину, длина 57–180, дублей 0; заодно run.sh: visible-breadcrumbs через check при обёртке step не исполнялась — исправлено. Полные прогоны трёх ячеек идут."
+      "status": "live_verified",
+      "evidence": "Выпущено и проверено на живом 12.10: an1mego.site a86dde28e142, animeg0.site d5e7342201e9, an1meg0.site 03635768fb8f (все activated/live_verified). /title/verhovnyy-bog-2/: description и og:description «Верховный Бог 2 (Wu Shang Shen Di 2nd Season) — аниме-сериал 2021 года, в наличии N серий. Жанры: боевик, приключения, фэнтези, исторический. Смотреть онлайн на AnimeGo.», X-Robots-Tag index, follow. Правка только в ВидАнимеГо (boundaries: мои области не тронуты); checks/run.sh: visible-breadcrumbs теперь исполняется (step вместо check). Полные прогоны: 25/42/153 PASS, rc=0."
     },
     {
       "id": "B016",
