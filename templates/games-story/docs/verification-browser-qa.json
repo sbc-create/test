@@ -1,0 +1,131 @@
+{
+ "commit_head": "423ba88c63c8dda074beff1e27487bcb8d451fc8",
+ "at": "2026-10-12T22:05:09Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "no_external_requests_on_load": true,
+  "home_counters_zero": true,
+  "home_opens_tracker": true,
+  "tracker_totals_update": true,
+  "tracker_clamps_to_source_max": true,
+  "tracker_persists_after_reload": true,
+  "home_counters_after_progress": true,
+  "guide_tracker_shares_state": true,
+  "route_rendered": true,
+  "pager_next_chapter": true,
+  "tracker_reset_all": true,
+  "items_type_page": true,
+  "video_no_iframe_before_click": true,
+  "video_iframe_after_click": true,
+  "video_external_request_only_after_click": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "search_keyboard_results": 9,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "nojs_video_link_only": true,
+  "nojs_guide_route": 3,
+  "nojs_tracker_disabled_numbers_visible": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/igra/celeste/": [],
+  "mobile:/igra/celeste/glava-1-forsaken-city/": [],
+  "mobile:/igra/celeste/predmety/": [],
+  "mobile:/igra/celeste/predmety/krasnye-klubniki/": [],
+  "mobile:/video/": [],
+  "mobile:/igra/celeste/prolog/": [],
+  "mobile:/igra/celeste/glava-8-core/": [],
+  "mobile:/igra/celeste/glava-6-reflection/": [],
+  "mobile:/kak-my-rabotaem/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=Badeline": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/igra/celeste/": [],
+  "desktop:/igra/celeste/glava-1-forsaken-city/": [],
+  "desktop:/igra/celeste/predmety/": [],
+  "desktop:/igra/celeste/predmety/krasnye-klubniki/": [],
+  "desktop:/video/": [],
+  "desktop:/igra/celeste/prolog/": [],
+  "desktop:/igra/celeste/glava-8-core/": [],
+  "desktop:/igra/celeste/glava-6-reflection/": [],
+  "desktop:/kak-my-rabotaem/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=Badeline": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 144,
+   "cls": 0
+  },
+  "mobile:tracker": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "mobile:guide": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:items": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:item": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:videos": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 120,
+   "cls": 0
+  },
+  "desktop:tracker": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:guide": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:items": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "desktop:item": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "desktop:videos": {
+   "lcp_ms": 56,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8858/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8858/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/423ba88/home-mobile.png",
+  "docs/screenshots/423ba88/tracker-mobile.png",
+  "docs/screenshots/423ba88/guide-mobile.png",
+  "docs/screenshots/423ba88/items-mobile.png",
+  "docs/screenshots/423ba88/item-mobile.png",
+  "docs/screenshots/423ba88/videos-mobile.png",
+  "docs/screenshots/423ba88/home-desktop.png",
+  "docs/screenshots/423ba88/tracker-desktop.png",
+  "docs/screenshots/423ba88/guide-desktop.png",
+  "docs/screenshots/423ba88/items-desktop.png",
+  "docs/screenshots/423ba88/item-desktop.png",
+  "docs/screenshots/423ba88/videos-desktop.png"
+ ]
+}
