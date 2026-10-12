@@ -44,7 +44,7 @@ def test_second_pass_does_not_duplicate():
     assert два.count(слой.МЕТКА_МЕТРИКИ) == 1
 
 
-def test_id_from_unit_environment(monkeypatch):
+def test_id_from_environment(monkeypatch):
     monkeypatch.setenv(слой.ПЕРЕМЕННАЯ_GA4, ID)
     assert _отдать().count(f"gtag('config','{ID}')") == 1
     monkeypatch.delenv(слой.ПЕРЕМЕННАЯ_GA4)
@@ -75,7 +75,7 @@ def test_audit_discriminates_patched_and_unpatched():
     assert проба.беды_пробы(с_тегом, ID) == []
     assert проба.беды_пробы(без_тега, None) == []
     assert проба.беды_пробы(без_тега, ID)          # ожидали тег — его нет
-    assert проба.беды_пробы(с_тегом, None)         # тег без ID в реестре
+    assert проба.беды_пробы(с_тегом, None)         # тег без ID в site.json
     assert проба.беды_пробы(с_тегом, "G-OTHER0001")  # чужой ID
 
 
@@ -86,3 +86,23 @@ def test_audit_catches_duplicates():
     assert any("page_view" in б for б in проба.беды_пробы(_снимок(двойной), ID))
     две_метрики = _отдать(ga4=ID).replace("</head>", слой.тег_метрики("12345678") + "</head>")
     assert any("Метрика" in б for б in проба.беды_пробы(_снимок(две_метрики), ID))
+
+
+@pytest.mark.parametrize("плохой", ["G-abc", " ", "G-", "UA-1234-1"])
+def test_audit_names_malformed_expected_id(плохой):
+    # Слой с таким ID тега не ставит; проба это подтверждает И называет вход.
+    без_тега = _снимок(_отдать(ga4=плохой))
+    б = проба.беды_пробы(без_тега, плохой)
+    assert б and all("BLOCKED_INPUT" in х for х in б)
+    # а если тег всё же стоит — это отдельное нарушение
+    assert any("без ID" in х for х in проба.беды_пробы(_снимок(_отдать(ga4=ID)), плохой))
+
+
+def test_audit_catches_duplicate_marker_without_second_config():
+    т = _отдать(ga4=ID).replace("</head>", f'<script {слой.МЕТКА_GA4}"{ID}"></script></head>')
+    assert т.count("gtag('config'") == 1
+    assert any("метка data-ga4-id: 2" in б for б in проба.беды_пробы(_снимок(т), ID))
+
+
+def test_layer_and_audit_share_id_form():
+    assert слой._ФОРМАТ_GA4.pattern == проба.ФОРМА_ID.pattern

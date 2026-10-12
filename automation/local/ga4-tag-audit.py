@@ -24,6 +24,8 @@ import time
         "zonafilm.space", "zonafilm12.site", "zonafilm.cc", "an1mego.site", "animeg0.site",
         "an1meg0.site", "animedia.icu", "animedia.space")
 ПУТИ = ("/", "/catalog/")
+#: Та же форма, что у слоя (seo_layer._ФОРМАТ_GA4): иная тег не получает.
+ФОРМА_ID = re.compile(r"G-[A-Z0-9]{4,16}")
 
 
 def снять(хост: str, путь: str) -> dict:
@@ -54,10 +56,17 @@ def беды_пробы(с: dict, ждём: str | None) -> list[str]:
         б.append(f"Метрика: признаков {с['метрика']} (ждём 1)")
     if с["page_view"]:
         б.append(f"явный page_view: {с['page_view']}")
+    if ждём is not None and not ФОРМА_ID.fullmatch(ждём.strip()):
+        # ID задан, но не проходит форму: слой тега не поставит. Проба это
+        # называет (BLOCKED_INPUT), а не молчит, и проверяет, что тега нет.
+        б.append(f"BLOCKED_INPUT: ID {ждём!r} не проходит форму G-[A-Z0-9]{{4,16}} — тега быть не должно")
+        ждём = None
     if ждём is None:
         if с["ga4_id"] or с["config"] or с["gtm"]:
-            б.append(f"тег GA4 без ID в реестре: {с['ga4_id']} config={с['config']} gtm={с['gtm']}")
+            б.append(f"тег GA4 без ID в site.json: {с['ga4_id']} config={с['config']} gtm={с['gtm']}")
     else:
+        if len(с["ga4_id"]) != 1:
+            б.append(f"метка data-ga4-id: {len(с['ga4_id'])} шт (ждём 1)")
         if с["ga4_id"] != [ждём]:
             б.append(f"ID {с['ga4_id']} (ждём [{ждём}])")
         if с["config"] != 1 or с["gtm"] != 1:
