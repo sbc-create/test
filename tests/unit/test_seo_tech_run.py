@@ -165,3 +165,18 @@ def test_broken_check_is_unusable_not_discriminating(среда):
 def test_exit_code_2_is_unusable(среда):
     _сделать(среда, "D2", проверка="import sys; sys.exit(2)\n")
     assert tech_run.verify("D2", state=среда["state"])["steps"]["check_usable"] is False
+
+
+def test_cyrillic_check_path_found_in_branch(среда):
+    среда["задача"]["check"] = "checks/проверка_h1.py"
+    захват = tech_run.claim(среда["задача"], "E1", state=среда["state"])
+    копия = Path(захват["worktree"])
+    (копия / "checks" / "проверка_h1.py").write_text(ПРОВЕРКА_ПАДАЮЩАЯ_НА_БАЗЕ)
+    (копия / "page.html").write_text("<h1>t</h1>")
+    _git(копия, "-c", "user.email=t@t", "-c", "user.name=t", "add", ".")
+    _git(копия, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "правка")
+    import json as _j
+    очередь = tech_run.QUEUE
+    д = _j.loads(очередь.read_text()); д["tasks"][0]["check"] = "checks/проверка_h1.py"; очередь.write_text(_j.dumps(д))
+    итог = tech_run.verify("E1", state=среда["state"])
+    assert итог["steps"]["check_in_branch"] is True and итог["verdict"] == "VERIFIED", итог

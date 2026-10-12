@@ -209,8 +209,18 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
             if замок and владелец == run_id and not живой:
                 замок.unlink(missing_ok=True)
             убрано.append(копия.name)
+    # Прогон, умерший между worktree add и записью журнала, оставляет копию без
+    # записи в claims.jsonl: её репозиторий неизвестен. Поэтому prune — по всем
+    # репозиториям очереди, а не только по найденным.
+    try:
+        for з in load_queue():
+            if з.get("repo") and "*" not in з["repo"] and "<" not in з["repo"]:
+                репозитории.add(REPO / з["repo"])
+    except (OSError, ValueError, KeyError):
+        pass
     for репо in репозитории:
-        _git(репо, "worktree", "prune", check=False)
+        if (репо / ".git").exists():
+            _git(репо, "worktree", "prune", check=False)
     return убрано
 
 
@@ -247,8 +257,10 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
     шаги["check_declared"] = bool(проверка)
 
     if шаги["has_commit"] and проверка:
-        файлы = _git(репо, "ls-tree", "-r", "--name-only", голова)
-        шаги["check_in_branch"] = проверка in файлы.splitlines()
+        # -z: без экранирования не-ASCII путей (иначе кириллическое имя проверки
+        # не нашлось бы в ветке — замечание Архитектора 12.10).
+        файлы = _git(репо, "ls-tree", "-r", "-z", "--name-only", голова)
+        шаги["check_in_branch"] = проверка in файлы.split("\0")
         if шаги["check_in_branch"]:
             база_wt = state / "wt" / f"{run_id}-verify-base"
             голова_wt = state / "wt" / f"{run_id}-verify-head"
