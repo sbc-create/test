@@ -42,7 +42,7 @@
 | food-daily | claude/template-food-daily / wt-template-food-daily | 59972fa (+ лента каталога 5ac8115) | 127.0.0.1:8847 | #95 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | food-baking | claude/template-food-baking / wt-template-food-baking | cd39fdc | 127.0.0.1:8848 | #96 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | food-weekly | claude/template-food-weekly / wt-template-food-weekly | 8b1e34d | 127.0.0.1:8849 | #97 | READY_FOR_REVIEW_WITH_BLOCKERS |
-| food-appliances | claude/template-food-appliances (создаётся) | — | 127.0.0.1:8850 (план) | — | building |
+| food-appliances | claude/template-food-appliances / wt-template-food-appliances | 0dc5e4d | 127.0.0.1:8850 | #98 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | остальные 6 | — | — | — | — | planned |
 
 Ревизия после ~30 задач: лучше — три работающих сайта с собственными дизайнами и axe 0;
@@ -50,5 +50,9 @@
 (решение: работать через `cd` из исходной сессии); проверить перед продолжением — ruff format
 перед каждым коммитом, CI-гейт красный из-за общего линта (handoff).
 
-Продолжение: `cd /home/claude/wt-template-food-appliances` (после создания) → аудит SharkNinja и
-профильного раздела Еды → импорт рецептов в мультиварке/аэрогриле → шаблон «от прибора к блюду».
+Ревизия после food-appliances: лучше — табло прибора со ссылками на шаги, валидатор режимов
+(выдуманный режим или число отклоняется), axe 0 после исправления контраста; сломалось — ничего;
+проверить — гриль без полных фактов (раздел 404), мелочи мобильной шапки и крошек (REPORT.md).
+
+Продолжение: home-practical — новая ветка `claude/template-home-practical` и worktree от origin/main,
+сначала аудит 3 референсов (хосты только из задания; если их нет — BLOCKED_INPUT, без подстановки).
