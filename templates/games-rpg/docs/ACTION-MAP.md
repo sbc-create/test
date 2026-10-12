@@ -1,7 +1,7 @@
 # Карта действий games-rpg, вариант A (codex-sections)
 
-Проверено на commit `125d884` в Chromium: `bin/games-rpg qa` → `docs/verification-browser-qa.json`, exit 0.
-Каждая строка — действие с проверкой результата (описание — в `quest/qa.py` под тем же именем).
+Проверено на commit `14d7192` в Chromium: `bin/games-rpg qa --shots docs/screenshots/14d7192 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
 | --- | --- | --- |
@@ -25,6 +25,6 @@
 | history_back_returns | PASS | `True` |
 | nojs_stages_listed | PASS | `8` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 24 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 29 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 30 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
