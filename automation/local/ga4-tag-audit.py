@@ -6,6 +6,7 @@
   gtag config, ни одного явного page_view (его шлёт config — явный задвоил бы);
 * домен БЕЗ ожидаемого ID: тега GA4 нет вовсе (правило «нет ID — нет тега»);
 * Метрика на месте и не задвоена: признак счётчика ровно один;
+* смешение: один ID на двух доменах — отказ на входе и нарушение на живых страницах;
 * число для веса страницы: байты и время ответа — сравнивать до и после.
 Непатченная витрина без --expect даёт «ок» по отсутствию тега и НАРУШЕНИЕ, если
 для неё ожидание задано, — так проба доказуемо различает. Не измерено — отдельно.
@@ -74,6 +75,14 @@ def беды_пробы(с: dict, ждём: str | None) -> list[str]:
     return б
 
 
+def смешение(ожидания: dict[str, str]) -> dict[str, list[str]]:
+    """ID, ожидаемые у двух и более доменов: у каждого сайта свой ресурс."""
+    по_id: dict[str, list[str]] = {}
+    for домен, и in ожидания.items():
+        по_id.setdefault(и.strip(), []).append(домен)
+    return {и: sorted(д) for и, д in по_id.items() if len(д) > 1}
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--expect", action="append", default=[], metavar="домен=G-ID")
@@ -85,6 +94,11 @@ def main(argv: list[str] | None = None) -> int:
         print("домены вне перечня")
         return 2
     плохо = 0
+    повтор = смешение(ожидания)
+    if повтор:
+        print("ОТКАЗ — один ID ожидается у нескольких доменов (смешение данных):", повтор)
+        return 2
+    увидено: dict[str, set[str]] = {}
     for х in хосты:
         for путь in ПУТИ:
             try:
@@ -94,11 +108,17 @@ def main(argv: list[str] | None = None) -> int:
                 плохо += 1
                 continue
             б = беды_пробы(с, ожидания.get(х))
+            for и in с["ga4_id"]:
+                увидено.setdefault(и, set()).add(х)
             плохо += bool(б)
             print(f"{'ок' if not б else 'НАРУШЕНИЕ':10} {х + путь:32} build {с['build']} ga4={с['ga4_id']} "
                   f"config={с['config']} метрика={с['метрика']} {с['байт']} Б {с['сек']} с", flush=True)
             for стр in б:
                 print("    ·", стр)
+    for и, домены in sorted(увидено.items()):
+        if len(домены) > 1:
+            print(f"НАРУШЕНИЕ  смешение: {и} стоит на {sorted(домены)}")
+            плохо += 1
     print("ИТОГ", "чисто" if not плохо else f"нарушений/не измерено: {плохо}")
     return 1 if плохо else 0
 

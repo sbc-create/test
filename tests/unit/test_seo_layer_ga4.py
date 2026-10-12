@@ -17,7 +17,9 @@ ID = "G-TESTSTREAM1"  # синтетический, формат потока; �
 
 
 def _отдать(тело=СТРАНИЦА, **к) -> str:
-    return слой.обогатить(тело, "text/html; charset=utf-8", хост="example.test", путь="/", counter="12345678",
+    к.setdefault("ga4_хосты", "example.test")
+    к.setdefault("counter", "12345678")
+    return слой.обогатить(тело, "text/html; charset=utf-8", хост=к.pop("хост", "example.test"), путь="/",
                           **к).decode("utf-8")
 
 
@@ -46,9 +48,10 @@ def test_second_pass_does_not_duplicate():
 
 def test_id_from_environment(monkeypatch):
     monkeypatch.setenv(слой.ПЕРЕМЕННАЯ_GA4, ID)
-    assert _отдать().count(f"gtag('config','{ID}')") == 1
+    monkeypatch.setenv(слой.ПЕРЕМЕННАЯ_GA4_ХОСТЫ, "example.test")
+    assert _отдать(ga4_хосты=None).count(f"gtag('config','{ID}')") == 1
     monkeypatch.delenv(слой.ПЕРЕМЕННАЯ_GA4)
-    assert "gtag(" not in _отдать()
+    assert "gtag(" not in _отдать(ga4_хосты=None)
 
 
 def test_explicit_empty_beats_environment(monkeypatch):
@@ -106,3 +109,28 @@ def test_audit_catches_duplicate_marker_without_second_config():
 
 def test_layer_and_audit_share_id_form():
     assert слой._ФОРМАТ_GA4.pattern == проба.ФОРМА_ID.pattern
+
+
+def test_host_guard_fails_closed():
+    assert "gtag(" not in _отдать(ga4=ID, ga4_хосты="")                       # нет списка — нет тега
+    assert "gtag(" not in _отдать(ga4=ID, хост="preview.example.test")       # превью/чужой хост
+    assert "gtag(" not in _отдать(ga4=ID, хост="", ga4_хосты="example.test")
+    assert _отдать(ga4=ID, хост="EXAMPLE.test:443").count("gtag('config'") == 1
+    assert _отдать(ga4=ID, хост="b.test", ga4_хосты="a.test, b.test").count("gtag('config'") == 1
+
+
+def test_ga4_independent_of_metrika():
+    т = _отдать(ga4=ID, counter="")                 # Метрики нет — GA4 есть
+    assert т.count("gtag('config'") == 1 and слой.МЕТКА_МЕТРИКИ not in т
+    т = _отдать(ga4=ID, counter="не-число")
+    assert т.count("gtag('config'") == 1
+    т = _отдать(ga4="", counter="12345678")         # и наоборот
+    assert "gtag(" not in т and т.count(слой.МЕТКА_МЕТРИКИ) == 1
+    # Скрипт GA4 не ждёт Метрику: в теге нет ни ym, ни флага Метрики.
+    тег = слой.тег_ga4(ID)
+    assert "ym(" not in тег and "__sfMetrika" not in тег and "mc.yandex" not in тег
+
+
+def test_audit_refuses_shared_id():
+    assert проба.смешение({"a.test": ID, "b.test": ID, "c.test": "G-OTHER0001"}) == {ID: ["a.test", "b.test"]}
+    assert проба.смешение({"a.test": ID, "b.test": "G-OTHER0001"}) == {}
