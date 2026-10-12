@@ -1,0 +1,7 @@
+<article class="plan">
+  <{{ hl|default("h3") }} class="plan__title"><a href="/menyu/{{ p.slug }}/">{{ p.title }}</a></{{ hl|default("h3") }}>
+  <p>{{ p.description }}</p>
+  <p class="plan__meta">{{ p.people }} чел. · 7 дней · 21 приём пищи</p>
+  <ol class="mini" aria-label="Ужины недели">{% for d in p.days %}<li><span>{{ DAYS[loop.index0][:2] }}</span> {{ app.catalogs['food-daily']['items'][d.dinner[0].slug].title }}</li>{% endfor %}</ol>
+  <p class="plan__links"><a href="/menyu/{{ p.slug }}/">Неделя</a> · <a href="/menyu/{{ p.slug }}/pokupki/">Список покупок</a></p>
+</article>

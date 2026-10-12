@@ -452,6 +452,8 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # PRACTICAL-NETWORK-NIGHT-CONTINUE-02: референсы food-weekly
+            "menunedeli.ru", "www.mealime.com", "www.plantoeat.com",
         }
 
 

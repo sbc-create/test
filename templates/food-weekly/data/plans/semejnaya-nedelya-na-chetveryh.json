@@ -1,0 +1,161 @@
+{
+ "slug": "semejnaya-nedelya-na-chetveryh",
+ "title": "Семейная неделя на четверых",
+ "people": 4,
+ "description": "Неделя на семью из четырёх человек: сытные вторые блюда, супы на обед и разные завтраки каждый день.",
+ "days": [
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "pyshnye-oladi-na-kefire"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "kurinyj-sup-s-syrnymi-klyockami"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "domashnie-kotlety"
+    },
+    {
+     "site": "food-daily",
+     "slug": "grechka-po-kupecheski"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "tvorozhnaya-zapekanka-na-zheltkah"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "sup-s-frikadelkami"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "kurica-v-slivochnom-souse"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "bliny-na-moloke-i-kefire"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "chechevichnyj-sup-s-ovoshchami"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "makarony-po-flotski"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "pshennaya-kasha-s-tykvoj"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "salat-s-kuricej-gribami-i-yajcom"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "tefteli-v-tomatnom-souse"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "syrniki-s-ezhevikoj"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "sup-s-frikadelkami"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "plov-s-kuricej"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "lenivye-vareniki"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "grecheskij-salat"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "mintaj-v-slivkah"
+    },
+    {
+     "site": "food-daily",
+     "slug": "zapechennaya-cvetnaya-kapusta"
+    }
+   ]
+  },
+  {
+   "breakfast": [
+    {
+     "site": "food-daily",
+     "slug": "pyshnye-oladi-na-kefire"
+    }
+   ],
+   "lunch": [
+    {
+     "site": "food-daily",
+     "slug": "kurinyj-sup-s-syrnymi-klyockami"
+    }
+   ],
+   "dinner": [
+    {
+     "site": "food-daily",
+     "slug": "domashnie-kotlety"
+    }
+   ]
+  }
+ ],
+ "schema_version": 1,
+ "site_id": "food-weekly",
+ "author_mode": "manual_standin",
+ "note": "план составлен сессией Claude из каталога food-daily; не Qwen, не проверен редактором",
+ "published_at": "2026-10-12"
+}

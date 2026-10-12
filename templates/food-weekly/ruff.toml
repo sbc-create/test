@@ -1,0 +1,8 @@
+# Настройки ruff только для шаблона food-weekly; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"weekplan/qa.py" = ["E501"]
+"weekplan/server.py" = ["E501"]
+"weekplan/build.py" = ["E501"]

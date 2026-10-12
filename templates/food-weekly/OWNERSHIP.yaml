@@ -1,0 +1,20 @@
+template: food-weekly
+branch: claude/template-food-weekly
+worktree: /home/claude/wt-template-food-weekly
+base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main, не ветки других шаблонов
+owner_scope:
+  write: [templates/food-weekly/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста аудита по заданию NIGHT-CONTINUE-02, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m weekplan.server (pid var/food-weekly/run/preview.pid)"
+  bind: 127.0.0.1:8849
+  data: templates/food-weekly/data (планы + снимок каталога food-daily)
+  build: var/food-weekly/build/<commit>
+  qa_dependencies: templates/food-weekly/qa (axe-core 4.13.0, свой lockfile)
+network_contracts:
+  - consumer_of: "food-daily /api/catalog.v1.json (recipe-catalog/1), только 127.0.0.1 в preview"
+shared_with_other_templates: []
