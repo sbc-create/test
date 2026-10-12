@@ -1,5 +1,7 @@
 site_id: food-appliances
 name: "Готовим в технике"       # рабочее название
+variant_id: device-panel   # вариант A; вариант B — ветка claude/template-food-appliances-b
+variant_version: "1"
 mode: preview
 production_authorized: false
 origin:

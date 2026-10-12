@@ -138,3 +138,9 @@ def test_no_cross_template_code():
             and p.name != "test_food_appliances.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_variant_identity_meta(app):
+    _, html, _ = app.route("/", {})
+    assert '<meta name="site-factory-variant-id" content="device-panel">' in html
+    assert '<meta name="site-factory-variant-version" content="1">' in html

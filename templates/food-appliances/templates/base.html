@@ -6,6 +6,8 @@
 <title>{{ meta.title }}{% if meta.kind != 'home' %} · Готовим в технике{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ robots }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 <meta property="og:url" content="{{ meta.canonical }}">
 {% endif %}
