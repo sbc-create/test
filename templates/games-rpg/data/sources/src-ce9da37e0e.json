@@ -1,0 +1,25 @@
+{
+ "id": "src-ce9da37e0e",
+ "url": "https://bg3.wiki/wiki/Wyll",
+ "fetched_at": "2026-10-12T22:08:56Z",
+ "page_sha256": "312f4137b0bde8adeccc313c35fc16a6e65d18143ebe7b47ee432010a5a05812",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Wyll",
+ "lead": [
+  "Wyll Ravengard is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. He is a Human and a Fiend Warlock with the Folk Hero background. Wyll is first encountered just outside the Emerald Grove in Act One .",
+  "Known as the \"Blade of Frontiers\" across the marches of Baldur's Gate , Wyll is a valiant hero who fights injustice and hunts monsters wherever they may hide. Though forever bound to his infernal patron Mizora , he has dedicated his whole life to protecting the city he loves."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 8,
+  "DEX": 13,
+  "CON": 14,
+  "INT": 13,
+  "WIS": 10,
+  "CHA": 17
+ }
+}

@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<article class="entry" data-slug="{{ e.slug }}" data-version="{{ e.version }}">
+  <p class="kicker">{{ site.games[e.game].title }} · <span lang="en">{{ e.src.name }}</span></p>
+  <h1>{{ e.title }}</h1>
+  <p class="lead">{{ e.summary }} <a class="ref" href="#ist-1" aria-label="Источник">[1]</a></p>
+  {% if e.patches or site.version %}<p class="patchnote">{% if e.patches %}Пометки о патчах на странице источника: {{ e.patches|join(', ') }}. {% endif %}{% if site.version and e.type != 'version' %}Сверено с источником после {{ site.version.src.name }}.{% endif %}</p>{% endif %}
+  {% if e.points %}<section aria-labelledby="h-pts"><h2 id="h-pts">Главное</h2><ul class="pts">{% for x in e.points %}<li>{{ x }}</li>{% endfor %}</ul></section>{% endif %}
+  {% if e.abilities %}<section aria-labelledby="h-ab"><h2 id="h-ab">Характеристики по умолчанию</h2>
+    <dl class="abil">{% for k, v in e.abilities %}<div><dt>{{ k }}</dt><dd>{{ v }}</dd></div>{% endfor %}</dl></section>{% endif %}
+  {% if e.progression %}<section aria-labelledby="h-pr"><h2 id="h-pr">Что класс получает по уровням</h2>
+    <div class="tablewrap" role="region" aria-label="Прогрессия класса" tabindex="0"><table class="prog"><thead><tr><th scope="col">Уровень</th><th scope="col">Бонус мастерства</th><th scope="col">Умения</th></tr></thead>
+    <tbody>{% for r in e.progression %}<tr><th scope="row">{{ r.level }}</th><td>{{ r.bonus or '' }}</td><td lang="en">{{ r.features }}</td></tr>{% endfor %}</tbody></table></div>
+    <p class="note">Бонус мастерства зависит от уровня персонажа, а не класса — как указано в источнике.</p></section>{% endif %}
+  {% if e.stages %}<section class="check" aria-labelledby="h-st"><h2 id="h-st">Этапы прохождения</h2><p class="note">Названия этапов — как в источнике. Отмечайте пройденное — отметки сохраняются на этом устройстве.</p>
+    <ul>{% for x in e.stages %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span lang="en">{{ x }}</span></label></li>{% endfor %}</ul>
+    <p class="note" data-check-status aria-live="polite"></p><button type="button" class="btn btn--line" data-check-reset hidden>Снять отметки</button></section>{% endif %}
+  {% if e.tips %}<section aria-labelledby="h-tips"><h2 id="h-tips">Совет редакции</h2><p class="note">Наша рекомендация, а не текст источника.</p><ul>{% for x in e.tips %}<li>{{ x }}</li>{% endfor %}</ul></section>{% endif %}
+  <p><button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
+  <section class="sources" aria-labelledby="h-src"><h2 id="h-src">Источники</h2>
+    <ol><li id="ist-1"><a href="{{ e.src.url }}" rel="nofollow noopener" lang="en">{{ e.src.name }} — {{ e.src.publisher }}</a>, прочитан {{ e.src.fetched_at[:10] }}.</li>{% for s in e.also %}<li><a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }} — {{ s.publisher }}</a>.</li>{% endfor %}</ol>
+    <p class="note">Версия материала {{ e.version }}, опубликовано {{ e.published_at }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла. Вики распространяется по CC BY-NC-SA — мы не копируем её текст, только ссылаемся и пересказываем факты.</p>
+  </section>
+</article>
+{% set rel = site.related(e) %}{% if rel %}<section aria-labelledby="h-rel"><h2 id="h-rel">Связанное</h2>{{ grid(rel) }}</section>{% endif %}
+{% endblock %}

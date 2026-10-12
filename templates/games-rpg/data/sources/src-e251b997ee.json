@@ -1,0 +1,27 @@
+{
+ "id": "src-e251b997ee",
+ "url": "https://bg3.wiki/wiki/Karlach",
+ "fetched_at": "2026-10-12T22:08:58Z",
+ "page_sha256": "4a0a7ae558fcead641f053e9872fe079670fd9da3dabcb07e753f820274b637f",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Karlach",
+ "lead": [
+  "Karlach Cliffgate is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. She is a Zariel Tiefling and a Barbarian with the Outlander background. Karlach is on the Risen Road during Act One.",
+  "Once a soldier in Zariel's army, Karlach has been given a new chance at life after the recent events. Now, freed from Avernus , she will make the most out of it, and no one will get in her way."
+ ],
+ "patches": [
+  "Patch 8"
+ ],
+ "abilities": {
+  "STR": 17,
+  "DEX": 13,
+  "CON": 15,
+  "INT": 8,
+  "WIS": 12,
+  "CHA": 10
+ }
+}

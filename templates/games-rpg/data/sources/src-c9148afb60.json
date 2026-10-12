@@ -1,0 +1,17 @@
+{
+ "id": "src-c9148afb60",
+ "url": "https://bg3.wiki/wiki/Long_rest",
+ "fetched_at": "2026-10-12T22:09:08Z",
+ "page_sha256": "76ffd3d68a149c4cfae433ec834d5654f12ad7b66415718173eeb171e54b0e65",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "mechanic",
+ "name": "Resting",
+ "lead": [
+  "Resting is a gameplay mechanic used to restore lost hit points and depleted resources .",
+  "Rests can be either long or short. Long rests restore all lost hit points and spent resources, whereas short rests restore a limited amount of hit points, and a smaller variety of resources."
+ ],
+ "patches": []
+}

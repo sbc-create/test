@@ -1,0 +1,860 @@
+{
+ "site_id": "games-rpg",
+ "ownership": {
+  "contract": "games-ownership/1",
+  "games": {
+   "celeste": {
+    "owner": "games-story",
+    "title": "Celeste",
+    "wiki": "celeste.ink"
+   },
+   "baldurs-gate-3": {
+    "owner": "games-rpg",
+    "title": "Baldur's Gate 3",
+    "wiki": "bg3.wiki"
+   },
+   "minecraft": {
+    "owner": "games-survival",
+    "title": "Minecraft",
+    "wiki": "minecraft.wiki"
+   }
+  }
+ },
+ "items": [
+  {
+   "slug": "astarion",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-ca757cc885",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Astarion: плут из высших эльфов",
+   "summary": "Персонаж-«origin» и спутник, с которым возможен роман для героя любого пола. Высший эльф, плут с предысторией «Шарлатан». Впервые встречается к западу от обломков Наутилоида в первом акте.",
+   "points": [
+    "Класс: плут (Rogue)",
+    "Раса: высший эльф",
+    "Предыстория: Charlatan"
+   ],
+   "tips": [],
+   "related": [
+    "shadowheart",
+    "gale"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "0b5343bd480a0119be76627b2e074b863cc44a9363f67fb784df24472f06dbbb",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "gale",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-e9fef0292b",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Gale: волшебник-человек",
+   "summary": "Персонаж-«origin» и спутник, с которым возможен роман для героя любого пола. Человек, волшебник с предысторией «Мудрец». Впервые встречается у точки быстрого перемещения Roadside Cliffs в первом акте.",
+   "points": [
+    "Класс: волшебник (Wizard)",
+    "Раса: человек",
+    "Предыстория: Sage"
+   ],
+   "tips": [],
+   "related": [
+    "klass-volshebnik",
+    "astarion"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "28073bdb35b60d118a23c4d20e7ea6444bbaf273df39a5fee6863cd6218d4301",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "karlach",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-e251b997ee",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Karlach: варвар-тифлинг",
+   "summary": "Персонаж-«origin» и спутница, с которой возможен роман для героя любого пола. Тифлинг Зариэль, варвар с предысторией «Чужеземец». В первом акте находится на Risen Road.",
+   "points": [
+    "Класс: варвар (Barbarian)",
+    "Раса: тифлинг Зариэль",
+    "Предыстория: Outlander"
+   ],
+   "tips": [],
+   "related": [
+    "wyll",
+    "klass-voin"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "7875127a65420b9240eb3a1f5c7128cc3c82d6eeb187ccf602e3d4ae5aa2ac06",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "klass-voin",
+   "game": "baldurs-gate-3",
+   "type": "build",
+   "src": "src-395a070a05",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Основа билда: воин (Fighter)",
+   "summary": "Воин сражается боевым мастерством; основная характеристика — Сила или Ловкость. Ниже — что класс получает по уровням по таблице источника.",
+   "points": [
+    "Уровень 5: дополнительная атака (Extra Attack)",
+    "Уровень 11: улучшенная дополнительная атака",
+    "Подкласс выбирается на уровне 3"
+   ],
+   "tips": [
+    "Это основа билда по таблице класса, а не готовая сборка: выбор черт и экипировки зависит от вашей партии."
+   ],
+   "related": [
+    "laezel",
+    "karlach"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "16ad47b9d64b972ab817095526ad50a21423cabc94af3820df72dc8a97ff5fcc",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "klass-volshebnik",
+   "game": "baldurs-gate-3",
+   "type": "build",
+   "src": "src-0c24db2609",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Основа билда: волшебник (Wizard)",
+   "summary": "Волшебник использует знание тайной магии; основная характеристика — Интеллект.",
+   "points": [
+    "Основная характеристика: Интеллект"
+   ],
+   "tips": [
+    "Таблицу прогрессии волшебника мы не публикуем: в источнике она содержит слоты заклинаний, и наш разбор не прошёл проверку. Смотрите источник."
+   ],
+   "related": [
+    "gale"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "736b29f644ea4073d23fa38f3a6611107145f4c32f026eca9f70c5645529fe63",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "klass-zhrec",
+   "game": "baldurs-gate-3",
+   "type": "build",
+   "src": "src-f3a21cbfbe",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Основа билда: жрец (Cleric)",
+   "summary": "Жрец действует волей своего божества и колдует силой веры; основная характеристика — Мудрость.",
+   "points": [
+    "Основная характеристика: Мудрость"
+   ],
+   "tips": [
+    "Таблицу прогрессии жреца мы не публикуем: в источнике она содержит слоты заклинаний, и наш разбор не прошёл проверку. Смотрите источник."
+   ],
+   "related": [
+    "shadowheart"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "d48c35cb5953786291e4d3126a692d4a0346ec0d7c9b565e47aeee3b1f6e8563",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "kvest-spasti-halsina",
+   "game": "baldurs-gate-3",
+   "type": "quest",
+   "src": "src-2aec74bfe6",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Квест: спасти друида Халсина",
+   "summary": "Побочный квест основного задания первого акта «Find a Cure». Начинается в Роще друидов после разговоров с NPC об исчезновении Халсина; сведения о нём дают Нетти и Рат во Внутреннем святилище.",
+   "points": [
+    "Акт: первый",
+    "Родительский квест: Find a Cure"
+   ],
+   "tips": [],
+   "related": [
+    "wyll",
+    "kvest-yasli-gityanki"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [
+    "Этап: Entering the Goblin Camp",
+    "Этап: The Shattered Sanctum",
+    "Этап: Freeing Halsin",
+    "Этап: Priestess Gut",
+    "Этап: Minthara",
+    "Этап: Dror Ragzlin",
+    "Этап: Back in the Worg Pens",
+    "Этап: Getting the Rewards"
+   ],
+   "version": 1,
+   "text_hash": "d7a973168bea65a307ae4f34a8df78636a5dfa401b27139a289fe6663c7e857b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "kvest-yasli-gityanki",
+   "game": "baldurs-gate-3",
+   "type": "quest",
+   "src": "src-2b18010e96",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Квест: найти ясли гитьянки",
+   "summary": "Побочный квест основного задания первого акта «Find a Cure». Начинается, как только Lae'zel освобождена и присоединилась к отряду; большую часть первого акта связан с её личным квестом «The Githyanki Warrior».",
+   "points": [
+    "Акт: первый",
+    "Родительский квест: Find a Cure",
+    "Связан с личным квестом Lae'zel"
+   ],
+   "tips": [
+    "Цели и записи журнала могут отличаться в зависимости от ваших решений."
+   ],
+   "related": [
+    "laezel",
+    "kvest-spasti-halsina"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [
+    "Этап: The Githyanki Patrol",
+    "Этап: Accessing the Monastery",
+    "Этап: The Githyanki Crèche",
+    "Этап: The Infirmary",
+    "Этап: The Kith'rak"
+   ],
+   "version": 1,
+   "text_hash": "0c6707971a1fe9a44da6f5e9720350674ba79b45cfda585a7a5006a53f6ba00e",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "laezel",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-f89ddc7048",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Lae'zel: воин-гитьянки",
+   "summary": "Персонаж-«origin» и спутница, с которой возможен роман для героя любого пола. Гитьянки, воин с предысторией «Солдат». Если не играть за неё, впервые встречается на Наутилоиде в прологе.",
+   "points": [
+    "Класс: воин (Fighter)",
+    "Раса: гитьянки",
+    "Предыстория: Soldier"
+   ],
+   "tips": [],
+   "related": [
+    "klass-voin",
+    "kvest-yasli-gityanki"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "45163092c35202d5feeb0fe9f38b152aa378405e07ca3c5689dfdf7c30cfb6c9",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "mehanika-otdyh",
+   "game": "baldurs-gate-3",
+   "type": "mechanic",
+   "src": "src-c9148afb60",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Механика: короткий и долгий отдых",
+   "summary": "Отдых восстанавливает здоровье и ресурсы. Долгий отдых восстанавливает всё потерянное здоровье и все потраченные ресурсы, короткий — часть здоровья и меньший набор ресурсов.",
+   "points": [
+    "Долгий отдых: всё здоровье и все ресурсы",
+    "Короткий отдых: часть здоровья и часть ресурсов"
+   ],
+   "tips": [],
+   "related": [
+    "mehanika-preimushchestvo"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "abb471567a24f29f3ea66b7a47849cd26caffee2faf717db6e13a82c285cc1ca",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "mehanika-preimushchestvo",
+   "game": "baldurs-gate-3",
+   "type": "mechanic",
+   "src": "src-80cb6e2007",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Механика: преимущество и помеха",
+   "summary": "С преимуществом бросаются две d20 и берётся больший результат, с помехой — меньший. Те же термины используются и для состязаний проверок характеристик.",
+   "points": [
+    "Преимущество: две d20, выбирается больший результат",
+    "Помеха: две d20, выбирается меньший результат",
+    "Страница источника содержит пометку о Patch 7"
+   ],
+   "tips": [],
+   "related": [
+    "mehanika-otdyh"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "4d04c704417bd2c44e4b4405b7a12a86474d60279a6f9af3604488ec491bb30d",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "shadowheart",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-b9458ea969",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Shadowheart: жрица-полуэльфийка",
+   "summary": "Персонаж-«origin» и спутница, с которой возможен роман для героя любого пола. Высшая полуэльфийка, жрица домена Обмана с предысторией «Прислужник». Впервые встречается на Наутилоиде в прологе.",
+   "points": [
+    "Класс: жрица (Cleric), домен Обмана",
+    "Раса: высшая полуэльфийка",
+    "Предыстория: Acolyte"
+   ],
+   "tips": [],
+   "related": [
+    "klass-zhrec",
+    "astarion"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "ffea67c7947bf941bc7363664c2e5d0b4df9f6dec4605c8806d57ad50946ef18",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "versiya-patch-8",
+   "game": "baldurs-gate-3",
+   "type": "version",
+   "src": "src-07bd2e5b20",
+   "also": [],
+   "title": "Версия игры: Patch 8 — финальный крупный патч",
+   "summary": "По данным вики, Patch 8 — последний крупный патч Baldur's Gate 3; вышел 15 апреля 2025 года. Главное в нём — фоторежим и новый подкласс для каждого из 12 классов.",
+   "points": [
+    "Материалы сайта сверены со страницами вики, прочитанными после выхода Patch 8.",
+    "Если сведения зависят от патча, это указано на странице материала."
+   ],
+   "tips": [],
+   "related": [],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "1aef817a3637d23648a14307d87ba98baba1ae6cf9f5367fa47f33bbfc32892c",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "wyll",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-ce9da37e0e",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Wyll: колдун с покровителем-исчадием",
+   "summary": "Персонаж-«origin» и спутник, с которым возможен роман для героя любого пола. Человек, колдун покровителя-исчадия с предысторией «Народный герой». Впервые встречается у входа в Изумрудную рощу в первом акте.",
+   "points": [
+    "Класс: колдун (Warlock), покровитель — исчадие",
+    "Раса: человек",
+    "Предыстория: Folk Hero"
+   ],
+   "tips": [],
+   "related": [
+    "karlach",
+    "kvest-spasti-halsina"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "d2a0a46141b6d42e8031c851693fd5fd4a092f971d9bea61f50571bf8c170f14",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-07bd2e5b20": {
+   "id": "src-07bd2e5b20",
+   "url": "https://bg3.wiki/wiki/Patch_8",
+   "fetched_at": "2026-10-12T22:09:15Z",
+   "page_sha256": "b17661c7502edf2681f521231d602ce4e570ee159dca645a6eea617602b3f54b",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "patch",
+   "name": "Patch 8",
+   "lead": [
+    "Patch 8 is the final major patch for Baldur's Gate 3 and was released on April 15, 2025.",
+    "The highlights of patch 8 are Photo mode and the addition of a new subclass for each of the 12 classes in the game."
+   ],
+   "patches": [
+    "Patch 8"
+   ]
+  },
+  "src-0c24db2609": {
+   "id": "src-0c24db2609",
+   "url": "https://bg3.wiki/wiki/Wizard",
+   "fetched_at": "2026-10-12T22:09:02Z",
+   "page_sha256": "c4befcddd97203eb001a3e4992887c918898ef3cfef391b5072195deb4fa8ac1",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "class",
+   "name": "Wizard",
+   "lead": [
+    "Wizards channel magic through their extensive knowledge of the arcane to fight enemies and aid allies in combat. Wizards use Intelligence as their primary ability score.",
+    "Through experience, you acquire new power. You gain the following traits."
+   ],
+   "patches": [],
+   "progression": [],
+   "progression_parsed": false
+  },
+  "src-2aec74bfe6": {
+   "id": "src-2aec74bfe6",
+   "url": "https://bg3.wiki/wiki/Rescue_the_Druid_Halsin",
+   "fetched_at": "2026-10-12T22:09:11Z",
+   "page_sha256": "1ee4e4d8dc28ea0482d0d9f4814ad3864167eed3ce3d508f9ea41978dc62e365",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "quest",
+   "name": "Rescue the Druid Halsin",
+   "lead": [
+    "Rescue the Druid Halsin is a sub- Quest of Act One's main quest, ⁠ Find a Cure . It can be initiated after entering the Druid Grove by speaking with various Non-player characters about Halsin's disappearance.",
+    "Information on Halsin can be found by speaking to Nettie during ⁠ Get Help from Healer Nettie or by speaking to Rath. Both Rath and Nettie are in the Inner Sanctum, which is accessible via the stone door north of the Sacred Pool. Mentioning to Rath that Kagha seems dangerous makes him lament that a snake has replaced their leader. Pressing for more information results in Rath revealing that Halsin disappeared at the goblin camp. Nettie discusses more about Halsin if the party is honest with her about their affliction and symptoms, stating that Halsin could better treat them if he was around."
+   ],
+   "patches": [],
+   "stages": [
+    "Entering the Goblin Camp",
+    "The Shattered Sanctum",
+    "Freeing Halsin",
+    "Priestess Gut",
+    "Minthara",
+    "Dror Ragzlin",
+    "Back in the Worg Pens",
+    "Getting the Rewards"
+   ]
+  },
+  "src-2b18010e96": {
+   "id": "src-2b18010e96",
+   "url": "https://bg3.wiki/wiki/Find_the_Githyanki_Cr%C3%A8che",
+   "fetched_at": "2026-10-12T22:09:13Z",
+   "page_sha256": "21e430a357ca20c394cdb3308871c85d342584a246a9bd59141d03d09a0054ee",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "quest",
+   "name": "Find the Githyanki Crèche",
+   "lead": [
+    "Find the Githyanki Crèche is a sub- Quest of the main quest of Act One , Find a Cure . It can be initiated as soon as Lae'zel is rescued during ⁠ Free Lae'zel if she joins the party. For the majority of Act One, this quest is directly connected to Lae'zel's Companion quest, ⁠ The Githyanki Warrior .",
+    "Objectives and journal entries may vary pending player decisions and outcomes."
+   ],
+   "patches": [],
+   "stages": [
+    "The Githyanki Patrol",
+    "Accessing the Monastery",
+    "The Githyanki Crèche",
+    "The Infirmary",
+    "The Kith'rak"
+   ]
+  },
+  "src-395a070a05": {
+   "id": "src-395a070a05",
+   "url": "https://bg3.wiki/wiki/Fighter",
+   "fetched_at": "2026-10-12T22:09:00Z",
+   "page_sha256": "287ae2d2cd39b2867533c1bd017d2a3830a116fe56f685682c46efda46545273",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "class",
+   "name": "Fighter",
+   "lead": [
+    "Fighters use their martial expertise to fight enemies and support their allies in combat. Fighters use Strength or Dexterity as their primary ability score.",
+    "Note: Proficiency bonus is based on character level , not class level. It is included in the table for convenience."
+   ],
+   "patches": [],
+   "progression": [
+    {
+     "level": 1,
+     "bonus": "+2",
+     "features": "Second Wind , Fighting Style"
+    },
+    {
+     "level": 2,
+     "bonus": "",
+     "features": "Action Surge"
+    },
+    {
+     "level": 3,
+     "bonus": "",
+     "features": "Choose a subclass"
+    },
+    {
+     "level": 4,
+     "bonus": "",
+     "features": "Feat"
+    },
+    {
+     "level": 5,
+     "bonus": "+3",
+     "features": "Extra Attack"
+    },
+    {
+     "level": 6,
+     "bonus": "",
+     "features": "Feat"
+    },
+    {
+     "level": 7,
+     "bonus": "",
+     "features": "Subclass feature"
+    },
+    {
+     "level": 8,
+     "bonus": "",
+     "features": "Feat"
+    },
+    {
+     "level": 9,
+     "bonus": "+4",
+     "features": "Indomitable"
+    },
+    {
+     "level": 10,
+     "bonus": "",
+     "features": "Subclass feature"
+    },
+    {
+     "level": 11,
+     "bonus": "",
+     "features": "Improved Extra Attack"
+    },
+    {
+     "level": 12,
+     "bonus": "",
+     "features": "Feat"
+    }
+   ],
+   "progression_parsed": true
+  },
+  "src-80cb6e2007": {
+   "id": "src-80cb6e2007",
+   "url": "https://bg3.wiki/wiki/Advantage",
+   "fetched_at": "2026-10-12T22:09:06Z",
+   "page_sha256": "a2e38c50b91e61b8a90bd457083c5581765c75405b5ac74546a2a742488f1d70",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "mechanic",
+   "name": "Advantage",
+   "lead": [
+    "Advantage and Disadvantage are terms used for two different gameplay mechanics that can greatly affect the success of dice rolls. First they are used for rolling two dice , second they are used for contesting ability checks .",
+    "A number of situations and conditions give creatures advantage or disadvantage on d20 rolls. A creature that makes a roll with advantage rolls two d20 dice separately, and uses the higher of the two results. If they have disadvantage, they choose the lower of the two."
+   ],
+   "patches": [
+    "Patch 7"
+   ]
+  },
+  "src-b9458ea969": {
+   "id": "src-b9458ea969",
+   "url": "https://bg3.wiki/wiki/Shadowheart",
+   "fetched_at": "2026-10-12T22:08:48Z",
+   "page_sha256": "2b6fe01cb55f8d0cb581d16fc2bf17e6efe6c1ffebc9584e2d9b3898236bb923",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Shadowheart",
+   "lead": [
+    "Shadowheart (born Jenevelle Hallowleaf) is an Origin character and a recruitable companion who can be romanced by characters of any gender. She is a high half-elf and a Trickery Domain Cleric with the Acolyte background. Shadowheart can be first found on the Nautiloid during the prologue where she serves as a temporary companion, and can be properly recruited at various points in Act One .",
+    "When within 9 m (30 ft) of a wolf, must roll a DC 15 WIS save or become Frightened ."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 13,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 10,
+    "WIS": 17,
+    "CHA": 8
+   }
+  },
+  "src-c9148afb60": {
+   "id": "src-c9148afb60",
+   "url": "https://bg3.wiki/wiki/Long_rest",
+   "fetched_at": "2026-10-12T22:09:08Z",
+   "page_sha256": "76ffd3d68a149c4cfae433ec834d5654f12ad7b66415718173eeb171e54b0e65",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "mechanic",
+   "name": "Resting",
+   "lead": [
+    "Resting is a gameplay mechanic used to restore lost hit points and depleted resources .",
+    "Rests can be either long or short. Long rests restore all lost hit points and spent resources, whereas short rests restore a limited amount of hit points, and a smaller variety of resources."
+   ],
+   "patches": []
+  },
+  "src-ca757cc885": {
+   "id": "src-ca757cc885",
+   "url": "https://bg3.wiki/wiki/Astarion",
+   "fetched_at": "2026-10-12T22:08:50Z",
+   "page_sha256": "4e4e59c6d3d7d61db4084b3bb698e4f88913339cfd69b8293a0b0c225e81fdb4",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Astarion",
+   "lead": [
+    "Astarion Ancunín is an Origin character and recruitable companion who can be romanced by characters of any gender. He is a high elven rogue with the Charlatan background. Astarion can be first found west of the Nautiloid Wreck during Act One .",
+    "A vampire spawn previously under the control of Cazador Szarr until being abducted by the Nautiloid , Astarion is set on exacting revenge upon Cazador and becoming free, no matter the consequences."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 8,
+    "DEX": 17,
+    "CON": 14,
+    "INT": 13,
+    "WIS": 13,
+    "CHA": 10
+   }
+  },
+  "src-ce9da37e0e": {
+   "id": "src-ce9da37e0e",
+   "url": "https://bg3.wiki/wiki/Wyll",
+   "fetched_at": "2026-10-12T22:08:56Z",
+   "page_sha256": "312f4137b0bde8adeccc313c35fc16a6e65d18143ebe7b47ee432010a5a05812",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Wyll",
+   "lead": [
+    "Wyll Ravengard is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. He is a Human and a Fiend Warlock with the Folk Hero background. Wyll is first encountered just outside the Emerald Grove in Act One .",
+    "Known as the \"Blade of Frontiers\" across the marches of Baldur's Gate , Wyll is a valiant hero who fights injustice and hunts monsters wherever they may hide. Though forever bound to his infernal patron Mizora , he has dedicated his whole life to protecting the city he loves."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 8,
+    "DEX": 13,
+    "CON": 14,
+    "INT": 13,
+    "WIS": 10,
+    "CHA": 17
+   }
+  },
+  "src-e251b997ee": {
+   "id": "src-e251b997ee",
+   "url": "https://bg3.wiki/wiki/Karlach",
+   "fetched_at": "2026-10-12T22:08:58Z",
+   "page_sha256": "4a0a7ae558fcead641f053e9872fe079670fd9da3dabcb07e753f820274b637f",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Karlach",
+   "lead": [
+    "Karlach Cliffgate is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. She is a Zariel Tiefling and a Barbarian with the Outlander background. Karlach is on the Risen Road during Act One.",
+    "Once a soldier in Zariel's army, Karlach has been given a new chance at life after the recent events. Now, freed from Avernus , she will make the most out of it, and no one will get in her way."
+   ],
+   "patches": [
+    "Patch 8"
+   ],
+   "abilities": {
+    "STR": 17,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 8,
+    "WIS": 12,
+    "CHA": 10
+   }
+  },
+  "src-e9fef0292b": {
+   "id": "src-e9fef0292b",
+   "url": "https://bg3.wiki/wiki/Gale",
+   "fetched_at": "2026-10-12T22:08:52Z",
+   "page_sha256": "11cf1f8743528337401aca8e7ed586b3317c2740dbe7445ef9a814b2d185ead4",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Gale",
+   "lead": [
+    "Gale Dekarios is an Origin Character and recruitable Companion who can be romanced by characters of any gender. He is a human wizard with the Sage background. Gale can be first found at the Roadside Cliffs waypoint during Act One .",
+    "A scholar and prodigy in the arcane arts, Gale is committed to unlocking the secrets of the Weave no matter the cost."
+   ],
+   "patches": [
+    "Patch 8"
+   ],
+   "abilities": {
+    "STR": 8,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 17,
+    "WIS": 10,
+    "CHA": 12
+   }
+  },
+  "src-f3a21cbfbe": {
+   "id": "src-f3a21cbfbe",
+   "url": "https://bg3.wiki/wiki/Cleric",
+   "fetched_at": "2026-10-12T22:09:04Z",
+   "page_sha256": "c2eeddfbc12e0a3c5434d4a262d2cbe2c12740cf7d2c000e3c44bd4e9d599fa1",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "class",
+   "name": "Cleric",
+   "lead": [
+    "Clerics worship and enact their deity's will to the world, for better or worse. They channel the power of their faith to cast Spells . Clerics use Wisdom as their primary ability score.",
+    "Through experience, you acquire new power. You gain the following traits."
+   ],
+   "patches": [],
+   "progression": [],
+   "progression_parsed": false
+  },
+  "src-f89ddc7048": {
+   "id": "src-f89ddc7048",
+   "url": "https://bg3.wiki/wiki/Lae%27zel",
+   "fetched_at": "2026-10-12T22:08:54Z",
+   "page_sha256": "cd5ba405225a2e48ef3a23580e00abc730a6b2062eaac911a4f703ab1dffa3fb",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Lae'zel",
+   "lead": [
+    "Lae'zel of Crèche K'liir is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. She is a Githyanki Fighter with the Soldier background. Unless played as an origin character, Lae'zel is first encountered on the Nautiloid during the prologue, where she serves as a temporary companion, and can be properly recruited on the Roadside Cliffs in Act One .",
+    "A ferocious warrior zealously devoted to the Lich Queen Vlaakith , Lae'zel will do whatever is necessary to end the terror of the Illithid and prove herself to her queen."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 17,
+    "DEX": 13,
+    "CON": 15,
+    "INT": 10,
+    "WIS": 12,
+    "CHA": 8
+   }
+  }
+ }
+}

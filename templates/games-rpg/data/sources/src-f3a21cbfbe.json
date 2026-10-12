@@ -1,0 +1,19 @@
+{
+ "id": "src-f3a21cbfbe",
+ "url": "https://bg3.wiki/wiki/Cleric",
+ "fetched_at": "2026-10-12T22:09:04Z",
+ "page_sha256": "c2eeddfbc12e0a3c5434d4a262d2cbe2c12740cf7d2c000e3c44bd4e9d599fa1",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "class",
+ "name": "Cleric",
+ "lead": [
+  "Clerics worship and enact their deity's will to the world, for better or worse. They channel the power of their faith to cast Spells . Clerics use Wisdom as their primary ability score.",
+  "Through experience, you acquire new power. You gain the following traits."
+ ],
+ "patches": [],
+ "progression": [],
+ "progression_parsed": false
+}

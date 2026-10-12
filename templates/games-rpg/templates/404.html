@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block main %}
+<div class="nf"><p class="nf__code">404</p><h1>Такой страницы нет</h1>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск со страницы 404"><label class="sr" for="nq">Персонаж или класс</label><input id="nq" name="q" type="search"><button type="submit">Найти</button></form>
+<p><a href="/">На главную</a></p></div>
+{% endblock %}
