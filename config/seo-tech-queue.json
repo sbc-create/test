@@ -233,8 +233,8 @@
       "norm": "fails_closed шаблона фабрики: запуск без --data-dir обязан отказать",
       "expected": "run.py --check без --data-dir и без ZONA02_DATA → ненулевой код; checks/fails_closed.py из шаблона 83f51e7 стоит и зелёный; живая служба не задета",
       "check": "checks/fails_closed.py; checks/run.sh; после выпуска — живой ответ zonafilm.cc и x-site-factory-build-id",
-      "status": "blocked",
-      "owner_action": "Архитектор: решение по пути отката. Живая служба nova-zonafilm-cc.service передаёт --data-dir (правке не мешает), но прежняя nova-zona-02.service (ExecStart …/zona-02/current/run.py --port 9123, без --data-dir и без ZONA02_DATA в drop-in) живёт именно на умолчании data_root: обязательный --data-dir сломает откат на прежнее размещение. Нужно: подтвердить, что прежнее размещение выведено из пути отката, или что его юнит получит --data-dir. После этого SEO готовит правку run.py + fails_closed одним коммитом и выпускает штатно."
+      "status": "live_verified",
+      "evidence": "zonafilm-cc 0e310ff3e819: run.py::данные() отказывает без --data-dir и без ZONA02_DATA (решение Архитектора: обязателен источник, а не аргумент; прежний nova-zona-02.service задаёт ZONA02_DATA в самом юните — откат цел); checks/fails_closed.py (83f51e7) в run.sh; config/site.json neighbour_site_ids. fails_closed на прежнем run.py rc=1, на новом rc=0 (чужой каталог /srv/zonafilm-space/data); run.py --check → 1, с --data-dir → 0; checks/run.sh rc=0. Выложено: zona-02-code-0e310ff3e819 activated/live_verified 2026-10-12T15:43:14Z; https://zonafilm.cc/ → 200, x-site-factory-build-id: 0e310ff3e819-zona-02. Независимо проверено Архитектором (включая ZONA02_DATA=/srv/zonafilm-space/data → 1)."
     },
     {
       "id": "T012",
@@ -245,9 +245,22 @@
       "norm": "проверка падает только по причине витрины, а не окружения прогона; копия не слабее шаблона",
       "expected": "у всех 15 нет фиксированного порта; Yummy и lords-08/-09 не требуют publisher_id_expected там, где плеера нет или значение не объявлено",
       "check": "checks/activate_scenarios.py ИТОГ: PASS; site-checks-drift.py --check activate_scenarios.py",
-      "status": "blocked",
-      "evidence": "Шаблон 83f51e7 взят и прошёл (ИТОГ: PASS) у 7: 1lordserials1-online d5333e715258, animedia-icu e96bc9c39ba7, lordfilm47-space 035f2213a264, lordserials22-info 21e5888e7f3f, lordserials22-site 6b46e7429d10, lordserials22-space 4c323bc29ee6, zonafilm-space 7cdb89f98bff. У 8 возвращена прежняя копия: yummyani-biz/-org/-site, yummyani7-info/-site и lordfilm077-site, lordserial101-site — rc=1 «config/site.json не объявляет publisher_id_expected»; animedia-space — rc=1, ИТОГ: FAIL (своя редакция).",
+      "status": "verified",
+      "evidence": "Шаблон f198891 (свободная пара портов; пустой publisher_id_expected — названный пропуск) у 14 из 15: ИТОГ: PASS у 7, ЗАМЕЧАНИЕ о пропуске у 7 (пять Yummy, lords-08/-09). animedia-space — собственная редакция, к шаблону не приводится (согласовано с Архитектором). Последние коммиты: 1lordserials1-online b24ab0930e23, animedia-icu e654e865ced0, lordfilm077-site 7208b972e814, lordfilm47-space fed45854ee96, lordserial101-site 7fc7d48aee14, lordserials22-info b6ac76672605, -site 6e22775544b1, -space 80c84fd89aed, yummyani-biz 0795cf25684b, -org 717de52b1909, -site d2f9445ae124, zonafilm-space a42f44f7fc36; локально (B008) yummyani7-info e26f18f8938d, -site 285b2153cc90. Тем же заходом entrypoint_present (3615c82) у 15 копий, rc=0; lordfilm47-space и animedia-space — свои редакции. drift: fails_closed 18/18, no_secrets 20/20, activate_scenarios 14/15, entrypoint_present 15/17.",
       "owner_action": "Архитектор (шаблон): ветка для семейства без своего плеера (Yummy) и для витрины без объявленного значения — сценарий активации без сверки publisher_id, но с названной причиной; после этого SEO берёт шаблон в оставшиеся 7 (кроме animedia-space, где нужна сверка её редакции с шаблоном). lords-08/-09: значение publisher_id_expected — у владельца (не подставляем)."
+    },
+    {
+      "id": "T013",
+      "site": "lords-01, lords-05..09 (6 ячеек с manifest_stamp)",
+      "repo": "var/site-repos/*",
+      "urls": [],
+      "problem": "D207: artifact_sha256 считался по одной точке входа, а правка модуля оформления меняет рантайм, не меняя цифры (animeg0-site: exit=0 → exit=1 через 25 мин). Шаблоны 6dd9247: build_release штампует artifact_sha256 по всему рантайму и code_file_sha256 по точке входа, manifest_stamp сверяет обе.",
+      "norm": "D207; манифест говорит о выпуске правду",
+      "expected": "tools/build_release.py и checks/manifest_stamp.py = 6dd9247 одним коммитом; manifest_stamp rc=0",
+      "check": "checks/manifest_stamp.py; при следующем выпуске — результат исполнителя activated/live_verified",
+      "status": "in_progress",
+      "evidence": "Одним коммитом, rc=0 сразу (красного окна нет — проверка штампует той же функцией сборщика): lordfilm077-site dc3fa7d9c2a7, lordserial101-site 0dbe2b0c956e, lordserials22-info e1fd81796032, lordserials22-site 1bbda5404f47, lordserials22-space 4d7590aa950d; verify_pins rc=0; checks/run.sh rc=0 (lordserials22-info). Выкладка не делалась: первая сборка по новому определению — при следующем штатном выпуске. lordfilm47-space не тронута — см. owner_action.",
+      "owner_action": "Архитектор: в lordfilm47-space/config/template-manifest.json нет template_origin, а верхний source_commit = 515fcf0b39de, тогда как pins.lock.json source_commit = ac4e439e4cd9 — какой из двух настоящий источник шаблона, не установлено. Вписать template_origin наугад нельзя. После ответа SEO вписывает template_origin и берёт оба файла."
     }
   ]
 }
