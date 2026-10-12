@@ -181,7 +181,7 @@
       "expected": "во всех 17 ячейках копия = шаблон 7729da7; шаг находит настоящий чужой каталог в /srv и получает ненулевой код",
       "check": "checks/fails_closed.py (rc=0, «отказ подтверждён; чужой каталог /srv/…»); automation/local/site-checks-drift.py --check fails_closed.py",
       "status": "verified",
-      "evidence": "Копии = шаблон 9dc003f во всех 17 ячейках (site-checks-drift.py 9dc003f: «состав тот же у 17»). checks/fails_closed.py rc=0 везде; чужой каталог своего семейства у 12, у пяти новейших Lords (neighbour_site_ids пуст) — каталог другого семейства, шаг это называет. Отправлено (последние коммиты): 1lordserials1-online dcb153f460ca, animedia-icu 3d9cca2e46fa, animedia-space 0a9ba159fe9f, lordfilm47-space d67293b5e6d9, lordserial33-biz f6ed26505ab6, yummyani-biz d57c28edca6a, yummyani-org 6ebe84e97fa5, yummyani-site 0b16ab674a3f, zonafilm-space 397a8688f97b, zonafilm12-site c8f38e8d0df6, lordfilm077-site bc1a70fb2cf7, lordserial101-site 7b43f21c4693, lordserials22-info 9b5a2f954784, lordserials22-site e9c46a494673, lordserials22-space 488dd9f35a53. Локально (B008): yummyani7-info fc121dc8f7c9, yummyani7-site e91e1cd48d04. Полный checks/run.sh rc=0 у 1lordserials1-online (activate-scenarios — на свободном порту: при параллельном прогоне занят 9801), animedia-icu, animedia-space. Принято Архитектором 12.10. Выкладка не требуется: правка только в checks/."
+      "evidence": "Копии = шаблон 9dc003f во всех 17 ячейках (site-checks-drift.py 9dc003f: «состав тот же у 17»). checks/fails_closed.py rc=0 везде; чужой каталог своего семейства у 12, у пяти новейших Lords (neighbour_site_ids пуст) — каталог другого семейства, шаг это называет. Отправлено (последние коммиты): 1lordserials1-online dcb153f460ca, animedia-icu 3d9cca2e46fa, animedia-space 0a9ba159fe9f, lordfilm47-space d67293b5e6d9, lordserial33-biz f6ed26505ab6, yummyani-biz d57c28edca6a, yummyani-org 6ebe84e97fa5, yummyani-site 0b16ab674a3f, zonafilm-space 397a8688f97b, zonafilm12-site c8f38e8d0df6, lordfilm077-site bc1a70fb2cf7, lordserial101-site 7b43f21c4693, lordserials22-info 9b5a2f954784, lordserials22-site e9c46a494673, lordserials22-space 488dd9f35a53. Локально (B008): yummyani7-info fc121dc8f7c9, yummyani7-site e91e1cd48d04. Полный checks/run.sh rc=0 у 1lordserials1-online (activate-scenarios — на свободном порту: при параллельном прогоне занят 9801), animedia-icu, animedia-space. Принято Архитектором 12.10. Выкладка не требуется: правка только в checks/. Обновлено до 83f51e7 (каталог своего семейства с диска): rc=0 у всех 17, пять новейших Lords берут /srv/lordfilm47-space/data."
     },
     {
       "id": "T010",
@@ -215,7 +215,7 @@
       "site": "yummyani.biz, yummyani.org, yummyani.site, yummyani7.info, yummyani7.site",
       "status": "blocked",
       "problem": "D177 (три места publisher_id: файл плеера, объявление в config/site.json, учёт реестра) описывает Lords/Zona/AnimeGo. У пяти Yummy своего плеера нет: воспроизведение — верхний поток Next.js, player.json и LORDS_PLAYER_CONFIG отсутствуют по решению (yummyani-org/run.py check_player, docstring). Пустой publisher_id_expected у Yummy ВЕРЕН: объявление без плеера даёт отказ run.py --check (измерено Архитектором: «сайт объявляет publisher_id …, но LORDS_PLAYER_CONFIG не задан»). Идентификатор, который отдают карточки Yummy, приходит из верхнего потока; где он живёт и кем учитывается — не установлено. Поправка 12.10: прежняя формулировка («сверка выключена, вписать значение») была ошибочной — её исполнение сломало бы пять витрин.",
-      "owner_action": "Владелец: указать, где у Yummy задаётся publisher_id (конфигурация верхнего потока Next.js) и каким местом его учитывать. До ответа publisher_id_expected у Yummy НЕ заполняется, реестр по одному источнику не заполняется."
+      "owner_action": "Владелец: (1) где у Yummy задаётся publisher_id (конфигурация верхнего потока Next.js); (2) нужно ли вообще вести его учёт в реестре, если ни плеера, ни объявления у семейства нет. До ответа publisher_id_expected у Yummy НЕ заполняется, учёт в реестре по одному источнику не заполняется (ни SEO, ни Архитектором)."
     },
     {
       "id": "B011",
@@ -223,6 +223,31 @@
       "status": "blocked",
       "problem": "Один и тот же publisher_id в учёте у двух ячеек, обе витрины его отдают (измерение Архитектора bec65ab; SEO-сверка 12.10: значение отдают ещё an1mego/an1meg0/animeg0). D177: идентификатор принадлежит конкретному домену.",
       "owner_action": "Владелец: подтвердить, что общий идентификатор у нескольких доменов допустим, или выдать отдельные. Правкой не трогаем: это настройка плеера и выплат."
+    },
+    {
+      "id": "T011",
+      "site": "zonafilm.cc (zona-02)",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [],
+      "problem": "Единственная ячейка без checks/fails_closed.py. `run.py --check` без --data-dir даёт код 0: run.py::данные() берёт --data-dir → ZONA02_DATA → config/runtime.json[data_root] (= /srv/zonafilm-cc/data). Изоляция держится (с --data-dir /srv/zonafilm-space/data → код 1, нет zona-02-catalog.json — измерение Архитектора), умолчание указывает на СВОЙ каталог, но правило «не угадывай каталог данных» не выполнено и не проверяется.",
+      "norm": "fails_closed шаблона фабрики: запуск без --data-dir обязан отказать",
+      "expected": "run.py --check без --data-dir и без ZONA02_DATA → ненулевой код; checks/fails_closed.py из шаблона 83f51e7 стоит и зелёный; живая служба не задета",
+      "check": "checks/fails_closed.py; checks/run.sh; после выпуска — живой ответ zonafilm.cc и x-site-factory-build-id",
+      "status": "blocked",
+      "owner_action": "Архитектор: решение по пути отката. Живая служба nova-zonafilm-cc.service передаёт --data-dir (правке не мешает), но прежняя nova-zona-02.service (ExecStart …/zona-02/current/run.py --port 9123, без --data-dir и без ZONA02_DATA в drop-in) живёт именно на умолчании data_root: обязательный --data-dir сломает откат на прежнее размещение. Нужно: подтвердить, что прежнее размещение выведено из пути отката, или что его юнит получит --data-dir. После этого SEO готовит правку run.py + fails_closed одним коммитом и выпускает штатно."
+    },
+    {
+      "id": "T012",
+      "site": "15 ячеек с checks/activate_scenarios.py",
+      "repo": "var/site-repos/*",
+      "urls": [],
+      "problem": "Фиксированный порт 9801 в activate_scenarios: параллельные прогоны падали на «Address already in use» (поймано 12.10 на 1lordserials1-online). Шаблон 83f51e7 подбирает свободную пару портов, но требует publisher_id_expected в config/site.json — у пяти Yummy его нет по решению (плеер — верхний поток Next.js, B010), у lords-08/-09 не объявлен; animedia-space несёт собственную, приспособленную под свою раскладку редакцию.",
+      "norm": "проверка падает только по причине витрины, а не окружения прогона; копия не слабее шаблона",
+      "expected": "у всех 15 нет фиксированного порта; Yummy и lords-08/-09 не требуют publisher_id_expected там, где плеера нет или значение не объявлено",
+      "check": "checks/activate_scenarios.py ИТОГ: PASS; site-checks-drift.py --check activate_scenarios.py",
+      "status": "blocked",
+      "evidence": "Шаблон 83f51e7 взят и прошёл (ИТОГ: PASS) у 7: 1lordserials1-online d5333e715258, animedia-icu e96bc9c39ba7, lordfilm47-space 035f2213a264, lordserials22-info 21e5888e7f3f, lordserials22-site 6b46e7429d10, lordserials22-space 4c323bc29ee6, zonafilm-space 7cdb89f98bff. У 8 возвращена прежняя копия: yummyani-biz/-org/-site, yummyani7-info/-site и lordfilm077-site, lordserial101-site — rc=1 «config/site.json не объявляет publisher_id_expected»; animedia-space — rc=1, ИТОГ: FAIL (своя редакция).",
+      "owner_action": "Архитектор (шаблон): ветка для семейства без своего плеера (Yummy) и для витрины без объявленного значения — сценарий активации без сверки publisher_id, но с названной причиной; после этого SEO берёт шаблон в оставшиеся 7 (кроме animedia-space, где нужна сверка её редакции с шаблоном). lords-08/-09: значение publisher_id_expected — у владельца (не подставляем)."
     }
   ]
 }
