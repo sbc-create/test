@@ -350,8 +350,8 @@
       "expected": "description из полей каталога (оригинальное название, вид, год, серии, жанры), ≤180, без обрыва слова; дублей 0",
       "check": "python3 checks/title_meta_fallback.py; bash checks/run.sh",
       "verify_live": "meta description на странице тайтла без синопсиса",
-      "status": "verified",
-      "evidence": "animedia-space 41241f2: run.sh rc=0 48 PASS; расчёт по 2 393 тайтлам — длина 64–180, дублей 0. animedia-icu: та же правка байт в байт, проверки идут. Выпуск animedia-02 подан. animedia.space ВЫПУЩЕНО и проверено на живом (6b7037812e0d): adept-svyatogo-znaka-2-specvypuski — «… — аниме-сериал 2011 года, в наличии 4 серии. Жанры: сэйнэн, этти. Смотреть онлайн на Animedia.»; страница с синопсисом обрезана по слову с «…». animedia.icu (5d0b2be) — выпуск подан."
+      "status": "live_verified",
+      "evidence": "animedia-space 41241f2: run.sh rc=0 48 PASS; расчёт по 2 393 тайтлам — длина 64–180, дублей 0. animedia-icu: та же правка байт в байт, проверки идут. Выпуск animedia-02 подан. animedia.space ВЫПУЩЕНО и проверено на живом (6b7037812e0d): adept-svyatogo-znaka-2-specvypuski — «… — аниме-сериал 2011 года, в наличии 4 серии. Жанры: сэйнэн, этти. Смотреть онлайн на Animedia.»; страница с синопсисом обрезана по слову с «…». animedia.icu (5d0b2be) — выпуск подан. animedia.icu ВЫПУЩЕНО 5d0b2bedc991 (activated/live_verified), живой https://animedia.icu/title/3000-mil-v-poiskah-materi/: «3000 миль в поисках матери (From the Appenines to the Andes) — аниме-сериал 1976 года, в наличии 52 серии. Жанры: драма, исторический, приключения. Смотреть онлайн на Animedia.», index, follow."
     },
     {
       "id": "T018",
