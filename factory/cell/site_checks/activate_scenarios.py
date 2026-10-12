@@ -2,6 +2,7 @@
 import http.server
 import json
 import os
+import socket
 import subprocess
 import sys
 import tempfile
@@ -158,11 +159,39 @@ def run(repo: Path, site_id: str, port: int):
     return итог
 
 
+def свободная_пара(попыток: int = 20) -> int:
+    """Начало пары свободных портов: шаг занимает `port` и `port + 1`.
+
+    Прежде здесь стоял постоянный 9801, и это ловушка для ПАРАЛЛЕЛЬНЫХ
+    прогонов: два одновременных шага двух ячеек получали «Address already in
+    use», то есть отказ не про витрину, а про занятый порт. Измерено
+    SEO-сессией 12.10 на `1lordserials1-online`; на свободном порту тот же шаг
+    даёт rc=0.
+
+    Между освобождением порта и его занятием сервером есть окно, в которое
+    может встрять кто-то ещё — поэтому попытки ограничены числом, а не
+    временем, и исчерпание предела называется отказом, а не тишиной.
+    """
+    for _ in range(попыток):
+        with socket.socket() as проба:
+            проба.bind(('127.0.0.1', 0))
+            кандидат = проба.getsockname()[1]
+        with socket.socket() as второй:
+            try:
+                второй.bind(('127.0.0.1', кандидат + 1))
+            except OSError:
+                continue
+        return кандидат
+    print(f'не нашлось пары свободных портов за {попыток} попыток',
+          file=sys.stderr)
+    raise SystemExit(1)
+
+
 if __name__ == '__main__':
     repo = Path(__file__).resolve().parent.parent
     site_id = json.loads((repo/'config'/'site.json')
                         .read_text(encoding='utf-8'))['site_id']
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 9801
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else свободная_пара()
     res = run(repo, site_id, port)
     ok = True
     for фаза, поля in res.items():
