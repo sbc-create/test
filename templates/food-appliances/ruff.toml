@@ -6,3 +6,4 @@ line-length = 120
 "techkitchen/qa.py" = ["E501"]
 "techkitchen/server.py" = ["E501"]
 "techkitchen/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

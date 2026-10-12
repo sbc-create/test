@@ -86,6 +86,16 @@ def test_recipe_jsonld_visible_and_no_fakes(app):
             assert k not in rec
 
 
+def test_appliance_page_lists_only_its_recipes(app):
+    for a in ("multivarka", "aerogril"):
+        _, html, _ = get(app, f"/pribor/{a}/")
+        found = set(re.findall(r'href="/recept/([a-z0-9-]+)/"', html))
+        own = {r.slug for r in app.site.recipes if r.appliance == a}
+        assert found == own, a
+    _, html, _ = get(app, "/")
+    assert 'href="/pribor/gril/"' not in html  # прибор без рецептов не показывается
+
+
 def test_404_for_empty_appliance_category_mode(app):
     for p in ("/pribor/gril/", "/pribor/multivarka/ryba/", "/rezhim/aerogril-x/", "/recept/net/"):
         assert get(app, p)[0] == 404

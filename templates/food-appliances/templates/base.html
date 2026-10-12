@@ -22,7 +22,7 @@
 <header class="console">
   <a class="brand" href="/"><span class="brand__led" aria-hidden="true"></span>Готовим <b>в технике</b></a>
   <nav class="devices" aria-label="Приборы">{% for k, (label, _) in APPLIANCES.items() %}{% if site.for_appliance(k) %}<a href="/pribor/{{ k }}/">{{ label }}</a>{% endif %}{% endfor %}<a href="/kak-chitat-rezhimy/">Режимы</a></nav>
-  <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту"><label class="sr" for="fq">Блюдо, продукт или режим</label><input id="fq" name="q" type="search" placeholder="Блюдо, продукт, режим"><button type="submit">Найти</button></form>
+  <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту"><label class="sr" for="fq">Блюдо, продукт или режим</label><input id="fq" name="q" type="search" placeholder="Блюдо или режим"><button type="submit">Найти</button></form>
 </header>
 {% if meta.crumbs|length > 1 %}<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>{% endif %}
 <main id="main">{% block main %}{% endblock %}</main>
