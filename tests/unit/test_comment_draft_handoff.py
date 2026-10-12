@@ -216,6 +216,35 @@ def test_публикация_закрывает_черновик(стенд):
     assert видит["handoff"]["comment_id"] == "cmv-1"
 
 
+def test_решение_без_имени_проверяющего_не_записывается(стенд):
+    """«Принято неизвестно кем» записью о решении не является.
+
+    Поймано на живом проходе 10 октября: редактор отклонил черновик
+    `cd-cc880b98d158` с подробной причиной, а `reviewed_by` остался пустым —
+    застава роли пустое имя пропускает намеренно (роль без объявленных
+    ограничений не трогается), и спросить о решении было бы некого.
+    """
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    comments.передать("yummyani.org", "van-pis", author="qwen/к/run-1")
+    for пусто in ("", "   ", None):
+        with pytest.raises(comments.ОперацияОтклонена) as ош:
+            comments.решение("yummyani.org", "van-pis", author=пусто,
+                             verdict="accepted")
+        assert "именем проверяющего" in str(ош.value)
+    # Состояние не изменилось: отказ наступил до записи.
+    assert comments.черновик("yummyani.org", slug="van-pis")["handoff"]["state"] \
+        == "submitted"
+
+
+def test_передача_без_имени_не_записывается(стенд):
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    with pytest.raises(comments.ОперацияОтклонена) as ош:
+        comments.передать("yummyani.org", "van-pis", author="")
+    assert "только с именем" in str(ош.value)
+    assert comments.черновик("yummyani.org", slug="van-pis")["handoff"]["state"] \
+        == "drafted"
+
+
 def test_черновик_прежнего_кода_получает_имя(стенд):
     """Записи без `draft_id` в хранилище есть, и они обязаны получить имя.
 
@@ -257,3 +286,65 @@ def test_журнал_хранит_оба_события(стенд):
               (стенд / editorial.ИСТОРИЯ).read_text(encoding="utf-8").splitlines() if с]
     операции = [з.get("op") for з in строки]
     assert "submit-comment" in операции and "review-comment" in операции
+
+
+# --- второе решение по одному черновику -------------------------------------
+#
+# Живой случай 2026-10-10. Фоновый редактор решил по переданному Квеном
+# черновику `cd-0f289031ed9b` в 22:45:52 и 22:47:48, я записал своё решение в
+# 22:47:52 — через четыре секунды, прочитав состояние ДО решения редактора.
+# Оба решения были «отклонить», но основание редактора исчезло без следа:
+# поле одно, последний записавший выигрывает. Запись о том, кто принял работу,
+# так вести нельзя: расхождение двух проверяющих надо видеть, а не узнавать по
+# тому, кто записал позже.
+
+
+def test_второе_решение_не_перезаписывает_первое(стенд):
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    comments.передать("yummyani.org", "van-pis", author="qwen/к/run-1")
+    comments.решение("yummyani.org", "van-pis", author="editor/claude/run-7",
+                     verdict="rejected", note="основание редактора")
+    with pytest.raises(comments.ОперацияОтклонена) as ош:
+        comments.решение("yummyani.org", "van-pis",
+                         author="architect/claude/run-9", verdict="rejected",
+                         note="моё основание")
+    сказано = str(ош.value)
+    assert "решение уже записано" in сказано
+    assert "editor/claude/run-7" in сказано, "отказ обязан назвать, кто решил"
+    хранимое = comments.черновик("yummyani.org", slug="van-pis")["handoff"]
+    assert хранимое["reviewed_by"] == "editor/claude/run-7"
+    assert хранимое["review_note"] == "основание редактора", (
+        "основание первого проверяющего затёрто вторым")
+
+
+def test_отказ_различает_решение_без_имени(стенд):
+    """Именно так и выглядел живой случай: у первого решения имени не было."""
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    comments.передать("yummyani.org", "van-pis", author="qwen/к/run-1")
+    сайт = comments._сайт("yummyani.org")
+    черновики = comments._черновики(сайт)
+    запись = черновики["items"]["van-pis"]
+    запись["handoff"] = {**запись["handoff"], "state": "rejected",
+                         "reviewed_at": "2026-10-10T22:45:52Z",
+                         "reviewed_by": "", "review_note": ""}
+    editorial._записать_атомарно(
+        comments._каталог(сайт) / comments.ЧЕРНОВИКИ, черновики)
+    with pytest.raises(comments.ОперацияОтклонена) as ош:
+        comments.решение("yummyani.org", "van-pis",
+                         author="architect/claude/run-9", verdict="accepted")
+    assert "без имени проверяющего" in str(ош.value)
+
+
+def test_после_отклонения_черновик_передаётся_заново(стенд):
+    """Отказ не запирает путь: исправленный текст идёт на проверку снова."""
+    comments.подготовить("yummyani.org", "van-pis", ТЕКСТ, author="qwen/к/run-1")
+    comments.передать("yummyani.org", "van-pis", author="qwen/к/run-1")
+    comments.решение("yummyani.org", "van-pis", author="editor/claude/run-7",
+                     verdict="rejected", note="нет источника")
+    снова = comments.передать("yummyani.org", "van-pis", author="qwen/к/run-2",
+                              note="источник добавлен")
+    assert снова["handoff"]["state"] == "submitted"
+    итог = comments.решение("yummyani.org", "van-pis",
+                            author="editor/claude/run-8", verdict="accepted",
+                            note="источник проверен")
+    assert итог["handoff"]["state"] == "accepted"
