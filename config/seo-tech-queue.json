@@ -258,9 +258,8 @@
       "norm": "D207; манифест говорит о выпуске правду",
       "expected": "tools/build_release.py и checks/manifest_stamp.py = 6dd9247 одним коммитом; manifest_stamp rc=0",
       "check": "checks/manifest_stamp.py; при следующем выпуске — результат исполнителя activated/live_verified",
-      "status": "verified",
-      "evidence": "6 из 6, по одному коммиту на ячейку, manifest_stamp rc=0 сразу (красного окна нет — проверка штампует той же функцией сборщика; подтверждено Архитектором): lordfilm077-site dc3fa7d9c2a7, lordserial101-site 0dbe2b0c956e, lordserials22-info e1fd81796032, lordserials22-site 1bbda5404f47, lordserials22-space 4d7590aa950d, lordfilm47-space ff7298b47a06 (+ template_origin.source_commit = pins.source_commit ac4e439e4cd9, вывод Архитектора). checks/run.sh rc=0 у lordserials22-info и lordfilm47-space. НЕ выпущено: до первого выпуска по новому определению Архитектор сверяет, не считает ли исполнитель artifact_sha256 по прежнему определению (privileged.py/transfer.py).",
-      "owner_action": "Архитектор: подтвердить, что исполнитель не сверяет artifact_sha256 по прежнему определению; после этого — штатный выпуск при следующей правке (отдельно ради цифры не выпускаем)."
+      "status": "live_verified",
+      "evidence": "6 из 6 скопировано одним коммитом на ячейку (lordfilm077-site dc3fa7d9c2a7, lordserial101-site 0dbe2b0c956e, lordserials22-info e1fd81796032, -site 1bbda5404f47, -space 4d7590aa950d, lordfilm47-space ff7298b47a06 + template_origin из замка). Выложено и проверено на живом: lords-05 e1fd81796032 и lords-01 ff7298b47a06 — activated/live_verified; независимый пересчёт в /srv/<repo>/current: artifact_sha256 по 13 файлам рантайма совпал, code_file_sha256 по точке входа совпал, build_id = x-site-factory-build-id живого домена; у lords-01 верхний source_commit перезаписан сборкой на ac4e439e4cd9 (= template_origin). Исполнитель artifact_sha256 не читает (сверено Архитектором). lords-06..09 — при следующем штатном выпуске."
     },
     {
       "id": "T014",
@@ -271,8 +270,9 @@
       "norm": "D207; происхождение шаблона = замок",
       "expected": "template_origin.source_commit заполнен значением, которое проверка фабрики примет и которое не противоречит записанному в note",
       "check": "factory/cell/site_checks/manifest_stamp.py (если ячейка его возьмёт)",
-      "status": "blocked",
-      "owner_action": "Архитектор: ac4e439e4cd9 (пин, монорепозиторий) или 72bf12afb2a7 (коммит ветки шаблона из note) — какой из них source_commit по конвенции; у lordserials22-* source_commit — коммит ветки шаблона (63fe341…, он же пин). Значение не вписываем до ответа."
+      "status": "verified",
+      "owner_action": "Архитектор: ac4e439e4cd9 (пин, монорепозиторий) или 72bf12afb2a7 (коммит ветки шаблона из note) — какой из них source_commit по конвенции; у lordserials22-* source_commit — коммит ветки шаблона (63fe341…, он же пин). Значение не вписываем до ответа.",
+      "evidence": "1lordserials1-online b87fa58: template_origin.source_commit = pins.source_commit = monorepo_commit (ac4e439e4cd9), строка соответствия в note (72bf12afb2a7 — координата ветки той же правки; вывод Архитектора). checks/run.sh rc=0. Попутно 150bcdf: checks/activate_scenarios.py возвращён к копии исполнителя (696ec80, sha 6481dedb88e4) — checks/deploy_request.py требует совпадения, копирование шаблонов 83f51e7/f198891 его нарушило (ошибка SEO: после копирования не гонялся полный набор). Выкладка не требуется до следующей правки."
     }
   ]
 }
