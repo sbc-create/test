@@ -1,4 +1,4 @@
-"""SSR-сервер games-story (вариант chapter-guides)."""
+"""SSR-сервер games-story (вариант progress-tracker)."""
 
 from __future__ import annotations
 
@@ -133,19 +133,40 @@ class App:
                 gid=gid,
                 gs=gs,
             )
-        m = re.fullmatch(r"/igra/([a-z0-9-]+)/kollekcii/", path)
-        if m and m.group(1) in s.games:
+        m = re.fullmatch(r"/igra/([a-z0-9-]+)/predmety/", path)
+        if m and m.group(1) in s.games and s.for_game(m.group(1)):
             gid = m.group(1)
-            crumbs = [home, (s.games[gid]["title"], f"/igra/{gid}/"), ("Коллекционные предметы", path)]
+            crumbs = [home, (s.games[gid]["title"], f"/igra/{gid}/"), ("Предметы", path)]
             return self.page(
-                "collectibles.html",
-                f"{s.games[gid]['title']}: коллекционные предметы по главам",
-                "Сколько клубник в каждой главе и что открывают кристальные сердца.",
+                "items.html",
+                f"{s.games[gid]['title']}: предметы и стороны по видам",
+                "Клубники и стороны по главам — по видам.",
                 path,
                 crumbs,
                 [],
-                "collectibles",
+                "items",
                 gid=gid,
+            )
+        m = re.fullmatch(r"/igra/([a-z0-9-]+)/predmety/([a-z-]+)/", path)
+        if m and m.group(1) in s.games and m.group(2) in s.ITEM_TYPES and s.by_item(m.group(1), m.group(2)):
+            gid, it = m.group(1), m.group(2)
+            crumbs = [
+                home,
+                (s.games[gid]["title"], f"/igra/{gid}/"),
+                ("Предметы", f"/igra/{gid}/predmety/"),
+                (s.ITEM_TYPES[it][0], path),
+            ]
+            return self.page(
+                "item.html",
+                f"{s.games[gid]['title']}: {s.ITEM_TYPES[it][0].lower()} по главам",
+                f"{s.ITEM_TYPES[it][0]} в каждой главе — по данным источника.",
+                path,
+                crumbs,
+                [],
+                "item",
+                gid=gid,
+                it=it,
+                rows=s.by_item(gid, it),
             )
         m = re.fullmatch(r"/igra/([a-z0-9-]+)/([a-z0-9-]+)/", path)
         if m and m.group(2) in s.by_slug and s.by_slug[m.group(2)].game == m.group(1):
@@ -216,7 +237,8 @@ class App:
         urls = ["/", "/video/", "/kak-my-rabotaem/", "/istochniki/"]
         for gid in s.games:
             if s.for_game(gid):
-                urls += [f"/igra/{gid}/", f"/igra/{gid}/kollekcii/"]
+                urls += [f"/igra/{gid}/", f"/igra/{gid}/predmety/"]
+                urls += [f"/igra/{gid}/predmety/{it}/" for it in s.ITEM_TYPES if s.by_item(gid, it)]
         urls += [g.url for g in s.guides]
         return urls
 

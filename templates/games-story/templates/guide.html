@@ -1,33 +1,31 @@
 {% extends "base.html" %}
-{% from "_parts.html" import card, video %}
+{% from "_parts.html" import tracker_row, video %}
 {% block main %}
 {% set prev, nxt = site.neighbours(g) %}
 <article class="guide" data-slug="{{ g.slug }}" data-version="{{ g.version }}">
   <p class="kicker">{{ site.games[g.game].title }} · {% if g.chapter is not none %}глава {{ g.chapter }}{% else %}{{ g.name }}{% endif %}</p>
   <h1>{{ g.title }}</h1>
   <p class="lead">{{ g.summary }} <a class="ref" href="#ist-1" aria-label="Источник">[1]</a></p>
-  <nav class="toc" aria-label="Оглавление">{% if g.checkpoints %}<a href="#marshrut">Маршрут</a> {% endif %}{% if g.mechanics %}<a href="#mehaniki">Механики</a> {% endif %}{% if g.berries %}<a href="#predmety">Предметы</a> {% endif %}<a href="#progress">Прогресс</a> <a href="#istochniki">Источники</a></nav>
-  <dl class="facts">
-    <div><dt>Стороны</dt><dd>{{ g.sides or 'нет данных' }}</dd></div>
-    <div><dt>Персонажи</dt><dd lang="en">{{ g.characters|join(', ') or 'нет данных' }}</dd></div>
-  </dl>
-  {% if g.checkpoints %}<section id="marshrut" aria-labelledby="h-route"><h2 id="h-route">Маршрут A-стороны</h2><p class="note">Названия участков — как в источнике.</p>
-  <ol class="route">{% for c in g.checkpoints %}<li><span lang="en">{{ c }}</span></li>{% endfor %}</ol></section>
-  {% else %}<section id="marshrut"><h2>Маршрут</h2><p class="note">Участки этой главы источник не выделяет.</p></section>{% endif %}
-  {% if g.mechanics %}<section id="mehaniki" aria-labelledby="h-mech"><h2 id="h-mech">Что нового в механике</h2><ul>{% for x in g.mechanics %}<li>{{ x }}</li>{% endfor %}</ul></section>{% endif %}
-  {% if g.berries %}<section id="predmety" aria-labelledby="h-items"><h2 id="h-items">Коллекционные предметы</h2>
-  <table class="items"><tbody>{% for b in g.berries %}<tr><th scope="row">{{ b.label|capitalize }}</th><td>{{ b.count }}</td></tr>{% endfor %}</tbody></table></section>{% endif %}
-  {% if g.tips %}<section aria-labelledby="h-tips"><h2 id="h-tips">Совет редакции</h2><p class="note">Наша рекомендация, а не текст источника.</p><ul>{% for x in g.tips %}<li>{{ x }}</li>{% endfor %}</ul></section>{% endif %}
+  <div class="two">
+    <section aria-labelledby="h-route"><h2 id="h-route">Маршрут</h2>
+      {% if g.checkpoints %}<ol class="steps">{% for c in g.checkpoints %}<li><span lang="en">{{ c }}</span></li>{% endfor %}</ol><p class="note">Названия участков — как в источнике.</p>
+      {% else %}<p class="note">Участки этой главы источник не выделяет.</p>{% endif %}
+      {% if g.mechanics %}<h3>Новое в механике</h3><ul>{% for x in g.mechanics %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+      {% if g.tips %}<h3>Совет редакции</h3><p class="note">Наша рекомендация, а не текст источника.</p><ul>{% for x in g.tips %}<li>{{ x }}</li>{% endfor %}</ul>{% endif %}
+    </section>
+    <aside class="gpanel" aria-label="Трекер главы и предметы">
+      <h2>Мой прогресс</h2>
+      <table class="trk trk--one" data-game="{{ g.game }}"><thead><tr><th scope="col">Глава</th><th scope="col">Клубники</th><th scope="col">Стороны</th></tr></thead><tbody>{{ tracker_row(g) }}</tbody></table>
+      {% if g.berries %}<h2>Предметы в главе</h2><table class="items"><tbody>{% for b in g.berries %}<tr><th scope="row">{{ b.label|capitalize }}</th><td>{{ b.count }}</td></tr>{% endfor %}</tbody></table>{% endif %}
+      <p class="facts"><b>Персонажи:</b> <span lang="en">{{ g.characters|join(', ') or 'нет данных' }}</span></p>
+    </aside>
+  </div>
   {% if g.videos %}<section aria-labelledby="h-v"><h2 id="h-v">Видео</h2>{% for v in g.videos %}{{ video(v) }}{% endfor %}</section>{% endif %}
-  <section id="progress" class="check" aria-labelledby="h-check"><h2 id="h-check">Мой прогресс</h2>
-    <ul>{% for x in g.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
-    <p class="note" data-check-status aria-live="polite"></p>
-    <button type="button" class="btn btn--line" data-check-reset hidden>Сбросить прогресс главы</button> <button type="button" class="btn btn--line" data-print hidden>Печать</button>
-  </section>
+  <p><button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
   <nav class="pager" aria-label="Соседние главы">{% if prev %}<a href="{{ prev.url }}">← {{ prev.title }}</a>{% else %}<span></span>{% endif %}{% if nxt %}<a href="{{ nxt.url }}">{{ nxt.title }} →</a>{% endif %}</nav>
-  <section id="istochniki" class="sources" aria-labelledby="h-src"><h2 id="h-src">Источники</h2>
-    <ol><li id="ist-1"><a href="{{ g.src.url }}" rel="nofollow noopener" lang="en">{{ g.name }} — {{ g.src.publisher }}</a>, прочитан {{ g.src.fetched_at[:10] }}.</li>{% for s in g.also %}<li><a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }} — {{ s.publisher }}</a>, прочитан {{ s.fetched_at[:10] }}.</li>{% endfor %}</ol>
-    <p class="note">Версия гайда {{ g.version }}, опубликовано {{ g.published_at }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
+  <section class="sources" aria-labelledby="h-src"><h2 id="h-src">Источники</h2>
+    <ol><li id="ist-1"><a href="{{ g.src.url }}" rel="nofollow noopener" lang="en">{{ g.name }} — {{ g.src.publisher }}</a>, прочитан {{ g.src.fetched_at[:10] }}.</li>{% for s in g.also %}<li><a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }} — {{ s.publisher }}</a>.</li>{% endfor %}</ol>
+    <p class="note">Версия гайда {{ g.version }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
   </section>
 </article>
 {% endblock %}

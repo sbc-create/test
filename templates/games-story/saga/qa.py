@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-story (chapter-guides): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-story (progress-tracker): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,17 +11,17 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8857"
+BASE = "http://127.0.0.1:8858"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 GUIDE = "/igra/celeste/glava-1-forsaken-city/"
 SHOTS = {
     "home": "/",
-    "game": "/igra/celeste/",
+    "tracker": "/igra/celeste/",
     "guide": GUIDE,
-    "collectibles": "/igra/celeste/kollekcii/",
+    "items": "/igra/celeste/predmety/",
+    "item": "/igra/celeste/predmety/krasnye-klubniki/",
     "videos": "/video/",
-    "farewell": "/igra/celeste/glava-9-farewell/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/igra/celeste/prolog/",
@@ -97,37 +97,48 @@ def run(shots: Path | None) -> dict:
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
         A["no_external_requests_on_load"] = not external
+        A["home_counters_zero"] = pg.locator(".dash [data-stat=red]").inner_text() == "0"
         with pg.expect_navigation():
-            pg.locator(".hd__nav a", has_text="Celeste").click()
-        A["nav_opens_game"] = pg.url.endswith("/igra/celeste/")
-        box = pg.locator(".gc").nth(1).bounding_box()
-        with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 10)
-        A["whole_card_opens_guide"] = pg.url.endswith(GUIDE)
-        A["route_rendered"] = pg.locator(".route li").count() == 3
-        boxes = pg.locator(".check input")
-        boxes.nth(0).check()
-        boxes.nth(1).check()
-        pg.reload()
-        A["progress_persists_after_reload"] = (
-            boxes.nth(0).is_checked() and boxes.nth(1).is_checked() and not boxes.nth(2).is_checked()
+            pg.locator(".dash .btn").first.click()
+        A["home_opens_tracker"] = pg.url.endswith("/igra/celeste/")
+        row = pg.locator("tr[data-slug='glava-1-forsaken-city']")
+        row.locator("[data-red-input]").fill("12")
+        row.locator("[data-red-input]").press("Tab")
+        row.locator("input[data-side=A]").check()
+        A["tracker_totals_update"] = (
+            pg.locator("tfoot [data-stat=red]").inner_text() == "12"
+            and pg.locator("tfoot [data-stat=sides]").inner_text() == "1"
         )
-        pg.goto(BASE + "/igra/celeste/")
-        A["game_page_shows_chapter_progress"] = (
-            pg.locator(".gc[data-slug='glava-1-forsaken-city'] [data-progress]").inner_text() == "Прогресс: 2 из 4"
+        row2 = pg.locator("tr[data-slug='glava-2-old-site']")
+        row2.locator("[data-red-input]").fill("999")
+        row2.locator("[data-red-input]").press("Tab")
+        A["tracker_clamps_to_source_max"] = row2.locator("[data-red-input]").input_value() == "18"
+        pg.reload()
+        A["tracker_persists_after_reload"] = (
+            row.locator("[data-red-input]").input_value() == "12" and row.locator("input[data-side=A]").is_checked()
+        )
+        pg.goto(BASE + "/")
+        A["home_counters_after_progress"] = (
+            pg.locator(".dash [data-stat=red]").inner_text() == "30"
+            and pg.locator(".dash [data-stat=sides]").inner_text() == "1"
         )
         pg.goto(BASE + GUIDE)
-        pg.click("[data-check-reset]")
-        pg.reload()
-        A["progress_reset"] = not boxes.nth(0).is_checked()
+        A["guide_tracker_shares_state"] = pg.locator(".trk [data-red-input]").input_value() == "12"
+        A["route_rendered"] = pg.locator(".steps li").count() == 3
         with pg.expect_navigation():
             pg.locator(".pager a").last.click()
         A["pager_next_chapter"] = pg.url.endswith("/glava-2-old-site/")
+        pg.goto(BASE + "/igra/celeste/")
         with pg.expect_navigation():
-            pg.locator(".pager a").first.click()
-        A["pager_prev_chapter"] = pg.url.endswith(GUIDE)
-        pg.click(".toc a[href='#predmety']")
-        A["toc_jumps"] = pg.evaluate("location.hash") == "#predmety"
+            pg.click("[data-tracker-reset]")
+        A["tracker_reset_all"] = pg.locator("tfoot [data-stat=red]").inner_text() == "0"
+        with pg.expect_navigation():
+            pg.locator(".hd__nav a", has_text="Предметы").click()
+        with pg.expect_navigation():
+            pg.locator(".types a").first.click()
+        A["items_type_page"] = (
+            pg.url.endswith("/predmety/krasnye-klubniki/") and pg.locator("tfoot td").first.inner_text() == "175"
+        )
         pg.goto(BASE + "/video/")
         A["video_no_iframe_before_click"] = pg.locator("iframe").count() == 0
         pg.locator("[data-play]").first.click()
@@ -145,13 +156,13 @@ def run(shots: Path | None) -> dict:
         pg.click("[data-print]")
         A["print_button_calls_print"] = pg.evaluate("window.__printed") == 1
         pg.emulate_media(media="print")
-        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".route").is_visible()
+        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".steps").is_visible()
         pg.emulate_media(media="screen")
         pg.goto(BASE + "/")
         pg.fill("#fq", "Badeline")
         with pg.expect_navigation():
             pg.press("#fq", "Enter")
-        A["search_keyboard_results"] = pg.locator(".gc").count()
+        A["search_keyboard_results"] = pg.locator(".types li").count()
         with pg.expect_navigation():
             pg.click(".find--page .reset")
         A["search_clear"] = pg.locator("#sq").input_value() == ""
@@ -170,7 +181,11 @@ def run(shots: Path | None) -> dict:
             and not pg.locator("[data-play]").first.is_visible()
         )
         pg.goto(BASE + GUIDE)
-        A["nojs_guide_route"] = pg.locator(".route li").count()
+        A["nojs_guide_route"] = pg.locator(".steps li").count()
+        pg.goto(BASE + "/igra/celeste/")
+        A["nojs_tracker_disabled_numbers_visible"] = (
+            pg.locator("[data-red-input]").first.is_disabled() and pg.locator(".of").count() > 5
+        )
         ctx.close()
         br.close()
     return res

@@ -85,6 +85,32 @@ class Site:
         i = gs.index(g)
         return (gs[i - 1] if i > 0 else None, gs[i + 1] if i + 1 < len(gs) else None)
 
+    ITEM_TYPES = {
+        "krasnye-klubniki": ("Красные клубники", "Strawberry"),
+        "zolotye-klubniki": ("Золотые клубники", "Golden Strawberries"),
+        "storony": ("Стороны A/B/C", None),
+    }
+
+    def by_item(self, game: str, t: str) -> list[tuple]:
+        """Глава → значение для вида предмета (число клубник из источника или строка сторон)."""
+        label, kind = self.ITEM_TYPES[t]
+        out = []
+        for g in self.for_game(game):
+            if kind is None:
+                if g.sides:
+                    out.append((g, g.sides))
+            else:
+                n = next((b["count"] for b in g.src.get("berries", []) if b["kind"] == kind), 0)
+                if n:
+                    out.append((g, n))
+        return out
+
+    def side_letters(self, g: Guide) -> list[str]:
+        return [x[-1] for x in re.findall(r"\d[ABC]", g.sides)]
+
+    def sides_total(self, game: str) -> int:
+        return sum(len(self.side_letters(g)) for g in self.for_game(game))
+
     def related(self, g: Guide) -> list[Guide]:
         return [self.by_slug[s] for s in g.related_slugs if s in self.by_slug]
 

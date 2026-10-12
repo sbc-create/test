@@ -1,4 +1,4 @@
-"""Приёмочные тесты games-story (вариант chapter-guides)."""
+"""Приёмочные тесты games-story (вариант progress-tracker)."""
 
 import copy
 import html as htmlmod
@@ -100,6 +100,23 @@ def test_video_is_facade_with_verified_metadata(app):
     assert len(vids) == len(app.site.videos) and all("uploadDate" not in x and "duration" not in x for x in vids)
 
 
+def test_tracker_rows_match_source(app):
+    _, html, _ = get(app, "/igra/celeste/")
+    for g in app.site.for_game("celeste"):
+        row = re.search(rf'<tr data-slug="{g.slug}"(.*?)</tr>', html, re.S).group(0)
+        if g.red:
+            assert f'max="{g.red}"' in row
+        assert re.findall(r'data-side="([ABC])"', row) == app.site.side_letters(g)
+    assert "disabled" in html  # без JS поля выключены, числа источника видны
+
+
+def test_item_type_pages_sum_source_numbers(app):
+    _, html, _ = get(app, "/igra/celeste/predmety/krasnye-klubniki/")
+    assert re.search(r"Итого</th><td>(\d+)</td>", html).group(1) == str(app.site.red_total("celeste"))
+    _, html, _ = get(app, "/igra/celeste/predmety/zolotye-klubniki/")
+    assert "Reflection" in html  # у Reflection только золотые клубники
+
+
 def test_404s_and_other_sites_games(app):
     for p in ("/igra/minecraft/", "/igra/baldurs-gate-3/", "/igra/celeste/net/", "/igra/celeste/glava-99/"):
         assert get(app, p)[0] == 404, p
@@ -107,7 +124,7 @@ def test_404s_and_other_sites_games(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="chapter-guides"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="progress-tracker"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)
