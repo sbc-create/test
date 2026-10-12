@@ -20,7 +20,8 @@ h2 { font-size: 1.3rem; letter-spacing: -.01em; }
 .bar nav a { color: #fff; text-decoration: none; min-height: 32px; display: inline-flex; align-items: center; }
 .bar nav a:hover { text-decoration: underline; }
 .crumbs ol { list-style: none; display: flex; flex-wrap: wrap; gap: 6px; margin: 12px auto 0; padding: 0 16px; max-width: 1200px; font-size: .85rem; color: var(--muted); }
-.crumbs li + li::before { content: "›"; margin-right: 6px; }
+.crumbs li:not(:last-child)::after { content: "›"; margin-left: 6px; }
+.crumbs a, .week__day a, .dish a, .plan__title a { display: inline-block; padding-block: 3px; min-height: 24px; }
 main { max-width: 1200px; margin: 0 auto; padding: 8px 16px 40px; }
 .lead { font-size: 1.08rem; color: var(--ink-2); max-width: 46em; }
 .kicker { text-transform: uppercase; letter-spacing: .12em; font-size: .78rem; font-weight: 700; color: var(--muted); margin: 10px 0 0; }
@@ -73,7 +74,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 8px 16px 40px; }
 .buy li { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 10px 14px; border-bottom: 1px solid var(--line); align-items: baseline; }
 .buy li:last-child { border-bottom: 0; }
 .buy label { display: flex; gap: 8px; align-items: baseline; cursor: pointer; }
-.buy input { width: 18px; height: 18px; accent-color: var(--accent); transform: translateY(3px); }
+.buy input { width: 24px; height: 24px; accent-color: var(--accent); vertical-align: middle; flex: none; }
 .buy input:checked + .buy__name { text-decoration: line-through; color: var(--muted); }
 .buy b { white-space: nowrap; font-variant-numeric: tabular-nums; }
 .buy__for { grid-column: 1 / -1; color: var(--muted); font-size: .8rem; }

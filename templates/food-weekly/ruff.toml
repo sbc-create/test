@@ -6,3 +6,4 @@ line-length = 120
 "weekplan/qa.py" = ["E501"]
 "weekplan/server.py" = ["E501"]
 "weekplan/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]
