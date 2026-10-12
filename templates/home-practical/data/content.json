@@ -1,0 +1,1815 @@
+{
+ "site_id": "home-practical",
+ "items": [
+  {
+   "slug": "aksessuary-na-odnoj-veshalke",
+   "title": "Шарфы, ремни и галстуки на одной вешалке",
+   "room": "spalnya",
+   "task": "organizaciya",
+   "tags": [
+    "bez-sverleniya",
+    "vlazhnye-pomeshcheniya",
+    "uhod"
+   ],
+   "summary": "Вешалка 32 × 72 см занимает места не больше обычных плечиков, но вмещает не меньше 18 аксессуаров. Ей можно пользоваться и во влажных помещениях.",
+   "applies": "Шкаф в спальне, где шарфы, ремни и галстуки лежат вперемешку на полке.",
+   "need": [
+    {
+     "text": "Многофункциональная вешалка",
+     "src": [
+      "src-0cb873150f"
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "Снимите с полки шарфы, ремни, галстуки и другие аксессуары.",
+     "src": [
+      "src-0cb873150f"
+     ]
+    },
+    {
+     "text": "Развесьте их по ячейкам вешалки — их не меньше 18.",
+     "src": [
+      "src-0cb873150f"
+     ]
+    },
+    {
+     "text": "Повесьте вешалку на штангу шкафа рядом с одеждой, с которой эти вещи носят."
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-0cb873150f",
+     "text": "Уход: ручная стирка в холодной воде (30 °C), не отбеливать, не сушить в машине, не гладить; сушить на верёвке."
+    }
+   ],
+   "checklist": [
+    "Аксессуары сняты с полок",
+    "Вешалка висит рядом с одеждой"
+   ],
+   "sources": [
+    "src-0cb873150f"
+   ],
+   "related": [
+    "razdelit-yashchik-komoda",
+    "sezonnaya-obuv-v-korobkah"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "3196c3b4475ff95deb8859962eaac3ace97038b366825da3eb3bf3f606bc4e16",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "krupy-v-kontejnerah",
+   "title": "Крупы и сыпучие продукты в контейнерах",
+   "room": "kuhnya",
+   "task": "hranenie",
+   "tags": [
+    "yashchiki-i-korobki",
+    "bez-sverleniya",
+    "uhod"
+   ],
+   "summary": "Прямоугольный контейнер на 1,0 л размером 21 × 15 × 6 см. Перед первым использованием его нужно вымыть; он подходит для микроволновки, морозилки и посудомоечной машины.",
+   "applies": "Кухонные шкафы и ящики, где продукты хранятся в открытых пачках.",
+   "need": [
+    {
+     "text": "Контейнеры с прямоугольными крышками той же серии",
+     "src": [
+      "src-e48d8e12dc"
+     ]
+    },
+    {
+     "text": "Ярлыки или маркер"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Вымойте контейнеры перед первым использованием.",
+     "src": [
+      "src-e48d8e12dc"
+     ]
+    },
+    {
+     "text": "Насухо вытрите их перед тем, как засыпать продукты."
+    },
+    {
+     "text": "Засыпьте продукт и закройте подходящей прямоугольной крышкой той же серии.",
+     "src": [
+      "src-e48d8e12dc"
+     ]
+    },
+    {
+     "text": "Подпишите содержимое на крышке или боковой стенке."
+    },
+    {
+     "text": "Перед каждым заполнением осматривайте контейнер: с трещинами и сколами его не используют.",
+     "src": [
+      "src-e48d8e12dc"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-e48d8e12dc",
+     "text": "Не используйте острые металлические приборы."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-e48d8e12dc",
+     "text": "Использование, уход, нагрев или хранение не по рекомендациям может повредить контейнер."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-e48d8e12dc",
+     "text": "Не используйте контейнер с видимыми трещинами, сколами или повреждениями поверхности."
+    }
+   ],
+   "checklist": [
+    "Контейнеры вымыты",
+    "Крышки подходят по форме",
+    "Содержимое подписано",
+    "Трещин и сколов нет"
+   ],
+   "sources": [
+    "src-e48d8e12dc"
+   ],
+   "related": [
+    "razdelit-yashchik-komoda"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "a430fdb468eb0ef7eea6507aab7b467be86a9255ffb1b59bbd17755500150a4e",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "nastennaya-veshalka-v-prihozhej",
+   "title": "Настенная вешалка в прихожей",
+   "room": "prihozhaya",
+   "task": "uluchsheniya",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie"
+   ],
+   "summary": "Вешалка крепится к стене шурупами, которые продаются отдельно. Производитель предупреждает об опасности падения и требует надёжного крепления.",
+   "applies": "Прихожая без места для шкафа. Размеры по карточке товара: ширина 19 см, глубина 7 см, высота 78 см.",
+   "need": [
+    {
+     "text": "Вешалка",
+     "src": [
+      "src-bf88bf5091"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели для стены — продаются отдельно; подходит крепёж серии TRIXIG",
+     "src": [
+      "src-bf88bf5091"
+     ]
+    },
+    {
+     "text": "Дрель, отвёртка, уровень"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Выберите место и убедитесь, что в стене нет скрытой проводки и труб."
+    },
+    {
+     "text": "Отметьте точки крепления по уровню."
+    },
+    {
+     "text": "Закрепите вешалку шурупами и дюбелями, подходящими для вашей стены.",
+     "src": [
+      "src-bf88bf5091"
+     ]
+    },
+    {
+     "text": "Покачайте вешалку рукой: она не должна смещаться, прежде чем на неё повесят одежду."
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-bf88bf5091",
+     "text": "Опасность падения: вешалку нужно надёжно закрепить подходящими шурупами и дюбелями."
+    },
+    {
+     "kind": "editorial",
+     "text": "Допустимая нагрузка в карточке товара не указана — проверьте её в инструкции по сборке, прежде чем вешать тяжёлую верхнюю одежду."
+    }
+   ],
+   "checklist": [
+    "Крепёж подобран под стену",
+    "Вешалка выставлена по уровню",
+    "Вешалка не смещается при нагрузке рукой"
+   ],
+   "sources": [
+    "src-bf88bf5091"
+   ],
+   "related": [
+    "obuvnaya-polka-u-vhoda",
+    "zadelat-otverstiya-ot-krepezha"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "6751ec5c3c672972ffd2e922a911fe8db61889f585182ae608a1f429ed940e53",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "navesnoj-shkaf-s-dvercej",
+   "title": "Навесной шкаф с дверцей: установка и полки",
+   "room": "vannaya",
+   "task": "mebel",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie",
+    "uhod"
+   ],
+   "summary": "Шкаф 60 × 31,6 × 75 см с 2 регулируемыми полками. Его обязательно крепят к стене; ручка продаётся отдельно.",
+   "applies": "Стена в ванной, где не хватает места для хранения.",
+   "need": [
+    {
+     "text": "Шкаф с 2 регулируемыми полками",
+     "src": [
+      "src-00ebd60393"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели для вашей стены",
+     "src": [
+      "src-00ebd60393"
+     ]
+    },
+    {
+     "text": "Ручка или кнопка — продаётся отдельно",
+     "src": [
+      "src-00ebd60393"
+     ]
+    },
+    {
+     "text": "Дрель, отвёртка, уровень"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Выберите место и убедитесь, что в стене нет скрытой проводки и труб."
+    },
+    {
+     "text": "Закрепите шкаф шурупами и дюбелями, подходящими для вашей стены.",
+     "src": [
+      "src-00ebd60393"
+     ]
+    },
+    {
+     "text": "Переставьте 2 полки на нужную высоту.",
+     "src": [
+      "src-00ebd60393"
+     ]
+    },
+    {
+     "text": "Установите ручку, если она нужна.",
+     "src": [
+      "src-00ebd60393"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-00ebd60393",
+     "text": "Опасность падения: шкаф должен быть надёжно закреплён."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-00ebd60393",
+     "text": "Уход: мягкая ткань, смоченная водой и мягким неабразивным средством, затем вытереть насухо."
+    },
+    {
+     "kind": "editorial",
+     "text": "Допустимая нагрузка на полки в карточке не указана — тяжёлые запасы лучше хранить внизу."
+    }
+   ],
+   "checklist": [
+    "Шкаф надёжно закреплён",
+    "Полки выставлены",
+    "Ручка установлена или не нужна"
+   ],
+   "sources": [
+    "src-00ebd60393"
+   ],
+   "related": [
+    "zerkalnyj-shkafchik-nad-rakovinoj",
+    "zakrepit-komod-k-stene"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "91ab0a92f0f06e9ccd1f1e063e2ff116a3178e508708bdd53a851f5a46240c2b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "obuvnaya-polka-u-vhoda",
+   "title": "Обувная полка у входа: одна или две в высоту",
+   "room": "prihozhaya",
+   "task": "hranenie",
+   "tags": [
+    "obuv",
+    "bez-sverleniya",
+    "uhod"
+   ],
+   "summary": "Полка 79 × 32 × 37 см вмещает примерно 6 пар обуви. Фурнитура, чтобы поставить 2 полки друг на друга, входит в комплект.",
+   "applies": "Узкая прихожая. Свободная высота под полкой — 10 см.",
+   "need": [
+    {
+     "text": "Одна или две обувные полки",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Самоклеящиеся накладки TRIXIG для защиты пола — продаются отдельно",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Рулетка"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Измерьте место: полке нужно 79 см по ширине и 32 см по глубине.",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Соберите полку по инструкции производителя.",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Если нужен второй ярус, соедините 2 полки фурнитурой из комплекта.",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "На чувствительный пол наклейте защитные накладки.",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Расставьте обувь: примерно 6 пар на одну полку.",
+     "src": [
+      "src-467a76ac55"
+     ]
+    },
+    {
+     "text": "Мокрую обувь сначала просушите, потом ставьте на полку."
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-467a76ac55",
+     "text": "Фурнитура в комплекте рассчитана на соединение 2 полок."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-467a76ac55",
+     "text": "Уход: протирать тканью, смоченной мягким моющим средством, затем вытирать насухо."
+    }
+   ],
+   "checklist": [
+    "Место под полку измерено",
+    "Ярусы соединены фурнитурой из комплекта",
+    "Пол защищён накладками",
+    "На каждой полке около 6 пар"
+   ],
+   "sources": [
+    "src-467a76ac55"
+   ],
+   "related": [
+    "sezonnaya-obuv-v-korobkah",
+    "nastennaya-veshalka-v-prihozhej"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "409a7829a246b72c6589857c5053980a71f578e83a297f1c87f30603d50e36e2",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "povesit-nastennuyu-polku",
+   "title": "Повесить настенную полку со скрытым креплением",
+   "room": "gostinaya",
+   "task": "uluchsheniya",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie"
+   ],
+   "summary": "Полка длиной 110 см держится на скрытых кронштейнах из комплекта и выдерживает до 10 кг. Шурупы для стены в комплект не входят.",
+   "applies": "Стены в гостиной, спальне или прихожей, где нужно освободить пол. Глубина полки — 26 см, толщина — 5 см.",
+   "not_for": "Тяжёлые вещи: нагрузка больше 10 кг не допускается.",
+   "need": [
+    {
+     "text": "Полка со скрытым кронштейном (входит в комплект)",
+     "src": [
+      "src-d0c1c27a04"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели для вашей стены — продаются отдельно",
+     "src": [
+      "src-d0c1c27a04"
+     ]
+    },
+    {
+     "text": "Дрель, отвёртка, уровень, карандаш"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Выберите место и убедитесь, что в стене нет скрытой проводки и труб."
+    },
+    {
+     "text": "Отметьте по уровню положение кронштейна."
+    },
+    {
+     "text": "Закрепите скрытый кронштейн шурупами и дюбелями, подходящими для вашей стены.",
+     "src": [
+      "src-d0c1c27a04"
+     ]
+    },
+    {
+     "text": "Установите полку на кронштейн по инструкции по сборке производителя.",
+     "src": [
+      "src-d0c1c27a04"
+     ]
+    },
+    {
+     "text": "Ставьте на полку вещи общей массой не больше 10 кг.",
+     "src": [
+      "src-d0c1c27a04"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-d0c1c27a04",
+     "text": "Опасность падения: полку нужно надёжно закрепить; если сомневаетесь в выборе крепежа — обратитесь к специалисту."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-d0c1c27a04",
+     "text": "Максимальная нагрузка — 10 кг."
+    },
+    {
+     "kind": "editorial",
+     "text": "Не используйте полку как опору или ступеньку."
+    }
+   ],
+   "checklist": [
+    "Место проверено на скрытую проводку и трубы",
+    "Кронштейн выставлен по уровню",
+    "Крепёж подобран под материал стены",
+    "На полке не больше 10 кг"
+   ],
+   "sources": [
+    "src-d0c1c27a04"
+   ],
+   "related": [
+    "zakrepit-knizhnyj-stellazh",
+    "zadelat-otverstiya-ot-krepezha"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "235e2e40ae97921f2f951b3050a47a3d141df02c54c5fdc0a54f3a707e12de41",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "razdelit-yashchik-komoda",
+   "title": "Разделить ящик комода коробками",
+   "room": "spalnya",
+   "task": "organizaciya",
+   "tags": [
+    "yashchiki-i-korobki",
+    "bez-sverleniya",
+    "uhod"
+   ],
+   "summary": "В наборе 6 коробок трёх размеров. Расчёт ниже показывает, как они встают в ящик шириной 71 см и глубиной 38 см.",
+   "applies": "Ящики комода в спальне. Размеры коробок: 14 × 14 × 13 см, 28 × 14 × 13 см и 28 × 28 × 13 см, по 2 каждого.",
+   "need": [
+    {
+     "text": "Набор из 6 коробок",
+     "src": [
+      "src-72ae8be73a"
+     ]
+    },
+    {
+     "text": "Рулетка"
+    }
+   ],
+   "calc": [
+    {
+     "label": "Ряд в первом ящике: две большие коробки и одна маленькая",
+     "expr": "28 + 28 + 14",
+     "result": "70",
+     "unit": "см",
+     "conclusion": "Это не больше 71 см ширины ящика — ряд помещается."
+    },
+    {
+     "label": "Глубина, которая остаётся за большими коробками",
+     "expr": "38 - 28",
+     "result": "10",
+     "unit": "см",
+     "conclusion": "Это меньше 14 см — второй ряд в этот ящик не встанет."
+    },
+    {
+     "label": "Ряд во втором ящике: две средние коробки длинной стороной вдоль ящика и одна маленькая",
+     "expr": "28 + 28 + 14",
+     "result": "70",
+     "unit": "см",
+     "conclusion": "Помещается по ширине, глубина ряда — 14 см."
+    }
+   ],
+   "steps": [
+    {
+     "text": "Измерьте внутреннюю высоту ящика: в карточке комода она не указана, а высота коробок — 13 см.",
+     "src": [
+      "src-641bfa5c95",
+      "src-72ae8be73a"
+     ]
+    },
+    {
+     "text": "В первый ящик поставьте 2 большие коробки и одну маленькую в один ряд.",
+     "src": [
+      "src-72ae8be73a"
+     ]
+    },
+    {
+     "text": "Во второй ящик поставьте 2 средние коробки и одну маленькую.",
+     "src": [
+      "src-72ae8be73a"
+     ]
+    },
+    {
+     "text": "Разложите по коробкам мелкие вещи, которые раньше лежали вперемешку."
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-72ae8be73a",
+     "text": "Коробки не стирать; чистить пылесосом или роликом для одежды."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-641bfa5c95",
+     "text": "Комод с ящиками должен быть надёжно закреплён к стене."
+    },
+    {
+     "kind": "editorial",
+     "text": "Если ящик ниже 13 см внутри, коробки не подойдут — сначала измерьте."
+    }
+   ],
+   "checklist": [
+    "Внутренняя высота ящика измерена",
+    "Ряды собраны по расчёту",
+    "Комод закреплён к стене"
+   ],
+   "sources": [
+    "src-72ae8be73a",
+    "src-641bfa5c95"
+   ],
+   "related": [
+    "zakrepit-komod-k-stene",
+    "aksessuary-na-odnoj-veshalke",
+    "sezonnaya-obuv-v-korobkah"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "2b4969efe8cef0251e5cec760785851865702f5dfb75512785636f38f366f661",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "sezonnaya-obuv-v-korobkah",
+   "title": "Сезонная обувь в тканевых коробках",
+   "room": "spalnya",
+   "task": "hranenie",
+   "tags": [
+    "obuv",
+    "yashchiki-i-korobki",
+    "bez-sverleniya",
+    "uhod"
+   ],
+   "summary": "Коробка 23 × 34 × 19 см рассчитана на гардеробы PAX. Стирать её нельзя: пыль снимают роликом, пятна — влажной тканью.",
+   "applies": "Шкаф в спальне или прихожей. Перед покупкой сверьте полку шкафа: ширина коробки 23 см, глубина 34 см, высота 19 см.",
+   "need": [
+    {
+     "text": "Тканевые коробки для обуви",
+     "src": [
+      "src-2cac158478"
+     ]
+    },
+    {
+     "text": "Ролик для одежды",
+     "src": [
+      "src-2cac158478"
+     ]
+    },
+    {
+     "text": "Рулетка, ярлыки"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Измерьте полку: глубина должна быть не меньше 34 см, высота — не меньше 19 см.",
+     "src": [
+      "src-2cac158478"
+     ]
+    },
+    {
+     "text": "Почистите и просушите обувь перед хранением."
+    },
+    {
+     "text": "Разложите обувь по коробкам и подпишите ярлыки, чтобы не открывать каждую."
+    },
+    {
+     "text": "Поставьте коробки на полку шкафа."
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-2cac158478",
+     "text": "Не стирать, не отбеливать, не сушить в машине, не гладить, не сдавать в химчистку."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-2cac158478",
+     "text": "Протирать тканью, смоченной водой; пыль удалять роликом."
+    },
+    {
+     "kind": "editorial",
+     "text": "Коробки другой глубины не войдут в полку, рассчитанную под конкретный шкаф."
+    }
+   ],
+   "checklist": [
+    "Полка измерена",
+    "Обувь чистая и сухая",
+    "Коробки подписаны"
+   ],
+   "sources": [
+    "src-2cac158478"
+   ],
+   "related": [
+    "obuvnaya-polka-u-vhoda",
+    "razdelit-yashchik-komoda"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ed6e1aa2f70ebc2d108f34cb187bd4dabd818db1ed284be506ea07afcba52804",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "tumba-s-yashchikami-pod-stol",
+   "title": "Тумба с ящиками на колёсах под стол",
+   "room": "rabochee-mesto",
+   "task": "hranenie",
+   "tags": [
+    "yashchiki-i-korobki",
+    "bez-sverleniya",
+    "uhod"
+   ],
+   "summary": "Тумба 28 × 44 × 65 см, в ящик помещаются бумаги формата A4. Нагрузка — до 1 кг на ящик и до 5 кг на всю тумбу.",
+   "applies": "Рабочее место, где бумаги и мелочи лежат на столе. Под столешницей должно хватать 65 см высоты и 44 см глубины.",
+   "need": [
+    {
+     "text": "Тумба",
+     "src": [
+      "src-2b5a691a22"
+     ]
+    },
+    {
+     "text": "Отвёртка"
+    },
+    {
+     "text": "Рулетка"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Измерьте место под столом: тумбе нужно 65 см по высоте и 44 см по глубине.",
+     "src": [
+      "src-2b5a691a22"
+     ]
+    },
+    {
+     "text": "Соберите тумбу по инструкции производителя.",
+     "src": [
+      "src-2b5a691a22"
+     ]
+    },
+    {
+     "text": "Разложите вещи: не больше 1 кг в ящик и не больше 5 кг во всю тумбу.",
+     "src": [
+      "src-2b5a691a22"
+     ]
+    },
+    {
+     "text": "Примерно через две недели после сборки подтяните винты.",
+     "src": [
+      "src-2b5a691a22"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-2b5a691a22",
+     "text": "Максимальная нагрузка — 1 кг на ящик и 5 кг на тумбу."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-2b5a691a22",
+     "text": "Для устойчивости подтягивайте винты примерно через две недели после сборки и затем по необходимости."
+    },
+    {
+     "kind": "editorial",
+     "text": "Ноутбук и тяжёлые книги на тумбу не ставьте: это легко превышает нагрузку."
+    }
+   ],
+   "checklist": [
+    "Тумба помещается под столом",
+    "В ящиках не больше 1 кг",
+    "Винты подтянуты после двух недель"
+   ],
+   "sources": [
+    "src-2b5a691a22"
+   ],
+   "related": [
+    "razdelit-yashchik-komoda"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "4eb67bdc33504dfc4d264a36997ecf5132b8b89971a4ad365658cdc2613a7306",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zadelat-otverstiya-ot-krepezha",
+   "title": "Заделать отверстия после снятия крепежа",
+   "room": "gostinaya",
+   "task": "uluchsheniya",
+   "tags": [
+    "sverlenie"
+   ],
+   "summary": "Отверстия от дюбелей в гипсокартоне и штукатурке заполняют шпаклёвкой, затем шлифуют и подкрашивают. Порядок — по рекомендациям CPSC.",
+   "applies": "Стены из гипсокартона и штукатурки после переезда или перестановки мебели.",
+   "not_for": "Кирпич и бетон: для них нужны другие материалы — проволочная щётка, герметик и, при желании подобрать цвет, кирпичная пыль.",
+   "need": [
+    {
+     "text": "Плоскогубцы",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Шпаклёвка или шпаклёвочная смесь для швов",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Шпательная лопатка шириной 1–4 дюйма — по удобству",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Мелкозернистая шлифовальная бумага, зернистость от 150 до 220",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Краска в цвет стены",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "Извлеките дюбель из стены плоскогубцами.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Срежьте или зашлифуйте всё, что выступает из отверстия.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Протрите стену влажной тканью от пыли и дайте ей высохнуть.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Полностью заполните отверстие шпаклёвкой и разгладьте её лопаткой поверх отверстия и вокруг.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Если отверстие глубокое, заполните сколько получится, а остальное — вторым слоем.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Дайте шпаклёвке высохнуть столько, сколько указано на упаковке.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Зашлифуйте заплатку вровень со стеной, не продавливая углубление.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    },
+    {
+     "text": "Подкрасьте место; если разница в цвете или фактуре заметна, нанесите второй слой краски.",
+     "src": [
+      "src-1c6e32a6f7"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "organization",
+     "src": "src-1c6e32a6f7",
+     "text": "Набор материалов зависит от того, в какую стену был установлен крепёж."
+    },
+    {
+     "kind": "editorial",
+     "text": "Проверьте оттенок краски на незаметном участке стены."
+    }
+   ],
+   "checklist": [
+    "Дюбель удалён, края отверстия зачищены",
+    "Отверстие заполнено полностью",
+    "Шпаклёвка высохла по времени с упаковки",
+    "Заплатка вровень со стеной",
+    "Краска нанесена, разницы в цвете не видно"
+   ],
+   "sources": [
+    "src-1c6e32a6f7"
+   ],
+   "related": [
+    "zakrepit-komod-k-stene",
+    "povesit-nastennuyu-polku",
+    "nastennaya-veshalka-v-prihozhej"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "599011edf798da9d4afb5dde39add7bd5009b7abc5be06b602e1a3940b4f7d21",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zakrepit-knizhnyj-stellazh",
+   "title": "Закрепить высокий книжный стеллаж",
+   "room": "gostinaya",
+   "task": "mebel",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie"
+   ],
+   "summary": "Стеллаж высотой 202 см производитель требует надёжно закрепить: есть опасность опрокидывания. Нагрузка на одну полку — не больше 30 кг.",
+   "applies": "Высокие открытые стеллажи в гостиной и кабинете. Пример — стеллаж 80 × 28 × 202 см: 1 неподвижная и 4 регулируемые полки.",
+   "need": [
+    {
+     "text": "Комплект для крепления мебели к стене: ремень и два кронштейна",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Дрель и сверло",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Отвёртка",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Детектор каркаса стены (stud finder) — найти брус или профиль под гипсокартоном",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели, подходящие для материала вашей стены",
+     "src": [
+      "src-a104528611"
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "До установки проверьте, что между верхом стеллажа и потолком остаётся место: без него стеллаж не получится закрепить к стене.",
+     "src": [
+      "src-a104528611"
+     ]
+    },
+    {
+     "text": "Закрепите кронштейн на стене.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Придвиньте стеллаж к стене.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Закрепите вторую часть крепления на стеллаже.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Соедините ремень с кронштейнами и затяните его.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Расставьте вещи так, чтобы на одну полку приходилось не больше 30 кг.",
+     "src": [
+      "src-a104528611"
+     ]
+    },
+    {
+     "text": "Потяните за ремень и убедитесь, что крепление держит.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-a104528611",
+     "text": "Опасность опрокидывания: стеллаж должен быть надёжно закреплён шурупами и дюбелями, подходящими для вашей стены."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-a104528611",
+     "text": "Максимальная нагрузка — 30 кг на полку."
+    },
+    {
+     "kind": "organization",
+     "src": "src-491fb55ab9",
+     "text": "CPSC рекомендует крепить к стене всю мебель с ящиками, дверцами и полками."
+    },
+    {
+     "kind": "editorial",
+     "text": "Тяжёлые книги и папки удобнее ставить на нижние полки."
+    }
+   ],
+   "checklist": [
+    "Над стеллажом есть место для крепления",
+    "Крепление соединено со стеной и стеллажом, ремень затянут",
+    "Ни одна полка не нагружена больше 30 кг",
+    "Крепление выдержало проверку рывком"
+   ],
+   "sources": [
+    "src-a104528611",
+    "src-491fb55ab9"
+   ],
+   "related": [
+    "zakrepit-komod-k-stene",
+    "povesit-nastennuyu-polku",
+    "zadelat-otverstiya-ot-krepezha"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7f12101f733eb96c30776204f3f49a83b1490da90d844e6fff30c367747eadef",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zakrepit-komod-k-stene",
+   "title": "Закрепить комод к стене, чтобы он не опрокинулся",
+   "room": "spalnya",
+   "task": "mebel",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie"
+   ],
+   "summary": "Производитель комода предупреждает об опасности опрокидывания и требует надёжно его закрепить. Порядок работ — по программе CPSC «Anchor It!».",
+   "applies": "Комоды и другая мебель с ящиками в спальне, детской и гостиной. Пример в инструкции — комод на 3 ящика: ширина 82 см, глубина 51 см, высота 78 см.",
+   "need": [
+    {
+     "text": "Комплект для крепления мебели к стене: ремень и два кронштейна",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Дрель и сверло",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Отвёртка",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Детектор каркаса стены (stud finder) — найти брус или профиль под гипсокартоном",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели, подходящие для материала вашей стены",
+     "src": [
+      "src-641bfa5c95"
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "Закрепите первый кронштейн на стене.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Придвиньте комод вплотную к стене.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Закрепите второй кронштейн или пластину на комоде.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Соедините ремень с обоими кронштейнами.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Затяните ремень и убедитесь, что соединение надёжное.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    },
+    {
+     "text": "Потяните за ремень: крепление должно держать комод у стены.",
+     "src": [
+      "src-491fb55ab9"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-641bfa5c95",
+     "text": "Опасность опрокидывания: комод должен быть надёжно закреплён. Используйте шурупы и дюбели, подходящие для вашей стены; если сомневаетесь — обратитесь к специалисту."
+    },
+    {
+     "kind": "organization",
+     "src": "src-491fb55ab9",
+     "text": "CPSC: крепление к стене всей мебели с ящиками, дверцами и полками предотвращает травмы и гибель при опрокидывании."
+    },
+    {
+     "kind": "organization",
+     "src": "src-491fb55ab9",
+     "text": "В США с 1 сентября 2023 года действует федеральное правило о предотвращении опрокидывания мебели."
+    },
+    {
+     "kind": "editorial",
+     "text": "Перед сверлением убедитесь, что в месте крепления нет скрытой проводки и труб."
+    }
+   ],
+   "checklist": [
+    "Кронштейн надёжно закреплён на стене",
+    "Комод стоит вплотную к стене",
+    "Ремень соединён с обоими кронштейнами и затянут",
+    "Крепление выдержало проверку рывком",
+    "Шурупы и дюбели подобраны под материал стены"
+   ],
+   "sources": [
+    "src-641bfa5c95",
+    "src-491fb55ab9"
+   ],
+   "related": [
+    "zakrepit-knizhnyj-stellazh",
+    "razdelit-yashchik-komoda",
+    "zadelat-otverstiya-ot-krepezha"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7452cf4d59273433f66afeca38915a53e2d8ef85001aa3e8775c5503dac570b9",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zerkalnyj-shkafchik-nad-rakovinoj",
+   "title": "Зеркальный шкафчик над раковиной",
+   "room": "vannaya",
+   "task": "hranenie",
+   "tags": [
+    "krepezh-k-stene",
+    "opasnost-padeniya",
+    "sverlenie",
+    "vlazhnye-pomeshcheniya",
+    "uhod"
+   ],
+   "summary": "Шкафчик 40 × 16,6 × 75 см нужно надёжно закрепить: производитель предупреждает об опасности падения. Ручку ставят с обратной стороны дверцы — сверлить зеркало нельзя.",
+   "applies": "Стена над раковиной в ванной.",
+   "need": [
+    {
+     "text": "Шкафчик",
+     "src": [
+      "src-6669baf533"
+     ]
+    },
+    {
+     "text": "Шурупы и дюбели для вашей стены",
+     "src": [
+      "src-6669baf533"
+     ]
+    },
+    {
+     "text": "Ручка или кнопка, которую крепят с обратной стороны дверцы, — по желанию",
+     "src": [
+      "src-6669baf533"
+     ]
+    },
+    {
+     "text": "Дрель, отвёртка, уровень"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Выберите место и убедитесь, что в стене нет скрытой проводки и труб."
+    },
+    {
+     "text": "Закрепите шкафчик шурупами и дюбелями, подходящими для вашей стены.",
+     "src": [
+      "src-6669baf533"
+     ]
+    },
+    {
+     "text": "Если ставите ручку, крепите её с обратной стороны дверцы: зеркальное стекло не сверлят.",
+     "src": [
+      "src-6669baf533"
+     ]
+    },
+    {
+     "text": "Несколько шкафчиков соедините шурупами из комплекта.",
+     "src": [
+      "src-6669baf533"
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "manufacturer",
+     "src": "src-6669baf533",
+     "text": "Опасность падения: шкафчик должен быть надёжно закреплён."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-6669baf533",
+     "text": "Дверцей можно пользоваться и без ручки."
+    },
+    {
+     "kind": "manufacturer",
+     "src": "src-6669baf533",
+     "text": "Уход: мягкая ткань, смоченная водой и мягким неабразивным средством, затем вытереть насухо."
+    }
+   ],
+   "checklist": [
+    "Место проверено на проводку и трубы",
+    "Шкафчик надёжно закреплён",
+    "Зеркало не сверлилось"
+   ],
+   "sources": [
+    "src-6669baf533"
+   ],
+   "related": [
+    "navesnoj-shkaf-s-dvercej",
+    "zadelat-otverstiya-ot-krepezha"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "4f12aa3afc330eb718b5a14b279a6b6ba542d3a6ddd7d8ca56fdc7c7824420e7",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-00ebd60393": {
+   "id": "src-00ebd60393",
+   "url": "https://www.ikea.com/gb/en/p/enhet-wall-cabinet-with-door-white-40623025/",
+   "fetched_at": "2026-10-12T20:24:13Z",
+   "page_sha256": "27dfe1d49a9b207bdae2130f6219add8633f0ec9bd16964cefa82e57bd2a4ee5",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "ENHET wall cabinet with door, white, 60x32x75 cm",
+   "article": "406.230.25",
+   "measures": {
+    "Depth": "31.6 cm",
+    "Height": "75 cm",
+    "Width": "60 cm"
+   },
+   "good_to_know": [
+    "Screws for connecting several base cabinets included.",
+    "2 adjustable shelves included.",
+    "Knob or handle, sold separately."
+   ],
+   "safety": [
+    "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe dry with a clean cloth.",
+    "Wipe clean with a soft cloth dampened in water and a mild non-abrasive washing-up detergent or soap, if necessary."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/enhet-wall-cabinet-with-door-white__AA-2623388-3-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-0cb873150f": {
+   "id": "src-0cb873150f",
+   "url": "https://www.ikea.com/gb/en/p/komplement-multi-use-hanger-white-60387211/",
+   "fetched_at": "2026-10-12T20:24:25Z",
+   "page_sha256": "bcc9b45d27eaee40e1de1fe0d3ecf0d9a70482bc132c99869761c636d8878517",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "KOMPLEMENT multi-use hanger, white",
+   "article": "603.872.11",
+   "measures": {
+    "Width": "32 cm",
+    "Height": "72 cm"
+   },
+   "good_to_know": [],
+   "safety": [],
+   "care": [
+    "Hand wash, cold (30°C).",
+    "Do not bleach.",
+    "Do not tumble dry.",
+    "Do not iron.",
+    "Line drying."
+   ],
+   "assembly_pdf": [],
+   "notes": [
+    "Helps you to keep your shawls, belts, ties and other accessories in order.",
+    "Takes as little room as a clothes-hanger, but can store at least 18 different accessories.",
+    "Can also be used in bathrooms and other damp areas indoors."
+   ]
+  },
+  "src-1c6e32a6f7": {
+   "id": "src-1c6e32a6f7",
+   "url": "https://www.anchorit.gov/how-to-anchor/repair-tips/",
+   "fetched_at": "2026-10-12T20:23:40Z",
+   "page_sha256": "d0615ddeed9c2861ac7dd7e83791cf789091fe53af2c266113f3791802059c09",
+   "parser": "hp-facts/1.0",
+   "kind": "organization",
+   "publisher": "U.S. Consumer Product Safety Commission (Anchor It!)",
+   "name": "Anchor It! — Repair Tips",
+   "quotes": [
+    {
+     "id": "depends",
+     "quote": "What you'll need depends on the type of wall you anchored into"
+    },
+    {
+     "id": "drywall-supplies",
+     "quote": "Pliers Spackle or joint compound A joint knife (1-4 inches wide, depending on personal preference) Fine grain sandpaper (anything from 150 to 220) Paint that matches the wall",
+     "values": [
+      "150",
+      "220"
+     ]
+    },
+    {
+     "id": "masonry-supplies",
+     "quote": "A wire brush Caulk Brick dust (if you want the color to match)"
+    },
+    {
+     "id": "remove",
+     "quote": "Remove the anchor from the wall with a pair of pliers"
+    },
+    {
+     "id": "scrape",
+     "quote": "Scrape away or sand down any bits sticking out of the hole"
+    },
+    {
+     "id": "wipe",
+     "quote": "Prep the wall by wiping it with a damp cloth to get rid of any dust"
+    },
+    {
+     "id": "fill",
+     "quote": "Fill the hole completely with the spackle"
+    },
+    {
+     "id": "second-pass",
+     "quote": "If the hole is too deep to fill in one shot, fill as much as you can and then do a second pass to complete the rest"
+    },
+    {
+     "id": "dry",
+     "quote": "Allow the spackle to dry for the length of time recommended on the tub"
+    },
+    {
+     "id": "sand",
+     "quote": "use your sandpaper to make it as flush with the wall as you can without starting to create a dent"
+    },
+    {
+     "id": "paint",
+     "quote": "if you can still see a difference in color or texture, apply a second layer of paint"
+    }
+   ]
+  },
+  "src-2b5a691a22": {
+   "id": "src-2b5a691a22",
+   "url": "https://www.ikea.com/gb/en/p/helmer-drawer-unit-on-castors-black-70625023/",
+   "fetched_at": "2026-10-12T20:24:18Z",
+   "page_sha256": "357fb54e169677c2bac14ec0fe69034dfa9c354eb0599d11952b36fbd439f47e",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "HELMER drawer unit on castors, black, 28x65 cm",
+   "article": "706.250.23",
+   "measures": {
+    "Max. load": "5 kg",
+    "Max. load/drawer": "1 kg",
+    "Width": "28 cm",
+    "Depth": "44 cm",
+    "Height": "65 cm",
+    "Depth of drawer (inside)": "37 cm",
+    "Width of drawer (inside)": "22 cm"
+   },
+   "good_to_know": [
+    "The drawer holds A4 and letter size papers."
+   ],
+   "safety": [],
+   "care": [
+    "Wipe clean with a cloth dampened in a mild cleaner.",
+    "Wipe dry with a clean cloth.",
+    "For increased stability, re-tighten the screws about two weeks after assembly and when necessary."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/helmer-drawer-unit-on-castors-black__AA-2596950-5-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-2cac158478": {
+   "id": "src-2cac158478",
+   "url": "https://www.ikea.com/gb/en/p/hemmafixare-shoe-box-fabric-striped-white-grey-40503914/",
+   "fetched_at": "2026-10-12T20:24:04Z",
+   "page_sha256": "33a3f3bd30e75b00d9394b79088bac5adbb426366aba5e3d0be515f94813bd2b",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "HEMMAFIXARE shoe box, fabric striped/white/grey, 23x34x19 cm",
+   "article": "405.039.14",
+   "measures": {
+    "Depth": "34 cm",
+    "Height": "19 cm",
+    "Width": "23 cm"
+   },
+   "good_to_know": [
+    "Designed for PAX wardrobes."
+   ],
+   "safety": [],
+   "care": [
+    "Do not wash.",
+    "Do not bleach.",
+    "Do not tumble dry.",
+    "Do not iron.",
+    "Do not dryclean.",
+    "Wipe clean with a cloth dampened in water.",
+    "Remove dust with a lint remover."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/hemmafixare-shoe-box-fabric-striped-white-grey__AA-2285830-1-2.pdf"
+   ],
+   "notes": []
+  },
+  "src-467a76ac55": {
+   "id": "src-467a76ac55",
+   "url": "https://www.ikea.com/gb/en/p/tjusig-shoe-rack-black-10152639/",
+   "fetched_at": "2026-10-12T20:24:01Z",
+   "page_sha256": "e19f6270d9690838d0d28cdcc299c7c1a052753812ee568d96c6e2c1f3c9ea13",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "TJUSIG shoe rack, black, 79x32x37 cm",
+   "article": "101.526.39",
+   "measures": {
+    "Width": "79 cm",
+    "Depth": "32 cm",
+    "Height": "37 cm",
+    "Free height under furniture": "10 cm"
+   },
+   "good_to_know": [
+    "Holds approx. 6 pairs of shoes.",
+    "Connection fittings for stacking 2 shoe racks are included.",
+    "Combines with other products in the TJUSIG series.",
+    "To prevent scratches on sensitive surfaces, complete with TRIXIG self-adhesive floor protectors, sold separately."
+   ],
+   "safety": [],
+   "care": [
+    "Wipe clean with a cloth dampened in a mild cleaner.",
+    "Wipe clean with a dry cloth.",
+    "Wipe dry with a clean cloth."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/tjusig-shoe-rack-black__AA-1144848-2-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-491fb55ab9": {
+   "id": "src-491fb55ab9",
+   "url": "https://www.anchorit.gov/",
+   "fetched_at": "2026-10-12T20:23:38Z",
+   "page_sha256": "22bfb8d2b31f4ca8a125cee7e3b262f866f527f927ecf6e68a813bd51aed9016",
+   "parser": "hp-facts/1.0",
+   "kind": "organization",
+   "publisher": "U.S. Consumer Product Safety Commission (Anchor It!)",
+   "name": "Anchor It! — How to anchor furniture and TVs",
+   "quotes": [
+    {
+     "id": "anchor-all",
+     "quote": "Anchoring all furniture with drawers, doors, and shelves to the wall prevents tip-over injuries and deaths"
+    },
+    {
+     "id": "need",
+     "quote": "Furniture/TV anchoring kit Drill and drill bit Screwdriver Stud finder"
+    },
+    {
+     "id": "step-1",
+     "quote": "ATTACH a bracket to the wall"
+    },
+    {
+     "id": "step-2",
+     "quote": "MOVE the furniture close to the wall"
+    },
+    {
+     "id": "step-3",
+     "quote": "ATTACH the other bracket/plate to your furniture or TV"
+    },
+    {
+     "id": "step-4",
+     "quote": "CONNECT the strap to both brackets"
+    },
+    {
+     "id": "step-5",
+     "quote": "TIGHTEN the strap and make sure it's secure"
+    },
+    {
+     "id": "tug",
+     "quote": "Tug on the straps to be confident everything is secure"
+    },
+    {
+     "id": "rule",
+     "quote": "Federal Rule to Prevent Furniture Tip-Over Injuries and Death; Effective September 1, 2023",
+     "values": [
+      "2023"
+     ]
+    }
+   ]
+  },
+  "src-641bfa5c95": {
+   "id": "src-641bfa5c95",
+   "url": "https://www.ikea.com/gb/en/p/fagelfjaellet-chest-of-3-drawers-off-white-40611640/",
+   "fetched_at": "2026-10-12T20:23:49Z",
+   "page_sha256": "9a15fdf3f5f337f299ee7fd53ce58f8e26029b58d5348ec74445992008137b97",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "FÅGELFJÄLLET chest of 3 drawers, off-white, 82x51x78 cm",
+   "article": "406.116.40",
+   "measures": {
+    "Depth": "51 cm",
+    "Depth of drawer (inside)": "38 cm",
+    "Height": "78 cm",
+    "Storage capacity": "130 l",
+    "Width": "82 cm",
+    "Width of drawer (inside)": "71 cm",
+    "Drawer pull-out": "24.7 cm"
+   },
+   "good_to_know": [
+    "The chest of drawers holds approximately 75 medium-sized T-shirts."
+   ],
+   "safety": [
+    "WARNING! Tipping hazard – this product must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe clean with a cloth dampened in a mild cleaner.",
+    "Wipe dry with a clean cloth."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/fagelfjaellet-chest-of-3-drawers-off-white__AA-2621423-3-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-6669baf533": {
+   "id": "src-6669baf533",
+   "url": "https://www.ikea.com/gb/en/p/enhet-mirror-cabinet-with-door-white-30623040/",
+   "fetched_at": "2026-10-12T20:24:16Z",
+   "page_sha256": "b890c8568e2fc2abe9165fbc3420815bf67468c409b39a2a09e0403c40037ea6",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "ENHET mirror cabinet with door, white, 40x17x75 cm",
+   "article": "306.230.40",
+   "measures": {
+    "Depth": "16.6 cm",
+    "Height": "75 cm",
+    "Width": "40 cm"
+   },
+   "good_to_know": [
+    "To be completed with a knob/handle that can be mounted on the backside of the door as you cannot drill in the mirrored glass. The door can also be used without a knob or handle.",
+    "Screws for connecting several wall cabinets included."
+   ],
+   "safety": [
+    "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe dry with a clean cloth.",
+    "Wipe clean with a soft cloth dampened in water and a mild non-abrasive washing-up detergent or soap, if necessary."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/enhet-mirror-cabinet-with-door-white__AA-2623388-3-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-72ae8be73a": {
+   "id": "src-72ae8be73a",
+   "url": "https://www.ikea.com/gb/en/p/skubb-box-set-of-6-white-00428549/",
+   "fetched_at": "2026-10-12T20:24:07Z",
+   "page_sha256": "f291d6ba9297cf402fb371abff61bff038183a327153f46ad6487e289de5ad96",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "SKUBB box, set of 6, white",
+   "article": "004.285.49",
+   "measures": {},
+   "good_to_know": [
+    "Sizes: 14x14x13 cm, 28x14x13 cm and 28x28x13 cm, 2 of each."
+   ],
+   "safety": [],
+   "care": [
+    "Clean by vacuuming or use a lint roller.",
+    "Do not wash.",
+    "Do not bleach.",
+    "Do not tumble dry.",
+    "Do not iron.",
+    "Do not dryclean."
+   ],
+   "assembly_pdf": [],
+   "notes": []
+  },
+  "src-a104528611": {
+   "id": "src-a104528611",
+   "url": "https://www.ikea.com/gb/en/p/billy-bookcase-brown-walnut-effect-50508652/",
+   "fetched_at": "2026-10-12T20:23:53Z",
+   "page_sha256": "c3b17004bb8e90e00709b356260d6801a238faaf86742d570c7690cb92ac4a1f",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "BILLY bookcase, brown walnut effect, 80x28x202 cm",
+   "article": "505.086.52",
+   "measures": {
+    "Width": "80 cm",
+    "Depth": "28 cm",
+    "Height": "202 cm",
+    "Max. load/shelf": "30 kg"
+   },
+   "good_to_know": [
+    "Keep in mind that you need enough space between the top of the furniture and the ceiling to be able to anchor the product to the wall.",
+    "1 fixed shelf and 4 adjustable shelves included.",
+    "May be completed with doors; available in different colours and designs.",
+    "May be completed with extra shelves to add storage space.",
+    "May be completed with BILLY height extension unit in the same width and depth for added vertical storage.",
+    "Product is possible to recycle or use for energy recovery, if available in your community."
+   ],
+   "safety": [
+    "WARNING! Tipping hazard – this product must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe clean with a cloth dampened in a mild cleaner.",
+    "Wipe dry with a clean cloth."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/billy-bookcase-brown-walnut-effect__AA-2289108-3-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-bf88bf5091": {
+   "id": "src-bf88bf5091",
+   "url": "https://www.ikea.com/gb/en/p/tjusig-hanger-black-80291707/",
+   "fetched_at": "2026-10-12T20:23:58Z",
+   "page_sha256": "d82cbf58b125e20ebae2194421684516f283167901ee6786da2a71d24071a02b",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "TJUSIG black, Hanger, 78 cm",
+   "article": "802.917.07",
+   "measures": {
+    "Width": "19 cm",
+    "Depth": "7 cm",
+    "Height": "78 cm"
+   },
+   "good_to_know": [
+    "Combines with other products in the TJUSIG series.",
+    "Can be fixed with suitable screws/fittings from our TRIXIG series.",
+    "Product is possible to recycle or use for energy recovery, if available in your community.",
+    "Screws for wall mounting sold separately."
+   ],
+   "safety": [
+    "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe clean with a damp cloth.",
+    "Wipe dry with a clean cloth."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/tjusig-hanger-black__AA-1103756-10-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-d0c1c27a04": {
+   "id": "src-d0c1c27a04",
+   "url": "https://www.ikea.com/gb/en/p/lack-wall-shelf-white-90282180/",
+   "fetched_at": "2026-10-12T20:23:55Z",
+   "page_sha256": "b883993a00363ba8623f28e8fc6831ab9c6cdddbc7a740a51cc10a7cc29e4e65",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "LACK wall shelf, white, 110x26 cm",
+   "article": "902.821.80",
+   "measures": {
+    "Length": "110 cm",
+    "Depth": "26 cm",
+    "Thickness": "5 cm",
+    "Max. load": "10 kg"
+   },
+   "good_to_know": [
+    "Hidden suspension brackets are included.",
+    "Combines with other products in the LACK series.",
+    "Screws for wall mounting sold separately."
+   ],
+   "safety": [
+    "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+   ],
+   "care": [
+    "Wipe clean with a cloth dampened in a mild cleaner.",
+    "Wipe dry with a clean cloth."
+   ],
+   "assembly_pdf": [
+    "https://www.ikea.com/gb/en/assembly_instructions/lack-wall-shelf-white__AA-24442-15-100.pdf"
+   ],
+   "notes": []
+  },
+  "src-e48d8e12dc": {
+   "id": "src-e48d8e12dc",
+   "url": "https://www.ikea.com/gb/en/p/ikea-365-food-container-with-lid-rectangular-plastic-70507963/",
+   "fetched_at": "2026-10-12T20:24:10Z",
+   "page_sha256": "14ccb04da16e3f5a07a8c9d40add8ad6c6bf2880a7f56d812c63e84f85920c72",
+   "parser": "hp-facts/1.0",
+   "kind": "manufacturer",
+   "publisher": "IKEA",
+   "name": "IKEA 365+ food container with lid, rectangular/plastic, 1.0 l",
+   "article": "705.079.63",
+   "measures": {
+    "Length": "21 cm",
+    "Width": "15 cm",
+    "Height": "6 cm",
+    "Volume": "1.0 l"
+   },
+   "good_to_know": [
+    "Fits with IKEA 365+ rectangular-shaped lids.",
+    "Wash this product before using it for the first time."
+   ],
+   "safety": [],
+   "care": [
+    "Microwave-safe.",
+    "Freezer-safe.",
+    "Dishwasher-safe.",
+    "Do not use with sharp metal cutlery.",
+    "Any use, care, heating or storage other than recommended may damage the product.",
+    "Do not use if there are visible cracks, chips or surface damage."
+   ],
+   "assembly_pdf": [],
+   "notes": []
+  }
+ }
+}

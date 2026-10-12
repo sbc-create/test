@@ -1,0 +1,33 @@
+{
+ "id": "src-2b5a691a22",
+ "url": "https://www.ikea.com/gb/en/p/helmer-drawer-unit-on-castors-black-70625023/",
+ "fetched_at": "2026-10-12T20:24:18Z",
+ "page_sha256": "357fb54e169677c2bac14ec0fe69034dfa9c354eb0599d11952b36fbd439f47e",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "HELMER drawer unit on castors, black, 28x65 cm",
+ "article": "706.250.23",
+ "measures": {
+  "Max. load": "5 kg",
+  "Max. load/drawer": "1 kg",
+  "Width": "28 cm",
+  "Depth": "44 cm",
+  "Height": "65 cm",
+  "Depth of drawer (inside)": "37 cm",
+  "Width of drawer (inside)": "22 cm"
+ },
+ "good_to_know": [
+  "The drawer holds A4 and letter size papers."
+ ],
+ "safety": [],
+ "care": [
+  "Wipe clean with a cloth dampened in a mild cleaner.",
+  "Wipe dry with a clean cloth.",
+  "For increased stability, re-tighten the screws about two weeks after assembly and when necessary."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/helmer-drawer-unit-on-castors-black__AA-2596950-5-100.pdf"
+ ],
+ "notes": []
+}

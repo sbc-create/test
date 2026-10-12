@@ -1,0 +1,33 @@
+{
+ "id": "src-bf88bf5091",
+ "url": "https://www.ikea.com/gb/en/p/tjusig-hanger-black-80291707/",
+ "fetched_at": "2026-10-12T20:23:58Z",
+ "page_sha256": "d82cbf58b125e20ebae2194421684516f283167901ee6786da2a71d24071a02b",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "TJUSIG black, Hanger, 78 cm",
+ "article": "802.917.07",
+ "measures": {
+  "Width": "19 cm",
+  "Depth": "7 cm",
+  "Height": "78 cm"
+ },
+ "good_to_know": [
+  "Combines with other products in the TJUSIG series.",
+  "Can be fixed with suitable screws/fittings from our TRIXIG series.",
+  "Product is possible to recycle or use for energy recovery, if available in your community.",
+  "Screws for wall mounting sold separately."
+ ],
+ "safety": [
+  "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe clean with a damp cloth.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/tjusig-hanger-black__AA-1103756-10-100.pdf"
+ ],
+ "notes": []
+}

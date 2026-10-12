@@ -1,0 +1,33 @@
+{
+ "id": "src-467a76ac55",
+ "url": "https://www.ikea.com/gb/en/p/tjusig-shoe-rack-black-10152639/",
+ "fetched_at": "2026-10-12T20:24:01Z",
+ "page_sha256": "e19f6270d9690838d0d28cdcc299c7c1a052753812ee568d96c6e2c1f3c9ea13",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "TJUSIG shoe rack, black, 79x32x37 cm",
+ "article": "101.526.39",
+ "measures": {
+  "Width": "79 cm",
+  "Depth": "32 cm",
+  "Height": "37 cm",
+  "Free height under furniture": "10 cm"
+ },
+ "good_to_know": [
+  "Holds approx. 6 pairs of shoes.",
+  "Connection fittings for stacking 2 shoe racks are included.",
+  "Combines with other products in the TJUSIG series.",
+  "To prevent scratches on sensitive surfaces, complete with TRIXIG self-adhesive floor protectors, sold separately."
+ ],
+ "safety": [],
+ "care": [
+  "Wipe clean with a cloth dampened in a mild cleaner.",
+  "Wipe clean with a dry cloth.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/tjusig-shoe-rack-black__AA-1144848-2-100.pdf"
+ ],
+ "notes": []
+}

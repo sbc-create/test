@@ -1,0 +1,34 @@
+{% macro card(m, heading='h3') %}
+<article class="card card--{{ m.room }}" data-slug="{{ m.slug }}">
+  <img class="card__pic" src="{{ asset('img/rooms/' ~ m.room ~ '.svg') }}" alt="" width="56" height="56">
+  <p class="card__where"><span>{{ m.room_label }}</span> · <span>{{ m.task_label }}</span></p>
+  <{{ heading }} class="card__title"><a href="{{ m.url }}">{{ m.title }}</a></{{ heading }}>
+  <p class="card__lede">{{ m.summary }}</p>
+  <p class="card__meta">{{ m.steps|length }} {{ plural(m.steps|length, 'шаг', 'шага', 'шагов') }} · {{ m.checklist|length }} {{ plural(m.checklist|length, 'пункт', 'пункта', 'пунктов') }} проверки{% if m.manufacturer %} · <b>есть требования производителя</b>{% endif %}</p>
+</article>
+{% endmacro %}
+
+{% macro grid(items, heading='h3') %}
+<div class="grid">{% for m in items %}{{ card(m, heading) }}{% endfor %}</div>
+{% endmacro %}
+
+{% macro filters(room, task, action='/zadachi/') %}
+<form class="filters" action="{{ action }}" method="get" aria-label="Фильтр инструкций">
+  <div class="filters__f">
+    <label for="f-room">Помещение</label>
+    <select id="f-room" name="pomeshchenie">
+      <option value="">Все помещения</option>
+      {% for k, v in ROOMS.items() %}<option value="{{ k }}"{% if room == k %} selected{% endif %}>{{ v }}</option>{% endfor %}
+    </select>
+  </div>
+  <div class="filters__f">
+    <label for="f-task">Задача</label>
+    <select id="f-task" name="zadacha">
+      <option value="">Все задачи</option>
+      {% for k, v in TASKS.items() %}<option value="{{ k }}"{% if task == k %} selected{% endif %}>{{ v }}</option>{% endfor %}
+    </select>
+  </div>
+  <button type="submit">Показать</button>
+  {% if room or task %}<a class="filters__reset" href="{{ action }}">Сбросить фильтры</a>{% endif %}
+</form>
+{% endmacro %}

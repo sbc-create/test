@@ -1,0 +1,26 @@
+{
+ "id": "src-72ae8be73a",
+ "url": "https://www.ikea.com/gb/en/p/skubb-box-set-of-6-white-00428549/",
+ "fetched_at": "2026-10-12T20:24:07Z",
+ "page_sha256": "f291d6ba9297cf402fb371abff61bff038183a327153f46ad6487e289de5ad96",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "SKUBB box, set of 6, white",
+ "article": "004.285.49",
+ "measures": {},
+ "good_to_know": [
+  "Sizes: 14x14x13 cm, 28x14x13 cm and 28x28x13 cm, 2 of each."
+ ],
+ "safety": [],
+ "care": [
+  "Clean by vacuuming or use a lint roller.",
+  "Do not wash.",
+  "Do not bleach.",
+  "Do not tumble dry.",
+  "Do not iron.",
+  "Do not dryclean."
+ ],
+ "assembly_pdf": [],
+ "notes": []
+}

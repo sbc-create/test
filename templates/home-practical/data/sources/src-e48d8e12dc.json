@@ -1,0 +1,32 @@
+{
+ "id": "src-e48d8e12dc",
+ "url": "https://www.ikea.com/gb/en/p/ikea-365-food-container-with-lid-rectangular-plastic-70507963/",
+ "fetched_at": "2026-10-12T20:24:10Z",
+ "page_sha256": "14ccb04da16e3f5a07a8c9d40add8ad6c6bf2880a7f56d812c63e84f85920c72",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "IKEA 365+ food container with lid, rectangular/plastic, 1.0 l",
+ "article": "705.079.63",
+ "measures": {
+  "Length": "21 cm",
+  "Width": "15 cm",
+  "Height": "6 cm",
+  "Volume": "1.0 l"
+ },
+ "good_to_know": [
+  "Fits with IKEA 365+ rectangular-shaped lids.",
+  "Wash this product before using it for the first time."
+ ],
+ "safety": [],
+ "care": [
+  "Microwave-safe.",
+  "Freezer-safe.",
+  "Dishwasher-safe.",
+  "Do not use with sharp metal cutlery.",
+  "Any use, care, heating or storage other than recommended may damage the product.",
+  "Do not use if there are visible cracks, chips or surface damage."
+ ],
+ "assembly_pdf": [],
+ "notes": []
+}

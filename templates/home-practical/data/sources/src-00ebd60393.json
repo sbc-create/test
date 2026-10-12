@@ -1,0 +1,32 @@
+{
+ "id": "src-00ebd60393",
+ "url": "https://www.ikea.com/gb/en/p/enhet-wall-cabinet-with-door-white-40623025/",
+ "fetched_at": "2026-10-12T20:24:13Z",
+ "page_sha256": "27dfe1d49a9b207bdae2130f6219add8633f0ec9bd16964cefa82e57bd2a4ee5",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "ENHET wall cabinet with door, white, 60x32x75 cm",
+ "article": "406.230.25",
+ "measures": {
+  "Depth": "31.6 cm",
+  "Height": "75 cm",
+  "Width": "60 cm"
+ },
+ "good_to_know": [
+  "Screws for connecting several base cabinets included.",
+  "2 adjustable shelves included.",
+  "Knob or handle, sold separately."
+ ],
+ "safety": [
+  "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe dry with a clean cloth.",
+  "Wipe clean with a soft cloth dampened in water and a mild non-abrasive washing-up detergent or soap, if necessary."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/enhet-wall-cabinet-with-door-white__AA-2623388-3-100.pdf"
+ ],
+ "notes": []
+}

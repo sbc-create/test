@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{% if q %}Поиск: «{{ q }}»{% else %}Поиск по инструкциям{% endif %}</h1>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице">
+  <label class="sr" for="sq">Что нужно сделать</label>
+  <input id="sq" name="q" type="search" value="{{ q }}" placeholder="Полка или комод">
+  <button type="submit">Найти</button>
+  {% if q %}<a class="filters__reset" href="/poisk/">Очистить</a>{% endif %}
+</form>
+{% if not q %}
+<p class="count">Введите, что нужно сделать или какой предмет вас интересует. Можно начать с помещения:</p>
+<ul class="chips__plain">{% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/">{{ v }}</a></li>{% endfor %}</ul>
+{% elif items %}
+<p class="count" role="status">Найдено: {{ items|length }} {{ plural(items|length, 'инструкция', 'инструкции', 'инструкций') }}</p>
+{{ grid(items, 'h2') }}
+{% else %}
+<div class="empty" role="status">
+  <h2>Ничего не нашлось</h2>
+  <p>Попробуйте другое слово — например, «полка», «ящик», «обувь» — или откройте каталог.</p>
+  <p><a class="btn" href="/zadachi/">Открыть каталог задач</a></p>
+</div>
+{% endif %}
+{% endblock %}
