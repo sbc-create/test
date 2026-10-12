@@ -6,7 +6,7 @@
   <p class="hero__lead">Простые завтраки, обеды и ужины. Ищите по названию или по тому, что есть в холодильнике, — порции пересчитаются сами.</p>
   <form class="search" action="/poisk/" method="get" role="search">
     <label for="q" class="sr">Блюдо или продукты</label>
-    <input id="q" name="q" type="search" placeholder="Например: творог, курица с рисом" autocomplete="off" enterkeyhint="search">
+    <input id="q" name="q" type="search" placeholder="Творог, гречка" autocomplete="off" enterkeyhint="search">
     <button type="submit">Найти</button>
   </form>
   {% set products = site.product_options() %}

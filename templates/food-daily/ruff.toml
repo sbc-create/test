@@ -10,3 +10,4 @@ line-length = 120
 "fooddaily/ux_probe.py" = ["E501"]
 "fooddaily/store.py" = ["E501"]
 "fooddaily/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]
