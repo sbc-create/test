@@ -1,8 +1,8 @@
-/* home-practical (rooms-cards): сохранённые материалы, чек-лист, печать. Всё хранится только в браузере,
+/* home-practical (home-audit): обход квартиры (выбор помнится), план с отметками, сохранённые материалы, чек-лист, печать. Всё хранится только в браузере,
    ключи в пространстве имён варианта (data-ns на <body>). Без JS страницы полностью читаются. */
 (function () {
   "use strict";
-  var ns = document.body.getAttribute("data-ns") || "hp";
+  var ns = document.body.getAttribute("data-ns") || "hp-audit";
   function read(key, def) {
     try { var v = localStorage.getItem(ns + ":" + key); return v ? JSON.parse(v) : def; } catch (e) { return def; }
   }
@@ -80,4 +80,57 @@
     b.addEventListener("click", function () { window.print(); });
   });
   badge();
+
+  // Обход: выбор хранится в адресе; дополнительно помним его, чтобы вернуться к плану
+  function planHref(list) { return "/obhod/plan/" + (list.length ? "?" + list.map(function (s) { return "m=" + encodeURIComponent(s); }).join("&") : ""); }
+  var fromUrl = new URLSearchParams(location.search).getAll("m");
+  if (fromUrl.length && /^\/obhod\//.test(location.pathname)) write("picked", fromUrl);
+  var audit = document.querySelector("[data-audit]");
+  if (audit) {
+    var room = audit.querySelectorAll("input[type=checkbox][name=m]");
+    if (!fromUrl.length) {
+      var saved0 = read("picked", []);
+      room.forEach(function (b) { b.checked = saved0.indexOf(b.value) !== -1; });
+      saved0.forEach(function (s) {
+        var mine = Array.prototype.some.call(room, function (b) { return b.value === s; });
+        if (!mine) { var h = document.createElement("input"); h.type = "hidden"; h.name = "m"; h.value = s; audit.appendChild(h); }
+      });
+    }
+    var count = audit.querySelector("[data-audit-count]");
+    var upd = function () {
+      var all = Array.prototype.map.call(audit.querySelectorAll("input[name=m]"), function (x) { return x.type === "hidden" || x.checked ? x.value : null; }).filter(Boolean);
+      write("picked", all);
+      count.textContent = all.length ? "Отмечено всего: " + all.length : "";
+    };
+    audit.addEventListener("change", upd); upd();
+    // Переход по номерам комнат и «Назад» уносит и свежие, ещё не отправленные отметки этой страницы
+    document.querySelectorAll(".steps-bar a, .audit__go a").forEach(function (a) {
+      a.addEventListener("click", function () {
+        var cur = read("picked", []);
+        a.href = a.pathname + (cur.length ? "?" + cur.map(function (s) { return "m=" + encodeURIComponent(s); }).join("&") : "");
+      });
+    });
+  }
+  var stored = read("picked", []);
+  if (stored.length) document.querySelectorAll("[data-plan-link]").forEach(function (a) { a.href = planHref(stored); });
+  var restore = document.querySelector("[data-restore]");
+  if (restore && stored.length) {
+    restore.hidden = false;
+    restore.textContent = "Открыть сохранённый выбор (" + stored.length + ")";
+    restore.addEventListener("click", function () { location.href = planHref(stored); });
+  }
+  // План: отметки «сделано»
+  var dones = document.querySelectorAll("[data-done]");
+  if (dones.length) {
+    var prog = document.querySelector("[data-plan-progress]"), done0 = read("done", []);
+    var syncp = function (save) {
+      var d = read("done", []);
+      dones.forEach(function (b) { var s = b.getAttribute("data-done"), i = d.indexOf(s); if (b.checked && i === -1) d.push(s); if (!b.checked && i !== -1) d.splice(i, 1); });
+      if (save) write("done", d);
+      var n = 0; dones.forEach(function (b) { if (b.checked) n++; });
+      prog.textContent = n === dones.length ? "Всё из плана сделано." : "Сделано: " + n + " из " + dones.length + ".";
+    };
+    dones.forEach(function (b) { b.hidden = false; b.checked = done0.indexOf(b.getAttribute("data-done")) !== -1; b.addEventListener("change", function () { syncp(true); }); });
+    syncp(false);
+  }
 })();

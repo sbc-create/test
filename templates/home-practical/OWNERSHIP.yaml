@@ -1,8 +1,8 @@
 template: home-practical
-variant_id: rooms-cards
-branch: claude/template-home-practical
-worktree: /home/claude/wt-template-home-practical
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main, не ветка другого шаблона
+variant_id: home-audit   # вариант C; A — rooms-cards (8867), B — problem-checklists (8852)
+branch: claude/template-home-practical-c
+worktree: /home/claude/wt-template-home-practical-c
+base_commit: 19fb887   # вариант A (claude/template-home-practical)
 owner_scope:
   write: [templates/home-practical/**]
   shared_files_touched:
@@ -12,11 +12,11 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m udobdom.server (pid var/home-practical/run/preview.pid)"
-  bind: 127.0.0.1:8851
+  bind: 127.0.0.1:8867
   data: templates/home-practical/data (факты источников, материалы, content.json)
   private: var/home-practical/private (страницы источников, 0700, вне git)
   build: var/home-practical/build/<commit>
   qa_dependencies: templates/home-practical/qa (axe-core 4.13.0, свой lockfile)
-  browser_storage_namespace: "hp-rooms"
+  browser_storage_namespace: "hp-audit"
 network_contracts: []
 shared_with_other_templates: []

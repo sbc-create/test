@@ -1,4 +1,7 @@
-# home-practical — «Удобный дом» (вариант A: rooms-cards)
+# home-practical — «Удобный дом», вариант C `home-audit`
+
+Вариант C: обход квартиры по шести помещениям → личный план (инструкции по комнатам, «Что понадобится», прогресс, печать).
+Порт 8867, ключи `hp-audit:*`. Вариант A — ветка `claude/template-home-practical`, B — `claude/template-home-practical-b`.
 
 Хранение, организация пространства, мебель и небольшие улучшения. Навигация от помещения: плитки комнат с
 собственными пиктограммами → задачи → инструкция. В начале инструкции «паспорт» с размерами и нагрузками
@@ -7,10 +10,10 @@
 ## Команды (из `templates/home-practical`)
 
 ```bash
-bin/home-practical start | stop | status          # preview http://127.0.0.1:8851/ (только loopback, noindex)
+bin/home-practical start | stop | status          # preview http://127.0.0.1:8867/ (только loopback, noindex)
 bin/home-practical test                           # pytest шаблона
 bin/home-practical qa --shots docs/screenshots/<sha> --out docs/verification-browser-qa.json
-python3 qa/viewports.py 8851                      # все URL sitemap × 320/390/768/1440
+python3 qa/viewports.py 8867                      # все URL sitemap × 320/390/768/1440
 bin/home-practical build --commit HEAD            # статический артефакт var/home-practical/build/<sha>
 bin/home-practical sources ikea <url>… | quotes | reparse | check   # факты источников (allowlist, robots)
 bin/home-practical content validate | build       # проверка материалов против фактов → data/content.json

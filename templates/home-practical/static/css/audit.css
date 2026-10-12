@@ -1,9 +1,9 @@
-/* home-practical, вариант rooms-cards — «Удобный дом»: льняной фон, тёмно-зелёный и глиняный,
-   плитки помещений с собственными пиктограммами. Только этот вариант. */
-:root { --bg: #f7f2ea; --card: #fffdf9; --ink: #23211d; --ink-2: #4b463f; --muted: #5f584e; --green: #2c3e36;
-  --green-2: #3d5449; --clay: #a4482a; --sand: #eadfcd; --line: #dccfbb; --focus: #e39a63;
+/* home-practical, вариант home-audit — «Удобный дом»: обход квартиры. Белая бумага, синий чертёжный
+   цвет, жёлтые отметки, нумерованный маршрут. Только этот вариант. */
+:root { --bg: #f5f7fb; --card: #ffffff; --ink: #18202c; --ink-2: #3c4656; --muted: #4f5a6b; --green: #1d3f73;
+  --green-2: #2b5592; --clay: #9a3412; --sand: #fff1b8; --line: #d3dbe8; --focus: #f5b301;
   --kuhnya: #f4e3cf; --prihozhaya: #e3e8dc; --spalnya: #e6e1ef; --gostinaya: #f1e6d6; --vannaya: #dceaec; --rabochee-mesto: #ece6da;
-  --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; --serif: Georgia, "PT Serif", serif; color-scheme: light; }
+  --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; --serif: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 17px/1.6 var(--sans); }
@@ -189,3 +189,39 @@ main:focus { outline: none; }
   .steps li, .lim, .check label { break-inside: avoid; border-color: #999; }
   .sources a::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
 }
+
+/* ---- вариант C: маршрут, вопросы, план ---- */
+.hero--audit h1 { font-weight: 800; letter-spacing: -.01em; }
+.btn--big { min-height: 52px; font-size: 1.1rem; padding: 0 24px; }
+.route { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; counter-reset: r; }
+.route a { display: grid; grid-template-columns: 48px 1fr auto; grid-template-rows: auto auto; gap: 2px 14px; align-items: center; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; color: var(--ink); text-decoration: none; }
+.route a:hover { border-color: var(--green); }
+.route__n { grid-row: 1 / 3; width: 44px; height: 44px; border-radius: 50%; display: grid; place-items: center; background: var(--green); color: #fff; font-weight: 800; }
+.route__name { font-weight: 800; font-size: 1.1rem; } .route__lede { grid-column: 2; color: var(--muted); font-size: .92rem; }
+.route__q { grid-row: 1 / 3; grid-column: 3; background: var(--sand); border-radius: 999px; padding: 2px 10px; font-size: .88rem; font-weight: 700; white-space: nowrap; }
+@media (max-width: 480px) { .route a { grid-template-columns: 48px 1fr; } .route__q { grid-row: auto; grid-column: 2; justify-self: start; } }
+.steps-bar ol { list-style: none; padding: 0; margin: 14px 0 0; display: flex; gap: 6px; flex-wrap: wrap; }
+.steps-bar a { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--line); background: var(--card); color: var(--ink); text-decoration: none; font-weight: 800; }
+.steps-bar li[aria-current] a { background: var(--green); border-color: var(--green); color: #fff; }
+.kicker { margin: 12px 0 0; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; font-size: .8rem; color: var(--green-2); }
+.qs { list-style: none; padding: 0; display: grid; gap: 10px; }
+.q { display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; align-items: start; background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; }
+.q:has(input:checked) { border-color: var(--green); box-shadow: inset 6px 0 0 var(--focus); }
+.q__pick { display: grid; grid-template-columns: 28px 1fr; gap: 10px; cursor: pointer; }
+.q__pick input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--green); }
+.q__applies { display: block; color: var(--ink-2); font-size: .95rem; }
+.q__more { display: inline-block; min-height: 24px; font-weight: 700; white-space: nowrap; }
+@media (max-width: 520px) { .q { grid-template-columns: 1fr; } .q__more { padding-left: 38px; } }
+.audit__go { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; margin: 16px 0; }
+.audit__count { margin: 0; font-weight: 700; color: var(--green-2); }
+.plan__progress { font-weight: 800; color: var(--green-2); min-height: 1.4em; }
+.plan-room { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 2px 16px 12px; margin: 14px 0; }
+.plan-room h2 { margin: .7em 0 .4em; }
+.plan-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.plan-list li { display: grid; grid-template-columns: 32px 1fr; gap: 10px; align-items: start; }
+.plan-done input { width: 24px; height: 24px; margin: 4px 0 0; accent-color: var(--green); }
+.plan-list li:has(input:checked) b { text-decoration: line-through; color: var(--muted); }
+.plan-list a { display: inline-block; min-height: 24px; } .plan-meta { display: block; color: var(--muted); font-size: .9rem; }
+.plan-need { background: var(--sand); border-radius: 10px; padding: 2px 16px 12px; margin: 14px 0; }
+.plan-need small { color: var(--ink-2); }
+@media print { .actions, .audit__go, .steps-bar, .plan-done { display: none !important; } .plan-need { background: none; } }

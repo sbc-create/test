@@ -54,6 +54,7 @@ class App:
             if p.is_file()
         }
         self.env.globals.update(
+            app=self,
             site=self.site,
             ROOMS=ROOMS,
             TASKS=TASKS,
@@ -131,6 +132,11 @@ class App:
                 [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
                 "home",
             )
+        if path == "/obhod/plan/":
+            return self.audit_plan(q)
+        m = re.fullmatch(r"/obhod/([a-z-]+)/", path)
+        if m and m.group(1) in self.audit_rooms():
+            return self.audit_room(m.group(1), q)
         if path == "/pomeshcheniya/":
             crumbs = [home, ("Помещения", path)]
             return self.page(
@@ -288,9 +294,81 @@ class App:
             )
         return self.not_found()
 
+    # --- вариант C: обход квартиры ------------------------------------------------
+    def audit_rooms(self) -> list[str]:
+        return [r for r in ROOMS if self.site.in_room(r)]
+
+    def picked(self, q: dict) -> list[str]:
+        """Отмеченные инструкции из адреса; неизвестные слаги отбрасываются, порядок — как в каталоге."""
+        want = set((q.get("m") or [])[:60])
+        return [m.slug for m in self.site.materials if m.slug in want]
+
+    def audit_room(self, room: str, q: dict):
+        rooms = self.audit_rooms()
+        i = rooms.index(room)
+        picked = self.picked(q)
+        crumbs = [("Главная", "/"), ("Обход квартиры", f"/obhod/{rooms[0]}/"), (ROOMS[room], f"/obhod/{room}/")]
+        meta = Meta(
+            f"Обход квартиры: {ROOMS[room].lower()} ({i + 1} из {len(rooms)})",
+            f"Отметьте, что из этого про ваш дом: {ROOM_LEDE[room]}",
+            None if picked else self.site.abs(f"/obhod/{room}/"),
+            not picked,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "audit",
+        )
+        nxt = rooms[i + 1] if i + 1 < len(rooms) else None
+        body = self.render(
+            "audit_room.html",
+            meta,
+            room=room,
+            n=i + 1,
+            total=len(rooms),
+            rooms=rooms,
+            items=self.site.in_room(room),
+            picked=picked,
+            nxt=nxt,
+            prev=rooms[i - 1] if i else None,
+        )
+        return 200, body, {}
+
+    def audit_plan(self, q: dict):
+        picked = self.picked(q)
+        mats = [self.site.by_slug[s] for s in picked]
+        crumbs = [("Главная", "/"), ("Мой план", "/obhod/plan/")]
+        meta = Meta(
+            f"Мой план: {len(mats)} {plural(len(mats), 'инструкция', 'инструкции', 'инструкций')}"
+            if mats
+            else "Мой план",
+            "План по итогам обхода квартиры: инструкции по комнатам и общий список того, что понадобится.",
+            None if mats else self.site.abs("/obhod/plan/"),
+            not mats,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "plan",
+        )
+        need: dict[str, list] = {}
+        for m in mats:
+            for x in m.need:
+                need.setdefault(x["text"], []).append(m)
+        by_room = [(r, [m for m in mats if m.room == r]) for r in self.audit_rooms()]
+        body = self.render(
+            "audit_plan.html", meta, mats=mats, by_room=[x for x in by_room if x[1]], need=need, picked=picked
+        )
+        return 200, body, {}
+
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/pomeshcheniya/", "/zadachi/", "/podborki/", "/istochniki/", "/kak-my-proveryaem/"]
+        urls = [
+            "/",
+            "/obhod/plan/",
+            "/pomeshcheniya/",
+            "/zadachi/",
+            "/podborki/",
+            "/istochniki/",
+            "/kak-my-proveryaem/",
+        ]
+        urls += [f"/obhod/{r}/" for r in self.audit_rooms()]
         urls += [f"/pomeshcheniya/{r}/" for r in ROOMS if s.in_room(r)]
         urls += [f"/zadachi/{t}/" for t in TASKS if s.for_task(t)]
         urls += [f"/podborki/{c}/" for c in s.collections]

@@ -26,3 +26,12 @@ Production — отдельный переключатель: `mode: production`
 HowTo — только видимое: число шагов совпадает со страницей; нет `image`, `aggregateRating`, `author`, `estimatedCost`,
 `totalTime`, `video`, `review` (тест). Тег, на котором построена подборка, ссылается на подборку и своей страницы не имеет —
 иначе две страницы с одинаковым набором. Адрес без завершающего слэша получает 301.
+
+## Вариант C (home-audit)
+
+| тип | пример | canonical | production | sitemap |
+| --- | --- | --- | --- | --- |
+| шаг обхода | `/obhod/kuhnya/` | себя | index | да |
+| шаг обхода с выбором | `/obhod/prihozhaya/?m=…` | нет | noindex | нет |
+| план без выбора | `/obhod/plan/` | себя | index | да |
+| план с выбором | `/obhod/plan/?m=…` | нет | noindex | нет |

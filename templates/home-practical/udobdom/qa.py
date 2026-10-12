@@ -11,11 +11,13 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8851"
+BASE = "http://127.0.0.1:8867"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 MAT = "/instrukciya/razdelit-yashchik-komoda/"
 SHOTS = {
+    "audit_room": "/obhod/prihozhaya/",
+    "audit_plan": "/obhod/plan/?m=aksessuary-na-odnoj-veshalke",
     "home": "/",
     "room": "/pomeshcheniya/spalnya/",
     "catalog": "/zadachi/?pomeshchenie=vannaya",
@@ -187,8 +189,49 @@ def run(shots: Path | None) -> dict:
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
         )
-        ctx.close()
 
+        # --- вариант C: обход квартиры и план ---
+        pg.evaluate("localStorage.clear(); 0")
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".hero .btn--big").click()
+        A["audit_start_opens_first_room"] = pg.url.endswith("/obhod/kuhnya/") and pg.locator(
+            ".kicker"
+        ).text_content().startswith("Шаг 1")  # inner_text отдаёт текст после text-transform: uppercase
+        pg.locator(".q__pick").first.click()
+        A["audit_count_updates"] = pg.locator("[data-audit-count]").inner_text() == "Отмечено всего: 1"
+        first = pg.locator(".q input").first.get_attribute("value")
+        with pg.expect_navigation():
+            pg.click(".audit__go button")
+        A["audit_next_room_carries_choice"] = "/obhod/prihozhaya/" in pg.url and f"m={first}" in pg.url
+        pg.locator(".q__pick").first.click()
+        second = pg.locator(".q input").first.get_attribute("value")
+        with pg.expect_navigation():
+            pg.locator(".steps-bar a").last.click()
+        A["steps_bar_jumps_keeping_choice"] = "/obhod/rabochee-mesto/" in pg.url and f"m={first}" in pg.url
+        pg.goto(BASE + "/obhod/rabochee-mesto/")  # без параметров: выбор восстанавливается из хранилища
+        with pg.expect_navigation():
+            pg.click(".audit__go button")
+        A["plan_has_both_choices"] = (
+            "/obhod/plan/" in pg.url
+            and pg.locator(f"[data-done='{first}']").count() == 1
+            and pg.locator(f"[data-done='{second}']").count() == 1
+        )
+        pg.locator(f"[data-done='{first}']").check()
+        A["plan_progress_counts"] = pg.locator("[data-plan-progress]").inner_text().startswith("Сделано: 1 из ")
+        pg.reload()
+        A["plan_done_persists"] = pg.locator(f"[data-done='{first}']").is_checked()
+        pg.goto(BASE + "/obhod/plan/")
+        A["empty_plan_offers_restore"] = pg.locator("[data-restore]").is_visible()
+        with pg.expect_navigation():
+            pg.click("[data-restore]")
+        A["restore_opens_saved_plan"] = pg.locator("[data-done]").count() == 2
+        A["header_plan_link_points_to_choice"] = f"m={first}" in (
+            pg.locator(".top [data-plan-link]").get_attribute("href") or ""
+        )
+        A["storage_namespace_own"] = all(k.startswith("hp-audit:") for k in pg.evaluate("Object.keys(localStorage)"))
+        pg.goto(BASE + "/")
+        ctx.close()
         # --- без JavaScript ---
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
@@ -200,6 +243,14 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + "/")
         pg.click(".menu summary") if pg.locator(".menu summary").is_visible() else None
         A["nojs_rooms_reachable"] = pg.locator("a[href='/pomeshcheniya/kuhnya/']").count() >= 1
+        pg.goto(BASE + "/obhod/kuhnya/")
+        pg.locator(".q input").first.check()
+        with pg.expect_navigation():
+            pg.click(".audit__go button")
+        pg.goto(pg.url.replace("/obhod/prihozhaya/", "/obhod/plan/"))
+        A["nojs_audit_to_plan_via_url"] = (
+            pg.locator("[data-done]").count() == 1 and pg.locator(".plan-need li").count() >= 1
+        )
         ctx.close()
         br.close()
     return res

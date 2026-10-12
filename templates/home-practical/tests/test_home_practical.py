@@ -148,7 +148,7 @@ def test_404s_and_collection_backed_tag(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'name="site-factory-variant-id" content="rooms-cards"' in html
+    assert 'content="noindex, nofollow"' in html and 'name="site-factory-variant-id" content="home-audit"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)

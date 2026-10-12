@@ -9,11 +9,11 @@
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
 <meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
-<link rel="stylesheet" href="{{ asset('css/rooms.css') }}">
+<link rel="stylesheet" href="{{ asset('css/audit.css') }}">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/home.js') }}" defer></script>
+<script src="{{ asset('js/audit.js') }}" defer></script>
 </head>
 <body data-ns="{{ site.cfg.storage_namespace }}" data-kind="{{ meta.kind }}">
 <a class="skip" href="#main">К содержимому</a>
@@ -25,7 +25,7 @@
       <input id="fq" name="q" type="search" placeholder="Полка или комод">
       <button type="submit">Найти</button>
     </form>
-    <a class="saved-link" href="/sohranennoe/">Сохранённое <span class="badge" data-saved-count hidden></span></a>
+    <a class="saved-link" href="/obhod/plan/" data-plan-link>Мой план</a> <a class="saved-link" href="/sohranennoe/">Сохранённое <span class="badge" data-saved-count hidden></span></a>
     <details class="menu">
       <summary>Меню</summary>
       <nav aria-label="Помещения и разделы (меню)">
