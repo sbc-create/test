@@ -11,7 +11,7 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8849"
+BASE = "http://127.0.0.1:8865"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 PLAN = "/menyu/bystraya-nedelya-dlya-dvoih/"
@@ -80,38 +80,60 @@ def run(shots: Path | None) -> dict:
             ctx.close()
         ctx = br.new_context(viewport=VIEW["mobile"], locale="ru-RU")
         pg = ctx.new_page()
-        pg.goto(BASE + PLAN + "pokupki/")
-        before = pg.locator(".buy li").count()
-        before_text = pg.locator(".buy").first.inner_text()
-        pg.goto(BASE + PLAN)
-        pg.locator(".swap summary").first.click()
-        # первая замена: завтрак дня 1 (сырники) → ленивые вареники
-        pg.locator(".swap select").first.select_option(value="d1-breakfast-0:lenivye-vareniki")
-        with pg.expect_navigation():
-            pg.locator(".swap button").first.click()
-        S["swap_url_has_zamena_or_s"] = ("s=" in pg.url) or ("zamena=" in pg.url)
-        S["swapped_marker"] = pg.locator(".dish--swapped").count()
-        pg.click("text=Список покупок (с заменами)")
-        S["shopping_after_swap_url"] = "zamena=" in pg.url
-        S["shopping_rows_before_after"] = [before, pg.locator(".buy li").count()]
-        S["shopping_changed_after_swap"] = pg.locator(".buy").first.inner_text() != before_text
-        pg.locator(".buy input").first.check()
-        pg.reload()
-        S["bought_mark_persists"] = pg.locator(".buy input").first.is_checked()
-        pg.goto(BASE + PLAN + "?s=d1-breakfast-0:plov-s-kuricej")
-        S["invalid_swap_warning"] = pg.locator(".warn").count() >= 1
         pg.goto(BASE + "/")
         pg.keyboard.press("Tab")
         S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        with pg.expect_navigation():
+            pg.locator(".plans-t tbody th a").first.click()
+        S["home_table_opens_week"] = pg.url.endswith(PLAN) and pg.locator(".agenda__day").count() == 7
+        pg.locator(".weeknav a", has_text="Чт").click()
+        S["weeknav_jumps_to_thursday"] = pg.evaluate("location.hash") == "#den-4"
+        pg.goto(BASE + PLAN + "pokupki/")
+        trip1_before = pg.locator("#zakupka-1 .buy").inner_text()
+        pg.goto(BASE + PLAN)
+        pg.locator(".swap summary").first.click()
+        # замена: завтрак дня 1 (сырники) → ленивые вареники; меняется только первая закупка
+        pg.locator(".swap select").first.select_option(value="d1-breakfast-0:lenivye-vareniki")
+        with pg.expect_navigation():
+            pg.locator(".swap button").first.click()
+        S["swap_in_url"] = ("s=" in pg.url) or ("zamena=" in pg.url)
+        S["swapped_marker"] = pg.locator(".meal dd.swapped").count() == 1
+        with pg.expect_navigation():
+            pg.locator(".trips a", has_text="Закупка 1").click()
+        S["trip_link_keeps_swaps_and_anchor"] = "zamena=" in pg.url and pg.url.endswith("#zakupka-1")
+        S["trip1_changed_after_swap"] = pg.locator("#zakupka-1 .buy").inner_text() != trip1_before
+        boxes = pg.locator("#zakupka-1 .buy input")
+        total = boxes.count()
+        boxes.nth(0).check()
+        boxes.nth(1).check()
+        S["trip_counter_counts_left"] = pg.locator("#zakupka-1 .trip__count").inner_text().startswith(
+            f"Осталось купить: {total - 2} "
+        ) and pg.locator("#zakupka-1 .trip__count").inner_text().endswith(f" из {total}")
+        pg.reload()
+        S["bought_marks_persist_per_trip"] = (
+            boxes.nth(0).is_checked() and not pg.locator("#zakupka-2 .buy input").first.is_checked()
+        )
+        S["storage_keys_own_namespace"] = all(
+            k.startswith("fwb.bought.") for k in pg.evaluate("Object.keys(localStorage)")
+        )
+        pg.locator(".all summary").click()
+        S["whole_list_expands"] = pg.locator(".all .buy").is_visible()
+        pg.goto(BASE + PLAN + "?s=d1-breakfast-0:plov-s-kuricej")
+        S["invalid_swap_warning"] = pg.locator(".warn").count() >= 1
+        resp = pg.goto(BASE + "/nesushchestvuet/")
+        S["real_404"] = resp.status == 404
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
         pg.goto(BASE + PLAN)
-        S["nojs_week_dishes"] = pg.locator(".dish").count()
+        S["nojs_week_dishes"] = pg.locator(".meal dd").count() >= 21
         pg.goto(BASE + PLAN + "?s=d2-dinner-0:mintaj-v-slivkah")
-        S["nojs_swap_works"] = pg.locator(".dish--swapped").count() >= 1
+        S["nojs_swap_works"] = pg.locator(".meal dd.swapped").count() >= 1
+        pg.goto(BASE + PLAN + "pokupki/")
+        S["nojs_trips_listed"] = pg.locator(".trip").count() == 2 and pg.locator("#zakupka-2 .buy li").count() > 0
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

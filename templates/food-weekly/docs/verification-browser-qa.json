@@ -1,6 +1,6 @@
 {
- "commit_head": "da65202c22c10c20819815a00882cb22fe41a48b",
- "at": "2026-10-12T20:07:27Z",
+ "commit_head": "96c0c983b8dd4975c929ddc81551495376825ea5",
+ "at": "2026-10-12T23:12:56Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -12,19 +12,22 @@
   "desktop:week:no_hscroll": true,
   "desktop:day:no_hscroll": true,
   "desktop:shopping:no_hscroll": true,
-  "swap_url_has_zamena_or_s": true,
-  "swapped_marker": 1,
-  "shopping_after_swap_url": true,
-  "shopping_rows_before_after": [
-   110,
-   110
-  ],
-  "shopping_changed_after_swap": true,
-  "bought_mark_persists": true,
-  "invalid_swap_warning": true,
   "first_tab_skip": true,
-  "nojs_week_dishes": 23,
-  "nojs_swap_works": true
+  "home_table_opens_week": true,
+  "weeknav_jumps_to_thursday": true,
+  "swap_in_url": true,
+  "swapped_marker": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip1_changed_after_swap": true,
+  "trip_counter_counts_left": true,
+  "bought_marks_persist_per_trip": true,
+  "storage_keys_own_namespace": true,
+  "whole_list_expands": true,
+  "invalid_swap_warning": true,
+  "real_404": true,
+  "nojs_week_dishes": true,
+  "nojs_swap_works": true,
+  "nojs_trips_listed": true
  },
  "axe": {
   "version": "4.13.0",
@@ -51,60 +54,88 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 108,
+   "lcp_ms": 172,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "mobile:week": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "mobile:day": {
    "lcp_ms": 52,
    "cls": 0
   },
+  "mobile:week": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:day": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
   "mobile:shopping": {
-   "lcp_ms": 92,
+   "lcp_ms": 100,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 132,
+   "lcp_ms": 492,
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 112,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:week": {
-   "lcp_ms": 112,
+   "lcp_ms": 84,
    "cls": 0
   },
   "desktop:day": {
-   "lcp_ms": 92,
+   "lcp_ms": 76,
    "cls": 0
   },
   "desktop:shopping": {
-   "lcp_ms": 104,
+   "lcp_ms": 112,
    "cls": 0
   }
  },
  "console_errors": [
-  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8849/nesushchestvuet/",
-  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8849/nesushchestvuet/"
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8865/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8865/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/da65202/home-mobile.png",
-  "docs/screenshots/da65202/catalog-mobile.png",
-  "docs/screenshots/da65202/week-mobile.png",
-  "docs/screenshots/da65202/day-mobile.png",
-  "docs/screenshots/da65202/shopping-mobile.png",
-  "docs/screenshots/da65202/home-desktop.png",
-  "docs/screenshots/da65202/catalog-desktop.png",
-  "docs/screenshots/da65202/week-desktop.png",
-  "docs/screenshots/da65202/day-desktop.png",
-  "docs/screenshots/da65202/shopping-desktop.png"
- ]
+  "docs/screenshots/96c0c98/home-mobile.png",
+  "docs/screenshots/96c0c98/catalog-mobile.png",
+  "docs/screenshots/96c0c98/week-mobile.png",
+  "docs/screenshots/96c0c98/day-mobile.png",
+  "docs/screenshots/96c0c98/shopping-mobile.png",
+  "docs/screenshots/96c0c98/home-desktop.png",
+  "docs/screenshots/96c0c98/catalog-desktop.png",
+  "docs/screenshots/96c0c98/week-desktop.png",
+  "docs/screenshots/96c0c98/day-desktop.png",
+  "docs/screenshots/96c0c98/shopping-desktop.png"
+ ],
+ "actions": {
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:week:no_hscroll": true,
+  "mobile:day:no_hscroll": true,
+  "mobile:shopping:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:week:no_hscroll": true,
+  "desktop:day:no_hscroll": true,
+  "desktop:shopping:no_hscroll": true,
+  "first_tab_skip": true,
+  "home_table_opens_week": true,
+  "weeknav_jumps_to_thursday": true,
+  "swap_in_url": true,
+  "swapped_marker": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip1_changed_after_swap": true,
+  "trip_counter_counts_left": true,
+  "bought_marks_persist_per_trip": true,
+  "storage_keys_own_namespace": true,
+  "whole_list_expands": true,
+  "invalid_swap_warning": true,
+  "real_404": true,
+  "nojs_week_dishes": true,
+  "nojs_swap_works": true,
+  "nojs_trips_listed": true
+ }
 }

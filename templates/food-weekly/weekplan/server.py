@@ -77,6 +77,21 @@ class App:
             app=self, MEALS=planner.MEALS, DAYS=planner.DAYS, asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}"
         )
 
+    def summary(self, slug: str) -> dict:
+        """Сводка плана для таблицы сравнения: всё считается из плана и каталога, без оценок."""
+        plan = self.plans[slug]
+        days, _ = planner.resolve(plan, self.catalogs, {})
+        dishes = {d["slug"]: d["item"] for day in days for m in planner.MEALS for d in day[m]}
+        sl = planner.shopping_list(days, plan["people"])
+        mins = [x["total_minutes"] for x in dishes.values() if x.get("total_minutes")]
+        return {
+            "dishes": len(dishes),
+            "products": len(sl["items"]) + len(sl["to_taste"]),
+            "quick": sum(1 for m in mins if m <= 30),
+            "timed": len(mins),
+            "longest": max(mins) if mins else None,
+        }
+
     # --- адреса -----------------------------------------------------------
     @property
     def indexable(self) -> bool:
@@ -172,17 +187,25 @@ class App:
                 own = f"{base}pokupki/"
                 crumbs.append(("Список покупок", own))
                 sl = planner.shopping_list(days, plan["people"])
+                trips = [
+                    ("Закупка 1: понедельник — среда", planner.shopping_list(days[:3], plan["people"]), "1"),
+                    ("Закупка 2: четверг — воскресенье", planner.shopping_list(days[3:], plan["people"]), "2"),
+                ]
                 meta = Meta(
                     f"Список покупок: {plan['title']}",
-                    f"Все продукты плана «{plan['title']}» на {plan['people']} чел., "
-                    "сложенные по единицам измерения.",
+                    f"Продукты плана «{plan['title']}» на {plan['people']} чел. двумя закупками "
+                    "(пн–ср и чт–вс) и одним списком, по единицам измерения.",
                     None if swaps else self.abs(own),
                     not swaps,
                     crumbs,
                     [self.crumbs_ld(crumbs)],
                     "shopping",
                 )
-                return 200, self.render("shopping.html", meta, plan=plan, sl=sl, qs=qs, swaps=swaps, notes=notes), {}
+                return (
+                    200,
+                    self.render("shopping.html", meta, plan=plan, sl=sl, trips=trips, qs=qs, swaps=swaps, notes=notes),
+                    {},
+                )
             meta = Meta(
                 plan["title"],
                 plan["description"],
