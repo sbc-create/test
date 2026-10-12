@@ -6,7 +6,7 @@
       "site_id": "animedia-01",
       "domain": "animedia.icu",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/animedia-icu",
@@ -44,7 +44,7 @@
         "note": "Выложенная основа, из которой собран действующий выпуск. Проверено побайтово по src/ в /srv/animedia-icu/app."
       },
       "content_revision": null,
-      "last_update": "2026-09-23T19:27:10.603751+00:00",
+      "last_update": "2026-10-12T11:34:24.846872+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -93,7 +93,7 @@
       "aliases": [
         "www.animedia.space"
       ],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/animedia-space",
@@ -137,7 +137,7 @@
         "note": "Собрано и проверено. НЕ развёрнуто: активация требует root."
       },
       "content_revision": null,
-      "last_update": "2026-09-22T22:52:57.839749+00:00",
+      "last_update": "2026-10-12T11:34:24.886413+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -326,7 +326,7 @@
       "aliases": [
         "www.an1meg0.site"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/an1meg0-site",
@@ -393,13 +393,14 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 33768290 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      }
+      },
+      "last_update": "2026-10-12T11:34:24.955394+00:00"
     },
     {
       "site_id": "lords-01",
       "domain": "lordfilm47.space",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/lordfilm47-space",
@@ -437,7 +438,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-23T17:25:04.653034+00:00",
+      "last_update": "2026-10-12T11:34:24.974721+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -619,7 +620,7 @@
       "aliases": [
         "www.lordserials22.info"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/lordserials22-info",
@@ -685,7 +686,8 @@
           "source": "get/projects_2/projects"
         },
         "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T22:47:19Z; домен счётчика по ответу API — lordserials22.info. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      }
+      },
+      "last_update": "2026-10-12T11:34:24.998019+00:00"
     },
     {
       "site_id": "lords-06",
@@ -1099,7 +1101,7 @@
       "aliases": [
         "www.yummyani7.site"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/yummyani7-site",
@@ -1164,7 +1166,8 @@
           "source": "get/projects_2/projects"
         },
         "note": "счётчик 113109087 создан службой, отчёт var/analytics/connect-yummyani7.site.json от 2026-09-27T22:47:25Z; домен счётчика по ответу API — yummyani7.site. проект 33762615 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      }
+      },
+      "last_update": "2026-10-12T11:34:25.020961+00:00"
     },
     {
       "site_id": "yummy-08",
@@ -1172,7 +1175,7 @@
       "aliases": [
         "www.yummyani7.info"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/yummyani7-info",
@@ -1237,13 +1240,14 @@
           "source": "get/projects_2/projects"
         },
         "note": "счётчик 113109089 создан службой, отчёт var/analytics/connect-yummyani7.info.json от 2026-09-27T22:47:26Z; домен счётчика по ответу API — yummyani7.info. проект 33762646 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      }
+      },
+      "last_update": "2026-10-12T11:34:25.044166+00:00"
     },
     {
       "site_id": "yummy-biz",
       "domain": "yummyani.biz",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/yummyani-biz",
@@ -1279,7 +1283,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-25T20:14:00.675472+00:00",
+      "last_update": "2026-10-12T11:34:25.105227+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1316,7 +1320,7 @@
       "site_id": "yummy-org",
       "domain": "yummyani.org",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/yummyani-org",
@@ -1352,7 +1356,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-25T20:14:00.781579+00:00",
+      "last_update": "2026-10-12T11:34:25.136848+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1383,7 +1387,7 @@
       "site_id": "yummy-site",
       "domain": "yummyani.site",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/yummyani-site",
@@ -1419,7 +1423,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-25T20:14:00.815902+00:00",
+      "last_update": "2026-10-12T11:34:25.173685+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1450,7 +1454,7 @@
       "site_id": "zona-01",
       "domain": "zonafilm.space",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/zonafilm-space",
@@ -1487,7 +1491,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-09-22T23:41:04.126983+00:00",
+      "last_update": "2026-10-12T11:34:25.206153+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1523,7 +1527,7 @@
       "site_id": "zona-02",
       "domain": "zonafilm.cc",
       "aliases": [],
-      "status": "staged",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/zonafilm-cc",
@@ -1560,7 +1564,7 @@
         "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-10-08T23:21:14.714459+00:00",
+      "last_update": "2026-10-12T11:34:25.241638+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1609,7 +1613,7 @@
       "aliases": [
         "www.zonafilm12.site"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/site-repos/zonafilm12-site",
@@ -1676,7 +1680,8 @@
           "source": "get/projects_2/projects"
         },
         "note": "счётчик 113109081 создан службой, отчёт var/analytics/connect-zonafilm12.site.json от 2026-09-27T22:47:17Z; домен счётчика по ответу API — zonafilm12.site. проект 33762526 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
-      }
+      },
+      "last_update": "2026-10-12T11:34:25.278484+00:00"
     }
   ]
 }
