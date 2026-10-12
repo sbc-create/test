@@ -392,6 +392,19 @@
       "expected": "в каждой ячейке сторож из шаблона factory/cell/site_checks/run.sh (0790e65): счёт по grep -cE '^(check|step) ', checks-all-ran FAIL при расхождении; обычный провал не подменяется",
       "check": "python3 automation/local/run-sh-guard-audit.py (из ветки Архитектора) — код 0; bash checks/run.sh каждой ячейки rc=0",
       "status": "queued"
+    },
+    {
+      "id": "T020",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/title/sbornik-istoriy-gose-aoyamy/"
+      ],
+      "problem": "На страницах AnimeGo нет видимых хлебных крошек (ни одна страница класса ВидАнимеГо не передаёт крошки в оболочку), поэтому нет и BreadcrumbList: общий SEO-слой строит разметку только из видимых крошек (4f71b49). У Animedia и Lords/Zona BreadcrumbList на тайтле есть (замер 12.10 ~21:30Z).",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.4 — BreadcrumbList из видимых крошек; задание пользователя п.3 (крошки, внутренние ссылки)",
+      "expected": "тайтл: Главная / Аниме (каталог) / Название — свои классы ag-, стиль AnimeGo; BreadcrumbList на тайтле; проверки геометрии (checks/geometry.js) и boundaries зелёные",
+      "check": "bash checks/run.sh (visible-breadcrumbs, boundaries, geometry)",
+      "status": "queued"
     }
   ]
 }
