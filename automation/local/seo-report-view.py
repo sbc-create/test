@@ -24,7 +24,41 @@ import sys
 import time
 from pathlib import Path
 
-REPORTS = Path(__file__).resolve().parents[2] / "var" / "seo-regular" / "reports" / "daily"
+ХВОСТ = Path("var") / "seo-regular" / "reports" / "daily"
+
+
+def где_отчёты(явный: str | None = None) -> tuple[Path | None, list[Path]]:
+    """(каталог отчётов, все проверенные пути).
+
+    Прежняя редакция брала каталог ТОЛЬКО от своего файла
+    (`parents[2]/var/seo-regular/reports/daily`). Запущенная из другого
+    worktree, вкладка находила ноль отчётов и печатала «жду суточный отчёт…
+    Последний показанный: нет» — бесконечно, при четырёх готовых отчётах в
+    дереве службы. Молчание, похожее на ожидание, хуже отказа: по нему нельзя
+    понять, что искали не там.
+
+    Служба `seo-regular-daily` работает в `/home/claude/wt-portable-site-cell-01`
+    и складывает отчёты в её `var/`, а путь к корню оператора уже объявлен
+    переменной `SEO_OPERATOR_ROOT` (drop-in `20-editorial-queue.conf` службы
+    MCP). Поэтому порядок такой: явный аргумент → эта переменная → своё
+    дерево. Чужой путь в коде не прописывается.
+    """
+    проверено: list[Path] = []
+    кандидаты: list[Path] = []
+    if явный:
+        кандидаты.append(Path(явный).expanduser())
+    корень = os.environ.get("SEO_OPERATOR_ROOT")
+    if корень:
+        кандидаты.append(Path(корень).expanduser() / ХВОСТ)
+    кандидаты.append(Path(__file__).resolve().parents[2] / ХВОСТ)
+    for путь in кандидаты:
+        проверено.append(путь)
+        if путь.is_dir():
+            return путь, проверено
+    return None, проверено
+
+
+REPORTS = Path(__file__).resolve().parents[2] / ХВОСТ
 STATE = Path(os.path.expanduser("~/.seo-report-view.json"))
 UTC = dt.timezone.utc
 MSK = dt.timezone(dt.timedelta(hours=3))
@@ -66,8 +100,26 @@ def _save(state: dict) -> None:
     STATE.write_text(json.dumps(state), encoding="utf-8")
 
 
-def main() -> int:
+def main(аргв: list[str] | None = None) -> int:
+    global REPORTS
+    аргв = sys.argv[1:] if аргв is None else аргв
+    явный = None
+    if аргв and аргв[0] == "--reports" and len(аргв) > 1:
+        явный = аргв[1]
+    найдено, проверено = где_отчёты(явный)
+    if найдено is None:
+        print("каталог суточных отчётов не найден. Проверены пути:",
+              file=sys.stderr)
+        for путь in проверено:
+            print(f"   {путь}", file=sys.stderr)
+        print("Укажите каталог явно (`--reports <путь>`) или задайте "
+              "SEO_OPERATOR_ROOT. Ждать здесь нечего: ожидание на "
+              "несуществующем каталоге выглядит как «отчёта ещё нет».",
+              file=sys.stderr)
+        return 2
+    REPORTS = найдено
     sys.stdout.write("\033]0;SEO — ОТЧЁТ\007")
+    print(f"каталог отчётов: {REPORTS}", flush=True)
     state = _load()
     now = dt.datetime.now(UTC)
     if "shown" not in state:
