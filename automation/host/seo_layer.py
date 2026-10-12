@@ -67,6 +67,46 @@ def тег_метрики(counter: str) -> str:
     )
 
 
+#: Признак уже вставленного тега GA4 — та же идемпотентность, что у Метрики.
+МЕТКА_GA4 = "data-ga4-id="
+
+#: Переменная юнита с идентификатором потока GA4. Маршрут «реестр → исполнитель
+#: → Environment= юнита» ведёт Архитектор (как у LORDS_METRIKA_COUNTER); слой
+#: только читает её.
+ПЕРЕМЕННАЯ_GA4 = "LORDS_GA4_MEASUREMENT_ID"
+
+_ФОРМАТ_GA4 = re.compile(r"G-[A-Z0-9]{4,16}")
+
+
+def тег_ga4(measurement_id: str) -> str:
+    """Официальный тег GA4 (gtag.js) или пустая строка.
+
+    Нет идентификатора или он не похож на идентификатор потока — тега нет:
+    пустое поле это BLOCKED_INPUT, а не повод подставить значение.
+
+    Ровно один `config` на страницу, и он сам шлёт ровно один `page_view`
+    (send_page_view по умолчанию). Отдельного `event('page_view')` нет — иначе
+    просмотр учитывался бы дважды. Повторная вставка скрипта на одной странице
+    гасится флагом окна. Загрузка асинхронная, как у Метрики.
+    """
+    measurement_id = (measurement_id or "").strip()
+    if not _ФОРМАТ_GA4.fullmatch(measurement_id):
+        return ""
+    return (
+        f'<script async {МЕТКА_GA4}"{measurement_id}" '
+        f'src="https://www.googletagmanager.com/gtag/js?id={measurement_id}"></script>'
+        "<script>"
+        "(function(){"
+        "if(window.__sfGa4Ready){return;}window.__sfGa4Ready=1;"
+        "window.dataLayer=window.dataLayer||[];"
+        "function gtag(){dataLayer.push(arguments);}"
+        "gtag('js',new Date());"
+        f"gtag('config','{measurement_id}');"
+        "})();"
+        "</script>"
+    )
+
+
 # ---------------------------------------------------------------------------
 # Canonical
 # ---------------------------------------------------------------------------
@@ -202,7 +242,7 @@ def обогатить(тело: bytes, тип: str, *, хост: str = "", пу
               counter: str = "", имя_сайта: str = "",
               сущность: dict[str, Any] | None = None,
               поиск: str = "", крошки: dict[str, str] | None = None,
-              код: int = 200) -> bytes:
+              код: int = 200, ga4: str | None = None) -> bytes:
     """Дополнить HTML-ответ SEO-разметкой. Вызывается из отдачи ответа.
 
     На ответах, которые не 200, canonical и схема не ставятся: канонический
@@ -215,6 +255,12 @@ def обогатить(тело: bytes, тип: str, *, хост: str = "", пу
     вставка = ""
     if МЕТКА_МЕТРИКИ.encode("utf-8") not in тело:
         вставка += тег_метрики(counter)
+    # GA4 — из переменной юнита, если вызов не передал явно: точки отдачи
+    # витрин не меняются, тег приходит с выпуском общего слоя.
+    if ga4 is None:
+        ga4 = os.environ.get(ПЕРЕМЕННАЯ_GA4, "")
+    if МЕТКА_GA4.encode("utf-8") not in тело:
+        вставка += тег_ga4(ga4)
     if код == 200:
         if b'rel="canonical"' not in тело:
             вставка += тег_каноникал(хост, путь)
