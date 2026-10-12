@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ pr.title }}</h1>
+<p class="lead">{{ pr.symptom }}</p>
+<p class="hint">Решения по порядку. Прогресс по каждому — по отметкам в его чек-листе на этом устройстве.</p>
+<ol class="seq">
+  {% for m in pr['items'] %}
+  <li data-slug="{{ m.slug }}" data-version="{{ m.version }}" data-steps="{{ m.steps|length }}">
+    <h2 class="seq__t"><a href="{{ m.url }}">{{ m.title }}</a></h2>
+    <p class="seq__m">{{ m.room_label }} · {{ m.task_label }} · {{ m.steps|length }} {{ plural(m.steps|length, 'шаг', 'шага', 'шагов') }}</p>
+    <p>{{ m.summary }}</p>
+    <p class="seq__p" data-progress hidden></p>
+  </li>
+  {% endfor %}
+</ol>
+{% endblock %}

@@ -1,39 +1,33 @@
-# Отчёт home-practical, вариант A «Удобный дом» (rooms-cards)
+# Отчёт home-practical, вариант B «Удобный дом: чек-листы решений» (problem-checklists)
 
 Статус: **READY_FOR_REVIEW_WITH_BLOCKERS** (закрытый preview; production заблокирован).
-Проверенный код: `06d708c31eb8585df0aa21484546e080bba4ac6a`, ветка `claude/template-home-practical`, база — origin/main `a7f7cb6`.
+Проверенный код: `819b9348d1d7dc32c0027e694fb52b346527455f`, ветка `claude/template-home-practical-b` (начата с 19fb887 варианта A).
 
 ## Как открыть
 
-- Preview: `http://127.0.0.1:8851/` (только loopback; `noindex, nofollow`; robots `Disallow: /`). Запуск: `bin/home-practical start`.
-- Скриншоты (390 и 1440 px): `docs/screenshots/06d708c/` — главная, помещение, каталог с фильтром, инструкция, подборка, пустой фильтр.
-- Артефакт: `var/home-practical/build/06d708c…/` — 49 файлов, tree_sha256 `692f5d8d…a27e`.
+- Preview B: `http://127.0.0.1:8852/` (loopback, `noindex, nofollow`). Вариант A для сравнения: `http://127.0.0.1:8851/`.
+- Скриншоты (390 и 1440 px): `docs/screenshots/819b934/` — главная, проблема, каталог, инструкция, помещение, пустой фильтр.
+- Артефакт: `var/home-practical/build/819b934…/` — 50 файлов, tree_sha256 `0ff24ef3…3b93`.
+- Отличия от A: `docs/VARIANTS.md`.
 
-## Проверки на 06d708c (фактически запущены)
+## Проверки на 819b934 (фактически запущены)
 
 | команда | exit | результат |
 | --- | --- | --- |
-| `bin/home-practical test` | 0 | 12 passed |
+| `bin/home-practical test` | 0 | 15 passed |
 | `ruff check .` + `ruff format --check .` (шаблон) | 0 | чисто |
 | `pytest tests/unit/test_permission_matrix.py` (корень) | 0 | 192 passed |
-| `bin/home-practical content validate` | 0 | 13/13 ok |
-| `bin/home-practical build --commit HEAD` | 0 | 49 файлов, все URL sitemap 200 |
-| `bin/home-practical qa --shots … --out docs/verification-browser-qa.json` | 0 | 32 действия PASS, axe 0 на 18 стр. × 2, консоль — только ожидаемый 404 |
-| `python3 qa/viewports.py 8851 …` | 0 | 41 URL × 320/390/768/1440 — 0 замечаний |
+| `bin/home-practical build --commit HEAD` | 0 | 50 файлов, все URL sitemap 200 |
+| `bin/home-practical qa --shots … --out docs/verification-browser-qa.json` | 0 | 34 действия PASS, axe 0 на 20 стр. × 2 |
+| `python3 qa/viewports.py 8852 …` | 0 | 49 URL × 320/390/768/1440 — 0 замечаний |
 
-Карта действий с PASS/NOT_RUN — `docs/ACTION-MAP.md`. Метрики (лаборатория, loopback, без троттлинга, headless Chromium):
-LCP 52–172 мс, CLS 0 на 6 типах страниц × 2 ширины; самая тяжёлая инструкция — 21 КБ HTML.
+Метрики (лаборатория, loopback, без троттлинга): LCP 44–168 мс, CLS 0. Карта действий — `docs/ACTION-MAP.md`.
 
 ## Готовность
 
 | слой | состояние |
 | --- | --- |
-| интерфейс | готов: все типы страниц из ТЗ, поиск, фильтры, сброс, пустые состояния, теги, оглавление, чек-лист, сохранённое, печать, мобильное меню, клавиатура |
-| наполнение | 13 инструкций в 6 помещениях и 4 задачах на фактах 15 открытых страниц; тексты — черновики сессии Claude (`manual_standin`), не Qwen, редакцией не проверены; на кухне 1 инструкция, на рабочем месте 1 |
-| изображения | своих фото нет; используются собственные SVG-пиктограммы помещений |
-| внешние интеграции | нет (реклама и счётчики выключены) |
-| production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT); права на использование фактов и ссылок на товары — на решение владельца |
-
-## Изменения в общих файлах
-
-`inventory/network-allowlist.yaml` (+4 хоста, только GET) и `tests/unit/test_permission_matrix.py` (точный состав allowlist).
+| интерфейс | готов: проблемы, каталог с фильтрами и сортировкой, шаги-чек-листы с прогрессом, итоговая проверка, сохранённое, печать, поиск, теги, подборки, 404 |
+| наполнение | тот же проверенный снимок, что в A: 13 инструкций на фактах 15 страниц; черновики сессии Claude (`manual_standin`), не Qwen, без редакторской проверки |
+| внешние интеграции | нет |
+| production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT); A и B — варианты одного сайта, публикуется один |

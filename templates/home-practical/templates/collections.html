@@ -1,10 +1,5 @@
 {% extends "base.html" %}
 {% block main %}
 <h1>Подборки</h1>
-<p class="lead">Инструкции, собранные вокруг одной задачи.</p>
-<ul class="cols">
-  {% for c in site.collections.values() %}
-  <li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span><span class="cols__n">{{ c['items']|length }} {{ plural(c['items']|length, 'инструкция', 'инструкции', 'инструкций') }}</span></a></li>
-  {% endfor %}
-</ul>
+<ul class="plain">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/">{{ c.title }}</a> <span>{{ c['items']|length }} · {{ c.lede }}</span></li>{% endfor %}</ul>
 {% endblock %}

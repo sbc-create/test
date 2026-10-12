@@ -1,4 +1,4 @@
-"""Приёмочные тесты home-practical (вариант rooms-cards)."""
+"""Приёмочные тесты home-practical (вариант problem-checklists)."""
 
 import copy
 import json
@@ -111,16 +111,45 @@ def test_howto_matches_visible_and_no_fakes(app):
 
 def test_manufacturer_and_editorial_are_separated(app):
     _, html, _ = get(app, "/instrukciya/zakrepit-komod-k-stene/")
-    man = html.split("Требования производителя")[1].split("</div>")[0]
-    ed = html.split("Совет редакции")[1].split("</div>")[0]
-    assert "ist-" in man and "ist-" not in ed and "не требование производителя" in ed
+    rows = re.findall(r'<div class="lims__r lims__r--(\w+)"><dt>.*?</dt><dd>(.*?)</dd></div>', html, re.S)
+    assert {k for k, _ in rows} == {"man", "org", "ed"}
+    for kind, dd in rows:
+        assert ("ist-" in dd) == (kind != "ed"), kind
+        assert ("не требование производителя" in dd) == (kind == "ed")
+
+
+def test_steps_are_checkable_and_problems_link_back(app):
+    for m in app.site.materials:
+        _, html, _ = get(app, m.url)
+        assert len(re.findall(r'data-step="\d+"', html)) == len(m.steps)
+        assert len(re.findall(r'data-check="\d+"', html)) == len(m.checklist)
+        for p in app.site.problems_for(m):
+            assert f'href="/problemy/{p["slug"]}/"' in html
+
+
+def test_problems_pages_and_404(app):
+    assert len(app.site.problems) >= 5
+    for slug, p in app.site.problems.items():
+        st, html, _ = get(app, f"/problemy/{slug}/")
+        assert st == 200 and re.findall(r'<h2 class="seq__t"><a href="([^"]+)"', html) == [m.url for m in p["items"]]
+    assert get(app, "/problemy/net/")[0] == 404
+
+
+def test_catalog_sort_orders(app):
+    _, html, _ = get(app, "/zadachi/", {"sort": ["nazvanie"]})
+    titles = re.findall(r'<tr><td><a href="/instrukciya/[^"]+">(.*?)</a>', html)
+    assert titles == sorted(titles) and len(titles) == len(app.site.materials) and canon(html) is None
+    _, html, _ = get(app, "/zadachi/", {"sort": ["zadacha"]})
+    tasks = re.findall(r"</a></td><td>[^<]+</td><td>([^<]+)</td>", html)
+    order = list(content.TASKS.values())
+    assert [order.index(t) for t in tasks] == sorted(order.index(t) for t in tasks)
 
 
 def test_filters_reset_empty_and_noindex(app):
     st, html, _ = get(app, "/zadachi/", {"pomeshchenie": ["kuhnya"], "zadacha": ["mebel"]})
-    assert st == 200 and 'class="empty"' in html and "Сбросить фильтры" in html and canon(html) is None
+    assert st == 200 and 'class="empty"' in html and ">Сбросить</a>" in html and canon(html) is None
     st, html, _ = get(app, "/zadachi/", {"pomeshchenie": ["spalnya"]})
-    assert html.count('class="card ') == len(app.site.in_room("spalnya")) and canon(html) is None
+    assert html.count("<tr><td><a ") == len(app.site.in_room("spalnya")) and canon(html) is None
     st, html, _ = get(app, "/zadachi/", {"pomeshchenie": ["cherdak"]})
     assert "Такого фильтра нет" in html
     _, html, _ = get(app, "/poisk/", {"q": ["квантовый"]})
@@ -148,7 +177,9 @@ def test_404s_and_collection_backed_tag(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'name="site-factory-variant-id" content="rooms-cards"' in html
+    assert (
+        'content="noindex, nofollow"' in html and 'name="site-factory-variant-id" content="problem-checklists"' in html
+    )
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)

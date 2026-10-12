@@ -1,13 +1,13 @@
 site_id: home-practical
 name: "Удобный дом"
-variant_id: rooms-cards          # вариант A: навигация от помещения, визуальные карточки, подборки
+variant_id: problem-checklists   # вариант B: навигация от проблемы, компактный каталог, последовательные чек-листы
 variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
-  preview: "http://127.0.0.1:8851"
+  preview: "http://127.0.0.1:8852"
   production: null               # BLOCKED_INPUT: домен не выбран
-server: {bind: 127.0.0.1, port: 8851}
-storage_namespace: "hp-rooms"    # ключи localStorage только этого варианта
+server: {bind: 127.0.0.1, port: 8852}
+storage_namespace: "hp-problems" # ключи localStorage только этого варианта
 ads: {adapter: disabled}
 analytics: {adapter: disabled}

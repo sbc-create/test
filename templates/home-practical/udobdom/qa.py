@@ -1,4 +1,4 @@
-"""Браузерная приёмка home-practical: карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка home-practical (problem-checklists): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,24 +11,27 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8851"
+BASE = "http://127.0.0.1:8852"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
-MAT = "/instrukciya/razdelit-yashchik-komoda/"
+MAT = "/instrukciya/zakrepit-komod-k-stene/"
+PROB = "/problemy/mebel-mozhet-upast/"
 SHOTS = {
     "home": "/",
-    "room": "/pomeshcheniya/spalnya/",
-    "catalog": "/zadachi/?pomeshchenie=vannaya",
+    "problem": PROB,
+    "catalog": "/zadachi/?sort=nazvanie",
     "material": MAT,
-    "collection": "/podborki/krepim-k-stene/",
+    "room": "/pomeshcheniya/spalnya/",
     "empty-filter": "/zadachi/?pomeshchenie=kuhnya&zadacha=mebel",
 }
 AXE_PAGES = list(SHOTS.values()) + [
+    "/problemy/",
     "/pomeshcheniya/",
     "/zadachi/mebel/",
-    "/instrukciya/zakrepit-komod-k-stene/",
+    "/instrukciya/razdelit-yashchik-komoda/",
     "/instrukciya/zadelat-otverstiya-ot-krepezha/",
     "/podborki/",
+    "/podborki/obuv/",
     "/teg/sverlenie/",
     "/istochniki/",
     "/kak-my-proveryaem/",
@@ -95,94 +98,97 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
-        A["mobile_rooms_bar_hidden"] = not pg.locator(".rooms-bar").is_visible()
-        pg.click(".menu summary")
-        A["mobile_menu_opens"] = pg.locator(".menu nav").is_visible()
         with pg.expect_navigation():
-            pg.locator(".menu a", has_text="Ванная").click()
-        A["mobile_menu_link_opens_room"] = (
-            pg.url.endswith("/pomeshcheniya/vannaya/") and pg.locator("h1").inner_text() == "Ванная"
+            pg.locator(".problems a").first.click()
+        A["home_problem_opens"] = pg.url.endswith(PROB)
+        with pg.expect_navigation():
+            pg.locator(".seq__t a").first.click()
+        A["problem_first_solution_opens"] = pg.url.endswith(MAT)
+        steps = pg.locator("[data-step]")
+        n = steps.count()
+        steps.nth(0).check()
+        steps.nth(1).check()
+        A["progress_text_after_2"] = pg.locator("[data-progress-text]").inner_text()
+        A["progress_value"] = pg.evaluate("document.querySelector('[data-progress]').value") == 2
+        pg.click("[data-next]")
+        A["next_step_focuses_first_unchecked"] = pg.evaluate("document.activeElement.id") == "shag-3"
+        pg.reload()
+        A["steps_persist_after_reload"] = [steps.nth(i).is_checked() for i in range(n)] == [True, True] + [False] * (
+            n - 2
         )
-        # фильтры: сочетание, результат, сброс
-        pg.goto(BASE + "/zadachi/")
-        total = pg.locator(".card").count()
-        pg.select_option("#f-room", "spalnya")
-        pg.select_option("#f-task", "organizaciya")
-        with pg.expect_navigation():
-            pg.click(".filters button")
-        cards = pg.locator(".card__where").all_inner_texts()
-        A["filter_room_task_combo"] = {
-            "total": total,
-            "after": len(cards),
-            "ok": len(cards) > 0 and all("Спальня" in c and "Организация" in c for c in cards),
-        }
-        with pg.expect_navigation():
-            pg.click(".filters__reset")
-        A["filter_reset_restores_all"] = pg.locator(".card").count() == total and pg.url.endswith("/zadachi/")
-        pg.goto(BASE + "/zadachi/?pomeshchenie=kuhnya&zadacha=mebel")
-        A["filter_empty_state_with_exits"] = pg.locator(".empty a").count() >= 2
-        pg.go_back()
-        A["history_back_returns"] = pg.url.endswith("/zadachi/")
-        pg.go_forward()
-        A["history_forward_returns"] = "zadacha=mebel" in pg.url
-        # поиск: ввод с клавиатуры, результат, пустой запрос, нет результатов, очистка
-        pg.goto(BASE + "/")
-        pg.fill("#hq", "обувь")
-        with pg.expect_navigation():
-            pg.press("#hq", "Enter")
-        A["search_keyboard_results"] = pg.locator(".card").count()
-        with pg.expect_navigation():
-            pg.click(".find--page .filters__reset")
-        A["search_clear"] = pg.locator("#sq").input_value() == "" and pg.locator(".card").count() == 0
-        pg.goto(BASE + "/poisk/?q=")
-        A["search_empty_query_hint"] = pg.locator(".chips__plain a").count() == 6
-        pg.goto(BASE + "/poisk/?q=квантовый")
-        A["search_no_results_message"] = pg.locator(".empty h2").inner_text() == "Ничего не нашлось"
-        # материал: оглавление, ссылка на источник, чек-лист, сохранение, печать
+        pg.goto(BASE + PROB)
+        A["problem_page_shows_progress"] = (
+            pg.locator(".seq li").first.locator("[data-progress]").inner_text() == f"Выполнено шагов: 2 из {n}"
+        )
         pg.goto(BASE + MAT)
-        pg.click(".toc a[href='#shagi']")
-        A["toc_jumps_to_steps"] = pg.evaluate("location.hash") == "#shagi"
-        pg.locator("a.ref").first.click()
-        A["ref_jumps_to_source"] = (
-            pg.evaluate("location.hash").startswith("#ist-") and pg.locator(pg.evaluate("location.hash")).count() == 1
-        )
-        boxes = pg.locator(".check input")
-        boxes.nth(0).check()
-        boxes.nth(2).check()
+        for i in range(n):
+            steps.nth(i).check()
+        A["all_steps_done_text"] = pg.locator("[data-progress-text]").inner_text().startswith("Все шаги выполнены")
+        pg.click("[data-next]")
+        A["next_after_all_goes_to_final"] = pg.evaluate("document.activeElement.id") == "itog"
+        checks = pg.locator("[data-check]")
+        checks.nth(0).check()
         pg.reload()
-        A["checklist_persists_after_reload"] = [boxes.nth(i).is_checked() for i in range(boxes.count())] == [
-            True,
-            False,
-            True,
-        ]
-        A["checklist_status_text"] = pg.locator("[data-check-status]").inner_text()
-        pg.click("[data-check-reset]")
+        A["final_check_persists"] = checks.nth(0).is_checked() and pg.locator(
+            "[data-check-status]"
+        ).inner_text().startswith("Проверено 1")
+        pg.click("[data-steps-reset]")
         pg.reload()
-        A["checklist_reset"] = not any(boxes.nth(i).is_checked() for i in range(boxes.count()))
+        A["steps_reset"] = not any(steps.nth(i).is_checked() for i in range(n))
         pg.click("[data-save]")
-        A["save_button_pressed"] = pg.get_attribute("[data-save]", "aria-pressed") == "true"
         pg.reload()
         A["save_persists_after_reload"] = pg.get_attribute("[data-save]", "aria-pressed") == "true"
-        A["saved_badge"] = pg.locator(".saved-link .badge").inner_text()
+        A["saved_badge"] = pg.locator(".nav .badge").inner_text()
         pg.goto(BASE + "/sohranennoe/")
-        A["saved_page_lists_item"] = pg.locator("[data-saved-item]:not([hidden]) .card").count() == 1
+        A["saved_page_lists_item"] = pg.locator("[data-saved-item]:not([hidden])").count() == 1
         pg.click("[data-saved-clear]")
         A["saved_clear_shows_empty"] = pg.locator("[data-saved-empty]").is_visible()
         pg.goto(BASE + MAT)
         pg.evaluate(
             "window.__printed = 0; window.print = () => { window.__printed++; }; 0"
-        )  # «; 0»: не возвращать функцию — Playwright вызывает её при сериализации
+        )  # «; 0»: не возвращать функцию
         pg.click("[data-print]")
         A["print_button_calls_print"] = pg.evaluate("window.__printed") == 1
         pg.emulate_media(media="print")
-        A["print_hides_navigation"] = not pg.locator(".top").is_visible() and pg.locator(".steps").is_visible()
+        A["print_hides_navigation"] = not pg.locator(".bar").is_visible() and pg.locator(".todo__list").is_visible()
         pg.emulate_media(media="screen")
-        pg.goto(BASE + "/pomeshcheniya/spalnya/")
-        href = pg.locator(".card__title a").first.get_attribute("href")
-        box = pg.locator(".card").first.bounding_box()
+        pg.locator("a.ref").first.click()
+        A["ref_jumps_to_source"] = pg.evaluate("location.hash").startswith("#ist-")
+        # каталог: сегментные фильтры, сортировка, сброс, пустое состояние, история
+        pg.goto(BASE + "/zadachi/")
+        total = pg.locator("tbody tr").count()
+        pg.locator(".seg label", has_text="Ванная").click()
+        pg.select_option("#sort", "nazvanie")
         with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 12)
-        A["whole_card_clickable"] = pg.url.endswith(href)
+            pg.click(".ctl button")
+        titles = pg.locator("tbody td:first-child").all_inner_texts()
+        rooms = pg.locator("tbody td:nth-child(2)").all_inner_texts()
+        A["filter_and_sort"] = {
+            "total": total,
+            "after": len(titles),
+            "ok": bool(titles) and set(rooms) == {"Ванная"} and titles == sorted(titles),
+        }
+        with pg.expect_navigation():
+            pg.click(".ctl .reset")
+        A["filter_reset_restores_all"] = pg.locator("tbody tr").count() == total
+        pg.goto(BASE + "/zadachi/?pomeshchenie=kuhnya&zadacha=mebel")
+        A["filter_empty_state_with_exits"] = pg.locator(".empty a").count() == 2
+        pg.go_back()
+        A["history_back_returns"] = pg.url.endswith("/zadachi/")
+        pg.go_forward()
+        A["history_forward_returns"] = "zadacha=mebel" in pg.url
+        # поиск
+        pg.goto(BASE + "/")
+        pg.fill("#hq", "комод")
+        with pg.expect_navigation():
+            pg.press("#hq", "Enter")
+        A["search_keyboard_results"] = pg.locator(".row").count()
+        with pg.expect_navigation():
+            pg.click(".find--wide .reset")
+        A["search_clear"] = pg.locator("#sq").input_value() == "" and pg.locator(".row").count() == 0
+        A["search_empty_query_offers_problems"] = pg.locator(".plain a[href^='/problemy/']").count() >= 5
+        pg.goto(BASE + "/poisk/?q=квантовый")
+        A["search_no_results_message"] = pg.locator(".empty h2").inner_text() == "Ничего не нашлось"
         pg.goto(BASE + "/nesushchestvuet/")
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
@@ -193,13 +199,14 @@ def run(shots: Path | None) -> dict:
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
         pg.goto(BASE + MAT)
-        A["nojs_material_steps"] = pg.locator(".steps li").count()
-        A["nojs_save_button_hidden"] = not pg.locator("[data-save]").is_visible()
-        pg.goto(BASE + "/zadachi/?pomeshchenie=prihozhaya")
-        A["nojs_filter_works"] = pg.locator(".card").count() == 2
-        pg.goto(BASE + "/")
-        pg.click(".menu summary") if pg.locator(".menu summary").is_visible() else None
-        A["nojs_rooms_reachable"] = pg.locator("a[href='/pomeshcheniya/kuhnya/']").count() >= 1
+        A["nojs_steps_listed"] = pg.locator(".todo__list li").count()
+        A["nojs_progress_and_save_hidden"] = (
+            not pg.locator("[data-progress-box]").is_visible() and not pg.locator("[data-save]").is_visible()
+        )
+        pg.goto(BASE + "/zadachi/?pomeshchenie=prihozhaya&sort=nazvanie")
+        A["nojs_filter_works"] = pg.locator("tbody tr").count() == 2
+        pg.goto(BASE + PROB)
+        A["nojs_problem_lists_solutions"] = pg.locator(".seq li").count() == 6
         ctx.close()
         br.close()
     return res

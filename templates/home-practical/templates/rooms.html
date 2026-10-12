@@ -1,15 +1,6 @@
 {% extends "base.html" %}
 {% block main %}
 <h1>Помещения</h1>
-<p class="lead">С чего начать — зависит от комнаты. В каждой — инструкции по хранению, мебели и небольшим улучшениям.</p>
-<ul class="rooms">
-  {% for k, v in ROOMS.items() %}{% set n = site.in_room(k)|length %}
-  <li><a class="room-tile room-tile--{{ k }}" href="/pomeshcheniya/{{ k }}/">
-    <img src="{{ asset('img/rooms/' ~ k ~ '.svg') }}" alt="" width="72" height="72">
-    <span class="room-tile__name">{{ v }}</span>
-    <span class="room-tile__lede">{{ ROOM_LEDE[k] }}</span>
-    <span class="room-tile__n">{{ n }} {{ plural(n, 'инструкция', 'инструкции', 'инструкций') }}</span>
-  </a></li>
-  {% endfor %}
-</ul>
+<p class="lead">Если удобнее начать с комнаты — здесь инструкции по каждой.</p>
+<ul class="plain">{% for k, v in ROOMS.items() %}{% set n = site.in_room(k)|length %}<li><a href="/pomeshcheniya/{{ k }}/">{{ v }}</a> <span>{{ n }} {{ plural(n, 'инструкция', 'инструкции', 'инструкций') }}</span></li>{% endfor %}</ul>
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import rows %}
 {% macro ref(srcs) %}{% for s in srcs %}<a class="ref" href="#ist-{{ mt.src_index[s] }}" aria-label="Источник {{ mt.src_index[s] }}">[{{ mt.src_index[s] }}]</a>{% endfor %}{% endmacro %}
 {% block main %}
 <article class="mat" data-slug="{{ mt.slug }}" data-version="{{ mt.version }}">
@@ -7,87 +7,85 @@
     <p class="mat__where"><a href="/pomeshcheniya/{{ mt.room }}/">{{ mt.room_label }}</a> · <a href="/zadachi/{{ mt.task }}/">{{ mt.task_label }}</a></p>
     <h1>{{ mt.title }}</h1>
     <p class="lead">{{ mt.summary }}</p>
+    {% set probs = site.problems_for(mt) %}
+    {% if probs %}<p class="solves">Решает: {% for p in probs %}<a href="/problemy/{{ p.slug }}/">{{ p.title|lower }}</a>{% if not loop.last %}; {% endif %}{% endfor %}</p>{% endif %}
     <div class="mat__actions">
       <button type="button" class="btn" data-save="{{ mt.slug }}" aria-pressed="false" hidden>Сохранить</button>
-      <button type="button" class="btn btn--ghost" data-print hidden>Печать</button>
+      <button type="button" class="btn btn--line" data-print hidden>Печать</button>
     </div>
   </header>
 
-  <nav class="toc" aria-label="Оглавление">
-    <h2 class="toc__h">Содержание</h2>
-    <ol>
-      {% if mt.passport %}<li><a href="#pasport">Размеры и нагрузки</a></li>{% endif %}
-      <li><a href="#gde">Где подходит</a></li>
-      <li><a href="#nuzhno">Что потребуется</a></li>
-      {% if mt.calc %}<li><a href="#raschet">Расчёт</a></li>{% endif %}
-      <li><a href="#shagi">Шаги</a></li>
-      <li><a href="#ogranicheniya">Ограничения и требования</a></li>
-      <li><a href="#proverka">Чек-лист</a></li>
-      <li><a href="#istochniki">Источники</a></li>
-    </ol>
-  </nav>
+  <div class="mat__grid">
+    <div class="mat__main">
+      <nav class="toc" aria-label="Оглавление">
+        <a href="#shagi">Шаги</a> <a href="#itog">Итоговая проверка</a> <a href="#ogranicheniya">Ограничения</a> {% if mt.passport %}<a href="#pasport">Размеры</a> {% endif %}<a href="#nuzhno">Что потребуется</a> <a href="#istochniki">Источники</a>
+      </nav>
 
-  {% if mt.passport %}
-  <section class="passport" id="pasport" aria-labelledby="h-pas">
-    <h2 id="h-pas">Размеры и нагрузки по данным производителя</h2>
-    <dl>
-      {% for p in mt.passport %}<div class="passport__row{% if p.load %} passport__row--load{% endif %}"><dt>{{ p.label }}</dt><dd>{{ p.value }} {{ ref([p.src]) }}</dd></div>{% endfor %}
-    </dl>
-  </section>
-  {% endif %}
+      <section id="shagi" class="todo" aria-labelledby="h-steps">
+        <h2 id="h-steps">Шаги</h2>
+        <div class="progress" data-progress-box hidden>
+          <progress max="{{ mt.steps|length }}" value="0" data-progress aria-label="Выполнено шагов"></progress>
+          <span data-progress-text aria-live="polite"></span>
+          <button type="button" class="btn btn--small" data-next>Следующий шаг</button>
+        </div>
+        <ol class="todo__list">{% for x in mt.steps %}
+          <li id="shag-{{ loop.index }}" tabindex="-1">
+            <label><input type="checkbox" data-step="{{ loop.index }}"><span><b>Шаг {{ loop.index }}.</b> {{ x.text }}</span></label>
+            {% if x.get('src') %}<span class="todo__ref">{{ ref(x.src) }}</span>{% endif %}
+          </li>{% endfor %}
+        </ol>
+        <button type="button" class="btn btn--line" data-steps-reset hidden>Начать заново</button>
+      </section>
 
-  <section id="gde" aria-labelledby="h-gde">
-    <h2 id="h-gde">Где подходит</h2>
-    <p>{{ mt.applies }}</p>
-    {% if mt.not_for %}<p class="notfor"><b>Не подходит:</b> {{ mt.not_for }}</p>{% endif %}
-  </section>
+      {% if mt.calc %}
+      <section class="calc" aria-labelledby="h-calc">
+        <h2 id="h-calc">Расчёт</h2>
+        <ul>{% for c in mt.calc %}<li><span>{{ c.label }}:</span> <code>{{ c.expr|replace('-', '−') }} = {{ c.result }} {{ c.unit }}</code>. {{ c.get('conclusion', '') }}</li>{% endfor %}</ul>
+      </section>
+      {% endif %}
 
-  <section id="nuzhno" aria-labelledby="h-need">
-    <h2 id="h-need">Что потребуется</h2>
-    <ul class="need">{% for x in mt.need %}<li>{{ x.text }} {{ ref(x.get('src', [])) }}</li>{% endfor %}</ul>
-  </section>
+      <section id="itog" class="final" aria-labelledby="h-final">
+        <h2 id="h-final">Итоговая проверка</h2>
+        <ul>{% for x in mt.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
+        <p class="final__status" data-check-status aria-live="polite"></p>
+      </section>
 
-  {% if mt.calc %}
-  <section id="raschet" class="calc" aria-labelledby="h-calc">
-    <h2 id="h-calc">Расчёт</h2>
-    <ul>{% for c in mt.calc %}<li><span>{{ c.label }}:</span> <code>{{ c.expr|replace('-', '−') }} = {{ c.result }} {{ c.unit }}</code>. {{ c.get('conclusion', '') }}</li>{% endfor %}</ul>
-  </section>
-  {% endif %}
+      <section id="ogranicheniya" aria-labelledby="h-lim">
+        <h2 id="h-lim">Ограничения</h2>
+        <dl class="lims">
+          {% for x in mt.manufacturer %}<div class="lims__r lims__r--man"><dt>Производитель</dt><dd>{{ x.text }} {{ ref([x.src]) }}</dd></div>{% endfor %}
+          {% for x in mt.organization %}<div class="lims__r lims__r--org"><dt>Организация</dt><dd>{{ x.text }} {{ ref([x.src]) }}</dd></div>{% endfor %}
+          {% for x in mt.editorial %}<div class="lims__r lims__r--ed"><dt>Совет редакции</dt><dd>{{ x.text }} <small>(не требование производителя)</small></dd></div>{% endfor %}
+        </dl>
+      </section>
+    </div>
 
-  <section id="shagi" aria-labelledby="h-steps">
-    <h2 id="h-steps">Шаги</h2>
-    <ol class="steps">{% for x in mt.steps %}<li id="shag-{{ loop.index }}"><span class="steps__n" aria-hidden="true">{{ loop.index }}</span><p>{{ x.text }} {{ ref(x.get('src', [])) }}</p></li>{% endfor %}</ol>
-  </section>
-
-  <section id="ogranicheniya" aria-labelledby="h-lim">
-    <h2 id="h-lim">Ограничения и требования</h2>
-    {% if mt.manufacturer %}<div class="lim lim--man"><h3>Требования производителя</h3><ul>{% for x in mt.manufacturer %}<li>{{ x.text }} {{ ref([x.src]) }}</li>{% endfor %}</ul></div>{% endif %}
-    {% if mt.organization %}<div class="lim lim--org"><h3>Рекомендации профильной организации</h3><ul>{% for x in mt.organization %}<li>{{ x.text }} {{ ref([x.src]) }}</li>{% endfor %}</ul></div>{% endif %}
-    {% if mt.editorial %}<div class="lim lim--ed"><h3>Совет редакции</h3><p class="lim__note">Это наша рекомендация, а не требование производителя.</p><ul>{% for x in mt.editorial %}<li>{{ x.text }}</li>{% endfor %}</ul></div>{% endif %}
-  </section>
-
-  <section id="proverka" class="check" aria-labelledby="h-check">
-    <h2 id="h-check">Чек-лист</h2>
-    <p class="check__hint" data-check-status aria-live="polite">Отметьте выполненное — отметки сохранятся на этом устройстве.</p>
-    <ul>{% for x in mt.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
-    <button type="button" class="btn btn--ghost" data-check-reset hidden>Снять все отметки</button>
-  </section>
-
-  {% if mt.tags %}
-  <section class="tags" aria-labelledby="h-tags"><h2 id="h-tags" class="sr">Теги</h2>
-    <ul>{% for t in mt.tags %}{% set u = site.tag_url(t) %}<li>{% if u %}<a href="{{ u }}">{{ TAGS[t] }}</a>{% else %}<span>{{ TAGS[t] }}</span>{% endif %}</li>{% endfor %}</ul>
-  </section>
-  {% endif %}
+    <aside class="mat__side" aria-label="Параметры и материалы">
+      {% if mt.passport %}
+      <section id="pasport" aria-labelledby="h-pas">
+        <h2 id="h-pas">Размеры и нагрузки</h2>
+        <table class="pas"><tbody>{% for p in mt.passport %}<tr{% if p.load %} class="pas__load"{% endif %}><th scope="row">{{ p.label }}</th><td>{{ p.value }} {{ ref([p.src]) }}</td></tr>{% endfor %}</tbody></table>
+      </section>
+      {% endif %}
+      <section id="nuzhno" aria-labelledby="h-need">
+        <h2 id="h-need">Что потребуется</h2>
+        <ul>{% for x in mt.need %}<li>{{ x.text }} {{ ref(x.get('src', [])) }}</li>{% endfor %}</ul>
+      </section>
+      <section aria-labelledby="h-where">
+        <h2 id="h-where">Где подходит</h2>
+        <p>{{ mt.applies }}</p>
+        {% if mt.not_for %}<p class="notfor"><b>Не подходит:</b> {{ mt.not_for }}</p>{% endif %}
+      </section>
+      {% if mt.tags %}<ul class="tags" aria-label="Теги">{% for t in mt.tags %}{% set u = site.tag_url(t) %}<li>{% if u %}<a href="{{ u }}">{{ TAGS[t] }}</a>{% else %}<span>{{ TAGS[t] }}</span>{% endif %}</li>{% endfor %}</ul>{% endif %}
+    </aside>
+  </div>
 
   <section id="istochniki" class="sources" aria-labelledby="h-src">
     <h2 id="h-src">Источники</h2>
     <ol>{% for s in mt.sources %}<li id="ist-{{ loop.index }}"><b>{{ SOURCE_KIND[s.kind] }}:</b> <a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }}</a>{% if s.get('article') %}, артикул {{ s.article }}{% endif %}. Открыт и прочитан {{ s.fetched_at[:10] }}.</li>{% endfor %}</ol>
-    <p class="ver">Версия {{ mt.version }}, опубликовано {{ mt.published_at }}{% if mt.updated_at != mt.published_at %}, обновлено {{ mt.updated_at }}{% endif %}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
+    <p class="ver">Версия {{ mt.version }}, опубликовано {{ mt.published_at }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
   </section>
 </article>
-
 {% set rel = site.related(mt) %}
-{% if rel %}
-<section class="block" aria-labelledby="h-rel"><h2 id="h-rel">Связанные инструкции</h2>{{ grid(rel) }}</section>
-{% endif %}
+{% if rel %}<section aria-labelledby="h-rel"><h2 id="h-rel">Дальше по теме</h2>{{ rows(rel) }}</section>{% endif %}
 {% endblock %}

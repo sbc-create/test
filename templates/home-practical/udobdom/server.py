@@ -1,4 +1,4 @@
-"""SSR-сервер home-practical (вариант rooms-cards)."""
+"""SSR-сервер home-practical (вариант problem-checklists)."""
 
 from __future__ import annotations
 
@@ -60,6 +60,7 @@ class App:
             TAGS=TAGS,
             ROOM_LEDE=ROOM_LEDE,
             SOURCE_KIND=SOURCE_KIND,
+            SORTS=self.site.SORTS,
             asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}",
             plural=plural,
         )
@@ -162,9 +163,11 @@ class App:
             bad = [x for x, reg in ((room, ROOMS), (task, TASKS)) if x and x not in reg]
             room = room if room in ROOMS else ""
             task = task if task in TASKS else ""
-            items = s.filter(room or None, task or None)
+            sort = (q.get("sort") or [""])[0]
+            sort = sort if sort in s.SORTS else ""
+            items = s.sort(s.filter(room or None, task or None), sort or "pomeshchenie")
             crumbs = [home, ("Каталог задач", path)]
-            filtered = bool(room or task or bad)
+            filtered = bool(room or task or bad or sort)
             meta = Meta(
                 "Каталог задач по дому"
                 + (f": {ROOMS[room].lower()}" if room else "")
@@ -176,7 +179,30 @@ class App:
                 [self.crumbs_ld(crumbs), self.items_ld(items)],
                 "catalog",
             )
-            return 200, self.render("catalog.html", meta, items=items, room=room, task=task, bad=bad), {}
+            return 200, self.render("catalog.html", meta, items=items, room=room, task=task, bad=bad, sort=sort), {}
+        if path == "/problemy/":
+            crumbs = [home, ("Проблемы", path)]
+            return self.page(
+                "problems.html",
+                "Что мешает дома: выберите проблему",
+                "Начните с того, что не так, — и получите последовательный чек-лист решения.",
+                path,
+                crumbs,
+            )
+        m = re.fullmatch(r"/problemy/([a-z0-9-]+)/", path)
+        if m and m.group(1) in s.problems:
+            pr = s.problems[m.group(1)]
+            crumbs = [home, ("Проблемы", "/problemy/"), (pr["title"], path)]
+            return self.page(
+                "problem.html",
+                pr["title"],
+                pr["symptom"] + " Инструкции по порядку с чек-листами.",
+                path,
+                crumbs,
+                [self.items_ld(pr["items"])],
+                "problem",
+                pr=pr,
+            )
         m = re.fullmatch(r"/zadachi/([a-z-]+)/", path)
         if m and m.group(1) in TASKS and s.for_task(m.group(1)):
             t = m.group(1)
@@ -290,7 +316,8 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/pomeshcheniya/", "/zadachi/", "/podborki/", "/istochniki/", "/kak-my-proveryaem/"]
+        urls = ["/", "/problemy/", "/pomeshcheniya/", "/zadachi/", "/podborki/", "/istochniki/", "/kak-my-proveryaem/"]
+        urls += [f"/problemy/{p}/" for p in s.problems]
         urls += [f"/pomeshcheniya/{r}/" for r in ROOMS if s.in_room(r)]
         urls += [f"/zadachi/{t}/" for t in TASKS if s.for_task(t)]
         urls += [f"/podborki/{c}/" for c in s.collections]
