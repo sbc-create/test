@@ -1,4 +1,4 @@
-"""SSR-сервер games-rpg (вариант codex-sections)."""
+"""SSR-сервер games-rpg (вариант party-planner)."""
 
 from __future__ import annotations
 
@@ -122,6 +122,38 @@ class App:
                 "game",
                 gid=gid,
             )
+        if path == "/otryad/":
+            gid = next(iter(s.games))
+            slugs = [x for x in q.get("p", []) if x in {e.slug for e in s.characters(gid)}][:4]
+            over = len(q.get("p", [])) > 4
+            crumbs = [home, ("Отряд", path)]
+            meta = Meta(
+                "Планировщик отряда",
+                "Соберите отряд до 4 спутников и сравните классы и характеристики по данным вики.",
+                None if slugs else s.abs(path),
+                not slugs,
+                crumbs,
+                [self.crumbs_ld(crumbs)],
+                "party",
+            )
+            return 200, self.render("party.html", meta, gid=gid, party=s.party(gid, slugs), slugs=slugs, over=over), {}
+        m = re.fullmatch(r"/([a-z0-9-]+)/personazhi/", path)
+        if m and m.group(1) in s.games and s.characters(m.group(1)):
+            gid = m.group(1)
+            key = (q.get("sort") or [""])[0]
+            key = key if key in ("STR", "DEX", "CON", "INT", "WIS", "CHA") else ""
+            crumbs = [home, (s.games[gid]["title"], f"/{gid}/"), ("Персонажи", path)]
+            items = s.sort_characters(gid, key)
+            meta = Meta(
+                f"{s.games[gid]['title']}: персонажи — сравнение характеристик",
+                "Таблица спутников с характеристиками по данным вики.",
+                None if key else s.abs(path),
+                not key,
+                crumbs,
+                [self.crumbs_ld(crumbs), self.items_ld(items)],
+                "chars",
+            )
+            return 200, self.render("characters.html", meta, gid=gid, items=items, key=key), {}
         m = re.fullmatch(r"/([a-z0-9-]+)/([a-z]+)/", path)
         if m and m.group(1) in s.games and m.group(2) in s.sections(m.group(1)):
             gid, sec = m.group(1), m.group(2)
@@ -193,7 +225,7 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/kak-my-rabotaem/", "/istochniki/"]
+        urls = ["/", "/otryad/", "/kak-my-rabotaem/", "/istochniki/"]
         for gid in s.games:
             secs = s.sections(gid)
             if secs:

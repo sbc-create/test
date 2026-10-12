@@ -1,12 +1,9 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import partyform %}
 {% block main %}
-<section class="hero"><h1>Гайды RPG</h1><p class="lead">Справочник по ролевым играм: спутники, основы билдов по классам, квесты и механики. У каждого материала — источник и версия игры.</p></section>
-{% for gid, gm in site.games.items() %}{% set secs = site.sections(gid) %}{% if secs %}
-<section aria-labelledby="h-{{ gid }}"><div class="head"><h2 id="h-{{ gid }}">{{ gm.title }}</h2><a href="/{{ gid }}/">Весь справочник</a></div>
-{% if site.version %}<p class="ver">Сверено с: <a href="{{ site.version.url }}">{{ site.version.src.name }}</a></p>{% endif %}
-{% for sec, (label, items) in secs.items() %}<h3><a href="/{{ gid }}/{{ sec }}/">{{ label }}</a></h3>{{ grid(items[:3], 'h4') }}{% endfor %}
-</section>
-{% endif %}{% endfor %}
-<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец.</p>
+<h1>Соберите отряд</h1>
+<p class="lead">Выберите до четырёх спутников — и посмотрите, какие классы у вас есть и у кого лучшая каждая характеристика. Данные — из вики игры{% if site.version %}, сверено после {{ site.version.src.name }}{% endif %}.</p>
+<p class="last" data-last-party hidden></p>
+{% for gid in site.games %}{{ partyform(gid, []) }}
+<section aria-labelledby="h-more"><h2 id="h-more">Справочник</h2><ul class="secs">{% for sec, (label, items) in site.sections(gid).items() %}<li><a href="/{{ gid }}/{{ sec }}/"><b>{{ label }}</b><span>{{ items|length }}</span></a></li>{% endfor %}</ul></section>{% endfor %}
 {% endblock %}

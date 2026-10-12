@@ -1,4 +1,4 @@
-# SEO-матрица games-rpg (вариант codex-sections)
+# SEO-матрица games-rpg (вариант party-planner)
 
 Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production — только с доменом и `production_authorized` (тест).
 
@@ -6,11 +6,13 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 | --- | --- | --- | --- | --- | --- |
 | главная | `/` | себя | index | да | WebSite |
 | игра | `/baldurs-gate-3/` | себя | index (игра принадлежит сайту по реестру) | да | BreadcrumbList |
-| раздел | `/baldurs-gate-3/personazhi/` | себя | index | да | BreadcrumbList, ItemList |
+| отряд | `/otryad/` (без параметров) | себя | index; с выбором — noindex без canonical | да | BreadcrumbList |
+| персонажи (таблица) | `/baldurs-gate-3/personazhi/` | себя; с `?sort=` — нет | index / noindex | да | BreadcrumbList, ItemList |
+| раздел | `/baldurs-gate-3/bildy/` | себя | index | да | BreadcrumbList, ItemList |
 | материал | `/baldurs-gate-3/bildy/klass-voin/` | себя | index | да | BreadcrumbList |
 | версия | `/baldurs-gate-3/versiya/versiya-patch-8/` | себя | index | да | BreadcrumbList |
 | поиск | `/poisk/?q=…` | нет | noindex | нет | — |
 | 404 | `/celeste/` (игра другого сайта), `/baldurs-gate-3/bildy/shadowheart/` (не тот раздел) | нет | 404 | нет | — |
 
-В sitemap 22 URL, все 200, canonical на себя, один H1, уникальные title (тест). Разметка Article/HowTo не используется:
+В sitemap 23 URL, все 200, canonical на себя, один H1, уникальные title (тест). Разметка Article/HowTo не используется:
 у материалов нет автора и дат, которые можно было бы честно указать в ней.

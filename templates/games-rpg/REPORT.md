@@ -1,31 +1,30 @@
-# Отчёт games-rpg, вариант A «Гайды RPG» (codex-sections)
+# Отчёт games-rpg, вариант B «Гайды RPG: отряд» (party-planner)
 
-Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `125d8842a6bdc162acf94e073953ed1c9bace2bb`, ветка `claude/template-games-rpg` (база origin/main a7f7cb6).
+Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `3daa6971d60cc8d95b52a5e6dec636710fcab1e9`, ветка `claude/template-games-rpg-b` (начата с 13b0901 варианта A).
 
 ## Как открыть
 
-- Preview: `http://127.0.0.1:8859/` (loopback, `noindex, nofollow`).
-- Скриншоты (390 и 1440 px): `docs/screenshots/125d884/` — главная, игра, раздел, персонаж, билд, квест.
-- Артефакт: `var/games-rpg/build/125d884…/` — 28 файлов.
+- Preview: `http://127.0.0.1:8860/` (loopback, `noindex, nofollow`). Вариант A — http://127.0.0.1:8859/; отличия — docs/VARIANTS.md.
+- Скриншоты (390 и 1440 px): `docs/screenshots/3daa697/` — главная, отряд, таблица персонажей, персонаж, билд, квест.
+- Артефакт: `var/games-rpg/build/3daa697…/` — 29 файлов.
 
-## Проверки на 125d884 (фактически запущены)
+## Проверки на 3daa697 (фактически запущены)
 
 | команда | exit | результат |
 | --- | --- | --- |
-| `bin/games-rpg test` | 0 | 9 passed |
+| `bin/games-rpg test` | 0 | 11 passed |
 | `ruff check . + ruff format --check .` | 0 | чисто |
-| `pytest tests/unit/test_permission_matrix.py` | 0 | 192 passed |
-| `bin/games-rpg build --commit HEAD` | 0 | см. var/games-rpg/build |
-| `bin/games-rpg qa …` | 0 | 20 действий PASS; axe 0 на 30 стр.×ширин |
-| `python3 qa/viewports.py 8859 …` | 0 | 24 URL × 4 ширины — 0 замечаний |
+| `bin/games-rpg build --commit HEAD` | 0 | 29 файлов |
+| `bin/games-rpg qa …` | 0 | 25 действий PASS; axe 0 на 30 стр.×ширин |
+| `python3 qa/viewports.py 8860 …` | 0 | 27 URL × 4 ширины — 0 замечаний |
 
-LCP (лаборатория, loopback, без троттлинга) 40–132 мс. Карта действий — `docs/ACTION-MAP.md`.
+LCP (лаборатория, loopback, без троттлинга) 40–140 мс. Карта действий — `docs/ACTION-MAP.md`.
 
 ## Готовность
 
 | слой | состояние |
 | --- | --- |
-| интерфейс | готов: игра, разделы (персонажи, билды, квесты, механики), материал с паспортом/прогрессией/этапами, версия игры, поиск, печать, 404 |
-| наполнение | Baldurs Gate 3: 6 спутников, 3 основы билдов (у 2 кастеров таблица скрыта), 2 механики, 2 квеста, версия Patch 8; раздел предметов не опубликован — нет проверенных фактов; тексты — `manual_standin`, не Qwen |
+| интерфейс | готов: планировщик отряда без JS, сводка с равенствами, таблица персонажей с сортировкой, лист персонажа, билды, квесты с этапами, версия, поиск, печать, 404 |
+| наполнение | тот же снимок, что в A (Baldurs Gate 3, Patch 8); тексты — manual_standin, не Qwen |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |

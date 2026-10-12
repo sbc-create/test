@@ -1,14 +1,18 @@
-# Карта действий games-rpg, вариант A (codex-sections)
+# Карта действий games-rpg, вариант B (party-planner)
 
-Проверено на commit `125d884` в Chromium: `bin/games-rpg qa` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `3daa697` в Chromium: `bin/games-rpg qa` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `quest/qa.py` под тем же именем).
 
 | проверка | статус | фактический результат |
 | --- | --- | --- |
 | keyboard_first_tab_is_skip | PASS | `True` |
 | skip_moves_focus_to_main | PASS | `True` |
-| nav_opens_section | PASS | `True` |
-| whole_card_opens_entry | PASS | `True` |
+| no_last_party_initially | PASS | `True` |
+| party_submits | PASS | `True` |
+| party_best_rows | PASS | `True` |
+| party_tie_lists_both | PASS | `True` |
+| last_party_link_on_home | PASS | `True` |
+| table_sort_by_header | PASS | `True` |
 | abilities_shown | PASS | `True` |
 | patch_badge_opens_version | PASS | `True` |
 | build_progression_rows | PASS | `12` |
@@ -24,7 +28,8 @@
 | 404_has_search_and_home | PASS | `True` |
 | history_back_returns | PASS | `True` |
 | nojs_stages_listed | PASS | `8` |
+| nojs_party_works | PASS | `True` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 24 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 27 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 30 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
