@@ -1583,6 +1583,8 @@ def test_backfill_is_shared_between_domains_not_taken_by_higher_rated_films(tmp_
                     f"film-{i}": {
                         "description": None,
                         "imdb_rating": 9.5,
+                        "original_name": f"Film {i}",
+                        "year": 2020,
                         "external_ids": {"imdb": str(i)},
                     }
                     for i in range(10)
@@ -1593,6 +1595,34 @@ def test_backfill_is_shared_between_domains_not_taken_by_higher_rated_films(tmp_
     )
     found = regular.editor_candidates(snap, facts, set(), limit=4, sites={"a.ru": "a", "b.ru": "b"})
     assert sorted(c["site"] for c in found) == ["a.ru", "a.ru", "b.ru", "b.ru"]
+
+
+def test_backfill_film_needs_original_name_and_year(tmp_path):
+    """Без оригинального названия или года путь D200 не находит статью —
+    такой фильм в запас не идёт (zonafilm.space 12.10: IDENTITY_UNCLEAR 2 из 2)."""
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    база = {"description": None, "imdb_rating": 7.0, "playable": True}
+    (facts / "z-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    "polnyy": {**база, "original_name": "Full", "year": 2021,
+                               "external_ids": {"imdb": "1"}},
+                    "bez-nazvaniya": {**база, "year": 2021, "external_ids": {"imdb": "2"}},
+                    "bez-goda": {**база, "original_name": "No Year", "external_ids": {"imdb": "3"}},
+                    "pustoe-nazvanie": {**база, "original_name": " ", "year": 2021,
+                                        "external_ids": {"imdb": "4"}},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = regular.editor_candidates(snap, facts, set(), sites={"z.ru": "z"})
+    assert [c["slug"] for c in found] == ["polnyy"]
+    assert found[0]["film_args"] == ["1", "", "Full", "2021", "movie"]
 
 
 def test_result_holds_separate_reasons(tmp_path):

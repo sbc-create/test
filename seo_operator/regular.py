@@ -2752,7 +2752,12 @@ def editor_candidates(
                     continue
                 if shiki.get("match_state") == "external_id_exact+title_verified":
                     оценка = shiki.get("value") or 0
-                elif (mine.get("external_ids") or {}).get("imdb") and not shiki:
+                elif ((mine.get("external_ids") or {}).get("imdb") and not shiki
+                      and (mine.get("original_name") or "").strip() and mine.get("year")):
+                    # Фильм в запас — только с оригинальным названием и годом:
+                    # по ним путь D200 строит варианты статьи, а без них
+                    # редактор закрывал задание IDENTITY_UNCLEAR (zonafilm.space
+                    # 12.10: 2 из 2, leyla-i-medzhnun без названия и года).
                     оценка = float(mine.get("imdb_rating") or 0)
                 else:
                     continue
