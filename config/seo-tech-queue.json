@@ -381,7 +381,7 @@
       "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
       "status": "blocked",
       "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200.",
-      "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч)."
+      "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч). Режим держится только на meta robots (X-Robots-Tag у Yummy нет): сверка automation/local/indexing-live-snapshot.py --compare."
     },
     {
       "id": "T019",
@@ -419,7 +419,7 @@
       "expected": "раздел жанра со своим адресом, H1, title, description, canonical на себя, пагинация; ссылки жанров со страницы тайтла",
       "check": "HTTP 200, canonical == адрес раздела, ссылки /…genre… на странице тайтла",
       "status": "blocked",
-      "owner_action": "Владелец контейнера Next.js yummyani-staging (выкладка вне factory cell trigger, тот же путь и те же условия по режиму индексации, что B016): решение о разделах жанров Yummy. SEO готов подготовить спецификацию страниц и тексты из каталога."
+      "owner_action": "Владелец контейнера Next.js yummyani-staging (выкладка вне factory cell trigger, тот же путь и те же условия по режиму индексации, что B016): решение о разделах жанров Yummy. SEO готов подготовить спецификацию страниц и тексты из каталога. Режим индексации Yummy держится ТОЛЬКО на <meta name=robots> (X-Robots-Tag у пяти витрин Yummy нет, замер Архитектора 12.10): до и после выкладки сверить мету на живых страницах (automation/local/indexing-live-snapshot.py --compare)."
     },
     {
       "id": "T021",
@@ -431,7 +431,8 @@
       "problem": "Служебный жанр «аниме» (есть у каждого тайтла семейства) выводится ссылкой жанра и даёт раздел с H1 «Аниме в жанре «аниме»» — тавтология и раздел-дубль всего каталога.",
       "expected": "жанр «аниме» не выводится ссылкой на тайтле AnimeGo (как в запасном описании); раздел — canonical на /catalog/ либо исключён из перечня жанров",
       "check": "bash checks/run.sh; живой H1 раздела",
-      "status": "queued"
+      "status": "session",
+      "evidence": "an1mego.site 31f05ba954a3 выпущено (activated/live_verified), живой /title/verhovnyy-bog-2/: ссылки жанров боевик, приключения, фэнтези, исторический, уся, мультфильм — «аниме» нет. animeg0/an1meg0 — проверки идут."
     }
   ]
 }
