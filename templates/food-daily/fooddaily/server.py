@@ -335,6 +335,10 @@ class App:
             return 200, self.robots(), {"Content-Type": "text/plain; charset=utf-8"}
         if path == "/sitemap.xml":
             return 200, self.sitemap(), {"Content-Type": "application/xml; charset=utf-8"}
+        if path == "/api/catalog.v1.json":
+            # Контракт recipe-catalog/1 для других сайтов сети (меню недели): только опубликованное,
+            # только факты и адреса; тексты шагов не отдаются. Не индексируется (X-Robots-Tag, вне sitemap).
+            return 200, json.dumps(self.catalog(), ensure_ascii=False), {"Content-Type": "application/json"}
         if path == "/healthz":
             return (
                 200,
@@ -349,6 +353,35 @@ class App:
                 {"Content-Type": "application/json"},
             )
         return self.not_found()
+
+    def catalog(self) -> dict:
+        s = self.site
+        return {
+            "schema": "recipe-catalog/1",
+            "site_id": s.cfg["site_id"],
+            "mode": s.mode,
+            "origin": s.origin,
+            "generated_at": s.generated_at,
+            "items": [
+                {
+                    "content_id": r.raw["content_id"],
+                    "version": r.raw["version"],
+                    "slug": r.slug,
+                    "path": r.url,
+                    "title": r.title,
+                    "category": r.category,
+                    "category_label": r.category_label,
+                    "servings": r.servings,
+                    "total_minutes": r.total_minutes,
+                    "review_status": r.raw["review_status"],
+                    "ingredients": [
+                        {"name": i.name, "quantity": i.quantity, "quantity_max": i.quantity_max, "unit": i.unit}
+                        for i, _ in r.ingredients
+                    ],
+                }
+                for r in s.recipes
+            ],
+        }
 
     def not_found(self) -> tuple[int, str, dict]:
         meta = seo.Meta(

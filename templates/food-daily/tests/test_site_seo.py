@@ -246,3 +246,14 @@ def test_no_category_illustration_posing_as_dish(app, site):
     assert "img/zavtraki.svg" not in html and "recipe__illo" not in html
     _, html, _ = get(app, "/recepty/")
     assert "<img" not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
+
+
+def test_catalog_contract_v1(app, site):
+    st, body, headers = get(app, "/api/catalog.v1.json")
+    data = json.loads(body)
+    assert st == 200 and headers["Content-Type"] == "application/json"
+    assert data["schema"] == "recipe-catalog/1" and data["site_id"] == "food-daily"
+    assert len(data["items"]) == len(site.recipes)
+    for it in data["items"]:
+        assert it["path"].startswith("/recept/") and "steps" not in it and it["ingredients"]
+    assert "/api/catalog.v1.json" not in app.sitemap()
