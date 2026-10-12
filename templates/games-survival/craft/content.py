@@ -28,7 +28,13 @@ MATERIALS = ROOT / "data" / "materials"
 CONTENT = ROOT / "data" / "content.json"
 HISTORY = ROOT / "data" / "history.jsonl"
 SITE_ID = "games-survival"
-TYPES = {"item": "Предметы и блоки", "resource": "Ресурсы", "biome": "Биомы", "version": "Версия игры"}
+TYPES = {
+    "item": "Предметы и блоки",
+    "building": "Постройки",
+    "resource": "Ресурсы",
+    "biome": "Биомы",
+    "version": "Версия игры",
+}
 FORBIDDEN = re.compile(r"(?i)рейтинг|лучший гайд|лучший билд|имба|мета-билд|tier|\d{1,2}:\d{2}|таймкод|₽|\bруб")
 NUM = re.compile(r"\d+(?:[.,]\d+)?")
 

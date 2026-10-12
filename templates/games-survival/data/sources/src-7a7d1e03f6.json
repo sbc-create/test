@@ -3,15 +3,15 @@
  "url": "https://minecraft.wiki/w/Planks",
  "fetched_at": "2026-10-12T22:26:08Z",
  "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
- "parser": "gsv-facts/1.1",
+ "parser": "gsv-facts/1.1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
  "type": "block",
  "name": "Planks",
  "lead": [
-  "34 PODZOL 2 SAND 10 DIRT 15 COLOR _ORANGE 26 COLOR _BROWN 28 COLOR _RED 36 TERRACOTTA _WHITE 14 QUARTZ 22 COLOR _LIGHT _GRAY 18 COLOR _YELLOW 53 CRIMSON _STEM 56 WARPED _STEM",
-  "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems."
+  "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems.",
+  "Planks can be broken by hand, but using an axe speeds up the process."
  ],
  "recipes": [
   {

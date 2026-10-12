@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Chest",
  "fetched_at": "2026-10-12T22:26:02Z",
  "page_sha256": "990949009a86e83c0fb5891b84f3b2371fe1f73489cdd210035cdcd563bf78a4",
- "parser": "gsv-facts/1.1",
+ "parser": "gsv-facts/1.1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Bucket",
  "fetched_at": "2026-10-12T22:26:15Z",
  "page_sha256": "7dc98b8393e42097d0882ae9e7b45f8354b8d0a2ce8eb706cb7653ef31edf424",
- "parser": "gsv-facts/1.1",
+ "parser": "gsv-facts/1.1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

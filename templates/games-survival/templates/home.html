@@ -2,7 +2,7 @@
 {% block main %}
 <section class="hero" aria-labelledby="h-main"><h1 id="h-main">Что будем делать?</h1>
 <p class="lead">Выберите предмет и сколько штук нужно — получите шаги крафта по порядку и список базовых ресурсов. Количества — из сетки крафта источника{% if site.version and site.version.src.java_current %} (Java Edition {{ site.version.src.java_current }}){% endif %}.</p>
-{% set targets = site.entries|selectattr('type', 'equalto', 'item')|list %}
+{% set targets = site.entries|selectattr('type', 'in', ['item', 'building'])|list %}
 <form class="pf" action="/planirovshchik/" method="get" aria-label="Планировщик крафта">
   <label for="pi">Предмет</label><select id="pi" name="item">{% for e in targets if recipe_inputs(e) %}<option value="{{ e.slug }}">{{ e.short }}</option>{% endfor %}</select>
   <label for="pn">Сколько</label><input id="pn" name="n" type="number" inputmode="numeric" min="1" max="{{ MAX_N }}" value="1" required>

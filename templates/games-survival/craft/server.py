@@ -213,7 +213,7 @@ class App:
         return urls
 
     def targets(self) -> list[Entry]:
-        return [e for e in self.site.entries if e.type == "item" and recipe_inputs(self.site, e)]
+        return [e for e in self.site.entries if e.type in ("item", "building") and recipe_inputs(self.site, e)]
 
     def planner(self, q: dict):
         """Без параметров — индексируемая страница выбора; с параметрами — расчёт (noindex, без canonical)."""

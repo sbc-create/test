@@ -210,3 +210,18 @@ def test_no_cross_template_code():
             and p.name != "test_games_survival.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_buildings_in_planner(app):
+    s = app.site
+    assert "postrojki" in s.sections("minecraft")
+    p = plan(s, s.by_slug["zabor"], 6)  # 4 доски + 2 палки → 3 забора
+    assert [(st.entry.slug, st.crafts, st.made) for st in p.steps] == [
+        ("doski", 3, 12),
+        ("palka", 1, 4),
+        ("zabor", 2, 6),
+    ]
+    assert {b.slug: q for b, q in p.base} == {"brevno": 3}
+    assert recipe_inputs(s, s.by_slug["krovat"]) is None  # шерсти на сайте нет — не цель планировщика
+    _, html, _ = get(app, s.by_slug["dver"].url)
+    assert "пока не разобран надёжно" in html

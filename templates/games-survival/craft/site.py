@@ -11,7 +11,7 @@ import yaml
 from craft.content import TYPES
 
 ROOT = Path(__file__).resolve().parents[1]
-SECTION = {"item": "predmety", "resource": "resursy", "biome": "biomy", "version": "versiya"}
+SECTION = {"item": "predmety", "building": "postrojki", "resource": "resursy", "biome": "biomy", "version": "versiya"}
 
 
 def words(s: str) -> list[str]:

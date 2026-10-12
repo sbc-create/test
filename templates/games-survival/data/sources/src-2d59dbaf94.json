@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/",
  "fetched_at": "2026-10-12T22:26:39Z",
  "page_sha256": "0aef7b984e4f26cb4a1f844df8cc9a34b6a0aed075ef176b5ec50c16e2db4840",
- "parser": "gsv-facts/1.1",
+ "parser": "gsv-facts/1.1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Taiga",
  "fetched_at": "2026-10-12T22:26:36Z",
  "page_sha256": "e264169f80e9ece67a6fd1f9fb35ee56d993b775459bd4df308abfd90ac36ee7",
- "parser": "gsv-facts/1.1",
+ "parser": "gsv-facts/1.1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
