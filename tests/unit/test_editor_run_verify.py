@@ -444,12 +444,14 @@ def test_gate_does_not_refresh_while_every_catalog_domain_has_work(tmp_path, mon
 
 
 def test_paused_domains_are_not_offered_to_the_editor(tmp_path):
-    """11.10: публикация на Lords/Zona затирала поля editorial-overrides.json — домены на паузе."""
+    """11.10: публикация на Lords/Zona затирала поля editorial-overrides.json — домены на паузе.
+    12.10: zonafilm.space снят первым (защита установлена) — механизм проверяется на zonafilm.cc."""
     f = _gate_files(tmp_path, task_leased=True)
     f["candidates"].write_text(json.dumps({"candidates": [
-        {"url": "https://zonafilm.space/title/a/"}, {"url": "https://animedia.space/title/b/"}]}),
+        {"url": "https://zonafilm.cc/title/a/"}, {"url": "https://animedia.space/title/b/"}]}),
         encoding="utf-8")
     d = editor_run.gate(NOW, **f)
     assert [c["url"] for c in d["next"]] == ["https://animedia.space/title/b/"]
-    assert "zonafilm.space" not in editor_run.allowed_domains()
+    assert "zonafilm.cc" not in editor_run.allowed_domains()
     assert "animedia.space" in editor_run.allowed_domains()
+    assert "zonafilm.space" not in editor_run.PAUSED_PUBLISH

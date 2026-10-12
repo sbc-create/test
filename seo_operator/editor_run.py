@@ -662,9 +662,15 @@ def _work(
 #: zona-01-edit-5a59f77cae43). Постоянные данные сайта публикация лишь читать
 #: вправе; до установки правки «_живые_правки» (ветка Архитектора) редактор на
 #: этих доменах не публикует. Снимается удалением строки — после установки.
+#: 2026-10-12: правка установлена (editorial-fix-installed.py код 0, служба
+#: перезапущена 17:42:04 после правки 17:41:55; editorial-overrides-audit.py код 0;
+#: живой <h1> silsila-badalte-rishton-ka = «История наших отношений»). Снимается
+#: по шагам: первым zonafilm.space — единственная витрина с чужим ручным полем
+#: (name), где защита проверяется делом; остальные шесть — после аудита её
+#: первой публикации.
 PAUSED_PUBLISH = {
     d: "MCP editorial.py затирает поля editorial-overrides.json (установка правки _живые_правки)"
-    for d in ("zonafilm.space", "zonafilm.cc", "zonafilm12.site", "lordfilm47.space",
+    for d in ("zonafilm.cc", "zonafilm12.site", "lordfilm47.space",
               "lordserial33.biz", "1lordserials1.online", "lordserials22.info")
 }
 
