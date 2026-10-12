@@ -108,9 +108,9 @@
       "id": "B004",
       "site": "7 доменов Lords/Zona",
       "problem": "PAUSED_PUBLISH на 7 доменах Lords/Zona: служба MCP затирала поля editorial-overrides.json.",
-      "status": "session",
-      "owner_action": "",
-      "evidence": "12.10 ~18:20Z SEO прогнал сам: editorial-fix-installed.py (из claude/nova-publish-memory-02 d7f3e66) код 0 — «установлена и перечитана службой» (правка 17:41:55, запуск службы 17:42:04, ручное name видно издателю, actor ЗОНА сохранён); editorial-overrides-audit.py код 0 — zonafilm-space поля description+name, у шести остальных только description (сверено Архитектором с передачами 114/115/116: ручное name вносилось только на zonafilm.space); живой <h1> zonafilm.space/title/silsila-badalte-rishton-ka/ = «История наших отношений». Пауза снята с zonafilm.space (seo_operator/editor_run.py); остальные шесть — после аудита её первой публикации."
+      "status": "blocked",
+      "owner_action": "Архитектор: исправить сборку накладки (factory/qwen/editorial.py: применить_правки / запись целиком) — actor и reason сохраняются у записей, которых публикация не касается; затем установка в службу (перезапуск site-factory-mcp — владелец), переснять снимок, пробная публикация на zonafilm.space, --compare код 0 → снятие паузы по одной витрине.",
+      "evidence": "12.10 ~18:20Z SEO прогнал сам: editorial-fix-installed.py (из claude/nova-publish-memory-02 d7f3e66) код 0 — «установлена и перечитана службой» (правка 17:41:55, запуск службы 17:42:04, ручное name видно издателю, actor ЗОНА сохранён); editorial-overrides-audit.py код 0 — zonafilm-space поля description+name, у шести остальных только description (сверено Архитектором с передачами 114/115/116: ручное name вносилось только на zonafilm.space); живой <h1> zonafilm.space/title/silsila-badalte-rishton-ka/ = «История наших отношений». Пауза снята с zonafilm.space (seo_operator/editor_run.py); остальные шесть — после аудита её первой публикации. 12.10 22:47Z первая публикация на zonafilm.space (ura-mechte-film-puzyryaschayasya-mechta, прогон 20261012T224004Z): editorial-overlay-before-after --compare код 1 — «подменено авторство: 3»: actor и reason трёх прежних записей редактора перезаписаны текущим прогоном (reason «ura-mechte…» на описаниях Дорохедоро, Ледяной стены, Agar Tum Na Hote). Тексты целы: sha256 всех четырёх description = body_digest публикаций в history.jsonl. Чужое поле name (silsila, актор Архитектора) цело. zonafilm.space возвращён в PAUSED_PUBLISH (23d1eb2); подтверждено независимо Архитектором."
     },
     {
       "id": "B005",
@@ -375,7 +375,7 @@
         "https://yummyani.site/sitemap/titles.xml",
         "https://yummyani.site/anime/istrebitel-demonov-trenirovka-hashira"
       ],
-      "problem": "Карта сайта titles.xml обрезана ровно на 8000 адресах: walkAnimeListItems(maxPages=80, limit=100). 366 из 7 299 тайтлов снимка витрины (страницы отвечают 200) в карте отсутствуют; обход по updated_at_desc, за пределом — давно не обновлявшиеся. yummyani.site — единственная витрина сети с заметным трафиком (~1547 посетителей/сутки).",
+      "problem": "Карта сайта titles.xml обрезана ровно на 8000 адресах: walkAnimeListItems(maxPages=80, limit=100). 366 из 7 299 тайтлов снимка витрины (страницы отвечают 200) в карте отсутствуют; обход по updated_at_desc, за пределом — давно не обновлявшиеся. yummyani.site — единственная витрина сети с заметным трафиком (~1547 посетителей/сутки). Плюс (замер Архитектора 12.10): все пять Yummy объявляют 347 страниц каталога при содержимом до 334 — 13 пустых страниц 200 index, follow на витрину (65 по семейству), сайт сам ссылается на 346 и 347; тот же контейнер.",
       "norm": "sitemap: все индексируемые канонические страницы",
       "expected": "titles.xml без потолка 8000; 366 слагов в карте",
       "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
