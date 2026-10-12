@@ -258,9 +258,21 @@
       "norm": "D207; манифест говорит о выпуске правду",
       "expected": "tools/build_release.py и checks/manifest_stamp.py = 6dd9247 одним коммитом; manifest_stamp rc=0",
       "check": "checks/manifest_stamp.py; при следующем выпуске — результат исполнителя activated/live_verified",
-      "status": "in_progress",
-      "evidence": "Одним коммитом, rc=0 сразу (красного окна нет — проверка штампует той же функцией сборщика): lordfilm077-site dc3fa7d9c2a7, lordserial101-site 0dbe2b0c956e, lordserials22-info e1fd81796032, lordserials22-site 1bbda5404f47, lordserials22-space 4d7590aa950d; verify_pins rc=0; checks/run.sh rc=0 (lordserials22-info). Выкладка не делалась: первая сборка по новому определению — при следующем штатном выпуске. lordfilm47-space не тронута — см. owner_action.",
-      "owner_action": "Архитектор: в lordfilm47-space/config/template-manifest.json нет template_origin, а верхний source_commit = 515fcf0b39de, тогда как pins.lock.json source_commit = ac4e439e4cd9 — какой из двух настоящий источник шаблона, не установлено. Вписать template_origin наугад нельзя. После ответа SEO вписывает template_origin и берёт оба файла."
+      "status": "verified",
+      "evidence": "6 из 6, по одному коммиту на ячейку, manifest_stamp rc=0 сразу (красного окна нет — проверка штампует той же функцией сборщика; подтверждено Архитектором): lordfilm077-site dc3fa7d9c2a7, lordserial101-site 0dbe2b0c956e, lordserials22-info e1fd81796032, lordserials22-site 1bbda5404f47, lordserials22-space 4d7590aa950d, lordfilm47-space ff7298b47a06 (+ template_origin.source_commit = pins.source_commit ac4e439e4cd9, вывод Архитектора). checks/run.sh rc=0 у lordserials22-info и lordfilm47-space. НЕ выпущено: до первого выпуска по новому определению Архитектор сверяет, не считает ли исполнитель artifact_sha256 по прежнему определению (privileged.py/transfer.py).",
+      "owner_action": "Архитектор: подтвердить, что исполнитель не сверяет artifact_sha256 по прежнему определению; после этого — штатный выпуск при следующей правке (отдельно ради цифры не выпускаем)."
+    },
+    {
+      "id": "T014",
+      "site": "1lordserials1.online (lords-03)",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [],
+      "problem": "config/template-manifest.json: template_origin есть, но source_commit в нём пуст; manifest_stamp ячейка не несёт, поэтому никто этого не видит (находка Архитектора). Неоднозначность: note того же блока говорит «коммит поднят с 515fcf0b39de до 72bf12afb2a7 (ветка claude/lords-episode-zero-515fcf0)», а monorepo_commit и pins.source_commit = ac4e439e4cd9.",
+      "norm": "D207; происхождение шаблона = замок",
+      "expected": "template_origin.source_commit заполнен значением, которое проверка фабрики примет и которое не противоречит записанному в note",
+      "check": "factory/cell/site_checks/manifest_stamp.py (если ячейка его возьмёт)",
+      "status": "blocked",
+      "owner_action": "Архитектор: ac4e439e4cd9 (пин, монорепозиторий) или 72bf12afb2a7 (коммит ветки шаблона из note) — какой из них source_commit по конвенции; у lordserials22-* source_commit — коммит ветки шаблона (63fe341…, он же пин). Значение не вписываем до ответа."
     }
   ]
 }
