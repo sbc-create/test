@@ -1,33 +1,33 @@
 # Отчёт games-survival, вариант A «База выживания» (craft-tree)
 
-Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `897ebaa876a6a2ea35997ffe1e995ad12dfd82d0`, ветка `claude/template-games-survival` (origin/main a7f7cb6).
+Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `e5e1a100c3f9dd54eafb6540a0081609e4fbda77`, ветка `claude/template-games-survival` (origin/main a7f7cb6).
 
 ## Как открыть
 
 - Preview: `http://127.0.0.1:8861/` (loopback, `noindex, nofollow`).
-- Скриншоты (390 и 1440 px): `docs/screenshots/897ebaa/` — главная, игра, раздел, предмет, ресурс, биом.
-- Артефакт: `var/games-survival/build/897ebaa…/` — 32 файлов.
+- Скриншоты (390 и 1440 px): `docs/screenshots/e5e1a10/` — главная, игра, раздел, предмет, ресурс, биом.
+- Артефакт: `var/games-survival/build/e5e1a10…/` — 37 файлов.
 
-## Проверки на 897ebaa (фактически запущены)
+## Проверки на e5e1a10 (фактически запущены)
 
 | команда | exit | результат |
 | --- | --- | --- |
-| `bin/games-survival test` | 0 | 0 — 12 passed |
+| `bin/games-survival test` | 0 | 0 — 13 passed |
 | `ruff check . + ruff format --check .` | 0 | 0 — чисто |
 | `pytest tests/unit/test_permission_matrix.py` | 0 | 0 — 192 passed |
-| `bin/games-survival build --commit HEAD` | 0 | 0 — 32 файла, var/games-survival/build/897ebaa… |
+| `bin/games-survival build --commit HEAD` | 0 | 0 — 37 файлов, var/games-survival/build/e5e1a10… |
 | `bin/games-survival qa …` | 0 | 0 — 22 действия PASS; axe 0 |
-| `python3 qa/viewports.py 8861 …` | 0 | 0 — 28 URL × 4 ширины, 0 замечаний |
-| `bin/games-survival qa --shots docs/screenshots/897ebaa --out docs/verification-browser-qa.json …` | 0 | 22 действий PASS; axe 0 на 30 стр.×ширин |
-| `python3 qa/viewports.py 8861 …` | 0 | 28 URL × 4 ширины — 0 замечаний |
+| `python3 qa/viewports.py 8861 …` | 0 | 0 — 33 URL × 4 ширины, 0 замечаний |
+| `bin/games-survival qa --shots docs/screenshots/e5e1a10 --out docs/verification-browser-qa.json …` | 0 | 22 действий PASS; axe 0 на 30 стр.×ширин |
+| `python3 qa/viewports.py 8861 …` | 0 | 33 URL × 4 ширины — 0 замечаний |
 
-LCP (лаборатория, loopback, без троттлинга) 40–152 мс. Карта действий — `docs/ACTION-MAP.md`.
+LCP (лаборатория, loopback, без троттлинга) 44–172 мс. Карта действий — `docs/ACTION-MAP.md`.
 
 ## Готовность
 
 | слой | состояние |
 | --- | --- |
-| интерфейс | готов: игра, разделы (предметы и блоки, ресурсы, биомы), страница предмета с рецептами по сетке и связями в обе стороны, цепочка старта, версия игры, поиск, печать, 404 |
-| наполнение | Minecraft (Java Edition 26.3): 10 предметов/блоков, 4 ресурса, 4 биома, страница версии; рецепты кирки и раздел построек не выпущены (GV-05, GV-06); ремонт щита не считается рецептом (GV-10); тексты — manual_standin, не Qwen |
+| интерфейс | готов: игра, разделы (предметы и блоки, постройки, ресурсы, биомы), страница с рецептами по сетке и связями в обе стороны, цепочка старта, версия игры, поиск, печать, 404 |
+| наполнение | Minecraft (Java Edition 26.3): 10 предметов/блоков, 4 постройки (рецепт двери не разобран — не показан), 4 ресурса, 4 биома, версия; рецепты кирки не выпущены (GV-05); тексты — manual_standin, не Qwen |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
