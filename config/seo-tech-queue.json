@@ -108,7 +108,7 @@
       "id": "B004",
       "site": "7 доменов Lords/Zona",
       "problem": "PAUSED_PUBLISH на 7 доменах Lords/Zona: служба MCP затирала поля editorial-overrides.json.",
-      "status": "in_progress",
+      "status": "session",
       "owner_action": "",
       "evidence": "12.10 ~18:20Z SEO прогнал сам: editorial-fix-installed.py (из claude/nova-publish-memory-02 d7f3e66) код 0 — «установлена и перечитана службой» (правка 17:41:55, запуск службы 17:42:04, ручное name видно издателю, actor ЗОНА сохранён); editorial-overrides-audit.py код 0 — zonafilm-space поля description+name, у шести остальных только description (сверено Архитектором с передачами 114/115/116: ручное name вносилось только на zonafilm.space); живой <h1> zonafilm.space/title/silsila-badalte-rishton-ka/ = «История наших отношений». Пауза снята с zonafilm.space (seo_operator/editor_run.py); остальные шесть — после аудита её первой публикации."
     },
@@ -280,7 +280,7 @@
     {
       "id": "B012",
       "site": "все ячейки (исполнитель выпусков)",
-      "status": "in_progress",
+      "status": "blocked",
       "problem": "Копия шаблонов проверок у исполнителя (/usr/local/lib/site-factory-cell, root, от 2026-10-01) отстала от дерева фабрики по пяти проверкам: activate_scenarios, entrypoint_present, fails_closed, manifest_stamp, no_secrets. Ячейка с checks/deploy_request.py (1lordserials1-online) требует побайтового совпадения со ВСТАНОВЛЕННОЙ копией, поэтому новые шаблоны (свободный порт, пропуск сверки плеера) в неё не доходят. Побайтово не совпадают с установленной 96 копий по восьми проверкам (site-checks-drift.py 65c5150), из них до 12.10: verify_pins 15, ascii_shell_identifiers 5, compiles 1. Сторож договора стоит у одной ячейки из девятнадцати; ставить его остальным до переустановки нельзя — все станут красными. Той же переустановкой обновляется установленный реестр /usr/local/lib/site-factory-cell/config/site-cells.json (2026-10-09 12:46, root 0600): правки реестра 12.10 (статусы, publisher_id, animego-04 data_owner f47af91) в нём отсутствуют. zonafilm-cc/checks/cell_unit.py при недоступном файле откатывается к реестру дерева — безопасно (проверено Архитектором). Следствие договора: у 1lordserials1-online (копия исполнителя, 696ec80) остался постоянный порт 9801 — единственная из 15 копий; два параллельных прогона этой ячейки поймают «Address already in use». До переустановки её проверки гоняются по одной. После переустановки в установленный реестр попадут и правки паспорта 12.10: 13 статусов, 5 publisher_id, animego-04 data_owner.",
       "owner_action": "Владелец (root), без спешки: повторный `sudo bash automation/host/install-cell-executor.sh --dry-run` (ожидается ровно 2 файла), затем без флага. Законность копий шаблонов в ячейках — B013.",
       "evidence": "Переустановка исполнителя выполнена владельцем 12.10 (Архитектор). Остаток: B004 применён после неё — установленная копия расходится с деревом службы ровно в двух файлах (factory/qwen/editorial.py, factory/cell/editorial_store.py), сегодня инертно: исполнитель зовёт только прочитать_подготовленное()/отпечаток(), они байт в байт равны (проверка Архитектора). 1lordserials1-online checks/deploy_request.py код 0."

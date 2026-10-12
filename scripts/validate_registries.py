@@ -40,6 +40,9 @@ MAPPING = {
     # Блокеры редактора, не выводимые из данных: без доказательства не принимаются.
     "editor-coverage-blockers.json": "editor-coverage-blockers.schema.json",
     "editor-run.json": "editor-run.schema.json",
+    # Очередь технической SEO-работы: блокер без действия владельца и задача
+    # без проверки не проходят — таймер иначе возьмёт то, что нельзя подтвердить.
+    "seo-tech-queue.json": "seo-tech-queue.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых
