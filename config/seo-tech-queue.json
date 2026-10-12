@@ -414,9 +414,9 @@
         "https://yummyani.site/anime/vechnaya-volya-4",
         "https://yummyani.site/catalog?genre=boevik"
       ],
-      "problem": "Жанры на странице тайтла — простой текст («Жанры: Боевик, Приключения, …»), ссылок нет; собственных разделов жанров нет: /catalog?genre=boevik и /catalog/boevik — 404, /catalog?genres=boevik — 200, но canonical на /catalog (фильтр не индексируется). У Lords/Zona/Animedia/AnimeGo жанры кликабельны и ведут на разделы 200 со списком (замер 12.10 ~21:45Z).",
+      "problem": "Жанры на странице тайтла Yummy — простой текст, ссылок 0 на всех пяти витринах (замер SEO и Архитектора 12.10). Разделы жанров СУЩЕСТВУЮТ, но закрыты: /catalog/genre/comedy — 200, отбирает (состав a5e09100db ≠ /catalog fe658ad3b8), noindex, follow, canonical на себя; /catalog?genre=comedy — тот же состав, noindex, canonical на /catalog; /catalog?genres=comedy — параметр игнорируется (состав = /catalog), index, follow, canonical на /catalog. Значения жанров — английские слова (comedy, drama, fantasy); транслит (boevik) — 404, это и был мой первый замер 21:45Z. Итог: работающие страницы жанров закрыты от индекса и не получают ссылок с карточек витрины с ~79% трафика сети.",
       "norm": "задание пользователя п.3 — кликабельные жанры с работающими разделами; SEO_KNOWLEDGE_PACK §3 (раздел одного жанра — своя страница)",
-      "expected": "раздел жанра со своим адресом, H1, title, description, canonical на себя, пагинация; ссылки жанров со страницы тайтла",
+      "expected": "путевая форма /catalog/genre/<жанр> открыта индексации (index, follow, canonical на себя, H1/title/description жанра), ссылки жанров на карточке тайтла ведут на неё; ?genres= — 404 или canonical без index",
       "check": "HTTP 200, canonical == адрес раздела, ссылки /…genre… на странице тайтла",
       "status": "blocked",
       "owner_action": "Владелец контейнера Next.js yummyani-staging (выкладка вне factory cell trigger, тот же путь и те же условия по режиму индексации, что B016): решение о разделах жанров Yummy. SEO готов подготовить спецификацию страниц и тексты из каталога. Режим индексации Yummy держится ТОЛЬКО на <meta name=robots> (X-Robots-Tag у пяти витрин Yummy нет, замер Архитектора 12.10): до и после выкладки сверить мету на живых страницах (automation/local/indexing-live-snapshot.py --compare)."
