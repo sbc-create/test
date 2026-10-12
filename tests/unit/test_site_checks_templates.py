@@ -214,7 +214,88 @@ def test_git_не_про_этот_проект_это_отказ(tmp_path):
     assert "не про этот проект" in ошибки
 
 
-@pytest.mark.parametrize("имя", ["fails_closed.py", "no_secrets.py"])
+# --------------------------------------------------------------------------- #
+#  entrypoint_present: зеркало не врёт.
+# --------------------------------------------------------------------------- #
+def ячейка_с_точкой(tmp_path: Path, *, объявлено: str, запускает: str | None,
+                    в_пинах: bool = False) -> Path:
+    """Витрина, у которой имя точки входа объявлено одним способом, а
+    `run.py` запускает (или не запускает) названный файл."""
+    корень = tmp_path / "ячейка"
+    (корень / "checks").mkdir(parents=True, exist_ok=True)
+    (корень / "config").mkdir(parents=True, exist_ok=True)
+    (корень / "src").mkdir(parents=True, exist_ok=True)
+    (корень / "src" / объявлено).write_text("print(1)\n", encoding="utf-8")
+    конфиг = {"site_id": "проба-01"}
+    if в_пинах:
+        (корень / "pins.lock.json").write_text(
+            json.dumps({"pins": {"entrypoint": объявлено}}), encoding="utf-8")
+    else:
+        конфиг["entrypoint"] = объявлено
+    (корень / "config" / "site.json").write_text(
+        json.dumps(конфиг, ensure_ascii=False), encoding="utf-8")
+    пускатель = ('КОРЕНЬ = "."\n'
+                 f'путь = КОРЕНЬ / "src" / "{запускает}"\n'
+                 if запускает else "имя = конфиг['entrypoint']\n")
+    (корень / "run.py").write_text(пускатель, encoding="utf-8")
+    return корень
+
+
+def test_зеркало_разошлось_это_отказ(tmp_path):
+    """Пин никто не исполняет, поэтому разойтись он может только молча."""
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py",
+                             запускает="другой.py")
+    код, _вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 1, ошибки
+    assert "зеркало разошлось" in ошибки
+
+
+def test_зеркало_совпадает_это_проход(tmp_path):
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py",
+                             запускает="frontend.py")
+    код, вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 0, ошибки
+    assert "зеркало совпадает" in вывод
+
+
+def test_имя_из_конфигурации_пускателя_не_сверяется_вслух(tmp_path):
+    """«Не проверялось» и «проверено» — разные утверждения."""
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py", запускает=None)
+    код, вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 0, ошибки
+    assert "зеркало не сверялось" in вывод
+
+
+def test_имя_из_пинов_тоже_находится(tmp_path):
+    """У animedia-space имя живёт в pins.lock.json, и ячейка исправна."""
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py",
+                             запускает="frontend.py", в_пинах=True)
+    код, вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 0, ошибки
+    assert "pins.lock.json" in вывод
+
+
+def test_пропавший_файл_точки_входа_это_отказ(tmp_path):
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py",
+                             запускает="frontend.py")
+    (корень / "src" / "frontend.py").unlink()
+    код, _вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 1
+    assert "нет точки входа" in ошибки
+
+
+def test_имя_не_задано_нигде_это_отказ(tmp_path):
+    корень = ячейка_с_точкой(tmp_path, объявлено="frontend.py",
+                             запускает="frontend.py")
+    (корень / "config" / "site.json").write_text(
+        json.dumps({"site_id": "проба-01"}), encoding="utf-8")
+    код, _вывод, ошибки = прогнать("entrypoint_present.py", корень)
+    assert код == 1
+    assert "не задают имя точки входа" in ошибки
+
+
+@pytest.mark.parametrize("имя", ["fails_closed.py", "no_secrets.py",
+                                 "entrypoint_present.py"])
 def test_шаблон_существует_и_компилируется(имя):
     источник = (ШАБЛОНЫ / имя).read_text(encoding="utf-8")
     compile(источник, имя, "exec")
