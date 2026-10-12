@@ -381,6 +381,16 @@
       "status": "blocked",
       "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200.",
       "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч)."
+    },
+    {
+      "id": "T019",
+      "site": "все 21 ячейка витрин",
+      "repo": "var/site-repos/*",
+      "problem": "checks/run.sh ячеек не сверяет число объявленных проверок с исполненными: строка с неверной обёрткой (check при функции step) молчит — так visible-breadcrumbs не исполнялась на трёх AnimeGo с 4f71b49 до 12.10. Сторожа счёта нет ни в одной из 21 (automation/local/run-sh-guard-audit.py, Архитектор, код 3).",
+      "norm": "проверка, которая не исполнилась, не может считаться пройденной",
+      "expected": "в каждой ячейке сторож из шаблона factory/cell/site_checks/run.sh (0790e65): счёт по grep -cE '^(check|step) ', checks-all-ran FAIL при расхождении; обычный провал не подменяется",
+      "check": "python3 automation/local/run-sh-guard-audit.py (из ветки Архитектора) — код 0; bash checks/run.sh каждой ячейки rc=0",
+      "status": "queued"
     }
   ]
 }
