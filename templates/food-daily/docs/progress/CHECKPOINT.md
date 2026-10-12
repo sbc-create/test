@@ -74,7 +74,9 @@
 | home-practical A (rooms-cards) | claude/template-home-practical | wt-template-home-practical | 06d708c | 127.0.0.1:8851 | #99 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | home-practical B (problem-checklists) | claude/template-home-practical-b | wt-template-home-practical-b | 819b934 | 127.0.0.1:8852 | #100 (база — ветка A) | READY_FOR_REVIEW_WITH_BLOCKERS |
 | garden-season A (month-calendar) | claude/template-garden-season | wt-template-garden-season | 31fec6c | 127.0.0.1:8853 | #101 | READY_FOR_REVIEW_WITH_BLOCKERS |
-| garden-season B (region-timeline) | claude/template-garden-season-b | wt-template-garden-season-b | — | 127.0.0.1:8854 (план) | — | building |
+| garden-season B (region-timeline) | claude/template-garden-season-b | wt-template-garden-season-b | 65f5054 | 127.0.0.1:8854 | #102 (база — A) | READY_FOR_REVIEW_WITH_BLOCKERS |
+| plants-home A (plant-catalog) | claude/template-plants-home | wt-template-plants-home | f034b3f | 127.0.0.1:8855 | #103 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| plants-home B (pick-and-diagnose) | claude/template-plants-home-b | wt-template-plants-home-b | — | 127.0.0.1:8856 (план) | — | building |
 | garden-season … games-survival | — | — | — | — | — | planned |
 
 Сделано за первые 50 минут: сверка 4 сайтов на 320/390/768/1440 (найдены и исправлены скролл на 320 px в
@@ -95,3 +97,7 @@ commit food-baking); home-practical A от аудита до PR.
 Обновление 21:20Z: garden-season A готов (#101; 29 действий PASS, axe 0, ширины 0; сроков для России в источниках нет — не
 придуманы). Следующие 3 действия: (1) garden B «от региона» — ветка `-b` от 18e1723, порт 8854; (2) QA и PR B;
 (3) plants-home A — аудит каталогов растений с условиями ухода. Возобновление: `cd /home/claude/wt-template-garden-season-b`.
+
+Обновление 21:38Z: garden B (#102) и plants A (#103) готовы. MBG Plant Finder закрыт robots.txt — заменён NC State Extension.
+Следующие 3 действия: (1) plants B — подбор по условиям и диагностика; (2) games-story A — реестр игр и проверка источников/видео;
+(3) games-rpg A. Возобновление: `cd /home/claude/wt-template-plants-home-b`.
