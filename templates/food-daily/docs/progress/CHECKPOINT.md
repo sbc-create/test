@@ -123,3 +123,7 @@ commit food-baking); home-practical A от аудита до PR.
 В A исправлен ремонт щита как рецепт (897ebaa, доказательства 845322b). Очередь игровых сайтов закрыта (A и B у всех трёх).
 Следующие 3 действия: (1) food-daily B — ветка `claude/template-food-daily-b` от текущего A, свой порт/CSS/JS/хранилище;
 (2) food-baking B; (3) food-weekly B и food-appliances B. Возобновление: `cd /home/claude/wt-template-food-daily-b`.
+
+Обновление 23:00Z: food-daily B (#111; fridge-first, порт 8863; 31 действие PASS, axe 0, 57 URL × 4 ширины — 0).
+Следующие 3 действия: (1) food-baking B — ветка `-b`, порт 8864; (2) food-weekly B — порт 8865; (3) food-appliances B — порт 8866.
+Возобновление: `cd /home/claude/wt-template-food-baking-b`.
