@@ -46,8 +46,9 @@
       "expected": "Видимые крошки «<Сайт> / Каталог / <Название>» из реальной иерархии в <nav aria-label=\"Хлебные крошки\">; разметку построит общий слой.",
       "check": "checks/title_breadcrumbs.py",
       "verify_live": "<nav aria-label=\"Хлебные крошки\"> на /title/<slug>/ и совпадающий BreadcrumbList",
-      "status": "queued",
-      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+      "status": "verified",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
+      "evidence": "Подготовлено штатным механизмом очереди (seo-tech-next, ручной запуск сессии 20261012T1200Z-session): ветка claude/seo-tech-t003-20261012t1200z-session в var/site-repos/an1mego-site, коммит aebcaaea03f4, НЕ отправлена. seo-tech-verify: VERIFIED — все 9 шагов (check_fails_on_base, check_passes_on_branch, run_all_passes, not_pushed). Выпуск — после просмотра человеком (видимое изменение интерфейса)."
     },
     {
       "id": "T004",
@@ -113,7 +114,8 @@
       "site": "zonafilm12.site",
       "problem": "Перегрузка внешним потоком: главная 504, затем 200 за ~18 с.",
       "status": "blocked",
-      "owner_action": "root: sudo journalctl -u nginx --since \"-15min\" | tail -50 → limit_req или запрет источника → sudo systemctl restart nova-zonafilm12-site.service."
+      "owner_action": "root: sudo journalctl -u nginx --since \"-15min\" | tail -50 → limit_req или запрет источника → sudo systemctl restart nova-zonafilm12-site.service.",
+      "evidence": "Замер 2026-10-12 ~11:50Z: GET https://zonafilm12.site/ — 200 за 23,0 с (132 КБ). Аудиты на этом домене отложены, чтобы не добавлять нагрузку."
     },
     {
       "id": "B006",
