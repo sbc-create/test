@@ -158,7 +158,8 @@
       "problem": "artifact_sha256 в template-manifest.json не совпадает ни с одним файлом точки входа — ложное заявление о происхождении.",
       "expected": "build_id: worktree-unbuilt и пустая цифра (прецедент lordfilm47-space 26.09) либо верная цифра.",
       "verify_live": "python3 -m pytest tests/unit/test_cell_entrypoint_contract.py -q",
-      "status": "session"
+      "status": "blocked",
+      "owner_action": "Архитектор (контракт factory/cell): определения расходятся. tests/unit/test_cell_entrypoint_contract.py считает artifact_sha256 = sha256(src/<entrypoint>); animeg0-site/checks/manifest_and_entrypoint.py — сумма ВСЕХ файлов рантайма (src/*.py + run.py, с именами) и ей соответствует; 1lordserials1-online/checks/manifest_fields.py проверяет заштампованный манифест сборки (build_id <commit12>-<site>, stamped). Привести манифесты к тесту фабрики — сломать проверки репозиториев. Нужно одно определение цифры на сеть; Yummy ×4 — путь выпуска Yummy."
     },
     {
       "id": "B007",
