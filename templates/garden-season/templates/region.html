@@ -1,7 +1,31 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, region_chip %}
+{% from "_parts.html" import region_chip, bar %}
 {% block main %}
-<h1>{{ REGIONS[r] }}</h1>
+<p class="kicker">Регион</p>
+<h1>{{ REGIONS[r] }}: год работ</h1>
 <p class="lead">{{ REGION_NOTE[r] }}</p>
-{{ grid(items, 'h2') }}
+<nav class="filters" aria-label="Фильтр ленты">
+  <p class="filters__h">Тип работ:</p>
+  <ul class="chips">
+    <li><a href="/region/{{ r }}/{% if crop %}?kultura={{ crop }}{% endif %}"{% if not typ %} aria-current="true"{% endif %}>Все</a></li>
+    {% for k, v in TYPES.items() %}<li><a href="/region/{{ r }}/?tip={{ k }}{% if crop %}&amp;kultura={{ crop }}{% endif %}"{% if typ == k %} aria-current="true"{% endif %}>{{ v }}</a></li>{% endfor %}
+  </ul>
+  <p class="filters__h">Культура:</p>
+  <ul class="chips">
+    <li><a href="/region/{{ r }}/{% if typ %}?tip={{ typ }}{% endif %}"{% if not crop %} aria-current="true"{% endif %}>Все</a></li>
+    {% for k, v in CROPS.items() %}<li><a href="/region/{{ r }}/?kultura={{ k }}{% if typ %}&amp;tip={{ typ }}{% endif %}"{% if crop == k %} aria-current="true"{% endif %}>{{ v }}</a></li>{% endfor %}
+  </ul>
+  {% if typ or crop %}<p><a class="reset" href="/region/{{ r }}/">Сбросить фильтры</a></p>{% endif %}
+</nav>
+{% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}.</p>{% endif %}
+{% if line %}
+<ol class="tl">{% for m, ws in line.items() %}
+  <li class="tl__m"><h2 class="tl__h"><a href="/kalendar/{{ MONTH_SLUG[m - 1] }}/">{{ MONTHS[m - 1]|capitalize }}</a></h2>
+    <ul>{% for w in ws %}<li><a href="{{ w.url }}">{{ w.title }}</a> <span class="tl__type">{{ w.type_label }}</span></li>{% endfor %}</ul>
+  </li>{% endfor %}
+</ol>
+{% else %}
+<div class="empty"><h2>Для этого региона по фильтру работ нет</h2><p>Снимите фильтр или выберите другой регион.</p><p><a class="btn" href="/region/{{ r }}/">Сбросить фильтры</a> <a class="btn btn--line" href="/regiony/">Другой регион</a></p></div>
+{% endif %}
+{% if seasonal and not typ and not crop %}<h2>Без точного месяца</h2><p class="note">Источник называет сезон, а не месяц:</p><ul class="seasonal">{% for w in seasonal %}<li><a href="{{ w.url }}">{{ w.title }}</a></li>{% endfor %}</ul>{% endif %}
 {% endblock %}

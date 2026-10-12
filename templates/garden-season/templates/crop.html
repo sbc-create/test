@@ -1,14 +1,13 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, region_chip %}
+{% from "_parts.html" import rows, region_chip %}
 {% block main %}
-<h1>{{ CROPS[crop] }}: когда что делать</h1>
-<p class="lead">Строки — регионы, столбцы — месяцы. В ячейке — работа, которую источник ставит на этот месяц для этого региона.</p>
-<div class="tablewrap" role="region" aria-label="Сроки по регионам и месяцам" tabindex="0">
-<table class="cg">
-  <thead><tr><th scope="col">Регион</th>{% for i in range(12) %}<th scope="col"><abbr title="{{ MONTHS[i] }}">{{ MONTHS[i][:3] }}</abbr></th>{% endfor %}</tr></thead>
-  <tbody>{% for r, row in cgrid.items() %}<tr><th scope="row">{{ region_chip(r) }}</th>{% for i in range(12) %}<td>{% for w in row.get(i + 1, []) %}<a href="{{ w.url }}" title="{{ w.title }}">●<span class="sr"> {{ w.title }}, {{ MONTHS[i] }}</span></a>{% endfor %}</td>{% endfor %}</tr>{% endfor %}</tbody>
-</table>
+<p class="kicker">Культура</p>
+<h1>{{ CROPS[crop] }}: когда что делать — по регионам</h1>
+<div class="regcols">{% for r, row in cgrid.items() %}
+  <section class="regcol" aria-labelledby="h-{{ r }}"><h2 id="h-{{ r }}">{{ region_chip(r) }}</h2>
+    <ul>{% for m, ws in row|dictsort %}<li><b>{{ MONTHS[m - 1]|capitalize }}</b>: {% for w in ws %}<a href="{{ w.url }}">{{ w.title }}</a>{% if not loop.last %}; {% endif %}{% endfor %}</li>{% endfor %}</ul>
+  </section>{% endfor %}
 </div>
-<h2>Работы</h2>
-{{ grid(site.for_crop(crop), 'h3') }}
+<h2>Все работы</h2>
+{{ rows(site.for_crop(crop)) }}
 {% endblock %}

@@ -1,5 +1,5 @@
 {% extends "base.html" %}
 {% block main %}
 <h1>Подборки</h1>
-<ul class="cols">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span><span class="cols__n">{{ c['items']|length }} {{ plural(c['items']|length, 'работа', 'работы', 'работ') }}</span></a></li>{% endfor %}</ul>
+<ul class="items">{% for c in site.collections.values() %}<li class="item"><h2 class="item__t"><a href="/podborki/{{ c.slug }}/">{{ c.title }}</a></h2><p class="item__m">{{ c.lede }} · {{ c['items']|length }}</p></li>{% endfor %}</ul>
 {% endblock %}

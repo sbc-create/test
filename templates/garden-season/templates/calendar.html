@@ -1,23 +1,14 @@
 {% extends "base.html" %}
-{% from "_parts.html" import region_chip %}
 {% block main %}
-<h1>Календарь работ на год</h1>
-<form class="flt" action="/kalendar/" method="get" aria-label="Фильтр календаря">
-  <div><label for="f-r">Регион</label><select id="f-r" name="region"><option value="">Все регионы</option>{% for k, v in REGIONS.items() %}<option value="{{ k }}"{% if region == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select></div>
-  <div><label for="f-t">Тип работ</label><select id="f-t" name="tip"><option value="">Все работы</option>{% for k, v in TYPES.items() %}<option value="{{ k }}"{% if typ == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select></div>
-  <button type="submit">Показать</button>
-  {% if region or typ %}<a class="reset" href="/kalendar/">Сбросить</a>{% endif %}
+<h1>Месяцы</h1>
+<p class="lead">Работы по месяцам для всех регионов. Удобнее начать с <a href="/regiony/">своего региона</a> — там только его сроки.</p>
+<form class="flt" action="/kalendar/" method="get" aria-label="Фильтр месяцев">
+  <label for="f-r">Регион</label><select id="f-r" name="region"><option value="">Все регионы</option>{% for k, v in REGIONS.items() %}<option value="{{ k }}"{% if region == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+  <label for="f-t">Тип</label><select id="f-t" name="tip"><option value="">Все</option>{% for k, v in TYPES.items() %}<option value="{{ k }}"{% if typ == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+  <button type="submit">Показать</button>{% if region or typ %} <a class="reset" href="/kalendar/">Сбросить</a>{% endif %}
 </form>
-{% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}. Показаны результаты без него.</p>{% endif %}
+{% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}.</p>{% endif %}
 {% set total = grid.values()|map('length')|sum %}
-<p class="count" role="status">Отмечено работ по месяцам: {{ total }}{% if region %} · {{ REGIONS[region] }}{% endif %}{% if typ %} · {{ TYPES[typ] }}{% endif %}</p>
-{% if total %}
-<ol class="cal">{% for m, ws in grid.items() %}
-  <li class="cal__m"><h2><a href="/kalendar/{{ MONTH_SLUG[m - 1] }}/">{{ MONTHS[m - 1]|capitalize }}</a></h2>
-    {% if ws %}<ul>{% for w in ws %}<li><a href="{{ w.url }}">{{ w.title }}</a></li>{% endfor %}</ul>{% else %}<p class="cal__none">нет работ{% if region or typ %} по фильтру{% endif %}</p>{% endif %}
-  </li>{% endfor %}
-</ol>
-{% else %}
-<div class="empty"><h2>По этому сочетанию работ нет</h2><p>Снимите фильтр типа работ или выберите другой регион.</p><p><a class="btn" href="/kalendar/">Сбросить</a> <a class="btn btn--line" href="/regiony/">О регионах</a></p></div>
-{% endif %}
+{% if total %}<ul class="months">{% for m, ws in grid.items() if ws %}<li><a href="/kalendar/{{ MONTH_SLUG[m - 1] }}/">{{ MONTHS[m - 1]|capitalize }}</a> <span>{{ ws|length }}</span></li>{% endfor %}</ul>
+{% else %}<div class="empty"><h2>По этому сочетанию работ нет</h2><p><a class="btn" href="/kalendar/">Сбросить</a> <a class="btn btn--line" href="/regiony/">Выбрать регион</a></p></div>{% endif %}
 {% endblock %}

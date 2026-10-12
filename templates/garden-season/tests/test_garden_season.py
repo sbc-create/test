@@ -1,4 +1,4 @@
-"""Приёмочные тесты garden-season (вариант month-calendar)."""
+"""Приёмочные тесты garden-season (вариант region-timeline)."""
 
 import copy
 import json
@@ -104,9 +104,9 @@ def test_sitemap_urls_200_canonical_unique(app):
 def test_work_page_shows_region_for_every_timing_and_howto_matches(app):
     for w in app.site.works:
         _, html, _ = get(app, w.url)
-        when = html.split('class="when__t"')[1].split("</table>")[0]
-        assert when.count("<tr>") - 1 == len(w.timing)
-        assert when.count('class="rg rg--') == len(w.timing)
+        when = html.split('class="year__list"')[1].split("</ul>")[0]
+        assert when.count("<li>") == len(w.timing) and when.count('class="rg rg--') == len(w.timing)
+        assert html.count('class="year__row"') == len(w.regions)
         ld = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
         h = next(x for x in ld if x["@type"] == "HowTo")
         assert len(h["step"]) == len(w.steps)
@@ -118,7 +118,7 @@ def test_work_page_shows_region_for_every_timing_and_howto_matches(app):
 
 def test_month_page_groups_by_region_and_empty_month(app):
     _, html, _ = get(app, "/kalendar/fevral/")
-    heads = re.findall(r'<section class="mreg" aria-labelledby="h-([a-z-]+)">', html)
+    heads = re.findall(r'<section aria-labelledby="h-([a-z-]+)"><h2', html)
     assert heads == [r for r in content.REGIONS if r in heads] and {"or-all", "or-west", "or-east"} <= set(heads)
     st, html, _ = get(app, "/kalendar/dekabr/")
     assert (
@@ -134,15 +134,31 @@ def test_crop_grid_does_not_mix_regions(app):
     assert g["or-all"].keys() == {10} and g["or-west"].keys() == {11} and g["uk"].keys() == {10}
 
 
-def test_calendar_filters(app):
-    st, html, _ = get(app, "/kalendar/", {"region": ["uk"]})
-    assert canon(html) is None and "Великобритания" in html
-    titles = set(re.findall(r'<li><a href="(/rabota/[^"]+)">', html))
-    assert titles == {w.url for w in app.site.works if any(t["region"] == "uk" and t.get("month") for t in w.timing)}
-    _, html, _ = get(app, "/kalendar/", {"region": ["uk"], "tip": ["zima"]})
-    assert 'class="empty"' in html and ">Сбросить</a>" in html
-    _, html, _ = get(app, "/kalendar/", {"region": ["mars"]})
+def test_region_timeline_only_own_region_and_filters(app):
+    for r in content.REGIONS:
+        for m, ws in app.site.region_timeline(r).items():
+            for w in ws:
+                assert any(t["region"] == r and t.get("month") == m for t in w.timing), (r, m, w.slug)
+    _, html, _ = get(app, "/region/or-west/")
+    assert canon(html) and 'data-region="or-west"' in html
+    st, html, _ = get(app, "/region/or-west/", {"tip": ["uhod"], "kultura": ["malina"]})
+    assert (
+        st == 200
+        and canon(html) is None
+        and "/rabota/malina-obrezka/" in html
+        and "/rabota/sideraty-na-zimu/" not in html
+    )
+    _, html, _ = get(app, "/region/uk/", {"tip": ["zima"]})
+    assert 'class="empty"' in html and "Сбросить фильтры" in html
+    _, html, _ = get(app, "/region/uk/", {"kultura": ["banan"]})
     assert "Такого фильтра нет" in html
+
+
+def test_calendar_month_list_filters(app):
+    _, html, _ = get(app, "/kalendar/", {"region": ["uk"]})
+    assert canon(html) is None and set(re.findall(r'<li><a href="/kalendar/([a-z]+)/">', html)) == {"oktyabr"}
+    _, html, _ = get(app, "/kalendar/", {"region": ["uk"], "tip": ["zima"]})
+    assert 'class="empty"' in html
 
 
 def test_404s(app):
@@ -152,7 +168,7 @@ def test_404s(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="month-calendar"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="region-timeline"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)

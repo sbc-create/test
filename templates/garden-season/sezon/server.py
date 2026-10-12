@@ -1,4 +1,4 @@
-"""SSR-сервер garden-season (вариант month-calendar)."""
+"""SSR-сервер garden-season (вариант region-timeline)."""
 
 from __future__ import annotations
 
@@ -249,18 +249,32 @@ class App:
         m = re.fullmatch(r"/region/([a-z-]+)/", path)
         if m and m.group(1) in REGIONS and s.for_region(m.group(1)):
             r = m.group(1)
-            items = s.for_region(r)
+            typ = (q.get("tip") or [""])[0]
+            crop = (q.get("kultura") or [""])[0]
+            bad = [x for x, reg in ((typ, TYPES), (crop, CROPS)) if x and x not in reg]
+            typ = typ if typ in TYPES else ""
+            crop = crop if crop in CROPS else ""
+            filtered = bool(typ or crop or bad)
+            line = s.region_timeline(r, typ or None, crop or None)
+            items = [w for ws in line.values() for w in ws]
             crumbs = [home, ("Регионы", "/regiony/"), (REGIONS[r], path)]
-            return self.page(
-                "region.html",
-                f"{REGIONS[r]}: сезонные работы",
+            meta = Meta(
+                f"{REGIONS[r]}: год работ на участке"
+                + (f" — {TYPES[typ].lower()}" if typ else "")
+                + (f" — {CROPS[crop].lower()}" if crop else ""),
                 REGION_NOTE[r],
-                path,
+                None if filtered else s.abs(path),
+                not filtered,
                 crumbs,
-                [self.items_ld(items)],
+                [self.crumbs_ld(crumbs), self.items_ld(items)],
                 "region",
-                r=r,
-                items=items,
+            )
+            return (
+                200,
+                self.render(
+                    "region.html", meta, r=r, line=line, typ=typ, crop=crop, bad=bad, seasonal=s.region_seasonal(r)
+                ),
+                {},
             )
         m = re.fullmatch(r"/tip/([a-z]+)/", path)
         if m and m.group(1) in TYPES and s.for_type(m.group(1)):
