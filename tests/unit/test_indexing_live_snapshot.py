@@ -35,6 +35,10 @@ def _модуль():
 
 
 def _стенд(monkeypatch, состояния: dict, домены=("проба.test",)):
+    # Подменяется ОТБОР, а не `живые_домены`: снимок зовёт отбор напрямую,
+    # чтобы печатать исключённых с причиной.
+    monkeypatch.setattr(сн, "отбор_доменов",
+                        lambda реестр=None: (list(домены), []))
     monkeypatch.setattr(сн, "живые_домены", lambda: list(домены))
     monkeypatch.setattr(сн, "снять",
                         lambda домен, предел: состояния[домен])
@@ -164,3 +168,74 @@ def test_живой_снимок_существует():
         f"в снимке есть закрытые от обхода домены: {закрытые}. "
         "Снимок снят ДО операций владельца, и закрытый домен в нём означал "
         "бы, что режим уже потерян.")
+
+
+# ------------------------------------------------------------- отбор доменов
+def test_отбор_идёт_по_факту_а_не_по_состоянию_ячейки(tmp_path, monkeypatch):
+    """Поле `status` описывает ЯЧЕЙКУ, а не доступность домена.
+
+    `1lordserials1.online` и `lordserial33.biz` стоят `not_extracted`, потому
+    что их ячейка не вынута, — но домены отдают страницы посетителю. Отбор по
+    `status == "live"` пропускал обе, и снимок перед работами владельца их не
+    покрывал: после работ по ним нельзя было бы сказать ни «режим сохранён»,
+    ни «сломан».
+    """
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "a", "domain": "живой.test", "status": "live"},
+        {"site_id": "b", "domain": "вынут-не-он.test",
+         "status": "not_extracted"},
+        {"site_id": "c", "domain": "мёртвый.test", "status": "planned"},
+        {"site_id": "d", "domain": "стенд.localhost", "status": "live"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+
+    разрешаются = {"живой.test", "вынут-не-он.test"}
+
+    def разрешить(имя):
+        if имя in разрешаются:
+            return "127.0.0.1"
+        raise OSError("имя не разрешается")
+
+    monkeypatch.setattr(сн.socket, "gethostbyname", разрешить)
+    берём, мимо = сн.отбор_доменов(реестр)
+    assert берём == ["вынут-не-он.test", "живой.test"], берём
+    # Исключённые названы с причиной: молчаливое исключение выглядело бы как
+    # «такого домена нет вовсе».
+    причины = " ".join(мимо)
+    assert "мёртвый.test" in причины and "не разрешается" in причины
+    assert "стенд.localhost" in причины and "стенда" in причины
+    assert "status=planned" in причины, (
+        "причина не называет состояние из реестра — непонятно, ожидаемо это "
+        "или поломка")
+
+
+def test_служебное_имя_стенда_не_опрашивается(tmp_path, monkeypatch):
+    """Имя `*.localhost` в сеть не выпускается даже на разрешение."""
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "d", "domain": "стенд.localhost", "status": "live"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+
+    спрошено: list[str] = []
+
+    def разрешить(имя):
+        спрошено.append(имя)
+        return "127.0.0.1"
+
+    monkeypatch.setattr(сн.socket, "gethostbyname", разрешить)
+    берём, мимо = сн.отбор_доменов(реестр)
+    assert берём == []
+    assert спрошено == [], f"стендовое имя всё же опрошено: {спрошено}"
+    assert "стенда" in " ".join(мимо)
+
+
+def test_запись_без_домена_пропускается_молча(tmp_path, monkeypatch):
+    """Запись без домена — не исключённый домен, а отсутствие домена."""
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "x", "status": "planned"},
+    ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(сн.socket, "gethostbyname",
+                        lambda имя: (_ for _ in ()).throw(OSError()))
+    берём, мимо = сн.отбор_доменов(реестр)
+    assert берём == [] and мимо == []

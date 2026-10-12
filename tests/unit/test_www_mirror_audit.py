@@ -87,14 +87,32 @@ def test_без_canonical_вовсе_это_лишний_ход_а_не_дубл
     assert "—" in довод
 
 
-def test_домены_берутся_из_реестра_и_только_живые(tmp_path):
+def test_домены_берутся_по_факту_а_не_по_состоянию_ячейки(tmp_path,
+                                                          monkeypatch):
+    """Отбор по РАЗРЕШЕНИЮ ИМЕНИ, а не по полю `status`.
+
+    Поле описывает состояние ячейки: `1lordserials1.online` и
+    `lordserial33.biz` стоят `not_extracted`, но домены отдают страницы. Отбор
+    по `status == "live"` пропускал обе, и приёмка молчала о двух витринах из
+    семнадцати, выглядя полной.
+    """
     реестр = tmp_path / "site-cells.json"
     реестр.write_text(json.dumps({"cells": [
         {"site_id": "a", "domain": "живой.test", "status": "live"},
         {"site_id": "b", "domain": "запланирован.test", "status": "planned"},
         {"site_id": "c", "domain": "вынут.test", "status": "not_extracted"},
+        {"site_id": "d", "domain": "стенд.localhost", "status": "live"},
     ]}, ensure_ascii=False), encoding="utf-8")
-    assert ау.живые_домены(реестр) == ["живой.test"]
+
+    разрешаются = {"живой.test", "вынут.test"}
+
+    def разрешить(имя):
+        if имя in разрешаются:
+            return "127.0.0.1"
+        raise OSError("имя не разрешается")
+
+    monkeypatch.setattr(ау.socket, "gethostbyname", разрешить)
+    assert ау.живые_домены(реестр) == ["вынут.test", "живой.test"]
 
 
 def test_таймаут_это_не_измерено_и_меняет_код(tmp_path, capsys, monkeypatch):
@@ -108,6 +126,7 @@ def test_таймаут_это_не_измерено_и_меняет_код(tmp_
     реестр.write_text(json.dumps({"cells": [
         {"site_id": "a", "domain": "медленный.test", "status": "live"},
     ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(ау.socket, "gethostbyname", lambda имя: "127.0.0.1")
     monkeypatch.setattr(ау, "снять",
                         lambda хост, предел: (ау.НЕ_ИЗМЕРЕНО,
                                               "TimeoutError: read timed out"))
@@ -123,6 +142,7 @@ def test_отсутствие_зеркала_дефектом_не_считае�
     реестр.write_text(json.dumps({"cells": [
         {"site_id": "a", "domain": "без-www.test", "status": "live"},
     ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(ау.socket, "gethostbyname", lambda имя: "127.0.0.1")
     monkeypatch.setattr(ау, "снять",
                         lambda хост, предел: (ау.ЗЕРКАЛА_НЕТ, "DNS нет"))
     код = ау.главное(["--registry", str(реестр)])
@@ -136,6 +156,7 @@ def test_дубль_меняет_код_возврата(tmp_path, capsys, monke
     реестр.write_text(json.dumps({"cells": [
         {"site_id": "a", "domain": "дубль.test", "status": "live"},
     ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(ау.socket, "gethostbyname", lambda имя: "127.0.0.1")
     monkeypatch.setattr(ау, "снять",
                         lambda хост, предел: (ау.ДУБЛЬ, "canonical=себя"))
     код = ау.главное(["--registry", str(реестр)])

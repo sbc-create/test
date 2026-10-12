@@ -23,6 +23,7 @@ from __future__ import annotations
 import argparse
 import json
 import re
+import socket
 import ssl
 import sys
 import urllib.error
@@ -41,11 +42,43 @@ _CONTENT = re.compile(r"""content=["']([^"']+)["']""", re.I)
 НЕ_ИЗМЕРЕНО = "НЕ ИЗМЕРЕНО"
 
 
-def живые_домены() -> list[str]:
-    д = json.loads(РЕЕСТР.read_text(encoding="utf-8"))
+#: Служебные имена стендов: домена в сети у них нет и быть не должно.
+СТЕНДОВЫЕ = (".localhost", ".localhost.test")
+
+
+def отбор_доменов(реестр: Path | None = None) -> tuple[list[str], list[str]]:
+    """Домены для снимка и причины исключения остальных.
+
+    Отбор по ФАКТУ разрешения имени, а не по полю `status`. Поле описывает
+    состояние ЯЧЕЙКИ: `1lordserials1.online` и `lordserial33.biz` стоят
+    `not_extracted`, потому что их ячейка не вынута, — но домены отдают
+    страницы посетителю. Отбор по `status == "live"` пропускал обе, и снимок
+    перед работами владельца их не покрывал.
+    """
+    д = json.loads((реестр or РЕЕСТР).read_text(encoding="utf-8"))
     ячейки = д.get("cells") or д
-    return sorted({з.get("domain") for з in ячейки
-                   if з.get("status") == "live" and з.get("domain")})
+    берём: list[str] = []
+    мимо: list[str] = []
+    for запись in ячейки:
+        домен = str(запись.get("domain") or "").strip()
+        if not домен:
+            continue
+        if any(домен.endswith(х) for х in СТЕНДОВЫЕ):
+            мимо.append(f"{домен}: служебное имя стенда")
+            continue
+        try:
+            socket.gethostbyname(домен)
+        except OSError:
+            мимо.append(f"{домен}: имя не разрешается "
+                        f"(status={запись.get('status') or '—'})")
+            continue
+        берём.append(домен)
+    return sorted(set(берём)), sorted(set(мимо))
+
+
+def живые_домены() -> list[str]:
+    домены, _ = отбор_доменов()
+    return домены
 
 
 def _значение(разметка: str, образец: re.Pattern, поле: re.Pattern) -> str:
@@ -102,7 +135,12 @@ def главное(аргв=None) -> int:
         return 2
 
     файл = опции.store / f"{опции.label}.json"
-    домены = живые_домены()
+    домены, мимо = отбор_доменов()
+    if мимо:
+        print(f"вне снимка: {len(мимо)} — с названной причиной у каждого")
+        for строка in мимо:
+            print(f"   {строка}")
+        print()
     сейчас = {домен: снять(домен, опции.timeout) for домен in домены}
 
     if опции.snapshot:

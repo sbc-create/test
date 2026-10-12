@@ -57,11 +57,31 @@ class _БезРедиректа(urllib.request.HTTPRedirectHandler):
         return None
 
 
+#: Служебные имена стендов: домена в сети у них нет и быть не должно.
+СТЕНДОВЫЕ = (".localhost", ".localhost.test")
+
+
 def живые_домены(реестр: Path) -> list[str]:
+    """Домены, чьё имя РАЗРЕШАЕТСЯ, а не те, чья ячейка вынута.
+
+    Поле `status` описывает состояние ячейки: `1lordserials1.online` и
+    `lordserial33.biz` стоят `not_extracted`, потому что ячейка не вынута, — но
+    домены отдают страницы посетителю. Отбор по `status == "live"` пропускал
+    обе, и приёмка молчала о двух витринах из семнадцати, выглядя полной.
+    """
     д = json.loads(реестр.read_text(encoding="utf-8"))
     ячейки = д.get("cells") or д
-    return sorted({з.get("domain") for з in ячейки
-                   if з.get("status") == "live" and з.get("domain")})
+    берём: list[str] = []
+    for запись in ячейки:
+        домен = str(запись.get("domain") or "").strip()
+        if not домен or any(домен.endswith(х) for х in СТЕНДОВЫЕ):
+            continue
+        try:
+            socket.gethostbyname(домен)
+        except OSError:
+            continue
+        берём.append(домен)
+    return sorted(set(берём))
 
 
 def _значение(разметка: str, образец: re.Pattern, поле: re.Pattern) -> str:
