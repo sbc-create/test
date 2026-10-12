@@ -34,3 +34,21 @@
 1. Исправить 1–4, 6, 7 в шаблоне food-daily, тесты.
 2. Своя установка axe-core в `templates/food-daily/qa/` + прогон + ручной проход клавиатурой.
 3. Commit, приёмка, обновление PR #95 → переход к food-baking.
+
+## Прогресс сети (обновлено 12.10.2026)
+
+| сайт | ветка / worktree | проверенный код | preview | PR | статус |
+| --- | --- | --- | --- | --- | --- |
+| food-daily | claude/template-food-daily / wt-template-food-daily | 59972fa (+ лента каталога 5ac8115) | 127.0.0.1:8847 | #95 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-baking | claude/template-food-baking / wt-template-food-baking | cd39fdc | 127.0.0.1:8848 | #96 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-weekly | claude/template-food-weekly / wt-template-food-weekly | 8b1e34d | 127.0.0.1:8849 | #97 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-appliances | claude/template-food-appliances (создаётся) | — | 127.0.0.1:8850 (план) | — | building |
+| остальные 6 | — | — | — | — | planned |
+
+Ревизия после ~30 задач: лучше — три работающих сайта с собственными дизайнами и axe 0;
+сломалось — ничего, но guard не даёт сессии возвращаться в старые worktree после EnterWorktree
+(решение: работать через `cd` из исходной сессии); проверить перед продолжением — ruff format
+перед каждым коммитом, CI-гейт красный из-за общего линта (handoff).
+
+Продолжение: `cd /home/claude/wt-template-food-appliances` (после создания) → аудит SharkNinja и
+профильного раздела Еды → импорт рецептов в мультиварке/аэрогриле → шаблон «от прибора к блюду».
