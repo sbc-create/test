@@ -1,10 +1,9 @@
-{% macro card(g, heading='h3') %}
-<article class="gc" data-slug="{{ g.slug }}" data-version="{{ g.version }}" data-total="{{ g.checklist|length }}">
-  <p class="gc__n">{% if g.chapter is not none %}Глава {{ g.chapter }}{% else %}{{ g.name }}{% endif %}</p>
-  <{{ heading }} class="gc__t"><a href="{{ g.url }}">{{ g.title }}</a></{{ heading }}>
-  <p class="gc__m">{% if g.red %}{{ g.red }} {{ plural(g.red, 'красная клубника', 'красные клубники', 'красных клубник') }}{% else %}без красных клубник{% endif %}{% if g.checkpoints %} · {{ g.checkpoints|length }} {{ plural(g.checkpoints|length, 'участок', 'участка', 'участков') }}{% endif %}</p>
-  <p class="gc__p" data-progress hidden></p>
-</article>
+{% macro tracker_row(g) %}
+<tr data-slug="{{ g.slug }}" data-red="{{ g.red }}" data-sides="{{ site.side_letters(g)|join('') }}">
+  <th scope="row"><a href="{{ g.url }}">{{ g.title }}</a></th>
+  <td>{% if g.red %}<label class="sr" for="red-{{ g.slug }}">Собрано красных клубник: {{ g.title }}</label><input id="red-{{ g.slug }}" class="num" type="number" min="0" max="{{ g.red }}" value="0" inputmode="numeric" data-red-input disabled> <span class="of">/ {{ g.red }}</span>{% else %}<span class="of">—</span>{% endif %}</td>
+  <td>{% for l in site.side_letters(g) %}<label class="side"><input type="checkbox" data-side="{{ l }}" disabled><span>{{ l }}</span></label>{% else %}<span class="of">{% if g.sides %}{{ g.sides }}{% else %}—{% endif %}</span>{% endfor %}</td>
+</tr>
 {% endmacro %}
 {% macro video(v) %}
 <figure class="vid" data-vid="{{ v.video_id }}">

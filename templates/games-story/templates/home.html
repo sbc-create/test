@@ -1,10 +1,16 @@
 {% extends "base.html" %}
-{% from "_parts.html" import card %}
 {% block main %}
-<section class="hero"><h1>Сюжет пройден</h1><p class="lead">Гайды по сюжетным играм по главам: маршрут, новые механики, коллекционные предметы. Прогресс отмечается и сохраняется на этом устройстве.</p></section>
+<h1>Трекер прохождения</h1>
+<p class="lead">Отмечайте собранные клубники и пройденные стороны — прогресс хранится на этом устройстве. Числа предметов — из источника.</p>
 {% for gid, gm in site.games.items() %}{% set gs = site.for_game(gid) %}{% if gs %}
-<section aria-labelledby="h-{{ gid }}"><div class="head"><h2 id="h-{{ gid }}">{{ gm.title }}</h2><a href="/igra/{{ gid }}/">Все главы</a></div>
-<div class="gcs">{% for g in gs %}{{ card(g) }}{% endfor %}</div></section>
+<section class="dash" data-game="{{ gid }}" aria-labelledby="h-{{ gid }}">
+  <h2 id="h-{{ gid }}">{{ gm.title }}</h2>
+  <dl class="dash__stats">
+    <div><dt>Красные клубники</dt><dd><span data-stat="red">0</span> / {{ site.red_total(gid) }}</dd></div>
+    <div><dt>Пройдено сторон</dt><dd><span data-stat="sides">0</span> / {{ site.sides_total(gid) }}</dd></div>
+  </dl>
+  <noscript><p class="note">Счётчики прогресса работают с JavaScript. Все данные — в трекере.</p></noscript>
+  <p><a class="btn" href="/igra/{{ gid }}/">Открыть трекер</a> <a class="btn btn--line" href="/igra/{{ gid }}/predmety/">Предметы по видам</a></p>
+</section>
 {% endif %}{% endfor %}
-<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец, гайды не дублируются.</p>
 {% endblock %}

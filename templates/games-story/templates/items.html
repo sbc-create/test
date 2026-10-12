@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ site.games[gid].title }}: предметы по видам</h1>
+<ul class="types">{% for it, (label, kind) in site.ITEM_TYPES.items() %}{% set rows = site.by_item(gid, it) %}{% if rows %}<li><a href="/igra/{{ gid }}/predmety/{{ it }}/"><b>{{ label }}</b><span>в {{ rows|length }} {{ plural(rows|length, 'главе', 'главах', 'главах') }}</span></a></li>{% endif %}{% endfor %}</ul>
+{% endblock %}

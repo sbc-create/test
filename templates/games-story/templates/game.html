@@ -1,9 +1,14 @@
 {% extends "base.html" %}
-{% from "_parts.html" import card, video %}
+{% from "_parts.html" import tracker_row, video %}
 {% block main %}
-<h1>{{ site.games[gid].title }}</h1>
-<p class="lead">Главы по порядку прохождения. Всего красных клубник по главам: {{ site.red_total(gid) }} (сумма чисел из карточек глав источника).</p>
-<p class="actions"><a class="btn btn--line" href="/igra/{{ gid }}/kollekcii/">Коллекционные предметы по главам</a></p>
-<div class="gcs gcs--wide">{% for g in gs %}{{ card(g, 'h2') }}{% endfor %}</div>
+<h1>{{ site.games[gid].title }}: трекер</h1>
+<p class="lead">Главы по порядку. Всего красных клубник: {{ site.red_total(gid) }} (сумма чисел источника по главам).</p>
+<div class="tablewrap" role="region" aria-label="Трекер глав" tabindex="0">
+<table class="trk" data-game="{{ gid }}">
+  <thead><tr><th scope="col">Глава</th><th scope="col">Красные клубники</th><th scope="col">Стороны</th></tr></thead>
+  <tbody>{% for g in gs %}{{ tracker_row(g) }}{% endfor %}</tbody>
+  <tfoot><tr><th scope="row">Итого</th><td><span data-stat="red">0</span> / {{ site.red_total(gid) }}</td><td><span data-stat="sides">0</span> пройдено</td></tr></tfoot>
+</table></div>
+<p><button type="button" class="btn btn--line" data-tracker-reset hidden>Сбросить весь прогресс</button></p>
 {% if site.videos %}<section aria-labelledby="h-vid"><h2 id="h-vid">Видео о разработке</h2>{% for v in site.videos %}{{ video(v) }}{% endfor %}</section>{% endif %}
 {% endblock %}

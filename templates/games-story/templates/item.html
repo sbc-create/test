@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ site.ITEM_TYPES[it][0] }}</h1>
+<p class="lead">По главам {{ site.games[gid].title }} — числа из карточек глав источника.</p>
+<table class="items items--wide"><thead><tr><th scope="col">Глава</th><th scope="col">{% if it == 'storony' %}Стороны{% else %}Количество{% endif %}</th></tr></thead>
+<tbody>{% for g, v in rows %}<tr><th scope="row"><a href="{{ g.url }}">{{ g.title }}</a></th><td>{{ v }}</td></tr>{% endfor %}</tbody>
+{% if it != 'storony' %}<tfoot><tr><th scope="row">Итого</th><td>{{ rows|map(attribute=1)|sum }}</td></tr></tfoot>{% endif %}</table>
+{% endblock %}
