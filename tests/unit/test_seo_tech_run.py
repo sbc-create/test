@@ -123,3 +123,45 @@ def test_real_queue_parses_and_has_owner_actions():
             assert з.get("owner_action"), з["id"]
         if з["status"] == "queued":
             assert з.get("check") and з.get("repo"), з["id"]
+
+
+def test_claim_is_atomic_second_claim_refused(среда):
+    s = среда["state"]
+    tech_run.claim(среда["задача"], "A1", state=s)
+    with pytest.raises(tech_run.ЗанятоДругимПрогоном):
+        tech_run.claim(среда["задача"], "A2", state=s)
+    # claim_next пропускает занятую задачу, а не берёт её второй раз
+    assert tech_run.claim_next(tech_run.load_queue(), "A3", state=s) is None
+
+
+def test_stale_lock_is_reclaimed_once(среда):
+    s = среда["state"]
+    tech_run.claim(среда["задача"], "B1", state=s)
+    tech_run.prune_worktrees(state=s)  # живой захват не трогается
+    assert (s / "wt" / "B1").exists()
+    позже = dt.datetime.now(dt.timezone.utc) + dt.timedelta(seconds=tech_run.STALE_S + 60)
+    убрано = tech_run.prune_worktrees(state=s, now=позже)
+    assert "B1" in убрано and not (s / "wt" / "B1").exists()
+    assert not (s / "claims" / "T900.claim").exists()
+    assert tech_run.claim(среда["задача"], "B2", state=s)["run_id"] == "B2"
+
+
+def test_prune_removes_closed_run_copy(среда):
+    s = среда["state"]
+    tech_run.claim(среда["задача"], "C1", state=s)
+    tech_run.record({"run_id": "C1", "task_id": "T900", "verdict": "INCOMPLETE"}, {}, state=s)
+    assert "C1" in tech_run.prune_worktrees(state=s)
+    assert not (s / "wt" / "C1").exists()
+
+
+def test_broken_check_is_unusable_not_discriminating(среда):
+    _сделать(среда, "D1", проверка="import модуль_которого_нет\n")
+    итог = tech_run.verify("D1", state=среда["state"])
+    assert итог["steps"]["check_usable"] is False
+    assert итог["steps"]["check_fails_on_base"] is False
+    assert итог["verdict"] == "INCOMPLETE"
+
+
+def test_exit_code_2_is_unusable(среда):
+    _сделать(среда, "D2", проверка="import sys; sys.exit(2)\n")
+    assert tech_run.verify("D2", state=среда["state"])["steps"]["check_usable"] is False

@@ -308,11 +308,13 @@ def main(argv=None) -> int:
         # Коды: 10 — задача захвачена (var/seo-tech/next.json), 0 — работы нет,
         # 3 — неисправность (очередь не читается, git отказал) — не тихий 0.
         try:
-            задача = tech_run.next_task(tech_run.load_queue())
-            if задача is None:
-                print(json.dumps({"run": False, "reason": "нет задач queued с запасом попыток"}, ensure_ascii=False))
+            убрано = tech_run.prune_worktrees()
+            захват = tech_run.claim_next(tech_run.load_queue(), args.run_id)
+            if захват is None:
+                print(json.dumps({"run": False, "reason": "нет задач queued с запасом попыток и без живого захвата",
+                                  "pruned": убрано}, ensure_ascii=False))
                 return 0
-            захват = tech_run.claim(задача, args.run_id)
+            захват = {**захват, "pruned": убрано}
         except Exception as exc:  # noqa: BLE001 — поломка называется
             print(json.dumps({"run": False, "state": "error", "reason": f"{type(exc).__name__}: {exc}"[:400]},
                              ensure_ascii=False))
