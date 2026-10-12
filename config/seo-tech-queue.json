@@ -432,7 +432,7 @@
       "expected": "жанр «аниме» не выводится ссылкой на тайтле AnimeGo (как в запасном описании); раздел — canonical на /catalog/ либо исключён из перечня жанров",
       "check": "bash checks/run.sh; живой H1 раздела",
       "status": "session",
-      "evidence": "an1mego.site 31f05ba954a3 выпущено (activated/live_verified), живой /title/verhovnyy-bog-2/: ссылки жанров боевик, приключения, фэнтези, исторический, уся, мультфильм — «аниме» нет. animeg0/an1meg0 — проверки идут."
+      "evidence": "РЕГРЕССИЯ: an1mego.site 31f05ba954a3 переприсвоил «пары» в _характеристики — на живом пропали Тип/Эпизоды/Статус (замер 12.10 ~22:05Z). Исправление e199788 (переименование; service_genre_link ловит переприсвоение), data_chain an1meg0 0 провалов, run.sh an1mego rc=0 — выпуск идёт. animeg0/an1meg0 с ошибочной версией не выпускались."
     },
     {
       "id": "B018",
@@ -441,6 +441,29 @@
       "status": "blocked",
       "evidence": "SEO состав не меняет: /healthz читает исполнитель при проверке выпуска на живом (build_id), правка без решения может сломать live_verified. Значения в отчёт не выносятся.",
       "owner_action": "Владелец: решение о составе публичного /healthz (минимальная форма {\"ok\"} уже работает на восьми витринах); затем Архитектор — какие поля нужны исполнителю и куда их перенести (непубличный адрес), SEO — правка шаблонов ячеек."
+    },
+    {
+      "id": "T022",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/title/stalnoy-angel-kurumi-2/",
+        "https://an1mego.site/title/stalnoy-angel-kurumi-2/season-1/episode-5/"
+      ],
+      "problem": "Карточка многосезонного тайтла AnimeGo даёт в серверном HTML ссылки на один сезон целиком и одну серию другого ({1:12, 2:1}); серий в карте сайта нет ни у одной витрины сети. Страницы серий без ссылки отвечают 200 с плеером (stalnoy-angel-kurumi-2/season-1/episode-5). Выборки Архитектора 12.10: an1mego 9 из 20 карточек, 263 серии без ссылки; animeg0 7 из 14, 795; an1meg0 7 из 14, 213. У lordserial33.biz при той же схеме — 20 из 20 без разрывов.",
+      "norm": "каждая индексируемая страница достижима ссылкой из серверного HTML",
+      "expected": "серверный HTML карточки несёт ссылки на серии всех сезонов (переключатель сезонов — без потери ссылок для обхода)",
+      "check": "automation/local/episode-links-coverage.py (Архитектор, 0a40113) — 0 карточек с разрывом; bash checks/run.sh (boundaries, geometry)",
+      "status": "queued"
+    },
+    {
+      "id": "T023",
+      "site": "an1mego.site",
+      "repo": "var/site-repos/an1mego-site",
+      "problem": "В наборе проверок an1mego нет checks/data_chain.py (есть у an1meg0) — поэтому регрессия 31f05ba954a3 (таблица характеристик тайтла потеряла Тип/Эпизоды/Статус) прошла run.sh и вышла на живой сайт; поймал data_chain соседней ячейки.",
+      "expected": "data_chain (или эквивалентная проверка характеристик тайтла на синтетическом снимке) в наборе an1mego и animeg0",
+      "check": "bash checks/run.sh; проверка падает на 31f05ba954a3",
+      "status": "queued"
     }
   ]
 }
