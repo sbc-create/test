@@ -32,7 +32,7 @@
       "check": "checks/visible_breadcrumbs.py",
       "verify_live": "сравнение BreadcrumbList и <nav aria-label=\"Хлебные крошки\"> на странице тайтла",
       "status": "live_verified",
-      "evidence": "общий слой d6c0eb5 (тест падает на прежнем слое 4/5). Выложено и проверено на живых страницах (x-site-factory-build-id + итог исполнителя activated/live_verified): lords-01 fcbad98ddb89, lords-02 2985b6f3b092, lords-03 e8eb5f1330a9, lords-05 6cd86be76697, zona-01 12a45fd9f02c, zona-02 b7e6b16a0efa, zona-03 5a38cbf2df4f, animedia-01 d16d31f36ec6, animedia-02 3d79bd059b1f — BreadcrumbList = видимые крошки; animego-02 4f71b49860cd, animego-03 a114b2266bef, animego-04 9f993b2d6d62 — видимых крошек нет, ложной цепочки больше нет (видимые крошки — T003–T005). AnimeGo: коммиты «ядро:» с boundaries --принять и update_pins (прецедент 28cf94f); animeg0 перештампован tools/stamp_manifest.py."
+      "evidence": "общий слой d6c0eb5 (тест падает на прежнем слое 4/5). Выложено и проверено на живых страницах (x-site-factory-build-id + итог исполнителя activated/live_verified): lords-01 fcbad98ddb89, lords-02 2985b6f3b092, lords-03 e8eb5f1330a9, lords-05 6cd86be76697, zona-01 12a45fd9f02c, zona-02 b7e6b16a0efa, zona-03 5a38cbf2df4f, animedia-01 d16d31f36ec6, animedia-02 3d79bd059b1f — BreadcrumbList = видимые крошки; animego-02 4f71b49860cd, animego-03 a114b2266bef, animego-04 9f993b2d6d62 — видимых крошек нет, ложной цепочки больше нет (видимые крошки — T003–T005). AnimeGo: коммиты «ядро:» с boundaries --принять и update_pins (прецедент 28cf94f); animeg0 перештампован tools/stamp_manifest.py. Принято Архитектором независимо: automation/local/breadcrumb-acceptance.py (d3e69bd), 17 живых витрин, расхождений 0."
     },
     {
       "id": "T003",
@@ -48,7 +48,7 @@
       "verify_live": "<nav aria-label=\"Хлебные крошки\"> на /title/<slug>/ и совпадающий BreadcrumbList",
       "status": "verified",
       "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
-      "evidence": "Подготовлено штатным механизмом очереди (seo-tech-next, ручной запуск сессии 20261012T1200Z-session): ветка claude/seo-tech-t003-20261012t1200z-session в var/site-repos/an1mego-site, коммит aebcaaea03f4, НЕ отправлена. seo-tech-verify: VERIFIED — все 9 шагов (check_fails_on_base, check_passes_on_branch, run_all_passes, not_pushed). Выпуск — после просмотра человеком (видимое изменение интерфейса)."
+      "evidence": "Подготовлено штатным механизмом очереди (seo-tech-next, ручной запуск сессии 20261012T1200Z-session): ветка claude/seo-tech-t003-20261012t1200z-session в var/site-repos/an1mego-site, коммит aebcaaea03f4, НЕ отправлена. seo-tech-verify: VERIFIED — все 9 шагов (check_fails_on_base, check_passes_on_branch, run_all_passes, not_pushed). Выпуск — после просмотра человеком (видимое изменение интерфейса). Принято Архитектором: seo-tech-mechanism-audit.py 24/24 по следам живого дерева; gh api — ветки нет на удалённом репозитории, коммит aebcaaea03f4 только локально."
     },
     {
       "id": "T004",
