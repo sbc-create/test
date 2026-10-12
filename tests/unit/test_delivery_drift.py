@@ -77,8 +77,13 @@ def test_их_копия_это_мой_прежний_коммит(м, tmp_path)
     код, вывод = прогон(м, моё, их)
     assert код == 1
     assert "их копия УСТАРЕЛА" in вывод
-    assert "доставить можно целиком" in вывод
-    assert "своя работа" not in вывод
+    # Легенда сменилась вместе с признаками набора: «доставить целиком» теперь
+    # сказано как «про ФАЙЛ», потому что про набор говорят отдельные строки.
+    assert "про ФАЙЛ" in вывод
+    assert "СВОЯ работа" not in вывод
+    набор = [с for с in вывод.splitlines()
+             if с.strip().startswith(("ВМЕСТЕ С", "НЕ ДОСТАВЛЯТЬ"))]
+    assert not набор, f"у одиночного файла нашлись признаки набора: {набор}"
 
 
 def test_у_них_своя_работа_целиком_копировать_нельзя(м, tmp_path):
@@ -125,6 +130,122 @@ def test_предел_глубины_ограничивает_поиск(м, tmp
         м.главное(["--mine", str(моё), "--theirs", str(их),
                    "--subdir", "tests/unit", "--depth", "2"])
     assert "СВОЯ работа" in буфер.getvalue()
+
+
+def test_парный_файл_назван_вместе_с_этим(м, tmp_path):
+    """Поправка по измерению SEO-сессии: доставка — про НАБОР, не про файл.
+
+    Новый `build_release.py` без парного перечня в `extract.py` валит проверку,
+    которая читает ОБА файла, а менялись они РАЗНЫМИ коммитами — «тот же
+    коммит» такую пару не находит. Находит её тест, упоминающий оба.
+    """
+    моё = моя_ветвь(tmp_path, ["версия 1\n", "версия 2\n"])
+    # Второй расходящийся файл и проверка, читающая оба.
+    (моё / "factory" / "cell").mkdir(parents=True)
+    (моё / "factory" / "cell" / "парный.py").write_text("ПЕРЕЧЕНЬ = (1, 2)\n",
+                                                        encoding="utf-8")
+    (моё / "tests" / "unit" / "test_пара.py").write_text(
+        "# читает проба.py и парный.py\n", encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "пара")
+    (моё / "factory" / "cell" / "парный.py").write_text("ПЕРЕЧЕНЬ = (1, 2, 3)\n",
+                                                        encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "перечень вырос")
+
+    их = их_ветвь(tmp_path, "версия 1\n")
+    (их / "factory" / "cell").mkdir(parents=True)
+    (их / "factory" / "cell" / "парный.py").write_text("ПЕРЕЧЕНЬ = (1, 2)\n",
+                                                       encoding="utf-8")
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        м.главное(["--mine", str(моё), "--theirs", str(их),
+                   "--subdir", "tests/unit", "--subdir", "factory/cell"])
+    вывод = буфер.getvalue()
+    assert "ВМЕСТЕ С" in вывод, вывод
+    assert "по одному нельзя" in вывод
+
+
+def test_предмет_проверки_отсутствует_в_цели(м, tmp_path):
+    """«Их копия — мой прежний коммит» необходимо, но НЕ достаточно."""
+    моё = моя_ветвь(tmp_path, ["версия 1\n"])
+    (моё / "factory" / "cell").mkdir(parents=True)
+    (моё / "factory" / "cell" / "модуль.py").write_text(
+        "def новая_функция():\n    return 1\n", encoding="utf-8")
+    (моё / "tests" / "unit" / "test_предмет.py").write_text(
+        "from factory.cell import модуль as м\n"
+        "def test_зовёт():\n    assert м.новая_функция() == 1\n",
+        encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "предмет и тест")
+    (моё / "tests" / "unit" / "test_предмет.py").write_text(
+        "from factory.cell import модуль as м\n"
+        "def test_зовёт():\n    assert м.новая_функция() == 1  # правка\n",
+        encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "правка теста")
+
+    их = их_ветвь(tmp_path, "версия 1\n")
+    (их / "factory" / "cell").mkdir(parents=True)
+    (их / "factory" / "cell" / "модуль.py").write_text(
+        "def старая_функция():\n    return 0\n", encoding="utf-8")
+    (их / "tests" / "unit" / "test_предмет.py").write_text(
+        "from factory.cell import модуль as м\n"
+        "def test_зовёт():\n    assert м.новая_функция() == 1\n",
+        encoding="utf-8")
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        м.главное(["--mine", str(моё), "--theirs", str(их),
+                   "--subdir", "tests/unit", "--subdir", "factory/cell"])
+    вывод = буфер.getvalue()
+    находки = [с for с in вывод.splitlines() if с.strip().startswith("НЕ ДОСТАВЛЯТЬ")]
+    assert находки, вывод
+    assert "нет новая_функция" in вывод
+
+
+def test_поведенческую_разницу_инструмент_не_видит(м, tmp_path):
+    """Граница названа честно, а не обойдена молчанием.
+
+    Тест может падать в цели не из-за пропавшего символа, а из-за ИНОГО
+    поведения того же символа (у SEO-сессии так падала передача черновика:
+    имя проверяющего). Такого инструмент не видит и видеть не может, поэтому
+    полный прогон остаётся обязательным — и он молчит, а не утверждает
+    «доставлять безопасно».
+    """
+    моё = моя_ветвь(tmp_path, ["версия 1\n"])
+    (моё / "factory" / "cell").mkdir(parents=True)
+    (моё / "factory" / "cell" / "модуль.py").write_text(
+        'def имя():\n    return "новое"\n', encoding="utf-8")
+    (моё / "tests" / "unit" / "test_поведение.py").write_text(
+        "from factory.cell import модуль as м\n"
+        'def test_имя():\n    assert м.имя() == "новое"\n', encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "поведение")
+    (моё / "tests" / "unit" / "test_поведение.py").write_text(
+        "from factory.cell import модуль as м\n"
+        'def test_имя():\n    assert м.имя() == "новое"  # правка\n',
+        encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "правка")
+
+    их = их_ветвь(tmp_path, "версия 1\n")
+    (их / "factory" / "cell").mkdir(parents=True)
+    # Символ ЕСТЬ, но ведёт себя иначе.
+    (их / "factory" / "cell" / "модуль.py").write_text(
+        'def имя():\n    return "прежнее"\n', encoding="utf-8")
+    (их / "tests" / "unit" / "test_поведение.py").write_text(
+        "from factory.cell import модуль as м\n"
+        'def test_имя():\n    assert м.имя() == "новое"\n', encoding="utf-8")
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        м.главное(["--mine", str(моё), "--theirs", str(их),
+                   "--subdir", "tests/unit", "--subdir", "factory/cell"])
+    вывод = буфер.getvalue()
+    # Утверждение про НАХОДКУ, а не про строку легенды: легенда упоминает
+    # «НЕ ДОСТАВЛЯТЬ» всегда, и первая редакция теста ловила именно её.
+    находки = [с for с in вывод.splitlines() if с.strip().startswith("НЕ ДОСТАВЛЯТЬ")]
+    assert not находки, (
+        f"инструмент заявил о том, чего не умеет измерить: {находки}")
 
 
 def test_нет_каталога_у_одной_стороны_это_не_измерено(м, tmp_path):
