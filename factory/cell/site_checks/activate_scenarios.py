@@ -10,6 +10,10 @@ import threading
 from pathlib import Path
 
 
+#: Про какие ячейки уже сказано, что сверка плеера не проводилась.
+_СКАЗАНО_ПРО_ПЛЕЕР: set = set()
+
+
 def health_server(port):
     class H(http.server.BaseHTTPRequestHandler):
         def do_GET(self):
@@ -50,15 +54,30 @@ def sandbox(tmp: Path, repo: Path, site_id: str, port: int):
     # которой нет. После того как номера стали разными у каждого домена
     # (D138), такое умолчание — готовый способ проверить не то, что выложено.
     # Пустое поле — BLOCKED_INPUT, а не повод подставить соседнее значение.
+    # Пустое поле — НЕ отказ, и это поправка по измерению SEO-сессии 12.10.
+    # Прежде здесь стоял SystemExit, и шаг требовал объявления у всех. Но у
+    # Yummy своего плеера нет и не должно быть (воспроизведением занимается
+    # верхний поток Next.js), поэтому пустое `publisher_id_expected` там
+    # ВЕРНО: вписать значение — значит получить отказ «LORDS_PLAYER_CONFIG не
+    # задан», проверено вызовом их `run.py::check_player`. Требовать поле у
+    # всех — заваливать корректную конфигурацию.
+    #
+    # Поэтому сверка publisher_id становится необязательной, но НАЗВАННОЙ:
+    # сценарий активации прогоняется, а про пропуск сказано вслух. Молча
+    # пропустить нельзя — тогда «проверено» и «не проверялось» сольются.
     cfg = json.loads((repo/'config'/'site.json').read_text(encoding='utf-8'))
     pub = str(cfg.get('publisher_id_expected') or '').strip()
-    if not pub:
-        raise SystemExit(
-            f"{site_id}: config/site.json не объявляет publisher_id_expected — "
-            "сценарий активации нечем проверять, и подставить номер соседней "
-            "витрины нельзя")
-    (shared/f'player-{site_id}.json').write_text(
-        json.dumps({'publisher_id': pub}), encoding='utf-8')
+    if pub:
+        (shared/f'player-{site_id}.json').write_text(
+            json.dumps({'publisher_id': pub}), encoding='utf-8')
+    elif site_id not in _СКАЗАНО_ПРО_ПЛЕЕР:
+        # Один раз на прогон, а не на каждую песочницу: `sandbox` зовётся
+        # трижды, и тройное замечание читается как три разных случая.
+        _СКАЗАНО_ПРО_ПЛЕЕР.add(site_id)
+        print(f'  ЗАМЕЧАНИЕ: {site_id} не объявляет publisher_id_expected — '
+              'сверка publisher_id в сценарии не проводилась; номер соседней '
+              'витрины подставить нельзя (D138: у каждого домена свой)',
+              file=sys.stderr)
     (old_root/'data'/'animedia-community.json').write_text(
         json.dumps({'c': 'ЖИВАЯ ЗАПИСЬ'}, ensure_ascii=False), encoding='utf-8')
     (old_root/'current'/'site'/'index.html').write_text('<html></html>', encoding='utf-8')
