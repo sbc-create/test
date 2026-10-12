@@ -1,6 +1,6 @@
 # Карта действий games-survival, вариант B (craft-planner)
 
-Проверено на commit `ffdb862` в Chromium: `bin/games-survival qa --shots docs/screenshots/ffdb862 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `9e5892b` в Chromium: `bin/games-survival qa --shots docs/screenshots/9e5892b --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -32,6 +32,6 @@
 | history_back_returns | PASS | `True` |
 | nojs_plan_computed_on_server | PASS | `True` |
 | nojs_reset_and_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 32 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 37 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 36 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
