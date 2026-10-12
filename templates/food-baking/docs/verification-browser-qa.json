@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8848",
- "commit_head": "cd39fdcf8aff79e229d17f32d68075930378a29b",
- "at": "2026-10-12T06:13:06Z",
+ "commit_head": "0b95dcb1fb58668c390a16e58f6edf3735a5738e",
+ "at": "2026-10-12T20:07:23Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -56,54 +56,54 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 180,
+   "lcp_ms": 252,
    "cls": 0,
-   "bytes": 20380
+   "bytes": 20600
   },
   "mobile:catalog": {
-   "lcp_ms": 160,
+   "lcp_ms": 100,
    "cls": 0,
-   "bytes": 10847
+   "bytes": 10835
   },
   "mobile:recipe": {
    "lcp_ms": 132,
    "cls": 0,
-   "bytes": 14883
+   "bytes": 14871
   },
   "mobile:dough": {
-   "lcp_ms": 124,
-   "cls": 0,
-   "bytes": 5742
-  },
-  "mobile:pitfalls": {
-   "lcp_ms": 92,
-   "cls": 0,
-   "bytes": 5806
-  },
-  "desktop:home": {
-   "lcp_ms": 184,
-   "cls": 0,
-   "bytes": 20380
-  },
-  "desktop:catalog": {
-   "lcp_ms": 116,
-   "cls": 0,
-   "bytes": 10847
-  },
-  "desktop:recipe": {
-   "lcp_ms": 140,
-   "cls": 0,
-   "bytes": 14883
-  },
-  "desktop:dough": {
    "lcp_ms": 84,
    "cls": 0,
-   "bytes": 5742
+   "bytes": 5730
   },
-  "desktop:pitfalls": {
+  "mobile:pitfalls": {
    "lcp_ms": 80,
    "cls": 0,
-   "bytes": 5806
+   "bytes": 5794
+  },
+  "desktop:home": {
+   "lcp_ms": 248,
+   "cls": 0,
+   "bytes": 20600
+  },
+  "desktop:catalog": {
+   "lcp_ms": 136,
+   "cls": 0,
+   "bytes": 10835
+  },
+  "desktop:recipe": {
+   "lcp_ms": 220,
+   "cls": 0,
+   "bytes": 14871
+  },
+  "desktop:dough": {
+   "lcp_ms": 80,
+   "cls": 0,
+   "bytes": 5730
+  },
+  "desktop:pitfalls": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "bytes": 5794
   }
  },
  "console_errors": [
@@ -111,15 +111,15 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found)"
  ],
  "screenshots": [
-  "templates/food-baking/docs/screenshots/cd39fdc/home-mobile.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/catalog-mobile.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/recipe-mobile.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/dough-mobile.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/pitfalls-mobile.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/home-desktop.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/catalog-desktop.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/recipe-desktop.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/dough-desktop.png",
-  "templates/food-baking/docs/screenshots/cd39fdc/pitfalls-desktop.png"
+  "docs/screenshots/0b95dcb/home-mobile.png",
+  "docs/screenshots/0b95dcb/catalog-mobile.png",
+  "docs/screenshots/0b95dcb/recipe-mobile.png",
+  "docs/screenshots/0b95dcb/dough-mobile.png",
+  "docs/screenshots/0b95dcb/pitfalls-mobile.png",
+  "docs/screenshots/0b95dcb/home-desktop.png",
+  "docs/screenshots/0b95dcb/catalog-desktop.png",
+  "docs/screenshots/0b95dcb/recipe-desktop.png",
+  "docs/screenshots/0b95dcb/dough-desktop.png",
+  "docs/screenshots/0b95dcb/pitfalls-desktop.png"
  ]
 }
