@@ -78,7 +78,9 @@
 | plants-home A (plant-catalog) | claude/template-plants-home | wt-template-plants-home | f034b3f | 127.0.0.1:8855 | #103 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | plants-home B (pick-and-diagnose) | claude/template-plants-home-b | wt-template-plants-home-b | 694e764 | 127.0.0.1:8856 | #104 (база — A) | READY_FOR_REVIEW_WITH_BLOCKERS |
 | games-story A (chapter-guides) | claude/template-games-story | wt-template-games-story | 1b5e5ae | 127.0.0.1:8857 | #105 | READY_FOR_REVIEW_WITH_BLOCKERS |
-| games-story B (progress-tracker) | claude/template-games-story-b | wt-template-games-story-b | — | 127.0.0.1:8858 (план) | — | building |
+| games-story B (progress-tracker) | claude/template-games-story-b | wt-template-games-story-b | 423ba88 | 127.0.0.1:8858 | #106 (база — A) | READY_FOR_REVIEW_WITH_BLOCKERS |
+| games-rpg A (codex-sections) | claude/template-games-rpg | wt-template-games-rpg | 125d884 | 127.0.0.1:8859 | #107 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| games-rpg B (party-planner) | claude/template-games-rpg-b | wt-template-games-rpg-b | — | 127.0.0.1:8860 (план) | — | building |
 | games-rpg, games-survival | claude/template-games-rpg, -survival | созданы, источники проверены (bg3.wiki, minecraft.wiki — 200) | — | 8859/8861 (план) | — | planned |
 | garden-season … games-survival | — | — | — | — | — | planned |
 
@@ -108,3 +110,6 @@ commit food-baking); home-practical A от аудита до PR.
 Обновление 21:58Z: plants B (#104) и games-story A (#105). Игровые вики wiki.gg/Fandom/StrategyWiki/Zelda Wiki — 403
 (не обходились); Celeste Wiki, bg3.wiki, minecraft.wiki, terraria.wiki.gg — 200. Реестр games-ownership/1.
 Следующие 3 действия: (1) games-story B; (2) games-rpg A (bg3.wiki, патч); (3) games-survival A (minecraft.wiki, крафт).
+
+Обновление 22:19Z: games-story B (#106), games-rpg A (#107). Следующие 3 действия: (1) games-rpg B — планировщик отряда;
+(2) games-survival A — minecraft.wiki, крафт с проверяемыми связями; (3) games-survival B.
