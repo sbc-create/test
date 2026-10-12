@@ -255,6 +255,8 @@ sudo systemctl try-restart nova-lordfilm47-space.service
 ```
 python3 -m pytest tests/unit/test_cell_resources.py -q     # 17 passed
 python3 -m pytest tests/unit/test_sitemap_chain.py -q      # 14 passed
+python3 -m pytest tests/unit/test_timer_anchors.py -q      # 14 passed
+python3 -m pytest tests/unit/test_healthz_exposure.py -q   # 11 passed
 ```
 
 Тесты проверяют поведение, а не имена: подставные файлы юнитов, подставные
