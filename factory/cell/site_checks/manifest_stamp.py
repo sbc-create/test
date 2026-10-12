@@ -40,8 +40,9 @@ import build_release  # noqa: E402
 ПОЛЕ_ПРОИСХОЖДЕНИЯ = "template_origin"
 
 #: Сведения о выпуске: в репозитории они обязаны быть пусты.
-ПУСТЫЕ_В_РЕПО = ("artifact_sha256", "runtime_commit", "site_repo_commit",
-                 "built_at", "release_dir", "bound_release_link")
+ПУСТЫЕ_В_РЕПО = ("artifact_sha256", "code_file_sha256", "runtime_commit",
+                 "site_repo_commit", "built_at", "release_dir",
+                 "bound_release_link")
 
 cfg = json.loads((ROOT / "config" / "site.json").read_text(encoding="utf-8"))
 pins = json.loads((ROOT / "pins.lock.json").read_text(encoding="utf-8"))
@@ -85,11 +86,31 @@ else:
     if готовый["bound_release_link"] != dep.get("current_link"):
         плохо.append("bound_release_link разошёлся с deployment.current_link")
 
+# Две цифры — два имени, и путать их нельзя (решение D207):
+# `artifact_sha256` закрепляет ВЕСЬ рантайм, `code_file_sha256` — исполняемую
+# точку входа. Сумма одной точки входа пропускает правку соседнего модуля
+# молча; измерено 12.10 на живой ячейке, где такая правка оставила цифру
+# точки входа верной, а артефакт разошёлся.
+файлы = sorted((ROOT / "src").glob("*.py"))
+if (ROOT / "run.py").is_file():
+    файлы.append(ROOT / "run.py")
+_сумма = hashlib.sha256()
+for _файл in файлы:
+    _сумма.update(_файл.relative_to(ROOT).as_posix().encode("utf-8"))
+    _сумма.update(b"\0")
+    _сумма.update(_файл.read_bytes())
+    _сумма.update(b"\0")
+сумма_рантайма = _сумма.hexdigest()
+if готовый["artifact_sha256"] != сумма_рантайма:
+    плохо.append(f"artifact_sha256 {готовый['artifact_sha256'][:12]} "
+                 f"не сумма рантайма ({сумма_рантайма[:12]}): файлов "
+                 f"{len(файлы)}")
+
 рантайм = ROOT / "src" / cfg["entrypoint"]
 сумма = hashlib.sha256(рантайм.read_bytes()).hexdigest()
-if готовый["artifact_sha256"] != сумма:
-    плохо.append(f"artifact_sha256 {готовый['artifact_sha256'][:12]} "
-                 f"не сумма {cfg['entrypoint']} ({сумма[:12]})")
+if готовый.get("code_file_sha256") != сумма:
+    плохо.append(f"code_file_sha256 {str(готовый.get('code_file_sha256'))[:12]} "
+                 f"не сумма точки входа {cfg['entrypoint']} ({сумма[:12]})")
 
 закреплён = pins["pins"]["source_commit"]
 if готовый["source_commit"] != закреплён:

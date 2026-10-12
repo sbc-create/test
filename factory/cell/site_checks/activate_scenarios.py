@@ -2,11 +2,16 @@
 import http.server
 import json
 import os
+import socket
 import subprocess
 import sys
 import tempfile
 import threading
 from pathlib import Path
+
+
+#: Про какие ячейки уже сказано, что сверка плеера не проводилась.
+_СКАЗАНО_ПРО_ПЛЕЕР: set = set()
 
 
 def health_server(port):
@@ -49,15 +54,30 @@ def sandbox(tmp: Path, repo: Path, site_id: str, port: int):
     # которой нет. После того как номера стали разными у каждого домена
     # (D138), такое умолчание — готовый способ проверить не то, что выложено.
     # Пустое поле — BLOCKED_INPUT, а не повод подставить соседнее значение.
+    # Пустое поле — НЕ отказ, и это поправка по измерению SEO-сессии 12.10.
+    # Прежде здесь стоял SystemExit, и шаг требовал объявления у всех. Но у
+    # Yummy своего плеера нет и не должно быть (воспроизведением занимается
+    # верхний поток Next.js), поэтому пустое `publisher_id_expected` там
+    # ВЕРНО: вписать значение — значит получить отказ «LORDS_PLAYER_CONFIG не
+    # задан», проверено вызовом их `run.py::check_player`. Требовать поле у
+    # всех — заваливать корректную конфигурацию.
+    #
+    # Поэтому сверка publisher_id становится необязательной, но НАЗВАННОЙ:
+    # сценарий активации прогоняется, а про пропуск сказано вслух. Молча
+    # пропустить нельзя — тогда «проверено» и «не проверялось» сольются.
     cfg = json.loads((repo/'config'/'site.json').read_text(encoding='utf-8'))
     pub = str(cfg.get('publisher_id_expected') or '').strip()
-    if not pub:
-        raise SystemExit(
-            f"{site_id}: config/site.json не объявляет publisher_id_expected — "
-            "сценарий активации нечем проверять, и подставить номер соседней "
-            "витрины нельзя")
-    (shared/f'player-{site_id}.json').write_text(
-        json.dumps({'publisher_id': pub}), encoding='utf-8')
+    if pub:
+        (shared/f'player-{site_id}.json').write_text(
+            json.dumps({'publisher_id': pub}), encoding='utf-8')
+    elif site_id not in _СКАЗАНО_ПРО_ПЛЕЕР:
+        # Один раз на прогон, а не на каждую песочницу: `sandbox` зовётся
+        # трижды, и тройное замечание читается как три разных случая.
+        _СКАЗАНО_ПРО_ПЛЕЕР.add(site_id)
+        print(f'  ЗАМЕЧАНИЕ: {site_id} не объявляет publisher_id_expected — '
+              'сверка publisher_id в сценарии не проводилась; номер соседней '
+              'витрины подставить нельзя (D138: у каждого домена свой)',
+              file=sys.stderr)
     (old_root/'data'/'animedia-community.json').write_text(
         json.dumps({'c': 'ЖИВАЯ ЗАПИСЬ'}, ensure_ascii=False), encoding='utf-8')
     (old_root/'current'/'site'/'index.html').write_text('<html></html>', encoding='utf-8')
@@ -158,11 +178,39 @@ def run(repo: Path, site_id: str, port: int):
     return итог
 
 
+def свободная_пара(попыток: int = 20) -> int:
+    """Начало пары свободных портов: шаг занимает `port` и `port + 1`.
+
+    Прежде здесь стоял постоянный 9801, и это ловушка для ПАРАЛЛЕЛЬНЫХ
+    прогонов: два одновременных шага двух ячеек получали «Address already in
+    use», то есть отказ не про витрину, а про занятый порт. Измерено
+    SEO-сессией 12.10 на `1lordserials1-online`; на свободном порту тот же шаг
+    даёт rc=0.
+
+    Между освобождением порта и его занятием сервером есть окно, в которое
+    может встрять кто-то ещё — поэтому попытки ограничены числом, а не
+    временем, и исчерпание предела называется отказом, а не тишиной.
+    """
+    for _ in range(попыток):
+        with socket.socket() as проба:
+            проба.bind(('127.0.0.1', 0))
+            кандидат = проба.getsockname()[1]
+        with socket.socket() as второй:
+            try:
+                второй.bind(('127.0.0.1', кандидат + 1))
+            except OSError:
+                continue
+        return кандидат
+    print(f'не нашлось пары свободных портов за {попыток} попыток',
+          file=sys.stderr)
+    raise SystemExit(1)
+
+
 if __name__ == '__main__':
     repo = Path(__file__).resolve().parent.parent
     site_id = json.loads((repo/'config'/'site.json')
                         .read_text(encoding='utf-8'))['site_id']
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 9801
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else свободная_пара()
     res = run(repo, site_id, port)
     ok = True
     for фаза, поля in res.items():

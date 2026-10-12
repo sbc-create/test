@@ -60,7 +60,8 @@ RETIRED_PUBLISHER_IDS = frozenset({"10331", "10333"})
 #: репозиторий сайта отдельным файлом и импортировать фабрику не может. Чтобы
 #: копии не разошлись, их совпадение сторожит
 #: `tests/unit/test_cell_manifest_fields.py`.
-ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "runtime_commit", "site_repo_commit",
+ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "code_file_sha256",
+                "runtime_commit", "site_repo_commit",
                 "site_repo_dirty", "built_at", "built_from", "release_dir",
                 "bound_release_link", "source_commit", "source_dirty")
 
