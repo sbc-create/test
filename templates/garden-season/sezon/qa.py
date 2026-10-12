@@ -1,4 +1,4 @@
-"""Браузерная приёмка garden-season (month-calendar): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка garden-season (region-timeline): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,35 +11,34 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8853"
+BASE = "http://127.0.0.1:8854"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 WORK = "/rabota/malina-obrezka/"
 SHOTS = {
     "home": "/",
-    "month": "/kalendar/oktyabr/",
-    "calendar": "/kalendar/?region=or-west",
+    "region": "/region/or-all/",
+    "region-filtered": "/region/or-west/?tip=uhod",
     "work": WORK,
     "crop": "/kultura/chesnok/",
     "empty-month": "/kalendar/dekabr/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
-    "/kalendar/",
-    "/kalendar/fevral/",
-    "/kultury/",
-    "/kultura/malina/",
     "/regiony/",
     "/region/uk/",
+    "/region/uk/?tip=zima",
+    "/kalendar/",
+    "/kalendar/oktyabr/",
+    "/kultury/",
+    "/kultura/malina/",
     "/tip/zima/",
     "/podborki/",
     "/podborki/yagodniki/",
     "/rabota/uborka-i-hranenie-kartofelya/",
-    "/rabota/sideraty-na-zimu/",
     "/kak-chitat-sroki/",
     "/istochniki/",
     "/poisk/?q=чеснок",
     "/poisk/?q=квантовый",
-    "/kalendar/?region=uk&tip=zima",
     "/nesushchestvuet/",
 ]
 PERF = """() => new Promise(res => { let lcp = 0, cls = 0;
@@ -100,83 +99,75 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
+        A["header_before_choice"] = pg.locator("[data-myreg]").inner_text() == "Выбрать регион"
         with pg.expect_navigation():
-            pg.locator(".months a").nth(9).click()
-        A["month_strip_opens_october"] = (
-            pg.url.endswith("/kalendar/oktyabr/")
-            and pg.get_attribute(".months a[aria-current]", "href") == "/kalendar/oktyabr/"
+            pg.locator(".regcard--or-west").click()
+        A["home_region_card_opens_region"] = pg.url.endswith("/region/or-west/")
+        pg.goto(BASE + "/")
+        A["region_remembered_in_header"] = (
+            pg.locator("[data-myreg]").inner_text().startswith("Мой регион: Западный Орегон")
+            and pg.get_attribute("[data-myreg]", "href") == "/region/or-west/"
         )
-        A["month_groups_regions"] = pg.locator("section.mreg").count()
+        pg.goto(BASE + "/region/or-west/")
+        total = pg.locator(".tl li li a").count()
         with pg.expect_navigation():
-            pg.locator(".pager a").last.click()
-        A["pager_next_month"] = pg.url.endswith("/kalendar/noyabr/")
+            pg.locator(".chips a", has_text="Уход").first.click()
+        A["chip_filter_reduces"] = 0 < pg.locator(".tl li li a").count() < total and "tip=uhod" in pg.url
         with pg.expect_navigation():
-            pg.locator(".pager a").first.click()
-        A["pager_prev_month"] = pg.url.endswith("/kalendar/oktyabr/")
-        pg.goto(BASE + "/kalendar/dekabr/")
-        A["empty_month_honest"] = pg.locator(".empty a[href*='oregonstate.edu']").count() == 1
-        # календарь: фильтр, сброс, пустое сочетание, история
-        pg.goto(BASE + "/kalendar/")
-        total = pg.locator(".cal__m li a").count()
-        pg.select_option("#f-r", "or-west")
+            pg.locator(".chips a", has_text="Малина").click()
+        A["chip_filters_combine"] = (
+            "tip=uhod" in pg.url and "kultura=malina" in pg.url and pg.locator(".tl li li a").count() >= 1
+        )
         with pg.expect_navigation():
-            pg.click(".flt button")
-        A["filter_region_reduces"] = 0 < pg.locator(".cal__m li a").count() < total
-        with pg.expect_navigation():
-            pg.click(".flt .reset")
-        A["filter_reset_restores_all"] = pg.locator(".cal__m li a").count() == total
-        pg.goto(BASE + "/kalendar/?region=uk&tip=zima")
+            pg.click(".filters .reset")
+        A["filter_reset_restores_all"] = pg.locator(".tl li li a").count() == total
+        pg.goto(BASE + "/region/uk/?tip=zima")
         A["filter_empty_state_with_exits"] = pg.locator(".empty a").count() == 2
         pg.go_back()
-        A["history_back_returns"] = pg.url.endswith("/kalendar/")
+        A["history_back_returns"] = pg.url.endswith("/region/or-west/")
         pg.go_forward()
         A["history_forward_returns"] = "tip=zima" in pg.url
-        # культура: ячейка таблицы ведёт на работу
-        pg.goto(BASE + "/kultura/chesnok/")
+        pg.goto(BASE + "/region/or-west/")
+        href = pg.locator(".tl li li a").first.get_attribute("href")
         with pg.expect_navigation():
-            pg.locator(".cg td a").first.click()
-        A["crop_cell_opens_work"] = pg.url.endswith("/rabota/posadka-chesnoka-osenyu/")
-        # работа: регион у каждого срока, оглавление, источники, чек-лист, печать
+            pg.locator(".tl li li a").first.click()
+        A["timeline_link_opens_work"] = pg.url.endswith(href)
         pg.goto(BASE + WORK)
-        A["timing_rows_with_region"] = (
-            pg.locator(".when__t tbody tr").count() == pg.locator(".when__t tbody .rg").count() == 4
+        A["year_rows_match_regions"] = pg.locator(".year__row").count() == 3 and pg.locator(".year__c--on").count() == 4
+        A["year_list_has_region_each"] = (
+            pg.locator(".year__list li").count() == pg.locator(".year__list .rg").count() == 4
         )
-        pg.click(".toc a[href='#shagi']")
-        A["toc_jumps_to_steps"] = pg.evaluate("location.hash") == "#shagi"
         pg.locator(".steps a.ref").first.click()
         A["ref_jumps_to_source"] = pg.evaluate("location.hash").startswith("#ist-")
         boxes = pg.locator(".check input")
-        boxes.nth(0).check()
+        boxes.nth(1).check()
         pg.reload()
-        A["checklist_persists_after_reload"] = boxes.nth(0).is_checked() and not boxes.nth(1).is_checked()
+        A["checklist_persists_after_reload"] = boxes.nth(1).is_checked() and not boxes.nth(0).is_checked()
         pg.click("[data-check-reset]")
         pg.reload()
-        A["checklist_reset"] = not boxes.nth(0).is_checked()
+        A["checklist_reset"] = not boxes.nth(1).is_checked()
         pg.evaluate(
             "window.__printed = 0; window.print = () => { window.__printed++; }; 0"
         )  # «; 0»: не возвращать функцию
         pg.click("[data-print]")
         A["print_button_calls_print"] = pg.evaluate("window.__printed") == 1
         pg.emulate_media(media="print")
-        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".when").is_visible()
+        A["print_hides_navigation"] = not pg.locator(".top").is_visible() and pg.locator(".year").is_visible()
         pg.emulate_media(media="screen")
-        pg.goto(BASE + "/region/or-west/")
-        box = pg.locator(".wk").first.bounding_box()
-        href = pg.locator(".wk__t a").first.get_attribute("href")
+        pg.goto(BASE + "/kalendar/oktyabr/")
         with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 10)
-        A["whole_card_clickable"] = pg.url.endswith(href)
-        # поиск
+            pg.locator(".pager a").last.click()
+        A["month_pager_next"] = pg.url.endswith("/kalendar/noyabr/")
+        pg.goto(BASE + "/kalendar/dekabr/")
+        A["empty_month_honest"] = pg.locator(".empty a[href*='oregonstate.edu']").count() == 1
         pg.goto(BASE + "/")
         pg.fill("#fq", "чеснок")
         with pg.expect_navigation():
             pg.press("#fq", "Enter")
-        A["search_keyboard_results"] = pg.locator(".wk").count()
+        A["search_keyboard_results"] = pg.locator(".item").count()
         with pg.expect_navigation():
             pg.click(".find--page .reset")
-        A["search_clear"] = pg.locator("#sq").input_value() == "" and pg.locator(".wk").count() == 0
-        pg.goto(BASE + "/poisk/?q=октябрь")
-        A["search_by_month"] = pg.locator(".wk").count()
+        A["search_clear"] = pg.locator("#sq").input_value() == "" and pg.locator(".item").count() == 0
         pg.goto(BASE + "/poisk/?q=квантовый")
         A["search_no_results_message"] = pg.locator(".empty h2").inner_text() == "Ничего не нашлось"
         pg.goto(BASE + "/nesushchestvuet/")
@@ -191,8 +182,9 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + WORK)
         A["nojs_work_steps"] = pg.locator(".steps li").count()
         A["nojs_print_hidden"] = not pg.locator("[data-print]").is_visible()
-        pg.goto(BASE + "/kalendar/?region=or-west")
-        A["nojs_filter_works"] = pg.locator(".cal__m li a").count() > 0
+        pg.goto(BASE + "/region/or-west/?tip=uhod")
+        A["nojs_region_filter_works"] = pg.locator(".tl li li a").count() > 0
+        A["nojs_header_links_to_regions"] = pg.get_attribute("[data-myreg]", "href") == "/regiony/"
         ctx.close()
         br.close()
     return res

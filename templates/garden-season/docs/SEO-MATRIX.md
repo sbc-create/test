@@ -1,4 +1,4 @@
-# SEO-матрица garden-season (вариант month-calendar)
+# SEO-матрица garden-season (вариант region-timeline)
 
 Preview закрыт: `X-Robots-Tag` и мета `noindex, nofollow`, robots `Disallow: /`. Production — `mode: production`,
 `production_authorized: true`, `origin.production`; без домена — RuntimeError (BLOCKED_INPUT, тест). Рекламы и счётчиков нет.
@@ -12,7 +12,8 @@ Preview закрыт: `X-Robots-Tag` и мета `noindex, nofollow`, robots `Di
 | месяц без работ | `/kalendar/dekabr/` | то же | нет | noindex | нет | BreadcrumbList |
 | культуры / культура | `/kultury/`, `/kultura/malina/` | «Малина: когда что делать — по регионам» | себя | index | да | BreadcrumbList, ItemList |
 | работа | `/rabota/malina-obrezka/` | название работы | себя | index | да | HowTo (название, описание, шаги), BreadcrumbList |
-| регионы / регион | `/regiony/`, `/region/or-west/` | «Западный Орегон: сезонные работы» | себя | index | да | BreadcrumbList, ItemList |
+| регионы / регион | `/regiony/`, `/region/or-west/` | «Западный Орегон: год работ на участке» | себя | index | да | BreadcrumbList, ItemList |
+| регион с фильтром | `/region/or-west/?tip=…&kultura=…` | «…: год работ — …» | нет | noindex | нет | BreadcrumbList, ItemList |
 | тип работ | `/tip/zima/` | «Подготовка к зиме: работы по месяцам» | себя | index | да | BreadcrumbList, ItemList |
 | подборки / подборка | `/podborki/`, `/podborki/yagodniki/` | название подборки | себя | index (≥2) | да | BreadcrumbList, ItemList |
 | как читать сроки, источники | `/kak-chitat-sroki/`, `/istochniki/` | — | себя | index | да | BreadcrumbList |

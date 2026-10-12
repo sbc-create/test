@@ -9,29 +9,21 @@
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
 <meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
-<link rel="stylesheet" href="{{ asset('css/season.css') }}">
+<link rel="stylesheet" href="{{ asset('css/timeline.css') }}">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/season.js') }}" defer></script>
+<script src="{{ asset('js/timeline.js') }}" defer></script>
 </head>
-<body data-ns="{{ site.cfg.storage_namespace }}">
+<body data-ns="{{ site.cfg.storage_namespace }}"{% if meta.kind == 'region' %} data-region="{{ r }}"{% endif %}>
 <a class="skip" href="#main">К содержимому</a>
-<header class="hd">
-  <div class="hd__in">
-    <a class="logo" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="34" height="34"><span>Дача по сезону</span></a>
-    <nav class="hd__nav" aria-label="Разделы">
-      <a href="/kalendar/">Календарь</a><a href="/kultury/">Культуры</a><a href="/regiony/">Регионы</a><a href="/podborki/">Подборки</a>
-    </nav>
-    <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту">
-      <label class="sr" for="fq">Культура или работа</label>
-      <input id="fq" name="q" type="search" placeholder="Чеснок, полив">
-      <button type="submit">Найти</button>
-    </form>
-  </div>
-  <nav class="months" aria-label="Месяцы">
-    <ol>{% for i in range(12) %}<li><a href="/kalendar/{{ MONTH_SLUG[i] }}/"{% if mo is defined and mo == i + 1 %} aria-current="page"{% endif %}>{{ MONTHS[i][:3] }}<span class="sr">{{ MONTHS[i][3:] }}</span></a></li>{% endfor %}</ol>
-  </nav>
+<header class="top">
+  <a class="brand" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="30" height="30"><span>Дача по сезону</span></a>
+  <a class="myreg" href="/regiony/" data-myreg>Выбрать регион</a>
+  <nav class="top__nav" aria-label="Разделы"><a href="/kultury/">Культуры</a><a href="/kalendar/">Месяцы</a><a href="/podborki/">Подборки</a></nav>
+  <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту">
+    <label class="sr" for="fq">Культура или работа</label><input id="fq" name="q" type="search" placeholder="Чеснок, полив"><button type="submit">Найти</button>
+  </form>
 </header>
 {% if meta.crumbs|length > 1 %}
 <nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>
@@ -39,11 +31,9 @@
 <main id="main" tabindex="-1">
 {% block main %}{% endblock %}
 </main>
-<footer class="ft">
-  <div class="ft__in">
-    <p>Сроки взяты из календаря Oregon State University Extension и руководств RHS. У каждого срока указан регион: он верен для этого региона и не переносится на другие без проверки по местным данным. Тексты подготовлены с помощью ИИ и пока не проверены редакцией.</p>
-    <nav aria-label="О сайте"><a href="/kak-chitat-sroki/">Как читать сроки</a> <a href="/istochniki/">Источники</a> <a href="/regiony/">Регионы</a></nav>
-  </div>
+<footer class="foot">
+  <p>Каждый срок — для своего региона: календарь Oregon State University Extension (Орегон, США) и руководства RHS (Великобритания). Сроков для регионов России в этих источниках нет. Тексты подготовлены с помощью ИИ и пока не проверены редакцией.</p>
+  <nav aria-label="О сайте"><a href="/kak-chitat-sroki/">Как читать сроки</a> <a href="/istochniki/">Источники</a></nav>
 </footer>
 </body>
 </html>

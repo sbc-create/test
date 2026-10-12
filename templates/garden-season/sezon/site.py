@@ -174,6 +174,21 @@ class Site:
                         grid[t["region"]][t["month"]].append(w)
         return {r: grid[r] for r in REGIONS if r in grid}
 
+    def region_timeline(self, r: str, typ: str | None = None, crop: str | None = None) -> dict[int, list[Work]]:
+        """Месяц → работы ТОЛЬКО со сроками этого региона (без подмешивания сроков других регионов)."""
+        out: dict[int, list[Work]] = {}
+        for w in self.works:
+            if (typ and w.type != typ) or (crop and w.crop != crop):
+                continue
+            for t in w.timing:
+                if t["region"] == r and t.get("month") and w not in out.setdefault(t["month"], []):
+                    out[t["month"]].append(w)
+        return dict(sorted(out.items()))
+
+    def region_seasonal(self, r: str) -> list[Work]:
+        """Работы со сроком «по сезону» (цитата без месяца) для региона."""
+        return [w for w in self.works if any(t["region"] == r and not t.get("month") for t in w.timing)]
+
     def related(self, w: Work) -> list[Work]:
         return [self.by_slug[s] for s in w.related_slugs if s in self.by_slug]
 

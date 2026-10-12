@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% from "_parts.html" import region_chip %}
 {% block main %}
-<h1>Регионы источников</h1>
-<p class="lead">Срок посадки или обрезки зависит от климата. Поэтому каждый срок на сайте подписан регионом, для которого его дал источник.</p>
-<ul class="reglist reglist--big">{% for r in REGIONS %}{% set n = site.for_region(r)|length %}{% if n %}<li><h2><a href="/region/{{ r }}/">{{ region_chip(r) }}</a></h2><p>{{ REGION_NOTE[r] }}</p><p class="count">{{ n }} {{ plural(n, 'работа', 'работы', 'работ') }}</p></li>{% endif %}{% endfor %}</ul>
+<h1>Регионы</h1>
+<p class="lead">Выберите регион, сроки которого ближе к вашему климату.</p>
+<ul class="regions">{% for r in REGIONS %}{% set n = site.for_region(r)|length %}{% if n %}<li><a class="regcard regcard--{{ r }}" href="/region/{{ r }}/"><b>{{ REGIONS[r] }}</b><span>{{ REGION_NOTE[r] }}</span><em>{{ n }} {{ plural(n, 'работа', 'работы', 'работ') }}</em></a></li>{% endif %}{% endfor %}</ul>
 {% endblock %}

@@ -1,7 +1,6 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import rows %}
 {% block main %}
-<h1>{{ c.title }}</h1>
-<p class="lead">{{ c.lede }}</p>
-{{ grid(c['items'], 'h2') }}
+<p class="kicker">Подборка</p><h1>{{ c.title }}</h1><p class="lead">{{ c.lede }}</p>
+{{ rows(c['items'], 'h2') }}
 {% endblock %}

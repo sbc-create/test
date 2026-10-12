@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% block main %}
 <h1>Культуры</h1>
-<p class="lead">Для каждой культуры — когда что делать, с разбивкой по регионам источников.</p>
-<ul class="crops crops--big">{% for c, ws in site.crops().items() %}<li><a href="/kultura/{{ c }}/">{{ CROPS[c] }} <span>{{ ws|length }} {{ plural(ws|length, 'работа', 'работы', 'работ') }}</span></a></li>{% endfor %}</ul>
+<ul class="chips chips--big">{% for c, ws in site.crops().items() %}<li><a href="/kultura/{{ c }}/">{{ CROPS[c] }} · {{ ws|length }}</a></li>{% endfor %}</ul>
 {% endblock %}

@@ -1,9 +1,13 @@
-/* garden-season (month-calendar): чек-лист работы с сохранением отметок и печать. Без JS всё читается. */
+/* garden-season (region-timeline): запоминает выбранный регион, чек-лист работы, печать. Без JS всё читается. */
 (function () {
   "use strict";
   var ns = document.body.getAttribute("data-ns") || "gs";
   function read(k, d) { try { var v = localStorage.getItem(ns + ":" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function write(k, v) { try { localStorage.setItem(ns + ":" + k, JSON.stringify(v)); return true; } catch (e) { return false; } }
+  var here = document.body.getAttribute("data-region");
+  if (here) write("region", { code: here, label: document.querySelector("h1").textContent.split(":")[0] });
+  var mine = read("region", null), link = document.querySelector("[data-myreg]");
+  if (link && mine && mine.code) { link.href = "/region/" + mine.code + "/"; link.textContent = "Мой регион: " + mine.label; }
   var work = document.querySelector(".work[data-slug]");
   if (work) {
     var key = "check:" + work.getAttribute("data-slug") + ":v" + work.getAttribute("data-version");
@@ -13,7 +17,7 @@
       var done = [];
       boxes.forEach(function (b) { if (b.checked) done.push(b.getAttribute("data-check")); });
       if (save && !write(key, done)) { status.textContent = "Отметки не сохраняются: хранилище браузера недоступно."; return; }
-      status.textContent = done.length === boxes.length ? "Всё сделано." : "Отмечено " + done.length + " из " + boxes.length + ". Отметки сохраняются на этом устройстве.";
+      status.textContent = done.length ? "Сделано " + done.length + " из " + boxes.length + "." : "";
       reset.hidden = done.length === 0;
     };
     boxes.forEach(function (b) {
@@ -21,9 +25,7 @@
       b.addEventListener("change", function () { sync(true); });
     });
     reset.addEventListener("click", function () { boxes.forEach(function (b) { b.checked = false; }); sync(true); });
-    if (state.length) sync(false);
+    sync(false);
   }
-  document.querySelectorAll("[data-print]").forEach(function (b) {
-    b.hidden = false; b.addEventListener("click", function () { window.print(); });
-  });
+  document.querySelectorAll("[data-print]").forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
 })();

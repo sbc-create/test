@@ -1,152 +1,150 @@
 {
- "commit_head": "31fec6c3d1e232a126a8f113cfde154ffc31592c",
- "at": "2026-10-12T21:16:56Z",
+ "commit_head": "65f50540e2baf0c72e62b739558ca498f3c5054c",
+ "at": "2026-10-12T21:24:07Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
-  "month_strip_opens_october": true,
-  "month_groups_regions": 3,
-  "pager_next_month": true,
-  "pager_prev_month": true,
-  "empty_month_honest": true,
-  "filter_region_reduces": true,
+  "header_before_choice": true,
+  "home_region_card_opens_region": true,
+  "region_remembered_in_header": true,
+  "chip_filter_reduces": true,
+  "chip_filters_combine": true,
   "filter_reset_restores_all": true,
   "filter_empty_state_with_exits": true,
   "history_back_returns": true,
   "history_forward_returns": true,
-  "crop_cell_opens_work": true,
-  "timing_rows_with_region": true,
-  "toc_jumps_to_steps": true,
+  "timeline_link_opens_work": true,
+  "year_rows_match_regions": true,
+  "year_list_has_region_each": true,
   "ref_jumps_to_source": true,
   "checklist_persists_after_reload": true,
   "checklist_reset": true,
   "print_button_calls_print": true,
   "print_hides_navigation": true,
-  "whole_card_clickable": true,
+  "month_pager_next": true,
+  "empty_month_honest": true,
   "search_keyboard_results": 1,
   "search_clear": true,
-  "search_by_month": 10,
   "search_no_results_message": true,
   "404_has_search_and_home": true,
   "nojs_work_steps": 5,
   "nojs_print_hidden": true,
-  "nojs_filter_works": true
+  "nojs_region_filter_works": true,
+  "nojs_header_links_to_regions": true
  },
  "axe": {
   "version": "4.13.0",
   "mobile:/": [],
-  "mobile:/kalendar/oktyabr/": [],
-  "mobile:/kalendar/?region=or-west": [],
+  "mobile:/region/or-all/": [],
+  "mobile:/region/or-west/?tip=uhod": [],
   "mobile:/rabota/malina-obrezka/": [],
   "mobile:/kultura/chesnok/": [],
   "mobile:/kalendar/dekabr/": [],
-  "mobile:/kalendar/": [],
-  "mobile:/kalendar/fevral/": [],
-  "mobile:/kultury/": [],
-  "mobile:/kultura/malina/": [],
   "mobile:/regiony/": [],
   "mobile:/region/uk/": [],
+  "mobile:/region/uk/?tip=zima": [],
+  "mobile:/kalendar/": [],
+  "mobile:/kalendar/oktyabr/": [],
+  "mobile:/kultury/": [],
+  "mobile:/kultura/malina/": [],
   "mobile:/tip/zima/": [],
   "mobile:/podborki/": [],
   "mobile:/podborki/yagodniki/": [],
   "mobile:/rabota/uborka-i-hranenie-kartofelya/": [],
-  "mobile:/rabota/sideraty-na-zimu/": [],
   "mobile:/kak-chitat-sroki/": [],
   "mobile:/istochniki/": [],
   "mobile:/poisk/?q=чеснок": [],
   "mobile:/poisk/?q=квантовый": [],
-  "mobile:/kalendar/?region=uk&tip=zima": [],
   "mobile:/nesushchestvuet/": [],
   "desktop:/": [],
-  "desktop:/kalendar/oktyabr/": [],
-  "desktop:/kalendar/?region=or-west": [],
+  "desktop:/region/or-all/": [],
+  "desktop:/region/or-west/?tip=uhod": [],
   "desktop:/rabota/malina-obrezka/": [],
   "desktop:/kultura/chesnok/": [],
   "desktop:/kalendar/dekabr/": [],
-  "desktop:/kalendar/": [],
-  "desktop:/kalendar/fevral/": [],
-  "desktop:/kultury/": [],
-  "desktop:/kultura/malina/": [],
   "desktop:/regiony/": [],
   "desktop:/region/uk/": [],
+  "desktop:/region/uk/?tip=zima": [],
+  "desktop:/kalendar/": [],
+  "desktop:/kalendar/oktyabr/": [],
+  "desktop:/kultury/": [],
+  "desktop:/kultura/malina/": [],
   "desktop:/tip/zima/": [],
   "desktop:/podborki/": [],
   "desktop:/podborki/yagodniki/": [],
   "desktop:/rabota/uborka-i-hranenie-kartofelya/": [],
-  "desktop:/rabota/sideraty-na-zimu/": [],
   "desktop:/kak-chitat-sroki/": [],
   "desktop:/istochniki/": [],
   "desktop:/poisk/?q=чеснок": [],
   "desktop:/poisk/?q=квантовый": [],
-  "desktop:/kalendar/?region=uk&tip=zima": [],
   "desktop:/nesushchestvuet/": []
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 116,
+   "lcp_ms": 160,
    "cls": 0
   },
-  "mobile:month": {
-   "lcp_ms": 88,
+  "mobile:region": {
+   "lcp_ms": 72,
    "cls": 0
   },
-  "mobile:calendar": {
-   "lcp_ms": 56,
+  "mobile:region-filtered": {
+   "lcp_ms": 32,
    "cls": 0
   },
   "mobile:work": {
-   "lcp_ms": 84,
+   "lcp_ms": 96,
    "cls": 0
   },
   "mobile:crop": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:empty-month": {
-   "lcp_ms": 36,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "desktop:month": {
    "lcp_ms": 68,
    "cls": 0
   },
-  "desktop:calendar": {
-   "lcp_ms": 64,
+  "mobile:empty-month": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 116,
+   "cls": 0
+  },
+  "desktop:region": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:region-filtered": {
+   "lcp_ms": 48,
    "cls": 0
   },
   "desktop:work": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:crop": {
-   "lcp_ms": 48,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:empty-month": {
-   "lcp_ms": 48,
+   "lcp_ms": 60,
    "cls": 0
   }
  },
  "console_errors": [
-  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8853/nesushchestvuet/",
-  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8853/nesushchestvuet/"
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/31fec6c/home-mobile.png",
-  "docs/screenshots/31fec6c/month-mobile.png",
-  "docs/screenshots/31fec6c/calendar-mobile.png",
-  "docs/screenshots/31fec6c/work-mobile.png",
-  "docs/screenshots/31fec6c/crop-mobile.png",
-  "docs/screenshots/31fec6c/empty-month-mobile.png",
-  "docs/screenshots/31fec6c/home-desktop.png",
-  "docs/screenshots/31fec6c/month-desktop.png",
-  "docs/screenshots/31fec6c/calendar-desktop.png",
-  "docs/screenshots/31fec6c/work-desktop.png",
-  "docs/screenshots/31fec6c/crop-desktop.png",
-  "docs/screenshots/31fec6c/empty-month-desktop.png"
+  "docs/screenshots/65f5054/home-mobile.png",
+  "docs/screenshots/65f5054/region-mobile.png",
+  "docs/screenshots/65f5054/region-filtered-mobile.png",
+  "docs/screenshots/65f5054/work-mobile.png",
+  "docs/screenshots/65f5054/crop-mobile.png",
+  "docs/screenshots/65f5054/empty-month-mobile.png",
+  "docs/screenshots/65f5054/home-desktop.png",
+  "docs/screenshots/65f5054/region-desktop.png",
+  "docs/screenshots/65f5054/region-filtered-desktop.png",
+  "docs/screenshots/65f5054/work-desktop.png",
+  "docs/screenshots/65f5054/crop-desktop.png",
+  "docs/screenshots/65f5054/empty-month-desktop.png"
  ]
 }
