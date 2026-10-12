@@ -137,12 +137,35 @@ for conf_file in "${configs[@]}"; do
   fi
 done
 
+# Откат обязан сообщать о СВОЁМ провале. Прежняя редакция глотала оба отказа
+# через `|| true`: и неудачное копирование отдельного файла, и непрохождение
+# `nginx -t` после восстановления. Оператор видел «возврат конфигурации» и
+# больше ничего, тогда как восстановленная конфигурация могла быть нерабочей, а
+# nginx продолжал отдавать прежнюю. Правило проекта прямое: наличие файла
+# бэкапа доказательством восстановления не считается.
 restore() {
   printf '\033[33m[!]\033[0m возврат конфигурации из %s\n' "${BACKUP_ROOT}/${stamp}" >&2
+  restore_failed=0
   for conf_file in "${configs[@]}"; do
-    cp -p "${BACKUP_ROOT}/${stamp}/$(basename "$conf_file")" "$conf_file" || true
+    if ! cp -p "${BACKUP_ROOT}/${stamp}/$(basename "$conf_file")" "$conf_file"; then
+      printf '   НЕ ВОССТАНОВЛЕН: %s\n' "$conf_file" >&2
+      restore_failed=1
+    fi
   done
-  nginx -t >/dev/null 2>&1 && nginx -s reload || true
+  if nginx -t >/dev/null 2>&1; then
+    if nginx -s reload; then
+      printf '   откат завершён: конфигурация восстановлена и перезагружена\n' >&2
+    else
+      printf '   ОТКАТ НЕ ЗАВЕРШЁН: конфигурация восстановлена, но nginx -s reload отказал\n' >&2
+      restore_failed=1
+    fi
+  else
+    printf '   ОТКАТ НЕ ЗАВЕРШЁН: восстановленная конфигурация не проходит nginx -t.\n' >&2
+    printf '   nginx продолжает работать на ПРЕЖНЕЙ загруженной конфигурации.\n' >&2
+    printf '   Копии лежат в %s — восстановите вручную и проверьте nginx -t.\n' "${BACKUP_ROOT}/${stamp}" >&2
+    restore_failed=1
+  fi
+  return "$restore_failed"
 }
 
 if [ "$dry_run" = 1 ]; then
@@ -153,7 +176,10 @@ fi
 
 log "проверка конфигурации"
 if ! nginx -t; then
-  restore
+  # Код отка́та здесь гасится НАМЕРЕННО: под `set -e` ненулевой возврат оборвал
+  # бы сценарий до `die`, и оператор потерял бы главную причину. О своём
+  # провале откат уже сообщил сам, отдельными строками в stderr.
+  restore || true
   die "nginx -t не прошёл; конфигурация возвращена, reload не делался"
 fi
 
