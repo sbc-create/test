@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Furnace",
  "fetched_at": "2026-10-12T22:25:59Z",
  "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.0.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

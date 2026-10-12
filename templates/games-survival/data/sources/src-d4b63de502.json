@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Torch",
  "fetched_at": "2026-10-12T22:26:03Z",
  "page_sha256": "ba3079b6758be3fe2f518039ed21e330c51fe6f6e0d6dbff8e865fdd621550c0",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.0.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

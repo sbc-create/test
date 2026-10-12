@@ -9,6 +9,7 @@
     <ul class="recs">{% for r in e.recipes %}<li class="rec"><span class="rec__grid" aria-hidden="true">{% for i in range(9) %}<i class="{% if i < r.slots %}on{% endif %}"></i>{% endfor %}</span>
       <span class="rec__txt"><b lang="en">{{ r.ingredients }}</b><span>занято слотов: {{ r.slots }} из 9</span></span><span class="rec__arrow" aria-hidden="true">→</span><span class="rec__out"><b lang="en">{{ r.result }}</b> × {{ r.count }}</span></li>{% endfor %}</ul>
     <p class="note">Ингредиенты и количества — из сетки крафта источника. Схема слотов условная: показано число занятых клеток, а не их расположение.</p></section>{% endif %}
+  {% if not e.recipes and e.type == 'building' %}<p class="note">Рецепт на странице источника записан в другом формате и пока не разобран надёжно — смотрите источник [1].</p>{% endif %}
   {% set src_from = site.made_from(e) %}{% set src_for = site.used_for(e) %}
   {% if src_from or src_for %}<section class="links" aria-labelledby="h-links"><h2 id="h-links">Связи</h2>
     <div class="links__grid">

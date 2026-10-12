@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Stick",
  "fetched_at": "2026-10-12T22:26:11Z",
  "page_sha256": "35c622e98a7b20fa57f327493afd6a8e05d4a8daa87c464abc5a21a2df952382",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.0.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

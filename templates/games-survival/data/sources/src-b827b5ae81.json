@@ -1,0 +1,46 @@
+{
+ "id": "src-b827b5ae81",
+ "url": "https://minecraft.wiki/w/Bed",
+ "fetched_at": "2026-10-12T23:21:37Z",
+ "page_sha256": "8720c12c21830d1f0867e0d8063fb7a0051a142be232bd3eda9acb73b81cf925",
+ "parser": "gsv-facts/1.0.1",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Bed",
+ "lead": [
+  "A bed is a dyeable utility block that allows a player in the Overworld to sleep through the night and change their spawn point to within a few blocks of the bed, as long as it is not broken or obstructed. Villagers sleep in beds at night and require spare beds to produce offspring .",
+  "Beds are used by pressing the use item button while looking at the bed."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Matching Wool + Any Planks",
+   "slots": 6,
+   "alternatives_in_first_slot": 16,
+   "result": "White Bed",
+   "count": 1
+  },
+  {
+   "ingredients": "Any Bed + Matching Dye",
+   "slots": 2,
+   "alternatives_in_first_slot": 16,
+   "result": "White Bed",
+   "count": 1
+  },
+  {
+   "ingredients": "Any Dyed Bed + Bleach",
+   "slots": 2,
+   "alternatives_in_first_slot": 15,
+   "result": "White Bed",
+   "count": 1
+  },
+  {
+   "ingredients": "Any Bed + Bone Meal or Lapis Lazuli or Cocoa Beans or Ink Sac",
+   "slots": 2,
+   "alternatives_in_first_slot": 16,
+   "result": "White Bed",
+   "count": 1
+  }
+ ]
+}

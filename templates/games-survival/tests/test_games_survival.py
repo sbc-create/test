@@ -167,3 +167,14 @@ def test_no_cross_template_code():
 
 def test_repair_is_not_a_recipe(app):
     assert all("Damaged" not in r["ingredients"] for r in app.site.by_slug["shchit"].recipes)
+
+
+def test_buildings_section_from_source(app):
+    s = app.site
+    assert "postrojki" in s.sections("minecraft")
+    assert {"zabor", "stupeni", "dver", "krovat"} <= {e.slug for e in s.sections("minecraft")["postrojki"][1]}
+    assert sorted(x.slug for x in s.made_from(s.by_slug["zabor"])) == ["doski", "palka"]
+    assert ("Oak Fence", 3) in [(r["result"], r["count"]) for r in s.by_slug["zabor"].recipes]
+    _, html, _ = get(app, s.by_slug["dver"].url)
+    assert "пока не разобран надёжно" in html and 'class="rec"' not in html  # рецепт двери не придуман
+    assert all("COLOR _" not in p for r in load_all().values() for p in r["lead"])

@@ -1,0 +1,25 @@
+{
+ "id": "src-c7c5312bdc",
+ "url": "https://minecraft.wiki/w/Stairs",
+ "fetched_at": "2026-10-12T23:21:42Z",
+ "page_sha256": "ba41adc487ee6109dea96a13499d46d1607163e0633c816efea407a5b823c083",
+ "parser": "gsv-facts/1.0.1",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Stairs",
+ "lead": [
+  "Stairs are blocks that allow mobs and players to change elevation without jumping.",
+  "All stairs have the same crafting recipe format, where six blocks result in four stairs of the same type. Like axes , the crafting recipe of stairs can be horizontally flipped."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Planks , Bamboo Mosaic , stone blocks, brick blocks, Quartz Block , Smooth Quartz , Cut Copper , Wool , or Concrete",
+   "slots": 6,
+   "alternatives_in_first_slot": 90,
+   "result": "Oak Stairs",
+   "count": 4
+  }
+ ]
+}

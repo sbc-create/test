@@ -207,6 +207,32 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "dver",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-429987c579",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Дверь: преграда, которую можно открыть",
+   "summary": "Дверь — переключаемая преграда для существ. Ставится только на полный твёрдый блок снизу и занимает два блока в высоту.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "4b0312da1f89c6e4beca59e5077ffd7b9150d60547c7f329756353d6e41b5b05",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "fakel",
    "game": "minecraft",
    "type": "item",
@@ -229,6 +255,32 @@
    },
    "version": 1,
    "text_hash": "e3faed535445277df1ebbbd0456afae3dd36753132239f00f3064b518685e58b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "krovat",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-b827b5ae81",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Кровать: ночь и точка возрождения",
+   "summary": "Кровать позволяет в Верхнем мире переспать ночь и переносит точку возрождения к кровати, пока её не сломали и не загородили. По сетке источника шерсть одного цвета и доски дают 1 кровать.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "544f802f12bab52e843f1c45372210d7a2eb84554c9ee5129c5c7291fec867da",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
    "review_status": "ai_draft"
@@ -338,6 +390,33 @@
    },
    "version": 1,
    "text_hash": "3bdd0c9078233c58ee578650bbdd44f2d4e00c67cfe3c4b12ff89447bb4f7a3a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "stupeni",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-c7c5312bdc",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Ступеньки: 6 блоков — 4 ступеньки",
+   "summary": "Ступеньки позволяют подниматься на блок без прыжка. Все ступеньки крафтятся одинаково: из 6 блоков получается 4 ступеньки того же вида.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "bulyzhnik"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "84cd249e61c017fc664729d2a155622b4651b9617ce3415931564a0738e9f193",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
    "review_status": "ai_draft"
@@ -500,6 +579,33 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "zabor",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-ad3fa70d4d",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Забор: 6 слотов — 3 забора",
+   "summary": "Забор — барьер, через который обычно не перепрыгнуть; игрок, в отличие от мобов, видит сквозь просветы. Высота столкновения — 1,5 блока. По сетке источника доски и палки в 6 слотах дают 3 забора.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "palka"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7be302ae70467672eab8ec08f3697dc69a7974b52d6f877c9c28fe8888b4fb6f",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "zheleznyj-slitok",
    "game": "minecraft",
    "type": "item",
@@ -534,7 +640,7 @@
    "url": "https://minecraft.wiki/w/Chest",
    "fetched_at": "2026-10-12T22:26:02Z",
    "page_sha256": "990949009a86e83c0fb5891b84f3b2371fe1f73489cdd210035cdcd563bf78a4",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -587,7 +693,7 @@
    "url": "https://minecraft.wiki/",
    "fetched_at": "2026-10-12T22:26:39Z",
    "page_sha256": "0aef7b984e4f26cb4a1f844df8cc9a34b6a0aed075ef176b5ec50c16e2db4840",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -600,12 +706,29 @@
    "java_versions": [],
    "java_current": "26.3"
   },
+  "src-429987c579": {
+   "id": "src-429987c579",
+   "url": "https://minecraft.wiki/w/Door",
+   "fetched_at": "2026-10-12T23:21:35Z",
+   "page_sha256": "fad97dd6409b873e84506cee9876f41b53d287e35aac9eae4d801ae42df1815a",
+   "parser": "gsv-facts/1.0.1",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Door",
+   "lead": [
+    "A door is a block that serves as a switchable barrier to entity movement.",
+    "Doors must be supported by a full solid block face beneath them. The bottom half of the door is placed where the player is aiming, with the top half extending one block above. If there is not enough space for the door, or not an appropriate supporting block underneath the base, no action is performed."
+   ],
+   "recipes": []
+  },
   "src-553de39ee4": {
    "id": "src-553de39ee4",
    "url": "https://minecraft.wiki/w/Bucket",
    "fetched_at": "2026-10-12T22:26:15Z",
    "page_sha256": "7dc98b8393e42097d0882ae9e7b45f8354b8d0a2ce8eb706cb7653ef31edf424",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -630,7 +753,7 @@
    "url": "https://minecraft.wiki/w/Crafting_Table",
    "fetched_at": "2026-10-12T22:25:57Z",
    "page_sha256": "072f3c0f8644876a3de5ae7a44a826c62e125a61bd6d6c3d989e4def05076b50",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -655,15 +778,15 @@
    "url": "https://minecraft.wiki/w/Planks",
    "fetched_at": "2026-10-12T22:26:08Z",
    "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
    "type": "block",
    "name": "Planks",
    "lead": [
-    "34 PODZOL 2 SAND 10 DIRT 15 COLOR _ORANGE 26 COLOR _BROWN 28 COLOR _RED 36 TERRACOTTA _WHITE 14 QUARTZ 22 COLOR _LIGHT _GRAY 18 COLOR _YELLOW 53 CRIMSON _STEM 56 WARPED _STEM",
-    "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems."
+    "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems.",
+    "Planks can be broken by hand, but using an axe speeds up the process."
    ],
    "recipes": [
     {
@@ -687,7 +810,7 @@
    "url": "https://minecraft.wiki/w/Pickaxe",
    "fetched_at": "2026-10-12T22:26:13Z",
    "page_sha256": "e9f195af6eb5785f33d019856524a32437141d92ee2a300b473685eb9ccd10ee",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -704,7 +827,7 @@
    "url": "https://minecraft.wiki/w/Furnace",
    "fetched_at": "2026-10-12T22:25:59Z",
    "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -743,7 +866,7 @@
    "url": "https://minecraft.wiki/w/Taiga",
    "fetched_at": "2026-10-12T22:26:36Z",
    "page_sha256": "e264169f80e9ece67a6fd1f9fb35ee56d993b775459bd4df308abfd90ac36ee7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -759,15 +882,15 @@
    "url": "https://minecraft.wiki/w/Log",
    "fetched_at": "2026-10-12T22:26:21Z",
    "page_sha256": "f7bafd57ff92081df1f44d4b3eafbae3887577cf506a6d1229cef5f00c193065",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
    "type": "resource",
    "name": "Log",
    "lead": [
-    "34 PODZOL 34 PODZOL 26 COLOR _BROWN 2 SAND 14 QUARTZ 10 DIRT 34 PODZOL 15 COLOR _ORANGE 11 STONE 26 COLOR _BROWN 28 COLOR _RED 34 PODZOL 36 TERRACOTTA _WHITE 43 TERRACOTTA _GRAY 14 QUARTZ 11 STONE 22 COLOR _LIGHT _GRAY 34 PODZOL 53 CRIMSON _STEM 56 WARPED _STEM",
-    "A log or stem is a naturally occurring block found in trees or huge fungi , primarily used as a building block and to create planks , a versatile crafting ingredient. There are currently ten types of logs: oak , spruce , birch , jungle , acacia , dark oak , mangrove , cherry , pale oak and poplar ; and two types of stems: crimson and warped ."
+    "A log or stem is a naturally occurring block found in trees or huge fungi , primarily used as a building block and to create planks , a versatile crafting ingredient. There are currently ten types of logs: oak , spruce , birch , jungle , acacia , dark oak , mangrove , cherry , pale oak and poplar ; and two types of stems: crimson and warped .",
+    "Logs and stems can be broken by hand, but using an axe is faster. Logs and stems drop themselves when broken with any tool."
    ]
   },
   "src-930ee91150": {
@@ -775,7 +898,7 @@
    "url": "https://minecraft.wiki/w/Shield",
    "fetched_at": "2026-10-12T22:26:17Z",
    "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -835,7 +958,7 @@
    "url": "https://minecraft.wiki/w/Forest",
    "fetched_at": "2026-10-12T22:26:32Z",
    "page_sha256": "8e0601c9309a79cb6cfddd562fc8757eea23dbe1ab39101ad17e2c893eda71d8",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -851,7 +974,7 @@
    "url": "https://minecraft.wiki/w/Desert",
    "fetched_at": "2026-10-12T22:26:34Z",
    "page_sha256": "1c0865fff7d32b923706cb70fa4cee9a8df0affc00cb7fdb6a88c62a20c5215d",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -867,7 +990,7 @@
    "url": "https://minecraft.wiki/w/Stick",
    "fetched_at": "2026-10-12T22:26:11Z",
    "page_sha256": "35c622e98a7b20fa57f327493afd6a8e05d4a8daa87c464abc5a21a2df952382",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -899,7 +1022,7 @@
    "url": "https://minecraft.wiki/w/Ladder",
    "fetched_at": "2026-10-12T22:26:05Z",
    "page_sha256": "693e3318d641afe7849781154eca6b5470e78106b4ce29f8c49e26325595a832",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -919,12 +1042,44 @@
     }
    ]
   },
+  "src-ad3fa70d4d": {
+   "id": "src-ad3fa70d4d",
+   "url": "https://minecraft.wiki/w/Fence",
+   "fetched_at": "2026-10-12T23:21:40Z",
+   "page_sha256": "2e9aef8d1691f23497cadd9e9d096229d6d4e099af2b9014c0ecc2be1301d837",
+   "parser": "gsv-facts/1.0.1",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Fence",
+   "lead": [
+    "A fence is a barrier block that cannot normally be jumped over, similar to a wall . Unlike a wall, a player (but not mobs ) can see through the openings in a fence.",
+    "While fences appear to be a single block tall and have a hitbox height of one block, their collision box (for entities) is 1.5 blocks tall , meaning most mobs cannot jump over them without the Jump Boost status effect. They are transparent to light and have visual gaps in the model. Spiders can climb over a fence, just like any other vertical object. Camels can walk over fences."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Matching Planks + Stick",
+     "slots": 6,
+     "alternatives_in_first_slot": 13,
+     "result": "Oak Fence",
+     "count": 3
+    },
+    {
+     "ingredients": "Nether Bricks + Nether Brick",
+     "slots": 6,
+     "alternatives_in_first_slot": 1,
+     "result": "Nether Brick Fence",
+     "count": 6
+    }
+   ]
+  },
   "src-b11ea9dd8d": {
    "id": "src-b11ea9dd8d",
    "url": "https://minecraft.wiki/w/Plains",
    "fetched_at": "2026-10-12T22:26:30Z",
    "page_sha256": "ca9a5edc340228a6090638e9b139355c772f798263a867c50b8e8bbcdf662559",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -935,12 +1090,83 @@
     "Plains are the second-most common Overworld biome after forests , covering about 10.2% of its area. This is due to both their abundance and their potential to grow very large. They generate across a broad range of moderate temperatures when humidity is low to moderate."
    ]
   },
+  "src-b827b5ae81": {
+   "id": "src-b827b5ae81",
+   "url": "https://minecraft.wiki/w/Bed",
+   "fetched_at": "2026-10-12T23:21:37Z",
+   "page_sha256": "8720c12c21830d1f0867e0d8063fb7a0051a142be232bd3eda9acb73b81cf925",
+   "parser": "gsv-facts/1.0.1",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Bed",
+   "lead": [
+    "A bed is a dyeable utility block that allows a player in the Overworld to sleep through the night and change their spawn point to within a few blocks of the bed, as long as it is not broken or obstructed. Villagers sleep in beds at night and require spare beds to produce offspring .",
+    "Beds are used by pressing the use item button while looking at the bed."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Matching Wool + Any Planks",
+     "slots": 6,
+     "alternatives_in_first_slot": 16,
+     "result": "White Bed",
+     "count": 1
+    },
+    {
+     "ingredients": "Any Bed + Matching Dye",
+     "slots": 2,
+     "alternatives_in_first_slot": 16,
+     "result": "White Bed",
+     "count": 1
+    },
+    {
+     "ingredients": "Any Dyed Bed + Bleach",
+     "slots": 2,
+     "alternatives_in_first_slot": 15,
+     "result": "White Bed",
+     "count": 1
+    },
+    {
+     "ingredients": "Any Bed + Bone Meal or Lapis Lazuli or Cocoa Beans or Ink Sac",
+     "slots": 2,
+     "alternatives_in_first_slot": 16,
+     "result": "White Bed",
+     "count": 1
+    }
+   ]
+  },
+  "src-c7c5312bdc": {
+   "id": "src-c7c5312bdc",
+   "url": "https://minecraft.wiki/w/Stairs",
+   "fetched_at": "2026-10-12T23:21:42Z",
+   "page_sha256": "ba41adc487ee6109dea96a13499d46d1607163e0633c816efea407a5b823c083",
+   "parser": "gsv-facts/1.0.1",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Stairs",
+   "lead": [
+    "Stairs are blocks that allow mobs and players to change elevation without jumping.",
+    "All stairs have the same crafting recipe format, where six blocks result in four stairs of the same type. Like axes , the crafting recipe of stairs can be horizontally flipped."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Planks , Bamboo Mosaic , stone blocks, brick blocks, Quartz Block , Smooth Quartz , Cut Copper , Wool , or Concrete",
+     "slots": 6,
+     "alternatives_in_first_slot": 90,
+     "result": "Oak Stairs",
+     "count": 4
+    }
+   ]
+  },
   "src-ccd9178392": {
    "id": "src-ccd9178392",
    "url": "https://minecraft.wiki/w/Cobblestone",
    "fetched_at": "2026-10-12T22:26:24Z",
    "page_sha256": "eaefa7f1cd549f91b930fe35a653683b96151bf2e31d4501fdf91bc1b6e7cac6",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -956,7 +1182,7 @@
    "url": "https://minecraft.wiki/w/Coal",
    "fetched_at": "2026-10-12T22:26:26Z",
    "page_sha256": "13d6c36389364d94d2c9a9b132fa55e9b62068cbabef66cb40a6881c728c6c86",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -972,7 +1198,7 @@
    "url": "https://minecraft.wiki/w/Torch",
    "fetched_at": "2026-10-12T22:26:03Z",
    "page_sha256": "ba3079b6758be3fe2f518039ed21e330c51fe6f6e0d6dbff8e865fdd621550c0",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -1011,7 +1237,7 @@
    "url": "https://minecraft.wiki/w/Raw_Iron",
    "fetched_at": "2026-10-12T22:26:28Z",
    "page_sha256": "4cc6e601a0ffb1e5328fb5cd73aa9232ab0ce608cba78fb45d6515cc67f393a7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -1027,7 +1253,7 @@
    "url": "https://minecraft.wiki/w/Iron_Ingot",
    "fetched_at": "2026-10-12T22:26:19Z",
    "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.0.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",

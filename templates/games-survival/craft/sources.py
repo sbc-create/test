@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[1]
 PRIVATE = REPO / "var" / "games-survival" / "private" / "pages"
 OUT = ROOT / "data" / "sources"
-PARSER = "gsv-facts/1.0"
+PARSER = "gsv-facts/1.0.1"  # 1.0.1: подписи спрайтов («COLOR _GRAY») не считаются абзацем
 
 
 def tx(s: str) -> str:
@@ -86,7 +86,7 @@ def parse(raw: str, url: str, kind: str) -> dict:
         "game": "minecraft",
         "type": kind,
         "name": title,
-        "lead": [p for p in paras if len(p) > 60][:2],
+        "lead": [p for p in paras if len(p) > 60 and not re.search(r"\b[A-Z]{3,} _", p)][:2],
     }
     if kind in ("item", "block"):
         base = title.lower().split(" (")[0]

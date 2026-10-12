@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Iron_Ingot",
  "fetched_at": "2026-10-12T22:26:19Z",
  "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.0.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Shield",
  "fetched_at": "2026-10-12T22:26:17Z",
  "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.0.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
