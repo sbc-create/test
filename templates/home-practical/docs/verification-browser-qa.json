@@ -1,0 +1,149 @@
+{
+ "commit_head": "06d708c31eb8585df0aa21484546e080bba4ac6a",
+ "at": "2026-10-12T20:42:42Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "mobile_rooms_bar_hidden": true,
+  "mobile_menu_opens": true,
+  "mobile_menu_link_opens_room": true,
+  "filter_room_task_combo": {
+   "total": 13,
+   "after": 2,
+   "ok": true
+  },
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "search_keyboard_results": 2,
+  "search_clear": true,
+  "search_empty_query_hint": true,
+  "search_no_results_message": true,
+  "toc_jumps_to_steps": true,
+  "ref_jumps_to_source": true,
+  "checklist_persists_after_reload": true,
+  "checklist_status_text": "Отмечено 2 из 3. Отметки сохраняются на этом устройстве.",
+  "checklist_reset": true,
+  "save_button_pressed": true,
+  "save_persists_after_reload": true,
+  "saved_badge": "1",
+  "saved_page_lists_item": true,
+  "saved_clear_shows_empty": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "whole_card_clickable": true,
+  "404_has_search_and_home": true,
+  "nojs_material_steps": 4,
+  "nojs_save_button_hidden": true,
+  "nojs_filter_works": true,
+  "nojs_rooms_reachable": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/pomeshcheniya/spalnya/": [],
+  "mobile:/zadachi/?pomeshchenie=vannaya": [],
+  "mobile:/instrukciya/razdelit-yashchik-komoda/": [],
+  "mobile:/podborki/krepim-k-stene/": [],
+  "mobile:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "mobile:/pomeshcheniya/": [],
+  "mobile:/zadachi/mebel/": [],
+  "mobile:/instrukciya/zakrepit-komod-k-stene/": [],
+  "mobile:/instrukciya/zadelat-otverstiya-ot-krepezha/": [],
+  "mobile:/podborki/": [],
+  "mobile:/teg/sverlenie/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/kak-my-proveryaem/": [],
+  "mobile:/poisk/?q=полка": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/sohranennoe/": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/pomeshcheniya/spalnya/": [],
+  "desktop:/zadachi/?pomeshchenie=vannaya": [],
+  "desktop:/instrukciya/razdelit-yashchik-komoda/": [],
+  "desktop:/podborki/krepim-k-stene/": [],
+  "desktop:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "desktop:/pomeshcheniya/": [],
+  "desktop:/zadachi/mebel/": [],
+  "desktop:/instrukciya/zakrepit-komod-k-stene/": [],
+  "desktop:/instrukciya/zadelat-otverstiya-ot-krepezha/": [],
+  "desktop:/podborki/": [],
+  "desktop:/teg/sverlenie/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/kak-my-proveryaem/": [],
+  "desktop:/poisk/?q=полка": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/sohranennoe/": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 172,
+   "cls": 0
+  },
+  "mobile:room": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:material": {
+   "lcp_ms": 112,
+   "cls": 0
+  },
+  "mobile:collection": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 144,
+   "cls": 0
+  },
+  "desktop:room": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:material": {
+   "lcp_ms": 108,
+   "cls": 0
+  },
+  "desktop:collection": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:empty-filter": {
+   "lcp_ms": 60,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8851/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8851/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/06d708c/home-mobile.png",
+  "docs/screenshots/06d708c/room-mobile.png",
+  "docs/screenshots/06d708c/catalog-mobile.png",
+  "docs/screenshots/06d708c/material-mobile.png",
+  "docs/screenshots/06d708c/collection-mobile.png",
+  "docs/screenshots/06d708c/empty-filter-mobile.png",
+  "docs/screenshots/06d708c/home-desktop.png",
+  "docs/screenshots/06d708c/room-desktop.png",
+  "docs/screenshots/06d708c/catalog-desktop.png",
+  "docs/screenshots/06d708c/material-desktop.png",
+  "docs/screenshots/06d708c/collection-desktop.png",
+  "docs/screenshots/06d708c/empty-filter-desktop.png"
+ ]
+}
