@@ -405,6 +405,33 @@
       "expected": "тайтл: Главная / Аниме (каталог) / Название — свои классы ag-, стиль AnimeGo; BreadcrumbList на тайтле; проверки геометрии (checks/geometry.js) и boundaries зелёные",
       "check": "bash checks/run.sh (visible-breadcrumbs, boundaries, geometry)",
       "status": "queued"
+    },
+    {
+      "id": "B017",
+      "site": "yummyani.site (и прочие Yummy на том же коде)",
+      "repo": "/srv/sites/yummyani-staging/repo",
+      "urls": [
+        "https://yummyani.site/anime/vechnaya-volya-4",
+        "https://yummyani.site/catalog?genre=boevik"
+      ],
+      "problem": "Жанры на странице тайтла — простой текст («Жанры: Боевик, Приключения, …»), ссылок нет; собственных разделов жанров нет: /catalog?genre=boevik и /catalog/boevik — 404, /catalog?genres=boevik — 200, но canonical на /catalog (фильтр не индексируется). У Lords/Zona/Animedia/AnimeGo жанры кликабельны и ведут на разделы 200 со списком (замер 12.10 ~21:45Z).",
+      "norm": "задание пользователя п.3 — кликабельные жанры с работающими разделами; SEO_KNOWLEDGE_PACK §3 (раздел одного жанра — своя страница)",
+      "expected": "раздел жанра со своим адресом, H1, title, description, canonical на себя, пагинация; ссылки жанров со страницы тайтла",
+      "check": "HTTP 200, canonical == адрес раздела, ссылки /…genre… на странице тайтла",
+      "status": "blocked",
+      "owner_action": "Владелец контейнера Next.js yummyani-staging (выкладка вне factory cell trigger, тот же путь и те же условия по режиму индексации, что B016): решение о разделах жанров Yummy. SEO готов подготовить спецификацию страниц и тексты из каталога."
+    },
+    {
+      "id": "T021",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/catalog/?genre=%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5"
+      ],
+      "problem": "Служебный жанр «аниме» (есть у каждого тайтла семейства) выводится ссылкой жанра и даёт раздел с H1 «Аниме в жанре «аниме»» — тавтология и раздел-дубль всего каталога.",
+      "expected": "жанр «аниме» не выводится ссылкой на тайтле AnimeGo (как в запасном описании); раздел — canonical на /catalog/ либо исключён из перечня жанров",
+      "check": "bash checks/run.sh; живой H1 раздела",
+      "status": "queued"
     }
   ]
 }
