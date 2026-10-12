@@ -1,0 +1,155 @@
+{
+ "commit_head": "819b9348d1d7dc32c0027e694fb52b346527455f",
+ "at": "2026-10-12T20:56:54Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "home_problem_opens": true,
+  "problem_first_solution_opens": true,
+  "progress_text_after_2": "Выполнено 2 из 6",
+  "progress_value": true,
+  "next_step_focuses_first_unchecked": true,
+  "steps_persist_after_reload": true,
+  "problem_page_shows_progress": true,
+  "all_steps_done_text": true,
+  "next_after_all_goes_to_final": true,
+  "final_check_persists": true,
+  "steps_reset": true,
+  "save_persists_after_reload": true,
+  "saved_badge": "1",
+  "saved_page_lists_item": true,
+  "saved_clear_shows_empty": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "ref_jumps_to_source": true,
+  "filter_and_sort": {
+   "total": 13,
+   "after": 2,
+   "ok": true
+  },
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "search_keyboard_results": 2,
+  "search_clear": true,
+  "search_empty_query_offers_problems": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "nojs_steps_listed": 6,
+  "nojs_progress_and_save_hidden": true,
+  "nojs_filter_works": true,
+  "nojs_problem_lists_solutions": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/problemy/mebel-mozhet-upast/": [],
+  "mobile:/zadachi/?sort=nazvanie": [],
+  "mobile:/instrukciya/zakrepit-komod-k-stene/": [],
+  "mobile:/pomeshcheniya/spalnya/": [],
+  "mobile:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "mobile:/problemy/": [],
+  "mobile:/pomeshcheniya/": [],
+  "mobile:/zadachi/mebel/": [],
+  "mobile:/instrukciya/razdelit-yashchik-komoda/": [],
+  "mobile:/instrukciya/zadelat-otverstiya-ot-krepezha/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/obuv/": [],
+  "mobile:/teg/sverlenie/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/kak-my-proveryaem/": [],
+  "mobile:/poisk/?q=полка": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/sohranennoe/": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/problemy/mebel-mozhet-upast/": [],
+  "desktop:/zadachi/?sort=nazvanie": [],
+  "desktop:/instrukciya/zakrepit-komod-k-stene/": [],
+  "desktop:/pomeshcheniya/spalnya/": [],
+  "desktop:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "desktop:/problemy/": [],
+  "desktop:/pomeshcheniya/": [],
+  "desktop:/zadachi/mebel/": [],
+  "desktop:/instrukciya/razdelit-yashchik-komoda/": [],
+  "desktop:/instrukciya/zadelat-otverstiya-ot-krepezha/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/obuv/": [],
+  "desktop:/teg/sverlenie/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/kak-my-proveryaem/": [],
+  "desktop:/poisk/?q=полка": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/sohranennoe/": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 168,
+   "cls": 0
+  },
+  "mobile:problem": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:material": {
+   "lcp_ms": 104,
+   "cls": 0
+  },
+  "mobile:room": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 144,
+   "cls": 0
+  },
+  "desktop:problem": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:material": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:room": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:empty-filter": {
+   "lcp_ms": 48,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8852/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8852/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/819b934/home-mobile.png",
+  "docs/screenshots/819b934/problem-mobile.png",
+  "docs/screenshots/819b934/catalog-mobile.png",
+  "docs/screenshots/819b934/material-mobile.png",
+  "docs/screenshots/819b934/room-mobile.png",
+  "docs/screenshots/819b934/empty-filter-mobile.png",
+  "docs/screenshots/819b934/home-desktop.png",
+  "docs/screenshots/819b934/problem-desktop.png",
+  "docs/screenshots/819b934/catalog-desktop.png",
+  "docs/screenshots/819b934/material-desktop.png",
+  "docs/screenshots/819b934/room-desktop.png",
+  "docs/screenshots/819b934/empty-filter-desktop.png"
+ ]
+}
