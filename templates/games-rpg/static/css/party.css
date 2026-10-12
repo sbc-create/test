@@ -61,6 +61,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .abil { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0; }
 .abil div { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 6px; text-align: center; }
 .abil dt { font-size: .8rem; color: var(--muted); } .abil dd { margin: 0; font-weight: 800; font-size: 1.4rem; color: var(--slate); }
+.passport { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)); } .passport dd { font-size: 1.1rem; overflow-wrap: anywhere; }
 .prog { width: 100%; border-collapse: collapse; background: #fff; font-size: .92rem; }
 .prog th, .prog td { padding: 6px 8px; border-bottom: 1px solid var(--line); text-align: left; }
 .prog thead th { background: var(--slate); color: #fff; }
