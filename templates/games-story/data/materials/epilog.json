@@ -1,0 +1,23 @@
+{
+ "slug": "epilog",
+ "game": "celeste",
+ "src": "src-4465a62d9a",
+ "also": [],
+ "title": "Эпилог: спуск с горы",
+ "summary": "Эпилог идёт после The Summit и описывает спуск Мадлен с вершины. Это самая короткая глава: почти всё в ней — сценки.",
+ "mechanics": [],
+ "tips": [],
+ "videos": [],
+ "checklist": [
+  "Глава пройдена"
+ ],
+ "related": [
+  "glava-7-the-summit",
+  "glava-8-core"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

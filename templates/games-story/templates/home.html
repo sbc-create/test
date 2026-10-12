@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_parts.html" import card %}
+{% block main %}
+<section class="hero"><h1>Сюжет пройден</h1><p class="lead">Гайды по сюжетным играм по главам: маршрут, новые механики, коллекционные предметы. Прогресс отмечается и сохраняется на этом устройстве.</p></section>
+{% for gid, gm in site.games.items() %}{% set gs = site.for_game(gid) %}{% if gs %}
+<section aria-labelledby="h-{{ gid }}"><div class="head"><h2 id="h-{{ gid }}">{{ gm.title }}</h2><a href="/igra/{{ gid }}/">Все главы</a></div>
+<div class="gcs">{% for g in gs %}{{ card(g) }}{% endfor %}</div></section>
+{% endif %}{% endfor %}
+<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец, гайды не дублируются.</p>
+{% endblock %}

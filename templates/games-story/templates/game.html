@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_parts.html" import card, video %}
+{% block main %}
+<h1>{{ site.games[gid].title }}</h1>
+<p class="lead">Главы по порядку прохождения. Всего красных клубник по главам: {{ site.red_total(gid) }} (сумма чисел из карточек глав источника).</p>
+<p class="actions"><a class="btn btn--line" href="/igra/{{ gid }}/kollekcii/">Коллекционные предметы по главам</a></p>
+<div class="gcs gcs--wide">{% for g in gs %}{{ card(g, 'h2') }}{% endfor %}</div>
+{% if site.videos %}<section aria-labelledby="h-vid"><h2 id="h-vid">Видео о разработке</h2>{% for v in site.videos %}{{ video(v) }}{% endfor %}</section>{% endif %}
+{% endblock %}

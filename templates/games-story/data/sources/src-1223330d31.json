@@ -1,0 +1,17 @@
+{
+ "id": "src-1223330d31",
+ "url": "https://celeste.ink/wiki/Crystal_Hearts",
+ "fetched_at": "2026-10-12T21:51:13Z",
+ "page_sha256": "d3560abe74d0290e50e8eaef6dbe369715f59ed93567de8e0c450eb086205ec8",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Crystal Heart",
+ "paragraphs": [
+  "Crystal Hearts are high-importance collectables in Celeste . Their primary purpose is to unlock different chapters locked by Heart Doors ; thus, they are also a prerequisite to unlocking all C-Sides , Variant Mode , and Golden Strawberries . They also serve as chapter completion objectives for all B-Sides, all C-Sides, and Core A-Side . Blue Crystal Hearts appear in every A-Side, Red Crystal Hearts in every B-Side, Gold Crystal Hearts in every C-Side, and a Gray Crystal Heart in Farewell , .mw-parser-output .censored{color:black;background-color:black;padding:1px;cursor:pointer}.mw-parser-output .censored a{color:black;text-decoration:underline;padding:1px}.mw-parser-output .censored:hover{color:inherit;background-color:inherit} which is revealed to be glitching . Each Crystal Heart, except the C-Side ones, also has a name specific to itself and an associated achievement with said name.",
+  "A Crystal Heart can be collected by dashing into it. In 5B , a crystal heart can also be gathered by throwing a Theo Crystal into it.",
+  "After a heart is collected, Madeline slows down, and the game continues to run for 135 frames (~2.25 seconds) before she completely stops. It is possible to die during these 135 frames if, for instance, Madeline dashes into spikes. After the collection cutscene depicting the heart in the middle of the screen, the heart is saved and will remain in the save file indefinitely.",
+  "Crystal Hearts in A-Sides serve as well-guarded secrets, often hiding at quite a significant distance from the main path or requiring otherwise tedious tasks to be performed. These Crystal Hearts are blue, and each one has a unique name and achievement associated with it."
+ ]
+}

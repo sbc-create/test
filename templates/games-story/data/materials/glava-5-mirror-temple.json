@@ -1,0 +1,33 @@
+{
+ "slug": "glava-5-mirror-temple",
+ "game": "celeste",
+ "src": "src-de7e870f6c",
+ "also": [
+  "src-1223330d31"
+ ],
+ "title": "Глава 5. Mirror Temple: храм зеркал",
+ "summary": "Пятая глава вводит пять новых элементов: блоки-перестановки (Swap Blocks), красные пузыри, Искателей (Seekers), барьеры для Искателей и кристалл с Тео.",
+ "mechanics": [
+  "Блоки-перестановки (Swap Blocks)",
+  "Красные пузыри",
+  "Искатели (Seekers) и барьеры для них",
+  "Кристалл с Тео"
+ ],
+ "tips": [],
+ "videos": [],
+ "checklist": [
+  "A-сторона пройдена",
+  "Все клубники главы собраны",
+  "B-сторона пройдена",
+  "C-сторона пройдена"
+ ],
+ "related": [
+  "glava-4-golden-ridge",
+  "glava-6-reflection"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

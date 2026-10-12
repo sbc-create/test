@@ -1,0 +1,23 @@
+{
+ "id": "src-970f904d11",
+ "url": "https://celeste.ink/wiki/Prologue",
+ "fetched_at": "2026-10-12T21:50:43Z",
+ "page_sha256": "3290305f43274b66f5a819620b76421a3de1fe39bbc3dd75356440ab5a4fa678",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Prologue",
+ "chapter": null,
+ "strawberries": "None",
+ "sides": "Interlude",
+ "characters": [
+  "Madeline",
+  "Granny",
+  "Bird"
+ ],
+ "levels": [],
+ "checkpoints": [],
+ "lead": "Prologue is the first chapter in Celeste , and starts automatically after creating a save. It introduces the four basic techs within the game: walking, jumping, climbing, and dashing . Three gameplay entities are introduced in this chapter: an Intro Crusher (a block which falls on its own), a collapsing bridge , and the (in)famous intro car . Madeline , Granny , and the Bird are also introduced in this chapter.",
+ "berries": []
+}

@@ -1,0 +1,6 @@
+{
+  "name": "games-story-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона games-story (axe-core)",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

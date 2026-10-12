@@ -1,0 +1,17 @@
+{
+ "id": "src-2042208adc",
+ "url": "https://celeste.ink/wiki/Strawberries",
+ "fetched_at": "2026-10-12T21:51:09Z",
+ "page_sha256": "6c60a342335181e0632f2cbddc3ce77406d6e93df07dd6367d091bc093410246",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Collectables",
+ "paragraphs": [
+  "Celeste features many optional collectable items to give the player an additional challenge.",
+  "Red Strawberries, also known as Red Berries, are the main collectable of Celeste. They are found in every A-Side other than Reflection and Farewell . They serve no gameplay purpose other than as an optional challenge for the player, as mentioned in the Old Site postcard . However, they are required to get three achievements (requiring 30, 80, and 175 respectively) and change both the pie and the characters' reactions to it at the end of the Epilogue .",
+  "To get a 1-UP (an easter egg referencing Super Mario Bros.), you need to pick up six strawberries and collect them all at once. Before you collect all six of them, you must not touch ground tiles for more than 8 frames, jump, or dash from the ground. An achievement is associated with getting a 1-UP.",
+  "Strawberry Seeds are sometimes required to be collected for a Red Strawberry to spawn. If you touch the ground before gathering all seeds in a room, the ones collected will move to their original positions, and you will need to start over. The Red Strawberry will spawn once all Strawberry Seeds are collected."
+ ]
+}

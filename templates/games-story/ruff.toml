@@ -1,0 +1,12 @@
+# Настройки ruff только для шаблона games-story; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"saga/qa.py" = ["E501"]
+"saga/server.py" = ["E501"]
+"saga/site.py" = ["E501"]
+"saga/content.py" = ["E501"]
+"saga/sources.py" = ["E501"]
+"saga/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]
