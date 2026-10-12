@@ -144,3 +144,10 @@ def test_no_cross_template_code():
             and p.name != "test_food_weekly.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_day_abbreviations_are_correct(app):
+    _, html, _ = get(app, "/menyu/")
+    for bad in ("<span>Че</span>", "<span>Пя</span>", "<span>Су</span>", "<span>Во</span>"):
+        assert bad not in html
+    assert "<span>Чт</span>" in html and "<span>Вс</span>" in html
