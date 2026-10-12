@@ -293,6 +293,16 @@
       "expected": "шаблоны Архитектора в дереве службы → переустановка исполнителя → site-checks-drift.py: 0 расхождений с установленной копией → f198891 в 1lordserials1-online → решение о deploy_request для остальных ячеек",
       "check": "automation/local/site-checks-drift.py; checks/deploy_request.py у 1lordserials1-online",
       "owner_action": "1) Архитектор: внести шесть файлов шаблонов в дерево службы (его зона — шаблоны проверок). 2) Владелец (root): `sudo bash automation/host/install-cell-executor.sh --dry-run`, затем без флага (заодно закрывает остаток B012)."
+    },
+    {
+      "id": "B014",
+      "site": "animedia.space, animedia.icu",
+      "repo": "var/site-repos/animedia-space",
+      "problem": "tests/unit/test_qwen_indexing_operation.py::test_в_рантайме_не_осталось_буквального_запрета_страниц красный на обеих Animedia (полный прогон 12.10): тест (c5c5f5b, 05.10) признаёт вычисляемой мету robots только с «мета_роботов(», а блок лишних ключей, поставленный инструментом automation/host/apply-unknown-keys-noindex.py (450171d), вычисляет её через _закрытые_роботы(). Поведение витрины верно: блок срабатывает только на странице без noindex и всегда отдаёт noindex — закрытый сайт он открыть не может. Попытка SEO перевести блок на мета_роботов() отвергнута проверками витрины (query-keys исполняет блок изолированно — NameError; pins разошлись) и откачена без коммита.",
+      "expected": "тест и инструмент согласованы; tests/unit/test_qwen_indexing_operation.py зелёный",
+      "check": "python3 -m pytest -q tests/unit/test_qwen_indexing_operation.py",
+      "status": "blocked",
+      "owner_action": "Архитектор (тест и инструмент — его): решить, признаёт ли тест _закрытые_роботы(...) вычисляемым значением, или инструмент меняет форму вызова. Ослабление проверки SEO сам не делает."
     }
   ]
 }
