@@ -11,15 +11,17 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8850"
+BASE = "http://127.0.0.1:8866"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 RECIPE = "/recept/plov-v-multivarke/"
+CONSOLE = "/recept/zharkoe-v-multivarke/"  # шаг 2: «Выпечка» 15 минут по источнику
 SHOTS = {
     "home": "/",
     "appliance": "/pribor/multivarka/",
     "category": "/pribor/aerogril/kurica/",
     "recipe": RECIPE,
+    "recipe_console": CONSOLE,
     "mode": "/rezhim/multivarka-vypechka/",
     "guide": "/kak-chitat-rezhimy/",
 }
@@ -81,28 +83,61 @@ def run(shots: Path | None) -> dict:
             ctx.close()
         ctx = br.new_context(viewport=VIEW["mobile"], locale="ru-RU")
         pg = ctx.new_page()
-        pg.goto(BASE + RECIPE)
-        link = pg.locator(".display__val a").first
-        target = link.get_attribute("href")
-        link.click()
-        S["display_link_targets_step"] = pg.evaluate("location.hash") == target and pg.locator(target).count() == 1
+        pg.goto(BASE + "/")
+        pg.keyboard.press("Tab")
+        S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        with pg.expect_navigation():
+            pg.locator(".dev", has_text="Аэрогриль").click()
+        S["device_opens_own_table"] = pg.url.endswith("/pribor/aerogril/") and all(
+            t == "Аэрогриль" for t in pg.locator(".cmp td[data-label='Прибор']").all_inner_texts()
+        )
+        with pg.expect_navigation():
+            pg.locator(".cmp tbody th a").first.click()
+        S["table_row_opens_recipe"] = "/recept/" in pg.url
+        pg.goto(BASE + CONSOLE)
+        step2 = pg.locator("#shag-2")
+        S["setting_chip_in_source_step"] = "«Выпечка»" in step2.locator(".set").inner_text()
+        step2.locator(".timer").click()
+        pg.wait_for_timeout(1300)
+        S["timer_counts_down_15"] = step2.locator(".timer").inner_text().startswith("Осталось 14:")
+        step2.locator(".timer").click()
+        S["timer_stops"] = step2.locator(".timer").inner_text() == "Таймер 15 мин"
+        marks = pg.locator("[data-step-done]")
+        marks.nth(0).check()
+        marks.nth(1).check()
+        S["progress_counts"] = pg.locator("[data-progress]").inner_text().startswith("Сделано шагов: 2 из ")
+        pg.reload()
+        S["marks_persist_after_reload"] = marks.nth(0).is_checked() and marks.nth(1).is_checked()
+        S["storage_keys_own_namespace"] = pg.evaluate("Object.keys(localStorage)") == [
+            "fab.steps." + CONSOLE.strip("/").split("/")[-1]
+        ]
+        pg.click("[data-steps-reset]")
+        S["reset_clears"] = not marks.nth(0).is_checked()
         pg.goto(BASE + "/")
         pg.fill("#fq", "тушение")
         with pg.expect_navigation():
             pg.press("#fq", "Enter")
-        S["search_by_mode_results"] = pg.locator("main a[href^='/recept/']").count()
-        pg.goto(BASE + "/")
-        pg.keyboard.press("Tab")
-        S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        S["search_by_mode_results"] = pg.locator("main a[href^='/recept/']").count() > 0
+        with pg.expect_navigation():
+            pg.locator(".devices a", has_text="Режимы").click()
+        S["modes_nav_opens_guide"] = pg.url.endswith("/kak-chitat-rezhimy/") and pg.locator("h1").count() == 1
+        resp = pg.goto(BASE + "/nesushchestvuet/")
+        S["real_404"] = resp.status == 404
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
         pg.goto(BASE + RECIPE)
-        S["nojs_recipe_steps"] = pg.locator("li[id^='shag-']").count()
+        S["nojs_steps_and_settings"] = (
+            pg.locator("li[id^='shag-']").count() > 0 and pg.locator(".set__chip").count() > 0
+        )
+        S["nojs_timers_and_marks_hidden"] = (
+            pg.locator(".timer").first.is_hidden() and pg.locator(".done").first.is_hidden()
+        )
         pg.goto(BASE + "/poisk/?q=" + "аэрогриль")
-        S["nojs_search_results"] = pg.locator("main a[href^='/recept/']").count()
+        S["nojs_search_results"] = pg.locator("main a[href^='/recept/']").count() > 0
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

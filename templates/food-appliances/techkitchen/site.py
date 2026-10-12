@@ -136,6 +136,29 @@ class Recipe:
         return list(dict.fromkeys(m["name"].capitalize() for m in self.modes))
 
     @property
+    def step_settings(self) -> dict[int, list[dict]]:
+        """Номер шага (с 1) → настройки прибора, которые источник называет в этом шаге: режим, температура, время."""
+        out: dict[int, list[dict]] = {}
+        for m in self.modes:
+            out.setdefault(m["step"], []).append({"kind": "mode", "label": "Режим", "value": f"«{m['name']}»"})
+        for t in self.temperatures:
+            out.setdefault(t["step"], []).append(
+                {"kind": "temp", "label": "Температура", "value": f"{t['value_c']} °C"}
+            )
+        for t in self.appliance_times:
+            v = f"{t['min']}–{t['max']} мин" if t["max"] else f"{t['min']} мин"
+            out.setdefault(t["step"], []).append({"kind": "time", "label": "Время", "value": v, "minutes": t["min"]})
+        return out
+
+    @property
+    def time_label(self) -> str:
+        return (
+            ", ".join(f"{t['min']}–{t['max']}" if t["max"] else str(t["min"]) for t in self.appliance_times) + " мин"
+            if self.appliance_times
+            else ""
+        )
+
+    @property
     def search_text(self) -> str:
         return norm(
             " ".join([self.title, self.appliance_label] + [i["name"] for i in self.ingredients] + self.mode_names)

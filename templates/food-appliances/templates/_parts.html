@@ -3,3 +3,11 @@
 {% for r in items %}<li class="tile tile--{{ r.appliance }}"><a href="{{ r.url }}"><span class="tile__dev">{{ r.appliance_label }}</span><{{ h }} class="tile__title">{{ r.title }}</{{ h }}><span class="tile__params">{% if r.temperatures %}<b>{{ r.temperatures[0].value_c }}°</b>{% endif %}{% for m in r.mode_names[:2] %}<b>{{ m }}</b>{% endfor %}{% if r.appliance_times %}<b>{{ r.appliance_times[-1]['min'] }}{% if r.appliance_times[-1]['max'] %}–{{ r.appliance_times[-1]['max'] }}{% endif %} мин</b>{% endif %}</span></a></li>{% endfor %}
 </ul>
 {%- endmacro %}
+
+{% macro table(items, h=False) -%}
+<div class="tablewrap"><table class="cmp">
+<thead><tr><th scope="col">Рецепт</th><th scope="col">Прибор</th><th scope="col">Режимы</th><th scope="col" class="num">°C</th><th scope="col">В приборе</th><th scope="col" class="num">Порций</th></tr></thead>
+<tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a></th><td data-label="Прибор">{{ r.appliance_label }}</td><td data-label="Режимы">{{ r.mode_names|join(', ') or '—' }}</td><td class="num" data-label="°C">{{ r.temperatures|map(attribute='value_c')|unique|join(', ') or '—' }}</td><td data-label="В приборе">{{ r.time_label or '—' }}</td><td class="num" data-label="Порций">{{ r.servings }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="note">«—» — источник значение не называет. Параметры — для прибора из рецепта-источника; для другой модели сверьтесь с инструкцией производителя.</p>
+{%- endmacro %}

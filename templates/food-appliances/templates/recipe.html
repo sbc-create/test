@@ -1,23 +1,22 @@
 {% extends "base.html" %}
 {% block main %}
-<article class="rec">
+<article class="rec" data-recipe="{{ r.slug }}">
   <p class="kicker"><a href="/pribor/{{ r.appliance }}/">{{ r.appliance_label }}</a></p>
   <h1>{{ r.title }}</h1>
   <p class="lead">{{ r.intro }}</p>
-  <section class="display" aria-labelledby="disp-h">
-    <h2 id="disp-h" class="sr">Параметры прибора</h2>
-    <div class="display__cell"><span class="display__label">Прибор</span><span class="display__val">{{ r.appliance_label }}</span></div>
-    <div class="display__cell"><span class="display__label">Режим</span><span class="display__val">{% if r.modes %}{% for m in r.modes %}<a href="#shag-{{ m.step }}">«{{ m.name }}»</a>{% if not loop.last %} → {% endif %}{% endfor %}{% else %}не назван{% endif %}</span></div>
-    <div class="display__cell"><span class="display__label">Температура</span><span class="display__val">{% if r.temperatures %}{% for t in r.temperatures %}<a href="#shag-{{ t.step }}">{{ t.value_c }}°</a>{% if not loop.last %}, {% endif %}{% endfor %}{% else %}не указана{% endif %}</span></div>
-    <div class="display__cell"><span class="display__label">Время в приборе</span><span class="display__val">{% for t in r.appliance_times %}<a href="#shag-{{ t.step }}">{{ t['min'] }}{% if t['max'] %}–{{ t['max'] }}{% endif %} мин</a>{% if not loop.last %}, {% endif %}{% endfor %}</span></div>
-    <p class="display__note">По данным источника этого рецепта, ссылка ведёт на шаг. Для другой модели прибора проверьте инструкцию производителя — параметры не переносятся автоматически.</p>
+  <p class="summary">{{ r.appliance_label }}{% if r.mode_names %} · режимы: {{ r.mode_names|join(' → ') }}{% endif %}{% if r.time_label %} · в приборе {{ r.time_label }}{% endif %} · {{ r.servings }} порц.</p>
+  <section aria-labelledby="ing-h"><h2 id="ing-h">Продукты</h2>
+    <ul class="ing">{% for i in r.ingredients %}<li><span>{{ i.name }}</span><b>{{ i.amount }}</b></li>{% endfor %}</ul></section>
+  <section aria-labelledby="st-h"><h2 id="st-h">Шаги с настройками прибора</h2>
+    <p class="progress" data-progress aria-live="polite"></p>
+    <ol class="pult" data-steps="{{ r.slug }}">{% for s in r.steps %}{% set n = loop.index %}{% set sets = r.step_settings.get(n, []) %}
+      <li id="shag-{{ n }}" class="{% if sets %}has-set{% endif %}"><label class="done" hidden><input type="checkbox" data-step-done="{{ n }}"><span class="sr">Шаг {{ n }} сделан</span></label>
+        <div>{% if sets %}<p class="set">{% for x in sets %}<span class="set__chip set__chip--{{ x.kind }}"><small>{{ x.label }}</small> {{ x.value }}</span>{% endfor %}</p>{% endif %}
+          <p>{{ s.text }}</p>{% if s.get('cue') %}<p class="cue">Признак готовности: {{ s.cue|lower }}</p>{% endif %}
+          {% for x in sets if x.kind == 'time' %}<button type="button" class="timer" data-minutes="{{ x.minutes }}" hidden>Таймер {{ x.minutes }} мин</button>{% endfor %}</div></li>{% endfor %}</ol>
+    <p><button type="button" class="reset-btn" data-steps-reset hidden>Снять отметки</button></p>
+    <p class="note">Настройки — из шага рецепта-источника. Для другой модели прибора проверьте инструкцию производителя: параметры не переносятся автоматически.</p>
   </section>
-  <div class="rec__cols">
-    <section aria-labelledby="ing-h"><h2 id="ing-h">Продукты · {{ r.servings }} порц.</h2>
-      <ul class="ing">{% for i in r.ingredients %}<li><span>{{ i.name }}</span><b>{{ i.amount }}</b></li>{% endfor %}</ul></section>
-    <section aria-labelledby="st-h"><h2 id="st-h">Шаги</h2>
-      <ol class="steps">{% for s in r.steps %}<li id="shag-{{ loop.index }}"><p>{{ s.text }}</p>{% if s.get('cue') %}<p class="cue">Признак готовности: {{ s.cue|lower }}</p>{% endif %}</li>{% endfor %}</ol></section>
-  </div>
   <p class="prov">Состав, количества, режимы, температура и время — из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener">{{ r.source.url.split('/')[2] }}</a>. Текст написан заново с помощью ИИ; редакция рецепт не проверяла и не готовила. Опубликовано {{ r.published_at }}, версия {{ r.version }}.</p>
 </article>
 {% endblock %}

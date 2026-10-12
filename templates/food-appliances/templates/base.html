@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{{ meta.title }}{% if meta.kind != 'home' %} · Готовим в технике{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 <meta name="robots" content="{{ robots }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 <meta property="og:url" content="{{ meta.canonical }}">
@@ -13,9 +15,10 @@
 <meta property="og:description" content="{{ meta.description }}">
 <meta name="theme-color" content="#1c1f24">
 <link rel="icon" href="{{ asset('img/dial.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/panel.css') }}">
+<link rel="stylesheet" href="{{ asset('css/console.css') }}">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x | tojson }}</script>
 {% endfor %}
+<script src="{{ asset('js/console.js') }}" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>

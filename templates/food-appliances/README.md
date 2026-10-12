@@ -1,4 +1,7 @@
-# food-appliances — «Готовим в технике»
+# food-appliances — «Готовим в технике», вариант B `step-console`
+
+Вариант B: таблица сравнения рецептов, настройки прибора прямо в шагах, таймеры и отметки (ключи `fab.*`).
+Порт 8866. Вариант A — ветка `claude/template-food-appliances`.
 
 Рецепты для мультиварки и аэрогриля. Сверху рецепта — табло прибора: режим, температура и
 время, каждое значение ведёт к своему шагу. Собственный дизайн «панель прибора»: графит,
@@ -7,7 +10,7 @@
 ## Команды (из `templates/food-appliances`)
 
 ```bash
-bin/food-appliances start | stop | status   # preview http://127.0.0.1:8850/ (только loopback, noindex)
+bin/food-appliances start | stop | status   # preview http://127.0.0.1:8866/ (только loopback, noindex)
 bin/food-appliances test                    # pytest шаблона
 bin/food-appliances qa --shots docs/screenshots/<sha> --out docs/verification-browser-qa.json
 bin/food-appliances build --commit HEAD     # статический артефакт в var/food-appliances/build/<sha>
