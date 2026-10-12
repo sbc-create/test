@@ -1,12 +1,19 @@
 {% extends "base.html" %}
 {% block main %}
 <section class="intro">
-  <h1>Меню на неделю — и список покупок, который считается сам</h1>
-  <p>Выберите план на семь дней. Любое блюдо можно заменить, а список покупок пересчитается по рецептам и числу людей.</p>
+  <h1>Неделя еды: выберите план и купите всё за две поездки</h1>
+  <p class="lead">Сравните планы по числу блюд и продуктов. Неделя открывается списком по дням, а покупки делятся на две закупки: понедельник — среда и четверг — воскресенье.</p>
 </section>
 <section aria-labelledby="h-plans"><h2 id="h-plans">Планы</h2>
-<div class="plans">{% for p in app.plans.values() %}{% include "_plancard.html" %}{% endfor %}</div></section>
-<section class="steps3" aria-labelledby="h-how"><h2 id="h-how">Как это работает</h2>
-<ol><li><b>Выберите неделю</b> — на двоих, на семью или сезонную.</li><li><b>Замените блюда</b>, которые не подходят: только на блюда того же приёма пищи.</li><li><b>Откройте список покупок</b> — продукты сложены по единицам, ничего не пересчитано «на глаз».</li></ol>
-<p><a href="/kak-planirovat/">Подробнее о планировании →</a></p></section>
+<div class="tablewrap"><table class="plans-t">
+<thead><tr><th scope="col">План</th><th scope="col" class="num">Людей</th><th scope="col" class="num">Разных блюд</th><th scope="col" class="num">Продуктов</th><th scope="col" class="num">Блюд до 30 мин</th><th scope="col" class="num">Самое долгое</th></tr></thead>
+<tbody>{% for p in app.plans.values() %}{% set s = app.summary(p.slug) %}<tr>
+<th scope="row"><a href="/menyu/{{ p.slug }}/">{{ p.title }}</a><span class="sub"><a href="/menyu/{{ p.slug }}/pokupki/">покупки</a></span></th>
+<td class="num" data-label="Людей">{{ p.people }}</td><td class="num" data-label="Разных блюд">{{ s.dishes }}</td><td class="num" data-label="Продуктов">{{ s.products }}</td>
+<td class="num" data-label="Блюд до 30 мин">{{ s.quick }} из {{ s.timed }}</td><td class="num" data-label="Самое долгое">{{ s.longest ~ ' мин' if s.longest else '—' }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="note">Время — из рецептов-источников; у блюд без указанного времени оно не учитывается. Продукты — строки списка покупок (одинаковые продукты в разных единицах — разные строки).</p></section>
+<section aria-labelledby="h-how"><h2 id="h-how">Как пользоваться</h2>
+<ol class="how"><li>Откройте план — дни идут списком, сегодняшний можно найти по названию дня.</li><li>Замените блюдо, если не подходит: только на блюдо того же приёма пищи.</li><li>Купите продукты в две поездки и отмечайте купленное — отметки сохраняются в браузере.</li></ol>
+<p><a href="/kak-planirovat/">Подробнее о планировании</a></p></section>
 {% endblock %}

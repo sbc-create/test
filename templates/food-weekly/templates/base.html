@@ -6,17 +6,19 @@
 <title>{{ meta.title }}{% if meta.kind != 'home' %} — Меню на неделю{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ robots }}">
+<meta name="site-factory-variant-id" content="{{ app.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ app.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 <meta property="og:url" content="{{ meta.canonical }}">
 {% endif %}
 <meta property="og:title" content="{{ meta.title }}">
 <meta property="og:description" content="{{ meta.description }}">
-<meta name="theme-color" content="#1f2a44">
+<meta name="theme-color" content="#f6f1fb">
 <link rel="icon" href="{{ asset('img/grid.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/planner.css') }}">
+<link rel="stylesheet" href="{{ asset('css/agenda.css') }}">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x | tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/planner.js') }}" defer></script>
+<script src="{{ asset('js/agenda.js') }}" defer></script>
 </head>
 <body>
 <a class="skip" href="#main">К содержимому</a>

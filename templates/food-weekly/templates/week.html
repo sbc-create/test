@@ -3,20 +3,17 @@
 <header class="weekhead">
   <h1>{{ plan.title }}</h1>
   <p class="lead">{{ plan.description }} На {{ plan.people }} чел.</p>
-  <p class="actions"><a class="btn" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}">Список покупок{% if swaps %} (с заменами){% endif %}</a>{% if swaps %} <a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/">Сбросить замены ({{ swaps|length }})</a>{% endif %}</p>
+  <nav class="trips" aria-label="Покупки"><a class="btn" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}#zakupka-1">Закупка 1: пн–ср</a><a class="btn" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}#zakupka-2">Закупка 2: чт–вс</a>{% if swaps %}<a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/">Сбросить замены ({{ swaps|length }})</a>{% endif %}</nav>
   {% for n in notes %}<p class="warn">{{ n }}</p>{% endfor %}
 </header>
-<div class="week" role="table" aria-label="План на неделю">
-  <div class="week__row week__row--head" role="row"><span role="columnheader">День</span>{% for m, label in MEALS.items() %}<span role="columnheader">{{ label }}</span>{% endfor %}</div>
-  {% for day in days %}{% set n = loop.index %}
-  <div class="week__row" role="row">
-    <span class="week__day" role="rowheader"><a href="/menyu/{{ plan.slug }}/den-{{ n }}/{{ qs }}">{{ DAYS[n-1] }}</a></span>
-    {% for m, label in MEALS.items() %}
-    <div class="slot slot--{{ m }}" role="cell"><span class="slot__label">{{ label }}</span>
-      {% for d in day[m] %}
-      <div class="dish{% if d.swapped %} dish--swapped{% endif %}">
-        <a href="{{ app.recipe_url(d.site, d.item) }}">{{ d.item.title }}</a>
-        <span class="dish__meta">{% if d.item.total_minutes %}{{ d.item.total_minutes }} мин · {% endif %}рецепт на {{ d.item.servings }} порц.{% if d.swapped %} · заменено{% endif %}</span>
+<nav class="weeknav" aria-label="Дни">{% for day in days %}<a href="#den-{{ loop.index }}" aria-label="{{ DAYS[loop.index0] }}">{{ ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'][loop.index0] }}</a>{% endfor %}</nav>
+<ol class="agenda">
+{% for day in days %}{% set n = loop.index %}
+  <li class="agenda__day" id="den-{{ n }}">
+    <h2><a href="/menyu/{{ plan.slug }}/den-{{ n }}/{{ qs }}">{{ DAYS[n-1] }}</a>{% if n == 1 or n == 4 %} <span class="trip-mark">закупка {{ 1 if n == 1 else 2 }}</span>{% endif %}</h2>
+    <dl class="meals">{% for m, label in MEALS.items() %}<div class="meal"><dt>{{ label }}</dt>
+      {% for d in day[m] %}<dd class="{% if d.swapped %}swapped{% endif %}"><a href="{{ app.recipe_url(d.site, d.item) }}">{{ d.item.title }}</a>
+        <span class="meta">{% if d.item.total_minutes %}{{ d.item.total_minutes }} мин · {% endif %}рецепт на {{ d.item.servings }} порц.{% if d.swapped %} · заменено{% endif %}</span>
         <details class="swap"><summary>Заменить</summary>
           <form method="get" action="/menyu/{{ plan.slug }}/">
             {% if swaps %}<input type="hidden" name="zamena" value="{{ zcur }}">{% endif %}
@@ -24,13 +21,9 @@
             <select id="s-{{ d.key }}" name="s">{% for a in alts[m] %}<option value="{{ d.key }}:{{ a.slug }}"{% if a.slug == d.slug %} selected{% endif %}>{{ a.title }}</option>{% endfor %}</select>
             <button type="submit">Заменить</button>
           </form>
-        </details>
-      </div>
-      {% endfor %}
-    </div>
-    {% endfor %}
-  </div>
-  {% endfor %}
-</div>
+        </details></dd>{% endfor %}</div>{% endfor %}</dl>
+  </li>
+{% endfor %}
+</ol>
 <p class="note">Замена хранится в адресе страницы: им можно поделиться. Такие страницы не индексируются.</p>
 {% endblock %}
