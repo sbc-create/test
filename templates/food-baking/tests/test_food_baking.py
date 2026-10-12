@@ -90,7 +90,7 @@ def test_recipe_jsonld_matches_visible(app):
     for r in app.site.recipes:
         _, html, _ = get(app, r.url)
         rec = next(x for x in ld(html) if x["@type"] == "Recipe")
-        assert len(rec["recipeIngredient"]) == html.count('<li><label><input type="checkbox">')
+        assert len(rec["recipeIngredient"]) == html.count("data-weigh=")  # вариант B: строки таблицы «Отвесить»
         assert len(rec["recipeInstructions"]) == len(re.findall(r'<li id="shag-\d+"', html))
         for k in ("image", "aggregateRating", "author", "nutrition", "video", "review"):
             assert k not in rec

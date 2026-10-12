@@ -145,6 +145,36 @@ class Recipe:
         return out
 
     @property
+    def flour_g(self) -> float | None:
+        """Масса муки в граммах по составу источника (все виды муки в г/кг); None — если муки в граммах нет."""
+        g = sum(
+            i["quantity"] * (1000 if i["unit"] == "kg" else 1)
+            for i in self.raw["ingredients"]
+            if re.search(r"мук", i["name"], re.I) and i["unit"] in ("g", "kg") and i["quantity"]
+        )
+        return g or None
+
+    @property
+    def bench(self) -> list[dict]:
+        """Строки рабочего листа: продукт, количество и пекарский процент (доля от массы муки) —
+        только для продуктов в граммах; остальное без процента."""
+        fl = self.flour_g
+        out = []
+        for raw, i in zip(self.raw["ingredients"], self.ingredients, strict=True):
+            pct = None
+            if fl and raw["unit"] in ("g", "kg") and raw["quantity"]:
+                pct = round(raw["quantity"] * (1000 if raw["unit"] == "kg" else 1) / fl * 100)
+            out.append({**i, "pct": pct})
+        return out
+
+    @property
+    def bake_label(self) -> str | None:
+        t = self.oven["bake_times"]
+        if not t:
+            return None
+        return ", ".join(f"{x['min']}–{x['max']} мин" if x.get("max") else f"{x['min']} мин" for x in t)
+
+    @property
     def search_text(self) -> str:
         return norm(
             " ".join([self.title] + [i["name"] for i in self.ingredients] + [TAGS.get(t, t) for t in self.tags])
@@ -208,6 +238,23 @@ class Site:
             for r in self.recipes
             if words and all(w in r.search_text or (len(w) > 5 and w[:-2] in r.search_text) for w in words)
         ]
+
+    def by_temp(self) -> list[tuple[int | None, list[Recipe]]]:
+        """Рецепты по главной (первой по убыванию) температуре духовки; без духовки — в конце (None)."""
+        groups: dict = {}
+        for r in self.recipes:
+            groups.setdefault(r.temps[0] if r.temps else None, []).append(r)
+        return sorted(groups.items(), key=lambda kv: (kv[0] is None, -(kv[0] or 0)))
+
+    def sorted_by(self, items: list[Recipe], key: str) -> list[Recipe]:
+        if key == "temp":
+            return sorted(items, key=lambda r: (not r.temps, -(r.temps[0] if r.temps else 0), r.title))
+        if key == "vremya":
+            t = lambda r: r.times["total_minutes"]  # noqa: E731
+            return sorted(items, key=lambda r: (t(r) is None, t(r) or 0, r.title))
+        if key == "nazvanie":
+            return sorted(items, key=lambda r: r.title)
+        return items
 
     def filter(self, dough: str = "", oven: str = "") -> list[Recipe]:
         items = self.recipes

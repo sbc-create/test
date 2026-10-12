@@ -1,45 +1,43 @@
 {% extends "base.html" %}
 {% block main %}
-<article class="spread" data-recipe="{{ r.slug }}">
-  <header class="spread__head">
+<article class="sheet-b" data-recipe="{{ r.slug }}">
+  <header>
     <p class="kicker">{{ r.group_label }}{% if r.dough_label %} · {% if r.dough in site.doughs() %}<a href="/testo/{{ r.dough }}/">{{ r.dough_label|lower }}</a>{% else %}{{ r.dough_label|lower }}{% endif %}{% endif %}</p>
     <h1>{{ r.title }}</h1>
     <p class="lead">{{ r.intro }}</p>
-    {% set links = site.tag_links(r) %}{% if links %}<ul class="tags tags--inline" aria-label="Темы">{% for h, l in links %}<li><a href="{{ h }}">{{ l }}</a></li>{% endfor %}</ul>{% endif %}
   </header>
-  <div class="spread__pages">
-    <aside class="left-page" aria-label="Подготовка">
-      <section class="oven" aria-labelledby="oven-h">
-        <h2 id="oven-h">Духовка и форма</h2>
-        <dl>
-          <dt>Температура</dt><dd>{% if r.temps %}{{ r.temps | join(' → ') }} °C{% else %}без духовки{% endif %}</dd>
-          <dt>Выпекание</dt><dd>{% if r.timers %}{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">(шаг {{ t.step }})</a>{% if not loop.last %}, {% endif %}{% endfor %}{% else %}источник не указывает отдельно{% endif %}</dd>
-          <dt>Форма</dt><dd>{{ r.form or 'источник не называет' }}</dd>
-          <dt>Всего</dt><dd>{{ r.total or '—' }}</dd>
-          <dt>Выход</dt><dd>{{ r.servings }} порц.</dd>
-        </dl>
-        <p class="note">Значения взяты из рецепта-источника. Рецепт не масштабируется: для другой формы и количества нет проверенного пересчёта.</p>
-        {% if r.timers %}<div class="timers" data-timers hidden>{% for t in r.timers %}<button type="button" class="timer" data-minutes="{{ t.minutes }}" aria-live="polite">Таймер {{ t.minutes }} мин</button>{% endfor %}</div>{% endif %}
-      </section>
-      <section class="scale" aria-labelledby="ing-h">
-        <h2 id="ing-h">Продукты</h2>
-        <ul class="weigh">
-        {% for i in r.ingredients %}<li><label><input type="checkbox"> <span>{{ i.name }}</span></label><b{% if i.weighed %} class="w"{% endif %}>{{ i.amount }}</b></li>{% endfor %}
-        </ul>
-        <p class="note">Отмечайте продукты, когда они отвешены и стоят на столе.</p>
-      </section>
-    </aside>
-    <section class="right-page" aria-labelledby="method-h">
-      <h2 id="method-h">Ход работы</h2>
-      <ol class="method">
-      {% for s in r.steps %}{% set si = loop.index0 %}
-        <li id="shag-{{ loop.index }}"><p>{{ s.text }}</p>{% if s.cue %}<p class="cue">Готово, когда: {{ s.cue|lower }}</p>{% endif %}
-          {% for p in r.pitfalls if p.step_index == si %}<p class="pitfall"><b>Осторожно:</b> {{ p.text }}</p>{% endfor %}
-        </li>
-      {% endfor %}
-      </ol>
-    </section>
-  </div>
+  <section class="strip" aria-labelledby="oven-h">
+    <h2 id="oven-h" class="sr">Духовка и форма</h2>
+    <dl>
+      <div class="strip__t"><dt>Духовка</dt><dd>{% if r.temps %}{{ r.temps | join(' → ') }} °C{% else %}не нужна{% endif %}</dd></div>
+      <div><dt>В духовке</dt><dd>{% if r.timers %}{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг {{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}{% else %}не указано{% endif %}</dd></div>
+      <div><dt>Форма</dt><dd>{{ r.form or 'не указана' }}</dd></div>
+      <div><dt>Всего</dt><dd>{{ r.total or '—' }}</dd></div>
+    </dl>
+  </section>
+  <section aria-labelledby="ing-h">
+    <h2 id="ing-h">Отвесить</h2>
+    <div class="tablewrap"><table class="weigh-t">
+      <thead><tr><th scope="col">Продукт</th><th scope="col" class="num">Количество</th>{% if r.flour_g %}<th scope="col" class="num">% от муки</th>{% endif %}</tr></thead>
+      <tbody>{% for i in r.bench %}<tr><th scope="row"><label><input type="checkbox" data-weigh="{{ loop.index }}"> {{ i.name }}</label></th><td class="num">{{ i.amount }}</td>{% if r.flour_g %}<td class="num">{{ i.pct ~ ' %' if i.pct is not none else '—' }}</td>{% endif %}</tr>{% endfor %}</tbody>
+    </table></div>
+    <p class="note">{% if r.flour_g %}Пекарский процент — масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %), считается только по граммам источника; штуки и ложки без процента. {% endif %}Рецепт не масштабируется: для другой формы нет проверенного пересчёта.</p>
+  </section>
+  <section aria-labelledby="method-h">
+    <h2 id="method-h">Ход работы</h2>
+    <p class="progress" data-progress aria-live="polite"></p>
+    <ol class="method-b" data-steps="{{ r.slug }}">
+    {% for s in r.steps %}{% set si = loop.index0 %}{% set n = loop.index %}
+      <li id="shag-{{ n }}"><label class="done" hidden><input type="checkbox" data-step-done="{{ n }}"><span class="sr">Шаг {{ n }} сделан</span></label>
+        <div><p>{{ s.text }}</p>{% if s.cue %}<p class="cue">Готово, когда: {{ s.cue|lower }}</p>{% endif %}
+        {% for p in r.pitfalls if p.step_index == si %}<p class="pitfall"><b>Осторожно:</b> {{ p.text }}</p>{% endfor %}
+        {% for t in r.timers if t.step == n %}<button type="button" class="timer" data-minutes="{{ t.minutes }}" hidden>Таймер {{ t.minutes }} мин</button>{% endfor %}</div>
+      </li>
+    {% endfor %}
+    </ol>
+    <p><button type="button" class="reset-btn" data-steps-reset hidden>Снять отметки</button></p>
+  </section>
+  {% set links = site.tag_links(r) %}{% if links %}<ul class="chips chips--light" aria-label="Темы">{% for h, l in links %}<li><a href="{{ h }}">{{ l }}</a></li>{% endfor %}</ul>{% endif %}
   <footer class="provenance">
     <p>Состав, количества, температура и время — из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener">{{ r.source.url.split('/')[2] }}</a>. Текст шагов написан заново с помощью ИИ.</p>
     <p>Редакция ещё не проверила текст и не пекла это блюдо. Фото нет. Опубликовано {{ r.published_at }}, версия {{ r.version }}.</p>

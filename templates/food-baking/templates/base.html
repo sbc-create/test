@@ -6,6 +6,8 @@
 <title>{{ meta.title }}{% if meta.kind != 'home' %} · Тесто и десерты{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ meta.robots(site) }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 {% endif %}{% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
 {% endif %}{% if meta.next %}<link rel="next" href="{{ meta.next }}">
@@ -15,12 +17,12 @@
 <meta property="og:type" content="{{ 'article' if meta.kind == 'recipe' else 'website' }}">
 {% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
 {% endif %}
-<meta name="theme-color" content="#f3ece0">
+<meta name="theme-color" content="#1e2328">
 <link rel="icon" href="{{ asset('img/whisk.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/book.css') }}">
+<link rel="stylesheet" href="{{ asset('css/bench.css') }}">
 {% for ld in meta.ld_json() %}<script type="application/ld+json">{{ ld | safe }}</script>
 {% endfor %}
-<script src="{{ asset('js/book.js') }}" defer></script>
+<script src="{{ asset('js/bench.js') }}" defer></script>
 </head>
 <body class="k-{{ meta.kind }}">
 <a class="skip" href="#text">К тексту</a>
@@ -30,7 +32,7 @@
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
   </div>
   <nav class="toc-nav" aria-label="Разделы книги">
-    <a href="/recepty/">Оглавление</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
+    <a href="/#po-temperature">По температуре</a><a href="/recepty/">Таблица рецептов</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
   </nav>
 </header>
 {% if meta.crumbs|length > 1 %}

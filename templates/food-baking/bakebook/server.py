@@ -24,7 +24,9 @@ from .site import GROUPS, TAGS, Recipe, Site
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = ROOT / "static"
 EDITOR_SECRET = Path(
-    os.environ.get("FOOD_BAKING_EDITOR_SECRET", str(Path.home() / ".config" / "food-baking-preview" / "editor.json"))
+    os.environ.get(
+        "FOOD_BAKING_B_EDITOR_SECRET", str(Path.home() / ".config" / "food-baking-b-preview" / "editor.json")
+    )
 )
 HEADERS = {
     "X-Content-Type-Options": "nosniff",
@@ -170,8 +172,9 @@ class App:
         if m:
             n = int(m.group(1) or 1)
             flt = {"dough": g("testo"), "oven": g("duhovka")}
-            filtered = any(flt.values())
-            items = s.filter(**flt) if filtered else s.recipes
+            sort = g("sort") if g("sort") in ("temp", "vremya", "nazvanie") else ""
+            filtered = any(flt.values()) or bool(sort)
+            items = s.sorted_by(s.filter(**flt) if any(flt.values()) else s.recipes, sort)
             chunk, pages = s.page(items, n)
             if n > pages or (m.group(1) and n == 1):
                 return self.not_found()
@@ -189,7 +192,15 @@ class App:
             return (
                 200,
                 self.render(
-                    "catalog.html", meta, items=chunk, n=n, pages=pages, flt=flt, filtered=filtered, total=len(items)
+                    "catalog.html",
+                    meta,
+                    items=chunk,
+                    n=n,
+                    pages=pages,
+                    flt=flt,
+                    sort=sort,
+                    filtered=filtered,
+                    total=len(items),
                 ),
                 {},
             )

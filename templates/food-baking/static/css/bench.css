@@ -1,9 +1,9 @@
-/* food-baking — «Тесто и десерты»: книга рецептов. Собственная система,
-   не связана ни с одним другим шаблоном сети. */
+/* food-baking, вариант B oven-bench — «Тесто и десерты»: рабочий стол пекаря.
+   Графит, нержавейка, оранжевый «жар духовки», гротеск и моноширинные числа. Только этот вариант. */
 :root {
-  --flour: #f3ece0; --page: #fffbf3; --rule: #e7dcc8; --ink: #2b1d1a; --ink-2: #5a4640; --muted: #6e5a52;
-  --wine: #5b2333; --wine-2: #7a2f45; --butter: #f3d9a4; --butter-2: #e8bf6a; --sage: #4c5f3e;
-  --serif: "Bodoni Moda", "Didot", "Bodoni 72", "PT Serif", Georgia, "Times New Roman", serif;
+  --flour: #eceef0; --page: #ffffff; --rule: #d3d8dd; --ink: #1b1f24; --ink-2: #3c444d; --muted: #4f5862;
+  --wine: #1e2328; --wine-2: #a3410c; --butter: #ffd7b0; --butter-2: #f08a3c; --sage: #2f5d4a;
+  --serif: "Avenir Next", "Segoe UI", system-ui, sans-serif; --mono: ui-monospace, "JetBrains Mono", Menlo, monospace;
   --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
   color-scheme: light;
 }
@@ -43,12 +43,11 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 
 /* лист */
 .sheet { max-width: 1120px; margin: 16px auto 40px; padding: 28px clamp(16px, 4vw, 56px) 48px; background: var(--page);
-  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
-  box-shadow: 0 1px 0 #d8cbb4, 0 20px 40px -30px rgba(43, 29, 26, .5); border-left: 6px double var(--wine); }
-@media (max-width: 600px) { .sheet { margin: 0 0 24px; border-left-width: 3px; } }
+  border: 1px solid var(--rule); border-radius: 6px; }
+@media (max-width: 600px) { .sheet { margin: 0 0 24px; border-width: 0; border-radius: 0; } }
 .kicker { margin: 0; font: 700 .76rem/1.4 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--sage); }
 .kicker a { color: inherit; }
-.lead { font: italic 1.15rem/1.55 var(--serif); color: var(--ink-2); max-width: 44em; }
+.lead { font: 1.1rem/1.55 var(--sans); color: var(--ink-2); max-width: 44em; }
 .note { font-size: .86rem; color: var(--muted); }
 .more { margin-top: 18px; font-weight: 700; }
 .frontis { text-align: center; padding: 18px 0 8px; border-bottom: 1px solid var(--rule); margin-bottom: 18px; }
@@ -126,3 +125,52 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 .colophon nav { display: flex; gap: 16px; flex-wrap: wrap; }
 @media print { .spine, .crumbs, .colophon, .timers, .tags { display: none !important; } .sheet { box-shadow: none; border: 0; background: #fff; } .oven { background: #fff; color: #000; border: 1px solid #000; } .oven h2, .oven dt { color: #000; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---- вариант B: от духовки ---- */
+.bench-hero h1 { font-weight: 800; letter-spacing: -.02em; }
+.temp-jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 6px 0 18px; }
+.temp-jump a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 4px; background: var(--wine); color: #fff; text-decoration: none; font: 700 1rem var(--mono); }
+.temp-jump a small { color: var(--butter); font-weight: 400; }
+.temp { background: var(--page); border: 1px solid var(--rule); border-left: 8px solid var(--butter-2); border-radius: 4px; padding: 2px 16px 12px; margin: 0 0 14px; scroll-margin-top: 12px; }
+.temp__h { font: 700 1.1rem var(--sans); margin: 12px 0 6px; } .temp__h b { font: 800 1.6rem var(--mono); color: var(--wine-2); }
+.rows { list-style: none; padding: 0; margin: 0; }
+.rows li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 2px 12px; padding: 7px 0; border-top: 1px solid var(--rule); }
+.rows li:first-child { border-top: 0; }
+.rows a { display: inline-block; min-height: 24px; font-weight: 700; color: var(--ink); }
+.rows span { color: var(--muted); font-size: .92rem; }
+.chips { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 14px; border-radius: 4px; border: 2px solid var(--wine); color: var(--wine); text-decoration: none; font-weight: 700; }
+.chips--light a { border-color: var(--rule); color: var(--ink-2); font-weight: 600; background: var(--page); }
+.tablewrap { position: relative; overflow-x: auto; }
+.cmp, .weigh-t { width: 100%; border-collapse: collapse; background: var(--page); }
+.cmp th, .cmp td, .weigh-t th, .weigh-t td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.cmp thead th, .weigh-t thead th { background: var(--wine); color: #fff; font-size: .85rem; }
+.num { text-align: right !important; font-family: var(--mono); white-space: nowrap; }
+.cmp tbody th a { display: inline-block; min-height: 24px; font-weight: 700; color: var(--ink); }
+@media (max-width: 700px) {
+  .cmp thead { display: none; } .cmp tr { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+  .cmp th, .cmp td { border: 0; padding: 2px 10px; } .cmp tbody th { grid-column: 1 / -1; }
+  .cmp td { font-size: .9rem; text-align: left !important; } .cmp td::before { content: attr(data-label) ": "; color: var(--muted); font-family: var(--sans); }
+}
+.strip dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr)); gap: 10px; margin: 0 0 22px; }
+.strip dl > div { background: var(--page); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 12px; }
+.strip dt { font-size: .8rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.strip dd { margin: 2px 0 0; font-weight: 700; } .strip a { font-weight: 400; display: inline-block; min-height: 24px; }
+.strip__t { background: var(--wine) !important; border-color: var(--wine) !important; } .strip__t dt { color: var(--butter); } .strip__t dd { color: #fff; font: 800 1.35rem var(--mono); }
+.weigh-t label { display: inline-flex; gap: 10px; align-items: center; cursor: pointer; font-weight: 600; }
+.weigh-t input, .done input { width: 24px; height: 24px; margin: 0; accent-color: var(--wine-2); }
+.weigh-t tr:has(input:checked) th, .weigh-t tr:has(input:checked) td { color: var(--muted); text-decoration: line-through; }
+.method-b { list-style: none; padding: 0; counter-reset: s; display: grid; gap: 10px; }
+.method-b > li { counter-increment: s; display: grid; grid-template-columns: 44px 1fr; gap: 12px; background: var(--page); border: 1px solid var(--rule); border-radius: 4px; padding: 12px; scroll-margin-top: 12px; }
+.method-b > li::before { content: counter(s); grid-column: 1; grid-row: 1; width: 44px; height: 44px; display: grid; place-items: center; background: var(--wine); color: #fff; font: 800 1.1rem var(--mono); border-radius: 4px; }
+.method-b > li > div { grid-column: 2; } .method-b p { margin: 0 0 6px; }
+.done { grid-column: 1; grid-row: 1; width: 44px; height: 44px; display: grid; place-items: center; z-index: 1; cursor: pointer; }
+.done input { width: 44px; height: 44px; opacity: 0; cursor: pointer; }
+.method-b > li:has(.done input:checked)::before { content: "✓"; background: var(--sage); }
+.method-b > li:has(.done input:checked) > div > p:first-child { color: var(--muted); text-decoration: line-through; }
+.method-b > li:has(.done input:focus-visible)::before { outline: 3px solid var(--butter-2); outline-offset: 2px; }
+.progress { font-weight: 700; min-height: 1.4em; color: var(--sage); }
+.timer, .reset-btn { font: 700 .95rem var(--sans); min-height: 44px; padding: 0 16px; border-radius: 4px; border: 2px solid var(--wine-2); background: #fff; color: var(--wine-2); cursor: pointer; }
+.timer[data-running] { background: var(--wine-2); color: #fff; }
+.reset { display: inline-block; min-height: 24px; }
+@media print { .temp-jump, .done, .timer, .reset-btn, .filters { display: none !important; } }

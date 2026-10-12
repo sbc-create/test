@@ -14,19 +14,22 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8848"
+BASE = "http://127.0.0.1:8864"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 SHOTS = {
     "home": "/",
     "catalog": "/recepty/",
     "recipe": "/recept/keks-s-kabachkom-i-ananasom/",
+    "recipe_pct": "/recept/yablochnoe-myagkoe-pechene/",
     "dough": "/testo/zavarnoe/",
     "pitfalls": "/oshibki/zavarnoe/",
 }
 AXE_PAGES = [
     "/",
     "/recepty/",
+    "/recepty/?sort=temp",
+    "/recept/yablochnoe-myagkoe-pechene/",
     "/recepty/page/2/",
     "/recept/limonnyj-keks/",
     "/recept/pirozhnye-lebedi/",
@@ -91,37 +94,73 @@ def run(shots: Path | None) -> dict:
             ctx.close()
         ctx = br.new_context(viewport=VIEW["mobile"], locale="ru-RU")
         pg = ctx.new_page()
-        pg.goto(BASE + "/recept/keks-s-kabachkom-i-ananasom/")
-        pg.click(".timer")
-        pg.wait_for_timeout(1300)
-        S["timer_counts_down_from_source_80_min"] = pg.locator(".timer").first.inner_text()
-        pg.locator(".weigh input").first.check()
-        S["weigh_checkbox"] = pg.locator(".weigh input").first.is_checked()
-        S["oven_temp_text"] = pg.locator(".oven dd").first.inner_text()
-        pg.goto(BASE + "/recepty/")
-        with pg.expect_navigation():
-            pg.select_option("select[name=testo]", "zavarnoe")
-        S["filter_zavarnoe_rows"] = pg.locator(".toc__row").count()
-        pg.goto(BASE + "/recepty/?testo=zavarnoe&duhovka=net")
-        S["filter_empty"] = pg.locator(".empty h2").inner_text() if pg.locator(".empty h2").count() else None
-        pg.goto(BASE + "/poisk/?q=" + "  ЗАВАРНОЙ  ")
-        S["search_case_spaces"] = pg.locator(".toc__row").count()
-        pg.goto(BASE + "/poisk/?q=печенье")
-        S["search_pechene"] = pg.locator(".toc__row").count()
+        # главная: переход к температуре и в рецепт
         pg.goto(BASE + "/")
         pg.keyboard.press("Tab")
         S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        pg.locator(".temp-jump a", has_text="180").click()
+        S["temp_jump_anchor"] = pg.evaluate("location.hash") == "#t-180"
+        with pg.expect_navigation():
+            pg.locator("#t-180 .rows a").first.click()
+        S["temp_row_opens_recipe_at_180"] = pg.locator(".strip__t dd").inner_text().startswith("180")
+        # рабочий лист: таймер из источника, отметки сохраняются и сбрасываются
+        pg.goto(BASE + "/recept/keks-s-kabachkom-i-ananasom/")
+        pg.click(".timer")
+        pg.wait_for_timeout(1300)
+        S["timer_counts_down_from_source_80_min"] = pg.locator(".timer").first.inner_text().startswith("Осталось 79:")
+        pg.click(".timer")
+        S["timer_stops"] = pg.locator(".timer").first.inner_text() == "Таймер 80 мин"
+        pg.locator("[data-weigh]").first.check()
+        steps = pg.locator("[data-step-done]")
+        steps.nth(0).check()
+        S["steps_progress_text"] = pg.locator("[data-progress]").inner_text().startswith("Сделано шагов: 1 из ")
+        pg.reload()
+        S["marks_persist_after_reload"] = pg.locator("[data-weigh]").first.is_checked() and steps.nth(0).is_checked()
+        S["storage_keys_own_namespace"] = (
+            all(k.startswith("fbb.") for k in pg.evaluate("Object.keys(localStorage)"))
+            and pg.evaluate("Object.keys(localStorage).length") == 2
+        )
+        pg.click("[data-steps-reset]")
+        S["reset_clears_marks"] = not pg.locator("[data-weigh]").first.is_checked() and not steps.nth(0).is_checked()
+        pg.goto(BASE + "/recept/yablochnoe-myagkoe-pechene/")
+        S["bakers_pct_butter_50"] = (
+            pg.locator(".weigh-t tr", has_text="Сливочное масло").locator("td").nth(1).inner_text() == "50 %"
+        )
+        pg.locator(".strip a", has_text="шаг 5").click()
+        S["oven_strip_links_to_step"] = pg.evaluate("location.hash") == "#shag-5"
+        # таблица: фильтр и сортировка применяются сразу
+        pg.goto(BASE + "/recepty/")
+        with pg.expect_navigation():
+            pg.select_option("select[name=sort]", "temp")
+        S["sort_hot_first"] = (
+            pg.locator(".cmp tbody tr").first.locator("td[data-label='°C']").inner_text().startswith("220")
+        )
+        with pg.expect_navigation():
+            pg.select_option("select[name=testo]", "zavarnoe")
+        S["filter_zavarnoe_rows"] = pg.locator(".cmp tbody tr").count() == 2
+        with pg.expect_navigation():
+            pg.click(".filters .reset")
+        S["filter_reset"] = pg.url.endswith("/recepty/")
+        pg.goto(BASE + "/recepty/?testo=zavarnoe&duhovka=net")
+        S["filter_empty"] = pg.locator(".empty h2").count() == 1
+        pg.goto(BASE + "/poisk/?q=" + "  ЗАВАРНОЙ  ")
+        S["search_case_spaces"] = pg.locator(".toc__row").count() > 0
+        pg.goto(BASE + "/poisk/?q=печенье")
+        S["search_pechene"] = pg.locator(".toc__row").count() > 0
+        resp = pg.goto(BASE + "/nesushchestvuet/")
+        S["real_404"] = resp.status == 404
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
         pg.goto(BASE + "/recept/pirozhnye-lebedi/")
-        S["nojs_steps"] = pg.locator(".method li").count()
-        S["nojs_pitfalls"] = pg.locator(".pitfall").count()
-        S["nojs_timers_hidden"] = (
-            pg.locator("[data-timers]").is_hidden() if pg.locator("[data-timers]").count() else True
+        S["nojs_steps"] = pg.locator(".method-b > li").count() > 0
+        S["nojs_pitfalls"] = pg.locator(".pitfall").count() > 0
+        S["nojs_timers_and_marks_hidden"] = (
+            pg.locator(".timer").first.is_hidden() and pg.locator(".done").first.is_hidden()
         )
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

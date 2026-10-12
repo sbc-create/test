@@ -1,26 +1,21 @@
 {% extends "base.html" %}
-{% from "_parts.html" import toc %}
 {% block main %}
-<section class="frontis">
-  <p class="frontis__kicker">Книга рецептов выпечки</p>
-  <h1>Тесто и десерты</h1>
-  <p class="frontis__lead">Кексы, хлеб, пироги и заварные пирожные. У каждого рецепта — температура, время и форма, если их называет источник, и предупреждения прямо в шагах.</p>
+<section class="bench-hero">
+  <h1>Что печём сегодня?</h1>
+  <p class="lead">Рецепты собраны по температуре духовки: разогрели на 180 °C — смотрите всё, что печётся при ней. Температура, время и форма — из рецепта-источника.</p>
 </section>
-<section class="chapter" aria-labelledby="ch-dough">
-  <h2 id="ch-dough"><span class="chapter__no">I</span> Виды теста</h2>
-  <ul class="doughs">
-  {% for k, items in site.doughs().items() %}
-    <li><a href="/testo/{{ k }}/"><b>{{ DOUGH[k][0] }}</b><span>{{ DOUGH[k][1] }}</span><i>{{ items|length }} рецепт{{ 'а' if items|length in [2,3,4] else 'ов' }}</i></a></li>
+<section aria-labelledby="po-temperature" class="temps">
+  <h2 id="po-temperature">По температуре духовки</h2>
+  <nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %} <small>{{ items|length }}</small></a>{% endfor %}</nav>
+  {% for t, items in site.by_temp() %}
+  <section class="temp" id="t-{{ t or 'net' }}" aria-labelledby="h-t-{{ t or 'net' }}">
+    <h3 id="h-t-{{ t or 'net' }}" class="temp__h">{% if t %}<b>{{ t }}</b> °C{% else %}Без духовки{% endif %}</h3>
+    <ul class="rows">{% for r in items %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{{ r.bake_label or (r.total if r.total else '') }}</span></li>{% endfor %}</ul>
+  </section>
   {% endfor %}
-  </ul>
 </section>
-<section class="chapter" aria-labelledby="ch-new">
-  <h2 id="ch-new"><span class="chapter__no">II</span> Новые страницы книги</h2>
-  {{ toc(latest) }}
-  <p class="more"><a href="/recepty/">Всё оглавление →</a></p>
-</section>
-<section class="chapter" aria-labelledby="ch-tags">
-  <h2 id="ch-tags"><span class="chapter__no">III</span> По продукту и поводу</h2>
-  <ul class="tags">{% for k, items in site.tags().items() %}<li><a href="/teg/{{ k }}/">{{ TAGS[k] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul>
-</section>
+<section aria-labelledby="h-dough"><h2 id="h-dough">Виды теста</h2>
+<ul class="chips">{% for k, items in site.doughs().items() %}<li><a href="/testo/{{ k }}/">{{ DOUGH[k][0] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul></section>
+<section aria-labelledby="h-tags"><h2 id="h-tags">По продукту и поводу</h2>
+<ul class="chips chips--light">{% for k, items in site.tags().items() %}<li><a href="/teg/{{ k }}/">{{ TAGS[k] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul></section>
 {% endblock %}
