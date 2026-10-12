@@ -365,6 +365,22 @@
       "expected": "description из полей снимка, ≤180",
       "check": "bash checks/run.sh",
       "status": "queued"
+    },
+    {
+      "id": "B016",
+      "site": "yummyani.site (и прочие Yummy на том же коде)",
+      "repo": "/srv/sites/yummyani-staging/repo",
+      "urls": [
+        "https://yummyani.site/sitemap/titles.xml",
+        "https://yummyani.site/anime/istrebitel-demonov-trenirovka-hashira"
+      ],
+      "problem": "Карта сайта titles.xml обрезана ровно на 8000 адресах: walkAnimeListItems(maxPages=80, limit=100). 366 из 7 299 тайтлов снимка витрины (страницы отвечают 200) в карте отсутствуют; обход по updated_at_desc, за пределом — давно не обновлявшиеся. yummyani.site — единственная витрина сети с заметным трафиком (~1547 посетителей/сутки).",
+      "norm": "sitemap: все индексируемые канонические страницы",
+      "expected": "titles.xml без потолка 8000; 366 слагов в карте",
+      "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
+      "status": "blocked",
+      "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200.",
+      "owner_action": "Владелец репозитория /srv/sites/yummyani-staging/repo (сейчас в нём работает другая сессия: ветка claude/night-yummy-schedule-12, грязное дерево) — применить правку и пересобрать контейнер Next.js. SEO в чужой репозиторий не пишет; маршрут — через Архитектора."
     }
   ]
 }
