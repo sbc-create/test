@@ -151,3 +151,9 @@ def test_day_abbreviations_are_correct(app):
     for bad in ("<span>Че</span>", "<span>Пя</span>", "<span>Су</span>", "<span>Во</span>"):
         assert bad not in html
     assert "<span>Чт</span>" in html and "<span>Вс</span>" in html
+
+
+def test_variant_identity_meta(app):
+    _, html, _ = app.route("/", {})
+    assert '<meta name="site-factory-variant-id" content="week-grid">' in html
+    assert '<meta name="site-factory-variant-version" content="1">' in html

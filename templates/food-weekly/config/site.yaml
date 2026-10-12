@@ -1,5 +1,7 @@
 site_id: food-weekly
 name: "Меню на неделю"          # рабочее название
+variant_id: week-grid   # вариант A; вариант B — ветка claude/template-food-weekly-b
+variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
