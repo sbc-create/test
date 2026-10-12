@@ -164,6 +164,7 @@ def test_парный_файл_назван_вместе_с_этим(м, tmp_pat
     вывод = буфер.getvalue()
     assert "ВМЕСТЕ С" in вывод, вывод
     assert "по одному нельзя" in вывод
+    assert "читающая оба файла" in вывод, "связь названа неверно"
 
 
 def test_предмет_проверки_отсутствует_в_цели(м, tmp_path):
@@ -198,9 +199,12 @@ def test_предмет_проверки_отсутствует_в_цели(м, 
         м.главное(["--mine", str(моё), "--theirs", str(их),
                    "--subdir", "tests/unit", "--subdir", "factory/cell"])
     вывод = буфер.getvalue()
-    находки = [с for с in вывод.splitlines() if с.strip().startswith("НЕ ДОСТАВЛЯТЬ")]
+    находки = [с for с in вывод.splitlines()
+               if с.strip().startswith("чего нет в цели")]
     assert находки, вывод
     assert "нет новая_функция" in вывод
+    # Спутник назван, значит сказано, что недостающее принесёт он.
+    assert "принесёт спутник" in вывод or "доставлять нельзя" in вывод
 
 
 def test_поведенческую_разницу_инструмент_не_видит(м, tmp_path):
@@ -243,7 +247,8 @@ def test_поведенческую_разницу_инструмент_не_в�
     вывод = буфер.getvalue()
     # Утверждение про НАХОДКУ, а не про строку легенды: легенда упоминает
     # «НЕ ДОСТАВЛЯТЬ» всегда, и первая редакция теста ловила именно её.
-    находки = [с for с in вывод.splitlines() if с.strip().startswith("НЕ ДОСТАВЛЯТЬ")]
+    находки = [с for с in вывод.splitlines()
+               if с.strip().startswith("чего нет в цели")]
     assert not находки, (
         f"инструмент заявил о том, чего не умеет измерить: {находки}")
 
@@ -255,3 +260,50 @@ def test_нет_каталога_у_одной_стороны_это_не_изм
     код, вывод = прогон(м, моё, их)
     assert код == 0
     assert "нет в одной из ветвей" in вывод
+
+
+def test_тест_и_код_под_ним_называются_парой(м, tmp_path):
+    """Пара «тест ↔ код, который он проверяет» обязана ехать вместе.
+
+    Прежний признак искал ТЕСТЫ, упоминающие имя файла, и для файла теста не
+    находил ничего: тест своего имени в тексте не содержит. Поэтому пара
+    молчала — проверено 12.10 на `test_comment_draft_handoff` ↔
+    `factory/qwen/comments.py`, которые остались у SEO-сессии на ОДНОМ прежнем
+    коммите. Доставить тест без кода — получить красное; код без теста —
+    потерять проверку.
+    """
+    моё = моя_ветвь(tmp_path, ["версия 1\n"])
+    (моё / "factory" / "qwen").mkdir(parents=True)
+    (моё / "factory" / "qwen" / "модуль.py").write_text(
+        "def имя():\n    return 1\n", encoding="utf-8")
+    (моё / "tests" / "unit" / "test_пара_кода.py").write_text(
+        "from factory.qwen import модуль\n"
+        "def test_зовёт():\n    assert модуль.имя() == 1\n", encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "пара теста и кода")
+    # Обе стороны расходятся: правим и код, и тест.
+    (моё / "factory" / "qwen" / "модуль.py").write_text(
+        "def имя():\n    return 2\n", encoding="utf-8")
+    (моё / "tests" / "unit" / "test_пара_кода.py").write_text(
+        "from factory.qwen import модуль\n"
+        "def test_зовёт():\n    assert модуль.имя() == 2\n", encoding="utf-8")
+    git(моё, "add", "-A")
+    git(моё, "commit", "-q", "-m", "обе стороны")
+
+    их = их_ветвь(tmp_path, "версия 1\n")
+    (их / "factory" / "qwen").mkdir(parents=True)
+    (их / "factory" / "qwen" / "модуль.py").write_text(
+        "def имя():\n    return 1\n", encoding="utf-8")
+    (их / "tests" / "unit" / "test_пара_кода.py").write_text(
+        "from factory.qwen import модуль\n"
+        "def test_зовёт():\n    assert модуль.имя() == 1\n", encoding="utf-8")
+
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        м.главное(["--mine", str(моё), "--theirs", str(их),
+                   "--subdir", "tests/unit", "--subdir", "factory/qwen"])
+    вывод = буфер.getvalue()
+    строки = [с for с in вывод.splitlines() if "ВМЕСТЕ С" in с]
+    assert строки, вывод
+    assert "factory/qwen/модуль.py" in строки[0], строки
+    assert "этот тест проверяет их код" in строки[0], строки
