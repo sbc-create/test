@@ -1,0 +1,99 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/semga-v-aerogrile-s-zelenym-salatom-189916",
+ "title": "Семга в аэрогриле с зеленым салатом",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 15,
+ "total_minutes": 15,
+ "ingredients": [
+  {
+   "name": "Стейк из семги",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Розмарин",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 2.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Лимон",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Капуста брокколи",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Цукини",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Огурцы",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Стебель сельдерея",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Семечки подсолнуха",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 20.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   0,
+   4,
+   9
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 4
+   }
+  ],
+  "times": [
+   {
+    "min": 8,
+    "max": null,
+    "step": 4
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "1e446b9e45d4f7318e6f74575b63e92f9239b8ef3908a69b53913af5de9efb66",
+ "record_id": "fa-dbf293381dbf",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:57:38Z"
+}

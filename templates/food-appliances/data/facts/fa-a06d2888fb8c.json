@@ -1,0 +1,84 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/syrniki-v-aerogrile-192645",
+ "title": "Сырники в аэрогриле",
+ "servings": 6,
+ "prep_minutes": 30,
+ "cook_minutes": 40,
+ "total_minutes": 70,
+ "ingredients": [
+  {
+   "name": "Творог 9%-ный",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "name": "Манная крупа",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Ванильный сахар",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Разрыхлитель",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сметана",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   5,
+   6,
+   7
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 7
+   }
+  ],
+  "times": [
+   {
+    "min": 20,
+    "max": 25,
+    "step": 7
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "7cf0b5afc485a340c4d3629ebed3056c53ef9da8542b0ac91ae378c09d1637c9",
+ "record_id": "fa-a06d2888fb8c",
+ "step_count": 9,
+ "fetched_at": "2026-10-12T06:57:18Z"
+}

@@ -1,0 +1,8 @@
+# Настройки ruff только для шаблона food-appliances; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"techkitchen/qa.py" = ["E501"]
+"techkitchen/server.py" = ["E501"]
+"techkitchen/build.py" = ["E501"]

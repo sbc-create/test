@@ -56,3 +56,22 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- food-appliances: аудит и факты рецептов для техники (только чтение) ----
+  # Внесены заданием владельца PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12).
+  # Только GET, 1 запрос на хост.
+  - ref: food-appliances-sharkninja
+    host: www.sharkninja.com
+    purpose: "food-appliances: референс SharkNinja — раздел рецептов (назван в задании)"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-appliances-eda-rambler
+    host: eda.rambler.ru
+    purpose: "food-appliances: профильный раздел кулинарного референса и источник фактов рецептов для приборов"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-appliances-1000-menu
+    host: 1000.menu
+    purpose: "food-appliances: третий референс из исходного аудита: подборки для мультиварки"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)

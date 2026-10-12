@@ -1,0 +1,67 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurinoe-file-v-aerogrile-190571",
+ "title": "Куриное филе в аэрогриле",
+ "servings": 2,
+ "prep_minutes": 30,
+ "cook_minutes": 30,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Куриное филе",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Смесь «Четыре специи»",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Паприка",
+   "quantity": 0.5,
+   "unit": "tsp"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   2
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 2
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": 20,
+    "step": 2
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 2
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "d74d90562568e05191b11dd4c00c7daecb463594d5ea15cca62a7b6a2b4f0ebf",
+ "record_id": "fa-bb0af9dbbb16",
+ "step_count": 3,
+ "fetched_at": "2026-10-12T06:57:35Z"
+}

@@ -1,0 +1,98 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/perepelki-v-aerogrile-s-ovoschami-192644",
+ "title": "Перепелки в аэрогриле с овощами",
+ "servings": 3,
+ "prep_minutes": 30,
+ "cook_minutes": 30,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Перепелка",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соевый соус",
+   "quantity": 50.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 3.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 60.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Красный сладкий перец",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Свежая кукуруза",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "name": "Петрушка",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Тимьян",
+   "quantity": 3.0,
+   "unit": "g"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   6,
+   8
+  ],
+  "modes": [
+   {
+    "name": "куриные крылышки",
+    "step": 8
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "60333ed954807878adc2098318dd7f4b6aea4e7801aa7d672e3368a427d826fa",
+ "record_id": "fa-ac360252b902",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:57:21Z"
+}

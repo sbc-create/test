@@ -1,0 +1,61 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurinoe-file-na-grile-189288",
+ "title": "Куриное филе на гриле",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 40,
+ "total_minutes": 40,
+ "ingredients": [
+  {
+   "name": "Куриное филе",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Приправа для курицы",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Желтые помидоры",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Помидоры",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   6
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "61400835f4d57562300982e5431c77809f67182557f61961add67eeaae223f12",
+ "record_id": "fa-beb38686d3b9",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:07Z"
+}

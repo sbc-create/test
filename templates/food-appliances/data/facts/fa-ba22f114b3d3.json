@@ -1,0 +1,78 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/omlet-s-gribami-i-bolgarskim-percem-v-multivarke-188262",
+ "title": "Омлет с грибами и болгарским перцем в мультиварке",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 25,
+ "total_minutes": 25,
+ "ingredients": [
+  {
+   "name": "Куриное яйцо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сладкий перец",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Шампиньоны",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 10.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Молоко",
+   "quantity": 50.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   0,
+   1,
+   9
+  ],
+  "modes": [
+   {
+    "name": "Жарка",
+    "step": 1
+   },
+   {
+    "name": "Выпечка",
+    "step": 9
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 9
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "23e484aaf681191117c06b928a69208c7fc2c3e8eaa3d40678b372d41b9d0c76",
+ "record_id": "fa-ba22f114b3d3",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:56:48Z"
+}

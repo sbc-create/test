@@ -1,0 +1,102 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/ris-karri-s-kuricey-v-multivarke-136782",
+ "title": "Рис карри с курицей в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Рис",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Вода",
+   "quantity": 1.5,
+   "unit": "cup"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 2.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Карри",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Филе куриной грудки",
+   "quantity": 250.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   2,
+   3,
+   4
+  ],
+  "modes": [
+   {
+    "name": "жарка",
+    "step": 2
+   },
+   {
+    "name": "жарка",
+    "step": 3
+   },
+   {
+    "name": "крупы",
+    "step": 4
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 2
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 2
+   },
+   {
+    "min": 5,
+    "max": null,
+    "step": 3
+   },
+   {
+    "min": 25,
+    "max": null,
+    "step": 4
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "14b1cc0475866b79343c86de1be2fb5d02aafb24400835db633caea7108d4e63",
+ "record_id": "fa-0dacb3a68adb",
+ "step_count": 6,
+ "fetched_at": "2026-10-12T06:59:15Z"
+}

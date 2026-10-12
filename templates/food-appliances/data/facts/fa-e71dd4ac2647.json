@@ -1,0 +1,76 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/ovsyanaya-kasha-s-yablokom-izyumom-i-koricey-v-multivarke-114413",
+ "title": "Овсяная каша с яблоком, изюмом и корицей в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 30,
+ "total_minutes": 30,
+ "ingredients": [
+  {
+   "name": "Овсяные хлопья",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Вода",
+   "quantity": 250.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Обезжиренное молоко",
+   "quantity": 250.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Тростниковый сахар",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Изюм",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Яблоко",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливки",
+   "quantity": 20.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Молотая корица",
+   "quantity": 1.0,
+   "unit": "tsp"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   0
+  ],
+  "modes": [
+   {
+    "name": "Мультиповар",
+    "step": 0
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 140,
+    "step": 0
+   }
+  ],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "b5c458be300619081f4445c10d70aa47e6ed1e46a367629d6533f72654e78433",
+ "record_id": "fa-e71dd4ac2647",
+ "step_count": 6,
+ "fetched_at": "2026-10-12T06:59:47Z"
+}

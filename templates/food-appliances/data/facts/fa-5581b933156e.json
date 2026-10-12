@@ -1,0 +1,87 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/kulich-v-aerogrile-191571",
+ "title": "Кулич в аэрогриле",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Сливочное масло",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "name": "Мягкий творог",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 110.0,
+   "unit": "g"
+  },
+  {
+   "name": "Разрыхлитель",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сода",
+   "quantity": 4.0,
+   "unit": "g"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Цукаты",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахарная пудра",
+   "quantity": 25.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   8
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 175,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 35,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "22b8716f50e65a5e840c4e47d7857dd86173c114a34547892d205de0755b8a4b",
+ "record_id": "fa-5581b933156e",
+ "step_count": 12,
+ "fetched_at": "2026-10-12T06:57:30Z"
+}

@@ -1,0 +1,113 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/tvorozhnaya-zapekanka-v-multivarke-173382",
+ "title": "Творожная запеканка в мультиварке",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Творог",
+   "quantity": 350.0,
+   "unit": "g"
+  },
+  {
+   "name": "Творожный сыр",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Кефир",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Изюм",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Апельсины",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Манная крупа",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "name": "Ванильный сахар",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Разрыхлитель",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Варенье",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Сметана",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   7,
+   8
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 8
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 140,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "de8c189cde6f165c5bdccae4b60d13dac9f80ad0776fcdf8630c876a1b7c8907",
+ "record_id": "fa-20a295b33aab",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:58:47Z"
+}

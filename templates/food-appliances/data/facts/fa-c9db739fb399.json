@@ -1,0 +1,89 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/pshyonnaya-kasha-s-bananom-koricey-i-vyalenoy-klyukvoy-v-multivarke-114567",
+ "title": "Пшенная каша с бананом, корицей и вяленой клюквой в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 70,
+ "total_minutes": 70,
+ "ingredients": [
+  {
+   "name": "Вода",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Бананы",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Пшено",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молоко 3,2%-ное",
+   "quantity": 1.0,
+   "unit": "l"
+  },
+  {
+   "name": "Тростниковый сахар",
+   "quantity": 1.5,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Вяленая клюква",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Палочки корицы",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Свежая мята",
+   "quantity": 2.0,
+   "unit": "sprig"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   2,
+   4,
+   5
+  ],
+  "modes": [
+   {
+    "name": "Молочная каша",
+    "step": 4
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 50,
+    "max": null,
+    "step": 4
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "b7e97b090c29197eee1be25dc4e42e9c7f5e9f867bd1b1d5aecbc333315aa06f",
+ "record_id": "fa-c9db739fb399",
+ "step_count": 7,
+ "fetched_at": "2026-10-12T06:59:41Z"
+}

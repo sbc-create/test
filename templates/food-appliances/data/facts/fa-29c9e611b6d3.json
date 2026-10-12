@@ -1,0 +1,113 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurica-karri-v-multivarke-173383",
+ "title": "Курица карри в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 40,
+ "total_minutes": 40,
+ "ingredients": [
+  {
+   "name": "Куриные бедра",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Кокосовое молоко",
+   "quantity": 400.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Арахисовая паста",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Желтая паста карри",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Шампиньоны",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Красный сладкий перец",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Зеленый горошек",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Кинза",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Лайм",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   4,
+   5,
+   7
+  ],
+  "modes": [
+   {
+    "name": "Жарка",
+    "step": 4
+   },
+   {
+    "name": "Тушение",
+    "step": 7
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 7,
+    "max": null,
+    "step": 4
+   },
+   {
+    "min": 5,
+    "max": null,
+    "step": 5
+   },
+   {
+    "min": 15,
+    "max": null,
+    "step": 7
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "c8577bc7e8efddbb1cebb1cd69981080544e211b19c885933634308951b71e61",
+ "record_id": "fa-29c9e611b6d3",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:44Z"
+}

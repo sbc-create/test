@@ -1,0 +1,78 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/gorohovaya-kasha-v-multivarke-114670",
+ "title": "Гороховая каша в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 260,
+ "total_minutes": 260,
+ "ingredients": [
+  {
+   "name": "Горох",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Ветчина",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Копченая грудинка",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 4.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   2,
+   5
+  ],
+  "modes": [
+   {
+    "name": "Мультиповар",
+    "step": 2
+   },
+   {
+    "name": "Подогрев",
+    "step": 5
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 90,
+    "step": 2
+   }
+  ],
+  "times": [
+   {
+    "min": 135,
+    "max": null,
+    "step": 2
+   },
+   {
+    "min": 5,
+    "max": null,
+    "step": 5
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "cbd83f65acf0dd0ed944505c0e2aec4d688cb1244b413a6949f3d6187be8fee7",
+ "record_id": "fa-ddbf89440ed9",
+ "step_count": 6,
+ "fetched_at": "2026-10-12T06:59:36Z"
+}

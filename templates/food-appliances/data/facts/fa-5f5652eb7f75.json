@@ -1,0 +1,84 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/plov-s-ovoschami-v-multivarke-104278",
+ "title": "Плов с овощами в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Рис",
+   "quantity": 260.0,
+   "unit": "g"
+  },
+  {
+   "name": "Консервированный зеленый горошек",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сладкий перец",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 70.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лук-порей",
+   "quantity": 70.0,
+   "unit": "g"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 70.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Вода",
+   "quantity": 330.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "g"
+  },
+  {
+   "name": "Специи",
+   "quantity": 1.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   5,
+   10,
+   12
+  ],
+  "modes": [
+   {
+    "name": "ПЛОВ",
+    "step": 10
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 10
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "b45b268b641e3a902c391c70d3350291e52fc0a001a060f97d710eb758b5e4b5",
+ "record_id": "fa-5f5652eb7f75",
+ "step_count": 14,
+ "fetched_at": "2026-10-12T06:59:53Z"
+}

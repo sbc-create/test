@@ -1,0 +1,107 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/solyanka-v-multivarke-193211",
+ "title": "Солянка в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Белокочанная капуста",
+   "quantity": 1.0,
+   "unit": "kg"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Охотничьи колбаски",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Свиные копченые ребра",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 6.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Томатная паста",
+   "quantity": 5.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Бульон",
+   "quantity": 250.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Сметана",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Укроп",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Петрушка",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   7
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 30,
+    "max": 40,
+    "step": 7
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 7
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "a4477549ec0885dcde889775fc3391101e63cc19ff5fcddf19042ec64d551420",
+ "record_id": "fa-a761ea4af7b4",
+ "step_count": 9,
+ "fetched_at": "2026-10-12T06:56:28Z"
+}

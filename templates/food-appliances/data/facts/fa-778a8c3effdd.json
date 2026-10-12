@@ -1,0 +1,79 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/biskvit-v-multivarke-188255",
+ "title": "Бисквит в мультиварке",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Разрыхлитель",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Ванилин",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Сахарная пудра",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   9,
+   10,
+   11
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 10
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 50,
+    "max": null,
+    "step": 10
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 11
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "df24e5de7519ec6d63ddd48a307f6fe7773619c038baa7207811d2d4179feec9",
+ "record_id": "fa-778a8c3effdd",
+ "step_count": 15,
+ "fetched_at": "2026-10-12T06:56:51Z"
+}

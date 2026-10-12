@@ -1,0 +1,73 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kartofel-s-kuricey-v-multivarke-125505",
+ "title": "Картофель с курицей в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 70,
+ "total_minutes": 70,
+ "ingredients": [
+  {
+   "name": "Картофель",
+   "quantity": 5.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Куриная голень",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Приправа для курицы",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Укроп",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   2,
+   3
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 2
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 30,
+    "max": null,
+    "step": 2
+   },
+   {
+    "min": 20,
+    "max": null,
+    "step": 3
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "ecc07cfa96a4eae8dfc3934fc7dcbe614b10d56e72711175ab0db4bf25127666",
+ "record_id": "fa-14400f365135",
+ "step_count": 5,
+ "fetched_at": "2026-10-12T06:59:22Z"
+}

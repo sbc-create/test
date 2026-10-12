@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "_parts.html" import tiles %}
+{% block main %}
+<p class="kicker">Прибор</p>
+<h1>{{ APPLIANCES[a][0] }}</h1>
+<p class="lead">{{ APPLIANCES[a][1] }}</p>
+{% set cats = site.categories(a) %}{% if cats %}<nav class="chips" aria-label="Категории"><span>По продукту:</span>{% for c, rs in cats.items() %}<a href="/pribor/{{ a }}/{{ c }}/">{{ CATEGORIES[c] }} <small>{{ rs|length }}</small></a>{% endfor %}</nav>{% endif %}
+{% set ms = site.modes() %}{% set mine = [] %}{% for k, e in ms.items() if e.appliance == a %}{% set _ = mine.append((k, e)) %}{% endfor %}
+{% if mine %}<nav class="chips" aria-label="Режимы"><span>Режимы:</span>{% for k, e in mine %}<a href="/rezhim/{{ k }}/">«{{ e.name }}» <small>{{ e.recipes|length }}</small></a>{% endfor %}</nav>{% endif %}
+{{ tiles(items, 'h2') }}
+{% endblock %}

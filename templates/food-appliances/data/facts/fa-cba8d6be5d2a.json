@@ -1,0 +1,108 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/krolik-v-multivarke-175240",
+ "title": "Кролик в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Ножки кролика",
+   "quantity": 700.0,
+   "unit": "g"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Шампиньоны",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Бекон",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Орегано",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Копченая паприка",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Куриный бульон",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Вода",
+   "quantity": 60.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 40.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Зеленый лук",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Птитим",
+   "quantity": 280.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   3,
+   5,
+   7,
+   8
+  ],
+  "modes": [
+   {
+    "name": "Жарка",
+    "step": 3
+   },
+   {
+    "name": "Тушение",
+    "step": 8
+   }
+  ],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "d2705957bf7ae7e0cdd63248178440b865635295c92fa21c7a0b14ba815c94f4",
+ "record_id": "fa-cba8d6be5d2a",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:36Z"
+}

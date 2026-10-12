@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import tiles %}
+{% block main %}
+<h1>Поиск</h1>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q">Блюдо, продукт или режим</label><input id="q" name="q" type="search" value="{{ q }}"><button type="submit">Найти</button></form>
+{% if q %}{% if items %}<p class="lead">Найдено: {{ items|length }}</p>{{ tiles(items, 'h2') }}{% else %}<div class="empty"><h2>По запросу «{{ q }}» ничего нет</h2><p>Попробуйте название прибора или продукта.</p></div>{% endif %}{% endif %}
+{% endblock %}
