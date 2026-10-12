@@ -1,4 +1,4 @@
-/* games-rpg (codex-sections): отметки этапов квеста, печать. */
+/* games-rpg (party-planner): последний отряд, отметки этапов квеста, печать. */
 (function () {
   "use strict";
   var ns = document.body.getAttribute("data-ns") || "grpg";
@@ -32,5 +32,13 @@
       i.loading = "lazy"; i.className = "vid__frame"; b.replaceWith(i);
     });
   });
+  var sum = document.querySelector("[data-party]");
+  if (sum) write("party", sum.getAttribute("data-party"));
+  var last = document.querySelector("[data-last-party]"), lp = read("party", "");
+  if (last && lp) {
+    var a = document.createElement("a");
+    a.href = "/otryad/?" + lp.split(",").map(function (s) { return "p=" + encodeURIComponent(s); }).join("&");
+    a.textContent = "Открыть ваш последний отряд"; last.appendChild(a); last.hidden = false;
+  }
   document.querySelectorAll("[data-print]").forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
 })();

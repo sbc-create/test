@@ -1,4 +1,4 @@
-"""Приёмочные тесты games-rpg (вариант codex-sections)."""
+"""Приёмочные тесты games-rpg (вариант party-planner)."""
 
 import copy
 import json
@@ -84,6 +84,24 @@ def test_entry_shows_source_facts(app):
     assert len(re.findall(r'data-check="\d+"', html)) == len(app.site.by_slug["kvest-spasti-halsina"].stages)
 
 
+def test_party_summary_ties_and_limit(app):
+    p = app.site.party("baldurs-gate-3", ["gale", "karlach", "shadowheart"])
+    best = {k: (v, {e.slug for e in w}) for k, (v, w) in p["best"].items()}
+    assert best["Ловкость"] == (13, {"gale", "karlach", "shadowheart"}) and best["Сила"] == (17, {"karlach"})
+    st, html, _ = get(app, "/otryad/", {"p": ["gale", "karlach", "wyll", "astarion", "laezel"]})
+    assert st == 200 and "учтены первые четыре" in html and canon(html) is None
+    assert html.count('<tr><th scope="row">') == 6
+    _, html, _ = get(app, "/otryad/", {"p": ["nikto"]})
+    assert "Отряд пока пуст" in html
+
+
+def test_character_table_sorts_by_ability(app):
+    _, html, _ = get(app, "/baldurs-gate-3/personazhi/", {"sort": ["INT"]})
+    order = re.findall(r'<th scope="row"><a href="/baldurs-gate-3/personazhi/([a-z]+)/"', html)
+    vals = [app.site.by_slug[x].src["abilities"]["INT"] for x in order]
+    assert vals == sorted(vals, reverse=True) and canon(html) is None and 'aria-sort="descending"' in html
+
+
 def test_sitemap_urls_200_canonical_unique(app):
     titles = []
     for p in app.sitemap_urls():
@@ -101,7 +119,7 @@ def test_404s_and_other_sites_games(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="codex-sections"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="party-planner"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)

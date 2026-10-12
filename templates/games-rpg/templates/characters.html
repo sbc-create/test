@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Персонажи: сравнение</h1>
+<p class="lead">Характеристики по умолчанию из вики. Нажмите на заголовок, чтобы отсортировать.{% if key %} <a class="reset" href="/{{ gid }}/personazhi/">Сбросить сортировку</a>{% endif %}</p>
+<div class="tablewrap" role="region" aria-label="Сравнение персонажей" tabindex="0"><table class="cmp">
+<thead><tr><th scope="col">Персонаж</th>{% for k, ru in (('STR','Сила'),('DEX','Ловк.'),('CON','Тел.'),('INT','Инт.'),('WIS','Мудр.'),('CHA','Хар.')) %}<th scope="col"{% if key == k %} aria-sort="descending"{% endif %}><a href="/{{ gid }}/personazhi/?sort={{ k }}" title="Сортировать: {{ ru }}">{{ ru }}{% if key == k %} ↓{% endif %}</a></th>{% endfor %}</tr></thead>
+<tbody>{% for e in items %}<tr><th scope="row"><a href="{{ e.url }}">{{ e.src.name }}</a><small>{{ e.points[0]|replace('Класс: ', '') if e.points else '' }}</small></th>{% for k in ('STR','DEX','CON','INT','WIS','CHA') %}<td>{{ e.src.abilities[k] if e.src.abilities is defined and k in e.src.abilities else '—' }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

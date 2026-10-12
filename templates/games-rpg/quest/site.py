@@ -82,6 +82,26 @@ class Site:
                 out[sec] = (label, items)
         return out
 
+    def characters(self, game: str) -> list[Entry]:
+        return [e for e in self.entries if e.game == game and e.type == "character"]
+
+    def sort_characters(self, game: str, key: str) -> list[Entry]:
+        chars = self.characters(game)
+        if key in ABIL_RU:
+            return sorted(chars, key=lambda e: (-dict(e.src.get("abilities", {})).get(key, 0), e.title))
+        return sorted(chars, key=lambda e: e.title)
+
+    def party(self, game: str, slugs: list[str]) -> dict:
+        """Сводка отряда: только факты источника — классы и наибольшее значение каждой характеристики в отряде."""
+        members = [e for e in self.characters(game) if e.slug in slugs][:4]
+        best = {}
+        for k, ru in ABIL_RU.items():
+            vals = [(e.src.get("abilities", {}).get(k, 0), e) for e in members]
+            if vals:
+                v = max(x[0] for x in vals)
+                best[ru] = (v, [e for x, e in vals if x == v])  # при равенстве — все обладатели максимума
+        return {"members": members, "classes": [e.points[0] for e in members if e.points], "best": best}
+
     def related(self, e: Entry) -> list[Entry]:
         return [self.by_slug[s] for s in e.related_slugs if s in self.by_slug]
 

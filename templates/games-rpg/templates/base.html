@@ -9,18 +9,18 @@
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
 <meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
-<link rel="stylesheet" href="{{ asset('css/codex.css') }}">
+<link rel="stylesheet" href="{{ asset('css/party.css') }}">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/codex.js') }}" defer></script>
+<script src="{{ asset('js/party.js') }}" defer></script>
 </head>
 <body data-ns="{{ site.cfg.storage_namespace }}">
 <a class="skip" href="#main">К содержимому</a>
 <header class="hd">
   <a class="logo" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="32" height="32"><span>Гайды RPG</span></a>
   {% if site.version %}<a class="patch" href="{{ site.version.url }}">Версия: {{ site.version.src.name }}</a>{% endif %}
-  <nav class="hd__nav" aria-label="Разделы">{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() %}<a href="/{{ gid }}/{{ sec }}/">{{ label }}</a>{% endfor %}{% endfor %}</nav>
+  <nav class="hd__nav" aria-label="Разделы"><a href="/otryad/">Отряд</a>{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() %}<a href="/{{ gid }}/{{ sec }}/">{{ label }}</a>{% endfor %}{% endfor %}</nav>
   <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту"><label class="sr" for="fq">Персонаж, класс, квест</label><input id="fq" name="q" type="search" placeholder="Персонаж, класс"><button type="submit">Найти</button></form>
 </header>
 {% if meta.crumbs|length > 1 %}

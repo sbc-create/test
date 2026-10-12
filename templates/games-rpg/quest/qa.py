@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-rpg (codex-sections): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-rpg (party-planner): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,14 +11,14 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8859"
+BASE = "http://127.0.0.1:8860"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 QUEST = "/baldurs-gate-3/kvesty/kvest-spasti-halsina/"
 SHOTS = {
     "home": "/",
-    "game": "/baldurs-gate-3/",
-    "section": "/baldurs-gate-3/personazhi/",
+    "party": "/otryad/?p=gale&p=karlach&p=shadowheart",
+    "chars": "/baldurs-gate-3/personazhi/?sort=STR",
     "character": "/baldurs-gate-3/personazhi/gale/",
     "build": "/baldurs-gate-3/bildy/klass-voin/",
     "quest": QUEST,
@@ -92,15 +92,30 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
+        A["no_last_party_initially"] = not pg.locator("[data-last-party]").is_visible()
+        pg.locator("input[name=p][value=gale]").check()
+        pg.locator("input[name=p][value=karlach]").check()
+        with pg.expect_navigation():
+            pg.click(".pf button")
+        A["party_submits"] = "p=gale" in pg.url and "p=karlach" in pg.url
+        A["party_best_rows"] = pg.locator(".best tbody tr").count() == 6
+        A["party_tie_lists_both"] = (
+            "Gale, Karlach" in pg.locator(".best tbody tr", has_text="Телосложение").inner_text()
+        )
+        pg.goto(BASE + "/")
+        A["last_party_link_on_home"] = (
+            pg.locator("[data-last-party] a").get_attribute("href") == "/otryad/?p=gale&p=karlach"
+        )
         with pg.expect_navigation():
             pg.locator(".hd__nav a", has_text="Персонажи").click()
-        A["nav_opens_section"] = pg.url.endswith("/personazhi/") and pg.locator(".ec").count() == 6
-        pg.locator(".ec").nth(2).scroll_into_view_if_needed()
-        box = pg.locator(".ec").nth(2).bounding_box()
-        href = pg.locator(".ec__t a").nth(2).get_attribute("href")
         with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 10)
-        A["whole_card_opens_entry"] = pg.url.endswith(href)
+            pg.locator(".cmp thead a", has_text="Сила").click()
+        A["table_sort_by_header"] = "sort=STR" in pg.url and pg.locator(".cmp tbody th a").first.inner_text() in (
+            "Karlach",
+            "Lae'zel",
+        )
+        with pg.expect_navigation():
+            pg.locator(".cmp tbody th a", has_text="Gale").click()
         A["abilities_shown"] = pg.locator(".abil div").count() == 6
         with pg.expect_navigation():
             pg.click(".patch")
@@ -133,7 +148,7 @@ def run(shots: Path | None) -> dict:
         pg.fill("#fq", "Gale")
         with pg.expect_navigation():
             pg.press("#fq", "Enter")
-        A["search_keyboard_results"] = pg.locator(".ec").count()
+        A["search_keyboard_results"] = pg.locator(".row").count()
         with pg.expect_navigation():
             pg.click(".find--page .reset")
         A["search_clear"] = pg.locator("#sq").input_value() == ""
@@ -150,6 +165,8 @@ def run(shots: Path | None) -> dict:
         pg = ctx.new_page()
         pg.goto(BASE + QUEST)
         A["nojs_stages_listed"] = pg.locator(".check li").count()
+        pg.goto(BASE + "/otryad/?p=wyll&p=astarion")
+        A["nojs_party_works"] = pg.locator(".best tbody tr").count() == 6
         A["nojs_print_hidden"] = not pg.locator("[data-print]").is_visible()
         ctx.close()
         br.close()
