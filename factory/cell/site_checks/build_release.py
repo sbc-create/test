@@ -69,7 +69,8 @@ def files() -> list:
 #:                      разойтись с тем, что проверяет verify_pins.
 #:   site_repo_commit   коммит ЭТОГО репозитория — версия самого сайта.
 #:   runtime_commit     какой выпуск сайта исполняется.
-#:   artifact_sha256    сумма ФАЙЛА РАНТАЙМА: по ней судят, какой код работает.
+#:   artifact_sha256    сумма ВСЕГО РАНТАЙМА: по ней судят, какой код работает.
+#:   code_file_sha256   сумма исполняемой точки входа — отдельным именем.
 #:   built_at           время КОММИТА выпуска.
 #:   release_dir        куда выпуск ставится на боевой машине.
 #:   bound_release_link ссылка, которой он привязан.
@@ -77,9 +78,35 @@ def files() -> list:
 #: `release_dir` и `bound_release_link` до этой правки указывали в дерево
 #: ОБЩЕЙ фабрики `/srv/lords/.frontend/…`, потому что родословная у сборщиков
 #: общая. Каждая выделенная ячейка объявляла своей раскладкой чужую.
-ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "runtime_commit", "site_repo_commit",
+ПОЛЯ_ВЫПУСКА = ("build_id", "artifact_sha256", "code_file_sha256",
+                "runtime_commit", "site_repo_commit",
                 "site_repo_dirty", "built_at", "built_from", "release_dir",
                 "bound_release_link", "source_commit", "source_dirty")
+
+
+def сумма_рантайма(корень) -> str:
+    """Цифра ЦЕЛОГО рантайма: все файлы `src/*.py` плюс `run.py`.
+
+    Имя файла входит в сумму вместе с разделителем, иначе переименование
+    модуля цифру не меняло бы.
+
+    Почему не одна точка входа (решение D207). Сумма единственного файла
+    пропускает правку соседнего модуля МОЛЧА, и это измерено 12.10 на живой
+    ячейке: `animeg0-site` дал `exit=0`, а через 25 минут `exit=1` — выкладка
+    тронула модуль оформления, цифра точки входа осталась верной, а цифра
+    артефакта разошлась. Определение «по всему рантайму» пришло не из фабрики,
+    а из самой ячейки, вместе с этой причиной.
+    """
+    файлы = sorted((корень / "src").glob("*.py"))
+    if (корень / "run.py").is_file():
+        файлы.append(корень / "run.py")
+    сумма = hashlib.sha256()
+    for файл in файлы:
+        сумма.update(файл.relative_to(корень).as_posix().encode("utf-8"))
+        сумма.update(b"\0")
+        сумма.update(файл.read_bytes())
+        сумма.update(b"\0")
+    return сумма.hexdigest()
 
 #: Поле, которое сборка НЕ трогает: происхождение шаблона неподвижно.
 ПОЛЕ_ПРОИСХОЖДЕНИЯ = "template_origin"
@@ -115,7 +142,8 @@ def штамп(manifest: dict, cfg: dict, pins: dict, commit: str, dirty: bool) 
     out["site_repo_dirty"] = bool(dirty)
     out["runtime_commit"] = commit
     out["build_id"] = f"{короткий}-{cfg['site_id']}"
-    out["artifact_sha256"] = hashlib.sha256(
+    out["artifact_sha256"] = сумма_рантайма(ROOT)
+    out["code_file_sha256"] = hashlib.sha256(
         (ROOT / "src" / cfg["entrypoint"]).read_bytes()).hexdigest()
     out["built_at"] = commit_time(commit)
     out["built_from"] = "site-repo git commit"
