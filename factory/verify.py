@@ -387,6 +387,7 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
 
     group = package.get("cross_site_group")
     hosts: list[tuple[str, str]] = []
+    без_домена: list[str] = []
     if group:
         for directory in sorted((PATHS.sites).iterdir()):
             if not (directory / "package.yaml").exists():
@@ -395,8 +396,24 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
                 other = validation.load_package(directory.name)
             except Exception:  # noqa: BLE001 — нечитаемый чужой пакет не должен ронять проверку
                 continue
-            if other.get("cross_site_group") == group:
-                hosts.append((directory.name, other["domain"]))
+            if other.get("cross_site_group") != group:
+                continue
+            домен = other.get("domain")
+            if not домен:
+                # Участник группы без объявленного домена. Прежняя редакция
+                # брала `other["domain"]` как есть, и `None` уезжал в
+                # заголовок `Host`: ворота падали с
+                # `TypeError: expected string or bytes-like object` в
+                # `putheader`. Измерено 2026-10-12 на группе `lords-quartet`,
+                # где у `lords-04` домен не объявлен.
+                #
+                # Падение здесь хуже отказа: по traceback не видно, что
+                # сравнение не состоялось, а проверка, которая не сравнила,
+                # «уникальностью» не является. Поэтому участник НАЗЫВАЕТСЯ и
+                # пропускается, а не роняет прогон.
+                без_домена.append(directory.name)
+                continue
+            hosts.append((directory.name, домен))
 
     pages: list = []
     for _, host in hosts:
@@ -430,6 +447,12 @@ def cross_site_uniqueness(base_url: str, package: dict, out_dir: Path) -> Report
                 canonical=canonical.group(1) if canonical and live_indexable else ""))
 
     report = uniqueness.check(pages)
+    if без_домена:
+        # Пропущенный участник — часть ответа, а не деталь реализации: по
+        # отчёту должно быть видно, С КЕМ сравнение не проводилось.
+        report.counts = {**(report.counts or {}),
+                         "group_members_without_domain": len(без_домена),
+                         "skipped_members": ",".join(sorted(без_домена))}
     (out_dir / "cross-site-uniqueness.json").write_text(
         json.dumps(redact_obj(report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
     return report
