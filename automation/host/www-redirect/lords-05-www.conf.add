@@ -1,0 +1,31 @@
+# Отдельный блок для www-зеркала lordserials22.info.
+#
+# Зачем. До этой правки `server_name lordserials22.info www.lordserials22.info;` стоял одним
+# блоком, и www отдавал сам сайт: код 200, canonical на САМ www-хост,
+# индексация открыта. Это второй сайт с тем же содержимым, и вес делится
+# между двумя хостами. Измерение — `automation/local/www-mirror-audit.py`.
+#
+# Сертификат покрывает имя www (SAN содержит и lordserials22.info, и www.lordserials22.info,
+# TLS проверяется штатно) — без этого отдельный блок сломал бы HTTPS.
+#
+# Меняется РОВНО одно: www перенаправляет вместо того, чтобы отдавать
+# каталог. Заголовок режима индексации и подтверждение прав в Вебмастере
+# сохранены как были: правка не должна менять больше заявленного.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.lordserials22.info;
+
+    ssl_certificate     /etc/letsencrypt/live/lordserials22.info/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/lordserials22.info/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    server_tokens off;
+
+    add_header X-Robots-Tag $cell_robots_lords_05 always;
+
+    include /etc/nginx/snippets/webmaster-verification.conf;
+
+    return 301 https://lordserials22.info$request_uri;
+}

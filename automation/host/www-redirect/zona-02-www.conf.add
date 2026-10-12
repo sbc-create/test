@@ -1,0 +1,31 @@
+# Отдельный блок для www-зеркала zonafilm.cc.
+#
+# Зачем. До этой правки `server_name zonafilm.cc www.zonafilm.cc;` стоял одним
+# блоком, и www отдавал сам сайт: код 200, canonical на САМ www-хост,
+# индексация открыта. Это второй сайт с тем же содержимым, и вес делится
+# между двумя хостами. Измерение — `automation/local/www-mirror-audit.py`.
+#
+# Сертификат покрывает имя www (SAN содержит и zonafilm.cc, и www.zonafilm.cc,
+# TLS проверяется штатно) — без этого отдельный блок сломал бы HTTPS.
+#
+# Меняется РОВНО одно: www перенаправляет вместо того, чтобы отдавать
+# каталог. Заголовок режима индексации и подтверждение прав в Вебмастере
+# сохранены как были: правка не должна менять больше заявленного.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.zonafilm.cc;
+
+    ssl_certificate     /etc/letsencrypt/live/zonafilm.cc/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/zonafilm.cc/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    server_tokens off;
+
+    add_header X-Robots-Tag $cell_robots_zona_02 always;
+
+    include /etc/nginx/snippets/webmaster-verification.conf;
+
+    return 301 https://zonafilm.cc$request_uri;
+}

@@ -1,0 +1,31 @@
+# Отдельный блок для www-зеркала an1meg0.site.
+#
+# Зачем. До этой правки `server_name an1meg0.site www.an1meg0.site;` стоял одним
+# блоком, и www отдавал сам сайт: код 200, canonical на САМ www-хост,
+# индексация открыта. Это второй сайт с тем же содержимым, и вес делится
+# между двумя хостами. Измерение — `automation/local/www-mirror-audit.py`.
+#
+# Сертификат покрывает имя www (SAN содержит и an1meg0.site, и www.an1meg0.site,
+# TLS проверяется штатно) — без этого отдельный блок сломал бы HTTPS.
+#
+# Меняется РОВНО одно: www перенаправляет вместо того, чтобы отдавать
+# каталог. Заголовок режима индексации и подтверждение прав в Вебмастере
+# сохранены как были: правка не должна менять больше заявленного.
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name www.an1meg0.site;
+
+    ssl_certificate     /etc/letsencrypt/live/an1meg0.site/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/an1meg0.site/privkey.pem;
+    ssl_protocols TLSv1.2 TLSv1.3;
+    ssl_prefer_server_ciphers off;
+
+    server_tokens off;
+
+    add_header X-Robots-Tag $cell_robots_animego_04 always;
+
+    include /etc/nginx/snippets/webmaster-verification.conf;
+
+    return 301 https://an1meg0.site$request_uri;
+}
