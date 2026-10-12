@@ -391,7 +391,8 @@
       "norm": "проверка, которая не исполнилась, не может считаться пройденной",
       "expected": "в каждой ячейке сторож из шаблона factory/cell/site_checks/run.sh (0790e65): счёт по grep -cE '^(check|step) ', checks-all-ran FAIL при расхождении; обычный провал не подменяется",
       "check": "python3 automation/local/run-sh-guard-audit.py (из ветки Архитектора) — код 0; bash checks/run.sh каждой ячейки rc=0",
-      "status": "queued"
+      "status": "queued",
+      "evidence": "13.10 ~00:30Z SEO: сделано на трёх AnimeGo (обёртка step) — an1mego fb2046d, animeg0 418483b, an1meg0 af2f4b6: «checks-all-ran: исполнились все 24/27/26», «checks-measured: пропусков нет», rc=0; мутации: check при step → ОТКАЗ, пропуск виден, провал остаётся провалом. Осталось 18 ячеек (обёртка check, ближе к шаблону) — задача остаётся queued."
     },
     {
       "id": "T020",
