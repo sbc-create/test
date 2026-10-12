@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ TYPES[t] }}</h1>
+<p class="lead">Работы типа «{{ TYPES[t]|lower }}» — с месяцами и регионами.</p>
+{{ grid(items, 'h2') }}
+{% endblock %}

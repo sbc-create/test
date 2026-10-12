@@ -1,0 +1,6 @@
+{
+  "name": "garden-season-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона garden-season (axe-core)",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

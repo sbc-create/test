@@ -1,0 +1,3939 @@
+{
+ "site_id": "garden-season",
+ "items": [
+  {
+   "slug": "analiz-pochvy",
+   "title": "Сдать почву на анализ и внести известь по результату",
+   "type": "pochva",
+   "summary": "OSU советует заказать анализ почвы в январе–феврале; в Западном Орегоне в октябре вносят органику и известь — только если это показал анализ.",
+   "applies": "Огород и цветники. Сроки — по календарю OSU; октябрьское известкование — Западный Орегон.",
+   "timing": [
+    {
+     "src": "src-350fb00b44",
+     "item": "m01-03",
+     "region": "or-all",
+     "month": 1
+    },
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-02",
+     "region": "or-all",
+     "month": 2
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-20",
+     "region": "or-west",
+     "month": 10
+    }
+   ],
+   "steps": [
+    {
+     "text": "В январе закажите анализ почвы, чтобы узнать, каких питательных веществ не хватает.",
+     "refs": [
+      {
+       "src": "src-350fb00b44",
+       "item": "m01-03"
+      }
+     ]
+    },
+    {
+     "text": "Список лабораторий можно получить в местном отделении службы распространения знаний.",
+     "refs": [
+      {
+       "src": "src-350fb00b44",
+       "item": "m01-03"
+      }
+     ]
+    },
+    {
+     "text": "Западный Орегон: в октябре вскопайте почву с органикой и известью — если это показал анализ и позволяет погода.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-20"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-20"
+      }
+     ],
+     "text": "Известь вносят по результатам анализа, а не по привычке."
+    },
+    {
+     "kind": "editorial",
+     "text": "Берите пробы с разных участков огорода и смешивайте их."
+    }
+   ],
+   "checklist": [
+    "Анализ заказан",
+    "Результат получен",
+    "Известь — только по результату"
+   ],
+   "related": [
+    "sideraty-na-zimu"
+   ],
+   "sources": [
+    "src-138c3cca29",
+    "src-156dfb55f7",
+    "src-350fb00b44"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "f2c015d44d65c545210a0648c6c7eca7f53b3b628a9d78fa7755f645e03d65b0",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "golubika-za-sezon",
+   "title": "Голубика: обрезка, подкормка и сетка от птиц",
+   "type": "uhod",
+   "crop": "golubika",
+   "summary": "OSU ставит обрезку голубики на февраль, подкормку — на апрель, а в июле советует накрыть кусты сеткой, чтобы птицы не съели урожай.",
+   "applies": "Кусты голубики. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-11",
+     "region": "or-all",
+     "month": 2
+    },
+    {
+     "src": "src-95fa9d8e7a",
+     "item": "m04-06",
+     "region": "or-all",
+     "month": 4
+    },
+    {
+     "src": "src-05b538df4d",
+     "item": "m07-19",
+     "region": "or-all",
+     "month": 7
+    }
+   ],
+   "need": [
+    {
+     "text": "Секатор"
+    },
+    {
+     "text": "Удобрение, навоз или компост",
+     "refs": [
+      {
+       "src": "src-95fa9d8e7a",
+       "item": "m04-06"
+      }
+     ]
+    },
+    {
+     "text": "Сетка от птиц",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-19"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "В феврале обрежьте кусты голубики.",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-11"
+      }
+     ]
+    },
+    {
+     "text": "В апреле внесите удобрение, навоз или компост.",
+     "refs": [
+      {
+       "src": "src-95fa9d8e7a",
+       "item": "m04-06"
+      }
+     ]
+    },
+    {
+     "text": "В июле накройте кусты сеткой от птиц.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-19"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Закрепите сетку у земли, чтобы птицы не пробирались снизу."
+    }
+   ],
+   "checklist": [
+    "Обрезка сделана",
+    "Подкормка внесена",
+    "Сетка натянута до созревания"
+   ],
+   "related": [
+    "klubnika-za-sezon",
+    "malina-obrezka"
+   ],
+   "sources": [
+    "src-05b538df4d",
+    "src-156dfb55f7",
+    "src-95fa9d8e7a"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "9dc7d58c7ec000cb312764f8d95b85423d71ff41feb0fe864eb23e7db1c94e16",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "instrumenty-na-zimu",
+   "title": "Подготовить инструменты к зиме",
+   "type": "zima",
+   "summary": "В октябре и ноябре OSU советует очистить, заточить и смазать инструменты и газонокосилку перед хранением.",
+   "applies": "Садовый инструмент и техника. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-16",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-09",
+     "region": "or-all",
+     "month": 11
+    }
+   ],
+   "need": [
+    {
+     "text": "Щётка, точильный брусок, масло"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Очистите инструменты от земли.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-16"
+      }
+     ]
+    },
+    {
+     "text": "Заточите режущие кромки.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-16"
+      }
+     ]
+    },
+    {
+     "text": "Смажьте металлические части маслом.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-16"
+      },
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-09"
+      }
+     ]
+    },
+    {
+     "text": "Очистите и смажьте газонокосилку перед хранением.",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-09"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Храните инструменты в сухом месте, а не на земле."
+    }
+   ],
+   "checklist": [
+    "Инструмент очищен",
+    "Кромки заточены",
+    "Металл смазан",
+    "Косилка подготовлена"
+   ],
+   "related": [
+    "poliv-k-zime"
+   ],
+   "sources": [
+    "src-1128e780b1",
+    "src-138c3cca29"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "14cc2adfef6fab8cf68a7a333cc44ce3bedd85564625d5022b6eb4d2790f1bbf",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "klubnika-za-sezon",
+   "title": "Клубника за сезон: посадка, вредители, сбор и уход после урожая",
+   "type": "uhod",
+   "crop": "klubnika",
+   "summary": "Посадка ягодных культур в марте у OSU указана для Западного Орегона; в апреле — осмотр на пенницу и тлю, в июне — регулярный сбор, в августе — чистка и подкормка грядок.",
+   "applies": "Клубника в открытом грунте. Сроки — по календарю OSU; мартовская посадка — только Западный Орегон.",
+   "timing": [
+    {
+     "src": "src-5c6098a725",
+     "item": "m03-16",
+     "region": "or-west",
+     "month": 3
+    },
+    {
+     "src": "src-95fa9d8e7a",
+     "item": "m04-21",
+     "region": "or-all",
+     "month": 4
+    },
+    {
+     "src": "src-01baf5e0a8",
+     "item": "m06-05",
+     "region": "or-all",
+     "month": 6
+    },
+    {
+     "src": "src-f60feacc36",
+     "item": "m08-05",
+     "region": "or-all",
+     "month": 8
+    }
+   ],
+   "need": [
+    {
+     "text": "Инсектицидное мыло — если вредители есть",
+     "refs": [
+      {
+       "src": "src-95fa9d8e7a",
+       "item": "m04-21"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "В Западном Орегоне ягодные культуры, включая клубнику, сажают в марте.",
+     "refs": [
+      {
+       "src": "src-5c6098a725",
+       "item": "m03-16"
+      }
+     ]
+    },
+    {
+     "text": "В апреле осматривайте кусты на пенницу и тлю.",
+     "refs": [
+      {
+       "src": "src-95fa9d8e7a",
+       "item": "m04-21"
+      }
+     ]
+    },
+    {
+     "text": "Если вредители есть, смойте их водой или обработайте инсектицидным мылом по инструкции.",
+     "refs": [
+      {
+       "src": "src-95fa9d8e7a",
+       "item": "m04-21"
+      }
+     ]
+    },
+    {
+     "text": "Собирайте спелые ягоды регулярно, чтобы не развивалась гниль.",
+     "refs": [
+      {
+       "src": "src-01baf5e0a8",
+       "item": "m06-05"
+      }
+     ]
+    },
+    {
+     "text": "В августе очистите и подкормите грядки.",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-05"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-5c6098a725",
+       "item": "m03-16"
+      }
+     ],
+     "text": "Мартовский срок посадки OSU относится к Западному Орегону."
+    }
+   ],
+   "checklist": [
+    "Осмотр на вредителей",
+    "Ягоды собираются регулярно",
+    "Грядки очищены после урожая"
+   ],
+   "related": [
+    "malina-obrezka",
+    "golubika-za-sezon"
+   ],
+   "sources": [
+    "src-01baf5e0a8",
+    "src-5c6098a725",
+    "src-95fa9d8e7a",
+    "src-f60feacc36"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "edaf40bfa565c22f5da66e8cc1786881bce0d6dfb5888870f4602a790909e3f3",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "malina-obrezka",
+   "title": "Малина: когда обрезать в разных районах",
+   "type": "uhod",
+   "crop": "malina",
+   "summary": "Пример того, как сроки зависят от района: обрезку ремонтантной малины OSU для Западного Орегона ставит на конец февраля — начало марта, а для восточного Орегона — обрезку и формирование в феврале.",
+   "applies": "Летняя и ремонтантная малина. Сроки — по календарю OSU с разбивкой по районам Орегона.",
+   "timing": [
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-15",
+     "region": "or-west",
+     "month": 2
+    },
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-12",
+     "region": "or-east",
+     "month": 2
+    },
+    {
+     "src": "src-f60feacc36",
+     "item": "m08-08",
+     "region": "or-all",
+     "month": 8
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-18",
+     "region": "or-all",
+     "month": 10
+    }
+   ],
+   "need": [
+    {
+     "text": "Секатор"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Западный Орегон: ремонтантную малину обрезайте в конце февраля или начале марта.",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-15"
+      }
+     ]
+    },
+    {
+     "text": "Восточный Орегон: в феврале обрезайте и формируйте летнюю и ремонтантную малину.",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-12"
+      }
+     ]
+    },
+    {
+     "text": "После сбора урожая (август) вырежьте отплодоносившие побеги.",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-08"
+      }
+     ]
+    },
+    {
+     "text": "Осмотрите основание побегов у земли на отверстия стеклянницы и удалите поражённую древесину.",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-08"
+      }
+     ]
+    },
+    {
+     "text": "В октябре вырежьте засохшие плодоносившие побеги.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-18"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-15"
+      },
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-12"
+      }
+     ],
+     "text": "Февральские и мартовские сроки OSU разные для западной и восточной частей штата."
+    },
+    {
+     "kind": "editorial",
+     "text": "Режьте на уровне земли, чтобы не оставлять пеньков."
+    }
+   ],
+   "checklist": [
+    "Срок сверен с районом",
+    "Отплодоносившие побеги вырезаны",
+    "Основание побегов осмотрено"
+   ],
+   "related": [
+    "klubnika-za-sezon",
+    "golubika-za-sezon"
+   ],
+   "sources": [
+    "src-138c3cca29",
+    "src-156dfb55f7",
+    "src-f60feacc36"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "31afc0f8fc5e324d0c8b204d32d6658066ece07fd07a2b8b7335fb7d5c2a85a2",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "okuchit-kartofel",
+   "title": "Окучить картофель и попробовать молодые клубни",
+   "type": "uhod",
+   "crop": "kartofel",
+   "summary": "В июле OSU советует подсыпать землю к основанию кустов, а когда картофель зацветёт — взять с каждого куста несколько молодых клубней. Сроки посадки в Великобритании RHS относит к весне.",
+   "applies": "Картофель в открытом грунте. Июльский срок — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-05b538df4d",
+     "item": "m07-02",
+     "region": "or-all",
+     "month": 7
+    },
+    {
+     "src": "src-b19febdc67",
+     "item": "spring",
+     "region": "uk",
+     "month": null
+    }
+   ],
+   "need": [
+    {
+     "text": "Тяпка или лопата"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Подсыпьте землю к основанию кустов картофеля.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-02"
+      }
+     ]
+    },
+    {
+     "text": "Когда растения зацветут, аккуратно возьмите с каждого куста несколько молодых клубней.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-02"
+      }
+     ]
+    },
+    {
+     "text": "Остальные клубни оставьте дозревать до уборки.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-07"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "organization",
+     "refs": [
+      {
+       "src": "src-b19febdc67",
+       "item": "chitting"
+      }
+     ],
+     "text": "RHS: проращивание начинают с конца января в более мягких районах и до начала марта в холодных; оно занимает четыре–шесть недель — даже внутри одной страны сроки разные."
+    },
+    {
+     "kind": "editorial",
+     "text": "Берите немного клубней с куста, чтобы не ослабить растение."
+    }
+   ],
+   "checklist": [
+    "Кусты окучены",
+    "Молодые клубни взяты только после цветения"
+   ],
+   "related": [
+    "uborka-i-hranenie-kartofelya"
+   ],
+   "sources": [
+    "src-05b538df4d",
+    "src-5c0419c8cc",
+    "src-b19febdc67"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "39fa2abbb3ea02bf1aa76a12c6f78058f1b2bcfffb84a85c902b48088f5a0a57",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "poliv-k-zime",
+   "title": "Система полива: от запуска весной до консервации на зиму",
+   "type": "zima",
+   "summary": "OSU: в мае подготовить и запустить систему полива, летом следить, чтобы растения не пересыхали, в октябре слить воду или продуть систему и утеплить клапаны, в ноябре слить и убрать шланги.",
+   "applies": "Капельный полив, шланги и краны на участке. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-9ce417b052",
+     "item": "m05-01",
+     "region": "or-all",
+     "month": 5
+    },
+    {
+     "src": "src-f60feacc36",
+     "item": "m08-09",
+     "region": "or-all",
+     "month": 8
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-04",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-09",
+     "region": "or-all",
+     "month": 11
+    }
+   ],
+   "steps": [
+    {
+     "text": "В мае подготовьте и запустите систему полива.",
+     "refs": [
+      {
+       "src": "src-9ce417b052",
+       "item": "m05-01"
+      }
+     ]
+    },
+    {
+     "text": "Летом внимательно следите за поливом, чтобы растения не пересыхали.",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-09"
+      }
+     ]
+    },
+    {
+     "text": "В октябре слейте воду или продуйте систему и утеплите узлы клапанов.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-04"
+      }
+     ]
+    },
+    {
+     "text": "Слейте воду из шлангов и аккуратно уберите их, чтобы мороз их не повредил.",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-09"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Сфотографируйте схему узлов перед разборкой — весной соберёте быстрее."
+    }
+   ],
+   "checklist": [
+    "Вода слита или система продута",
+    "Клапаны утеплены",
+    "Шланги сухие и убраны"
+   ],
+   "related": [
+    "instrumenty-na-zimu"
+   ],
+   "sources": [
+    "src-1128e780b1",
+    "src-138c3cca29",
+    "src-9ce417b052",
+    "src-f60feacc36"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "b123cc0fd5c6e9ce5aa6b07428df1d5c8b09d723a277e1880e5d1b199f90bb0c",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "posadka-chesnoka-osenyu",
+   "title": "Посадить чеснок осенью под урожай следующего лета",
+   "type": "posadka",
+   "crop": "chesnok",
+   "summary": "В календаре OSU посадка чеснока стоит в октябре для всего Орегона и в ноябре — для Западного Орегона. RHS для Великобритании называет лучшим месяцем октябрь.",
+   "applies": "Огород с открытым грунтом. Сроки ниже относятся к Орегону (OSU) и Великобритании (RHS); для своего региона сверьтесь с местными данными.",
+   "timing": [
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-23",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-23",
+     "region": "or-west",
+     "month": 11
+    },
+    {
+     "src": "src-24bd413279",
+     "item": "october",
+     "region": "uk",
+     "month": 10
+    },
+    {
+     "src": "src-24bd413279",
+     "item": "autumn",
+     "region": "uk",
+     "month": null
+    }
+   ],
+   "need": [
+    {
+     "text": "Зубки чеснока для посадки",
+     "refs": [
+      {
+       "src": "src-24bd413279",
+       "item": "autumn"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "Высадите зубки осенью — урожай будет следующим летом.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-23"
+      },
+      {
+       "src": "src-24bd413279",
+       "item": "autumn"
+      }
+     ]
+    },
+    {
+     "text": "Если вы в Западном Орегоне, ноябрь — ещё подходящее время для посадки.",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-23"
+      }
+     ]
+    },
+    {
+     "text": "Летом убирайте чеснок, когда листья пожелтеют, и оставьте головки сушиться на солнце.",
+     "refs": [
+      {
+       "src": "src-24bd413279",
+       "item": "harvest"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "organization",
+     "refs": [
+      {
+       "src": "src-24bd413279",
+       "item": "autumn"
+      }
+     ],
+     "text": "RHS: урожай созревает на следующий год, в конце весны и летом."
+    },
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-23"
+      }
+     ],
+     "text": "Ноябрьский срок OSU указан только для Западного Орегона."
+    },
+    {
+     "kind": "editorial",
+     "text": "Если ваш регион не Орегон и не Великобритания, эти сроки — ориентир, а не правило: сверьтесь с местным календарём."
+    }
+   ],
+   "checklist": [
+    "Регион сверен со сроками источника",
+    "Зубки высажены",
+    "Отмечено, где посажен чеснок"
+   ],
+   "related": [
+    "uborka-i-hranenie-kartofelya",
+    "sideraty-na-zimu"
+   ],
+   "sources": [
+    "src-1128e780b1",
+    "src-138c3cca29",
+    "src-24bd413279"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "a1b8ab8d248b83704c875975190ba3c86e55dcbfc0f8e7847285fe588a5fed5e",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "reven-razdelit-i-ukryt",
+   "title": "Ревень: разделить куст и укрыть на зиму",
+   "type": "zima",
+   "crop": "reven",
+   "summary": "OSU советует делить ревень в октябре — примерно раз в 4 года, мульчировать грядку навозом или компостом осенью и подкармливать в феврале.",
+   "applies": "Многолетние посадки ревеня. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-22",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-15",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-06",
+     "region": "or-all",
+     "month": 11
+    },
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-08",
+     "region": "or-all",
+     "month": 2
+    },
+    {
+     "src": "src-05b538df4d",
+     "item": "m07-05",
+     "region": "or-all",
+     "month": 7
+    }
+   ],
+   "need": [
+    {
+     "text": "Лопата",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-22"
+      }
+     ]
+    },
+    {
+     "text": "Перепревший навоз или компост, солома",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-15"
+      },
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-06"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "В октябре выкопайте и разделите куст — это делают примерно раз в 4 года.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-22"
+      }
+     ]
+    },
+    {
+     "text": "Укройте грядку мульчей из навоза или компоста.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-15"
+      }
+     ]
+    },
+    {
+     "text": "В ноябре добавьте укрытие из компостированного навоза и соломы.",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-06"
+      }
+     ]
+    },
+    {
+     "text": "В феврале подкормите ревень навозом или полным удобрением.",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-08"
+      }
+     ]
+    },
+    {
+     "text": "Летом прополите, замульчируйте и обильно полейте, чтобы корни окрепли к следующему году.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-05"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Отметьте год деления, чтобы не пропустить следующий."
+    }
+   ],
+   "checklist": [
+    "Куст разделён (если прошло около 4 лет)",
+    "Грядка замульчирована",
+    "Подкормка в феврале запланирована"
+   ],
+   "related": [
+    "sideraty-na-zimu"
+   ],
+   "sources": [
+    "src-05b538df4d",
+    "src-1128e780b1",
+    "src-138c3cca29",
+    "src-156dfb55f7"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ba38b1e541004a692230b980e053da2773bc665701c41ed2b61eabb2279be593",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "sideraty-na-zimu",
+   "title": "Посеять сидераты на зиму и заделать их весной",
+   "type": "pochva",
+   "summary": "Сидераты на зиму OSU советует сеять в августе на свободных грядках; для Западного Орегона — до сентября или начала октября, а ноябрь там — последний шанс. В феврале их заделывают в почву.",
+   "applies": "Свободные грядки после урожая. Сроки сентября и ноября — только Западный Орегон.",
+   "timing": [
+    {
+     "src": "src-f60feacc36",
+     "item": "m08-14",
+     "region": "or-all",
+     "month": 8
+    },
+    {
+     "src": "src-5c0419c8cc",
+     "item": "m09-16",
+     "region": "or-west",
+     "month": 9
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-14",
+     "region": "or-west",
+     "month": 11
+    },
+    {
+     "src": "src-156dfb55f7",
+     "item": "m02-09",
+     "region": "or-all",
+     "month": 2
+    }
+   ],
+   "calc": [
+    {
+     "label": "Слой листьев в сантиметрах",
+     "expr": "3 * 2.54",
+     "result": "7.62",
+     "unit": "см",
+     "conclusion": "Нижняя граница слоя из источника (3 дюйма)."
+    },
+    {
+     "label": "Верхняя граница слоя",
+     "expr": "4 * 2.54",
+     "result": "10.16",
+     "unit": "см",
+     "conclusion": "OSU: слой 3–4 дюйма."
+    }
+   ],
+   "need": [
+    {
+     "text": "Семена сидератов",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-14"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "В августе посейте сидераты на освободившиеся грядки.",
+     "refs": [
+      {
+       "src": "src-f60feacc36",
+       "item": "m08-14"
+      }
+     ]
+    },
+    {
+     "text": "Западный Орегон: сейте до сентября или начала октября, чтобы растения укоренились до холодов и дождей.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-16"
+      }
+     ]
+    },
+    {
+     "text": "Западный Орегон: в ноябре — последний шанс посеять. Вместо этого можно укрыть грядку слоем листьев 3–4 дюйма (7,62–10,16 см).",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-14"
+      }
+     ]
+    },
+    {
+     "text": "В феврале заделайте сидераты или другую органику в почву.",
+     "refs": [
+      {
+       "src": "src-156dfb55f7",
+       "item": "m02-09"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-14"
+      }
+     ],
+     "text": "OSU: слой листьев подавляет зимние и ранние весенние сорняки и защищает почву от уплотнения дождём."
+    }
+   ],
+   "checklist": [
+    "Свободные грядки засеяны",
+    "Срок сверен с районом",
+    "Весенняя заделка запланирована"
+   ],
+   "related": [
+    "analiz-pochvy",
+    "reven-razdelit-i-ukryt"
+   ],
+   "sources": [
+    "src-1128e780b1",
+    "src-156dfb55f7",
+    "src-5c0419c8cc",
+    "src-f60feacc36"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ed2b2c3ea77ab5b0b5ad070f79ba137d6d8f13ea5167c419e9fc6f2197ca5ce4",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "tomaty-opory-i-fitoftoroz",
+   "title": "Томаты: опоры летом и наблюдение за фитофторозом",
+   "type": "zashchita",
+   "crop": "tomaty",
+   "summary": "В июне OSU советует ставить шпалеры, в июле — подвязывать томаты, а с конца июля — следить за ранним и поздним фитофторозом.",
+   "applies": "Высокорослые томаты в открытом грунте. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-01baf5e0a8",
+     "item": "m06-01",
+     "region": "or-all",
+     "month": 6
+    },
+    {
+     "src": "src-05b538df4d",
+     "item": "m07-07",
+     "region": "or-all",
+     "month": 7
+    },
+    {
+     "src": "src-05b538df4d",
+     "item": "m07-14",
+     "region": "or-all",
+     "month": 7
+    }
+   ],
+   "need": [
+    {
+     "text": "Шпалера или колья",
+     "refs": [
+      {
+       "src": "src-01baf5e0a8",
+       "item": "m06-01"
+      },
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-07"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "В июне поставьте шпалеры для томатов.",
+     "refs": [
+      {
+       "src": "src-01baf5e0a8",
+       "item": "m06-01"
+      }
+     ]
+    },
+    {
+     "text": "В июле подвязывайте томаты по мере роста.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-07"
+      }
+     ]
+    },
+    {
+     "text": "С конца июля осматривайте кусты на ранний и поздний фитофтороз.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-14"
+      }
+     ]
+    },
+    {
+     "text": "При признаках болезни прореживайте куст для проветривания и обрывайте поражённые листья.",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-14"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-05b538df4d",
+       "item": "m07-14"
+      }
+     ],
+     "text": "OSU допускает и одобренный фунгицид — только по инструкции на этикетке."
+    },
+    {
+     "kind": "editorial",
+     "text": "Поражённые листья не кладите в компост, если не уверены, что он прогревается."
+    }
+   ],
+   "checklist": [
+    "Опоры стоят",
+    "Кусты подвязаны",
+    "Осмотр на фитофтороз начат"
+   ],
+   "related": [
+    "zelenye-tomaty-dozarit"
+   ],
+   "sources": [
+    "src-01baf5e0a8",
+    "src-05b538df4d"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "c0d26dfa8a6d5500cc6bb02a1888186f1c8a9af55e29121a4549190919a5a53d",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "uborka-i-hranenie-kartofelya",
+   "title": "Убрать и сохранить картофель",
+   "type": "urozhaj",
+   "crop": "kartofel",
+   "summary": "По календарю OSU картофель убирают, когда ботва отмирает (сентябрь), и хранят в темноте при умеренной влажности и температуре около 40 °F, то есть примерно 4,4 °C.",
+   "applies": "Огород и погреб или прохладная кладовая. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-5c0419c8cc",
+     "item": "m09-07",
+     "region": "or-all",
+     "month": 9
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-08",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-1128e780b1",
+     "item": "m11-03",
+     "region": "or-all",
+     "month": 11
+    }
+   ],
+   "calc": [
+    {
+     "label": "Температура хранения в градусах Цельсия",
+     "expr": "(40 - 32) * 5 / 9",
+     "result": "4.4",
+     "unit": "°C",
+     "conclusion": "OSU указывает «около 40 °F»."
+    }
+   ],
+   "need": [
+    {
+     "text": "Тёмное место с умеренной влажностью",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-08"
+      }
+     ]
+    }
+   ],
+   "steps": [
+    {
+     "text": "Копайте картофель, когда ботва отомрёт.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-07"
+      }
+     ]
+    },
+    {
+     "text": "Уберите клубни на хранение в тёмное место.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-07"
+      },
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-08"
+      }
+     ]
+    },
+    {
+     "text": "Держите их при умеренной влажности и температуре около 40 °F (около 4,4 °C).",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-08"
+      }
+     ]
+    },
+    {
+     "text": "Проросшие клубни выбрасывайте; на семена следующего года их не оставляйте.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-08"
+      }
+     ]
+    },
+    {
+     "text": "В ноябре переберите запас и удалите всё, что начало портиться.",
+     "refs": [
+      {
+       "src": "src-1128e780b1",
+       "item": "m11-03"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "university",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-08"
+      }
+     ],
+     "text": "OSU: не используйте убранный картофель как семенной на следующий год."
+    },
+    {
+     "kind": "editorial",
+     "text": "Термометр в месте хранения помогает понять, близка ли температура к рекомендованной."
+    }
+   ],
+   "checklist": [
+    "Ботва отмерла перед уборкой",
+    "Место хранения тёмное",
+    "Температура около 4,4 °C",
+    "Проросшие клубни удалены",
+    "Запас перебран в ноябре"
+   ],
+   "related": [
+    "okuchit-kartofel",
+    "zelenye-tomaty-dozarit"
+   ],
+   "sources": [
+    "src-1128e780b1",
+    "src-138c3cca29",
+    "src-5c0419c8cc"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "355a36d397d78b7881e432b7b89e6626843df1dca9634f791403ddb50302a96b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "yabloki-sbor-i-sanitariya",
+   "title": "Яблоки: сбор, хранение и уборка падалицы",
+   "type": "urozhaj",
+   "crop": "yabloni",
+   "summary": "В октябре OSU советует собрать и хранить яблоки около 40 °F (около 4,4 °C) при умеренной влажности, убрать падалицу и сгрести больные листья.",
+   "applies": "Яблони на участке. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-11",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-29",
+     "region": "or-all",
+     "month": 10
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-30",
+     "region": "or-all",
+     "month": 10
+    }
+   ],
+   "calc": [
+    {
+     "label": "Температура хранения в градусах Цельсия",
+     "expr": "(40 - 32) * 5 / 9",
+     "result": "4.4",
+     "unit": "°C",
+     "conclusion": "OSU указывает «около 40 °F»."
+    }
+   ],
+   "steps": [
+    {
+     "text": "Соберите яблоки и уберите на хранение при температуре около 4,4 °C и умеренной влажности.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-11"
+      }
+     ]
+    },
+    {
+     "text": "Уберите падалицу: в ней могут зимовать личинки яблонной мухи и плодожорки.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-29"
+      }
+     ]
+    },
+    {
+     "text": "Сгребите и уничтожьте больные листья или отправьте их в горячий компост.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-30"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Для хранения отбирайте плоды без повреждений."
+    }
+   ],
+   "checklist": [
+    "Яблоки на хранении",
+    "Падалица убрана",
+    "Больные листья убраны"
+   ],
+   "related": [
+    "uborka-i-hranenie-kartofelya"
+   ],
+   "sources": [
+    "src-138c3cca29"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "a44c5e4dceb325dd17ad1ba6230b22cedb9c6213c41dc8c2ccf17b7bbbd6cd63",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zelenye-tomaty-dozarit",
+   "title": "Дозарить зелёные томаты дома перед заморозками",
+   "type": "urozhaj",
+   "crop": "tomaty",
+   "summary": "Если грозят заморозки, OSU советует снять зелёные томаты и дозаривать их в помещении (сентябрь), а в октябре — часто проверять и убирать подгнившие.",
+   "applies": "Томаты в открытом грунте в конце сезона. Сроки — по календарю OSU для Орегона.",
+   "timing": [
+    {
+     "src": "src-5c0419c8cc",
+     "item": "m09-03",
+     "region": "or-all",
+     "month": 9
+    },
+    {
+     "src": "src-138c3cca29",
+     "item": "m10-10",
+     "region": "or-all",
+     "month": 10
+    }
+   ],
+   "need": [
+    {
+     "text": "Место в доме для дозаривания"
+    }
+   ],
+   "steps": [
+    {
+     "text": "Следите за прогнозом: при угрозе заморозков защитите кусты.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-03"
+      }
+     ]
+    },
+    {
+     "text": "Снимите зелёные плоды и унесите их дозаривать в дом.",
+     "refs": [
+      {
+       "src": "src-5c0419c8cc",
+       "item": "m09-03"
+      },
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-10"
+      }
+     ]
+    },
+    {
+     "text": "Часто проверяйте плоды и выбрасывайте подгнившие.",
+     "refs": [
+      {
+       "src": "src-138c3cca29",
+       "item": "m10-10"
+      }
+     ]
+    }
+   ],
+   "limits": [
+    {
+     "kind": "editorial",
+     "text": "Раскладывайте плоды в один слой — так легче замечать порчу."
+    }
+   ],
+   "checklist": [
+    "Плоды сняты до заморозков",
+    "Дозаривание в доме",
+    "Подгнившие плоды убраны"
+   ],
+   "related": [
+    "tomaty-opory-i-fitoftoroz",
+    "uborka-i-hranenie-kartofelya"
+   ],
+   "sources": [
+    "src-138c3cca29",
+    "src-5c0419c8cc"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "709187d73f05877ff180ebccd41b4c0f158d9c018c4c1e4613f22422762c839d",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-01baf5e0a8": {
+   "id": "src-01baf5e0a8",
+   "url": "https://extension.oregonstate.edu/catalog/em-9528-june-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:46Z",
+   "page_sha256": "1938660d0a434db67403a6293a2153d233df8411edaa9c6ad8593f59c419b234",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "June garden calendar",
+   "month": 6,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "May 2021",
+   "reviewed": "2026",
+   "items": [
+    {
+     "id": "m06-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Construct trellises for tomatoes, cucumbers, pole beans and vines."
+    },
+    {
+     "id": "m06-02",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune lilacs, forsythia, rhododendrons and azaleas after bloom."
+    },
+    {
+     "id": "m06-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Fertilize vegetable garden one month after plants emerge by applying a side dressing alongside rows where a soil test or plant vigor shows a need."
+    },
+    {
+     "id": "m06-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest thinnings from new plantings of lettuce, onion and chard."
+    },
+    {
+     "id": "m06-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Pick ripe strawberries regularly to avoid fruit-rotting diseases."
+    },
+    {
+     "id": "m06-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Use organic mulches to conserve soil moisture in ornamental beds. An inch or two of sawdust, bark dust or composted leaves will minimize loss of water through evaporation."
+    },
+    {
+     "id": "m06-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "After normal fruit drop of apples, pears and peaches in June, consider thinning the remainder to produce a crop of larger fruit."
+    },
+    {
+     "id": "m06-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Make sure raised beds receive enough water for plants to avoid drought stress."
+    },
+    {
+     "id": "m06-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If green lawns are being maintained through the summer, apply 1 pound nitrogen per 1,000 square feet to lawns.",
+     "when": "Mid-June"
+    },
+    {
+     "id": "m06-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-local",
+     "text": "Frost can still be a concern during cold nights. Protect young vegetables from frost by having row cover (frost cloth) on hand. Place over crops when needed. Use season extenders, such as walls of water, around tomatoes and other tender plants.",
+     "region_label": "Central Oregon and higher elevations of eastern Oregon"
+    },
+    {
+     "id": "m06-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If you want a green lawn, water frequently during periods of heat and drought stress. Irrigate 0.25 inches four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+    },
+    {
+     "id": "m06-12",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Plant dahlias and gladioli."
+    },
+    {
+     "id": "m06-13",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective.",
+     "region_label": "Central Oregon and high elevations of eastern Oregon"
+    },
+    {
+     "id": "m06-14",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray cherry trees for cherry fruit fly, as necessary, if fruit is ripening.",
+     "when": "First week"
+    },
+    {
+     "id": "m06-15",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray for codling moth in apple and pear trees, as necessary. Continue use of pheromone traps for insect pest detection.",
+     "when": "First week"
+    },
+    {
+     "id": "m06-16",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Learn to identify beneficial insects and plant some insectary plants, — such as alyssum, Phacelia, coriander, candytuft, sunflower, yarrow and dill — to attract them to your garden. Check with local nurseries for best selections."
+    },
+    {
+     "id": "m06-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Blossoms on squash and cucumbers begin to drop; this is nothing to worry about. Cherries may also drop fruit; this is not a major concern."
+    },
+    {
+     "id": "m06-18",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor azaleas, primroses and other broadleaf ornamentals for adult root weevils. Look for fresh evidence of feeding (notching at leaf edges). Try sticky trap products on plant trunks to trap adult weevils. Protect against damaging the bark by applying the sticky material on a 4-inch wide band of poly sheeting or burlap wrapped around the trunk. Mark plants now and manage root weevils with beneficial nematodes when soil temperatures are above 55 degrees Fahrenheit. If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+    },
+    {
+     "id": "m06-19",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control garden weeds by pulling, hoeing or mulching."
+    },
+    {
+     "id": "m06-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control aphids on vegetables as needed by hosing off with water or by using insecticidal soap or a registered insecticide."
+    },
+    {
+     "id": "m06-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Watch for 12-spotted beetles on beans, cucumbers and squash and cabbage worms or flea beetles in cole crops (cabbage, broccoli, Brussels sprouts). Remove the pests by hand or treat with registered pesticides."
+    },
+    {
+     "id": "m06-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Birch trees dripping a sticky fluid from their leaves means that aphids are present. Control as needed."
+    },
+    {
+     "id": "m06-23",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Use yellow sticky traps to monitor for cherry fruit fly. About 1 week after the first fly is caught, spray cherries at appropriate intervals."
+    },
+    {
+     "id": "m06-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Second spray for codling moth in apple and pear trees, as necessary.",
+     "when": "Last week"
+    },
+    {
+     "id": "m06-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Continue monitoring blueberry, strawberry, cherry and other plants that produce soft fruits and berries for spotted wing drosophila. If these pests are present, use an integrated and least toxic approach to manage the pests. Learn how to monitor and manage spotted wing drosophila."
+    },
+    {
+     "id": "m06-26",
+     "section": "Indoor gardening",
+     "region": "or-all",
+     "text": "Move houseplants outdoors for cleaning, grooming, repotting and summer growth."
+    }
+   ]
+  },
+  "src-05b538df4d": {
+   "id": "src-05b538df4d",
+   "url": "https://extension.oregonstate.edu/catalog/em-9543-july-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:52Z",
+   "page_sha256": "0cf25d7238a211be2d57a0a47760cdbc891ae4eee77aaee46ccac01a5d5ca91c",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "July garden calendar",
+   "month": 7,
+   "region_scope": "Орегон, США",
+   "caveat": "Recommendations are not necessarily applicable to all areas of Oregon.",
+   "published": "June 2021",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m07-01",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If you want a green lawn, water frequently during periods of heat and drought stress. Irrigate a quarter inch four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+    },
+    {
+     "id": "m07-02",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Mound soil up around the base of your potato plants. Gather and eat a few \"new\" potatoes from each hill when plants begin to flower."
+    },
+    {
+     "id": "m07-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "To reduce evaporation, water vegetable and flower gardens in the early morning. Water the soil rather than leaves to reduce disease. Water deeply and infrequently to encourage root growth."
+    },
+    {
+     "id": "m07-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Pay careful attention to watering and feeding hanging baskets of flowers or vegetable plantings during extended periods of hot weather."
+    },
+    {
+     "id": "m07-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Weed and fertilize rhubarb and asparagus beds. A mulch of compost or rotted cow manure works well as fertilizer. Water deeply to develop crowns for next year."
+    },
+    {
+     "id": "m07-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Mulch with paper, plastic, sawdust, etc. to conserve soil moisture."
+    },
+    {
+     "id": "m07-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Stake tall-growing flowering plants such as delphinium, hollyhocks, and lupine. Stake tomatoes as necessary."
+    },
+    {
+     "id": "m07-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Make compost of lawn clippings and garden plants that are ready to be recycled. Do not use clippings if lawn has been treated with herbicide, including \"weed-and-feed\" products. Do not compost diseased plants unless you are using the \"hot compost\" method (120 degrees to 150 degrees F)."
+    },
+    {
+     "id": "m07-09",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Beets, bush beans, carrots, cauliflower, broccoli, lettuce, kale and peas planted in midsummer provide fall and winter crops. Get more tips on what to plant now in Fall and Winter Vegetable Gardening in the Pacific Northwest."
+    },
+    {
+     "id": "m07-10",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Dig spring bulbs when tops have died down; divide and store or replant."
+    },
+    {
+     "id": "m07-11",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "First planting of Chinese cabbage, kohlrabi, and rutabagas.",
+     "region_label": "Oregon Coast"
+    },
+    {
+     "id": "m07-12",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control hollyhock rust by sanitation, picking affected leaves, or spraying with a registered fungicide. Read and follow label directions."
+    },
+    {
+     "id": "m07-13",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Watch for cutworm damage in garden. In July, climbing cutworms become a problem and large portions of foliage will begin to disappear on established plants. Use barriers, remove by hand, use beneficial nematodes when soil temperature is above 55 degrees F, or spray with Bt-k according to label directions."
+    },
+    {
+     "id": "m07-14",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Begin to monitor for early and late blight on tomatoes. Correct by pruning for air circulation, picking off affected leaves, and/or treat with approved fungicide.",
+     "when": "Late July"
+    },
+    {
+     "id": "m07-15",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Place traps to catch adult apple maggot flies. You can use pheromone traps to monitor presence of pests."
+    },
+    {
+     "id": "m07-16",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray filbert trees for filbertworm, as necessary.",
+     "when": "July 10"
+    },
+    {
+     "id": "m07-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray peach and prune trees for peach tree borer and peach twig borer, as necessary.",
+     "when": "July 10-15"
+    },
+    {
+     "id": "m07-18",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Third spray for codling moth in apple and pear trees, as necessary.",
+     "when": "July 17-23"
+    },
+    {
+     "id": "m07-19",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Cover blueberry bushes with netting to keep birds from eating the entire crop."
+    },
+    {
+     "id": "m07-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor camellias, holly and maple trees for scale insects. Treat if necessary."
+    },
+    {
+     "id": "m07-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor rhododendrons for adult root weevils. Look for fresh evidence of feeding (notching). Try sticky trap products on plant trunks to trap adult weevils. Manage root weevils with beneficial nematodes (if soil temperature is above 55 degrees F). If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+    },
+    {
+     "id": "m07-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spider mites can become a problem on ornamental plants, vegetables and fruit plants during hot, dry weather. Watch for dusty-looking foliage, loss of color and the presence of tiny mites. Wash infested areas with water or spray with appropriate pesticides. For more information visit the PNW Insect Management Handbook Landscape Pests - Spider Mites."
+    },
+    {
+     "id": "m07-23",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "If necessary, spray for corn earworm as silking begins. Protect bees from spray.",
+     "region_label": "East of the Cascades"
+    },
+    {
+     "id": "m07-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Continue monitoring raspberry, blackberry, blueberry, cherry and other plants that produce soft fruits and berries for spotted wing drosophila. If the flies are present, use an integrated and least-toxic approach to manage the pests. Learn how to monitor for drosophila flies and larval infestations in fruit."
+    },
+    {
+     "id": "m07-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check leafy vegetables for caterpillars. Remove caterpillars as they appear. Use Bt-k, if necessary."
+    },
+    {
+     "id": "m07-26",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose and bacterial canker of stone fruit. Sterilize tools before each new cut."
+    }
+   ]
+  },
+  "src-0f430f24fa": {
+   "id": "src-0f430f24fa",
+   "url": "https://extension.oregonstate.edu/catalog/em-9684-december-garden-calendar",
+   "fetched_at": "2026-10-12T21:02:11Z",
+   "page_sha256": "e3ef99d7b6d7db9c263e7c25daf5d92c1648f0e9593c7765a9752494e476cba5",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "December garden calendar",
+   "month": 12,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "November 2020",
+   "reviewed": "2026",
+   "items": [
+    {
+     "id": "m12-01",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Do not walk on lawns until frost has melted.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m12-02",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Spread wood ashes evenly on your vegetable garden. Use no more than 1.5 pounds per 100 square feet per year. Don't use if the soil pH is greater than 7.0 or if potassium levels are excessive."
+    },
+    {
+     "id": "m12-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Protect new landscape plants from wind. Use stakes, guy wires or windbreaks as needed."
+    },
+    {
+     "id": "m12-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Yard sanitation – rake leaves, cut and remove withered stalks of perennial flowers, mulch flowerbeds, and hoe or pull winter weeds but consider leaving some leaves and standing stems where they do not pose disease problems to support overwintering beneficial insects and pollinators."
+    },
+    {
+     "id": "m12-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Turn the compost pile and protect from heavy rains, if necessary."
+    },
+    {
+     "id": "m12-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "During heavy rains, watch for drainage problems in the yard. Tilling, ditching, and French drains are possible short-term solutions. Consider rain gardens and bioswales as a longer-term solution."
+    },
+    {
+     "id": "m12-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Check stored flower bulbs, fresh vegetables, and fruits for rot and fungus problems. Discard any showing signs of rot."
+    },
+    {
+     "id": "m12-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Tie limbs of columnar evergreens to prevent snow or ice breakage."
+    },
+    {
+     "id": "m12-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "Water your plants every six to eight weeks with a deep soaking to keep them from drying out.",
+     "region_label": "Central/eastern Oregon"
+    },
+    {
+     "id": "m12-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Make sure that landscape plants in protected sites receive water regularly during the winter.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m12-11",
+     "section": "Planting and propagation",
+     "region": "or-west",
+     "text": "This is a good time to plant trees and landscape shrubs.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m12-12",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m12-13",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check for rodent damage around bases of trees and large shrubs. Remove weeds to prevent rodents from using them as hiding places. Use traps and approved baits as necessary."
+    },
+    {
+     "id": "m12-14",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Avoid mounding mulching materials around the bases of trees and shrubs. The mulch might provide cover for rodents."
+    },
+    {
+     "id": "m12-15",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor spruce trees for spruce aphids. Treat if present in large numbers. Read and follow pesticide label directions."
+    },
+    {
+     "id": "m12-16",
+     "section": "Indoor gardening",
+     "region": "or-all",
+     "text": "Protect poinsettias from cold; keep them in bright, indirect light away from cold windows, drafts, and heat vents. Fertilize with houseplant fertilizer to maintain leaf color."
+    },
+    {
+     "id": "m12-17",
+     "section": "Indoor gardening",
+     "region": "or-all",
+     "text": "Monitor houseplants for adequate water and fertilizer. Water and fertilizer requirements generally are less in winter."
+    },
+    {
+     "id": "m12-18",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "Home"
+    },
+    {
+     "id": "m12-19",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "Topics"
+    },
+    {
+     "id": "m12-20",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "Get involved"
+    },
+    {
+     "id": "m12-21",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "About"
+    },
+    {
+     "id": "m12-22",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "For employees"
+    },
+    {
+     "id": "m12-23",
+     "section": "Have a question? Ask Extension!",
+     "region": "or-all",
+     "text": "Log in"
+    }
+   ]
+  },
+  "src-1128e780b1": {
+   "id": "src-1128e780b1",
+   "url": "https://extension.oregonstate.edu/catalog/em-9615-november-garden-calendar",
+   "fetched_at": "2026-10-12T21:02:06Z",
+   "page_sha256": "73393b4b425fe805852144918cd1dd9d572755981798e8e4afdc8f86f3946fa3",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "November garden calendar",
+   "month": 11,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "October 2020",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m11-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Force spring bulbs for indoor blooms in December."
+    },
+    {
+     "id": "m11-02",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Service lawn mower."
+    },
+    {
+     "id": "m11-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Check potatoes in storage and remove any going bad."
+    },
+    {
+     "id": "m11-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Place a portable cold frame over rows of winter vegetables."
+    },
+    {
+     "id": "m11-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Place mulch around berries for winter protection."
+    },
+    {
+     "id": "m11-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Cover rhubarb and asparagus beds with composted manure and straw."
+    },
+    {
+     "id": "m11-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Rake and compost leaves that are free of diseases and insects. Use mulch to prevent erosion and compaction from rain."
+    },
+    {
+     "id": "m11-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "To protect built-in sprinkler systems, drain the system and insulate the valve mechanisms."
+    },
+    {
+     "id": "m11-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Clean and oil your lawnmower and other garden equipment and tools before storing them for winter. Drain and store hoses carefully to avoid damage from freezing. Renew mulch around perennial flowerbeds after removing weeds."
+    },
+    {
+     "id": "m11-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Protect tender evergreens from drying wind."
+    },
+    {
+     "id": "m11-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Tie limbs of upright evergreens to prevent breakage by snow or ice."
+    },
+    {
+     "id": "m11-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Trim chrysanthemums to 4 to 6 inches after they finish blooming."
+    },
+    {
+     "id": "m11-13",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Leave ornamental grasses up in winter to provide texture in the landscape. Cut them back a few inches above the ground in early spring."
+    },
+    {
+     "id": "m11-14",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Last chance to plant cover crops for soil building. You can also use a 3- to 4-inch layer of leaves, spread over the garden plot, to eliminate winter weeds, suppress early spring weeds and prevent soil compaction by rain.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-15",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Watch for wet soil and drainage problems in yard during heavy rains. Tiling, ditching and French drains are possible solutions. Consider rain gardens and bioswales as a long-term solution.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-16",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Take cuttings of rhododendrons and camellias for propagation; propagate begonias from leaf cuttings.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-17",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune roses (tea and floribunda, but NOT climbers and ramblers) to around 3 feet in height to prevent winter damage.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-18",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "If there is no snow cover and the ground is warm enough, water your newly planted perennials, trees and shrubs every 6 to 8 weeks. Give them a deep soaking to keep them from drying out.",
+     "region_label": "Central/eastern Oregon"
+    },
+    {
+     "id": "m11-19",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "Wrap the trunks of young, thin-barked trees (maples, aspen, ash) with paper tree wrap late in the month to prevent sunscald. Remove in April. Wrap new trees two to three years in a row until the outer bark has thickened.",
+     "region_label": "Central/eastern Oregon"
+    },
+    {
+     "id": "m11-20",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant a window garden of lettuce, chives and parsley."
+    },
+    {
+     "id": "m11-21",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "It's a good time to plant trees and shrubs. Consider varieties that supply food and shelter to birds, such as sumac, elderberry, flowering currant and mock orange."
+    },
+    {
+     "id": "m11-22",
+     "section": "Planting/propagation",
+     "region": "or-west",
+     "text": "Still time to plant spring-flowering bulbs, such as tulips, daffodils, hyacinths and crocuses. Don't delay.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-23",
+     "section": "Planting/propagation",
+     "region": "or-west",
+     "text": "Good time to plant garlic for harvest next summer, and to transplant landscape trees and shrubs.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Rake and destroy leaves from fruit trees that were diseased this year. Remove and discard mummified fruit."
+    },
+    {
+     "id": "m11-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check firewood for insect infestations. Burn affected wood first and don't store inside."
+    },
+    {
+     "id": "m11-26",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Treat peaches four weeks after leaf fall spray for peach leaf curl and shothole diseases."
+    },
+    {
+     "id": "m11-27",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Moss appearing in lawn may mean too much shade or poor drainage. Correct site conditions if moss is bothersome.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-28",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Bait garden for slugs during rainy periods. Use traps or phosphate baits, which are pet-safe.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m11-29",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m11-30",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Reduce fertilizer applications."
+    }
+   ]
+  },
+  "src-138c3cca29": {
+   "id": "src-138c3cca29",
+   "url": "https://extension.oregonstate.edu/catalog/em-9611-october-garden-calendar",
+   "fetched_at": "2026-10-12T21:02:03Z",
+   "page_sha256": "9e9d66eb171ce3e36a7a17601dde5d4b0d5432ae1fed1605bd9facbb6a7dd26f",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "October garden calendar",
+   "month": 10,
+   "region_scope": "Орегон, США",
+   "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+   "published": "September 2020",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m10-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "If needed, improve soil drainage of lawns before rain begins."
+    },
+    {
+     "id": "m10-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "To become an OSU Master Gardener volunteer, register with your local Extension office. For additional information, visit OSU Master Gardener."
+    },
+    {
+     "id": "m10-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Recycle disease-free plant material and kitchen vegetable and fruit scraps into compost."
+    },
+    {
+     "id": "m10-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Drain or blow out your irrigation system and insulate valve mechanisms in preparation of winter."
+    },
+    {
+     "id": "m10-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Use newspaper or cardboard covered by mulch to discourage winter and spring annual weeds or remove a lawn area for conversion to garden beds. For conversion, work in the paper and mulch as organic matter once the lawn grass has died."
+    },
+    {
+     "id": "m10-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Clean and paint greenhouses and cold frames for plant storage and winter growth."
+    },
+    {
+     "id": "m10-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest sunflower heads; use seed for bird feed or roast for personal use."
+    },
+    {
+     "id": "m10-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Dig and store potatoes; keep in darkness, moderate humidity, temperature about 40°F. Discard unused potatoes if they sprout. Don't use as seed potatoes for next year."
+    },
+    {
+     "id": "m10-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest and immediately dry filberts and walnuts; dry at 95°–100°F."
+    },
+    {
+     "id": "m10-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Ripen green tomatoes indoors. Check often and discard rotting fruit."
+    },
+    {
+     "id": "m10-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest and store apples; keep at about 40°F, moderate humidity."
+    },
+    {
+     "id": "m10-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Place mulch over roots of roses, azaleas, rhododendrons and berries for winter protection."
+    },
+    {
+     "id": "m10-13",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Trim or stake bushy herbaceous perennials to prevent wind damage."
+    },
+    {
+     "id": "m10-14",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "To suppress future pest problems, clean up annual flower beds by removing diseased plant materials, overwintering areas for insect pests; mulch with manure or garden compost to feed the soil and suppress weeds."
+    },
+    {
+     "id": "m10-15",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Cover asparagus and rhubarb beds with a mulch of manure or compost."
+    },
+    {
+     "id": "m10-16",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Clean, sharpen and oil tools and equipment before storing for winter."
+    },
+    {
+     "id": "m10-17",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Store garden supplies and fertilizers in a safe, dry place out of reach of children."
+    },
+    {
+     "id": "m10-18",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune out dead fruiting canes in raspberries."
+    },
+    {
+     "id": "m10-19",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Harvest squash and pumpkins; keep in dry area at 55°–60°F.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m10-20",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Spade organic material and lime into garden soil, as indicated by soil test results (if necessary and the weather permits).",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m10-21",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "Prune evergreens.",
+     "region_label": "Central/eastern Oregon"
+    },
+    {
+     "id": "m10-22",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Dig and divide rhubarb. (Should be done about every 4 years.)"
+    },
+    {
+     "id": "m10-23",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant garlic for harvesting next summer."
+    },
+    {
+     "id": "m10-24",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Propagate chrysanthemums, fuchsias and geraniums by stem cuttings."
+    },
+    {
+     "id": "m10-25",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Save seeds from the vegetable and flower garden. Dry, date, label, and store in a cool and dry location."
+    },
+    {
+     "id": "m10-26",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant ground covers, trees and shrubs."
+    },
+    {
+     "id": "m10-27",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Dig and store geraniums, tuberous begonias, dahlias and gladiolas."
+    },
+    {
+     "id": "m10-28",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Pot and store tulips and daffodils to force into early bloom, indoors, in December and January."
+    },
+    {
+     "id": "m10-29",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Remove and dispose of windfall apples that might be harboring apple maggot or codling moth larvae."
+    },
+    {
+     "id": "m10-30",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Rake and destroy diseased leaves (apple, cherry, rose, etc.), or hot compost diseased leaves."
+    },
+    {
+     "id": "m10-31",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray apple and stone fruit trees at leaf fall to prevent various fungal and bacterial diseases."
+    },
+    {
+     "id": "m10-32",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If moles and gophers are a problem, consider traps."
+    },
+    {
+     "id": "m10-33",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Control fall-germinating lawn weeds while they are small. Hand weeding and weeding tools are particularly effective at this stage.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m10-34",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m10-35",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Reduce water, place in cool area (50–55°F) and increase time in shade or darkness (12–14 hours) to force Christmas cactus to bloom in late December.",
+     "when": "Early October"
+    },
+    {
+     "id": "m10-36",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Place hanging pots of fuchsias where they won't freeze. Don't cut back until spring."
+    },
+    {
+     "id": "m10-37",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-west",
+     "text": "Check/treat houseplants for disease and insects before bringing indoors.",
+     "region_label": "Western Oregon"
+    }
+   ]
+  },
+  "src-156dfb55f7": {
+   "id": "src-156dfb55f7",
+   "url": "https://extension.oregonstate.edu/catalog/em-9689-february-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:32Z",
+   "page_sha256": "0038c9af42c34ddf4884eeb0ac7889494a5c3975c30b1c0d7053d69b3c761f3d",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "February garden calendar",
+   "month": 2,
+   "region_scope": "Орегон, США",
+   "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+   "published": "January 2021",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m02-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Tune-up lawn mower and garden equipment before the busy season begins."
+    },
+    {
+     "id": "m02-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Have soil tested to determine its nutrient needs. For more information, contact your local Extension office or learn more about garden soil testing."
+    },
+    {
+     "id": "m02-03",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Select and store healthy scion wood for grafting fruit and nut trees. Wrap in a damp cloth and place in a plastic bag. Store in a cool place."
+    },
+    {
+     "id": "m02-04",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Plan an herb bed for cooking and creating an interesting landscape. For example, choose parsley, sage, chives and lavender. Choose a sunny spot and plant seeds or transplants once the danger of frost has passed (late-April or early-May in the Willamette Valley and central coast; June or July in eastern and central Oregon)."
+    },
+    {
+     "id": "m02-05",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Plan to add herbaceous perennial flowers to your flowering landscape this spring. Try some drought-tolerant perennials to save money."
+    },
+    {
+     "id": "m02-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Repair winter damage to trees and shrubs."
+    },
+    {
+     "id": "m02-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Make a cold frame or hotbed to start early vegetables or flowers."
+    },
+    {
+     "id": "m02-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Fertilize rhubarb with manure or a complete fertilizer."
+    },
+    {
+     "id": "m02-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Incorporate cover crops or other organic matter into soil."
+    },
+    {
+     "id": "m02-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune and train grapes; make cuttings."
+    },
+    {
+     "id": "m02-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune fruit trees and blueberries."
+    },
+    {
+     "id": "m02-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "Prune and train summer-bearing and fall-bearing raspberries.",
+     "region_label": "Eastern Oregon"
+    },
+    {
+     "id": "m02-13",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune roses.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-14",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune and train trailing blackberries (if not done the prior August).",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-15",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune fall-bearing raspberries (in late-February or early-March).",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-16",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune clematis, Virginia creeper, and other vining ornamentals.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-17",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant windowsill container garden of herbs like chives, cilantro and parsley."
+    },
+    {
+     "id": "m02-18",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plan to add herbaceous perennial flowers this spring: astilbe, candytuft, peony and anemone."
+    },
+    {
+     "id": "m02-19",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Good time to plant fruit trees and deciduous shrubs. Replace varieties of ornamental plants that are susceptible to disease with resistant cultivars."
+    },
+    {
+     "id": "m02-20",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant asparagus if the ground is warm enough."
+    },
+    {
+     "id": "m02-21",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant seed flats of cole crops (cabbage, cauliflower, broccoli and Brussels sprouts), indoors or in a greenhouse."
+    },
+    {
+     "id": "m02-22",
+     "section": "Planting/propagation",
+     "region": "or-west",
+     "text": "Where soil is dry enough and workable, plant garden peas and sweet peas. Suggested varieties of garden peas include: Corvallis, Dark Green Perfection, Green Arrow, Oregon Sugar Pod, Snappy, Knight, Sugar Snap, Oregon Trail and Oregon Sugar Pod II.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-23",
+     "section": "Planting/propagation",
+     "region": "or-west",
+     "text": "Good time to plant new roses.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m02-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Use delayed-dormant sprays of lime sulfur for fruit and deciduous trees and shrubs."
+    },
+    {
+     "id": "m02-26",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose, bacterial canker of stone fruit and Eastern filbert blight. Sterilize tools before each new cut."
+    },
+    {
+     "id": "m02-27",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control moles and gophers with traps."
+    },
+    {
+     "id": "m02-28",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Elm leaf beetles, box-elder bugs and brown marmorated stink bugs are emerging from hibernation and may be seen indoors. They are not harmful, but can be a nuisance. Remove them with a vacuum or broom and dustpan.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-29",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Monitor for European crane fly and treat lawns if damage has been verified.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m02-30",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Make your own potting soil for starting seedlings in pots or flats, or use clean sterile commercial mixes."
+    },
+    {
+     "id": "m02-31",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-east",
+     "text": "Gather branches of quince, forsythia and flowering cherries; bring indoors to force early bloom.",
+     "region_label": "Central Oregon"
+    }
+   ]
+  },
+  "src-24bd413279": {
+   "id": "src-24bd413279",
+   "url": "https://www.rhs.org.uk/vegetables/garlic/grow-your-own",
+   "fetched_at": "2026-10-12T21:03:16Z",
+   "page_sha256": "38b59399b9ebc23c982847052b07148bf385b640b730dd0c82b0cd8f25ac42ca",
+   "parser": "gs-facts/1.0",
+   "kind": "organization",
+   "publisher": "Royal Horticultural Society (RHS)",
+   "name": "How to grow garlic — RHS Guide",
+   "region_scope": "Великобритания",
+   "quotes": [
+    {
+     "id": "autumn",
+     "region": "uk",
+     "quote": "It's grown from cloves, which are best planted in autumn, and is ready to harvest the following year, in late spring and summer."
+    },
+    {
+     "id": "october",
+     "region": "uk",
+     "quote": "is best planted in October"
+    },
+    {
+     "id": "harvest",
+     "region": "uk",
+     "quote": "Harvest garlic when the leaves turn yellow and then leave them to dry in the sun"
+    }
+   ]
+  },
+  "src-350fb00b44": {
+   "id": "src-350fb00b44",
+   "url": "https://extension.oregonstate.edu/catalog/em-9698-january-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:29Z",
+   "page_sha256": "f77e5f2c6538e0f0736fbd1055d9b9f6d46f72073efaacc4c4fc8fc98dcdb649",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "January garden calendar",
+   "month": 1,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "December 2020",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m01-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Plan to replace varieties of ornamental plants that are susceptible to disease with resistant cultivars in February."
+    },
+    {
+     "id": "m01-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Take hardwood cuttings of deciduous ornamental shrubs and trees for propagation."
+    },
+    {
+     "id": "m01-03",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Order a soil test to determine your garden's nutrient needs. Contact your local Extension office for a list of laboratories or view: Get actionable results from a soil, plant or environmental testing lab."
+    },
+    {
+     "id": "m01-04",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Begin planning this year’s vegetable garden in western Oregon and central Oregon vegetables. Check with local retail garden or nursery stores for seeds and seed catalogs."
+    },
+    {
+     "id": "m01-05",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Keep a garden journal. Consult your journal in the winter, so you can better plan for the growing season."
+    },
+    {
+     "id": "m01-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "To prevent winter damage from drying, water plants deeply every six to eight weeks, when the temperatures are above freezing.",
+     "region_label": "Central/Eastern Oregon"
+    },
+    {
+     "id": "m01-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Place windbreaks to protect sensitive landscape evergreens against cold, drying winds."
+    },
+    {
+     "id": "m01-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Reapply or redistribute mulch that has blown or washed away during winter."
+    },
+    {
+     "id": "m01-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Clean pruners and other small garden tools with rubbing alcohol."
+    },
+    {
+     "id": "m01-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Water landscape plants underneath wide eaves and in other sites shielded from rain.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m01-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Do not walk on lawns until frost has melted.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m01-12",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Scout cherry trees for signs and symptoms of bacterial canker. Remove infected branches with a clean pruner or saw. Sterilize tools before each new cut. Burn or send the branches to a landfill before bloom. See Managing Diseases and Insects in Home Orchards."
+    },
+    {
+     "id": "m01-13",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Watch for field mice damage on lower trunks of trees and shrubs. Eliminate hiding places by removing weeds. Use traps and approved baits as necessary."
+    },
+    {
+     "id": "m01-14",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Use dormant sprays of lime sulfur or copper fungicide on roses for general disease control, or plan to replace susceptible varieties with resistant cultivars in February."
+    },
+    {
+     "id": "m01-15",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Moss in lawn may mean too much shade or poor drainage. Modify site conditions if moss is bothersome.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m01-16",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray peach trees with approved fungicides to combat peach leaf curl and shothole. Or plant curl-resistant cultivars such as 'Frost', 'Q1-8' or 'Creswell'.",
+     "when": "Mid-January"
+    },
+    {
+     "id": "m01-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m01-18",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Monitor houseplants for correct water and fertilizer; guard against insect infestations; clean dust from leaves."
+    },
+    {
+     "id": "m01-19",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Protect sensitive plants such as weeping figs from cold drafts in the house."
+    },
+    {
+     "id": "m01-20",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Propagate split-leaf philodendrons and other leggy indoor plants by air-layering or vegetative cuttings."
+    },
+    {
+     "id": "m01-21",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-all",
+     "text": "Plant dwarf annual flowers such as coleus, impatiens and seedling geraniums inside as houseplants."
+    },
+    {
+     "id": "m01-22",
+     "section": "Houseplants and indoor gardening",
+     "region": "or-west",
+     "text": "Gather branches of quince, forsythia and flowering cherries and bring them indoors to force an early bloom.",
+     "region_label": "Western Oregon"
+    }
+   ]
+  },
+  "src-5c0419c8cc": {
+   "id": "src-5c0419c8cc",
+   "url": "https://extension.oregonstate.edu/catalog/em-9587-september-garden-calendar",
+   "fetched_at": "2026-10-12T21:02:00Z",
+   "page_sha256": "cb59f93c650576fbbce600d1481f301b6f724dc1e5ddb44de109a584977ddaba",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "September garden calendar",
+   "month": 9,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "August 2020",
+   "reviewed": "2026",
+   "items": [
+    {
+     "id": "m09-01",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest winter squash when the \"ground spot\" changes from white to a cream or gold color."
+    },
+    {
+     "id": "m09-02",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Pick and store winter squash; mulch carrots, parsnips and beets for winter harvesting."
+    },
+    {
+     "id": "m09-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Protect tomatoes; pick green tomatoes and ripen indoors if frost threatens."
+    },
+    {
+     "id": "m09-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Reduce water on trees, shrubs and vines east of Cascades to harden them for winter."
+    },
+    {
+     "id": "m09-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Stake tall flowers to keep them from blowing over in fall winds."
+    },
+    {
+     "id": "m09-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Dig, clean and store tuberous begonias if frost threatens."
+    },
+    {
+     "id": "m09-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Harvest potatoes when the tops die down. Store them in a dark location."
+    },
+    {
+     "id": "m09-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Optimal time for establishing a new lawn is August through mid-September."
+    },
+    {
+     "id": "m09-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Aerate lawns."
+    },
+    {
+     "id": "m09-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Apply 1 pound nitrogen per 1,000 square feet to lawns. Reduce risks of run-off into local waterways by not fertilizing just prior to rain, and not over-irrigating so that water runs off of lawn and onto sidewalk or street.",
+     "when": "Early-September"
+    },
+    {
+     "id": "m09-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-local",
+     "text": "Stop irrigating your lawn after Labor Day to suppress European crane fly populations.",
+     "region_label": "Willamette Valley"
+    },
+    {
+     "id": "m09-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Recycle disease-free plant material and kitchen vegetable and fruit scraps into compost."
+    },
+    {
+     "id": "m09-13",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Divide peonies and iris."
+    },
+    {
+     "id": "m09-14",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant or transplant woody ornamentals and mature herbaceous perennials. Fall planting of trees, shrubs and perennials can encourage healthy root growth over the winter."
+    },
+    {
+     "id": "m09-15",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant daffodils, tulips and crocus for spring bloom. Work calcium and phosphorus into the soil below the bulbs at planting time. Remember when purchasing bulbs, the size of the bulb is directly correlated to the size of the flower yet to come in spring."
+    },
+    {
+     "id": "m09-16",
+     "section": "Planting/propagation",
+     "region": "or-west",
+     "text": "Plant seeds of overwintering cover crops by September or early October so they get established before the weather turns cold and wet.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m09-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Apply parasitic nematodes to moist soil beneath rhododendrons and azaleas that show root weevil damage (notched leaves)."
+    },
+    {
+     "id": "m09-18",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control slugs as necessary. Least toxic management options include barriers and traps. Baits are also available for slug control; use caution around pets. Read and follow all label directions prior to using baits, or any other chemical control."
+    },
+    {
+     "id": "m09-19",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor trailing berries for leaf and cane spot. Treat if necessary."
+    },
+    {
+     "id": "m09-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "As necessary, apply copper spray for peach and cherry trees at the recommended timing."
+    },
+    {
+     "id": "m09-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray for juniper twig blight, as necessary, after pruning away dead and infected twigs."
+    },
+    {
+     "id": "m09-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Continue monitoring late-season soft fruits and berries for Spotted Wing Drosophila (SWD). If SWD are present, use an integrated and least toxic approach to manage the pests."
+    },
+    {
+     "id": "m09-23",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Spray susceptible varieties of potatoes and tomatoes for early and late blight.",
+     "region_label": "Coastal and Western valleys"
+    },
+    {
+     "id": "m09-24",
+     "section": "Indoor gardening",
+     "region": "or-all",
+     "text": "Clean houseplants, check for insects, and repot and fertilize if necessary; then bring them indoors."
+    }
+   ]
+  },
+  "src-5c6098a725": {
+   "id": "src-5c6098a725",
+   "url": "https://extension.oregonstate.edu/catalog/em-9714-march-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:35Z",
+   "page_sha256": "f17af9b7c348180a76dea283d24be97e6abb6895b076fc61a9516a65c1c81a99",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "March garden calendar",
+   "month": 3,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "February 2021",
+   "reviewed": "2026",
+   "items": [
+    {
+     "id": "m03-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Plan your vegetable garden carefully for spring, summer and fall vegetables that can be eaten fresh or preserved. If you lack in-ground gardening space, plan an outdoor container garden."
+    },
+    {
+     "id": "m03-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Use a soil thermometer at planting depth to help you know when to plant vegetables. Some cool season crops (onions, kale, lettuce and spinach) can be planted when the soil is consistently at or above 40 degrees Fahrenheit."
+    },
+    {
+     "id": "m03-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Lawn mowing: Set blade at 0.75–1 inch for bentgrass lawns; 1.5–2.5 inches for bluegrasses, fine fescues and ryegrasses."
+    },
+    {
+     "id": "m03-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Compost grass clippings and yard waste, except for clippings from lawns where weed-and-feed products or weed killers have been used."
+    },
+    {
+     "id": "m03-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Spread a thin layer of mature compost over garden and landscape areas and incorporate it into the top several inches of soil where possible."
+    },
+    {
+     "id": "m03-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune gooseberries and currants; fertilize with composted manure or a complete fertilizer if needed."
+    },
+    {
+     "id": "m03-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Fertilize evergreen shrubs and trees if needed. If established and healthy, their nutrient needs should be minimal."
+    },
+    {
+     "id": "m03-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If needed, fertilize rhododendrons, camellias and azaleas with acid-type fertilizer. If established and healthy, their nutrient needs should be minimal."
+    },
+    {
+     "id": "m03-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune spring-flowering shrubs after blossoms fade.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Fertilize caneberries using band fertilizer, broadcast fertilizer, a complete fertilizer or well-composted manure.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-11",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Divide hosta, daylilies and mums."
+    },
+    {
+     "id": "m03-12",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Use stored scion wood to graft fruit and ornamental trees."
+    },
+    {
+     "id": "m03-13",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Plant insectary plants such as alyssum, phacelia, coriander, candytuft, sunflower, yarrow and dill to attract beneficial insects to the garden."
+    },
+    {
+     "id": "m03-14",
+     "section": "Planting and propagation",
+     "region": "or-east",
+     "text": "Plant seed flats of cole crops (cabbage, cauliflower, broccoli and Brussels sprouts) indoors or in a greenhouse.",
+     "region_label": "Central Oregon"
+    },
+    {
+     "id": "m03-15",
+     "section": "Planting and propagation",
+     "region": "or-west",
+     "text": "If soil is dry enough, prepare vegetable garden and plant early cool-season crops (carrots, beets, broccoli, leeks, parsley, chives, rhubarb, peas and radishes). Plant onions outdoors as soon as the soil is dry enough to work.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-16",
+     "section": "Planting and propagation",
+     "region": "or-west",
+     "text": "Plant berry crops (strawberries, raspberries, blueberries, blackberries, currants, gooseberries and other berry-producing crop plants). See OSU Extension publications for berry varieties.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If webworms or leafrollers are present at damaging levels, consider management options. Prune out and destroy infested twigs, and spray if needed and it's labeled for the specific pest and plant."
+    },
+    {
+     "id": "m03-18",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Protect new plant growth from slugs. Least toxic management options include barriers and traps. Baits are also available for slug control; use with caution around pets. Read and follow all label directions prior to using baits or any other chemical control."
+    },
+    {
+     "id": "m03-19",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Learn to identify the predatory insects that can help keep aphids and other pests under control."
+    },
+    {
+     "id": "m03-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spray to control leaf and twig fungus diseases in dogwood, sycamore, hawthorn and willow trees."
+    },
+    {
+     "id": "m03-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Prune ornamentals for air circulation and to help prevent fungus diseases."
+    },
+    {
+     "id": "m03-22",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Start rose blackspot control tactics at budbreak. Control rose diseases such as black spot. Remove infected leaves. Spray as necessary with a registered fungicide.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-23",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Monitor for European crane fly and treat lawns if damage has been verified.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m03-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+    },
+    {
+     "id": "m03-25",
+     "section": "Indoor gardening",
+     "region": "or-all",
+     "text": "Start tuberous begonias indoors."
+    },
+    {
+     "id": "m03-26",
+     "section": "Indoor gardening",
+     "region": "or-west",
+     "text": "Take geraniums, tuberous begonias and fuchsias from protected storage. Water and fertilize lightly, and cut back if necessary. Harden plants off and move outdoors next month after danger of frost.",
+     "region_label": "Western Oregon"
+    }
+   ]
+  },
+  "src-95fa9d8e7a": {
+   "id": "src-95fa9d8e7a",
+   "url": "https://extension.oregonstate.edu/catalog/em-9476-april-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:41Z",
+   "page_sha256": "1546039ef1b1674880298249e4133fa7a82d76c7c8d104af2dc728e9c4c7699d",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "April garden calendar",
+   "month": 4,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "March 2021",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m04-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Write in your garden journal throughout the growing season."
+    },
+    {
+     "id": "m04-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Prepare garden soil for spring planting. Incorporate generous amounts of organic materials and other amendments, using the results of a soil analysis as a guide."
+    },
+    {
+     "id": "m04-03",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Prepare raised beds in areas where cold soils and poor drainage are a continuing problem. Incorporate generous amounts (at least 2 inches) of organic materials."
+    },
+    {
+     "id": "m04-04",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Use a soil thermometer to help you know when to plant vegetables. When the soil is consistently above 60 degrees Fahrenheit, some warm-season vegetables (beans, sweet corn) can be planted."
+    },
+    {
+     "id": "m04-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Allow foliage of spring-flowering bulbs to brown and die down before removing."
+    },
+    {
+     "id": "m04-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Apply commercial fertilizers, manure or compost to cane, bush (gooseberries, currants, and blueberries), and trailing berries."
+    },
+    {
+     "id": "m04-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Place compost or decomposed manure around perennial vegetables, such as asparagus and rhubarb."
+    },
+    {
+     "id": "m04-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Cut back ornamental grasses to a few inches above the ground."
+    },
+    {
+     "id": "m04-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Cover transplants to protect against late spring frosts."
+    },
+    {
+     "id": "m04-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "This is an optimum time to fertilize lawns. Apply 1 pound nitrogen per 1,000 square feet of lawn. Reduce risks of runoff into local waterways by not fertilizing just prior to rain, and not overirrigating so that water runs off the lawn and onto the sidewalk or street."
+    },
+    {
+     "id": "m04-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "De-thatch and renovate lawns. If moss has been a problem, scratch the surface before seeding with perennial ryegrass.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m04-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune and shape or thin spring-blooming shrubs and trees after blossoms fade.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m04-13",
+     "section": "Maintenance and cleanup",
+     "region": "or-east",
+     "text": "If snow mold was a problem, scratch the surface. If turf damage is severe, seed with Kentucky bluegrass.",
+     "region_label": "Central/Eastern Oregon"
+    },
+    {
+     "id": "m04-14",
+     "section": "Maintenance and cleanup",
+     "region": "or-local",
+     "text": "Prune your deciduous trees and shrubs, using proper techniques.",
+     "region_label": "Central Oregon and higher elevations of eastern Oregon"
+    },
+    {
+     "id": "m04-15",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Plant gladioli, hardy transplants of alyssum, phlox and marigolds, if weather and soil conditions permit."
+    },
+    {
+     "id": "m04-16",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "It's a great time to start a vegetable garden. Among the vegetables you can plant, consider: Oregon Coast: Beets, cabbage, carrots, cauliflower, celery, chard, slicing cucumbers, endive, leeks, lettuce, onion sets, peas and potatoes."
+    },
+    {
+     "id": "m04-17",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Broccoli, Brussels sprouts, cabbage, carrots, cauliflower, chard, chives, endive, leeks, lettuce, peas, radishes, rhubarb, rutabagas, spinach and turnips.",
+     "region_label": "Western valleys, Portland, Roseburg, Medford"
+    },
+    {
+     "id": "m04-18",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Peas, radishes, lettuce, spinach and turnips.",
+     "region_label": "Central Oregon and higher elevations of Eastern Oregon (late April)"
+    },
+    {
+     "id": "m04-19",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Snap and lima beans, beets, broccoli, Brussels sprouts, cabbage, carrots, cauliflower, chard, chives, sweet corn, slicing and pickling cucumbers, kohlrabi, leeks, lettuce, onion sets, parsnips, peas, potatoes, pumpkins, radishes, rhubarb, rutabagas, summer and winter squash, and turnips.",
+     "region_label": "Columbia and Snake River valleys, Ontario"
+    },
+    {
+     "id": "m04-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Clean up hiding places for slugs, sowbugs and millipedes. Least toxic management options for slugs include barriers and traps. Baits are also available for slug control; use caution around pets. Read and follow all label directions prior to using baits or any other chemical control."
+    },
+    {
+     "id": "m04-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor strawberries for spittlebugs and aphids; if present, wash off with water or use insecticidal soap as a contact spray. Follow label directions."
+    },
+    {
+     "id": "m04-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If necessary, spray apples and pears when buds appear for scab. See Managing Diseases and Insects in Home Orchards."
+    },
+    {
+     "id": "m04-23",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Cut and remove weeds near the garden to remove potential sources of plant disease."
+    },
+    {
+     "id": "m04-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Use floating row covers to keep insects such as beet leaf miners, cabbage maggot adult flies and carrot rust flies away from susceptible crops."
+    },
+    {
+     "id": "m04-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Help prevent damping off of seedlings by providing adequate ventilation."
+    },
+    {
+     "id": "m04-26",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Place pheromone traps in apple or pear trees in late April to monitor codling moth activity.",
+     "region_label": "Southwest Oregon"
+    },
+    {
+     "id": "m04-27",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m04-28",
+     "section": "Pest monitoring and management",
+     "region": "or-west",
+     "text": "Spray stone fruits, such as cherries, plums, peaches and apricots, for brown rot blossom blight, if necessary.",
+     "region_label": "Western Oregon"
+    }
+   ]
+  },
+  "src-9ce417b052": {
+   "id": "src-9ce417b052",
+   "url": "https://extension.oregonstate.edu/catalog/em-9688-may-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:43Z",
+   "page_sha256": "67e1e6acc72ec013d2a9efe439abb2d42ef03842949cc39a13a17eab578db0dd",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "May garden calendar",
+   "month": 5,
+   "region_scope": "Орегон, США",
+   "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+   "published": "April 2021",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m05-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Prepare and prime irrigation system for summer."
+    },
+    {
+     "id": "m05-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Use a soil thermometer to help you know when to plant vegetables. Wait until the soil is consistently above 70 degrees to plant tomatoes, squash, melons, peppers and eggplant."
+    },
+    {
+     "id": "m05-03",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Place pheromone traps in apple trees to detect presence of codling moth. Plan a control program of sprays, baits or predators when moths are found."
+    },
+    {
+     "id": "m05-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If needed, fertilize rhododendrons and azaleas with acid-type fertilizer. If established and healthy, their nutrient needs should be minimal. Remove spent blossoms."
+    },
+    {
+     "id": "m05-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "When selecting new roses, choose plants labeled for resistance to diseases. Fertilize roses and control rose diseases such as mildew with a registered fungicide, either organic or synthetic."
+    },
+    {
+     "id": "m05-06",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant dahlias, gladioli and tuberous begonias in mid-May."
+    },
+    {
+     "id": "m05-07",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant chrysanthemums for fall color."
+    },
+    {
+     "id": "m05-08",
+     "section": "Planting/propagation",
+     "region": "or-all",
+     "text": "Plant these vegetables (dates vary locally; check with local Master Gardeners): Oregon coast: Snap beans, broccoli, Brussels sprouts, cantaloupes, pickling cucumbers, dill, kale, parsnips, peppers, pumpkins, summer and winter squash, sweet corn and tomatoes."
+    },
+    {
+     "id": "m05-09",
+     "section": "Planting/propagation",
+     "region": "or-local",
+     "text": "Snap and lima beans, Brussels sprouts, cantaloupes, slicing and pickling cucumbers, dill, eggplant, kale, peppers, pumpkins, summer and winter squash, onions, potatoes, tomatoes and watermelon.",
+     "region_label": "Western valleys, Portland, Roseburg, Medford"
+    },
+    {
+     "id": "m05-10",
+     "section": "Planting/propagation",
+     "region": "or-local",
+     "text": "Snap and lima beans, beets, celery, sweet corn, slicing and pickling cucumbers, dill, kale, kohlrabi, onions, parsley, parsnips, peppers, white potatoes, pumpkins, summer and winter squash, and tomatoes.",
+     "region_label": "Lower elevations, eastern Oregon (dates vary widely)"
+    },
+    {
+     "id": "m05-11",
+     "section": "Planting/propagation",
+     "region": "or-local",
+     "text": "Direct seed carrots, corn (late May), chard, kohlrabi, and potatoes. Transplant Brussels sprouts, cauliflower, cucumbers (late May), leeks or peppers.",
+     "region_label": "Central Oregon and higher elevations of eastern Oregon"
+    },
+    {
+     "id": "m05-12",
+     "section": "Planting/propagation",
+     "region": "or-local",
+     "text": "Cantaloupes, dill, eggplant, kale, okra, peppers, sweet potatoes, tomatoes and watermelon.",
+     "region_label": "Columbia and Snake River valleys, Ontario"
+    },
+    {
+     "id": "m05-13",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If an unknown plant problem occurs, contact your local Master Gardener hotline or plant clinic for identification and future management options."
+    },
+    {
+     "id": "m05-14",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective."
+    },
+    {
+     "id": "m05-15",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Trap moles and gophers as new mounds appear."
+    },
+    {
+     "id": "m05-16",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Leafrolling worms may affect apples and blueberries. Prune off and destroy affected leaves."
+    },
+    {
+     "id": "m05-17",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor aphids on strawberries and ornamentals. If present, control options include washing off with water, hand removal, or using registered insecticides labeled for the problem plant. Read and follow all label directions prior to using insecticides. Promoting natural enemies (predators and parasitoids that eat or kill insects) is a longer-term solution for insect control in gardens."
+    },
+    {
+     "id": "m05-18",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Spittle bugs may appear on ornamental plants as foam on stems. In most cases, they don't require management. If desired, wash off with water or use insecticidal soap as a contact spray. Read and follow label directions when using insecticides, including insecticidal soap."
+    },
+    {
+     "id": "m05-19",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control cabbage worms in cabbage and cauliflower, 12-spotted cucumber beetles in beans and lettuce, and maggots in radishes. Control can involve hand removal, placing barrier screen over newly planted rows, or spraying or dusting with registered pesticides, labeled for use on the problem plant. Read and follow label directions when using insecticides."
+    },
+    {
+     "id": "m05-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Tiny holes in foliage and shiny, black beetles on tomato, beets, radishes and potato indicate flea beetle attack. Treat with Neem, Bt or use nematodes for larvae. Read and follow label directions when using insecticides."
+    },
+    {
+     "id": "m05-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Prevent root maggots when planting cole crops (cabbage, broccoli, collards and kale) by covering with row covers or screens, or by applying appropriate insecticides."
+    },
+    {
+     "id": "m05-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor rhododendrons, azaleas, primroses and other broadleaf ornamentals for adult root weevils. Look for fresh evidence of feeding (notching at leaf edges). Try sticky trap products on plant trunks to trap adult weevils. Protect against damaging the bark by applying the sticky material on a 4-inch wide band of poly sheeting or burlap wrapped around the trunk. Mark plants now and manage with beneficial nematodes when soil temperatures are above 55 degrees. If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+    },
+    {
+     "id": "m05-23",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control slugs with bait or traps and by removing or mowing vegetation near garden plots."
+    },
+    {
+     "id": "m05-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Monitor blueberry, raspberry, strawberry and other plants that produce soft fruits and berries for spotted wing drosophila (SWD). Learn how to monitor for SWD flies and larval infestations in fruit."
+    }
+   ]
+  },
+  "src-b19febdc67": {
+   "id": "src-b19febdc67",
+   "url": "https://www.rhs.org.uk/vegetables/potatoes/grow-your-own",
+   "fetched_at": "2026-10-12T21:03:18Z",
+   "page_sha256": "e5f64025118f8d240ae8c8fb1748a9f7a2bbe70e178ecd46ab92888cc25bbf40",
+   "parser": "gs-facts/1.0",
+   "kind": "organization",
+   "publisher": "Royal Horticultural Society (RHS)",
+   "name": "How to grow potatoes — RHS Guide",
+   "region_scope": "Великобритания",
+   "quotes": [
+    {
+     "id": "spring",
+     "region": "uk",
+     "quote": "Potatoes are grown from specially prepared 'seed potatoes' (small tubers), usually planted in spring."
+    },
+    {
+     "id": "chitting",
+     "region": "uk",
+     "quote": "start chitting in late January in milder areas and up to early March in colder spots – the process takes four to six weeks."
+    },
+    {
+     "id": "pots",
+     "region": "uk",
+     "quote": "Plant one seed potato per 30cm (12in) of pot diameter, setting them just below the surface.",
+     "values": [
+      30,
+      12
+     ]
+    }
+   ]
+  },
+  "src-f60feacc36": {
+   "id": "src-f60feacc36",
+   "url": "https://extension.oregonstate.edu/catalog/em-9539-august-garden-calendar",
+   "fetched_at": "2026-10-12T21:01:57Z",
+   "page_sha256": "92606409a6ad2ee71aa7246939c3c6b5a579dd1d2c38b15343dd0b049b016069",
+   "parser": "gs-facts/1.0",
+   "kind": "university",
+   "publisher": "Oregon State University Extension Service",
+   "name": "August garden calendar",
+   "month": 8,
+   "region_scope": "Орегон, США",
+   "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+   "published": "July 2020",
+   "reviewed": "2025",
+   "items": [
+    {
+     "id": "m08-01",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "The optimal time for establishing a new lawn is August through mid-September."
+    },
+    {
+     "id": "m08-02",
+     "section": "Planning",
+     "region": "or-all",
+     "text": "Dampwood termites begin flying late this month. Make sure your home is free of wet wood or places where wood and soil are in contact."
+    },
+    {
+     "id": "m08-03",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Make compost out of lawn clippings and garden plants that are ready to be recycled. Don't use clippings if the lawn has been treated with herbicide, including \"weed-and-feed\" products. Don't compost diseased plants unless you are using the \"hot compost\" method (120 degrees to 150 degrees Fahrenheit)."
+    },
+    {
+     "id": "m08-04",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Fertilize cucumbers, summer squash and broccoli to maintain production while you continue harvesting."
+    },
+    {
+     "id": "m08-05",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Clean and fertilize strawberry beds."
+    },
+    {
+     "id": "m08-06",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Use mulch to protect ornamentals and garden plants from hot weather damage. If needed, provide temporary shade, especially for recent plantings."
+    },
+    {
+     "id": "m08-07",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Camellias need deep watering to develop flower buds for next spring."
+    },
+    {
+     "id": "m08-08",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune raspberries, boysenberries and other caneberries after harvest. Check raspberries for holes made by crown borers, near the soil line, at the base of the plant. Remove infested wood before adults emerge (approximately mid-August)."
+    },
+    {
+     "id": "m08-09",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Monitor garden irrigation closely so crops and ornamentals don't dry out."
+    },
+    {
+     "id": "m08-10",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "If you want your lawn to stay green, you'll have to water frequently during periods of heat and drought stress. Irrigate 0.25 inches four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+    },
+    {
+     "id": "m08-11",
+     "section": "Maintenance and cleanup",
+     "region": "or-all",
+     "text": "Prune cherry trees before fall rains begin to allow callusing in dry weather. This will minimize the spread of bacterial canker."
+    },
+    {
+     "id": "m08-12",
+     "section": "Maintenance and cleanup",
+     "region": "or-west",
+     "text": "Prune out dead fruiting canes in trailing blackberries and train new primocanes prior the to end of the month.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m08-13",
+     "section": "Maintenance and cleanup",
+     "region": "or-local",
+     "text": "Prune away excess vegetation and new blossoms on tomatoes after mid-August. Concentrate on ripening set fruit.",
+     "region_label": "High elevations, Central and Eastern Oregon"
+    },
+    {
+     "id": "m08-14",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Plant winter cover crops in vacant space in the vegetable garden"
+    },
+    {
+     "id": "m08-15",
+     "section": "Planting and propagation",
+     "region": "or-all",
+     "text": "Plant winter kale, Brussels sprouts, turnips, parsnips, parsley and Chinese cabbage."
+    },
+    {
+     "id": "m08-16",
+     "section": "Planting and propagation",
+     "region": "or-west",
+     "text": "Mid-summer planting of peas; use enation-virus-resistant varieties. Plant fall crops of cabbage, cauliflower and broccoli.",
+     "region_label": "Western Oregon"
+    },
+    {
+     "id": "m08-17",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Plant spinach.",
+     "region_label": "Oregon Coast"
+    },
+    {
+     "id": "m08-18",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Plant cauliflower, broccoli, Brussels sprouts, spinach, turnips and parsnips.",
+     "region_label": "Western valleys, Portland, Roseburg, Medford"
+    },
+    {
+     "id": "m08-19",
+     "section": "Planting and propagation",
+     "region": "or-local",
+     "text": "Plant Chinese cabbage and endive.",
+     "region_label": "Columbia and Snake River Valleys, Ontario"
+    },
+    {
+     "id": "m08-20",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose and bacterial canker of stone fruit. Sterilize tools before each new cut."
+    },
+    {
+     "id": "m08-21",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check apple maggot traps; spray tree if needed."
+    },
+    {
+     "id": "m08-22",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Control yellowjackets and wasps with traps and lures as necessary. Keep in mind they are beneficial insects and help control pest insects in the home garden."
+    },
+    {
+     "id": "m08-23",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If necessary, spray for walnut husk fly.",
+     "when": "First week"
+    },
+    {
+     "id": "m08-24",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If necessary, second spray for peach tree borer and/or peach twig borer.",
+     "when": "First week"
+    },
+    {
+     "id": "m08-25",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "If necessary, second spray of filbert trees for filbertworm.",
+     "when": "First week"
+    },
+    {
+     "id": "m08-26",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check for root weevils in ornamental shrubs and flowers; codling moth and spider mite in apple trees; scale insects in camellias, holly and maples. Treat as necessary."
+    },
+    {
+     "id": "m08-27",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Watch for corn earworm on early corn. Treat as needed."
+    },
+    {
+     "id": "m08-28",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "For mite control on ornamentals and most vegetables, hose off foliage, spray with approved miticide if necessary."
+    },
+    {
+     "id": "m08-29",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Check leafy vegetables for caterpillars. Pick off caterpillars as they appear. Use Bt-k, if necessary."
+    },
+    {
+     "id": "m08-30",
+     "section": "Pest monitoring and management",
+     "region": "or-all",
+     "text": "Continue monitoring peaches, plums, prunes, figs, fall-bearing raspberries and strawberries, and other plants that produce soft fruits and berries for Spotted Wing Drosophila. If SWD are present, use an integrated and least toxic approach to manage the pests."
+    },
+    {
+     "id": "m08-31",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Corn may need protection from earworm. Spray new silks with appropriate pesticides if necessary.",
+     "region_label": "Willamette Valley"
+    },
+    {
+     "id": "m08-32",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Check for tomato hornworm. Remove them if found.",
+     "region_label": "East of Cascades"
+    },
+    {
+     "id": "m08-33",
+     "section": "Pest monitoring and management",
+     "region": "or-local",
+     "text": "Spray potatoes and tomatoes for early and late blight.",
+     "region_label": "Coastal and western valleys"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,9 @@
+# Хосты garden-season. Запрос возможен только к хосту, который есть и здесь,
+# и в inventory/network-allowlist.yaml (GET).
+sources:
+  - host: www.rhs.org.uk
+    role: [organization]
+  - host: extension.oregonstate.edu
+    role: [university]
+  - host: www.supersadovnik.ru
+    role: [reference]

@@ -1,0 +1,32 @@
+{
+ "id": "src-b19febdc67",
+ "url": "https://www.rhs.org.uk/vegetables/potatoes/grow-your-own",
+ "fetched_at": "2026-10-12T21:03:18Z",
+ "page_sha256": "e5f64025118f8d240ae8c8fb1748a9f7a2bbe70e178ecd46ab92888cc25bbf40",
+ "parser": "gs-facts/1.0",
+ "kind": "organization",
+ "publisher": "Royal Horticultural Society (RHS)",
+ "name": "How to grow potatoes — RHS Guide",
+ "region_scope": "Великобритания",
+ "quotes": [
+  {
+   "id": "spring",
+   "region": "uk",
+   "quote": "Potatoes are grown from specially prepared 'seed potatoes' (small tubers), usually planted in spring."
+  },
+  {
+   "id": "chitting",
+   "region": "uk",
+   "quote": "start chitting in late January in milder areas and up to early March in colder spots – the process takes four to six weeks."
+  },
+  {
+   "id": "pots",
+   "region": "uk",
+   "quote": "Plant one seed potato per 30cm (12in) of pot diameter, setting them just below the surface.",
+   "values": [
+    30,
+    12
+   ]
+  }
+ ]
+}

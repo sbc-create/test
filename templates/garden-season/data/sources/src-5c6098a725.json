@@ -1,0 +1,181 @@
+{
+ "id": "src-5c6098a725",
+ "url": "https://extension.oregonstate.edu/catalog/em-9714-march-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:35Z",
+ "page_sha256": "f17af9b7c348180a76dea283d24be97e6abb6895b076fc61a9516a65c1c81a99",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "March garden calendar",
+ "month": 3,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "February 2021",
+ "reviewed": "2026",
+ "items": [
+  {
+   "id": "m03-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Plan your vegetable garden carefully for spring, summer and fall vegetables that can be eaten fresh or preserved. If you lack in-ground gardening space, plan an outdoor container garden."
+  },
+  {
+   "id": "m03-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Use a soil thermometer at planting depth to help you know when to plant vegetables. Some cool season crops (onions, kale, lettuce and spinach) can be planted when the soil is consistently at or above 40 degrees Fahrenheit."
+  },
+  {
+   "id": "m03-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Lawn mowing: Set blade at 0.75–1 inch for bentgrass lawns; 1.5–2.5 inches for bluegrasses, fine fescues and ryegrasses."
+  },
+  {
+   "id": "m03-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Compost grass clippings and yard waste, except for clippings from lawns where weed-and-feed products or weed killers have been used."
+  },
+  {
+   "id": "m03-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Spread a thin layer of mature compost over garden and landscape areas and incorporate it into the top several inches of soil where possible."
+  },
+  {
+   "id": "m03-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune gooseberries and currants; fertilize with composted manure or a complete fertilizer if needed."
+  },
+  {
+   "id": "m03-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Fertilize evergreen shrubs and trees if needed. If established and healthy, their nutrient needs should be minimal."
+  },
+  {
+   "id": "m03-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If needed, fertilize rhododendrons, camellias and azaleas with acid-type fertilizer. If established and healthy, their nutrient needs should be minimal."
+  },
+  {
+   "id": "m03-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune spring-flowering shrubs after blossoms fade.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Fertilize caneberries using band fertilizer, broadcast fertilizer, a complete fertilizer or well-composted manure.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-11",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Divide hosta, daylilies and mums."
+  },
+  {
+   "id": "m03-12",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Use stored scion wood to graft fruit and ornamental trees."
+  },
+  {
+   "id": "m03-13",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Plant insectary plants such as alyssum, phacelia, coriander, candytuft, sunflower, yarrow and dill to attract beneficial insects to the garden."
+  },
+  {
+   "id": "m03-14",
+   "section": "Planting and propagation",
+   "region": "or-east",
+   "text": "Plant seed flats of cole crops (cabbage, cauliflower, broccoli and Brussels sprouts) indoors or in a greenhouse.",
+   "region_label": "Central Oregon"
+  },
+  {
+   "id": "m03-15",
+   "section": "Planting and propagation",
+   "region": "or-west",
+   "text": "If soil is dry enough, prepare vegetable garden and plant early cool-season crops (carrots, beets, broccoli, leeks, parsley, chives, rhubarb, peas and radishes). Plant onions outdoors as soon as the soil is dry enough to work.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-16",
+   "section": "Planting and propagation",
+   "region": "or-west",
+   "text": "Plant berry crops (strawberries, raspberries, blueberries, blackberries, currants, gooseberries and other berry-producing crop plants). See OSU Extension publications for berry varieties.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If webworms or leafrollers are present at damaging levels, consider management options. Prune out and destroy infested twigs, and spray if needed and it's labeled for the specific pest and plant."
+  },
+  {
+   "id": "m03-18",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Protect new plant growth from slugs. Least toxic management options include barriers and traps. Baits are also available for slug control; use with caution around pets. Read and follow all label directions prior to using baits or any other chemical control."
+  },
+  {
+   "id": "m03-19",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Learn to identify the predatory insects that can help keep aphids and other pests under control."
+  },
+  {
+   "id": "m03-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray to control leaf and twig fungus diseases in dogwood, sycamore, hawthorn and willow trees."
+  },
+  {
+   "id": "m03-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Prune ornamentals for air circulation and to help prevent fungus diseases."
+  },
+  {
+   "id": "m03-22",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Start rose blackspot control tactics at budbreak. Control rose diseases such as black spot. Remove infected leaves. Spray as necessary with a registered fungicide.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-23",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Monitor for European crane fly and treat lawns if damage has been verified.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m03-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m03-25",
+   "section": "Indoor gardening",
+   "region": "or-all",
+   "text": "Start tuberous begonias indoors."
+  },
+  {
+   "id": "m03-26",
+   "section": "Indoor gardening",
+   "region": "or-west",
+   "text": "Take geraniums, tuberous begonias and fuchsias from protected storage. Water and fertilize lightly, and cut back if necessary. Harden plants off and move outdoors next month after danger of frost.",
+   "region_label": "Western Oregon"
+  }
+ ]
+}

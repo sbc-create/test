@@ -1,0 +1,16 @@
+# Цитаты выбраны вручную; при импорте сверяются с текстом страницы дословно. Регион: Великобритания.
+url: https://www.rhs.org.uk/vegetables/garlic/grow-your-own
+kind: organization
+publisher: Royal Horticultural Society (RHS)
+name: "How to grow garlic — RHS Guide"
+region_scope: "Великобритания"
+quotes:
+  - id: autumn
+    region: uk
+    quote: "It's grown from cloves, which are best planted in autumn, and is ready to harvest the following year, in late spring and summer."
+  - id: october
+    region: uk
+    quote: "is best planted in October"
+  - id: harvest
+    region: uk
+    quote: "Harvest garlic when the leaves turn yellow and then leave them to dry in the sun"

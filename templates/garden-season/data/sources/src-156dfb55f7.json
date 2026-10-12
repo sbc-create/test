@@ -1,0 +1,213 @@
+{
+ "id": "src-156dfb55f7",
+ "url": "https://extension.oregonstate.edu/catalog/em-9689-february-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:32Z",
+ "page_sha256": "0038c9af42c34ddf4884eeb0ac7889494a5c3975c30b1c0d7053d69b3c761f3d",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "February garden calendar",
+ "month": 2,
+ "region_scope": "Орегон, США",
+ "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+ "published": "January 2021",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m02-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Tune-up lawn mower and garden equipment before the busy season begins."
+  },
+  {
+   "id": "m02-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Have soil tested to determine its nutrient needs. For more information, contact your local Extension office or learn more about garden soil testing."
+  },
+  {
+   "id": "m02-03",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Select and store healthy scion wood for grafting fruit and nut trees. Wrap in a damp cloth and place in a plastic bag. Store in a cool place."
+  },
+  {
+   "id": "m02-04",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Plan an herb bed for cooking and creating an interesting landscape. For example, choose parsley, sage, chives and lavender. Choose a sunny spot and plant seeds or transplants once the danger of frost has passed (late-April or early-May in the Willamette Valley and central coast; June or July in eastern and central Oregon)."
+  },
+  {
+   "id": "m02-05",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Plan to add herbaceous perennial flowers to your flowering landscape this spring. Try some drought-tolerant perennials to save money."
+  },
+  {
+   "id": "m02-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Repair winter damage to trees and shrubs."
+  },
+  {
+   "id": "m02-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Make a cold frame or hotbed to start early vegetables or flowers."
+  },
+  {
+   "id": "m02-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Fertilize rhubarb with manure or a complete fertilizer."
+  },
+  {
+   "id": "m02-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Incorporate cover crops or other organic matter into soil."
+  },
+  {
+   "id": "m02-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune and train grapes; make cuttings."
+  },
+  {
+   "id": "m02-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune fruit trees and blueberries."
+  },
+  {
+   "id": "m02-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "Prune and train summer-bearing and fall-bearing raspberries.",
+   "region_label": "Eastern Oregon"
+  },
+  {
+   "id": "m02-13",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune roses.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-14",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune and train trailing blackberries (if not done the prior August).",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-15",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune fall-bearing raspberries (in late-February or early-March).",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-16",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune clematis, Virginia creeper, and other vining ornamentals.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-17",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant windowsill container garden of herbs like chives, cilantro and parsley."
+  },
+  {
+   "id": "m02-18",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plan to add herbaceous perennial flowers this spring: astilbe, candytuft, peony and anemone."
+  },
+  {
+   "id": "m02-19",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Good time to plant fruit trees and deciduous shrubs. Replace varieties of ornamental plants that are susceptible to disease with resistant cultivars."
+  },
+  {
+   "id": "m02-20",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant asparagus if the ground is warm enough."
+  },
+  {
+   "id": "m02-21",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant seed flats of cole crops (cabbage, cauliflower, broccoli and Brussels sprouts), indoors or in a greenhouse."
+  },
+  {
+   "id": "m02-22",
+   "section": "Planting/propagation",
+   "region": "or-west",
+   "text": "Where soil is dry enough and workable, plant garden peas and sweet peas. Suggested varieties of garden peas include: Corvallis, Dark Green Perfection, Green Arrow, Oregon Sugar Pod, Snappy, Knight, Sugar Snap, Oregon Trail and Oregon Sugar Pod II.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-23",
+   "section": "Planting/propagation",
+   "region": "or-west",
+   "text": "Good time to plant new roses.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m02-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Use delayed-dormant sprays of lime sulfur for fruit and deciduous trees and shrubs."
+  },
+  {
+   "id": "m02-26",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose, bacterial canker of stone fruit and Eastern filbert blight. Sterilize tools before each new cut."
+  },
+  {
+   "id": "m02-27",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control moles and gophers with traps."
+  },
+  {
+   "id": "m02-28",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Elm leaf beetles, box-elder bugs and brown marmorated stink bugs are emerging from hibernation and may be seen indoors. They are not harmful, but can be a nuisance. Remove them with a vacuum or broom and dustpan.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-29",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Monitor for European crane fly and treat lawns if damage has been verified.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m02-30",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Make your own potting soil for starting seedlings in pots or flats, or use clean sterile commercial mixes."
+  },
+  {
+   "id": "m02-31",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-east",
+   "text": "Gather branches of quince, forsythia and flowering cherries; bring indoors to force early bloom.",
+   "region_label": "Central Oregon"
+  }
+ ]
+}
