@@ -273,6 +273,13 @@
       "status": "verified",
       "owner_action": "Архитектор: ac4e439e4cd9 (пин, монорепозиторий) или 72bf12afb2a7 (коммит ветки шаблона из note) — какой из них source_commit по конвенции; у lordserials22-* source_commit — коммит ветки шаблона (63fe341…, он же пин). Значение не вписываем до ответа.",
       "evidence": "1lordserials1-online b87fa58: template_origin.source_commit = pins.source_commit = monorepo_commit (ac4e439e4cd9), строка соответствия в note (72bf12afb2a7 — координата ветки той же правки; вывод Архитектора). checks/run.sh rc=0. Попутно 150bcdf: checks/activate_scenarios.py возвращён к копии исполнителя (696ec80, sha 6481dedb88e4) — checks/deploy_request.py требует совпадения, копирование шаблонов 83f51e7/f198891 его нарушило (ошибка SEO: после копирования не гонялся полный набор). Выкладка не требуется до следующей правки."
+    },
+    {
+      "id": "B012",
+      "site": "все ячейки (исполнитель выпусков)",
+      "status": "blocked",
+      "problem": "Копия шаблонов проверок у исполнителя (/usr/local/lib/site-factory-cell, root, от 2026-10-01) отстала от дерева фабрики по пяти проверкам: activate_scenarios, entrypoint_present, fails_closed, manifest_stamp, no_secrets. Ячейка с checks/deploy_request.py (1lordserials1-online) требует побайтового совпадения со ВСТАНОВЛЕННОЙ копией, поэтому новые шаблоны (свободный порт, пропуск сверки плеера) в неё не доходят. Побайтово не совпадают с установленной 96 копий по восьми проверкам (site-checks-drift.py 65c5150), из них до 12.10: verify_pins 15, ascii_shell_identifiers 5, compiles 1. Сторож договора стоит у одной ячейки из девятнадцати; ставить его остальным до переустановки нельзя — все станут красными.",
+      "owner_action": "Владелец (root): `sudo bash automation/host/install-cell-executor.sh --dry-run`, просмотреть план, затем `sudo bash automation/host/install-cell-executor.sh`. После этого: SEO/Архитектор прогоняют automation/local/site-checks-drift.py до нуля расхождений с установленной копией, SEO берёт f198891 в 1lordserials1-online, затем решается установка deploy_request остальным ячейкам."
     }
   ]
 }
