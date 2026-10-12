@@ -163,6 +163,30 @@ class Site:
     def for_region(self, r: str) -> list[Work]:
         return [w for w in self.works if r in w.regions]
 
+    # Регион пользователя → регионы источника, сроки которых к нему относятся: свой регион и «весь штат»
+    # для районов Орегона. Великобритания (RHS) с Орегоном не смешивается.
+    PLOT_REGIONS = {
+        "or-west": ("or-west", "or-all"),
+        "or-east": ("or-east", "or-all"),
+        "or-local": ("or-local", "or-all"),
+        "or-all": ("or-all",),
+        "uk": ("uk",),
+    }
+
+    def plot(self, region: str, crops: list[str], general: bool) -> dict[int, list[dict]]:
+        """Месяц → строки «работа, регион источника, уточнение» для выбранного региона и культур."""
+        allowed = self.PLOT_REGIONS[region]
+        out: dict[int, list[dict]] = {}
+        for w in self.works:
+            if not ((w.crop and w.crop in crops) or (not w.crop and general)):
+                continue
+            for x in w.when:
+                if x["month"] and x["region"] in allowed:
+                    rows = out.setdefault(x["month"], [])
+                    if not any(r["work"] is w and r["region"] == x["region"] for r in rows):
+                        rows.append({"work": w, **x})
+        return dict(sorted(out.items()))
+
     def crop_grid(self, c: str) -> dict[str, dict[int, list[Work]]]:
         """Регион → месяц → работы: таблица сроков культуры без смешивания регионов."""
         grid: dict[str, dict[int, list[Work]]] = {}

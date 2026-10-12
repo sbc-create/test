@@ -9,11 +9,11 @@
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
 <meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
-<link rel="stylesheet" href="{{ asset('css/season.css') }}">
+<link rel="stylesheet" href="{{ asset('css/plot.css') }}">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/season.js') }}" defer></script>
+<script src="{{ asset('js/plot.js') }}" defer></script>
 </head>
 <body data-ns="{{ site.cfg.storage_namespace }}">
 <a class="skip" href="#main">К содержимому</a>

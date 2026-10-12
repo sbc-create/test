@@ -167,6 +167,8 @@ class App:
                 [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
                 "home",
             )
+        if path == "/moj-uchastok/":
+            return self.my_plot(q)
         if path == "/kalendar/":
             region = (q.get("region") or [""])[0]
             typ = (q.get("tip") or [""])[0]
@@ -339,9 +341,48 @@ class App:
             )
         return self.not_found()
 
+    def my_plot(self, q: dict):
+        """Без параметров — индексируемая форма; с выбором — noindex без canonical; неизвестный регион — 400."""
+        s = self.site
+        region = (q.get("region") or [""])[0]
+        crops = [c for c in dict.fromkeys(q.get("k", [])) if c in s.crops()]
+        general = (q.get("obshchie") or [""])[0] == "1"
+        crumbs = [("Главная", "/"), ("Мой участок", "/moj-uchastok/")]
+        asked = bool(region or crops or general)
+        error = None
+        if asked and region not in Site.PLOT_REGIONS:
+            error = "Выберите регион: без него сроки нельзя показать честно."
+        elif asked and not crops and not general:
+            error = "Отметьте хотя бы одну культуру или общие работы."
+        months = s.plot(region, crops, general) if asked and not error else {}
+        meta = Meta(
+            f"Мой участок: {REGIONS[region]}"
+            if months or (asked and not error)
+            else "Мой участок: календарь под ваш регион",
+            "Выберите регион и культуры — получите календарь работ на год, где у каждого срока указан регион источника.",
+            None if asked else s.abs("/moj-uchastok/"),
+            not asked,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "plot",
+        )
+        body = self.render(
+            "plot.html", meta, region=region, crops=crops, general=general, months=months, error=error, asked=asked
+        )
+        return (400 if error else 200), body, {}
+
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/kalendar/", "/kultury/", "/regiony/", "/podborki/", "/kak-chitat-sroki/", "/istochniki/"]
+        urls = [
+            "/",
+            "/moj-uchastok/",
+            "/kalendar/",
+            "/kultury/",
+            "/regiony/",
+            "/podborki/",
+            "/kak-chitat-sroki/",
+            "/istochniki/",
+        ]
         urls += [f"/kalendar/{MONTH_SLUG[m - 1]}/" for m in range(1, 13) if s.in_month(m)]
         urls += [f"/kultura/{c}/" for c in s.crops()]
         urls += [f"/region/{r}/" for r in REGIONS if s.for_region(r)]

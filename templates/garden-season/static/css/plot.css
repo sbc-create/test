@@ -1,7 +1,7 @@
-/* garden-season, вариант month-calendar — «Дача по сезону»: кремовая бумага, мох, солнечно-жёлтый.
-   Лента месяцев в шапке, регион подписан текстом у каждого срока. Только этот вариант. */
-:root { --bg: #f6f2e6; --card: #fffdf6; --ink: #1f2a1f; --ink-2: #3f4a3e; --muted: #59614f; --moss: #2f5233; --moss-2: #3f6a44;
-  --sun: #f2c14e; --sun-2: #fbe7b0; --line: #ddd5bd; --focus: #b35a00; --west: #1d5b8f; --east: #8a4b0f; --local: #6b3f8a; --uk: #8a1f3a;
+/* garden-season, вариант my-plot — «Дача по сезону»: мой участок. Светлая зелень, терракота, карточки выбора.
+   Регион подписан текстом у каждого срока. Только этот вариант. */
+:root { --bg: #f1f6ef; --card: #ffffff; --ink: #1a2419; --ink-2: #3a4638; --muted: #4e5a4b; --moss: #8a3b12; --moss-2: #a3471a;
+  --sun: #9cc98a; --sun-2: #e3f1dc; --line: #ddd5bd; --focus: #b35a00; --west: #1d5b8f; --east: #8a4b0f; --local: #6b3f8a; --uk: #8a1f3a;
   --sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif; color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -171,3 +171,32 @@ main:focus { outline: none; }
   .steps li, .lim, .check label, .when { break-inside: avoid; }
   .sources a::after { content: " (" attr(href) ")"; font-size: 9pt; word-break: break-all; }
 }
+
+/* ---- вариант C: форма участка и личный календарь ---- */
+.plot-form { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; margin: 14px 0 24px; }
+.plot-form fieldset { border: 0; padding: 0; margin: 0 0 14px; min-width: 0; } .plot-form legend { font-weight: 800; font-size: 1.1rem; padding: 0; margin-bottom: 8px; }
+.pick { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr)); }
+.pick__item { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 10px 12px; border: 2px solid var(--line); border-radius: 10px; cursor: pointer; background: #fff; height: 100%; }
+.pick__item input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--moss); }
+.pick__item small { display: block; color: var(--muted); font-size: .86rem; }
+.pick__item:has(input:checked) { border-color: var(--moss); background: var(--sun-2); }
+.pick--row { display: flex; flex-wrap: wrap; }
+.pick__chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px 0 10px; border: 2px solid var(--line); border-radius: 999px; background: #fff; cursor: pointer; font-weight: 600; }
+.pick__chip input { flex: 0 0 auto; width: 24px; height: 24px; margin: 0; accent-color: var(--moss); }
+.pick__chip:has(input:checked) { border-color: var(--moss); background: var(--sun-2); }
+.pick__item:has(input:focus-visible), .pick__chip:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
+.plot-form__go { margin: 0; }
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+.plot { list-style: none; padding: 0; display: grid; gap: 12px; }
+.plot__m { background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--moss); border-radius: 10px; padding: 2px 16px 12px; scroll-margin-top: 12px; }
+.plot__m h2 { margin: .6em 0 .3em; }
+.plot__m ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 8px; }
+.plot__row { display: grid; grid-template-columns: 32px 1fr; gap: 8px; align-items: start; }
+.plot__done input { width: 24px; height: 24px; margin: 4px 0 0; accent-color: var(--moss); }
+.plot__row:has(input:checked) b { text-decoration: line-through; color: var(--muted); }
+.plot__row a { display: inline-block; min-height: 24px; margin-right: 6px; }
+.plot__when { display: block; color: var(--muted); font-size: .9rem; }
+.plot__progress { font-weight: 800; color: var(--moss); min-height: 1.4em; }
+.links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
+.links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--moss); border-radius: 8px; text-decoration: none; font-weight: 700; color: var(--moss); }
+@media print { .plot-form, .actions, .plot__done { display: none !important; } }

@@ -1,4 +1,4 @@
-"""Браузерная приёмка garden-season (month-calendar): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка garden-season (my-plot): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,11 +11,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8853"
+BASE = "http://127.0.0.1:8868"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 WORK = "/rabota/malina-obrezka/"
 SHOTS = {
+    "plot": "/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1",
     "home": "/",
     "month": "/kalendar/oktyabr/",
     "calendar": "/kalendar/?region=or-west",
@@ -183,6 +184,36 @@ def run(shots: Path | None) -> dict:
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
         )
+        # --- вариант C: мой участок ---
+        pg.evaluate("localStorage.clear(); 0")
+        pg.goto(BASE + "/")
+        pg.locator(".pick__item--or-west").click()
+        pg.locator(".pick__chip", has_text="Чеснок").click()
+        pg.locator(".pick__chip", has_text="Общие работы").locator("input").uncheck()
+        with pg.expect_navigation():
+            pg.click(".plot-form .btn")
+        regs = pg.locator(".plot .rg").all_inner_texts()
+        A["plot_from_home_shows_only_allowed_regions"] = (
+            "/moj-uchastok/" in pg.url
+            and bool(regs)
+            and all(r in ("Западный Орегон", "Орегон (весь штат)") for r in regs)
+        )
+        A["plot_months_in_order"] = pg.locator(".plot__m h2").all_inner_texts() == ["Октябрь", "Ноябрь"]
+        boxes = pg.locator("[data-done]")
+        boxes.nth(0).check()
+        A["plot_progress_counts"] = pg.locator("[data-plot-progress]").inner_text().startswith("Сделано: 1 из ")
+        pg.reload()
+        A["plot_done_persists"] = boxes.nth(0).is_checked()
+        pg.goto(BASE + "/")
+        A["home_form_remembers_choice"] = (
+            pg.locator("input[name=region][value=or-west]").is_checked()
+            and pg.locator("input[name=k][value=chesnok]").is_checked()
+        )
+        resp = pg.goto(BASE + "/moj-uchastok/?region=moskva&k=chesnok")
+        A["unknown_region_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        pg.goto(BASE + "/moj-uchastok/?region=uk&k=golubika")
+        A["no_works_honest_empty_state"] = pg.locator(".empty h2").inner_text() == "Для этого выбора работ нет"
+        A["storage_namespace_own"] = all(k.startswith("gs-plot:") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
 
         # --- без JavaScript ---

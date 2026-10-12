@@ -1,4 +1,7 @@
-# garden-season — «Дача по сезону» (вариант A: month-calendar)
+# garden-season — «Дача по сезону», вариант C `my-plot`
+
+Вариант C: «мой участок» — регион и культуры → личный календарь на год с отметками. Порт 8868, ключи `gs-plot:*`.
+Вариант A — ветка `claude/template-garden-season`, B — `claude/template-garden-season-b`.
 
 Календарь сезонных работ. Лента 12 месяцев в шапке → месяц, где работы сгруппированы по региону источника →
 работа-инструкция с таблицей «когда — регион — источник», шагами, оговорками и чек-листом. Культуры — таблица «регион × месяц».
@@ -6,10 +9,10 @@
 ## Команды (из `templates/garden-season`)
 
 ```bash
-bin/garden-season start | stop | status          # preview http://127.0.0.1:8853/ (loopback, noindex)
+bin/garden-season start | stop | status          # preview http://127.0.0.1:8868/ (loopback, noindex)
 bin/garden-season test                           # pytest шаблона
 bin/garden-season qa --shots docs/screenshots/<sha> --out docs/verification-browser-qa.json
-python3 qa/viewports.py 8853                     # все URL sitemap × 320/390/768/1440
+python3 qa/viewports.py 8868                     # все URL sitemap × 320/390/768/1440
 bin/garden-season build --commit HEAD            # статический артефакт var/garden-season/build/<sha>
 bin/garden-season sources osu <url>… | quotes | reparse | check
 bin/garden-season content validate | build

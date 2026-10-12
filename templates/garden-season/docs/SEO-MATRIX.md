@@ -21,3 +21,7 @@ Preview закрыт: `X-Robots-Tag` и мета `noindex, nofollow`, robots `Di
 
 В sitemap 54 URL, все 200, canonical на себя, один H1, уникальные title (тест). HowTo — только видимое, без image,
 рейтинга, автора, цены, времени (тест). Сроки в разметку не выносятся: они региональные и показаны в таблице на странице.
+
+## Вариант C (my-plot)
+
+`/moj-uchastok/` без параметров — index, canonical на себя, в sitemap; с выбором — noindex без canonical; неизвестный регион — 400.

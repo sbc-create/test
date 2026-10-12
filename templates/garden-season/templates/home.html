@@ -1,27 +1,12 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, region_chip %}
+{% from "plot_form.html" import plot_form %}
 {% block main %}
 <section class="hero">
-  <h1>Что делать на участке в каждый месяц</h1>
-  <p class="lead">Календарь сезонных работ. У каждого срока указан регион, для которого его дал источник, — сроки одного региона мы не выдаём за общие.</p>
+  <h1>Мой участок: календарь работ под ваш регион</h1>
+  <p class="lead">Выберите регион и то, что растёт у вас, — получите работы по месяцам на весь год. У каждого срока подписан регион, для которого его дал источник; сроки разных регионов не смешиваются.</p>
 </section>
-<section aria-labelledby="h-year">
-  <h2 id="h-year">Год по месяцам</h2>
-  <ol class="year">{% for i in range(12) %}{% set n = site.in_month(i + 1)|length %}
-    <li class="year__m{% if not n %} year__m--empty{% endif %}"><a href="/kalendar/{{ MONTH_SLUG[i] }}/"><b>{{ MONTHS[i]|capitalize }}</b><span>{% if n %}{{ n }} {{ plural(n, 'работа', 'работы', 'работ') }}{% else %}пока нет работ{% endif %}</span></a></li>
-  {% endfor %}</ol>
-</section>
-<section aria-labelledby="h-reg">
-  <h2 id="h-reg">Регионы источников</h2>
-  <ul class="reglist">{% for r in REGIONS %}{% if site.for_region(r) %}<li><a href="/region/{{ r }}/">{{ region_chip(r) }}</a> <span>{{ REGION_NOTE[r] }}</span></li>{% endif %}{% endfor %}</ul>
-  <p><a href="/kak-chitat-sroki/">Как перенести сроки на свой участок</a></p>
-</section>
-<section aria-labelledby="h-crops">
-  <h2 id="h-crops">Культуры</h2>
-  <ul class="crops">{% for c, ws in site.crops().items() %}<li><a href="/kultura/{{ c }}/">{{ CROPS[c] }} <span>{{ ws|length }}</span></a></li>{% endfor %}</ul>
-</section>
-<section aria-labelledby="h-cols">
-  <h2 id="h-cols">Подборки</h2>
-  <ul class="cols">{% for c in site.collections.values() %}<li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span></a></li>{% endfor %}</ul>
+{{ plot_form(big=True) }}
+<section aria-labelledby="h-more"><h2 id="h-more">Смотреть без выбора</h2>
+  <ul class="links"><li><a href="/kalendar/">Календарь по месяцам</a></li><li><a href="/kultury/">Культуры</a></li><li><a href="/regiony/">Регионы источников</a></li><li><a href="/kak-chitat-sroki/">Как перенести сроки на свой участок</a></li></ul>
 </section>
 {% endblock %}

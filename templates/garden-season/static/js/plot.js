@@ -1,7 +1,7 @@
 /* garden-season (month-calendar): чек-лист работы с сохранением отметок и печать. Без JS всё читается. */
 (function () {
   "use strict";
-  var ns = document.body.getAttribute("data-ns") || "gs";
+  var ns = document.body.getAttribute("data-ns") || "gs-plot";
   function read(k, d) { try { var v = localStorage.getItem(ns + ":" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function write(k, v) { try { localStorage.setItem(ns + ":" + k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   var work = document.querySelector(".work[data-slug]");
@@ -26,4 +26,32 @@
   document.querySelectorAll("[data-print]").forEach(function (b) {
     b.hidden = false; b.addEventListener("click", function () { window.print(); });
   });
+
+  // Мой участок: помним последний выбор для пустой формы, отмечаем сделанное по месяцам
+  var form = document.querySelector("[data-plot-form]");
+  var q = new URLSearchParams(location.search);
+  if (location.pathname === "/moj-uchastok/" && q.get("region")) write("plot", location.search);
+  if (form && location.pathname === "/" ) {
+    var last = read("plot", "");
+    if (last) {
+      var p = new URLSearchParams(last);
+      form.querySelectorAll("input").forEach(function (x) {
+        if (x.name === "region") x.checked = x.value === p.get("region");
+        else if (x.name === "k") x.checked = p.getAll("k").indexOf(x.value) !== -1;
+        else if (x.name === "obshchie") x.checked = p.get("obshchie") === "1";
+      });
+    }
+  }
+  var dones = document.querySelectorAll("[data-done]");
+  if (dones.length) {
+    var prog = document.querySelector("[data-plot-progress]"), d0 = read("done", []);
+    var sync = function (save) {
+      var d = read("done", []), n = 0;
+      dones.forEach(function (b) { var k = b.getAttribute("data-done"), i = d.indexOf(k); if (b.checked) { n++; if (i === -1) d.push(k); } else if (i !== -1) d.splice(i, 1); });
+      if (save) write("done", d);
+      prog.textContent = n === dones.length ? "Все работы года отмечены." : "Сделано: " + n + " из " + dones.length + ".";
+    };
+    dones.forEach(function (b) { b.hidden = false; b.checked = d0.indexOf(b.getAttribute("data-done")) !== -1; b.addEventListener("change", function () { sync(true); }); });
+    sync(false);
+  }
 })();

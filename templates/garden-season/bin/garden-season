@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# garden-season: управление ТОЛЬКО своим preview (127.0.0.1:8853) и инструментами шаблона.
+# garden-season: управление ТОЛЬКО своим preview (127.0.0.1:8868) и инструментами шаблона.
 set -euo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 REPO="$(cd "$HERE/../.." && pwd)"
@@ -7,7 +7,7 @@ RUN="$REPO/var/garden-season/run"; LOG="$REPO/var/garden-season/logs"
 mkdir -p "$RUN" "$LOG"; cd "$HERE"
 PIDFILE="$RUN/preview.pid"
 alive() { [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null && grep -q "sezon.server" "/proc/$(cat "$PIDFILE")/cmdline" 2>/dev/null; }
-health() { python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8853/healthz',timeout=2).read().decode())"; }
+health() { python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8868/healthz',timeout=2).read().decode())"; }
 case "${1:-help}" in
   sources) shift; exec python3 -m sezon.sources "$@" ;;
   content) shift; exec python3 -m sezon.content "$@" ;;
@@ -16,7 +16,7 @@ case "${1:-help}" in
   start)
     if alive; then echo "уже работает, pid $(cat "$PIDFILE")"; exit 0; fi
     nohup python3 -m sezon.server >>"$LOG/preview.log" 2>&1 & echo $! >"$PIDFILE"
-    for _ in $(seq 1 40); do if health >/dev/null 2>&1; then echo "preview: http://127.0.0.1:8853/ (pid $(cat "$PIDFILE"))"; exit 0; fi; python3 -c "import time;time.sleep(0.25)"; done
+    for _ in $(seq 1 40); do if health >/dev/null 2>&1; then echo "preview: http://127.0.0.1:8868/ (pid $(cat "$PIDFILE"))"; exit 0; fi; python3 -c "import time;time.sleep(0.25)"; done
     echo "preview не ответил, журнал: $LOG/preview.log" >&2; exit 1 ;;
   stop) if alive; then kill "$(cat "$PIDFILE")"; echo "остановлен"; else echo "не запущен"; fi; rm -f "$PIDFILE" ;;
   restart) bash "$HERE/bin/garden-season" stop; bash "$HERE/bin/garden-season" start ;;
