@@ -184,3 +184,9 @@ def test_content_has_no_source_step_text():
     assert data["site_id"] == "food-baking"
     for it in data["items"]:
         assert "_steps" not in it and "editor_notes" not in it
+
+
+def test_variant_identity_meta(app):
+    _, html, _ = app.route("/", {})
+    assert '<meta name="site-factory-variant-id" content="book-spread">' in html
+    assert '<meta name="site-factory-variant-version" content="1">' in html

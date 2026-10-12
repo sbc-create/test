@@ -6,6 +6,8 @@
 <title>{{ meta.title }}{% if meta.kind != 'home' %} · Тесто и десерты{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ meta.robots(site) }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 {% endif %}{% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
 {% endif %}{% if meta.next %}<link rel="next" href="{{ meta.next }}">

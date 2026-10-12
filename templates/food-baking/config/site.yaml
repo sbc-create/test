@@ -1,6 +1,8 @@
 # food-baking — «Тесто и десерты». Отдельная конфигурация, ничего общего с другими сайтами сети.
 site_id: food-baking
 name: "Тесто и десерты"            # рабочее название, не проверено
+variant_id: book-spread   # вариант A; вариант B — ветка claude/template-food-baking-b
+variant_version: "1"
 mode: preview                      # production — отдельный переключатель, нужен домен
 production_authorized: false
 origin:
