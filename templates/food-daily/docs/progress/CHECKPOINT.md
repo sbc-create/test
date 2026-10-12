@@ -56,3 +56,32 @@
 
 Продолжение: home-practical — новая ветка `claude/template-home-practical` и worktree от origin/main,
 сначала аудит 3 референсов (хосты только из задания; если их нет — BLOCKED_INPUT, без подстановки).
+
+---
+
+# Ночь 12–13.10.2026 (старт 2026-10-12T20:00Z = 23:00 MSK)
+
+Хост claude-control-01, пользователь claude, origin `sbc-create/test`, main `a7f7cb6` (не менялся).
+Варианты: идентификатор `variant_id` по образцу фабрики (мета `site-factory-variant-id`); A — исходная ветка
+`claude/template-<site>`, B — `claude/template-<site>-b`, свой worktree и порт.
+
+| сайт / вариант | ветка | worktree | проверенный код | preview | PR | статус |
+| --- | --- | --- | --- | --- | --- | --- |
+| food-daily A | claude/template-food-daily | wt-template-food-daily | 4c263da | 127.0.0.1:8847 | #95 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-baking A | claude/template-food-baking | wt-template-food-baking | 0b95dcb | 127.0.0.1:8848 | #96 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-weekly A | claude/template-food-weekly | wt-template-food-weekly | da65202 | 127.0.0.1:8849 | #97 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| food-appliances A | claude/template-food-appliances | wt-template-food-appliances | 8953b3a | 127.0.0.1:8850 | #98 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| home-practical A (rooms-cards) | claude/template-home-practical | wt-template-home-practical | 06d708c | 127.0.0.1:8851 | #99 | READY_FOR_REVIEW_WITH_BLOCKERS |
+| home-practical B (problem-checklists) | claude/template-home-practical-b | wt-template-home-practical-b | — | 127.0.0.1:8852 (план) | — | building |
+| garden-season … games-survival | — | — | — | — | — | planned |
+
+Сделано за первые 50 минут: сверка 4 сайтов на 320/390/768/1440 (найдены и исправлены скролл на 320 px в
+food-baking, обрезанные подсказки, зоны нажатия <24 px во всех четырёх, падающий тест изоляции в отчётном
+commit food-baking); home-practical A от аудита до PR.
+
+Следующие 3 действия: (1) B: ветка `-b` от 19fb887, worktree, порт 8852, навигация «от проблемы», компактный
+каталог, последовательные чек-листы; (2) B: QA, карта действий, PR; (3) garden-season A: аудит профильных
+садовых/ботанических источников.
+
+Возобновление: `cd /home/claude/wt-template-home-practical/templates/home-practical && bin/home-practical status`;
+ветки и PR — таблица выше; проверка ширин — `python3 qa/viewports.py <порт>` в каждом шаблоне.
