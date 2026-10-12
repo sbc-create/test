@@ -120,7 +120,8 @@
       "site": "технический SEO-цикл",
       "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
       "status": "blocked",
-      "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer."
+      "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer.",
+      "evidence": "Предусловия выполнены и приняты Архитектором независимо: механизм 23/23, обёртка 20/20, расхождений 0 (docs/verification/autocontinue-mechanism-20261012.md, 188b43a); тесты tests/unit/test_seo_tech_run.py 17/17. Осталось только действие root."
     },
     {
       "id": "T006",
