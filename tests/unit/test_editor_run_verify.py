@@ -455,3 +455,43 @@ def test_paused_domains_are_not_offered_to_the_editor(tmp_path):
     assert "zonafilm.cc" not in editor_run.allowed_domains()
     assert "animedia.space" in editor_run.allowed_domains()
     assert "zonafilm.space" not in editor_run.PAUSED_PUBLISH
+
+
+def _rep(**kw):
+    steps = {"claimed": True, "source_read": True, "written": False, "published": False,
+             "public_page_verified": False}
+    steps.update(kw.pop("steps", {}))
+    return {"complete": all(steps.values()), "steps": steps, "outcomes": [], "unresolved": [],
+            "comments_published": 0, **kw}
+
+
+def test_verdict_refusals_and_visible_comments_are_resolved_not_failure():
+    """19:25Z 12.10: 4 задания с законными отказами и 3 видимых комментария шли в INCOMPLETE."""
+    rep = _rep(outcomes=[{"task_id": "a", "outcome": "IDENTITY_UNCLEAR"}], comments_published=3)
+    v = editor_run.verdict(rep, {"outcome": "PUBLISHED"}, comments_visible=3)
+    assert v == "RESOLVED" and v not in editor_run.ERROR_VERDICTS
+
+
+def test_verdict_unconfirmed_comment_stays_failure():
+    rep = _rep(outcomes=[{"task_id": "a", "outcome": "SOURCES_MISSING"}], comments_published=3)
+    assert editor_run.verdict(rep, {"outcome": "PUBLISHED"}, comments_visible=2) == "INCOMPLETE"
+
+
+def test_verdict_task_without_result_stays_failure():
+    rep = _rep(outcomes=[{"task_id": "a", "outcome": "IDENTITY_UNCLEAR"}], unresolved=["b"])
+    assert editor_run.verdict(rep, {"outcome": "PUBLISHED"}, comments_visible=0) == "INCOMPLETE"
+
+
+def test_verdict_text_published_but_page_unverified_stays_failure():
+    rep = _rep(steps={"written": True, "published": True},
+               outcomes=[{"task_id": "a", "outcome": "TEXT_WRITTEN"}])
+    assert editor_run.verdict(rep, {"outcome": "PUBLISHED"}, comments_visible=0) == "INCOMPLETE"
+
+
+def test_verdict_complete_and_empty_batch():
+    full = _rep(steps={"written": True, "published": True, "public_page_verified": True})
+    assert editor_run.verdict(full, {}, 0) == "COMPLETE"
+    # Ничего не взято и не опубликовано: прежнее правило самоотчёта.
+    пусто = _rep(steps={"claimed": False})
+    assert editor_run.verdict(пусто, {"outcome": "NO_TASK"}, 0) == "NO_PUBLICATION"
+    assert editor_run.verdict(пусто, {"outcome": "PUBLISHED"}, 0) == "INCOMPLETE"

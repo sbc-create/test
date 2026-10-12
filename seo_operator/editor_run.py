@@ -192,6 +192,13 @@ def verify(
         c.get("tool") == "editorial_facts" and c.get("outcome") == "ok" for c in calls
     )
     pages = [_page_has(p["url"], p["body"], fetch) for p in pubs]
+    # Итог КАЖДОГО взятого задания, а не только TEXT_WRITTEN: партия, где все
+    # задания закрыты законными отказами, отличается от партии, бросившей
+    # задание без итога (19:25Z 12.10 — 4 задания, 4 итога, а в отчёте пусто).
+    итоги = [e for e in events if e.get("event") == "task_result"]
+    с_итогом = {e.get("task_id") for e in итоги}
+    без_итога = sorted({e.get("task_id") for e in claimed} - с_итогом)
+    комментарии = sum(1 for c in calls if c.get("tool") == "publish_comment" and c.get("outcome") == "ok")
     steps = {
         "claimed": bool(claimed),
         "source_read": read_source,
@@ -215,6 +222,9 @@ def verify(
             }
             for e in written
         ],
+        "outcomes": [{"task_id": e.get("task_id"), "outcome": e.get("outcome")} for e in итоги],
+        "unresolved": без_итога,
+        "comments_published": комментарии,
         "publications": [{k: p[k] for k in ("site", "slug", "at", "url")} for p in pubs],
         "pages": pages,
         "bridge_calls_seen": len(calls),
@@ -364,6 +374,33 @@ CADENCE_DEFAULTS = {
 #: Исходы партии, которые считаются сбоем для нарастающей паузы. Честное «задач
 #: нет» и полный запуск сбоем не являются.
 ERROR_VERDICTS = ("INCOMPLETE",)
+
+
+def verdict(report: dict, self_report: dict, comments_visible: int) -> str:
+    """Вердикт партии для runs.jsonl; сбоем (ERROR_VERDICTS) считается только INCOMPLETE.
+
+    * COMPLETE — полный путь текста подтверждён (строгое `complete`, не меняется);
+    * RESOLVED — текста нет, но у КАЖДОГО взятого задания записан итог, и каждый
+      комментарий, опубликованный по журналу моста, увиден браузером
+      (`comments_visible` — сколько подтвердил comment-visible-check.py). Это
+      работа партии, а не сбой: 19:25Z 12.10 — 4 законных отказа и 3 видимых
+      комментария засчитывались INCOMPLETE и удлиняли паузу;
+    * NO_PUBLICATION — честное «работы нет» в самоотчёте и ничего не опубликовано;
+    * INCOMPLETE — всё остальное: задание без итога, неподтверждённый
+      комментарий, описание без видимой страницы.
+    """
+    if report.get("complete"):
+        return "COMPLETE"
+    steps = report.get("steps") or {}
+    опубликовано_текстов = steps.get("published")
+    комментарии = int(report.get("comments_published") or 0)
+    if (not опубликовано_текстов and not report.get("unresolved")
+            and (report.get("outcomes") or комментарии)
+            and comments_visible >= комментарии):
+        return "RESOLVED"
+    if self_report.get("outcome") in ("NO_TASK", "SOURCES_MISSING") and not опубликовано_текстов:
+        return "NO_PUBLICATION"
+    return "INCOMPLETE"
 
 
 def cadence(path: Path | None = None) -> dict:

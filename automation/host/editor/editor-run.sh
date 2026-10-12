@@ -96,15 +96,36 @@ PY
 )"
 
 python3 - "$STATE" "$RUN_ID" "$TRIGGER" "$STARTED" "$FINISHED" "$MODEL_RC" "$VERIFY_RC" "$SELF" <<'PY'
-import json, sys, pathlib
+import json, subprocess, sys, pathlib
+from urllib.parse import urlsplit
+from seo_operator import editor_run
 state, run_id, trigger, started, finished, model_rc, verify_rc, self_report = sys.argv[1:]
 verify = json.loads(pathlib.Path(state, f"{run_id}.verify.json").read_text(encoding="utf-8"))
 self_report = json.loads(self_report)
 no_task = self_report.get("outcome") in ("NO_TASK", "SOURCES_MISSING") and not verify["steps"]["published"]
+# Комментарии, опубликованные по журналу моста, подтверждаются БРАУЗЕРОМ на
+# адресах из самоотчёта (подпись «Редакция» в ветке): слово модели — не довод.
+проверки = []
+if verify.get("comments_published"):
+    тексты = {p["url"].rstrip("/") for p in verify.get("publications") or []}
+    for url in self_report.get("urls") or []:
+        if url.rstrip("/") in тексты:
+            continue
+        адрес = urlsplit(url)
+        slug = адрес.path.rstrip("/").rsplit("/", 1)[-1]
+        try:
+            rc = subprocess.run(["python3", "automation/local/comment-visible-check.py", адрес.netloc, slug],
+                                capture_output=True, text=True, timeout=180).returncode
+        except subprocess.TimeoutExpired:
+            rc = 2
+        проверки.append({"url": url, "rc": rc})
+видно = sum(1 for п in проверки if п["rc"] == 0)
 record = {"run_id": run_id, "trigger": trigger, "started_at": started, "finished_at": finished, "model_started": True,
           "model_exit": int(model_rc), "verified_complete": verify["complete"], "steps": verify["steps"],
           "self_report": self_report, "honest_no_publication": no_task,
-          "verdict": "COMPLETE" if verify["complete"] else ("NO_PUBLICATION" if no_task else "INCOMPLETE")}
+          "outcomes": verify.get("outcomes"), "unresolved": verify.get("unresolved"),
+          "comments_published": verify.get("comments_published"), "comment_checks": проверки,
+          "verdict": editor_run.verdict(verify, self_report, видно)}
 pathlib.Path(state, f"{run_id}.run.json").write_text(json.dumps(record, ensure_ascii=False, indent=2), encoding="utf-8")
 with open(pathlib.Path(state, "runs.jsonl"), "a", encoding="utf-8") as fh:
     fh.write(json.dumps(record, ensure_ascii=False) + "\n")
@@ -113,4 +134,6 @@ PY
 
 if [ "$VERIFY_RC" -eq 0 ]; then exit 0; fi
 case "$SELF" in *NO_TASK*|*SOURCES_MISSING*) exit 0 ;; esac
+# RESOLVED: у каждого задания итог, каждый комментарий увиден браузером — не сбой.
+grep -q '"verdict": "RESOLVED"' "$STATE/$RUN_ID.run.json" && exit 0
 exit 2
