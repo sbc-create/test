@@ -1,0 +1,172 @@
+{
+ "commit_head": "0b9f676d41333863a1ffdbe117ca9182ff0d9c3e",
+ "at": "2026-10-12T23:46:21Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "month_strip_opens_october": true,
+  "month_groups_regions": 3,
+  "pager_next_month": true,
+  "pager_prev_month": true,
+  "empty_month_honest": true,
+  "filter_region_reduces": true,
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "crop_cell_opens_work": true,
+  "timing_rows_with_region": true,
+  "toc_jumps_to_steps": true,
+  "ref_jumps_to_source": true,
+  "checklist_persists_after_reload": true,
+  "checklist_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "whole_card_clickable": true,
+  "search_keyboard_results": 1,
+  "search_clear": true,
+  "search_by_month": 10,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "plot_from_home_shows_only_allowed_regions": true,
+  "plot_months_in_order": true,
+  "plot_progress_counts": true,
+  "plot_done_persists": true,
+  "home_form_remembers_choice": true,
+  "unknown_region_400_alert": true,
+  "no_works_honest_empty_state": true,
+  "storage_namespace_own": true,
+  "nojs_work_steps": 5,
+  "nojs_print_hidden": true,
+  "nojs_filter_works": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1": [],
+  "mobile:/": [],
+  "mobile:/kalendar/oktyabr/": [],
+  "mobile:/kalendar/?region=or-west": [],
+  "mobile:/rabota/malina-obrezka/": [],
+  "mobile:/kultura/chesnok/": [],
+  "mobile:/kalendar/dekabr/": [],
+  "mobile:/kalendar/": [],
+  "mobile:/kalendar/fevral/": [],
+  "mobile:/kultury/": [],
+  "mobile:/kultura/malina/": [],
+  "mobile:/regiony/": [],
+  "mobile:/region/uk/": [],
+  "mobile:/tip/zima/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/yagodniki/": [],
+  "mobile:/rabota/uborka-i-hranenie-kartofelya/": [],
+  "mobile:/rabota/sideraty-na-zimu/": [],
+  "mobile:/kak-chitat-sroki/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=чеснок": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/kalendar/?region=uk&tip=zima": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1": [],
+  "desktop:/": [],
+  "desktop:/kalendar/oktyabr/": [],
+  "desktop:/kalendar/?region=or-west": [],
+  "desktop:/rabota/malina-obrezka/": [],
+  "desktop:/kultura/chesnok/": [],
+  "desktop:/kalendar/dekabr/": [],
+  "desktop:/kalendar/": [],
+  "desktop:/kalendar/fevral/": [],
+  "desktop:/kultury/": [],
+  "desktop:/kultura/malina/": [],
+  "desktop:/regiony/": [],
+  "desktop:/region/uk/": [],
+  "desktop:/tip/zima/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/yagodniki/": [],
+  "desktop:/rabota/uborka-i-hranenie-kartofelya/": [],
+  "desktop:/rabota/sideraty-na-zimu/": [],
+  "desktop:/kak-chitat-sroki/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=чеснок": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/kalendar/?region=uk&tip=zima": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:plot": {
+   "lcp_ms": 180,
+   "cls": 0
+  },
+  "mobile:home": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "mobile:month": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:calendar": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:work": {
+   "lcp_ms": 104,
+   "cls": 0
+  },
+  "mobile:crop": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:empty-month": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "desktop:plot": {
+   "lcp_ms": 144,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 88,
+   "cls": 0
+  },
+  "desktop:month": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:calendar": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:work": {
+   "lcp_ms": 260,
+   "cls": 0
+  },
+  "desktop:crop": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:empty-month": {
+   "lcp_ms": 52,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8868/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8868/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/0b9f676/plot-mobile.png",
+  "docs/screenshots/0b9f676/home-mobile.png",
+  "docs/screenshots/0b9f676/month-mobile.png",
+  "docs/screenshots/0b9f676/calendar-mobile.png",
+  "docs/screenshots/0b9f676/work-mobile.png",
+  "docs/screenshots/0b9f676/crop-mobile.png",
+  "docs/screenshots/0b9f676/empty-month-mobile.png",
+  "docs/screenshots/0b9f676/plot-desktop.png",
+  "docs/screenshots/0b9f676/home-desktop.png",
+  "docs/screenshots/0b9f676/month-desktop.png",
+  "docs/screenshots/0b9f676/calendar-desktop.png",
+  "docs/screenshots/0b9f676/work-desktop.png",
+  "docs/screenshots/0b9f676/crop-desktop.png",
+  "docs/screenshots/0b9f676/empty-month-desktop.png"
+ ]
+}
