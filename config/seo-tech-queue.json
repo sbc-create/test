@@ -476,6 +476,15 @@
       "expected": "склонение по числу; доступное число пишется всегда, когда оно меньше заявленного",
       "check": "bash checks/run.sh; живой HTML",
       "status": "queued"
+    },
+    {
+      "id": "T025",
+      "site": "lordserial33.biz, zonafilm.cc, zonafilm12.site, animedia.space, an1mego.site",
+      "repo": "var/site-repos/*",
+      "problem": "Ячейки семейства исполняют один код, а наборы проверок у них разные (automation/local/family-checks-drift.py, Архитектор 0dea340): lordserial33-biz без activate_scenarios/artifact_contents/manifest_stamp (есть у шести родственников); zonafilm-cc и zonafilm12-site без activate_scenarios; zonafilm-cc без ascii_shell_identifiers/compiles/entrypoint_present, а вместо no_secrets — no_data_or_secrets, проверяющая только имена файлов, не содержимое; animedia-space без compiles; an1mego-site без data_chain (из-за этого регрессия 31f05ba954a3 вышла на живой).",
+      "expected": "у каждой ячейки — шаблонные проверки, которые несёт её родня; no_data_or_secrets zonafilm-cc усилена до сканирования содержимого",
+      "check": "family-checks-drift.py — 0 потерь; bash checks/run.sh каждой затронутой ячейки rc=0",
+      "status": "queued"
     }
   ]
 }
