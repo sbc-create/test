@@ -322,6 +322,8 @@ def run(shots_dir: Path | None) -> dict:
         ctx.close()
         browser.close()
     # плоская карта действий для отчёта: сценарий со словарём — PASS, если все его булевы проверки истинны
+    acc = res["accessibility"]
+    res["axe"] = {"version": acc.get("axe_version"), **{k: v["violations"] for k, v in acc.get("pages", {}).items()}}
     res["actions"] = {
         k: (all(x for x in v.values() if isinstance(x, bool)) if isinstance(v, dict) else v) for k, v in S.items()
     }
