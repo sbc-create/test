@@ -731,6 +731,14 @@ def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
     return out
 
 
+#: Домены, где ПЕРВАЯ публикация после снятия паузы — приёмка защиты полей:
+#: идут первыми при любом счёте публикаций. 12.10: zonafilm.space был разрешён,
+#: но при равном нуле с an1mego.site стоял четвёртым, и за пять партий до него
+#: не дошло — а от этой публикации зависит снятие паузы с шести витрин.
+#: Строка убирается после сверки editorial-overlay-before-after.py --compare.
+ПЕРВАЯ_ПУБЛИКАЦИЯ = ("zonafilm.space",)
+
+
 def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:
     """Чередовать домены, начиная с того, где за сутки опубликовано меньше всего.
 
@@ -740,7 +748,8 @@ def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:
     by_domain: dict[str, list[dict]] = {}
     for c in cands:
         by_domain.setdefault(c.get("domain") or c.get("url", "").split("/")[2], []).append(c)
-    order = sorted(by_domain, key=lambda d: (recent.get(d, 0), list(by_domain).index(d)))
+    order = sorted(by_domain, key=lambda d: (d not in ПЕРВАЯ_ПУБЛИКАЦИЯ, recent.get(d, 0),
+                                             list(by_domain).index(d)))
     out: list[dict] = []
     while any(by_domain.values()):
         for d in order:

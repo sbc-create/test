@@ -495,3 +495,12 @@ def test_verdict_complete_and_empty_batch():
     пусто = _rep(steps={"claimed": False})
     assert editor_run.verdict(пусто, {"outcome": "NO_TASK"}, 0) == "NO_PUBLICATION"
     assert editor_run.verdict(пусто, {"outcome": "PUBLISHED"}, 0) == "INCOMPLETE"
+
+
+def test_rotate_puts_first_publication_check_domain_first():
+    """12.10: zonafilm.space при равном нуле публикаций стоял четвёртым и не доходил до партии."""
+    cands = [{"url": "https://an1mego.site/title/a/"}, {"url": "https://animedia.icu/title/b/"},
+             {"url": "https://zonafilm.space/title/c/"}]
+    got = editor_run.rotate(cands, {"animedia.icu": 1})
+    assert got[0]["url"] == "https://zonafilm.space/title/c/"
+    assert [c["url"].split("/")[2] for c in got[1:]] == ["an1mego.site", "animedia.icu"]
