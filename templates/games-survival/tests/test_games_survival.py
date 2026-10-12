@@ -163,3 +163,7 @@ def test_no_cross_template_code():
             and p.name != "test_games_survival.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_repair_is_not_a_recipe(app):
+    assert all("Damaged" not in r["ingredients"] for r in app.site.by_slug["shchit"].recipes)
