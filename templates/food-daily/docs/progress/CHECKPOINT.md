@@ -113,3 +113,8 @@ commit food-baking); home-practical A от аудита до PR.
 
 Обновление 22:19Z: games-story B (#106), games-rpg A (#107). Следующие 3 действия: (1) games-rpg B — планировщик отряда;
 (2) games-survival A — minecraft.wiki, крафт с проверяемыми связями; (3) games-survival B.
+
+Обновление 22:39Z: games-rpg B (#108), games-survival A (#109; 22 действия PASS, axe 0, 28 URL × 4 ширины — 0; рецепты кирки и
+постройки не выпущены — нет надёжных фактов). Следующие 3 действия: (1) games-survival B «планировщик крафта» — ветка `-b` от db40378,
+порт 8862, разбор до базовых ресурсов по количествам слотов источника; (2) QA и PR B; (3) B-варианты food-daily/baking/weekly/appliances.
+Возобновление: `cd /home/claude/wt-template-games-survival-b`.
