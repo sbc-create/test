@@ -118,3 +118,8 @@ commit food-baking); home-practical A от аудита до PR.
 постройки не выпущены — нет надёжных фактов). Следующие 3 действия: (1) games-survival B «планировщик крафта» — ветка `-b` от db40378,
 порт 8862, разбор до базовых ресурсов по количествам слотов источника; (2) QA и PR B; (3) B-варианты food-daily/baking/weekly/appliances.
 Возобновление: `cd /home/claude/wt-template-games-survival-b`.
+
+Обновление 22:48Z: games-survival B (#110; 27 действий PASS, axe 0, 32 URL × 4 ширины — 0; планировщик по слотам сетки).
+В A исправлен ремонт щита как рецепт (897ebaa, доказательства 845322b). Очередь игровых сайтов закрыта (A и B у всех трёх).
+Следующие 3 действия: (1) food-daily B — ветка `claude/template-food-daily-b` от текущего A, свой порт/CSS/JS/хранилище;
+(2) food-baking B; (3) food-weekly B и food-appliances B. Возобновление: `cd /home/claude/wt-template-food-daily-b`.
