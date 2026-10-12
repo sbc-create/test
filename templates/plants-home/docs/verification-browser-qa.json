@@ -1,0 +1,143 @@
+{
+ "commit_head": "f034b3f77003a54ce9588c5421625ba3a53be601",
+ "at": "2026-10-12T21:37:02Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "light_card_opens_category": true,
+  "filter_light_and_care": true,
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "whole_card_clickable": true,
+  "passport_light_link": true,
+  "problem_link_opens_problem": true,
+  "toc_jumps_to_section": true,
+  "checklist_persists_after_reload": true,
+  "checklist_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "search_keyboard_results": 1,
+  "search_clear": true,
+  "search_by_latin": 1,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "nojs_plant_sections": 6,
+  "nojs_print_hidden": true,
+  "nojs_filter_works": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/katalog/?svet=ten": [],
+  "mobile:/rastenie/shlyumbergera-dekabrist/": [],
+  "mobile:/svet/poluten/": [],
+  "mobile:/problema/korni-gniyut/": [],
+  "mobile:/katalog/?svet=solnce&uhod=Medium": [],
+  "mobile:/katalog/": [],
+  "mobile:/rastenie/aspidistra-vysokaya/": [],
+  "mobile:/rastenie/falenopsis/": [],
+  "mobile:/rastenie/monstera-delikatesnaya/": [],
+  "mobile:/svet/": [],
+  "mobile:/svet/ten/": [],
+  "mobile:/problemy/": [],
+  "mobile:/problema/muchnistyj-chervec/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/neprihotlivye/": [],
+  "mobile:/kak-chitat/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=фикус": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/katalog/?svet=ten": [],
+  "desktop:/rastenie/shlyumbergera-dekabrist/": [],
+  "desktop:/svet/poluten/": [],
+  "desktop:/problema/korni-gniyut/": [],
+  "desktop:/katalog/?svet=solnce&uhod=Medium": [],
+  "desktop:/katalog/": [],
+  "desktop:/rastenie/aspidistra-vysokaya/": [],
+  "desktop:/rastenie/falenopsis/": [],
+  "desktop:/rastenie/monstera-delikatesnaya/": [],
+  "desktop:/svet/": [],
+  "desktop:/svet/ten/": [],
+  "desktop:/problemy/": [],
+  "desktop:/problema/muchnistyj-chervec/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/neprihotlivye/": [],
+  "desktop:/kak-chitat/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=фикус": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 148,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:plant": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "mobile:light": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:problem": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 112,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:plant": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:light": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:problem": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:empty-filter": {
+   "lcp_ms": 48,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8855/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8855/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/f034b3f/home-mobile.png",
+  "docs/screenshots/f034b3f/catalog-mobile.png",
+  "docs/screenshots/f034b3f/plant-mobile.png",
+  "docs/screenshots/f034b3f/light-mobile.png",
+  "docs/screenshots/f034b3f/problem-mobile.png",
+  "docs/screenshots/f034b3f/empty-filter-mobile.png",
+  "docs/screenshots/f034b3f/home-desktop.png",
+  "docs/screenshots/f034b3f/catalog-desktop.png",
+  "docs/screenshots/f034b3f/plant-desktop.png",
+  "docs/screenshots/f034b3f/light-desktop.png",
+  "docs/screenshots/f034b3f/problem-desktop.png",
+  "docs/screenshots/f034b3f/empty-filter-desktop.png"
+ ]
+}
