@@ -170,6 +170,59 @@
       "problem": "CSU-4: основной текст /catalog/ совпадает на 91 % — один каталог под несколькими индексируемыми доменами.",
       "status": "blocked",
       "owner_action": "Решение владельца (Архитектор, cross-site-gate-20261012.md §4): принять риск, развести каталоги (разный состав/порядок по профилю сайта) или закрыть дублирующий каталог от индекса на одном из доменов. Тексты-заглушки для «уникальности» не пишем."
+    },
+    {
+      "id": "T009",
+      "site": "17 ячеек: Lords, Zona, Animedia, Yummy",
+      "repo": "var/site-repos/*",
+      "urls": [],
+      "problem": "checks/fails_closed.py не доказывал отказ запуска с каталогом данных ЧУЖОГО сайта: у 12 копий проверка кончалась на «neighbour_site_ids не пуст», у 5 подставлялся /srv/<site_id>/data — такого пути на машине нет (каталоги названы по репозиторию), то есть проверялось только «каталога нет → отказ». Находка Архитектора (site-checks-drift.py 9137034) + измерение SEO 12.10; шаблон исправлен Архитектором 7729da7.",
+      "norm": "изоляция сайтов: запуск с чужим каталогом обязан отказать; D203/D205 — проверка должна уметь упасть по нужной причине",
+      "expected": "во всех 17 ячейках копия = шаблон 7729da7; шаг находит настоящий чужой каталог в /srv и получает ненулевой код",
+      "check": "checks/fails_closed.py (rc=0, «отказ подтверждён; чужой каталог /srv/…»); automation/local/site-checks-drift.py --check fails_closed.py",
+      "status": "verified",
+      "evidence": "Копии = шаблон 9dc003f во всех 17 ячейках (site-checks-drift.py 9dc003f: «состав тот же у 17»). checks/fails_closed.py rc=0 везде; чужой каталог своего семейства у 12, у пяти новейших Lords (neighbour_site_ids пуст) — каталог другого семейства, шаг это называет. Отправлено (последние коммиты): 1lordserials1-online dcb153f460ca, animedia-icu 3d9cca2e46fa, animedia-space 0a9ba159fe9f, lordfilm47-space d67293b5e6d9, lordserial33-biz f6ed26505ab6, yummyani-biz d57c28edca6a, yummyani-org 6ebe84e97fa5, yummyani-site 0b16ab674a3f, zonafilm-space 397a8688f97b, zonafilm12-site c8f38e8d0df6, lordfilm077-site bc1a70fb2cf7, lordserial101-site 7b43f21c4693, lordserials22-info 9b5a2f954784, lordserials22-site e9c46a494673, lordserials22-space 488dd9f35a53. Локально (B008): yummyani7-info fc121dc8f7c9, yummyani7-site e91e1cd48d04. Полный checks/run.sh rc=0 у 1lordserials1-online (activate-scenarios — на свободном порту: при параллельном прогоне занят 9801), animedia-icu, animedia-space. Принято Архитектором 12.10. Выкладка не требуется: правка только в checks/."
+    },
+    {
+      "id": "T010",
+      "site": "20 ячеек (вкл. 3 AnimeGo)",
+      "repo": "var/site-repos/*",
+      "urls": [],
+      "problem": "checks/no_secrets.py: у 16 копий нет поиска значения внутри хранимых файлов; у трёх AnimeGo нет сторожа «git отвечает не про этот проект» (дерево без .git → rc=0 на прежней копии, rc=1 на новой — воспроизведено) и нет запрета имён *-catalog.json (отслеживаемый снимок каталога → rc=0 на прежней копии).",
+      "norm": "данные ячейки и значения окружения не в git (D177)",
+      "expected": "копия = шаблон 7729da7 во всех 20; заготовки проверок берут publisher_id из config/site.json[publisher_id_expected], а не цифрами в коде",
+      "check": "checks/no_secrets.py rc=0; шаги с изменёнными заготовками rc=0",
+      "status": "verified",
+      "evidence": "Копии = шаблон 9dc003f во всех 20 (drift: «состав тот же у 20»; копий, потерявших проверку шаблона: 0). AnimeGo: an1mego ba5c03a08a0a, animeg0 14b39f6e95a7, an1meg0 868fa883ecb4 — полный checks/run.sh rc=0 у всех трёх. Заготовки 1lordserials1-online (community_flow, reload_live), animedia-icu (harness), animedia-space (update_dry_run) берут publisher_id из config/site.json[publisher_id_expected]. Образец publisher_id в шаблоне снят Архитектором: значение публикует сама витрина (data-publisher-id). Принято Архитектором 12.10."
+    },
+    {
+      "id": "B008",
+      "site": "yummyani7.info, yummyani7.site",
+      "status": "blocked",
+      "problem": "в ветках по два чужих неотправленных коммита (4fabe14/1e25dc0 и 1d95ba3/5dddc43: накладки и модерация комментариев). Push коммитов T009/T010 унёс бы их с собой.",
+      "owner_action": "Автор коммитов 4fabe14, 1e25dc0, 1d95ba3, 5dddc43 решает их судьбу (отправить или отозвать). После этого SEO отправляет 5fbd8c80eba6 и 9d2544830c5b."
+    },
+    {
+      "id": "B009",
+      "site": "zonafilm.cc",
+      "status": "verified",
+      "problem": "site-manifest.json (c75a34b, 2026-09-22): в блоке publisher значение совпадает с живым publisher_id 1lordserials1.online/lordserials22.info, ссылка ведёт на lords-01; живой zonafilm.cc отдаёт другой ID, lords-01 — тоже другой. Похоже на копию чужого манифеста. Плеер не трогаем.",
+      "owner_action": "Архитектор/владелец: подтвердить, читает ли кто-то site-manifest.json[publisher] при запуске, и привести блок к zona-02 (своё значение и ссылка) или убрать значение, оставив только ссылку.",
+      "evidence": "zonafilm-cc e5301c8f2faa: блок publisher в site-manifest.json заменён блоком реестра (config/site-cells.json, zona-02); совпадает с publisher_id_expected и с data-publisher-id на 3 живых карточках zonafilm.cc. Блок не читается ни release.py, ни build.py (bec65ab) — живого влияния не было и нет. checks/run.sh rc=0."
+    },
+    {
+      "id": "B010",
+      "site": "yummyani.biz, yummyani.org, yummyani.site, yummyani7.info, yummyani7.site",
+      "status": "blocked",
+      "problem": "D177: config/site.json[publisher_id_expected] = null у пяти Yummy, учёт реестра пуст; run.py Yummy сверку поддерживает («если сайт объявил ожидаемый publisher_id…»), но без объявления она выключена — неверный player.json пройдёт молча. Витрины идентификатор отдают. Один источник (живая страница) — недостаточное основание, значение не подставляем.",
+      "owner_action": "Владелец: подтвердить publisher_id для каждого из пяти доменов Yummy (или решение, что D177 к семейству не применяется). После подтверждения SEO вписывает publisher_id_expected в config/site.json каждой ячейки."
+    },
+    {
+      "id": "B011",
+      "site": "animedia.space (animedia-02), zonafilm.space (zona-01)",
+      "status": "blocked",
+      "problem": "Один и тот же publisher_id в учёте у двух ячеек, обе витрины его отдают (измерение Архитектора bec65ab; SEO-сверка 12.10: значение отдают ещё an1mego/an1meg0/animeg0). D177: идентификатор принадлежит конкретному домену.",
+      "owner_action": "Владелец: подтвердить, что общий идентификатор у нескольких доменов допустим, или выдать отдельные. Правкой не трогаем: это настройка плеера и выплат."
     }
   ]
 }
