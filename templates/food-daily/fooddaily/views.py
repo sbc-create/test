@@ -439,6 +439,28 @@ class Site:
     def product_options(self) -> list[tuple[str, str]]:
         return [(t, TAGS[t][0]) for t, items in self.tag_pages().items() if TAGS[t][1] == "product"]
 
+    def fridge_products(self) -> list[tuple[str, str, int]]:
+        """Все продукты-темы, которые есть хотя бы в одном рецепте: (ключ, название, число рецептов)."""
+        out = []
+        for key, (label, kind) in TAGS.items():
+            n = len(self.tag(key)) if kind == "product" else 0
+            if n:
+                out.append((key, label, n))
+        return out
+
+    def fridge(self, have: list[str]) -> list[tuple[Recipe, list[str], list[str]]]:
+        """Рецепты, где есть хотя бы один выбранный продукт: (рецепт, есть, не хватает) — по продуктам-темам рецепта.
+        Сначала больше совпадений, затем меньше недостающего, затем быстрее."""
+        want = set(have)
+        rows = []
+        for r in self.recipes:
+            prods = [t for t in r.tags if TAGS.get(t, ("", ""))[1] == "product"]
+            got = [t for t in prods if t in want]
+            if got:
+                rows.append((r, got, [t for t in prods if t not in want]))
+        rows.sort(key=lambda x: (-len(x[1]), len(x[2]), x[0].total_minutes or 10**6, x[0].title))
+        return rows
+
     def page(self, items: list, n: int) -> tuple[list, int, int]:
         per = self.cfg["pagination"]["per_page"]
         pages = max(1, math.ceil(len(items) / per))

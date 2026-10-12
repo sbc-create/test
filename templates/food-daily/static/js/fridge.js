@@ -1,5 +1,5 @@
-/* food-daily: улучшения поверх серверного HTML. Без этого файла рецепт,
-   каталог, поиск и фильтры работают полностью. */
+/* food-daily, вариант B fridge-first: улучшения поверх серверного HTML. Без этого файла подбор, рецепт,
+   каталог, поиск и фильтры работают полностью. Хранилище — только ключи fdb.* (вариант A — fd.*). */
 (function () {
   "use strict";
   document.documentElement.classList.add("js");
@@ -8,7 +8,7 @@
     get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* приватный режим */ } }
   };
-  var FAV = "fd.fav.v1", LIST = "fd.list.v1";
+  var FAV = "fdb.fav.v1", LIST = "fdb.list.v1", FRIDGE = "fdb.fridge.v1";
 
   function fmt(q) {
     if (q === null || isNaN(q)) return "";
@@ -106,38 +106,25 @@
         add.textContent = n ? "Добавлено: " + n + " " + plural(n, "продукт", "продукта", "продуктов") : "Уже в списке";
       });
     }
-    /* режим готовки */
-    var cook = recipe.querySelector("[data-cook]"), open = recipe.querySelector("[data-cook-open]");
-    var steps = Array.prototype.map.call(recipe.querySelectorAll(".step"), function (li) {
-      var cue = li.querySelector(".cue");
-      return { text: li.querySelector("p").textContent, cue: cue ? cue.textContent : "" };
-    });
-    var at = 0, opener = null;
-    function show() {
-      cook.querySelector("[data-cook-count]").textContent = "Шаг " + (at + 1) + " из " + steps.length;
-      cook.querySelector("[data-cook-text]").textContent = steps[at].text;
-      cook.querySelector("[data-cook-cue]").textContent = steps[at].cue;
-      cook.querySelector("[data-cook-prev]").disabled = at === 0;
-      cook.querySelector("[data-cook-next]").textContent = at === steps.length - 1 ? "Готово" : "Дальше →";
-    }
-    function close() { cook.hidden = true; document.body.style.overflow = ""; if (opener) opener.focus(); }
-    if (cook && open && steps.length) {
-      open.hidden = false;
-      open.addEventListener("click", function () { opener = open; at = 0; cook.hidden = false; document.body.style.overflow = "hidden"; show(); cook.querySelector("[data-cook-next]").focus(); });
-      cook.querySelector("[data-cook-close]").addEventListener("click", close);
-      cook.querySelector("[data-cook-prev]").addEventListener("click", function () { if (at > 0) { at--; show(); } });
-      cook.querySelector("[data-cook-next]").addEventListener("click", function () { if (at < steps.length - 1) { at++; show(); } else close(); });
-      document.addEventListener("keydown", function (e) {
-        if (cook.hidden) return;
-        if (e.key === "Escape") close();
-        else if (e.key === "ArrowRight") { if (at < steps.length - 1) { at++; show(); } }
-        else if (e.key === "ArrowLeft") { if (at > 0) { at--; show(); } }
-        else if (e.key === "Tab") { /* фокус не уходит из диалога */
-          var f = cook.querySelectorAll("button:not([disabled])"), first = f[0], last = f[f.length - 1];
-          if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
-          else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
-        }
+    /* отметки шагов: прогресс сохраняется для этого рецепта */
+    var list = recipe.querySelector("[data-steps]");
+    if (list) {
+      var key = "fdb.steps." + list.getAttribute("data-steps"), checks = list.querySelectorAll("[data-step-check]");
+      var status = recipe.querySelector("[data-steps-status]"), reset = recipe.querySelector("[data-steps-reset]");
+      var done = store.get(key, []);
+      var sync = function (save) {
+        var d = []; checks.forEach(function (c) { if (c.checked) d.push(c.getAttribute("data-step-check")); });
+        if (save) store.set(key, d);
+        status.textContent = d.length === checks.length ? "Все шаги отмечены." : d.length ? "Сделано шагов: " + d.length + " из " + checks.length + "." : "";
+        reset.hidden = d.length === 0;
+      };
+      checks.forEach(function (c) {
+        c.closest("label").hidden = false;
+        c.checked = done.indexOf(c.getAttribute("data-step-check")) >= 0;
+        c.addEventListener("change", function () { sync(true); });
       });
+      reset.addEventListener("click", function () { checks.forEach(function (c) { c.checked = false; }); sync(true); checks[0].focus(); });
+      sync(false);
     }
   }
 
@@ -167,6 +154,28 @@
   /* ---- фильтры: применяются при выборе, кнопка остаётся для работы без JS ---- */
   var ff = document.querySelector("[data-autosubmit]");
   if (ff) ff.addEventListener("change", function () { ff.submit(); });
+
+  /* ---- подбор: помним выбранные продукты и подсказываем число отмеченных ---- */
+  document.querySelectorAll("[data-fridge-form]").forEach(function (f) {
+    var boxes = f.querySelectorAll("input[name=est]"), hint = f.querySelector("[data-fridge-hint]");
+    var fromUrl = new URLSearchParams(location.search).getAll("est");
+    if (fromUrl.length) store.set(FRIDGE, fromUrl);
+    else if (!document.querySelector(".match")) {
+      var saved = store.get(FRIDGE, []);
+      boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) >= 0; });
+    }
+    var upd = function () {
+      var n = 0; boxes.forEach(function (b) { if (b.checked) n++; });
+      if (hint) hint.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один продукт";
+    };
+    f.addEventListener("change", upd); upd();
+    f.addEventListener("submit", function (e) {
+      var n = 0; boxes.forEach(function (b) { if (b.checked) n++; });
+      if (!n) { e.preventDefault(); if (hint) hint.textContent = "Отметьте хотя бы один продукт"; boxes[0].focus(); }
+    });
+    var clr = f.querySelector("[data-fridge-clear]");
+    if (clr) clr.addEventListener("click", function () { store.set(FRIDGE, []); });
+  });
 
   var pr = document.querySelector("[data-print]");
   if (pr) { pr.hidden = false; pr.addEventListener("click", function () { window.print(); }); }

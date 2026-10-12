@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, pager %}
+{% from "_parts.html" import pager %}
 {% block main %}
 <header class="page-head">
   <h1>{{ 'Подбор рецептов' if filtered else 'Все рецепты' }}</h1>
@@ -26,13 +26,21 @@
         {% for key, (label, _) in CATEGORIES.items() %}<option value="{{ key }}"{% if filt.category == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
+    <label>Порядок
+      <select name="sort">
+        {% for key, label in [('', 'сначала новые'), ('vremya', 'сначала быстрые'), ('nazvanie', 'по названию')] %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
     <button type="submit" class="btn">Показать</button>
     {% if filtered %}<a class="btn btn--ghost" href="/recepty/">Сбросить</a>{% endif %}
   </fieldset>
 </form>
 {% if items %}
-{{ grid(items, 'h2') }}
-{% set qs = ('?' ~ ('produkt=' ~ filt.product ~ '&' if filt.product else '') ~ ('vremya=' ~ filt.time ~ '&' if filt.time else '') ~ ('tip=' ~ filt.category if filt.category else '')).rstrip('&') if filtered else '' %}
+<div class="tablewrap"><table class="cat">
+  <thead><tr><th scope="col">Рецепт</th><th scope="col">Раздел</th><th scope="col">Время</th><th scope="col">Порции</th></tr></thead>
+  <tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a><span class="cat__ing">{{ r.key_ingredients|join(' · ') }}</span></th><td data-label="Раздел">{{ r.category_label }}</td><td data-label="Время">{{ r.time_label or '—' }}</td><td data-label="Порции">{{ r.servings or '—' }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% set qs = ('?' ~ ('produkt=' ~ filt.product ~ '&' if filt.product else '') ~ ('vremya=' ~ filt.time ~ '&' if filt.time else '') ~ ('tip=' ~ filt.category ~ '&' if filt.category else '') ~ ('sort=' ~ sort if sort else '')).rstrip('&') if filtered else '' %}
 {{ pager(base, page, pages, qs) }}
 {% else %}
 <div class="empty">

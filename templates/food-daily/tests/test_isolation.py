@@ -95,7 +95,7 @@ def test_template_layer_has_no_data_access():
 
 
 def test_static_assets_are_own_files():
-    css = (ROOT / "static" / "css" / "site.css").read_text()
+    css = (ROOT / "static" / "css" / "fridge.css").read_text()
     assert "@import" not in css and "url(http" not in css
     html = "".join(p.read_text() for p in (ROOT / "templates").glob("*.html"))
     assert not re.search(r'(src|href)="https?://(?!schema\.org)', html.replace("{{ r.source.url }}", ""))

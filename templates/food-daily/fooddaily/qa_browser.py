@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -17,12 +18,13 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8847"
+BASE = "http://127.0.0.1:8863"
 VIEWPORTS = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 SHOTS = {
     "home": "/",
     "catalog": "/recepty/",
     "recipe": "/recept/syrniki-s-ezhevikoj/",
+    "fridge": "/iz-holodilnika/?est=kurica&est=ris",
     "tag": "/produkty/kurica/",
     "article": "/sovety/priznaki-gotovnosti/",
 }
@@ -80,6 +82,10 @@ PERF_JS = r"""
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 AXE_PAGES = [
     "/",
+    "/iz-holodilnika/",
+    "/iz-holodilnika/?est=kurica&est=ris",
+    "/iz-holodilnika/?est=kvantovyj",
+    "/recepty/?sort=vremya",
     "/recepty/",
     "/recepty/supy/",
     "/recepty/zavtraki/",
@@ -225,23 +231,71 @@ def run(shots_dir: Path | None) -> dict:
         S["favorite_counter"] = page.locator("[data-fav-count]").inner_text()
         page.goto(BASE + "/izbrannoe/")
         S["favorites_page_items"] = page.locator("[data-fav-grid] .card").count()
-        # режим готовки и клавиатура
+        # отметки шагов: сохраняются после перезагрузки, сброс очищает
         page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
-        page.click("[data-cook-open]")
-        first = page.locator("[data-cook-count]").inner_text()
-        page.keyboard.press("ArrowRight")
-        second = page.locator("[data-cook-count]").inner_text()
-        page.keyboard.press("Escape")
-        S["cooking_mode"] = {
-            "first": first,
-            "after_arrow": second,
-            "closed_on_esc": page.locator("[data-cook]").is_hidden(),
+        marks = page.locator("[data-step-check]")
+        marks.nth(0).check()
+        marks.nth(1).check()
+        status = page.locator("[data-steps-status]").inner_text()
+        page.reload()
+        kept = marks.nth(0).is_checked() and marks.nth(1).is_checked() and not marks.nth(2).is_checked()
+        page.click("[data-steps-reset]")
+        S["step_marks"] = {
+            "status_counts": status.startswith("Сделано шагов: 2 из "),
+            "persist_after_reload": kept,
+            "reset_clears": not marks.nth(0).is_checked(),
+            "no_cook_modal": page.locator("[data-cook]").count() == 0,
+        }
+        # подбор «что есть дома»: выбор → результаты, память выбора, пустой выбор, неверный продукт
+        page.goto(BASE + "/")
+        page.locator(".pick__item", has_text="Курица").click()
+        page.locator(".pick__item", has_text="Рис").click()
+        hint = page.locator("[data-fridge-hint]").inner_text()
+        with page.expect_navigation():
+            page.click(".pick .btn")
+        first = page.locator(".match__t").first.inner_text()
+        page.goto(BASE + "/")
+        remembered = page.locator("input[value=kurica]").is_checked() and page.locator("input[value=ris]").is_checked()
+        page.goto(BASE + "/iz-holodilnika/?est=kurica&est=ris")
+        with page.expect_navigation():
+            page.click("[data-fridge-clear]")
+        page.goto(BASE + "/")
+        cleared = not page.locator("input[value=kurica]").is_checked()
+        page.goto(BASE + "/iz-holodilnika/")
+        url_before = page.url
+        page.click(".pick .btn")
+        empty_blocked = page.url == url_before and "хотя бы один" in page.locator("[data-fridge-hint]").inner_text()
+        resp = page.goto(BASE + "/iz-holodilnika/?est=kvantovyj")
+        S["fridge"] = {
+            "hint_counts_two": hint == "Отмечено: 2",
+            "first_has_both_plov": first == "Плов с курицей на сковороде",
+            "remembers_selection": remembered,
+            "clear_forgets_selection": cleared,
+            "empty_submit_blocked": empty_blocked,
+            "unknown_product_400_alert": resp.status == 400 and page.locator(".err[role=alert]").count() == 1,
+        }
+        with page.expect_navigation():
+            page.locator(".match__row, .tools a", has_text="Что есть дома").first.click()
+        S["header_fridge_link"] = page.url.endswith("/iz-holodilnika/")
+        # каталог-таблица: сортировка по времени применяется сразу
+        page.goto(BASE + "/recepty/")
+        with page.expect_navigation():
+            page.select_option("select[name=sort]", "vremya")
+        times = page.locator(".cat td[data-label='Время']").all_inner_texts()
+
+        def mins(t):
+            m = re.fullmatch(r"(?:(\d+) ч)?\s*(?:(\d+) мин)?", t.strip())
+            return int(m.group(1) or 0) * 60 + int(m.group(2) or 0) if m and t.strip() != "—" else 10**6
+
+        S["catalog_sort_by_time"] = {
+            "first": times[0] if times else None,
+            "ok": bool(times) and [mins(t) for t in times] == sorted(mins(t) for t in times),
         }
         # фильтры: выбор применяется, сброс и пустой результат
         page.goto(BASE + "/recepty/")
         with page.expect_navigation():
             page.select_option("select[name=tip]", "supy")
-        S["filter_supy_cards"] = page.locator(".grid .card").count()
+        S["filter_supy_rows"] = page.locator(".cat tbody tr").count()
         S["filter_reset_link"] = page.locator("a.btn--ghost", has_text="Сбросить").count() == 1
         page.goto(BASE + "/recepty/?produkt=tvorog&tip=supy")
         S["filter_empty_state"] = page.locator(".empty h2").inner_text() if page.locator(".empty h2").count() else None
@@ -267,6 +321,10 @@ def run(shots_dir: Path | None) -> dict:
         S["nojs_fav_button_hidden"] = page.locator(".recipe__actions [data-fav]").is_hidden()
         ctx.close()
         browser.close()
+    # плоская карта действий для отчёта: сценарий со словарём — PASS, если все его булевы проверки истинны
+    res["actions"] = {
+        k: (all(x for x in v.values() if isinstance(x, bool)) if isinstance(v, dict) else v) for k, v in S.items()
+    }
     return res
 
 

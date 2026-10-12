@@ -1,64 +1,28 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, illo %}
 {% block main %}
-<section class="hero">
-  <h1 class="hero__title">Что приготовить <em>сегодня?</em></h1>
-  <p class="hero__lead">Простые завтраки, обеды и ужины. Ищите по названию или по тому, что есть в холодильнике, — порции пересчитаются сами.</p>
-  <form class="search" action="/poisk/" method="get" role="search">
-    <label for="q" class="sr">Блюдо или продукты</label>
-    <input id="q" name="q" type="search" placeholder="Творог, гречка" autocomplete="off" enterkeyhint="search">
-    <button type="submit">Найти</button>
+<section class="fridge-hero" aria-labelledby="h-main">
+  <h1 id="h-main">Что есть дома?</h1>
+  <p class="lead">Отметьте продукты — покажем рецепты, где они нужны, и чего не хватит. Подбор идёт по главным продуктам рецепта.</p>
+  {% set options = site.fridge_products() %}
+  <form class="pick" action="/iz-holodilnika/" method="get" data-fridge-form>
+    <fieldset><legend class="sr">Продукты</legend>
+    <ul class="pick__list">{% for key, label, n in options %}<li><label class="pick__item"><input type="checkbox" name="est" value="{{ key }}"><span>{{ label }}</span></label></li>{% endfor %}</ul></fieldset>
+    <div class="pick__go"><button type="submit" class="btn">Подобрать рецепты</button><p class="pick__hint" data-fridge-hint aria-live="polite"></p></div>
   </form>
-  {% set products = site.product_options() %}
-  {% if products %}
-  <p class="chips" aria-label="Популярные продукты">
-    <span class="chips__label">Есть дома:</span>
-    {% for key, label in products[:8] %}<a class="chip" href="/produkty/{{ key }}/">{{ label }}</a>{% endfor %}
-  </p>
-  {% endif %}
-  <p class="chips" aria-label="По времени">
-    <span class="chips__label">Время:</span>
-    {% for key, (label, _, _) in TIME_BUCKETS.items() %}<a class="chip chip--time" href="/recepty/?vremya={{ key }}">{{ label }}</a>{% endfor %}
-  </p>
 </section>
 
-<section class="block" aria-labelledby="new-h">
-  <div class="block__head"><h2 id="new-h">Новые рецепты</h2><a href="/recepty/">Все рецепты →</a></div>
-  {{ grid(recipes) }}
-</section>
+{% set meals = [('Завтрак', ['zavtraki']), ('Обед', ['supy', 'salaty']), ('Ужин', ['vtorye-blyuda', 'garniry'])] %}
+<section aria-labelledby="h-day"><h2 id="h-day">На сегодня</h2>
+<div class="day">{% for name, cats in meals %}{% set items = site.recipes|selectattr('category', 'in', cats)|list %}{% if items %}
+  <section class="day__col" aria-labelledby="h-{{ loop.index }}"><h3 id="h-{{ loop.index }}">{{ name }}</h3>
+  <ul class="rows">{% for r in items[:4] %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{{ r.time_label or 'время не указано' }}</span></li>{% endfor %}</ul>
+  <a class="more" href="/recepty/{{ cats[0] }}/">{{ CATEGORIES[cats[0]][0] }}: все</a></section>
+{% endif %}{% endfor %}</div></section>
 
-{% if collections %}
-<section class="block" aria-labelledby="col-h">
-  <div class="block__head"><h2 id="col-h">Подборки</h2><a href="/podborki/">Все подборки →</a></div>
-  <div class="collections">
-    {% for key, (title, desc, items) in collections.items() %}
-    <a class="collection collection--{{ loop.index % 4 }}" href="/podborki/{{ key }}/">
-      <span class="collection__title">{{ title }}</span>
-      <span class="collection__desc">{{ desc }}</span>
-      <span class="collection__count">{{ items|length }} рецепт{{ 'а' if items|length % 10 in [2,3,4] and items|length % 100 not in [12,13,14] else ('' if items|length % 10 == 1 and items|length % 100 != 11 else 'ов') }}</span>
-    </a>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
+{% set fast = site.recipes|selectattr('total_minutes')|selectattr('total_minutes', 'le', 30)|list %}
+{% if fast %}<section aria-labelledby="h-fast"><div class="block__head"><h2 id="h-fast">Быстро, до 30 минут</h2><a href="/recepty/?sort=vremya">Все по времени</a></div>
+<ul class="rows rows--inline">{% for r in fast[:6] %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{{ r.time_label }}</span></li>{% endfor %}</ul></section>{% endif %}
 
-{% if site.articles %}
-<section class="block" aria-labelledby="tips-h">
-  <div class="block__head"><h2 id="tips-h">Советы</h2><a href="/sovety/">Все советы →</a></div>
-  <div class="collections">
-    {% for a in site.articles.values() %}
-    <a class="collection collection--{{ (loop.index + 1) % 4 }}" href="/sovety/{{ a.slug }}/"><span class="collection__title">{{ a.title }}</span><span class="collection__desc">{{ a.description }}</span></a>
-    {% endfor %}
-  </div>
-</section>
-{% endif %}
-
-<section class="block" aria-labelledby="sec-h">
-  <div class="block__head"><h2 id="sec-h">Разделы</h2></div>
-  <ul class="sections-grid">
-    {% for key, (label, desc) in CATEGORIES.items() %}{% set n = site.category(key)|length %}{% if n %}
-    <li><a href="/recepty/{{ key }}/">{{ illo(key, 'tile') }}<span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
-    {% endif %}{% endfor %}
-  </ul>
-</section>
+<section aria-labelledby="h-more"><h2 id="h-more">Ещё</h2>
+<ul class="links">{% if collections %}<li><a href="/podborki/">Подборки: {{ collections|length }}</a></li>{% endif %}{% if site.articles %}<li><a href="/sovety/">Советы: {{ site.articles|length }}</a></li>{% endif %}<li><a href="/recepty/">Все рецепты: {{ site.recipes|length }}</a></li></ul></section>
 {% endblock %}

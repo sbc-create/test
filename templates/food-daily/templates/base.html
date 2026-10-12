@@ -6,6 +6,8 @@
 <title>{{ meta.title }}{% if meta.page_type != 'home' %}{{ site.cfg.seo.title_suffix }}{% endif %}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ meta.robots(site) }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
 {% endif %}
 {% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
@@ -17,13 +19,13 @@
 <meta property="og:type" content="{{ 'article' if meta.page_type == 'recipe' else 'website' }}">
 {% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
 {% endif %}
-<meta name="theme-color" content="#f7efe3">
+<meta name="theme-color" content="#eef4f1">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/site.css') }}">
+<link rel="stylesheet" href="{{ asset('css/fridge.css') }}">
 {% for ld in meta.jsonld_html() %}
 <script type="application/ld+json">{{ ld | safe }}</script>
 {% endfor %}
-<script src="{{ asset('js/site.js') }}" defer></script>
+<script src="{{ asset('js/fridge.js') }}" defer></script>
 </head>
 <body class="pt-{{ meta.page_type }}">
 <a class="skip" href="#main">К содержимому</a>
@@ -34,6 +36,7 @@
       <span class="brand__name">Будни <i>на&nbsp;кухне</i></span>
     </a>
     <nav class="tools" aria-label="Инструменты">
+      <a href="/iz-holodilnika/" class="tool tool--fridge"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></svg><span>Что есть дома</span></a>
       <a href="/poisk/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>Поиск</span></a>
       <a href="/izbrannoe/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span>Избранное</span><b class="count" data-fav-count hidden></b></a>
       <a href="/spisok-pokupok/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Покупки</span><b class="count" data-list-count hidden></b></a>

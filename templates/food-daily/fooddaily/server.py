@@ -31,8 +31,8 @@ STATIC = ROOT / "static"
 TEMPLATES = ROOT / "templates"
 EDITOR_SECRET = Path(
     os.environ.get(
-        "FOOD_DAILY_EDITOR_SECRET",
-        str(Path.home() / ".config" / "food-daily-preview" / "editor.json"),
+        "FOOD_DAILY_B_EDITOR_SECRET",
+        str(Path.home() / ".config" / "food-daily-b-preview" / "editor.json"),
     )
 )
 
@@ -90,12 +90,19 @@ class App:
                 self.render("home.html", meta, recipes=s.recipes[:6], collections=s.collections()),
                 {},
             )
+        if path == "/iz-holodilnika/":
+            return self.fridge(query)
         m = re.fullmatch(r"/recepty/(?:page/(\d+)/)?", path)
         if m:
             n = int(m.group(1) or 1)
             filt = {"product": q1("produkt"), "time": q1("vremya"), "category": q1("tip")}
-            filtered = any(filt.values())
-            items = s.filter(**filt) if filtered else s.recipes
+            sort = q1("sort") if q1("sort") in ("vremya", "nazvanie") else ""
+            filtered = any(filt.values()) or bool(sort)
+            items = s.filter(**filt) if any(filt.values()) else s.recipes
+            if sort == "vremya":  # без указанного времени — в конце
+                items = sorted(items, key=lambda r: (r.total_minutes is None, r.total_minutes or 0, r.title))
+            elif sort == "nazvanie":
+                items = sorted(items, key=lambda r: r.title)
             chunk, n, pages = s.page(items, n)
             if n > pages or (m.group(1) and n == 1):
                 return self.not_found()
@@ -122,6 +129,7 @@ class App:
                     total=len(items),
                     filt=filt,
                     filtered=filtered,
+                    sort=sort,
                     base="/recepty/",
                     products=s.product_options(),
                 ),
@@ -383,6 +391,36 @@ class App:
             ],
         }
 
+    def fridge(self, query: dict) -> tuple[int, str, dict]:
+        """Подбор «что есть дома». Без параметров — индексируемая страница выбора;
+        с параметрами — noindex без canonical, неизвестные продукты — 400."""
+        s = self.site
+        options = s.fridge_products()
+        known = {k for k, _, _ in options}
+        raw = [x.strip() for x in query.get("est", []) if x.strip()][:30]
+        have = [k for k in dict.fromkeys(raw) if k in known]
+        crumbs = [("Главная", "/"), ("Из холодильника", "/iz-holodilnika/")]
+        meta = seo.Meta(
+            title="Что приготовить из того, что есть дома",
+            description="Отметьте продукты, которые есть дома, — покажем рецепты, где они нужны, и чего не хватает.",
+            canonical=s.abs("/iz-holodilnika/"),
+            index=True,
+            page_type="page",
+            breadcrumbs=crumbs,
+            jsonld=[seo.breadcrumb_ld(s, crumbs)],
+        )
+        error = None
+        if raw:
+            meta.index, meta.canonical = False, None
+            if not have:
+                error = "Таких продуктов в рецептах нет. Отметьте продукты из списка."
+            else:
+                meta.title = "Подбор: " + ", ".join(TAGS[k][0].lower() for k in have)
+        label = lambda keys: [TAGS[k][0].lower() for k in keys]  # noqa: E731
+        rows = [(r, label(got), label(miss)) for r, got, miss in s.fridge(have)] if have else []
+        body = self.render("fridge.html", meta, options=options, have=have, rows=rows, error=error)
+        return (400 if error else 200), body, {}
+
     def not_found(self) -> tuple[int, str, dict]:
         meta = seo.Meta(
             title="Страница не найдена",
@@ -407,6 +445,7 @@ class App:
         urls: list[tuple[str, str | None]] = [
             ("/", s.recipes[0].updated_at[:10] if s.recipes else None),
             ("/recepty/", None),
+            ("/iz-holodilnika/", None),
             ("/podborki/", None),
             ("/o-proekte/", None),
             ("/kontakty/", None),
