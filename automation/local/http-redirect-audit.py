@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import concurrent.futures
 import http.client
+import re
 import sys
 
 ДОМЕНЫ = (
@@ -29,8 +30,12 @@ import sys
 ПУТЬ_ACME = "/.well-known/acme-challenge/probe-not-a-real-token"
 
 
-def ответ(домен: str, путь: str) -> tuple[str, str]:
-    """Код и Location первого ответа по http, без следования переходам."""
+def ответ(домен: str, путь: str, *, тело: bool = False) -> tuple[str, str, str]:
+    """Код, Location и (по просьбе) тело первого ответа по http.
+
+    Переходы не следуются намеренно: вопрос именно в том, что отвечает
+    ПЕРВЫЙ ответ, а не куда в итоге приводит цепочка.
+    """
     try:
         соединение = http.client.HTTPConnection(домен, 80, timeout=ТАЙМАУТ)
         соединение.request("GET", путь, headers={"Host": домен,
@@ -38,19 +43,32 @@ def ответ(домен: str, путь: str) -> tuple[str, str]:
         о = соединение.getresponse()
         код = str(о.status)
         куда = о.getheader("Location") or ""
-        о.read(1)
+        # Хватает головы документа: canonical и robots стоят в <head>, а
+        # качать десятки мегабайт каталога ради двух тегов незачем.
+        содержимое = (о.read(40000).decode("utf-8", "replace") if тело
+                      else (о.read(1) and ""))
         соединение.close()
-        return код, куда
+        return код, куда, содержимое
     except Exception as сбой:
-        return f"нет ответа: {type(сбой).__name__}", ""
+        return f"нет ответа: {type(сбой).__name__}", "", ""
 
 
 def проверить(домен: str) -> dict:
-    код, куда = ответ(домен, "/")
+    код, куда, страница = ответ(домен, "/", тело=True)
     ведёт_на_https = куда.startswith(f"https://{домен}")
-    код_acme, _ = ответ(домен, ПУТЬ_ACME)
+    код_acme, _куда, _т = ответ(домен, ПУТЬ_ACME)
+    # Чем закрыта копия по http, если редиректа нет. Различать обязательно:
+    # canonical на https — это ВЕСОМОЕ смягчение, и без него отсутствие
+    # редиректа значит совсем другое. Измерено 12.10: у всех девяти домена
+    # без редиректа canonical уже указывает на https.
+    кан = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]+)"', страница)
+    роб = re.search(r'<meta[^>]+name="robots"[^>]+content="([^"]*)"', страница)
+    canonical = кан.group(1) if кан else ""
     return {"домен": домен, "код": код, "location": куда,
             "перенаправляет": код in ("301", "302", "307", "308") and ведёт_на_https,
+            "canonical_по_http": canonical,
+            "canonical_на_https": canonical.startswith(f"https://{домен}"),
+            "robots_по_http": (роб.group(1).strip() if роб else ""),
             # 404 по пути ACME — правильный ответ: токена нет, но путь жив и
             # НЕ перенаправляется. Перенаправление здесь сломало бы продление.
             "acme_жив": код_acme in ("404", "403", "200")}
@@ -71,6 +89,18 @@ def главное(аргв: list[str] | None = None) -> int:
     print(f"\nдоменов {len(итоги)}; без перенаправления: {len(без)}")
     if без:
         print("   " + " ".join(и["домен"] for и in без))
+        голые = [и for и in без if not и["canonical_на_https"]]
+        print(f"   из них БЕЗ canonical на https: {len(голые)}"
+              + (" — " + " ".join(и["домен"] for и in голые) if голые else ""))
+        print("   это и есть мера серьёзности: при canonical на https копия по "
+              "http сама называет правильный адрес, и отсутствие редиректа "
+              "остаётся незашифрованным лишним ходом, а не вторым сайтом в "
+              "индексе. Без canonical это уже дубль.")
+        for и in без:
+            if not и["canonical_на_https"]:
+                print(f"      {и['домен']:24} canonical "
+                      f"{и['canonical_по_http'] or '—'}, "
+                      f"robots {и['robots_по_http'] or '—'}")
     if без_acme:
         print(f"ВНИМАНИЕ: перенаправляют и путь ACME: "
               f"{' '.join(и['домен'] for и in без_acme)} — продление "
