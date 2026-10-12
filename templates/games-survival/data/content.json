@@ -534,7 +534,7 @@
    "url": "https://minecraft.wiki/w/Chest",
    "fetched_at": "2026-10-12T22:26:02Z",
    "page_sha256": "990949009a86e83c0fb5891b84f3b2371fe1f73489cdd210035cdcd563bf78a4",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -549,6 +549,16 @@
      "ingredients": "Any Planks",
      "slots": 8,
      "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
      "result": "Chest",
      "count": 1
     },
@@ -556,6 +566,17 @@
      "ingredients": "Copper Ingot + Chest",
      "slots": 9,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Chest",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot"
+     ],
      "result": "Copper Chest",
      "count": 1
     },
@@ -563,6 +584,10 @@
      "ingredients": "Chest + Matching Boat",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Chest",
+      "Oak Boat"
+     ],
      "result": "Oak Boat with Chest",
      "count": 1
     },
@@ -570,6 +595,10 @@
      "ingredients": "Chest + Minecart",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Chest",
+      "Minecart"
+     ],
      "result": "Minecart with Chest",
      "count": 1
     },
@@ -577,6 +606,10 @@
      "ingredients": "Tripwire Hook + Chest",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Tripwire Hook",
+      "Chest"
+     ],
      "result": "Trapped Chest",
      "count": 1
     }
@@ -587,7 +620,7 @@
    "url": "https://minecraft.wiki/",
    "fetched_at": "2026-10-12T22:26:39Z",
    "page_sha256": "0aef7b984e4f26cb4a1f844df8cc9a34b6a0aed075ef176b5ec50c16e2db4840",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -605,7 +638,7 @@
    "url": "https://minecraft.wiki/w/Bucket",
    "fetched_at": "2026-10-12T22:26:15Z",
    "page_sha256": "7dc98b8393e42097d0882ae9e7b45f8354b8d0a2ce8eb706cb7653ef31edf424",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -620,6 +653,11 @@
      "ingredients": "Iron Ingot",
      "slots": 3,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot"
+     ],
      "result": "Bucket",
      "count": 1
     }
@@ -630,7 +668,7 @@
    "url": "https://minecraft.wiki/w/Crafting_Table",
    "fetched_at": "2026-10-12T22:25:57Z",
    "page_sha256": "072f3c0f8644876a3de5ae7a44a826c62e125a61bd6d6c3d989e4def05076b50",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -645,6 +683,12 @@
      "ingredients": "Any Planks",
      "slots": 4,
      "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
      "result": "Crafting Table",
      "count": 1
     }
@@ -655,7 +699,7 @@
    "url": "https://minecraft.wiki/w/Planks",
    "fetched_at": "2026-10-12T22:26:08Z",
    "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -670,6 +714,9 @@
      "ingredients": "Matching Log or Matching Stem or Matching Stripped Log or Matching Stripped Stem or Matching Wood or Matching Hyphae or Matching Stripped Wood or Matching Stripped Hyphae",
      "slots": 1,
      "alternatives_in_first_slot": 48,
+     "slot_items": [
+      "Oak Log"
+     ],
      "result": "Oak Planks",
      "count": 4
     },
@@ -677,6 +724,9 @@
      "ingredients": "Block of Bamboo or Block of Stripped Bamboo",
      "slots": 1,
      "alternatives_in_first_slot": 2,
+     "slot_items": [
+      "Block of Bamboo"
+     ],
      "result": "Bamboo Planks",
      "count": 2
     }
@@ -687,7 +737,7 @@
    "url": "https://minecraft.wiki/w/Pickaxe",
    "fetched_at": "2026-10-12T22:26:13Z",
    "page_sha256": "e9f195af6eb5785f33d019856524a32437141d92ee2a300b473685eb9ccd10ee",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -704,7 +754,7 @@
    "url": "https://minecraft.wiki/w/Furnace",
    "fetched_at": "2026-10-12T22:25:59Z",
    "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -719,6 +769,16 @@
      "ingredients": "Any stone-tier block",
      "slots": 8,
      "alternatives_in_first_slot": 3,
+     "slot_items": [
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone"
+     ],
      "result": "Furnace",
      "count": 1
     },
@@ -726,6 +786,17 @@
      "ingredients": "Iron Ingot + Furnace + Smooth Stone",
      "slots": 9,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot",
+      "Furnace",
+      "Iron Ingot",
+      "Smooth Stone",
+      "Smooth Stone",
+      "Smooth Stone"
+     ],
      "result": "Blast Furnace",
      "count": 1
     },
@@ -733,6 +804,10 @@
      "ingredients": "Furnace + Minecart",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Furnace",
+      "Minecart"
+     ],
      "result": "Minecart with Furnace",
      "count": 1
     }
@@ -743,7 +818,7 @@
    "url": "https://minecraft.wiki/w/Taiga",
    "fetched_at": "2026-10-12T22:26:36Z",
    "page_sha256": "e264169f80e9ece67a6fd1f9fb35ee56d993b775459bd4df308abfd90ac36ee7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -759,7 +834,7 @@
    "url": "https://minecraft.wiki/w/Log",
    "fetched_at": "2026-10-12T22:26:21Z",
    "page_sha256": "f7bafd57ff92081df1f44d4b3eafbae3887577cf506a6d1229cef5f00c193065",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -775,7 +850,7 @@
    "url": "https://minecraft.wiki/w/Shield",
    "fetched_at": "2026-10-12T22:26:17Z",
    "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -790,6 +865,15 @@
      "ingredients": "Any Planks + Iron Ingot",
      "slots": 7,
      "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Iron Ingot",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
      "result": "Shield",
      "count": 1
     },
@@ -797,6 +881,10 @@
      "ingredients": "Shield + Matching Banner",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "White Banner"
+     ],
      "result": "White Shield",
      "count": 1
     },
@@ -804,6 +892,10 @@
      "ingredients": "Shield + Matching Banner",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "White Banner"
+     ],
      "result": "White Shield",
      "count": 1
     },
@@ -811,6 +903,10 @@
      "ingredients": "Damaged Shield",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "Shield"
+     ],
      "result": "Shield",
      "count": 1
     },
@@ -818,6 +914,15 @@
      "ingredients": "Matching Wool + Any Planks + Iron Ingot",
      "slots": 7,
      "alternatives_in_first_slot": 16,
+     "slot_items": [
+      "White Wool",
+      "Oak Planks",
+      "White Wool",
+      "Oak Planks",
+      "Iron Ingot",
+      "White Wool",
+      "Oak Planks"
+     ],
      "result": "White Shield",
      "count": 1
     },
@@ -825,6 +930,15 @@
      "ingredients": "Any Planks + Iron Ingot",
      "slots": 7,
      "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Iron Ingot",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
      "result": "Shield",
      "count": 1
     }
@@ -835,7 +949,7 @@
    "url": "https://minecraft.wiki/w/Forest",
    "fetched_at": "2026-10-12T22:26:32Z",
    "page_sha256": "8e0601c9309a79cb6cfddd562fc8757eea23dbe1ab39101ad17e2c893eda71d8",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -851,7 +965,7 @@
    "url": "https://minecraft.wiki/w/Desert",
    "fetched_at": "2026-10-12T22:26:34Z",
    "page_sha256": "1c0865fff7d32b923706cb70fa4cee9a8df0affc00cb7fdb6a88c62a20c5215d",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -867,7 +981,7 @@
    "url": "https://minecraft.wiki/w/Stick",
    "fetched_at": "2026-10-12T22:26:11Z",
    "page_sha256": "35c622e98a7b20fa57f327493afd6a8e05d4a8daa87c464abc5a21a2df952382",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -882,6 +996,10 @@
      "ingredients": "Any Planks",
      "slots": 2,
      "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks"
+     ],
      "result": "Stick",
      "count": 4
     },
@@ -889,6 +1007,10 @@
      "ingredients": "Bamboo",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Bamboo",
+      "Bamboo"
+     ],
      "result": "Stick",
      "count": 1
     }
@@ -899,7 +1021,7 @@
    "url": "https://minecraft.wiki/w/Ladder",
    "fetched_at": "2026-10-12T22:26:05Z",
    "page_sha256": "693e3318d641afe7849781154eca6b5470e78106b4ce29f8c49e26325595a832",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -914,6 +1036,15 @@
      "ingredients": "Stick",
      "slots": 7,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick"
+     ],
      "result": "Ladder",
      "count": 3
     }
@@ -924,7 +1055,7 @@
    "url": "https://minecraft.wiki/w/Plains",
    "fetched_at": "2026-10-12T22:26:30Z",
    "page_sha256": "ca9a5edc340228a6090638e9b139355c772f798263a867c50b8e8bbcdf662559",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -940,7 +1071,7 @@
    "url": "https://minecraft.wiki/w/Cobblestone",
    "fetched_at": "2026-10-12T22:26:24Z",
    "page_sha256": "eaefa7f1cd549f91b930fe35a653683b96151bf2e31d4501fdf91bc1b6e7cac6",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -956,7 +1087,7 @@
    "url": "https://minecraft.wiki/w/Coal",
    "fetched_at": "2026-10-12T22:26:26Z",
    "page_sha256": "13d6c36389364d94d2c9a9b132fa55e9b62068cbabef66cb40a6881c728c6c86",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -972,7 +1103,7 @@
    "url": "https://minecraft.wiki/w/Torch",
    "fetched_at": "2026-10-12T22:26:03Z",
    "page_sha256": "ba3079b6758be3fe2f518039ed21e330c51fe6f6e0d6dbff8e865fdd621550c0",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -987,6 +1118,10 @@
      "ingredients": "Coal or Charcoal + Stick",
      "slots": 2,
      "alternatives_in_first_slot": 2,
+     "slot_items": [
+      "Coal",
+      "Stick"
+     ],
      "result": "Torch",
      "count": 4
     },
@@ -994,6 +1129,10 @@
      "ingredients": "Cerium Chloride or Mercuric Chloride or Potassium Chloride or Tungsten Chloride + Torch",
      "slots": 2,
      "alternatives_in_first_slot": 4,
+     "slot_items": [
+      "Cerium Chloride",
+      "Torch"
+     ],
      "result": "Blue Torch",
      "count": 1
     },
@@ -1001,6 +1140,10 @@
      "ingredients": "Magnesium + Torch",
      "slots": 2,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Magnesium",
+      "Torch"
+     ],
      "result": "Underwater Torch",
      "count": 1
     }
@@ -1011,7 +1154,7 @@
    "url": "https://minecraft.wiki/w/Raw_Iron",
    "fetched_at": "2026-10-12T22:26:28Z",
    "page_sha256": "4cc6e601a0ffb1e5328fb5cd73aa9232ab0ce608cba78fb45d6515cc67f393a7",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -1027,7 +1170,7 @@
    "url": "https://minecraft.wiki/w/Iron_Ingot",
    "fetched_at": "2026-10-12T22:26:19Z",
    "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
-   "parser": "gsv-facts/1.0",
+   "parser": "gsv-facts/1.1",
    "kind": "wiki",
    "publisher": "Minecraft Wiki",
    "game": "minecraft",
@@ -1042,6 +1185,9 @@
      "ingredients": "Block of Iron",
      "slots": 1,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Block of Iron"
+     ],
      "result": "Iron Ingot",
      "count": 9
     },
@@ -1049,6 +1195,17 @@
      "ingredients": "Iron Nugget",
      "slots": 9,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget"
+     ],
      "result": "Iron Ingot",
      "count": 1
     },
@@ -1056,6 +1213,9 @@
      "ingredients": "Iron",
      "slots": 1,
      "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron"
+     ],
      "result": "Iron Ingot",
      "count": 1
     }

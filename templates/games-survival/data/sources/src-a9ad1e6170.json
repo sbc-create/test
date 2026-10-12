@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Ladder",
  "fetched_at": "2026-10-12T22:26:05Z",
  "page_sha256": "693e3318d641afe7849781154eca6b5470e78106b4ce29f8c49e26325595a832",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -18,6 +18,15 @@
    "ingredients": "Stick",
    "slots": 7,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Stick",
+    "Stick",
+    "Stick",
+    "Stick",
+    "Stick",
+    "Stick",
+    "Stick"
+   ],
    "result": "Ladder",
    "count": 3
   }

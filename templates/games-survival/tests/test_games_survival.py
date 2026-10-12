@@ -1,4 +1,4 @@
-"""Приёмочные тесты games-survival (вариант craft-tree)."""
+"""Приёмочные тесты games-survival (вариант craft-planner)."""
 
 import copy
 import json
@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT))
 
 from craft import content  # noqa: E402
 from craft.net import Client, Refused  # noqa: E402
+from craft.plan import plan, recipe_inputs  # noqa: E402
 from craft.server import App  # noqa: E402
 from craft.site import Site, own_recipes  # noqa: E402
 from craft.sources import load_all, parse_recipes  # noqa: E402
@@ -93,13 +94,59 @@ def test_recipe_parser_drops_foreign_rows_and_duplicates():
     assert parse_recipes("<p>нет сетки</p>") == []
 
 
-def test_entry_page_shows_recipes_and_links(app):
+def test_entry_page_shows_recipes_and_uses(app):
     e = app.site.by_slug["palka"]
     _, html, _ = get(app, e.url)
-    assert html.count('class="rec"') == len(e.recipes)
+    assert html.count('<td class="num">') >= len(e.recipes)
     for r in e.recipes:
         assert f"× {r['count']}" in html
     assert 'href="/minecraft/predmety/doski/"' in html and 'href="/minecraft/predmety/fakel/"' in html
+    assert 'action="/planirovshchik/"' in html
+
+
+def test_slot_counts_come_from_source_grid(app):
+    s = app.site
+    by = s.by_slug
+    per = {x.slug: q for x, q in recipe_inputs(s, by["shchit"])[1]}
+    assert per == {"doski": 6, "zheleznyj-slitok": 1}
+    assert {x.slug: q for x, q in recipe_inputs(s, by["lestnica"])[1]} == {"palka": 7}
+    for e in s.entries:
+        ri = recipe_inputs(s, e)
+        if ri:
+            assert sum(q for _, q in ri[1]) == ri[0]["slots"], e.slug
+
+
+def test_planner_math(app):
+    s = app.site
+    p = plan(s, s.by_slug["fakel"], 16)
+    assert [(st.entry.slug, st.crafts, st.made) for st in p.steps] == [
+        ("doski", 1, 4),
+        ("palka", 1, 4),
+        ("fakel", 4, 16),
+    ]
+    assert {b.slug: q for b, q in p.base} == {"brevno": 1, "ugol": 4}
+    p = plan(s, s.by_slug["shchit"], 1)
+    doski = next(st for st in p.steps if st.entry.slug == "doski")
+    assert (doski.need, doski.made, doski.surplus) == (6, 8, 2)
+    # Слиток делается в печи — для планировщика это базовый ресурс, а не шаг крафта
+    assert {b.slug for b, _ in plan(s, s.by_slug["zheleznyj-slitok"], 1).base} == {"zheleznyj-slitok"}
+    with pytest.raises(ValueError):
+        plan(s, s.by_slug["fakel"], 65)
+
+
+def test_planner_page_input_validation(app):
+    st, html, _ = get(app, "/planirovshchik/", {"item": ["fakel"], "n": ["16"]})
+    assert st == 200 and "noindex" in html and canon(html) is None
+    assert 'Уголь</a></th><td class="num">4</td>' in html and 'data-plan="fakel-16"' in html
+    for q in ({"item": ["fakel"], "n": ["0"]}, {"item": ["fakel"], "n": ["abc"]}, {"item": ["brevno"], "n": ["1"]}):
+        st, html, _ = get(app, "/planirovshchik/", q)
+        assert st == 400 and 'role="alert"' in html, q
+    st, html, _ = get(app, "/planirovshchik/")
+    assert st == 200 and canon(html) == app.site.abs("/planirovshchik/")
+
+
+def test_repair_is_not_a_recipe(app):
+    assert all("Damaged" not in r["ingredients"] for r in app.site.by_slug["shchit"].recipes)
 
 
 def test_sitemap_urls_200_canonical_unique(app):
@@ -127,7 +174,7 @@ def test_search(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="craft-tree"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="craft-planner"' in html
     assert get(app, "/robots.txt")[1].strip().endswith("Disallow: /")
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)

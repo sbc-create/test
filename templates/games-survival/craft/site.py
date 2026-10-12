@@ -24,7 +24,7 @@ def own_recipes(name: str, recipes: list[dict]) -> list[dict]:
     out = []
     for r in recipes:
         res, ing = r["result"], r["ingredients"]
-        exact = res == name
+        exact = res == name and name not in ing  # «Damaged Shield → Shield» — ремонт, а не крафт
         variant = res.endswith(" " + name) and name not in ing
         odd = len(ing.split()) == 1 and res.startswith(ing) and r["slots"] == 1 and r["count"] == 1
         if (exact or variant) and not odd and not (variant and ing.endswith(name)) and r not in out:
@@ -43,6 +43,8 @@ class Entry:
         self.name = self.src["name"]
         self.section = SECTION[self.type]
         self.url = f"/{self.game}/{self.section}/{self.slug}/"
+        head, _, tail = self.title.partition(": ")
+        self.short = tail[:1].upper() + tail[1:] if self.type == "biome" and tail else head  # «Биом: лес» → «Лес»
         self.recipes = own_recipes(self.name, self.src.get("recipes", []))
         self.search_text = " ".join([self.title, self.summary, self.name, *[r["ingredients"] for r in self.recipes]])
 

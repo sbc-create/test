@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Crafting_Table",
  "fetched_at": "2026-10-12T22:25:57Z",
  "page_sha256": "072f3c0f8644876a3de5ae7a44a826c62e125a61bd6d6c3d989e4def05076b50",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -18,6 +18,12 @@
    "ingredients": "Any Planks",
    "slots": 4,
    "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks"
+   ],
    "result": "Crafting Table",
    "count": 1
   }

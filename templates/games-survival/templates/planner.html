@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{% if p %}{{ p.target.short }} × {{ p.n }}{% else %}Планировщик крафта{% endif %}</h1>
+<form class="pf" action="/planirovshchik/" method="get" aria-label="Планировщик крафта">
+  <label for="pi">Предмет</label><select id="pi" name="item">{% for e in targets %}<option value="{{ e.slug }}"{% if e.slug == slug %} selected{% endif %}>{{ e.short }}</option>{% endfor %}</select>
+  <label for="pn">Сколько</label><input id="pn" name="n" type="number" inputmode="numeric" min="1" max="{{ MAX_N }}" value="{{ n }}" required>
+  <button type="submit" class="btn">Посчитать</button>
+</form>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if p %}
+<section aria-labelledby="h-base"><h2 id="h-base">Базовые ресурсы</h2>
+<table class="tbl"><thead><tr><th scope="col">Ресурс</th><th scope="col" class="num">Нужно</th></tr></thead>
+<tbody>{% for b, q in p.base %}<tr><th scope="row"><a href="{{ b.url }}">{{ b.short }}</a></th><td class="num">{{ q }}</td></tr>{% endfor %}</tbody></table>
+<p class="note">Базовый — то, что не собирается на верстаке из материалов сайта: добывается или плавится (печь в расчёт не входит).</p></section>
+<section class="steps" aria-labelledby="h-steps" data-plan="{{ p.target.slug }}-{{ p.n }}"><h2 id="h-steps">Шаги по порядку</h2>
+<p class="steps__status" data-status aria-live="polite"></p>
+<ol>{% for st in p.steps %}<li><label class="step"><input type="checkbox" data-step="{{ loop.index }}"><span>
+  <b>{{ st.entry.short }}</b>: {{ st.crafts }} {{ plural(st.crafts, 'крафт', 'крафта', 'крафтов') }} → {{ st.made }} шт.
+  <span class="step__in">на всё: {% for y, q, t in st.inputs %}{{ y.short }} {{ t }}{% if not loop.last %}, {% endif %}{% endfor %}{% if st.surplus %}; останется лишних: {{ st.surplus }}{% endif %}</span></span></label></li>{% endfor %}</ol>
+<p><button type="button" class="btn btn--line" data-steps-reset hidden>Сбросить отметки</button> <button type="button" class="btn btn--line" data-print hidden>Печать</button></p></section>
+<p class="note">Расчёт по первому рецепту каждого предмета, все ингредиенты которого есть на сайте: {% for st in p.steps %}{{ st.entry.short }} — {{ st.recipe.slots }} {{ plural(st.recipe.slots, 'слот', 'слота', 'слотов') }} → {{ st.recipe.count }} шт.{% if not loop.last %}; {% endif %}{% endfor %}. Источник: страницы предметов на Minecraft Wiki.</p>
+{% elif not error %}
+<p class="lead">Выберите предмет и количество (1–{{ MAX_N }}). Можно сразу открыть готовый расчёт:</p>
+<ul class="tiles">{% for e in targets %}{% set ri = recipe_inputs(e) %}<li><a href="/planirovshchik/?item={{ e.slug }}&amp;n={{ ri[0].count }}"><b>{{ e.short }}</b><span>{{ ri[0].count }} шт. за крафт</span></a></li>{% endfor %}</ul>
+{% endif %}
+{% endblock %}

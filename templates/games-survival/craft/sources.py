@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[1]
 PRIVATE = REPO / "var" / "games-survival" / "private" / "pages"
 OUT = ROOT / "data" / "sources"
-PARSER = "gsv-facts/1.0"
+PARSER = "gsv-facts/1.1"
 
 
 def tx(s: str) -> str:
@@ -69,6 +69,7 @@ def parse_recipes(raw: str) -> list[dict]:
                     "ingredients": ingredients,
                     "slots": len(filled),
                     "alternatives_in_first_slot": len(filled[0]),
+                    "slot_items": [f[0] for f in filled],
                     "result": result[0],
                     "count": int(size.group(1)) if size else 1,
                 }

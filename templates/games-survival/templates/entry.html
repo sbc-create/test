@@ -1,25 +1,23 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
 {% block main %}
 <article class="entry" data-slug="{{ e.slug }}" data-version="{{ e.version }}">
   <p class="kicker">{{ site.games[e.game].title }} · <span lang="en">{{ e.name }}</span></p>
   <h1>{{ e.title }}</h1>
   <p class="lead">{{ e.summary }} <a class="ref" href="#ist-1" aria-label="Источник">[1]</a></p>
-  {% if e.recipes %}<section aria-labelledby="h-rec"><h2 id="h-rec">Рецепты на верстаке</h2>
-    <ul class="recs">{% for r in e.recipes %}<li class="rec"><span class="rec__grid" aria-hidden="true">{% for i in range(9) %}<i class="{% if i < r.slots %}on{% endif %}"></i>{% endfor %}</span>
-      <span class="rec__txt"><b lang="en">{{ r.ingredients }}</b><span>занято слотов: {{ r.slots }} из 9</span></span><span class="rec__arrow" aria-hidden="true">→</span><span class="rec__out"><b lang="en">{{ r.result }}</b> × {{ r.count }}</span></li>{% endfor %}</ul>
-    <p class="note">Ингредиенты и количества — из сетки крафта источника. Схема слотов условная: показано число занятых клеток, а не их расположение.</p></section>{% endif %}
-  {% set src_from = site.made_from(e) %}{% set src_for = site.used_for(e) %}
-  {% if src_from or src_for %}<section class="links" aria-labelledby="h-links"><h2 id="h-links">Связи</h2>
-    <div class="links__grid">
-      <div><h3>Из чего делается</h3>{% if src_from %}<ul>{% for x in src_from %}<li><a href="{{ x.url }}">{{ x.title.split(':')[0] }}</a></li>{% endfor %}</ul>{% else %}<p class="note">Среди материалов сайта нет.</p>{% endif %}</div>
-      <div><h3>Что можно сделать</h3>{% if src_for %}<ul>{% for x in src_for %}<li><a href="{{ x.url }}">{{ x.title.split(':')[0] }}</a></li>{% endfor %}</ul>{% else %}<p class="note">Среди материалов сайта нет.</p>{% endif %}</div>
-    </div></section>{% endif %}
+  {% set ri = recipe_inputs(e) %}
+  {% if ri %}<form class="pf pf--inline" action="/planirovshchik/" method="get" aria-label="Посчитать ресурсы"><input type="hidden" name="item" value="{{ e.slug }}"><label for="en">Нужно штук</label><input id="en" name="n" type="number" inputmode="numeric" min="1" max="{{ MAX_N }}" value="{{ ri[0].count }}" required><button type="submit" class="btn">Посчитать ресурсы</button></form>{% endif %}
+  {% if e.recipes %}<section aria-labelledby="h-rec"><h2 id="h-rec">Рецепты</h2>
+    <div class="tablewrap"><table class="tbl"><thead><tr><th scope="col">Ингредиенты</th><th scope="col" class="num">Слотов</th><th scope="col">Результат</th></tr></thead>
+    <tbody>{% for r in e.recipes %}<tr><td lang="en">{{ r.ingredients }}</td><td class="num">{{ r.slots }}</td><td><span lang="en">{{ r.result }}</span> × {{ r.count }}</td></tr>{% endfor %}</tbody></table></div>
+    {% if ri %}<p class="note">На один крафт: {% for y, q in ri[1] %}<a href="{{ y.url }}">{{ y.short }}</a> — {{ q }}{% if not loop.last %}, {% endif %}{% endfor %} (по занятым слотам сетки источника).</p>{% endif %}</section>{% endif %}
+  {% set u = uses(e) %}
+  {% if u %}<section aria-labelledby="h-use"><h2 id="h-use">Куда идёт</h2>
+    <div class="tablewrap"><table class="tbl"><thead><tr><th scope="col">Предмет</th><th scope="col" class="num">На крафт</th><th scope="col" class="num">Выход</th></tr></thead>
+    <tbody>{% for x, q, c in u %}<tr><th scope="row"><a href="{{ x.url }}">{{ x.short }}</a> · <a class="mini" href="/planirovshchik/?item={{ x.slug }}&amp;n={{ c }}" aria-label="Посчитать ресурсы: {{ x.short }}">посчитать</a></th><td class="num">{{ q }}</td><td class="num">{{ c }}</td></tr>{% endfor %}</tbody></table></div></section>{% endif %}
   <p><button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
   <section class="sources" aria-labelledby="h-src"><h2 id="h-src">Источники</h2>
     <ol><li id="ist-1"><a href="{{ e.src.url }}" rel="nofollow noopener" lang="en">{{ e.name }} — {{ e.src.publisher }}</a>, прочитан {{ e.src.fetched_at[:10] }}.</li>{% for s in e.also %}<li><a href="{{ s.url }}" rel="nofollow noopener" lang="en">Главная страница {{ s.publisher }}</a> (версия{% if s.java_current %} Java Edition {{ s.java_current }}{% endif %}).</li>{% endfor %}</ol>
     <p class="note">Версия материала {{ e.version }}, опубликовано {{ e.published_at }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
   </section>
 </article>
-{% set rel = site.related(e) %}{% if rel %}<section aria-labelledby="h-rel"><h2 id="h-rel">Рядом в цепочке</h2>{{ grid(rel) }}</section>{% endif %}
 {% endblock %}
