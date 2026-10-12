@@ -124,7 +124,13 @@ def test_без_расхождений_код_ноль(стенд, capsys, monke
 
 def test_срок_закрытия_покрытия_считается_из_отчёта(стенд, capsys, monkeypatch,
                                                     tmp_path):
-    """Вместо «когда-нибудь доберётся» — число суток из бюджета прогона."""
+    """Вместо «когда-нибудь доберётся» — число суток из бюджета прогона.
+
+    Отчёт описывает ТОТ ЖЕ каталог, что и витрина: `titles` совпадает с числом
+    записей стенда. Это условие в стенде раньше не соблюдалось, и тест
+    проходил на несогласованном мире — отчёт обходил 62652 записи при одной
+    записи у витрины.
+    """
     м, подробности = стенд
     файл = tmp_path / "details.json"
     файл.write_text(json.dumps({"details": {"с-жанрами": подробности["с-жанрами"]}}),
@@ -133,9 +139,59 @@ def test_срок_закрытия_покрытия_считается_из_от
     отчёт = tmp_path / "detail-backfill-report.json"
     отчёт.write_text(json.dumps({
         "budget": 500, "requests_made": 2700, "finished_at": "2026-10-11T03:53:21Z",
+        "before": {"titles": 1, "cached": 0},
+        "after": {"titles": 1, "cached": 0}}), encoding="utf-8")
+    м.ОТЧЁТ_ДОБОРА = отчёт
+    assert м.главное(["--site", "animedia-01"]) == 0
+    вывод = capsys.readouterr().out
+    assert "НЕ в кэше 1" in вывод
+    assert "~1 сут" in вывод
+
+
+def test_чужой_отчёт_добора_не_выдаётся_за_план_этой_витрины(
+        стенд, capsys, monkeypatch, tmp_path):
+    """Отчёт про другой каталог не даёт витрине срока закрытия.
+
+    Измерено 12.10: у animedia-01 8552 записи, отчёт добора обходит 62652, и
+    инструмент печатал её «~5 сут» как свой. Это приписывание чужого плана
+    работ, и читается оно как обещание.
+    """
+    м, подробности = стенд
+    файл = tmp_path / "details.json"
+    файл.write_text(json.dumps({"details": {"с-жанрами": подробности["с-жанрами"]}}),
+                    encoding="utf-8")
+    monkeypatch.setitem(м.ВИТРИНЫ, "animedia-01", файл)
+    отчёт = tmp_path / "detail-backfill-report.json"
+    отчёт.write_text(json.dumps({
+        "budget": 500, "requests_made": 2700, "finished_at": "2026-10-11T03:53:21Z",
+        "before": {"titles": 62652, "cached": 59875},
         "after": {"titles": 62652, "cached": 60375}}), encoding="utf-8")
     м.ОТЧЁТ_ДОБОРА = отчёт
     assert м.главное(["--site", "animedia-01"]) == 0
     вывод = capsys.readouterr().out
-    assert "НЕ в кэше 2277" in вывод
-    assert "~5 сут" in вывод
+    assert "ДРУГОЙ каталог" in вывод
+    assert "сут" not in вывод.split("ДРУГОЙ каталог")[0].split("в кэше")[-1]
+
+
+def test_пустой_источник_назван_незакрываемым(стенд, capsys, monkeypatch,
+                                              tmp_path):
+    """17 записей lords-02 добором не закроются: источник для них пуст.
+
+    Смешивать их с «не спрошены» нельзя: первое закрывается ожиданием,
+    второе — никогда, и решение по ним принимает человек.
+    """
+    м, подробности = стенд
+    файл = tmp_path / "details.json"
+    файл.write_text(json.dumps({"details": {
+        "пусто-у-источника": подробности["пусто-у-источника"]}}),
+        encoding="utf-8")
+    monkeypatch.setitem(м.ВИТРИНЫ, "lords-02", файл)
+    отчёт = tmp_path / "detail-backfill-report.json"
+    отчёт.write_text(json.dumps({
+        "budget": 500, "requests_made": 2700, "finished_at": "2026-10-11T03:53:21Z",
+        "before": {"titles": 1, "cached": 1},
+        "after": {"titles": 1, "cached": 1}}), encoding="utf-8")
+    м.ОТЧЁТ_ДОБОРА = отчёт
+    assert м.главное(["--site", "lords-02"]) == 0
+    вывод = capsys.readouterr().out
+    assert "НЕ закроются никогда" in вывод
