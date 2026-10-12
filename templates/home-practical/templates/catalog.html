@@ -1,16 +1,24 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, filters %}
+{% from "_parts.html" import table %}
 {% block main %}
 <h1>Каталог задач</h1>
-<p class="lead">Все инструкции сайта. Выберите помещение и задачу — или посмотрите всё сразу.</p>
-{{ filters(room, task) }}
+<form class="ctl" action="/zadachi/" method="get" aria-label="Фильтр и сортировка">
+  <fieldset><legend>Помещение</legend>
+    <div class="seg"><label><input type="radio" name="pomeshchenie" value=""{% if not room %} checked{% endif %}><span>Все</span></label>{% for k, v in ROOMS.items() %}<label><input type="radio" name="pomeshchenie" value="{{ k }}"{% if room == k %} checked{% endif %}><span>{{ v }}</span></label>{% endfor %}</div>
+  </fieldset>
+  <fieldset><legend>Задача</legend>
+    <div class="seg"><label><input type="radio" name="zadacha" value=""{% if not task %} checked{% endif %}><span>Все</span></label>{% for k, v in TASKS.items() %}<label><input type="radio" name="zadacha" value="{{ k }}"{% if task == k %} checked{% endif %}><span>{{ v }}</span></label>{% endfor %}</div>
+  </fieldset>
+  <div class="ctl__row">
+    <label for="sort">Сортировка</label>
+    <select id="sort" name="sort">{% for k, v in SORTS.items() %}<option value="{{ k }}"{% if (sort or 'pomeshchenie') == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select>
+    <button type="submit">Применить</button>
+    {% if room or task or sort %}<a class="reset" href="/zadachi/">Сбросить</a>{% endif %}
+  </div>
+</form>
 {% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}. Показаны результаты без него.</p>{% endif %}
-<p class="count" role="status">Найдено: {{ items|length }} {{ plural(items|length, 'инструкция', 'инструкции', 'инструкций') }}{% if room %} · {{ ROOMS[room] }}{% endif %}{% if task %} · {{ TASKS[task] }}{% endif %}</p>
-{% if items %}{{ grid(items, 'h2') }}{% else %}
-<div class="empty">
-  <h2>По этому сочетанию инструкций пока нет</h2>
-  <p>Попробуйте другую задачу для этого помещения или посмотрите все инструкции.</p>
-  <p><a class="btn" href="/zadachi/">Сбросить фильтры</a>{% if room %} <a class="btn btn--ghost" href="/pomeshcheniya/{{ room }}/">Всё для помещения «{{ ROOMS[room] }}»</a>{% endif %}</p>
-</div>
+<p class="count" role="status">Найдено: {{ items|length }}{% if room %} · {{ ROOMS[room] }}{% endif %}{% if task %} · {{ TASKS[task] }}{% endif %}</p>
+{% if items %}{{ table(items) }}{% else %}
+<div class="empty"><h2>По этому сочетанию инструкций пока нет</h2><p>Снимите один из фильтров или начните с проблемы.</p><p><a class="btn" href="/zadachi/">Сбросить</a> <a class="btn btn--line" href="/problemy/">Выбрать проблему</a></p></div>
 {% endif %}
 {% endblock %}

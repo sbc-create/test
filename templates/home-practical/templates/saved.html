@@ -1,14 +1,10 @@
 {% extends "base.html" %}
-{% from "_parts.html" import card %}
+{% from "_parts.html" import rows %}
 {% block main %}
-<h1>Сохранённые инструкции</h1>
+<h1>Сохранённое</h1>
 <p class="lead">Список хранится только в этом браузере.</p>
-<noscript><p class="warn">Сохранение работает с включённым JavaScript. Все инструкции доступны в <a href="/zadachi/">каталоге</a>.</p></noscript>
-<div class="empty" data-saved-empty hidden>
-  <h2>Пока ничего не сохранено</h2>
-  <p>Нажмите «Сохранить» на странице инструкции, и она появится здесь.</p>
-  <p><a class="btn" href="/zadachi/">Открыть каталог задач</a></p>
-</div>
-<div class="grid" data-saved-list>{% for m in site.materials %}<div data-saved-item="{{ m.slug }}" hidden>{{ card(m, 'h2') }}</div>{% endfor %}</div>
-<button type="button" class="btn btn--ghost" data-saved-clear hidden>Очистить сохранённое</button>
+<noscript><p class="warn">Сохранение работает с включённым JavaScript. Все инструкции — в <a href="/zadachi/">каталоге</a>.</p></noscript>
+<div class="empty" data-saved-empty hidden><h2>Пока ничего не сохранено</h2><p>Нажмите «Сохранить» в инструкции.</p><p><a class="btn" href="/problemy/">Выбрать проблему</a></p></div>
+<ol class="rows" data-saved-list>{% for m in site.materials %}<li class="row" data-saved-item="{{ m.slug }}" hidden><h2 class="row__t"><a href="{{ m.url }}">{{ m.title }}</a></h2><p class="row__m"><span>{{ m.room_label }}</span><span>{{ m.task_label }}</span></p></li>{% endfor %}</ol>
+<button type="button" class="btn btn--line" data-saved-clear hidden>Очистить сохранённое</button>
 {% endblock %}

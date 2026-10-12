@@ -1,50 +1,21 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import table %}
 {% block main %}
-<section class="hero">
-  <h1>Что сделать удобнее дома?</h1>
-  <p class="lead">Выберите комнату — и получите пошаговые инструкции по хранению, мебели и небольшим улучшениям. Размеры и нагрузки взяты из документации производителей, у каждой инструкции есть источник.</p>
-  <form class="find find--big" action="/poisk/" method="get" role="search" aria-label="Поиск на главной">
-    <label class="sr" for="hq">Что нужно сделать</label>
-    <input id="hq" name="q" type="search" placeholder="Закрепить комод">
-    <button type="submit">Найти</button>
-  </form>
+<section class="intro">
+  <h1>Что мешает дома?</h1>
+  <p class="lead">Выберите проблему — и пройдите решение по шагам. Каждый шаг отмечается, размеры и нагрузки взяты у производителей.</p>
 </section>
-
-<section class="block" aria-labelledby="h-rooms">
-  <h2 id="h-rooms">Помещения</h2>
-  <ul class="rooms">
-    {% for k, v in ROOMS.items() %}{% set n = site.in_room(k)|length %}
-    <li><a class="room-tile room-tile--{{ k }}" href="/pomeshcheniya/{{ k }}/">
-      <img src="{{ asset('img/rooms/' ~ k ~ '.svg') }}" alt="" width="72" height="72">
-      <span class="room-tile__name">{{ v }}</span>
-      <span class="room-tile__lede">{{ ROOM_LEDE[k] }}</span>
-      <span class="room-tile__n">{{ n }} {{ plural(n, 'инструкция', 'инструкции', 'инструкций') }}</span>
-    </a></li>
-    {% endfor %}
-  </ul>
-</section>
-
-<section class="block" aria-labelledby="h-tasks">
-  <h2 id="h-tasks">Задачи</h2>
-  <ul class="tasks">
-    {% for k, v in TASKS.items() %}{% set n = site.for_task(k)|length %}
-    <li><a href="/zadachi/{{ k }}/"><b>{{ v }}</b> <span>{{ n }} {{ plural(n, 'инструкция', 'инструкции', 'инструкций') }}</span></a></li>
-    {% endfor %}
-  </ul>
-</section>
-
-<section class="block" aria-labelledby="h-cols">
-  <div class="block__head"><h2 id="h-cols">Подборки</h2><a href="/podborki/">Все подборки</a></div>
-  <ul class="cols">
-    {% for c in site.collections.values() %}
-    <li><a href="/podborki/{{ c.slug }}/"><b>{{ c.title }}</b><span>{{ c.lede }}</span><span class="cols__n">{{ c['items']|length }} {{ plural(c['items']|length, 'инструкция', 'инструкции', 'инструкций') }}</span></a></li>
-    {% endfor %}
-  </ul>
-</section>
-
-<section class="block" aria-labelledby="h-new">
-  <div class="block__head"><h2 id="h-new">Инструкции</h2><a href="/zadachi/">Каталог задач</a></div>
-  {{ grid(site.materials[:6]) }}
+<ol class="problems">
+  {% for p in site.problems.values() %}
+  <li><a href="/problemy/{{ p.slug }}/"><b>{{ p.title }}</b><span>{{ p.symptom }}</span><em>{{ p['items']|length }} {{ plural(p['items']|length, 'решение', 'решения', 'решений') }}</em></a></li>
+  {% endfor %}
+</ol>
+<form class="find find--wide" action="/poisk/" method="get" role="search" aria-label="Поиск на главной">
+  <label for="hq">Не нашли свою проблему? Опишите словами</label>
+  <div><input id="hq" name="q" type="search" placeholder="Например: комод"><button type="submit">Найти</button></div>
+</form>
+<section aria-labelledby="h-all">
+  <div class="head"><h2 id="h-all">Все инструкции</h2><a href="/zadachi/">Фильтры и сортировка</a></div>
+  {{ table(site.sort(site.materials, 'zadacha')) }}
 </section>
 {% endblock %}

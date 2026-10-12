@@ -120,6 +120,12 @@ class Site:
         cols = yaml.safe_load((ROOT / "config" / "collections.yaml").read_text())["collections"]
         self.collections = {c["slug"]: {**c, "items": self.with_tag(c["tag"])} for c in cols}
         self.collections = {k: v for k, v in self.collections.items() if len(v["items"]) >= 2}
+        probs = yaml.safe_load((ROOT / "config" / "problems.yaml").read_text())["problems"]
+        self.problems = {
+            p["slug"]: {**p, "items": [self.by_slug[x] for x in p["materials"]]}
+            for p in probs
+            if all(x in self.by_slug for x in p["materials"])
+        }
 
     @property
     def indexable(self) -> bool:
@@ -173,6 +179,19 @@ class Site:
             if all(any(x.startswith(w) for x in ws) for w in qs):
                 scored.append((-sum(any(x.startswith(w) for x in title) for w in qs), m.title, m))
         return [m for *_, m in sorted(scored, key=lambda t: (t[0], t[1]))]
+
+    def problems_for(self, m: Material) -> list[dict]:
+        return [p for p in self.problems.values() if m in p["items"]]
+
+    SORTS = {"pomeshchenie": "по помещению", "zadacha": "по задаче", "nazvanie": "по названию"}
+
+    def sort(self, items: list[Material], key: str) -> list[Material]:
+        rooms, tasks = list(ROOMS), list(TASKS)
+        if key == "zadacha":
+            return sorted(items, key=lambda m: (tasks.index(m.task), m.title))
+        if key == "nazvanie":
+            return sorted(items, key=lambda m: m.title)
+        return sorted(items, key=lambda m: (rooms.index(m.room), m.title))
 
     def used_sources(self) -> list[dict]:
         return sorted(self.sources.values(), key=lambda s: (s["kind"], s["name"]))

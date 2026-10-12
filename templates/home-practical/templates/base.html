@@ -9,41 +9,29 @@
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
 <meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
 {% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
-<link rel="stylesheet" href="{{ asset('css/rooms.css') }}">
+<link rel="stylesheet" href="{{ asset('css/checklist.css') }}">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/home.js') }}" defer></script>
+<script src="{{ asset('js/steps.js') }}" defer></script>
 </head>
 <body data-ns="{{ site.cfg.storage_namespace }}" data-kind="{{ meta.kind }}">
 <a class="skip" href="#main">К содержимому</a>
-<header class="top">
-  <div class="top__in">
-    <a class="logo" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="32" height="32"><span>Удобный дом</span></a>
+<header class="bar">
+  <div class="bar__in">
+    <a class="brand" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="28" height="28"><span>Удобный дом</span><small>чек-листы решений</small></a>
+    <nav class="nav" aria-label="Основные разделы">
+      <a href="/problemy/"{% if meta.kind in ('problems', 'problem') %} aria-current="page"{% endif %}>Проблемы</a>
+      <a href="/zadachi/"{% if meta.kind == 'catalog' %} aria-current="page"{% endif %}>Каталог</a>
+      <a href="/pomeshcheniya/"{% if meta.kind in ('rooms', 'room') %} aria-current="page"{% endif %}>Помещения</a>
+      <a href="/sohranennoe/"{% if meta.kind == 'saved' %} aria-current="page"{% endif %}>Сохранённое <span class="badge" data-saved-count hidden></span></a>
+    </nav>
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту">
-      <label class="sr" for="fq">Что нужно сделать</label>
-      <input id="fq" name="q" type="search" placeholder="Полка или комод">
+      <label class="sr" for="fq">Что не так или что нужно сделать</label>
+      <input id="fq" name="q" type="search" placeholder="Поиск">
       <button type="submit">Найти</button>
     </form>
-    <a class="saved-link" href="/sohranennoe/">Сохранённое <span class="badge" data-saved-count hidden></span></a>
-    <details class="menu">
-      <summary>Меню</summary>
-      <nav aria-label="Помещения и разделы (меню)">
-        <ul>
-          {% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/">{{ v }}</a></li>{% endfor %}
-          <li><a href="/zadachi/">Каталог задач</a></li>
-          <li><a href="/podborki/">Подборки</a></li>
-        </ul>
-      </nav>
-    </details>
   </div>
-  <nav class="rooms-bar" aria-label="Помещения">
-    <ul>
-      {% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/"{% if room is defined and room == k %} aria-current="page"{% endif %}>{{ v }}</a></li>{% endfor %}
-      <li class="rooms-bar__sep"><a href="/zadachi/">Все задачи</a></li>
-      <li><a href="/podborki/">Подборки</a></li>
-    </ul>
-  </nav>
 </header>
 {% if meta.crumbs|length > 1 %}
 <nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>
@@ -52,10 +40,8 @@
 {% block main %}{% endblock %}
 </main>
 <footer class="foot">
-  <div class="foot__in">
-    <p>Размеры, нагрузки и требования — из инструкций производителей и материалов профильных организаций; у каждой инструкции есть список источников. Тексты подготовлены с помощью ИИ и пока не проверены редакцией.</p>
-    <nav aria-label="О сайте"><a href="/kak-my-proveryaem/">Как мы проверяем</a> <a href="/istochniki/">Источники</a> <a href="/zadachi/">Каталог задач</a></nav>
-  </div>
+  <p>Числа и требования — из документации производителей и материалов профильных организаций, у каждой инструкции есть источники. Тексты подготовлены с помощью ИИ и пока не проверены редакцией.</p>
+  <nav aria-label="О сайте"><a href="/kak-my-proveryaem/">Как мы проверяем</a> <a href="/istochniki/">Источники</a> <a href="/podborki/">Подборки</a></nav>
 </footer>
 </body>
 </html>

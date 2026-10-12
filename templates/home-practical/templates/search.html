@@ -1,24 +1,18 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import rows %}
 {% block main %}
-<h1>{% if q %}Поиск: «{{ q }}»{% else %}Поиск по инструкциям{% endif %}</h1>
-<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице">
-  <label class="sr" for="sq">Что нужно сделать</label>
-  <input id="sq" name="q" type="search" value="{{ q }}" placeholder="Полка или комод">
-  <button type="submit">Найти</button>
-  {% if q %}<a class="filters__reset" href="/poisk/">Очистить</a>{% endif %}
+<h1>{% if q %}Поиск: «{{ q }}»{% else %}Поиск{% endif %}</h1>
+<form class="find find--wide" action="/poisk/" method="get" role="search" aria-label="Поиск на странице">
+  <label for="sq">Что не так или что нужно сделать</label>
+  <div><input id="sq" name="q" type="search" value="{{ q }}"><button type="submit">Найти</button>{% if q %}<a class="reset" href="/poisk/">Очистить</a>{% endif %}</div>
 </form>
 {% if not q %}
-<p class="count">Введите, что нужно сделать или какой предмет вас интересует. Можно начать с помещения:</p>
-<ul class="chips__plain">{% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/">{{ v }}</a></li>{% endfor %}</ul>
+<p class="count">Введите слово — или выберите проблему:</p>
+<ul class="plain">{% for p in site.problems.values() %}<li><a href="/problemy/{{ p.slug }}/">{{ p.title }}</a></li>{% endfor %}</ul>
 {% elif items %}
-<p class="count" role="status">Найдено: {{ items|length }} {{ plural(items|length, 'инструкция', 'инструкции', 'инструкций') }}</p>
-{{ grid(items, 'h2') }}
+<p class="count" role="status">Найдено: {{ items|length }}</p>
+{{ rows(items, 'h2') }}
 {% else %}
-<div class="empty" role="status">
-  <h2>Ничего не нашлось</h2>
-  <p>Попробуйте другое слово — например, «полка», «ящик», «обувь» — или откройте каталог.</p>
-  <p><a class="btn" href="/zadachi/">Открыть каталог задач</a></p>
-</div>
+<div class="empty" role="status"><h2>Ничего не нашлось</h2><p>Попробуйте другое слово — «полка», «ящик», «обувь» — или выберите проблему.</p><p><a class="btn" href="/problemy/">Выбрать проблему</a></p></div>
 {% endif %}
 {% endblock %}
