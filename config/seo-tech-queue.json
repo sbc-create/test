@@ -6,7 +6,9 @@
       "id": "T001",
       "site": "zonafilm.cc",
       "repo": "var/site-repos/zonafilm-cc",
-      "urls": ["https://zonafilm.cc/"],
+      "urls": [
+        "https://zonafilm.cc/"
+      ],
       "problem": "На главной нет ни одного <h1> (meta-audit 12.10).",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.1",
       "expected": "Ровно один видимый H1, равный утверждённому титулу.",
@@ -19,20 +21,26 @@
       "id": "T002",
       "site": "12 витрин (Lords ×4, Zona ×3, AnimeGo ×3, Animedia ×2)",
       "repo": "var/site-repos/*",
-      "urls": ["https://lordserial33.biz/title/jamai-2-0/", "https://an1mego.site/title/ey-u-tebya-ushki-torchat/",
-               "https://animedia.icu/title/ey-u-tebya-ushki-torchat/"],
+      "urls": [
+        "https://lordserial33.biz/title/jamai-2-0/",
+        "https://an1mego.site/title/ey-u-tebya-ushki-torchat/",
+        "https://animedia.icu/title/ey-u-tebya-ushki-torchat/"
+      ],
       "problem": "BreadcrumbList из сегментов адреса: «Главная › title › slug» (/title/ — 404), не совпадает с видимыми крошками.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "Разметка совпадает с видимыми крошками; без видимых крошек разметки нет.",
       "check": "checks/visible_breadcrumbs.py",
       "verify_live": "сравнение BreadcrumbList и <nav aria-label=\"Хлебные крошки\"> на странице тайтла",
-      "status": "session"
+      "status": "session",
+      "evidence": "общий слой d6c0eb5 (тест падает на прежнем слое 4/5); lords-01 fcbad98ddb89 live_verified (BreadcrumbList = видимые крошки); остальные — раскатка/выкладка идут"
     },
     {
       "id": "T003",
       "site": "an1mego.site",
       "repo": "var/site-repos/an1mego-site",
-      "urls": ["https://an1mego.site/title/ey-u-tebya-ushki-torchat/"],
+      "urls": [
+        "https://an1mego.site/title/ey-u-tebya-ushki-torchat/"
+      ],
       "problem": "На странице тайтла нет видимых хлебных крошек; после T002 у неё нет и BreadcrumbList.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "Видимые крошки «<Сайт> / Каталог / <Название>» из реальной иерархии в <nav aria-label=\"Хлебные крошки\">; разметку построит общий слой.",
@@ -45,7 +53,9 @@
       "id": "T004",
       "site": "animeg0.site",
       "repo": "var/site-repos/animeg0-site",
-      "urls": ["https://animeg0.site/title/ey-u-tebya-ushki-torchat/"],
+      "urls": [
+        "https://animeg0.site/title/ey-u-tebya-ushki-torchat/"
+      ],
       "problem": "То же, что T003.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "То же, что T003.",
@@ -57,7 +67,9 @@
       "id": "T005",
       "site": "an1meg0.site",
       "repo": "var/site-repos/an1meg0-site",
-      "urls": ["https://an1meg0.site/title/ey-u-tebya-ushki-torchat/"],
+      "urls": [
+        "https://an1meg0.site/title/ey-u-tebya-ushki-torchat/"
+      ],
       "problem": "То же, что T003.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "То же, что T003.",
@@ -109,6 +121,51 @@
       "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
       "status": "blocked",
       "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer."
+    },
+    {
+      "id": "T006",
+      "site": "lordserial33.biz",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/anime/"
+      ],
+      "problem": "checks/lords02_taxonomy.py падает на живом снимке (и на прежнем коде): 17 новых записей с идентификатором аниме-базы без жанра аниме (например roza-2, stich-i-ay — «западный контент»), не разобраны в config/classification-overrides.json.",
+      "norm": "разделы по типу контента (D139-класс: фильтр до сортировки и обрезки); тест не отключается",
+      "expected": "каждое из 17 рассогласований разобрано поимённо по данным снимка; lords02-taxonomy проходит.",
+      "check": "checks/lords02_taxonomy.py",
+      "status": "verified",
+      "evidence": "lordserial33-biz commit 2985b6f3b092: 17 записей в cross_signal_reviewed; checks/lords02_taxonomy.py rc=0 (на прежнем коде rc=1), checks/run.sh rc=0. Выкладка lords-02 — в очереди."
+    },
+    {
+      "id": "T007",
+      "site": "lordserial33.biz, lordfilm47.space, 1lordserials1.online, lordserials22.info",
+      "repo": "var/site-repos/<lords>",
+      "urls": [
+        "https://lordserial33.biz/catalog/",
+        "https://lordfilm47.space/collections/"
+      ],
+      "problem": "CSU-3 (ворота cross-site, 2b451a2): H1 «Каталог» на /catalog/ у всех Lords, «Подборки» на /collections/ у трёх; title уже несёт имя сайта.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.1; factory seo-cross-site CSU-3",
+      "expected": "H1 несёт признак сайта; /catalog/ индексируем, один canonical.",
+      "verify_live": "python3 -m factory seo-cross-site --site lords-02 --base https://lordserial33.biz — без CSU-3",
+      "status": "blocked",
+      "owner_action": "Решается вместе с B007. H1 «Каталог»/«Подборки» внутри каждого сайта уникален, title уже несёт имя сайта; совпадение H1 между доменами — следствие одного каталога под несколькими доменами (CSU-4). Добавлять имя сайта в H1 ради прохождения ворот — правка ради зелёного результата, не делается без решения по B007."
+    },
+    {
+      "id": "T008",
+      "site": "10 ячеек (1lordserials1-online, animedia-icu, animeg0-site, lordserial33-biz, yummyani-biz, yummyani-site, yummyani7-info, yummyani7-site, zonafilm-space, zonafilm12-site)",
+      "repo": "var/site-repos/*",
+      "problem": "artifact_sha256 в template-manifest.json не совпадает ни с одним файлом точки входа — ложное заявление о происхождении.",
+      "expected": "build_id: worktree-unbuilt и пустая цифра (прецедент lordfilm47-space 26.09) либо верная цифра.",
+      "verify_live": "python3 -m pytest tests/unit/test_cell_entrypoint_contract.py -q",
+      "status": "session"
+    },
+    {
+      "id": "B007",
+      "site": "lordfilm47.space ↔ 1lordserials1.online",
+      "problem": "CSU-4: основной текст /catalog/ совпадает на 91 % — один каталог под несколькими индексируемыми доменами.",
+      "status": "blocked",
+      "owner_action": "Решение владельца (Архитектор, cross-site-gate-20261012.md §4): принять риск, развести каталоги (разный состав/порядок по профилю сайта) или закрыть дублирующий каталог от индекса на одном из доменов. Тексты-заглушки для «уникальности» не пишем."
     }
   ]
 }
