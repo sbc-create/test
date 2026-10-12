@@ -1,0 +1,27 @@
+{
+ "slug": "predmet-everburn-blade",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-e195885694",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Everburn Blade — двуручный меч с огнём",
+ "summary": "Необычный двуручный меч, который всегда горит: к 2d6 рубящего урона добавляется 1d4 урона огнём. По данным вики, его носит Commander Zhalk на наутилоиде в прологе.",
+ "points": [
+  "Редкость: необычный (Uncommon)",
+  "Урон: 2d6 рубящего + модификатор Силы",
+  "Дополнительно: 1d4 огнём",
+  "Где найти: Nautiloid (пролог)"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-sword-of-justice"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

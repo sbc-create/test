@@ -387,6 +387,131 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "predmet-adamantine-splint",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-6608eb1dfd",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Adamantine Splint Armour — тяжёлые латы",
+   "summary": "Очень редкие тяжёлые латы с классом доспеха 18 и весом 19 кг. Их куют в Adamantine Forge; для ношения нужно владение тяжёлыми доспехами.",
+   "points": [
+    "Редкость: очень редкий (Very rare)",
+    "Класс доспеха: 18",
+    "Вес: 19 кг",
+    "Где найти: Adamantine Forge"
+   ],
+   "tips": [],
+   "related": [],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "215a6cda3340b73f83c17903cd977017af35100a277de2c0bf7f6d2d09141285",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-everburn-blade",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-e195885694",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Everburn Blade — двуручный меч с огнём",
+   "summary": "Необычный двуручный меч, который всегда горит: к 2d6 рубящего урона добавляется 1d4 урона огнём. По данным вики, его носит Commander Zhalk на наутилоиде в прологе.",
+   "points": [
+    "Редкость: необычный (Uncommon)",
+    "Урон: 2d6 рубящего + модификатор Силы",
+    "Дополнительно: 1d4 огнём",
+    "Где найти: Nautiloid (пролог)"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-sword-of-justice"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "7de39738eba79e11686939be9b01733cc5c52568a2696d16c04eab88c597d75e",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-phalar-aluve",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-842ac8926e",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Phalar Aluve — меч в камне",
+   "summary": "Редкий длинный меч +1, который можно держать одной или двумя руками: 1d8 + 1 одной рукой, 1d10 + 1 двумя. Застрял в камне в Underdark; способы освободить его перечислены на странице вики.",
+   "points": [
+    "Редкость: редкий (Rare), зачарование +1",
+    "Одной рукой: 1d8 + 1 рубящего",
+    "Двумя руками: 1d10 + 1 рубящего",
+    "Где найти: Underdark"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-everburn-blade"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "3ee09eed97b6f80ad7d2b1f9e7e041da32fff2871c5dfd81f34e316ffdc87822",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-sword-of-justice",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-9e1cb72fea",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Sword of Justice — меч Андерса",
+   "summary": "Необычный двуручный меч +1: 2d6 + 1 рубящего урона. По данным вики, его носит Anders в Risen Road Toll House; меч можно забрать с тела или получить от него в награду.",
+   "points": [
+    "Редкость: необычный (Uncommon), зачарование +1",
+    "Урон: 2d6 + 1 рубящего",
+    "Где найти: Risen Road Toll House"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-everburn-blade"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "7d0162c5e7d709dc4a8baba6e30561190638b92577c0c266a053824e8d11b209",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "shadowheart",
    "game": "baldurs-gate-3",
    "type": "character",
@@ -647,6 +772,33 @@
    ],
    "progression_parsed": true
   },
+  "src-6608eb1dfd": {
+   "id": "src-6608eb1dfd",
+   "url": "https://bg3.wiki/wiki/Adamantine_Splint_Armour",
+   "fetched_at": "2026-10-12T23:26:26Z",
+   "page_sha256": "4b03dfdeef7b2f6572999cf9cfd91c42ad0c62ebfc45bffe2b8514fb083fc51f",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Adamantine Splint Armour",
+   "lead": [
+    "Adamantine Splint Armour is a very rare Heavy Armour that reduces all incoming damage by 2 and sends attackers Reeling . In addition, attacks cannot land Critical Hits on the wearer.",
+    "The adamantine plates lock and slide together perfectly - offering protection against even the deadliest of blades."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Very rare",
+    "weight_kg": 19.0,
+    "damage": [],
+    "extra_damage": [],
+    "armour_class": 18,
+    "category": "Heavy Armour",
+    "enchantment": 0,
+    "found_in": "Adamantine Forge"
+   }
+  },
   "src-80cb6e2007": {
    "id": "src-80cb6e2007",
    "url": "https://bg3.wiki/wiki/Advantage",
@@ -665,6 +817,76 @@
    "patches": [
     "Patch 7"
    ]
+  },
+  "src-842ac8926e": {
+   "id": "src-842ac8926e",
+   "url": "https://bg3.wiki/wiki/Phalar_Aluve",
+   "fetched_at": "2026-10-12T23:26:22Z",
+   "page_sha256": "a7e5182197142d1429e257d6213968afd1da50e6975449d5475fba9c59f6d418",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Phalar Aluve",
+   "lead": [
+    "Phalar Aluve is a rare +1 Longsword that can be made to Sing or Shriek , granting nearby allies or enemies a bonus to Attack Rolls or damage rolls, depending on the choice."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Rare",
+    "weight_kg": 1.35,
+    "damage": [
+     {
+      "hand": "One-handed",
+      "dice": "1d8 + 1",
+      "type": "Slashing"
+     },
+     {
+      "hand": "Two-handed",
+      "dice": "1d10 + 1",
+      "type": "Slashing"
+     }
+    ],
+    "extra_damage": [],
+    "armour_class": null,
+    "category": "Longswords",
+    "enchantment": 1,
+    "found_in": "Underdark"
+   }
+  },
+  "src-9e1cb72fea": {
+   "id": "src-9e1cb72fea",
+   "url": "https://bg3.wiki/wiki/Sword_of_Justice",
+   "fetched_at": "2026-10-12T23:26:24Z",
+   "page_sha256": "601c0dbc760332499a902c98184ee8415790fa3e153d1e1b88c7acb1e6dc7df4",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Sword of Justice",
+   "lead": [
+    "Sword of Justice is an uncommon +1 greatsword that grants its wielder the Tyr's Protection spell.",
+    "The words 'Deliverance. Justice. Vengeance.' are engraved on the base of this sword. They echo in your mind."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Uncommon",
+    "weight_kg": 2.7,
+    "damage": [
+     {
+      "hand": null,
+      "dice": "2d6 + 1",
+      "type": "Slashing"
+     }
+    ],
+    "extra_damage": [],
+    "armour_class": null,
+    "category": "Greatswords",
+    "enchantment": 1,
+    "found_in": "Risen Road Toll House"
+   }
   },
   "src-b9458ea969": {
    "id": "src-b9458ea969",
@@ -756,6 +978,44 @@
     "INT": 13,
     "WIS": 10,
     "CHA": 17
+   }
+  },
+  "src-e195885694": {
+   "id": "src-e195885694",
+   "url": "https://bg3.wiki/wiki/Everburn_Blade",
+   "fetched_at": "2026-10-12T23:26:20Z",
+   "page_sha256": "647d78d1d6cb7208c870698b9cf48d0d2fa391aaf1524d8f27dc7b49ec87e7e3",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Everburn Blade",
+   "lead": [
+    "Everburn Blade is an uncommon greatsword that deals additional ⁠ ⁠ Fire damage.",
+    "Silent flames surge the length of the blade as soon as it clears the scabbard."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Uncommon",
+    "weight_kg": 2.7,
+    "damage": [
+     {
+      "hand": null,
+      "dice": "2d6",
+      "type": "Slashing"
+     }
+    ],
+    "extra_damage": [
+     {
+      "dice": "1d4",
+      "type": "Fire"
+     }
+    ],
+    "armour_class": null,
+    "category": "Greatswords",
+    "enchantment": 0,
+    "found_in": "Nautiloid"
    }
   },
   "src-e251b997ee": {

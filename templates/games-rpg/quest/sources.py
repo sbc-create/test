@@ -89,6 +89,8 @@ def parse(raw: str, url: str, kind: str) -> dict:
         bad = sum(1 for r in rows if re.fullmatch(r"[\d\s+-]*", r["features"]))
         rec["progression"] = rows if rows and bad <= 1 else []
         rec["progression_parsed"] = bool(rec["progression"])
+    if kind == "item":
+        rec["item"] = parse_item(body)
     if kind == "quest":
         stages, w = [], False
         for lv, name in heads:
@@ -98,6 +100,43 @@ def parse(raw: str, url: str, kind: str) -> dict:
                 stages.append(name)
         rec["stages"] = stages
     return rec
+
+
+DMG_TYPES = "Slashing|Piercing|Bludgeoning|Fire|Cold|Lightning|Thunder|Acid|Poison|Necrotic|Radiant|Psychic|Force"
+
+
+def parse_item(body: str) -> dict:
+    """Паспорт предмета из инфобокса: редкость и вес — из подписей иконок, урон, вид, класс доспеха и место —
+    из текста блоков «Properties»/«Details»/«Where to find». Цена не извлекается: стоимость на сайте не публикуется."""
+    t = tx(body).replace("\u2060", "").replace("\u202f", " ")
+    t = re.sub(r"\s+", " ", t)
+    out: dict = {}
+    m = re.search(r'alt="Rarity: ([^"]+)"', body)
+    out["rarity"] = m.group(1) if m else None
+    m = re.search(r'alt="Weight: ([\d.]+)\W*kg', body)
+    out["weight_kg"] = float(m.group(1)) if m else None
+    i = t.find("Properties")
+    j = t.find("Details", i) if i >= 0 else -1
+    props = t[i:j] if i >= 0 and j > i else ""
+    out["damage"] = [
+        {"hand": hand or None, "dice": dice, "type": kind}
+        for hand, dice, kind in re.findall(
+            rf"(?:(One-handed|Two-handed) damage|Damage) (\d+d\d+(?: \+ \d+)?) \([^)]*\)[^.]*?\b({DMG_TYPES})\b", props
+        )
+    ]
+    out["extra_damage"] = [
+        {"dice": d, "type": k}
+        for d, k in re.findall(rf"Extra damage (\d+d\d+(?: \+ \d+)?) \([^)]*\) ({DMG_TYPES})", props)
+    ]
+    m = re.search(r"Properties (\d+) Armour Class (\w+ Armour)", t)
+    out["armour_class"] = int(m.group(1)) if m else None
+    m2 = re.search(r"Details ([A-Z][\w ]*?) Rarity:", t)
+    out["category"] = m.group(2) if m else (m2.group(1) if m2 else None)
+    m = re.search(r"Enchantment: \+ (\d+)", t)
+    out["enchantment"] = int(m.group(1)) if m else 0
+    m = re.search(r"Where to find (.+?) X: ", t)
+    out["found_in"] = m.group(1).strip() if m and len(m.group(1)) < 60 else None
+    return out
 
 
 def source_id(url: str) -> str:
@@ -155,6 +194,10 @@ def fact_text(rec: dict) -> str:
     parts = [rec["name"], *rec.get("lead", []), *rec.get("patches", []), *rec.get("stages", [])]
     parts += [f"{k} {v}" for k, v in rec.get("abilities", {}).items()]
     parts += [f"level {r['level']} {r['bonus']} {r['features']}" for r in rec.get("progression", [])]
+    it = rec.get("item") or {}
+    parts += [str(it.get(k) or "") for k in ("rarity", "weight_kg", "armour_class", "category", "found_in")]
+    parts += [f"+{it['enchantment']}" if it.get("enchantment") else ""]
+    parts += [f"{d['dice']} {d['type']}" for d in it.get("damage", []) + it.get("extra_damage", [])]
     return " ".join(parts)
 
 
