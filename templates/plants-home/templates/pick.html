@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_parts.html" import pickform, grid %}
+{% block main %}
+<h1>Подбор растения</h1>
+{{ pickform(light, maint, pets, lights) }}
+{% if asked %}
+<section aria-labelledby="h-res" class="res"><h2 id="h-res">Подходящие виды</h2>
+<p class="note" role="status">Условия: {% if light %}{{ lights[light][1].lower() }}{% else %}свет любой{% endif %}; уход {% if maint %}{{ MAINT[maint] }}{% else %}любой{% endif %}{% if pets %}; есть дети или животные{% endif %}. <a class="reset" href="/podbor/">Начать заново</a></p>
+{% if pets %}
+  <h3>Источник указывает: не ядовито</h3>{% if groups.nontoxic %}{{ grid(groups.nontoxic, 'h4') }}{% else %}<p class="note">Таких видов при этих условиях нет.</p>{% endif %}
+  <h3>Источник не указывает ядовитость</h3><p class="note">Это не значит, что растение безопасно. Уточните перед покупкой.</p>{% if groups.nodata %}{{ grid(groups.nodata, 'h4') }}{% else %}<p class="note">Нет.</p>{% endif %}
+  <h3>Ядовиты по источнику</h3>{% if groups.toxic %}<ul class="rows">{% for p in groups.toxic %}<li class="row"><h4 class="row__t"><a href="{{ p.url }}">{{ p.ru_name }}</a></h4><p class="row__m">ядовитость: {{ p.poison }}</p></li>{% endfor %}</ul>{% else %}<p class="note">Нет.</p>{% endif %}
+{% else %}
+  {% if groups.all %}{{ grid(groups.all, 'h3') }}{% else %}<div class="empty"><h3>При этих условиях подходящих видов нет</h3><p>Ослабьте одно из условий — например, выберите «Неважно» для ухода.</p><p><a class="btn" href="/podbor/">Начать заново</a></p></div>{% endif %}
+{% endif %}
+</section>
+{% endif %}
+{% endblock %}

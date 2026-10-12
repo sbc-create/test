@@ -1,10 +1,20 @@
-{% macro light_icon(slug) %}<img class="li" src="{{ asset('img/light-' ~ slug ~ '.svg') }}" alt="" width="22" height="22">{% endmacro %}
-{% macro card(p, heading='h3') %}
-<article class="pc">
-  <{{ heading }} class="pc__t"><a href="{{ p.url }}">{{ p.ru_name }}</a></{{ heading }}>
-  <p class="pc__sci"><i lang="la">{{ p.sci }}</i></p>
-  <p class="pc__light">{% for l in p.light %}<span>{{ light_icon(l[0]) }}{{ l[1] }}</span>{% endfor %}</p>
-  {% set bits = [] %}{% if p.maint %}{% set bits = bits + ['Уход: ' ~ p.maint] %}{% endif %}{% if p.problems %}{% set bits = bits + ['проблем по источнику: ' ~ p.problems|length] %}{% endif %}{% if bits %}<p class="pc__m">{{ bits|join(' · ') }}</p>{% endif %}
-</article>
+{% macro light_icon(slug) %}<img class="li" src="{{ asset('img/light-' ~ slug ~ '.svg') }}" alt="" width="20" height="20">{% endmacro %}
+{% macro row(p, heading='h3') %}
+<li class="row">
+  <{{ heading }} class="row__t"><a href="{{ p.url }}">{{ p.ru_name }}</a> <i lang="la">{{ p.sci }}</i></{{ heading }}>
+  <p class="row__m">{% for l in p.light %}<span>{{ light_icon(l[0]) }}{{ l[1] }}</span>{% endfor %}{% if p.maint %}<span>уход: {{ p.maint }}</span>{% endif %}</p>
+</li>
 {% endmacro %}
-{% macro grid(items, heading='h3') %}<div class="pcs">{% for p in items %}{{ card(p, heading) }}{% endfor %}</div>{% endmacro %}
+{% macro grid(items, heading='h3') %}<ul class="rows">{% for p in items %}{{ row(p, heading) }}{% endfor %}</ul>{% endmacro %}
+{% macro pickform(light, maint, pets, lights) %}
+<form class="pick" action="/podbor/" method="get" aria-label="Подбор растения">
+  <fieldset><legend>1. Сколько прямого солнца на месте?</legend>
+    <div class="opts"><label><input type="radio" name="svet" value=""{% if not light %} checked{% endif %}><span>Не знаю</span></label>{% for slug, lv in lights.items() %}<label><input type="radio" name="svet" value="{{ slug }}"{% if light == slug %} checked{% endif %}><span>{{ light_icon(slug) }}{{ lv[1] }}<small>{{ lv[2] }}</small></span></label>{% endfor %}</div></fieldset>
+  <fieldset><legend>2. Сколько времени на уход?</legend>
+    <div class="opts"><label><input type="radio" name="uhod" value=""{% if not maint %} checked{% endif %}><span>Неважно</span></label><label><input type="radio" name="uhod" value="Low"{% if maint == 'Low' %} checked{% endif %}><span>Минимум — простой уход</span></label><label><input type="radio" name="uhod" value="Medium"{% if maint == 'Medium' %} checked{% endif %}><span>Готов к среднему</span></label></div></fieldset>
+  <fieldset><legend>3. Есть дети или животные, которые могут погрызть растение?</legend>
+    <div class="opts"><label><input type="radio" name="zhivotnye" value=""{% if not pets %} checked{% endif %}><span>Нет</span></label><label><input type="radio" name="zhivotnye" value="da"{% if pets %} checked{% endif %}><span>Да</span></label></div></fieldset>
+  <input type="hidden" name="submit" value="1">
+  <button type="submit">Показать подходящие</button>
+</form>
+{% endmacro %}

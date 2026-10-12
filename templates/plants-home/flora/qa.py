@@ -1,4 +1,4 @@
-"""Браузерная приёмка plants-home (plant-catalog): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка plants-home (pick-and-diagnose): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,33 +11,34 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8855"
+BASE = "http://127.0.0.1:8856"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 PLANT = "/rastenie/shlyumbergera-dekabrist/"
 SHOTS = {
     "home": "/",
-    "catalog": "/katalog/?svet=ten",
+    "pick-result": "/podbor/?svet=ten&zhivotnye=da&submit=1",
+    "compare": "/katalog/?sort=uhod",
     "plant": PLANT,
-    "light": "/svet/poluten/",
-    "problem": "/problema/korni-gniyut/",
-    "empty-filter": "/katalog/?svet=solnce&uhod=Medium",
+    "diagnose": "/chto-sluchilos/",
+    "empty-pick": "/podbor/?svet=solnce&uhod=Medium&submit=1",
 }
 AXE_PAGES = list(SHOTS.values()) + [
+    "/podbor/",
     "/katalog/",
     "/rastenie/aspidistra-vysokaya/",
     "/rastenie/falenopsis/",
-    "/rastenie/monstera-delikatesnaya/",
     "/svet/",
     "/svet/ten/",
     "/problemy/",
-    "/problema/muchnistyj-chervec/",
+    "/problema/korni-gniyut/",
     "/podborki/",
     "/podborki/neprihotlivye/",
     "/kak-chitat/",
     "/istochniki/",
     "/poisk/?q=фикус",
     "/poisk/?q=квантовый",
+    "/katalog/?svet=solnce&uhod=Medium",
     "/nesushchestvuet/",
 ]
 PERF = """() => new Promise(res => { let lcp = 0, cls = 0;
@@ -98,46 +99,50 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
+        pg.locator("input[name=svet][value=ten]").check()
+        pg.locator("input[name=zhivotnye][value=da]").check()
         with pg.expect_navigation():
-            pg.locator(".lights a").last.click()
-        A["light_card_opens_category"] = pg.url.endswith("/svet/ten/") and pg.locator(".pc").count() >= 2
+            pg.click(".pick button")
+        A["pick_submits_choices"] = "svet=ten" in pg.url and "zhivotnye=da" in pg.url
+        A["pick_shows_three_toxicity_groups"] = pg.locator(".res h3").count() == 3
+        A["pick_nodata_warning"] = pg.locator("text=Это не значит, что растение безопасно").count() == 1
+        A["pick_keeps_choice_after_submit"] = pg.locator("input[name=svet][value=ten]").is_checked()
+        with pg.expect_navigation():
+            pg.click(".res .reset")
+        A["pick_restart"] = pg.url.endswith("/podbor/") and pg.locator(".res").count() == 0
+        pg.goto(BASE + "/podbor/?svet=solnce&uhod=Medium&submit=1")
+        A["pick_empty_state"] = pg.locator(".empty a").count() == 1
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".diag a").first.click()
+        A["home_diagnose_link_opens_problem"] = "/problema/" in pg.url
         pg.goto(BASE + "/katalog/")
-        total = pg.locator(".pc").count()
+        total = pg.locator(".cmp tbody tr").count()
         pg.select_option("#f-l", "ten")
-        pg.select_option("#f-m", "Low")
+        pg.select_option("#f-s", "uhod")
         with pg.expect_navigation():
             pg.click(".flt button")
-        A["filter_light_and_care"] = 0 < pg.locator(".pc").count() < total
+        A["compare_filter_and_sort"] = 0 < pg.locator(".cmp tbody tr").count() < total and "sort=uhod" in pg.url
         with pg.expect_navigation():
             pg.click(".flt .reset")
-        A["filter_reset_restores_all"] = pg.locator(".pc").count() == total
-        pg.goto(BASE + "/katalog/?svet=solnce&uhod=Medium")
-        A["filter_empty_state_with_exits"] = pg.locator(".empty a").count() == 2
+        A["compare_reset"] = pg.locator(".cmp tbody tr").count() == total
         pg.go_back()
-        A["history_back_returns"] = pg.url.endswith("/katalog/")
+        A["history_back_returns"] = "sort=uhod" in pg.url
         pg.go_forward()
-        A["history_forward_returns"] = "uhod=Medium" in pg.url
-        pg.goto(BASE + "/svet/ten/")
-        box = pg.locator(".pc").first.bounding_box()
-        href = pg.locator(".pc__t a").first.get_attribute("href")
+        A["history_forward_returns"] = pg.url.endswith("/katalog/")
         with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 12)
-        A["whole_card_clickable"] = pg.url.endswith(href)
+            pg.locator(".cmp tbody th a").first.click()
+        A["compare_row_opens_plant"] = "/rastenie/" in pg.url
         pg.goto(BASE + PLANT)
+        A["ifthen_items"] = pg.locator(".ifthen li").count()
         with pg.expect_navigation():
-            pg.locator(".pass dd a").first.click()
-        A["passport_light_link"] = "/svet/" in pg.url
+            pg.locator(".ifthen a").first.click()
+        A["ifthen_link_opens_problem"] = "/problema/" in pg.url
         pg.goto(BASE + PLANT)
-        with pg.expect_navigation():
-            pg.locator(".probs a[href^='/problema/']").first.click()
-        A["problem_link_opens_problem"] = "/problema/" in pg.url and pg.locator(".byplant li").count() >= 2
-        pg.goto(BASE + PLANT)
-        pg.click(".toc a[href='#t-cvetenie']")
-        A["toc_jumps_to_section"] = pg.evaluate("location.hash") == "#t-cvetenie"
         boxes = pg.locator(".check input")
         boxes.nth(0).check()
         pg.reload()
-        A["checklist_persists_after_reload"] = boxes.nth(0).is_checked() and not boxes.nth(1).is_checked()
+        A["checklist_persists_after_reload"] = boxes.nth(0).is_checked()
         pg.click("[data-check-reset]")
         pg.reload()
         A["checklist_reset"] = not boxes.nth(0).is_checked()
@@ -147,18 +152,13 @@ def run(shots: Path | None) -> dict:
         pg.click("[data-print]")
         A["print_button_calls_print"] = pg.evaluate("window.__printed") == 1
         pg.emulate_media(media="print")
-        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".pass").is_visible()
+        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".care").is_visible()
         pg.emulate_media(media="screen")
         pg.goto(BASE + "/")
         pg.fill("#fq", "фикус")
         with pg.expect_navigation():
             pg.press("#fq", "Enter")
-        A["search_keyboard_results"] = pg.locator(".pc").count()
-        with pg.expect_navigation():
-            pg.click(".find--page .reset")
-        A["search_clear"] = pg.locator("#sq").input_value() == "" and pg.locator(".pc").count() == 0
-        pg.goto(BASE + "/poisk/?q=Monstera")
-        A["search_by_latin"] = pg.locator(".pc").count()
+        A["search_keyboard_results"] = pg.locator(".row").count()
         pg.goto(BASE + "/poisk/?q=квантовый")
         A["search_no_results_message"] = pg.locator(".empty h2").inner_text() == "Ничего не нашлось"
         pg.goto(BASE + "/nesushchestvuet/")
@@ -168,11 +168,10 @@ def run(shots: Path | None) -> dict:
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
+        pg.goto(BASE + "/podbor/?svet=ten&zhivotnye=da&submit=1")
+        A["nojs_pick_works"] = pg.locator(".res .row").count() > 0
         pg.goto(BASE + PLANT)
-        A["nojs_plant_sections"] = pg.locator(".care").count()
         A["nojs_print_hidden"] = not pg.locator("[data-print]").is_visible()
-        pg.goto(BASE + "/katalog/?svet=ten")
-        A["nojs_filter_works"] = pg.locator(".pc").count() > 0
         ctx.close()
         br.close()
     return res

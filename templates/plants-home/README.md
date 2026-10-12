@@ -1,13 +1,13 @@
-# plants-home — «Домашние растения» (вариант A: plant-catalog)
+# plants-home — «Домашние растения» (вариант B: pick-and-diagnose)
 
-Каталог комнатных растений: карточки видов с фильтром по свету и сложности ухода; карточка — паспорт условий по справочнику,
-уход по темам (свет, полив, температура, влажность, почва, подкормка, цветение, размножение), проблемы, чек-лист, источник.
+Подбор по условиям (свет, уход, дети/животные) с честной ядовитостью, таблица сравнения видов, карточка «уход + если … то»,
+диагностика «что случилось». Сравнение с вариантом A — `docs/VARIANTS.md`.
 
 ```bash
-bin/plants-home start | stop | status            # preview http://127.0.0.1:8855/ (loopback, noindex)
+bin/plants-home start | stop | status            # preview http://127.0.0.1:8856/ (loopback, noindex)
 bin/plants-home test
 bin/plants-home qa --shots docs/screenshots/<sha> --out docs/verification-browser-qa.json
-python3 qa/viewports.py 8855
+python3 qa/viewports.py 8856
 bin/plants-home build --commit HEAD
 bin/plants-home sources ncsu <url>… | reparse | check
 bin/plants-home content validate | build

@@ -1,13 +1,13 @@
 site_id: plants-home
 name: "Домашние растения"
-variant_id: plant-catalog        # вариант A: каталог карточек с фильтрами по условиям
+variant_id: pick-and-diagnose    # вариант B: подбор по условиям, сравнение видов, диагностика по симптому
 variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
-  preview: "http://127.0.0.1:8855"
+  preview: "http://127.0.0.1:8856"
   production: null               # BLOCKED_INPUT: домен не выбран
-server: {bind: 127.0.0.1, port: 8855}
-storage_namespace: "ph-catalog"
+server: {bind: 127.0.0.1, port: 8856}
+storage_namespace: "ph-pick"
 ads: {adapter: disabled}
 analytics: {adapter: disabled}

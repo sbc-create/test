@@ -2,31 +2,36 @@
 {% from "_parts.html" import grid, light_icon %}
 {% block main %}
 <article class="plant" data-slug="{{ p.slug }}" data-version="{{ p.version }}">
-  <h1>{{ p.ru_name }}</h1>
-  <p class="plant__sci"><i lang="la">{{ p.sci }}</i>{% if p.common_en %} · <span lang="en">{{ p.common_en[:3]|join(', ') }}</span>{% endif %}</p>
+  <h1>{{ p.ru_name }} <i lang="la">{{ p.sci }}</i></h1>
   <p class="lead">{{ p.summary }}</p>
-  <div class="plant__actions"><button type="button" class="btn btn--line" data-print hidden>Печать</button></div>
-  <section class="pass" aria-labelledby="h-pass"><h2 id="h-pass">Условия по справочнику</h2>
-    <dl>
-      <div><dt>Свет</dt><dd>{% for l in p.light %}<a href="/svet/{{ l[0] }}/">{{ light_icon(l[0]) }}{{ l[1] }}</a> <span class="pass__d">— {{ l[2] }}</span>{% if not loop.last %}<br>{% endif %}{% endfor %}</dd></div>
-      {% if p.drainage %}<div><dt>Почва</dt><dd>{{ p.drainage|join(', ') }}</dd></div>{% endif %}
-      {% if p.maint %}<div><dt>Сложность ухода</dt><dd>{{ p.maint }}</dd></div>{% endif %}
-      {% if p.propag %}<div><dt>Размножение</dt><dd>{{ p.propag|join(', ') }}</dd></div>{% endif %}
-      <div><dt>Ядовитость</dt><dd>{% if p.poison %}{{ p.poison }} (по источнику){% elif p.poison_note %}источник указывает, что растение не ядовито{% else %}источник не указывает — это не значит, что растение безопасно{% endif %}</dd></div>
-    </dl>
-    <p class="pass__src">Источник: <a href="#istochnik">[1]</a></p>
-  </section>
-  <nav class="toc" aria-label="Оглавление">{% for t, xs in p.care_by_topic() %}<a href="#t-{{ t }}">{{ TOPICS[t] }}</a> {% endfor %}{% if p.problems %}<a href="#problemy">Проблемы</a> {% endif %}<a href="#proverka">Чек-лист</a></nav>
-  {% for t, xs in p.care_by_topic() %}<section id="t-{{ t }}" class="care" aria-labelledby="h-{{ t }}"><h2 id="h-{{ t }}">{{ TOPICS[t] }}</h2>{% for x in xs %}<p>{{ x.text }} <a class="ref" href="#istochnik" aria-label="Источник">[1]</a></p>{% endfor %}</section>{% endfor %}
-  {% if p.calc %}<section class="calc" aria-labelledby="h-calc"><h2 id="h-calc">Перевод температуры</h2><ul>{% for c in p.calc %}<li>{{ c.label }}: <code>{{ c.expr|replace('-', '−')|replace('*', '×')|replace('/', '÷') }} = {{ c.result|replace('.', ',') }} {{ c.unit }}</code></li>{% endfor %}</ul></section>{% endif %}
-  {% if p.problems %}<section id="problemy" aria-labelledby="h-pr"><h2 id="h-pr">Проблемы, которые называет источник</h2><ul class="probs">{% for x in p.problems %}<li>{% if x.tag in site.problems() %}<a href="/problema/{{ x.tag }}/">{{ PROBLEMS[x.tag][0] }}</a>{% else %}<b>{{ PROBLEMS[x.tag][0] }}</b>{% endif %}: {{ x.text }} <a class="ref" href="#istochnik" aria-label="Источник">[1]</a></li>{% endfor %}</ul></section>{% else %}<section id="problemy"><h2>Проблемы</h2><p>Источник не называет серьёзных проблем для этого вида.</p></section>{% endif %}
-  <section id="proverka" class="check" aria-labelledby="h-check"><h2 id="h-check">Чек-лист ухода</h2>
-    <ul>{% for x in p.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
-    <p class="note" data-check-status aria-live="polite"></p><button type="button" class="btn btn--line" data-check-reset hidden>Снять отметки</button>
-  </section>
+  <div class="two">
+    <div>
+      <section aria-labelledby="h-care"><h2 id="h-care">Уход</h2>
+        <dl class="care">{% for t, xs in p.care_by_topic() %}<div id="t-{{ t }}"><dt>{{ TOPICS[t] }}</dt><dd>{% for x in xs %}{{ x.text }} {% endfor %}<a class="ref" href="#istochnik" aria-label="Источник">[1]</a></dd></div>{% endfor %}</dl>
+      </section>
+      <section aria-labelledby="h-if"><h2 id="h-if">Если что-то не так</h2>
+        {% if p.problems %}<ul class="ifthen">{% for x in p.problems %}<li><b>Если {{ PROBLEMS[x.tag][0]|lower }}:</b> {{ x.text }}{% if x.tag in site.problems() %} <a href="/problema/{{ x.tag }}/">У других видов →</a>{% endif %}</li>{% endfor %}</ul>
+        {% else %}<p>Источник не называет серьёзных проблем для этого вида.</p>{% endif %}
+      </section>
+      <section class="check" aria-labelledby="h-check"><h2 id="h-check">Отметить уход</h2>
+        <ul>{% for x in p.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
+        <p class="note" data-check-status aria-live="polite"></p>
+        <button type="button" class="btn btn--line" data-check-reset hidden>Снять отметки</button> <button type="button" class="btn btn--line" data-print hidden>Печать</button>
+      </section>
+    </div>
+    <aside class="side" aria-label="Условия по справочнику">
+      <table class="cond"><caption>Условия по справочнику</caption><tbody>
+        <tr><th scope="row">Свет</th><td>{% for l in p.light %}<a href="/svet/{{ l[0] }}/">{{ light_icon(l[0]) }}{{ l[1] }}</a>{% if not loop.last %}<br>{% endif %}{% endfor %}</td></tr>
+        {% if p.drainage %}<tr><th scope="row">Почва</th><td>{{ p.drainage|join(', ') }}</td></tr>{% endif %}
+        <tr><th scope="row">Уход</th><td>{{ p.maint or 'нет данных' }}</td></tr>
+        {% if p.propag %}<tr><th scope="row">Размножение</th><td>{{ p.propag|join(', ') }}</td></tr>{% endif %}
+        <tr><th scope="row">Ядовитость</th><td>{% if p.poison %}{{ p.poison }} (по источнику){% elif p.poison_note %}не ядовито (по источнику){% else %}источник не указывает — это не значит, что безопасно{% endif %}</td></tr>
+      </tbody></table>
+      {% if p.calc %}<p class="note">{% for c in p.calc %}{{ c.label }} ≈ {{ c.result|replace('.', ',') }} {{ c.unit }}{% if not loop.last %}; {% endif %}{% endfor %}.</p>{% endif %}
+    </aside>
+  </div>
   <section id="istochnik" class="sources" aria-labelledby="h-src"><h2 id="h-src">Источник</h2>
-    <p>[1] <a href="{{ p.src.url }}" rel="nofollow noopener" lang="en">{{ p.sci }} — {{ p.src.publisher }}</a>. Открыт и прочитан {{ p.src.fetched_at[:10] }}.</p>
-    <p class="note">Версия {{ p.version }}, опубликовано {{ p.published_at }}. Русское название — редакционное. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
+    <p>[1] <a href="{{ p.src.url }}" rel="nofollow noopener" lang="en">{{ p.sci }} — {{ p.src.publisher }}</a>. Прочитан {{ p.src.fetched_at[:10] }}. Русское название — редакционное. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
   </section>
 </article>
 {% set rel = site.related(p) %}{% if rel %}<section aria-labelledby="h-rel"><h2 id="h-rel">Похожие по уходу</h2>{{ grid(rel) }}</section>{% endif %}
