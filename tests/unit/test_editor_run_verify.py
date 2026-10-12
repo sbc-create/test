@@ -454,7 +454,6 @@ def test_paused_domains_are_not_offered_to_the_editor(tmp_path):
     assert [c["url"] for c in d["next"]] == ["https://animedia.space/title/b/"]
     assert "zonafilm.cc" not in editor_run.allowed_domains()
     assert "animedia.space" in editor_run.allowed_domains()
-    assert "zonafilm.space" not in editor_run.PAUSED_PUBLISH
 
 
 def _rep(**kw):
@@ -497,8 +496,9 @@ def test_verdict_complete_and_empty_batch():
     assert editor_run.verdict(пусто, {"outcome": "PUBLISHED"}, 0) == "INCOMPLETE"
 
 
-def test_rotate_puts_first_publication_check_domain_first():
+def test_rotate_puts_first_publication_check_domain_first(monkeypatch):
     """12.10: zonafilm.space при равном нуле публикаций стоял четвёртым и не доходил до партии."""
+    monkeypatch.setattr(editor_run, "ПЕРВАЯ_ПУБЛИКАЦИЯ", ("zonafilm.space",))
     cands = [{"url": "https://an1mego.site/title/a/"}, {"url": "https://animedia.icu/title/b/"},
              {"url": "https://zonafilm.space/title/c/"}]
     got = editor_run.rotate(cands, {"animedia.icu": 1})

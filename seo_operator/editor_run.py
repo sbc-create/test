@@ -707,7 +707,7 @@ def _work(
 #: первой публикации.
 PAUSED_PUBLISH = {
     d: "MCP editorial.py затирает поля editorial-overrides.json (установка правки _живые_правки)"
-    for d in ("zonafilm.cc", "zonafilm12.site", "lordfilm47.space",
+    for d in ("zonafilm.space", "zonafilm.cc", "zonafilm12.site", "lordfilm47.space",
               "lordserial33.biz", "1lordserials1.online", "lordserials22.info")
 }
 
@@ -736,7 +736,7 @@ def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
 #: но при равном нуле с an1mego.site стоял четвёртым, и за пять партий до него
 #: не дошло — а от этой публикации зависит снятие паузы с шести витрин.
 #: Строка убирается после сверки editorial-overlay-before-after.py --compare.
-ПЕРВАЯ_ПУБЛИКАЦИЯ = ("zonafilm.space",)
+ПЕРВАЯ_ПУБЛИКАЦИЯ: tuple[str, ...] = ()  # 12.10 22:47Z сверка дала код 1 — zonafilm.space снова на паузе
 
 
 def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:
