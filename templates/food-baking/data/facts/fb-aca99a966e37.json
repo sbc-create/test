@@ -1,0 +1,81 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/kruassan-s-vyalenym-vinogradom-i-taledzho-150959",
+ "title": "Круассан с вяленым виноградом и таледжо",
+ "servings": 1,
+ "prep_minutes": 720,
+ "cook_minutes": 10,
+ "total_minutes": 730,
+ "ingredients": [
+  {
+   "raw": "Круассан, 1 штука",
+   "name": "Круассан",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сыр таледжо, 40 г",
+   "name": "Сыр таледжо",
+   "quantity": 40.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Грецкие орехи, 10 г",
+   "name": "Грецкие орехи",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Изюм, 20 г",
+   "name": "Изюм",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Груши, 250 г",
+   "name": "Груши",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Ксантан, 50 г",
+   "name": "Ксантан",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Соус унаги, 0.2 мл",
+   "name": "Соус унаги",
+   "quantity": 0.2,
+   "unit": "ml"
+  },
+  {
+   "raw": "Кипяток, 1000 л",
+   "name": "Кипяток",
+   "quantity": 1000.0,
+   "unit": "l"
+  },
+  {
+   "raw": "Сироп из топинамбура, 10 мл",
+   "name": "Сироп из топинамбура",
+   "quantity": 10.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [],
+  "bake_times": [],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "температура духовки в источнике не названа"
+ ],
+ "complete": true,
+ "content_hash": "c41898b1d3e843ea79e15f2899dbd0bd3f36526a6919a791138b5ed8d778ab81",
+ "record_id": "fb-aca99a966e37",
+ "group_hint": "sloyki",
+ "step_count": 8,
+ "fetched_at": "2026-10-12T06:01:13Z"
+}

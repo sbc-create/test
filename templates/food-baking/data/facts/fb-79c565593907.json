@@ -1,0 +1,132 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/keks-s-kabachkom-i-ananasom-193016",
+ "title": "Кекс с кабачком и ананасом",
+ "servings": 12,
+ "prep_minutes": 120,
+ "cook_minutes": 120,
+ "total_minutes": 240,
+ "ingredients": [
+  {
+   "raw": "Пшеничная мука, 250 г",
+   "name": "Пшеничная мука",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Молотая корица, 2 чайные ложки",
+   "name": "Молотая корица",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Разрыхлитель, 10 г",
+   "name": "Разрыхлитель",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сода, 1 чайная ложка",
+   "name": "Сода",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Соль, 0.5 чайных ложек",
+   "name": "Соль",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сахар, 200 г",
+   "name": "Сахар",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 4 штуки",
+   "name": "Куриное яйцо",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Растительное масло, 240 мл",
+   "name": "Растительное масло",
+   "quantity": 240.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Кабачки, 300 г",
+   "name": "Кабачки",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Грецкие орехи, 120 г",
+   "name": "Грецкие орехи",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Консервированный ананас кусочками, 225 г",
+   "name": "Консервированный ананас кусочками",
+   "quantity": 225.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Ванильная паста, 2 чайные ложки",
+   "name": "Ванильная паста",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сливочное масло, 20 г",
+   "name": "Сливочное масло",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сахарная пудра, 120 г",
+   "name": "Сахарная пудра",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Молоко, 30 мл",
+   "name": "Молоко",
+   "quantity": 30.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 175,
+    "step": 0
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 80,
+    "max": null,
+    "step": 7
+   }
+  ],
+  "forms": [
+   {
+    "text": "Форму для кекса",
+    "diameter_cm": null,
+    "step": 1
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "3f8ec0ee372ac6355fa1872dd082bc4a3943fa6b6c3d81ec0672e75241504416",
+ "record_id": "fb-79c565593907",
+ "group_hint": "keks",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:00:34Z"
+}

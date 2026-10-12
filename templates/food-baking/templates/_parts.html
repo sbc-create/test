@@ -1,0 +1,10 @@
+{% macro toc(items, heading='h3') -%}
+<ol class="toc">
+{% for r in items %}
+  <li class="toc__row">
+    <a class="toc__link" href="{{ r.url }}"><{{ heading }} class="toc__title">{{ r.title }}</{{ heading }}><span class="toc__dots" aria-hidden="true"></span><span class="toc__meta">{% if r.temps %}{{ r.temps[0] }} °C{% else %}без духовки{% endif %}{% if r.total %} · {{ r.total }}{% endif %}</span></a>
+    <p class="toc__sub">{{ r.group_label }}{% if r.dough_label %} · {{ r.dough_label|lower }}{% endif %} · {{ r.ingredients|length }} продуктов</p>
+  </li>
+{% endfor %}
+</ol>
+{%- endmacro %}

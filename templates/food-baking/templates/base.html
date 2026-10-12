@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ meta.title }}{% if meta.kind != 'home' %} · Тесто и десерты{% endif %}</title>
+<meta name="description" content="{{ meta.description }}">
+<meta name="robots" content="{{ meta.robots(site) }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
+{% endif %}{% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
+{% endif %}{% if meta.next %}<link rel="next" href="{{ meta.next }}">
+{% endif %}
+<meta property="og:title" content="{{ meta.title }}">
+<meta property="og:description" content="{{ meta.description }}">
+<meta property="og:type" content="{{ 'article' if meta.kind == 'recipe' else 'website' }}">
+{% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
+{% endif %}
+<meta name="theme-color" content="#f3ece0">
+<link rel="icon" href="{{ asset('img/whisk.svg') }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ asset('css/book.css') }}">
+{% for ld in meta.ld_json() %}<script type="application/ld+json">{{ ld | safe }}</script>
+{% endfor %}
+<script src="{{ asset('js/book.js') }}" defer></script>
+</head>
+<body class="k-{{ meta.kind }}">
+<a class="skip" href="#text">К тексту</a>
+<header class="spine">
+  <div class="spine__in">
+    <a class="title" href="/"><span class="title__small">книга рецептов</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
+    <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Найти: кекс, слива…"><button type="submit">Найти</button></form>
+  </div>
+  <nav class="toc-nav" aria-label="Разделы книги">
+    <a href="/recepty/">Оглавление</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
+  </nav>
+</header>
+{% if meta.crumbs|length > 1 %}
+<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>
+{% endif %}
+<main id="text" class="sheet">
+{% block main %}{% endblock %}
+</main>
+<footer class="colophon">
+  <p><b>Тесто и десерты</b> · рабочее название, закрытая предварительная версия</p>
+  <p>Состав, количества, температура и время — из рецептов-источников, ссылка на каждой странице. Текст написан с помощью ИИ и ещё не проверен редакцией; блюда редакция не пекла.</p>
+  <nav aria-label="О сайте"><a href="/o-proekte/">О книге</a> <a href="/testo/">Виды теста</a> <a href="/recepty/">Все рецепты</a></nav>
+</footer>
+</body>
+</html>
