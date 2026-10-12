@@ -1,0 +1,53 @@
+# Один прогон технического SEO. Обёртка — automation/host/editor/seo-tech-run.sh,
+# задание — docs/seo-tech/SEO_TECH_RUN_PROMPT.md, очередь — config/seo-tech-queue.json
+# (только определения задач; прогресс и захваты живут в var/seo-tech/).
+#
+# Коды обёртки: 0 — VERIFIED или честное «задач нет»; 75 — занято другим прогоном;
+# 2 — прогон неполный; 70 — шаг захвата неисправен. Успехом считаются только 0 и 75:
+# 2 и 70 обязаны уронить юнит, иначе неисправный захват тихо съедал бы попытки задач.
+[Unit]
+Description=Техническое SEO сети: один прогон
+After=network-online.target
+Wants=network-online.target
+# Прогон НЕ публикует и мостом MCP не пользуется — он готовит ветку в отдельной
+# рабочей копии, поэтому зависимости от site-factory-mcp.service здесь нет.
+# Повторные падения не должны глушить таймер: без этого systemd после пяти
+# отказов перестаёт запускать юнит, и очередь встала бы молча.
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=HOME=/home/claude
+Environment=PYTHONDONTWRITEBYTECODE=1
+# Признак запуска попадает в var/seo-tech/gate.jsonl и в запись вердикта. Именно
+# по нему приёмка отличает ход таймера от ручного `systemctl start` и может
+# доказать «две задачи подряд без ручной команды между ними».
+Environment=SEO_TECH_TRIGGER=systemd-timer
+ExecStart=/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-run.sh
+SuccessExitStatus=0 75
+# Внутренний предел обёртки — 1500 с на модель; здесь с запасом на захват и на
+# вердикт по следам, который прогоняет проверки сайта на базе и на ветке.
+TimeoutStartSec=1800
+Nice=10
+CPUQuota=50%
+MemoryMax=2G
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+# Claude Code пишет сессии и настройки в домашний каталог; там же под рабочей
+# копией лежит var/seo-tech. Всё остальное дерево — только на чтение.
+ReadWritePaths=/home/claude
+# «Прогон не пушит» — свойство юнита, а не обещание сценария: без учётных данных
+# git и gh удалённая операция не выполнима, даже если модель её попробует.
+# Вердикт отдельно требует, чтобы у ветки не было удалённого двойника.
+InaccessiblePaths=/home/claude/.config/gh
+InaccessiblePaths=/home/claude/.ssh
+InaccessiblePaths=/etc/site-factory
+ProtectKernelTunables=yes
+RestrictSUIDSGID=yes
+
+[Install]
+WantedBy=multi-user.target
