@@ -72,7 +72,8 @@
 | food-weekly A | claude/template-food-weekly | wt-template-food-weekly | da65202 | 127.0.0.1:8849 | #97 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | food-appliances A | claude/template-food-appliances | wt-template-food-appliances | 8953b3a | 127.0.0.1:8850 | #98 | READY_FOR_REVIEW_WITH_BLOCKERS |
 | home-practical A (rooms-cards) | claude/template-home-practical | wt-template-home-practical | 06d708c | 127.0.0.1:8851 | #99 | READY_FOR_REVIEW_WITH_BLOCKERS |
-| home-practical B (problem-checklists) | claude/template-home-practical-b | wt-template-home-practical-b | — | 127.0.0.1:8852 (план) | — | building |
+| home-practical B (problem-checklists) | claude/template-home-practical-b | wt-template-home-practical-b | 819b934 | 127.0.0.1:8852 | #100 (база — ветка A) | READY_FOR_REVIEW_WITH_BLOCKERS |
+| garden-season A | claude/template-garden-season | wt-template-garden-season | — | 127.0.0.1:8853 (план) | — | building |
 | garden-season … games-survival | — | — | — | — | — | planned |
 
 Сделано за первые 50 минут: сверка 4 сайтов на 320/390/768/1440 (найдены и исправлены скролл на 320 px в
@@ -85,3 +86,7 @@ commit food-baking); home-practical A от аудита до PR.
 
 Возобновление: `cd /home/claude/wt-template-home-practical/templates/home-practical && bin/home-practical status`;
 ветки и PR — таблица выше; проверка ширин — `python3 qa/viewports.py <порт>` в каждом шаблоне.
+
+Обновление: home-practical B готов (34 действия PASS, axe 0, ширины 0). Следующие 3 действия: (1) garden-season A —
+аудит садовых/ботанических/университетских источников, выбор проверяемых фактов с регионом; (2) модель «культура ×
+сезон × регион», календарь работ; (3) QA и PR. Возобновление: `cd /home/claude/wt-template-garden-season`.
