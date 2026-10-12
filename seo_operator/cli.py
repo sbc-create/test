@@ -209,6 +209,15 @@ def main(argv=None) -> int:
     p.add_argument("--finished-at", required=True)
     p.add_argument("--out")
 
+    p = sub.add_parser("seo-tech-next", help="техническое SEO: захватить следующую задачу очереди (без модели)")
+    p.add_argument("--run-id", required=True)
+    p = sub.add_parser("seo-tech-verify", help="техническое SEO: вердикт прогона по следам (ветка, D203, run.sh)")
+    p.add_argument("--run-id", required=True)
+    p.add_argument("--no-run-all", action="store_true", help="не гонять полный checks/run.sh")
+    p.add_argument("--record", action="store_true", help="дописать вердикт в var/seo-tech/runs.jsonl")
+    p.add_argument("--extra", default="{}", help="JSON-поля к записи (trigger, model_exit, …)")
+    sub.add_parser("seo-tech-status", help="техническое SEO: состояние задач очереди по следам")
+
     p = sub.add_parser("webmaster-apply-mapping",
                        help="перенести подтверждённые Вебмастером host_id в реестр (только локально)")
     p.add_argument("--apply", action="store_true", help="записать; без флага — только показать")
@@ -293,6 +302,40 @@ def main(argv=None) -> int:
         if args.out:
             extra += ["--out", args.out]
         return editor_run.main(extra)
+    if args.command == "seo-tech-next":
+        from seo_operator import tech_run
+
+        # Коды: 10 — задача захвачена (var/seo-tech/next.json), 0 — работы нет,
+        # 3 — неисправность (очередь не читается, git отказал) — не тихий 0.
+        try:
+            задача = tech_run.next_task(tech_run.load_queue())
+            if задача is None:
+                print(json.dumps({"run": False, "reason": "нет задач queued с запасом попыток"}, ensure_ascii=False))
+                return 0
+            захват = tech_run.claim(задача, args.run_id)
+        except Exception as exc:  # noqa: BLE001 — поломка называется
+            print(json.dumps({"run": False, "state": "error", "reason": f"{type(exc).__name__}: {exc}"[:400]},
+                             ensure_ascii=False))
+            return 3
+        print(json.dumps({"run": True, **захват}, ensure_ascii=False))
+        return 10
+    if args.command == "seo-tech-verify":
+        from seo_operator import tech_run
+
+        итог = tech_run.verify(args.run_id, run_all=not args.no_run_all)
+        if args.record:
+            итог = tech_run.record(итог, json.loads(args.extra))
+            tech_run.release_worktree(args.run_id)
+        print(json.dumps(итог, ensure_ascii=False, indent=1))
+        return 0 if итог["verdict"] == "VERIFIED" else 2
+    if args.command == "seo-tech-status":
+        from seo_operator import tech_run
+
+        сводка = tech_run.task_state()
+        print(json.dumps([{"id": з["id"], "site": з.get("site"), "queue_status": з.get("status"),
+                           **сводка.get(з["id"], {})} for з in tech_run.load_queue()],
+                         ensure_ascii=False, indent=1, default=str))
+        return 0
     if args.command == "webmaster-apply-mapping":
         from seo_operator import webmaster_inventory
 

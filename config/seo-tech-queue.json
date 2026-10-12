@@ -1,0 +1,114 @@
+{
+  "schema_version": "1",
+  "note": "Очередь технического SEO. Определения задач; состояние прогонов — var/seo-tech/ (runs.jsonl, claims.jsonl). status: queued — может взять фоновый прогон (только готовит ветку, без push и выпуска); session — ведёт сессия; blocked — ждёт внешнего действия (owner_action — точное действие); live_verified — выпущено и подтверждено на живом сайте (build в заголовке + итог исполнителя). Статусы verified/released/live_verified ставит сессия по следам, не фоновый прогон.",
+  "tasks": [
+    {
+      "id": "T001",
+      "site": "zonafilm.cc",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": ["https://zonafilm.cc/"],
+      "problem": "На главной нет ни одного <h1> (meta-audit 12.10).",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.1",
+      "expected": "Ровно один видимый H1, равный утверждённому титулу.",
+      "check": "checks/home_h1.py",
+      "verify_live": "python3 automation/local/meta-audit.py zonafilm.cc",
+      "status": "live_verified",
+      "evidence": "commit 7bbdf787bb8f; x-site-factory-build-id 7bbdf787bb8f-zona-02; /var/lib/site-cells/results/zona-02-code-7bbdf787bb8f.json activated/live_verified; H1 «Zona — фильмы и сериалы онлайн»"
+    },
+    {
+      "id": "T002",
+      "site": "12 витрин (Lords ×4, Zona ×3, AnimeGo ×3, Animedia ×2)",
+      "repo": "var/site-repos/*",
+      "urls": ["https://lordserial33.biz/title/jamai-2-0/", "https://an1mego.site/title/ey-u-tebya-ushki-torchat/",
+               "https://animedia.icu/title/ey-u-tebya-ushki-torchat/"],
+      "problem": "BreadcrumbList из сегментов адреса: «Главная › title › slug» (/title/ — 404), не совпадает с видимыми крошками.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
+      "expected": "Разметка совпадает с видимыми крошками; без видимых крошек разметки нет.",
+      "check": "checks/visible_breadcrumbs.py",
+      "verify_live": "сравнение BreadcrumbList и <nav aria-label=\"Хлебные крошки\"> на странице тайтла",
+      "status": "session"
+    },
+    {
+      "id": "T003",
+      "site": "an1mego.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": ["https://an1mego.site/title/ey-u-tebya-ushki-torchat/"],
+      "problem": "На странице тайтла нет видимых хлебных крошек; после T002 у неё нет и BreadcrumbList.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
+      "expected": "Видимые крошки «<Сайт> / Каталог / <Название>» из реальной иерархии в <nav aria-label=\"Хлебные крошки\">; разметку построит общий слой.",
+      "check": "checks/title_breadcrumbs.py",
+      "verify_live": "<nav aria-label=\"Хлебные крошки\"> на /title/<slug>/ и совпадающий BreadcrumbList",
+      "status": "queued",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+    },
+    {
+      "id": "T004",
+      "site": "animeg0.site",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": ["https://animeg0.site/title/ey-u-tebya-ushki-torchat/"],
+      "problem": "То же, что T003.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
+      "expected": "То же, что T003.",
+      "check": "checks/title_breadcrumbs.py",
+      "status": "queued",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+    },
+    {
+      "id": "T005",
+      "site": "an1meg0.site",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": ["https://an1meg0.site/title/ey-u-tebya-ushki-torchat/"],
+      "problem": "То же, что T003.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
+      "expected": "То же, что T003.",
+      "check": "checks/title_breadcrumbs.py",
+      "status": "queued",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+    },
+    {
+      "id": "B001",
+      "site": "www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc",
+      "problem": "www-зеркала: 200, index, canonical на себя — дубли сайтов.",
+      "norm": "SEO_KNOWLEDGE_PACK §1 (единый канонический хост)",
+      "expected": "www → 308 на корень; на www нет self-canonical.",
+      "status": "blocked",
+      "owner_action": "root: команда §4 docs/verification/www-mirrors-20261012.md (коммит 6d20f68) — по одному домену; zonafilm12.site — после спада нагрузки.",
+      "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)"
+    },
+    {
+      "id": "B002",
+      "site": "17 доменов",
+      "problem": "GA4 не подключён: нет ресурсов, ID, сервисного аккаунта, разрешения сети.",
+      "status": "blocked",
+      "owner_action": "docs/seo-operator/GA4_CONNECTION_PACKAGE.md §4: ресурсы и тройки домен → G-ID → Property ID; сервисный аккаунт site-factory-ga4-reader@<ID проекта>.iam.gserviceaccount.com с ролью «Читатель»; задание на analyticsdata.googleapis.com и oauth2.googleapis.com в inventory/network-allowlist.yaml."
+    },
+    {
+      "id": "B003",
+      "site": "все домены с Метрикой",
+      "problem": "Метрика 11.10 не выгружена: сессия — BLOCKED_SECRET, analytics-cabinet 12.10 05:04Z не записал результат.",
+      "status": "blocked",
+      "owner_action": "root: journalctl -u analytics-cabinet.service --since \"2026-10-12 04:55\" и выгрузка за 11.10/10.10 командой из отчёта 12.10 (docs/seo-operator/REPORT_20261012_1012.md)."
+    },
+    {
+      "id": "B004",
+      "site": "7 доменов Lords/Zona",
+      "problem": "PAUSED_PUBLISH: защита редакционных полей не установлена (код 1).",
+      "status": "blocked",
+      "owner_action": "root: команда установки защиты Архитектора; затем контрольная публикация на zonafilm.space/title/silsila-badalte-rishton-ka/."
+    },
+    {
+      "id": "B005",
+      "site": "zonafilm12.site",
+      "problem": "Перегрузка внешним потоком: главная 504, затем 200 за ~18 с.",
+      "status": "blocked",
+      "owner_action": "root: sudo journalctl -u nginx --since \"-15min\" | tail -50 → limit_req или запрет источника → sudo systemctl restart nova-zonafilm12-site.service."
+    },
+    {
+      "id": "B006",
+      "site": "технический SEO-цикл",
+      "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
+      "status": "blocked",
+      "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer."
+    }
+  ]
+}
