@@ -88,7 +88,7 @@ def test_audit_catches_duplicates():
     assert any("config" in б for б in проба.беды_пробы(_снимок(двойной), ID))
     assert any("page_view" in б for б in проба.беды_пробы(_снимок(двойной), ID))
     две_метрики = _отдать(ga4=ID).replace("</head>", слой.тег_метрики("12345678") + "</head>")
-    assert any("Метрика" in б for б in проба.беды_пробы(_снимок(две_метрики), ID))
+    assert any("Метрика задвоена" in б for б in проба.беды_пробы(_снимок(две_метрики), ID))
 
 
 @pytest.mark.parametrize("плохой", ["G-abc", " ", "G-", "UA-1234-1"])
@@ -134,3 +134,10 @@ def test_ga4_independent_of_metrika():
 def test_audit_refuses_shared_id():
     assert проба.смешение({"a.test": ID, "b.test": ID, "c.test": "G-OTHER0001"}) == {ID: ["a.test", "b.test"]}
     assert проба.смешение({"a.test": ID, "b.test": "G-OTHER0001"}) == {}
+
+
+def test_audit_one_counter_without_other_is_not_violation():
+    только_ga4 = _снимок(_отдать(ga4=ID, counter=""))
+    assert только_ga4["метрика"] == 0 and проба.беды_пробы(только_ga4, ID) == []
+    только_метрика = _снимок(_отдать(ga4=""))
+    assert проба.беды_пробы(только_метрика, None) == []
