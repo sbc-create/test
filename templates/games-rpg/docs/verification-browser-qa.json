@@ -1,0 +1,127 @@
+{
+ "commit_head": "125d8842a6bdc162acf94e073953ed1c9bace2bb",
+ "at": "2026-10-12T22:18:38Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "nav_opens_section": true,
+  "whole_card_opens_entry": true,
+  "abilities_shown": true,
+  "patch_badge_opens_version": true,
+  "build_progression_rows": 12,
+  "build_no_hscroll_on_phone": true,
+  "quest_stages_persist": true,
+  "quest_stages_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "ref_jumps_to_source": true,
+  "search_keyboard_results": 1,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "history_back_returns": true,
+  "nojs_stages_listed": 8,
+  "nojs_print_hidden": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/baldurs-gate-3/": [],
+  "mobile:/baldurs-gate-3/personazhi/": [],
+  "mobile:/baldurs-gate-3/personazhi/gale/": [],
+  "mobile:/baldurs-gate-3/bildy/klass-voin/": [],
+  "mobile:/baldurs-gate-3/kvesty/kvest-spasti-halsina/": [],
+  "mobile:/baldurs-gate-3/bildy/": [],
+  "mobile:/baldurs-gate-3/bildy/klass-volshebnik/": [],
+  "mobile:/baldurs-gate-3/mehaniki/mehanika-preimushchestvo/": [],
+  "mobile:/baldurs-gate-3/versiya/versiya-patch-8/": [],
+  "mobile:/kak-my-rabotaem/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=Gale": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/baldurs-gate-3/": [],
+  "desktop:/baldurs-gate-3/personazhi/": [],
+  "desktop:/baldurs-gate-3/personazhi/gale/": [],
+  "desktop:/baldurs-gate-3/bildy/klass-voin/": [],
+  "desktop:/baldurs-gate-3/kvesty/kvest-spasti-halsina/": [],
+  "desktop:/baldurs-gate-3/bildy/": [],
+  "desktop:/baldurs-gate-3/bildy/klass-volshebnik/": [],
+  "desktop:/baldurs-gate-3/mehaniki/mehanika-preimushchestvo/": [],
+  "desktop:/baldurs-gate-3/versiya/versiya-patch-8/": [],
+  "desktop:/kak-my-rabotaem/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=Gale": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 132,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:section": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
+  "mobile:character": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:build": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:quest": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 124,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:section": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:character": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:build": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:quest": {
+   "lcp_ms": 52,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8859/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8859/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/125d884/home-mobile.png",
+  "docs/screenshots/125d884/game-mobile.png",
+  "docs/screenshots/125d884/section-mobile.png",
+  "docs/screenshots/125d884/character-mobile.png",
+  "docs/screenshots/125d884/build-mobile.png",
+  "docs/screenshots/125d884/quest-mobile.png",
+  "docs/screenshots/125d884/home-desktop.png",
+  "docs/screenshots/125d884/game-desktop.png",
+  "docs/screenshots/125d884/section-desktop.png",
+  "docs/screenshots/125d884/character-desktop.png",
+  "docs/screenshots/125d884/build-desktop.png",
+  "docs/screenshots/125d884/quest-desktop.png"
+ ]
+}
