@@ -1,0 +1,153 @@
+"""Серии без ссылки: счёт обязан быть по парам, а не по номерам.
+
+Инструмент создан после измерения 12.10: на трёх витринах AnimeGo карточки
+многосезонных тайтлов дают ОДИН сезон полностью плюс одну серию другого, и
+сотни страниц серий остаются без единой ссылки при пустой карте серий. Те же
+тайтлы на `lordserial33.biz` дают все.
+
+Главная проверка здесь — против МОЕЙ ЖЕ ошибки: первый замер считал различные
+НОМЕРА серий и объявил расхождение «36 против 18» на `schastlivaya-karta`, где
+всё было верно: при двух сезонах номера повторяются. Счёт обязан идти по парам
+«сезон+серия».
+"""
+from __future__ import annotations
+
+import importlib.util
+import sys
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parents[2]
+ИСТОЧНИК = КОРЕНЬ / "automation" / "local" / "episode-links-coverage.py"
+
+
+def _модуль():
+    спец = importlib.util.spec_from_file_location("episode_links_coverage",
+                                                  ИСТОЧНИК)
+    м = importlib.util.module_from_spec(спец)
+    sys.modules["episode_links_coverage"] = м
+    спец.loader.exec_module(м)
+    return м
+
+
+по = _модуль()
+
+
+def _ld(тип: str, **поля) -> str:
+    import json
+    узел = {"@context": "https://schema.org", "@type": тип, **поля}
+    return ('<script type="application/ld+json">'
+            + json.dumps(узел, ensure_ascii=False) + "</script>")
+
+
+def test_счёт_идёт_по_парам_а_не_по_номерам():
+    """Моя же ошибка: при двух сезонах номера повторяются.
+
+    Два сезона по 18 серий — это 36 страниц, а различных номеров 18. Счёт по
+    номерам объявил бы расхождение там, где всё верно.
+    """
+    ссылки = "".join(
+        f'<a href="/title/x/season-{с}/episode-{э}/">с</a>'
+        for с in (1, 2) for э in range(1, 19))
+    пары = по.связанные(ссылки)
+    assert len(пары) == 36, len(пары)
+    assert len({э for _, э in пары}) == 18, "номеров действительно 18"
+
+
+def test_объявленное_берётся_только_из_tvseries():
+    """`WebSite` и `BreadcrumbList` на той же странице в счёт не идут."""
+    разметка = (_ld("WebSite", name="витрина", numberOfEpisodes=999)
+                + _ld("BreadcrumbList", itemListElement=[])
+                + _ld("TVSeries", name="тайтл", numberOfEpisodes=24))
+    assert по.объявлено(разметка) == 24
+
+
+def test_без_tvseries_это_не_измерено():
+    """None — «сверять не с чем», а не «ноль серий»."""
+    assert по.объявлено(_ld("Movie", name="фильм")) is None
+    assert по.объявлено("<html>пусто</html>") is None
+
+
+def test_нечисловое_значение_не_роняет_разбор():
+    """Отказ здесь стоил бы всей выборки из-за одной странной карточки."""
+    assert по.объявлено(_ld("TVSeries", numberOfEpisodes="много")) is None
+
+
+def test_сломанный_json_ld_пропускается():
+    разметка = ('<script type="application/ld+json">{сломано</script>'
+                + _ld("TVSeries", numberOfEpisodes=7))
+    assert по.объявлено(разметка) == 7
+
+
+def test_ссылок_больше_объявленного_разрывом_не_считается():
+    """Лишние ссылки — не потеря находимости, а расхождение в другую сторону.
+
+    Инструмент ищет недостижимое содержимое, а не любое несовпадение чисел:
+    иначе он кричал бы на карточке, где серий БОЛЬШЕ обещанного.
+    """
+    ссылки = "".join(f'<a href="/title/x/season-1/episode-{э}/">с</a>'
+                     for э in range(1, 11))
+    assert len(по.связанные(ссылки)) == 10
+    assert по.объявлено(_ld("TVSeries", numberOfEpisodes=7)) == 7
+    # Правило самого инструмента: разрыв только когда объявлено > связано.
+    assert not (7 > 10)
+
+
+def test_нулевая_серия_в_пары_входит():
+    """`episode-0` — такая же страница, и терялась она именно в счёте."""
+    ссылки = ('<a href="/title/x/season-1/episode-0/">с</a>'
+              '<a href="/title/x/season-1/episode-1/">с</a>')
+    пары = по.связанные(ссылки)
+    assert (1, 0) in пары and len(пары) == 2, пары
+
+
+def test_карточки_не_фильтруются_по_имени_части(monkeypatch):
+    """Предположение «в имени части есть слово title» ложно.
+
+    Части называются `sitemap-1.xml`, и фильтр по имени оставлял выборку
+    пустой — инструмент говорил «не измерено» на исправной карте.
+    """
+    страницы = {
+        "https://проба.test/sitemap.xml":
+            "<loc>https://проба.test/sitemap-1.xml</loc>",
+        "https://проба.test/sitemap-1.xml":
+            "<loc>https://проба.test/title/один</loc>"
+            "<loc>https://проба.test/title/два/</loc>"
+            "<loc>https://проба.test/catalog</loc>",
+    }
+    monkeypatch.setattr(по, "достать",
+                        lambda адрес, предел, байт=0: страницы[адрес])
+    итог = по.карточки("проба.test", 10, 5.0)
+    assert итог == ["https://проба.test/title/один",
+                    "https://проба.test/title/два/"], итог
+
+
+def test_серии_в_карте_считаются():
+    """Если серии в карте есть, находимость сохраняется другим путём."""
+    страницы = {
+        "https://проба.test/sitemap.xml":
+            "<loc>https://проба.test/sitemap-1.xml</loc>",
+        "https://проба.test/sitemap-1.xml":
+            "<loc>https://проба.test/title/x/season-1/episode-1/</loc>"
+            "<loc>https://проба.test/title/x</loc>",
+    }
+    прежнее = по.достать
+    по.достать = lambda адрес, предел, байт=0: страницы[адрес]
+    try:
+        assert по.серии_в_карте("проба.test", 5.0) == 1
+    finally:
+        по.достать = прежнее
+
+
+def test_недоступная_карта_это_минус_один():
+    """Отличается от «серий в карте ноль»: это предел измерения."""
+    прежнее = по.достать
+
+    def падает(адрес, предел, байт=0):
+        raise OSError("нет связи")
+
+    по.достать = падает
+    try:
+        assert по.серии_в_карте("проба.test", 5.0) == -1
+        assert по.карточки("проба.test", 10, 5.0) == []
+    finally:
+        по.достать = прежнее

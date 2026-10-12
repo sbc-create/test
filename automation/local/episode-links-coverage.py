@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+"""Серии, которых нет ни в ссылках карточки, ни в карте сайта.
+
+Зачем. Страница серии может существовать, отдавать 200, несть плеер и верный
+заголовок — и при этом быть недостижимой: на неё не ведёт ни одна ссылка, и в
+карте сайта её нет. Такое содержимое не найдёт ни обход, ни посетитель.
+
+Измерено 12.10 на трёх витринах AnimeGo: у многосезонных тайтлов карточка даёт
+ОДИН сезон полностью плюс ровно одну серию другого — 12+1 и 1+12, всегда 13 из
+объявленных 24 и 36. Те же тайтлы на `lordserial33.biz` дают все. Серии без
+ссылки проверены поимённо: 200, плеер смонтирован, заголовок верный.
+
+Как считается и почему именно так:
+
+* объявленное число берётся из `numberOfEpisodes` в JSON-LD `TVSeries` — это то,
+  что витрина сама обещает обходу;
+* фактическое — число РАЗНЫХ ПАР «сезон+серия» в ссылках. Не различных номеров:
+  при двух сезонах номера повторяются, и счёт по номерам дал мне ложное
+  расхождение 36 против 18 на `schastlivaya-karta`, где всё было верно;
+* если серии есть в карте сайта, разрыв в ссылках менее тяжёл — это
+  называется отдельно, потому что находимость тогда сохраняется.
+
+Ничего не меняет: только читает живые витрины и их карты.
+
+    python3 automation/local/episode-links-coverage.py an1mego.site
+    python3 automation/local/episode-links-coverage.py --limit 60 lordserial33.biz
+"""
+from __future__ import annotations
+
+import argparse
+import collections
+import json
+import re
+import ssl
+import sys
+import urllib.error
+import urllib.request
+
+_LD = re.compile(r"<script[^>]+application/ld\+json[^>]*>(.*?)</script>",
+                 re.S | re.I)
+_ПАРА = re.compile(r"/season-(\d+)/episode-(\d+)/")
+_КАРТОЧКА = re.compile(r"/(?:title|anime)/[^/]+/?$")
+
+
+def _открыть():
+    контекст = ssl.create_default_context()
+    контекст.check_hostname = False
+    контекст.verify_mode = ssl.CERT_NONE
+    return urllib.request.build_opener(
+        urllib.request.HTTPSHandler(context=контекст))
+
+
+def достать(адрес: str, предел: float, байт: int = 900_000) -> str:
+    ответ = _открыть().open(
+        urllib.request.Request(адрес, headers={"User-Agent":
+                                               "factory-episode-coverage"}),
+        timeout=предел)
+    return ответ.read(байт).decode("utf-8", "replace")
+
+
+def объявлено(разметка: str) -> int | None:
+    """`numberOfEpisodes` из JSON-LD `TVSeries`, либо None если его нет."""
+    итог: int | None = None
+    for кусок in _LD.findall(разметка):
+        try:
+            документ = json.loads(кусок)
+        except json.JSONDecodeError:
+            continue
+        for узел in (документ if isinstance(документ, list) else [документ]):
+            if not isinstance(узел, dict) or узел.get("@type") != "TVSeries":
+                continue
+            значение = узел.get("numberOfEpisodes")
+            if значение is None:
+                continue
+            try:
+                итог = int(значение)
+            except (TypeError, ValueError):
+                continue
+    return итог
+
+
+def связанные(разметка: str) -> set[tuple[int, int]]:
+    """Разные ПАРЫ «сезон+серия» в ссылках страницы.
+
+    Пары, а не номера: при двух сезонах номера повторяются, и счёт по номерам
+    даёт ложное расхождение там, где всё верно.
+    """
+    return {(int(с), int(э)) for с, э in _ПАРА.findall(разметка)}
+
+
+def карточки(домен: str, предел_штук: int, предел_с: float) -> list[str]:
+    """Адреса карточек из публичной карты сайта, а не угаданные."""
+    try:
+        корень = достать(f"https://{домен}/sitemap.xml", предел_с, 1_500_000)
+    except Exception:
+        return []
+    свои = re.findall(r"<loc>([^<]+)</loc>", корень)
+    прямые = [а for а in свои if _КАРТОЧКА.search(а)]
+    if прямые:
+        return прямые[:предел_штук]
+    итог: list[str] = []
+    for часть in свои:
+        # Имя части не фильтруется: предположение «в имени есть слово title»
+        # ложно — части называются `sitemap-1.xml`, и фильтр по имени оставлял
+        # выборку пустой, а инструмент говорил «не измерено» на исправной карте.
+        try:
+            тело = достать(часть, предел_с, 1_500_000)
+        except Exception:
+            continue
+        итог += [а for а in re.findall(r"<loc>([^<]+)</loc>", тело)
+                 if _КАРТОЧКА.search(а)]
+        if len(итог) >= предел_штук:
+            break
+    return итог[:предел_штук]
+
+
+def серии_в_карте(домен: str, предел_с: float) -> int:
+    """Сколько адресов серий объявлено в карте сайта.
+
+    Если их там много, разрыв в ссылках менее тяжёл: находимость сохраняется
+    другим путём. Ноль означает, что ссылки — единственный путь.
+    """
+    try:
+        корень = достать(f"https://{домен}/sitemap.xml", предел_с, 1_500_000)
+    except Exception:
+        return -1
+    всего = 0
+    for часть in re.findall(r"<loc>([^<]+)</loc>", корень):
+        try:
+            тело = достать(часть, предел_с, 1_500_000)
+        except Exception:
+            continue
+        всего += sum(1 for а in re.findall(r"<loc>([^<]+)</loc>", тело)
+                     if "/episode-" in а)
+    return всего
+
+
+def главное(аргв=None) -> int:
+    р = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("domains", nargs="+")
+    р.add_argument("--limit", type=int, default=40,
+                   help="сколько карточек брать из карты сайта")
+    р.add_argument("--timeout", type=float, default=60.0)
+    опции = р.parse_args(аргв)
+
+    расхождений_всего = 0
+    for домен in опции.domains:
+        print(f"=== {домен}")
+        адреса = карточки(домен, опции.limit, опции.timeout)
+        if not адреса:
+            print("   [не измерено] карту сайта или её разделы прочитать "
+                  "не удалось")
+            continue
+        в_карте = серии_в_карте(домен, опции.timeout)
+        с_сериями = 0
+        без_объявления = 0
+        затронуто: list[tuple[str, int, int, dict]] = []
+        потеряно = 0
+        for адрес in адреса:
+            try:
+                разметка = достать(адрес, опции.timeout, 700_000)
+            except Exception:
+                continue
+            пары = связанные(разметка)
+            if not пары:
+                continue
+            с_сериями += 1
+            сказано = объявлено(разметка)
+            if сказано is None:
+                без_объявления += 1
+                continue
+            if сказано > len(пары):
+                по_сезонам = collections.Counter(с for с, _ in пары)
+                затронуто.append((адрес, сказано, len(пары),
+                                  dict(sorted(по_сезонам.items()))))
+                потеряно += сказано - len(пары)
+
+        print(f"   карточек в выборке: {len(адреса)}; с сериями: {с_сериями}")
+        if без_объявления:
+            print(f"   [не измерено] без numberOfEpisodes: {без_объявления} — "
+                  "сверять не с чем")
+        print(f"   серий в карте сайта: "
+              f"{'прочитать не удалось' if в_карте < 0 else в_карте}")
+        if затронуто:
+            print(f"   карточек, где ссылок МЕНЬШЕ объявленного: "
+                  f"{len(затронуто)}; серий без ссылки: {потеряно}")
+            for адрес, сказано, факт, по_сезонам in затронуто[:8]:
+                имя = адрес.rstrip("/").rsplit("/", 1)[-1]
+                print(f"      {имя[:40]:42s} объявлено {сказано}, "
+                      f"в ссылках {факт}, сезоны {по_сезонам}")
+            if len(затронуто) > 8:
+                print(f"      … и ещё {len(затронуто) - 8}")
+            if в_карте == 0:
+                print("   ССЫЛКИ — ЕДИНСТВЕННЫЙ ПУТЬ: серий в карте сайта "
+                      "нет, значит несвязанные страницы не найдёт ни обход, "
+                      "ни посетитель")
+            расхождений_всего += len(затронуто)
+        else:
+            print("   ссылок не меньше объявленного ни у одной карточки")
+
+    return 1 if расхождений_всего else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(главное())
