@@ -93,14 +93,16 @@
       "site": "17 доменов",
       "problem": "GA4 не подключён: нет ресурсов, ID, сервисного аккаунта, разрешения сети.",
       "status": "blocked",
-      "owner_action": "docs/seo-operator/GA4_CONNECTION_PACKAGE.md §4: ресурсы и тройки домен → G-ID → Property ID; сервисный аккаунт site-factory-ga4-reader@<ID проекта>.iam.gserviceaccount.com с ролью «Читатель»; задание на analyticsdata.googleapis.com и oauth2.googleapis.com в inventory/network-allowlist.yaml."
+      "owner_action": "docs/seo-operator/GA4_CONNECTION_PACKAGE.md §4: ресурсы и тройки домен → G-ID → Property ID; сервисный аккаунт site-factory-ga4-reader@<ID проекта>.iam.gserviceaccount.com с ролью «Читатель»; задание на analyticsdata.googleapis.com и oauth2.googleapis.com в inventory/network-allowlist.yaml.",
+      "evidence": "12.10: G-… нет ни на одной из 17 живых витрин (замер Архитектора; SEO выборочно — yummyani.site, zonafilm.space, animedia.icu: 0). Код готов; до значений ID делать нечего — придумывать G-ID нельзя."
     },
     {
       "id": "B003",
       "site": "все домены с Метрикой",
       "problem": "Метрика 11.10 не выгружена: сессия — BLOCKED_SECRET, analytics-cabinet 12.10 05:04Z не записал результат.",
       "status": "blocked",
-      "owner_action": "root: journalctl -u analytics-cabinet.service --since \"2026-10-12 04:55\" и выгрузка за 11.10/10.10 командой из отчёта 12.10 (docs/seo-operator/REPORT_20261012_1012.md)."
+      "owner_action": "root: journalctl -u analytics-cabinet.service --since \"2026-10-12 04:55\" и выгрузка за 11.10/10.10 командой из отчёта 12.10 (docs/seo-operator/REPORT_20261012_1012.md).",
+      "evidence": "12.10: сбор идёт — счётчик Метрики на живых главных 17/17, все номера различны (замер Архитектора; SEO выборочно подтвердил: yummyani.site 111881037, zonafilm.space 112582938, animedia.icu 113288667). Блокер только на выгрузке: по Архитектору — нет YANDEX_METRIKA_TOKEN и закрыта сеть до api-metrika.yandex.net (blockers.md стр. 30); оба действия владельца нужны вместе."
     },
     {
       "id": "B004",
