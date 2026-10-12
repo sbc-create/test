@@ -1,0 +1,150 @@
+{
+ "commit_head": "65f50540e2baf0c72e62b739558ca498f3c5054c",
+ "at": "2026-10-12T21:24:07Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "header_before_choice": true,
+  "home_region_card_opens_region": true,
+  "region_remembered_in_header": true,
+  "chip_filter_reduces": true,
+  "chip_filters_combine": true,
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "timeline_link_opens_work": true,
+  "year_rows_match_regions": true,
+  "year_list_has_region_each": true,
+  "ref_jumps_to_source": true,
+  "checklist_persists_after_reload": true,
+  "checklist_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "month_pager_next": true,
+  "empty_month_honest": true,
+  "search_keyboard_results": 1,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "nojs_work_steps": 5,
+  "nojs_print_hidden": true,
+  "nojs_region_filter_works": true,
+  "nojs_header_links_to_regions": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/region/or-all/": [],
+  "mobile:/region/or-west/?tip=uhod": [],
+  "mobile:/rabota/malina-obrezka/": [],
+  "mobile:/kultura/chesnok/": [],
+  "mobile:/kalendar/dekabr/": [],
+  "mobile:/regiony/": [],
+  "mobile:/region/uk/": [],
+  "mobile:/region/uk/?tip=zima": [],
+  "mobile:/kalendar/": [],
+  "mobile:/kalendar/oktyabr/": [],
+  "mobile:/kultury/": [],
+  "mobile:/kultura/malina/": [],
+  "mobile:/tip/zima/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/yagodniki/": [],
+  "mobile:/rabota/uborka-i-hranenie-kartofelya/": [],
+  "mobile:/kak-chitat-sroki/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=чеснок": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/region/or-all/": [],
+  "desktop:/region/or-west/?tip=uhod": [],
+  "desktop:/rabota/malina-obrezka/": [],
+  "desktop:/kultura/chesnok/": [],
+  "desktop:/kalendar/dekabr/": [],
+  "desktop:/regiony/": [],
+  "desktop:/region/uk/": [],
+  "desktop:/region/uk/?tip=zima": [],
+  "desktop:/kalendar/": [],
+  "desktop:/kalendar/oktyabr/": [],
+  "desktop:/kultury/": [],
+  "desktop:/kultura/malina/": [],
+  "desktop:/tip/zima/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/yagodniki/": [],
+  "desktop:/rabota/uborka-i-hranenie-kartofelya/": [],
+  "desktop:/kak-chitat-sroki/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=чеснок": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 160,
+   "cls": 0
+  },
+  "mobile:region": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:region-filtered": {
+   "lcp_ms": 32,
+   "cls": 0
+  },
+  "mobile:work": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "mobile:crop": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:empty-month": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 116,
+   "cls": 0
+  },
+  "desktop:region": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:region-filtered": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "desktop:work": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:crop": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:empty-month": {
+   "lcp_ms": 60,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/65f5054/home-mobile.png",
+  "docs/screenshots/65f5054/region-mobile.png",
+  "docs/screenshots/65f5054/region-filtered-mobile.png",
+  "docs/screenshots/65f5054/work-mobile.png",
+  "docs/screenshots/65f5054/crop-mobile.png",
+  "docs/screenshots/65f5054/empty-month-mobile.png",
+  "docs/screenshots/65f5054/home-desktop.png",
+  "docs/screenshots/65f5054/region-desktop.png",
+  "docs/screenshots/65f5054/region-filtered-desktop.png",
+  "docs/screenshots/65f5054/work-desktop.png",
+  "docs/screenshots/65f5054/crop-desktop.png",
+  "docs/screenshots/65f5054/empty-month-desktop.png"
+ ]
+}
