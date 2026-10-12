@@ -43,6 +43,7 @@ MAPPING = {
     # Очередь технической SEO-работы: блокер без действия владельца и задача
     # без проверки не проходят — таймер иначе возьмёт то, что нельзя подтвердить.
     "seo-tech-queue.json": "seo-tech-queue.schema.json",
+    "editorial-protected-fields.json": "editorial-protected-fields.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых
