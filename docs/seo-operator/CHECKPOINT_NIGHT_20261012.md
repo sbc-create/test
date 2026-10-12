@@ -79,3 +79,15 @@
   доставки, 39 уникальных адресов, видно 39/39; yummyani.site 34, yummyani7.info 2,
   yummyani7.site 2, an1meg0.site 1; комментарии (журнал моста): ok 43, refused 4.
   Простоев по ресурсам 0 (шлюз: run 14, paused 70). Lords/Zona — 0 (пауза).
+
+## После 09:00
+
+* D1/D2 выложены, проверены SEO вживую, **независимая приёмка Архитектора
+  пройдена** (39 проверок, 0 расхождений; набор карточек по canonical стр.2 =
+  набор страницы): zonafilm.space 0fba131fc1b0-zona-01, zonafilm12.site
+  18a7edca9451-zona-03, zonafilm.cc 6e31b0c8903f-zona-02, animedia.icu
+  22d1ffa1eba7-animedia-01, animedia.space 984034b91d21-animedia-space.
+* Суточный отчёт за 12.10 сформирован 05:49 UTC (08:49 МСК) — до срока
+  (данные Архитектора: 74 публикации, видно 71, не проверено 3).
+* D3 (поиск noindex): закоммичено Lords lordfilm47 c2b4899, lordserial33 72c17a7,
+  1lordserials1 7639870, lordserials22 b11d54d; AnimeGo и Zona/Animedia — раскатка.
