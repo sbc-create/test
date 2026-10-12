@@ -1,4 +1,7 @@
-# food-daily — «Будни на кухне»
+# food-daily — «Будни на кухне», вариант B `fridge-first`
+
+Вариант B: главная — подбор «что есть дома» (`/iz-holodilnika/`), каталог — таблица с сортировкой, в рецепте — отметки
+шагов вместо модального режима готовки. Порт 8863, хранилище `fdb.*`. Вариант A — ветка `claude/template-food-daily`.
 
 Первый сайт сети практических сайтов (TEMPLATE-FOOD-DAILY-01). Собственный
 SSR-шаблон, импорт фактов рецептов, файловый контур Qwen, сценарии видео.
@@ -21,15 +24,15 @@ SSR-шаблон, импорт фактов рецептов, файловый �
 ## Preview (только этот сайт)
 
 ```bash
-bash templates/food-daily/bin/food-daily start     # http://127.0.0.1:8847/ (только петля)
+bash templates/food-daily/bin/food-daily start     # http://127.0.0.1:8863/ (только петля)
 bash templates/food-daily/bin/food-daily status    # pid и /healthz
 bash templates/food-daily/bin/food-daily stop      # останавливает только свой pid (проверка cmdline)
-bash templates/food-daily/bin/food-daily editor-init   # учётка редактора: ~/.config/food-daily-preview/ (0600)
+bash templates/food-daily/bin/food-daily editor-init   # учётка редактора: ~/.config/food-daily-b-preview/ (0600)
 ```
 
-Редактор: `http://127.0.0.1:8847/redaktor/` (Basic Auth, пароль в
-`~/.config/food-daily-preview/editor-password.txt`).
-Доступ с рабочей машины — SSH-туннель на порт 8847 (наружу preview не слушает).
+Редактор: `http://127.0.0.1:8863/redaktor/` (Basic Auth, пароль в
+`~/.config/food-daily-b-preview/editor-password.txt`).
+Доступ с рабочей машины — SSH-туннель на порт 8863 (наружу preview не слушает).
 
 ## Сбор и импорт (возобновляемые, с лимитами из `config/crawl.yaml`)
 

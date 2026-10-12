@@ -19,7 +19,6 @@
     {% endif %}
     <div class="recipe__actions">
       <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
-      <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
       <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
     </div>
   </header>
@@ -49,14 +48,17 @@
 
     <section class="steps" aria-labelledby="steps-h">
       <h2 id="steps-h">Как готовить</h2>
-      <ol class="step-list">
+      <p class="steps__status" data-steps-status aria-live="polite"></p>
+      <ol class="step-list" data-steps="{{ r.slug }}">
         {% for s in r.d.steps %}
         <li class="step" id="shag-{{ loop.index }}">
+          <label class="step__mark" hidden><input type="checkbox" data-step-check="{{ loop.index }}"><span class="sr">Шаг {{ loop.index }} сделан</span></label>
           <p>{{ s.text }}</p>
           {% if s.get('readiness_cue') %}<p class="cue"><b>Как понять, что готово:</b> {{ s.readiness_cue }}</p>{% endif %}
         </li>
         {% endfor %}
       </ol>
+      <button class="btn btn--ghost" type="button" data-steps-reset hidden>Снять отметки</button>
 
       {% if r.d.tips %}
       <aside class="tips" aria-labelledby="tips-h">
@@ -85,14 +87,9 @@
   {% if r.related %}
   <section class="block related" aria-labelledby="rel-h">
     <h2 id="rel-h">Похожие рецепты</h2>
-    {{ grid(r.related) }}
+    <ul class="rows">{% for o in r.related %}<li><a href="{{ o.url }}">{{ o.title }}</a><span>{{ o.time_label or o.category_label }}</span></li>{% endfor %}</ul>
   </section>
   {% endif %}
 
-  <div class="cook" data-cook hidden role="dialog" aria-modal="true" aria-labelledby="cook-title">
-    <div class="cook__bar"><p id="cook-title">{{ r.title }}</p><button type="button" data-cook-close>Закрыть</button></div>
-    <div class="cook__stage" aria-live="polite"><p class="cook__count" data-cook-count></p><p class="cook__text" data-cook-text></p><p class="cook__cue" data-cook-cue></p></div>
-    <div class="cook__nav"><button type="button" data-cook-prev>← Назад</button><button type="button" data-cook-next>Дальше →</button></div>
-  </div>
 </article>
 {% endblock %}

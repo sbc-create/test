@@ -1,0 +1,468 @@
+{
+ "base": "http://127.0.0.1:8863",
+ "commit_head": "0f52eaf486f558bae56798a6d41e2c73cb9a2acf",
+ "at": "2026-10-12T22:58:51Z",
+ "scenarios": {
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:recipe:no_hscroll": true,
+  "mobile:fridge:no_hscroll": true,
+  "mobile:tag:no_hscroll": true,
+  "mobile:article:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:recipe:no_hscroll": true,
+  "desktop:fridge:no_hscroll": true,
+  "desktop:tag:no_hscroll": true,
+  "desktop:article:no_hscroll": true,
+  "servings_scale_2_to_4": {
+   "before": "190 г",
+   "after": "380 г",
+   "ok": true,
+   "time_unchanged": true
+  },
+  "shopping_list_items": 6,
+  "shopping_list_after_clear_done": 5,
+  "favorite_counter": "1",
+  "favorites_page_items": 1,
+  "step_marks": {
+   "status_counts": true,
+   "persist_after_reload": true,
+   "reset_clears": true,
+   "no_cook_modal": true
+  },
+  "fridge": {
+   "hint_counts_two": true,
+   "first_has_both_plov": true,
+   "remembers_selection": true,
+   "clear_forgets_selection": true,
+   "empty_submit_blocked": true,
+   "unknown_product_400_alert": true
+  },
+  "header_fridge_link": true,
+  "catalog_sort_by_time": {
+   "first": "12 мин",
+   "ok": true
+  },
+  "filter_supy_rows": 4,
+  "filter_reset_link": true,
+  "filter_empty_state": "Ничего не нашлось",
+  "search_case_spaces": 1,
+  "search_yo": 1,
+  "search_by_ingredient_tykva": 2,
+  "first_tab_skip_link": true,
+  "nojs_recipe_steps": 7,
+  "nojs_ingredients": 6,
+  "nojs_fav_button_hidden": true
+ },
+ "a11y": {
+  "mobile:home": [],
+  "mobile:catalog": [],
+  "mobile:recipe": [],
+  "mobile:fridge": [],
+  "mobile:tag": [],
+  "mobile:article": [],
+  "desktop:home": [],
+  "desktop:catalog": [],
+  "desktop:recipe": [],
+  "desktop:fridge": [],
+  "desktop:tag": [],
+  "desktop:article": []
+ },
+ "contrast": {
+  "mobile:home": [],
+  "mobile:catalog": [],
+  "mobile:recipe": [],
+  "mobile:fridge": [],
+  "mobile:tag": [],
+  "mobile:article": [],
+  "desktop:home": [],
+  "desktop:catalog": [],
+  "desktop:recipe": [],
+  "desktop:fridge": [],
+  "desktop:tag": [],
+  "desktop:article": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 232,
+   "cls": 0,
+   "ttfb_ms": 37,
+   "dom_ms": 159,
+   "bytes": 46317,
+   "requests": 3
+  },
+  "mobile:catalog": {
+   "lcp_ms": 104,
+   "cls": 0,
+   "ttfb_ms": 41,
+   "dom_ms": 71,
+   "bytes": 10343,
+   "requests": 3
+  },
+  "mobile:recipe": {
+   "lcp_ms": 112,
+   "cls": 0,
+   "ttfb_ms": 28,
+   "dom_ms": 49,
+   "bytes": 19494,
+   "requests": 3
+  },
+  "mobile:fridge": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "ttfb_ms": 19,
+   "dom_ms": 38,
+   "bytes": 10125,
+   "requests": 3
+  },
+  "mobile:tag": {
+   "lcp_ms": 76,
+   "cls": 0,
+   "ttfb_ms": 18,
+   "dom_ms": 46,
+   "bytes": 11654,
+   "requests": 3
+  },
+  "mobile:article": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "ttfb_ms": 19,
+   "dom_ms": 54,
+   "bytes": 13235,
+   "requests": 3
+  },
+  "desktop:home": {
+   "lcp_ms": 128,
+   "cls": 0,
+   "ttfb_ms": 10,
+   "dom_ms": 34,
+   "bytes": 46317,
+   "requests": 3
+  },
+  "desktop:catalog": {
+   "lcp_ms": 304,
+   "cls": 0,
+   "ttfb_ms": 7,
+   "dom_ms": 272,
+   "bytes": 10343,
+   "requests": 3
+  },
+  "desktop:recipe": {
+   "lcp_ms": 88,
+   "cls": 0,
+   "ttfb_ms": 7,
+   "dom_ms": 47,
+   "bytes": 19494,
+   "requests": 3
+  },
+  "desktop:fridge": {
+   "lcp_ms": 76,
+   "cls": 0,
+   "ttfb_ms": 4,
+   "dom_ms": 21,
+   "bytes": 10125,
+   "requests": 3
+  },
+  "desktop:tag": {
+   "lcp_ms": 68,
+   "cls": 0,
+   "ttfb_ms": 4,
+   "dom_ms": 24,
+   "bytes": 11654,
+   "requests": 3
+  },
+  "desktop:article": {
+   "lcp_ms": 48,
+   "cls": 0,
+   "ttfb_ms": 5,
+   "dom_ms": 22,
+   "bytes": 13235,
+   "requests": 3
+  }
+ },
+ "console_errors": [],
+ "screenshots": [
+  "docs/screenshots/0f52eaf/home-mobile.png",
+  "docs/screenshots/0f52eaf/catalog-mobile.png",
+  "docs/screenshots/0f52eaf/recipe-mobile.png",
+  "docs/screenshots/0f52eaf/fridge-mobile.png",
+  "docs/screenshots/0f52eaf/tag-mobile.png",
+  "docs/screenshots/0f52eaf/article-mobile.png",
+  "docs/screenshots/0f52eaf/home-desktop.png",
+  "docs/screenshots/0f52eaf/catalog-desktop.png",
+  "docs/screenshots/0f52eaf/recipe-desktop.png",
+  "docs/screenshots/0f52eaf/fridge-desktop.png",
+  "docs/screenshots/0f52eaf/tag-desktop.png",
+  "docs/screenshots/0f52eaf/article-desktop.png"
+ ],
+ "accessibility": {
+  "axe_version": "4.13.0",
+  "pages": {
+   "mobile:/": {
+    "violations": [],
+    "passes": 37
+   },
+   "mobile:/iz-holodilnika/": {
+    "violations": [],
+    "passes": 36
+   },
+   "mobile:/iz-holodilnika/?est=kurica&est=ris": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/iz-holodilnika/?est=kvantovyj": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recepty/?sort=vremya": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recepty/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recepty/supy/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/produkty/kurica/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 32
+   },
+   "mobile:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/": {
+    "violations": [],
+    "passes": 36
+   },
+   "desktop:/iz-holodilnika/": {
+    "violations": [],
+    "passes": 35
+   },
+   "desktop:/iz-holodilnika/?est=kurica&est=ris": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/iz-holodilnika/?est=kvantovyj": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recepty/?sort=vremya": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recepty/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recepty/supy/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/produkty/kurica/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 31
+   },
+   "desktop:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 38
+   }
+  },
+  "keyboard": {
+   "/": {
+    "steps": 30,
+    "without_visible_outline": [],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Что есть дома",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты"
+    ]
+   },
+   "/recept/syrniki-s-ezhevikoj/": {
+    "steps": 30,
+    "without_visible_outline": [],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Что есть дома",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты"
+    ]
+   }
+  }
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/iz-holodilnika/": [],
+  "mobile:/iz-holodilnika/?est=kurica&est=ris": [],
+  "mobile:/iz-holodilnika/?est=kvantovyj": [],
+  "mobile:/recepty/?sort=vremya": [],
+  "mobile:/recepty/": [],
+  "mobile:/recepty/supy/": [],
+  "mobile:/recepty/zavtraki/": [],
+  "mobile:/produkty/kurica/": [],
+  "mobile:/sposob/na-skovorode/": [],
+  "mobile:/podborki/bystro-do-30-minut/": [],
+  "mobile:/recept/syrniki-s-ezhevikoj/": [],
+  "mobile:/recept/plov-s-kuricej/": [],
+  "mobile:/recept/grecheskij-salat/": [],
+  "mobile:/recept/domashnyaya-shaurma/": [],
+  "mobile:/recept/tefteli-v-tomatnom-souse/": [],
+  "mobile:/sovety/priznaki-gotovnosti/": [],
+  "mobile:/poisk/?q=zzz": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/iz-holodilnika/": [],
+  "desktop:/iz-holodilnika/?est=kurica&est=ris": [],
+  "desktop:/iz-holodilnika/?est=kvantovyj": [],
+  "desktop:/recepty/?sort=vremya": [],
+  "desktop:/recepty/": [],
+  "desktop:/recepty/supy/": [],
+  "desktop:/recepty/zavtraki/": [],
+  "desktop:/produkty/kurica/": [],
+  "desktop:/sposob/na-skovorode/": [],
+  "desktop:/podborki/bystro-do-30-minut/": [],
+  "desktop:/recept/syrniki-s-ezhevikoj/": [],
+  "desktop:/recept/plov-s-kuricej/": [],
+  "desktop:/recept/grecheskij-salat/": [],
+  "desktop:/recept/domashnyaya-shaurma/": [],
+  "desktop:/recept/tefteli-v-tomatnom-souse/": [],
+  "desktop:/sovety/priznaki-gotovnosti/": [],
+  "desktop:/poisk/?q=zzz": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "actions": {
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:recipe:no_hscroll": true,
+  "mobile:fridge:no_hscroll": true,
+  "mobile:tag:no_hscroll": true,
+  "mobile:article:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:recipe:no_hscroll": true,
+  "desktop:fridge:no_hscroll": true,
+  "desktop:tag:no_hscroll": true,
+  "desktop:article:no_hscroll": true,
+  "servings_scale_2_to_4": true,
+  "shopping_list_items": 6,
+  "shopping_list_after_clear_done": 5,
+  "favorite_counter": "1",
+  "favorites_page_items": 1,
+  "step_marks": true,
+  "fridge": true,
+  "header_fridge_link": true,
+  "catalog_sort_by_time": true,
+  "filter_supy_rows": 4,
+  "filter_reset_link": true,
+  "filter_empty_state": "Ничего не нашлось",
+  "search_case_spaces": 1,
+  "search_yo": 1,
+  "search_by_ingredient_tykva": 2,
+  "first_tab_skip_link": true,
+  "nojs_recipe_steps": 7,
+  "nojs_ingredients": 6,
+  "nojs_fav_button_hidden": true
+ }
+}

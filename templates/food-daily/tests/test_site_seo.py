@@ -194,9 +194,12 @@ def test_no_fake_video_or_ratings(app, site):
 
 
 def test_cards_always_have_titles(app):
-    _, html, _ = get(app, "/recepty/")
+    _, html, _ = get(app, "/recepty/zavtraki/")  # вариант B: карточки — на страницах разделов
     cards = re.findall(r'<article class="card card--[a-z-]+".*?</article>', html, re.S)
     assert cards and all(re.search(r'class="card__title">[^<]{3,}<', c) for c in cards)
+    _, html, _ = get(app, "/recepty/")  # а каталог — таблица: у каждой строки есть название-ссылка
+    rows = re.findall(r"<tr><th scope=\"row\">(.*?)</th>", html, re.S)
+    assert rows and all(re.search(r'<a href="/recept/[^"]+">[^<]{3,}</a>', r) for r in rows)
 
 
 def test_source_attribution_shows_domain(app, site):
@@ -245,7 +248,7 @@ def test_no_category_illustration_posing_as_dish(app, site):
     _, html, _ = get(app, site.recipes[0].url)
     assert "img/zavtraki.svg" not in html and "recipe__illo" not in html
     _, html, _ = get(app, "/recepty/")
-    assert "<img" not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
+    assert "<img" not in re.search(r'<table class="cat">.*?</table>', html, re.S).group(0)
 
 
 def test_catalog_contract_v1(app, site):
