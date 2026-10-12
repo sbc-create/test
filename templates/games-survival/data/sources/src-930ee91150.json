@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Shield",
  "fetched_at": "2026-10-12T22:26:17Z",
  "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -18,6 +18,15 @@
    "ingredients": "Any Planks + Iron Ingot",
    "slots": 7,
    "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Iron Ingot",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks"
+   ],
    "result": "Shield",
    "count": 1
   },
@@ -25,6 +34,10 @@
    "ingredients": "Shield + Matching Banner",
    "slots": 2,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "White Banner"
+   ],
    "result": "White Shield",
    "count": 1
   },
@@ -32,6 +45,10 @@
    "ingredients": "Shield + Matching Banner",
    "slots": 2,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "White Banner"
+   ],
    "result": "White Shield",
    "count": 1
   },
@@ -39,6 +56,10 @@
    "ingredients": "Damaged Shield",
    "slots": 2,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "Shield"
+   ],
    "result": "Shield",
    "count": 1
   },
@@ -46,6 +67,15 @@
    "ingredients": "Matching Wool + Any Planks + Iron Ingot",
    "slots": 7,
    "alternatives_in_first_slot": 16,
+   "slot_items": [
+    "White Wool",
+    "Oak Planks",
+    "White Wool",
+    "Oak Planks",
+    "Iron Ingot",
+    "White Wool",
+    "Oak Planks"
+   ],
    "result": "White Shield",
    "count": 1
   },
@@ -53,6 +83,15 @@
    "ingredients": "Any Planks + Iron Ingot",
    "slots": 7,
    "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Iron Ingot",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks"
+   ],
    "result": "Shield",
    "count": 1
   }

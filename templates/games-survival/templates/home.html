@@ -1,10 +1,17 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
 {% block main %}
-<section class="hero"><h1>База выживания</h1><p class="lead">Из чего что делается: рецепты по сетке крафта, ресурсы и биомы. Каждая связь «из чего → во что» взята из рецептов источника{% if site.version %}, версия — {{ site.version.src.java_current and 'Java Edition ' ~ site.version.src.java_current }}{% endif %}.</p></section>
-{% for gid, gm in site.games.items() %}
-<section aria-labelledby="h-chain"><h2 id="h-chain">С чего начать</h2>
-<ol class="chain">{% for slug in ('brevno', 'doski', 'palka', 'verstak', 'fakel') %}{% if slug in site.by_slug %}{% set e = site.by_slug[slug] %}<li><a href="{{ e.url }}">{{ e.title.split(':')[0] }}</a></li>{% endif %}{% endfor %}</ol></section>
-{% for sec, (label, items) in site.sections(gid).items() %}<section aria-labelledby="h-{{ sec }}"><div class="head"><h2 id="h-{{ sec }}">{{ label }}</h2><a href="/{{ gid }}/{{ sec }}/">Все: {{ items|length }}</a></div>{{ grid(items[:4], 'h3') }}</section>{% endfor %}
-{% endfor %}
+<section class="hero" aria-labelledby="h-main"><h1 id="h-main">Что будем делать?</h1>
+<p class="lead">Выберите предмет и сколько штук нужно — получите шаги крафта по порядку и список базовых ресурсов. Количества — из сетки крафта источника{% if site.version and site.version.src.java_current %} (Java Edition {{ site.version.src.java_current }}){% endif %}.</p>
+{% set targets = site.entries|selectattr('type', 'equalto', 'item')|list %}
+<form class="pf" action="/planirovshchik/" method="get" aria-label="Планировщик крафта">
+  <label for="pi">Предмет</label><select id="pi" name="item">{% for e in targets if recipe_inputs(e) %}<option value="{{ e.slug }}">{{ e.short }}</option>{% endfor %}</select>
+  <label for="pn">Сколько</label><input id="pn" name="n" type="number" inputmode="numeric" min="1" max="{{ MAX_N }}" value="1" required>
+  <button type="submit" class="btn">Посчитать</button>
+</form></section>
+<section aria-labelledby="h-t"><h2 id="h-t">Быстрый выбор</h2>
+<ul class="tiles">{% for e in targets if recipe_inputs(e) %}{% set ri = recipe_inputs(e) %}<li><a href="/planirovshchik/?item={{ e.slug }}&amp;n={{ ri[0].count }}"><b>{{ e.short }}</b><span>{{ ri[0].count }} шт. за крафт</span></a></li>{% endfor %}</ul></section>
+{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() if sec != 'predmety' %}
+<section aria-labelledby="h-{{ sec }}"><div class="head"><h2 id="h-{{ sec }}">{{ label }}</h2><a href="/{{ gid }}/{{ sec }}/">Таблица: {{ items|length }}</a></div>
+<ul class="chips">{% for e in items %}<li><a href="{{ e.url }}">{{ e.short }}</a></li>{% endfor %}</ul></section>
+{% endfor %}{% endfor %}
 {% endblock %}

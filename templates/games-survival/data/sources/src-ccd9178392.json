@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Cobblestone",
  "fetched_at": "2026-10-12T22:26:24Z",
  "page_sha256": "eaefa7f1cd549f91b930fe35a653683b96151bf2e31d4501fdf91bc1b6e7cac6",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

@@ -1,4 +1,4 @@
-"""SSR-сервер games-survival (вариант craft-tree)."""
+"""SSR-сервер games-survival (вариант craft-planner)."""
 
 from __future__ import annotations
 
@@ -13,6 +13,7 @@ from pathlib import Path
 
 import jinja2
 
+from craft.plan import MAX_N, plan, recipe_inputs, uses
 from craft.site import Entry, Site
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -59,7 +60,14 @@ class App:
             for p in STATIC.rglob("*")
             if p.is_file()
         }
-        self.env.globals.update(site=self.site, plural=plural, asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}")
+        self.env.globals.update(
+            site=self.site,
+            plural=plural,
+            asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}",
+            recipe_inputs=lambda e: recipe_inputs(self.site, e),
+            uses=lambda e: uses(self.site, e),
+            MAX_N=MAX_N,
+        )
 
     def robots(self, meta: Meta) -> str:
         if not self.site.indexable:
@@ -101,8 +109,8 @@ class App:
         if path == "/":
             return self.page(
                 "home.html",
-                "База выживания — ресурсы, крафт и биомы со связями из источника",
-                "Справочник по играм на выживание: из чего что делается, рецепты по сетке крафта, ресурсы и биомы — с версией игры.",
+                "База выживания — планировщик крафта и ресурсы по сетке источника",
+                "Выберите, что сделать, и сколько: шаги крафта и базовые ресурсы считаются по сетке крафта источника, с версией игры.",
                 "/",
                 [],
                 [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
@@ -150,6 +158,8 @@ class App:
             return self.page(
                 "entry.html", f"{e.title} — {s.games[e.game]['title']}", e.summary, e.url, crumbs, [], "entry", e=e
             )
+        if path == "/planirovshchik/":
+            return self.planner(q)
         if path == "/kak-my-rabotaem/":
             crumbs = [home, ("Как мы работаем", path)]
             return self.page(
@@ -193,7 +203,7 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/kak-my-rabotaem/", "/istochniki/"]
+        urls = ["/", "/planirovshchik/", "/kak-my-rabotaem/", "/istochniki/"]
         for gid in s.games:
             secs = s.sections(gid)
             if secs:
@@ -201,6 +211,44 @@ class App:
                 urls += [f"/{gid}/{sec}/" for sec in secs]
         urls += [e.url for e in s.entries]
         return urls
+
+    def targets(self) -> list[Entry]:
+        return [e for e in self.site.entries if e.type == "item" and recipe_inputs(self.site, e)]
+
+    def planner(self, q: dict):
+        """Без параметров — индексируемая страница выбора; с параметрами — расчёт (noindex, без canonical)."""
+        slug = (q.get("item") or [""])[0]
+        raw = (q.get("n") or [""])[0].strip()
+        crumbs = [("Главная", "/"), ("Планировщик", "/planirovshchik/")]
+        targets = self.targets()
+        if not slug and not raw:
+            return self.page(
+                "planner.html",
+                "Планировщик крафта: сколько нужно ресурсов",
+                "Выберите предмет и количество — получите шаги крафта и базовые ресурсы по сетке источника.",
+                "/planirovshchik/",
+                crumbs,
+                kind="planner",
+                targets=targets,
+                p=None,
+                error=None,
+                slug="",
+                n=1,
+            )
+        e = self.site.by_slug.get(slug)
+        error = None
+        if e not in targets:
+            error = "Выберите предмет из списка."
+        n = int(raw) if raw.isdigit() else 0
+        if not error and not 1 <= n <= MAX_N:
+            error = f"Количество — целое число от 1 до {MAX_N}."
+        p = plan(self.site, e, n) if not error else None
+        title = f"План: {e.title.split(':')[0]} × {n}" if p else "Планировщик: проверьте ввод"
+        meta = Meta(title, "Расчёт по сетке источника.", None, False, crumbs, [], "planner")
+        body = self.render(
+            "planner.html", meta, targets=targets, p=p, error=error, slug=slug, n=n if p else (raw[:4] or 1)
+        )
+        return (200 if p else 400), body, {}
 
     def sitemap(self):
         rows = "\n".join(f"<url><loc>{self.site.abs(p)}</loc></url>" for p in self.sitemap_urls())

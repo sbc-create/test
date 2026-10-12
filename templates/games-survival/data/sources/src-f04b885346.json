@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Iron_Ingot",
  "fetched_at": "2026-10-12T22:26:19Z",
  "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
- "parser": "gsv-facts/1.0",
+ "parser": "gsv-facts/1.1",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -18,6 +18,9 @@
    "ingredients": "Block of Iron",
    "slots": 1,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Block of Iron"
+   ],
    "result": "Iron Ingot",
    "count": 9
   },
@@ -25,6 +28,17 @@
    "ingredients": "Iron Nugget",
    "slots": 9,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget"
+   ],
    "result": "Iron Ingot",
    "count": 1
   },
@@ -32,6 +46,9 @@
    "ingredients": "Iron",
    "slots": 1,
    "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Iron"
+   ],
    "result": "Iron Ingot",
    "count": 1
   }

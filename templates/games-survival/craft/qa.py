@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-survival (craft-tree): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-survival (craft-planner): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,12 +11,13 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8861"
+BASE = "http://127.0.0.1:8862"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 ITEM = "/minecraft/predmety/palka/"
 SHOTS = {
     "home": "/",
+    "planner": "/planirovshchik/?item=fakel&n=16",
     "game": "/minecraft/",
     "section": "/minecraft/predmety/",
     "item": ITEM,
@@ -24,6 +25,8 @@ SHOTS = {
     "biome": "/minecraft/biomy/biom-les/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
+    "/planirovshchik/",
+    "/planirovshchik/?item=fakel&n=0",
     "/minecraft/resursy/",
     "/minecraft/biomy/",
     "/minecraft/predmety/shchit/",
@@ -92,39 +95,60 @@ def run(shots: Path | None) -> dict:
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
         A["skip_moves_focus_to_main"] = pg.evaluate("document.activeElement.id") == "main"
+        pg.select_option("#pi", "fakel")
+        pg.fill("#pn", "16")
         with pg.expect_navigation():
-            pg.locator(".chain a", has_text="Доски").click()
-        A["home_chain_opens_item"] = pg.url.endswith("/minecraft/predmety/doski/")
-        with pg.expect_navigation():
-            pg.locator(".links a", has_text="Бревно").click()
-        A["made_from_link_opens_ingredient"] = pg.url.endswith("/minecraft/resursy/brevno/")
-        with pg.expect_navigation():
-            pg.locator(".hd__nav a", has_text="Предметы").click()
-        A["nav_opens_section"] = pg.url.endswith("/predmety/") and pg.locator(".ec").count() == 10
-        pg.locator(".ec").nth(2).scroll_into_view_if_needed()
-        box = pg.locator(".ec").nth(2).bounding_box()
-        href = pg.locator(".ec__t a").nth(2).get_attribute("href")
-        with pg.expect_navigation():
-            pg.mouse.click(box["x"] + 20, box["y"] + box["height"] - 10)
-        A["whole_card_opens_entry"] = pg.url.endswith(href)
-        pg.goto(BASE + ITEM)
-        A["item_recipes_shown"] = pg.locator(".rec").count()
-        A["recipe_count_from_source"] = pg.locator(".rec__out").first.inner_text().endswith("× 4")
-        with pg.expect_navigation():
-            pg.locator(".links a", has_text="Факел").click()
-        A["used_for_link_opens_product"] = pg.url.endswith("/minecraft/predmety/fakel/")
-        A["product_lists_back_link"] = pg.locator(".links a", has_text="Палка").count() == 1
-        with pg.expect_navigation():
-            pg.click(".patch")
-        A["version_badge_opens_version"] = pg.url.endswith("/versiya/versiya/")
-        pg.goto(BASE + ITEM)
-        A["item_no_hscroll_on_phone"] = pg.evaluate("document.documentElement.scrollWidth <= innerWidth")
+            pg.click(".pf .btn")
+        A["home_form_opens_plan"] = "item=fakel" in pg.url and pg.locator("h1").inner_text() == "Факел × 16"
+        A["plan_base_coal_16_torches"] = pg.locator(".tbl tbody tr", has_text="Уголь").locator("td").inner_text() == "4"
+        A["plan_steps_in_order"] = pg.locator(".step b").all_inner_texts() == ["Доски", "Палка", "Факел"]
+        boxes = pg.locator("[data-step]")
+        boxes.nth(0).check()
+        boxes.nth(1).check()
+        A["steps_status_counts"] = pg.locator("[data-status]").inner_text() == "Готово шагов: 2 из 3."
+        pg.reload()
+        A["steps_persist_after_reload"] = (
+            boxes.nth(0).is_checked() and boxes.nth(1).is_checked() and not boxes.nth(2).is_checked()
+        )
+        A["storage_uses_variant_namespace"] = pg.evaluate("Object.keys(localStorage)") == ["gsv-plan:steps:fakel-16"]
+        pg.click("[data-steps-reset]")
+        A["steps_reset_clears"] = (
+            boxes.nth(0).is_checked() is False
+            and pg.evaluate("localStorage.getItem('gsv-plan:steps:fakel-16')") == "[]"
+        )
         pg.evaluate("window.__printed = 0; window.print = () => { window.__printed++; }; 0")  # «; 0»: не функция
         pg.click("[data-print]")
         A["print_button_calls_print"] = pg.evaluate("window.__printed") == 1
         pg.emulate_media(media="print")
-        A["print_hides_navigation"] = not pg.locator(".hd").is_visible() and pg.locator(".rec").first.is_visible()
+        A["print_hides_navigation_and_form"] = (
+            not pg.locator(".hd").is_visible()
+            and not pg.locator(".pf").is_visible()
+            and pg.locator(".step").first.is_visible()
+        )
         pg.emulate_media(media="screen")
+        pg.fill("#pn", "65")
+        A["number_field_blocks_over_max"] = pg.evaluate("document.querySelector('#pn').checkValidity()") is False
+        resp = pg.goto(BASE + "/planirovshchik/?item=fakel&n=0")
+        A["bad_quantity_400_with_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        with pg.expect_navigation():
+            pg.locator(".hd__nav a", has_text="Ресурсы").click()
+        A["nav_opens_catalogue_table"] = pg.url.endswith("/resursy/") and pg.locator(".tbl--cat tbody tr").count() == 4
+        with pg.expect_navigation():
+            pg.locator(".tbl--cat a", has_text="Бревно").click()
+        A["catalogue_row_opens_entry"] = pg.url.endswith("/minecraft/resursy/brevno/")
+        with pg.expect_navigation():
+            pg.locator("a.mini").first.click()
+        A["uses_row_opens_plan"] = "item=doski" in pg.url and "n=4" in pg.url
+        pg.goto(BASE + "/minecraft/predmety/shchit/")
+        pg.fill("#en", "2")
+        with pg.expect_navigation():
+            pg.click(".pf .btn")
+        A["entry_form_plans_quantity"] = pg.locator("h1").inner_text() == "Щит × 2"
+        with pg.expect_navigation():
+            pg.click(".patch")
+        A["version_badge_opens_version"] = pg.url.endswith("/versiya/versiya/")
+        pg.goto(BASE + "/minecraft/predmety/shchit/")
+        A["entry_no_hscroll_on_phone"] = pg.evaluate("document.documentElement.scrollWidth <= innerWidth")
         pg.locator("a.ref").first.click()
         A["ref_jumps_to_source"] = pg.evaluate("location.hash") == "#ist-1"
         pg.goto(BASE + "/")
@@ -146,9 +170,11 @@ def run(shots: Path | None) -> dict:
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
-        pg.goto(BASE + ITEM)
-        A["nojs_recipes_and_links"] = pg.locator(".rec").count() > 0 and pg.locator(".links a").count() > 0
-        A["nojs_print_hidden"] = not pg.locator("[data-print]").is_visible()
+        pg.goto(BASE + "/planirovshchik/?item=lestnica&n=3")
+        A["nojs_plan_computed_on_server"] = pg.locator(".step").count() == 3
+        A["nojs_reset_and_print_hidden"] = (
+            not pg.locator("[data-print]").is_visible() and not pg.locator("[data-steps-reset]").is_visible()
+        )
         ctx.close()
         br.close()
     return res
