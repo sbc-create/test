@@ -1,0 +1,23 @@
+{
+ "slug": "verstak",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-73a470da69",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Верстак: доступ ко всем рецептам",
+ "summary": "Верстак открывает все рецепты крафта, включая те, что недоступны в сетке инвентаря. Делается из 4 досок любого вида.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "doski",
+  "pech",
+  "sunduk"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

@@ -56,3 +56,12 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- games-survival: источники (только чтение) ---
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026: «для игр — руководства,
+  # официальные материалы и качественные вики с указанием версии игры». Только GET, robots.txt, пауза.
+  - ref: games-survival-minecraft-wiki
+    host: minecraft.wiki
+    purpose: "games-survival: Minecraft Wiki — ресурсы, крафт, постройки, биомы, версия"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

@@ -1,0 +1,12 @@
+# Настройки ruff только для шаблона games-survival; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"craft/qa.py" = ["E501"]
+"craft/server.py" = ["E501"]
+"craft/site.py" = ["E501"]
+"craft/content.py" = ["E501"]
+"craft/sources.py" = ["E501"]
+"craft/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

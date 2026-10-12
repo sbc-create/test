@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ site.games[gid].title }}</h1>
+{% if site.version %}<p class="lead">{{ site.version.summary }} <a href="{{ site.version.url }}">Подробнее о версии</a></p>{% endif %}
+<ul class="secs">{% for sec, (label, items) in site.sections(gid).items() %}<li><a href="/{{ gid }}/{{ sec }}/"><b>{{ label }}</b><span>{{ items|length }} {{ plural(items|length, 'материал', 'материала', 'материалов') }}</span></a></li>{% endfor %}</ul>
+{% endblock %}

@@ -1,0 +1,25 @@
+{
+ "id": "src-553de39ee4",
+ "url": "https://minecraft.wiki/w/Bucket",
+ "fetched_at": "2026-10-12T22:26:15Z",
+ "page_sha256": "7dc98b8393e42097d0882ae9e7b45f8354b8d0a2ce8eb706cb7653ef31edf424",
+ "parser": "gsv-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Bucket",
+ "lead": [
+  "A bucket is a utility item used to carry water , lava , milk , powder snow , and sulfur cubes .",
+  "Using a water , lava , or powder snow bucket empties the bucket, resulting in a regular empty bucket. Emptying a bucket of sulfur cube also returns an empty bucket, but other buckets of mob do not, giving a water bucket instead."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Iron Ingot",
+   "slots": 3,
+   "alternatives_in_first_slot": 1,
+   "result": "Bucket",
+   "count": 1
+  }
+ ]
+}

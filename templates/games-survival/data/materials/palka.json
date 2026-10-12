@@ -1,0 +1,23 @@
+{
+ "slug": "palka",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-9cea39e37a",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Палка: 2 доски — 4 палки",
+ "summary": "Палка нужна для инструментов, факелов и лестниц. По сетке источника из двух досок получается 4 палки; есть и рецепт из бамбука.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "doski",
+  "fakel",
+  "lestnica"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

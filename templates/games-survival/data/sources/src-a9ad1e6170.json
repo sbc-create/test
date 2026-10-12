@@ -1,0 +1,25 @@
+{
+ "id": "src-a9ad1e6170",
+ "url": "https://minecraft.wiki/w/Ladder",
+ "fetched_at": "2026-10-12T22:26:05Z",
+ "page_sha256": "693e3318d641afe7849781154eca6b5470e78106b4ce29f8c49e26325595a832",
+ "parser": "gsv-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Ladder",
+ "lead": [
+  "The ladder is a block used for climbing vertically or horizontally. They can be placed only on the sides of other blocks.",
+  "Ladders generate naturally in library rooms of strongholds and in intersection rooms with a wooden ceiling. Ladders can also be found in village structures such as plains and taiga temples and many small or medium houses, as well as in churches. They may also be found leading to the basements of igloos , in end ships on the pillar leading up to the crow's nest, and in rail rooms of woodland mansions . Ladders can also generate in ancient cities , trail ruins , trial chambers , and in end cities ."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Stick",
+   "slots": 7,
+   "alternatives_in_first_slot": 1,
+   "result": "Ladder",
+   "count": 3
+  }
+ ]
+}

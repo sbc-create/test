@@ -1,0 +1,23 @@
+template: games-survival
+variant_id: craft-tree
+branch: claude/template-games-survival
+worktree: /home/claude/wt-template-games-survival
+base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main
+owner_scope:
+  write: [templates/games-survival/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "1 хост (minecraft.wiki) по заданию ночи 12–13.10.2026, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m craft.server (pid var/games-survival/run/preview.pid)"
+  bind: 127.0.0.1:8861
+  data: templates/games-survival/data (факты, материалы, content.json)
+  private: var/games-survival/private (страницы источника, 0700, вне git)
+  build: var/games-survival/build/<commit>
+  qa_dependencies: templates/games-survival/qa (axe-core 4.13.0, свой lockfile)
+  browser_storage_namespace: "gsv-tree"
+network_contracts:
+  - contract: "games-ownership/1 (config/ownership.yaml) — одинаковая копия в games-story, games-survival, games-survival"
+shared_with_other_templates: []

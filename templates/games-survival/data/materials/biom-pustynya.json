@@ -1,0 +1,21 @@
+{
+ "slug": "biom-pustynya",
+ "game": "minecraft",
+ "type": "biome",
+ "src": "src-985aec5fcb",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Биом: пустыня",
+ "summary": "Пустыня — обширный засушливый биом в основном из песка; в ней встречаются пустынные пирамиды и деревни, а враждебные мобы здесь опаснее обычных.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "biom-ravniny"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

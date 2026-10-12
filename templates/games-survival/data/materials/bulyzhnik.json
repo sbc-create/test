@@ -1,0 +1,21 @@
+{
+ "slug": "bulyzhnik",
+ "game": "minecraft",
+ "type": "resource",
+ "src": "src-ccd9178392",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Булыжник",
+ "summary": "Булыжник получают, добывая камень; он идёт в крафт и на строительство.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "pech"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

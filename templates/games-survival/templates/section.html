@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ label }}</h1>
+{{ grid(items, 'h2') }}
+{% endblock %}

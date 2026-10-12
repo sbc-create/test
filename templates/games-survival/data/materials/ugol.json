@@ -1,0 +1,22 @@
+{
+ "slug": "ugol",
+ "game": "minecraft",
+ "type": "resource",
+ "src": "src-d304033453",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Уголь",
+ "summary": "Уголь добывают в основном из угольной руды; он нужен для факелов и костров, а также служит топливом.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "fakel",
+  "pech"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

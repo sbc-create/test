@@ -1,0 +1,25 @@
+{
+ "id": "src-73a470da69",
+ "url": "https://minecraft.wiki/w/Crafting_Table",
+ "fetched_at": "2026-10-12T22:25:57Z",
+ "page_sha256": "072f3c0f8644876a3de5ae7a44a826c62e125a61bd6d6c3d989e4def05076b50",
+ "parser": "gsv-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Crafting Table",
+ "lead": [
+  "A crafting table is a utility block that gives access to all crafting recipes, including many not available from the inventory 's crafting grid.",
+  "Crafting tables can be mined by hand or with any tool, but axes are the quickest."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks",
+   "slots": 4,
+   "alternatives_in_first_slot": 13,
+   "result": "Crafting Table",
+   "count": 1
+  }
+ ]
+}

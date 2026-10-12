@@ -1,0 +1,22 @@
+{
+ "slug": "fakel",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-d4b63de502",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Факел: уголь и палка",
+ "summary": "Факел ломается мгновенно чем угодно. По сетке источника уголь или древесный уголь и палка дают 4 факела.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "ugol",
+  "palka"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

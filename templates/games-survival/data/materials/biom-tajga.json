@@ -1,0 +1,21 @@
+{
+ "slug": "biom-tajga",
+ "game": "minecraft",
+ "type": "biome",
+ "src": "src-82215d6f2e",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Биом: тайга",
+ "summary": "Тайга — влажный и холодный биом с папоротниками, елями и соснами; здесь часто появляются лисы и волки.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "biom-les"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

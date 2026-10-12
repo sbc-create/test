@@ -1,0 +1,17 @@
+{
+ "id": "src-7b76afa6f7",
+ "url": "https://minecraft.wiki/w/Pickaxe",
+ "fetched_at": "2026-10-12T22:26:13Z",
+ "page_sha256": "e9f195af6eb5785f33d019856524a32437141d92ee2a300b473685eb9ccd10ee",
+ "parser": "gsv-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Pickaxe",
+ "lead": [
+  "A pickaxe is a tiered tool that is required to mine most types of stone , ores , and blocks crafted from stone or ores. The mining level of a given pickaxe determines which blocks it can collect.",
+  "Wooden, golden, stone, copper, iron, and diamond pickaxes are crafted using two sticks and three of the tier’s material."
+ ],
+ "recipes": []
+}

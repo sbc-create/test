@@ -1,0 +1,39 @@
+{
+ "id": "src-d4b63de502",
+ "url": "https://minecraft.wiki/w/Torch",
+ "fetched_at": "2026-10-12T22:26:03Z",
+ "page_sha256": "ba3079b6758be3fe2f518039ed21e330c51fe6f6e0d6dbff8e865fdd621550c0",
+ "parser": "gsv-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Torch",
+ "lead": [
+  "Torches can be broken instantly using anything, and drop themselves as an item.",
+  "When lava flows into a torch's space, it will be destroyed without dropping anything."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Coal or Charcoal + Stick",
+   "slots": 2,
+   "alternatives_in_first_slot": 2,
+   "result": "Torch",
+   "count": 4
+  },
+  {
+   "ingredients": "Cerium Chloride or Mercuric Chloride or Potassium Chloride or Tungsten Chloride + Torch",
+   "slots": 2,
+   "alternatives_in_first_slot": 4,
+   "result": "Blue Torch",
+   "count": 1
+  },
+  {
+   "ingredients": "Magnesium + Torch",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Underwater Torch",
+   "count": 1
+  }
+ ]
+}

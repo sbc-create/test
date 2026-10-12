@@ -1,0 +1,23 @@
+{
+ "slug": "doski",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-7a7d1e03f6",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Доски: из чего и сколько",
+ "summary": "Доски — основа ранних рецептов. По сетке источника из одного бревна или ствола получается 4 доски, из блока бамбука — 2.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "brevno",
+  "palka",
+  "verstak"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}
