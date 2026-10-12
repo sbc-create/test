@@ -1,6 +1,6 @@
 {
- "commit_head": "8b1e34d0429ca0fe1e4e6c5fab38b39bc1a6bfdb",
- "at": "2026-10-12T06:48:08Z",
+ "commit_head": "da65202c22c10c20819815a00882cb22fe41a48b",
+ "at": "2026-10-12T20:07:27Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -51,43 +51,43 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 128,
+   "lcp_ms": 108,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 56,
+   "lcp_ms": 44,
    "cls": 0
   },
   "mobile:week": {
-   "lcp_ms": 92,
-   "cls": 0
-  },
-  "mobile:day": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "mobile:shopping": {
    "lcp_ms": 76,
    "cls": 0
   },
+  "mobile:day": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:shopping": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
   "desktop:home": {
-   "lcp_ms": 84,
+   "lcp_ms": 132,
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 68,
+   "lcp_ms": 112,
    "cls": 0
   },
   "desktop:week": {
-   "lcp_ms": 60,
+   "lcp_ms": 112,
    "cls": 0
   },
   "desktop:day": {
-   "lcp_ms": 72,
+   "lcp_ms": 92,
    "cls": 0
   },
   "desktop:shopping": {
-   "lcp_ms": 68,
+   "lcp_ms": 104,
    "cls": 0
   }
  },
@@ -96,15 +96,15 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8849/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/8b1e34d/home-mobile.png",
-  "docs/screenshots/8b1e34d/catalog-mobile.png",
-  "docs/screenshots/8b1e34d/week-mobile.png",
-  "docs/screenshots/8b1e34d/day-mobile.png",
-  "docs/screenshots/8b1e34d/shopping-mobile.png",
-  "docs/screenshots/8b1e34d/home-desktop.png",
-  "docs/screenshots/8b1e34d/catalog-desktop.png",
-  "docs/screenshots/8b1e34d/week-desktop.png",
-  "docs/screenshots/8b1e34d/day-desktop.png",
-  "docs/screenshots/8b1e34d/shopping-desktop.png"
+  "docs/screenshots/da65202/home-mobile.png",
+  "docs/screenshots/da65202/catalog-mobile.png",
+  "docs/screenshots/da65202/week-mobile.png",
+  "docs/screenshots/da65202/day-mobile.png",
+  "docs/screenshots/da65202/shopping-mobile.png",
+  "docs/screenshots/da65202/home-desktop.png",
+  "docs/screenshots/da65202/catalog-desktop.png",
+  "docs/screenshots/da65202/week-desktop.png",
+  "docs/screenshots/da65202/day-desktop.png",
+  "docs/screenshots/da65202/shopping-desktop.png"
  ]
 }
