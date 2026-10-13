@@ -53,10 +53,10 @@
   },
   "stopped": true,
   "test_rerun": {
-   "head": "4356f03",
+   "head": "09b03fc",
    "exit": 0,
-   "result": "28 passed, 3 skipped",
-   "why": "первый прогон: 3 failed — нет var/food-baking/private; тесты помечены skipif с причиной"
+   "result": "32 passed, 1 skipped",
+   "why": "логика валидатора — на синтетической фикстуре; пропущена только полная сверка текста с закрытыми снимками источника"
   }
  },
  "food-weekly-c": {
@@ -113,10 +113,10 @@
   },
   "stopped": true,
   "test_rerun": {
-   "head": "1973778",
+   "head": "68ce79d",
    "exit": 0,
-   "result": "20 passed, 1 skipped",
-   "why": "первый прогон: 1 failed — нет var/food-appliances/private; тест помечен skipif с причиной"
+   "result": "22 passed, 1 skipped",
+   "why": "то же"
   }
  },
  "home-practical-c": {
