@@ -1,6 +1,6 @@
 # Карта действий food-appliances, вариант B (step-console)
 
-Проверено на commit `a9c3ec0` в Chromium: `python3 -m techkitchen.qa --shots docs/screenshots/a9c3ec0 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `838da4a` в Chromium: `python3 -m techkitchen.qa --shots docs/screenshots/838da4a --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -31,6 +31,16 @@
 | reset_clears | PASS | `True` |
 | search_by_mode_results | PASS | `True` |
 | modes_nav_opens_guide | PASS | `True` |
+| display_link_jumps_to_step | PASS | `True` |
+| queue_empty_submit_blocked | PASS | `True` |
+| queue_count_updates | PASS | `True` |
+| queue_two_devices | PASS | `True` |
+| queue_aerogril_grouped_by_temp | PASS | `True` |
+| queue_done_mark_persists | PASS | `True` |
+| queue_header_link_keeps_choice | PASS | `True` |
+| queue_form_remembers_choice | PASS | `True` |
+| queue_unknown_recipe_400_alert | PASS | `True` |
+| queue_storage_namespace_own | PASS | `True` |
 | real_404 | PASS | `True` |
 | nojs_steps_and_settings | PASS | `True` |
 | nojs_timers_and_marks_hidden | PASS | `True` |

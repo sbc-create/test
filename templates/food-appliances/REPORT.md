@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 36–160 м�
 | наполнение | тот же снимок, что у A: 12 рецептов (6 мультиварка, 6 аэрогриль, факты eda.rambler.ru); тексты — manual_standin, не Qwen; редакция не проверяла и не готовила |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 838da4a (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из A: табло «прибор / режим / °C / время» со ссылками на шаги (пульт в шагах сохранён; тест варианта, запрещавший табло, обновлён). Перенесено из C: очередь на прибор (/ochered/: по приборам и температуре, сумма времени в приборе, отметки «готово», память выбора, пустой выбор блокируется, неизвестный рецепт — 400).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-appliances test` | 0 | 20 passed in 0.78s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m techkitchen.qa --shots docs/screenshots/838da4a --out docs/verification-browser-qa.json` | 0 | 42 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8866 '/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke' '/ochered/?r=neizvestno' '/poisk/?q=тушение' /nesushchestvuet/` | 0 | 30 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 838da4a |
+
+Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
