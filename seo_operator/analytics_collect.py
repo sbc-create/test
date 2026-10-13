@@ -589,6 +589,36 @@ def _goal_reaches(provider, entry: dict, counter_id: int, date1: str, date2: str
     )
 
 
+class _WebmasterBreaker:
+    """Первый сетевой отказ Вебмастера за прогон — последний запрос к нему.
+
+    2026-10-13: api.webmaster.yandex.net закрыт по сети хоста; каждый из 21×5
+    запросов проходил свою цепочку повторов, прогон с 05:03Z к 07:57Z не
+    кончился, и Метрика (уже снятая) не попадала ни в артефакт, ни в отчёт
+    10:00 МСК. Остальные запросы прогона получают ту же причину без сети —
+    показатель остаётся «не измерено» с причиной, а не нулём. Отказ HTTP
+    (токен, права, 404 хоста) предохранитель не трогает: он у каждого хоста свой.
+    """
+
+    def __init__(self, provider) -> None:
+        self._provider = provider
+        self._tripped: str | None = None
+
+    def __getattr__(self, name):
+        return getattr(self._provider, name)
+
+    def get_webmaster_report(self, *args, **kwargs):
+        if self._tripped:
+            raise FactoryError(self._tripped)
+        try:
+            return self._provider.get_webmaster_report(*args, **kwargs)
+        except FactoryError as exc:
+            if "сеть недоступна" in exc.reason:
+                at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                self._tripped = f"{exc.reason} Сеть проверена в {at}; в этом прогоне не повторялось."
+            raise
+
+
 def collect(
     *,
     date1: str = "7daysAgo",
@@ -597,7 +627,7 @@ def collect(
     artifacts_dir: Path | None = None,
 ) -> dict:
     """Собирает показатели по всем доменам реестра и пишет артефакт."""
-    provider = provider or YandexAnalyticsProvider(dry_run=True)
+    provider = _WebmasterBreaker(provider or YandexAnalyticsProvider(dry_run=True))
     entries = registry.load()["properties"]
     collections = [collect_domain(provider, entry, date1=date1, date2=date2) for entry in entries]
 
