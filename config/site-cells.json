@@ -1016,8 +1016,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-11"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-11",
+        "remote": "https://github.com/sbc-create/site-lordfilm-spb-ru"
       },
       "template": {
         "template_id": "lords-films",
@@ -1034,7 +1035,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:42:58.351194+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1093,8 +1094,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-12"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-12",
+        "remote": "https://github.com/sbc-create/site-lordfilm-msk-ru"
       },
       "template": {
         "template_id": "lords-films",
@@ -1111,7 +1113,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:43:06.798798+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1248,8 +1250,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-14"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-14",
+        "remote": "https://github.com/sbc-create/site-lordserial-group"
       },
       "template": {
         "template_id": "lords-serials",
@@ -1266,7 +1269,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:43:13.744046+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1325,8 +1328,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-15"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-15",
+        "remote": "https://github.com/sbc-create/site-lordserial-spb-ru"
       },
       "template": {
         "template_id": "lords-serials",
@@ -1343,7 +1347,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:43:20.913819+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1402,8 +1406,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-16"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-16",
+        "remote": "https://github.com/sbc-create/site-lordserial-msk-ru"
       },
       "template": {
         "template_id": "lords-serials",
@@ -1420,7 +1425,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:43:28.734831+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1479,8 +1484,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-17"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-17",
+        "remote": "https://github.com/sbc-create/site-lordserial-net-ru"
       },
       "template": {
         "template_id": "lords-serials",
@@ -1497,7 +1503,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:43:36.280825+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
