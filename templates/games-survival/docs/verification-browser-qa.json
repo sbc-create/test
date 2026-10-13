@@ -1,6 +1,6 @@
 {
- "commit_head": "e0f9abf11110bf89f84e04eb03c3abe929422e89",
- "at": "2026-10-13T08:31:05Z",
+ "commit_head": "31c0a92139a573030a815a0f5d9d700448a654ab",
+ "at": "2026-10-13T13:33:09Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -18,6 +18,10 @@
   "nav_opens_catalogue_table": true,
   "catalogue_row_opens_entry": true,
   "uses_row_opens_plan": true,
+  "made_from_link_opens_ingredient": true,
+  "used_for_link_opens_product": true,
+  "product_lists_back_link": true,
+  "tool_page_links_source_materials": true,
   "entry_form_plans_quantity": true,
   "version_badge_opens_version": true,
   "entry_no_hscroll_on_phone": true,
@@ -82,39 +86,39 @@
  },
  "perf_lab": {
   "mobile:inventory": {
-   "lcp_ms": 280,
+   "lcp_ms": 524,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 44,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:planner": {
-   "lcp_ms": 72,
+   "lcp_ms": 108,
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 68,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:section": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:item": {
-   "lcp_ms": 76,
+   "lcp_ms": 96,
    "cls": 0
   },
   "mobile:resource": {
-   "lcp_ms": 40,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:biome": {
-   "lcp_ms": 56,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:inventory": {
-   "lcp_ms": 92,
+   "lcp_ms": 140,
    "cls": 0
   },
   "desktop:home": {
@@ -122,7 +126,7 @@
    "cls": 0
   },
   "desktop:planner": {
-   "lcp_ms": 76,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:game": {
@@ -130,7 +134,7 @@
    "cls": 0
   },
   "desktop:section": {
-   "lcp_ms": 84,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:item": {
@@ -138,11 +142,11 @@
    "cls": 0
   },
   "desktop:resource": {
-   "lcp_ms": 40,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:biome": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   }
  },
@@ -153,21 +157,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8872/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/e0f9abf/inventory-mobile.png",
-  "docs/screenshots/e0f9abf/home-mobile.png",
-  "docs/screenshots/e0f9abf/planner-mobile.png",
-  "docs/screenshots/e0f9abf/game-mobile.png",
-  "docs/screenshots/e0f9abf/section-mobile.png",
-  "docs/screenshots/e0f9abf/item-mobile.png",
-  "docs/screenshots/e0f9abf/resource-mobile.png",
-  "docs/screenshots/e0f9abf/biome-mobile.png",
-  "docs/screenshots/e0f9abf/inventory-desktop.png",
-  "docs/screenshots/e0f9abf/home-desktop.png",
-  "docs/screenshots/e0f9abf/planner-desktop.png",
-  "docs/screenshots/e0f9abf/game-desktop.png",
-  "docs/screenshots/e0f9abf/section-desktop.png",
-  "docs/screenshots/e0f9abf/item-desktop.png",
-  "docs/screenshots/e0f9abf/resource-desktop.png",
-  "docs/screenshots/e0f9abf/biome-desktop.png"
+  "docs/screenshots/31c0a92/inventory-mobile.png",
+  "docs/screenshots/31c0a92/home-mobile.png",
+  "docs/screenshots/31c0a92/planner-mobile.png",
+  "docs/screenshots/31c0a92/game-mobile.png",
+  "docs/screenshots/31c0a92/section-mobile.png",
+  "docs/screenshots/31c0a92/item-mobile.png",
+  "docs/screenshots/31c0a92/resource-mobile.png",
+  "docs/screenshots/31c0a92/biome-mobile.png",
+  "docs/screenshots/31c0a92/inventory-desktop.png",
+  "docs/screenshots/31c0a92/home-desktop.png",
+  "docs/screenshots/31c0a92/planner-desktop.png",
+  "docs/screenshots/31c0a92/game-desktop.png",
+  "docs/screenshots/31c0a92/section-desktop.png",
+  "docs/screenshots/31c0a92/item-desktop.png",
+  "docs/screenshots/31c0a92/resource-desktop.png",
+  "docs/screenshots/31c0a92/biome-desktop.png"
  ]
 }

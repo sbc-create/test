@@ -1,6 +1,6 @@
 # Карта действий games-survival, вариант C (inventory-first)
 
-Проверено на commit `e0f9abf` в Chromium: `bin/games-survival qa --shots docs/screenshots/e0f9abf --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `31c0a92` в Chromium: `bin/games-survival qa --shots docs/screenshots/31c0a92 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -21,6 +21,10 @@
 | nav_opens_catalogue_table | PASS | `True` |
 | catalogue_row_opens_entry | PASS | `True` |
 | uses_row_opens_plan | PASS | `True` |
+| made_from_link_opens_ingredient | PASS | `True` |
+| used_for_link_opens_product | PASS | `True` |
+| product_lists_back_link | PASS | `True` |
+| tool_page_links_source_materials | PASS | `True` |
 | entry_form_plans_quantity | PASS | `True` |
 | version_badge_opens_version | PASS | `True` |
 | entry_no_hscroll_on_phone | PASS | `True` |
