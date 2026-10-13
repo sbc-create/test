@@ -376,3 +376,45 @@ def test_webmaster_network_outage_is_tried_once_per_run(monkeypatch, reason, net
             assert by_key[key]["measured"] is False
             assert by_key[key]["value"] == analytics_collect.NOT_MEASURED
             assert reason.split(".")[0] in by_key[key]["reason"]
+
+
+def test_breaker_trips_on_the_text_transport_actually_raises(monkeypatch):
+    """Предохранитель узнаёт отказ по тексту причины; текст — тот, что поднимает
+    сам транспорт при сетевом сбое, а не записанный в тест по памяти. Если
+    формулировку в transport.py перепишут, тест упадёт, а не прогон станет
+    снова трёхчасовым без ошибки."""
+    import urllib.error
+
+    from factory import audit
+    from factory.analytics.credentials import OAuthToken
+    from factory.analytics.transport import RateLimiter, YandexApiClient
+    from factory.retry import RetryPolicy
+
+    monkeypatch.setattr(audit, "record", lambda **kw: None)
+
+    def нет_сети(request, timeout):
+        raise urllib.error.URLError("timed out")
+
+    client = YandexApiClient(
+        "https://api.webmaster.yandex.net", OAuthToken("x" * 40, "тест"), service="webmaster",
+        opener=нет_сети, rate_limiter=RateLimiter(min_interval=0),
+        retry_policy=RetryPolicy(max_attempts=2, base_delay=0.01, max_delay=0.02),
+        sleep=lambda _s: None)
+
+    class Провайдер(StubProvider):
+        calls = 0
+
+        def get_webmaster_report(self, host_id, resource, params=None):
+            Провайдер.calls += 1
+            client.request("GET", f"/v4/user/1/hosts/{host_id}/{resource}")
+
+    from factory.errors import FactoryError
+
+    breaker = analytics_collect._WebmasterBreaker(Провайдер())
+    with pytest.raises(BlockedAnalyticsAccess) as first:
+        breaker.get_webmaster_report("h", "summary")
+    for _ in range(2):
+        with pytest.raises(FactoryError) as later:
+            breaker.get_webmaster_report("h", "summary")
+    assert Провайдер.calls == 1, "после сетевого отказа транспорта сеть больше не трогается"
+    assert first.value.reason.split(".")[0] in later.value.reason  # причина та же, не ноль
