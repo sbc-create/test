@@ -141,6 +141,12 @@ done < "$CELL_PLAN"
 # Строка в журнал прогона — обычным echo: функции `log` в этом сценарии нет,
 # и вызов несуществующей свалил бы весь бэкап на украшении отчёта.
 echo "данные ячеек: собрано элементов $CELL_ITEMS из плана $(wc -l < "$CELL_PLAN")"
+# Сводка уходит в запись о проверке. Иначе «данные ячеек в копии» пришлось бы
+# принимать на слово: архив и запись лежат под root, и заглянуть внутрь
+# снаружи нечем. Число в записи проверяемо и без доступа к архиву.
+CELL_SITES="$(find "$STAGE/srv-cells" -maxdepth 1 -mindepth 1 -type d 2>/dev/null | wc -l)"
+CELL_KB="$(du -sk "$STAGE/srv-cells" 2>/dev/null | awk '{print $1}')"
+CELL_KB="${CELL_KB:-0}"
 # The encrypted Secret Hub store. Without it a restore has no way to regenerate
 # the consumer files excluded above, and the backup would only look complete.
 # Ciphertext is safe to archive precisely because the master key is not: it lives
@@ -242,9 +248,11 @@ fi
 # ---------------------------------------------------------------------------
 # 4. Record. Only now is the backup allowed to count as verified.
 # ---------------------------------------------------------------------------
-python3 - "$RECORD" "$ARCHIVE" "$BUNDLE" "$FILE_COUNT" "$STAMP" <<'PYEOF'
+python3 - "$RECORD" "$ARCHIVE" "$BUNDLE" "$FILE_COUNT" "$STAMP" \
+         "$CELL_SITES" "$CELL_ITEMS" "$CELL_KB" <<'PYEOF'
 import hashlib, json, os, sys
 record, archive, bundle, count, stamp = sys.argv[1:6]
+cell_sites, cell_items, cell_kb = sys.argv[6:9]
 def sha(p):
     if not os.path.exists(p):
         return None
@@ -264,6 +272,15 @@ json.dump({
     "files": int(count),
     "restore_verified": True,
     "restore_method": "extract to temp dir + sha256sum -c against source manifest",
+    # Покрытие данных ячеек. Ноль витрин здесь — это НЕ «ячеек нет»: до
+    # 2026-10-13 данные ячеек в архив не попадали вовсе, и отличить одно
+    # состояние от другого по самому архиву было нечем. Поле отвечает числом.
+    "cell_data": {
+        "sites": int(cell_sites or 0),
+        "items": int(cell_items or 0),
+        "kib": int(cell_kb or 0),
+        "selected_by": "data_contract.user_writable витрины; поставляемые снимки исключены",
+    },
 }, open(record, "w"), ensure_ascii=False, indent=2)
 PYEOF
 chmod 0640 "$RECORD"
