@@ -44,6 +44,24 @@ def plural(n: int, one: str, few: str, many: str) -> str:
     return one if m % 10 == 1 else few if 2 <= m % 10 <= 4 else many
 
 
+SNIPPET_MAX = 160
+
+
+def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
+    """Описание для сниппета: целиком, если помещается; иначе — по границе фразы, запятой или тире."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
+    if cut >= limit // 3:
+        return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    for sep in (", ", " — "):
+        cut = text.rfind(sep, 0, limit - 1)
+        if cut >= limit // 2:
+            return text[:cut].rstrip(",;:—– ") + "…"
+    return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
+
+
 def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
     """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
     out, shown = head, 0
@@ -251,7 +269,7 @@ class App:
             )
             meta = Meta(
                 r.seo_title,
-                r.seo_description,
+                snippet(r.seo_description),
                 s.abs(r.url),
                 True,
                 crumbs,
