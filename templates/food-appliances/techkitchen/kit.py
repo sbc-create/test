@@ -176,6 +176,7 @@ def build(out: Path) -> dict:
         dst = pdir / DB.name
         with sqlite3.connect(f"file:{DB}?mode=ro", uri=True) as a, sqlite3.connect(dst) as b:
             a.backup(b)
+            b.execute("PRAGMA journal_mode=DELETE")  # один файл базы: без -wal/-shm, контрольная сумма стабильна
         os.chmod(dst, 0o600)
         (pdir / "versions.json").write_text(json.dumps(db_versions(dst), indent=1) + "\n")
         private = verify_db(dst, pdir / "versions.json") | {"db": f"private/{DB.name}"}
