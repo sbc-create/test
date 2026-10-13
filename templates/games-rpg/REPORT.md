@@ -88,3 +88,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 7f8d1b1 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 180 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 60ba606 (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Контент: карточки 6 персонажей и 2 квестов начинаются с отличающей фразы; Sword of Justice — условие награды по сырой странице вики (версии 2).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-rpg test` | 0 | 19 passed in 0.87s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m quest.qa --shots docs/screenshots/60ba606 --out docs/verification-browser-qa.json` | 0 | 33 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8871 '/?tip=item' '/?tip=xx' '/poisk/?q=Gale' '/otryad/?p=gale&p=karlach&p=shadowheart' '/otryad/?p=nikto' /nesushchestvuet/` | 0 | 42 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 60ba606 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
