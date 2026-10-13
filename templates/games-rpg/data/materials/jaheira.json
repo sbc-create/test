@@ -1,0 +1,28 @@
+{
+ "slug": "jaheira",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-ab35900c81",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Jaheira: друид-полуэльф",
+ "summary": "Спутник, которого можно взять в отряд; вместе с Minsc вернулась из Baldur's Gate и Baldur's Gate II, и это единственные два спутника, с которыми нельзя завести роман. Высший полуэльф, друид с предысторией «Солдат».",
+ "points": [
+  "Класс: друид (Druid)",
+  "Раса: высший полуэльф",
+  "Предыстория: Soldier",
+  "Роман: невозможен"
+ ],
+ "tips": [],
+ "related": [
+  "minsc",
+  "halsin"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

@@ -1,0 +1,19 @@
+{
+ "id": "src-07bd2e5b20",
+ "url": "https://bg3.wiki/wiki/Patch_8",
+ "fetched_at": "2026-10-12T22:09:15Z",
+ "page_sha256": "b17661c7502edf2681f521231d602ce4e570ee159dca645a6eea617602b3f54b",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "patch",
+ "name": "Patch 8",
+ "lead": [
+  "Patch 8 is the final major patch for Baldur's Gate 3 and was released on April 15, 2025.",
+  "The highlights of patch 8 are Photo mode and the addition of a new subclass for each of the 12 classes in the game."
+ ],
+ "patches": [
+  "Patch 8"
+ ]
+}

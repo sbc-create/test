@@ -1,0 +1,27 @@
+{
+ "slug": "gale",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-e9fef0292b",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Gale: волшебник-человек",
+ "summary": "Человек, волшебник с предысторией «Мудрец». Персонаж-«origin» и спутник, с которым возможен роман для героя любого пола. Впервые встречается у точки быстрого перемещения Roadside Cliffs в первом акте.",
+ "points": [
+  "Класс: волшебник (Wizard)",
+  "Раса: человек",
+  "Предыстория: Sage"
+ ],
+ "tips": [],
+ "related": [
+  "klass-volshebnik",
+  "astarion"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

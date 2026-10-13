@@ -1,0 +1,23 @@
+template: games-rpg
+variant_id: index-compare   # вариант C; A — codex-sections (8859), B — party-planner (8860)
+branch: claude/template-games-rpg-c
+worktree: /home/claude/wt-template-games-rpg-c
+base_commit: 0e68f8a   # вариант A (claude/template-games-rpg), с предметами
+owner_scope:
+  write: [templates/games-rpg/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "1 хост (bg3.wiki) по заданию ночи 12–13.10.2026, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m quest.server (pid var/games-rpg/run/preview.pid)"
+  bind: 127.0.0.1:8871
+  data: templates/games-rpg/data (факты, материалы, content.json)
+  private: var/games-rpg/private (страницы источника, 0700, вне git)
+  build: var/games-rpg/build/<commit>
+  qa_dependencies: templates/games-rpg/qa (axe-core 4.13.0, свой lockfile)
+  browser_storage_namespace: "grpg-index"
+network_contracts:
+  - contract: "games-ownership/1 (config/ownership.yaml) — одинаковая копия в games-story, games-rpg, games-survival"
+shared_with_other_templates: []

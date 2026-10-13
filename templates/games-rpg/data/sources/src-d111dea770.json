@@ -1,0 +1,38 @@
+{
+ "id": "src-d111dea770",
+ "url": "https://bg3.wiki/wiki/Duellist%27s_Prerogative",
+ "fetched_at": "2026-10-13T00:58:01Z",
+ "page_sha256": "324242aa0f61a1b48334f96c0b637560b20ce40cffa3117fa469e92e942642c6",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Duellist's Prerogative",
+ "lead": [
+  "Duellist's Prerogative is a legendary +3 Rapier that grants the wielder a greater chance of critical hits, and an extra reaction provided their off-hand is empty. The wielder can also use a reaction to grant additional Necrotic damage on a hit.",
+  "A blade gifted to Lora by her own mother, Lenore the Fleet. When challenged to duels, Lenore's opponents assumed she had received this nickname from some naval exploit. They found out how wrong they were when her blade blurred faster than the eye could follow."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Legendary",
+  "weight_kg": 0.9,
+  "damage": [
+   {
+    "hand": null,
+    "dice": "1d8 + 3",
+    "type": "Piercing"
+   }
+  ],
+  "extra_damage": [
+   {
+    "dice": "1d4",
+    "type": "Necrotic"
+   }
+  ],
+  "armour_class": null,
+  "category": "Rapiers",
+  "enchantment": 3,
+  "found_in": "Lora's House"
+ }
+}

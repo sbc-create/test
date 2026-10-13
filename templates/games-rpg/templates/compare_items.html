@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Сравнение предметов {{ site.games[gid].title }}</h1>
+<p class="lead">Поля — из инфобоксов страниц вики; цена не показывается. К урону оружия добавляется модификатор характеристики персонажа.</p>
+<div class="tablewrap"><table class="cmp">
+<thead><tr><th scope="col">Предмет</th><th scope="col">Редкость</th><th scope="col">Вид</th><th scope="col">Урон</th><th scope="col" class="num">КД</th><th scope="col" class="num">Вес</th><th scope="col">Где</th></tr></thead>
+<tbody>{% for e in items %}{% set it = e.item %}<tr><th scope="row"><a href="{{ e.url }}" lang="en">{{ e.src.name }}</a></th>
+<td data-label="Редкость" lang="en">{{ it.rarity or '—' }}</td><td data-label="Вид" lang="en">{{ it.category or '—' }}{% if it.enchantment %} +{{ it.enchantment }}{% endif %}</td>
+<td data-label="Урон">{% for d in it.damage %}{{ d.dice }} <span lang="en">{{ d.type }}</span>{% if d.hand %} ({{ 'одной' if d.hand == 'One-handed' else 'двумя' }}){% endif %}{% if not loop.last %}; {% endif %}{% endfor %}{% for d in it.extra_damage %}; + {{ d.dice }} <span lang="en">{{ d.type }}</span>{% endfor %}{% if not it.damage %}—{% endif %}</td>
+<td class="num" data-label="КД">{{ it.armour_class or '—' }}</td><td class="num" data-label="Вес">{{ ('%g' % it.weight_kg).replace('.', ',') ~ ' кг' if it.weight_kg else '—' }}</td><td data-label="Где" lang="en">{{ it.found_in or '—' }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="note">КД — класс доспеха. «—» — у предмета такого поля нет или источник его не называет.</p>
+{% endblock %}

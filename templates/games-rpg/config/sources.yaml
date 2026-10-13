@@ -1,0 +1,3 @@
+sources:
+  - host: bg3.wiki
+    role: [wiki]

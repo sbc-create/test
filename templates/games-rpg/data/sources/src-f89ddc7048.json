@@ -1,0 +1,25 @@
+{
+ "id": "src-f89ddc7048",
+ "url": "https://bg3.wiki/wiki/Lae%27zel",
+ "fetched_at": "2026-10-12T22:08:54Z",
+ "page_sha256": "cd5ba405225a2e48ef3a23580e00abc730a6b2062eaac911a4f703ab1dffa3fb",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Lae'zel",
+ "lead": [
+  "Lae'zel of Crèche K'liir is an Origin Character and a recruitable Companion who can be romanced by characters of any gender. She is a Githyanki Fighter with the Soldier background. Unless played as an origin character, Lae'zel is first encountered on the Nautiloid during the prologue, where she serves as a temporary companion, and can be properly recruited on the Roadside Cliffs in Act One .",
+  "A ferocious warrior zealously devoted to the Lich Queen Vlaakith , Lae'zel will do whatever is necessary to end the terror of the Illithid and prove herself to her queen."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 17,
+  "DEX": 13,
+  "CON": 15,
+  "INT": 10,
+  "WIS": 12,
+  "CHA": 8
+ }
+}

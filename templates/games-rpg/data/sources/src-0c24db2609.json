@@ -1,0 +1,19 @@
+{
+ "id": "src-0c24db2609",
+ "url": "https://bg3.wiki/wiki/Wizard",
+ "fetched_at": "2026-10-12T22:09:02Z",
+ "page_sha256": "c4befcddd97203eb001a3e4992887c918898ef3cfef391b5072195deb4fa8ac1",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "class",
+ "name": "Wizard",
+ "lead": [
+  "Wizards channel magic through their extensive knowledge of the arcane to fight enemies and aid allies in combat. Wizards use Intelligence as their primary ability score.",
+  "Through experience, you acquire new power. You gain the following traits."
+ ],
+ "patches": [],
+ "progression": [],
+ "progression_parsed": false
+}

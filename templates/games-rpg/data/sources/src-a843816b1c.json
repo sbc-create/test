@@ -1,0 +1,25 @@
+{
+ "id": "src-a843816b1c",
+ "url": "https://bg3.wiki/wiki/Halsin",
+ "fetched_at": "2026-10-13T01:32:01Z",
+ "page_sha256": "8ec4497777c6b1a121949ffbcaef86928c3575b7dd52c6defa68b8fce6e7a2ed",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Halsin",
+ "lead": [
+  "Halsin is a recruitable Companion who can be romanced by characters of any gender. He is a wood elf and a Circle of the Moon Druid with the Outlander background. Halsin can first be found in the Shattered Sanctum during Act One as an attached follower or as a camp follower .",
+  "You have Proficiency with Longswords , Shortswords , Longbows , and Shortbows ."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 10,
+  "DEX": 14,
+  "CON": 14,
+  "INT": 8,
+  "WIS": 17,
+  "CHA": 12
+ }
+}

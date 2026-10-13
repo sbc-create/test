@@ -1,0 +1,25 @@
+{
+ "slug": "predmet-adamantine-splint",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-6608eb1dfd",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Adamantine Splint Armour — тяжёлые латы",
+ "summary": "Очень редкие тяжёлые латы с классом доспеха 18 и весом 19 кг. Их куют в Adamantine Forge; для ношения нужно владение тяжёлыми доспехами.",
+ "points": [
+  "Редкость: очень редкий (Very rare)",
+  "Класс доспеха: 18",
+  "Вес: 19 кг",
+  "Где найти: Adamantine Forge"
+ ],
+ "tips": [],
+ "related": [],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

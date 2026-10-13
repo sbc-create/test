@@ -1,0 +1,19 @@
+{
+ "id": "src-80cb6e2007",
+ "url": "https://bg3.wiki/wiki/Advantage",
+ "fetched_at": "2026-10-12T22:09:06Z",
+ "page_sha256": "a2e38c50b91e61b8a90bd457083c5581765c75405b5ac74546a2a742488f1d70",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "mechanic",
+ "name": "Advantage",
+ "lead": [
+  "Advantage and Disadvantage are terms used for two different gameplay mechanics that can greatly affect the success of dice rolls. First they are used for rolling two dice , second they are used for contesting ability checks .",
+  "A number of situations and conditions give creatures advantage or disadvantage on d20 rolls. A creature that makes a roll with advantage rolls two d20 dice separately, and uses the higher of the two results. If they have disadvantage, they choose the lower of the two."
+ ],
+ "patches": [
+  "Patch 7"
+ ]
+}

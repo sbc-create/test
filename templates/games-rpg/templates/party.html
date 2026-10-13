@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_parts.html" import partyform %}
+{% block main %}
+<h1>Планировщик отряда</h1>
+{% if unknown %}<p class="warn" role="status">Таких спутников в справочнике нет — отметьте из списка ниже.</p>{% endif %}
+{% if over %}<p class="warn" role="status">В отряде не больше 4 спутников — учтены первые четыре.</p>{% endif %}
+{{ partyform(gid, slugs) }}
+{% if party.members %}
+<section class="sum" aria-labelledby="h-sum" data-party="{{ slugs|join(',') }}"><h2 id="h-sum">Отряд: {{ party.members|map(attribute='src')|map(attribute='name')|join(', ') }}</h2>
+  <h3>Классы</h3><ul>{% for e in party.members %}<li><a href="{{ e.url }}">{{ e.src.name }}</a> — {{ e.points[0]|replace('Класс: ', '') if e.points else 'нет данных' }}</li>{% endfor %}</ul>
+  <h3>Лучшая характеристика в отряде</h3>
+  <table class="best"><thead><tr><th scope="col">Характеристика</th><th scope="col">Значение</th><th scope="col">У кого</th></tr></thead>
+  <tbody>{% for k, (v, who) in party.best.items() %}<tr><th scope="row">{{ k }}</th><td>{{ v }}</td><td>{{ who|map(attribute="src")|map(attribute="name")|join(", ") }}</td></tr>{% endfor %}</tbody></table>
+  <p class="note">Значения по умолчанию из вики; в игре их меняют уровни, снаряжение и решения игрока.</p>
+  <p><a class="reset" href="/otryad/">Очистить отряд</a></p>
+</section>
+{% else %}<div class="empty"><h2>Отряд пока пуст</h2><p>Отметьте спутников выше и нажмите «Собрать отряд».</p></div>{% endif %}
+{% endblock %}

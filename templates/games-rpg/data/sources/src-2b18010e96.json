@@ -1,0 +1,24 @@
+{
+ "id": "src-2b18010e96",
+ "url": "https://bg3.wiki/wiki/Find_the_Githyanki_Cr%C3%A8che",
+ "fetched_at": "2026-10-12T22:09:13Z",
+ "page_sha256": "21e430a357ca20c394cdb3308871c85d342584a246a9bd59141d03d09a0054ee",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "quest",
+ "name": "Find the Githyanki Crèche",
+ "lead": [
+  "Find the Githyanki Crèche is a sub- Quest of the main quest of Act One , Find a Cure . It can be initiated as soon as Lae'zel is rescued during ⁠ Free Lae'zel if she joins the party. For the majority of Act One, this quest is directly connected to Lae'zel's Companion quest, ⁠ The Githyanki Warrior .",
+  "Objectives and journal entries may vary pending player decisions and outcomes."
+ ],
+ "patches": [],
+ "stages": [
+  "The Githyanki Patrol",
+  "Accessing the Monastery",
+  "The Githyanki Crèche",
+  "The Infirmary",
+  "The Kith'rak"
+ ]
+}

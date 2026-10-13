@@ -1,0 +1,27 @@
+{
+ "id": "src-2aec74bfe6",
+ "url": "https://bg3.wiki/wiki/Rescue_the_Druid_Halsin",
+ "fetched_at": "2026-10-12T22:09:11Z",
+ "page_sha256": "1ee4e4d8dc28ea0482d0d9f4814ad3864167eed3ce3d508f9ea41978dc62e365",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "quest",
+ "name": "Rescue the Druid Halsin",
+ "lead": [
+  "Rescue the Druid Halsin is a sub- Quest of Act One's main quest, ⁠ Find a Cure . It can be initiated after entering the Druid Grove by speaking with various Non-player characters about Halsin's disappearance.",
+  "Information on Halsin can be found by speaking to Nettie during ⁠ Get Help from Healer Nettie or by speaking to Rath. Both Rath and Nettie are in the Inner Sanctum, which is accessible via the stone door north of the Sacred Pool. Mentioning to Rath that Kagha seems dangerous makes him lament that a snake has replaced their leader. Pressing for more information results in Rath revealing that Halsin disappeared at the goblin camp. Nettie discusses more about Halsin if the party is honest with her about their affliction and symptoms, stating that Halsin could better treat them if he was around."
+ ],
+ "patches": [],
+ "stages": [
+  "Entering the Goblin Camp",
+  "The Shattered Sanctum",
+  "Freeing Halsin",
+  "Priestess Gut",
+  "Minthara",
+  "Dror Ragzlin",
+  "Back in the Worg Pens",
+  "Getting the Rewards"
+ ]
+}

@@ -1,0 +1,27 @@
+{
+ "slug": "astarion",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-ca757cc885",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Astarion: плут из высших эльфов",
+ "summary": "Высший эльф, плут с предысторией «Шарлатан». Персонаж-«origin» и спутник, с которым возможен роман для героя любого пола. Впервые встречается к западу от обломков Наутилоида в первом акте.",
+ "points": [
+  "Класс: плут (Rogue)",
+  "Раса: высший эльф",
+  "Предыстория: Charlatan"
+ ],
+ "tips": [],
+ "related": [
+  "shadowheart",
+  "gale"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

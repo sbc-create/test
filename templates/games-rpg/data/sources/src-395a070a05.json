@@ -1,0 +1,80 @@
+{
+ "id": "src-395a070a05",
+ "url": "https://bg3.wiki/wiki/Fighter",
+ "fetched_at": "2026-10-12T22:09:00Z",
+ "page_sha256": "287ae2d2cd39b2867533c1bd017d2a3830a116fe56f685682c46efda46545273",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "class",
+ "name": "Fighter",
+ "lead": [
+  "Fighters use their martial expertise to fight enemies and support their allies in combat. Fighters use Strength or Dexterity as their primary ability score.",
+  "Note: Proficiency bonus is based on character level , not class level. It is included in the table for convenience."
+ ],
+ "patches": [],
+ "progression": [
+  {
+   "level": 1,
+   "bonus": "+2",
+   "features": "Second Wind , Fighting Style"
+  },
+  {
+   "level": 2,
+   "bonus": "",
+   "features": "Action Surge"
+  },
+  {
+   "level": 3,
+   "bonus": "",
+   "features": "Choose a subclass"
+  },
+  {
+   "level": 4,
+   "bonus": "",
+   "features": "Feat"
+  },
+  {
+   "level": 5,
+   "bonus": "+3",
+   "features": "Extra Attack"
+  },
+  {
+   "level": 6,
+   "bonus": "",
+   "features": "Feat"
+  },
+  {
+   "level": 7,
+   "bonus": "",
+   "features": "Subclass feature"
+  },
+  {
+   "level": 8,
+   "bonus": "",
+   "features": "Feat"
+  },
+  {
+   "level": 9,
+   "bonus": "+4",
+   "features": "Indomitable"
+  },
+  {
+   "level": 10,
+   "bonus": "",
+   "features": "Subclass feature"
+  },
+  {
+   "level": 11,
+   "bonus": "",
+   "features": "Improved Extra Attack"
+  },
+  {
+   "level": 12,
+   "bonus": "",
+   "features": "Feat"
+  }
+ ],
+ "progression_parsed": true
+}

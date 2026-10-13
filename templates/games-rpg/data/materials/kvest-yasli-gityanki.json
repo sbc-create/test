@@ -1,0 +1,35 @@
+{
+ "slug": "kvest-yasli-gityanki",
+ "game": "baldurs-gate-3",
+ "type": "quest",
+ "src": "src-2b18010e96",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Квест: найти ясли гитьянки",
+ "summary": "Начинается, как только Lae'zel освобождена и присоединилась к отряду; большую часть первого акта связан с её личным квестом «The Githyanki Warrior». Побочный квест основного задания первого акта «Find a Cure».",
+ "points": [
+  "Акт: первый",
+  "Родительский квест: Find a Cure",
+  "Связан с личным квестом Lae'zel"
+ ],
+ "tips": [
+  "Цели и записи журнала могут отличаться в зависимости от ваших решений."
+ ],
+ "related": [
+  "laezel",
+  "kvest-spasti-halsina"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": [
+  "Этап: The Githyanki Patrol",
+  "Этап: Accessing the Monastery",
+  "Этап: The Githyanki Crèche",
+  "Этап: The Infirmary",
+  "Этап: The Kith'rak"
+ ]
+}

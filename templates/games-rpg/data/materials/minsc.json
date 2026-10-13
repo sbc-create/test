@@ -1,0 +1,27 @@
+{
+ "slug": "minsc",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-de7cf7601d",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Minsc: следопыт-человек",
+ "summary": "Спутник, которого можно взять в отряд; вместе с Jaheira вернулся из Baldur's Gate и Baldur's Gate II, роман с ним невозможен. Человек, следопыт-охотник с предысторией «Народный герой».",
+ "points": [
+  "Класс: следопыт (Hunter Ranger)",
+  "Раса: человек",
+  "Предыстория: Folk Hero",
+  "Роман: невозможен"
+ ],
+ "tips": [],
+ "related": [
+  "jaheira"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

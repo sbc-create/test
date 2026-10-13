@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="hero"><h1>Указатель от А до Я</h1><p class="lead">Все материалы справочника в одном списке: тип, короткая справка и ссылка. Факты — из вики игры{% if site.version %}, сверено с {{ site.version.src.name }}{% endif %}.</p></section>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+<nav class="types" aria-label="Фильтр по типу"><a href="/"{% if not tip %} aria-current="page"{% endif %}>Все</a>{% for k, label in types.items() %}{% if site.entries|selectattr('type', 'equalto', k)|list %}<a href="/?tip={{ k }}"{% if tip == k %} aria-current="page"{% endif %}>{{ label }}</a>{% endif %}{% endfor %}</nav>
+<nav class="az" aria-label="Буквы">{% for l in letters %}<a href="#bukva-{{ loop.index }}">{{ l }}</a>{% endfor %}</nav>
+{% for l, es in letters.items() %}<section class="letter" id="bukva-{{ loop.index }}" aria-labelledby="h-l-{{ loop.index }}"><h2 id="h-l-{{ loop.index }}">{{ l }}</h2>
+  <dl class="gl">{% for e in es %}<div class="gl__row"><dt><a href="{{ e.url }}" lang="en">{{ e.src.name }}</a> <span class="gl__type">{{ types[e.type] }}</span></dt><dd>{{ e.summary.split('. ')[0].rstrip('.') }}.</dd></div>{% endfor %}</dl></section>
+{% endfor %}
+{% for gid, gm in site.games.items() %}{% if site.entries|selectattr('type', 'equalto', 'item')|list %}<p class="more"><a class="btn" href="/{{ gid }}/sravnenie-predmetov/">Сравнить предметы {{ gm.title }}</a></p>{% endif %}{% endfor %}
+<p class="party-link"><a class="btn btn--line" href="/otryad/">Собрать отряд: классы и характеристики спутников</a></p>
+<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец.</p>
+{% endblock %}
