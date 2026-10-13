@@ -172,7 +172,7 @@ def test_тяжёлое_задание_по_коммиту_это_нарушен
   emulator:
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    steps: [{run: bash tools/e2e/run_device.sh phone}]""")
+    steps: [{uses: 'reactivecircus/android-emulator-runner@v2.38.0'}]""")
     исход, пояснение = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
     assert исход == пп.НАРУШЕНО
     assert "emulator" in пояснение
@@ -191,7 +191,7 @@ def test_тяжёлое_задание_по_условию_ручного_зап
     if: github.event_name == 'workflow_dispatch' && inputs.e2e
     runs-on: ubuntu-latest
     timeout-minutes: 45
-    steps: [{run: bash tools/e2e/run_device.sh phone}]""")
+    steps: [{uses: 'reactivecircus/android-emulator-runner@v2.38.0'}]""")
     исход, пояснение = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
     assert исход == пп.СОБЛЮДЕНО, пояснение
 
@@ -205,7 +205,7 @@ def test_расписание_чаще_суток_это_нарушение(пп
                           """  verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
-    steps: [{run: bash tools/e2e/run_device.sh phone}]""")
+    steps: [{uses: 'reactivecircus/android-emulator-runner@v2.38.0'}]""")
     исход, пояснение = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
     assert исход == пп.НАРУШЕНО
     assert "чаще раза в сутки" in пояснение
@@ -258,3 +258,80 @@ def test_код_возврата_различает_три_исхода(пп, tm
     битый.write_text("name: [незакрытая", encoding="utf-8")
     assert пп.главная(["--file", str(битый)]) == 2
     capsys.readouterr()
+
+def test_юнит_тест_с_именем_e2e_тяжёлым_не_считается(пп):
+    """Измерено 13.10 на настоящем файле приложения.
+
+    Правило по словам объявило тяжёлым задание `build`, которое идёт шесть
+    минут и собирает APK: совпало `e2e` в имени шага «e2e helper unit tests
+    (anr attribution)», то есть в названии ЮНИТ-теста про вспомогательный код.
+    Признак должен брать то, что задание ОБЪЯВЛЯЕТ в `uses`.
+    """
+    текст = """
+name: CI
+on:
+  push:
+    branches: [main, 'app/**']
+    paths-ignore: ['docs/**', '**/*.md']
+concurrency:
+  group: ci-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - run: ./gradlew testDebugUnitTest
+      - name: e2e helper unit tests (anr attribution)
+        run: ./gradlew :tools:testDebugUnitTest
+"""
+    assert пп.тяжёлые_задания(__import__("yaml").safe_load(текст)) == [], (
+        "шестиминутная сборка APK объявлена тяжёлой из-за слова в имени шага")
+    исход, пояснение = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
+    assert исход == пп.СОБЛЮДЕНО, пояснение
+
+
+def test_задание_с_эмулятором_тяжёлое_по_uses(пп):
+    текст = """
+name: CI
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['docs/**', '**/*.md']
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+jobs:
+  emu:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: reactivecircus/android-emulator-runner@v2.38.0
+"""
+    import yaml
+
+    assert пп.тяжёлые_задания(yaml.safe_load(текст)) == ["emu"]
+    исход, пояснение = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
+    assert исход == пп.НАРУШЕНО, "эмулятор по коммиту не назван нарушением"
+
+
+def test_задание_под_входом_ручного_запуска_тяжёлое(пп):
+    текст = """
+name: CI
+on:
+  workflow_dispatch:
+    inputs:
+      soak: {type: boolean, default: false}
+jobs:
+  soak:
+    if: github.event_name == 'workflow_dispatch' && inputs.soak
+    runs-on: ubuntu-latest
+    timeout-minutes: 100
+    steps:
+      - run: bash tools/soak.sh
+"""
+    import yaml
+
+    assert пп.тяжёлые_задания(yaml.safe_load(текст)) == ["soak"]
+    исход, _ = _исход(пп.проверить(текст), "ТЯЖЁЛОЕ")
+    assert исход == пп.СОБЛЮДЕНО, "запуск только вручную — это и есть правило"
