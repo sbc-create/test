@@ -77,6 +77,24 @@ class Site:
     def for_game(self, game: str) -> list[Guide]:
         return [g for g in self.guides if g.game == game]
 
+    def tally(self, game: str) -> list[dict]:
+        """Общий счётчик (идея варианта B) поверх чек-листов глав: какие пункты — «все клубники» и «стороны».
+        Клубники считаются числом из источника главы, когда отмечен пункт «все клубники собраны»."""
+        rows = []
+        for g in self.for_game(game):
+            items = list(enumerate(g.checklist, 1))
+            rows.append(
+                {
+                    "slug": g.slug,
+                    "version": g.version,
+                    "total": len(items),
+                    "red": g.red,
+                    "berry": next((i for i, x in items if "клубник" in x.lower()), None),
+                    "sides": [i for i, x in items if "сторона" in x.lower()],
+                }
+            )
+        return rows
+
     def red_total(self, game: str) -> int:
         return sum(g.red for g in self.for_game(game))
 

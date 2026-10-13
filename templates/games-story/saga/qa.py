@@ -118,6 +118,11 @@ def run(shots: Path | None) -> dict:
         A["game_page_shows_chapter_progress"] = (
             pg.locator(".gc[data-slug='glava-1-forsaken-city'] [data-progress]").inner_text() == "Прогресс: 2 из 4"
         )
+        # общий счётчик на главной (идея B): отмечены «A-сторона» и «все клубники» главы 1 (20 клубник по источнику)
+        pg.goto(BASE + "/")
+        A["home_tally_red_from_source"] = pg.locator(".dash [data-stat=red]").inner_text() == "20"
+        A["home_tally_sides"] = pg.locator(".dash [data-stat=sides]").inner_text() == "1"
+        A["home_tally_full_chapters"] = pg.locator(".dash [data-stat=full]").inner_text() == "0"
         pg.goto(BASE + GUIDE)
         pg.click("[data-check-reset]")
         pg.reload()

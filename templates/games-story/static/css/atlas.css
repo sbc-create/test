@@ -99,3 +99,9 @@ main { max-width: 1120px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .cp__where, .cp__next { color: var(--ink-2); font-size: .95rem; }
 .cp-count { font-weight: 700; }
 .kicker { color: var(--pink-ink); }
+
+/* ---- общий счётчик собранного — идея варианта B ---- */
+.dash { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 4px 18px 16px; margin: 14px 0; }
+.dash__stats { display: grid; gap: 10px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); margin: 0 0 8px; }
+.dash__stats div { background: var(--panel-2); border-radius: 6px; padding: 10px 14px; }
+.dash__stats dt { color: var(--muted); font-size: .88rem; } .dash__stats dd { margin: 4px 0 0; font-weight: 800; font-size: 1.6rem; color: var(--pink-ink); font-variant-numeric: tabular-nums; }

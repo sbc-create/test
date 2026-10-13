@@ -34,6 +34,22 @@
   });
   document.querySelectorAll("[data-print]").forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
 
+  // Общий счётчик на главной (идея варианта B): клубники, стороны, главы целиком — из чек-листов глав
+  document.querySelectorAll("[data-tally]").forEach(function (box) {
+    var rows; try { rows = JSON.parse(box.getAttribute("data-tally")); } catch (e) { return; }
+    var red = 0, sides = 0, full = 0;
+    rows.forEach(function (r) {
+      var done = read("check:" + r.slug + ":v" + r.version, []);
+      if (!Array.isArray(done)) return;
+      if (r.berry !== null && done.indexOf(String(r.berry)) !== -1) red += r.red;
+      r.sides.forEach(function (i) { if (done.indexOf(String(i)) !== -1) sides++; });
+      if (r.total && done.length >= r.total) full++;
+    });
+    box.querySelector("[data-stat=red]").textContent = red;
+    box.querySelector("[data-stat=sides]").textContent = sides;
+    box.querySelector("[data-stat=full]").textContent = full;
+  });
+
   // «Где я?»: фильтр чекпоинтов на лету (без JS работает форма)
   var f = document.querySelector("[data-cp-filter]");
   if (f) {
