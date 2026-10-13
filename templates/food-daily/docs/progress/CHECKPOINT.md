@@ -167,3 +167,6 @@ home, garden, plants, games-story, games-rpg, games-survival. Следующие
 
 Обновление 00:23Z: food-appliances C (#122; device-queue, 8874; 28 действий PASS, axe 0, 30 URL × 4 — 0). Третьи варианты: 8 сайтов.
 Осталось: food-daily C и food-baking C (по времени), утренний отчёт.
+
+Обновление 00:29Z: food-baking C (#123; bake-batch, 8875; 32 действия PASS, axe 0, 30 URL × 4 — 0). Третьи варианты: 9 сайтов из 10.
+Осталось: food-daily C, утренний отчёт.
