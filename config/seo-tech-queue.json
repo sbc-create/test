@@ -755,7 +755,7 @@
       "expected": "решение: свести поля к одному или закрепить правило «проверка происхождения читает оба»; тест на запись каждого пути",
       "status": "queued",
       "check": "перечень title-overlays.json: у каждой записи provenance или source_manifest; тест на оба пути публикации",
-      "evidence": "Сессия 13.10 ~04:25Z: в фабрике проверки, требующей provenance, нет — factory/qwen/editorial.py валидатор накладки проверяет только тип source_manifest (строка ~960). Единственный читатель одного поля — editorial.состояние(): \"author\": provenance.author → у трёх записей source_manifest выдаст None, то есть отчёт состояния покажет их без автора. Правка затрагивает factory/ (новая цифра состава для владельца) — отложена до решения по сведению полей."
+      "evidence": "Сессия 13.10 ~04:25Z: в фабрике проверки, требующей provenance, нет — factory/qwen/editorial.py валидатор накладки проверяет только тип source_manifest (строка ~960). Единственный читатель одного поля — editorial.состояние(): \"author\": provenance.author → у трёх записей source_manifest выдаст None, то есть отчёт состояния покажет их без автора. Правка затрагивает factory/ (новая цифра состава для владельца) — отложена до решения по сведению полей. Замер сессии wt-portable-site-cell-01-97 13.10 11:10 МСК (automation/local/overlay-provenance.py в её ветви): 294 записи, 291 provenance, 3 source_manifest (stage2-ongoing-019fc72d, batch10-15-24-y-okrug-tokio, repair-009-1-rev1 — yummyani.site), без обоих полей 0; читатель одного поля даёт 3 ложных пробела (--one-field-check). Валидатор в factory/ отложен: сдвигает цифру состава 06f74262107c."
     },
     {
       "id": "T044",
