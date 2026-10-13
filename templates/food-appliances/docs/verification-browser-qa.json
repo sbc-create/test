@@ -1,6 +1,6 @@
 {
- "commit_head": "5d5aee3824d7528a4fe0d0257c07858be054851a",
- "at": "2026-10-13T13:51:38Z",
+ "commit_head": "19737781e75b586d9bde4fb9e54231fc7a3f9360",
+ "at": "2026-10-13T14:28:25Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:appliance:no_hscroll": true,
@@ -78,39 +78,39 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 164,
+   "lcp_ms": 148,
    "cls": 0
   },
   "mobile:appliance": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:category": {
-   "lcp_ms": 40,
-   "cls": 0
-  },
-  "mobile:recipe": {
-   "lcp_ms": 92,
-   "cls": 0
-  },
-  "mobile:recipe_console": {
    "lcp_ms": 52,
    "cls": 0
   },
+  "mobile:recipe": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "mobile:recipe_console": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
   "mobile:mode": {
-   "lcp_ms": 48,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:guide": {
-   "lcp_ms": 28,
+   "lcp_ms": 72,
    "cls": 0
   },
   "mobile:queue": {
-   "lcp_ms": 108,
+   "lcp_ms": 432,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 80,
+   "lcp_ms": 104,
    "cls": 0
   },
   "desktop:appliance": {
@@ -118,19 +118,19 @@
    "cls": 0
   },
   "desktop:category": {
-   "lcp_ms": 72,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:recipe": {
-   "lcp_ms": 84,
+   "lcp_ms": 88,
    "cls": 0
   },
   "desktop:recipe_console": {
-   "lcp_ms": 80,
+   "lcp_ms": 52,
    "cls": 0
   },
   "desktop:mode": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:guide": {
@@ -138,7 +138,7 @@
    "cls": 0
   },
   "desktop:queue": {
-   "lcp_ms": 92,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -149,22 +149,22 @@
   "desktop: Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:8866/ochered/?r=neizvestno"
  ],
  "screenshots": [
-  "docs/screenshots/5d5aee3/home-mobile.png",
-  "docs/screenshots/5d5aee3/appliance-mobile.png",
-  "docs/screenshots/5d5aee3/category-mobile.png",
-  "docs/screenshots/5d5aee3/recipe-mobile.png",
-  "docs/screenshots/5d5aee3/recipe_console-mobile.png",
-  "docs/screenshots/5d5aee3/mode-mobile.png",
-  "docs/screenshots/5d5aee3/guide-mobile.png",
-  "docs/screenshots/5d5aee3/queue-mobile.png",
-  "docs/screenshots/5d5aee3/home-desktop.png",
-  "docs/screenshots/5d5aee3/appliance-desktop.png",
-  "docs/screenshots/5d5aee3/category-desktop.png",
-  "docs/screenshots/5d5aee3/recipe-desktop.png",
-  "docs/screenshots/5d5aee3/recipe_console-desktop.png",
-  "docs/screenshots/5d5aee3/mode-desktop.png",
-  "docs/screenshots/5d5aee3/guide-desktop.png",
-  "docs/screenshots/5d5aee3/queue-desktop.png"
+  "docs/screenshots/1973778/home-mobile.png",
+  "docs/screenshots/1973778/appliance-mobile.png",
+  "docs/screenshots/1973778/category-mobile.png",
+  "docs/screenshots/1973778/recipe-mobile.png",
+  "docs/screenshots/1973778/recipe_console-mobile.png",
+  "docs/screenshots/1973778/mode-mobile.png",
+  "docs/screenshots/1973778/guide-mobile.png",
+  "docs/screenshots/1973778/queue-mobile.png",
+  "docs/screenshots/1973778/home-desktop.png",
+  "docs/screenshots/1973778/appliance-desktop.png",
+  "docs/screenshots/1973778/category-desktop.png",
+  "docs/screenshots/1973778/recipe-desktop.png",
+  "docs/screenshots/1973778/recipe_console-desktop.png",
+  "docs/screenshots/1973778/mode-desktop.png",
+  "docs/screenshots/1973778/guide-desktop.png",
+  "docs/screenshots/1973778/queue-desktop.png"
  ],
  "actions": {
   "mobile:home:no_hscroll": true,

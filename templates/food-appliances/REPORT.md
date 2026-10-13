@@ -60,3 +60,17 @@ LCP (лаборатория, loopback, без троттлинга) 36–160 м�
 | `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 5d5aee3 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 1973778 (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Тест сверки черновиков без закрытых снимков — SKIPPED с причиной (здесь выполнен).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-appliances test` | 0 | 21 passed in 0.66s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m techkitchen.qa --shots docs/screenshots/1973778 --out docs/verification-browser-qa.json` | 0 | 42 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8866 '/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke' '/ochered/?r=neizvestno' '/poisk/?q=тушение' /nesushchestvuet/` | 0 | 30 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 1973778 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 432 мс. Карта действий — `docs/ACTION-MAP.md`.
