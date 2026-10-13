@@ -1,0 +1,13 @@
+{% macro plot_form(region='', crops=[], general=True, big=False) %}
+<form class="plot-form{% if big %} plot-form--big{% endif %}" action="/moj-uchastok/" method="get" data-plot-form>
+  <fieldset><legend>1. Ваш регион</legend>
+    <ul class="pick">{% for r, label in REGIONS.items() %}<li><label class="pick__item pick__item--{{ r }}"><input type="radio" name="region" value="{{ r }}"{% if r == region %} checked{% endif %} required><span><b>{{ label }}</b><small>{{ REGION_NOTE[r] }}</small></span></label></li>{% endfor %}</ul>
+    <p class="note">Других регионов в источниках нет: сроков для России сайт не даёт и не придумывает.</p>
+  </fieldset>
+  <fieldset><legend>2. Что растёт на участке</legend>
+    <ul class="pick pick--row">{% for c, ws in site.crops().items() %}<li><label class="pick__chip"><input type="checkbox" name="k" value="{{ c }}"{% if c in crops %} checked{% endif %}><span>{{ CROPS[c] }}</span></label></li>{% endfor %}
+      <li><label class="pick__chip"><input type="checkbox" name="obshchie" value="1"{% if general %} checked{% endif %}><span>Общие работы (почва, полив, инструменты)</span></label></li></ul>
+  </fieldset>
+  <p class="plot-form__go"><button type="submit" class="btn">Показать мой календарь</button></p>
+</form>
+{% endmacro %}

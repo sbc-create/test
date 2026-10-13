@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import region_chip %}
+{% block main %}
+<h1>Регионы источников</h1>
+<p class="lead">Срок посадки или обрезки зависит от климата. Поэтому каждый срок на сайте подписан регионом, для которого его дал источник.</p>
+<ul class="reglist reglist--big">{% for r in REGIONS %}{% set n = site.for_region(r)|length %}{% if n %}<li><h2><a href="/region/{{ r }}/">{{ region_chip(r) }}</a></h2><p>{{ REGION_NOTE[r] }}</p><p class="count">{{ n }} {{ plural(n, 'работа', 'работы', 'работ') }}</p></li>{% endif %}{% endfor %}</ul>
+{% endblock %}

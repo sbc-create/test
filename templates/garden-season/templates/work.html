@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, region_chip %}
+{% macro ref(x) %}{% for n in w.refs(x) %}<a class="ref" href="#ist-{{ n }}" aria-label="Источник {{ n }}">[{{ n }}]</a>{% endfor %}{% endmacro %}
+{% block main %}
+<article class="work" data-slug="{{ w.slug }}" data-version="{{ w.version }}">
+  <p class="work__meta"><a href="/tip/{{ w.type }}/">{{ w.type_label }}</a>{% if w.crop %} · <a href="/kultura/{{ w.crop }}/">{{ w.crop_label }}</a>{% endif %}</p>
+  <h1>{{ w.title }}</h1>
+  <p class="lead">{{ w.summary }}</p>
+  <div class="work__actions"><button type="button" class="btn btn--line" data-print hidden>Печать</button></div>
+
+  <section class="when" aria-labelledby="h-when">
+    <h2 id="h-when">Сроки по регионам</h2>
+    <table class="when__t"><thead><tr><th scope="col">Когда</th><th scope="col">Регион</th><th scope="col">Источник</th></tr></thead>
+    <tbody>{% for x in w.when %}<tr><td>{% if x.month %}{{ MONTHS[x.month - 1]|capitalize }}{% else %}по сезону{% endif %}{% if x.when %} <span lang="en">({{ x.when }})</span>{% endif %}</td><td>{{ region_chip(x.region, x.label) }}</td><td><a class="ref" href="#ist-{{ w.src_index[x.src] }}" aria-label="Источник {{ w.src_index[x.src] }}">[{{ w.src_index[x.src] }}]</a></td></tr>{% endfor %}</tbody></table>
+    <p class="when__note">Срок верен для указанного региона. Для своего участка сверьтесь с местными данными: заморозками, почвой, погодой года.</p>
+  </section>
+
+  <nav class="toc" aria-label="Оглавление"><a href="#gde">Где подходит</a> {% if w.need %}<a href="#nuzhno">Что потребуется</a> {% endif %}<a href="#shagi">Шаги</a> <a href="#ogranicheniya">Оговорки</a> <a href="#proverka">Чек-лист</a> <a href="#istochniki">Источники</a></nav>
+
+  <section id="gde" aria-labelledby="h-gde"><h2 id="h-gde">Где подходит</h2><p>{{ w.applies }}</p></section>
+  {% if w.need %}<section id="nuzhno" aria-labelledby="h-need"><h2 id="h-need">Что потребуется</h2><ul>{% for x in w.need %}<li>{{ x.text }} {{ ref(x) }}</li>{% endfor %}</ul></section>{% endif %}
+  {% if w.calc %}<section class="calc" aria-labelledby="h-calc"><h2 id="h-calc">Перевод единиц</h2><ul>{% for c in w.calc %}<li>{{ c.label }}: <code>{{ c.expr|replace('-', '−')|replace('*', '×')|replace('/', '÷') }} = {{ c.result|replace('.', ',') }} {{ c.unit }}</code>. {{ c.get('conclusion', '') }}</li>{% endfor %}</ul></section>{% endif %}
+  <section id="shagi" aria-labelledby="h-steps"><h2 id="h-steps">Шаги</h2>
+    <ol class="steps">{% for x in w.steps %}<li id="shag-{{ loop.index }}"><p>{{ x.text }} {{ ref(x) }}</p></li>{% endfor %}</ol>
+  </section>
+  <section id="ogranicheniya" aria-labelledby="h-lim"><h2 id="h-lim">Оговорки</h2>
+    {% for kind, title in (('university', 'Университетский справочник'), ('organization', 'Садоводческая организация')) %}{% set xs = w.limits_of(kind) %}{% if xs %}<div class="lim lim--src"><h3>{{ title }}</h3><ul>{% for x in xs %}<li>{{ x.text }} {{ ref(x) }}</li>{% endfor %}</ul></div>{% endif %}{% endfor %}
+    {% set ed = w.limits_of('editorial') %}{% if ed %}<div class="lim lim--ed"><h3>Совет редакции</h3><p class="lim__note">Наша рекомендация, не требование источника.</p><ul>{% for x in ed %}<li>{{ x.text }}</li>{% endfor %}</ul></div>{% endif %}
+  </section>
+  <section id="proverka" class="check" aria-labelledby="h-check"><h2 id="h-check">Чек-лист</h2>
+    <p class="check__hint" data-check-status aria-live="polite">Отметки сохраняются на этом устройстве.</p>
+    <ul>{% for x in w.checklist %}<li><label><input type="checkbox" data-check="{{ loop.index }}"> <span>{{ x }}</span></label></li>{% endfor %}</ul>
+    <button type="button" class="btn btn--line" data-check-reset hidden>Снять отметки</button>
+  </section>
+  <section id="istochniki" class="sources" aria-labelledby="h-src"><h2 id="h-src">Источники</h2>
+    <ol>{% for s in w.sources %}<li id="ist-{{ loop.index }}"><b>{{ SOURCE_KIND[s.kind] }}:</b> <a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }}</a> — {{ s.publisher }}{% if s.get('published') %}, опубл. {{ s.published }}{% if s.reviewed %}, пересмотрен {{ s.reviewed }}{% endif %}{% endif %}. Регион: {{ s.region_scope }}. Прочитан {{ s.fetched_at[:10] }}.</li>{% endfor %}</ol>
+    <p class="ver">Версия {{ w.version }}, опубликовано {{ w.published_at }}. Текст подготовлен с помощью ИИ, редакция его ещё не проверяла.</p>
+  </section>
+</article>
+{% set rel = site.related(w) %}{% if rel %}<section aria-labelledby="h-rel"><h2 id="h-rel">Связанные работы</h2>{{ grid(rel) }}</section>{% endif %}
+{% endblock %}

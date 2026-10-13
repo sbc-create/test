@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% from "plot_form.html" import plot_form %}
+{% from "_parts.html" import region_chip %}
+{% block main %}
+{% if months %}
+<h1 data-plot-region="{{ REGIONS[region] }}">Мой участок: {{ REGIONS[region] }}</h1>
+<p class="lead">{% for c in crops %}{{ CROPS[c] }}{% if not loop.last %}, {% endif %}{% endfor %}{% if crops and general %} и {% endif %}{% if general %}общие работы{% endif %}. Месяцы без работ пропущены. Отмечайте сделанное — отметки хранятся в этом браузере.</p>
+{% if region in ('or-west', 'or-east', 'or-local') %}<p class="note">Для района Орегона показаны и сроки «весь штат»: источник даёт их для всего Орегона, у каждой строки подписано, к какому региону она относится.</p>{% endif %}
+<p class="plot__progress" data-plot-progress aria-live="polite"></p>
+<p class="actions"><a class="btn btn--line" href="#izmenit">Изменить выбор</a> <button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
+<ol class="plot">{% for m, rows in months.items() %}
+  <li class="plot__m" id="mesyac-{{ m }}"><h2>{{ MONTHS[m - 1]|capitalize }}</h2>
+    <ul>{% for r in rows %}<li class="plot__row"><label class="plot__done"><input type="checkbox" data-done="{{ r.work.slug }}:{{ m }}:{{ r.region }}" hidden><span class="sr">Сделано</span></label>
+      <div><a href="{{ r.work.url }}"><b>{{ r.work.title }}</b></a> {{ region_chip(r.region, r.label) }}{% if r.when %}<span class="plot__when" lang="en">{{ r.when }}</span>{% endif %}</div></li>{% endfor %}</ul></li>
+{% endfor %}</ol>
+<h2 id="izmenit">Изменить выбор</h2>
+{{ plot_form(region, crops, general) }}
+{% else %}
+<h1>Мой участок</h1>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% elif asked %}<div class="empty" role="status"><h2>Для этого выбора работ нет</h2><p>В источниках нет сроков этих культур для выбранного региона. Попробуйте другой регион или добавьте общие работы.</p></div>{% endif %}
+{{ plot_form(region, crops, general if asked else True) }}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,159 @@
+{
+ "id": "src-0f430f24fa",
+ "url": "https://extension.oregonstate.edu/catalog/em-9684-december-garden-calendar",
+ "fetched_at": "2026-10-12T21:02:11Z",
+ "page_sha256": "e3ef99d7b6d7db9c263e7c25daf5d92c1648f0e9593c7765a9752494e476cba5",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "December garden calendar",
+ "month": 12,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "November 2020",
+ "reviewed": "2026",
+ "items": [
+  {
+   "id": "m12-01",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Do not walk on lawns until frost has melted.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m12-02",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Spread wood ashes evenly on your vegetable garden. Use no more than 1.5 pounds per 100 square feet per year. Don't use if the soil pH is greater than 7.0 or if potassium levels are excessive."
+  },
+  {
+   "id": "m12-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Protect new landscape plants from wind. Use stakes, guy wires or windbreaks as needed."
+  },
+  {
+   "id": "m12-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Yard sanitation – rake leaves, cut and remove withered stalks of perennial flowers, mulch flowerbeds, and hoe or pull winter weeds but consider leaving some leaves and standing stems where they do not pose disease problems to support overwintering beneficial insects and pollinators."
+  },
+  {
+   "id": "m12-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Turn the compost pile and protect from heavy rains, if necessary."
+  },
+  {
+   "id": "m12-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "During heavy rains, watch for drainage problems in the yard. Tilling, ditching, and French drains are possible short-term solutions. Consider rain gardens and bioswales as a longer-term solution."
+  },
+  {
+   "id": "m12-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Check stored flower bulbs, fresh vegetables, and fruits for rot and fungus problems. Discard any showing signs of rot."
+  },
+  {
+   "id": "m12-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Tie limbs of columnar evergreens to prevent snow or ice breakage."
+  },
+  {
+   "id": "m12-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "Water your plants every six to eight weeks with a deep soaking to keep them from drying out.",
+   "region_label": "Central/eastern Oregon"
+  },
+  {
+   "id": "m12-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Make sure that landscape plants in protected sites receive water regularly during the winter.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m12-11",
+   "section": "Planting and propagation",
+   "region": "or-west",
+   "text": "This is a good time to plant trees and landscape shrubs.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m12-12",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m12-13",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check for rodent damage around bases of trees and large shrubs. Remove weeds to prevent rodents from using them as hiding places. Use traps and approved baits as necessary."
+  },
+  {
+   "id": "m12-14",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Avoid mounding mulching materials around the bases of trees and shrubs. The mulch might provide cover for rodents."
+  },
+  {
+   "id": "m12-15",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor spruce trees for spruce aphids. Treat if present in large numbers. Read and follow pesticide label directions."
+  },
+  {
+   "id": "m12-16",
+   "section": "Indoor gardening",
+   "region": "or-all",
+   "text": "Protect poinsettias from cold; keep them in bright, indirect light away from cold windows, drafts, and heat vents. Fertilize with houseplant fertilizer to maintain leaf color."
+  },
+  {
+   "id": "m12-17",
+   "section": "Indoor gardening",
+   "region": "or-all",
+   "text": "Monitor houseplants for adequate water and fertilizer. Water and fertilizer requirements generally are less in winter."
+  },
+  {
+   "id": "m12-18",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "Home"
+  },
+  {
+   "id": "m12-19",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "Topics"
+  },
+  {
+   "id": "m12-20",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "Get involved"
+  },
+  {
+   "id": "m12-21",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "About"
+  },
+  {
+   "id": "m12-22",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "For employees"
+  },
+  {
+   "id": "m12-23",
+   "section": "Have a question? Ask Extension!",
+   "region": "or-all",
+   "text": "Log in"
+  }
+ ]
+}

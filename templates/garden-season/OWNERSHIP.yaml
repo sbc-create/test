@@ -1,0 +1,22 @@
+template: garden-season
+variant_id: my-plot   # вариант C; A — month-calendar (8853), B — region-timeline (8854)
+branch: claude/template-garden-season-c
+worktree: /home/claude/wt-template-garden-season-c
+base_commit: 18e1723   # вариант A (claude/template-garden-season)
+owner_scope:
+  write: [templates/garden-season/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста источников и референсов по заданию ночи 12–13.10.2026, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m sezon.server (pid var/garden-season/run/preview.pid)"
+  bind: 127.0.0.1:8868
+  data: templates/garden-season/data (факты источников, работы, content.json)
+  private: var/garden-season/private (страницы источников, 0700, вне git)
+  build: var/garden-season/build/<commit>
+  qa_dependencies: templates/garden-season/qa (axe-core 4.13.0, свой lockfile)
+  browser_storage_namespace: "gs-plot"
+network_contracts: []
+shared_with_other_templates: []

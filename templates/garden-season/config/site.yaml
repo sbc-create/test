@@ -1,0 +1,13 @@
+site_id: garden-season
+name: "Дача по сезону"
+variant_id: my-plot              # вариант C: мой участок — регион и культуры → личный календарь на год
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8868"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8868}
+storage_namespace: "gs-plot"
+ads: {adapter: disabled}
+analytics: {adapter: disabled}

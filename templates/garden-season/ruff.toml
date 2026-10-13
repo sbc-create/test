@@ -1,0 +1,10 @@
+# Настройки ruff только для шаблона garden-season; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"sezon/qa.py" = ["E501"]
+"sezon/server.py" = ["E501"]
+"sezon/site.py" = ["E501"]
+"sezon/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

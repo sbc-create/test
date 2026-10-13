@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, region_chip %}
+{% block main %}
+<h1>{{ MONTHS[mo - 1]|capitalize }}: работы на участке</h1>
+<p class="lead">Работы, которые источники ставят на {{ MONTHS[mo - 1] }}. Сгруппированы по региону: срок верен для своего региона.</p>
+{% if groups %}
+{% for r, ws in groups.items() %}
+<section class="mreg" aria-labelledby="h-{{ r }}">
+  <h2 id="h-{{ r }}">{{ region_chip(r) }}</h2>
+  <p class="mreg__note">{{ REGION_NOTE[r] }}</p>
+  {{ grid(ws) }}
+</section>
+{% endfor %}
+{% else %}
+<div class="empty"><h2>На {{ MONTHS[mo - 1] }} инструкций пока нет</h2><p>Мы добавляем работы только с подтверждённым источником и регионом.</p>{% if osu %}<p>Полный перечень работ на этот месяц для Орегона — в <a href="{{ osu.url }}" rel="nofollow noopener" lang="en">календаре OSU Extension</a>.</p>{% endif %}<p><a class="btn" href="/kalendar/">Весь календарь</a></p></div>
+{% endif %}
+{% if osu and groups %}<p class="srcnote">Полный перечень работ на {{ MONTHS[mo - 1] }} для Орегона: <a href="{{ osu.url }}" rel="nofollow noopener" lang="en">{{ osu.name }}</a> (OSU Extension, опубл. {{ osu.published }}{% if osu.reviewed %}, пересмотрен {{ osu.reviewed }}{% endif %}).</p>{% endif %}
+<nav class="pager" aria-label="Соседние месяцы">{% set p = (mo + 10) % 12 %}{% set n = mo % 12 %}<a href="/kalendar/{{ MONTH_SLUG[p] }}/">← {{ MONTHS[p]|capitalize }}</a><a href="/kalendar/{{ MONTH_SLUG[n] }}/">{{ MONTHS[n]|capitalize }} →</a></nav>
+{% endblock %}

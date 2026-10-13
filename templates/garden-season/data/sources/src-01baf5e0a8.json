@@ -1,0 +1,179 @@
+{
+ "id": "src-01baf5e0a8",
+ "url": "https://extension.oregonstate.edu/catalog/em-9528-june-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:46Z",
+ "page_sha256": "1938660d0a434db67403a6293a2153d233df8411edaa9c6ad8593f59c419b234",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "June garden calendar",
+ "month": 6,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "May 2021",
+ "reviewed": "2026",
+ "items": [
+  {
+   "id": "m06-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Construct trellises for tomatoes, cucumbers, pole beans and vines."
+  },
+  {
+   "id": "m06-02",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune lilacs, forsythia, rhododendrons and azaleas after bloom."
+  },
+  {
+   "id": "m06-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Fertilize vegetable garden one month after plants emerge by applying a side dressing alongside rows where a soil test or plant vigor shows a need."
+  },
+  {
+   "id": "m06-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest thinnings from new plantings of lettuce, onion and chard."
+  },
+  {
+   "id": "m06-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Pick ripe strawberries regularly to avoid fruit-rotting diseases."
+  },
+  {
+   "id": "m06-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Use organic mulches to conserve soil moisture in ornamental beds. An inch or two of sawdust, bark dust or composted leaves will minimize loss of water through evaporation."
+  },
+  {
+   "id": "m06-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "After normal fruit drop of apples, pears and peaches in June, consider thinning the remainder to produce a crop of larger fruit."
+  },
+  {
+   "id": "m06-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Make sure raised beds receive enough water for plants to avoid drought stress."
+  },
+  {
+   "id": "m06-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If green lawns are being maintained through the summer, apply 1 pound nitrogen per 1,000 square feet to lawns.",
+   "when": "Mid-June"
+  },
+  {
+   "id": "m06-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-local",
+   "text": "Frost can still be a concern during cold nights. Protect young vegetables from frost by having row cover (frost cloth) on hand. Place over crops when needed. Use season extenders, such as walls of water, around tomatoes and other tender plants.",
+   "region_label": "Central Oregon and higher elevations of eastern Oregon"
+  },
+  {
+   "id": "m06-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If you want a green lawn, water frequently during periods of heat and drought stress. Irrigate 0.25 inches four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+  },
+  {
+   "id": "m06-12",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Plant dahlias and gladioli."
+  },
+  {
+   "id": "m06-13",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective.",
+   "region_label": "Central Oregon and high elevations of eastern Oregon"
+  },
+  {
+   "id": "m06-14",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray cherry trees for cherry fruit fly, as necessary, if fruit is ripening.",
+   "when": "First week"
+  },
+  {
+   "id": "m06-15",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray for codling moth in apple and pear trees, as necessary. Continue use of pheromone traps for insect pest detection.",
+   "when": "First week"
+  },
+  {
+   "id": "m06-16",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Learn to identify beneficial insects and plant some insectary plants, — such as alyssum, Phacelia, coriander, candytuft, sunflower, yarrow and dill — to attract them to your garden. Check with local nurseries for best selections."
+  },
+  {
+   "id": "m06-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Blossoms on squash and cucumbers begin to drop; this is nothing to worry about. Cherries may also drop fruit; this is not a major concern."
+  },
+  {
+   "id": "m06-18",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor azaleas, primroses and other broadleaf ornamentals for adult root weevils. Look for fresh evidence of feeding (notching at leaf edges). Try sticky trap products on plant trunks to trap adult weevils. Protect against damaging the bark by applying the sticky material on a 4-inch wide band of poly sheeting or burlap wrapped around the trunk. Mark plants now and manage root weevils with beneficial nematodes when soil temperatures are above 55 degrees Fahrenheit. If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+  },
+  {
+   "id": "m06-19",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control garden weeds by pulling, hoeing or mulching."
+  },
+  {
+   "id": "m06-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control aphids on vegetables as needed by hosing off with water or by using insecticidal soap or a registered insecticide."
+  },
+  {
+   "id": "m06-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Watch for 12-spotted beetles on beans, cucumbers and squash and cabbage worms or flea beetles in cole crops (cabbage, broccoli, Brussels sprouts). Remove the pests by hand or treat with registered pesticides."
+  },
+  {
+   "id": "m06-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Birch trees dripping a sticky fluid from their leaves means that aphids are present. Control as needed."
+  },
+  {
+   "id": "m06-23",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Use yellow sticky traps to monitor for cherry fruit fly. About 1 week after the first fly is caught, spray cherries at appropriate intervals."
+  },
+  {
+   "id": "m06-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Second spray for codling moth in apple and pear trees, as necessary.",
+   "when": "Last week"
+  },
+  {
+   "id": "m06-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Continue monitoring blueberry, strawberry, cherry and other plants that produce soft fruits and berries for spotted wing drosophila. If these pests are present, use an integrated and least toxic approach to manage the pests. Learn how to monitor and manage spotted wing drosophila."
+  },
+  {
+   "id": "m06-26",
+   "section": "Indoor gardening",
+   "region": "or-all",
+   "text": "Move houseplants outdoors for cleaning, grooming, repotting and summer growth."
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "plot_form.html" import plot_form %}
+{% block main %}
+<section class="hero">
+  <h1>Мой участок: календарь работ под ваш регион</h1>
+  <p class="lead">Выберите регион и то, что растёт у вас, — получите работы по месяцам на весь год. У каждого срока подписан регион, для которого его дал источник; сроки разных регионов не смешиваются.</p>
+</section>
+{{ plot_form(big=True) }}
+<section aria-labelledby="h-more"><h2 id="h-more">Смотреть без выбора</h2>
+  <ul class="links"><li><a href="/kalendar/">Календарь по месяцам</a></li><li><a href="/kultury/">Культуры</a></li><li><a href="/regiony/">Регионы источников</a></li><li><a href="/kak-chitat-sroki/">Как перенести сроки на свой участок</a></li></ul>
+</section>
+{% endblock %}

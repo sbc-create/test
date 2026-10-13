@@ -1,0 +1,165 @@
+{
+ "id": "src-9ce417b052",
+ "url": "https://extension.oregonstate.edu/catalog/em-9688-may-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:43Z",
+ "page_sha256": "67e1e6acc72ec013d2a9efe439abb2d42ef03842949cc39a13a17eab578db0dd",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "May garden calendar",
+ "month": 5,
+ "region_scope": "Орегон, США",
+ "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+ "published": "April 2021",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m05-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Prepare and prime irrigation system for summer."
+  },
+  {
+   "id": "m05-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Use a soil thermometer to help you know when to plant vegetables. Wait until the soil is consistently above 70 degrees to plant tomatoes, squash, melons, peppers and eggplant."
+  },
+  {
+   "id": "m05-03",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Place pheromone traps in apple trees to detect presence of codling moth. Plan a control program of sprays, baits or predators when moths are found."
+  },
+  {
+   "id": "m05-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If needed, fertilize rhododendrons and azaleas with acid-type fertilizer. If established and healthy, their nutrient needs should be minimal. Remove spent blossoms."
+  },
+  {
+   "id": "m05-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "When selecting new roses, choose plants labeled for resistance to diseases. Fertilize roses and control rose diseases such as mildew with a registered fungicide, either organic or synthetic."
+  },
+  {
+   "id": "m05-06",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant dahlias, gladioli and tuberous begonias in mid-May."
+  },
+  {
+   "id": "m05-07",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant chrysanthemums for fall color."
+  },
+  {
+   "id": "m05-08",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant these vegetables (dates vary locally; check with local Master Gardeners): Oregon coast: Snap beans, broccoli, Brussels sprouts, cantaloupes, pickling cucumbers, dill, kale, parsnips, peppers, pumpkins, summer and winter squash, sweet corn and tomatoes."
+  },
+  {
+   "id": "m05-09",
+   "section": "Planting/propagation",
+   "region": "or-local",
+   "text": "Snap and lima beans, Brussels sprouts, cantaloupes, slicing and pickling cucumbers, dill, eggplant, kale, peppers, pumpkins, summer and winter squash, onions, potatoes, tomatoes and watermelon.",
+   "region_label": "Western valleys, Portland, Roseburg, Medford"
+  },
+  {
+   "id": "m05-10",
+   "section": "Planting/propagation",
+   "region": "or-local",
+   "text": "Snap and lima beans, beets, celery, sweet corn, slicing and pickling cucumbers, dill, kale, kohlrabi, onions, parsley, parsnips, peppers, white potatoes, pumpkins, summer and winter squash, and tomatoes.",
+   "region_label": "Lower elevations, eastern Oregon (dates vary widely)"
+  },
+  {
+   "id": "m05-11",
+   "section": "Planting/propagation",
+   "region": "or-local",
+   "text": "Direct seed carrots, corn (late May), chard, kohlrabi, and potatoes. Transplant Brussels sprouts, cauliflower, cucumbers (late May), leeks or peppers.",
+   "region_label": "Central Oregon and higher elevations of eastern Oregon"
+  },
+  {
+   "id": "m05-12",
+   "section": "Planting/propagation",
+   "region": "or-local",
+   "text": "Cantaloupes, dill, eggplant, kale, okra, peppers, sweet potatoes, tomatoes and watermelon.",
+   "region_label": "Columbia and Snake River valleys, Ontario"
+  },
+  {
+   "id": "m05-13",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If an unknown plant problem occurs, contact your local Master Gardener hotline or plant clinic for identification and future management options."
+  },
+  {
+   "id": "m05-14",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective."
+  },
+  {
+   "id": "m05-15",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Trap moles and gophers as new mounds appear."
+  },
+  {
+   "id": "m05-16",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Leafrolling worms may affect apples and blueberries. Prune off and destroy affected leaves."
+  },
+  {
+   "id": "m05-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor aphids on strawberries and ornamentals. If present, control options include washing off with water, hand removal, or using registered insecticides labeled for the problem plant. Read and follow all label directions prior to using insecticides. Promoting natural enemies (predators and parasitoids that eat or kill insects) is a longer-term solution for insect control in gardens."
+  },
+  {
+   "id": "m05-18",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spittle bugs may appear on ornamental plants as foam on stems. In most cases, they don't require management. If desired, wash off with water or use insecticidal soap as a contact spray. Read and follow label directions when using insecticides, including insecticidal soap."
+  },
+  {
+   "id": "m05-19",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control cabbage worms in cabbage and cauliflower, 12-spotted cucumber beetles in beans and lettuce, and maggots in radishes. Control can involve hand removal, placing barrier screen over newly planted rows, or spraying or dusting with registered pesticides, labeled for use on the problem plant. Read and follow label directions when using insecticides."
+  },
+  {
+   "id": "m05-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Tiny holes in foliage and shiny, black beetles on tomato, beets, radishes and potato indicate flea beetle attack. Treat with Neem, Bt or use nematodes for larvae. Read and follow label directions when using insecticides."
+  },
+  {
+   "id": "m05-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Prevent root maggots when planting cole crops (cabbage, broccoli, collards and kale) by covering with row covers or screens, or by applying appropriate insecticides."
+  },
+  {
+   "id": "m05-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor rhododendrons, azaleas, primroses and other broadleaf ornamentals for adult root weevils. Look for fresh evidence of feeding (notching at leaf edges). Try sticky trap products on plant trunks to trap adult weevils. Protect against damaging the bark by applying the sticky material on a 4-inch wide band of poly sheeting or burlap wrapped around the trunk. Mark plants now and manage with beneficial nematodes when soil temperatures are above 55 degrees. If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+  },
+  {
+   "id": "m05-23",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control slugs with bait or traps and by removing or mowing vegetation near garden plots."
+  },
+  {
+   "id": "m05-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor blueberry, raspberry, strawberry and other plants that produce soft fruits and berries for spotted wing drosophila (SWD). Learn how to monitor for SWD flies and larval infestations in fruit."
+  }
+ ]
+}

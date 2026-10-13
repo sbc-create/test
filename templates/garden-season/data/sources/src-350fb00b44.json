@@ -1,0 +1,155 @@
+{
+ "id": "src-350fb00b44",
+ "url": "https://extension.oregonstate.edu/catalog/em-9698-january-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:29Z",
+ "page_sha256": "f77e5f2c6538e0f0736fbd1055d9b9f6d46f72073efaacc4c4fc8fc98dcdb649",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "January garden calendar",
+ "month": 1,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "December 2020",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m01-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Plan to replace varieties of ornamental plants that are susceptible to disease with resistant cultivars in February."
+  },
+  {
+   "id": "m01-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Take hardwood cuttings of deciduous ornamental shrubs and trees for propagation."
+  },
+  {
+   "id": "m01-03",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Order a soil test to determine your garden's nutrient needs. Contact your local Extension office for a list of laboratories or view: Get actionable results from a soil, plant or environmental testing lab."
+  },
+  {
+   "id": "m01-04",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Begin planning this year’s vegetable garden in western Oregon and central Oregon vegetables. Check with local retail garden or nursery stores for seeds and seed catalogs."
+  },
+  {
+   "id": "m01-05",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Keep a garden journal. Consult your journal in the winter, so you can better plan for the growing season."
+  },
+  {
+   "id": "m01-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "To prevent winter damage from drying, water plants deeply every six to eight weeks, when the temperatures are above freezing.",
+   "region_label": "Central/Eastern Oregon"
+  },
+  {
+   "id": "m01-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Place windbreaks to protect sensitive landscape evergreens against cold, drying winds."
+  },
+  {
+   "id": "m01-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Reapply or redistribute mulch that has blown or washed away during winter."
+  },
+  {
+   "id": "m01-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Clean pruners and other small garden tools with rubbing alcohol."
+  },
+  {
+   "id": "m01-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Water landscape plants underneath wide eaves and in other sites shielded from rain.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m01-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Do not walk on lawns until frost has melted.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m01-12",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Scout cherry trees for signs and symptoms of bacterial canker. Remove infected branches with a clean pruner or saw. Sterilize tools before each new cut. Burn or send the branches to a landfill before bloom. See Managing Diseases and Insects in Home Orchards."
+  },
+  {
+   "id": "m01-13",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Watch for field mice damage on lower trunks of trees and shrubs. Eliminate hiding places by removing weeds. Use traps and approved baits as necessary."
+  },
+  {
+   "id": "m01-14",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Use dormant sprays of lime sulfur or copper fungicide on roses for general disease control, or plan to replace susceptible varieties with resistant cultivars in February."
+  },
+  {
+   "id": "m01-15",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Moss in lawn may mean too much shade or poor drainage. Modify site conditions if moss is bothersome.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m01-16",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray peach trees with approved fungicides to combat peach leaf curl and shothole. Or plant curl-resistant cultivars such as 'Frost', 'Q1-8' or 'Creswell'.",
+   "when": "Mid-January"
+  },
+  {
+   "id": "m01-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m01-18",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Monitor houseplants for correct water and fertilizer; guard against insect infestations; clean dust from leaves."
+  },
+  {
+   "id": "m01-19",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Protect sensitive plants such as weeping figs from cold drafts in the house."
+  },
+  {
+   "id": "m01-20",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Propagate split-leaf philodendrons and other leggy indoor plants by air-layering or vegetative cuttings."
+  },
+  {
+   "id": "m01-21",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Plant dwarf annual flowers such as coleus, impatiens and seedling geraniums inside as houseplants."
+  },
+  {
+   "id": "m01-22",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-west",
+   "text": "Gather branches of quince, forsythia and flowering cherries and bring them indoors to force an early bloom.",
+   "region_label": "Western Oregon"
+  }
+ ]
+}
