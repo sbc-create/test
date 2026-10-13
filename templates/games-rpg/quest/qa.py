@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import subprocess
 import time
 from pathlib import Path
@@ -13,7 +14,7 @@ from playwright.sync_api import sync_playwright
 from quest.site import Site
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8871"
+BASE = os.environ.get("QA_BASE", "http://127.0.0.1:8871").rstrip("/")  # чистая копия на другом порту
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 QUEST = "/baldurs-gate-3/kvesty/kvest-spasti-halsina/"
