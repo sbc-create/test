@@ -1,6 +1,6 @@
 {
- "commit_head": "595c7d6d866f37405aa914fe74eb11e1fac07951",
- "at": "2026-10-13T13:19:29Z",
+ "commit_head": "163ff51642b14a1e500a210dccbf6dbd4c634b1d",
+ "at": "2026-10-13T13:55:09Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -98,75 +98,75 @@
  },
  "perf_lab": {
   "mobile:mine": {
-   "lcp_ms": 216,
+   "lcp_ms": 164,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 52,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "mobile:plant": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "mobile:light": {
-   "lcp_ms": 72,
-   "cls": 0
-  },
-  "mobile:problem": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "mobile:empty-filter": {
-   "lcp_ms": 48,
-   "cls": 0
-  },
-  "mobile:diagnose": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "mobile:compare": {
-   "lcp_ms": 264,
-   "cls": 0
-  },
-  "desktop:mine": {
-   "lcp_ms": 120,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 84,
-   "cls": 0
-  },
-  "desktop:catalog": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "desktop:plant": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:light": {
-   "lcp_ms": 84,
-   "cls": 0
-  },
-  "desktop:problem": {
    "lcp_ms": 68,
    "cls": 0
   },
-  "desktop:empty-filter": {
+  "mobile:plant": {
+   "lcp_ms": 116,
+   "cls": 0
+  },
+  "mobile:light": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:problem": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "mobile:diagnose": {
+   "lcp_ms": 128,
+   "cls": 0
+  },
+  "mobile:compare": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:mine": {
+   "lcp_ms": 132,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:plant": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:light": {
    "lcp_ms": 60,
    "cls": 0
   },
+  "desktop:problem": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:empty-filter": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
   "desktop:diagnose": {
-   "lcp_ms": 84,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:compare": {
-   "lcp_ms": 92,
+   "lcp_ms": 88,
    "cls": 0
   }
  },
@@ -175,23 +175,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/595c7d6/mine-mobile.png",
-  "docs/screenshots/595c7d6/home-mobile.png",
-  "docs/screenshots/595c7d6/catalog-mobile.png",
-  "docs/screenshots/595c7d6/plant-mobile.png",
-  "docs/screenshots/595c7d6/light-mobile.png",
-  "docs/screenshots/595c7d6/problem-mobile.png",
-  "docs/screenshots/595c7d6/empty-filter-mobile.png",
-  "docs/screenshots/595c7d6/diagnose-mobile.png",
-  "docs/screenshots/595c7d6/compare-mobile.png",
-  "docs/screenshots/595c7d6/mine-desktop.png",
-  "docs/screenshots/595c7d6/home-desktop.png",
-  "docs/screenshots/595c7d6/catalog-desktop.png",
-  "docs/screenshots/595c7d6/plant-desktop.png",
-  "docs/screenshots/595c7d6/light-desktop.png",
-  "docs/screenshots/595c7d6/problem-desktop.png",
-  "docs/screenshots/595c7d6/empty-filter-desktop.png",
-  "docs/screenshots/595c7d6/diagnose-desktop.png",
-  "docs/screenshots/595c7d6/compare-desktop.png"
+  "docs/screenshots/163ff51/mine-mobile.png",
+  "docs/screenshots/163ff51/home-mobile.png",
+  "docs/screenshots/163ff51/catalog-mobile.png",
+  "docs/screenshots/163ff51/plant-mobile.png",
+  "docs/screenshots/163ff51/light-mobile.png",
+  "docs/screenshots/163ff51/problem-mobile.png",
+  "docs/screenshots/163ff51/empty-filter-mobile.png",
+  "docs/screenshots/163ff51/diagnose-mobile.png",
+  "docs/screenshots/163ff51/compare-mobile.png",
+  "docs/screenshots/163ff51/mine-desktop.png",
+  "docs/screenshots/163ff51/home-desktop.png",
+  "docs/screenshots/163ff51/catalog-desktop.png",
+  "docs/screenshots/163ff51/plant-desktop.png",
+  "docs/screenshots/163ff51/light-desktop.png",
+  "docs/screenshots/163ff51/problem-desktop.png",
+  "docs/screenshots/163ff51/empty-filter-desktop.png",
+  "docs/screenshots/163ff51/diagnose-desktop.png",
+  "docs/screenshots/163ff51/compare-desktop.png"
  ]
 }
