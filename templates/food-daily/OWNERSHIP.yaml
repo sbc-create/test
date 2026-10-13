@@ -1,7 +1,7 @@
 # Владение и границы записи шаблона food-daily (TEMPLATE-FOOD-DAILY-01).
 # Проверяется tests/test_isolation.py и командой `git diff --stat <base>..HEAD`.
 template: food-daily
-variant_id: party-list   # вариант C; A — classic-cards (8876), B — fridge-first (8863)
+variant_id: party-list   # вариант C; A — classic-cards (8847), B — fridge-first (8863)
 branch: claude/template-food-daily-c
 worktree: /home/claude/wt-template-food-daily-c
 base_commit: aab3470   # вариант A (claude/template-food-daily)
