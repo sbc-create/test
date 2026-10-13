@@ -39,7 +39,15 @@ trap 'echo "BACKUP STOPPED: сигнал; временные данные уби
 
 fail() { echo "BACKUP FAILED: $*" >&2; exit 1; }
 
-mkdir -p "$BACKUP_DIR" "$LOG_DIR" || fail "не удалось создать каталоги"
+# `--preflight-only` — только политика места, ни одной записи. Нужен, чтобы
+# владелец проверял ТЕ ЖЕ числа, которые возьмёт прогон: источники перечислены
+# ниже один раз, и повторять их в документе значило бы заводить второй список.
+PREFLIGHT_ONLY=0
+[ "${1:-}" = "--preflight-only" ] && PREFLIGHT_ONLY=1
+
+if [ "$PREFLIGHT_ONLY" = 0 ]; then
+  mkdir -p "$BACKUP_DIR" "$LOG_DIR" || fail "не удалось создать каталоги"
+fi
 
 ARCHIVE="$BACKUP_DIR/host-$STAMP.tar.gz"
 # The git bundle is a rolling mirror, not a dated copy: this repository's
@@ -109,6 +117,11 @@ AVAIL_KB="$(df -Pk "$WORK" | awk 'NR==2{print $4}')"
 bash "$(dirname "$0")/backup-preflight-space.sh" \
      "$SOURCES_KB" "${PREV_ARCHIVE_KB:-0}" "${PREV_BUNDLE_KB:-0}" "$AVAIL_KB" 0 \
   || fail "сбор не начинался: места не хватает на все этапы, предыдущие копии целы"
+
+if [ "$PREFLIGHT_ONLY" = 1 ]; then
+  echo "preflight-only: места достаточно; сбор НЕ начинался, ничего не записано"
+  exit 0
+fi
 
 collect() {
   local src="$1" dest="$2"
