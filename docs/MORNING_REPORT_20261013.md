@@ -185,7 +185,7 @@ zonafilm.cc      0,08 · 0,09 · 0,10 · 0,37 с      ← память итог�
 | № | операция | чем проверяется |
 | --- | --- | --- |
 | 0 | закрепление версии: `executor-update-plan.py --expect 06f74262107c` | 13 файлов к обновлению, 3 к добавлению, код 0 |
-| 1 | `systemctl restart site-factory-mcp.service` | `ActiveEnterTimestamp` позже 19:41:22Z |
+| 1 | `systemctl restart site-factory-mcp.service` | `ActiveEnterTimestamp` позже **17:42:04Z** — старта текущего процесса (pid 1499831) |
 | 2 | `install-cell-executor.sh` (сначала `--dry-run`) | план после установки: 0 к обновлению |
 | 3 | `nginx-shadow-configs.sh --fix` | `nginx -t` без `conflicting server name` |
 | 4 | установка `seo-tech-run.service`/`.timer` | непустой `NEXT` в `list-timers` |
