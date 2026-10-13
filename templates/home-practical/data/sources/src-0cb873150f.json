@@ -1,0 +1,30 @@
+{
+ "id": "src-0cb873150f",
+ "url": "https://www.ikea.com/gb/en/p/komplement-multi-use-hanger-white-60387211/",
+ "fetched_at": "2026-10-12T20:24:25Z",
+ "page_sha256": "bcc9b45d27eaee40e1de1fe0d3ecf0d9a70482bc132c99869761c636d8878517",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "KOMPLEMENT multi-use hanger, white",
+ "article": "603.872.11",
+ "measures": {
+  "Width": "32 cm",
+  "Height": "72 cm"
+ },
+ "good_to_know": [],
+ "safety": [],
+ "care": [
+  "Hand wash, cold (30°C).",
+  "Do not bleach.",
+  "Do not tumble dry.",
+  "Do not iron.",
+  "Line drying."
+ ],
+ "assembly_pdf": [],
+ "notes": [
+  "Helps you to keep your shawls, belts, ties and other accessories in order.",
+  "Takes as little room as a clothes-hanger, but can store at least 18 different accessories.",
+  "Can also be used in bathrooms and other damp areas indoors."
+ ]
+}

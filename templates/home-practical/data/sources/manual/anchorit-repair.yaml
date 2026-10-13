@@ -1,0 +1,29 @@
+# Цитаты выбраны вручную со страницы и при импорте сверяются с её текстом дословно.
+url: https://www.anchorit.gov/how-to-anchor/repair-tips/
+kind: organization
+publisher: U.S. Consumer Product Safety Commission (Anchor It!)
+name: "Anchor It! — Repair Tips"
+quotes:
+  - id: depends
+    quote: "What you'll need depends on the type of wall you anchored into"
+  - id: drywall-supplies
+    quote: "Pliers Spackle or joint compound A joint knife (1-4 inches wide, depending on personal preference) Fine grain sandpaper (anything from 150 to 220) Paint that matches the wall"
+    values: ["150", "220"]
+  - id: masonry-supplies
+    quote: "A wire brush Caulk Brick dust (if you want the color to match)"
+  - id: remove
+    quote: "Remove the anchor from the wall with a pair of pliers"
+  - id: scrape
+    quote: "Scrape away or sand down any bits sticking out of the hole"
+  - id: wipe
+    quote: "Prep the wall by wiping it with a damp cloth to get rid of any dust"
+  - id: fill
+    quote: "Fill the hole completely with the spackle"
+  - id: second-pass
+    quote: "If the hole is too deep to fill in one shot, fill as much as you can and then do a second pass to complete the rest"
+  - id: dry
+    quote: "Allow the spackle to dry for the length of time recommended on the tub"
+  - id: sand
+    quote: "use your sandpaper to make it as flush with the wall as you can without starting to create a dent"
+  - id: paint
+    quote: "if you can still see a difference in color or texture, apply a second layer of paint"

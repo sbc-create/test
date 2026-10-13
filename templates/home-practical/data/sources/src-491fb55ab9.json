@@ -1,0 +1,51 @@
+{
+ "id": "src-491fb55ab9",
+ "url": "https://www.anchorit.gov/",
+ "fetched_at": "2026-10-12T20:23:38Z",
+ "page_sha256": "22bfb8d2b31f4ca8a125cee7e3b262f866f527f927ecf6e68a813bd51aed9016",
+ "parser": "hp-facts/1.0",
+ "kind": "organization",
+ "publisher": "U.S. Consumer Product Safety Commission (Anchor It!)",
+ "name": "Anchor It! — How to anchor furniture and TVs",
+ "quotes": [
+  {
+   "id": "anchor-all",
+   "quote": "Anchoring all furniture with drawers, doors, and shelves to the wall prevents tip-over injuries and deaths"
+  },
+  {
+   "id": "need",
+   "quote": "Furniture/TV anchoring kit Drill and drill bit Screwdriver Stud finder"
+  },
+  {
+   "id": "step-1",
+   "quote": "ATTACH a bracket to the wall"
+  },
+  {
+   "id": "step-2",
+   "quote": "MOVE the furniture close to the wall"
+  },
+  {
+   "id": "step-3",
+   "quote": "ATTACH the other bracket/plate to your furniture or TV"
+  },
+  {
+   "id": "step-4",
+   "quote": "CONNECT the strap to both brackets"
+  },
+  {
+   "id": "step-5",
+   "quote": "TIGHTEN the strap and make sure it's secure"
+  },
+  {
+   "id": "tug",
+   "quote": "Tug on the straps to be confident everything is secure"
+  },
+  {
+   "id": "rule",
+   "quote": "Federal Rule to Prevent Furniture Tip-Over Injuries and Death; Effective September 1, 2023",
+   "values": [
+    "2023"
+   ]
+  }
+ ]
+}

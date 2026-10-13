@@ -1,0 +1,29 @@
+# Вход «от проблемы» — перенесено из варианта B. Формулировки — редакционные; инструкции — существующие материалы.
+# Проблема показывается, только если все её материалы опубликованы.
+problems:
+  - slug: mebel-mozhet-upast
+    title: "Мебель или полка может упасть"
+    symptom: "Высокий шкаф, комод или навесная полка стоят без крепления к стене."
+    materials: [zakrepit-komod-k-stene, zakrepit-knizhnyj-stellazh, povesit-nastennuyu-polku,
+                navesnoj-shkaf-s-dvercej, zerkalnyj-shkafchik-nad-rakovinoj, nastennaya-veshalka-v-prihozhej]
+  - slug: besporyadok-v-yashchikah
+    title: "В ящиках и шкафах беспорядок"
+    symptom: "Мелочи лежат вперемешку, нужное приходится искать."
+    materials: [razdelit-yashchik-komoda, aksessuary-na-odnoj-veshalke, tumba-s-yashchikami-pod-stol,
+                sezonnaya-obuv-v-korobkah, krupy-v-kontejnerah]
+  - slug: obuv-negde-hranit
+    title: "Обуви негде стоять"
+    symptom: "У двери копится обувь, сезонная занимает место в шкафу."
+    materials: [obuvnaya-polka-u-vhoda, sezonnaya-obuv-v-korobkah]
+  - slug: malo-mesta-na-polu
+    title: "На полу не хватает места"
+    symptom: "Вещи стоят на полу, потому что их некуда поставить."
+    materials: [povesit-nastennuyu-polku, nastennaya-veshalka-v-prihozhej, obuvnaya-polka-u-vhoda, tumba-s-yashchikami-pod-stol]
+  - slug: dyrki-v-stene
+    title: "В стене остались отверстия от крепежа"
+    symptom: "После переезда или перестановки на стене видны следы дюбелей."
+    materials: [zadelat-otverstiya-ot-krepezha]
+  - slug: vlazhnoe-pomeshchenie
+    title: "Хранить во влажном помещении"
+    symptom: "В ванной нужно место для вещей."
+    materials: [zerkalnyj-shkafchik-nad-rakovinoj, aksessuary-na-odnoj-veshalke]

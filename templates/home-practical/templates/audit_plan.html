@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Мой план</h1>
+{% if mats %}
+<p class="lead">{{ mats|length }} {{ plural(mats|length, 'инструкция', 'инструкции', 'инструкций') }} по итогам обхода. Отмечайте сделанное — отметки сохраняются в этом браузере. Ссылкой на эту страницу можно поделиться: выбор записан в адресе.</p>
+<p class="plan__progress" data-plan-progress aria-live="polite"></p>
+<p class="actions"><a class="btn btn--line" href="/obhod/{{ app.audit_rooms()[0] }}/?{% for s in picked %}m={{ s }}{% if not loop.last %}&amp;{% endif %}{% endfor %}">Изменить выбор</a> <button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
+{% for r, items in by_room %}
+<section class="plan-room" aria-labelledby="h-{{ r }}"><h2 id="h-{{ r }}">{{ ROOMS[r] }}</h2>
+  <ul class="plan-list">{% for mt in items %}<li><label class="plan-done"><input type="checkbox" data-done="{{ mt.slug }}" hidden><span class="sr">Сделано: {{ mt.title }}</span></label>
+    <div><a href="{{ mt.url }}"><b>{{ mt.title }}</b></a><span class="plan-meta">{{ mt.task_label }} · шагов: {{ mt.steps|length }}{% if mt.manufacturer %} · есть требования производителя{% endif %}</span></div></li>{% endfor %}</ul>
+</section>
+{% endfor %}
+<section class="plan-need" aria-labelledby="h-need"><h2 id="h-need">Что понадобится</h2>
+  <ul>{% for text, ms in need.items() %}<li>{{ text }} <small>— {{ ms|map(attribute='title')|join('; ') }}</small></li>{% endfor %}</ul>
+  <p class="note">Список собран из разделов «Что потребуется» отмеченных инструкций; совпадающие пункты объединены только при одинаковом тексте.</p></section>
+{% else %}
+<div class="empty" role="status"><h2>Пока ничего не отмечено</h2><p>Пройдите обход по комнатам — план соберётся из отмеченных ситуаций.</p>
+<p><a class="btn" href="/obhod/{{ app.audit_rooms()[0] }}/">Начать обход</a> <button type="button" class="btn btn--line" data-restore hidden>Открыть сохранённый выбор</button></p></div>
+{% endif %}
+{% endblock %}

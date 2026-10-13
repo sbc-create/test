@@ -1,0 +1,6 @@
+{
+  "name": "home-practical-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона home-practical (axe-core)",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<header class="room-head room-head--{{ room }}">
+  <img src="{{ asset('img/rooms/' ~ room ~ '.svg') }}" alt="" width="96" height="96">
+  <div><h1>{{ ROOMS[room] }}</h1><p class="lead">{{ ROOM_LEDE[room] }}</p></div>
+</header>
+<nav class="chips" aria-label="Задачи в помещении «{{ ROOMS[room] }}»">
+  <ul>
+    {% for k, v in TASKS.items() %}{% set n = site.filter(room, k)|length %}
+    <li>{% if n %}<a href="/zadachi/?pomeshchenie={{ room }}&amp;zadacha={{ k }}">{{ v }} <span>{{ n }}</span></a>{% else %}<span class="chips__off">{{ v }} <span>0</span></span>{% endif %}</li>
+    {% endfor %}
+  </ul>
+</nav>
+{{ grid(items, 'h2') }}
+{% endblock %}

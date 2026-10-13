@@ -1,0 +1,13 @@
+site_id: home-practical
+name: "Удобный дом"
+variant_id: home-audit           # вариант C: обход квартиры по комнатам → личный план с прогрессом
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8867"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8867}
+storage_namespace: "hp-audit"    # ключи localStorage только этого варианта
+ads: {adapter: disabled}
+analytics: {adapter: disabled}

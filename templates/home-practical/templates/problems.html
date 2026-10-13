@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Что мешает дома</h1>
+<p class="lead">Начните с того, что не так. Внутри — инструкции в порядке, в котором их удобно выполнять, у каждой — чек-лист.</p>
+<ol class="problems">
+  {% for p in site.problems.values() %}
+  <li><a href="/problemy/{{ p.slug }}/"><b>{{ p.title }}</b><span>{{ p.symptom }}</span><em>{{ p['items']|length }} {{ plural(p['items']|length, 'решение', 'решения', 'решений') }}</em></a></li>
+  {% endfor %}
+</ol>
+<p class="hint">Не знаете, с чего начать? <a href="/obhod/{{ app.audit_rooms()[0] }}/">Пройдите обход квартиры</a> — план соберётся по вашим ответам.</p>
+{% endblock %}

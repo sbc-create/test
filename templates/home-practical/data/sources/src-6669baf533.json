@@ -1,0 +1,31 @@
+{
+ "id": "src-6669baf533",
+ "url": "https://www.ikea.com/gb/en/p/enhet-mirror-cabinet-with-door-white-30623040/",
+ "fetched_at": "2026-10-12T20:24:16Z",
+ "page_sha256": "b890c8568e2fc2abe9165fbc3420815bf67468c409b39a2a09e0403c40037ea6",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "ENHET mirror cabinet with door, white, 40x17x75 cm",
+ "article": "306.230.40",
+ "measures": {
+  "Depth": "16.6 cm",
+  "Height": "75 cm",
+  "Width": "40 cm"
+ },
+ "good_to_know": [
+  "To be completed with a knob/handle that can be mounted on the backside of the door as you cannot drill in the mirrored glass. The door can also be used without a knob or handle.",
+  "Screws for connecting several wall cabinets included."
+ ],
+ "safety": [
+  "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe dry with a clean cloth.",
+  "Wipe clean with a soft cloth dampened in water and a mild non-abrasive washing-up detergent or soap, if necessary."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/enhet-mirror-cabinet-with-door-white__AA-2623388-3-100.pdf"
+ ],
+ "notes": []
+}

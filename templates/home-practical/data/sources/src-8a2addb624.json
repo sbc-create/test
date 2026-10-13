@@ -1,0 +1,26 @@
+{
+ "id": "src-8a2addb624",
+ "url": "https://www.ikea.com/gb/en/p/skadis-container-white-20320798/",
+ "fetched_at": "2026-10-12T20:24:22Z",
+ "page_sha256": "5ee7476c65d40e824a33ad4971775e58cbfbc7f469d7e414744873ee7db675aa",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "SKÅDIS container, white",
+ "article": "203.207.98",
+ "measures": {
+  "Width": "7.5 cm",
+  "Depth": "9 cm",
+  "Height": "8 cm"
+ },
+ "good_to_know": [
+  "Can also be used in bathrooms."
+ ],
+ "safety": [],
+ "care": [
+  "Wipe clean with a damp cloth.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [],
+ "notes": []
+}

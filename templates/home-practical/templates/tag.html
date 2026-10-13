@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ TAGS[tag] }}</h1>
+<p class="lead">Инструкции с тегом «{{ TAGS[tag] }}».</p>
+{{ grid(items, 'h2') }}
+{% endblock %}

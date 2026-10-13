@@ -1,0 +1,9 @@
+# Настройки ruff только для шаблона home-practical; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"udobdom/qa.py" = ["E501"]
+"udobdom/server.py" = ["E501"]
+"udobdom/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

@@ -1,0 +1,11 @@
+# Хосты home-practical. Запрос возможен только к хосту, который есть и здесь,
+# и в inventory/network-allowlist.yaml (GET).
+sources:
+  - host: www.ikea.com
+    role: [reference, manufacturer_docs]
+  - host: www.cpsc.gov
+    role: [organization]
+  - host: www.anchorit.gov
+    role: [organization]
+  - host: www.ivd.ru
+    role: [reference]

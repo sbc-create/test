@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block main %}
+<nav class="steps-bar" aria-label="Этапы обхода"><ol>{% for r in rooms %}<li{% if r == room %} aria-current="step"{% endif %}><a href="/obhod/{{ r }}/{% if picked %}?{% for s in picked %}m={{ s }}{% if not loop.last %}&amp;{% endif %}{% endfor %}{% endif %}">{{ loop.index }}<span class="sr"> — {{ ROOMS[r] }}</span></a></li>{% endfor %}</ol></nav>
+<p class="kicker">Шаг {{ n }} из {{ total }}</p>
+<h1>{{ ROOMS[room] }}: что из этого про ваш дом?</h1>
+<p class="lead">Отметьте ситуации, которые у вас есть. Текст — условие применимости из инструкции; подробности откроются по ссылке.</p>
+<form class="audit" method="get" action="{{ '/obhod/' ~ nxt ~ '/' if nxt else '/obhod/plan/' }}" data-audit="{{ room }}">
+  {% for s in picked %}{% if site.by_slug[s].room != room %}<input type="hidden" name="m" value="{{ s }}">{% endif %}{% endfor %}
+  <ul class="qs">{% for mt in items %}
+    <li class="q"><label class="q__pick"><input type="checkbox" name="m" value="{{ mt.slug }}"{% if mt.slug in picked %} checked{% endif %}><span><b>{{ mt.title }}</b><span class="q__applies">{{ mt.applies }}</span></span></label>
+      <a class="q__more" href="{{ mt.url }}">Инструкция</a></li>
+  {% endfor %}</ul>
+  <div class="audit__go">
+    {% if prev %}<a class="btn btn--line" href="/obhod/{{ prev }}/{% if picked %}?{% for s in picked %}m={{ s }}{% if not loop.last %}&amp;{% endif %}{% endfor %}{% endif %}">Назад: {{ ROOMS[prev] }}</a>{% endif %}
+    <button type="submit" class="btn">{% if nxt %}Дальше: {{ ROOMS[nxt] }}{% else %}Показать мой план{% endif %}</button>
+    <p class="audit__count" data-audit-count aria-live="polite">{% if picked %}Отмечено всего: {{ picked|length }}{% endif %}</p>
+  </div>
+</form>
+{% endblock %}
