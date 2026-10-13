@@ -405,7 +405,8 @@
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4 — BreadcrumbList из видимых крошек; задание пользователя п.3 (крошки, внутренние ссылки)",
       "expected": "тайтл: Главная / Аниме (каталог) / Название — свои классы ag-, стиль AnimeGo; BreadcrumbList на тайтле; проверки геометрии (checks/geometry.js) и boundaries зелёные",
       "check": "bash checks/run.sh (visible-breadcrumbs, boundaries, geometry)",
-      "status": "queued"
+      "status": "done",
+      "evidence": "Дубль T003 (an1mego, verified — ветка ждёт просмотра человеком: видимое изменение интерфейса) и T004/T005 (animeg0, an1meg0, queued). Новая задача не нужна; заведена 12.10 по ошибке — очередь не была перечитана перед добавлением."
     },
     {
       "id": "B017",
