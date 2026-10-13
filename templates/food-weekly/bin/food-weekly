@@ -20,6 +20,7 @@ case "${1:-help}" in
   stop) if alive; then kill "$(cat "$PIDFILE")"; echo "остановлен"; else echo "не запущен"; fi; rm -f "$PIDFILE" ;;
   restart) bash "$HERE/bin/food-weekly" stop; bash "$HERE/bin/food-weekly" start ;;
   status) if alive; then echo "работает, pid $(cat "$PIDFILE")"; health; else echo "не запущен"; exit 3; fi ;;
+  kit) shift; exec python3 -m weekplan.kit "$@" ;;   # комплект переноса: build --out <каталог> | verify-db
   test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" --basetemp "$REPO/var/food-weekly/pytest" "$HERE/tests" "$@" ;;
   *) echo "команды: catalog audit build start stop restart status test" ;;
 esac
