@@ -91,10 +91,28 @@ def путь_сценария(команда: str) -> tuple[Path | None, str]:
     return None, способ
 
 
+def файлы_установки(команда: str) -> list[Path]:
+    """Источники команды `install`: всё, кроме каталога назначения и ключей.
+
+    Нужно отдельно: у `install` нет исполняемого сценария, и первая версия
+    проверки такие строки пропускала молча — а это ровно те файлы, которых
+    может не быть («install -m 0644 … unit /etc/systemd/system/»).
+    """
+    части = команда.split()
+    if "install" not in части:
+        return []
+    кандидаты = [Path(ч) for ч in части
+                 if ч.startswith("/") and not ч.startswith("/etc/")]
+    return [п for п in кандидаты if п.suffix]
+
+
 def проверить(док: Path) -> list[str]:
     беды: list[str] = []
     известные = site_id_ы()
     for команда in блоки(док.read_text(encoding="utf-8")):
+        for источник in файлы_установки(команда):
+            if not источник.is_file():
+                беды.append(f"install: источника НЕТ: {источник} ← {команда[:80]}")
         путь, способ = путь_сценария(команда)
         коротко = команда[:88]
         if путь is None:

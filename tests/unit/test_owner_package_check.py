@@ -104,3 +104,34 @@ def test_ловит_отсутствие_заготовки_nginx(tmp_path):
     д = _документ(tmp_path, f"sudo bash {сценарий} --site lords-10")
     беды = м.проверить(д)
     assert any("нет заготовки" in б for б in беды), беды
+
+
+def test_ловит_отсутствующий_источник_install(tmp_path):
+    """У `install` нет сценария, и первая версия проверки такие строки пропускала.
+
+    А это ровно те файлы, которых может не быть: юниты, которые владелец
+    ставит в /etc/systemd/system.
+    """
+    м = _модуль()
+    д = _документ(tmp_path, "sudo install -m 0644 -o root -g root "
+                            "/home/claude/нет-такого/unit.service /etc/systemd/system/")
+    беды = м.проверить(д)
+    assert any("install: источника НЕТ" in б for б in беды), беды
+
+
+def test_существующий_источник_install_проходит(tmp_path):
+    м = _модуль()
+    юнит = tmp_path / "seo-tech-run.service"
+    юнит.write_text("[Service]\n", encoding="utf-8")
+    д = _документ(tmp_path, f"sudo install -m 0644 -o root -g root {юнит} "
+                            "/etc/systemd/system/")
+    assert м.проверить(д) == []
+
+
+def test_вечерний_блок_проходит_проверку():
+    """Второй документ пакета — та же планка, что и у основного."""
+    м = _модуль()
+    блок = КОРЕНЬ / "docs" / "OWNER_BLOCK_20261013_EVENING.md"
+    assert блок.is_file(), "вечернего блока команд нет"
+    беды = м.проверить(блок)
+    assert беды == [], "\n".join(беды)
