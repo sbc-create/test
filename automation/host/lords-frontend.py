@@ -4184,17 +4184,9 @@ class Вид:
         профиль = str(ПРОФИЛЬ or "")
 
         кандидаты: list[tuple[int, str, str, dict]] = []
-        for сосед in self.д.items:
-            slug = сосед.get("slug")
-            if not slug or slug == текущий:
+        for slug, чужие_жанры, чужие_страны, сосед in _признаки_соседей(self):
+            if slug == текущий:
                 continue
-            д = self.п.get(slug) if self.п else {}
-            чужие_жанры = set(д.get("genre_codes") or [])
-            if not чужие_жанры and д.get("genres"):
-                чужие_жанры = {нормализовать(транслит(г)) for г in д["genres"] if г}
-                чужие_жанры.discard("")
-            чужие_страны = {нормализовать(транслит(с)) for с in (д.get("countries") or []) if с}
-            чужие_страны.discard("")
             балл = 0
             причины = []
             overlap = свои_жанры & чужие_жанры
@@ -4633,6 +4625,37 @@ def различимое_название(имя: str, запись: dict, де�
     if оригинал and оригинал.lower() != н:
         return f"{имя} ({оригинал}, {год})"
     return f"{имя} ({год})"
+
+
+#: Признаки соседей для похожих — один раз на снимок (apply-similar-features)
+_ПРИЗНАКИ_СОСЕДЕЙ: dict = {}
+
+
+def _признаки_соседей(вид) -> list:
+    """(slug, жанры, страны, запись) в порядке каталога — как строил прежний цикл."""
+    import time
+    ключ = tuple((id(о), getattr(о, "mtime", None), getattr(о, "revision", None))
+                 for о in (вид.д, вид.п))
+    сейчас = time.monotonic()
+    готово = _ПРИЗНАКИ_СОСЕДЕЙ.get(ключ)
+    if готово is not None and сейчас - готово[0] < 1800.0:
+        return готово[1]
+    признаки = []
+    for сосед in вид.д.items:
+        slug = сосед.get("slug")
+        if not slug:
+            continue
+        д = вид.п.get(slug) if вид.п else {}
+        чужие_жанры = set(д.get("genre_codes") or [])
+        if not чужие_жанры and д.get("genres"):
+            чужие_жанры = {нормализовать(транслит(г)) for г in д["genres"] if г}
+            чужие_жанры.discard("")
+        чужие_страны = {нормализовать(транслит(с)) for с in (д.get("countries") or []) if с}
+        чужие_страны.discard("")
+        признаки.append((slug, frozenset(чужие_жанры), frozenset(чужие_страны), сосед))
+    _ПРИЗНАКИ_СОСЕДЕЙ.clear()
+    _ПРИЗНАКИ_СОСЕДЕЙ[ключ] = (сейчас, признаки)
+    return признаки
 
 
 def запрос_строкой(выбрано: dict, **замена) -> str:
