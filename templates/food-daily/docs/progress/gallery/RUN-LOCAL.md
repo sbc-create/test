@@ -70,6 +70,46 @@ python3 -m http.server 8877 --bind 127.0.0.1 \
 переходы из карточек и таблицы основных вариантов в Chromium, 320/390/768/1440 × светлая/тёмная тема, axe-core.
 Последний результат — `click-result.json` (переходы) и `check-result.json` (ширины, темы, axe).
 
+## 4. Чистая копия рядом с действующим превью (свободный порт)
+
+Так проверяется, что сайт собирается и работает из одного git, без накопленных `var/` и `node_modules`.
+Действующее превью не останавливается: чистая копия слушает другой порт (у сервера есть `--port`,
+у приёмки — переменная `QA_BASE`; конфигурация не правится).
+
+```bash
+git worktree add --detach /tmp/clean/wt-template-<сайт>-<буква> claude/template-<сайт>-<буква>
+cd /tmp/clean/wt-template-<сайт>-<буква>/templates/<сайт>
+(cd qa && npm ci --no-audit --no-fund)          # axe-core 4.13.0 по package-lock.json
+bash bin/<сайт> test
+python3 -m <пакет>.server --port 89NN &          # та же команда, что в bin/<сайт> start, плюс --port
+QA_BASE=http://127.0.0.1:89NN python3 -m <модуль приёмки> --shots /tmp/clean/shots --out /tmp/clean/qa.json
+python3 qa/viewports.py 89NN <доп. адреса>
+kill %1                                          # остановить сервер чистой копии
+git worktree remove /tmp/clean/wt-template-<сайт>-<буква>   # когда копия больше не нужна
+```
+
+| сайт | пакет сервера | модуль приёмки | порт чистой копии |
+| --- | --- | --- | --- |
+| food-daily C | `fooddaily` | `fooddaily.qa_browser` | 8901 |
+| food-baking B | `bakebook` | `bakebook.qa` | 8902 |
+| food-weekly C | `weekplan` | `weekplan.qa` | 8903 |
+| food-appliances B | `techkitchen` | `techkitchen.qa` | 8904 |
+| home-practical C | `udobdom` | `udobdom.qa` | 8905 |
+| garden-season C | `sezon` | `sezon.qa` | 8906 |
+| plants-home C | `flora` | `flora.qa` | 8907 |
+| games-story C | `saga` | `saga.qa` | 8908 |
+| games-rpg C | `quest` | `quest.qa` | 8909 |
+| games-survival C | `craft` | `craft.qa` | 8910 |
+
+Чего нет в чистой копии и что из этого следует:
+- `qa/node_modules` — ставится `npm ci` (выше).
+- `var/<сайт>/private` — закрытые снимки источников (сырой текст страниц, не в git: права и срок хранения).
+  Публичный сайт без них работает полностью; тесты сверки черновиков food-baking (3) и food-appliances (1)
+  в чистой копии — SKIPPED с причиной «нет закрытых снимков источников», т. е. **не выполнялись**.
+- food-daily: БД пайплайна (`var/food-daily/preview/*.sqlite3`) не нужна — сайт читает `data/content-snapshot.json`;
+  редактор `/redaktor/` без секрета отвечает 401 с запросом Basic Auth (проверено: `FOOD_DAILY_C_EDITOR_SECRET`
+  на несуществующий файл, чистая копия на 8901); секрет создаётся вне репозитория, см. выше.
+
 ## Проверено 13.10.2026
 
 - Шаг 1 на чистой копии: `git worktree add --detach <scratchpad>/wt-template-food-weekly-c origin/claude/template-food-weekly-c` → exit 0;
@@ -77,3 +117,9 @@ python3 -m http.server 8877 --bind 127.0.0.1 \
   Превью из неё не запускалось: порт 8873 занят рабочим превью той же ветки.
 - Шаги 2–3: все 10 основных превью запущены штатным `bin/<сайт>`, галерея — `http.server` на 127.0.0.1;
   переходы из галереи — `click-result.json`.
+- Шаг 4 для всех 10 сайтов (13.10.2026, порты 8901–8910, действующие превью 8864–8876 продолжали отвечать):
+  `npm ci` exit 0; запуск штатной командой с `--port` — `/healthz` за 0,25 с; главная 200 со своим variant-id;
+  обход sitemap и всех `/static/` ресурсов — 0 ошибок; полная браузерная приёмка через `QA_BASE` — exit 0,
+  провалов 0, axe 0; ширины 320/390/768/1440 — 0 замечаний; сервер остановлен. Тесты: 8 сайтов — все passed;
+  food-baking и food-appliances на первом прогоне упали (3 и 1 тест: нет `var/.../private`), после пометки —
+  28 passed + 3 skipped и 20 passed + 1 skipped. Итоги по сайтам — `clean-result.json` рядом.

@@ -98,3 +98,16 @@ CI main с тех пор красный, поэтому каждая ветка 
 Дубликат PR не создан, чтобы не тратить CI и не плодить конкурирующие правки shared core.
 Остаётся одно действие владельца: слить #71 в main; после этого ветки вариантов станут зелёными
 после обновления от main (shared-файлы в них совпадают с main a7f7cb6).
+
+## Повторная проверка PR #71 (13.10.2026, вечер)
+
+| что | команда | результат |
+| --- | --- | --- |
+| состояние | `gh pr view 71 --json state,isDraft,mergeable,mergeStateStatus,baseRefName,headRefOid,statusCheckRollup` | OPEN, не черновик, MERGEABLE, CLEAN; head 98f373d; CI «Verify (schemas, lint, tests)» — SUCCESS (2026-09-15) |
+| свежесть | `git merge-base --is-ancestor origin/main origin/claude/lint-green-trunk` | exit 0 — main (a7f7cb6) не уходил вперёд, обновлять ветку PR не нужно |
+| объём | `git diff --stat origin/main origin/claude/lint-green-trunk` | 15 файлов, +16/−34 — те же файлы, что в этом разборе |
+| суть правок | просмотр diff | только lint: сортировка импортов, `collections.abc`, удалены неиспользуемые `import pytest`/`import sys`, `l` → `line`/`raw`, `%` → f-string; поведение тестов не меняется |
+| ruff на голове PR | `ruff check .` (0.6.9, снимок 98f373d) | exit 0 |
+
+Вывод: #71 — нужное исправление, дубликат не нужен. Слияние в main не выполнялось (ждёт решения владельца).
+

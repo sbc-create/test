@@ -12,6 +12,12 @@
 
 | файл | sha256 |
 | --- | --- |
-| `build_gallery.py` | `892fe6029d27b72b40ed9ee48da30bbe60deeeb34423c21734502ae9b5ab532c` |
+| `build_gallery.py` | `d8ee87636fc41d012615115b11224649fab6fc984f161d963fc41515ccd6225f` |
 | `check_gallery.py` | `b05283386b32e803380cd99586bf1914e5c408f75cd547f5ece7a01268139c59` |
 | `click_check.py` | `69a9e62000dfc64d857c6d37a51298a4360852e7e4430589ec8625a5206512ee` |
+| `clean_check.py` | `0f59026933acd91866d77f64943e1023e9aa629bbf108eaf5588a7585d9cf662` |
+| `content_audit.py` | `8f7abc349268d63044f3bd1d9437f6132d0ad3bfb7cfaa39b9d65d6422237449` |
+| `latin_check.py` | `119ded9ce1132ab242cbfbfa77a7a22076e8f060c8bcb572a4183097e41dfff3` |
+
+`remaining.json` — оставшиеся недостатки по сайтам (раздел «Что осталось»), `clean-result.json` — чистые копии
+10 основных вариантов на портах 8901–8910 (см. `RUN-LOCAL.md`, шаг 4).
