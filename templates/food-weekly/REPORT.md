@@ -60,3 +60,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–636 м�
 | `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 2ffc38f |
 
 Лабораторный LCP (loopback, без троттлинга) — до 208 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на f27012b (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Контент: описания двух планов приведены к составу, тест tests/test_plan_descriptions.py.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-weekly test` | 0 | 25 passed in 0.74s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m weekplan.qa --shots docs/screenshots/f27012b --out docs/verification-browser-qa.json` | 0 | 35 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8873 '/menyu/bystraya-nedelya-dlya-dvoih/pokupki/?s=d1-breakfast-0:lenivye-vareniki' '/svoya-nedelya/?d1-breakfast=lenivye-vareniki&lyudi=4' '/svoya-nedelya/?lyudi=50' /nesushchestvuet/` | 0 | 39 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-weekly build --commit HEAD` | 0 | собрано из f27012b |
+
+Лабораторный LCP (loopback, без троттлинга) — до 144 мс. Карта действий — `docs/ACTION-MAP.md`.
