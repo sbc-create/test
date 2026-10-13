@@ -19,7 +19,10 @@
   снимке нет, и выдумывать их нельзя;
 * источник видео — ПУСТОЙ список с причиной. Прямых ссылок на поток у фабрики
   нет: витрина подключает web-компонент провайдера, который сам поднимает
-  внутренний кадр и запрашивает поток. См. `docs/APP_READ_API.md`.
+  внутренний кадр и запрашивает поток. См. `docs/APP_READ_API.md`;
+* «где смотреть» — только ПОДТВЕРЖДЁННЫЕ предложения официальных сервисов из
+  отдельного хранилища `<site>-offers.json`. Пока одобренного источника таких
+  сведений нет, файла нет, и ответ — `status: unknown`, а не «нигде нет».
 
 Память. Снимок подробностей — десятки мегабайт, и разбор его целиком стоит
 гигабайт. Поэтому при старте строится УЗКИЙ указатель: только поля, которые
@@ -28,6 +31,7 @@
 from __future__ import annotations
 
 import argparse
+import datetime
 import gc
 import hmac
 import json
@@ -42,6 +46,13 @@ from urllib.parse import parse_qs, unquote, urlparse
 ПРЕДЕЛ_СТРАНИЦЫ = 50
 ПРЕДЕЛ_ЗАПРОСОВ_В_МИНУТУ = 120
 КИРИЛЛИЦА = re.compile(r"[А-Яа-яЁё]")
+# «Где смотреть»: сведения старше этого — «устарели» (тот же порог у клиента).
+СВЕЖЕСТЬ_ПРЕДЛОЖЕНИЯ_СЕК = 30 * 24 * 3600
+ВИДЫ_ПРЕДЛОЖЕНИЙ = {"SUBSCRIPTION", "PURCHASE", "RENTAL", "FREE"}
+РЕГИОН = re.compile(r"[A-Z]{2}")
+# Ссылка на поиск или главную сервиса — не доказательство, что произведение там есть.
+ПУТЬ_ПОИСКА = re.compile(r"(^|/)(search|poisk|find|results)(/|$)", re.IGNORECASE)
+ЗАПРОС_ПОИСКА = re.compile(r"(^|&)(q|query|text|search|s|kp_query)=", re.IGNORECASE)
 
 
 def _нормализовать(с: str) -> str:
@@ -167,9 +178,131 @@ class Каталог:
                 for н in range(1, нужный["eps"] + 1)]
 
 
+class ХранилищеПредложений:
+    """Подтверждённые предложения «где смотреть» — отдельно от снимка каталога.
+
+    Файл `<site>-offers.json` пишет одобренный источник сведений (фид партнёра,
+    проверка редакции), служба его только читает и перечитывает при изменении.
+    Форма: `{"source": {"id","name"}, "generatedAt", "offers": [WatchOffer…]}`.
+
+    Три состояния различаются и не сливаются:
+
+    * файла нет — источника сведений нет: `status: unknown` (ни «нигде нет»,
+      ни ошибка);
+    * файл есть, но не читается или не той формы — ОШИБКА службы (503): клиент
+      видит «не удалось загрузить» и повторяет, а не «данных нет»;
+    * файл есть — каждая запись проверяется, неполные и ссылки на поиск
+      отбрасываются, старше порога — в `staleOffers`, не в `offers`.
+    """
+
+    def __init__(self, путь: pathlib.Path) -> None:
+        self.путь = путь
+        self._метка: tuple[int, int] | None = None
+        self._данные: dict | None = None
+        self._ошибка: str | None = None
+
+    def снимок(self) -> tuple[dict | None, str | None]:
+        """(данные, ошибка); оба None — хранилища нет."""
+        try:
+            ст = self.путь.stat()
+        except FileNotFoundError:
+            self._метка, self._данные, self._ошибка = None, None, None
+            return None, None
+        except OSError as ош:
+            return None, f"хранилище предложений недоступно: {type(ош).__name__}"
+        метка = (ст.st_mtime_ns, ст.st_size)
+        if метка != self._метка:
+            self._метка = метка
+            try:
+                данные = json.loads(self.путь.read_text(encoding="utf-8"))
+                if not isinstance(данные, dict) or not isinstance(данные.get("offers"), list):
+                    raise ValueError("нет списка offers")
+                self._данные, self._ошибка = данные, None
+            except (OSError, ValueError) as ош:
+                self._данные, self._ошибка = None, f"хранилище предложений не читается: {ош}"
+        return self._данные, self._ошибка
+
+
+def _ссылка_на_поиск(url: str) -> bool:
+    разбор = urlparse(url)
+    путь = разбор.path or ""
+    if путь in ("", "/"):
+        return True
+    return bool(ПУТЬ_ПОИСКА.search(путь) or ЗАПРОС_ПОИСКА.search(разбор.query or ""))
+
+
+def _момент(значение) -> float | None:
+    if not isinstance(значение, str) or not значение:
+        return None
+    try:
+        return datetime.datetime.fromisoformat(значение.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+
+def проверить_предложение(з: dict, ид: str, сейчас: float) -> tuple[dict | None, str | None]:
+    """(предложение наружу, причина отказа). Обязательны все поля контракта."""
+    if not isinstance(з, dict) or з.get("contentId") != ид:
+        return None, "другое произведение"
+    for поле in ("serviceId", "serviceName", "url", "source", "checkedAt", "region"):
+        if not isinstance(з.get(поле), str) or not з[поле].strip():
+            return None, f"нет поля {поле}"
+    if not РЕГИОН.fullmatch(з["region"]):
+        return None, "регион не ISO 3166-1 alpha-2"
+    if not з["url"].startswith("https://") or _ссылка_на_поиск(з["url"]):
+        return None, "не официальная https-страница произведения"
+    момент = _момент(з["checkedAt"])
+    if момент is None or момент > сейчас + 24 * 3600:
+        return None, "время проверки не читается или в будущем"
+    вид = з.get("kind")
+    наружу = {
+        "contentId": ид, "serviceId": з["serviceId"], "serviceName": з["serviceName"],
+        "region": з["region"], "url": з["url"],
+        # Условия — только подтверждённые; неизвестный вид не превращается в «бесплатно».
+        "kind": вид if вид in ВИДЫ_ПРЕДЛОЖЕНИЙ else None,
+        "source": з["source"], "checkedAt": з["checkedAt"],
+    }
+    if isinstance(з.get("androidPackage"), str) and з["androidPackage"]:
+        наружу["androidPackage"] = з["androidPackage"]
+    return наружу, None
+
+
+def ответ_предложений(данные: dict | None, ид: str, регион: str, сейчас: float) -> dict:
+    """Тело ответа `titles/{id}/offers` по содержимому хранилища (без ошибки)."""
+    if данные is None:
+        return {"contentId": ид, "region": регион, "status": "unknown",
+                "reason": "NO_AVAILABILITY_SOURCE",
+                "offers": [], "staleOffers": [], "source": None, "checkedAt": None}
+    свежие, старые, отброшено = [], [], 0
+    for з in данные.get("offers") or []:
+        if not isinstance(з, dict) or з.get("contentId") != ид:
+            continue
+        п, причина = проверить_предложение(з, ид, сейчас)
+        if п is None:
+            отброшено += 1
+            continue
+        (старые if сейчас - _момент(п["checkedAt"]) > СВЕЖЕСТЬ_ПРЕДЛОЖЕНИЯ_СЕК else свежие).append(п)
+    в_регионе = [п for п in свежие if п["region"] == регион]
+    if в_регионе:
+        статус = "confirmed"
+    elif свежие:
+        статус = "other_region"
+    elif старые:
+        статус = "stale"
+    else:
+        статус = "unknown"
+    источник = данные.get("source") if isinstance(данные.get("source"), dict) else None
+    return {"contentId": ид, "region": регион, "status": статус,
+            "reason": None if статус != "unknown" else "NO_CONFIRMED_OFFERS",
+            "offers": свежие, "staleOffers": старые,
+            "source": {"id": источник.get("id"), "name": источник.get("name")} if источник else None,
+            "checkedAt": данные.get("generatedAt"), "dropped": отброшено}
+
+
 class Обработчик(BaseHTTPRequestHandler):
     server_version = ВЕРСИЯ
     каталог: Каталог
+    предложения: ХранилищеПредложений | None = None
     ключ: str = ""
     счётчик: dict = {}
 
@@ -407,6 +540,23 @@ class Обработчик(BaseHTTPRequestHandler):
                                    "компонентом. Нативному плееру это не подходит"),
                           "providerRefs": провайдеры}})
 
+        # «Где смотреть». Отдельное хранилище подтверждённых сведений, не снимок
+        # каталога: наличие фильма в сервисе — утверждение о третьей стороне, и
+        # без одобренного источника оно не делается. `unknown` — честное «мы не
+        # знаем», а не «нигде нет»; ошибка хранилища — 503, а не пустой список.
+        м = re.fullmatch(r"/api/app/v1/titles/([^/]+)/offers", путь)
+        if м:
+            ид = м.group(1)
+            if ид not in self.каталог.по_ид:
+                return self._отказ(404, "not_found", "тайтла нет в снимке")
+            регион = (параметры.get("region") or [""])[0].strip().upper()
+            if not РЕГИОН.fullmatch(регион):
+                return self._отказ(400, "bad_request", "region обязателен: ISO 3166-1 alpha-2, например RU")
+            данные, ошибка = (self.предложения.снимок() if self.предложения else (None, None))
+            if ошибка:
+                return self._отказ(503, "offers_unavailable", ошибка, {"Retry-After": "60"})
+            return self._ответ(200, ответ_предложений(данные, ид, регион, time.time()))
+
         return self._отказ(404, "not_found", "нет такого маршрута")
 
 
@@ -419,6 +569,7 @@ def главное(argv=None) -> int:
     ap.add_argument("--key-file", type=pathlib.Path, default=None)
     a = ap.parse_args(argv)
     Обработчик.каталог = Каталог(a.site, a.data_dir)
+    Обработчик.предложения = ХранилищеПредложений(a.data_dir / f"{a.site}-offers.json")
     if a.key_file and a.key_file.is_file():
         Обработчик.ключ = a.key_file.read_text(encoding="utf-8").strip()
     rss = 0
