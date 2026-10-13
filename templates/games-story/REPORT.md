@@ -46,3 +46,17 @@ Meta description глав ≤160 символов: целые предложен
 | `bash bin/games-story build --commit HEAD` | 0 | собрано из 8664df8 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 128 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 3174e66 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Идея из B: общий счётчик на главной — клубники (число из источника главы при отметке «все клубники собраны»), стороны, главы целиком — по отметкам чек-листов глав. Прогон на 8a1fc82 дал FAIL video_external_request_only_after_click: проверка шла сразу после нажатия, а iframe с loading=lazy запрашивает не мгновенно (на прошлом прогоне прошло). В 3174e66 приёмка ждёт запрос до 3 с; условие (запрос есть и только к youtube-nocookie.com) не ослаблено.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 18 passed in 0.67s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m saga.qa --shots docs/screenshots/3174e66 --out docs/verification-browser-qa.json` | 0 | 34 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8870 '/igra/celeste/gde-ya/?q=mess' '/igra/celeste/gde-ya/?q=zzzz' /nesushchestvuet/` | 0 | 29 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-story build --commit HEAD` | 0 | собрано из 3174e66 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 176 мс. Карта действий — `docs/ACTION-MAP.md`.

@@ -1,6 +1,6 @@
 {
- "commit_head": "8a1fc82e1a57803d6ca774a9adee528df22815b4",
- "at": "2026-10-13T13:22:11Z",
+ "commit_head": "3174e66238f4fbf9646cbb03485e6edcb667cc81",
+ "at": "2026-10-13T13:23:25Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -19,7 +19,7 @@
   "toc_jumps": true,
   "video_no_iframe_before_click": true,
   "video_iframe_after_click": true,
-  "video_external_request_only_after_click": false,
+  "video_external_request_only_after_click": true,
   "print_button_calls_print": true,
   "print_hides_navigation": true,
   "search_keyboard_results": 9,
@@ -74,67 +74,67 @@
  },
  "perf_lab": {
   "mobile:where": {
-   "lcp_ms": 132,
+   "lcp_ms": 176,
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:home": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:game": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:guide": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "mobile:collectibles": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:videos": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "mobile:farewell": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "desktop:where": {
-   "lcp_ms": 124,
-   "cls": 0
-  },
-  "desktop:character": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 108,
-   "cls": 0
-  },
-  "desktop:game": {
-   "lcp_ms": 84,
-   "cls": 0
-  },
-  "desktop:guide": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "desktop:collectibles": {
    "lcp_ms": 60,
    "cls": 0
   },
-  "desktop:videos": {
+  "mobile:home": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "mobile:guide": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "mobile:collectibles": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:videos": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "mobile:farewell": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "desktop:where": {
+   "lcp_ms": 112,
+   "cls": 0
+  },
+  "desktop:character": {
    "lcp_ms": 56,
    "cls": 0
   },
-  "desktop:farewell": {
+  "desktop:home": {
    "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:guide": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:collectibles": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:videos": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "desktop:farewell": {
+   "lcp_ms": 60,
    "cls": 0
   }
  },
@@ -143,21 +143,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8870/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/8a1fc82/where-mobile.png",
-  "docs/screenshots/8a1fc82/character-mobile.png",
-  "docs/screenshots/8a1fc82/home-mobile.png",
-  "docs/screenshots/8a1fc82/game-mobile.png",
-  "docs/screenshots/8a1fc82/guide-mobile.png",
-  "docs/screenshots/8a1fc82/collectibles-mobile.png",
-  "docs/screenshots/8a1fc82/videos-mobile.png",
-  "docs/screenshots/8a1fc82/farewell-mobile.png",
-  "docs/screenshots/8a1fc82/where-desktop.png",
-  "docs/screenshots/8a1fc82/character-desktop.png",
-  "docs/screenshots/8a1fc82/home-desktop.png",
-  "docs/screenshots/8a1fc82/game-desktop.png",
-  "docs/screenshots/8a1fc82/guide-desktop.png",
-  "docs/screenshots/8a1fc82/collectibles-desktop.png",
-  "docs/screenshots/8a1fc82/videos-desktop.png",
-  "docs/screenshots/8a1fc82/farewell-desktop.png"
+  "docs/screenshots/3174e66/where-mobile.png",
+  "docs/screenshots/3174e66/character-mobile.png",
+  "docs/screenshots/3174e66/home-mobile.png",
+  "docs/screenshots/3174e66/game-mobile.png",
+  "docs/screenshots/3174e66/guide-mobile.png",
+  "docs/screenshots/3174e66/collectibles-mobile.png",
+  "docs/screenshots/3174e66/videos-mobile.png",
+  "docs/screenshots/3174e66/farewell-mobile.png",
+  "docs/screenshots/3174e66/where-desktop.png",
+  "docs/screenshots/3174e66/character-desktop.png",
+  "docs/screenshots/3174e66/home-desktop.png",
+  "docs/screenshots/3174e66/game-desktop.png",
+  "docs/screenshots/3174e66/guide-desktop.png",
+  "docs/screenshots/3174e66/collectibles-desktop.png",
+  "docs/screenshots/3174e66/videos-desktop.png",
+  "docs/screenshots/3174e66/farewell-desktop.png"
  ]
 }

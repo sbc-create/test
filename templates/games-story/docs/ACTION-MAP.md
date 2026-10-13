@@ -1,6 +1,6 @@
 # Карта действий games-story, вариант C (atlas)
 
-Проверено на commit `8664df8` в Chromium: `python3 -m saga.qa --shots docs/screenshots/8664df8 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `3174e66` в Chromium: `python3 -m saga.qa --shots docs/screenshots/3174e66 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -13,6 +13,9 @@
 | route_rendered | PASS | `True` |
 | progress_persists_after_reload | PASS | `True` |
 | game_page_shows_chapter_progress | PASS | `True` |
+| home_tally_red_from_source | PASS | `True` |
+| home_tally_sides | PASS | `True` |
+| home_tally_full_chapters | PASS | `True` |
 | progress_reset | PASS | `True` |
 | pager_next_chapter | PASS | `True` |
 | pager_prev_chapter | PASS | `True` |
