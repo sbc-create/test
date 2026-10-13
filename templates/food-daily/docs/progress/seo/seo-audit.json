@@ -1,0 +1,152 @@
+{
+ "food-daily A": {
+  "urls": 51,
+  "links_checked_extra": 12,
+  "issues": {}
+ },
+ "food-daily B": {
+  "urls": 52,
+  "links_checked_extra": 9,
+  "issues": {}
+ },
+ "food-daily C": {
+  "urls": 52,
+  "links_checked_extra": 8,
+  "issues": {}
+ },
+ "food-baking A": {
+  "urls": 25,
+  "links_checked_extra": 4,
+  "issues": {}
+ },
+ "food-baking B": {
+  "urls": 25,
+  "links_checked_extra": 4,
+  "issues": {}
+ },
+ "food-baking C": {
+  "urls": 26,
+  "links_checked_extra": 4,
+  "issues": {}
+ },
+ "food-weekly A": {
+  "urls": 34,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "food-weekly B": {
+  "urls": 34,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "food-weekly C": {
+  "urls": 35,
+  "links_checked_extra": 3,
+  "issues": {}
+ },
+ "food-appliances A": {
+  "urls": 25,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "food-appliances B": {
+  "urls": 25,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "food-appliances C": {
+  "urls": 26,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "home-practical A": {
+  "urls": 37,
+  "links_checked_extra": 12,
+  "issues": {}
+ },
+ "home-practical B": {
+  "urls": 44,
+  "links_checked_extra": 1,
+  "issues": {}
+ },
+ "home-practical C": {
+  "urls": 44,
+  "links_checked_extra": 12,
+  "issues": {}
+ },
+ "garden-season A": {
+  "urls": 59,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "garden-season B": {
+  "urls": 59,
+  "links_checked_extra": 56,
+  "issues": {}
+ },
+ "garden-season C": {
+  "urls": 60,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "plants-home A": {
+  "urls": 41,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "plants-home B": {
+  "urls": 43,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "plants-home C": {
+  "urls": 42,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-story A": {
+  "urls": 17,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-story B": {
+  "urls": 20,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-story C": {
+  "urls": 26,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-rpg A": {
+  "urls": 34,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-rpg B": {
+  "urls": 35,
+  "links_checked_extra": 6,
+  "issues": {}
+ },
+ "games-rpg C": {
+  "urls": 35,
+  "links_checked_extra": 6,
+  "issues": {}
+ },
+ "games-survival A": {
+  "urls": 35,
+  "links_checked_extra": 0,
+  "issues": {}
+ },
+ "games-survival B": {
+  "urls": 36,
+  "links_checked_extra": 11,
+  "issues": {}
+ },
+ "games-survival C": {
+  "urls": 37,
+  "links_checked_extra": 11,
+  "issues": {}
+ }
+}
