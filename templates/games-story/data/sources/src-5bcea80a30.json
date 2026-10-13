@@ -1,0 +1,15 @@
+{
+ "id": "src-5bcea80a30",
+ "url": "https://www.youtube.com/watch?v=JVUIz-dGyK4",
+ "fetched_at": "2026-10-12T21:51:18Z",
+ "page_sha256": "02c880f01954f1257f2e46d4ba2276e03f253d194bef7ef67b08655f9d2fc809",
+ "parser": "gst-facts/1.0",
+ "kind": "video",
+ "publisher": "YouTube oEmbed",
+ "game": "celeste",
+ "video_id": "JVUIz-dGyK4",
+ "name": "Celeste's Matt Thorson and Noel Berry | GMTK Dev Interviews",
+ "channel": "Game Maker's Toolkit",
+ "channel_url": "https://www.youtube.com/@GMTK",
+ "embeddable": true
+}

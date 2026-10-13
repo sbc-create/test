@@ -1,0 +1,13 @@
+site_id: games-story
+name: "Сюжет пройден"
+variant_id: atlas                # вариант C: атлас — персонажи, механики, «где я?» по чекпоинтам
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8870"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8870}
+storage_namespace: "gst-atlas"
+ads: {adapter: disabled}
+analytics: {adapter: disabled}

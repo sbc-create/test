@@ -1,0 +1,23 @@
+template: games-story
+variant_id: atlas   # вариант C; A — chapter-guides (8857), B — progress-tracker (8858)
+branch: claude/template-games-story-c
+worktree: /home/claude/wt-template-games-story-c
+base_commit: a45135b   # вариант A (claude/template-games-story)
+owner_scope:
+  write: [templates/games-story/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста (вики, энциклопедия, oEmbed) по заданию ночи 12–13.10.2026, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m saga.server (pid var/games-story/run/preview.pid)"
+  bind: 127.0.0.1:8870
+  data: templates/games-story/data (факты глав, видео, гайды, content.json)
+  private: var/games-story/private (страницы источников, 0700, вне git)
+  build: var/games-story/build/<commit>
+  qa_dependencies: templates/games-story/qa (axe-core 4.13.0, свой lockfile)
+  browser_storage_namespace: "gst-atlas"
+network_contracts:
+  - contract: "games-ownership/1 (config/ownership.yaml) — одинаковая копия в games-story, games-rpg, games-survival"
+shared_with_other_templates: []

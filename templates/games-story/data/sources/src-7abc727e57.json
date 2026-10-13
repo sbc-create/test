@@ -1,0 +1,35 @@
+{
+ "id": "src-7abc727e57",
+ "url": "https://celeste.ink/wiki/Reflection",
+ "fetched_at": "2026-10-12T21:50:57Z",
+ "page_sha256": "d1e4a61c754d40add1697d4b92e970d6d71b6a1a478d668ece5ab54f32950e0d",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Reflection",
+ "chapter": 6,
+ "strawberries": "3",
+ "sides": "6A • 6B • 6C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Theo",
+  "Granny",
+  "Bird"
+ ],
+ "levels": [
+  {
+   "level": "6A",
+   "strawberries": "1"
+  }
+ ],
+ "checkpoints": [],
+ "lead": "Reflection is the sixth chapter of Celeste . Preceded by Mirror Temple and succeeded by The Summit , it introduces five new mechanics: feathers , Kevin Blocks , Bumpers , Badeline as a boss , and Badeline moving blocks.",
+ "berries": [
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

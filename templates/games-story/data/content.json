@@ -1,0 +1,902 @@
+{
+ "site_id": "games-story",
+ "ownership": {
+  "contract": "games-ownership/1",
+  "games": {
+   "celeste": {
+    "owner": "games-story",
+    "title": "Celeste",
+    "wiki": "celeste.ink"
+   },
+   "baldurs-gate-3": {
+    "owner": "games-rpg",
+    "title": "Baldur's Gate 3",
+    "wiki": "bg3.wiki"
+   },
+   "minecraft": {
+    "owner": "games-survival",
+    "title": "Minecraft",
+    "wiki": "minecraft.wiki"
+   }
+  }
+ },
+ "items": [
+  {
+   "slug": "epilog",
+   "game": "celeste",
+   "src": "src-4465a62d9a",
+   "also": [],
+   "title": "Эпилог: спуск с горы",
+   "summary": "Эпилог идёт после The Summit и описывает спуск Мадлен с вершины. Это самая короткая глава: почти всё в ней — сценки.",
+   "mechanics": [],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "Глава пройдена"
+   ],
+   "related": [
+    "glava-7-the-summit",
+    "glava-8-core"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "068bc351041d3ffa47558104afca0e2df80c289a58225f91d26510be4c199286",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-1-forsaken-city",
+   "game": "celeste",
+   "src": "src-40bc451c44",
+   "also": [
+    "src-2042208adc"
+   ],
+   "title": "Глава 1. Forsaken City: рывок в восьми направлениях",
+   "summary": "Первая игровая глава вводит рывок в восьми направлениях, красные и крылатые клубники и кристаллы, восстанавливающие рывок. Здесь впервые появляется Тео.",
+   "mechanics": [
+    "Рывок в восьми направлениях",
+    "Красные клубники и крылатые клубники",
+    "Кристаллы восстановления рывка (Dash Refills)"
+   ],
+   "tips": [
+    "Крылатая клубника улетает, если сделать рывок, — добирайтесь до неё прыжками."
+   ],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "prolog",
+    "glava-2-old-site"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "01b474364e0f826dc6269a920e5fc4b935d15d29f6d641f4af7b8b9fa6c25062",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-2-old-site",
+   "game": "celeste",
+   "src": "src-c8170bee7f",
+   "also": [],
+   "title": "Глава 2. Old Site: сон и первая встреча с Badeline",
+   "summary": "Большая часть главы проходит во сне Мадлен. Здесь впервые появляется Badeline, а также блоки сна (Dream Blocks), клубники-семена и переключатели-монеты.",
+   "mechanics": [
+    "Блоки сна (Dream Blocks)",
+    "Клубники-семена (Seeded Strawberries)",
+    "Переключатели касанием (Touch switches)"
+   ],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-1-forsaken-city",
+    "glava-3-celestial-resort"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "5a626e32c137acd2d5b6bc4b7825dbbc288f317aa5b01832a2d8ddcd4bb1ff30",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-3-celestial-resort",
+   "game": "celeste",
+   "src": "src-2c70852702",
+   "also": [],
+   "title": "Глава 3. Celestial Resort: заброшенный отель",
+   "summary": "Глава проходит в обветшалом отеле Celestial Resort. Хозяин отеля — призрак мистер Осиро, а главные препятствия — пылевые комки (Dust Bunnies), хотя шипы тоже встречаются.",
+   "mechanics": [
+    "Пылевые комки (Dust Bunnies)"
+   ],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-2-old-site",
+    "glava-4-golden-ridge"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "91104cd4c58a544f1cc09d08e8e8ba1c13de492f675b15e5847ec60b3bc52f58",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-4-golden-ridge",
+   "game": "celeste",
+   "src": "src-6292e9627b",
+   "also": [],
+   "title": "Глава 4. Golden Ridge: ветер на склоне",
+   "summary": "Глава на ветреном склоне — середина основной истории. Вводит пружинящие облака и зелёные пузыри; здесь снова появляется бабушка.",
+   "mechanics": [
+    "Пружинящие облака",
+    "Зелёные пузыри"
+   ],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-3-celestial-resort",
+    "glava-5-mirror-temple"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ca76051dc1a46ad15e4f4911b372a1e7642ceaba7586f7c655245fe44cb24bc9",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-5-mirror-temple",
+   "game": "celeste",
+   "src": "src-de7e870f6c",
+   "also": [
+    "src-1223330d31"
+   ],
+   "title": "Глава 5. Mirror Temple: храм зеркал",
+   "summary": "Пятая глава вводит пять новых элементов: блоки-перестановки (Swap Blocks), красные пузыри, Искателей (Seekers), барьеры для Искателей и кристалл с Тео.",
+   "mechanics": [
+    "Блоки-перестановки (Swap Blocks)",
+    "Красные пузыри",
+    "Искатели (Seekers) и барьеры для них",
+    "Кристалл с Тео"
+   ],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-4-golden-ridge",
+    "glava-6-reflection"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "30d4b13f73ae4e763d6c1ae577a3b9aa7bdff116e5a156f05a219962f1b2bd1c",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-6-reflection",
+   "game": "celeste",
+   "src": "src-7abc727e57",
+   "also": [
+    "src-2042208adc"
+   ],
+   "title": "Глава 6. Reflection: перья и бой с Badeline",
+   "summary": "Шестая глава вводит пять механик: перья, блоки Kevin, отталкивающие бамперы, бой с Badeline и движущиеся блоки Badeline. Красных клубник в этой главе нет — только золотые.",
+   "mechanics": [
+    "Перья (полёт)",
+    "Блоки Kevin",
+    "Бамперы",
+    "Бой с Badeline"
+   ],
+   "tips": [],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-5-mirror-temple",
+    "glava-7-the-summit"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "921520133005fd4e9af56fa43443fb70c57bb53fd24b6f5947eb8ce4c2e894be",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-7-the-summit",
+   "game": "celeste",
+   "src": "src-809b877919",
+   "also": [],
+   "title": "Глава 7. The Summit: восхождение с двойным рывком",
+   "summary": "Седьмая глава собирает механики прошлых глав и добавляет второй рывок. Последний участок отмечен флажками от 30 до 01 — число уменьшается по мере подъёма. Глава завершает основную историю.",
+   "mechanics": [
+    "Второй рывок",
+    "Механики всех предыдущих глав"
+   ],
+   "tips": [
+    "Под ногами часто нет безопасной земли — двигайтесь короткими отрезками между флажками."
+   ],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "glava-6-reflection",
+    "epilog"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "3916855718c8b468a61b7f5344a3e82ae4d608f9521843aa835cc4489996b032",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-8-core",
+   "game": "celeste",
+   "src": "src-937b104b9a",
+   "also": [
+    "src-1223330d31"
+   ],
+   "title": "Глава 8. Core: дверь сердец",
+   "summary": "Глава закрыта дверью сердец: для A-стороны нужно 4 кристальных сердца, для B-стороны — 15, для C-стороны — 23.",
+   "mechanics": [
+    "Дверь сердец (Heart Door)"
+   ],
+   "tips": [
+    "Сердца собираются рывком в них; в 5B сердце можно получить, бросив в него кристалл с Тео."
+   ],
+   "videos": [],
+   "checklist": [
+    "A-сторона пройдена",
+    "Все клубники главы собраны",
+    "B-сторона пройдена",
+    "C-сторона пройдена"
+   ],
+   "related": [
+    "epilog",
+    "glava-9-farewell"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "1e2373861921ef2a5fd898fea0176fcfa3942ec5ca14c18b34c335ea86febb85",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "glava-9-farewell",
+   "game": "celeste",
+   "src": "src-68898ab3ee",
+   "also": [],
+   "title": "Глава 9. Farewell: последняя и самая сложная",
+   "summary": "Финальная глава, самая длинная и сложная. Добавлена бесплатным обновлением 1.3.0.0 9 сентября 2019 года: космическая тема, кристаллы двойного рывка, рыбы-фугу и медузы, а также механики всех прошлых глав.",
+   "mechanics": [
+    "Кристаллы двойного рывка",
+    "Рыбы-фугу",
+    "Медузы (для парения)"
+   ],
+   "tips": [],
+   "videos": [
+    "src-5bcea80a30",
+    "src-c4d2505536"
+   ],
+   "checklist": [
+    "Глава пройдена"
+   ],
+   "related": [
+    "glava-8-core"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "cd7a90075b58f60338486dd1059bf149c7d86991a2cb378d3dab0c1a3fbb0b54",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "prolog",
+   "game": "celeste",
+   "src": "src-970f904d11",
+   "also": [],
+   "title": "Пролог: первые шаги к горе",
+   "summary": "Пролог начинается сразу после создания сохранения и учит четырём базовым действиям: ходьбе, прыжку, лазанию и рывку.",
+   "mechanics": [
+    "Падающий сам по себе блок (Intro Crusher)",
+    "Обрушивающийся мост",
+    "Машина в начале пути"
+   ],
+   "tips": [
+    "Пролог короткий: используйте его, чтобы привыкнуть к рывку."
+   ],
+   "videos": [],
+   "checklist": [
+    "Глава пройдена"
+   ],
+   "related": [
+    "glava-1-forsaken-city"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "967dc49c1493a8f52631b1c5f93190c57530efd354bdd2ba65d75409d993d5e1",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-1223330d31": {
+   "id": "src-1223330d31",
+   "url": "https://celeste.ink/wiki/Crystal_Hearts",
+   "fetched_at": "2026-10-12T21:51:13Z",
+   "page_sha256": "d3560abe74d0290e50e8eaef6dbe369715f59ed93567de8e0c450eb086205ec8",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Crystal Heart",
+   "paragraphs": [
+    "Crystal Hearts are high-importance collectables in Celeste . Their primary purpose is to unlock different chapters locked by Heart Doors ; thus, they are also a prerequisite to unlocking all C-Sides , Variant Mode , and Golden Strawberries . They also serve as chapter completion objectives for all B-Sides, all C-Sides, and Core A-Side . Blue Crystal Hearts appear in every A-Side, Red Crystal Hearts in every B-Side, Gold Crystal Hearts in every C-Side, and a Gray Crystal Heart in Farewell , .mw-parser-output .censored{color:black;background-color:black;padding:1px;cursor:pointer}.mw-parser-output .censored a{color:black;text-decoration:underline;padding:1px}.mw-parser-output .censored:hover{color:inherit;background-color:inherit} which is revealed to be glitching . Each Crystal Heart, except the C-Side ones, also has a name specific to itself and an associated achievement with said name.",
+    "A Crystal Heart can be collected by dashing into it. In 5B , a crystal heart can also be gathered by throwing a Theo Crystal into it.",
+    "After a heart is collected, Madeline slows down, and the game continues to run for 135 frames (~2.25 seconds) before she completely stops. It is possible to die during these 135 frames if, for instance, Madeline dashes into spikes. After the collection cutscene depicting the heart in the middle of the screen, the heart is saved and will remain in the save file indefinitely.",
+    "Crystal Hearts in A-Sides serve as well-guarded secrets, often hiding at quite a significant distance from the main path or requiring otherwise tedious tasks to be performed. These Crystal Hearts are blue, and each one has a unique name and achievement associated with it."
+   ]
+  },
+  "src-2042208adc": {
+   "id": "src-2042208adc",
+   "url": "https://celeste.ink/wiki/Strawberries",
+   "fetched_at": "2026-10-12T21:51:09Z",
+   "page_sha256": "6c60a342335181e0632f2cbddc3ce77406d6e93df07dd6367d091bc093410246",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Collectables",
+   "paragraphs": [
+    "Celeste features many optional collectable items to give the player an additional challenge.",
+    "Red Strawberries, also known as Red Berries, are the main collectable of Celeste. They are found in every A-Side other than Reflection and Farewell . They serve no gameplay purpose other than as an optional challenge for the player, as mentioned in the Old Site postcard . However, they are required to get three achievements (requiring 30, 80, and 175 respectively) and change both the pie and the characters' reactions to it at the end of the Epilogue .",
+    "To get a 1-UP (an easter egg referencing Super Mario Bros.), you need to pick up six strawberries and collect them all at once. Before you collect all six of them, you must not touch ground tiles for more than 8 frames, jump, or dash from the ground. An achievement is associated with getting a 1-UP.",
+    "Strawberry Seeds are sometimes required to be collected for a Red Strawberry to spawn. If you touch the ground before gathering all seeds in a room, the ones collected will move to their original positions, and you will need to start over. The Red Strawberry will spawn once all Strawberry Seeds are collected."
+   ]
+  },
+  "src-2c70852702": {
+   "id": "src-2c70852702",
+   "url": "https://celeste.ink/wiki/Celestial_Resort",
+   "fetched_at": "2026-10-12T21:50:50Z",
+   "page_sha256": "48ae16fa3a906ba1b0dbb706a1d9c10fc011393150d9ecb2aea433bbb6246aa2",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Celestial Resort",
+   "chapter": 3,
+   "strawberries": "25 • 3",
+   "sides": "3A • 3B • 3C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Theo",
+    "Mr. Oshiro"
+   ],
+   "levels": [
+    {
+     "level": "3A",
+     "strawberries": "25 • 1"
+    }
+   ],
+   "checkpoints": [
+    "Start",
+    "Huge Mess",
+    "Elevator Shaft",
+    "Presidential Suite"
+   ],
+   "lead": "Celestial Resort is the third chapter of Celeste . Preceded by Old Site and succeeded by Golden Ridge , it occurs in the decrepit Celestial Resort Hotel. It introduces Mr. Oshiro , a ghost who manages the hotel and tries convincing Madeline to stay. This chapter notably features a vast number of Dust Bunnies , which are the products of Mr. Oshiro's insecurities. They serve as the chapter's main obstacles, although spikes still appear.",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 25
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-40bc451c44": {
+   "id": "src-40bc451c44",
+   "url": "https://celeste.ink/wiki/Forsaken_City",
+   "fetched_at": "2026-10-12T21:50:45Z",
+   "page_sha256": "acf6dc6a15b42e1f02a301074f826c0b038967b353e442060448c275842afee4",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Forsaken City",
+   "chapter": 1,
+   "strawberries": "20 • 3 • 1",
+   "sides": "1A • 1B • 1C",
+   "characters": [
+    "Madeline",
+    "Theo",
+    "Bird"
+   ],
+   "levels": [
+    {
+     "level": "1A",
+     "strawberries": "20 • 1 • 1"
+    },
+    {
+     "level": "1B",
+     "strawberries": "1"
+    },
+    {
+     "level": "1C",
+     "strawberries": "1"
+    }
+   ],
+   "checkpoints": [
+    "Start",
+    "Crossing",
+    "Chasm"
+   ],
+   "lead": "Forsaken City is the first gameplay chapter of Celeste . Preceded by the Prologue and succeeded by Old Site , it introduces several core mechanics of the game, notably octadirectional dashes, red strawberries , red winged strawberries , and Dash Refills . Additionally, Theo first appears during this chapter.",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 20
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    },
+    {
+     "kind": "Forsaken City/Winged Gold Berry",
+     "count": 1
+    }
+   ]
+  },
+  "src-4465a62d9a": {
+   "id": "src-4465a62d9a",
+   "url": "https://celeste.ink/wiki/Epilogue",
+   "fetched_at": "2026-10-12T21:51:02Z",
+   "page_sha256": "23cbeb5d45d7a8c3e77e8aa782370451a48d2fafe9896bb3022cfa89fdf1bd2b",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Epilogue",
+   "chapter": null,
+   "strawberries": null,
+   "sides": "A-Side only",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Theo",
+    "Granny",
+    "Mr. Oshiro",
+    "Bird"
+   ],
+   "levels": [],
+   "checkpoints": [],
+   "lead": "The Epilogue is the final chapter of \"main game\" Celeste , and occurs after The Summit , following Madeline's descent from the peak of Celeste Mountain . It is the shortest chapter in Celeste , because most of it consists of cutscenes.",
+   "berries": []
+  },
+  "src-5bcea80a30": {
+   "id": "src-5bcea80a30",
+   "url": "https://www.youtube.com/watch?v=JVUIz-dGyK4",
+   "fetched_at": "2026-10-12T21:51:18Z",
+   "page_sha256": "02c880f01954f1257f2e46d4ba2276e03f253d194bef7ef67b08655f9d2fc809",
+   "parser": "gst-facts/1.0",
+   "kind": "video",
+   "publisher": "YouTube oEmbed",
+   "game": "celeste",
+   "video_id": "JVUIz-dGyK4",
+   "name": "Celeste's Matt Thorson and Noel Berry | GMTK Dev Interviews",
+   "channel": "Game Maker's Toolkit",
+   "channel_url": "https://www.youtube.com/@GMTK",
+   "embeddable": true
+  },
+  "src-6292e9627b": {
+   "id": "src-6292e9627b",
+   "url": "https://celeste.ink/wiki/Golden_Ridge",
+   "fetched_at": "2026-10-12T21:50:53Z",
+   "page_sha256": "44f809351321923baae0086aca676582873cff74e5f7ec9ceaec8bba8f85a96d",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Golden Ridge",
+   "chapter": 4,
+   "strawberries": "29 • 3",
+   "sides": "4A • 4B • 4C",
+   "characters": [
+    "Madeline",
+    "Bird",
+    "Granny",
+    "Theo",
+    "Badeline"
+   ],
+   "levels": [],
+   "checkpoints": [],
+   "lead": "Golden Ridge is the fourth chapter of Celeste . Preceded by the Celestial Resort and succeeded by Mirror Temple , it takes place on a windy cliff which scales Celeste Mountain. Within Celeste 's main narrative plot, this chapter marks a significant turning point, being the \"middle\" chapter among the seven main chapters of the story. This chapter introduces several new elements to the game, including bouncy clouds and green bubbles ; it also marks Granny 's first appearance since the prologue .",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 29
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-68898ab3ee": {
+   "id": "src-68898ab3ee",
+   "url": "https://celeste.ink/wiki/Farewell",
+   "fetched_at": "2026-10-12T21:51:06Z",
+   "page_sha256": "05622632671c28090759be430935d339d169101e87bbdbbddccc5972ed15e1dc",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Farewell",
+   "chapter": 9,
+   "strawberries": "1 • 1",
+   "sides": "A-side only",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Granny",
+    "Bird",
+    "Theo"
+   ],
+   "levels": [],
+   "checkpoints": [
+    "Start",
+    "Singular",
+    "Power Source",
+    "Remembered",
+    "Event Horizon",
+    "Determination",
+    "Stubbornness",
+    "Reconciliation",
+    "Farewell"
+   ],
+   "lead": "Farewell is the final chapter of Celeste , as well as the longest and hardest. Released on September 9, 2019, as free DLC ( update 1.3.0.0 ), it features a space-themed setting, and various new mechanics such as 2-Dash Refills , Pufferfish and Jellyfish , alongside mechanics from every other chapter mixed in.",
+   "berries": [
+    {
+     "kind": "Farewell/Moon Berry",
+     "count": 1
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 1
+    }
+   ]
+  },
+  "src-7abc727e57": {
+   "id": "src-7abc727e57",
+   "url": "https://celeste.ink/wiki/Reflection",
+   "fetched_at": "2026-10-12T21:50:57Z",
+   "page_sha256": "d1e4a61c754d40add1697d4b92e970d6d71b6a1a478d668ece5ab54f32950e0d",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Reflection",
+   "chapter": 6,
+   "strawberries": "3",
+   "sides": "6A • 6B • 6C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Theo",
+    "Granny",
+    "Bird"
+   ],
+   "levels": [
+    {
+     "level": "6A",
+     "strawberries": "1"
+    }
+   ],
+   "checkpoints": [],
+   "lead": "Reflection is the sixth chapter of Celeste . Preceded by Mirror Temple and succeeded by The Summit , it introduces five new mechanics: feathers , Kevin Blocks , Bumpers , Badeline as a boss , and Badeline moving blocks.",
+   "berries": [
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-809b877919": {
+   "id": "src-809b877919",
+   "url": "https://celeste.ink/wiki/The_Summit",
+   "fetched_at": "2026-10-12T21:50:59Z",
+   "page_sha256": "a1ccfe59013f3a2478e71c422c118bc2b377c93492d048dc90133ac63b1d69c5",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "The Summit",
+   "chapter": 7,
+   "strawberries": "47 • 3",
+   "sides": "7A • 7B • 7C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Bird",
+    "Granny"
+   ],
+   "levels": [
+    {
+     "level": "7A",
+     "strawberries": "47 • 1"
+    },
+    {
+     "level": "7B",
+     "strawberries": "1"
+    },
+    {
+     "level": "7C",
+     "strawberries": "1"
+    }
+   ],
+   "checkpoints": [
+    "Start to 2500M",
+    "3000M"
+   ],
+   "lead": "The Summit is the seventh chapter of Celeste . Preceded by Reflection and succeeded by Core , it's a throwback to the previous chapters, reusing most things from them, paired with the newly obtained second dash. Unlike the previous chapter, The Summit is a bit of a step up in difficulty, featuring a lot of platforming with no safe ground underneath. The last subchapter features checkpoint flags numbered from 30 to 01, with the number decreasing as the player ascends. It effectively serves as the end of Celeste 's main storyline; the Epilogue occurs after the events of The Summit.",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 47
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-937b104b9a": {
+   "id": "src-937b104b9a",
+   "url": "https://celeste.ink/wiki/Core",
+   "fetched_at": "2026-10-12T21:51:04Z",
+   "page_sha256": "a0db884a41973c2c7f1c1d57922bb5810ea18acf4296dde835481982c8bb2ede",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Core",
+   "chapter": 8,
+   "strawberries": "5 • 3",
+   "sides": "8A • 8B • 8C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Granny",
+    "Bird"
+   ],
+   "levels": [],
+   "checkpoints": [],
+   "lead": "Core is the eighth chapter of Celeste . Preceded by Epilogue and succeeded by Farewell , the chapter is locked behind a Heart Door , requiring four (4) Crystal Hearts to enter for the A-Side, 15 hearts for the B-Side, and 23 hearts for the C-Side.",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 5
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-970f904d11": {
+   "id": "src-970f904d11",
+   "url": "https://celeste.ink/wiki/Prologue",
+   "fetched_at": "2026-10-12T21:50:43Z",
+   "page_sha256": "3290305f43274b66f5a819620b76421a3de1fe39bbc3dd75356440ab5a4fa678",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Prologue",
+   "chapter": null,
+   "strawberries": "None",
+   "sides": "Interlude",
+   "characters": [
+    "Madeline",
+    "Granny",
+    "Bird"
+   ],
+   "levels": [],
+   "checkpoints": [],
+   "lead": "Prologue is the first chapter in Celeste , and starts automatically after creating a save. It introduces the four basic techs within the game: walking, jumping, climbing, and dashing . Three gameplay entities are introduced in this chapter: an Intro Crusher (a block which falls on its own), a collapsing bridge , and the (in)famous intro car . Madeline , Granny , and the Bird are also introduced in this chapter.",
+   "berries": []
+  },
+  "src-c4d2505536": {
+   "id": "src-c4d2505536",
+   "url": "https://www.youtube.com/watch?v=NKDrdaCT0XU",
+   "fetched_at": "2026-10-12T21:51:20Z",
+   "page_sha256": "b686c0fa821cfb5cb190c0541212edf703664c8092b5d9cbbf45d192c0e60c80",
+   "parser": "gst-facts/1.0",
+   "kind": "video",
+   "publisher": "YouTube oEmbed",
+   "game": "celeste",
+   "video_id": "NKDrdaCT0XU",
+   "name": "Celeste Developer Interview / Our Most-Played Nintendo Switch Games | Nintendo Power Podcast Ep. 3",
+   "channel": "Nintendo of America",
+   "channel_url": "https://www.youtube.com/@NintendoAmerica",
+   "embeddable": true
+  },
+  "src-c8170bee7f": {
+   "id": "src-c8170bee7f",
+   "url": "https://celeste.ink/wiki/Old_Site",
+   "fetched_at": "2026-10-12T21:50:48Z",
+   "page_sha256": "d85222d097059cb41ac9d9a12ef42e3fc7044b1e6638a52f86b7b40187eb149f",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Old Site",
+   "chapter": 2,
+   "strawberries": "18 • 3",
+   "sides": "2A • 2B • 2C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Theo",
+    "Bird"
+   ],
+   "levels": [
+    {
+     "level": "2A",
+     "strawberries": "18 • 1"
+    }
+   ],
+   "checkpoints": [
+    "Start",
+    "Intervention",
+    "Awake"
+   ],
+   "lead": "Old Site is the second chapter of Celeste . Preceded by Forsaken City and succeeded by Celestial Resort , most of it occurs during one of Madeline's dreams. It introduces Badeline for the first time, and also adds several new mechanics, including Dream Blocks , Seeded Strawberries , and Touch switches (also known as coins or shields).",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 18
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  },
+  "src-de7e870f6c": {
+   "id": "src-de7e870f6c",
+   "url": "https://celeste.ink/wiki/Mirror_Temple",
+   "fetched_at": "2026-10-12T21:50:55Z",
+   "page_sha256": "1c6d2274400b95978a500dc099081d321ccfd0fe79b1f8c44ee72769b5ed0f18",
+   "parser": "gst-facts/1.0",
+   "kind": "wiki",
+   "publisher": "Celeste Wiki",
+   "game": "celeste",
+   "name": "Mirror Temple",
+   "chapter": 5,
+   "strawberries": "31 • 3",
+   "sides": "5A • 5B • 5C",
+   "characters": [
+    "Madeline",
+    "Badeline",
+    "Theo"
+   ],
+   "levels": [
+    {
+     "level": "5A",
+     "strawberries": "31 • 1"
+    },
+    {
+     "level": "5B",
+     "strawberries": "1"
+    }
+   ],
+   "checkpoints": [
+    "Start and Depths",
+    "Unravelling through Rescue"
+   ],
+   "lead": "Mirror Temple is the fifth chapter of Celeste . Preceded by Golden Ridge and succeeded by Reflection , it introduces five new entities: Swap Blocks , Red Bubbles , Seekers , Seeker Barriers, and the Theo Crystal .",
+   "berries": [
+    {
+     "kind": "Strawberry",
+     "count": 31
+    },
+    {
+     "kind": "Golden Strawberries",
+     "count": 3
+    }
+   ]
+  }
+ }
+}

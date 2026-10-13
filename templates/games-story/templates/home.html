@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="hero"><h1>Атлас игры: кто, что и где</h1>
+<p class="lead">Не знаете, в какой вы главе? Найдите чекпоинт. Хотите вспомнить персонажа или механику — увидите, в каких главах они встречаются. Всё по инфобоксам и страницам вики игры.</p></section>
+{% for gid, game in site.games.items() %}{% if site.for_game(gid) %}
+<form class="where" action="/igra/{{ gid }}/gde-ya/" method="get" role="search" aria-label="Найти чекпоинт">
+  <label for="wq"><b>Где я?</b> Название чекпоинта или главы</label>
+  <div class="where__row"><input id="wq" name="q" type="search" placeholder="Например, Huge Mess"><button type="submit" class="btn">Найти</button></div>
+</form>
+<div class="atlas">
+  <section class="atlas__panel" aria-labelledby="h-ch"><h2 id="h-ch"><a href="/igra/{{ gid }}/personazhi/">Персонажи</a></h2>
+    <ul class="chips">{% for slug, c in site.characters(gid).items() %}<li><a href="/igra/{{ gid }}/personazh/{{ slug }}/"><span lang="en">{{ c.name }}</span> <small>{{ c.guides|length }} {{ plural(c.guides|length, 'глава', 'главы', 'глав') }}</small></a></li>{% endfor %}</ul></section>
+  <section class="atlas__panel" aria-labelledby="h-me"><h2 id="h-me"><a href="/igra/{{ gid }}/mehaniki/">Механики</a></h2>
+    {% set mi = site.mechanics_index(gid) %}<p>{{ mi|length }} {{ plural(mi|length, 'механика', 'механики', 'механик') }} в {{ site.for_game(gid)|length }} главах.</p>
+    <ul class="mini">{% for m, g in mi[:5] %}<li>{{ m }} — <a href="{{ g.url }}">{{ g.name }}</a></li>{% endfor %}</ul></section>
+  <section class="atlas__panel" aria-labelledby="h-cp"><h2 id="h-cp"><a href="/igra/{{ gid }}/gde-ya/">Чекпоинты</a></h2>
+    <p>{{ site.checkpoints(gid)|length }} чекпоинтов по порядку глав — с тем, что идёт следом.</p></section>
+</div>
+<section class="dash" aria-labelledby="h-tally-{{ gid }}" data-tally="{{ site.tally(gid)|tojson|forceescape }}">
+  <h2 id="h-tally-{{ gid }}">Ваш прогресс</h2>
+  {% set tl = site.tally(gid) %}
+  <dl class="dash__stats">
+    <div><dt>Клубники</dt><dd><span data-stat="red">0</span> / {{ site.red_total(gid) }}</dd></div>
+    <div><dt>Пройдено сторон</dt><dd><span data-stat="sides">0</span> / {{ tl|sum(attribute='sides', start=[])|length }}</dd></div>
+    <div><dt>Главы целиком</dt><dd><span data-stat="full">0</span> / {{ tl|length }}</dd></div>
+  </dl>
+  <p class="note">Считается по отметкам в чек-листах глав на этом устройстве; число клубник в главе — из источника.</p>
+  <noscript><p class="note">Счётчик работает с JavaScript; отметки ставятся на страницах глав.</p></noscript>
+</section>
+<section aria-labelledby="h-gl"><h2 id="h-gl">Главы {{ game.title }}</h2>
+  <ol class="chapters">{% for g in site.for_game(gid) %}<li><a href="{{ g.url }}"><span lang="en">{{ g.name }}</span></a></li>{% endfor %}</ol></section>
+{% endif %}{% endfor %}
+{% endblock %}

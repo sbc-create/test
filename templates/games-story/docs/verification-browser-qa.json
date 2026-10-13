@@ -1,0 +1,163 @@
+{
+ "commit_head": "852774ab0c7aa30adb857b4dd9499e98c7ea3abe",
+ "at": "2026-10-13T15:16:17Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "no_external_requests_on_load": true,
+  "nav_opens_game": true,
+  "whole_card_opens_guide": true,
+  "route_rendered": true,
+  "progress_persists_after_reload": true,
+  "game_page_shows_chapter_progress": true,
+  "home_tally_red_from_source": true,
+  "home_tally_sides": true,
+  "home_tally_full_chapters": true,
+  "progress_reset": true,
+  "pager_next_chapter": true,
+  "pager_prev_chapter": true,
+  "toc_jumps": true,
+  "video_no_iframe_before_click": true,
+  "video_iframe_after_click": true,
+  "video_external_request_only_after_click": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "search_keyboard_results": 9,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "home_where_am_i_finds_checkpoint": true,
+  "checkpoint_opens_chapter": true,
+  "live_filter_narrows": true,
+  "live_filter_clears": true,
+  "character_chip_opens_page": true,
+  "character_page_links_chapter": true,
+  "mechanics_table_rows": true,
+  "unknown_character_404": true,
+  "nojs_video_link_only": true,
+  "nojs_guide_route": 3
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/igra/celeste/gde-ya/": [],
+  "mobile:/igra/celeste/personazh/theo/": [],
+  "mobile:/": [],
+  "mobile:/igra/celeste/": [],
+  "mobile:/igra/celeste/glava-1-forsaken-city/": [],
+  "mobile:/igra/celeste/kollekcii/": [],
+  "mobile:/video/": [],
+  "mobile:/igra/celeste/glava-9-farewell/": [],
+  "mobile:/igra/celeste/prolog/": [],
+  "mobile:/igra/celeste/glava-8-core/": [],
+  "mobile:/igra/celeste/glava-6-reflection/": [],
+  "mobile:/kak-my-rabotaem/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=Badeline": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/igra/celeste/gde-ya/": [],
+  "desktop:/igra/celeste/personazh/theo/": [],
+  "desktop:/": [],
+  "desktop:/igra/celeste/": [],
+  "desktop:/igra/celeste/glava-1-forsaken-city/": [],
+  "desktop:/igra/celeste/kollekcii/": [],
+  "desktop:/video/": [],
+  "desktop:/igra/celeste/glava-9-farewell/": [],
+  "desktop:/igra/celeste/prolog/": [],
+  "desktop:/igra/celeste/glava-8-core/": [],
+  "desktop:/igra/celeste/glava-6-reflection/": [],
+  "desktop:/kak-my-rabotaem/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=Badeline": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:where": {
+   "lcp_ms": 132,
+   "cls": 0
+  },
+  "mobile:character": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:home": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:guide": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:collectibles": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "mobile:videos": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:farewell": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "desktop:where": {
+   "lcp_ms": 104,
+   "cls": 0
+  },
+  "desktop:character": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:guide": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:collectibles": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:videos": {
+   "lcp_ms": 216,
+   "cls": 0
+  },
+  "desktop:farewell": {
+   "lcp_ms": 64,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8870/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8870/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/852774a/where-mobile.png",
+  "docs/screenshots/852774a/character-mobile.png",
+  "docs/screenshots/852774a/home-mobile.png",
+  "docs/screenshots/852774a/game-mobile.png",
+  "docs/screenshots/852774a/guide-mobile.png",
+  "docs/screenshots/852774a/collectibles-mobile.png",
+  "docs/screenshots/852774a/videos-mobile.png",
+  "docs/screenshots/852774a/farewell-mobile.png",
+  "docs/screenshots/852774a/where-desktop.png",
+  "docs/screenshots/852774a/character-desktop.png",
+  "docs/screenshots/852774a/home-desktop.png",
+  "docs/screenshots/852774a/game-desktop.png",
+  "docs/screenshots/852774a/guide-desktop.png",
+  "docs/screenshots/852774a/collectibles-desktop.png",
+  "docs/screenshots/852774a/videos-desktop.png",
+  "docs/screenshots/852774a/farewell-desktop.png"
+ ]
+}

@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "_parts.html" import video %}
+{% block main %}
+<h1>Видео</h1><p class="lead">Только ролики, ссылки на которые есть в источниках, и только после проверки через YouTube oEmbed: видео существует, канал известен, встраивание разрешено. Таймкоды мы не придумываем.</p>
+{% for v in site.videos %}{{ video(v) }}{% endfor %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+ "id": "src-c4d2505536",
+ "url": "https://www.youtube.com/watch?v=NKDrdaCT0XU",
+ "fetched_at": "2026-10-12T21:51:20Z",
+ "page_sha256": "b686c0fa821cfb5cb190c0541212edf703664c8092b5d9cbbf45d192c0e60c80",
+ "parser": "gst-facts/1.0",
+ "kind": "video",
+ "publisher": "YouTube oEmbed",
+ "game": "celeste",
+ "video_id": "NKDrdaCT0XU",
+ "name": "Celeste Developer Interview / Our Most-Played Nintendo Switch Games | Nintendo Power Podcast Ep. 3",
+ "channel": "Nintendo of America",
+ "channel_url": "https://www.youtube.com/@NintendoAmerica",
+ "embeddable": true
+}

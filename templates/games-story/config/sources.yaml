@@ -1,0 +1,7 @@
+sources:
+  - host: celeste.ink
+    role: [wiki]
+  - host: en.wikipedia.org
+    role: [encyclopedia]
+  - host: www.youtube.com
+    role: [video_oembed]

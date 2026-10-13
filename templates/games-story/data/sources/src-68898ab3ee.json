@@ -1,0 +1,44 @@
+{
+ "id": "src-68898ab3ee",
+ "url": "https://celeste.ink/wiki/Farewell",
+ "fetched_at": "2026-10-12T21:51:06Z",
+ "page_sha256": "05622632671c28090759be430935d339d169101e87bbdbbddccc5972ed15e1dc",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Farewell",
+ "chapter": 9,
+ "strawberries": "1 • 1",
+ "sides": "A-side only",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Granny",
+  "Bird",
+  "Theo"
+ ],
+ "levels": [],
+ "checkpoints": [
+  "Start",
+  "Singular",
+  "Power Source",
+  "Remembered",
+  "Event Horizon",
+  "Determination",
+  "Stubbornness",
+  "Reconciliation",
+  "Farewell"
+ ],
+ "lead": "Farewell is the final chapter of Celeste , as well as the longest and hardest. Released on September 9, 2019, as free DLC ( update 1.3.0.0 ), it features a space-themed setting, and various new mechanics such as 2-Dash Refills , Pufferfish and Jellyfish , alongside mechanics from every other chapter mixed in.",
+ "berries": [
+  {
+   "kind": "Farewell/Moon Berry",
+   "count": 1
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 1
+  }
+ ]
+}

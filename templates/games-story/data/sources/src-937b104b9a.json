@@ -1,0 +1,33 @@
+{
+ "id": "src-937b104b9a",
+ "url": "https://celeste.ink/wiki/Core",
+ "fetched_at": "2026-10-12T21:51:04Z",
+ "page_sha256": "a0db884a41973c2c7f1c1d57922bb5810ea18acf4296dde835481982c8bb2ede",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Core",
+ "chapter": 8,
+ "strawberries": "5 • 3",
+ "sides": "8A • 8B • 8C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Granny",
+  "Bird"
+ ],
+ "levels": [],
+ "checkpoints": [],
+ "lead": "Core is the eighth chapter of Celeste . Preceded by Epilogue and succeeded by Farewell , the chapter is locked behind a Heart Door , requiring four (4) Crystal Hearts to enter for the A-Side, 15 hearts for the B-Side, and 23 hearts for the C-Side.",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 5
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

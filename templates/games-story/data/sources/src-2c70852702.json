@@ -1,0 +1,43 @@
+{
+ "id": "src-2c70852702",
+ "url": "https://celeste.ink/wiki/Celestial_Resort",
+ "fetched_at": "2026-10-12T21:50:50Z",
+ "page_sha256": "48ae16fa3a906ba1b0dbb706a1d9c10fc011393150d9ecb2aea433bbb6246aa2",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Celestial Resort",
+ "chapter": 3,
+ "strawberries": "25 • 3",
+ "sides": "3A • 3B • 3C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Theo",
+  "Mr. Oshiro"
+ ],
+ "levels": [
+  {
+   "level": "3A",
+   "strawberries": "25 • 1"
+  }
+ ],
+ "checkpoints": [
+  "Start",
+  "Huge Mess",
+  "Elevator Shaft",
+  "Presidential Suite"
+ ],
+ "lead": "Celestial Resort is the third chapter of Celeste . Preceded by Old Site and succeeded by Golden Ridge , it occurs in the decrepit Celestial Resort Hotel. It introduces Mr. Oshiro , a ghost who manages the hotel and tries convincing Madeline to stay. This chapter notably features a vast number of Dust Bunnies , which are the products of Mr. Oshiro's insecurities. They serve as the chapter's main obstacles, although spikes still appear.",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 25
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

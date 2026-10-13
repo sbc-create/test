@@ -1,0 +1,53 @@
+{
+ "id": "src-40bc451c44",
+ "url": "https://celeste.ink/wiki/Forsaken_City",
+ "fetched_at": "2026-10-12T21:50:45Z",
+ "page_sha256": "acf6dc6a15b42e1f02a301074f826c0b038967b353e442060448c275842afee4",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Forsaken City",
+ "chapter": 1,
+ "strawberries": "20 • 3 • 1",
+ "sides": "1A • 1B • 1C",
+ "characters": [
+  "Madeline",
+  "Theo",
+  "Bird"
+ ],
+ "levels": [
+  {
+   "level": "1A",
+   "strawberries": "20 • 1 • 1"
+  },
+  {
+   "level": "1B",
+   "strawberries": "1"
+  },
+  {
+   "level": "1C",
+   "strawberries": "1"
+  }
+ ],
+ "checkpoints": [
+  "Start",
+  "Crossing",
+  "Chasm"
+ ],
+ "lead": "Forsaken City is the first gameplay chapter of Celeste . Preceded by the Prologue and succeeded by Old Site , it introduces several core mechanics of the game, notably octadirectional dashes, red strawberries , red winged strawberries , and Dash Refills . Additionally, Theo first appears during this chapter.",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 20
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  },
+  {
+   "kind": "Forsaken City/Winged Gold Berry",
+   "count": 1
+  }
+ ]
+}

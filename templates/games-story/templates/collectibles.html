@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ site.games[gid].title }}: коллекционные предметы</h1>
+<p class="lead">Числа — из карточек глав источника. Итог посчитан сложением.</p>
+<div class="tablewrap" role="region" aria-label="Предметы по главам" tabindex="0"><table class="items items--wide">
+<thead><tr><th scope="col">Глава</th><th scope="col">Красные клубники</th><th scope="col">Другие клубники</th><th scope="col">Стороны</th></tr></thead>
+<tbody>{% for g in site.for_game(gid) %}<tr><th scope="row"><a href="{{ g.url }}">{{ g.title }}</a></th><td>{{ g.red or '—' }}</td><td>{% for b in g.berries if b.label != 'красные клубники' %}{{ b.label }}: {{ b.count }}{% if not loop.last %}; {% endif %}{% else %}—{% endfor %}</td><td>{{ g.sides or '—' }}</td></tr>{% endfor %}</tbody>
+<tfoot><tr><th scope="row">Итого красных</th><td>{{ site.red_total(gid) }}</td><td></td><td></td></tr></tfoot>
+</table></div>
+{% endblock %}

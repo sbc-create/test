@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_parts.html" import card %}
+{% block main %}
+<h1>{% if q %}Поиск: «{{ q }}»{% else %}Поиск по гайдам{% endif %}</h1>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="sq">Глава, механика или персонаж</label><input id="sq" name="q" type="search" value="{{ q }}"><button type="submit">Найти</button>{% if q %}<a class="reset" href="/poisk/">Очистить</a>{% endif %}</form>
+{% if not q %}<p class="note">Например: «Badeline», «перья», «Core».</p>
+{% elif items %}<p class="note" role="status">Найдено: {{ items|length }}</p><div class="gcs">{% for g in items %}{{ card(g, 'h2') }}{% endfor %}</div>
+{% else %}<div class="empty" role="status"><h2>Ничего не нашлось</h2><p><a class="btn" href="/">На главную</a></p></div>{% endif %}
+{% endblock %}

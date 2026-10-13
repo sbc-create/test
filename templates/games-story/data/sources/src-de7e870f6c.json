@@ -1,0 +1,44 @@
+{
+ "id": "src-de7e870f6c",
+ "url": "https://celeste.ink/wiki/Mirror_Temple",
+ "fetched_at": "2026-10-12T21:50:55Z",
+ "page_sha256": "1c6d2274400b95978a500dc099081d321ccfd0fe79b1f8c44ee72769b5ed0f18",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Mirror Temple",
+ "chapter": 5,
+ "strawberries": "31 • 3",
+ "sides": "5A • 5B • 5C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Theo"
+ ],
+ "levels": [
+  {
+   "level": "5A",
+   "strawberries": "31 • 1"
+  },
+  {
+   "level": "5B",
+   "strawberries": "1"
+  }
+ ],
+ "checkpoints": [
+  "Start and Depths",
+  "Unravelling through Rescue"
+ ],
+ "lead": "Mirror Temple is the fifth chapter of Celeste . Preceded by Golden Ridge and succeeded by Reflection , it introduces five new entities: Swap Blocks , Red Bubbles , Seekers , Seeker Barriers, and the Theo Crystal .",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 31
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}
