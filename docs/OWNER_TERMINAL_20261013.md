@@ -71,8 +71,9 @@ sudo systemctl restart site-factory-mcp.service
 systemctl show -p ActiveEnterTimestamp site-factory-mcp.service
 ```
 
-**Ожидаемо:** `ActiveEnterTimestamp` позже `12.10 19:41:22Z`. Проверка состояния
-доставки после перезапуска:
+**Ожидаемо:** `ActiveEnterTimestamp` позже **12.10 17:42:04Z** — это время
+старта текущего процесса моста (pid 1499831), измеренное единым видом состояния
+доставки. Проверка после перезапуска:
 
 ```bash
 python3 automation/local/delivery-state.py
