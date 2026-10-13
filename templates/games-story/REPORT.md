@@ -1,0 +1,34 @@
+# Отчёт games-story, вариант C «Сюжет пройден» (atlas)
+
+Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `34fc4b9afe38285b8efeb65be3e5aa358b9fe901`, ветка `claude/template-games-story-c` (вариант A a45135b).
+
+## Как открыть
+
+- Preview: `http://127.0.0.1:8870/` (loopback, `noindex, nofollow`).
+- Отличие от A (8857) и B (8858): вход — «Где я?» по чекпоинтам, персонажи по главам, указатель механик; светлая тема. Свои CSS/JS, ключи gst-atlas:*. Сравнение — docs/AUDIT.md.
+- Скриншоты (390 и 1440 px): `docs/screenshots/34fc4b9/` — «Где я?», персонаж, главная, игра, глава, коллекции, видео.
+- Артефакт: `var/games-story/build/34fc4b9…/` — 32 файлов.
+
+## Проверки на 34fc4b9 (фактически запущены)
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 0 — 15 passed |
+| `ruff check . + ruff format --check .` | 0 | 0 — чисто |
+| `pytest tests/unit/test_permission_matrix.py` | 0 | 0 — 192 passed |
+| `bash bin/games-story build --commit HEAD` | 0 | 0 — 32 файла, var/games-story/build/34fc4b9… |
+| `python3 -m saga.qa …` | 0 | 0 — 31 действие PASS; axe 0 |
+| `python3 qa/viewports.py 8870 …` | 0 | 0 — 29 URL × 4 ширины, 0 замечаний |
+| `python3 -m saga.qa --shots docs/screenshots/34fc4b9 --out docs/verification-browser-qa.json …` | 0 | 31 действий PASS; axe 0 на 32 стр.×ширин |
+| `python3 qa/viewports.py 8870 …` | 0 | 29 URL × 4 ширины — 0 замечаний |
+
+LCP (лаборатория, loopback, без троттлинга) 44–152 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Готовность
+
+| слой | состояние |
+| --- | --- |
+| интерфейс | готов: «Где я?» (поиск и фильтр на лету, что дальше), персонажи и их главы, указатель механик, а также всё из A — главы, коллекции, видео-фасад, отметки, поиск, 404 |
+| наполнение | тот же набор, что у A: Celeste — 11 материалов глав по celeste.ink, 2 видео (проверены по oEmbed); тексты — manual_standin, не Qwen |
+| внешние интеграции | нет (реклама и счётчики выключены) |
+| production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
