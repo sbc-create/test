@@ -83,3 +83,18 @@ CI main с тех пор красный, поэтому каждая ветка 
 
 Во всех 30 ветках отличается только `tests/unit/test_permission_matrix.py` — запись разрешённых хостов
 задания TEMPLATE-FOOD-DAILY-01 (коммит 361ae67, 11.10). Патч этот файл не затрагивает.
+
+## Решение владельца и итог (13.10.2026)
+
+Владелец разрешил отдельный черновой PR с минимальным патчем shared core. Перед созданием найден
+**уже открытый PR [#71](https://github.com/sbc-create/test/pull/71)** (`claude/lint-green-trunk`, 98f373d, от 2026-09-15):
+те же 15 файлов, та же суть исправлений (расхождения с `shared-lint-fix.patch` — только в контексте diff).
+
+| что | команда | exit | результат |
+| --- | --- | --- | --- |
+| снимок 98f373d (git archive, без symlink) | `ruff check .` (ruff 0.6.9) | 0 | All checks passed |
+| CI PR #71 | `gh pr view 71 --json statusCheckRollup` | — | Verify (schemas, lint, tests) — SUCCESS, MERGEABLE |
+
+Дубликат PR не создан, чтобы не тратить CI и не плодить конкурирующие правки shared core.
+Остаётся одно действие владельца: слить #71 в main; после этого ветки вариантов станут зелёными
+после обновления от main (shared-файлы в них совпадают с main a7f7cb6).
