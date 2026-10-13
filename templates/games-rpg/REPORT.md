@@ -74,3 +74,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 307c3e7 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 1260 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 7f8d1b1 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-rpg test` | 0 | 19 passed in 1.00s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m quest.qa --shots docs/screenshots/7f8d1b1 --out docs/verification-browser-qa.json` | 0 | 33 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8871 '/?tip=item' '/?tip=xx' '/poisk/?q=Gale' '/otryad/?p=gale&p=karlach&p=shadowheart' '/otryad/?p=nikto' /nesushchestvuet/` | 0 | 42 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 7f8d1b1 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 180 мс. Карта действий — `docs/ACTION-MAP.md`.
