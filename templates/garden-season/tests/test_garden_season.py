@@ -191,3 +191,16 @@ def test_no_cross_template_code():
             and p.name != "test_garden_season.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_meta_descriptions_fit_snippet(app):
+    from sezon.server import SNIPPET_MAX, snippet
+
+    assert snippet("Раз. Два три.", 8) == "Раз."
+    assert snippet("слово " * 40).endswith("…") and len(snippet("слово " * 40)) <= SNIPPET_MAX
+    long_clause = "Начало фразы " + "и ещё слова " * 8 + ", хвост " + "без точки " * 10
+    assert snippet(long_clause).endswith("слова…")  # режется по запятой, а не посреди хвоста
+    for path in re.findall(r"<loc>https?://[^/]+(/[^<]*)</loc>", get(app, "/sitemap.xml")[1]):
+        _, html, _ = get(app, path)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+        assert 20 <= len(desc) <= SNIPPET_MAX, (path, len(desc))
