@@ -114,8 +114,7 @@ def run(shots: Path | None) -> dict:
         A["storage_uses_variant_namespace"] = pg.evaluate("Object.keys(localStorage)") == ["gsv-inv:steps:fakel-16"]
         pg.click("[data-steps-reset]")
         A["steps_reset_clears"] = (
-            boxes.nth(0).is_checked() is False
-            and pg.evaluate("localStorage.getItem('gsv-inv:steps:fakel-16')") == "[]"
+            boxes.nth(0).is_checked() is False and pg.evaluate("localStorage.getItem('gsv-inv:steps:fakel-16')") == "[]"
         )
         pg.evaluate("window.__printed = 0; window.print = () => { window.__printed++; }; 0")  # «; 0»: не функция
         pg.click("[data-print]")
