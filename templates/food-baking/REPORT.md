@@ -62,3 +62,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–256 м�
 | `bash bin/food-baking build --commit HEAD` | 0 | собрано из 37fe950 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 284 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 55f09b2 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-baking test` | 0 | 31 passed in 0.96s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m bakebook.qa --shots docs/screenshots/55f09b2 --out docs/verification-browser-qa.json` | 0 | 44 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8864 '/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom' '/pechem/?r=neizvestno' '/recepty/?sort=temp' '/poisk/?q=печенье' /nesushchestvuet/` | 0 | 31 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-baking build --commit HEAD` | 0 | собрано из 55f09b2 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 220 мс. Карта действий — `docs/ACTION-MAP.md`.

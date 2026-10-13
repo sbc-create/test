@@ -1,6 +1,6 @@
 # Карта действий food-baking, вариант B (oven-bench)
 
-Проверено на commit `37fe950` в Chromium: `python3 -m bakebook.qa --shots docs/screenshots/37fe950 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `55f09b2` в Chromium: `python3 -m bakebook.qa --shots docs/screenshots/55f09b2 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
