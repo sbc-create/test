@@ -62,3 +62,36 @@ commit): **12 из 12**. Production — нет: домен (BLOCKED_INPUT), пр
 
 Изменения: метатеги варианта `book-spread` (тест), подсказка поиска (FB-09). Перезапущено на 79bf0b8: `python3 -m bakebook.qa --shots docs/screenshots/79bf0b8 --out docs/verification-browser-qa.json` → exit 0, 21 сценарий без провалов, axe 4.13.0 — 0 нарушений, 10 скриншотов;
 `python3 qa/viewports.py 8848 /poisk/?q=печенье /nesushchestvuet/` → exit 0, 27 URL × 4 ширины — 0 замечаний (`docs/verification-viewports.json`); `bin/food-baking test` → 21 passed.
+
+## Обновление на 21d30ce (13.10.2026): редактор
+
+Найдено проверкой редактора в браузере (раньше редактор проверялся только по HTTP: 401/403): на 390 px таблица
+давала горизонтальный скролл. Исправлено так же, как в B/C.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-baking test` | 0 | 21 passed |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m bakebook.qa --shots docs/screenshots/21d30ce --out docs/verification-browser-qa.json` | 0 | 21 сценарий PASS, axe 0 |
+| `python3 qa/viewports.py 8848 /poisk/?q=печенье /nesushchestvuet/ > docs/verification-viewports.json` | 0 | 27 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-baking build --commit HEAD` | 0 | собрано из 21d30ce |
+| приёмка редактора (scratchpad `ed_qa.py`) | 0 | 14 проверок PASS — `docs/verification-editor.json` |
+
+Проверки редактора:
+
+| действие | результат | ключ |
+| --- | --- | --- |
+| редактор: без входа — 401 и запрос Basic Auth | PASS | `no_auth_401_with_challenge` |
+| редактор: неверный пароль — 401 | PASS | `wrong_password_401` |
+| редактор: чужое имя с верным паролем — 401 | PASS | `wrong_user_401` |
+| редактор: верные данные — 200 | PASS | `login_200` |
+| редактор: страница редактора — noindex | PASS | `editor_noindex` |
+| редактор: robots закрывает /redaktor/ (в preview — «Disallow: /») | PASS | `robots_disallow_redaktor` |
+| редактор: в sitemap нет /redaktor/ | PASS | `sitemap_has_no_redaktor` |
+| редактор: строк в таблице столько же, сколько рецептов в content.json | PASS | `list_rows_match_content` |
+| редактор: история версий совпадает с history.jsonl | PASS | `history_rows_match_file` |
+| редактор: POST не принимается (501): редактор только читает | PASS | `post_not_accepted` |
+| редактор: на странице нет форм изменения | PASS | `read_only_no_forms` |
+| редактор: нет горизонтального скролла на 390 и 1440 px | PASS | `no_hscroll_editor_pages` |
+| редактор: axe-core 4.13.0 — 0 нарушений | PASS | `axe_zero_editor_pages` |
+| редактор: нет ошибок консоли | PASS | `no_console_errors` |

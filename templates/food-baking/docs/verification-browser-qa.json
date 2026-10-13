@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8848",
- "commit_head": "79bf0b8e617d9e77168610d82059b184cd94d673",
- "at": "2026-10-13T00:38:28Z",
+ "commit_head": "21d30cefcf436304dc23f9fa78e561bd728b9838",
+ "at": "2026-10-13T08:17:52Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -56,52 +56,52 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 380,
+   "lcp_ms": 228,
    "cls": 0,
-   "bytes": 20715
+   "bytes": 20804
   },
   "mobile:catalog": {
-   "lcp_ms": 116,
+   "lcp_ms": 136,
    "cls": 0,
    "bytes": 10950
   },
   "mobile:recipe": {
-   "lcp_ms": 188,
+   "lcp_ms": 132,
    "cls": 0,
    "bytes": 14986
   },
   "mobile:dough": {
-   "lcp_ms": 72,
+   "lcp_ms": 88,
    "cls": 0,
    "bytes": 5845
   },
   "mobile:pitfalls": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0,
    "bytes": 5909
   },
   "desktop:home": {
-   "lcp_ms": 232,
+   "lcp_ms": 168,
    "cls": 0,
-   "bytes": 20715
+   "bytes": 20804
   },
   "desktop:catalog": {
-   "lcp_ms": 116,
+   "lcp_ms": 96,
    "cls": 0,
    "bytes": 10950
   },
   "desktop:recipe": {
-   "lcp_ms": 124,
+   "lcp_ms": 116,
    "cls": 0,
    "bytes": 14986
   },
   "desktop:dough": {
-   "lcp_ms": 176,
+   "lcp_ms": 88,
    "cls": 0,
    "bytes": 5845
   },
   "desktop:pitfalls": {
-   "lcp_ms": 96,
+   "lcp_ms": 64,
    "cls": 0,
    "bytes": 5909
   }
@@ -111,15 +111,15 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found)"
  ],
  "screenshots": [
-  "docs/screenshots/79bf0b8/home-mobile.png",
-  "docs/screenshots/79bf0b8/catalog-mobile.png",
-  "docs/screenshots/79bf0b8/recipe-mobile.png",
-  "docs/screenshots/79bf0b8/dough-mobile.png",
-  "docs/screenshots/79bf0b8/pitfalls-mobile.png",
-  "docs/screenshots/79bf0b8/home-desktop.png",
-  "docs/screenshots/79bf0b8/catalog-desktop.png",
-  "docs/screenshots/79bf0b8/recipe-desktop.png",
-  "docs/screenshots/79bf0b8/dough-desktop.png",
-  "docs/screenshots/79bf0b8/pitfalls-desktop.png"
+  "docs/screenshots/21d30ce/home-mobile.png",
+  "docs/screenshots/21d30ce/catalog-mobile.png",
+  "docs/screenshots/21d30ce/recipe-mobile.png",
+  "docs/screenshots/21d30ce/dough-mobile.png",
+  "docs/screenshots/21d30ce/pitfalls-mobile.png",
+  "docs/screenshots/21d30ce/home-desktop.png",
+  "docs/screenshots/21d30ce/catalog-desktop.png",
+  "docs/screenshots/21d30ce/recipe-desktop.png",
+  "docs/screenshots/21d30ce/dough-desktop.png",
+  "docs/screenshots/21d30ce/pitfalls-desktop.png"
  ]
 }
