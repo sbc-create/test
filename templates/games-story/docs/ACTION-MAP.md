@@ -1,6 +1,6 @@
 # Карта действий games-story, вариант B (progress-tracker)
 
-Проверено на commit `423ba88` в Chromium: `bin/games-story qa` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `e0a9443` в Chromium: `bin/games-story qa` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `saga/qa.py` под тем же именем).
 
 | проверка | статус | фактический результат |

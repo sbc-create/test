@@ -1,6 +1,6 @@
 {
- "commit_head": "423ba88c63c8dda074beff1e27487bcb8d451fc8",
- "at": "2026-10-12T22:05:09Z",
+ "commit_head": "e0a94437cf10976e16a2d013d63c15f4fb3dcbb9",
+ "at": "2026-10-13T08:44:00Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -62,15 +62,15 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 144,
+   "lcp_ms": 112,
    "cls": 0
   },
   "mobile:tracker": {
-   "lcp_ms": 92,
+   "lcp_ms": 100,
    "cls": 0
   },
   "mobile:guide": {
-   "lcp_ms": 80,
+   "lcp_ms": 68,
    "cls": 0
   },
   "mobile:items": {
@@ -78,15 +78,15 @@
    "cls": 0
   },
   "mobile:item": {
-   "lcp_ms": 56,
+   "lcp_ms": 36,
    "cls": 0
   },
   "mobile:videos": {
-   "lcp_ms": 48,
+   "lcp_ms": 40,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 120,
+   "lcp_ms": 108,
    "cls": 0
   },
   "desktop:tracker": {
@@ -94,11 +94,11 @@
    "cls": 0
   },
   "desktop:guide": {
-   "lcp_ms": 80,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:items": {
-   "lcp_ms": 48,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:item": {
@@ -106,7 +106,7 @@
    "cls": 0
   },
   "desktop:videos": {
-   "lcp_ms": 56,
+   "lcp_ms": 40,
    "cls": 0
   }
  },
@@ -115,17 +115,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8858/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/423ba88/home-mobile.png",
-  "docs/screenshots/423ba88/tracker-mobile.png",
-  "docs/screenshots/423ba88/guide-mobile.png",
-  "docs/screenshots/423ba88/items-mobile.png",
-  "docs/screenshots/423ba88/item-mobile.png",
-  "docs/screenshots/423ba88/videos-mobile.png",
-  "docs/screenshots/423ba88/home-desktop.png",
-  "docs/screenshots/423ba88/tracker-desktop.png",
-  "docs/screenshots/423ba88/guide-desktop.png",
-  "docs/screenshots/423ba88/items-desktop.png",
-  "docs/screenshots/423ba88/item-desktop.png",
-  "docs/screenshots/423ba88/videos-desktop.png"
+  "docs/screenshots/e0a9443/home-mobile.png",
+  "docs/screenshots/e0a9443/tracker-mobile.png",
+  "docs/screenshots/e0a9443/guide-mobile.png",
+  "docs/screenshots/e0a9443/items-mobile.png",
+  "docs/screenshots/e0a9443/item-mobile.png",
+  "docs/screenshots/e0a9443/videos-mobile.png",
+  "docs/screenshots/e0a9443/home-desktop.png",
+  "docs/screenshots/e0a9443/tracker-desktop.png",
+  "docs/screenshots/e0a9443/guide-desktop.png",
+  "docs/screenshots/e0a9443/items-desktop.png",
+  "docs/screenshots/e0a9443/item-desktop.png",
+  "docs/screenshots/e0a9443/videos-desktop.png"
  ]
 }
