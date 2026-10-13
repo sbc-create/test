@@ -27,6 +27,38 @@ HEADERS = {
 }
 
 
+SNIPPET_MAX = 160
+
+
+def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
+    """Описание для сниппета: целиком, если помещается; иначе — по границе фразы, запятой или тире."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
+    if cut >= limit // 3:
+        return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    for sep in (", ", " — "):
+        cut = text.rfind(sep, 0, limit - 1)
+        if cut >= limit // 2:
+            return text[:cut].rstrip(",;:—– ") + "…"
+    return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
+
+
+def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
+    """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
+    out, shown = head, 0
+    for t in titles:
+        nxt = out + (": " if not shown else ", ") + t
+        tail = "." if shown + 1 == len(titles) else " и другие."
+        if len(nxt + tail) > limit:
+            break
+        out, shown = nxt, shown + 1
+    if not shown:
+        return head + "."
+    return out + ("." if shown == len(titles) else " и другие.")
+
+
 @dataclass
 class Meta:
     title: str
@@ -175,7 +207,10 @@ class App:
                 "Каталог задач по дому"
                 + (f": {ROOMS[room].lower()}" if room else "")
                 + (f", {TASKS[task].lower()}" if task else ""),
-                "Все инструкции: фильтр по помещению и задаче.",
+                with_examples(
+                    f"Все {len(s.materials)} инструкций с фильтром по помещению и задаче",
+                    [v.lower() for k, v in TASKS.items() if s.for_task(k)],
+                ),
                 None if filtered else s.abs(path),
                 not filtered,
                 crumbs,
@@ -191,7 +226,10 @@ class App:
             return self.page(
                 "task.html",
                 f"{TASKS[t]}: инструкции для всех помещений",
-                f"Задача «{TASKS[t].lower()}» — инструкции для разных комнат.",
+                with_examples(
+                    f"{TASKS[t]} — {len(items)} {plural(len(items), 'инструкция', 'инструкции', 'инструкций')}",
+                    [m.title for m in items],
+                ),
                 path,
                 crumbs,
                 [self.items_ld(items)],
@@ -204,7 +242,7 @@ class App:
             mt = s.by_slug[m.group(1)]
             crumbs = [home, (mt.room_label, f"/pomeshcheniya/{mt.room}/"), (mt.title, mt.url)]
             return self.page(
-                "material.html", mt.title, mt.summary, mt.url, crumbs, [self.howto_ld(mt)], "material", mt=mt
+                "material.html", mt.title, snippet(mt.summary), mt.url, crumbs, [self.howto_ld(mt)], "material", mt=mt
             )
         if path == "/problemy/":  # перенесено из варианта B
             crumbs = [home, ("Что мешает дома", path)]
@@ -235,7 +273,7 @@ class App:
             return self.page(
                 "collections.html",
                 "Подборки: крепление, ящики, обувь, без дрели",
-                "Инструкции, собранные по общей задаче.",
+                with_examples("Инструкции, собранные по общей задаче", [c["title"] for c in s.collections.values()]),
                 path,
                 crumbs,
             )
@@ -244,7 +282,16 @@ class App:
             c = s.collections[m.group(1)]
             crumbs = [home, ("Подборки", "/podborki/"), (c["title"], path)]
             return self.page(
-                "collection.html", c["title"], c["lede"], path, crumbs, [self.items_ld(c["items"])], "collection", c=c
+                "collection.html",
+                c["title"],
+                c["lede"]
+                if len(c["lede"]) >= 50
+                else with_examples(c["lede"].rstrip("."), [m.title for m in c["items"]]),
+                path,
+                crumbs,
+                [self.items_ld(c["items"])],
+                "collection",
+                c=c,
             )
         m = re.fullmatch(r"/teg/([a-z0-9-]+)/", path)
         if m and m.group(1) in s.tags():
@@ -254,7 +301,10 @@ class App:
             return self.page(
                 "tag.html",
                 f"{TAGS[t]} — инструкции",
-                f"Материалы с тегом «{TAGS[t]}».",
+                with_examples(
+                    f"«{TAGS[t]}» — {len(items)} {plural(len(items), 'инструкция', 'инструкции', 'инструкций')}",
+                    [m.title for m in items],
+                ),
                 path,
                 crumbs,
                 [self.items_ld(items)],
