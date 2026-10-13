@@ -608,6 +608,20 @@
       "check": "для каждого имени — ровно один индексируемый раздел",
       "status": "verified",
       "evidence": "zonafilm-space d1034a1 (локально, B019): главный_код_жанра(индекс, код) — код имени с наибольшим составом; canonical каталога с алиасом ведёт на главный; режим индексации не тронут. checks/genre_alias_canonical.py — стенд на снимке ячейки, пара из её индекса: horror → uzhasy, PASS; run.sh rc=0. zonafilm12-site 3d12c29 — та же правка, в снимке пар нет («НЕ ИЗМЕРЕНО»). zonafilm-cc: 97 имён, пар 0 — не применимо. Живая сверка после выкладки: /catalog/?genre=horror → canonical /catalog/?genre=uzhasy."
+    },
+    {
+      "id": "T034",
+      "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/"
+      ],
+      "problem": "Страница /catalog/ Zona не несёт ни одной ссылки на разделы жанров (фильтр — без ссылок); вход в разделы есть только с главной (6) и с карточек (3). Профиль по сети (замер Архитектора 13.10): ссылок на разделы со страницы /catalog/ — Animedia 150, Yummy 53, Lords 14, AnimeGo 2, Zona 0.",
+      "norm": "задание п.3 — внутренние ссылки на работающие разделы",
+      "expected": "на /catalog/ — список ссылок на разделы жанров (главный код имени, как в карте T032)",
+      "check": "число ссылок /catalog/?genre= на /catalog/ ≥ числу жанров в карте; цели 200, index",
+      "status": "queued",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
     }
   ]
 }
