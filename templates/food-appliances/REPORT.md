@@ -46,3 +46,17 @@ LCP (лаборатория, loopback, без троттлинга) 36–160 м�
 | `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 838da4a |
 
 Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 5d5aee3 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-appliances test` | 0 | 21 passed in 0.75s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m techkitchen.qa --shots docs/screenshots/5d5aee3 --out docs/verification-browser-qa.json` | 0 | 42 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8866 '/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke' '/ochered/?r=neizvestno' '/poisk/?q=тушение' /nesushchestvuet/` | 0 | 30 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 5d5aee3 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.

@@ -1,6 +1,6 @@
 # Карта действий food-appliances, вариант B (step-console)
 
-Проверено на commit `838da4a` в Chromium: `python3 -m techkitchen.qa --shots docs/screenshots/838da4a --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `5d5aee3` в Chromium: `python3 -m techkitchen.qa --shots docs/screenshots/5d5aee3 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
