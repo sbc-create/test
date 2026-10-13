@@ -938,8 +938,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-10"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-10",
+        "remote": "https://github.com/sbc-create/site-lordfilm-group"
       },
       "template": {
         "template_id": "lords-films",
@@ -956,7 +957,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:39:38.923753+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1169,8 +1170,9 @@
       "aliases": [],
       "status": "planned",
       "repo": {
-        "kind": "local",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-13"
+        "kind": "remote",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-13",
+        "remote": "https://github.com/sbc-create/site-lordserial-su"
       },
       "template": {
         "template_id": "lords-serials",
@@ -1187,7 +1189,7 @@
       },
       "deployed": {},
       "content_revision": null,
-      "last_update": null,
+      "last_update": "2026-10-13T13:39:39.220731+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
