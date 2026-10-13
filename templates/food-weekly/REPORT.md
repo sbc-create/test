@@ -88,3 +88,13 @@ LCP (лаборатория, loopback, без троттлинга) 48–636 м�
 | `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 2526dfb |
 
 Лабораторный LCP (loopback, без троттлинга) — до 216 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #121 перенацелен с `claude/template-food-weekly` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 121 --base claude/template-food-weekly`.
+- Комплект переноса — `bash bin/food-weekly kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`food-weekly-118eac6`): `sha256sum -c` — 0, тесты — 30 passed in 1.12s,
+  запуск на 8903 — `/healthz` за 0.25 с, главная 200 (`own-week`),
+  35 URL и 3 ресурсов — 0 ошибок.
