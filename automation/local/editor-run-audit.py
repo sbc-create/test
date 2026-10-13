@@ -24,6 +24,8 @@
 
     python3 automation/local/editor-run-audit.py --since "2026-10-06 14:00:00" \\
         --until "2026-10-06 15:00:00" [--grid 30] [--tz-offset 3]
+    python3 automation/local/editor-run-audit.py --since 2026-10-06T14:00:00Z \\
+        --until 2026-10-06T15:00:00Z        # та же форма, что у прочих инструментов
 """
 from __future__ import annotations
 
@@ -51,8 +53,39 @@ def _время(с: str) -> dt.datetime:
     return dt.datetime.strptime(с, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=ЮТС)
 
 
-def вызовы(since: str, until: str) -> list[dict]:
-    """Вызовы инструментов из журнала моста. Пусто — значит пусто."""
+#: Форма, которую понимает `journalctl`. Своя у него, и это не прихоть: с `T`
+#: он отвечает «Failed to parse timestamp», и прежде это кончалось выводом
+#: «ВЫЗОВОВ НЕТ» — то есть провал чтения выглядел провалом редактора.
+ФОРМА_ЖУРНАЛА = "%Y-%m-%d %H:%M:%S"
+
+
+def окно(с: str) -> dt.datetime:
+    """Разобрать границу окна в обеих принятых формах.
+
+    Принимается `2026-10-12T19:00:00Z`, `2026-10-12T19:00:00` и
+    `2026-10-12 19:00:00`. Первую `dt.fromisoformat` на 3.10 не принимает, и
+    прежде вызов с ней кончался трассировкой — а это самая очевидная форма,
+    потому что именно так время печатают все остальные инструменты фабрики.
+    """
+    чистое = с.strip()
+    if чистое.endswith(("Z", "z")):
+        чистое = чистое[:-1]
+    чистое = чистое.replace("T", " ")
+    try:
+        return dt.datetime.strptime(чистое, ФОРМА_ЖУРНАЛА).replace(tzinfo=ЮТС)
+    except ValueError:
+        raise SystemExit(
+            f"не разобрано время {с!r}: ожидается "
+            "«ГГГГ-ММ-ДД ЧЧ:ММ:СС» или «ГГГГ-ММ-ДДTЧЧ:ММ:ССZ»") from None
+
+
+def вызовы(since: str, until: str) -> tuple[list[dict], str | None]:
+    """(вызовы, причина непрочтения). Пустой список и None — значит пусто.
+
+    Второе значение и есть исправление: пустой список САМ ПО СЕБЕ не говорит,
+    вызовов не было или журнал не прочитан, а выводы из этих двух случаев
+    противоположны.
+    """
     г = subprocess.run(
         ["journalctl", "-u", ЮНИТ, "--since", since, "--until", until,
          "--no-pager", "-o", "cat"],
@@ -74,9 +107,10 @@ def вызовы(since: str, until: str) -> list[dict]:
             continue
         если.append(з)
     if г.returncode != 0 and not если:
-        print(f"журнал моста не прочитан: {(г.stderr or '').strip()[:200]}",
-              file=sys.stderr)
-    return если
+        причина = (г.stderr or "").strip()[:200] or f"код {г.returncode}"
+        print(f"журнал моста не прочитан: {причина}", file=sys.stderr)
+        return если, причина
+    return если, None
 
 
 def события_очереди(с: dt.datetime, до: dt.datetime) -> list[dict]:
@@ -114,17 +148,31 @@ def главная(argv: list[str] | None = None) -> int:
                    help="разрыв в секундах, который считается новым обращением")
     args = p.parse_args(argv)
 
-    с = dt.datetime.fromisoformat(args.since).replace(tzinfo=ЮТС)
-    до = dt.datetime.fromisoformat(args.until).replace(tzinfo=ЮТС)
+    с = окно(args.since)
+    до = окно(args.until)
+    if до <= с:
+        raise SystemExit(f"конец окна {args.until} не позже начала {args.since}")
     сдвиг = dt.timedelta(hours=args.tz_offset)
 
-    в = вызовы(args.since, args.until)
+    # Журналу передаётся ЕГО форма, а не то, что набрал человек.
+    в, непрочитан = вызовы(с.strftime(ФОРМА_ЖУРНАЛА), до.strftime(ФОРМА_ЖУРНАЛА))
     е = события_очереди(с, до)
-    print(f"окно {args.since}Z — {args.until}Z "
+    print(f"окно {с.strftime('%Y-%m-%dT%H:%M:%SZ')} — "
+          f"{до.strftime('%Y-%m-%dT%H:%M:%SZ')} "
           f"(местное {(с+сдвиг).strftime('%H:%M')}—{(до+сдвиг).strftime('%H:%M')})")
-    print(f"вызовов инструментов: {len(в)}; событий очереди: {len(е)}")
+    если_прочитан = "вызовов инструментов: " + (
+        "НЕ ИЗМЕРЕНО" if непрочитан else str(len(в)))
+    print(f"{если_прочитан}; событий очереди: {len(е)}")
 
-    if not в:
+    if непрочитан:
+        # Прежде здесь печаталось «ВЫЗОВОВ НЕТ. Работа до фабрики не дошла» —
+        # вывод о редакторе из провала ЧТЕНИЯ. Два случая, и выводы у них
+        # противоположные, поэтому они и разделены.
+        print(f"\nЖУРНАЛ МОСТА НЕ ПРОЧИТАН: {непрочитан}")
+        print("Вывода о запусках из этого НЕ следует: отсутствие записей и "
+              "отсутствие доступа к записям — разные вещи. События очереди "
+              "ниже читаются из файла и этим отказом не затронуты.")
+    elif not в:
         print("\nВЫЗОВОВ НЕТ. Работа до фабрики не дошла: запуск, обработавший "
               "задание, обязан вызвать editorial_queue_next.")
     else:
