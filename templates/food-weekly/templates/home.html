@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block main %}
+<section class="intro">
+  <h1>Соберите свою неделю — список покупок посчитается сам</h1>
+  <p class="lead">Выберите блюда на каждый день из каталога рецептов или возьмите готовый план за основу и поменяйте что хотите. Покупки считаются по рецептам и числу людей.</p>
+  <p><a class="btn btn--big" href="/svoya-nedelya/">Собрать свою неделю</a></p>
+</section>
+<section aria-labelledby="h-seed"><h2 id="h-seed">Начать с готового плана</h2>
+<ul class="seedlist">{% for p in app.plans.values() %}<li><a href="/menyu/{{ p.slug }}/"><b>{{ p.title }}</b></a><span>{{ p.people }} чел. · {{ p.description }}</span></li>{% endfor %}</ul>
+<p class="note">На странице «Своя неделя» любой план можно взять за основу и изменить.</p></section>
+{% endblock %}

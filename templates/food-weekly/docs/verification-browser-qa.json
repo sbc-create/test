@@ -1,0 +1,175 @@
+{
+ "commit_head": "2526dfbe4a79ae915638509fe42ada27cf23b48d",
+ "at": "2026-10-13T21:15:20Z",
+ "scenarios": {
+  "mobile:own:no_hscroll": true,
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:week:no_hscroll": true,
+  "mobile:day:no_hscroll": true,
+  "mobile:shopping:no_hscroll": true,
+  "desktop:own:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:week:no_hscroll": true,
+  "desktop:day:no_hscroll": true,
+  "desktop:shopping:no_hscroll": true,
+  "swap_url_has_zamena_or_s": true,
+  "swapped_marker": 1,
+  "shopping_after_swap_url": true,
+  "shopping_rows_before_after": [
+   201,
+   195
+  ],
+  "shopping_changed_after_swap": true,
+  "bought_mark_persists": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip_counter_counts_left": true,
+  "trip_marks_persist_separately": true,
+  "trip_whole_list_present": true,
+  "invalid_swap_warning": true,
+  "first_tab_skip": true,
+  "home_cta_opens_own_week": true,
+  "own_count_updates": true,
+  "own_week_shopping_listed": true,
+  "own_selection_kept": true,
+  "own_bought_persists": true,
+  "header_link_returns_to_own_week": true,
+  "seed_from_plan_fills_week": true,
+  "bad_people_400_alert": true,
+  "storage_namespace_own": true,
+  "nojs_week_dishes": 23,
+  "nojs_swap_works": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/menyu/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/den-1/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/pokupki/": [],
+  "mobile:/kak-planirovat/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/supy-dlya-obedov/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/?s=d1-dinner-0:plov-s-kuricej": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/menyu/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/den-1/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/pokupki/": [],
+  "desktop:/kak-planirovat/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/supy-dlya-obedov/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/?s=d1-dinner-0:plov-s-kuricej": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:own": {
+   "lcp_ms": 216,
+   "cls": 0
+  },
+  "mobile:home": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:week": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:day": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "mobile:shopping": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "desktop:own": {
+   "lcp_ms": 136,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:week": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
+  "desktop:day": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:shopping": {
+   "lcp_ms": 84,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8873/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8873/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/2526dfb/own-mobile.png",
+  "docs/screenshots/2526dfb/home-mobile.png",
+  "docs/screenshots/2526dfb/catalog-mobile.png",
+  "docs/screenshots/2526dfb/week-mobile.png",
+  "docs/screenshots/2526dfb/day-mobile.png",
+  "docs/screenshots/2526dfb/shopping-mobile.png",
+  "docs/screenshots/2526dfb/own-desktop.png",
+  "docs/screenshots/2526dfb/home-desktop.png",
+  "docs/screenshots/2526dfb/catalog-desktop.png",
+  "docs/screenshots/2526dfb/week-desktop.png",
+  "docs/screenshots/2526dfb/day-desktop.png",
+  "docs/screenshots/2526dfb/shopping-desktop.png"
+ ],
+ "actions": {
+  "mobile:own:no_hscroll": true,
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:week:no_hscroll": true,
+  "mobile:day:no_hscroll": true,
+  "mobile:shopping:no_hscroll": true,
+  "desktop:own:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:week:no_hscroll": true,
+  "desktop:day:no_hscroll": true,
+  "desktop:shopping:no_hscroll": true,
+  "swap_url_has_zamena_or_s": true,
+  "swapped_marker": 1,
+  "shopping_after_swap_url": true,
+  "shopping_rows_before_after": [
+   201,
+   195
+  ],
+  "shopping_changed_after_swap": true,
+  "bought_mark_persists": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip_counter_counts_left": true,
+  "trip_marks_persist_separately": true,
+  "trip_whole_list_present": true,
+  "invalid_swap_warning": true,
+  "first_tab_skip": true,
+  "home_cta_opens_own_week": true,
+  "own_count_updates": true,
+  "own_week_shopping_listed": true,
+  "own_selection_kept": true,
+  "own_bought_persists": true,
+  "header_link_returns_to_own_week": true,
+  "seed_from_plan_fills_week": true,
+  "bad_people_400_alert": true,
+  "storage_namespace_own": true,
+  "nojs_week_dishes": 23,
+  "nojs_swap_works": true
+ }
+}

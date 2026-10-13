@@ -56,3 +56,22 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- food-weekly: аудит планировщиков меню (только чтение) -----------------
+  # Внесены заданием владельца PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12).
+  # Только GET, 1 запрос на хост, сохраняются только измерения интерфейса.
+  - ref: food-weekly-menunedeli
+    host: menunedeli.ru
+    purpose: "food-weekly: референс «Меню недели» (назван в задании)"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-weekly-mealime
+    host: www.mealime.com
+    purpose: "food-weekly: референс Mealime (назван в задании)"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-weekly-plantoeat
+    host: www.plantoeat.com
+    purpose: "food-weekly: третий планировщик — выбран по заданию «плюс ещё один доступный планировщик»"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)

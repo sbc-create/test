@@ -1,0 +1,6 @@
+{
+  "name": "food-weekly-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона food-weekly (axe-core)",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

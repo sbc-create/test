@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Планы меню на неделю</h1>
+<p class="lead">Каждый план — 7 дней × завтрак, обед и ужин из рецептов сайта «Будни на кухне».</p>
+{% set hl = "h2" %}<div class="plans">{% for p in app.plans.values() %}{% include "_plancard.html" %}{% endfor %}</div>
+{% endblock %}

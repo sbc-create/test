@@ -1,0 +1,210 @@
+{
+ "at": "2026-10-12T06:39:07Z",
+ "mode": "server_html_no_js",
+ "hosts": {
+  "menunedeli.ru": {
+   "start0": {
+    "url": "https://menunedeli.ru/",
+    "status": 200,
+    "html_kb": 264,
+    "has_h1": true,
+    "jsonld": [
+     "BreadcrumbList",
+     "Course",
+     "CourseInstance",
+     "ImageObject",
+     "ItemList",
+     "ListItem",
+     "Offer",
+     "Organization",
+     "Person",
+     "Schedule",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 3,
+    "servings_people": 0,
+    "swap": 23,
+    "signup_wall": 0,
+    "ads": 0,
+    "video": 0
+   },
+   "start1": {
+    "url": "https://menunedeli.ru/menyu-na-nedelyu/",
+    "status": 200,
+    "html_kb": 453,
+    "has_h1": true,
+    "jsonld": [
+     "BreadcrumbList",
+     "ImageObject",
+     "ListItem",
+     "Organization",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 7,
+    "weekdays_en": 0,
+    "shopping_list": 11,
+    "servings_people": 1,
+    "swap": 5,
+    "signup_wall": 0,
+    "ads": 0,
+    "video": 8
+   },
+   "plan0": {
+    "url": "https://menunedeli.ru/2013/06/menyu-na-nedelyu-dlya-semi/",
+    "status": 200,
+    "html_kb": 443,
+    "has_h1": true,
+    "jsonld": [
+     "Article",
+     "BreadcrumbList",
+     "ImageObject",
+     "ListItem",
+     "Organization",
+     "Person",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 79,
+    "weekdays_en": 0,
+    "shopping_list": 9,
+    "servings_people": 3,
+    "swap": 5,
+    "signup_wall": 0,
+    "ads": 0,
+    "video": 4
+   },
+   "plan1": {
+    "url": "https://menunedeli.ru/2013/11/domashnee-menyu-na-nedelyu/",
+    "status": 200,
+    "html_kb": 429,
+    "has_h1": true,
+    "jsonld": [
+     "Article",
+     "BreadcrumbList",
+     "ImageObject",
+     "ListItem",
+     "Organization",
+     "Person",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 7,
+    "weekdays_en": 0,
+    "shopping_list": 3,
+    "servings_people": 0,
+    "swap": 5,
+    "signup_wall": 0,
+    "ads": 0,
+    "video": 4
+   }
+  },
+  "www.mealime.com": {
+   "start0": {
+    "url": "https://www.mealime.com/",
+    "status": 200,
+    "html_kb": 244,
+    "has_h1": false,
+    "jsonld": [],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 8,
+    "servings_people": 2,
+    "swap": 7,
+    "signup_wall": 13,
+    "ads": 0,
+    "video": 0
+   },
+   "start1": {
+    "url": "https://www.mealime.com/meal-plans",
+    "status": 404,
+    "html_kb": 0,
+    "has_h1": false,
+    "jsonld": [],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 0,
+    "servings_people": 0,
+    "swap": 0,
+    "signup_wall": 0,
+    "ads": 0,
+    "video": 0
+   },
+   "plan0": {
+    "url": "https://www.mealime.com/recipes",
+    "status": 200,
+    "html_kb": 1076,
+    "has_h1": false,
+    "jsonld": [],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 0,
+    "servings_people": 0,
+    "swap": 7,
+    "signup_wall": 1,
+    "ads": 0,
+    "video": 0
+   }
+  },
+  "www.plantoeat.com": {
+   "start0": {
+    "url": "https://www.plantoeat.com/",
+    "status": 200,
+    "html_kb": 366,
+    "has_h1": true,
+    "jsonld": [
+     "BreadcrumbList",
+     "EntryPoint",
+     "ImageObject",
+     "ListItem",
+     "Offer",
+     "Organization",
+     "PropertyValueSpecification",
+     "ReadAction",
+     "SearchAction",
+     "SoftwareApplication",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 19,
+    "servings_people": 9,
+    "swap": 109,
+    "signup_wall": 2,
+    "ads": 0,
+    "video": 1
+   },
+   "start1": {
+    "url": "https://www.plantoeat.com/tour/meal-planner/",
+    "status": 200,
+    "html_kb": 301,
+    "has_h1": true,
+    "jsonld": [
+     "BreadcrumbList",
+     "EntryPoint",
+     "ImageObject",
+     "ListItem",
+     "Organization",
+     "PropertyValueSpecification",
+     "ReadAction",
+     "SearchAction",
+     "WebPage",
+     "WebSite"
+    ],
+    "weekdays_ru": 0,
+    "weekdays_en": 0,
+    "shopping_list": 8,
+    "servings_people": 9,
+    "swap": 90,
+    "signup_wall": 2,
+    "ads": 0,
+    "video": 0
+   }
+  }
+ },
+ "requests": 14
+}

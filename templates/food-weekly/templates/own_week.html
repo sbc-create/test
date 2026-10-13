@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Своя неделя</h1>
+<p class="lead">Выберите блюдо на каждый приём пищи — можно не на все. Блюда — из каталога «Будней на кухне», каждое только для своего приёма пищи. Список покупок считается по рецептам и числу людей.</p>
+<p class="seeds">Взять за основу: {% for slug, qs in seeds.items() %}<a href="/svoya-nedelya/?{{ qs }}">{{ app.plans[slug].title }}</a>{% if not loop.last %} · {% endif %}{% endfor %}</p>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% for n in notes %}<p class="warn">{{ n }}</p>{% endfor %}
+<form class="own" action="/svoya-nedelya/" method="get" data-own-form>
+  <p class="own__people"><label for="lyudi">Сколько людей</label> <input id="lyudi" name="lyudi" type="number" inputmode="numeric" min="1" max="8" value="{{ people }}" required></p>
+  <ol class="own__days">{% for day in days %}{% set n = loop.index %}
+    <li class="own__day"><h2>{{ DAYS[n - 1] }}</h2>
+      {% for m, label in MEALS.items() %}<p class="own__slot"><label for="s-{{ n }}-{{ m }}">{{ label }}</label>
+        <select id="s-{{ n }}-{{ m }}" name="d{{ n }}-{{ m }}"><option value="">— не выбрано —</option>{% for a in alts[m] %}<option value="{{ a.slug }}"{% if day[m] and day[m][0].slug == a.slug %} selected{% endif %}>{{ a.title }}</option>{% endfor %}</select></p>{% endfor %}
+    </li>{% endfor %}</ol>
+  <p class="own__go"><button type="submit" class="btn">Посчитать покупки</button> <a class="btn btn--ghost" href="/svoya-nedelya/">Очистить</a> <span data-own-count aria-live="polite"></span></p>
+</form>
+{% if chosen %}
+<section class="own-result" aria-labelledby="h-buy"><h2 id="h-buy">Список покупок: {{ chosen }} {{ plural(chosen, 'блюдо', 'блюда', 'блюд') }} на {{ people }} чел.</h2>
+  <p class="actions"><button class="btn" type="button" data-print hidden>Печать</button></p>
+  <ul class="buy" data-list="own">{% for it in sl['items'] %}<li><label><input type="checkbox" value="{{ it.name }}|{{ it.unit }}"> <span class="buy__name">{{ it.name }}</span></label> <b>{{ it.amount }}</b>{% if it.hint %} <small>({{ it.hint }})</small>{% endif %}<small class="buy__for">{{ it.recipes|join(', ') }}</small></li>{% endfor %}</ul>
+  {% if sl.to_taste %}<p class="taste"><b>По вкусу и без количества:</b> {{ sl.to_taste|map(attribute='name')|join(', ') }}</p>{% endif %}
+  <p class="note">Количества — из рецептов-источников, пересчитаны на {{ people }} чел.; одинаковые продукты в разных единицах не складываются. Вода не включена.</p>
+</section>
+{% endif %}
+{% endblock %}
