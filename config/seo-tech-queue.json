@@ -516,6 +516,22 @@
       "check": "checks/pagination_links.py; bash checks/run.sh; живой HTML /catalog/",
       "status": "session",
       "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут."
+    },
+    {
+      "id": "T028",
+      "site": "zonafilm.space, zonafilm.cc, zonafilm12.site, lordfilm47.space, lordserials22.info, 1lordserials1.online",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/movies/?sort=newest&page=2",
+        "https://lordfilm47.space/movies/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&page=2",
+        "https://lordserials22.info/movies/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC&section=movies&page=2"
+      ],
+      "problem": "Ссылки листалки несут параметры, подставленные МАРШРУТОМ: Zona — sort=newest (/movies/, /series/, /catalog/ на всех трёх), Lords — kind=Фильм/Сериал (/movies/, /series/ у lordfilm47 и 1lordserials1), lordserials22.info — kind+section. Целевые страницы: index, follow c canonical на ?page=N (Zona, lordfilm47) либо noindex, follow (lordserials22.info) — канонические страницы листалки разделов прямых ссылок не получают (замер 13.10 ~01:15Z). lordserial33.biz — чисто (/movies/?page=2, canonical на себя). Тот же класс, что T027 у AnimeGo.",
+      "norm": "внутренние ссылки — на канонические адреса",
+      "expected": "ссылки листалки разделов = канонический адрес страницы (без подразумеваемых sort/kind/section)",
+      "check": "живой HTML листалки /movies/ /series/ /catalog/; canonical целевой страницы = её адрес",
+      "status": "session",
+      "evidence": "Код шести витрин разошёлся (у Zona есть пометка _подразумеваемое, у lordfilm47 нет); чинится по витрине. Первыми — zonafilm-space и zonafilm12-site."
     }
   ]
 }
