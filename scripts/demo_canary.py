@@ -72,12 +72,12 @@ def main() -> int:
 
     # --- 2. canary ---------------------------------------------------
     experiment = Experiment(
-        hypothesis="Сокращение переполненных title до 60 символов повысит CTR карточек",
+        hypothesis="Самоканонизация карточек, канонизированных на чужой адрес, вернёт их в индекс",
         site_id="fixture-anime",
         primary_metric="ctr",
         scope_pages=len(result.proposed_changes),
         site_total_pages=100,
-        applicability="Карточки произведений с title > 60 символов на одном сайте",
+        applicability="Карточки произведений с canonical на чужой URL на одном сайте",
     )
     applied = op.apply_canary(experiment, result.proposed_changes, sites_touched=1)
 

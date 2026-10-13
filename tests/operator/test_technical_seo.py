@@ -197,3 +197,12 @@ def test_findings_sorted_by_severity():
     p = Page(url="https://a.example/1", status_code=500, title="x" * 100)
     sev = [f["severity"] for f in run_all([p])]
     assert sev == sorted(sev, key=lambda s: ["critical", "high", "medium", "low", "info"].index(s))
+
+
+def test_length_findings_are_informational():
+    """REQ-SEO-META п.3: жёсткий лимит символов не является критерием истины."""
+    p = Page(url="https://a.example/1", title="Очень длинный заголовок " * 5,
+             description="Очень длинное описание. " * 20)
+    found = {f["id"]: f for f in run_all([p])}
+    assert found["ONP-002"]["severity"] == "info"
+    assert found["ONP-005"]["severity"] == "info"

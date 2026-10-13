@@ -658,7 +658,7 @@
       "expected": "«<раздел> на <сайт>: N <запись/записи/записей> каталога — смотреть онлайн[ — страница K].»",
       "check": "checks/section_description.py (стенд на снимке)",
       "status": "session",
-      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом."
+      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом. zonafilm-cc: обёртка ВидЗона.список в src/serve.py (шаблон закреплён), проверка ловит промах обёртки пометкой data-zx; стенд PASS, отрицательная проба rc=1. Animedia (2): ВидАнимедиа.список, сверка с видимым «Найдено N»; стенд PASS обе, отрицательная проба rc=1."
     },
     {
       "id": "T037",
@@ -674,6 +674,17 @@
       "check": "множество слагов каталога минус множество /title/ из живой карты == records из data/animedia-02-admission.json",
       "status": "done",
       "evidence": "Сессия 13.10 ~03:00Z: в карте 8 061, в каталоге 8 589, вне карты 528 = ровно 528 записей вне тематического допуска (exclude 239 + review 289), пересечение с картой 0, необъяснённых 0. Страницы отдают 200 и noindex, follow (4 из 4 проверены, маршрут_тайтла: _допуск != ДОПУЩЕНО). Ошибки сборщика нет. Остаток — решение человека по 289 записям review:* (anime_admission), не техническая правка."
+    },
+    {
+      "id": "T038",
+      "site": "фабрика (seo_operator)",
+      "repo": ".",
+      "problem": "seo_operator/technical_seo.py: ONP-002 (title > 60) уровня medium с рекомендацией «сократить до 60», ONP-005 (description > 160) — «сократить до 160»; seo_operator/pipeline.py propose() по ONP-002 сам режет title срезом page.title[:60] — посреди слова/сущности. Противоречит knowledge/SEO_KNOWLEDGE_PACK.md REQ-SEO-META п.3: «жёсткий лимит символов не является критерием истины: проверяются уникальность, читаемость, отсутствие обрезанных сущностей». Замечание Архитектора 13.10. Живых вызовов нет: propose/apply_canary — только tests/operator/test_pipeline.py и scripts/demo_canary.py (вся демо-гипотеза канарейки — «сокращение title до 60»).",
+      "norm": "REQ-SEO-META п.3 (база знаний выше кода фабрики, CLAUDE.md «Источники истины»)",
+      "expected": "длина — справочно (info), рекомендация «проверить читаемость и обрезанные сущности»; механической обрезки title нет; канареечный тест и демо опираются на правку, которая не нарушает п.3 (например IDX-001 cross-canonical)",
+      "check": "tests/operator/test_technical_seo.py, tests/operator/test_pipeline.py; grep: нет среза title[:N] в propose",
+      "status": "done",
+      "evidence": "factory/seo/validate.py SEO-003-len — warning, page_audit.py TITLE_LONG — info: им правка не нужна. Сделано 13.10 ~03:40Z: ONP-002/ONP-005 → info, рекомендация по п.3; ветка ONP-002 в propose() удалена; тест dry-run теперь требует: ONP-002 найден, правки title нет; демо-канарейка на IDX-001, docs/seo-operator/demo-canary-rollback.md перегенерирован (было: title обрезан до «…которо»). pytest tests/operator: 286 passed."
     }
   ]
 }

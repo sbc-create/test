@@ -104,10 +104,11 @@ def check_titles(pages: Iterable[Page]) -> list[dict]:
             _finding(
                 "ONP-002",
                 "on-page",
-                "medium",
-                f"{len(too_long)} title длиннее {TITLE_MAX} символов",
+                "info",
+                f"{len(too_long)} title длиннее {TITLE_MAX} символов (справочно)",
                 too_long,
-                f"Сократить title до {TITLE_MAX} символов.",
+                "Проверить уникальность, читаемость и отсутствие обрезанных сущностей; "
+                "длина сама по себе не дефект (SEO_KNOWLEDGE_PACK REQ-SEO-META п.3).",
                 f"Длина строки title > {TITLE_MAX}.",
             )
         )
@@ -154,10 +155,11 @@ def check_descriptions(pages: Iterable[Page]) -> list[dict]:
             _finding(
                 "ONP-005",
                 "on-page",
-                "low",
-                f"{len(too_long)} description длиннее {DESCRIPTION_MAX}",
+                "info",
+                f"{len(too_long)} description длиннее {DESCRIPTION_MAX} (справочно)",
                 too_long,
-                f"Сократить до {DESCRIPTION_MAX} символов.",
+                "Проверить, что description точно описывает видимый контент и не обрывает "
+                "сущность; длина сама по себе не дефект (SEO_KNOWLEDGE_PACK REQ-SEO-META п.3).",
                 f"Длина description > {DESCRIPTION_MAX}.",
             )
         )

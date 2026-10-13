@@ -89,7 +89,11 @@ class TestDryRun:
             Mode.DRY_RUN, pages_by_site={"fixture-anime": pages()}, today=TODAY
         )
         kinds = {c.kind.value for c in result.proposed_changes}
-        assert "title" in kinds and "canonical" in kinds
+        assert "canonical" in kinds
+        # Длинный title находится (ONP-002), но не режется: жёсткий лимит
+        # символов не критерий, обрезка даёт оборванную сущность (REQ-SEO-META п.3).
+        assert "ONP-002" in {f["id"] for f in result.findings}
+        assert "title" not in kinds
 
     def test_proposed_changes_are_reversible(self, tmp_path):
         result = operator(tmp_path).run(
@@ -132,7 +136,7 @@ class TestBlockers:
 class TestCanary:
     def make_experiment(self, **kw):
         defaults = {
-            "hypothesis": "Сокращение title повысит CTR",
+            "hypothesis": "Самоканонизация карточек вернёт их в индекс",
             "site_id": "fixture-anime",
             "primary_metric": "ctr",
             "scope_pages": 2,

@@ -124,35 +124,18 @@ class Operator:
         Only findings with a mechanical, verifiable fix become changes. Anything
         needing editorial judgement becomes a backlog item instead, so the
         unattended path never writes prose it cannot justify.
+
+        Title length (ONP-002) is not one of them: a hard character limit is
+        not a criterion of truth (SEO_KNOWLEDGE_PACK REQ-SEO-META п.3), and a
+        mechanical cut produces exactly the truncated entity that rule forbids.
         """
         from seo_operator.audit import ChangeKind
-        from seo_operator.technical_seo import TITLE_MAX
 
         changes: list[Change] = []
         by_url = {p.url: p for p in pages}
 
         for finding in findings:
-            if finding["id"] == "ONP-002":  # title too long
-                for url in finding["affected_urls"]:
-                    page = by_url.get(url)
-                    if not page or not page.title:
-                        continue
-                    trimmed = page.title[:TITLE_MAX].rstrip(" -—|,")
-                    if trimmed == page.title or not trimmed:
-                        continue
-                    changes.append(
-                        Change(
-                            site_id=site_id,
-                            entity_id=url,
-                            kind=ChangeKind.TITLE,
-                            field_name="title",
-                            before=page.title,
-                            after=trimmed,
-                            reason=f"title длиннее {TITLE_MAX} символов и обрезается в выдаче",
-                            source=finding["id"],
-                        )
-                    )
-            elif finding["id"] == "IDX-001":  # cross-canonical
+            if finding["id"] == "IDX-001":  # cross-canonical
                 for url in finding["affected_urls"]:
                     page = by_url.get(url)
                     if not page or page.canonical is None:
