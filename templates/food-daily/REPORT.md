@@ -141,3 +141,10 @@ Qwen: ночной прогон не подтверждён (ветки и фа�
 `python3 -m fooddaily.qa_browser --shots docs/screenshots/d05068d --out docs/verification/browser-qa.json` → exit 0, 26 сценариев
 без провалов, axe 4.13.0 — 0 нарушений, 10 скриншотов; `python3 qa/viewports.py 8847 /poisk/?q=тыква /nesushchestvuet/` → exit 0,
 53 URL × 4 ширины — 0 замечаний (`docs/verification/viewports-d05068d.json`); `bin/food-daily test` → 116 passed.
+
+## Обновление на 2bd36b8
+
+Зарезервировано место под переключатель порций и кнопки рецепта (их показывает JS) — сдвиг макета на странице рецепта убран
+(лабораторный CLS по прогону — 0). Перезапущено: `python3 -m fooddaily.qa_browser --shots docs/screenshots/2bd36b8 --out docs/verification/browser-qa.json`
+→ exit 0, 26 сценариев без провалов, axe 0; `python3 qa/viewports.py 8847 …` → 53 URL × 4 ширины, 0 замечаний
+(`docs/verification/viewports-2bd36b8.json`); `bin/food-daily test` → 116 passed.
