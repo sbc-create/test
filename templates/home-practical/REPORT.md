@@ -74,3 +74,13 @@ LCP (лаборатория, loopback, без троттлинга) 56–148 м�
 | `bash bin/home-practical build --commit HEAD` | 0 | собрано из 6b316b8 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 136 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #115 перенацелен с `claude/template-home-practical` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 115 --base claude/template-home-practical`.
+- Комплект переноса — `bash bin/home-practical kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`home-practical-45cd003`): `sha256sum -c` — 0, тесты — 23 passed in 1.47s,
+  запуск на 8905 — `/healthz` за 0.25 с, главная 200 (`home-audit`),
+  51 URL и 10 ресурсов — 0 ошибок.
