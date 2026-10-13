@@ -42,7 +42,9 @@ def test_quantities_are_slot_counts(app):
 
 def test_planks_and_sticks(app):
     now, almost = craftable(app.site, {"doski", "palka"})
-    assert {e.slug for e, *_ in now} == {"lestnica", "palka", "stupeni", "sunduk", "verstak", "zabor"}
+    assert {e.slug for e, *_ in now} == {"kirka", "lestnica", "palka", "stupeni", "sunduk", "verstak", "zabor"}
+    kirka = next(r for e, r, *_ in now if e.slug == "kirka")
+    assert kirka["result"] == "Wooden Pickaxe"  # доски и палки — деревянная кирка, а не «любая»
     miss = {e.slug: [m["title"] for m in ms] for e, r, ns, ms in almost}
     assert miss["fakel"] == ["Coal"] and miss["shchit"] == ["Iron Ingot"] and miss["krovat"] == ["White Wool"]
 
@@ -55,6 +57,6 @@ def test_page_states(app):
     st, html, _ = get(app, "/iz-togo-chto-est/")
     assert st == 200 and canon(html) == app.site.abs("/iz-togo-chto-est/")
     st, html, _ = get(app, "/iz-togo-chto-est/", {"est": ["doski", "palka"]})
-    assert st == 200 and canon(html) is None and "Можно сделать сейчас: 6" in html and "(на сайте нет)" in html
+    assert st == 200 and canon(html) is None and "Можно сделать сейчас: 7" in html and "(на сайте нет)" in html
     st, html, _ = get(app, "/iz-togo-chto-est/", {"est": ["almaz"]})
     assert st == 400 and 'role="alert"' in html

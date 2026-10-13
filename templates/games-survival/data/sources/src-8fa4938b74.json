@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Log",
  "fetched_at": "2026-10-12T22:26:21Z",
  "page_sha256": "f7bafd57ff92081df1f44d4b3eafbae3887577cf506a6d1229cef5f00c193065",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

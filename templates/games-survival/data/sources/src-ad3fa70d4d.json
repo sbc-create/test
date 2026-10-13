@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Fence",
  "fetched_at": "2026-10-12T23:21:40Z",
  "page_sha256": "2e9aef8d1691f23497cadd9e9d096229d6d4e099af2b9014c0ecc2be1301d837",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -27,6 +27,21 @@
     "Oak Planks"
    ],
    "result": "Oak Fence",
+   "results": [
+    "Oak Fence",
+    "Spruce Fence",
+    "Birch Fence",
+    "Jungle Fence",
+    "Acacia Fence",
+    "Dark Oak Fence",
+    "Mangrove Fence",
+    "Cherry Fence",
+    "Pale Oak Fence",
+    "Poplar Fence",
+    "Bamboo Fence",
+    "Crimson Fence",
+    "Warped Fence"
+   ],
    "count": 3
   },
   {
@@ -42,6 +57,9 @@
     "Nether Bricks"
    ],
    "result": "Nether Brick Fence",
+   "results": [
+    "Nether Brick Fence"
+   ],
    "count": 6
   }
  ]

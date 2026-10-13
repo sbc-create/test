@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Forest",
  "fetched_at": "2026-10-12T22:26:32Z",
  "page_sha256": "8e0601c9309a79cb6cfddd562fc8757eea23dbe1ab39101ad17e2c893eda71d8",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
