@@ -74,3 +74,17 @@ Meta description: у разделов — из данных (число мате
 | `bash bin/games-survival build --commit HEAD` | 0 | собрано из 7cc1254 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 172 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 711e2ca (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Контент: пустыня — «опасные разновидности враждебных мобов» (версия 2).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-survival test` | 0 | 25 passed in 1.12s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m craft.qa --shots docs/screenshots/711e2ca --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8872 '/iz-togo-chto-est/?est=doski&est=palka&est=ugol' '/iz-togo-chto-est/?est=almaz' '/planirovshchik/?item=zabor&n=64' /nesushchestvuet/` | 0 | 41 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-survival build --commit HEAD` | 0 | собрано из 711e2ca |
+
+Лабораторный LCP (loopback, без троттлинга) — до 140 мс. Карта действий — `docs/ACTION-MAP.md`.
