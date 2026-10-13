@@ -11,6 +11,7 @@
     <div class="tablewrap"><table class="tbl"><thead><tr><th scope="col">Ингредиенты</th><th scope="col" class="num">Слотов</th><th scope="col">Результат</th></tr></thead>
     <tbody>{% for r in e.recipes %}<tr><td lang="en">{{ r.ingredients }}</td><td class="num">{{ r.slots }}</td><td><span lang="en">{% if r.results is defined and r.results|length > 1 %}{{ r.results|join(" / ") }}{% else %}{{ r.result }}{% endif %}</span> × {{ r.count }}</td></tr>{% endfor %}</tbody></table></div>
     {% for r in e.recipes if r.results is defined and r.results|length > 1 %}{% if loop.first %}<p class="note">Сетка в источнике анимирована: материал в слотах и результат меняются вместе. Если меняется уровень инструмента (дерево, камень, железо…), планировщик такой рецепт не считает.</p>{% endif %}{% endfor %}
+    {% set mf = site.made_from(e) %}{% if not ri and mf %}<p class="note">Материалы, названные в рецепте источника: {% for y in mf %}<a href="{{ y.url }}">{{ y.short }}</a>{% if not loop.last %}, {% endif %}{% endfor %}. Количества по этому рецепту планировщик не считает.</p>{% endif %}
     {% if ri %}<p class="note">На один крафт: {% for y, q in ri[1] %}<a href="{{ y.url }}">{{ y.short }}</a> — {{ q }}{% if not loop.last %}, {% endif %}{% endfor %} (по занятым слотам сетки источника).</p>{% endif %}</section>{% endif %}
   {% set u = uses(e) %}
   {% if u %}<section aria-labelledby="h-use"><h2 id="h-use">Куда идёт</h2>

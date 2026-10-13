@@ -139,6 +139,20 @@ def run(shots: Path | None) -> dict:
         with pg.expect_navigation():
             pg.locator("a.mini").first.click()
         A["uses_row_opens_plan"] = "item=doski" in pg.url and "n=4" in pg.url
+        # связи «из чего → во что» (как в A; рекомендация: в приёмке C отдельно не проверялись)
+        pg.goto(BASE + "/minecraft/predmety/palka/")
+        with pg.expect_navigation():
+            pg.locator(".note a", has_text="Доски").first.click()
+        A["made_from_link_opens_ingredient"] = pg.url.endswith("/minecraft/predmety/doski/")
+        pg.goto(BASE + "/minecraft/predmety/palka/")
+        with pg.expect_navigation():
+            pg.locator("#h-use ~ .tablewrap a:not(.mini)", has_text="Факел").click()
+        A["used_for_link_opens_product"] = pg.url.endswith("/minecraft/predmety/fakel/")
+        A["product_lists_back_link"] = pg.locator(".note a", has_text="Палка").count() == 1
+        pg.goto(BASE + "/minecraft/predmety/kirka/")
+        with pg.expect_navigation():
+            pg.locator(".note a", has_text="Палка").first.click()
+        A["tool_page_links_source_materials"] = pg.url.endswith("/minecraft/predmety/palka/")
         pg.goto(BASE + "/minecraft/predmety/shchit/")
         pg.fill("#en", "2")
         with pg.expect_navigation():
