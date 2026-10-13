@@ -106,6 +106,79 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "diffenbahiya",
+   "ru_name": "Диффенбахия",
+   "summary": "Пёстрое растение для рассеянного света: полив после просыхания верхнего дюйма почвы, тепло, высокая влажность. Сок ядовит — держите от детей и животных.",
+   "calc": [
+    {
+     "label": "1 дюйм в сантиметрах",
+     "expr": "1 * 2.54",
+     "result": "2.5",
+     "unit": "см"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Рассеянный свет; защитите от прямого солнца и холодных сквозняков."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте обильно и давайте верхнему дюйму почвы (около 2,5 см) полностью просохнуть — это помогает избежать гниения корней."
+    },
+    {
+     "topic": "pochva",
+     "text": "Рыхлая плодородная почва с большим количеством органики."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Любит умеренную температуру и высокую влажность."
+    },
+    {
+     "topic": "uhod",
+     "text": "Сок ядовит и раздражает кожу: работайте в перчатках, мойте руки, не допускайте, чтобы дети и животные жевали листья."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "Возможно гниение корней."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Следите за щитовкой."
+    },
+    {
+     "tag": "tlya",
+     "text": "Следите за тлёй."
+    }
+   ],
+   "checklist": [
+    "Верхний слой почвы просох",
+    "Перчатки при работе",
+    "Недоступно детям и животным"
+   ],
+   "related": [
+    "spatifillum",
+    "aspidistra-vysokaya"
+   ],
+   "src": "src-407e446e4e",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "1231ddb644341e0ae15462fe3c00531832b75bae09a6f5c3f42bad284b6922c2",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "epipremnum-zolotistyj",
    "ru_name": "Эпипремнум золотистый",
    "summary": "Очень простая лиана: яркий рассеянный свет, но долго живёт и при слабом; почва просыхает между поливами.",
@@ -306,6 +379,79 @@
    "text_hash": "4498717bc912f5ee647b25c86d0d00bc6da460882fecbbcac617c2c1262f641b",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "fikus-lirovidnyj",
+   "ru_name": "Фикус лировидный",
+   "summary": "Крупное растение с листьями-лирами: яркий рассеянный свет или полутень, защита от послеполуденного солнца, тепло выше 55 °F (около 12,8 °C), без перелива.",
+   "calc": [
+    {
+     "label": "55 °F в градусах Цельсия",
+     "expr": "(55 - 32) * 5 / 9",
+     "result": "12.8",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет или полутень; защитите от послеполуденного солнца — от избытка прямого солнца бывают ожоги листьев."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Лучше всего при температуре выше 55 °F (около 12,8 °C); бурые пятна появляются, если рядом вентиляция отопления или кондиционера и температура скачет."
+    },
+    {
+     "topic": "poliv",
+     "text": "Чувствителен к переливу; листья опадают и от избытка, и от недостатка воды."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Лучше всего при средней относительной влажности."
+    },
+    {
+     "topic": "uhod",
+     "text": "Сок раздражает кожу: обрезайте и размножайте в перчатках."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "shchitovka",
+     "text": "Следите за щитовкой."
+    },
+    {
+     "tag": "tlya",
+     "text": "Следите за тлёй."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    }
+   ],
+   "checklist": [
+    "Нет послеполуденного солнца",
+    "Вдали от вентиляции",
+    "Перчатки при обрезке"
+   ],
+   "related": [
+    "fikus-kauchukonosnyj",
+    "monstera-delikatesnaya"
+   ],
+   "src": "src-15fbba4d78",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "368d0a738a6471d87717cd96a75ed8ac1fe0f1d840a680bb355a299ba46aa0d9",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
    "review_status": "ai_draft"
   },
   {
@@ -622,6 +768,123 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "pileya-peperomievidnaya",
+   "ru_name": "Пилея пеперомиевидная (китайское денежное дерево)",
+   "summary": "Компактное растение с круглыми листьями: яркий рассеянный свет, влажная хорошо дренированная смесь, без сквозняков и источников тепла.",
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Яркий рассеянный свет; при нехватке света побеги вытягиваются."
+    },
+    {
+     "topic": "poliv",
+     "text": "Смесь влажная и хорошо дренированная; от перелива загнивают корни. Не мочите листья — появятся пятна."
+    },
+    {
+     "topic": "vlazhnost",
+     "text": "Любит умеренную и высокую влажность, но переносит обычную домашнюю."
+    },
+    {
+     "topic": "uhod",
+     "text": "Держите подальше от холодных сквозняков и источников тепла."
+    },
+    {
+     "topic": "razmnozhenie",
+     "text": "Размножают отростками и черенками — лучше весной или в начале лета, в период активного роста."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "korni-gniyut",
+     "text": "При переливе загнивают корни."
+    },
+    {
+     "tag": "pautinnyj-kleshch",
+     "text": "Следите за паутинным клещом."
+    },
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Следите за мучнистым червецом."
+    },
+    {
+     "tag": "shchitovka",
+     "text": "Следите за щитовкой."
+    }
+   ],
+   "checklist": [
+    "Светло, но без прямого солнца",
+    "Нет сквозняков и батарей рядом",
+    "Листья сухие при поливе"
+   ],
+   "related": [
+    "peperomiya-tupolistnaya",
+    "hlorofitum-hohlatyj"
+   ],
+   "src": "src-bc4c5964d3",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "a46ca8792f34ef886f2118b47d5e3a41b4703f35003d3a35985d849b0055f294",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "sansevieriya-cilindricheskaya",
+   "ru_name": "Сансевиерия цилиндрическая",
+   "summary": "Суккулент с цилиндрическими листьями: яркое окно, смесь для кактусов, полив примерно раз в 2 недели летом и раз в месяц зимой.",
+   "calc": [
+    {
+     "label": "55 °F в градусах Цельсия",
+     "expr": "(55 - 32) * 5 / 9",
+     "result": "12.8",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Ярко освещённое окно; летом на улице — только утреннее солнце, иначе ожоги."
+    },
+    {
+     "topic": "poliv",
+     "text": "Поливайте примерно раз в 2 недели летом и раз в месяц зимой."
+    },
+    {
+     "topic": "pochva",
+     "text": "Хорошо дренированная смесь, подойдёт смесь для кактусов и суккулентов."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Если растение летом на улице, заносите в дом, когда температура падает ниже 55 °F (около 12,8 °C)."
+    }
+   ],
+   "problems": [],
+   "checklist": [
+    "Яркое окно",
+    "Редкий полив зимой",
+    "Смесь для суккулентов"
+   ],
+   "related": [
+    "sansevieriya-tryohpolosnaya",
+    "aloe-vera"
+   ],
+   "src": "src-8bb44d9073",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "0a03313e42bc08f2957ecc1f038aa1a7aa144b6fa3de711a5402fb1fe47b8076",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "sansevieriya-tryohpolosnaya",
    "ru_name": "Сансевиерия трёхполосная (щучий хвост)",
    "summary": "Очень выносливое растение: прямое солнце 2–6 часов в день, переносит и очень слабый свет; главное — не переливать.",
@@ -835,6 +1098,79 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "spatifillum",
+   "ru_name": "Спатифиллум (цветок мира)",
+   "summary": "Тенелюбивое растение: полутень или глубокая тень, без прямого солнца, тепло 68–85 °F (20–29,4 °C) днём, почва влажная, но не мокрая.",
+   "calc": [
+    {
+     "label": "68 °F в градусах Цельсия",
+     "expr": "(68 - 32) * 5 / 9",
+     "result": "20.0",
+     "unit": "°C"
+    },
+    {
+     "label": "85 °F в градусах Цельсия",
+     "expr": "(85 - 32) * 5 / 9",
+     "result": "29.4",
+     "unit": "°C"
+    },
+    {
+     "label": "40 °F в градусах Цельсия",
+     "expr": "(40 - 32) * 5 / 9",
+     "result": "4.4",
+     "unit": "°C"
+    }
+   ],
+   "care": [
+    {
+     "topic": "svet",
+     "text": "Полутень или глубокая тень; не ставьте под прямое солнце."
+    },
+    {
+     "topic": "temperatura",
+     "text": "Днём 68–85 °F (около 20–29,4 °C), ночью не больше чем на 10 градусов ниже. Долгий холод ниже 40 °F (около 4,4 °C) повреждает листья, стебли и корни."
+    },
+    {
+     "topic": "poliv",
+     "text": "Почва влажная, но не мокрая; между поливами давайте ей подсохнуть. Хорошо работает полив снизу."
+    },
+    {
+     "topic": "podkormka",
+     "text": "Удобряйте в четверть рекомендованной дозы и промывайте почву между подкормками: избыток удобрений и солей обжигает кончики листьев и корни."
+    },
+    {
+     "topic": "pochva",
+     "text": "Нужен большой горшок, но растению лучше быть немного тесно; смесь с большим количеством органики. Пересаживают при необходимости в феврале или марте."
+    }
+   ],
+   "problems": [
+    {
+     "tag": "muchnistyj-chervec",
+     "text": "Чаще всего — мучнистый червец; помогает регулярно протирать листья влажной тканью."
+    }
+   ],
+   "checklist": [
+    "Нет прямого солнца",
+    "Почва подсохла перед поливом",
+    "Подкормка в четверть дозы"
+   ],
+   "related": [
+    "aspidistra-vysokaya",
+    "filodendron-plyushchevidnyj"
+   ],
+   "src": "src-e6f6e12c9e",
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7a0404326b9e3cd6fbf36edafdf3c24cfd10a2ab0d0b210c3e9dbc270610810b",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "zamiokulkas",
    "ru_name": "Замиокулькас замиелистный",
    "summary": "Один из самых неприхотливых: растёт даже при слабом свете, но лучше — при ярком рассеянном. Корневища запасают воду, перелив опасен.",
@@ -897,6 +1233,96 @@
   }
  ],
  "sources": {
+  "src-15fbba4d78": {
+   "id": "src-15fbba4d78",
+   "url": "https://plants.ces.ncsu.edu/plants/ficus-lyrata/",
+   "fetched_at": "2026-10-13T00:42:29Z",
+   "page_sha256": "011fed1127d7bad2f20a05bf7995b49205122a0d168590a00bf093383246fcc2",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Ficus lyrata",
+   "common_names": [
+    "Banjo fig",
+    "Fiddle-leaf Fig"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Tropical Western and Central Africa"
+    ],
+    "Habit/Form:": [
+     "Rounded",
+     "Spreading",
+     "Vase"
+    ],
+    "Growth Rate:": [
+     "Medium"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b, 12a, 12b"
+    ],
+    "Problems:": [
+     "Contact Dermatitis",
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Oral irritation, burning of the mouth, tongue, and lips, excessive drooling, vomiting, and difficulty swallowing."
+    ],
+    "Poison Toxic Principle:": [
+     "insoluble calcium oxalates"
+    ],
+    "Causes Contact Dermatitis:": [
+     "No"
+    ],
+    "Poison Part:": [
+     "Bark",
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Sap/Juice",
+     "Stems"
+    ]
+   },
+   "description": [
+    "The fiddle-leaf fig is a small tropical tree and broadleaf evergreen, commonly grown and popular as a houseplant in many areas of the United States. As a houseplant, it will grow 2 to 10 feet tall. It has large, broad, lyre-shaped, green leaves that can measure up to 18 inches long. This plant rarely flowers or fruits when grown as a houseplant. The stems have a milky sap that can irritate the skin.",
+    "This plant is native to tropical regions of western and central Africa. It will grow 60 to 100 feet tall and is erect and vase-shaped. It is frequently used as an ornamental shade tree in tropical climates. In its native habitat, the plant will produce figs that appear solitary or in pairs.",
+    "The genus name, Ficus , is derived from the Latin name for an edible fig. The specific epithet, lyrata , means \"in the shape of a lyre\" and refers to the shape of the plant's leaves.",
+    "The fiddle-leaf fig prefers bright indirect light or partial shade and moist, well-drained, loamy, acidic soils. They are sensitive to overwatering and also need protection from the afternoon sun. It also performs best in medium relative humidity with a temperature greater than 55 degrees F. This a relatively low-maintenance houseplant that may be pruned as needed. The fiddle-leaf fig can be planted outdoors in plant hardiness zones 10 through 12.",
+    "This plant is toxic to humans, cats, and dogs if ingested. Oral irritation, excessive drooling, and vomiting may occur. The sap can irritate the skin and gloves are recommended when handling this plant, particularly when pruning or propagating.",
+    "In the United States, the fiddle-leaf fig is a tropical tree that is used as a houseplant in temperate areas and may be grown in a container. The container can be brought outside to a sheltered deck or patio during the summer months and brought indoors as the outdoor temperatures start to drop in the fall. The fiddle-leaf fig can also make a great focal point in a living room or office space. Texturally heavy, this plant is best suited for large spaces.",
+    "Seasons of Interest:",
+    "Foliage: Year-round"
+   ],
+   "problems": "The fiddle leaf fig has no serious insect pests or diseases. As a houseplant, monitor for scale, aphids, mealy bugs, thrips, and spider mites. Potential diseases include bacterial or fungal diseases. Leaf scorch can occur if the plant is receiving too much direct sunlight. Brown spots may occur if there is a fluctuation in room temperatures for heating or cooling vents. Leaf drop may occur from too much or too little water."
+  },
   "src-24f34e09c8": {
    "id": "src-24f34e09c8",
    "url": "https://plants.ces.ncsu.edu/plants/ficus-elastica/",
@@ -1288,6 +1714,99 @@
     "These plants grow well in containers and will spread if planted in the ground within their hardiness zone. They can be used as an accent or groundcover to fill in shady spaces."
    ],
    "problems": "There are no serious pest problems. This plant is resistant to damage by deer and is slightly salt tolerant."
+  },
+  "src-407e446e4e": {
+   "id": "src-407e446e4e",
+   "url": "https://plants.ces.ncsu.edu/plants/dieffenbachia-seguine/",
+   "fetched_at": "2026-10-13T00:42:32Z",
+   "page_sha256": "3992a7bbe75c25760a8649c6891d82d58ff72a4271d7db7637e0472ce9524bc3",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Dieffenbachia seguine",
+   "common_names": [
+    "Dieffenbachia",
+    "Dumbcane",
+    "Gold Dieffenbachia",
+    "Spotted Dumbcane",
+    "Variable Dieffenbachia"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division",
+     "Root Cutting",
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "Caribbean to South Tropical America"
+    ],
+    "Habit/Form:": [
+     "Erect"
+    ],
+    "Maintenance:": [
+     "Medium"
+    ],
+    "Light:": [
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "High Organic Matter"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist",
+     "Occasionally Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "10a, 10b, 11a, 11b"
+    ],
+    "Flower Bloom Time:": [
+     "Spring",
+     "Summer"
+    ],
+    "Problems:": [
+     "Contact Dermatitis",
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "High"
+    ],
+    "Poison Symptoms:": [
+     "Burning and swelling of the lips, tongue, and throat due to needle-like crystals becoming embedded in the mouth and throat. Difficulty in speaking and swallowing; nausea, vomiting, and diarrhea may also occur. Skin irritation if exposed to cell sap. Sap exposure to the eyes can result in damage to the cornea. It may be fatal to pets and livestock."
+    ],
+    "Poison Toxic Principle:": [
+     "Calcium oxalate crystals, oxalic acid"
+    ],
+    "Causes Contact Dermatitis:": [
+     "Yes"
+    ],
+    "Poison Part:": [
+     "Leaves",
+     "Roots",
+     "Sap/Juice",
+     "Stems"
+    ]
+   },
+   "description": [
+    "Dieffenbachia is an erect, broadleaf evergreen perennial in the Araceae family that is native to Central and South America. The large, shiny, green leaves are variegated in a variety of patterns of patches or blotches in colors of cream, white, or yellow. It grows from 3 to 8 feet tall and 2 to 3 feet wide and is scarcely branched. It is a popular houseplant and is grown for its ornamental foliage. It rarely develops flowers or fruits as a houseplant.",
+    "The genus name, Dieffenbachia, is in honor of J.F. Dieffenbach, who was in charge of the royal palace gardens in Vienna in the 1830s. Plants formerly designed as D. amoena , D. maculata , and D. picta are now placed in D. seguine.",
+    "The common name, dumbcane, refers to the numbing and paralyzing effects of the sap of this plant on the vocal cords of humans and pets if it is ingested.",
+    "This plant prefers loose, fertile, high organic soil and indirect light, moderate temperatures, and high humidity. Water the plant thoroughly and allow the top 1-inch surface of the soil to dry completely before watering the plant again. This will help prevent root rot. It needs to be protected from cold drafts and direct sunlight. Propagate by division or stem/root cuttings.",
+    "Although Dieffenbachia is grown as a houseplant, it can be toxic for pets and children. Be alert for toddlers and pets that might eat or chew on the leaves. Always make sure to wash your hands after handling this plant and keep your hands away from your eyes and mouth.",
+    "This plant has an exotic appeal and has wonderfully shaped rich green leaves with brush strokes of cream, yellow, and white which enhance the shape of the leaves. This plant will stand out and brighten the dark corners of your home."
+   ],
+   "problems": "Monitor for spider mites, scale, whiteflies, fungus gnats, and aphids. Potential diseases include fungal leaf spot, root rot, and blight. Wear gloves when handling this plant to prevent skin irritation or contact dermatitis."
   },
   "src-51ad8b14a6": {
    "id": "src-51ad8b14a6",
@@ -1874,6 +2393,89 @@
    ],
    "problems": "No significant problems. Monitor for mealybugs and spider mites. Overwatering may cause root rot."
   },
+  "src-8bb44d9073": {
+   "id": "src-8bb44d9073",
+   "url": "https://plants.ces.ncsu.edu/plants/dracaena-angolensis/",
+   "fetched_at": "2026-10-13T00:42:37Z",
+   "page_sha256": "6bbfcd6520ca36bb6461c41626d2596e33769a65c452d8840a2618b457ed859e",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Dracaena angolensis",
+   "common_names": [
+    "African Spear",
+    "Brazil Saint Bárbara Sword",
+    "Cylindrical Snake Plant",
+    "Spear Sansevieria"
+   ],
+   "attrs": {
+    "Country Or Region Of Origin:": [
+     "Africa"
+    ],
+    "Habit/Form:": [
+     "Erect",
+     "Spreading"
+    ],
+    "Growth Rate:": [
+     "Slow"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Sand",
+     "Shallow Rocky"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Occasionally Dry",
+     "Very Dry"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet",
+     "3 feet-6 feet"
+    ],
+    "Flower Bloom Time:": [
+     "Summer"
+    ],
+    "Problems:": [
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs"
+    ],
+    "Poison Severity:": [
+     "Low"
+    ],
+    "Poison Symptoms:": [
+     "Toxic if ingested by cats and dogs: dilated pupils, vomiting, stomach upset, abdominal pain, drooling, weakness, depression. Keep this plant away from pets and children. Humans should not ingest this plant. Skin irritation can occur from the plant sap."
+    ],
+    "Poison Toxic Principle:": [
+     "saponin"
+    ],
+    "Causes Contact Dermatitis:": [
+     "No"
+    ],
+    "Poison Part:": [
+     "Flowers",
+     "Fruits",
+     "Leaves",
+     "Roots",
+     "Sap/Juice",
+     "Stems"
+    ]
+   },
+   "description": [
+    "African spear is an easy-to-grow, succulent herbaceous perennial native to Africa. It is a member of the asparagus family (Asparagaceae). It has a dramatic form with subcylindrical, spiky leaves that resemble D. trifasicata in the variegation . The epithet is Latin for \"of Angola.\"",
+    "Grow this plant in a well-drained potting mix (one specific for cacti and succulents is good) and water only about every 2 weeks in summer and monthly in winter. Place it in a brightly lit window. If taken outdoors in the summer, only give it morning sun to avoid sunburn. Bring it indoors when the temperature falls below 55 degrees Fahrenheit.",
+    "The leaves grow from a rosette and are 1 inch wide and up to 7 feet tall with longitudinal stripes. It will occasionally bloom in a container. The plants are often sold as rooted leaf cuttings, sometimes with three or more leaves braided together or sometimes with their tips dipped in paint. These leaves will live for a long time. Eventually, new plants will arise for the base of the leaf cuttings."
+   ],
+   "problems": "Poisonous to Humans"
+  },
   "src-9a8478aae5": {
    "id": "src-9a8478aae5",
    "url": "https://plants.ces.ncsu.edu/plants/schlumbergera-x-buckleyi/",
@@ -1935,6 +2537,151 @@
     "The Christmas cactus is used primarily as an indoor ornamental. It can be grown in containers or hanging baskets. It is non-toxic and can be safely used in homes with pets or children."
    ],
    "problems": "Monitor for mealybugs, red spider mites, aphids, and soft brown scale. Overwatering can cause root rot. Sudden temperature changes, drafts, low humidity, and improper watering can cause flower buds to drop. Full sun can bleach the stems."
+  },
+  "src-bc4c5964d3": {
+   "id": "src-bc4c5964d3",
+   "url": "https://plants.ces.ncsu.edu/plants/pilea-peperomioides/",
+   "fetched_at": "2026-10-13T00:42:27Z",
+   "page_sha256": "b67486e1315521be1f6fd7be9428fb799a3e63cd2ca7757a5b4d235f72bf5302",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Pilea peperomioides",
+   "common_names": [
+    "Chinese Money Plant",
+    "Coin Plant",
+    "Friendship Plant",
+    "Missionary Plant",
+    "Pancake Plant",
+    "UFO Plant"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Stem Cutting"
+    ],
+    "Country Or Region Of Origin:": [
+     "China South-Central"
+    ],
+    "Habit/Form:": [
+     "Clumping",
+     "Erect"
+    ],
+    "Growth Rate:": [
+     "Rapid"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Dappled Sunlight (Shade through upper canopy all day)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "Loam (Silt)",
+     "Sand"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)",
+     "Neutral (6.0-8.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "9a, 9b, 10a, 10b, 11a, 11b"
+    ],
+    "Flower Bloom Time:": [
+     "Spring"
+    ]
+   },
+   "description": [
+    "The Chinese Money Plant is a popular evergreen perennial houseplant that is native to the Yunnan Province of Southern China where it grows in the shady and cool mountain areas. It is a member of the nettle or Urticaceae family. The plant is compact, erect, and has a clumping habit. The fleshy, circular, dark green leaves are distinctive. The leaves are peltate and the long stems attach at the center of the leaf which makes them resemble a lily pad or as if they were floating on air. The plant can produce small, tall, white to pinkish, spike-like flowers; however, houseplants rarely flower. The plant usually grows about 8 to 12 inches tall and equally as wide.",
+    "The Chinese Money Plant prefers bright, indirect sunlight, and moist, well-drained potting mix. It also thrives in moderate to high humidity, but it is tolerant of the average home's humidity levels. Cold drafts and sources of heat need to be avoided. The plant can be propagated by offsets or pups and by stem cuttings. Propagation is best done in the spring or early summer during the plant's active growth.",
+    "The Chinese Money Plant is used primarily as an ornamental indoor houseplant. Its visual appeal and easy care make it the perfect plant for the home and office with the bonus of being safe for pets and children."
+   ],
+   "problems": "Monitor for spider mites, mealybugs, fungus gnats, and scale insects. They are susceptible to root rot if overwatered. Avoid wetting the foliage which can result in leaf spots. Leggy growth results from inadequate light."
+  },
+  "src-e6f6e12c9e": {
+   "id": "src-e6f6e12c9e",
+   "url": "https://plants.ces.ncsu.edu/plants/spathiphyllum/",
+   "fetched_at": "2026-10-13T00:42:22Z",
+   "page_sha256": "1b7b369c23c550b31d46f5a584f6fff6b27444bea83c2dd2a9837a1f77aa16c5",
+   "parser": "ph-facts/1.0",
+   "kind": "university",
+   "publisher": "NC State Extension — Plant Toolbox",
+   "name": "Spathiphyllum",
+   "common_names": [
+    "Peace Lily",
+    "Spathe Flower",
+    "White Sails"
+   ],
+   "attrs": {
+    "Recommended Propagation Strategy:": [
+     "Division"
+    ],
+    "Country Or Region Of Origin:": [
+     "Mexico, Tropical America, Malesia, and Western Pacific"
+    ],
+    "Habit/Form:": [
+     "Erect",
+     "Mounding",
+     "Rounded"
+    ],
+    "Maintenance:": [
+     "Low"
+    ],
+    "Light:": [
+     "Deep shade (Less than 2 hours to no direct sunlight)",
+     "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+    ],
+    "Soil Texture:": [
+     "High Organic Matter"
+    ],
+    "Soil pH:": [
+     "Acid (<6.0)"
+    ],
+    "Soil Drainage:": [
+     "Good Drainage",
+     "Moist"
+    ],
+    "Available Space To Plant:": [
+     "12 inches-3 feet",
+     "3 feet-6 feet"
+    ],
+    "USDA Plant Hardiness Zone:": [
+     "11a, 11b, 12a, 12b"
+    ],
+    "Problems:": [
+     "Poisonous to Humans",
+     "Problem for Cats",
+     "Problem for Children",
+     "Problem for Dogs",
+     "Problem for Horses"
+    ],
+    "Poison Severity:": [
+     "Medium"
+    ],
+    "Poison Symptoms:": [
+     "The leaves of the Peace Lily can be poisonous if eaten in large quantities. Symptoms include severe pain in the mouth and a burning sensation to the lips, tongue, and throat, excessive drooling, vomiting (not horses), difficulty swallowing"
+    ],
+    "Poison Toxic Principle:": [
+     "Calcium oxalate crystals"
+    ],
+    "Causes Contact Dermatitis:": [
+     "No"
+    ],
+    "Poison Part:": [
+     "Leaves"
+    ]
+   },
+   "description": [
+    "Peace lily is a group of about 60 species of flowering plants that are semi-evergreen, perennial herbs typically grown as houseplants. They are members of the arum family (Araceae) and are native to Mexico, tropical America, Malesia and islands of the western Pacific. The genus name is Greek for \"spathe leaf,\" referring to the prominent spathe, which is a modified leaf.",
+    "Peace lilies prefer partial to deep shade. Do not place plants in direct sun. They enjoy warm conditions between 68 and 85 degrees F during the day and no more than a 10-degree drop at night. Cold and drafty conditions, specifically temperatures of 40 to 60 degrees F, will slow growth considerably. Extended periods below 40 degrees F can damage leaves, stems and roots. Keep the soil moist, but not soggy; allow it to dry between waterings. Watering from below works very well for peace lilies. Fertilize at one-quarter of the recommended strength and flush soil between applications of fertilizer. Over-fertilizing and salt build-up can burn the leaf tips and roots. The plant requires a large pot and should be kept somewhat pot-bound. Use a potting mix high in organic matter. Re-pot, when necessary, in February or March.",
+    "While peace lilies can grow up to 6 feet tall, they more typically reach 3 feet high and wide in an indoor setting. Dwarf cultivars are available. The plants have no specific bloom time, but flower freely.",
+    "These low-maintenance plants are popular as specimens or accents in interior groupings for their deep-green glossy foliage and showy, white blooms that change to pale green after 10 days and then remain lovely for at least another month."
+   ],
+   "problems": "Mealybugs are probably the most common insect indoors. Because of the wide foliage, cleaning the leaves regularly with a damp cloth to remove dust will help its appearance and remove some pests that tend to gather under the bottom of the leaves. Brown leaf tips are caused by excessive direct sunlight, underwatering, or low humidity."
   }
  }
 }

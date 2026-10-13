@@ -1,0 +1,64 @@
+{
+ "id": "src-bc4c5964d3",
+ "url": "https://plants.ces.ncsu.edu/plants/pilea-peperomioides/",
+ "fetched_at": "2026-10-13T00:42:27Z",
+ "page_sha256": "b67486e1315521be1f6fd7be9428fb799a3e63cd2ca7757a5b4d235f72bf5302",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Pilea peperomioides",
+ "common_names": [
+  "Chinese Money Plant",
+  "Coin Plant",
+  "Friendship Plant",
+  "Missionary Plant",
+  "Pancake Plant",
+  "UFO Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "China South-Central"
+  ],
+  "Habit/Form:": [
+   "Clumping",
+   "Erect"
+  ],
+  "Growth Rate:": [
+   "Rapid"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "9a, 9b, 10a, 10b, 11a, 11b"
+  ],
+  "Flower Bloom Time:": [
+   "Spring"
+  ]
+ },
+ "description": [
+  "The Chinese Money Plant is a popular evergreen perennial houseplant that is native to the Yunnan Province of Southern China where it grows in the shady and cool mountain areas. It is a member of the nettle or Urticaceae family. The plant is compact, erect, and has a clumping habit. The fleshy, circular, dark green leaves are distinctive. The leaves are peltate and the long stems attach at the center of the leaf which makes them resemble a lily pad or as if they were floating on air. The plant can produce small, tall, white to pinkish, spike-like flowers; however, houseplants rarely flower. The plant usually grows about 8 to 12 inches tall and equally as wide.",
+  "The Chinese Money Plant prefers bright, indirect sunlight, and moist, well-drained potting mix. It also thrives in moderate to high humidity, but it is tolerant of the average home's humidity levels. Cold drafts and sources of heat need to be avoided. The plant can be propagated by offsets or pups and by stem cuttings. Propagation is best done in the spring or early summer during the plant's active growth.",
+  "The Chinese Money Plant is used primarily as an ornamental indoor houseplant. Its visual appeal and easy care make it the perfect plant for the home and office with the bonus of being safe for pets and children."
+ ],
+ "problems": "Monitor for spider mites, mealybugs, fungus gnats, and scale insects. They are susceptible to root rot if overwatered. Avoid wetting the foliage which can result in leaf spots. Leggy growth results from inadequate light."
+}

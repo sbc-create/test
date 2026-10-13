@@ -72,7 +72,7 @@ PROPAG = {
 POISON = {"Low": "низкая", "Medium": "средняя", "High": "высокая"}
 PROBLEMS = {
     "korni-gniyut": ("Корни гниют от перелива", r"root rot|roots rotting|roots will rot|rotted|crown and root rot"),
-    "muchnistyj-chervec": ("Мучнистый червец", r"mealybug"),
+    "muchnistyj-chervec": ("Мучнистый червец", r"mealy ?bug"),
     "pautinnyj-kleshch": ("Паутинный клещ", r"spider mite"),
     "shchitovka": ("Щитовка", r"\bscales?\b|scale insects"),
     "tlya": ("Тля", r"aphid"),
