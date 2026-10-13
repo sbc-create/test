@@ -148,3 +148,48 @@ Qwen: ночной прогон не подтверждён (ветки и фа�
 (лабораторный CLS по прогону — 0). Перезапущено: `python3 -m fooddaily.qa_browser --shots docs/screenshots/2bd36b8 --out docs/verification/browser-qa.json`
 → exit 0, 26 сценариев без провалов, axe 0; `python3 qa/viewports.py 8847 …` → 53 URL × 4 ширины, 0 замечаний
 (`docs/verification/viewports-2bd36b8.json`); `bin/food-daily test` → 116 passed.
+
+## Обновление на e69bf15 (13.10.2026): редактор
+
+Найдено проверкой редактора в браузере (раньше редактор проверялся только по HTTP: 401/403): на 390 px таблица
+давала горизонтальный скролл, `<pre>` не был доступен с клавиатуры, поля diff и выбор решения были без подписей (axe: label, select-name, scrollable-region-focusable). Исправлено так же, как в B/C.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 118 passed |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/e69bf15 --out docs/verification/browser-qa.json` | 0 | 26 сценариев PASS, axe 0 |
+| `python3 qa/viewports.py 8847 /poisk/?q=тыква /nesushchestvuet/ > docs/verification/viewports-e69bf15.json` | 0 | 53 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из e69bf15 |
+| приёмка редактора (scratchpad `ed_qa.py`) | 0 | 26 проверок PASS — `docs/verification/editor.json` |
+
+Проверки редактора:
+
+| действие | результат | ключ |
+| --- | --- | --- |
+| редактор: без входа — 401 и запрос Basic Auth | PASS | `no_auth_401_with_challenge` |
+| редактор: неверный пароль — 401 | PASS | `wrong_password_401` |
+| редактор: чужое имя с верным паролем — 401 | PASS | `wrong_user_401` |
+| редактор: верные данные — 200 | PASS | `login_200` |
+| редактор: страница редактора — noindex | PASS | `editor_noindex` |
+| редактор: robots закрывает /redaktor/ (в preview — «Disallow: /») | PASS | `robots_disallow_redaktor` |
+| редактор: в sitemap нет /redaktor/ | PASS | `sitemap_has_no_redaktor` |
+| редактор: строк в списке столько же, сколько материалов в БД (24) | PASS | `list_rows_match_db` |
+| редактор: публичная страница выбранного рецепта — 200 | PASS | `public_page_200_before` |
+| редактор: параметр msg экранируется (<script> не исполняется) | PASS | `msg_param_escaped` |
+| редактор: POST без CSRF-токена — 403 | PASS | `post_without_csrf_403` |
+| редактор: POST без входа — 401 | PASS | `post_without_auth_401` |
+| редактор: после отклонённых POST страница не изменилась (200) | PASS | `public_page_200_after_refused_posts` |
+| редактор: ссылка из списка открывает материал | PASS | `list_link_opens_item` |
+| редактор: «Снять» → сообщение «снято с preview» | PASS | `unpublish_msg` |
+| редактор: статус публикации стал hidden | PASS | `unpublish_status_hidden` |
+| редактор: публичная страница после снятия — 404 | PASS | `public_page_404_after_unpublish` |
+| редактор: снимок сайта изменился только у этого материала | PASS | `snapshot_only_target_removed` |
+| редактор: «В preview» → страница снова 200 | PASS | `republish_restores_public_page` |
+| редактор: откат к v1 создаёт новую версию, а не стирает историю | PASS | `rollback_creates_new_version` |
+| редактор: diff между версиями показан | PASS | `diff_shown` |
+| редактор: решение редактора записано (статус editor_rejected на копии) | PASS | `review_recorded` |
+| редактор: журнал содержит действия editor:<имя> | PASS | `audit_log_has_editor_actions` |
+| редактор: нет горизонтального скролла на 390 и 1440 px | PASS | `no_hscroll_editor_pages` |
+| редактор: axe-core 4.13.0 — 0 нарушений | PASS | `axe_zero_editor_pages` |
+| редактор: нет ошибок консоли | PASS | `no_console_errors` |

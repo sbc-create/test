@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8847",
- "commit_head": "2bd36b875e22a7fbfb0ab3abe217f790d34669bf",
- "at": "2026-10-13T01:15:42Z",
+ "commit_head": "e69bf154a3a20ca1a5a676ac1fa3f2316dc455d1",
+ "at": "2026-10-13T08:18:50Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -65,98 +65,98 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 232,
+   "lcp_ms": 172,
    "cls": 0,
-   "ttfb_ms": 29,
-   "dom_ms": 96,
+   "ttfb_ms": 53,
+   "dom_ms": 127,
    "bytes": 49066,
    "requests": 3
   },
   "mobile:catalog": {
-   "lcp_ms": 76,
+   "lcp_ms": 136,
    "cls": 0,
-   "ttfb_ms": 20,
-   "dom_ms": 45,
+   "ttfb_ms": 28,
+   "dom_ms": 103,
    "bytes": 16533,
    "requests": 3
   },
   "mobile:recipe": {
-   "lcp_ms": 88,
+   "lcp_ms": 104,
    "cls": 0,
-   "ttfb_ms": 5,
-   "dom_ms": 34,
+   "ttfb_ms": 25,
+   "dom_ms": 55,
    "bytes": 22619,
    "requests": 3
   },
   "mobile:tag": {
    "lcp_ms": 52,
    "cls": 0,
-   "ttfb_ms": 7,
-   "dom_ms": 29,
+   "ttfb_ms": 9,
+   "dom_ms": 32,
    "bytes": 11418,
    "requests": 3
   },
   "mobile:article": {
-   "lcp_ms": 76,
+   "lcp_ms": 72,
    "cls": 0,
    "ttfb_ms": 18,
-   "dom_ms": 53,
+   "dom_ms": 50,
    "bytes": 12999,
    "requests": 3
   },
   "desktop:home": {
-   "lcp_ms": 160,
+   "lcp_ms": 148,
    "cls": 0,
-   "ttfb_ms": 8,
-   "dom_ms": 122,
+   "ttfb_ms": 7,
+   "dom_ms": 60,
    "bytes": 54324,
    "requests": 9
   },
   "desktop:catalog": {
-   "lcp_ms": 68,
+   "lcp_ms": 88,
    "cls": 0,
-   "ttfb_ms": 5,
-   "dom_ms": 30,
+   "ttfb_ms": 7,
+   "dom_ms": 33,
    "bytes": 16533,
    "requests": 3
   },
   "desktop:recipe": {
-   "lcp_ms": 112,
+   "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 7,
-   "dom_ms": 56,
+   "ttfb_ms": 6,
+   "dom_ms": 32,
    "bytes": 22619,
    "requests": 3
   },
   "desktop:tag": {
    "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 6,
-   "dom_ms": 26,
+   "ttfb_ms": 8,
+   "dom_ms": 33,
    "bytes": 11418,
    "requests": 3
   },
   "desktop:article": {
-   "lcp_ms": 92,
+   "lcp_ms": 72,
    "cls": 0,
    "ttfb_ms": 6,
-   "dom_ms": 37,
+   "dom_ms": 29,
    "bytes": 12999,
    "requests": 3
   }
  },
  "console_errors": [],
  "screenshots": [
-  "docs/screenshots/2bd36b8/home-mobile.png",
-  "docs/screenshots/2bd36b8/catalog-mobile.png",
-  "docs/screenshots/2bd36b8/recipe-mobile.png",
-  "docs/screenshots/2bd36b8/tag-mobile.png",
-  "docs/screenshots/2bd36b8/article-mobile.png",
-  "docs/screenshots/2bd36b8/home-desktop.png",
-  "docs/screenshots/2bd36b8/catalog-desktop.png",
-  "docs/screenshots/2bd36b8/recipe-desktop.png",
-  "docs/screenshots/2bd36b8/tag-desktop.png",
-  "docs/screenshots/2bd36b8/article-desktop.png"
+  "docs/screenshots/e69bf15/home-mobile.png",
+  "docs/screenshots/e69bf15/catalog-mobile.png",
+  "docs/screenshots/e69bf15/recipe-mobile.png",
+  "docs/screenshots/e69bf15/tag-mobile.png",
+  "docs/screenshots/e69bf15/article-mobile.png",
+  "docs/screenshots/e69bf15/home-desktop.png",
+  "docs/screenshots/e69bf15/catalog-desktop.png",
+  "docs/screenshots/e69bf15/recipe-desktop.png",
+  "docs/screenshots/e69bf15/tag-desktop.png",
+  "docs/screenshots/e69bf15/article-desktop.png"
  ],
  "accessibility": {
   "axe_version": "4.13.0",
