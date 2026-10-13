@@ -265,3 +265,4 @@ main { padding-bottom: 56px; }
 .taste { color: var(--ink-2); } .more a { display: inline-block; min-height: 24px; font-weight: 700; }
 [hidden] { display: none !important; }
 @media print { .pform, .actions, #izmenit { display: none !important; } }
+.actions { min-height: 44px; } /* место под кнопку печати, которую показывает JS: без сдвига макета */
