@@ -5014,6 +5014,13 @@ class ВидЛордс(Вид):
                 + "</div>")
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
+        # Листалка без параметров, подставленных путём раздела (apply-pager-route-params)
+        вид_пути = {"/movies": "Фильм", "/series": "Сериал",
+                    "/animation": "Мультфильм"}.get(str(разд).rstrip("/"))
+        if вид_пути and выбрано.get("kind") == вид_пути:
+            раздел_пути = (globals().get("_РАЗДЕЛ_ПО_ВИДУ") or {}).get(вид_пути)
+            выбрано = {к: в for к, в in выбрано.items()
+                       if к != "kind" and not (к == "section" and в == раздел_пути)}
         пункты = страницы(стр, всего)
         if not пункты:
             return ""
@@ -5994,6 +6001,13 @@ class ВидЗона(Вид):
         return '<div class="zg">' + "".join(self.плитка(з) for з in набор) + "</div>"
 
     def листалка(self, разд: str, выбрано: dict, стр: int, всего: int) -> str:
+        # Листалка без параметров, подставленных путём раздела (apply-pager-route-params)
+        вид_пути = {"/movies": "Фильм", "/series": "Сериал",
+                    "/animation": "Мультфильм"}.get(str(разд).rstrip("/"))
+        if вид_пути and выбрано.get("kind") == вид_пути:
+            раздел_пути = (globals().get("_РАЗДЕЛ_ПО_ВИДУ") or {}).get(вид_пути)
+            выбрано = {к: в for к, в in выбрано.items()
+                       if к != "kind" and not (к == "section" and в == раздел_пути)}
         пункты = страницы(стр, всего)
         if not пункты:
             return ""
