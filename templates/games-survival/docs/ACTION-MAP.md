@@ -1,6 +1,6 @@
 # Карта действий games-survival, вариант B (craft-planner)
 
-Проверено на commit `5813667` в Chromium: `bin/games-survival qa --shots docs/screenshots/5813667 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `1ecf26d` в Chromium: `bin/games-survival qa --shots docs/screenshots/1ecf26d --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
