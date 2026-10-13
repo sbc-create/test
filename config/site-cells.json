@@ -933,6 +933,318 @@
       }
     },
     {
+      "site_id": "lords-10",
+      "domain": "lordfilm.group",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-10"
+      },
+      "template": {
+        "template_id": "lords-films",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordfilm-group.service",
+        "previous_unit": null,
+        "port": 9125,
+        "account": "lordfilm-group",
+        "app_dir": "/srv/lordfilm-group/current",
+        "data_dir": "/srv/lordfilm-group/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-11",
+      "domain": "lordfilm.spb.ru",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-11"
+      },
+      "template": {
+        "template_id": "lords-films",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordfilm-spb-ru.service",
+        "previous_unit": null,
+        "port": 9126,
+        "account": "lordfilm-spb-ru",
+        "app_dir": "/srv/lordfilm-spb-ru/current",
+        "data_dir": "/srv/lordfilm-spb-ru/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-12",
+      "domain": "lordfilm.msk.ru",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-12"
+      },
+      "template": {
+        "template_id": "lords-films",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordfilm-msk-ru.service",
+        "previous_unit": null,
+        "port": 9127,
+        "account": "lordfilm-msk-ru",
+        "app_dir": "/srv/lordfilm-msk-ru/current",
+        "data_dir": "/srv/lordfilm-msk-ru/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-13",
+      "domain": "lordserial.su",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-13"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial-su.service",
+        "previous_unit": null,
+        "port": 9128,
+        "account": "lordserial-su",
+        "app_dir": "/srv/lordserial-su/current",
+        "data_dir": "/srv/lordserial-su/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-14",
+      "domain": "lordserial.group",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-14"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial-group.service",
+        "previous_unit": null,
+        "port": 9129,
+        "account": "lordserial-group",
+        "app_dir": "/srv/lordserial-group/current",
+        "data_dir": "/srv/lordserial-group/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-15",
+      "domain": "lordserial.spb.ru",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-15"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial-spb-ru.service",
+        "previous_unit": null,
+        "port": 9133,
+        "account": "lordserial-spb-ru",
+        "app_dir": "/srv/lordserial-spb-ru/current",
+        "data_dir": "/srv/lordserial-spb-ru/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-16",
+      "domain": "lordserial.msk.ru",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-16"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial-msk-ru.service",
+        "previous_unit": null,
+        "port": 9134,
+        "account": "lordserial-msk-ru",
+        "app_dir": "/srv/lordserial-msk-ru/current",
+        "data_dir": "/srv/lordserial-msk-ru/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
+      "site_id": "lords-17",
+      "domain": "lordserial.net.ru",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-17"
+      },
+      "template": {
+        "template_id": "lords-serials",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {},
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserial-net-ru.service",
+        "previous_unit": null,
+        "port": 9135,
+        "account": "lordserial-net-ru",
+        "app_dir": "/srv/lordserial-net-ru/current",
+        "data_dir": "/srv/lordserial-net-ru/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline"
+      },
+      "release": {}
+    },
+    {
       "site_id": "pilot-local",
       "domain": "pilot.localhost.test",
       "aliases": [],
