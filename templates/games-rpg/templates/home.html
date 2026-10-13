@@ -7,6 +7,7 @@
 {% for l, es in letters.items() %}<section class="letter" id="bukva-{{ loop.index }}" aria-labelledby="h-l-{{ loop.index }}"><h2 id="h-l-{{ loop.index }}">{{ l }}</h2>
   <dl class="gl">{% for e in es %}<div class="gl__row"><dt><a href="{{ e.url }}" lang="en">{{ e.src.name }}</a> <span class="gl__type">{{ types[e.type] }}</span></dt><dd>{{ e.summary.split('. ')[0].rstrip('.') }}.</dd></div>{% endfor %}</dl></section>
 {% endfor %}
-{% for gid, gm in site.games.items() %}{% if site.entries|selectattr('type', 'equalto', 'item')|list %}<p class="more"><a class="btn" href="/{{ gid }}/sravnenie-predmetov/">Сравнить предметы {{ gm.title }}</a> <a class="btn btn--line" href="/otryad/">Собрать отряд</a></p>{% endif %}{% endfor %}
+{% for gid, gm in site.games.items() %}{% if site.entries|selectattr('type', 'equalto', 'item')|list %}<p class="more"><a class="btn" href="/{{ gid }}/sravnenie-predmetov/">Сравнить предметы {{ gm.title }}</a></p>{% endif %}{% endfor %}
+<p class="party-link"><a class="btn btn--line" href="/otryad/">Собрать отряд: классы и характеристики спутников</a></p>
 <p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец.</p>
 {% endblock %}
