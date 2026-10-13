@@ -60,3 +60,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 3a559de |
 
 Лабораторный LCP (loopback, без троттлинга) — до 180 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 307c3e7 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из B: планировщик отряда (/otryad/, работает без JS; классы и наибольшее значение каждой характеристики с учётом равенства — по данным вики). Улучшения против B: любой выбор — noindex без canonical; неизвестные имена — предупреждение role=status. По ходу: 2493c5c — приёмка упала (вторая кнопка в .more ломала выбор кнопки сравнения; ссылка вынесена в 133f8ab); 133f8ab — axe color-contrast у отмеченного спутника (исправлено в 2e8185b, цвета из палитры — 307c3e7). Лабораторный LCP mobile:compare 1260 мс — страница не менялась, desktop 220 мс, load average машины около 7: шум замера, не регрессия кода.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-rpg test` | 0 | 18 passed in 0.71s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m quest.qa --shots docs/screenshots/307c3e7 --out docs/verification-browser-qa.json` | 0 | 33 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8871 '/?tip=item' '/?tip=xx' '/poisk/?q=Gale' '/otryad/?p=gale&p=karlach&p=shadowheart' '/otryad/?p=nikto' /nesushchestvuet/` | 0 | 42 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 307c3e7 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 1260 мс. Карта действий — `docs/ACTION-MAP.md`.

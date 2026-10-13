@@ -1,6 +1,6 @@
 # Карта действий games-rpg, вариант C (index-compare)
 
-Проверено на commit `3a559de` в Chromium: `python3 -m quest.qa --shots docs/screenshots/3a559de --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `307c3e7` в Chromium: `python3 -m quest.qa --shots docs/screenshots/307c3e7 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -29,8 +29,14 @@
 | compare_opens_table | PASS | `True` |
 | compare_no_hscroll_on_phone | PASS | `True` |
 | compare_row_opens_item | PASS | `True` |
+| party_submits | PASS | `True` |
+| party_best_rows | PASS | `True` |
+| party_noindex | PASS | `True` |
+| party_unknown_warns | PASS | `True` |
+| party_limit_four | PASS | `True` |
 | unknown_type_400_alert | PASS | `True` |
 | nojs_stages_listed | PASS | `8` |
+| nojs_party_works | PASS | `True` |
 | nojs_print_hidden | PASS | `True` |
 | ширины 320/390/768/1440 × 39 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 32 страниц×ширин | PASS | 0 нарушений |
