@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 56–148 м�
 | наполнение | тот же набор, что у A: 13 инструкций по 15 источникам (IKEA, CPSC Anchor It); тексты — manual_standin, не Qwen; редакция не проверяла |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на f2dc0bf (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из B: вход «Что мешает дома» (/problemy/ и 6 страниц проблем из config/problems.yaml варианта B; инструкции по порядку с прогрессом по отметкам чек-листа; ссылки из шапки, меню, главной, инструкции «Решает:» и 404). Сценарий приёмки на 381cccb упал (ссылка в скрытой на телефоне панели) — исправлен в f2dc0bf: на телефоне переход через «Меню».
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/home-practical test` | 0 | 20 passed in 0.80s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m udobdom.qa --shots docs/screenshots/f2dc0bf --out docs/verification-browser-qa.json` | 0 | 49 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8867 '/obhod/plan/?m=aksessuary-na-odnoj-veshalke' '/zadachi/?pomeshchenie=kuhnya&zadacha=mebel' '/poisk/?q=полка' /nesushchestvuet/` | 0 | 55 URL × 4 ширины, 0 замечаний |
+| `bash bin/home-practical build --commit HEAD` | 0 | собрано из f2dc0bf |
+
+Лабораторный LCP (loopback, без троттлинга) — до 268 мс. Карта действий — `docs/ACTION-MAP.md`.

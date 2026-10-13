@@ -1,6 +1,6 @@
 # Карта действий home-practical, вариант C (home-audit)
 
-Проверено на commit `d0bd2dc` в Chromium: `python3 -m udobdom.qa --shots docs/screenshots/d0bd2dc --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `f2dc0bf` в Chromium: `python3 -m udobdom.qa --shots docs/screenshots/f2dc0bf --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -32,6 +32,11 @@
 | print_button_calls_print | PASS | `True` |
 | print_hides_navigation | PASS | `True` |
 | whole_card_clickable | PASS | `True` |
+| problem_link_from_material | PASS | `True` |
+| problem_shows_checklist_progress | PASS | `True` |
+| problem_untouched_items_no_progress | PASS | `True` |
+| problem_item_opens_material | PASS | `True` |
+| problems_nav_link | PASS | `True` |
 | 404_has_search_and_home | PASS | `True` |
 | audit_start_opens_first_room | PASS | `True` |
 | audit_count_updates | PASS | `True` |

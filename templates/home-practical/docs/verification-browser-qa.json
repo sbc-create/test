@@ -1,6 +1,6 @@
 {
- "commit_head": "d0bd2dc793e6f37b60da5de650a1757c9d8ac0de",
- "at": "2026-10-12T23:40:40Z",
+ "commit_head": "f2dc0bf51b99613d95bfcb6bf53de46125509689",
+ "at": "2026-10-13T13:12:22Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -24,6 +24,11 @@
   "ref_jumps_to_source": true,
   "checklist_persists_after_reload": true,
   "checklist_status_text": "Отмечено 2 из 3. Отметки сохраняются на этом устройстве.",
+  "problem_link_from_material": true,
+  "problem_shows_checklist_progress": true,
+  "problem_untouched_items_no_progress": true,
+  "problem_item_opens_material": true,
+  "problems_nav_link": true,
   "checklist_reset": true,
   "save_button_pressed": true,
   "save_persists_after_reload": true,
@@ -61,6 +66,7 @@
   "mobile:/instrukciya/razdelit-yashchik-komoda/": [],
   "mobile:/podborki/krepim-k-stene/": [],
   "mobile:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "mobile:/problemy/mebel-mozhet-upast/": [],
   "mobile:/pomeshcheniya/": [],
   "mobile:/zadachi/mebel/": [],
   "mobile:/instrukciya/zakrepit-komod-k-stene/": [],
@@ -73,6 +79,7 @@
   "mobile:/poisk/?q=квантовый": [],
   "mobile:/sohranennoe/": [],
   "mobile:/nesushchestvuet/": [],
+  "mobile:/problemy/": [],
   "desktop:/obhod/prihozhaya/": [],
   "desktop:/obhod/plan/?m=aksessuary-na-odnoj-veshalke": [],
   "desktop:/": [],
@@ -81,6 +88,7 @@
   "desktop:/instrukciya/razdelit-yashchik-komoda/": [],
   "desktop:/podborki/krepim-k-stene/": [],
   "desktop:/zadachi/?pomeshchenie=kuhnya&zadacha=mebel": [],
+  "desktop:/problemy/mebel-mozhet-upast/": [],
   "desktop:/pomeshcheniya/": [],
   "desktop:/zadachi/mebel/": [],
   "desktop:/instrukciya/zakrepit-komod-k-stene/": [],
@@ -92,70 +100,79 @@
   "desktop:/poisk/?q=полка": [],
   "desktop:/poisk/?q=квантовый": [],
   "desktop:/sohranennoe/": [],
-  "desktop:/nesushchestvuet/": []
+  "desktop:/nesushchestvuet/": [],
+  "desktop:/problemy/": []
  },
  "perf_lab": {
   "mobile:audit_room": {
-   "lcp_ms": 148,
+   "lcp_ms": 116,
    "cls": 0
   },
   "mobile:audit_plan": {
-   "lcp_ms": 80,
+   "lcp_ms": 68,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 56,
+   "lcp_ms": 80,
    "cls": 0
   },
   "mobile:room": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "mobile:catalog": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "mobile:material": {
-   "lcp_ms": 108,
-   "cls": 0
-  },
-  "mobile:collection": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "mobile:empty-filter": {
-   "lcp_ms": 72,
-   "cls": 0
-  },
-  "desktop:audit_room": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:audit_plan": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "desktop:room": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:catalog": {
    "lcp_ms": 84,
    "cls": 0
   },
-  "desktop:material": {
-   "lcp_ms": 80,
+  "mobile:catalog": {
+   "lcp_ms": 52,
    "cls": 0
   },
-  "desktop:collection": {
+  "mobile:material": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "mobile:collection": {
    "lcp_ms": 56,
    "cls": 0
   },
+  "mobile:empty-filter": {
+   "lcp_ms": 268,
+   "cls": 0
+  },
+  "mobile:problem": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "desktop:audit_room": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:audit_plan": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:room": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:material": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:collection": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
   "desktop:empty-filter": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:problem": {
    "lcp_ms": 60,
    "cls": 0
   }
@@ -165,21 +182,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8867/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/d0bd2dc/audit_room-mobile.png",
-  "docs/screenshots/d0bd2dc/audit_plan-mobile.png",
-  "docs/screenshots/d0bd2dc/home-mobile.png",
-  "docs/screenshots/d0bd2dc/room-mobile.png",
-  "docs/screenshots/d0bd2dc/catalog-mobile.png",
-  "docs/screenshots/d0bd2dc/material-mobile.png",
-  "docs/screenshots/d0bd2dc/collection-mobile.png",
-  "docs/screenshots/d0bd2dc/empty-filter-mobile.png",
-  "docs/screenshots/d0bd2dc/audit_room-desktop.png",
-  "docs/screenshots/d0bd2dc/audit_plan-desktop.png",
-  "docs/screenshots/d0bd2dc/home-desktop.png",
-  "docs/screenshots/d0bd2dc/room-desktop.png",
-  "docs/screenshots/d0bd2dc/catalog-desktop.png",
-  "docs/screenshots/d0bd2dc/material-desktop.png",
-  "docs/screenshots/d0bd2dc/collection-desktop.png",
-  "docs/screenshots/d0bd2dc/empty-filter-desktop.png"
+  "docs/screenshots/f2dc0bf/audit_room-mobile.png",
+  "docs/screenshots/f2dc0bf/audit_plan-mobile.png",
+  "docs/screenshots/f2dc0bf/home-mobile.png",
+  "docs/screenshots/f2dc0bf/room-mobile.png",
+  "docs/screenshots/f2dc0bf/catalog-mobile.png",
+  "docs/screenshots/f2dc0bf/material-mobile.png",
+  "docs/screenshots/f2dc0bf/collection-mobile.png",
+  "docs/screenshots/f2dc0bf/empty-filter-mobile.png",
+  "docs/screenshots/f2dc0bf/problem-mobile.png",
+  "docs/screenshots/f2dc0bf/audit_room-desktop.png",
+  "docs/screenshots/f2dc0bf/audit_plan-desktop.png",
+  "docs/screenshots/f2dc0bf/home-desktop.png",
+  "docs/screenshots/f2dc0bf/room-desktop.png",
+  "docs/screenshots/f2dc0bf/catalog-desktop.png",
+  "docs/screenshots/f2dc0bf/material-desktop.png",
+  "docs/screenshots/f2dc0bf/collection-desktop.png",
+  "docs/screenshots/f2dc0bf/empty-filter-desktop.png",
+  "docs/screenshots/f2dc0bf/problem-desktop.png"
  ]
 }
