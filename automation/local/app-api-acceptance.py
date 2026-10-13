@@ -249,6 +249,26 @@ class Приёмка:
                  f"код {код}, sources={д.get('sources')}, reason={причина} — "
                  "честное отсутствие прямого потока")
 
+    def предложения(self, ид: str) -> None:
+        """«Где смотреть»: ответ с названным состоянием, без выдуманных предложений.
+
+        Пока одобренного источника доступности нет, верный ответ — `unknown`
+        с причиной; `confirmed` без хранилища означал бы выдумку.
+        """
+        код, тело, _ = self.запрос(f"/api/app/v1/titles/{ид}/offers?region=RU")
+        д = тело if isinstance(тело, dict) else {}
+        состояние = д.get("status")
+        форма = (isinstance(д.get("offers"), list) and isinstance(д.get("staleOffers"), list)
+                 and состояние in ("confirmed", "other_region", "stale", "unknown"))
+        честно = состояние != "unknown" or (д.get("offers") == [] and д.get("reason"))
+        self.шаг("где смотреть", код == 200 and форма and bool(честно),
+                 f"код {код}, status={состояние}, reason={д.get('reason')}, "
+                 f"offers={len(д.get('offers') or [])} — состояние названо, «нет» не выдумано")
+        код, тело, _ = self.запрос(f"/api/app/v1/titles/{ид}/offers")
+        ошибка = (тело.get("error") or {}).get("code") if isinstance(тело, dict) else None
+        self.шаг("где смотреть без региона", код == 400 and ошибка == "bad_request",
+                 f"код {код}, code={ошибка}")
+
     def фильм(self, ид: str) -> None:
         self.источники(f"/api/app/v1/episodes/movie/sources?contentId={ид}",
                        "источники фильма")
@@ -281,6 +301,7 @@ def главное(аргв: list[str] | None = None) -> int:
             п.карточка(ид)
             п.серии(ид)
             п.фильм(ид)
+            п.предложения(ид)
             print("   -- кодированные идентификаторы (RFC 3986) --")
             п.кодированные()
     print(f"\nрасхождений: {п.расхождений}")

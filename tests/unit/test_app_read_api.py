@@ -464,3 +464,110 @@ def test_обычные_пути_не_изменились(служба):
             ("/api/app/v1/нет-такого", 404)):
         код, _тело, _ = гет(база, urllib.parse.quote(путь))
         assert код == ожидание, путь
+
+
+# --- «Где смотреть»: titles/{id}/offers ------------------------------------
+#
+# Сценарии согласованы с приложением (Кинатека, docs/API_CONTRACT.md в
+# ott-app-sandbox): подтверждено, нет сведений, устарело, другой регион, ошибка
+# и повтор. Предложения здесь — ТЕСТОВЫЕ записи синтетического снимка; на боевом
+# хосте хранилища нет, и ответ там — unknown.
+
+def _записать_предложения(каталог: Path, записи, источник=None, сырое: str | None = None):
+    путь = каталог / "proba-01-offers.json"
+    if сырое is not None:
+        путь.write_text(сырое, encoding="utf-8")
+    else:
+        путь.write_text(json.dumps({"source": источник or {"id": "probe", "name": "проверочный источник"},
+                                    "generatedAt": "2026-10-13T09:00:00Z", "offers": записи},
+                                   ensure_ascii=False), encoding="utf-8")
+    return путь
+
+
+def _предложение(**поля):
+    import datetime as _dt
+    сейчас = _dt.datetime.now(_dt.timezone.utc)
+    з = {"contentId": ФИЛЬМ, "serviceId": "svc", "serviceName": "Сервис", "region": "RU",
+         "url": "https://svc.example/film/123", "kind": "SUBSCRIPTION", "source": "проверочный фид",
+         "checkedAt": (сейчас - _dt.timedelta(days=2)).isoformat().replace("+00:00", "Z")}
+    з.update(поля)
+    return з
+
+
+@pytest.fixture()
+def служба_с_предложениями(служба, снимок):
+    м, база = служба
+    м.Обработчик.предложения = м.ХранилищеПредложений(снимок / "proba-01-offers.json")
+    try:
+        yield м, база, снимок
+    finally:
+        м.Обработчик.предложения = None
+
+
+def test_предложения_без_источника_unknown_а_не_нигде(служба_с_предложениями):
+    _, база, _ = служба_с_предложениями
+    код, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert код == 200
+    assert тело["status"] == "unknown" and тело["reason"] == "NO_AVAILABILITY_SOURCE"
+    assert тело["offers"] == [] and тело["staleOffers"] == [] and тело["source"] is None
+
+
+def test_предложения_подтверждённое_со_всеми_полями(служба_с_предложениями):
+    _, база, каталог = служба_с_предложениями
+    _записать_предложения(каталог, [_предложение(androidPackage="example.svc")])
+    код, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=ru")
+    assert код == 200 and тело["status"] == "confirmed" and тело["region"] == "RU"
+    п = тело["offers"][0]
+    assert {"contentId", "serviceId", "serviceName", "region", "url", "kind", "source", "checkedAt"} <= set(п)
+    assert п["androidPackage"] == "example.svc" and тело["source"]["id"] == "probe"
+
+
+def test_предложения_устаревшие_отдельно_и_не_как_подтверждённые(служба_с_предложениями):
+    _, база, каталог = служба_с_предложениями
+    _записать_предложения(каталог, [_предложение(checkedAt="2026-01-01T00:00:00Z")])
+    _, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert тело["status"] == "stale" and тело["offers"] == [] and len(тело["staleOffers"]) == 1
+
+
+def test_предложения_только_другой_регион(служба_с_предложениями):
+    _, база, каталог = служба_с_предложениями
+    _записать_предложения(каталог, [_предложение(region="KZ")])
+    _, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert тело["status"] == "other_region" and тело["offers"][0]["region"] == "KZ"
+
+
+def test_предложения_поиск_неполные_и_выдуманные_условия_отбрасываются(служба_с_предложениями):
+    _, база, каталог = служба_с_предложениями
+    _записать_предложения(каталог, [
+        _предложение(url="https://svc.example/search?q=film"),        # поиск — не доказательство
+        _предложение(serviceId="b", url="https://svc.example/"),       # главная сервиса
+        _предложение(serviceId="c", url="http://svc.example/film/1"),  # не https
+        _предложение(serviceId="d", source=""),                       # без источника
+        _предложение(serviceId="e", checkedAt="вчера"),               # время не читается
+        _предложение(serviceId="f", region="Russia"),                 # регион не ISO
+        _предложение(serviceId="g", kind="LEASE"),                     # неизвестные условия → null
+        _предложение(contentId=СЕРИАЛ, serviceId="h"),                # другое произведение
+    ])
+    _, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert [п["serviceId"] for п in тело["offers"]] == ["g"]
+    assert тело["offers"][0]["kind"] is None and тело["dropped"] == 6
+
+
+def test_предложения_ошибка_хранилища_503_и_повтор_после_исправления(служба_с_предложениями):
+    _, база, каталог = служба_с_предложениями
+    путь = _записать_предложения(каталог, None, сырое="{битый json")
+    код, тело, заг = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert код == 503 and тело["error"]["code"] == "offers_unavailable" and заг.get("Retry-After") == "60"
+    import os as _os, time as _time
+    _записать_предложения(каталог, [_предложение()])
+    _os.utime(путь, (_time.time() + 5, _time.time() + 5))   # другая метка — хранилище перечитывается
+    код, тело, _ = гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU")
+    assert код == 200 and тело["status"] == "confirmed"
+
+
+def test_предложения_отказы_маршрута(служба_с_предложениями):
+    _, база, _ = служба_с_предложениями
+    assert гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers")[0] == 400                    # нет региона
+    assert гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RUS")[0] == 400
+    assert гет(база, "/api/app/v1/titles/no-such-title/offers?region=RU")[0] == 404
+    assert гет(база, f"/api/app/v1/titles/{ФИЛЬМ}/offers?region=RU", {"X-App-Key": "wrong-key"})[0] == 401
