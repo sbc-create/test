@@ -125,6 +125,18 @@ class Site:
         out = {t: self.with_problem(t) for t in PROBLEMS}
         return {t: v for t, v in out.items() if len(v) >= 2}
 
+    SORTS = {"nazvanie": "по названию", "uhod": "сначала простые в уходе", "ten": "сначала переносящие тень"}
+
+    def sort(self, items: list[Plant], key: str) -> list[Plant]:
+        if key == "uhod":
+            order = {"Low": 0, "Medium": 1, "High": 2}
+            return sorted(items, key=lambda p: (order.get(p.maint_en, 3), p.ru_name))
+        if key == "ten":
+            return sorted(
+                items, key=lambda p: ("ten" not in p.light_slugs, "rasseyannyj" not in p.light_slugs, p.ru_name)
+            )
+        return sorted(items, key=lambda p: p.ru_name)
+
     def filter(self, light: str | None, maint: str | None) -> list[Plant]:
         return [p for p in self.plants if (not light or light in p.light_slugs) and (not maint or p.maint_en == maint)]
 

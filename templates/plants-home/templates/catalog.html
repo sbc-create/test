@@ -1,13 +1,21 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid %}
+{% from "_parts.html" import grid, light_icon %}
 {% block main %}
 <h1>Каталог</h1>
 <form class="flt" action="/katalog/" method="get" aria-label="Фильтр каталога">
   <div><label for="f-l">Свет</label><select id="f-l" name="svet"><option value="">Любой</option>{% for slug, lv in lights.items() %}<option value="{{ slug }}"{% if light == slug %} selected{% endif %}>{{ lv[1] }}</option>{% endfor %}</select></div>
   <div><label for="f-m">Сложность ухода</label><select id="f-m" name="uhod"><option value="">Любая</option>{% for k, v in MAINT.items() %}<option value="{{ k }}"{% if maint == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select></div>
-  <button type="submit">Показать</button>{% if light or maint %}<a class="reset" href="/katalog/">Сбросить</a>{% endif %}
+  <div><label for="f-s">Порядок</label><select id="f-s" name="sort">{% for k, v in SORTS.items() %}<option value="{{ k }}"{% if (sort or 'nazvanie') == k %} selected{% endif %}>{{ v }}</option>{% endfor %}</select></div>
+  <div><label for="f-v">Вид</label><select id="f-v" name="vid"><option value="">карточки</option><option value="tablica"{% if table %} selected{% endif %}>таблица сравнения</option></select></div>
+  <button type="submit">Показать</button>{% if light or maint or sort or table %}<a class="reset" href="/katalog/">Сбросить</a>{% endif %}
 </form>
 {% if bad %}<p class="warn" role="status">Такого фильтра нет: {{ bad|join(', ') }}. Показаны результаты без него.</p>{% endif %}
 <p class="count" role="status">Найдено: {{ items|length }}</p>
-{% if items %}{{ grid(items, 'h2') }}{% else %}<div class="empty"><h2>По этому сочетанию растений нет</h2><p>Снимите один из фильтров.</p><p><a class="btn" href="/katalog/">Сбросить</a> <a class="btn btn--line" href="/svet/">Подобрать по свету</a></p></div>{% endif %}
+{% if items and table %}
+<div class="tablewrap" role="region" aria-label="Сравнение видов" tabindex="0"><table class="cmp">
+<thead><tr><th scope="col">Вид</th>{% for slug, lv in lights.items() %}<th scope="col">{{ light_icon(slug) }}<span>{{ lv[1] }}</span></th>{% endfor %}<th scope="col">Уход</th><th scope="col">Ядовитость</th></tr></thead>
+<tbody>{% for p in items %}<tr><th scope="row"><a href="{{ p.url }}">{{ p.ru_name }}</a><i lang="la">{{ p.sci }}</i></th>{% for slug in lights %}<td>{% if slug in p.light_slugs %}<span class="yes">да</span>{% else %}<span class="no">—</span>{% endif %}</td>{% endfor %}<td>{{ p.maint or 'нет данных' }}</td><td>{% if p.poison %}{{ p.poison }}{% elif p.poison_note %}не ядовито{% else %}нет данных{% endif %}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="note">Ядовитость — только то, что пишет справочник вида; «нет данных» не значит «безопасно».</p>
+{% elif items %}{{ grid(items, 'h2') }}{% else %}<div class="empty"><h2>По этому сочетанию растений нет</h2><p>Снимите один из фильтров.</p><p><a class="btn" href="/katalog/">Сбросить</a> <a class="btn btn--line" href="/svet/">Подобрать по свету</a></p></div>{% endif %}
 {% endblock %}

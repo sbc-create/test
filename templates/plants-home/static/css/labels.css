@@ -116,3 +116,18 @@ main { max-width: 1160px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 @media print { .hd, .crumbs, .ft, .mine-form, .actions, #izmenit, .tox, section[aria-labelledby="h-light"], .lead { display: none !important; } .labels { grid-template-columns: 1fr 1fr; } }
 h1, h2, h3, .label__name b { overflow-wrap: break-word; hyphens: auto; }
 .actions { min-height: 44px; } /* место под кнопку печати, которую показывает JS: без сдвига макета */
+
+/* ---- «Что случилось?» и таблица сравнения — перенесено из варианта B ---- */
+.rows { list-style: none; padding: 0; margin: 8px 0; border-top: 1px solid var(--line); }
+.row { padding: 10px 2px; border-bottom: 1px solid var(--line); }
+.row__t { margin: 0; font-size: 1.1rem; } .row__t a { display: inline-block; padding-block: 2px; min-height: 24px; }
+.row__t i { font-weight: 400; color: var(--muted); font-size: .9em; margin-left: 6px; }
+.row__m { margin: 2px 0 0; display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--ink); font-size: .92rem; }
+.tablewrap { position: relative; overflow-x: auto; background: #fff; border: 1px solid var(--line); border-radius: 12px; }
+.cmp { border-collapse: collapse; width: 100%; min-width: 760px; font-size: .95rem; }
+.cmp th, .cmp td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: center; }
+.cmp thead th { font-size: .82rem; color: var(--muted); vertical-align: bottom; }
+.cmp thead th span { display: block; }
+.cmp tbody th { text-align: left; } .cmp tbody th a { display: block; padding-block: 2px; min-height: 24px; font-weight: 700; } .cmp tbody th i { font-weight: 400; color: var(--muted); font-size: .85rem; }
+.yes { display: inline-block; padding: 0 8px; border-radius: 8px; background: #dff0e2; color: var(--leaf); font-weight: 800; }
+.no { color: var(--muted); }

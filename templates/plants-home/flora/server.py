@@ -120,6 +120,15 @@ class App:
             )
         if path == "/moi-rasteniya/":
             return self.mine(q)
+        if path == "/chto-sluchilos/":  # перенесено из варианта B
+            crumbs = [home, ("Что случилось", path)]
+            return self.page(
+                "diagnose.html",
+                "Что случилось с растением: симптом → вид → что пишет справочник",
+                "Опадают листья или бутоны, гниют корни, вредители — по видам, со ссылкой на источник вида.",
+                path,
+                crumbs,
+            )
         if path == "/katalog/":
             light = (q.get("svet") or [""])[0]
             maint = (q.get("uhod") or [""])[0]
@@ -127,8 +136,11 @@ class App:
             bad = [x for x, ok in ((light, light in lights), (maint, maint in MAINT)) if x and not ok]
             light = light if light in lights else ""
             maint = maint if maint in MAINT else ""
-            filtered = bool(light or maint or bad)
-            items = s.filter(light or None, maint or None)
+            sort = (q.get("sort") or [""])[0]
+            sort = sort if sort in s.SORTS else ""
+            table = (q.get("vid") or [""])[0] == "tablica"
+            filtered = bool(light or maint or bad or sort or table)
+            items = s.sort(s.filter(light or None, maint or None), sort or "nazvanie")
             crumbs = [home, ("Каталог", path)]
             meta = Meta(
                 "Каталог комнатных растений"
@@ -143,7 +155,18 @@ class App:
             )
             return (
                 200,
-                self.render("catalog.html", meta, items=items, light=light, maint=maint, bad=bad, lights=lights),
+                self.render(
+                    "catalog.html",
+                    meta,
+                    items=items,
+                    light=light,
+                    maint=maint,
+                    bad=bad,
+                    lights=lights,
+                    sort=sort,
+                    table=table,
+                    SORTS=s.SORTS,
+                ),
                 {},
             )
         m = re.fullmatch(r"/rastenie/([a-z0-9-]+)/", path)
@@ -303,6 +326,7 @@ class App:
         urls = [
             "/",
             "/moi-rasteniya/",
+            "/chto-sluchilos/",
             "/katalog/",
             "/svet/",
             "/problemy/",

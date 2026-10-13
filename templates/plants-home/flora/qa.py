@@ -23,6 +23,8 @@ SHOTS = {
     "light": "/svet/poluten/",
     "problem": "/problema/korni-gniyut/",
     "empty-filter": "/katalog/?svet=solnce&uhod=Medium",
+    "diagnose": "/chto-sluchilos/",
+    "compare": "/katalog/?sort=uhod&vid=tablica",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/katalog/",
@@ -163,6 +165,34 @@ def run(shots: Path | None) -> dict:
         A["search_by_latin"] = pg.locator(".pc").count()
         pg.goto(BASE + "/poisk/?q=квантовый")
         A["search_no_results_message"] = pg.locator(".empty h2").inner_text() == "Ничего не нашлось"
+        # перенесено из B: «Что случилось?» и таблица сравнения
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".links a", has_text="Что случилось").click()
+        A["diagnose_from_home"] = pg.url.endswith("/chto-sluchilos/") and pg.locator(".row").count() > 0
+        first_sym = pg.locator("main section h2 a").first.get_attribute("href")
+        with pg.expect_navigation():
+            pg.locator("main section h2 a").first.click()
+        A["diagnose_symptom_opens_problem"] = pg.url.endswith(first_sym)
+        pg.goto(BASE + "/chto-sluchilos/")
+        with pg.expect_navigation():
+            pg.locator(".row__t a").first.click()
+        A["diagnose_species_opens_plant"] = "/rastenie/" in pg.url
+        pg.goto(BASE + "/katalog/")
+        pg.select_option("#f-s", "uhod")
+        pg.select_option("#f-v", "tablica")
+        with pg.expect_navigation():
+            pg.locator(".flt button").click()
+        cells = pg.locator(".cmp tbody tr td:nth-last-child(2)").all_inner_texts()
+        A["compare_table_rows"] = pg.locator(".cmp tbody tr").count()
+        A["compare_sorted_by_care"] = cells == sorted(
+            cells,
+            key=lambda x: {"простой": 0, "средний": 1, "сложный": 2}.get(
+                x.strip().split()[0].lower() if x.strip() else "", 3
+            ),
+        )
+        A["compare_noindex"] = "noindex" in (pg.locator("meta[name=robots]").get_attribute("content") or "")
+        A["compare_table_keyboard_scroll"] = pg.locator(".tablewrap[tabindex='0']").count() == 1
         pg.goto(BASE + "/nesushchestvuet/")
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
