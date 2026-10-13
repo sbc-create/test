@@ -104,3 +104,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–212 м�
 | `bash bin/food-daily build --commit HEAD` | 0 | собрано из 6e1f1dc |
 
 Лабораторный LCP (loopback, без троттлинга) — до 184 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 9514da0 (13.10.2026)
+
+Пункты галереи (13.10.2026). Новый адрес рецепта курицы /recept/kurica-v-smetanno-chesnochnom-souse/ с редиректом 301 со старого (editorial rename, v3).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 141 passed in 10.26s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/9514da0 --out docs/verification-browser-qa.json` | 0 | 53 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8876 '/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8' '/iz-holodilnika/?est=kurica&est=ris' '/iz-holodilnika/?est=kvantovyj' '/recepty/?sort=vremya&vid=tablica' '/poisk/?q=творог' /nesushchestvuet/` | 0 | 59 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из 9514da0 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 572 мс. Карта действий — `docs/ACTION-MAP.md`.
