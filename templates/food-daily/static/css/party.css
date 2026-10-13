@@ -297,3 +297,6 @@ main { padding-bottom: 56px; }
   .cat td { font-size: .9rem; color: var(--ink-2); } .cat td::before { content: attr(data-label) ": "; color: var(--muted); }
   .cat td[data-label="Раздел"] { grid-column: 1 / -1; }
 }
+
+/* ссылка на шаг источника у подсказки или замены: цель касания не меньше 24 px */
+.src-step { display: inline-block; min-height: 24px; line-height: 24px; font-size: .85rem; white-space: nowrap; }
