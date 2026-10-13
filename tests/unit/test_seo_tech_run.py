@@ -227,3 +227,25 @@ def test_real_queue_has_allocation_and_directions():
     for з in очередь["tasks"]:
         if з["direction"] == "lords":
             assert not any(д in з.get("site", "") for д in вне), з["id"]
+
+
+def test_excluded_new_lords_domains_never_taken(среда):
+    """Восемь новых доменов Lords — вне продвижения: ни выбор, ни захват их не берут."""
+    s = среда["state"]
+    по_сайту = {**среда["задача"], "id": "T901", "site": "lordfilm.group"}
+    по_репо = {**среда["задача"], "id": "T902", "repo": "var/site-repos/lordserial-net-ru"}
+    соседний = {**среда["задача"], "id": "T903", "site": "lordfilm47.space"}
+    assert tech_run.вне_продвижения(по_сайту) == "lordfilm.group"
+    assert tech_run.вне_продвижения(по_репо) == "lordserial.net.ru"
+    assert tech_run.вне_продвижения(соседний) is None
+    assert tech_run.вне_продвижения({"site": "lordserial.su, lordfilm47.space"}) == "lordserial.su"
+    ид = [з["id"] for з in tech_run.candidates([по_сайту, по_репо, соседний], state=s)]
+    assert ид == ["T903"]
+    with pytest.raises(tech_run.ВнеПродвижения):
+        tech_run.claim(по_сайту, "X1", state=s)
+    assert not (s / "claims.jsonl").exists()
+
+
+def test_real_queue_has_no_task_on_excluded_domains():
+    задачи = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))["tasks"]
+    assert [з["id"] for з in задачи if tech_run.вне_продвижения(з)] == []

@@ -23,6 +23,7 @@ from __future__ import annotations
 import datetime as dt
 import json
 import os
+import re
 import shutil
 import subprocess
 from pathlib import Path
@@ -34,6 +35,27 @@ STATE = REPO / "var" / "seo-tech"
 MAX_ATTEMPTS = 3
 STALE_S = 2 * 3600
 ГОТОВО = {"verified", "released", "live_verified", "done"}
+
+
+class ВнеПродвижения(ValueError):
+    """Задача касается домена, исключённого владельцем из продвижения."""
+
+
+def вне_продвижения(задача: dict) -> str | None:
+    """Исключённый домен, которого касается задача, или None.
+
+    Восемь новых доменов Lords — только техническая подготовка ячеек
+    (Архитектор); периодические SEO-правки очереди их не трогают. Очередь
+    пишется руками, поэтому сверка идёт по доменам в `site` и по имени
+    репозитория в `repo` (`lordfilm-group` для `lordfilm.group`).
+    """
+    from .editor_run import ВНЕ_ПРОДВИЖЕНИЯ  # noqa: PLC0415 — editor_run тяжёлый, нужен только здесь
+    домены = set(re.findall(r"[a-z0-9-]+(?:\.[a-z0-9-]+)+", str(задача.get("site", "")).lower()))
+    репо = Path(str(задача.get("repo", ""))).name.lower()
+    for д in ВНЕ_ПРОДВИЖЕНИЯ:
+        if д in домены or репо == д.replace(".", "-"):
+            return д
+    return None
 
 
 def _сейчас() -> dt.datetime:
@@ -156,6 +178,8 @@ def candidates(задачи: list[dict], state: Path = STATE, now: dt.datetime |
         с = сводка.get(з["id"], {})
         if с.get("status") in ГОТОВО or с.get("failures", 0) >= MAX_ATTEMPTS or с.get("open_claim"):
             continue
+        if вне_продвижения(з):
+            continue
         итог.append(з)
     доли = доли or load_allocation()
     счёт = захваты_по_направлениям(задачи, state, now, int(доли.get("window_h", 24)))
@@ -179,6 +203,8 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
     старше STALE_S) снимается и захватывается заново — один раз.
     """
     now = now or _сейчас()
+    if д := вне_продвижения(задача):
+        raise ВнеПродвижения(f"{задача['id']}: {д} исключён из продвижения — только техническая подготовка ячейки")
     if any(к["run_id"] == run_id for к in _claims(state)):
         # Один run_id — один захват: verify() и release_worktree() ищут захват
         # по run_id, и второй захват под тем же именем увёл бы вердикт.
