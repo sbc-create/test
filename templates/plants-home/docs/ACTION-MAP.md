@@ -1,6 +1,6 @@
 # Карта действий plants-home, вариант C (my-collection)
 
-Проверено на commit `e6408ee` в Chromium: `python3 -m flora.qa --shots docs/screenshots/e6408ee --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `595c7d6` в Chromium: `python3 -m flora.qa --shots docs/screenshots/595c7d6 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -25,6 +25,14 @@
 | search_clear | PASS | `True` |
 | search_by_latin | PASS | `1` |
 | search_no_results_message | PASS | `True` |
+| diagnose_from_home | PASS | `True` |
+| diagnose_symptom_opens_problem | PASS | `True` |
+| diagnose_species_opens_plant | PASS | `True` |
+| compare_table_rows | PASS | `19` |
+| compare_sorted_by_care | PASS | `True` |
+| compare_noindex | PASS | `True` |
+| compare_table_keyboard_scroll | PASS | `True` |
+| compare_phone_no_sideways_scroll | PASS | `True` |
 | 404_has_search_and_home | PASS | `True` |
 | empty_collection_submit_blocked | PASS | `True` |
 | mine_count_updates | PASS | `True` |

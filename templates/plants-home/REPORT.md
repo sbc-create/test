@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–384 м�
 | наполнение | 19 видов по NC State Extension Plant Toolbox (5 добавлены ночью 13.10); тексты — manual_standin, не Qwen; редакция не проверяла |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 595c7d6 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из B: «Что случилось?» (/chto-sluchilos/: симптом → виды → текст справочника вида) и таблица сравнения видов с сортировкой (порядок и вид не индексируются; «нет данных» о ядовитости не выдаётся за «не ядовито»). Улучшение против B: на телефоне строки таблицы — карточки с подписями, без прокрутки вбок.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/plants-home test` | 0 | 18 passed in 0.62s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m flora.qa --shots docs/screenshots/595c7d6 --out docs/verification-browser-qa.json` | 0 | 42 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8869 '/moi-rasteniya/?r=aloe-vera&r=krassula-ovalnaya&r=sansevieriya-tryohpolosnaya' '/katalog/?sort=uhod&vid=tablica' '/katalog/?svet=solnce&uhod=Medium' '/poisk/?q=Monstera' /nesushchestvuet/` | 0 | 48 URL × 4 ширины, 0 замечаний |
+| `bash bin/plants-home build --commit HEAD` | 0 | собрано из 595c7d6 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 264 мс. Карта действий — `docs/ACTION-MAP.md`.

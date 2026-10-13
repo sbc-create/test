@@ -1,6 +1,6 @@
 {
- "commit_head": "86e6d3ee1f85f92fc7eca43cb720937b16516f42",
- "at": "2026-10-13T13:17:51Z",
+ "commit_head": "595c7d6d866f37405aa914fe74eb11e1fac07951",
+ "at": "2026-10-13T13:19:29Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -29,6 +29,7 @@
   "compare_sorted_by_care": true,
   "compare_noindex": true,
   "compare_table_keyboard_scroll": true,
+  "compare_phone_no_sideways_scroll": true,
   "404_has_search_and_home": true,
   "empty_collection_submit_blocked": true,
   "mine_count_updates": true,
@@ -97,31 +98,31 @@
  },
  "perf_lab": {
   "mobile:mine": {
-   "lcp_ms": 196,
+   "lcp_ms": 216,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 48,
-   "cls": 0
-  },
-  "mobile:catalog": {
-   "lcp_ms": 92,
-   "cls": 0
-  },
-  "mobile:plant": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "mobile:light": {
    "lcp_ms": 52,
    "cls": 0
   },
+  "mobile:catalog": {
+   "lcp_ms": 88,
+   "cls": 0
+  },
+  "mobile:plant": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "mobile:light": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
   "mobile:problem": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:empty-filter": {
-   "lcp_ms": 40,
+   "lcp_ms": 48,
    "cls": 0
   },
   "mobile:diagnose": {
@@ -129,43 +130,43 @@
    "cls": 0
   },
   "mobile:compare": {
-   "lcp_ms": 52,
+   "lcp_ms": 264,
    "cls": 0
   },
   "desktop:mine": {
-   "lcp_ms": 472,
+   "lcp_ms": 120,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 68,
+   "lcp_ms": 84,
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 80,
+   "lcp_ms": 76,
    "cls": 0
   },
   "desktop:plant": {
-   "lcp_ms": 60,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:light": {
-   "lcp_ms": 64,
+   "lcp_ms": 84,
    "cls": 0
   },
   "desktop:problem": {
-   "lcp_ms": 64,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:empty-filter": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:diagnose": {
-   "lcp_ms": 64,
+   "lcp_ms": 84,
    "cls": 0
   },
   "desktop:compare": {
-   "lcp_ms": 84,
+   "lcp_ms": 92,
    "cls": 0
   }
  },
@@ -174,23 +175,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/86e6d3e/mine-mobile.png",
-  "docs/screenshots/86e6d3e/home-mobile.png",
-  "docs/screenshots/86e6d3e/catalog-mobile.png",
-  "docs/screenshots/86e6d3e/plant-mobile.png",
-  "docs/screenshots/86e6d3e/light-mobile.png",
-  "docs/screenshots/86e6d3e/problem-mobile.png",
-  "docs/screenshots/86e6d3e/empty-filter-mobile.png",
-  "docs/screenshots/86e6d3e/diagnose-mobile.png",
-  "docs/screenshots/86e6d3e/compare-mobile.png",
-  "docs/screenshots/86e6d3e/mine-desktop.png",
-  "docs/screenshots/86e6d3e/home-desktop.png",
-  "docs/screenshots/86e6d3e/catalog-desktop.png",
-  "docs/screenshots/86e6d3e/plant-desktop.png",
-  "docs/screenshots/86e6d3e/light-desktop.png",
-  "docs/screenshots/86e6d3e/problem-desktop.png",
-  "docs/screenshots/86e6d3e/empty-filter-desktop.png",
-  "docs/screenshots/86e6d3e/diagnose-desktop.png",
-  "docs/screenshots/86e6d3e/compare-desktop.png"
+  "docs/screenshots/595c7d6/mine-mobile.png",
+  "docs/screenshots/595c7d6/home-mobile.png",
+  "docs/screenshots/595c7d6/catalog-mobile.png",
+  "docs/screenshots/595c7d6/plant-mobile.png",
+  "docs/screenshots/595c7d6/light-mobile.png",
+  "docs/screenshots/595c7d6/problem-mobile.png",
+  "docs/screenshots/595c7d6/empty-filter-mobile.png",
+  "docs/screenshots/595c7d6/diagnose-mobile.png",
+  "docs/screenshots/595c7d6/compare-mobile.png",
+  "docs/screenshots/595c7d6/mine-desktop.png",
+  "docs/screenshots/595c7d6/home-desktop.png",
+  "docs/screenshots/595c7d6/catalog-desktop.png",
+  "docs/screenshots/595c7d6/plant-desktop.png",
+  "docs/screenshots/595c7d6/light-desktop.png",
+  "docs/screenshots/595c7d6/problem-desktop.png",
+  "docs/screenshots/595c7d6/empty-filter-desktop.png",
+  "docs/screenshots/595c7d6/diagnose-desktop.png",
+  "docs/screenshots/595c7d6/compare-desktop.png"
  ]
 }
