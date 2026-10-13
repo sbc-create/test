@@ -645,7 +645,8 @@
       "problem": "Латинский код жанра даёт второй индексируемый раздел: /genre/drama/ (canonical → /catalog/?genre=drama) и /catalog/?genre=драма — один и тот же раздел (24 из 24 карточек, 65 страниц), каждый canonical на себя, оба index. И у латинского варианта title/H1/description несут код: «Аниме в жанре «drama»». Карточка ссылается на русское имя (?genre=драма), ld+json — имена (замер Архитектора 13.10, три AnimeGo).",
       "expected": "(а) один канонический адрес раздела жанра (латинский код → canonical на имя); (б) в title/H1/description — имя жанра, а не код",
       "check": "canonical /catalog/?genre=drama → /catalog/?genre=драма; H1 «Аниме в жанре «драма»»",
-      "status": "queued"
+      "status": "session",
+      "evidence": "Сессия 13.10 ~03:30Z: в снимке AnimeGo genre_codes нет ни у одного из 8 589 тайтлов — карточки всегда ссылаются на ?genre=<имя>; панель фильтров и /genre/<код>/ — на код. Решение по expected: ?genre=<код> → имя из индекса (genre_names), H1/title/description — имя, canonical — ?genre=<имя> побайтно как у карточки. ВидАнимеГо.список, 3 ячейки; checks/genre_landing.py: код даёт тот же H1 и canonical, что имя, и страница 2 — canonical имени с page=2. Отрицательная проба (код из HEAD) — rc=1: H1 «boevik», canonical ?genre=boevik. Полные наборы идут."
     },
     {
       "id": "T036",
@@ -658,7 +659,7 @@
       "expected": "«<раздел> на <сайт>: N <запись/записи/записей> каталога — смотреть онлайн[ — страница K].»",
       "check": "checks/section_description.py (стенд на снимке)",
       "status": "session",
-      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом. zonafilm-cc: обёртка ВидЗона.список в src/serve.py (шаблон закреплён), проверка ловит промах обёртки пометкой data-zx; стенд PASS, отрицательная проба rc=1. Animedia (2): ВидАнимедиа.список, сверка с видимым «Найдено N»; стенд PASS обе, отрицательная проба rc=1."
+      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом. zonafilm-cc: обёртка ВидЗона.список в src/serve.py (шаблон закреплён), проверка ловит промах обёртки пометкой data-zx; стенд PASS, отрицательная проба rc=1. Animedia (2): ВидАнимедиа.список, сверка с видимым «Найдено N»; стенд PASS обе, отрицательная проба rc=1. Локальные коммиты: zonafilm-cc 5458176, animedia-icu ca5925e (run.sh rc=0); animedia-space — повторный прогон после поправки runtime_artifact_sha256 (entrypoint-present поймал второй отпечаток)."
     },
     {
       "id": "T037",
