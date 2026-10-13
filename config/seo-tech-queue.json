@@ -458,7 +458,8 @@
       "norm": "каждая индексируемая страница достижима ссылкой из серверного HTML",
       "expected": "страница серии без дорожки — noindex, follow (или canonical на карточку); серия с дорожкой — без изменений",
       "check": "живой X-Robots-Tag/meta на season-1/episode-5 kurumi-2; bash checks/run.sh",
-      "status": "queued"
+      "status": "verified",
+      "evidence": "13.10: правило в _отдать — адрес серии + метка data-state=\"unavailable\" (разметка_плеера) → noindex, follow; серия с дорожкой, карточка, сезон не затронуты. Коммиты локально (пуш — после B019): an1mego 92a5ce3, animeg0 91d99c3, an1meg0 19fd654. checks/episode_unavailable_noindex.py: на прежнем коде 2 провала, на новом ок. checks/run.sh: an1mego rc=0 (28), an1meg0 rc=0 (30), animeg0 rc=1 только now_airing («нет произведения старше 2010 года») — тот же отказ на коде до правки (c051c0f), зависит от живого снимка /srv/animeg0-site/data, к T022 не относится. Живая проверка (X-Robots-Tag и meta на kurumi-2 season-1/episode-5) — после выпуска."
     },
     {
       "id": "T023",
@@ -782,6 +783,19 @@
       "status": "blocked",
       "owner_action": "Одно действие (пользователь claude, root не нужен): export XDG_RUNTIME_DIR=/run/user/1001; D=/home/claude/wt-portable-site-cell-01/automation/local/systemd-user; systemctl --user link $D/seo-report-view.service && systemctl --user enable --now $D/seo-report-view.timer — таймер раз в 5 мин поднимает tmux-сессию seo-report с вкладкой. Смотреть: tmux attach -t seo-report. Сессия SEO сама запустить не может: сторож отклоняет tmux и systemctl («команда 'tmux' не входит в профиль UNATTENDED_SAFE»). Внешний канал (CEO-чат) — отдельное решение владельца; по решению 08.10 не нужен.",
       "evidence": "13.10 07:57Z: состояние вкладки, отсутствие процесса; отказы сторожа «неизвестный инструмент … default-deny» и «команда 'tmux' не входит в профиль UNATTENDED_SAFE». Сделано в зоне SEO: b4e355d (Метрика не ждёт закрытый Вебмастер), d2b02b9 (раздел «Вчера по календарю МСК» в отчёте 10:00), отчёт docs/seo-operator/REPORT_20261012_DAY.md (c7dc278). 13.10 ~08:30Z: причина остановки — окно запускалось вручную (docs/SEO_REGULAR_RUN.md §4), сессии tmux seo-report нет, хост не перезагружался (uptime 491 ч); почему окно завершилось, сессия установить не может (syslog/kern.log закрыты). Юниты automation/local/systemd-user/seo-report-view.{service,timer}, тест tests/unit/test_seo_report_view_unit.py."
+    },
+    {
+      "id": "T045",
+      "site": "animeg0.site",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/"
+      ],
+      "problem": "checks/now_airing.py падает 13.10 на коде c051c0f (ночью тот же коммит проходил): «год сам по себе не отбирает: многолетние сериалы в блоке есть: в блоке нет ни одного произведения старше 2010 года». Остальные 17 условий блока «Сейчас выходят» выполнены. Отказ появился со сменой живого снимка /srv/animeg0-site/data.",
+      "norm": "проверка различает дефект кода, а не состав снимка; либо блок действительно перестал брать многолетние сериалы",
+      "expected": "установлено: дефект отбора блока или зависимость проверки от снимка; исправлено соответствующее",
+      "check": "python3 checks/now_airing.py rc=0",
+      "status": "queued"
     }
   ]
 }
