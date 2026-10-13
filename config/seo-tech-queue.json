@@ -1267,9 +1267,9 @@
       "norm": "аудит 13.10 (docs/seo-operator/AUDIT_GROWTH_20261013.md §7): страницы серий — главный тип входов из поиска",
       "expected": "noindex, follow на серии без дорожки и сезоне без доступных; согласованное число в описании серии",
       "check": "checks/episode_unavailable_noindex.py (копия снимка, настоящая витрина)",
-      "status": "verified",
+      "status": "live_verified",
       "dependencies": "нет",
-      "evidence": "Правка обеих Animedia; проверка: прежний код rc=1 (s1e9 «1999! Отдел…» — index), правка rc=0; полные run.sh идут."
+      "evidence": "animedia-icu f7694c4, animedia-space 474c553; проверка: прежний код rc=1, правка rc=0; полные run.sh пройдены. CI success 38441863699, 38441867162; исполнитель animedia-01 f7694c44f9c1, animedia-02 474c5532ca29 — ok/live_verified. Живые обе Animedia: ДжоДжо S7E5 — noindex, follow; S7E4 — index, follow; описание «Доступно 4 серии»."
     },
     {
       "id": "B022",
