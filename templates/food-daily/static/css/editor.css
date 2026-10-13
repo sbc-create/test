@@ -6,3 +6,8 @@ pre{background:#f3e9da;padding:10px;overflow:auto;max-height:420px}
 .actions{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}.actions form{display:flex;gap:6px;flex-wrap:wrap}
 button{min-height:36px}.msg{background:#e3ecd9;padding:8px 12px}
 li form{display:inline;margin-left:8px}
+.tw{overflow-x:auto;max-width:100%}
+main li,main p,code{overflow-wrap:anywhere}
+pre{white-space:pre-wrap;overflow-wrap:anywhere}
+label{display:inline-flex;gap:4px;align-items:center;flex-wrap:wrap}
+:focus-visible{outline:2px solid #2a1f17;outline-offset:2px}
