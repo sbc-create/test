@@ -10,6 +10,8 @@ from pathlib import Path
 
 from playwright.sync_api import sync_playwright
 
+from craft.site import Site
+
 ROOT = Path(__file__).resolve().parents[1]
 BASE = "http://127.0.0.1:8861"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
@@ -100,7 +102,9 @@ def run(shots: Path | None) -> dict:
         A["made_from_link_opens_ingredient"] = pg.url.endswith("/minecraft/resursy/brevno/")
         with pg.expect_navigation():
             pg.locator(".hd__nav a", has_text="Предметы").click()
-        A["nav_opens_section"] = pg.url.endswith("/predmety/") and pg.locator(".ec").count() == 10
+        A["nav_opens_section"] = pg.url.endswith("/predmety/") and pg.locator(".ec").count() == len(
+            Site().sections("minecraft")["predmety"][1]
+        )
         pg.locator(".ec").nth(2).scroll_into_view_if_needed()
         box = pg.locator(".ec").nth(2).bounding_box()
         href = pg.locator(".ec__t a").nth(2).get_attribute("href")

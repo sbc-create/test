@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Furnace",
  "fetched_at": "2026-10-12T22:25:59Z",
  "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
- "parser": "gsv-facts/1.0.1",
+ "parser": "gsv-facts/1.0.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -19,6 +19,9 @@
    "slots": 8,
    "alternatives_in_first_slot": 3,
    "result": "Furnace",
+   "results": [
+    "Furnace"
+   ],
    "count": 1
   },
   {
@@ -26,6 +29,9 @@
    "slots": 9,
    "alternatives_in_first_slot": 1,
    "result": "Blast Furnace",
+   "results": [
+    "Blast Furnace"
+   ],
    "count": 1
   },
   {
@@ -33,6 +39,9 @@
    "slots": 2,
    "alternatives_in_first_slot": 1,
    "result": "Minecart with Furnace",
+   "results": [
+    "Minecart with Furnace"
+   ],
    "count": 1
   }
  ]

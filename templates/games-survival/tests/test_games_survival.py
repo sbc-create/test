@@ -178,3 +178,11 @@ def test_buildings_section_from_source(app):
     _, html, _ = get(app, s.by_slug["dver"].url)
     assert "пока не разобран надёжно" in html and 'class="rec"' not in html  # рецепт двери не придуман
     assert all("COLOR _" not in p for r in load_all().values() for p in r["lead"])
+
+
+def test_pickaxe_animated_grid_keeps_all_results(app):
+    k = app.site.by_slug["kirka"]
+    assert len(k.recipes) == 1 and len(k.recipes[0]["results"]) == 6 and k.recipes[0]["slots"] == 5
+    assert all("Damaged" not in r["ingredients"] for r in k.recipes)  # ремонт — не рецепт
+    _, html, _ = get(app, k.url)
+    assert "Wooden Pickaxe / Golden Pickaxe" in html and "анимирована" in html

@@ -20,7 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 REPO = ROOT.parents[1]
 PRIVATE = REPO / "var" / "games-survival" / "private" / "pages"
 OUT = ROOT / "data" / "sources"
-PARSER = "gsv-facts/1.0.1"  # 1.0.1: подписи спрайтов («COLOR _GRAY») не считаются абзацем
+PARSER = "gsv-facts/1.0.2"  # 1.0.1: подписи спрайтов («COLOR _GRAY») не считаются абзацем
 
 
 def tx(s: str) -> str:
@@ -35,7 +35,8 @@ def _body(raw: str) -> str:
 
 
 def _slot_items(slot: str) -> list[str]:
-    return [html.unescape(t) for t in re.findall(r'class="invslot-item[^"]*">.*?title="([^"]+)"', slot, re.S)]
+    # у слота результата перед «>» бывают атрибуты (data-minetip-text) — их пропускаем
+    return [html.unescape(t) for t in re.findall(r'class="invslot-item[^"]*"[^>]*>.*?title="([^"]+)"', slot, re.S)]
 
 
 def parse_recipes(raw: str) -> list[dict]:
@@ -70,6 +71,7 @@ def parse_recipes(raw: str) -> list[dict]:
                     "slots": len(filled),
                     "alternatives_in_first_slot": len(filled[0]),
                     "result": result[0],
+                    "results": list(dict.fromkeys(result)),
                     "count": int(size.group(1)) if size else 1,
                 }
             )
