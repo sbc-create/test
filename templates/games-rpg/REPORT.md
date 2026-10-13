@@ -102,3 +102,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 60ba606 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на d54ced9 (13.10.2026)
+
+Пункты галереи (13.10.2026). Заголовок главной 68 знаков (был 72); тест — все заголовки sitemap ≤ 70.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-rpg test` | 0 | 20 passed in 0.82s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m quest.qa --shots docs/screenshots/d54ced9 --out docs/verification-browser-qa.json` | 0 | 33 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8871 '/?tip=item' '/?tip=xx' '/poisk/?q=Gale' '/otryad/?p=gale&p=karlach&p=shadowheart' '/otryad/?p=nikto' /nesushchestvuet/` | 0 | 42 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-rpg build --commit HEAD` | 0 | собрано из d54ced9 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
