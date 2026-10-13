@@ -116,3 +116,13 @@ Meta description длиннее одного предложения теперь
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из d54ced9 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #119 перенацелен с `claude/template-games-rpg` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 119 --base claude/template-games-rpg`.
+- Комплект переноса — `bash bin/games-rpg kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`games-rpg-32e2c91`): `sha256sum -c` — 0, тесты — 22 passed in 1.72s,
+  запуск на 8909 — `/healthz` за 0.25 с, главная 200 (`index-compare`),
+  36 URL и 4 ресурсов — 0 ошибок.
