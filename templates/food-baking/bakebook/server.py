@@ -476,9 +476,11 @@ class Server(socketserver.ThreadingMixIn, http.server.HTTPServer):
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="food-baking serve")
-    ap.parse_args(argv)
+    ap.add_argument("--port", type=int, help="другой локальный порт (чистая копия рядом с действующим превью)")
+    new_port = ap.parse_args(argv).port
     app = App()
     bind, port = app.site.cfg["server"]["bind"], app.site.cfg["server"]["port"]
+    port = new_port or port
     if bind not in ("127.0.0.1", "::1"):
         raise SystemExit("preview слушает только петлю")
     print(json.dumps({"listening": f"http://{bind}:{port}/", "recipes": len(app.site.recipes)}), flush=True)
