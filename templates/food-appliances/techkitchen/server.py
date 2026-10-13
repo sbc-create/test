@@ -44,6 +44,13 @@ def iso(m):
     return "PT" + (f"{h}H" if h else "") + (f"{mm}M" if mm else "")
 
 
+def plural(n: int, one: str, few: str, many: str) -> str:
+    n = abs(n) % 100
+    if 11 <= n <= 14:
+        return many
+    return one if n % 10 == 1 else few if 2 <= n % 10 <= 4 else many
+
+
 class App:
     def __init__(self, site: Site | None = None):
         self.site = site or Site()
@@ -121,6 +128,26 @@ class App:
 
     def route(self, path: str, q: dict):
         s = self.site
+        if path == "/ochered/":
+            want = [x for x in q.get("r", []) if x][:30]
+            queue = s.queue(want)
+            crumbs = [("Главная", "/"), ("Очередь на прибор", path)]
+            error = "Таких рецептов на сайте нет — отметьте из списка." if want and not queue else None
+            meta = Meta(
+                "Очередь на прибор"
+                + (
+                    f": {n} {plural(n, 'рецепт', 'рецепта', 'рецептов')}"
+                    if (n := sum(len(a["recipes"]) for a in queue.values()))
+                    else ""
+                ),
+                "Отметьте несколько рецептов — они выстроятся по приборам и температуре, со суммой времени в приборе.",
+                None if want else s.abs(path),
+                not want,
+                crumbs,
+                [self.crumbs_ld(crumbs)],
+                "queue",
+            )
+            return (400 if error else 200), self.render("queue.html", meta, queue=queue, picked=want, error=error), {}
         if path == "/":
             meta = Meta(
                 f"{s.cfg['name']} — рецепты для мультиварки и аэрогриля",
@@ -236,7 +263,7 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/kak-chitat-rezhimy/"]
+        urls = ["/", "/ochered/", "/kak-chitat-rezhimy/"]
         for a in APPLIANCES:
             if s.for_appliance(a):
                 urls.append(f"/pribor/{a}/")

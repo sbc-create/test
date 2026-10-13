@@ -11,11 +11,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8850"
+BASE = "http://127.0.0.1:8874"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 RECIPE = "/recept/plov-v-multivarke/"
 SHOTS = {
+    "queue": "/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke",
     "home": "/",
     "appliance": "/pribor/multivarka/",
     "category": "/pribor/aerogril/kurica/",
@@ -94,6 +95,29 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + "/")
         pg.keyboard.press("Tab")
         S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        # --- вариант C: очередь ---
+        pg.evaluate("localStorage.clear(); 0")
+        url0 = pg.url
+        pg.click(".qform .btn")
+        S["empty_queue_submit_blocked"] = pg.url == url0
+        pg.locator(".qpick label", has_text="Сырники").click()
+        pg.locator(".qpick label", has_text="Сёмга").click()
+        pg.locator(".qpick label", has_text="Плов").click()
+        S["queue_count_updates"] = pg.locator("[data-q-count]").inner_text() == "Отмечено: 3"
+        with pg.expect_navigation():
+            pg.click(".qform .btn")
+        S["queue_two_devices"] = pg.locator(".qdev").count() == 2
+        S["aerogril_grouped_by_temp"] = pg.locator("#h-aerogril ~ .qgroup h3").all_inner_texts() == ["200 °C", "180 °C"]
+        pg.locator("[data-done]").first.check()
+        pg.reload()
+        S["done_mark_persists"] = pg.locator("[data-done]").first.is_checked()
+        pg.goto(BASE + "/kak-chitat-rezhimy/")
+        S["header_link_keeps_queue"] = "r=" in (pg.locator("[data-q-link]").get_attribute("href") or "")
+        pg.goto(BASE + "/")
+        S["home_form_remembers_queue"] = pg.locator(".qpick input:checked").count() == 3
+        resp = pg.goto(BASE + "/ochered/?r=neizvestno")
+        S["unknown_recipe_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        S["storage_namespace_own"] = all(k.startswith("fac.") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
@@ -103,6 +127,7 @@ def run(shots: Path | None) -> dict:
         S["nojs_search_results"] = pg.locator("main a[href^='/recept/']").count()
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

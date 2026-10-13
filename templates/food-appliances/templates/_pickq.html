@@ -1,0 +1,9 @@
+{% macro pick(picked=[]) %}
+<form class="qform" action="/ochered/" method="get" data-q-form>
+  {% for k, (label, desc) in APPLIANCES.items() %}{% set items = site.for_appliance(k) %}{% if items %}
+  <fieldset><legend>{{ label }}</legend>
+    <ul class="qpick">{% for r in items %}<li><label><input type="checkbox" name="r" value="{{ r.slug }}"{% if r.slug in picked %} checked{% endif %}><span><b>{{ r.title }}</b><small>{% if r.temperatures %}{{ r.temperatures[0].value_c }} °C · {% endif %}{% if r.mode_names %}{{ r.mode_names|join(', ') }} · {% endif %}{% for x in r.appliance_times %}{{ x['min'] }}{% if x['max'] %}–{{ x['max'] }}{% endif %}{% if not loop.last %} + {% endif %}{% endfor %} мин</small></span></label></li>{% endfor %}</ul>
+  </fieldset>{% endif %}{% endfor %}
+  <p class="qform__go"><button type="submit" class="btn">Построить очередь</button> <span data-q-count aria-live="polite"></span></p>
+</form>
+{% endmacro %}

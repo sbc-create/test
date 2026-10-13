@@ -142,5 +142,5 @@ def test_no_cross_template_code():
 
 def test_variant_identity_meta(app):
     _, html, _ = app.route("/", {})
-    assert '<meta name="site-factory-variant-id" content="device-panel">' in html
+    assert '<meta name="site-factory-variant-id" content="device-queue">' in html
     assert '<meta name="site-factory-variant-version" content="1">' in html
