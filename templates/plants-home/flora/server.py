@@ -38,6 +38,32 @@ class Meta:
     kind: str = "page"
 
 
+def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
+    """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
+    out, shown = head, 0
+    for t in titles:
+        nxt = out + (": " if not shown else ", ") + t
+        tail = "." if shown + 1 == len(titles) else " и другие."
+        if len(nxt + tail) > limit:
+            break
+        out, shown = nxt, shown + 1
+    if not shown:
+        return head + "."
+    return out + ("." if shown == len(titles) else " и другие.")
+
+
+TITLE_MAX = 70
+
+
+def plant_title(ru: str, sci: str) -> str:
+    """Заголовок карточки вида: латынь остаётся (по ней ищут), хвост укорачивается, чтобы уложиться в TITLE_MAX."""
+    name = f"{ru}, {sci}" if ru.endswith(")") else f"{ru} ({sci})"  # без двух скобок подряд
+    for tail in (": свет, полив, проблемы", ": уход", ""):
+        if len(name + tail) <= TITLE_MAX:
+            return name + tail
+    return name
+
+
 def plural(n: int, one: str, few: str, many: str) -> str:
     n = abs(n) % 100
     if 11 <= n <= 14:
@@ -146,7 +172,10 @@ class App:
                 "Каталог комнатных растений"
                 + (f": {lights[light][1].lower()}" if light else "")
                 + (f", уход {MAINT[maint]}" if maint else ""),
-                "Все виды с фильтром по свету и сложности ухода.",
+                with_examples(
+                    f"{len(s.plants)} {plural(len(s.plants), 'вид', 'вида', 'видов')} с фильтром по свету и уходу",
+                    [p.ru_name for p in s.plants],
+                ),
                 None if filtered else s.abs(path),
                 not filtered,
                 crumbs,
@@ -175,7 +204,7 @@ class App:
             crumbs = [home, ("Каталог", "/katalog/"), (p.ru_name, p.url)]
             return self.page(
                 "plant.html",
-                f"{p.ru_name} ({p.sci}): свет, полив, проблемы",
+                plant_title(p.ru_name, p.sci),
                 p.summary,
                 p.url,
                 crumbs,
@@ -188,7 +217,9 @@ class App:
             return self.page(
                 "lights.html",
                 "Освещение: какие растения для какого места",
-                "Категории света по справочнику и виды для каждой.",
+                with_examples(
+                    "Категории света по справочнику и виды для каждой", [lv[1].lower() for lv in s.lights().values()]
+                ),
                 path,
                 crumbs,
             )
@@ -225,7 +256,11 @@ class App:
             return self.page(
                 "problem.html",
                 f"{PROBLEMS[t][0]}: у каких растений и что делать",
-                f"{PROBLEMS[t][0]} — что пишет справочник по каждому виду.",
+                with_examples(
+                    f"{PROBLEMS[t][0]} — что пишет справочник для {len(items)} "
+                    f"{plural(len(items), 'вида', 'видов', 'видов')}",
+                    [p.ru_name for p in items],
+                ),
                 path,
                 crumbs,
                 [self.items_ld(items)],
@@ -247,7 +282,16 @@ class App:
             c = s.collections[m.group(1)]
             crumbs = [home, ("Подборки", "/podborki/"), (c["title"], path)]
             return self.page(
-                "collection.html", c["title"], c["lede"], path, crumbs, [self.items_ld(c["items"])], "collection", c=c
+                "collection.html",
+                c["title"],
+                c["lede"]
+                if len(c["lede"]) >= 50
+                else with_examples(c["lede"].rstrip("."), [p.ru_name for p in c["items"]]),
+                path,
+                crumbs,
+                [self.items_ld(c["items"])],
+                "collection",
+                c=c,
             )
         if path == "/kak-chitat/":
             crumbs = [home, ("Как читать карточки", path)]
