@@ -1,6 +1,6 @@
 # Карта действий plants-home, вариант C (my-collection)
 
-Проверено на commit `223d3e3` в Chromium: `python3 -m flora.qa --shots docs/screenshots/223d3e3 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `e6408ee` в Chromium: `python3 -m flora.qa --shots docs/screenshots/e6408ee --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |

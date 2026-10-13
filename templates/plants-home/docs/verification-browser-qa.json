@@ -1,6 +1,6 @@
 {
- "commit_head": "223d3e38665beb1647ac726699d63bf28522dc68",
- "at": "2026-10-13T00:48:51Z",
+ "commit_head": "e6408ee9cc3ecc98d324c419b32b992b987910b5",
+ "at": "2026-10-13T01:12:03Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -86,19 +86,19 @@
  },
  "perf_lab": {
   "mobile:mine": {
-   "lcp_ms": 132,
+   "lcp_ms": 168,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 40,
+   "lcp_ms": 48,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 64,
+   "lcp_ms": 104,
    "cls": 0
   },
   "mobile:plant": {
-   "lcp_ms": 56,
+   "lcp_ms": 100,
    "cls": 0
   },
   "mobile:light": {
@@ -106,31 +106,31 @@
    "cls": 0
   },
   "mobile:problem": {
-   "lcp_ms": 48,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:empty-filter": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0
   },
   "desktop:mine": {
-   "lcp_ms": 104,
-   "cls": 0.0059
+   "lcp_ms": 384,
+   "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 72,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 72,
+   "lcp_ms": 88,
    "cls": 0
   },
   "desktop:plant": {
-   "lcp_ms": 72,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:light": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:problem": {
@@ -147,19 +147,19 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/223d3e3/mine-mobile.png",
-  "docs/screenshots/223d3e3/home-mobile.png",
-  "docs/screenshots/223d3e3/catalog-mobile.png",
-  "docs/screenshots/223d3e3/plant-mobile.png",
-  "docs/screenshots/223d3e3/light-mobile.png",
-  "docs/screenshots/223d3e3/problem-mobile.png",
-  "docs/screenshots/223d3e3/empty-filter-mobile.png",
-  "docs/screenshots/223d3e3/mine-desktop.png",
-  "docs/screenshots/223d3e3/home-desktop.png",
-  "docs/screenshots/223d3e3/catalog-desktop.png",
-  "docs/screenshots/223d3e3/plant-desktop.png",
-  "docs/screenshots/223d3e3/light-desktop.png",
-  "docs/screenshots/223d3e3/problem-desktop.png",
-  "docs/screenshots/223d3e3/empty-filter-desktop.png"
+  "docs/screenshots/e6408ee/mine-mobile.png",
+  "docs/screenshots/e6408ee/home-mobile.png",
+  "docs/screenshots/e6408ee/catalog-mobile.png",
+  "docs/screenshots/e6408ee/plant-mobile.png",
+  "docs/screenshots/e6408ee/light-mobile.png",
+  "docs/screenshots/e6408ee/problem-mobile.png",
+  "docs/screenshots/e6408ee/empty-filter-mobile.png",
+  "docs/screenshots/e6408ee/mine-desktop.png",
+  "docs/screenshots/e6408ee/home-desktop.png",
+  "docs/screenshots/e6408ee/catalog-desktop.png",
+  "docs/screenshots/e6408ee/plant-desktop.png",
+  "docs/screenshots/e6408ee/light-desktop.png",
+  "docs/screenshots/e6408ee/problem-desktop.png",
+  "docs/screenshots/e6408ee/empty-filter-desktop.png"
  ]
 }
