@@ -74,3 +74,13 @@ LCP (лаборатория, loopback, без троттлинга) 48–384 м�
 | `bash bin/plants-home build --commit HEAD` | 0 | собрано из ebae2af |
 
 Лабораторный LCP (loopback, без троттлинга) — до 440 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #117 перенацелен с `claude/template-plants-home` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 117 --base claude/template-plants-home`.
+- Комплект переноса — `bash bin/plants-home kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`plants-home-8d7cfee`): `sha256sum -c` — 0, тесты — 21 passed in 1.27s,
+  запуск на 8907 — `/healthz` за 0.25 с, главная 200 (`my-collection`),
+  43 URL и 8 ресурсов — 0 ошибок.
