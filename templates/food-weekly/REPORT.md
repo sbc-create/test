@@ -74,3 +74,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–636 м�
 | `bash bin/food-weekly build --commit HEAD` | 0 | собрано из f27012b |
 
 Лабораторный LCP (loopback, без троттлинга) — до 144 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 2526dfb (13.10.2026)
+
+Ссылки на food-daily ведут на основной вариант C (8876) и сразу на актуальный адрес курицы; каталог обновлён штатно, 3 плана переведены на новый slug; 301 со старого адреса в food-daily проверен (301 → новый адрес, новый — 200).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-weekly test` | 0 | 28 passed in 0.75s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m weekplan.qa --shots docs/screenshots/2526dfb --out docs/verification-browser-qa.json` | 0 | 35 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8873 '/menyu/bystraya-nedelya-dlya-dvoih/pokupki/?s=d1-breakfast-0:lenivye-vareniki' '/svoya-nedelya/?d1-breakfast=lenivye-vareniki&lyudi=4' '/svoya-nedelya/?lyudi=50' /nesushchestvuet/` | 0 | 39 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 2526dfb |
+
+Лабораторный LCP (loopback, без троттлинга) — до 216 мс. Карта действий — `docs/ACTION-MAP.md`.

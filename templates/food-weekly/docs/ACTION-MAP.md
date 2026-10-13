@@ -1,6 +1,6 @@
 # Карта действий food-weekly, вариант C (own-week)
 
-Проверено на commit `f27012b` в Chromium: `python3 -m weekplan.qa --shots docs/screenshots/f27012b --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `2526dfb` в Chromium: `python3 -m weekplan.qa --shots docs/screenshots/2526dfb --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
