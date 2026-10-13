@@ -104,6 +104,22 @@ sources:
       - "Frontmatter: name, description, tools, disallowedTools, model, permissionMode, maxTurns, skills, memory, effort."
 
   # ---------- источники, недоступные из-за egress policy ----------
+  - id: SRC-TOPVISOR-YANDEX-SERP-NOTICE
+    kind: official_announcement
+    owner: Topvisor
+    url: https://topvisor.com/ru/news/
+    retrieved_at: "2026-10-13T18:05:00Z"
+    status: unavailable_blocked
+    evidence: "PreToolUse WebFetch: хост «topvisor.com» не внесён в inventory (13.10 ~18:05Z); список хостов сессия не расширяет"
+    required_for: "сообщение Topvisor о недоступности Яндекс Search API для съёма позиций; оставшиеся режимы съёма Яндекса, их глубина и цена за проверку"
+  - id: SRC-YANDEX-SEARCH-API-PRICING
+    kind: official_documentation
+    owner: Yandex (Yandex Cloud)
+    url: https://yandex.cloud/ru/docs/search-api/pricing
+    retrieved_at: "2026-10-13T18:06:00Z"
+    status: unavailable_blocked
+    evidence: "PreToolUse WebFetch: хост «yandex.cloud» не внесён в inventory (13.10 ~18:06Z)"
+    required_for: "режимы и цена Yandex Search API, глубина выдачи — независимая сверка с тем, что сообщает Topvisor"
   - id: SRC-DLE-DOCS
     kind: official_documentation
     owner: SoftNews Media Group (DataLife Engine)
