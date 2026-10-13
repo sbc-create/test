@@ -46,3 +46,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–636 м�
 | `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 8397dc4 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 172 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 2ffc38f (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-weekly test` | 0 | 23 passed in 0.77s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m weekplan.qa --shots docs/screenshots/2ffc38f --out docs/verification-browser-qa.json` | 0 | 35 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8873 '/menyu/bystraya-nedelya-dlya-dvoih/pokupki/?s=d1-breakfast-0:lenivye-vareniki' '/svoya-nedelya/?d1-breakfast=lenivye-vareniki&lyudi=4' '/svoya-nedelya/?lyudi=50' /nesushchestvuet/` | 0 | 39 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 2ffc38f |
+
+Лабораторный LCP (loopback, без троттлинга) — до 208 мс. Карта действий — `docs/ACTION-MAP.md`.

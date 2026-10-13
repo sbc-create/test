@@ -1,6 +1,6 @@
 {
- "commit_head": "8397dc49963d53e2efac893d347bdcbf3adf7def",
- "at": "2026-10-13T13:03:54Z",
+ "commit_head": "2ffc38f64011531cae72d72eac636d2ceb9cb3d9",
+ "at": "2026-10-13T13:50:48Z",
  "scenarios": {
   "mobile:own:no_hscroll": true,
   "mobile:home:no_hscroll": true,
@@ -66,51 +66,51 @@
  },
  "perf_lab": {
   "mobile:own": {
-   "lcp_ms": 172,
+   "lcp_ms": 208,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 64,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:week": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "mobile:day": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "mobile:shopping": {
-   "lcp_ms": 100,
-   "cls": 0.0055
-  },
-  "desktop:own": {
-   "lcp_ms": 128,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "desktop:catalog": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "desktop:week": {
    "lcp_ms": 72,
    "cls": 0
   },
+  "mobile:week": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
+  "mobile:day": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
+  "mobile:shopping": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "desktop:own": {
+   "lcp_ms": 176,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:week": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
   "desktop:day": {
-   "lcp_ms": 52,
+   "lcp_ms": 48,
    "cls": 0
   },
   "desktop:shopping": {
-   "lcp_ms": 68,
+   "lcp_ms": 88,
    "cls": 0
   }
  },
@@ -119,18 +119,18 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8873/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/8397dc4/own-mobile.png",
-  "docs/screenshots/8397dc4/home-mobile.png",
-  "docs/screenshots/8397dc4/catalog-mobile.png",
-  "docs/screenshots/8397dc4/week-mobile.png",
-  "docs/screenshots/8397dc4/day-mobile.png",
-  "docs/screenshots/8397dc4/shopping-mobile.png",
-  "docs/screenshots/8397dc4/own-desktop.png",
-  "docs/screenshots/8397dc4/home-desktop.png",
-  "docs/screenshots/8397dc4/catalog-desktop.png",
-  "docs/screenshots/8397dc4/week-desktop.png",
-  "docs/screenshots/8397dc4/day-desktop.png",
-  "docs/screenshots/8397dc4/shopping-desktop.png"
+  "docs/screenshots/2ffc38f/own-mobile.png",
+  "docs/screenshots/2ffc38f/home-mobile.png",
+  "docs/screenshots/2ffc38f/catalog-mobile.png",
+  "docs/screenshots/2ffc38f/week-mobile.png",
+  "docs/screenshots/2ffc38f/day-mobile.png",
+  "docs/screenshots/2ffc38f/shopping-mobile.png",
+  "docs/screenshots/2ffc38f/own-desktop.png",
+  "docs/screenshots/2ffc38f/home-desktop.png",
+  "docs/screenshots/2ffc38f/catalog-desktop.png",
+  "docs/screenshots/2ffc38f/week-desktop.png",
+  "docs/screenshots/2ffc38f/day-desktop.png",
+  "docs/screenshots/2ffc38f/shopping-desktop.png"
  ],
  "actions": {
   "mobile:own:no_hscroll": true,
