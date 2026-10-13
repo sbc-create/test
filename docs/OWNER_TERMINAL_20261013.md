@@ -103,7 +103,19 @@ python3 automation/host/executor-update-plan.py --expect 06f74262107c
 установленной копией больше нет».
 
 **Откат:** сценарий переносит прежнюю копию в `/usr/local/lib/site-factory-cell.prev`
-(и удаляет прежний `.prev` перед этим). Возврат:
+— **и удаляет прежний `.prev` перед этим** (`rm -rf "$DEST.prev"`, затем
+`mv "$DEST" "$DEST.prev"`).
+
+Состояние на 06:20 МСК: установленная копия от **12.10 20:25**, а `.prev` хранит
+копию от **10.10 19:56**. То есть шаг 2 заменит `.prev` копией от 12.10 — это и
+есть правильная цель откатa, но **копия от 10.10 будет потеряна**. Если она
+нужна, отложите её до шага 2:
+
+```bash
+sudo cp -a /usr/local/lib/site-factory-cell.prev /usr/local/lib/site-factory-cell.20261010
+```
+
+Возврат к копии, которая была до шага 2:
 
 ```bash
 sudo systemctl stop site-cell-executor.timer
