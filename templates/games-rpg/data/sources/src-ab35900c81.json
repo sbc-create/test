@@ -1,0 +1,25 @@
+{
+ "id": "src-ab35900c81",
+ "url": "https://bg3.wiki/wiki/Jaheira",
+ "fetched_at": "2026-10-13T01:31:57Z",
+ "page_sha256": "abd367dd192fea5103d4938866e7726c8d0a6014b5464c398570f8217eb00c9e",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Jaheira",
+ "lead": [
+  "Jaheira is a recruitable companion . She and Minsc return from both Baldur's Gate and Baldur's Gate II: Shadows of Amn and are the only two recruitable companions who cannot be romanced . She is a high half-elf and a druid with the Soldier background, and can be first found at the Last Light Inn during Act Two .",
+  "Having become High Harper in the century since her first adventures, wherein her husband Khalid was killed, Jaheira is deadset on maintaining her Harper network, taking down the Cult of the Absolute , and later reuniting with Minsc , her closest friend. Jaheira is known for her sharp wit and dry humour, and also serves as a mentor figure to the rest of the party."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 10,
+  "DEX": 14,
+  "CON": 14,
+  "INT": 8,
+  "WIS": 17,
+  "CHA": 12
+ }
+}

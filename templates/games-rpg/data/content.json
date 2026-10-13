@@ -86,6 +86,71 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "halsin",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-a843816b1c",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Halsin: друид — лесной эльф",
+   "summary": "Спутник, роман с которым возможен для героя любого пола. Лесной эльф, друид Круга Луны с предысторией «Чужеземец». Впервые его можно найти в Shattered Sanctum в первом акте.",
+   "points": [
+    "Класс: друид Круга Луны (Circle of the Moon Druid)",
+    "Раса: лесной эльф",
+    "Предыстория: Outlander"
+   ],
+   "tips": [],
+   "related": [
+    "jaheira",
+    "kvest-spasti-halsina"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "a7f0d1b233a53d520f5c645076c7ea5b9e9aaf7af29014c777ef35989aa33271",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "jaheira",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-ab35900c81",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Jaheira: друид-полуэльф",
+   "summary": "Спутник, которого можно взять в отряд; вместе с Minsc вернулась из Baldur's Gate и Baldur's Gate II, и это единственные два спутника, с которыми нельзя завести роман. Высший полуэльф, друид с предысторией «Солдат».",
+   "points": [
+    "Класс: друид (Druid)",
+    "Раса: высший полуэльф",
+    "Предыстория: Soldier",
+    "Роман: невозможен"
+   ],
+   "tips": [],
+   "related": [
+    "minsc",
+    "halsin"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "61e1abd7c9adac25b5a4337fc448b06e3803d02823e605d789bedbb7f3ba4356",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "karlach",
    "game": "baldurs-gate-3",
    "type": "character",
@@ -384,6 +449,38 @@
    "text_hash": "4d04c704417bd2c44e4b4405b7a12a86474d60279a6f9af3604488ec491bb30d",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "minsc",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "src": "src-de7cf7601d",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Minsc: следопыт-человек",
+   "summary": "Спутник, которого можно взять в отряд; вместе с Jaheira вернулся из Baldur's Gate и Baldur's Gate II, роман с ним невозможен. Человек, следопыт-охотник с предысторией «Народный герой».",
+   "points": [
+    "Класс: следопыт (Hunter Ranger)",
+    "Раса: человек",
+    "Предыстория: Folk Hero",
+    "Роман: невозможен"
+   ],
+   "tips": [],
+   "related": [
+    "jaheira"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "0787db29ee0cc9f66012c406c1fadbc0b823ede7f3c2e6415319d1d7d13e958c",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
    "review_status": "ai_draft"
   },
   {
@@ -969,6 +1066,28 @@
     "found_in": "Jungle"
    }
   },
+  "src-5be045c32f": {
+   "id": "src-5be045c32f",
+   "url": "https://bg3.wiki/wiki/Minthara",
+   "fetched_at": "2026-10-13T01:32:03Z",
+   "page_sha256": "0295346aca4ff1656191366b2eac0cd677d133f9a1beefe4ce30407c93909288",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Minthara",
+   "lead": [
+    "Nightwarden Minthara Baenre is a recruitable Companion who can be romanced by characters of any gender. She is a Lolth-Sworn Drow and an Oath of Vengeance Paladin with the Noble background.",
+    "Ruthless in service of the Absolute , she commands a camp of goblins planning an attack on the Emerald Grove in the name of their god. Initially hostile, she can be re-encountered during Act Two and saved from execution."
+   ],
+   "patches": [
+    "Patch 5",
+    "Patch 6",
+    "Patch 7",
+    "Patch 8"
+   ]
+  },
   "src-6608eb1dfd": {
    "id": "src-6608eb1dfd",
    "url": "https://bg3.wiki/wiki/Adamantine_Splint_Armour",
@@ -1117,6 +1236,56 @@
     "found_in": "Crèche Y'llek"
    }
   },
+  "src-a843816b1c": {
+   "id": "src-a843816b1c",
+   "url": "https://bg3.wiki/wiki/Halsin",
+   "fetched_at": "2026-10-13T01:32:01Z",
+   "page_sha256": "8ec4497777c6b1a121949ffbcaef86928c3575b7dd52c6defa68b8fce6e7a2ed",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Halsin",
+   "lead": [
+    "Halsin is a recruitable Companion who can be romanced by characters of any gender. He is a wood elf and a Circle of the Moon Druid with the Outlander background. Halsin can first be found in the Shattered Sanctum during Act One as an attached follower or as a camp follower .",
+    "You have Proficiency with Longswords , Shortswords , Longbows , and Shortbows ."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 10,
+    "DEX": 14,
+    "CON": 14,
+    "INT": 8,
+    "WIS": 17,
+    "CHA": 12
+   }
+  },
+  "src-ab35900c81": {
+   "id": "src-ab35900c81",
+   "url": "https://bg3.wiki/wiki/Jaheira",
+   "fetched_at": "2026-10-13T01:31:57Z",
+   "page_sha256": "abd367dd192fea5103d4938866e7726c8d0a6014b5464c398570f8217eb00c9e",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Jaheira",
+   "lead": [
+    "Jaheira is a recruitable companion . She and Minsc return from both Baldur's Gate and Baldur's Gate II: Shadows of Amn and are the only two recruitable companions who cannot be romanced . She is a high half-elf and a druid with the Soldier background, and can be first found at the Last Light Inn during Act Two .",
+    "Having become High Harper in the century since her first adventures, wherein her husband Khalid was killed, Jaheira is deadset on maintaining her Harper network, taking down the Cult of the Absolute , and later reuniting with Minsc , her closest friend. Jaheira is known for her sharp wit and dry humour, and also serves as a mentor figure to the rest of the party."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 10,
+    "DEX": 14,
+    "CON": 14,
+    "INT": 8,
+    "WIS": 17,
+    "CHA": 12
+   }
+  },
   "src-b9458ea969": {
    "id": "src-b9458ea969",
    "url": "https://bg3.wiki/wiki/Shadowheart",
@@ -1245,6 +1414,31 @@
     "category": "Rapiers",
     "enchantment": 3,
     "found_in": "Lora's House"
+   }
+  },
+  "src-de7cf7601d": {
+   "id": "src-de7cf7601d",
+   "url": "https://bg3.wiki/wiki/Minsc",
+   "fetched_at": "2026-10-13T01:31:59Z",
+   "page_sha256": "05b906d61309ecbe2265c1bda397bbcef9d983ce2a4bf18fa4ff9c12aea9344f",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "character",
+   "name": "Minsc",
+   "lead": [
+    "Minsc of Rashemen is a recruitable Companion . He and Jaheira return from both Baldur's Gate and Baldur's Gate II: Shadows of Amn and are the only two recruitable companions who cannot be romanced . He is a Human and a Hunter Ranger with the Folk Hero background.",
+    "Can make an additional attack after an unarmed or weapon attack."
+   ],
+   "patches": [],
+   "abilities": {
+    "STR": 12,
+    "DEX": 17,
+    "CON": 13,
+    "INT": 8,
+    "WIS": 15,
+    "CHA": 10
    }
   },
   "src-e195885694": {
