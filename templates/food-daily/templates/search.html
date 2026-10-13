@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<header class="page-head">
+  <h1>Поиск рецептов</h1>
+  <p class="page-head__lead">По названию блюда и продуктам. «ё» и «е» не различаются.</p>
+</header>
+<form class="search search--page" action="/poisk/" method="get" role="search">
+  <label for="q" class="sr">Блюдо или продукты</label>
+  <input id="q" name="q" type="search" value="{{ q }}" placeholder="Тыква, сырники" autocomplete="off" autofocus>
+  <button type="submit">Найти</button>
+</form>
+{% if q %}
+  {% if items %}
+  <p class="result-count">Найдено: {{ items|length }}</p>
+  {{ grid(items, 'h2') }}
+  {% else %}
+  <div class="empty">
+    <h2>По запросу «{{ q }}» ничего нет</h2>
+    <p>Проверьте написание или поищите по одному продукту. Можно посмотреть <a href="/recepty/">все рецепты</a> или <a href="/podborki/">подборки</a>.</p>
+  </div>
+  {% endif %}
+{% endif %}
+{% endblock %}

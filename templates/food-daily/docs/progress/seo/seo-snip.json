@@ -1,0 +1,1723 @@
+{
+ "food-daily A": {
+  "title_long": [
+   [
+    "/recept/domashnie-kotlety/",
+    71
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    49
+   ],
+   [
+    "/o-proekte/",
+    47
+   ],
+   [
+    "/kontakty/",
+    49
+   ],
+   [
+    "/recepty/vtorye-blyuda/",
+    44
+   ],
+   [
+    "/recepty/salaty/",
+    48
+   ],
+   [
+    "/recepty/zakuski/",
+    34
+   ],
+   [
+    "/produkty/tvorog/",
+    31
+   ],
+   [
+    "/produkty/kurica/",
+    31
+   ],
+   [
+    "/produkty/farsh/",
+    29
+   ],
+   [
+    "/sposob/v-duhovke/",
+    48
+   ],
+   [
+    "/sposob/varka/",
+    44
+   ],
+   [
+    "/sposob/tushenie/",
+    46
+   ],
+   [
+    "/podborki/zavtraki-iz-tvoroga/",
+    38
+   ],
+   [
+    "/produkty/",
+    46
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 44,
+   "ItemList": 16,
+   "Article": 3,
+   "Recipe": 22
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zapechennaya-cvetnaya-kapusta/",
+    "/recept/tvorozhnaya-zapekanka-na-zheltkah/",
+    "/recept/syrniki-s-ezhevikoj/",
+    "/recept/sup-s-frikadelkami/",
+    "/recept/salat-s-kuricej-gribami-i-yajcom/",
+    "/recept/pyshnye-oladi-na-kefire/",
+    "/recept/pshennaya-kasha-s-tykvoj/",
+    "/recept/plov-s-kuricej/",
+    "/recept/makarony-po-flotski/",
+    "/recept/kurinyj-sup-s-syrnymi-klyockami/",
+    "/recept/kurica-v-slivochnom-souse/",
+    "/recept/grecheskij-salat/",
+    "/recept/domashnyaya-shaurma/",
+    "/recept/chechevichnyj-sup-s-ovoshchami/",
+    "/recept/bliny-na-moloke-i-kefire/",
+    "/recept/tykvennyj-sup-pyure/",
+    "/recept/tefteli-v-tomatnom-souse/",
+    "/recept/shakshuka-s-bekonom/",
+    "/recept/mintaj-v-slivkah/",
+    "/recept/lenivye-vareniki/",
+    "/recept/grechka-po-kupecheski/",
+    "/recept/domashnie-kotlety/"
+   ]
+  }
+ },
+ "food-daily B": {
+  "title_long": [
+   [
+    "/recept/domashnie-kotlety/",
+    71
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    49
+   ],
+   [
+    "/o-proekte/",
+    47
+   ],
+   [
+    "/kontakty/",
+    49
+   ],
+   [
+    "/recepty/vtorye-blyuda/",
+    44
+   ],
+   [
+    "/recepty/salaty/",
+    48
+   ],
+   [
+    "/recepty/zakuski/",
+    34
+   ],
+   [
+    "/produkty/tvorog/",
+    31
+   ],
+   [
+    "/produkty/kurica/",
+    31
+   ],
+   [
+    "/produkty/farsh/",
+    29
+   ],
+   [
+    "/sposob/v-duhovke/",
+    48
+   ],
+   [
+    "/sposob/varka/",
+    44
+   ],
+   [
+    "/sposob/tushenie/",
+    46
+   ],
+   [
+    "/podborki/zavtraki-iz-tvoroga/",
+    38
+   ],
+   [
+    "/produkty/",
+    46
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 45,
+   "ItemList": 16,
+   "Article": 3,
+   "Recipe": 22
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zapechennaya-cvetnaya-kapusta/",
+    "/recept/tvorozhnaya-zapekanka-na-zheltkah/",
+    "/recept/syrniki-s-ezhevikoj/",
+    "/recept/sup-s-frikadelkami/",
+    "/recept/salat-s-kuricej-gribami-i-yajcom/",
+    "/recept/pyshnye-oladi-na-kefire/",
+    "/recept/pshennaya-kasha-s-tykvoj/",
+    "/recept/plov-s-kuricej/",
+    "/recept/makarony-po-flotski/",
+    "/recept/kurinyj-sup-s-syrnymi-klyockami/",
+    "/recept/kurica-v-slivochnom-souse/",
+    "/recept/grecheskij-salat/",
+    "/recept/domashnyaya-shaurma/",
+    "/recept/chechevichnyj-sup-s-ovoshchami/",
+    "/recept/bliny-na-moloke-i-kefire/",
+    "/recept/tykvennyj-sup-pyure/",
+    "/recept/tefteli-v-tomatnom-souse/",
+    "/recept/shakshuka-s-bekonom/",
+    "/recept/mintaj-v-slivkah/",
+    "/recept/lenivye-vareniki/",
+    "/recept/grechka-po-kupecheski/",
+    "/recept/domashnie-kotlety/"
+   ]
+  }
+ },
+ "food-daily C": {
+  "title_long": [
+   [
+    "/recept/domashnie-kotlety/",
+    71
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    49
+   ],
+   [
+    "/o-proekte/",
+    47
+   ],
+   [
+    "/kontakty/",
+    49
+   ],
+   [
+    "/recepty/vtorye-blyuda/",
+    44
+   ],
+   [
+    "/recepty/salaty/",
+    48
+   ],
+   [
+    "/recepty/zakuski/",
+    34
+   ],
+   [
+    "/produkty/tvorog/",
+    31
+   ],
+   [
+    "/produkty/kurica/",
+    31
+   ],
+   [
+    "/produkty/farsh/",
+    29
+   ],
+   [
+    "/sposob/v-duhovke/",
+    48
+   ],
+   [
+    "/sposob/varka/",
+    44
+   ],
+   [
+    "/sposob/tushenie/",
+    46
+   ],
+   [
+    "/podborki/zavtraki-iz-tvoroga/",
+    38
+   ],
+   [
+    "/produkty/",
+    46
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 45,
+   "ItemList": 16,
+   "Article": 3,
+   "Recipe": 22
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zapechennaya-cvetnaya-kapusta/",
+    "/recept/tvorozhnaya-zapekanka-na-zheltkah/",
+    "/recept/syrniki-s-ezhevikoj/",
+    "/recept/sup-s-frikadelkami/",
+    "/recept/salat-s-kuricej-gribami-i-yajcom/",
+    "/recept/pyshnye-oladi-na-kefire/",
+    "/recept/pshennaya-kasha-s-tykvoj/",
+    "/recept/plov-s-kuricej/",
+    "/recept/makarony-po-flotski/",
+    "/recept/kurinyj-sup-s-syrnymi-klyockami/",
+    "/recept/kurica-v-slivochnom-souse/",
+    "/recept/grecheskij-salat/",
+    "/recept/domashnyaya-shaurma/",
+    "/recept/chechevichnyj-sup-s-ovoshchami/",
+    "/recept/bliny-na-moloke-i-kefire/",
+    "/recept/tykvennyj-sup-pyure/",
+    "/recept/tefteli-v-tomatnom-souse/",
+    "/recept/shakshuka-s-bekonom/",
+    "/recept/mintaj-v-slivkah/",
+    "/recept/lenivye-vareniki/",
+    "/recept/grechka-po-kupecheski/",
+    "/recept/domashnie-kotlety/"
+   ]
+  }
+ },
+ "food-baking A": {
+  "title_long": [
+   [
+    "/recept/pirog-gryaz-missisipi/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/o-proekte/",
+    46
+   ],
+   [
+    "/teg/k-chayu/",
+    27
+   ],
+   [
+    "/teg/shokolad/",
+    29
+   ],
+   [
+    "/teg/prazdnik/",
+    33
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 23,
+   "ItemList": 7,
+   "Recipe": 13
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/yablochnoe-myagkoe-pechene/",
+    "/recept/tykvennoe-pechene/",
+    "/recept/tort-karpatka/",
+    "/recept/tort-bez-vypechki-s-vinogradom/",
+    "/recept/pirozhnye-lebedi/",
+    "/recept/pirog-so-slivoj-i-shokoladom/",
+    "/recept/pirog-gryaz-missisipi/",
+    "/recept/pechene-s-finikami-i-slivami/",
+    "/recept/olivkovyj-hleb/",
+    "/recept/limonnyj-keks/",
+    "/recept/keks-s-kabachkom-i-ananasom/",
+    "/recept/keks-iz-chechevicy/",
+    "/recept/bananovyj-hleb/"
+   ]
+  }
+ },
+ "food-baking B": {
+  "title_long": [
+   [
+    "/recept/pirog-gryaz-missisipi/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/o-proekte/",
+    46
+   ],
+   [
+    "/teg/k-chayu/",
+    27
+   ],
+   [
+    "/teg/shokolad/",
+    29
+   ],
+   [
+    "/teg/prazdnik/",
+    33
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 23,
+   "ItemList": 7,
+   "Recipe": 13
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/yablochnoe-myagkoe-pechene/",
+    "/recept/tykvennoe-pechene/",
+    "/recept/tort-karpatka/",
+    "/recept/tort-bez-vypechki-s-vinogradom/",
+    "/recept/pirozhnye-lebedi/",
+    "/recept/pirog-so-slivoj-i-shokoladom/",
+    "/recept/pirog-gryaz-missisipi/",
+    "/recept/pechene-s-finikami-i-slivami/",
+    "/recept/olivkovyj-hleb/",
+    "/recept/limonnyj-keks/",
+    "/recept/keks-s-kabachkom-i-ananasom/",
+    "/recept/keks-iz-chechevicy/",
+    "/recept/bananovyj-hleb/"
+   ]
+  }
+ },
+ "food-baking C": {
+  "title_long": [
+   [
+    "/recept/pirog-gryaz-missisipi/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/o-proekte/",
+    46
+   ],
+   [
+    "/teg/k-chayu/",
+    27
+   ],
+   [
+    "/teg/shokolad/",
+    29
+   ],
+   [
+    "/teg/prazdnik/",
+    33
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 23,
+   "ItemList": 7,
+   "Recipe": 13
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/yablochnoe-myagkoe-pechene/",
+    "/recept/tykvennoe-pechene/",
+    "/recept/tort-karpatka/",
+    "/recept/tort-bez-vypechki-s-vinogradom/",
+    "/recept/pirozhnye-lebedi/",
+    "/recept/pirog-so-slivoj-i-shokoladom/",
+    "/recept/pirog-gryaz-missisipi/",
+    "/recept/pechene-s-finikami-i-slivami/",
+    "/recept/olivkovyj-hleb/",
+    "/recept/limonnyj-keks/",
+    "/recept/keks-s-kabachkom-i-ananasom/",
+    "/recept/keks-iz-chechevicy/",
+    "/recept/bananovyj-hleb/"
+   ]
+  }
+ },
+ "food-weekly A": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    39
+   ],
+   [
+    "/podborki/zavtraki-nedeli/",
+    42
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 33
+  },
+  "missing": {}
+ },
+ "food-weekly B": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    39
+   ],
+   [
+    "/podborki/zavtraki-nedeli/",
+    42
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 33
+  },
+  "missing": {}
+ },
+ "food-weekly C": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/podborki/",
+    39
+   ],
+   [
+    "/podborki/zavtraki-nedeli/",
+    42
+   ]
+  ],
+  "types": {
+   "BreadcrumbList": 34
+  },
+  "missing": {}
+ },
+ "food-appliances A": {
+  "title_long": [
+   [
+    "/kak-chitat-rezhimy/",
+    74
+   ],
+   [
+    "/recept/zharkoe-v-multivarke/",
+    76
+   ],
+   [
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    79
+   ],
+   [
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    72
+   ],
+   [
+    "/recept/plov-v-multivarke/",
+    75
+   ],
+   [
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    74
+   ],
+   [
+    "/recept/kurinoe-file-v-aerogrile/",
+    78
+   ],
+   [
+    "/recept/krevetki-v-aerogrile/",
+    83
+   ],
+   [
+    "/recept/kartoshka-v-aerogrile/",
+    76
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [],
+  "types": {
+   "BreadcrumbList": 24,
+   "ItemList": 11,
+   "Recipe": 12
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zharkoe-v-multivarke/",
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    "/recept/syrniki-v-aerogrile/",
+    "/recept/semga-v-aerogrile/",
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    "/recept/plov-v-multivarke/",
+    "/recept/omlet-v-multivarke/",
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    "/recept/kurinoe-file-v-aerogrile/",
+    "/recept/kurica-karri-v-multivarke/",
+    "/recept/krevetki-v-aerogrile/",
+    "/recept/kartoshka-v-aerogrile/"
+   ]
+  }
+ },
+ "food-appliances B": {
+  "title_long": [
+   [
+    "/kak-chitat-rezhimy/",
+    74
+   ],
+   [
+    "/recept/zharkoe-v-multivarke/",
+    76
+   ],
+   [
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    79
+   ],
+   [
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    72
+   ],
+   [
+    "/recept/plov-v-multivarke/",
+    75
+   ],
+   [
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    74
+   ],
+   [
+    "/recept/kurinoe-file-v-aerogrile/",
+    78
+   ],
+   [
+    "/recept/krevetki-v-aerogrile/",
+    83
+   ],
+   [
+    "/recept/kartoshka-v-aerogrile/",
+    76
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [],
+  "types": {
+   "BreadcrumbList": 24,
+   "ItemList": 11,
+   "Recipe": 12
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zharkoe-v-multivarke/",
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    "/recept/syrniki-v-aerogrile/",
+    "/recept/semga-v-aerogrile/",
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    "/recept/plov-v-multivarke/",
+    "/recept/omlet-v-multivarke/",
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    "/recept/kurinoe-file-v-aerogrile/",
+    "/recept/kurica-karri-v-multivarke/",
+    "/recept/krevetki-v-aerogrile/",
+    "/recept/kartoshka-v-aerogrile/"
+   ]
+  }
+ },
+ "food-appliances C": {
+  "title_long": [
+   [
+    "/kak-chitat-rezhimy/",
+    74
+   ],
+   [
+    "/recept/zharkoe-v-multivarke/",
+    76
+   ],
+   [
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    79
+   ],
+   [
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    72
+   ],
+   [
+    "/recept/plov-v-multivarke/",
+    75
+   ],
+   [
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    74
+   ],
+   [
+    "/recept/kurinoe-file-v-aerogrile/",
+    78
+   ],
+   [
+    "/recept/krevetki-v-aerogrile/",
+    83
+   ],
+   [
+    "/recept/kartoshka-v-aerogrile/",
+    76
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [],
+  "types": {
+   "BreadcrumbList": 25,
+   "ItemList": 11,
+   "Recipe": 12
+  },
+  "missing": {
+   "Recipe.image": [
+    "/recept/zharkoe-v-multivarke/",
+    "/recept/tvorozhnaya-zapekanka-v-multivarke/",
+    "/recept/syrniki-v-aerogrile/",
+    "/recept/semga-v-aerogrile/",
+    "/recept/ris-karri-s-kuricej-v-multivarke/",
+    "/recept/plov-v-multivarke/",
+    "/recept/omlet-v-multivarke/",
+    "/recept/kurinye-kotlety-v-aerogrile/",
+    "/recept/kurinoe-file-v-aerogrile/",
+    "/recept/kurica-karri-v-multivarke/",
+    "/recept/krevetki-v-aerogrile/",
+    "/recept/kartoshka-v-aerogrile/"
+   ]
+  }
+ },
+ "home-practical A": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/zadachi/",
+    45
+   ],
+   [
+    "/podborki/",
+    38
+   ],
+   [
+    "/zadachi/hranenie/",
+    49
+   ],
+   [
+    "/zadachi/mebel/",
+    47
+   ],
+   [
+    "/podborki/bez-sverleniya/",
+    43
+   ],
+   [
+    "/teg/krepezh-k-stene/",
+    38
+   ],
+   [
+    "/teg/sverlenie/",
+    35
+   ],
+   [
+    "/teg/vlazhnye-pomeshcheniya/",
+    38
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 36,
+   "ItemList": 19,
+   "HowTo": 13
+  },
+  "missing": {}
+ },
+ "home-practical B": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/zadachi/",
+    45
+   ],
+   [
+    "/podborki/",
+    38
+   ],
+   [
+    "/zadachi/hranenie/",
+    49
+   ],
+   [
+    "/zadachi/mebel/",
+    47
+   ],
+   [
+    "/podborki/bez-sverleniya/",
+    43
+   ],
+   [
+    "/teg/krepezh-k-stene/",
+    38
+   ],
+   [
+    "/teg/sverlenie/",
+    35
+   ],
+   [
+    "/teg/vlazhnye-pomeshcheniya/",
+    38
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 43,
+   "ItemList": 25,
+   "HowTo": 13
+  },
+  "missing": {}
+ },
+ "home-practical C": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/zadachi/",
+    45
+   ],
+   [
+    "/podborki/",
+    38
+   ],
+   [
+    "/zadachi/hranenie/",
+    49
+   ],
+   [
+    "/zadachi/mebel/",
+    47
+   ],
+   [
+    "/podborki/bez-sverleniya/",
+    43
+   ],
+   [
+    "/teg/krepezh-k-stene/",
+    38
+   ],
+   [
+    "/teg/sverlenie/",
+    35
+   ],
+   [
+    "/teg/vlazhnye-pomeshcheniya/",
+    38
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 43,
+   "ItemList": 19,
+   "HowTo": 13
+  },
+  "missing": {}
+ },
+ "garden-season A": {
+  "title_long": [
+   [
+    "/rabota/klubnika-za-sezon/",
+    80
+   ],
+   [
+    "/rabota/poliv-k-zime/",
+    73
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kultury/",
+    45
+   ],
+   [
+    "/podborki/",
+    43
+   ],
+   [
+    "/tip/uhod/",
+    44
+   ],
+   [
+    "/tip/pochva/",
+    45
+   ],
+   [
+    "/podborki/k-zime/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 58,
+   "ItemList": 34,
+   "HowTo": 18
+  },
+  "missing": {}
+ },
+ "garden-season B": {
+  "title_long": [
+   [
+    "/rabota/klubnika-za-sezon/",
+    80
+   ],
+   [
+    "/rabota/poliv-k-zime/",
+    73
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kultury/",
+    45
+   ],
+   [
+    "/podborki/",
+    43
+   ],
+   [
+    "/tip/uhod/",
+    44
+   ],
+   [
+    "/tip/pochva/",
+    45
+   ],
+   [
+    "/podborki/k-zime/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 58,
+   "ItemList": 34,
+   "HowTo": 18
+  },
+  "missing": {}
+ },
+ "garden-season C": {
+  "title_long": [
+   [
+    "/rabota/klubnika-za-sezon/",
+    80
+   ],
+   [
+    "/rabota/poliv-k-zime/",
+    73
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kultury/",
+    45
+   ],
+   [
+    "/podborki/",
+    43
+   ],
+   [
+    "/tip/uhod/",
+    44
+   ],
+   [
+    "/tip/pochva/",
+    45
+   ],
+   [
+    "/podborki/k-zime/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 59,
+   "ItemList": 34,
+   "HowTo": 18
+  },
+  "missing": {}
+ },
+ "plants-home A": {
+  "title_long": [
+   [
+    "/problemy/",
+    73
+   ],
+   [
+    "/problema/korni-gniyut/",
+    74
+   ],
+   [
+    "/rastenie/aspidistra-vysokaya/",
+    82
+   ],
+   [
+    "/rastenie/diffenbahiya/",
+    78
+   ],
+   [
+    "/rastenie/zamiokulkas/",
+    93
+   ],
+   [
+    "/rastenie/krassula-ovalnaya/",
+    95
+   ],
+   [
+    "/rastenie/monstera-delikatesnaya/",
+    85
+   ],
+   [
+    "/rastenie/peperomiya-tupolistnaya/",
+    88
+   ],
+   [
+    "/rastenie/pileya-peperomievidnaya/",
+    114
+   ],
+   [
+    "/rastenie/sansevieriya-tryohpolosnaya/",
+    104
+   ],
+   [
+    "/rastenie/sansevieriya-cilindricheskaya/",
+    91
+   ],
+   [
+    "/rastenie/senpoliya/",
+    98
+   ],
+   [
+    "/rastenie/spatifillum/",
+    84
+   ],
+   [
+    "/rastenie/falenopsis/",
+    86
+   ],
+   [
+    "/rastenie/fikus-kauchukonosnyj/",
+    79
+   ],
+   [
+    "/rastenie/fikus-lirovidnyj/",
+    74
+   ],
+   [
+    "/rastenie/filodendron-plyushchevidnyj/",
+    92
+   ],
+   [
+    "/rastenie/hlorofitum-hohlatyj/",
+    85
+   ],
+   [
+    "/rastenie/shlyumbergera-dekabrist/",
+    93
+   ],
+   [
+    "/rastenie/epipremnum-zolotistyj/",
+    84
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/katalog/",
+    47
+   ],
+   [
+    "/svet/",
+    49
+   ],
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/problema/shchitovka/",
+    47
+   ],
+   [
+    "/problema/tlya/",
+    43
+   ],
+   [
+    "/podborki/neprihotlivye/",
+    42
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 40,
+   "ItemList": 16
+  },
+  "missing": {}
+ },
+ "plants-home B": {
+  "title_long": [
+   [
+    "/chto-sluchilos/",
+    83
+   ],
+   [
+    "/problemy/",
+    73
+   ],
+   [
+    "/problema/korni-gniyut/",
+    74
+   ],
+   [
+    "/rastenie/aspidistra-vysokaya/",
+    82
+   ],
+   [
+    "/rastenie/diffenbahiya/",
+    78
+   ],
+   [
+    "/rastenie/zamiokulkas/",
+    93
+   ],
+   [
+    "/rastenie/krassula-ovalnaya/",
+    95
+   ],
+   [
+    "/rastenie/monstera-delikatesnaya/",
+    85
+   ],
+   [
+    "/rastenie/peperomiya-tupolistnaya/",
+    88
+   ],
+   [
+    "/rastenie/pileya-peperomievidnaya/",
+    114
+   ],
+   [
+    "/rastenie/sansevieriya-tryohpolosnaya/",
+    104
+   ],
+   [
+    "/rastenie/sansevieriya-cilindricheskaya/",
+    91
+   ],
+   [
+    "/rastenie/senpoliya/",
+    98
+   ],
+   [
+    "/rastenie/spatifillum/",
+    84
+   ],
+   [
+    "/rastenie/falenopsis/",
+    86
+   ],
+   [
+    "/rastenie/fikus-kauchukonosnyj/",
+    79
+   ],
+   [
+    "/rastenie/fikus-lirovidnyj/",
+    74
+   ],
+   [
+    "/rastenie/filodendron-plyushchevidnyj/",
+    92
+   ],
+   [
+    "/rastenie/hlorofitum-hohlatyj/",
+    85
+   ],
+   [
+    "/rastenie/shlyumbergera-dekabrist/",
+    93
+   ],
+   [
+    "/rastenie/epipremnum-zolotistyj/",
+    84
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/katalog/",
+    47
+   ],
+   [
+    "/svet/",
+    49
+   ],
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/problema/shchitovka/",
+    47
+   ],
+   [
+    "/problema/tlya/",
+    43
+   ],
+   [
+    "/podborki/neprihotlivye/",
+    42
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 42,
+   "ItemList": 16
+  },
+  "missing": {}
+ },
+ "plants-home C": {
+  "title_long": [
+   [
+    "/problemy/",
+    73
+   ],
+   [
+    "/problema/korni-gniyut/",
+    74
+   ],
+   [
+    "/rastenie/aspidistra-vysokaya/",
+    82
+   ],
+   [
+    "/rastenie/diffenbahiya/",
+    78
+   ],
+   [
+    "/rastenie/zamiokulkas/",
+    93
+   ],
+   [
+    "/rastenie/krassula-ovalnaya/",
+    95
+   ],
+   [
+    "/rastenie/monstera-delikatesnaya/",
+    85
+   ],
+   [
+    "/rastenie/peperomiya-tupolistnaya/",
+    88
+   ],
+   [
+    "/rastenie/pileya-peperomievidnaya/",
+    114
+   ],
+   [
+    "/rastenie/sansevieriya-tryohpolosnaya/",
+    104
+   ],
+   [
+    "/rastenie/sansevieriya-cilindricheskaya/",
+    91
+   ],
+   [
+    "/rastenie/senpoliya/",
+    98
+   ],
+   [
+    "/rastenie/spatifillum/",
+    84
+   ],
+   [
+    "/rastenie/falenopsis/",
+    86
+   ],
+   [
+    "/rastenie/fikus-kauchukonosnyj/",
+    79
+   ],
+   [
+    "/rastenie/fikus-lirovidnyj/",
+    74
+   ],
+   [
+    "/rastenie/filodendron-plyushchevidnyj/",
+    92
+   ],
+   [
+    "/rastenie/hlorofitum-hohlatyj/",
+    85
+   ],
+   [
+    "/rastenie/shlyumbergera-dekabrist/",
+    93
+   ],
+   [
+    "/rastenie/epipremnum-zolotistyj/",
+    84
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/katalog/",
+    47
+   ],
+   [
+    "/svet/",
+    49
+   ],
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/problema/shchitovka/",
+    47
+   ],
+   [
+    "/problema/tlya/",
+    43
+   ],
+   [
+    "/podborki/neprihotlivye/",
+    42
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 41,
+   "ItemList": 16
+  },
+  "missing": {}
+ },
+ "games-story A": {
+  "title_long": [
+   [
+    "/igra/celeste/glava-1-forsaken-city/",
+    85
+   ],
+   [
+    "/igra/celeste/glava-2-old-site/",
+    84
+   ],
+   [
+    "/igra/celeste/glava-3-celestial-resort/",
+    78
+   ],
+   [
+    "/igra/celeste/glava-4-golden-ridge/",
+    72
+   ],
+   [
+    "/igra/celeste/glava-6-reflection/",
+    77
+   ],
+   [
+    "/igra/celeste/glava-7-the-summit/",
+    83
+   ],
+   [
+    "/igra/celeste/glava-9-farewell/",
+    78
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    34
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 16,
+   "VideoObject": 4,
+   "ItemList": 1
+  },
+  "missing": {
+   "VideoObject.thumbnailUrl": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ],
+   "VideoObject.uploadDate": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ]
+  }
+ },
+ "games-story B": {
+  "title_long": [
+   [
+    "/igra/celeste/glava-1-forsaken-city/",
+    85
+   ],
+   [
+    "/igra/celeste/glava-2-old-site/",
+    84
+   ],
+   [
+    "/igra/celeste/glava-3-celestial-resort/",
+    78
+   ],
+   [
+    "/igra/celeste/glava-4-golden-ridge/",
+    72
+   ],
+   [
+    "/igra/celeste/glava-6-reflection/",
+    77
+   ],
+   [
+    "/igra/celeste/glava-7-the-summit/",
+    83
+   ],
+   [
+    "/igra/celeste/glava-9-farewell/",
+    78
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    34
+   ],
+   [
+    "/igra/celeste/predmety/",
+    40
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 19,
+   "VideoObject": 4,
+   "ItemList": 1
+  },
+  "missing": {
+   "VideoObject.thumbnailUrl": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ],
+   "VideoObject.uploadDate": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ]
+  }
+ },
+ "games-story C": {
+  "title_long": [
+   [
+    "/igra/celeste/glava-1-forsaken-city/",
+    85
+   ],
+   [
+    "/igra/celeste/glava-2-old-site/",
+    84
+   ],
+   [
+    "/igra/celeste/glava-3-celestial-resort/",
+    78
+   ],
+   [
+    "/igra/celeste/glava-4-golden-ridge/",
+    72
+   ],
+   [
+    "/igra/celeste/glava-6-reflection/",
+    77
+   ],
+   [
+    "/igra/celeste/glava-7-the-summit/",
+    83
+   ],
+   [
+    "/igra/celeste/glava-9-farewell/",
+    78
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    34
+   ],
+   [
+    "/igra/celeste/mehaniki/",
+    40
+   ],
+   [
+    "/igra/celeste/gde-ya/",
+    49
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 25,
+   "VideoObject": 4,
+   "ItemList": 1
+  },
+  "missing": {
+   "VideoObject.thumbnailUrl": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ],
+   "VideoObject.uploadDate": [
+    "/video/",
+    "/video/",
+    "/igra/celeste/glava-9-farewell/",
+    "/igra/celeste/glava-9-farewell/"
+   ]
+  }
+ },
+ "games-rpg A": {
+  "title_long": [
+   [
+    "/baldurs-gate-3/predmety/predmet-adamantine-splint/",
+    78
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-blood-of-lathander/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-duellists-prerogative/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-everburn-blade/",
+    77
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-helldusk-armour/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/versiya/versiya-patch-8/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kak-my-rabotaem/",
+    48
+   ],
+   [
+    "/istochniki/",
+    47
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 33,
+   "ItemList": 5
+  },
+  "missing": {}
+ },
+ "games-rpg B": {
+  "title_long": [
+   [
+    "/baldurs-gate-3/predmety/predmet-adamantine-splint/",
+    78
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-blood-of-lathander/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-duellists-prerogative/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-everburn-blade/",
+    77
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-helldusk-armour/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/versiya/versiya-patch-8/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kak-my-rabotaem/",
+    48
+   ],
+   [
+    "/istochniki/",
+    47
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 34,
+   "ItemList": 5
+  },
+  "missing": {}
+ },
+ "games-rpg C": {
+  "title_long": [
+   [
+    "/",
+    78
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-adamantine-splint/",
+    78
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-blood-of-lathander/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-duellists-prerogative/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-everburn-blade/",
+    77
+   ],
+   [
+    "/baldurs-gate-3/predmety/predmet-helldusk-armour/",
+    73
+   ],
+   [
+    "/baldurs-gate-3/versiya/versiya-patch-8/",
+    75
+   ]
+  ],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/kak-my-rabotaem/",
+    48
+   ],
+   [
+    "/istochniki/",
+    47
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 34,
+   "ItemList": 5
+  },
+  "missing": {}
+ },
+ "games-survival A": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/minecraft/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 34,
+   "ItemList": 4
+  },
+  "missing": {}
+ },
+ "games-survival B": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/minecraft/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 35,
+   "ItemList": 4
+  },
+  "missing": {}
+ },
+ "games-survival C": {
+  "title_long": [],
+  "title_short": [],
+  "desc_long": [],
+  "desc_short": [
+   [
+    "/istochniki/",
+    47
+   ],
+   [
+    "/minecraft/",
+    48
+   ]
+  ],
+  "types": {
+   "WebSite": 1,
+   "BreadcrumbList": 36,
+   "ItemList": 4
+  },
+  "missing": {}
+ }
+}

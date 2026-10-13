@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, pager %}
+{% block main %}
+<header class="page-head">
+  <h1>{{ 'Подбор рецептов' if filtered else 'Все рецепты' }}</h1>
+  <p class="page-head__lead">{{ total }} рецепт{{ 'а' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else ('' if total % 10 == 1 and total % 100 != 11 else 'ов') }}{% if filtered %} по выбранным условиям{% endif %}.</p>
+</header>
+<form class="filters" method="get" action="/recepty/" data-autosubmit>
+  <fieldset>
+    <legend class="sr">Фильтры</legend>
+    <label>Продукт
+      <select name="produkt">
+        <option value="">любой</option>
+        {% for key, label in products %}<option value="{{ key }}"{% if filt.product == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Время
+      <select name="vremya">
+        <option value="">любое</option>
+        {% for key, (label, _, _) in TIME_BUCKETS.items() %}<option value="{{ key }}"{% if filt.time == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Тип блюда
+      <select name="tip">
+        <option value="">любой</option>
+        {% for key, (label, _) in CATEGORIES.items() %}<option value="{{ key }}"{% if filt.category == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <button type="submit" class="btn">Показать</button>
+    {% if filtered %}<a class="btn btn--ghost" href="/recepty/">Сбросить</a>{% endif %}
+  </fieldset>
+</form>
+{% if items %}
+{{ grid(items, 'h2') }}
+{% set qs = ('?' ~ ('produkt=' ~ filt.product ~ '&' if filt.product else '') ~ ('vremya=' ~ filt.time ~ '&' if filt.time else '') ~ ('tip=' ~ filt.category if filt.category else '')).rstrip('&') if filtered else '' %}
+{{ pager(base, page, pages, qs) }}
+{% else %}
+<div class="empty">
+  <h2>Ничего не нашлось</h2>
+  <p>По этим условиям рецептов пока нет. Попробуйте убрать один из фильтров.</p>
+  <a class="btn" href="/recepty/">Сбросить фильтры</a>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,42 @@
+# Конфигурация сайта food-daily. Отдельна от всех других сайтов сети.
+site_id: food-daily
+name: "Будни на кухне"            # рабочее название; торговое обозначение не проверено
+variant_id: classic-cards   # вариант A; вариант B — ветка claude/template-food-daily-b
+variant_version: "1"
+lang: ru
+
+# Режим — отдельный проверяемый переключатель. preview: noindex везде,
+# X-Robots-Tag, robots.txt Disallow, sitemap не отдаётся поисковикам.
+# production требует origin (домен) и production_authorized — сейчас
+# домена нет, это BLOCKED_INPUT, а не повод подставить адрес.
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8847"
+  production: null                 # BLOCKED_INPUT: домен будет куплен позже
+
+server:
+  bind: 127.0.0.1                  # только петля: наружу preview не слушает
+  port: 8847
+  compose_project: null            # отдельный процесс, не контейнер; см. docs/ISOLATION.md
+
+storage:
+  db: var/food-daily/preview/food-daily.sqlite3
+  private_sources: var/food-daily/private
+  media: var/food-daily/media
+  cache: var/food-daily/cache
+  build: var/food-daily/build
+  editor_secret: var/food-daily/secrets/editor.json
+
+pagination:
+  per_page: 9
+
+seo:
+  tag_page_min_items: 2            # тег-страница существует при ≥2 материалах
+  tag_index_min_items: 3           # индексируется при ≥3
+  title_suffix: " — Будни на кухне"
+
+ads:
+  adapter: disabled                # preview: production-кампании и счётчики выключены
+analytics:
+  counters: []                     # подключаются после появления домена

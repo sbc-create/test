@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "food-daily/recipe-draft.schema.json",
+  "title": "Ответ редакционной модели на задание food-daily recipe_draft",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "job_id", "base_version", "producer", "draft"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "job_id": {"type": "string", "pattern": "^fdj-[0-9a-f]{16}$"},
+    "base_version": {"type": "integer", "minimum": 0},
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model", "mode"],
+      "properties": {
+        "provider": {"type": "string", "minLength": 1},
+        "model": {"type": "string", "minLength": 1},
+        "mode": {"enum": ["qwen_api", "qwen_manual_export", "manual_standin"]},
+        "note": {"type": "string"},
+        "cost": {"type": ["object", "null"]}
+      }
+    },
+    "draft": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "slug", "seo_title", "seo_description", "intro", "ingredients", "steps", "tips",
+                   "substitutions", "category", "meal", "tags"],
+      "properties": {
+        "title": {"type": "string", "minLength": 3, "maxLength": 90},
+        "slug": {"type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 80},
+        "seo_title": {"type": "string", "minLength": 10, "maxLength": 70},
+        "seo_description": {"type": "string", "minLength": 50, "maxLength": 170},
+        "intro": {"type": "string", "minLength": 40, "maxLength": 700},
+        "ingredients": {
+          "type": "array", "minItems": 2,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["fact_index", "display_name"],
+            "properties": {
+              "fact_index": {"type": "integer", "minimum": 0},
+              "display_name": {"type": "string", "minLength": 2, "maxLength": 80},
+              "group": {"type": "string", "maxLength": 40}
+            }
+          }
+        },
+        "steps": {
+          "type": "array", "minItems": 2,
+          "items": {
+            "type": "object", "additionalProperties": false,
+            "required": ["text", "source_steps"],
+            "properties": {
+              "text": {"type": "string", "minLength": 15, "maxLength": 600},
+              "source_steps": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 0}},
+              "readiness_cue": {"type": "string", "maxLength": 200}
+            }
+          }
+        },
+        "tips": {"type": "array", "maxItems": 4, "items": {
+          "type": "object", "additionalProperties": false, "required": ["text", "verified"],
+          "properties": {"text": {"type": "string", "minLength": 10, "maxLength": 300}, "verified": {"const": false}}}},
+        "substitutions": {"type": "array", "maxItems": 4, "items": {
+          "type": "object", "additionalProperties": false, "required": ["from_index", "to", "note", "verified"],
+          "properties": {"from_index": {"type": "integer", "minimum": 0}, "to": {"type": "string", "minLength": 2},
+                         "note": {"type": "string", "minLength": 5, "maxLength": 240}, "verified": {"const": false}}}},
+        "category": {"enum": ["zavtraki", "supy", "vtorye-blyuda", "garniry", "salaty", "zakuski"]},
+        "meal": {"enum": ["breakfast", "lunch", "dinner", "snack"]},
+        "tags": {"type": "array", "maxItems": 6, "items": {"type": "string", "pattern": "^[a-z0-9-]+$"}},
+        "editor_notes": {"type": "array", "maxItems": 6, "items": {"type": "string", "minLength": 5, "maxLength": 300},
+                         "description": "Внутренние замечания для редактора; читателю не показываются"},
+        "video_script": {"type": ["object", "null"]}
+      }
+    }
+  }
+}

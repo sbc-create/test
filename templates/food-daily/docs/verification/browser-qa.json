@@ -1,0 +1,331 @@
+{
+ "base": "http://127.0.0.1:8847",
+ "commit_head": "e69bf154a3a20ca1a5a676ac1fa3f2316dc455d1",
+ "at": "2026-10-13T08:18:50Z",
+ "scenarios": {
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:recipe:no_hscroll": true,
+  "mobile:tag:no_hscroll": true,
+  "mobile:article:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:recipe:no_hscroll": true,
+  "desktop:tag:no_hscroll": true,
+  "desktop:article:no_hscroll": true,
+  "servings_scale_2_to_4": {
+   "before": "190 г",
+   "after": "380 г",
+   "ok": true,
+   "time_unchanged": true
+  },
+  "shopping_list_items": 6,
+  "shopping_list_after_clear_done": 5,
+  "favorite_counter": "1",
+  "favorites_page_items": 1,
+  "cooking_mode": {
+   "first": "ШАГ 1 ИЗ 7",
+   "after_arrow": "ШАГ 2 ИЗ 7",
+   "closed_on_esc": true
+  },
+  "filter_supy_cards": 4,
+  "filter_reset_link": true,
+  "filter_empty_state": "Ничего не нашлось",
+  "search_case_spaces": 1,
+  "search_yo": 1,
+  "search_by_ingredient_tykva": 2,
+  "first_tab_skip_link": true,
+  "nojs_recipe_steps": 7,
+  "nojs_ingredients": 6,
+  "nojs_fav_button_hidden": true
+ },
+ "a11y": {
+  "mobile:home": [],
+  "mobile:catalog": [],
+  "mobile:recipe": [],
+  "mobile:tag": [],
+  "mobile:article": [],
+  "desktop:home": [],
+  "desktop:catalog": [],
+  "desktop:recipe": [],
+  "desktop:tag": [],
+  "desktop:article": []
+ },
+ "contrast": {
+  "mobile:home": [],
+  "mobile:catalog": [],
+  "mobile:recipe": [],
+  "mobile:tag": [],
+  "mobile:article": [],
+  "desktop:home": [],
+  "desktop:catalog": [],
+  "desktop:recipe": [],
+  "desktop:tag": [],
+  "desktop:article": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 172,
+   "cls": 0,
+   "ttfb_ms": 53,
+   "dom_ms": 127,
+   "bytes": 49066,
+   "requests": 3
+  },
+  "mobile:catalog": {
+   "lcp_ms": 136,
+   "cls": 0,
+   "ttfb_ms": 28,
+   "dom_ms": 103,
+   "bytes": 16533,
+   "requests": 3
+  },
+  "mobile:recipe": {
+   "lcp_ms": 104,
+   "cls": 0,
+   "ttfb_ms": 25,
+   "dom_ms": 55,
+   "bytes": 22619,
+   "requests": 3
+  },
+  "mobile:tag": {
+   "lcp_ms": 52,
+   "cls": 0,
+   "ttfb_ms": 9,
+   "dom_ms": 32,
+   "bytes": 11418,
+   "requests": 3
+  },
+  "mobile:article": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "ttfb_ms": 18,
+   "dom_ms": 50,
+   "bytes": 12999,
+   "requests": 3
+  },
+  "desktop:home": {
+   "lcp_ms": 148,
+   "cls": 0,
+   "ttfb_ms": 7,
+   "dom_ms": 60,
+   "bytes": 54324,
+   "requests": 9
+  },
+  "desktop:catalog": {
+   "lcp_ms": 88,
+   "cls": 0,
+   "ttfb_ms": 7,
+   "dom_ms": 33,
+   "bytes": 16533,
+   "requests": 3
+  },
+  "desktop:recipe": {
+   "lcp_ms": 68,
+   "cls": 0,
+   "ttfb_ms": 6,
+   "dom_ms": 32,
+   "bytes": 22619,
+   "requests": 3
+  },
+  "desktop:tag": {
+   "lcp_ms": 68,
+   "cls": 0,
+   "ttfb_ms": 8,
+   "dom_ms": 33,
+   "bytes": 11418,
+   "requests": 3
+  },
+  "desktop:article": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "ttfb_ms": 6,
+   "dom_ms": 29,
+   "bytes": 12999,
+   "requests": 3
+  }
+ },
+ "console_errors": [],
+ "screenshots": [
+  "docs/screenshots/e69bf15/home-mobile.png",
+  "docs/screenshots/e69bf15/catalog-mobile.png",
+  "docs/screenshots/e69bf15/recipe-mobile.png",
+  "docs/screenshots/e69bf15/tag-mobile.png",
+  "docs/screenshots/e69bf15/article-mobile.png",
+  "docs/screenshots/e69bf15/home-desktop.png",
+  "docs/screenshots/e69bf15/catalog-desktop.png",
+  "docs/screenshots/e69bf15/recipe-desktop.png",
+  "docs/screenshots/e69bf15/tag-desktop.png",
+  "docs/screenshots/e69bf15/article-desktop.png"
+ ],
+ "accessibility": {
+  "axe_version": "4.13.0",
+  "pages": {
+   "mobile:/": {
+    "violations": [],
+    "passes": 45
+   },
+   "mobile:/recepty/": {
+    "violations": [],
+    "passes": 36
+   },
+   "mobile:/recepty/supy/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/produkty/kurica/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 33
+   },
+   "mobile:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 32
+   },
+   "mobile:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 41
+   },
+   "mobile:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/": {
+    "violations": [],
+    "passes": 44
+   },
+   "desktop:/recepty/": {
+    "violations": [],
+    "passes": 35
+   },
+   "desktop:/recepty/supy/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recepty/zavtraki/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/produkty/kurica/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/sposob/na-skovorode/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/podborki/bystro-do-30-minut/": {
+    "violations": [],
+    "passes": 32
+   },
+   "desktop:/recept/syrniki-s-ezhevikoj/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/plov-s-kuricej/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/grecheskij-salat/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/domashnyaya-shaurma/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/recept/tefteli-v-tomatnom-souse/": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/sovety/priznaki-gotovnosti/": {
+    "violations": [],
+    "passes": 31
+   },
+   "desktop:/poisk/?q=zzz": {
+    "violations": [],
+    "passes": 40
+   },
+   "desktop:/nesushchestvuet/": {
+    "violations": [],
+    "passes": 38
+   }
+  },
+  "keyboard": {
+   "/": {
+    "steps": 30,
+    "without_visible_outline": [
+     {
+      "tag": "INPUT",
+      "text": "",
+      "outline": false,
+      "visible": true
+     }
+    ],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты",
+     "A:Закуски"
+    ]
+   },
+   "/recept/syrniki-s-ezhevikoj/": {
+    "steps": 30,
+    "without_visible_outline": [],
+    "order_head": [
+     "A:К содержимому",
+     "A:Будни на кухне",
+     "A:Поиск",
+     "A:Избранное",
+     "A:Покупки",
+     "A:Все",
+     "A:Завтраки",
+     "A:Супы",
+     "A:Вторые блюда",
+     "A:Гарниры",
+     "A:Салаты",
+     "A:Закуски"
+    ]
+   }
+  }
+ }
+}

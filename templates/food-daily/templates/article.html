@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block main %}
+<article class="article prose">
+  <h1>{{ a.title }}</h1>
+  <p class="lead">{{ a.lead }}</p>
+  {% for sec in a.sections %}
+  <section>
+    <h2>{{ sec.heading }}</h2>
+    {% if sec.type == 'text' %}
+      {% for p in sec.body %}<p>{{ p }}</p>{% endfor %}
+    {% elif sec.type == 'readiness_list' %}
+      {% for label, rows in site.readiness_by_category() %}
+      <h3>{{ label }}</h3>
+      <ul class="cue-list">{% for r, cue in rows %}<li><a href="{{ r.url }}">{{ r.title }}</a>: {{ cue }}</li>{% endfor %}</ul>
+      {% endfor %}
+    {% elif sec.type == 'substitutions_list' %}
+      <ul class="cue-list">{% for r, name, sub in site.all_substitutions() %}<li><b>{{ name }}</b> → {{ sub.to }} в рецепте «<a href="{{ r.url }}">{{ r.title }}</a>». {{ sub.note }} <i>Не проверено.</i></li>{% endfor %}</ul>
+    {% endif %}
+  </section>
+  {% endfor %}
+  <p class="disclosure">Текст подготовлен с помощью ИИ на основе рецептов сайта и ещё не проверен редакцией. Опубликовано {{ a.published }}.</p>
+</article>
+{% endblock %}

@@ -1,0 +1,86 @@
+# Лимиты сбора для аудита референсов и пилотного импорта food-daily.
+# Хосты — ровно из ТЗ TEMPLATE-FOOD-DAILY-01 (ред. 2); каждый внесён и в
+# inventory/network-allowlist.yaml. Добавление хоста сюда без записи там
+# не даёт доступа: http.py сверяет оба списка.
+schema_version: 1
+user_agent: "food-daily-audit/1.0 (site-factory reference audit; respects robots.txt)"
+limits:
+  per_host_concurrency: 1        # один запрос на хост одновременно
+  min_delay_seconds: 1.5         # пауза между запросами к одному хосту
+  timeout_seconds: 30
+  max_attempts: 3
+  max_response_bytes: 52428800   # 50 МиБ — предел одной карты сайта (несжатой)
+  max_retry_after_seconds: 300
+  max_sitemaps_per_host: 4000
+  max_runtime_seconds_per_host: 5400
+  max_disk_bytes_per_host: 1073741824
+storage:
+  # Всё сырьё — вне git: var/ исключён .gitignore.
+  root: var/food-daily
+hosts:
+  - id: russianfood
+    base: https://www.russianfood.com
+    lang: ru
+    # sitemap.xml → 404 и в robots.txt карты нет: обход каталога рубрик.
+    catalog:
+      seeds: [/]
+      follow: ['^/recipes/bytype/\?fid=\d+(&page=\d+)?$', '^/themes/(\?theme_id=\d+)?$']
+      max_pages: 2500
+  - id: 1000-menu
+    base: https://1000.menu
+    lang: ru
+  - id: eda-rambler
+    base: https://eda.rambler.ru
+    lang: ru
+    aliases: [https://eda.ru, https://www.eda.ru]
+  - id: gastronom
+    base: https://www.gastronom.ru
+    lang: ru
+  - id: povarenok
+    base: https://www.povarenok.ru
+    lang: ru
+    # sitemap-new.xml ссылается на sitemap1/2.xml, оба 404: обход рубрик.
+    catalog:
+      seeds: [/recipes/]
+      follow: ['^/recipes/(~\d+/)?$', '^/recipes/(dishes/[a-z]+|category/\d+|kitchen/\d+|destiny/\d+)/(~\d+/)?$']
+      max_pages: 3000
+  - id: povar
+    base: https://povar.ru
+    lang: ru
+    # sitemap.xml → 404: лента всех рецептов /mostnew/all/N/ и рубрики /list/.
+    catalog:
+      seeds: [/, /mostnew/all/1/]
+      follow: ['^/mostnew/all/\d+/$', '^/list/[a-z0-9_]+/$']
+      max_pages: 3200
+  - id: iamcook
+    base: https://www.iamcook.ru
+    lang: ru
+    # /sitemap.xml отдаёт HTML главной: обход разделов и тем.
+    catalog:
+      seeds: [/]
+      follow: ['^/section/\d+(/\d+)?$', '^/showsubsection/[a-z0-9_-]+(/\d+)?$', '^/theme/[a-z0-9_-]+(/\d+)?$', '^/(country|ingredients)/[a-z0-9_-]+(/\d+)?$', '^/event/[a-z0-9_/-]+$']
+      max_pages: 2500
+  - id: edimdoma
+    base: https://www.edimdoma.ru
+    lang: ru
+    # /sitemap.xml → 406 при объявленном UA и любом Accept. robots.txt
+    # закрывает /*?, но разрешает *?page= (более длинное правило побеждает),
+    # поэтому пагинация ленты /retsepty?page=N разрешена.
+    catalog:
+      seeds: [/retsepty]
+      follow: ['^/retsepty(\?page=\d+)?$', '^/retsepty/tags/\d+-[a-z0-9-]+(\?page=\d+)?$', '^/retsepty/(kategorii|rubriki)/[a-z0-9/-]+$']
+      max_pages: 1500
+  - id: food-ru
+    base: https://food.ru
+    lang: ru
+  - id: menunedeli
+    base: https://menunedeli.ru
+    lang: ru
+  - id: bbcgoodfood
+    base: https://www.bbcgoodfood.com
+    lang: en
+    ux_only: true
+  - id: seriouseats
+    base: https://www.seriouseats.com
+    lang: en
+    ux_only: true

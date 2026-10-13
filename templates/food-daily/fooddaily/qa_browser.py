@@ -1,0 +1,287 @@
+"""Браузерная приёмка preview: сценарии E2E, лабораторные метрики, скриншоты.
+
+Playwright (Python) из окружения пользователя; axe-core в этом worktree
+недоступен (node_modules — висячая ссылка), поэтому доступность проверяется
+собственным набором правил ниже и так и называется. Метрики — лабораторные
+(одна машина, без троттлинга сети), полевыми данными не являются.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import time
+from pathlib import Path
+
+from playwright.sync_api import sync_playwright
+
+ROOT = Path(__file__).resolve().parents[1]
+BASE = "http://127.0.0.1:8847"
+VIEWPORTS = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
+SHOTS = {
+    "home": "/",
+    "catalog": "/recepty/",
+    "recipe": "/recept/syrniki-s-ezhevikoj/",
+    "tag": "/produkty/kurica/",
+    "article": "/sovety/priznaki-gotovnosti/",
+}
+
+A11Y_JS = r"""
+() => {
+  const out = [];
+  document.querySelectorAll('img').forEach(i => { if (!i.hasAttribute('alt')) out.push('img без alt: ' + i.src); });
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    if (el.type === 'hidden') return;
+    const id = el.id; const lab = (id && document.querySelector('label[for="' + id + '"]')) || el.closest('label');
+    if (!lab && !el.getAttribute('aria-label')) out.push('поле без подписи: ' + (el.name || el.outerHTML.slice(0, 60)));
+  });
+  document.querySelectorAll('button, a[href]').forEach(el => {
+    if (el.closest('[hidden]') || el.hidden) return;
+    const name = (el.innerText || '').trim() || el.getAttribute('aria-label') || (el.querySelector('.sr') && el.querySelector('.sr').textContent);
+    if (!name) out.push('элемент без имени: ' + el.outerHTML.slice(0, 80));
+  });
+  const h1 = document.querySelectorAll('h1').length; if (h1 !== 1) out.push('h1 на странице: ' + h1);
+  let prev = 1; document.querySelectorAll('main h1, main h2, main h3').forEach(h => {
+    const l = +h.tagName[1]; if (l > prev + 1) out.push('пропуск уровня заголовка: ' + h.tagName + ' ' + h.textContent.slice(0, 40)); prev = l; });
+  if (!document.querySelector('main')) out.push('нет landmark main');
+  if (!document.documentElement.lang) out.push('нет lang');
+  return out;
+}"""
+
+CONTRAST_JS = r"""
+() => {
+  function lum(c) { const m = c.match(/\d+(\.\d+)?/g).map(Number); const a = m.slice(0,3).map(v => { v/=255; return v<=0.03928? v/12.92 : Math.pow((v+0.055)/1.055, 2.4); }); return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2]; }
+  function bg(el) { while (el) { const c = getComputedStyle(el).backgroundColor; if (c && !c.endsWith(', 0)') && c !== 'transparent') return c; el = el.parentElement; } return 'rgb(255,255,255)'; }
+  const bad = []; const sel = 'p, li, a, span, dt, dd, label, h1, h2, h3, button, small, output';
+  document.querySelectorAll(sel).forEach(el => {
+    if (!el.offsetParent || !el.textContent.trim() || el.closest('[hidden]')) return;
+    const cs = getComputedStyle(el); const fg = cs.color; const b = bg(el);
+    const L1 = lum(fg), L2 = lum(b); const r = (Math.max(L1,L2)+0.05)/(Math.min(L1,L2)+0.05);
+    const big = parseFloat(cs.fontSize) >= 24 || (parseFloat(cs.fontSize) >= 18.66 && +cs.fontWeight >= 700);
+    if (r < (big ? 3 : 4.5)) bad.push(el.tagName + ' «' + el.textContent.trim().slice(0, 30) + '» ' + r.toFixed(2));
+  });
+  return [...new Set(bad)].slice(0, 20);
+}"""
+
+PERF_JS = r"""
+() => new Promise(res => {
+  let lcp = 0, cls = 0;
+  new PerformanceObserver(l => { for (const e of l.getEntries()) lcp = e.startTime; }).observe({type: 'largest-contentful-paint', buffered: true});
+  new PerformanceObserver(l => { for (const e of l.getEntries()) if (!e.hadRecentInput) cls += e.value; }).observe({type: 'layout-shift', buffered: true});
+  setTimeout(() => {
+    const nav = performance.getEntriesByType('navigation')[0];
+    const bytes = performance.getEntriesByType('resource').reduce((s, r) => s + (r.transferSize || 0), nav.transferSize || 0);
+    res({lcp_ms: Math.round(lcp), cls: +cls.toFixed(4), ttfb_ms: Math.round(nav.responseStart), dom_ms: Math.round(nav.domContentLoadedEventEnd), bytes, requests: performance.getEntriesByType('resource').length + 1});
+  }, 1500);
+})"""
+
+
+AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
+AXE_PAGES = [
+    "/",
+    "/recepty/",
+    "/recepty/supy/",
+    "/recepty/zavtraki/",
+    "/produkty/kurica/",
+    "/sposob/na-skovorode/",
+    "/podborki/bystro-do-30-minut/",
+    "/recept/syrniki-s-ezhevikoj/",
+    "/recept/plov-s-kuricej/",
+    "/recept/grecheskij-salat/",
+    "/recept/domashnyaya-shaurma/",
+    "/recept/tefteli-v-tomatnom-souse/",
+    "/sovety/priznaki-gotovnosti/",
+    "/poisk/?q=zzz",
+    "/nesushchestvuet/",
+]
+
+KEYBOARD_JS = r"""
+() => {
+  const el = document.activeElement; if (!el || el === document.body) return null;
+  const cs = getComputedStyle(el); const r = el.getBoundingClientRect();
+  return {tag: el.tagName, text: (el.innerText || el.getAttribute('aria-label') || el.value || '').trim().slice(0, 40),
+          outline: cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) > 0, visible: r.width > 0 && r.height > 0};
+}"""
+
+
+def axe_and_keyboard(browser) -> dict:
+    out = {"axe_version": None, "pages": {}, "keyboard": {}}
+    if not AXE.exists():
+        out["status"] = "NOT_RUN: axe-core не установлен (cd templates/food-daily/qa && npm ci)"
+        return out
+    for vname in ("mobile", "desktop"):
+        # bypass_csp — только в тестовом браузере: строгая CSP сайта (script-src 'self') иначе не даёт внедрить axe
+        ctx = browser.new_context(viewport=VIEWPORTS[vname], locale="ru-RU", bypass_csp=True)
+        page = ctx.new_page()
+        for path in AXE_PAGES:
+            page.goto(BASE + path)
+            page.add_script_tag(path=str(AXE))
+            res = page.evaluate("""async () => { const r = await axe.run(document, {runOnly: {type: 'tag',
+                values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice']}});
+                return {v: axe.version, violations: r.violations.map(v => ({id: v.id, impact: v.impact,
+                  nodes: v.nodes.length, sample: v.nodes[0] && v.nodes[0].target.join(' ')})), passes: r.passes.length}; }""")
+            out["axe_version"] = res["v"]
+            out["pages"][f"{vname}:{path}"] = {
+                "violations": res["violations"],
+                "passes": res["passes"],
+            }
+        ctx.close()
+    # проход клавиатурой по главной и рецепту: порядок фокуса и видимость обводки
+    ctx = browser.new_context(viewport=VIEWPORTS["desktop"], locale="ru-RU")
+    page = ctx.new_page()
+    for path in ("/", "/recept/syrniki-s-ezhevikoj/"):
+        page.goto(BASE + path)
+        seen = []
+        for _ in range(30):
+            page.keyboard.press("Tab")
+            f = page.evaluate(KEYBOARD_JS)
+            if f:
+                seen.append(f)
+        out["keyboard"][path] = {
+            "steps": len(seen),
+            "without_visible_outline": [x for x in seen if not x["outline"]],
+            "order_head": [f"{x['tag']}:{x['text']}" for x in seen[:12]],
+        }
+    ctx.close()
+    return out
+
+
+def commit() -> str:
+    return subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True).stdout.strip()
+
+
+def run(shots_dir: Path | None) -> dict:
+    res: dict = {
+        "base": BASE,
+        "commit_head": commit(),
+        "at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "scenarios": {},
+        "a11y": {},
+        "contrast": {},
+        "perf_lab": {},
+        "console_errors": [],
+        "screenshots": [],
+    }
+    S = res["scenarios"]
+    with sync_playwright() as p:
+        # установленная версия браузера, без скачивания новых
+        exe = (
+            Path.home()
+            / ".cache/ms-playwright/chromium_headless_shell-1234/chrome-headless-shell-linux64/chrome-headless-shell"
+        )
+        browser = p.chromium.launch(executable_path=str(exe) if exe.exists() else None)
+        for vname, vp in VIEWPORTS.items():
+            ctx = browser.new_context(viewport=vp, device_scale_factor=1, locale="ru-RU")
+            page = ctx.new_page()
+            page.on(
+                "console",
+                lambda m, v=vname: m.type == "error" and res["console_errors"].append(f"{v}: {m.text}"),
+            )
+            page.on("pageerror", lambda e, v=vname: res["console_errors"].append(f"{v}: {e}"))
+            for name, path in SHOTS.items():
+                page.goto(BASE + path, wait_until="load")
+                res["perf_lab"][f"{vname}:{name}"] = page.evaluate(PERF_JS)
+                res["a11y"][f"{vname}:{name}"] = page.evaluate(A11Y_JS)
+                res["contrast"][f"{vname}:{name}"] = page.evaluate(CONTRAST_JS)
+                if shots_dir:
+                    shots_dir.mkdir(parents=True, exist_ok=True)
+                    f = shots_dir / f"{name}-{vname}.png"
+                    page.screenshot(path=str(f), full_page=True)
+                    res["screenshots"].append(
+                        str(f.resolve().relative_to(ROOT)) if ROOT in f.resolve().parents else str(f)
+                    )
+            # горизонтальная прокрутка на телефоне недопустима
+            for name, path in SHOTS.items():
+                page.goto(BASE + path)
+                S[f"{vname}:{name}:no_hscroll"] = page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+            ctx.close()
+
+        ctx = browser.new_context(viewport=VIEWPORTS["mobile"], locale="ru-RU")
+        page = ctx.new_page()
+        # порции: 2 → 4 удваивает граммы, время не меняется
+        page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
+        before = page.locator(".ing").nth(1).locator(".ing__amount").inner_text()
+        time_before = page.locator(".facts").inner_text()
+        page.click("[data-servings-control] [data-step='1']")
+        page.click("[data-servings-control] [data-step='1']")
+        after = page.locator(".ing").nth(1).locator(".ing__amount").inner_text()
+        S["servings_scale_2_to_4"] = {
+            "before": before,
+            "after": after,
+            "ok": before == "190 г" and after == "380 г",
+            "time_unchanged": page.locator(".facts").inner_text() == time_before,
+        }
+        # список покупок
+        page.click("[data-add-list]")
+        page.goto(BASE + "/spisok-pokupok/")
+        S["shopping_list_items"] = page.locator("[data-list] li").count()
+        page.locator("[data-list] li input").first.check()
+        page.click("[data-list-clear-done]")
+        S["shopping_list_after_clear_done"] = page.locator("[data-list] li").count()
+        # избранное
+        page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
+        page.click(".recipe__actions [data-fav]")
+        S["favorite_counter"] = page.locator("[data-fav-count]").inner_text()
+        page.goto(BASE + "/izbrannoe/")
+        S["favorites_page_items"] = page.locator("[data-fav-grid] .card").count()
+        # режим готовки и клавиатура
+        page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
+        page.click("[data-cook-open]")
+        first = page.locator("[data-cook-count]").inner_text()
+        page.keyboard.press("ArrowRight")
+        second = page.locator("[data-cook-count]").inner_text()
+        page.keyboard.press("Escape")
+        S["cooking_mode"] = {
+            "first": first,
+            "after_arrow": second,
+            "closed_on_esc": page.locator("[data-cook]").is_hidden(),
+        }
+        # фильтры: выбор применяется, сброс и пустой результат
+        page.goto(BASE + "/recepty/")
+        with page.expect_navigation():
+            page.select_option("select[name=tip]", "supy")
+        S["filter_supy_cards"] = page.locator(".grid .card").count()
+        S["filter_reset_link"] = page.locator("a.btn--ghost", has_text="Сбросить").count() == 1
+        page.goto(BASE + "/recepty/?produkt=tvorog&tip=supy")
+        S["filter_empty_state"] = page.locator(".empty h2").inner_text() if page.locator(".empty h2").count() else None
+        # поиск: ё/е, регистр, пробелы
+        page.goto(BASE + "/poisk/?q=" + "  ТВОРОЖНАЯ   запеканка ")
+        S["search_case_spaces"] = page.locator(".grid .card").count()
+        page.goto(BASE + "/poisk/?q=клёцками")
+        S["search_yo"] = page.locator(".grid .card").count()
+        page.goto(BASE + "/poisk/?q=тыква")
+        S["search_by_ingredient_tykva"] = page.locator(".grid .card").count()
+        # клавиатура: первый Tab — ссылка «К содержимому»
+        page.goto(BASE + "/")
+        page.keyboard.press("Tab")
+        S["first_tab_skip_link"] = page.evaluate("document.activeElement.className") == "skip"
+        # без JS рецепт целиком в HTML
+        ctx.close()
+        res["accessibility"] = axe_and_keyboard(browser)
+        ctx = browser.new_context(java_script_enabled=False)
+        page = ctx.new_page()
+        page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
+        S["nojs_recipe_steps"] = page.locator(".step").count()
+        S["nojs_ingredients"] = page.locator(".ing").count()
+        S["nojs_fav_button_hidden"] = page.locator(".recipe__actions [data-fav]").is_hidden()
+        ctx.close()
+        browser.close()
+    return res
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--shots")
+    ap.add_argument("--out")
+    a = ap.parse_args(argv)
+    res = run(Path(a.shots) if a.shots else None)
+    txt = json.dumps(res, ensure_ascii=False, indent=1)
+    if a.out:
+        Path(a.out).write_text(txt + "\n")
+    print(txt)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
