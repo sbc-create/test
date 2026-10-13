@@ -49,7 +49,7 @@ def вне_продвижения(задача: dict) -> str | None:
     пишется руками, поэтому сверка идёт по доменам в `site` и по имени
     репозитория в `repo` (`lordfilm-group` для `lordfilm.group`).
     """
-    from .editor_run import ВНЕ_ПРОДВИЖЕНИЯ  # noqa: PLC0415 — editor_run тяжёлый, нужен только здесь
+    from seo_operator.editor_run import ВНЕ_ПРОДВИЖЕНИЯ  # noqa: PLC0415 — editor_run тяжёлый, нужен только здесь
     домены = set(re.findall(r"[a-z0-9-]+(?:\.[a-z0-9-]+)+", str(задача.get("site", "")).lower()))
     репо = Path(str(задача.get("repo", ""))).name.lower()
     for д in ВНЕ_ПРОДВИЖЕНИЯ:
