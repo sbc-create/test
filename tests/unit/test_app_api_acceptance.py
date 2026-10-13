@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import re
 import sys
 import threading
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -133,6 +134,31 @@ def _сервер(сценарий: str, источники: dict | None = None,
                 return self._json(200, [{"episodeId": f"{СЕРИАЛ}:s1:e1"}])
             if "/sources" in путь:
                 return self._json(200, источники)
+            # «Где смотреть». Подставной сервер отвечает ровно так же, как
+            # служба (`automation/host/app-read-api.py`): без `region` — 400,
+            # с регионом и без одобренного источника — 200 и честное
+            # `unknown` с причиной. Пока этой ветви здесь не было, приёмка
+            # получала общий 404 и инструмент проверялся против поведения,
+            # которого у службы нет.
+            if "/offers" in путь:
+                адрес, _, запрос = путь.partition("?")
+                ид = адрес.removeprefix("/api/app/v1/titles/").removesuffix("/offers")
+                if ид != СЕРИАЛ:
+                    return self._json(404, {"error": {"code": "not_found",
+                                                      "message": "тайтла нет в снимке"}})
+                регион = ""
+                for пара in запрос.split("&"):
+                    имя, _, значение = пара.partition("=")
+                    if имя == "region":
+                        регион = значение.strip().upper()
+                if not re.fullmatch(r"[A-Z]{2}", регион):
+                    return self._json(400, {"error": {
+                        "code": "bad_request",
+                        "message": "region обязателен: ISO 3166-1 alpha-2"}})
+                return self._json(200, {
+                    "contentId": ид, "region": регион, "status": "unknown",
+                    "reason": "NO_AVAILABILITY_SOURCE", "offers": [],
+                    "staleOffers": [], "source": None, "checkedAt": None})
             return self._json(404, {"error": {"code": "not_found"}})
 
     с = ThreadingHTTPServer(("127.0.0.1", 0), Обработчик)
