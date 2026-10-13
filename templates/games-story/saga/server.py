@@ -44,6 +44,24 @@ def plural(n: int, one: str, few: str, many: str) -> str:
     return one if n % 10 == 1 else few if 2 <= n % 10 <= 4 else many
 
 
+SNIPPET_MAX = 160  # длиннее поисковики обрезают посреди фразы
+
+
+def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
+    """Описание для meta: целые предложения до limit символов; иначе — по запятой или тире, в крайнем случае по слову, с «…»."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
+    if cut >= limit // 3:
+        return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    for sep in (", ", " — "):
+        cut = text.rfind(sep, 0, limit - 1)
+        if cut >= limit // 2:
+            return text[:cut].rstrip(",;:—– ") + "…"
+    return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
+
+
 class App:
     def __init__(self, site: Site | None = None):
         self.site = site or Site()
@@ -154,7 +172,7 @@ class App:
             return self.page(
                 "guide.html",
                 f"{g.title} — гайд по {s.games[g.game]['title']}",
-                g.summary,
+                snippet(g.summary),
                 g.url,
                 crumbs,
                 [self.video_ld(v) for v in g.videos],
