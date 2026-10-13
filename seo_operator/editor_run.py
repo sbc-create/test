@@ -352,6 +352,114 @@ EDITOR_DOMAINS = (
     "yummyani7.info",
     "yummyani.biz",
 )
+#: Направления плановой работы. Владелец 2026-10-13: 50 % — аниме-сайты, 50 % —
+#: действующие продвигаемые Lordfilm/Lordserial. За 13.10 из 77 страниц 76
+#: пришлись на аниме, одна на Zona, Lords — ни одной: ротация по доменам
+#: (`rotate`) выравнивала витрины, а не направления, и девять аниме-доменов
+#: против четырёх Lords забирали цикл.
+#:
+#: Zona — ни то, ни другое: в долю Lords она не засчитывается и партию не
+#: открывает; её адреса идут хвостом любой партии. Восемь новых доменов Lords
+#: (`ВНЕ_ПРОДВИЖЕНИЯ`) — только техническая подготовка: в редакционную работу
+#: не входят ни при каком счёте доли.
+НАПРАВЛЕНИЯ: dict[str, tuple[str, ...]] = {
+    "anime": (*ANIMEDIA, "an1meg0.site", "an1mego.site", "animeg0.site",
+              "yummyani.site", "yummyani.org", "yummyani7.site", "yummyani7.info",
+              "yummyani.biz"),
+    "lords": ("lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
+              "lordserials22.info"),
+}
+ВНЕ_ПРОДВИЖЕНИЯ = ("lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
+                   "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
+                   "lordserial.net.ru")
+
+
+def направление_домена(домен: str) -> str | None:
+    for имя, домены in НАПРАВЛЕНИЯ.items():
+        if домен in домены:
+            return имя
+    return None
+
+
+def партии_по_направлениям(state: Path, now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
+    """Сколько партий за окно ВЫДЕЛЕНО каждому направлению — по журналу шлюза.
+
+    Считается выделенный ресурс (решение шлюза «запуск» с полем `allocated`), а
+    не число публикаций: партия, в которой источник не нашёлся, — тоже работа
+    направления. Записи без поля (до 13.10) не считаются ни за кого.
+    """
+    счёт = {имя: 0 for имя in НАПРАВЛЕНИЯ}
+    начало = now - dt.timedelta(hours=hours)
+    try:
+        строки = (state / "gate.jsonl").read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return счёт
+    for строка in строки:
+        try:
+            запись = json.loads(строка)
+            когда = dt.datetime.fromisoformat(str(запись.get("at", "")).replace("Z", "+00:00"))
+        except (ValueError, TypeError):
+            continue
+        решение = запись.get("gate") or {}
+        # Слот направления — запуск или НОВОЕ удержание доли (см. gate):
+        # продолжение удержания поля `allocated` не несёт и второй раз не считается.
+        if когда < начало or not (решение.get("run") or решение.get("state") == "allocation_hold"):
+            continue
+        if решение.get("allocated") in счёт:
+            счёт[решение["allocated"]] += 1
+    return счёт
+
+
+def очередное_направление(счёт: dict[str, int], доли: dict) -> str:
+    """Направление, сильнее всего отставшее от своей доли; при равенстве — Lords."""
+    всего = sum(счёт.values())
+
+    def отставание(имя: str) -> float:
+        return счёт.get(имя, 0) - float(доли.get(имя, 0.5)) * всего
+
+    return min(НАПРАВЛЕНИЯ, key=lambda имя: (отставание(имя), имя != "lords"))
+
+
+def _домен(c: dict) -> str:
+    return c.get("domain") or (_key(c.get("url", "")).split("/")[2:3] or [""])[0]
+
+
+def _по_направлению(fresh: list[dict], open_tasks: list[dict], state: Path,
+                    now: dt.datetime) -> dict:
+    """Партия одного направления: отставшего от доли, а при отсутствии у него
+    работы — другого, с названной причиной. Молча ресурс не перекладывается."""
+    conf = cadence()["allocation"]
+    счёт = партии_по_направлениям(state, now, hours=int(conf.get("window_h", 24)))
+    должно = очередное_направление(счёт, conf)
+    порядок = [должно] + [имя for имя in НАПРАВЛЕНИЯ if имя != должно]
+    причина_сдвига = ""
+    for имя in порядок:
+        свои = set(НАПРАВЛЕНИЯ[имя])
+        кандидаты = [c for c in fresh if _домен(c) in свои]
+        задания = [i for i in open_tasks if i.get("target_site") in свои]
+        if кандидаты or задания:
+            break
+        if имя == должно and len(set(счёт.values())) == 1:
+            # Ничья, отставания нет: работу берёт направление, у которого она
+            # есть, и долг не возникает — удерживать ещё нечего.
+            continue
+        if имя == должно:
+            на_паузе = свои & set(PAUSED_PUBLISH)
+            причина_сдвига = (
+                f"доля «{имя}» без работы: "
+                + (f"публикация на паузе ({len(на_паузе)} из {len(свои)} витрин, PAUSED_PUBLISH)"
+                   if на_паузе == свои else "свободных заданий и кандидатов нет")
+                + " — партия отдана другому направлению; ресурс доли идёт в техработу SEO")
+    else:
+        имя, кандидаты, задания = должно, [], []
+    чужие = set().union(*НАПРАВЛЕНИЯ.values())
+    хвост = [c for c in fresh if _домен(c) not in чужие]
+    домены = sorted((set(НАПРАВЛЕНИЯ[имя]) | {_домен(c) for c in хвост}) & set(allowed_domains()))
+    return {"direction": должно, "allocated": имя, "allocation_window": счёт,
+            "allocation_note": причина_сдвига, "domains": домены,
+            "next": кандидаты + хвост, "open_tasks": задания}
+
+
 #: Режим запусков (config/editor-run.json). Владелец 2026-10-10: круглосуточно,
 #: пауза 20 минут ПОСЛЕ ЗАВЕРШЕНИЯ партии вместо почасового цикла; таймер,
 #: flock и единственный исполнитель прежние. Значения по умолчанию — те же,
@@ -370,6 +478,9 @@ CADENCE_DEFAULTS = {
         "memory_full_avg60_max_pct": 5.0,
         "load1_per_cpu_max": 1.0,
     },
+    # Распределение плановой работы по направлениям (владелец 2026-10-13):
+    # доли партий за окно, см. НАПРАВЛЕНИЯ.
+    "allocation": {"anime": 0.5, "lords": 0.5, "window_h": 24, "hold_unworkable_share": True},
 }
 #: Исходы партии, которые считаются сбоем для нарастающей паузы. Честное «задач
 #: нет» и полный запуск сбоем не являются.
@@ -538,6 +649,11 @@ def gate(
             "reason": "недостаточно ресурсов: " + "; ".join(res["problems"]),
             "resources": res["measured"],
         }
+    удержание = _удержание_доли(state, now)
+    if удержание:
+        return {"run": False, "state": "allocation_hold",
+                "reason": f"{удержание['note']}: удержание до {удержание['until']}",
+                "hold_until": удержание["until"]}
     решение = _work(
         now,
         registry=registry,
@@ -548,9 +664,67 @@ def gate(
         refresh=refresh,
         recent=recent,
     )
+    if решение.get("allocation_note") and conf["allocation"].get("hold_unworkable_share", True):
+        # У отставшего направления работы нет (Lords — пауза публикаций). Его
+        # долю редактор НЕ отдаёт другому направлению: владелец 13.10 — «долю
+        # Lords — на техническую работу, не переключать молча весь ресурс на
+        # аниме». Шлюз выдерживает время одной типичной партии и записывает
+        # слот на счёт отставшего направления; память и процессор этого окна
+        # свободны для техработы. Общий объём вычислений не растёт.
+        до = now + dt.timedelta(seconds=_длительность_партии(state))
+        return {"run": False, "state": "allocation_hold",
+                "allocated": решение["direction"], "direction": решение["direction"],
+                "allocation_window": решение.get("allocation_window"),
+                "reason": решение["allocation_note"].replace(
+                    "партия отдана другому направлению", "партия не запускается"),
+                "hold_until": до.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "resources": res["measured"]}
     решение["state"] = "run" if решение["run"] else "no_work"
     решение["resources"] = res["measured"]
     return решение
+
+
+def _длительность_партии(state: Path, *, по: int = 10, умолчание: int = 1200) -> int:
+    """Медиана длительности последних партий, сек: столько длится удержание доли."""
+    длительности = []
+    for r in _runs(state)[-по:]:
+        try:
+            начало = dt.datetime.fromisoformat(str(r["started_at"]).replace("Z", "+00:00"))
+            конец = dt.datetime.fromisoformat(str(r["finished_at"]).replace("Z", "+00:00"))
+        except (KeyError, ValueError, TypeError):
+            continue
+        if конец > начало:
+            длительности.append(int((конец - начало).total_seconds()))
+    if not длительности:
+        return умолчание
+    длительности.sort()
+    return длительности[len(длительности) // 2]
+
+
+def _удержание_доли(state: Path, now: dt.datetime) -> dict | None:
+    """Действующее удержание доли: последняя запись шлюза с hold_until в будущем."""
+    try:
+        строки = (state / "gate.jsonl").read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return None
+    for строка in reversed(строки[-50:]):
+        try:
+            решение = json.loads(строка).get("gate") or {}
+        except ValueError:
+            continue
+        if решение.get("state") != "allocation_hold":
+            if решение.get("run"):
+                return None
+            continue
+        try:
+            до = dt.datetime.fromisoformat(str(решение.get("hold_until")).replace("Z", "+00:00"))
+        except ValueError:
+            return None
+        if до > now:
+            return {"until": решение["hold_until"],
+                    "note": "удержание доли «" + str(решение.get("direction") or "?") + "»"}
+        return None
+    return None
 
 
 def переданные_черновики() -> list[dict]:
@@ -662,6 +836,12 @@ def _work(
         )
     if fresh:
         fresh = rotate(fresh, recent_publications(now) if recent is None else recent)
+    партия: dict = {}
+    if fresh or open_tasks:
+        партия = _по_направлению(fresh, open_tasks, state, now)
+        fresh, open_tasks = партия.pop("next"), партия.pop("open_tasks")
+        if not партия["allocation_note"] and not (fresh or open_tasks):
+            партия = {}
     if open_tasks:
         # Список кандидатов отдаётся и при свободном задании очереди: запуск
         # 2026-10-09 12:50 закрыл единственное задание и встал (next.json пуст),
@@ -670,12 +850,14 @@ def _work(
             "run": True,
             "reason": f"свободных заданий на текст: {len(open_tasks)}; кандидатов: {len(fresh)}",
             "next": fresh,
+            **партия,
         }
     if fresh:
         return {
             "run": True,
             "reason": f"кандидатов без результата: {len(fresh)} (первый {fresh[0]['url']})",
             "next": fresh,
+            **партия,
         }
     if refresh and _refresh_candidates(candidates, now):
         return _work(

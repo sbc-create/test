@@ -1,10 +1,19 @@
 {
   "note": "Режим фонового редактора (seo_operator/editor_run.py). Владелец 2026-10-10: пауза 20 минут после завершения партии вместо почасового цикла; переход на 10 минут — только после оценки нагрузки и результативности режима 20 минут. Обоснование порогов — docs/editor/BACKGROUND_EDITOR.md, «Режим запусков».",
   "pause_after_batch_s": 1200,
-  "error_backoff": {"factor": 2, "max_s": 14400},
+  "error_backoff": {
+    "factor": 2,
+    "max_s": 14400
+  },
   "resources": {
     "mem_available_min_mib": 2048,
     "memory_full_avg60_max_pct": 5.0,
     "load1_per_cpu_max": 1.0
+  },
+  "allocation": {
+    "note": "Владелец 2026-10-13: 50 % плановой работы — аниме-сайты, 50 % — действующие Lordfilm/Lordserial (lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info). Доли — партий редактора за окно window_h; Zona в долю Lords не входит; восемь новых доменов Lords — вне редакционной работы (editor_run.ВНЕ_ПРОДВИЖЕНИЯ).",
+    "anime": 0.5,
+    "lords": 0.5,
+    "window_h": 24
   }
 }

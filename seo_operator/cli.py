@@ -267,7 +267,11 @@ def main(argv=None) -> int:
             # у них уже есть текст и автор, и разбирать их надо иначе, чем
             # искать, о чём писать. Промпт велит начинать с них.
             out.write_text(json.dumps({"reason": decision["reason"],
-                                       "domains": editor_run.allowed_domains(),
+                                       # Партия одного направления (50/50, 13.10):
+                                       # домены партии, а не весь список.
+                                       "domains": decision.get("domains") or editor_run.allowed_domains(),
+                                       "direction": decision.get("allocated"),
+                                       "allocation_note": decision.get("allocation_note", ""),
                                        "handoffs": decision.get("handoffs", []),
                                        "candidates": decision.get("next", [])},
                                       ensure_ascii=False, indent=1), encoding="utf-8")
