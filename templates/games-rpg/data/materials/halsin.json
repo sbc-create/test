@@ -1,0 +1,27 @@
+{
+ "slug": "halsin",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-a843816b1c",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Halsin: друид — лесной эльф",
+ "summary": "Спутник, роман с которым возможен для героя любого пола. Лесной эльф, друид Круга Луны с предысторией «Чужеземец». Впервые его можно найти в Shattered Sanctum в первом акте.",
+ "points": [
+  "Класс: друид Круга Луны (Circle of the Moon Druid)",
+  "Раса: лесной эльф",
+  "Предыстория: Outlander"
+ ],
+ "tips": [],
+ "related": [
+  "jaheira",
+  "kvest-spasti-halsina"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}
