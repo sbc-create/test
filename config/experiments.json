@@ -29,6 +29,16 @@
       "scope_page_share": 0.024,
       "phase": "canary",
       "evidence": "docs/seo-operator/NIGHT_20261014.md §11; checks/sitemap_episodes.py; измерение заблокировано до B022/B023 (Метрика, Вебмастер)"
+    },
+    {
+      "experiment_id": "exp-lords-sitemap-ongoing-episodes",
+      "site_id": "lords-05",
+      "hypothesis": "Последние серии онгоингов в карте сайта ускоряют обнаружение и индексацию страниц серий у лидера кластера Lords",
+      "primary_metric": "страницы серий в событиях «появилась в поиске» Вебмастера и поисковые входы на страницы серий (Метрика) за 7 и 28 дней после переобхода",
+      "applicability": "lordserials22.info: до 500 адресов /title/<slug>/season-N/episode-M/ — последняя серия с дорожкой у тайтлов watchlist службы согласования; контроль — lordfilm47.space, 1lordserials1.online, lordserial33.biz",
+      "scope_page_share": 0.008,
+      "phase": "canary",
+      "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023"
     }
   ]
 }

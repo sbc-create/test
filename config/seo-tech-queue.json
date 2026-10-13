@@ -1198,7 +1198,8 @@
       "expected": "подъём пина seo_layer до общего слоя (0287776bcb85fee8) отдельным выпуском",
       "status": "blocked",
       "owner_action": "Архитектор: подъём пина seo_layer у отставших витрин отдельной задачей выпуска с воротами D195; сессия файл не правит (закрыт от записи).",
-      "dependencies": "Архитектор"
+      "dependencies": "Архитектор",
+      "evidence": " 14.10: на lordserials22-info проверка indexing-live-switch (Sitemap в robots.txt в открытом режиме) на стенде падает и на прежнем коде — следствие той же 300-секундной паузы старой копии слоя."
     },
     {
       "id": "T066",
@@ -1414,6 +1415,22 @@
       "status": "live_verified",
       "evidence": "animeg0-site c8bb9ec; прежний код rc=1; полные run.sh трёх AnimeGo пройдены; CI 38477761177; animego-03 ok/live_verified. Живая карта animeg0.site — 236 серий, выборка 10 — 200 и index; контроль an1mego.site — 0 серий. Эксперимент exp-animego-sitemap-fresh-episodes (config/experiments.json), фаза canary.",
       "dependencies": "оценка эффекта — после B022/B023 (Метрика, Вебмастер): окна 7 и 28 дней от первого события появления серий в Вебмастере"
+    },
+    {
+      "id": "T075",
+      "site": "lordserials22.info (канарейка); контроль lordfilm47.space, 1lordserials1.online, lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/sitemap.xml"
+      ],
+      "problem": "В картах Lords нет страниц серий, хотя серии — главный тип входов из поиска (аудит 13.10; у lordserials22.info 87 входов на серии за неделю).",
+      "norm": "аудит 13.10 §9.3; правило канарейки",
+      "expected": "последняя серия с дорожкой у тайтлов watchlist службы согласования — в карте lordserials22.info",
+      "check": "checks/sitemap_ongoing_episodes.py",
+      "status": "live_verified",
+      "evidence": "lordserials22-info ff8a4b0; прежний код rc=1; CI 38479217612; lords-05 ok/live_verified. Живая карта — 64 407 адресов, из них 500 серий, выборка 10 — 200 и index; контроль lordfilm47.space — 0 серий. Эксперимент exp-lords-sitemap-ongoing-episodes, фаза canary. В полном run.sh indexing-live-switch («Sitemap: в robots.txt» в открытом режиме) падает и на прежнем коде — устаревший seo_layer ждёт 300 с (T065).",
+      "dependencies": "оценка — после B022/B023; окна 7 и 28 дней от первого события появления серий в Вебмастере"
     }
   ]
 }
