@@ -74,3 +74,17 @@ LCP (лаборатория, loopback, без троттлинга) 36–160 м�
 | `bash bin/food-appliances build --commit HEAD` | 0 | собрано из 1973778 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 432 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 68ce79d (13.10.2026): тесты в чистой копии
+
+Логика валидатора черновиков проверяется на синтетической фикстуре `tests/fixtures/validator_case.json`
+(не из источника), добавлена сверка черновиков с публичными фактами из git.
+
+| где | команда | exit | результат |
+| --- | --- | --- | --- |
+| рабочая копия (закрытые снимки есть) | `bash bin/food-appliances test -rs` | 0 | 23 passed |
+| чистая копия `git worktree add --detach … claude/template-food-appliances-b` | `bash bin/food-appliances test -rs` | 0 | 22 passed, 1 skipped |
+
+Пропущенный в чистой копии тест — полная сверка текста черновиков с источником (`test_all_drafts_pass_validation`):
+ему нужен сырой текст страниц `var/food-appliances/private`, который не хранится в git (права, срок хранения), а заново
+скачать его после заморозки знаний нельзя (CLOSED_WORLD). В чистой копии он **не выполнялся**; в рабочей копии — PASS.
