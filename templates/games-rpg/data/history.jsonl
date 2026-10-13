@@ -23,3 +23,12 @@
 {"slug": "halsin", "version": 1, "text_hash": "a7f0d1b233a53d520f5c645076c7ea5b9e9aaf7af29014c777ef35989aa33271", "at": "2026-10-13"}
 {"slug": "jaheira", "version": 1, "text_hash": "61e1abd7c9adac25b5a4337fc448b06e3803d02823e605d789bedbb7f3ba4356", "at": "2026-10-13"}
 {"slug": "minsc", "version": 1, "text_hash": "0787db29ee0cc9f66012c406c1fadbc0b823ede7f3c2e6415319d1d7d13e958c", "at": "2026-10-13"}
+{"slug": "astarion", "version": 2, "text_hash": "c3820fad7a5c92c23906aedfdf2eeec0111d492e6db7a9206c098d26b2b9f1a7", "at": "2026-10-13"}
+{"slug": "gale", "version": 2, "text_hash": "1b5ea71f1401df68b59dce7cd9962878ae61a40eaa2388df5b4d49be8d40c4c1", "at": "2026-10-13"}
+{"slug": "karlach", "version": 2, "text_hash": "486829a5e01bbcd02e13deb734e74ea6847f1cc28094279376e571aced60fe64", "at": "2026-10-13"}
+{"slug": "kvest-spasti-halsina", "version": 2, "text_hash": "b72746e7ba7152f8aef07b29d54ea646a162919949d19b40f7898b36b54b9359", "at": "2026-10-13"}
+{"slug": "kvest-yasli-gityanki", "version": 2, "text_hash": "633ef786039d638e96d679c37c3cda35477a5192d913a39c24244979009088c3", "at": "2026-10-13"}
+{"slug": "laezel", "version": 2, "text_hash": "809e02da8b14db9fe474ff5cf806b17cdba29b97eb554903d2c06ae8f3ea2a67", "at": "2026-10-13"}
+{"slug": "shadowheart", "version": 2, "text_hash": "2943713b76c39668d403fa3a7055dce06725341da8081dd3cfea08a35385d908", "at": "2026-10-13"}
+{"slug": "wyll", "version": 2, "text_hash": "3bd1e616c13363c1c664c5d2d4739c8e33e1c347821e394794985ff9d76483af", "at": "2026-10-13"}
+{"slug": "predmet-sword-of-justice", "version": 2, "text_hash": "19d5a90c1e84e07d1a85570953154ceb78eabe39a3843214be2677dcf6de30c9", "at": "2026-10-13"}
