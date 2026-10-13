@@ -799,8 +799,13 @@ concurrency:
   # разные ветви ждали по очереди при `cancel-in-progress: false`.
   group: release-{site_id}-${{{{ github.ref }}}}
   # На рабочей ветви новый коммит отменяет прежний прогон: его результат уже
-  # не относится к голове. На `main` — не отменяет: это приёмка выпуска.
-  cancel-in-progress: ${{{{ github.ref != 'refs/heads/main' }}}}
+  # не относится к голове. Там, где прогон — ПРИЁМКА, отмена выключена:
+  # это `main` и ветви `release/**` (ветвь запуска нового домена; исполнитель
+  # принимает ['main', 'claude/extract-*', 'release/*'], и прогон на
+  # release-ветви удостоверяет выпускаемое состояние). Нашлось при применении
+  # шаблона к zonafilm12: сравнение только с `refs/heads/main` обрывало бы
+  # приёмку на release-ветви новым коммитом.
+  cancel-in-progress: ${{{{ github.ref != 'refs/heads/main' && !startsWith(github.ref, 'refs/heads/release/') }}}}
 
 permissions:
   contents: read
