@@ -1,9 +1,10 @@
 # Владение и границы записи шаблона food-daily (TEMPLATE-FOOD-DAILY-01).
 # Проверяется tests/test_isolation.py и командой `git diff --stat <base>..HEAD`.
 template: food-daily
-branch: claude/template-food-daily
-worktree: /home/claude/wt-template-food-daily
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # main на момент старта, 11.10.2026
+variant_id: party-list   # вариант C; A — classic-cards (8876), B — fridge-first (8863)
+branch: claude/template-food-daily-c
+worktree: /home/claude/wt-template-food-daily-c
+base_commit: aab3470   # вариант A (claude/template-food-daily)
 owner_scope:
   write:
     - templates/food-daily/**                  # всё: код, шаблоны, стили, данные, тесты, отчёты
@@ -25,15 +26,15 @@ owner_scope:
     - other worktrees under /home/claude/wt-*
 runtime:
   process: "python3 -m fooddaily.server (pid-файл var/food-daily/run/preview.pid)"
-  bind: 127.0.0.1:8847
-  db: var/food-daily/preview/food-daily.sqlite3      # собственный файл SQLite, meta.site_id=food-daily
+  bind: 127.0.0.1:8876
+  db: var/food-daily-c/preview/food-daily.sqlite3      # собственный файл SQLite, meta.site_id=food-daily
   private_sources: var/food-daily/private            # 0700, вне git, срок хранения 30 дней
   media: var/food-daily/media                        # пусто: готовых медиа нет
   crawl_state: var/food-daily/crawl
   http_cache: var/food-daily/cache
   queue: "таблица jobs в собственной БД + var/food-daily/qwen/{outbox,inbox}"
   build: var/food-daily/build/<commit>
-  editor_secret: file:~/.config/food-daily-preview/editor.json   # вне репозитория, 0600
+  editor_secret: file:~/.config/food-daily-c-preview/editor.json   # вне репозитория, 0600
   search_index: "в памяти процесса, строится из снимка контента"
   compose_project: null
   network: "только петля; исходящие — только allowlist, только GET"

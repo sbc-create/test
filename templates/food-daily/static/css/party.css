@@ -1,18 +1,17 @@
-/* food-daily — собственная визуальная система «Будни на кухне».
-   Тёплая бумага, томатный акцент, шафран и зелень. Никаких общих стилей
-   с другими шаблонами сети. */
+/* food-daily, вариант C party-list — «Будни на кухне»: на компанию. Праздничный: сливочный фон, вишня, горчица.
+   Только этот вариант. */
 :root {
-  --paper: #f7efe3;
+  --paper: #fbf7ee;
   --paper-2: #fffaf2;
   --card: #fffdf8;
   --ink: #2a1f17;
   --ink-2: #5d4b3d;
   --muted: #685545;
   --line: #e6d7c3;
-  --tomato: #b8432a;
-  --tomato-ink: #8f2f1b;
-  --saffron: #e3a43a;
-  --herb: #3e6a3a;
+  --tomato: #9b1d3a;
+  --tomato-ink: #7c1530;
+  --saffron: #d9a400;
+  --herb: #5a4a00;
   --herb-soft: #e3ecd9;
   --plum: #6b3a52;
   --radius: 18px;
@@ -199,16 +198,6 @@ main { padding-bottom: 56px; }
 .provenance__dates { color: var(--muted); }
 
 /* режим готовки */
-.cook { position: fixed; inset: 0; z-index: 40; background: var(--ink); color: var(--paper-2); display: grid; grid-template-rows: auto 1fr auto; }
-.cook[hidden] { display: none; }
-.cook__bar, .cook__nav { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; }
-.cook__bar p { margin: 0; font: 600 1.05rem var(--display); }
-.cook button { min-height: 48px; padding: 0 20px; border-radius: 999px; border: 1.5px solid var(--paper-2); background: transparent; color: var(--paper-2); font: 600 1rem var(--text); cursor: pointer; }
-.cook__nav button:last-child { background: var(--saffron); border-color: var(--saffron); color: var(--ink); }
-.cook__stage { display: grid; align-content: center; padding: 0 22px; max-width: 900px; margin: 0 auto; }
-.cook__count { color: var(--saffron); font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
-.cook__text { font: 500 clamp(1.5rem, 1rem + 2.4vw, 2.6rem)/1.3 var(--display); margin: 0 0 14px; }
-.cook__cue { font-size: 1.1rem; color: #d9cbb8; }
 
 /* список покупок */
 .shop { list-style: none; padding: 0; margin: 0 0 16px; background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
@@ -254,3 +243,25 @@ main { padding-bottom: 56px; }
   .step { break-inside: avoid; }
   a { color: #000; text-decoration: none; }
 }
+
+/* ---- вариант C: на компанию ---- */
+.pform { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; margin: 16px 0 24px; }
+.pform__guests { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.pform__guests input { width: 90px; min-height: 44px; font: inherit; padding: 0 10px; border: 1px solid var(--ink-2); border-radius: var(--radius-s); }
+.pform fieldset { border: 0; padding: 0; margin: 14px 0 0; min-width: 0; } .pform legend { font: 600 1.15rem var(--display); padding: 0; margin-bottom: 6px; }
+.ppick { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.ppick label { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border: 2px solid var(--line); border-radius: var(--radius-s); cursor: pointer; min-height: 44px; }
+.ppick input, .plist input { flex: 0 0 auto; width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--tomato); }
+.ppick small { display: block; color: var(--muted); }
+.ppick label:has(input:checked) { border-color: var(--tomato); background: #fbe9ee; }
+.ppick label:has(input:focus-visible) { outline: 3px solid var(--saffron); outline-offset: 2px; }
+.pform__go { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-weight: 700; margin: 14px 0 0; }
+.plist { list-style: none; padding: 0; display: grid; gap: 4px; background: var(--card); border-radius: var(--radius); padding: 8px 14px; }
+.plist li { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; padding: 6px 0; border-bottom: 1px dashed var(--line); }
+.plist label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.plist .pfor, .plist .fixed { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; } .plist .fixed { color: var(--tomato-ink); }
+.plist li:has(input:checked) span { text-decoration: line-through; color: var(--muted); }
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: var(--radius-s); font-weight: 700; }
+.taste { color: var(--ink-2); } .more a { display: inline-block; min-height: 24px; font-weight: 700; }
+[hidden] { display: none !important; }
+@media print { .pform, .actions, #izmenit { display: none !important; } }

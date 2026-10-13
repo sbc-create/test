@@ -1,4 +1,4 @@
-/* food-daily: улучшения поверх серверного HTML. Без этого файла рецепт,
+/* food-daily, вариант C party-list: улучшения поверх серверного HTML; ключи fdc.*. Без этого файла рецепт,
    каталог, поиск и фильтры работают полностью. */
 (function () {
   "use strict";
@@ -8,7 +8,7 @@
     get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* приватный режим */ } }
   };
-  var FAV = "fd.fav.v1", LIST = "fd.list.v1";
+  var FAV = "fdc.fav.v1", LIST = "fdc.list.v1", PARTY = "fdc.party.v1";
 
   function fmt(q) {
     if (q === null || isNaN(q)) return "";
@@ -170,6 +170,27 @@
 
   var pr = document.querySelector("[data-print]");
   if (pr) { pr.hidden = false; pr.addEventListener("click", function () { window.print(); }); }
+
+  /* ---- на компанию: память выбора, счётчик, отметки купленного ---- */
+  var qs = new URLSearchParams(location.search);
+  if (location.pathname === "/na-kompaniyu/" && qs.getAll("r").length) store.set(PARTY, location.search);
+  var lastParty = store.get(PARTY, "");
+  if (lastParty) document.querySelectorAll("[data-p-link]").forEach(function (a) { a.href = "/na-kompaniyu/" + lastParty; });
+  document.querySelectorAll("[data-p-form]").forEach(function (fm) {
+    var boxes = fm.querySelectorAll("input[name=r]"), out = fm.querySelector("[data-p-count]");
+    if (!qs.getAll("r").length && lastParty) { var lp = new URLSearchParams(lastParty); boxes.forEach(function (b) { b.checked = lp.getAll("r").indexOf(b.value) !== -1; }); if (lp.get("gosti")) fm.querySelector("#gosti").value = lp.get("gosti"); }
+    var upd = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); out.textContent = n ? "Отмечено блюд: " + n : "Отметьте хотя бы одно блюдо"; return n; };
+    fm.addEventListener("change", upd); upd();
+    fm.addEventListener("submit", function (e) { if (!upd()) { e.preventDefault(); boxes[0].focus(); } });
+  });
+  var pl = document.querySelector("[data-plist]");
+  if (pl) {
+    var bkey = "fdc.bought." + location.search, got = store.get(bkey, []);
+    pl.querySelectorAll("input").forEach(function (cb) {
+      cb.checked = got.indexOf(cb.value) !== -1;
+      cb.addEventListener("change", function () { var v = []; pl.querySelectorAll("input:checked").forEach(function (x) { v.push(x.value); }); store.set(bkey, v); });
+    });
+  }
 
   syncFav();
 })();

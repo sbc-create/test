@@ -17,9 +17,10 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8847"
+BASE = "http://127.0.0.1:8876"
 VIEWPORTS = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 SHOTS = {
+    "party": "/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8",
     "home": "/",
     "catalog": "/recepty/",
     "recipe": "/recept/syrniki-s-ezhevikoj/",
@@ -256,6 +257,32 @@ def run(shots_dir: Path | None) -> dict:
         page.goto(BASE + "/")
         page.keyboard.press("Tab")
         S["first_tab_skip_link"] = page.evaluate("document.activeElement.className") == "skip"
+        # вариант C: на компанию
+        page.evaluate("localStorage.clear(); 0")
+        url0 = page.url
+        page.click(".pform .btn")
+        S["party_empty_submit_blocked"] = page.url == url0
+        page.locator(".ppick label", has_text="Плов с курицей").click()
+        page.locator(".ppick label", has_text="Греческий салат").click()
+        page.fill("#gosti", "8")
+        S["party_count_updates"] = page.locator("[data-p-count]").inner_text() == "Отмечено блюд: 2"
+        with page.expect_navigation():
+            page.click(".pform .btn")
+        S["party_list_scaled"] = (
+            page.locator(".plist li").count() > 0 and "8 гостей" in page.locator(".lead").inner_text()
+        )
+        page.locator(".plist input").first.check()
+        page.reload()
+        S["party_bought_persists"] = page.locator(".plist input").first.is_checked()
+        page.goto(BASE + "/recepty/")
+        S["party_header_link_keeps_choice"] = "gosti=8" in (page.locator("[data-p-link]").get_attribute("href") or "")
+        page.goto(BASE + "/")
+        S["party_home_remembers_choice"] = (
+            page.locator(".ppick input:checked").count() == 2 and page.locator("#gosti").input_value() == "8"
+        )
+        resp = page.goto(BASE + "/na-kompaniyu/?gosti=50")
+        S["party_bad_guests_400_alert"] = resp.status == 400 and page.locator(".err[role=alert]").count() == 1
+        S["party_storage_namespace_own"] = all(k.startswith("fdc.") for k in page.evaluate("Object.keys(localStorage)"))
         # без JS рецепт целиком в HTML
         ctx.close()
         res["accessibility"] = axe_and_keyboard(browser)
@@ -267,6 +294,11 @@ def run(shots_dir: Path | None) -> dict:
         S["nojs_fav_button_hidden"] = page.locator(".recipe__actions [data-fav]").is_hidden()
         ctx.close()
         browser.close()
+    acc = res["accessibility"]
+    res["axe"] = {"version": acc.get("axe_version"), **{k: v["violations"] for k, v in acc.get("pages", {}).items()}}
+    res["actions"] = {
+        k: (all(x for x in v.values() if isinstance(x, bool)) if isinstance(v, dict) else v) for k, v in S.items()
+    }
     return res
 
 

@@ -31,8 +31,8 @@ STATIC = ROOT / "static"
 TEMPLATES = ROOT / "templates"
 EDITOR_SECRET = Path(
     os.environ.get(
-        "FOOD_DAILY_EDITOR_SECRET",
-        str(Path.home() / ".config" / "food-daily-preview" / "editor.json"),
+        "FOOD_DAILY_C_EDITOR_SECRET",
+        str(Path.home() / ".config" / "food-daily-c-preview" / "editor.json"),
     )
 )
 
@@ -90,6 +90,8 @@ class App:
                 self.render("home.html", meta, recipes=s.recipes[:6], collections=s.collections()),
                 {},
             )
+        if path == "/na-kompaniyu/":
+            return self.party(query)
         m = re.fullmatch(r"/recepty/(?:page/(\d+)/)?", path)
         if m:
             n = int(m.group(1) or 1)
@@ -383,6 +385,41 @@ class App:
             ],
         }
 
+    def party(self, query: dict) -> tuple[int, str, dict]:
+        """На компанию: без выбора — индексируемая форма; с выбором — noindex без canonical; гостей вне 1–20 — 400."""
+        s = self.site
+        want = [x for x in query.get("r", []) if x][:12]
+        raw = (query.get("gosti") or [""])[0].strip()
+        guests = int(raw) if raw.isdigit() else (0 if raw else 6)
+        error = None
+        if not 1 <= guests <= 20:
+            error, guests = "Число гостей — от 1 до 20.", 6
+        p = s.party(want, guests)
+        if want and not p["recipes"] and not error:
+            error = "Таких рецептов на сайте нет — отметьте из списка."
+        asked = bool(want or raw)
+        crumbs = [("Главная", "/"), ("На компанию", "/na-kompaniyu/")]
+        meta = seo.Meta(
+            title="Готовим на компанию: общий список продуктов"
+            if not p["recipes"]
+            else f"На компанию: {guests} "
+            + (
+                "гость"
+                if guests % 10 == 1 and guests % 100 != 11
+                else "гостя"
+                if guests % 10 in (2, 3, 4) and guests % 100 not in (12, 13, 14)
+                else "гостей"
+            ),
+            description="Отметьте блюда и число гостей — продукты всех рецептов пересчитаются в один список.",
+            canonical=None if asked else s.abs("/na-kompaniyu/"),
+            index=not asked,
+            page_type="page",
+            breadcrumbs=crumbs,
+            jsonld=[seo.breadcrumb_ld(s, crumbs)],
+        )
+        body = self.render("party.html", meta, p=p, guests=guests, picked=want, error=error)
+        return (400 if error else 200), body, {}
+
     def not_found(self) -> tuple[int, str, dict]:
         meta = seo.Meta(
             title="Страница не найдена",
@@ -407,6 +444,7 @@ class App:
         urls: list[tuple[str, str | None]] = [
             ("/", s.recipes[0].updated_at[:10] if s.recipes else None),
             ("/recepty/", None),
+            ("/na-kompaniyu/", None),
             ("/podborki/", None),
             ("/o-proekte/", None),
             ("/kontakty/", None),

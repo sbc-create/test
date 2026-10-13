@@ -261,5 +261,5 @@ def test_catalog_contract_v1(app, site):
 
 def test_variant_identity_meta(app):
     _, html, _ = app.route("/", {})
-    assert '<meta name="site-factory-variant-id" content="classic-cards">' in html
+    assert '<meta name="site-factory-variant-id" content="party-list">' in html
     assert '<meta name="site-factory-variant-version" content="1">' in html

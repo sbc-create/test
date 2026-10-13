@@ -29,8 +29,8 @@ case "${1:-help}" in
     nohup python3 -m fooddaily.server >>"$LOG/preview.log" 2>&1 &
     echo $! >"$PIDFILE"
     for _ in $(seq 1 50); do
-      if python3 -c "import urllib.request,sys;urllib.request.urlopen('http://127.0.0.1:8847/healthz',timeout=1)" 2>/dev/null; then
-        echo "preview: http://127.0.0.1:8847/ (pid $(cat "$PIDFILE"))"; exit 0; fi
+      if python3 -c "import urllib.request,sys;urllib.request.urlopen('http://127.0.0.1:8876/healthz',timeout=1)" 2>/dev/null; then
+        echo "preview: http://127.0.0.1:8876/ (pid $(cat "$PIDFILE"))"; exit 0; fi
       python3 -c "import time;time.sleep(0.2)"
     done
     echo "preview не ответил на /healthz, журнал: $LOG/preview.log" >&2; exit 1 ;;
@@ -38,7 +38,7 @@ case "${1:-help}" in
     if alive; then kill "$(cat "$PIDFILE")"; rm -f "$PIDFILE"; echo "preview остановлен"; else rm -f "$PIDFILE"; echo "preview не запущен"; fi ;;
   restart) bash "$HERE/bin/food-daily" stop; bash "$HERE/bin/food-daily" start ;;
   status)
-    if alive; then echo "работает, pid $(cat "$PIDFILE")"; python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8847/healthz',timeout=3).read().decode())"; else echo "не запущен"; exit 3; fi ;;
+    if alive; then echo "работает, pid $(cat "$PIDFILE")"; python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8876/healthz',timeout=3).read().decode())"; else echo "не запущен"; exit 3; fi ;;
   test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" \
           --basetemp "$REPO/var/food-daily/pytest" "$HERE/tests" "$@" ;;
   *) sed -n '2,4p' "$0"; echo "команды: inventory catalog counts verify-sample topics import qwen editorial video build editor-init start stop restart status test" ;;

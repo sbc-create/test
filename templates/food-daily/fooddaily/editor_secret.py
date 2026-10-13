@@ -1,8 +1,8 @@
 """Создание учётной записи редактора preview.
 
 Хеш scrypt хранится в файле вне репозитория (по умолчанию
-~/.config/food-daily-preview/editor.json, права 0600; путь меняется
-переменной FOOD_DAILY_EDITOR_SECRET). Пароль генерируется и записывается
+~/.config/food-daily-c-preview/editor.json, права 0600; путь меняется
+переменной FOOD_DAILY_C_EDITOR_SECRET). Пароль генерируется и записывается
 в соседний файл editor-password.txt (0600) — в вывод, журнал и git он
 не попадает. Повторный запуск без --rotate ничего не меняет.
 """

@@ -439,6 +439,43 @@ class Site:
     def product_options(self) -> list[tuple[str, str]]:
         return [(t, TAGS[t][0]) for t, items in self.tag_pages().items() if TAGS[t][1] == "product"]
 
+    def party(self, slugs: list[str], guests: int) -> dict:
+        """Несколько рецептов на компанию: каждый пересчитан с его порций на гостей (как в пересчёте порций на странице
+        рецепта: непересчитываемые продукты не меняются), одинаковые название и единица складываются."""
+        rs = [self.by_slug[s] for s in dict.fromkeys(slugs) if s in self.by_slug]
+        rows: dict = {}
+        loose: dict = {}
+        for r in rs:
+            k = guests / r.servings if r.servings else None
+            for i, _ in r.ingredients:
+                key = norm(i.name)
+                if i.unit == "to_taste" or i.quantity is None or k is None:
+                    loose.setdefault(key, {"name": i.name, "recipes": []})["recipes"].append(r.title)
+                    continue
+                f = k if i.scalable else 1
+                e = rows.setdefault(
+                    (key, i.unit),
+                    {
+                        "name": i.name,
+                        "unit": i.unit,
+                        "q": 0.0,
+                        "qmax": 0.0,
+                        "ranged": False,
+                        "fixed": False,
+                        "recipes": [],
+                    },
+                )
+                e["q"] += i.quantity * f
+                e["qmax"] += (i.quantity_max or i.quantity) * f
+                e["ranged"] = e["ranged"] or bool(i.quantity_max)
+                e["fixed"] = e["fixed"] or not i.scalable
+                e["recipes"].append(r.title)
+        items = []
+        for e in sorted(rows.values(), key=lambda e: e["name"].lower()):
+            amt = fmt_qty(e["q"]) + (("–" + fmt_qty(e["qmax"])) if e["ranged"] else "")
+            items.append({**e, "amount": f"{amt} {UNITS.get(e['unit'] or '', '')}".strip()})
+        return {"recipes": rs, "items": items, "loose": sorted(loose.values(), key=lambda e: e["name"].lower())}
+
     def page(self, items: list, n: int) -> tuple[list, int, int]:
         per = self.cfg["pagination"]["per_page"]
         pages = max(1, math.ceil(len(items) / per))
