@@ -145,7 +145,9 @@ class App:
             return self.page(
                 "game.html",
                 f"{s.games[gid]['title']}: ресурсы, крафт, биомы",
-                f"Справочник по {s.games[gid]['title']} с указанием версии игры.",
+                f"Справочник по {s.games[gid]['title']}, Java Edition {s.version.src['java_current']}: "
+                + ", ".join(f"{label.lower()} — {len(items)}" for label, items in s.sections(gid).values())
+                + ". Рецепты и связи «из чего → во что».",
                 path,
                 crumbs,
                 [],
@@ -203,7 +205,11 @@ class App:
         if path == "/istochniki/":
             crumbs = [home, ("Источники", path)]
             return self.page(
-                "sources.html", "Источники материалов", "Страницы вики, по которым составлены материалы.", path, crumbs
+                "sources.html",
+                "Источники материалов",
+                "Страницы вики, по которым составлены материалы, с датой чтения каждой.",
+                path,
+                crumbs,
             )
         if path == "/poisk/":
             qq = (q.get("q") or [""])[0].strip()[:120]
