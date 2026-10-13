@@ -633,6 +633,32 @@
       "status": "blocked",
       "owner_action": "Владелец: шаг 6 docs/OWNER_TERMINAL_20261013.md (http-redirect-install.py). HSTS — отдельным решением (необратимо на срок max-age).",
       "evidence": "Подтверждено независимо Архитектором (13.10 ~02:30Z, переходы не следовались): те же 9 / 8, 4 planned без DNS. Инструмент automation/host/http-redirect-install.py (показ: изменилось бы 9, отказов 0; ACME-путь проверяется до правки; --rollback)."
+    },
+    {
+      "id": "T035",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/genre/drama/",
+        "https://an1mego.site/catalog/?genre=%D0%B4%D1%80%D0%B0%D0%BC%D0%B0"
+      ],
+      "problem": "Латинский код жанра даёт второй индексируемый раздел: /genre/drama/ (canonical → /catalog/?genre=drama) и /catalog/?genre=драма — один и тот же раздел (24 из 24 карточек, 65 страниц), каждый canonical на себя, оба index. И у латинского варианта title/H1/description несут код: «Аниме в жанре «drama»». Карточка ссылается на русское имя (?genre=драма), ld+json — имена (замер Архитектора 13.10, три AnimeGo).",
+      "expected": "(а) один канонический адрес раздела жанра (латинский код → canonical на имя); (б) в title/H1/description — имя жанра, а не код",
+      "check": "canonical /catalog/?genre=drama → /catalog/?genre=драма; H1 «Аниме в жанре «драма»»",
+      "status": "queued"
+    },
+    {
+      "id": "T036",
+      "site": "Zona (3), Animedia (2)",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/?genre=drama"
+      ],
+      "problem": "description разделов каталога без фактов: Zona 14–23 знака («Драма на Zona Cinema.»), Animedia 18–36 («Ai аниме на Animedia.»), числа нет ни у одного; страница при этом показывает «Результаты: N». У Lords образец: «Жанр «аниме» на Lordfilm: 8103 записи каталога — …» (замер Архитектора 13.10).",
+      "expected": "«<раздел> на <сайт>: N <запись/записи/записей> каталога — смотреть онлайн[ — страница K].»",
+      "check": "checks/section_description.py (стенд на снимке)",
+      "status": "session",
+      "evidence": "zonafilm-space, zonafilm12-site: правка в ВидЗона.каталог, стенд — PASS; полные прогоны идут. zonafilm-cc и Animedia — следом."
     }
   ]
 }
