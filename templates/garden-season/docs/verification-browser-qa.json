@@ -1,6 +1,6 @@
 {
- "commit_head": "0b9f676d41333863a1ffdbe117ca9182ff0d9c3e",
- "at": "2026-10-12T23:46:21Z",
+ "commit_head": "1f5b0685686139215b521c2fb451ac68b76b0ef8",
+ "at": "2026-10-13T00:55:23Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -8,7 +8,7 @@
   "month_groups_regions": 3,
   "pager_next_month": true,
   "pager_prev_month": true,
-  "empty_month_honest": true,
+  "december_lists_new_works": true,
   "filter_region_reduces": true,
   "filter_reset_restores_all": true,
   "filter_empty_state_with_exits": true,
@@ -25,7 +25,7 @@
   "whole_card_clickable": true,
   "search_keyboard_results": 1,
   "search_clear": true,
-  "search_by_month": 10,
+  "search_by_month": 11,
   "search_no_results_message": true,
   "404_has_search_and_home": true,
   "plot_from_home_shows_only_allowed_regions": true,
@@ -93,59 +93,59 @@
  },
  "perf_lab": {
   "mobile:plot": {
-   "lcp_ms": 180,
+   "lcp_ms": 192,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0
   },
   "mobile:month": {
-   "lcp_ms": 80,
+   "lcp_ms": 72,
    "cls": 0
   },
   "mobile:calendar": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:work": {
-   "lcp_ms": 104,
+   "lcp_ms": 144,
    "cls": 0
   },
   "mobile:crop": {
-   "lcp_ms": 48,
+   "lcp_ms": 72,
    "cls": 0
   },
-  "mobile:empty-month": {
+  "mobile:december": {
    "lcp_ms": 44,
    "cls": 0
   },
   "desktop:plot": {
-   "lcp_ms": 144,
+   "lcp_ms": 184,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "desktop:month": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "desktop:calendar": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "desktop:work": {
-   "lcp_ms": 260,
-   "cls": 0
-  },
-  "desktop:crop": {
    "lcp_ms": 72,
    "cls": 0
   },
-  "desktop:empty-month": {
-   "lcp_ms": 52,
+  "desktop:month": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:calendar": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:work": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:crop": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:december": {
+   "lcp_ms": 64,
    "cls": 0
   }
  },
@@ -154,19 +154,19 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8868/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/0b9f676/plot-mobile.png",
-  "docs/screenshots/0b9f676/home-mobile.png",
-  "docs/screenshots/0b9f676/month-mobile.png",
-  "docs/screenshots/0b9f676/calendar-mobile.png",
-  "docs/screenshots/0b9f676/work-mobile.png",
-  "docs/screenshots/0b9f676/crop-mobile.png",
-  "docs/screenshots/0b9f676/empty-month-mobile.png",
-  "docs/screenshots/0b9f676/plot-desktop.png",
-  "docs/screenshots/0b9f676/home-desktop.png",
-  "docs/screenshots/0b9f676/month-desktop.png",
-  "docs/screenshots/0b9f676/calendar-desktop.png",
-  "docs/screenshots/0b9f676/work-desktop.png",
-  "docs/screenshots/0b9f676/crop-desktop.png",
-  "docs/screenshots/0b9f676/empty-month-desktop.png"
+  "docs/screenshots/1f5b068/plot-mobile.png",
+  "docs/screenshots/1f5b068/home-mobile.png",
+  "docs/screenshots/1f5b068/month-mobile.png",
+  "docs/screenshots/1f5b068/calendar-mobile.png",
+  "docs/screenshots/1f5b068/work-mobile.png",
+  "docs/screenshots/1f5b068/crop-mobile.png",
+  "docs/screenshots/1f5b068/december-mobile.png",
+  "docs/screenshots/1f5b068/plot-desktop.png",
+  "docs/screenshots/1f5b068/home-desktop.png",
+  "docs/screenshots/1f5b068/month-desktop.png",
+  "docs/screenshots/1f5b068/calendar-desktop.png",
+  "docs/screenshots/1f5b068/work-desktop.png",
+  "docs/screenshots/1f5b068/crop-desktop.png",
+  "docs/screenshots/1f5b068/december-desktop.png"
  ]
 }
