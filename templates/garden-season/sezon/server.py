@@ -66,6 +66,20 @@ class Meta:
     kind: str = "page"
 
 
+def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
+    """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
+    out, shown = head, 0
+    for t in titles:
+        nxt = out + (": " if not shown else ", ") + t
+        tail = "." if shown + 1 == len(titles) else " и другие."
+        if len(nxt + tail) > limit:
+            break
+        out, shown = nxt, shown + 1
+    if not shown:
+        return head + "."
+    return out + ("." if shown == len(titles) else " и другие.")
+
+
 def plural(n: int, one: str, few: str, many: str) -> str:
     n = abs(n) % 100
     if 11 <= n <= 14:
@@ -229,7 +243,7 @@ class App:
             return self.page(
                 "crops.html",
                 "Культуры: сроки работ по регионам",
-                "Чеснок, картофель, томаты, ягодники и яблони.",
+                with_examples("Сроки работ по регионам для культур", [CROPS[c].lower() for c in s.crops()]),
                 path,
                 crumbs,
             )
@@ -290,7 +304,10 @@ class App:
             return self.page(
                 "type.html",
                 f"{TYPES[t]}: работы по месяцам",
-                f"Работы типа «{TYPES[t].lower()}» с регионом каждого срока.",
+                with_examples(
+                    f"{TYPES[t]} — {len(items)} {plural(len(items), 'работа', 'работы', 'работ')} с регионом каждого срока",
+                    [w.title for w in items],
+                ),
                 path,
                 crumbs,
                 [self.items_ld(items)],
@@ -303,7 +320,7 @@ class App:
             return self.page(
                 "collections.html",
                 "Подборки сезонных работ",
-                "Осень, весна, ягодники и подготовка к зиме.",
+                with_examples("Подборки сезонных работ", [c["title"] for c in s.collections.values()]),
                 path,
                 crumbs,
             )
@@ -312,7 +329,16 @@ class App:
             c = s.collections[m.group(1)]
             crumbs = [home, ("Подборки", "/podborki/"), (c["title"], path)]
             return self.page(
-                "collection.html", c["title"], c["lede"], path, crumbs, [self.items_ld(c["items"])], "collection", c=c
+                "collection.html",
+                c["title"],
+                c["lede"]
+                if len(c["lede"]) >= 50
+                else with_examples(c["lede"].rstrip("."), [w.title for w in c["items"]]),
+                path,
+                crumbs,
+                [self.items_ld(c["items"])],
+                "collection",
+                c=c,
             )
         if path == "/kak-chitat-sroki/":
             crumbs = [home, ("Как читать сроки", path)]
