@@ -14,7 +14,7 @@
 {% if items and table %}
 <div class="tablewrap" role="region" aria-label="Сравнение видов" tabindex="0"><table class="cmp">
 <thead><tr><th scope="col">Вид</th>{% for slug, lv in lights.items() %}<th scope="col">{{ light_icon(slug) }}<span>{{ lv[1] }}</span></th>{% endfor %}<th scope="col">Уход</th><th scope="col">Ядовитость</th></tr></thead>
-<tbody>{% for p in items %}<tr><th scope="row"><a href="{{ p.url }}">{{ p.ru_name }}</a><i lang="la">{{ p.sci }}</i></th>{% for slug in lights %}<td>{% if slug in p.light_slugs %}<span class="yes">да</span>{% else %}<span class="no">—</span>{% endif %}</td>{% endfor %}<td>{{ p.maint or 'нет данных' }}</td><td>{% if p.poison %}{{ p.poison }}{% elif p.poison_note %}не ядовито{% else %}нет данных{% endif %}</td></tr>{% endfor %}</tbody>
+<tbody>{% for p in items %}<tr><th scope="row"><a href="{{ p.url }}">{{ p.ru_name }}</a><i lang="la">{{ p.sci }}</i></th>{% for slug, lv in lights.items() %}<td data-label="{{ lv[1] }}">{% if slug in p.light_slugs %}<span class="yes">да</span>{% else %}<span class="no">—</span>{% endif %}</td>{% endfor %}<td data-label="Уход">{{ p.maint or 'нет данных' }}</td><td data-label="Ядовитость">{% if p.poison %}{{ p.poison }}{% elif p.poison_note %}не ядовито{% else %}нет данных{% endif %}</td></tr>{% endfor %}</tbody>
 </table></div>
 <p class="note">Ядовитость — только то, что пишет справочник вида; «нет данных» не значит «безопасно».</p>
 {% elif items %}{{ grid(items, 'h2') }}{% else %}<div class="empty"><h2>По этому сочетанию растений нет</h2><p>Снимите один из фильтров.</p><p><a class="btn" href="/katalog/">Сбросить</a> <a class="btn btn--line" href="/svet/">Подобрать по свету</a></p></div>{% endif %}

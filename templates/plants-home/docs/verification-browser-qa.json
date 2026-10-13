@@ -1,6 +1,6 @@
 {
- "commit_head": "e6408ee9cc3ecc98d324c419b32b992b987910b5",
- "at": "2026-10-13T01:12:03Z",
+ "commit_head": "86e6d3ee1f85f92fc7eca43cb720937b16516f42",
+ "at": "2026-10-13T13:17:51Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -22,6 +22,13 @@
   "search_clear": true,
   "search_by_latin": 1,
   "search_no_results_message": true,
+  "diagnose_from_home": true,
+  "diagnose_symptom_opens_problem": true,
+  "diagnose_species_opens_plant": true,
+  "compare_table_rows": 19,
+  "compare_sorted_by_care": true,
+  "compare_noindex": true,
+  "compare_table_keyboard_scroll": true,
   "404_has_search_and_home": true,
   "empty_collection_submit_blocked": true,
   "mine_count_updates": true,
@@ -46,6 +53,8 @@
   "mobile:/svet/poluten/": [],
   "mobile:/problema/korni-gniyut/": [],
   "mobile:/katalog/?svet=solnce&uhod=Medium": [],
+  "mobile:/chto-sluchilos/": [],
+  "mobile:/katalog/?sort=uhod&vid=tablica": [],
   "mobile:/katalog/": [],
   "mobile:/rastenie/aspidistra-vysokaya/": [],
   "mobile:/rastenie/falenopsis/": [],
@@ -68,6 +77,8 @@
   "desktop:/svet/poluten/": [],
   "desktop:/problema/korni-gniyut/": [],
   "desktop:/katalog/?svet=solnce&uhod=Medium": [],
+  "desktop:/chto-sluchilos/": [],
+  "desktop:/katalog/?sort=uhod&vid=tablica": [],
   "desktop:/katalog/": [],
   "desktop:/rastenie/aspidistra-vysokaya/": [],
   "desktop:/rastenie/falenopsis/": [],
@@ -86,7 +97,7 @@
  },
  "perf_lab": {
   "mobile:mine": {
-   "lcp_ms": 168,
+   "lcp_ms": 196,
    "cls": 0
   },
   "mobile:home": {
@@ -94,27 +105,35 @@
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 104,
+   "lcp_ms": 92,
    "cls": 0
   },
   "mobile:plant": {
-   "lcp_ms": 100,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:light": {
-   "lcp_ms": 68,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:problem": {
-   "lcp_ms": 60,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:empty-filter": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
+  "mobile:diagnose": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:compare": {
    "lcp_ms": 52,
    "cls": 0
   },
   "desktop:mine": {
-   "lcp_ms": 384,
+   "lcp_ms": 472,
    "cls": 0
   },
   "desktop:home": {
@@ -122,11 +141,11 @@
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 88,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:plant": {
-   "lcp_ms": 80,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:light": {
@@ -134,11 +153,19 @@
    "cls": 0
   },
   "desktop:problem": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:empty-filter": {
-   "lcp_ms": 68,
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:diagnose": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:compare": {
+   "lcp_ms": 84,
    "cls": 0
   }
  },
@@ -147,19 +174,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/e6408ee/mine-mobile.png",
-  "docs/screenshots/e6408ee/home-mobile.png",
-  "docs/screenshots/e6408ee/catalog-mobile.png",
-  "docs/screenshots/e6408ee/plant-mobile.png",
-  "docs/screenshots/e6408ee/light-mobile.png",
-  "docs/screenshots/e6408ee/problem-mobile.png",
-  "docs/screenshots/e6408ee/empty-filter-mobile.png",
-  "docs/screenshots/e6408ee/mine-desktop.png",
-  "docs/screenshots/e6408ee/home-desktop.png",
-  "docs/screenshots/e6408ee/catalog-desktop.png",
-  "docs/screenshots/e6408ee/plant-desktop.png",
-  "docs/screenshots/e6408ee/light-desktop.png",
-  "docs/screenshots/e6408ee/problem-desktop.png",
-  "docs/screenshots/e6408ee/empty-filter-desktop.png"
+  "docs/screenshots/86e6d3e/mine-mobile.png",
+  "docs/screenshots/86e6d3e/home-mobile.png",
+  "docs/screenshots/86e6d3e/catalog-mobile.png",
+  "docs/screenshots/86e6d3e/plant-mobile.png",
+  "docs/screenshots/86e6d3e/light-mobile.png",
+  "docs/screenshots/86e6d3e/problem-mobile.png",
+  "docs/screenshots/86e6d3e/empty-filter-mobile.png",
+  "docs/screenshots/86e6d3e/diagnose-mobile.png",
+  "docs/screenshots/86e6d3e/compare-mobile.png",
+  "docs/screenshots/86e6d3e/mine-desktop.png",
+  "docs/screenshots/86e6d3e/home-desktop.png",
+  "docs/screenshots/86e6d3e/catalog-desktop.png",
+  "docs/screenshots/86e6d3e/plant-desktop.png",
+  "docs/screenshots/86e6d3e/light-desktop.png",
+  "docs/screenshots/86e6d3e/problem-desktop.png",
+  "docs/screenshots/86e6d3e/empty-filter-desktop.png",
+  "docs/screenshots/86e6d3e/diagnose-desktop.png",
+  "docs/screenshots/86e6d3e/compare-desktop.png"
  ]
 }

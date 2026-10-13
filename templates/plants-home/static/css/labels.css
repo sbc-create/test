@@ -131,3 +131,10 @@ h1, h2, h3, .label__name b { overflow-wrap: break-word; hyphens: auto; }
 .cmp tbody th { text-align: left; } .cmp tbody th a { display: block; padding-block: 2px; min-height: 24px; font-weight: 700; } .cmp tbody th i { font-weight: 400; color: var(--muted); font-size: .85rem; }
 .yes { display: inline-block; padding: 0 8px; border-radius: 8px; background: #dff0e2; color: var(--leaf); font-weight: 800; }
 .no { color: var(--muted); }
+@media (max-width: 640px) {  /* телефон: строка таблицы — карточка с подписями, без прокрутки вбок */
+  .cmp { min-width: 0; } .cmp thead { display: none; }
+  .cmp tr { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 12px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+  .cmp th, .cmp td { border: 0; padding: 2px 0; text-align: left; } .cmp tbody th { grid-column: 1 / -1; }
+  .cmp td::before { content: attr(data-label) ": "; color: var(--muted); font-size: .85rem; }
+  .cmp td[data-label="Ядовитость"] { grid-column: 1 / -1; }
+}

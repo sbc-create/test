@@ -193,6 +193,9 @@ def run(shots: Path | None) -> dict:
         )
         A["compare_noindex"] = "noindex" in (pg.locator("meta[name=robots]").get_attribute("content") or "")
         A["compare_table_keyboard_scroll"] = pg.locator(".tablewrap[tabindex='0']").count() == 1
+        A["compare_phone_no_sideways_scroll"] = pg.evaluate(
+            "innerWidth > 640 || [...document.querySelectorAll('.tablewrap')].every(e => e.scrollWidth <= e.clientWidth + 1)"
+        )
         pg.goto(BASE + "/nesushchestvuet/")
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
