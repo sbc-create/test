@@ -14,7 +14,12 @@
   старому времени;
 * закомментированное расписание за действующее — в юните прежнее время
   оставлено в комментарии, и разбор, не отличающий комментарий от настройки,
-  взял бы именно его.
+  взял бы именно его;
+* **недописанный прогон за непроисходивший** — 13.10 таймер сработал в
+  05:03:28Z, а артефакта за сутки не было и через 19 минут; по артефактам это
+  читается как `НЕ ЗАПУСКАЛСЯ`, тогда как процесс сбора шёл (pid 680414, старт
+  секунда в секунду с меткой таймера, состояние `S` — ожидание сети). Эти два
+  исхода разделяет только чтение `/proc`.
 """
 from __future__ import annotations
 
@@ -210,3 +215,92 @@ def test_нечитаемый_юнит_не_выдаётся_за_успех(м�
     код = модуль.главная(["--unit", str(tmp_path / "нет-юнита")])
     assert код == 2
     assert модуль.НЕ_ИЗМЕРЕНО in capsys.readouterr().out
+
+def _проц(tmp_path, *, btime: int, записи: dict[int, tuple[str, int]]) -> Path:
+    """Поддельный /proc: общий `stat` с `btime` и каталоги процессов.
+
+    `записи` — pid → (командная строка, поле 22 в тиках).
+    """
+    корень = tmp_path / "proc"
+    корень.mkdir()
+    (корень / "stat").write_text(
+        f"cpu  1 2 3\nbtime {btime}\nprocesses 42\n", encoding="utf-8")
+    for pid, (команда, тики) in записи.items():
+        д = корень / str(pid)
+        д.mkdir()
+        (д / "cmdline").write_bytes(команда.replace(" ", "\0").encode())
+        поля = ["0"] * 52
+        поля[0] = str(pid)
+        поля[1] = "(python3)"
+        поля[2] = "S"
+        поля[21] = str(тики)
+        (д / "stat").write_text(" ".join(поля), encoding="utf-8")
+    # Посторонние записи, которые не должны мешать.
+    (корень / "uptime").write_text("1000.0 900.0", encoding="utf-8")
+    (корень / "self").mkdir()
+    return корень
+
+
+def test_идущий_прогон_находится_со_своим_моментом_старта(модуль, tmp_path):
+    корень = _проц(tmp_path, btime=1_760_000_000,
+                   записи={4242: ("python3 -m seo_operator.cli analytics-collect "
+                                  "--json --out /x.json", 12_345)})
+    найдено, _ = модуль.прогоны_сбора(корень)
+    assert len(найдено) == 1
+    pid, когда = найдено[0]
+    assert pid == 4242
+    ожидаемо = _dt.datetime.fromtimestamp(1_760_000_000 + 123.45, tz=UTC)
+    assert abs((когда - ожидаемо).total_seconds()) < 1
+
+
+def test_чужой_процесс_за_сбор_не_считается(модуль, tmp_path):
+    корень = _проц(tmp_path, btime=1_760_000_000,
+                   записи={7: ("python3 -m pytest tests", 100)})
+    найдено, пояснение = модуль.прогоны_сбора(корень)
+    assert найдено == []
+    assert "подстроке" in пояснение, "признак поиска не назван"
+
+
+def test_без_btime_момент_старта_не_выдумывается(модуль, tmp_path):
+    корень = tmp_path / "proc"
+    корень.mkdir()
+    (корень / "stat").write_text("cpu 1 2 3\n", encoding="utf-8")
+    найдено, пояснение = модуль.прогоны_сбора(корень)
+    assert найдено == []
+    assert модуль.НЕ_ИЗМЕРЕНО in пояснение
+
+
+def test_идущий_прогон_снимает_вердикт_не_запускался(модуль, tmp_path, capsys):
+    """Главная причина этой стадии: окно закрылось, а прогон ещё идёт."""
+    юнит = tmp_path / "analytics-cabinet.timer"
+    юнит.write_text(ЮНИТ_ТЕКСТ)
+    wants = tmp_path / "wants"
+    wants.write_text("x")
+    артефакты = tmp_path / "analytics"
+    артефакты.mkdir()
+    (артефакты / "analytics-2026-10-01.json").write_text("{}")
+    корень = _проц(tmp_path, btime=1_760_000_000,
+                   записи={99: ("python3 -m seo_operator.cli analytics-collect", 1)})
+    код = модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                          "--stamp", str(tmp_path / "нет"), "--days", "1",
+                          "--artifacts", str(артефакты), "--proc", str(корень)])
+    напечатано = capsys.readouterr().out
+    assert "прогон ИДЁТ прямо сейчас: pid 99" in напечатано
+    assert модуль.НЕ_ЗАПУСКАЛСЯ not in напечатано, "недописанный прогон назван провалом"
+    assert код != 1 or модуль.ЕЩЁ_НЕ_СРОК in напечатано
+
+
+def test_без_идущего_прогона_так_и_сказано(модуль, tmp_path, capsys):
+    юнит = tmp_path / "analytics-cabinet.timer"
+    юнит.write_text(ЮНИТ_ТЕКСТ)
+    wants = tmp_path / "wants"
+    wants.write_text("x")
+    артефакты = tmp_path / "analytics"
+    артефакты.mkdir()
+    (артефакты / "analytics-2026-10-01.json").write_text("{}")
+    корень = _проц(tmp_path, btime=1_760_000_000, записи={})
+    модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                    "--stamp", str(tmp_path / "нет"), "--days", "1",
+                    "--artifacts", str(артефакты), "--proc", str(корень)])
+    напечатано = capsys.readouterr().out
+    assert "идущих прогонов не найдено" in напечатано
