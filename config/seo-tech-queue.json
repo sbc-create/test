@@ -814,6 +814,20 @@
       "verify_live": "meta description на https://zonafilm.space/ и https://zonafilm12.site/",
       "status": "verified",
       "evidence": "zonafilm-space 6cb3866, zonafilm12-site 9d1f962 (локально, B019). Стенд PASS; отрицательная проба (прежний текст) rc=1, 4 провала. checks/run.sh rc=0 на обеих (zonafilm12 — известный пропуск genre-alias-canonical). Невидимое изменение — выезжает без просмотра."
+    },
+    {
+      "id": "T047",
+      "site": "zonafilm.space, zonafilm12.site, zonafilm.cc",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.cc/title/boec-baki/season-1/episode-1/"
+      ],
+      "problem": "description страницы серии — «<сериал> — N сезон, M серия: смотреть онлайн на Zona.» (~54 знака, META_THIN в отчёте 13.10). Блок фактов серии (название, дата выхода, длительность) в коде есть, но на Zona не выводится ни разу: в снимке /srv/zonafilm-space/data/zona-01-details.json (63 776 записей, 13.10 03:19Z) поля seasons нет ни у одной записи; живая страница boec-baki/season-1/episode-1 — блока нет.",
+      "norm": "SEO_KNOWLEDGE_PACK: description — содержательный пересказ страницы; факты только из источника",
+      "expected": "description серии с фактами — только когда источник даст поля серии и страница их покажет",
+      "check": "стенд: серия с блоком episode-facts, факты блока в description",
+      "status": "blocked",
+      "evidence": "13.10 ~11:20Z: правка «факты блока → description» написана и откатана без коммита — на снимке 0 серий с блоком, правка была бы мёртвым кодом. BLOCKED_INPUT: в источнике Zona нет полей серии; придумывать их нельзя (CLOSED_WORLD)."
     }
   ]
 }
