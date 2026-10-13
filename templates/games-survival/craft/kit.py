@@ -1,7 +1,7 @@
 """Комплект переноса сайта games-survival: код из коммита, разрешённый экспорт контента, закрытая часть, команды.
 
 Состав (каталог <out>/games-survival-<sha7>/):
-  code.tar.gz     — templates/games-survival (без data/ и docs/screenshots/) и inventory/ из коммита (git archive);
+  code.tar.gz     — templates/games-survival (без data/ и docs/screenshots/), inventory/ и .gitignore из коммита;
   content.tar.gz  — templates/games-survival/data/: публичный контент из git (закрытые снимки источников не входят);
   private/        — только своя редакционная база var/games-survival/preview/*.sqlite3, если есть (SQLite backup,
                     права 0600)
@@ -155,7 +155,7 @@ def build(out: Path) -> dict:
     kit = out / f"{SITE}-{sha[:7]}"
     kit.mkdir(parents=True, exist_ok=False)
     raw = subprocess.run(
-        ["git", "archive", "--format=tar", sha, f"templates/{SITE}", "inventory"],
+        ["git", "archive", "--format=tar", sha, f"templates/{SITE}", "inventory", ".gitignore"],
         cwd=REPO,
         capture_output=True,
         check=True,
