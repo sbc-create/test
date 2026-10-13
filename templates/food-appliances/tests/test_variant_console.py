@@ -41,7 +41,7 @@ def test_settings_sit_in_the_source_step(app):
         for t in r.appliance_times:
             assert f'data-minutes="{t["min"]}"' in step_html(html, t["step"]), (r.slug, t)
         assert html.count("data-step-done=") == len(r.steps)
-        assert 'class="display"' not in html  # табло A заменено пультом в шагах
+        assert html.count('class="display"') == 1  # табло из A перенесено (решение владельца 13.10.2026); пульт в шагах остался
 
 
 def test_home_and_appliance_tables(app):

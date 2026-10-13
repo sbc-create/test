@@ -199,6 +199,21 @@ class Site:
                     out.setdefault(t, []).append(r)
         return {k: v for k, v in out.items() if len(v) >= 2}
 
+    def queue(self, slugs: list[str]) -> dict[str, dict]:
+        """Прибор → группы по температуре (из рецептов; без температуры — в конце) и сумма времени в приборе
+        по минутам, записанным в источниках (диапазон, если у рецепта он есть)."""
+        out: dict[str, dict] = {}
+        for r in (self.by_slug[s] for s in dict.fromkeys(slugs) if s in self.by_slug):
+            a = out.setdefault(r.appliance, {"groups": {}, "min": 0, "max": 0, "recipes": []})
+            temp = r.temperatures[0]["value_c"] if r.temperatures else None
+            a["groups"].setdefault(temp, []).append(r)
+            a["recipes"].append(r)
+            a["min"] += sum(t["min"] for t in r.appliance_times)
+            a["max"] += sum(t["max"] or t["min"] for t in r.appliance_times)
+        for a in out.values():
+            a["groups"] = dict(sorted(a["groups"].items(), key=lambda kv: (kv[0] is None, -(kv[0] or 0))))
+        return out
+
     def modes(self) -> dict[str, dict]:
         """Режим → рецепты, где он назван; параметры у каждого рецепта свои. Страница — при ≥2 рецептах."""
         out: dict[str, dict] = {}

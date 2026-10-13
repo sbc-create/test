@@ -32,4 +32,30 @@
     reset.addEventListener("click", function () { checks.forEach(function (c) { c.checked = false; }); sync(true); checks[0].focus(); });
     sync(false);
   }
+  /* ---- очередь на прибор (перенесено из C): память выбора, счётчик, пустой выбор не отправляется, отметки «готово» ---- */
+  var qread = function (k, d) { try { var v = localStorage.getItem("fab." + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } };
+  var qwrite = function (k, v) { try { localStorage.setItem("fab." + k, JSON.stringify(v)); } catch (e) { /* приватный режим */ } };
+  var picked = new URLSearchParams(location.search).getAll("r");
+  if (location.pathname === "/ochered/" && picked.length) qwrite("queue", picked);
+  var saved = qread("queue", []);
+  if (saved.length) document.querySelectorAll("[data-q-link]").forEach(function (a) { a.href = "/ochered/?" + saved.map(function (s) { return "r=" + encodeURIComponent(s); }).join("&"); });
+  document.querySelectorAll("[data-q-form]").forEach(function (f) {
+    var boxes = f.querySelectorAll("input[name=r]"), out = f.querySelector("[data-q-count]");
+    if (!picked.length && saved.length) boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) !== -1; });
+    var upd = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); out.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один рецепт"; return n; };
+    f.addEventListener("change", upd); upd();
+    f.addEventListener("submit", function (e) { if (!upd()) { e.preventDefault(); boxes[0].focus(); } });
+  });
+  var dones = document.querySelectorAll("[data-done]");
+  if (dones.length) {
+    var d0 = qread("done", []);
+    dones.forEach(function (b) {
+      b.hidden = false; b.checked = d0.indexOf(b.getAttribute("data-done")) !== -1;
+      b.addEventListener("change", function () {
+        var d = []; dones.forEach(function (x) { if (x.checked) d.push(x.getAttribute("data-done")); }); qwrite("done", d);
+      });
+    });
+  }
+  var pr = document.querySelector("[data-print]");
+  if (pr) { pr.hidden = false; pr.addEventListener("click", function () { window.print(); }); }
 })();

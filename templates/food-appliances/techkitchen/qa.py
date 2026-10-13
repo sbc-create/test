@@ -24,12 +24,15 @@ SHOTS = {
     "recipe_console": CONSOLE,
     "mode": "/rezhim/multivarka-vypechka/",
     "guide": "/kak-chitat-rezhimy/",
+    "queue": "/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/recept/syrniki-v-aerogrile/",
     "/poisk/?q=тушение",
     "/poisk/?q=zzz",
     "/nesushchestvuet/",
+    "/ochered/",
+    "/ochered/?r=neizvestno",
 ]
 PERF = """() => new Promise(res => { let lcp = 0, cls = 0;
   new PerformanceObserver(l => { for (const e of l.getEntries()) lcp = e.startTime; }).observe({type: 'largest-contentful-paint', buffered: true});
@@ -121,6 +124,38 @@ def run(shots: Path | None) -> dict:
         with pg.expect_navigation():
             pg.locator(".devices a", has_text="Режимы").click()
         S["modes_nav_opens_guide"] = pg.url.endswith("/kak-chitat-rezhimy/") and pg.locator("h1").count() == 1
+        # табло (перенесено из A): ссылка «шаг» ведёт к шагу с настройкой
+        pg.goto(BASE + CONSOLE)
+        pg.locator(".display a").first.click()
+        S["display_link_jumps_to_step"] = pg.evaluate("location.hash").startswith("#shag-")
+        # очередь на прибор (перенесено из C)
+        pg.goto(BASE + "/ochered/")
+        pg.evaluate("localStorage.clear(); 0")
+        pg.reload()
+        url0 = pg.url
+        pg.click(".qform .btn")
+        S["queue_empty_submit_blocked"] = pg.url == url0
+        pg.locator(".qpick label", has_text="Сырники").click()
+        pg.locator(".qpick label", has_text="Сёмга").click()
+        pg.locator(".qpick label", has_text="Плов").click()
+        S["queue_count_updates"] = pg.locator("[data-q-count]").inner_text() == "Отмечено: 3"
+        with pg.expect_navigation():
+            pg.click(".qform .btn")
+        S["queue_two_devices"] = pg.locator(".qdev").count() == 2
+        S["queue_aerogril_grouped_by_temp"] = pg.locator("#h-aerogril ~ .qgroup h3").all_inner_texts() == [
+            "200 °C",
+            "180 °C",
+        ]
+        pg.locator("[data-done]").first.check()
+        pg.reload()
+        S["queue_done_mark_persists"] = pg.locator("[data-done]").first.is_checked()
+        pg.goto(BASE + "/kak-chitat-rezhimy/")
+        S["queue_header_link_keeps_choice"] = "r=" in (pg.locator("[data-q-link]").get_attribute("href") or "")
+        pg.goto(BASE + "/ochered/")
+        S["queue_form_remembers_choice"] = pg.locator(".qpick input:checked").count() == 3
+        resp = pg.goto(BASE + "/ochered/?r=neizvestno")
+        S["queue_unknown_recipe_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        S["queue_storage_namespace_own"] = all(k.startswith("fab.") for k in pg.evaluate("Object.keys(localStorage)"))
         resp = pg.goto(BASE + "/nesushchestvuet/")
         S["real_404"] = resp.status == 404
         ctx.close()
