@@ -1,0 +1,69 @@
+{
+ "id": "src-78d03500ec",
+ "url": "https://plants.ces.ncsu.edu/plants/streptocarpus-ionanthus/",
+ "fetched_at": "2026-10-12T21:27:52Z",
+ "page_sha256": "a7fc30c02218afd59f1133d5bdbfc07e110cce37f80e6c60d4ac95023a8cdb4e",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Streptocarpus ionanthus",
+ "common_names": [
+  "African Violet",
+  "Kenya Violet"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Leaf Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Eastern & South Western Tanzania"
+  ],
+  "Habit/Form:": [
+   "Clumping",
+   "Mounding"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Medium"
+  ],
+  "Light:": [
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "Less than 12 inches"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "11a, 11b, 12a, 12b"
+  ],
+  "Flower Bloom Time:": [
+   "Fall",
+   "Spring",
+   "Summer",
+   "Winter"
+  ],
+  "Problems:": [
+   "Frequent Insect Problems"
+  ]
+ },
+ "description": [
+  "African violet is an evergreen, tropical houseplant in the gloxinia family (Gesneriaceae). A popular potted houseplant, its flowers are red, purple, blue, white or pink. The species epithet is compounded from the Greek meaning “having the flower of a violet.”",
+  "As it is rarely grown outdoors, it prefers interior sites with bright, filtered light and moist soil. It requires a highly fertile medium for continued rebloom. It is best grown in a mixture of 2 or 3 parts sphagnum peat moss, 2 parts vermiculite and 1 part perlite. This mixture will allow the water to pass through quickly. Add lime to balance the acidity of the peat moss, or use coir, which is more sustainable than peat moss and has a near-neutral pH. Plant with the crown above the surface with the soil pressed around it. Plants mature in 2 to 5 years. Remove dead or yellowed leaves to maintain a beautiful specimen. Good drainage is essential. Allowing water to sit on the surface can cause the plant to decay. When watering, water from the bottom while keeping the leaves dry to prevent spots or rings, and allow the surface to dry before watering again. It thrives in high humidity, consider setting the plant container on a tray of wet pebbles or using a humidifier to increase in the interior humidity. It is intolerant of dry air or very cold water. Consistent temperatures will also contribute to the plant’s health. If the nighttime temperature is allowed to dip below 60 degrees, the plant will become stunted as temperatures rise and can experience a long recovery period. Maintaining a temperature between 60 and 80 degrees is optimum.",
+  "African violets have five different size classes: micro-miniature, miniature, semi-miniature, standard and large. The flower petals range in type and texture, including single, semi-double, double, frilled and ruffled, star-shaped, wasp-shaped, cup-shaped and bell-shaped. Their two main growth forms are rosette and trailing. There are thousands of cultivars, and each varies in size, habit, leaf color, flower color and flower shape.",
+  "The Clemson Cooperative Extension Home and Garden Information Center has a fact sheet on common African violet diseases and insect pests."
+ ],
+ "problems": "Diseases that may harm African violet are crown and root rot and botrytis blight. Insects that may damage this plant include vine weevil, thrips, mealybugs, cyclamen mites and glasshouse leafhoppers. Overwatering is the number one issue."
+}

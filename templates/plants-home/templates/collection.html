@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ c.title }}</h1><p class="lead">{{ c.lede }}</p>{{ grid(c['items'], 'h2') }}
+{% endblock %}

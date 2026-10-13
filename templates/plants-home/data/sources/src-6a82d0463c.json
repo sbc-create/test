@@ -1,0 +1,69 @@
+{
+ "id": "src-6a82d0463c",
+ "url": "https://plants.ces.ncsu.edu/plants/chlorophytum-comosum/",
+ "fetched_at": "2026-10-12T21:27:18Z",
+ "page_sha256": "0065ea0c422996e2e51f273c1b4e8da14ce9d06c1287086014c86decb4218ec3",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Chlorophytum comosum",
+ "common_names": [
+  "Anthericum Comosum",
+  "Chlorophytum",
+  "Ribbon Plant",
+  "Spider Ivy",
+  "Spiderplant",
+  "Spider Plant",
+  "Walking Anthericum"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Division"
+  ],
+  "Country Or Region Of Origin:": [
+   "W. Tropical Africa to Cameroon, Ethiopia to S. Africa"
+  ],
+  "Habit/Form:": [
+   "Arching",
+   "Cascading"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Medium"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Deep shade (Less than 2 hours to no direct sunlight)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)"
+  ],
+  "Soil pH:": [
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "9a, 9b, 10a, 10b, 11a, 11b"
+  ],
+  "Flower Bloom Time:": [
+   "Fall",
+   "Spring",
+   "Summer",
+   "Winter"
+  ]
+ },
+ "description": [
+  "Spider plant is an herbaceous perennial houseplant in the Asparagaceae (asparagus) family. Its native region is tropical West Africa to Cameroon and Ethiopia to South Africa.",
+  "It is commonly grown as a houseplant for its adaptability to many conditions. Spider plant prefers medium light levels yet can tolerate deep shade. It is intolerant of direct sunlight. It grows best in moist soil and medium air humidity, though it is tolerant of drought and dry soil. Keep temperatures above 45 degrees F. Avoid watering with tap water as the chlorine and fluorides can cause leaf tip burn. Reduce watering during winter. Use a humidifier or place the plant container on a tray of pebbles with water to increase the humidity. Do not over-fertilize, as this decreases plantlet formation. Spider plant propagates easily by plantlets or division. Stolons and plantlets are light dependent and develop when the mother plant receives short days and long, uninterrupted nights–less than 12 hours of light a day–for at least three weeks.",
+  "Spider plant does particularly well in hanging baskets or other containers where the leaves and stems can cascade down the side."
+ ],
+ "problems": "No significant problems."
+}

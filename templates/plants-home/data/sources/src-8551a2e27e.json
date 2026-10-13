@@ -1,0 +1,52 @@
+{
+ "id": "src-8551a2e27e",
+ "url": "https://plants.ces.ncsu.edu/plants/hoya-carnosa/",
+ "fetched_at": "2026-10-12T21:27:35Z",
+ "page_sha256": "bffbee3ad3c8602183d5340837ad47c6d4e93caf0f5dd5dafe78c435a6ee682d",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Hoya carnosa",
+ "common_names": [
+  "Honey Plant",
+  "Porcelainflower",
+  "Porcelain Flower",
+  "Wax Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Southeast Asia, Japan, and Taiwan"
+  ],
+  "Habit/Form:": [
+   "Climbing"
+  ],
+  "Growth Rate:": [
+   "Rapid"
+  ],
+  "Maintenance:": [
+   "Medium"
+  ],
+  "Light:": [
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "High Organic Matter"
+  ],
+  "Soil pH:": [
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage"
+  ],
+  "Flower Bloom Time:": [
+   "Fall",
+   "Spring",
+   "Summer"
+  ]
+ },
+ "description": [],
+ "problems": null
+}

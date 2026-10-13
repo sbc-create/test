@@ -1,0 +1,68 @@
+{
+ "id": "src-365265ac42",
+ "url": "https://plants.ces.ncsu.edu/plants/aspidistra-elatior/",
+ "fetched_at": "2026-10-12T21:27:47Z",
+ "page_sha256": "dd8652abaf305a36641405f8a67add64b1af5a020c39df382a89cf5f8e995e36",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Aspidistra elatior",
+ "common_names": [
+  "Bar Room Plant",
+  "Barroom Plant",
+  "Cast Iron Plant",
+  "Haran",
+  "Iron Plant",
+  "Variegated Cast Iron Plant"
+ ],
+ "attrs": {
+  "Country Or Region Of Origin:": [
+   "Japan"
+  ],
+  "Habit/Form:": [
+   "Clumping",
+   "Erect",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Slow"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Deep shade (Less than 2 hours to no direct sunlight)"
+  ],
+  "Soil Texture:": [
+   "Clay",
+   "High Organic Matter",
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Alkaline (>8.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "7a, 7b, 8a, 8b, 9a, 9b, 10a, 10b, 11a, 11b"
+  ],
+  "Flower Bloom Time:": [
+   "Summer"
+  ]
+ },
+ "description": [
+  "Cast iron plant is an evergreen, rhizomatous perennial reaching up to 2' in upright clumps. It is a good specimen for planting in dense shade. It makes a good evergreen \"hosta substitute\", especially for low light areas as well as indoors in pots. There are some variegated cultivars. It is called barroom plant because of its ability to withstand spittoonish conditions and iron plant due to its ability to withstand neglect. It is frequently utilized in exterior landscapes down south.",
+  "Cast iron plants prefer partial to full shade and are intolerant of direct sun. It needs rich, well-drained soil and is drought tolerant, though it can tolerate dry and nutrient-poor soils as well as a variety of soil textures. Water regularly spring to autumn, during droughts, sparingly in winter. Keep sheltered from winter winds.",
+  "These plants grow well in containers and will spread if planted in the ground within their hardiness zone. They can be used as an accent or groundcover to fill in shady spaces."
+ ],
+ "problems": "There are no serious pest problems. This plant is resistant to damage by deer and is slightly salt tolerant."
+}

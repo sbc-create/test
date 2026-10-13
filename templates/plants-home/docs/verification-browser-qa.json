@@ -1,0 +1,197 @@
+{
+ "commit_head": "ebae2afb8df813a5ef0d334fe41631ab3ff0258a",
+ "at": "2026-10-13T14:31:51Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "light_card_opens_category": true,
+  "filter_light_and_care": true,
+  "filter_reset_restores_all": true,
+  "filter_empty_state_with_exits": true,
+  "history_back_returns": true,
+  "history_forward_returns": true,
+  "whole_card_clickable": true,
+  "passport_light_link": true,
+  "problem_link_opens_problem": true,
+  "toc_jumps_to_section": true,
+  "checklist_persists_after_reload": true,
+  "checklist_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "search_keyboard_results": 2,
+  "search_clear": true,
+  "search_by_latin": 1,
+  "search_no_results_message": true,
+  "diagnose_from_home": true,
+  "diagnose_symptom_opens_problem": true,
+  "diagnose_species_opens_plant": true,
+  "compare_table_rows": 19,
+  "compare_sorted_by_care": true,
+  "compare_noindex": true,
+  "compare_table_keyboard_scroll": true,
+  "compare_phone_no_sideways_scroll": true,
+  "404_has_search_and_home": true,
+  "empty_collection_submit_blocked": true,
+  "mine_count_updates": true,
+  "collection_has_two_labels": true,
+  "tox_summary_lists_both": true,
+  "print_labels_calls_print": true,
+  "print_shows_only_labels": true,
+  "header_link_leads_to_collection": true,
+  "header_link_opens_collection": true,
+  "home_form_remembers_collection": true,
+  "storage_namespace_own": true,
+  "nojs_plant_sections": 6,
+  "nojs_print_hidden": true,
+  "nojs_filter_works": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/moi-rasteniya/?r=aloe-vera&r=krassula-ovalnaya&r=sansevieriya-tryohpolosnaya": [],
+  "mobile:/": [],
+  "mobile:/katalog/?svet=ten": [],
+  "mobile:/rastenie/shlyumbergera-dekabrist/": [],
+  "mobile:/svet/poluten/": [],
+  "mobile:/problema/korni-gniyut/": [],
+  "mobile:/katalog/?svet=solnce&uhod=Medium": [],
+  "mobile:/chto-sluchilos/": [],
+  "mobile:/katalog/?sort=uhod&vid=tablica": [],
+  "mobile:/katalog/": [],
+  "mobile:/rastenie/aspidistra-vysokaya/": [],
+  "mobile:/rastenie/falenopsis/": [],
+  "mobile:/rastenie/monstera-delikatesnaya/": [],
+  "mobile:/svet/": [],
+  "mobile:/svet/ten/": [],
+  "mobile:/problemy/": [],
+  "mobile:/problema/muchnistyj-chervec/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/neprihotlivye/": [],
+  "mobile:/kak-chitat/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=фикус": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/moi-rasteniya/?r=aloe-vera&r=krassula-ovalnaya&r=sansevieriya-tryohpolosnaya": [],
+  "desktop:/": [],
+  "desktop:/katalog/?svet=ten": [],
+  "desktop:/rastenie/shlyumbergera-dekabrist/": [],
+  "desktop:/svet/poluten/": [],
+  "desktop:/problema/korni-gniyut/": [],
+  "desktop:/katalog/?svet=solnce&uhod=Medium": [],
+  "desktop:/chto-sluchilos/": [],
+  "desktop:/katalog/?sort=uhod&vid=tablica": [],
+  "desktop:/katalog/": [],
+  "desktop:/rastenie/aspidistra-vysokaya/": [],
+  "desktop:/rastenie/falenopsis/": [],
+  "desktop:/rastenie/monstera-delikatesnaya/": [],
+  "desktop:/svet/": [],
+  "desktop:/svet/ten/": [],
+  "desktop:/problemy/": [],
+  "desktop:/problema/muchnistyj-chervec/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/neprihotlivye/": [],
+  "desktop:/kak-chitat/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=фикус": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:mine": {
+   "lcp_ms": 160,
+   "cls": 0
+  },
+  "mobile:home": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "mobile:plant": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "mobile:light": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:problem": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:diagnose": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:compare": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:mine": {
+   "lcp_ms": 128,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:plant": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:light": {
+   "lcp_ms": 440,
+   "cls": 0
+  },
+  "desktop:problem": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:empty-filter": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:diagnose": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:compare": {
+   "lcp_ms": 104,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/ebae2af/mine-mobile.png",
+  "docs/screenshots/ebae2af/home-mobile.png",
+  "docs/screenshots/ebae2af/catalog-mobile.png",
+  "docs/screenshots/ebae2af/plant-mobile.png",
+  "docs/screenshots/ebae2af/light-mobile.png",
+  "docs/screenshots/ebae2af/problem-mobile.png",
+  "docs/screenshots/ebae2af/empty-filter-mobile.png",
+  "docs/screenshots/ebae2af/diagnose-mobile.png",
+  "docs/screenshots/ebae2af/compare-mobile.png",
+  "docs/screenshots/ebae2af/mine-desktop.png",
+  "docs/screenshots/ebae2af/home-desktop.png",
+  "docs/screenshots/ebae2af/catalog-desktop.png",
+  "docs/screenshots/ebae2af/plant-desktop.png",
+  "docs/screenshots/ebae2af/light-desktop.png",
+  "docs/screenshots/ebae2af/problem-desktop.png",
+  "docs/screenshots/ebae2af/empty-filter-desktop.png",
+  "docs/screenshots/ebae2af/diagnose-desktop.png",
+  "docs/screenshots/ebae2af/compare-desktop.png"
+ ]
+}

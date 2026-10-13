@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% from "_pick.html" import pick %}
+{% block main %}
+<section class="hero">
+  <h1>Мои растения: сводка и этикетки ухода</h1>
+  <p class="lead">Отметьте виды, которые у вас растут. Получите сводку — какие из них ядовиты по данным источника, а о каких данных нет, — группы по свету и этикетки ухода для печати. Всё по университетскому справочнику, отдельно для каждого вида.</p>
+</section>
+{{ pick() }}
+<section aria-labelledby="h-more"><h2 id="h-more">Смотреть без выбора</h2>
+<ul class="links"><li><a href="/katalog/">Каталог видов</a></li><li><a href="/svet/">По свету</a></li><li><a href="/chto-sluchilos/">Что случилось с растением?</a></li><li><a href="/problemy/">Проблемы</a></li><li><a href="/kak-chitat/">Как читать карточку</a></li></ul></section>
+{% endblock %}

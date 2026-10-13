@@ -1,0 +1,12 @@
+# Настройки ruff только для шаблона plants-home; наследует корневой pyproject.toml.
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"flora/qa.py" = ["E501"]
+"flora/server.py" = ["E501"]
+"flora/site.py" = ["E501"]
+"flora/content.py" = ["E501"]
+"flora/sources.py" = ["E501"]
+"flora/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

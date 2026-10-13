@@ -1,0 +1,95 @@
+{
+ "id": "src-7b0bb45d1e",
+ "url": "https://plants.ces.ncsu.edu/plants/epipremnum-aureum/",
+ "fetched_at": "2026-10-12T21:27:11Z",
+ "page_sha256": "cbe77061462aa80644c23989084795854138839f97799fd67c810aa4a03bfec6",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Epipremnum aureum",
+ "common_names": [
+  "Devil's Ivy",
+  "Devil's Vine",
+  "Golden Pothos",
+  "Ivy Arum",
+  "Marble Queen",
+  "Pothos",
+  "Taro Vine"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Society Islands"
+  ],
+  "Habit/Form:": [
+   "Climbing",
+   "Creeping",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "High Organic Matter",
+   "Loam (Silt)",
+   "Shallow Rocky"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet",
+   "3 feet-6 feet",
+   "6-feet-12 feet",
+   "12-24 feet",
+   "24-60 feet"
+  ],
+  "Problems:": [
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Medium"
+  ],
+  "Poison Symptoms:": [
+   "Oral irritation, pain and swelling of mouth, tongue, and lips, excessive drooling, vomiting (not horses), difficulty swallowing, skin irritation, diarrhea"
+  ],
+  "Poison Toxic Principle:": [
+   "Calcium oxalate crystals"
+  ],
+  "Causes Contact Dermatitis:": [
+   "Yes"
+  ],
+  "Poison Part:": [
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Seeds",
+   "Stems"
+  ]
+ },
+ "description": [
+  "Pothos is a low-maintenance, herbaceous perennial, broadleaf evergreen houseplant in the arum family (Araceae) grown for its glossy, green or variegated leaves on cascading stems. It is native to the Society Islands. It grows only 6 to 8 feet as a horizontal groundcover, but the trailing and climbing vines can grow as long as 40 feet. This feature makes it well-suited for hanging baskets. As a container plant, it generally retains its juvenile leaf shape. The species epithet is Latin for \"golden.\"",
+  "Pothos is very easy to grow. It prefers bright, indirect light and survives for long periods in low light. Use a humidifier or place the plant container on a tray of wet pebbles to increase humidity, and let the well-drained potting medium dry out between watering. Fertilize every other month except when the plant is dormant in the winter. Wipe down the leaves occasionally with a soft rag to remove any collected dust. Over time, leaves will yellow and fall off, concentrating most of the leaves at the end of the stems. Prune stems back to maintain a bushy habit. Vines easily root in water. They climb by brown aerial roots. If given a support on which to climb and adequate light, the plant will begin to produce large, mature leaves.",
+  "In the recent past, Epipremnum aureum was treated as a cultivar of Epipremnum pinnatum and given the name E. pinnatum ‘Aureum’. After further study, botanists determined that the two have distinctively different vegetative features and should be recognized as separate species. Plants formerly called E. pinnatum 'Aureum' are now correctly called E. aureum .",
+  "It is distinguished from Philodendron hederaceum by the absence of conspicuous free stipules on new growth and by the grooved petioles.",
+  "Indoor vine with glossy, heart-shaped leaves variegated with yellow",
+  "No free stipules on new growth",
+  "Petioles are grooved"
+ ],
+ "problems": "Root rot and blackening of the leaf margins can occur with overwatering. Low light can cause loss of variegation. Monitor for mealybugs and scales."
+}

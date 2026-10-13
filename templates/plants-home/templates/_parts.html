@@ -1,0 +1,10 @@
+{% macro light_icon(slug) %}<img class="li" src="{{ asset('img/light-' ~ slug ~ '.svg') }}" alt="" width="22" height="22">{% endmacro %}
+{% macro card(p, heading='h3') %}
+<article class="pc">
+  <{{ heading }} class="pc__t"><a href="{{ p.url }}">{{ p.ru_name }}</a></{{ heading }}>
+  <p class="pc__sci"><i lang="la">{{ p.sci }}</i></p>
+  <p class="pc__light">{% for l in p.light %}<span>{{ light_icon(l[0]) }}{{ l[1] }}</span>{% endfor %}</p>
+  {% set bits = [] %}{% if p.maint %}{% set bits = bits + ['Уход: ' ~ p.maint] %}{% endif %}{% if p.problems %}{% set bits = bits + ['проблем по источнику: ' ~ p.problems|length] %}{% endif %}{% if bits %}<p class="pc__m">{{ bits|join(' · ') }}</p>{% endif %}
+</article>
+{% endmacro %}
+{% macro grid(items, heading='h3') %}<div class="pcs">{% for p in items %}{{ card(p, heading) }}{% endfor %}</div>{% endmacro %}

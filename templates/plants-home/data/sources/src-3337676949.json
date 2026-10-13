@@ -1,0 +1,91 @@
+{
+ "id": "src-3337676949",
+ "url": "https://plants.ces.ncsu.edu/plants/monstera-deliciosa/",
+ "fetched_at": "2026-10-12T21:27:23Z",
+ "page_sha256": "27a91a03c913ca35ee73b1218a2c4e0a5039493613d9c5cd15f7accdfa1ca0b9",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Monstera deliciosa",
+ "common_names": [
+  "Ceriman",
+  "Cutleaf Philodendron",
+  "Hurricane Plant",
+  "Mexican Breadfruit",
+  "Split-leaf Philodendron",
+  "Swiss Cheese Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Layering",
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Mexico to Panama"
+  ],
+  "Habit/Form:": [
+   "Climbing"
+  ],
+  "Growth Rate:": [
+   "Rapid"
+  ],
+  "Maintenance:": [
+   "Medium"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "High Organic Matter",
+   "Loam (Silt)"
+  ],
+  "Soil pH:": [
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "6-feet-12 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Problems:": [
+   "Contact Dermatitis",
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Intense burning of mouth, tongue, and throat; nausea, vomiting, difficulty swallowing, drooling, and diarrhea may also occur; contact with cell sap may cause skin irritation. Only if eaten in large quantities."
+  ],
+  "Poison Toxic Principle:": [
+   "Needle-like calcium oxalate crystals; possibly other unidentified toxins"
+  ],
+  "Causes Contact Dermatitis:": [
+   "Yes"
+  ],
+  "Poison Part:": [
+   "Bark",
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Seeds",
+   "Stems"
+  ]
+ },
+ "description": [
+  "Split-leaf philodendron is not actually a philodendron but a woody, perennial, broadleaf evergreen, climbing vine in the arum family (Araceae). It is native from Mexico to Panama and can grow to 70 feet tall, though it stays between 6 to 8 feet in most home environments. In North Carolina it is grown as a houseplant.",
+  "It prefers an average warm temperature of 60 to 85 degrees F, moderate brightness but not direct sunlight, and high humidity. Variegated cultivars will need more sunlight than darker green cultivars. Water this plant thoroughly, then allow the top quarter to one-third part to dry between watering. Using a humidifier or setting in the plant container on a tray of wet pebbles helps increase the humidity in dry interior settings. Sturdy support is necessary to prevent the stems from breaking. Prune or re-pot if needed in the spring and wipe dust off of the leaves regularly. Propagate by layering or stem cutting.",
+  "In its native habitat it starts its life as a terrestrial plant, turning epiphytic once it comes into contact with a sturdy tree it can climb. While It typically does not produce flowers or fruits in interior landscapes, it can produce an edible fruit that is said to taste like a cross between a banana and pineapple."
+ ],
+ "problems": "No significant problems."
+}

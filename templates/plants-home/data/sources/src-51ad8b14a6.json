@@ -1,0 +1,44 @@
+{
+ "id": "src-51ad8b14a6",
+ "url": "https://plants.ces.ncsu.edu/plants/phalaenopsis/",
+ "fetched_at": "2026-10-12T21:27:33Z",
+ "page_sha256": "aaec322a9091a3a5dc67d20bd3e4cecc8c3d36c48a8da58e03ccc369fa40c41e",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Phalaenopsis",
+ "common_names": [
+  "Moon Orchid",
+  "Moon Orchids",
+  "Moth Orchid",
+  "Moth Orchids",
+  "Phalaenopsis Orchid",
+  "Phalaenopsis Orchids"
+ ],
+ "attrs": {
+  "Country Or Region Of Origin:": [
+   "Tropical & Subtropical Asia, NE. Australia"
+  ],
+  "Habit/Form:": [
+   "Erect"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Deep shade (Less than 2 hours to no direct sunlight)"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b"
+  ]
+ },
+ "description": [
+  "Moth orchid is an epiphytic, tropical, herbaceous perennial in the orchid family (Orchidaceae). Moth orchids can range from a few inches to 2 feet in height and up to 2 feet (but usually less) in spread. Their region of origin is tropical and subtropical Asia and northeast Australia. The genus name comes from the Greek words phalaina, which means “moth,” and opsis, which means “like” because the flowers look like moths.",
+  "Moth orchids are the most popular and widely available kind of orchid sold as a houseplant. Commercial production is centered in Taiwan and the Netherlands. A modern hybrid, of which there are more than 34,000 registered, may have a dozen or more species in its ancestry and an equal number of hybrid generations. Moth orchids are also crossed with related genera to produce intergeneric hybrids such as Aeridopsis (= Aerides × Phalaenopsis ), Moirara (= Phalaenopsis × Renanthera × Vanda ), Parnataara (= Aerides × Arachnis × Phalaenopsis ), Renanthopsis (= Phalaenopsis × Renanthera ), Rhynchonopsis (= Phalaenopsis × Rhynchostylis ) and Vandaenopsis (= Phalaenopsis × Vanda ). Hybrids previously known as Doritaenopsis (= Doritis × Phalaenopsis ) are Phalaenopsis because the genus Doritis is now treated as a synonym of Phalaenopsis .",
+  "Moth orchids prefer low light, warm temperatures and high humidity. They are winter hardy in USDA Zones 10 to 12 and consequently must be grown as houseplants or greenhouse plants in North Carolina. The best placement in the house is on an east windowsill, but they can grow well on well-shaded west and south windowsills. Since they prefer warm, humid, damp but not soggy conditions, they are planted in pots with a bark-based medium that provides excellent drainage. The roots can photosynthesize, producing a green color from chlorophyll production, so clear plastic pots are often used. Orchids should be watered in the mornings with tepid water by placing plants in a sink and allowing water to flow freely through potting medium and foliage. Let the pot drain completely so that plants do not stand in water. Mature plants should be watered once weekly or more often in the heat of summer. Potting mix should dry some between waterings. If the growing medium is pure sphagnum moss, it can be difficult to rewet. It is better to repot such plants into bark-based orchid growing medium. Plants should be fertilized regularly with a balanced fertilizer twice monthly at half strength or weekly at quarter strength. Orchids need to be repotted approximately every two years after blooms have faded or as new leaves begin to appear. The flower stalk should be cut just above the fist node below the faded flowers; often (but not always) the node will produce a branch with more flowers.",
+  "Moth orchids will flower repeatedly once a year with proper care. The large-flowered, white species and hybrids that flower in spring require a cool, nighttime chill (ca. 55 degrees F for a week) in autumn to initiate flower spikes. The modern dwarf hybrids, which are bred from summer-flowering species, do not require a cool chill to initiate flowers. Flowers can last for four months or more. The showy flowers appearing in long sprays on arching stems are 3 to 6 inches wide in large-flowered hybrids but may be only 1 or 2 inches wide in dwarf cultivars. Traditionally, flowers were only white, pale pink or white with a pink lip, but breakthroughs in breeding are now giving consumers moth orchids in a wider range of colors including, yellow, cream, peachy tones and purple-red, as well as spotted (so-called “harlequin” patterns), splashed and variously patterned flowers. Genetic engineering has resulted in the production of blue-flowered moth orchids, but these are not yet widely available. Instead, consumers are offered moth orchids whose white flowers have been dyed blue, pink, or another color. These orchids, if they rebloom, will produce white flowers."
+ ],
+ "problems": "Scale and mealybugs may appear. Flower bud drop, also known as bud blast, may be caused by changes in temperature, humidity, moisture, fertilizer or location. Botrytis spot on the flowers can be a problem. Shriveled or wrinkled leaves are a sign that the leaves are not getting enough water – either the potting medium is being kept too dry or the plant’s roots are damaged (often rotted by a soggy growing medium)."
+}

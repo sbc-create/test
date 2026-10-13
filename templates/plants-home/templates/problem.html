@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ PROBLEMS[t][0] }}</h1><p class="lead">Что справочник пишет об этой проблеме у каждого вида. Советы одного вида не переносятся на другой.</p>
+<ul class="byplant">{% for p in items %}{% for x in p.problems if x.tag == t %}<li><h2><a href="{{ p.url }}">{{ p.ru_name }}</a> <i lang="la">{{ p.sci }}</i></h2><p>{{ x.text }}</p>{% set w = p.care|selectattr('topic', 'equalto', 'poliv')|list %}{% if w and t == 'korni-gniyut' %}<p class="note"><b>Полив этого вида по источнику:</b> {{ w[0].text }}</p>{% endif %}</li>{% endfor %}{% endfor %}</ul>
+{% endblock %}
