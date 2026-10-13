@@ -1,0 +1,90 @@
+{
+ "id": "src-15fbba4d78",
+ "url": "https://plants.ces.ncsu.edu/plants/ficus-lyrata/",
+ "fetched_at": "2026-10-13T00:42:29Z",
+ "page_sha256": "011fed1127d7bad2f20a05bf7995b49205122a0d168590a00bf093383246fcc2",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Ficus lyrata",
+ "common_names": [
+  "Banjo fig",
+  "Fiddle-leaf Fig"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Tropical Western and Central Africa"
+  ],
+  "Habit/Form:": [
+   "Rounded",
+   "Spreading",
+   "Vase"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Problems:": [
+   "Contact Dermatitis",
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Oral irritation, burning of the mouth, tongue, and lips, excessive drooling, vomiting, and difficulty swallowing."
+  ],
+  "Poison Toxic Principle:": [
+   "insoluble calcium oxalates"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Bark",
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Sap/Juice",
+   "Stems"
+  ]
+ },
+ "description": [
+  "The fiddle-leaf fig is a small tropical tree and broadleaf evergreen, commonly grown and popular as a houseplant in many areas of the United States. As a houseplant, it will grow 2 to 10 feet tall. It has large, broad, lyre-shaped, green leaves that can measure up to 18 inches long. This plant rarely flowers or fruits when grown as a houseplant. The stems have a milky sap that can irritate the skin.",
+  "This plant is native to tropical regions of western and central Africa. It will grow 60 to 100 feet tall and is erect and vase-shaped. It is frequently used as an ornamental shade tree in tropical climates. In its native habitat, the plant will produce figs that appear solitary or in pairs.",
+  "The genus name, Ficus , is derived from the Latin name for an edible fig. The specific epithet, lyrata , means \"in the shape of a lyre\" and refers to the shape of the plant's leaves.",
+  "The fiddle-leaf fig prefers bright indirect light or partial shade and moist, well-drained, loamy, acidic soils. They are sensitive to overwatering and also need protection from the afternoon sun. It also performs best in medium relative humidity with a temperature greater than 55 degrees F. This a relatively low-maintenance houseplant that may be pruned as needed. The fiddle-leaf fig can be planted outdoors in plant hardiness zones 10 through 12.",
+  "This plant is toxic to humans, cats, and dogs if ingested. Oral irritation, excessive drooling, and vomiting may occur. The sap can irritate the skin and gloves are recommended when handling this plant, particularly when pruning or propagating.",
+  "In the United States, the fiddle-leaf fig is a tropical tree that is used as a houseplant in temperate areas and may be grown in a container. The container can be brought outside to a sheltered deck or patio during the summer months and brought indoors as the outdoor temperatures start to drop in the fall. The fiddle-leaf fig can also make a great focal point in a living room or office space. Texturally heavy, this plant is best suited for large spaces.",
+  "Seasons of Interest:",
+  "Foliage: Year-round"
+ ],
+ "problems": "The fiddle leaf fig has no serious insect pests or diseases. As a houseplant, monitor for scale, aphids, mealy bugs, thrips, and spider mites. Potential diseases include bacterial or fungal diseases. Leaf scorch can occur if the plant is receiving too much direct sunlight. Brown spots may occur if there is a fluctuation in room temperatures for heating or cooling vents. Leaf drop may occur from too much or too little water."
+}
