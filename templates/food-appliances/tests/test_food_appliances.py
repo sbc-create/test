@@ -12,6 +12,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from techkitchen import drafts  # noqa: E402
+
+# Черновики сверяются с закрытыми снимками источников (var/<сайт>/private/*.json.gz): сырой текст страниц
+# в git не хранится (права и срок хранения). В чистой копии без var/ эти тесты не выполняются — SKIPPED
+# с причиной; в рабочей копии со снимками выполняются как обычно.
+NEEDS_PRIVATE = pytest.mark.skipif(
+    not any(drafts.PRIVATE.glob("*.json.gz")),
+    reason="нет закрытых снимков источников var/<сайт>/private — проверка черновиков не выполнялась",
+)
+
 from techkitchen.importer import appliance_facts, mode_names  # noqa: E402
 from techkitchen.net import Client, Refused, robots_allow, robots_rules  # noqa: E402
 from techkitchen.server import App  # noqa: E402
@@ -40,6 +49,7 @@ def test_12_full_recipes_two_appliances(app):
         assert r.appliance_times and (r.modes or r.temperatures), r.slug
 
 
+@NEEDS_PRIVATE
 def test_drafts_valid_and_mode_invention_rejected():
     files = list(drafts.DRAFTS.glob("*.json"))
     assert all(not drafts.validate(json.loads(p.read_text())) for p in files)
