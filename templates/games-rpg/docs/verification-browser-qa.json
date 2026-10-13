@@ -1,6 +1,6 @@
 {
- "commit_head": "133f8ab6b3c3de54270e659aa59af1f6933116dc",
- "at": "2026-10-13T13:28:27Z",
+ "commit_head": "2e8185beffb8c1caebcf0340fc840a477afde7ec",
+ "at": "2026-10-13T13:29:36Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -39,14 +39,7 @@
  "axe": {
   "version": "4.13.0",
   "mobile:/baldurs-gate-3/sravnenie-predmetov/": [],
-  "mobile:/otryad/?p=gale&p=karlach&p=shadowheart": [
-   {
-    "id": "color-contrast",
-    "impact": "serious",
-    "n": 6,
-    "sample": "label:nth-child(2) > span > b"
-   }
-  ],
+  "mobile:/otryad/?p=gale&p=karlach&p=shadowheart": [],
   "mobile:/": [],
   "mobile:/baldurs-gate-3/": [],
   "mobile:/baldurs-gate-3/personazhi/": [],
@@ -63,14 +56,7 @@
   "mobile:/poisk/?q=квантовый": [],
   "mobile:/nesushchestvuet/": [],
   "desktop:/baldurs-gate-3/sravnenie-predmetov/": [],
-  "desktop:/otryad/?p=gale&p=karlach&p=shadowheart": [
-   {
-    "id": "color-contrast",
-    "impact": "serious",
-    "n": 6,
-    "sample": "label:nth-child(2) > span > b"
-   }
-  ],
+  "desktop:/otryad/?p=gale&p=karlach&p=shadowheart": [],
   "desktop:/": [],
   "desktop:/baldurs-gate-3/": [],
   "desktop:/baldurs-gate-3/personazhi/": [],
@@ -89,47 +75,47 @@
  },
  "perf_lab": {
   "mobile:compare": {
-   "lcp_ms": 304,
+   "lcp_ms": 136,
    "cls": 0
   },
   "mobile:party": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "mobile:home": {
    "lcp_ms": 72,
    "cls": 0
   },
-  "mobile:game": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "mobile:section": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "mobile:character": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "mobile:build": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "mobile:quest": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "desktop:compare": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "desktop:party": {
+  "mobile:home": {
    "lcp_ms": 80,
    "cls": 0
   },
+  "mobile:game": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:section": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:character": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "mobile:build": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:quest": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:compare": {
+   "lcp_ms": 132,
+   "cls": 0
+  },
+  "desktop:party": {
+   "lcp_ms": 456,
+   "cls": 0
+  },
   "desktop:home": {
-   "lcp_ms": 84,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:game": {
@@ -137,19 +123,19 @@
    "cls": 0
   },
   "desktop:section": {
-   "lcp_ms": 76,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:character": {
-   "lcp_ms": 56,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:build": {
-   "lcp_ms": 56,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:quest": {
-   "lcp_ms": 60,
+   "lcp_ms": 64,
    "cls": 0
   }
  },
@@ -158,21 +144,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8871/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/133f8ab/compare-mobile.png",
-  "docs/screenshots/133f8ab/party-mobile.png",
-  "docs/screenshots/133f8ab/home-mobile.png",
-  "docs/screenshots/133f8ab/game-mobile.png",
-  "docs/screenshots/133f8ab/section-mobile.png",
-  "docs/screenshots/133f8ab/character-mobile.png",
-  "docs/screenshots/133f8ab/build-mobile.png",
-  "docs/screenshots/133f8ab/quest-mobile.png",
-  "docs/screenshots/133f8ab/compare-desktop.png",
-  "docs/screenshots/133f8ab/party-desktop.png",
-  "docs/screenshots/133f8ab/home-desktop.png",
-  "docs/screenshots/133f8ab/game-desktop.png",
-  "docs/screenshots/133f8ab/section-desktop.png",
-  "docs/screenshots/133f8ab/character-desktop.png",
-  "docs/screenshots/133f8ab/build-desktop.png",
-  "docs/screenshots/133f8ab/quest-desktop.png"
+  "docs/screenshots/2e8185b/compare-mobile.png",
+  "docs/screenshots/2e8185b/party-mobile.png",
+  "docs/screenshots/2e8185b/home-mobile.png",
+  "docs/screenshots/2e8185b/game-mobile.png",
+  "docs/screenshots/2e8185b/section-mobile.png",
+  "docs/screenshots/2e8185b/character-mobile.png",
+  "docs/screenshots/2e8185b/build-mobile.png",
+  "docs/screenshots/2e8185b/quest-mobile.png",
+  "docs/screenshots/2e8185b/compare-desktop.png",
+  "docs/screenshots/2e8185b/party-desktop.png",
+  "docs/screenshots/2e8185b/home-desktop.png",
+  "docs/screenshots/2e8185b/game-desktop.png",
+  "docs/screenshots/2e8185b/section-desktop.png",
+  "docs/screenshots/2e8185b/character-desktop.png",
+  "docs/screenshots/2e8185b/build-desktop.png",
+  "docs/screenshots/2e8185b/quest-desktop.png"
  ]
 }

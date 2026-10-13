@@ -104,7 +104,7 @@ main { max-width: 1100px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .pf__opts input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
 .pf__opts span { display: grid; gap: 2px; padding: 10px 14px; border: 2px solid var(--line); border-radius: 6px; background: #fff; min-height: 56px; }
 .pf__opts small { color: var(--muted); }
-.pf__opts input:checked + span { border-color: var(--wine); background: #fbefcf; color: var(--ink); }
+.pf__opts input:checked + span { border-color: var(--wine); background: var(--gold-2); color: var(--ink); }
 .pf__opts input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
 .sum { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 4px 18px 14px; margin-top: 16px; }
 .sum a { padding-block: 2px; } .sum li a { display: inline-block; min-height: 24px; }
@@ -113,4 +113,4 @@ main { max-width: 1100px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .best { border-collapse: collapse; width: 100%; background: #fff; }
 .best th, .best td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
 .best thead th { background: var(--wine); color: #fff; font-size: .85rem; }
-.warn { background: #fff4d6; border: 1px solid var(--gold-2); padding: 8px 12px; border-radius: 6px; }
+.warn { background: var(--gold-2); border: 1px solid var(--wine); padding: 8px 12px; border-radius: 6px; }
