@@ -114,3 +114,4 @@ main { max-width: 1160px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--leaf); border-radius: 8px; text-decoration: none; font-weight: 700; color: var(--leaf); }
 @media print { .hd, .crumbs, .ft, .mine-form, .actions, #izmenit, .tox, section[aria-labelledby="h-light"], .lead { display: none !important; } .labels { grid-template-columns: 1fr 1fr; } }
+h1, h2, h3, .label__name b { overflow-wrap: break-word; hyphens: auto; }
