@@ -1,7 +1,8 @@
 template: food-appliances
-branch: claude/template-food-appliances
-worktree: /home/claude/wt-template-food-appliances
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main, не ветки других шаблонов
+variant_id: device-queue   # вариант C; A — device-panel (8850), B — step-console (8866)
+branch: claude/template-food-appliances-c
+worktree: /home/claude/wt-template-food-appliances-c
+base_commit: 7575262   # вариант A (claude/template-food-appliances)
 owner_scope:
   write: [templates/food-appliances/**]
   shared_files_touched:
@@ -11,7 +12,7 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m techkitchen.server (pid var/food-appliances/run/preview.pid)"
-  bind: 127.0.0.1:8850
+  bind: 127.0.0.1:8874
   data: templates/food-appliances/data (факты без текста шагов, черновики, content.json)
   private: var/food-appliances/private (текст шагов источника, 0700, вне git)
   build: var/food-appliances/build/<commit>

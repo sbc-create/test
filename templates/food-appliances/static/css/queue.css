@@ -1,10 +1,11 @@
-/* food-appliances — «Готовим в технике»: панель прибора. Графит, янтарный
-   индикатор, моноширинные цифры. Собственная система, ни с кем не общая. */
-:root { --bg: #f2f2ef; --card: #ffffff; --graphite: #1c1f24; --graphite-2: #2b3038; --line: #d9dad5; --ink: #1c1f24;
-  --ink-2: #4a505b; --muted: #5c626c; --amber: #ffb547; --amber-ink: #8a5300; --teal: #0a6863; --steel: #e6e8ea;
+/* food-appliances, вариант device-queue — «Готовим в технике»: очередь на прибор. Светлый металл, бирюза, оранжевые
+   отметки температуры. Только этот вариант. */
+:root { --bg: #eef4f4; --card: #ffffff; --graphite: #0d4f4f; --graphite-2: #1a6363; --line: #cddede; --ink: #132626;
+  --ink-2: #4a505b; --muted: #5c626c; --amber: #ffc46b; --amber-ink: #7a4300; --teal: #0d5c5c; --steel: #e6e8ea;
   --mono: "JetBrains Mono", "SFMono-Regular", Menlo, Consolas, monospace; --sans: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.55 var(--sans); }
 a { color: var(--teal); }
 :focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
@@ -32,7 +33,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 8px 16px 40px; }
 .device { display: grid; gap: 6px; padding: 22px; background: var(--graphite); color: #fff; border-radius: 14px; text-decoration: none; min-height: 170px; border: 2px solid transparent; }
 .device:hover { border-color: var(--amber); }
 .device__name { font-size: 1.6rem; font-weight: 700; }
-.device__desc { color: #c9ccd2; }
+.device__desc { color: #dcecec; }
 .device__count { margin-top: auto; font-family: var(--mono); color: var(--amber); }
 .tiles { list-style: none; padding: 0; display: grid; gap: 12px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
 .tile a { display: grid; gap: 6px; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--graphite); border-radius: 10px; color: var(--ink); text-decoration: none; height: 100%; }
@@ -49,7 +50,7 @@ main { max-width: 1180px; margin: 0 auto; padding: 8px 16px 40px; }
 /* табло рецепта */
 .display { display: grid; gap: 1px; background: #000; border-radius: 12px; overflow: hidden; grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr)); margin: 16px 0 22px; }
 .display__cell { background: var(--graphite); padding: 12px 14px; display: grid; gap: 4px; }
-.display__label { font: 700 .7rem var(--mono); text-transform: uppercase; letter-spacing: .12em; color: #9aa0aa; }
+.display__label { font: 700 .7rem var(--mono); text-transform: uppercase; letter-spacing: .12em; color: #d3e6e6; }
 .display__val { font: 600 1.15rem var(--mono); color: var(--amber); }
 .display__val a { color: var(--amber); display: inline-block; padding: 2px 0; min-height: 24px; }
 .display__note { grid-column: 1 / -1; margin: 0; background: var(--graphite-2); color: #d5d8dd; padding: 10px 14px; font-size: .85rem; }
@@ -75,3 +76,25 @@ main { max-width: 1180px; margin: 0 auto; padding: 8px 16px 40px; }
 .prose { max-width: 760px; }
 .foot { max-width: 1180px; margin: 0 auto; padding: 14px 16px 30px; border-top: 1px solid var(--line); color: var(--muted); font-size: .86rem; }
 @media print { .console, .crumbs, .foot { display: none !important; } .display { background: #fff; } .display__cell { background: #fff; color: #000; } .display__val, .display__val a { color: #000; } }
+
+/* ---- вариант C: очередь ---- */
+.qform fieldset { border: 1px solid var(--line); border-radius: 10px; background: var(--card); padding: 10px 14px; margin: 0 0 12px; min-width: 0; }
+.qform legend { font-weight: 800; padding: 0 6px; }
+.qpick { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.qpick label { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border: 2px solid var(--line); border-radius: 8px; cursor: pointer; min-height: 44px; }
+.qpick input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--graphite); }
+.qpick small { display: block; color: var(--muted); font-family: var(--mono); font-size: .82rem; }
+.qpick label:has(input:checked) { border-color: var(--graphite); background: #e3f2f2; }
+.qpick label:has(input:focus-visible) { outline: 3px solid var(--amber-ink); outline-offset: 2px; }
+.qform__go { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-weight: 700; }
+.qdev { background: var(--card); border: 1px solid var(--line); border-top: 6px solid var(--graphite); border-radius: 10px; padding: 2px 16px 12px; margin: 14px 0; }
+.qgroup h3 { display: inline-block; font: 700 .95rem var(--mono); background: var(--amber); color: #2a1a00; padding: 2px 10px; border-radius: 6px; }
+.qlist { list-style: none; padding: 0; margin: 0 0 8px; display: grid; gap: 6px; }
+.qlist li { display: grid; grid-template-columns: 32px 1fr; gap: 8px; align-items: start; }
+.qdone input { width: 24px; height: 24px; margin: 3px 0 0; accent-color: var(--graphite); }
+.qlist a { display: inline-block; min-height: 24px; } .qlist span { display: block; color: var(--muted); font-family: var(--mono); font-size: .88rem; }
+.qlist li:has(input:checked) b { text-decoration: line-through; color: var(--muted); }
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+@media print { .qform, .actions, .qdone, #izmenit { display: none !important; } }
+.btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: var(--graphite); color: #fff; font: 700 1rem var(--sans); cursor: pointer; text-decoration: none; }
+.btn--line { background: #fff; color: var(--graphite); border: 2px solid var(--graphite); }

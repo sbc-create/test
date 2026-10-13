@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_pickq.html" import pick %}
+{% block main %}
+<h1>Очередь на прибор</h1>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if queue %}
+<p class="lead">Сгруппировано по прибору и температуре из рецептов. Время — сумма минут в приборе, записанных в рецептах; подготовка, разогрев и остывание сюда не входят.</p>
+<p class="actions"><button type="button" class="btn btn--line" data-print hidden>Печать</button></p>
+{% for a, d in queue.items() %}
+<section class="qdev" aria-labelledby="h-{{ a }}"><h2 id="h-{{ a }}">{{ APPLIANCES[a][0] }}: {{ d.recipes|length }} {{ 'рецепт' if d.recipes|length % 10 == 1 and d.recipes|length % 100 != 11 else ('рецепта' if d.recipes|length % 10 in [2,3,4] and d.recipes|length % 100 not in [12,13,14] else 'рецептов') }}, в приборе {{ d['min'] }}{% if d['max'] != d['min'] %}–{{ d['max'] }}{% endif %} мин</h2>
+  {% for temp, rs in d.groups.items() %}<div class="qgroup"><h3>{% if temp %}{{ temp }} °C{% else %}Температура в источнике не указана{% endif %}</h3>
+    <ol class="qlist">{% for r in rs %}<li><label class="qdone"><input type="checkbox" data-done="{{ r.slug }}" hidden><span class="sr">Готово: {{ r.title }}</span></label><div><a href="{{ r.url }}"><b>{{ r.title }}</b></a><span>{% if r.mode_names %}{{ r.mode_names|join(' → ') }} · {% endif %}{% for t in r.appliance_times %}{{ t['min'] }}{% if t['max'] %}–{{ t['max'] }}{% endif %}{% if not loop.last %} + {% endif %}{% endfor %} мин</span></div></li>{% endfor %}</ol></div>{% endfor %}
+</section>
+{% endfor %}
+<h2 id="izmenit">Изменить выбор</h2>
+{% endif %}
+{{ pick(picked) }}
+{% endblock %}

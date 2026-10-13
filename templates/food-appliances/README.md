@@ -1,4 +1,7 @@
-# food-appliances — «Готовим в технике»
+# food-appliances — «Готовим в технике», вариант C `device-queue`
+
+Вариант C: очередь рецептов на прибор — группы по температуре и сумма времени в приборе из источников. Порт 8874, ключи `fac.*`.
+Вариант A — ветка `claude/template-food-appliances`, B — `claude/template-food-appliances-b`.
 
 Рецепты для мультиварки и аэрогриля. Сверху рецепта — табло прибора: режим, температура и
 время, каждое значение ведёт к своему шагу. Собственный дизайн «панель прибора»: графит,
@@ -7,7 +10,7 @@
 ## Команды (из `templates/food-appliances`)
 
 ```bash
-bin/food-appliances start | stop | status   # preview http://127.0.0.1:8850/ (только loopback, noindex)
+bin/food-appliances start | stop | status   # preview http://127.0.0.1:8874/ (только loopback, noindex)
 bin/food-appliances test                    # pytest шаблона
 bin/food-appliances qa --shots docs/screenshots/<sha> --out docs/verification-browser-qa.json
 bin/food-appliances build --commit HEAD     # статический артефакт в var/food-appliances/build/<sha>
