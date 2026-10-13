@@ -1313,8 +1313,9 @@
       "direction": "network",
       "problem": "Логи nginx (www-data:adm 0640) сессии не читаются — обход YandexBot/Googlebot не измерен.",
       "status": "blocked",
-      "owner_action": "Владелец: sudo usermod -aG adm claude (или выгрузка строк YandexBot/Googlebot по доменам). Приёмка: суточный отчёт обхода по 17 доменам.",
-      "dependencies": "владелец"
+      "owner_action": "Владелец: sudo usermod -aG adm claude (или выгрузка строк YandexBot/Googlebot по доменам). Приёмка: суточный отчёт обхода по 17 доменам. Отдельное решение владельца: добавить $host в log_format общего журнала (приём уже используется в журнале webmaster_verification) — без него обход по доменам не измерить; правка затрагивает весь журнал.",
+      "dependencies": "владелец",
+      "evidence": "13.10, измерение Архитектора: для /var/log/nginx/access.log свой log_format не объявлен — действует combined, в нём нет $host/$server_name; счёт обхода по доменам из общего журнала невозможен (по первому полю — IP клиента). Свои журналы есть у lords-01/02/03 (lords-0N.access.log) — по ним разбивка законна. Для остальных доменов — только общее число обращений каждого робота."
     },
     {
       "id": "B027",
