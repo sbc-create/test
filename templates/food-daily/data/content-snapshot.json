@@ -1,17 +1,17 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-13T14:55:55Z",
+ "generated_at": "2026-10-13T14:59:27Z",
  "items": [
   {
    "content_id": "fd-00d47e5b9672",
    "slug": "bliny-na-moloke-i-kefire",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:11Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Блины на молоке и кефире",
     "slug": "bliny-na-moloke-i-kefire",
@@ -91,12 +91,7 @@
       ]
      }
     ],
-    "tips": [
-     {
-      "text": "Первый блин покажет, достаточно ли прогрета сковорода: если он рвётся, подождите ещё минуту.",
-      "verified": false
-     }
-    ],
+    "tips": [],
     "substitutions": [],
     "category": "zavtraki",
     "meal": "breakfast",
@@ -200,12 +195,12 @@
   {
    "content_id": "fd-0d2ec1ad68ea",
    "slug": "kurinyj-sup-s-syrnymi-klyockami",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:13Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Куриный суп с сырными клёцками",
     "slug": "kurinyj-sup-s-syrnymi-klyockami",
@@ -311,20 +306,8 @@
       "readiness_cue": "Клёцки всплыли и стали упругими."
      }
     ],
-    "tips": [
-     {
-      "text": "Ложку для клёцек удобно окунать в горячий бульон — тесто не прилипает.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 6,
-      "to": "творожный сыр",
-      "note": "Тесто для клёцек может получиться мягче; муку стоит добавлять понемногу.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "supy",
     "meal": "lunch",
     "tags": [
@@ -475,12 +458,12 @@
   {
    "content_id": "fd-1bf8a4fff455",
    "slug": "pshennaya-kasha-s-tykvoj",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:15Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Пшённая каша с тыквой на молоке",
     "slug": "pshennaya-kasha-s-tykvoj",
@@ -552,18 +535,14 @@
     ],
     "tips": [
      {
-      "text": "Тыкву для каши режут небольшими кубиками — так она быстрее размягчается.",
-      "verified": false
+      "text": "Сахар источник предлагает класть прямо в тарелку.",
+      "verified": false,
+      "source_steps": [
+       8
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 3,
-      "to": "мёд",
-      "note": "Добавляют в тарелку, в уже немного остывшую кашу.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "zavtraki",
     "meal": "breakfast",
     "tags": [
@@ -650,12 +629,12 @@
   {
    "content_id": "fd-2154b0ca14e2",
    "slug": "pyshnye-oladi-na-kefire",
-   "version": 3,
+   "version": 4,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T22:49:24Z",
+   "updated_at": "2026-10-13T14:59:15Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": null,
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Пышные оладьи на кефире",
     "slug": "pyshnye-oladi-na-kefire",
@@ -747,18 +726,15 @@
     ],
     "tips": [
      {
-      "text": "Тесто удобно набирать столовой ложкой, смоченной в воде: оно легче соскальзывает.",
-      "verified": false
+      "text": "Тесто набирайте не с глубины, а сверху. Первый оладушек разломите: если внутри не пропёкся, накройте сковороду крышкой и жарьте дольше.",
+      "verified": false,
+      "source_steps": [
+       8,
+       12
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 4,
-      "to": "мёд",
-      "note": "Мёд дает более тёмную корочку; огонь стоит держать чуть слабее.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "zavtraki",
     "meal": "breakfast",
     "tags": [
@@ -844,12 +820,12 @@
   {
    "content_id": "fd-3aa08c363c0b",
    "slug": "syrniki-s-ezhevikoj",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:17Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Сырники с ежевикой внутри",
     "slug": "syrniki-s-ezhevikoj",
@@ -933,20 +909,8 @@
       "readiness_cue": "Обе стороны ровно-золотистые, сырник пружинит при лёгком нажатии."
      }
     ],
-    "tips": [
-     {
-      "text": "Если ягоды крупные, удобнее брать по одной на сырник и делать заготовки чуть больше.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 3,
-      "to": "голубика или малина",
-      "note": "Мягкие ягоды держат форму хуже; их лучше брать слегка подмороженными.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "zavtraki",
     "meal": "breakfast",
     "tags": [
@@ -1032,12 +996,12 @@
   {
    "content_id": "fd-4fe655a71fa2",
    "slug": "plov-s-kuricej",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:14Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Плов с курицей на сковороде",
     "slug": "plov-s-kuricej",
@@ -1129,18 +1093,15 @@
     ],
     "tips": [
      {
-      "text": "Крышку во время томления лучше не поднимать — уходит пар, и рис готовится неравномерно.",
-      "verified": false
+      "text": "Воды должно быть столько, чтобы она покрывала рис примерно на 1 см; готовьте под крышкой на минимальном огне, пока жидкость полностью не впитается.",
+      "verified": false,
+      "source_steps": [
+       8,
+       10
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 0,
-      "to": "куриное филе",
-      "note": "Филе суше бёдер; обжаривать его стоит меньше.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "vtorye-blyuda",
     "meal": "dinner",
     "tags": [
@@ -1253,12 +1214,12 @@
   {
    "content_id": "fd-553b74d4001c",
    "slug": "sup-s-frikadelkami",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:16Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Суп с фрикадельками и сладким перцем",
     "slug": "sup-s-frikadelkami",
@@ -1350,20 +1311,8 @@
       ]
      }
     ],
-    "tips": [
-     {
-      "text": "Ладони, смоченные водой, помогают скатывать ровные фрикадельки.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 4,
-      "to": "петрушка",
-      "note": "Добавляют так же, в самом конце варки.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "supy",
     "meal": "lunch",
     "tags": [
@@ -1486,12 +1435,12 @@
   {
    "content_id": "fd-7798c76d4624",
    "slug": "grecheskij-salat",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:12Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Греческий салат с брынзой",
     "slug": "grecheskij-salat",
@@ -1582,20 +1531,8 @@
       ]
      }
     ],
-    "tips": [
-     {
-      "text": "Брынзу кладут последней и перемешивают бережно, чтобы кубики не раскрошились.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 5,
-      "to": "фета",
-      "note": "Фета мягче и солонее брынзы — соль в заправке стоит уменьшить.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "salaty",
     "meal": "lunch",
     "tags": [
@@ -1733,12 +1670,12 @@
   {
    "content_id": "fd-7ae95ed0f7be",
    "slug": "domashnyaya-shaurma",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:12Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Домашняя шаурма с курицей",
     "slug": "domashnyaya-shaurma",
@@ -1820,20 +1757,8 @@
       "readiness_cue": "Лаваш стал сухим и золотистым."
      }
     ],
-    "tips": [
-     {
-      "text": "Заворачивать проще, если сначала подогнуть нижний край лаваша, а затем боковые.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 0,
-      "to": "запечённое куриное филе",
-      "note": "Если шашлыка нет, подойдёт любое готовое филе.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "zakuski",
     "meal": "snack",
     "tags": [
@@ -1935,12 +1860,12 @@
   {
    "content_id": "fd-a4c90f2456c4",
    "slug": "makarony-po-flotski",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:14Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Макароны по-флотски с отварной свининой",
     "slug": "makarony-po-flotski",
@@ -2031,20 +1956,8 @@
       ]
      }
     ],
-    "tips": [
-     {
-      "text": "Бульон от варки мяса пригодится для супа на следующий день.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 1,
-      "to": "говядина",
-      "note": "Говядина варится дольше свинины.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "vtorye-blyuda",
     "meal": "dinner",
     "tags": [
@@ -2176,12 +2089,12 @@
   {
    "content_id": "fd-b1ff827b4cfa",
    "slug": "tvorozhnaya-zapekanka-na-zheltkah",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:19Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Творожная запеканка на желтках",
     "slug": "tvorozhnaya-zapekanka-na-zheltkah",
@@ -2265,20 +2178,8 @@
       ]
      }
     ],
-    "tips": [
-     {
-      "text": "Тёплую запеканку не режут сразу: остывая, она становится плотнее и не крошится.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 5,
-      "to": "кукурузный крахмал",
-      "note": "Если в рецепте имеется в виду картофельный, кукурузный даёт чуть более мягкую текстуру.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "zavtraki",
     "meal": "breakfast",
     "tags": [
@@ -2391,12 +2292,12 @@
   {
    "content_id": "fd-bca48b116558",
    "slug": "zapechennaya-cvetnaya-kapusta",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:21Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Запечённая цветная капуста с паприкой",
     "slug": "zapechennaya-cvetnaya-kapusta",
@@ -2453,20 +2354,8 @@
       "readiness_cue": "Края соцветий подрумянились, ножка легко протыкается."
      }
     ],
-    "tips": [
-     {
-      "text": "Соцветия одного размера пропекаются одновременно.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 3,
-      "to": "копчёная паприка",
-      "note": "Даёт дымный аромат.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "garniry",
     "meal": "dinner",
     "tags": [
@@ -2543,9 +2432,9 @@
   {
    "content_id": "fd-bfb12300a18a",
    "slug": "chechevichnyj-sup-s-ovoshchami",
-   "version": 2,
+   "version": 3,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-13T14:55:31Z",
+   "updated_at": "2026-10-13T14:59:11Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
    "producer_mode": "editorial_revision",
@@ -2662,14 +2551,7 @@
       ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 8,
-      "to": "греческий йогурт",
-      "note": "Для более лёгкой подачи.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "supy",
     "meal": "lunch",
     "tags": [
@@ -2819,12 +2701,12 @@
   {
    "content_id": "fd-c2e2b979d50a",
    "slug": "salat-s-kuricej-gribami-i-yajcom",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:15Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Салат с курицей, жареными грибами и яйцом",
     "slug": "salat-s-kuricej-gribami-i-yajcom",
@@ -2918,18 +2800,15 @@
     ],
     "tips": [
      {
-      "text": "Тёплые грибы сделают айсберг вялым — их добавляют полностью остывшими.",
-      "verified": false
+      "text": "Грибы по источнику сначала остужают и только потом кладут в салат.",
+      "verified": false,
+      "source_steps": [
+       7,
+       8
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 5,
-      "to": "греческий йогурт",
-      "note": "Заправка станет легче и кислее.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "salaty",
     "meal": "lunch",
     "tags": [
@@ -3054,12 +2933,12 @@
   {
    "content_id": "fd-c62b237c3214",
    "slug": "kurica-v-slivochnom-souse",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:01Z",
+   "updated_at": "2026-10-13T14:59:13Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Курица в сметанно-чесночном соусе в духовке",
     "slug": "kurica-v-slivochnom-souse",
@@ -3142,20 +3021,8 @@
       "readiness_cue": "При проколе у кости выделяется прозрачный сок."
      }
     ],
-    "tips": [
-     {
-      "text": "Форму лучше подобрать такую, чтобы куски лежали в один слой.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 4,
-      "to": "сушёный тимьян",
-      "note": "Тимьян — одна из трав смеси; вкус станет проще.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "vtorye-blyuda",
     "meal": "dinner",
     "tags": [
@@ -3269,12 +3136,12 @@
   {
    "content_id": "fd-0610c913e699",
    "slug": "domashnie-kotlety",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:11Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Домашние котлеты с картофелем и хлебом",
     "slug": "domashnie-kotlety",
@@ -3352,18 +3219,16 @@
       "readiness_cue": "Сок при надрезе прозрачный, без розового оттенка."
      }
     ],
-    "tips": [
-     {
-      "text": "Перед формовкой ладони смачивают холодной водой — фарш не липнет.",
-      "verified": false
-     }
-    ],
+    "tips": [],
     "substitutions": [
      {
-      "from_index": 2,
-      "to": "панировочные сухари",
-      "note": "Сухари тоже размачивают в молоке; котлеты получаются чуть плотнее.",
-      "verified": false
+      "from_index": 0,
+      "to": "свиной или свино-говяжий фарш",
+      "note": "Оба варианта называет источник.",
+      "verified": false,
+      "source_steps": [
+       0
+      ]
      }
     ],
     "category": "vtorye-blyuda",
@@ -3478,12 +3343,12 @@
   {
    "content_id": "fd-1ac4020e5ad5",
    "slug": "tefteli-v-tomatnom-souse",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:58:59Z",
+   "updated_at": "2026-10-13T14:59:18Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Тефтели с рисом в томатном соусе",
     "slug": "tefteli-v-tomatnom-souse",
@@ -3578,20 +3443,8 @@
       "readiness_cue": "Соус слегка загустел, тефтели плотные внутри."
      }
     ],
-    "tips": [
-     {
-      "text": "Тефтели одного размера тушатся одинаково — удобно формовать столовой ложкой.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 7,
-      "to": "томатное пюре",
-      "note": "Пюре менее концентрированное; его понадобится больше, а воды — меньше.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "vtorye-blyuda",
     "meal": "dinner",
     "tags": [
@@ -3734,12 +3587,12 @@
   {
    "content_id": "fd-334626e219a7",
    "slug": "lenivye-vareniki",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:59:13Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Ленивые вареники из творога",
     "slug": "lenivye-vareniki",
@@ -3820,16 +3673,23 @@
     ],
     "tips": [
      {
-      "text": "Чем суше творог, тем меньше муки понадобится — добавляйте её постепенно.",
-      "verified": false
+      "text": "Варите вареники порциями: если бросить все сразу, им будет тесно и они слипнутся. После всплытия варите не дольше минуты — иначе могут развалиться.",
+      "verified": false,
+      "source_steps": [
+       8,
+       9
+      ]
      }
     ],
     "substitutions": [
      {
       "from_index": 2,
       "to": "сахарозаменитель",
-      "note": "Вариант упомянут в источнике; количество нужно подобрать по сладости заменителя.",
-      "verified": false
+      "note": "Источник прямо допускает сахарозаменитель вместо сахара.",
+      "verified": false,
+      "source_steps": [
+       1
+      ]
      }
     ],
     "category": "zavtraki",
@@ -3908,12 +3768,12 @@
   {
    "content_id": "fd-3a0282bb1a67",
    "slug": "tykvennyj-sup-pyure",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:58:59Z",
+   "updated_at": "2026-10-13T14:59:20Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Тыквенный суп-пюре с плавленым сыром",
     "slug": "tykvennyj-sup-pyure",
@@ -4022,18 +3882,14 @@
     ],
     "tips": [
      {
-      "text": "Сухарики кладут прямо перед подачей, чтобы они не размокли.",
-      "verified": false
+      "text": "Семечки, сливки и сухарики по источнику добавляют в тарелку при подаче.",
+      "verified": false,
+      "source_steps": [
+       20
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 7,
-      "to": "сметана",
-      "note": "Вкус станет кисловатее; добавляют также в тарелку.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "supy",
     "meal": "lunch",
     "tags": [
@@ -4166,12 +4022,12 @@
   {
    "content_id": "fd-4b788c4aa5fb",
    "slug": "mintaj-v-slivkah",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:58:59Z",
+   "updated_at": "2026-10-13T14:59:14Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Минтай в сливках на сковороде",
     "slug": "mintaj-v-slivkah",
@@ -4252,18 +4108,14 @@
     ],
     "tips": [
      {
-      "text": "Холодные сливки могут свернуться на горячей сковороде — их подогревают заранее.",
-      "verified": false
+      "text": "Сливки по источнику вливают горячими.",
+      "verified": false,
+      "source_steps": [
+       7
+      ]
      }
     ],
-    "substitutions": [
-     {
-      "from_index": 0,
-      "to": "хек",
-      "note": "Хек похож по плотности; время тушения такое же — требует проверки.",
-      "verified": false
-     }
-    ],
+    "substitutions": [],
     "category": "vtorye-blyuda",
     "meal": "dinner",
     "tags": [
@@ -4370,12 +4222,12 @@
   {
    "content_id": "fd-dc8abf6706fd",
    "slug": "shakshuka-s-bekonom",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:58:59Z",
+   "updated_at": "2026-10-13T14:59:16Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Шакшука-скрэмбл с беконом",
     "slug": "shakshuka-s-bekonom",
@@ -4461,8 +4313,11 @@
     ],
     "tips": [
      {
-      "text": "Если бекон очень жирный, часть жира перед луком можно слить.",
-      "verified": false
+      "text": "Если в помидорах с луком много влаги, источник советует добавить половину или целую ложку муки — она вберёт лишнее.",
+      "verified": false,
+      "source_steps": [
+       9
+      ]
      }
     ],
     "substitutions": [],
@@ -4552,12 +4407,12 @@
   {
    "content_id": "fd-e8ccd8bca77b",
    "slug": "grechka-po-kupecheski",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:08Z",
-   "updated_at": "2026-10-11T21:58:59Z",
+   "updated_at": "2026-10-13T14:59:12Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Гречка по-купечески с мясом и грибами",
     "slug": "grechka-po-kupecheski",
@@ -4651,20 +4506,8 @@
       "readiness_cue": "Вода впиталась, крупинки целые и мягкие."
      }
     ],
-    "tips": [
-     {
-      "text": "Для этого блюда удобна сковорода с высокими бортами и крышкой.",
-      "verified": false
-     }
-    ],
-    "substitutions": [
-     {
-      "from_index": 2,
-      "to": "вешенки",
-      "note": "Вешенки дают больше влаги — обжаривать дольше.",
-      "verified": false
-     }
-    ],
+    "tips": [],
+    "substitutions": [],
     "category": "garniry",
     "meal": "dinner",
     "tags": [

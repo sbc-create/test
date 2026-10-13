@@ -58,18 +58,18 @@
         {% endfor %}
       </ol>
 
-      {% if r.d.tips %}
+      {% if r.tips %}
       <aside class="tips" aria-labelledby="tips-h">
         <h2 id="tips-h">Подсказки</h2>
-        <ul>{% for t in r.d.tips %}<li>{{ t.text }}</li>{% endfor %}</ul>
-        <p class="note">Подсказки ещё не проверены редакцией.</p>
+        <ul>{% for t in r.tips %}<li>{{ t.text }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if t.source_steps|length == 1 else 'шаги' }} {% for i in t.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
+        <p class="note">Подсказки пересказывают указания источника; редакция их не проверяла.</p>
       </aside>
       {% endif %}
       {% if r.substitutions %}
       <aside class="subs" aria-labelledby="subs-h">
         <h2 id="subs-h">Чем можно заменить</h2>
-        <ul>{% for name, s in r.substitutions %}<li><b>{{ name }}</b> → {{ s.to }}. {{ s.note }}</li>{% endfor %}</ul>
-        <p class="note">Замены не проверены на практике: пропорции и время могут потребовать подбора.</p>
+        <ul>{% for name, s in r.substitutions %}<li><b>{{ name }}</b> → {{ s.to }}. {{ s.note }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if s.source_steps|length == 1 else 'шаги' }} {% for i in s.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
+        <p class="note">Здесь только замены, которые называет сам источник; на практике редакция их не проверяла.</p>
       </aside>
       {% endif %}
     </section>

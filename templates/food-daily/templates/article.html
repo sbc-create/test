@@ -14,7 +14,7 @@
       <ul class="cue-list">{% for r, cue in rows %}<li><a href="{{ r.url }}">{{ r.title }}</a>: {{ cue }}</li>{% endfor %}</ul>
       {% endfor %}
     {% elif sec.type == 'substitutions_list' %}
-      <ul class="cue-list">{% for r, name, sub in site.all_substitutions() %}<li><b>{{ name }}</b> → {{ sub.to }} в рецепте «<a href="{{ r.url }}">{{ r.title }}</a>». {{ sub.note }} <i>Не проверено.</i></li>{% endfor %}</ul>
+      <ul class="cue-list">{% for r, name, sub in site.all_substitutions() %}<li><b>{{ name }}</b> → {{ sub.to }} в рецепте «<a href="{{ r.url }}">{{ r.title }}</a>». {{ sub.note }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, шаг {% for i in sub.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
     {% endif %}
   </section>
   {% endfor %}

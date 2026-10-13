@@ -319,6 +319,14 @@ def run(shots_dir: Path | None) -> dict:
         S["fridge_clear_forgets_selection"] = cleared
         S["fridge_empty_submit_blocked"] = empty_blocked
         S["fridge_unknown_product_400_alert"] = resp.status == 400 and page.locator(".err[role=alert]").count() == 1
+        # подсказки и замены — только подтверждённые источником, со ссылкой на шаг (13.10.2026)
+        page.goto(BASE + "/recept/lenivye-vareniki/")
+        links = page.locator("aside .src-step")
+        S["tips_subs_link_to_source_step"] = links.count() == 2 and all(
+            (links.nth(i).get_attribute("href") or "").startswith("https://") for i in range(links.count())
+        )
+        page.goto(BASE + "/recept/grecheskij-salat/")
+        S["unsourced_tips_subs_hidden"] = page.locator("aside.tips, aside.subs").count() == 0
         # перенесено из B: каталог — сортировка по времени и вид-таблица применяются сразу
         page.goto(BASE + "/recepty/")
         with page.expect_navigation():

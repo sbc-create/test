@@ -250,8 +250,14 @@ class Recipe:
 
     @property
     def substitutions(self):
+        """Только замены, которые называет сам источник (source_steps); остальное — в редакционных заметках."""
         names = {i["fact_index"]: i["display_name"] for i in self.d["ingredients"]}
-        return [(names[s["from_index"]], s) for s in self.d["substitutions"]]
+        return [(names[s["from_index"]], s) for s in self.d.get("substitutions") or [] if s.get("source_steps")]
+
+    @property
+    def tips(self) -> list[dict]:
+        """Только подсказки, подтверждённые шагами источника (source_steps)."""
+        return [t for t in self.d.get("tips") or [] if t.get("source_steps")]
 
     @property
     def lede(self) -> str:
