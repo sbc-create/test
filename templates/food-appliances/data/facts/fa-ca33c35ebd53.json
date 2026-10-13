@@ -1,0 +1,102 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/krevetki-v-aerogrile-193209",
+ "title": "Креветки в аэрогриле",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 45,
+ "total_minutes": 45,
+ "ingredients": [
+  {
+   "name": "Очищенные креветки",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 75.0,
+   "unit": "g"
+  },
+  {
+   "name": "Кукурузный крахмал",
+   "quantity": 175.0,
+   "unit": "g"
+  },
+  {
+   "name": "Панировочные сухари панко",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Газированная вода",
+   "quantity": 150.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": 5.0,
+   "unit": "g"
+  },
+  {
+   "name": "Замороженное манго",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "name": "Карри-порошок",
+   "quantity": 6.0,
+   "unit": "g"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 2.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Кинза",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Коричневый сахар",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лайм",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   9
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 9
+   }
+  ],
+  "times": [
+   {
+    "min": 20,
+    "max": null,
+    "step": 9
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "bf18512678823b2f96b4e2ad670486bc1477599928ecfcddedb7a4a022f8c295",
+ "record_id": "fa-ca33c35ebd53",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:57:04Z"
+}

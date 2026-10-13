@@ -1,0 +1,96 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/kasha-severnaya-v-multivarke-114568",
+ "title": "Каша «Северная» в мультиварке",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 75,
+ "total_minutes": 75,
+ "ingredients": [
+  {
+   "name": "Длиннозерный рис",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Гречневая крупа",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Свекла",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сушеные грибы",
+   "quantity": 40.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лимонный сок",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 0.5,
+   "unit": "tsp"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   4,
+   8
+  ],
+  "modes": [
+   {
+    "name": "Мультиповар",
+    "step": 4
+   },
+   {
+    "name": "Мультиповар",
+    "step": 8
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 160,
+    "step": 4
+   },
+   {
+    "value_c": 120,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 4
+   },
+   {
+    "min": 45,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "b89468c253833e4639939d2aa3904115cd6f93c1519ad3014b3ec84497ad8b3f",
+ "record_id": "fa-4ca60488f9ed",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:59:39Z"
+}

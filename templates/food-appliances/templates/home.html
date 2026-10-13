@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_parts.html" import table %}
+{% block main %}
+<section class="hero"><h1>Рецепты для техники: сравните режимы</h1><p class="lead">Все рецепты в одной таблице: прибор, режимы, температура и время. В рецепте настройка прибора стоит прямо в том шаге, где её называет источник, — рядом таймер.</p></section>
+<nav class="devs" aria-label="Выбор прибора">{% for k, (label, desc) in APPLIANCES.items() %}{% set items = site.for_appliance(k) %}{% if items %}<a href="/pribor/{{ k }}/" class="dev dev--{{ k }}"><b>{{ label }}</b><span>{{ items|length }} рецептов</span></a>{% endif %}{% endfor %}</nav>
+<p class="more"><a href="/ochered/">Готовите несколько блюд? Очередь на прибор: по приборам и температуре, с суммой времени</a></p>
+<section aria-labelledby="h-all"><h2 id="h-all">Все рецепты</h2>{{ table(site.recipes) }}</section>
+{% if site.modes() %}<section aria-labelledby="h-modes"><h2 id="h-modes">Режимы, встречающиеся в рецептах</h2><ul class="modes">{% for k, e in site.modes().items() %}<li><a href="/rezhim/{{ k }}/">«{{ e.name }}» <small>{{ e.recipes|length }}</small></a></li>{% endfor %}</ul></section>{% endif %}
+{% endblock %}

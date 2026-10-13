@@ -1,0 +1,12 @@
+site_id: food-appliances
+name: "Готовим в технике"       # рабочее название
+variant_id: step-console        # вариант B: таблица рецептов, настройки прибора прямо в шагах, таймеры и отметки
+variant_version: "1"
+storage_namespace: "fab"         # localStorage: fab.* (у A JS нет)
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8866"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8866}
+ads: {adapter: disabled}

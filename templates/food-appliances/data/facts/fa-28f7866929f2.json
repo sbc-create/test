@@ -1,0 +1,118 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/kulich-v-multivarke-176175",
+ "title": "Кулич в мультиварке",
+ "servings": 12,
+ "prep_minutes": null,
+ "cook_minutes": 180,
+ "total_minutes": 180,
+ "ingredients": [
+  {
+   "name": "Сливки 33%-ные",
+   "quantity": 150.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Сухие дрожжи",
+   "quantity": 8.0,
+   "unit": "g"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 540.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 135.0,
+   "unit": "g"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Ванильный сахар",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Изюм",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Апельсиновые цукаты",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "name": "Коньяк",
+   "quantity": 30.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Маршмеллоу",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сублимированная малина",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   5,
+   9
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 9
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 9
+   }
+  ],
+  "times": [
+   {
+    "min": 60,
+    "max": null,
+    "step": 5
+   },
+   {
+    "min": 50,
+    "max": null,
+    "step": 9
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "0506c263be7410d6ef91a5f842026689bb1f29f47a1f832fbd3465b384c50d7e",
+ "record_id": "fa-28f7866929f2",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:56:56Z"
+}

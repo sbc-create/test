@@ -1,0 +1,102 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/zharkoe-po-domashnemu-v-multivarke-137621",
+ "title": "Жаркое по-домашнему (в мультиварке)",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Свинина",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "name": "Картофель",
+   "quantity": 8.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Томатная паста",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Сметана",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Вода",
+   "quantity": 1.0,
+   "unit": "cup"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   3
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 1
+   },
+   {
+    "name": "Тушение",
+    "step": 3
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 1
+   },
+   {
+    "min": 60,
+    "max": null,
+    "step": 3
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "55b042d700b4f95b088285a85b843499bdda02555a5c60c8db57b5d9e9db2c96",
+ "record_id": "fa-460160f75588",
+ "step_count": 4,
+ "fetched_at": "2026-10-12T06:59:07Z"
+}

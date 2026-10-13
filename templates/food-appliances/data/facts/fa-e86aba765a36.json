@@ -1,0 +1,83 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/holodec-v-multivarke-187891",
+ "title": "Холодец в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 240,
+ "total_minutes": 240,
+ "ingredients": [
+  {
+   "name": "Свиная рулька",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Лук",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 5.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.5,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Черный перец горошком",
+   "quantity": 10.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Желатин",
+   "quantity": 25.0,
+   "unit": "g"
+  },
+  {
+   "name": "Зелень",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   2
+  ],
+  "modes": [
+   {
+    "name": "Варка",
+    "step": 2
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 180,
+    "max": null,
+    "step": 2
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "e10528c0cf337a47782898a002ace65bda349273a857b4bde2ba6597572ac460",
+ "record_id": "fa-e86aba765a36",
+ "step_count": 14,
+ "fetched_at": "2026-10-12T06:56:53Z"
+}

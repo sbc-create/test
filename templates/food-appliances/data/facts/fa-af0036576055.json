@@ -1,0 +1,62 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/buterbrody-v-multivarke-124978",
+ "title": "Бутерброды в мультиварке",
+ "servings": 4,
+ "prep_minutes": 30,
+ "cook_minutes": 40,
+ "total_minutes": 70,
+ "ingredients": [
+  {
+   "name": "Нарезной батон",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сыр",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Колбаса",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 6.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Подсолнечное нерафинированное масло",
+   "quantity": 50.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   3,
+   4
+  ],
+  "modes": [
+   {
+    "name": "Жарка",
+    "step": 3
+   }
+  ],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "82f36786d5bdaf61c369d9c459c5892f1206ab297e3e519c5235d02259fbc901",
+ "record_id": "fa-af0036576055",
+ "step_count": 6,
+ "fetched_at": "2026-10-12T06:59:25Z"
+}

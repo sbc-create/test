@@ -1,0 +1,74 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/tvorozhnaya-zapekanka-v-multivarke-192756",
+ "title": "Творожная запеканка в мультиварке",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Творог",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Манная крупа",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Сметана",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Несоленое сливочное масло",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Крупная соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   0,
+   8,
+   9
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 8
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "4ab3bdc908240221a6d67025ef6a7029350358a5930ed2d8e9772bd915f5b782",
+ "record_id": "fa-a0d604f5fdf8",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:56:36Z"
+}

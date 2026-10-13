@@ -1,0 +1,66 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/krevetki-gril-s-chesnochnym-sousom-191208",
+ "title": "Креветки гриль с чесночным соусом",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 20,
+ "total_minutes": 20,
+ "ingredients": [
+  {
+   "name": "Тигровые креветки",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лайм",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Греческий йогурт",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Укроп",
+   "quantity": 1.0,
+   "unit": "sprig"
+  },
+  {
+   "name": "Паприка",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 2.0,
+   "unit": "clove"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   3
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "7bc8456757854482d674a9dab5172c31829d52b5231042bea138f40709b11b3e",
+ "record_id": "fa-acee50085c0a",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:57:55Z"
+}

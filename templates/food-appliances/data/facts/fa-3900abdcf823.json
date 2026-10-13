@@ -1,0 +1,59 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kartoshka-s-multivarke-173380",
+ "title": "Картошка в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 40,
+ "total_minutes": 40,
+ "ingredients": [
+  {
+   "name": "Картофель",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Укроп",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   3,
+   4,
+   5
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 5
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 5
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "f717bdb8bcf0d5514fdb3955c7e7b41804e9623b3159d6002710e132523c5396",
+ "record_id": "fa-3900abdcf823",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:53Z"
+}

@@ -1,0 +1,76 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/risovaya-kasha-s-pryanostyami-v-multivarke-114671",
+ "title": "Рисовая каша с пряностями в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 40,
+ "total_minutes": 40,
+ "ingredients": [
+  {
+   "name": "Рис басмати",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Вода",
+   "quantity": 2.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Молотая корица",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Молотый кардамон",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Кунжут",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   4
+  ],
+  "modes": [
+   {
+    "name": "Крупа",
+    "step": 1
+   },
+   {
+    "name": "Мультиповар",
+    "step": 4
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 120,
+    "step": 4
+   }
+  ],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "c8bd1fb4e8dccec572279de2a9f77b1c0b59ef6357da9f89f5a1551661e96d3a",
+ "record_id": "fa-a786ba97b798",
+ "step_count": 7,
+ "fetched_at": "2026-10-12T06:59:33Z"
+}

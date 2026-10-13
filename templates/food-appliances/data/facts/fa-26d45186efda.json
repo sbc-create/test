@@ -1,0 +1,46 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/sparzha-na-grile-189476",
+ "title": "Спаржа на гриле",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 15,
+ "total_minutes": 15,
+ "ingredients": [
+  {
+   "name": "Молодая спаржа",
+   "quantity": 350.0,
+   "unit": "g"
+  },
+  {
+   "name": "Вода",
+   "quantity": 700.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Морская соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Тертый сыр пармезан",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   9
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "bfee374d5bb40d1af8c4141d8ca8d4fba8039493673434962483d0546209e73d",
+ "record_id": "fa-26d45186efda",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:58:04Z"
+}

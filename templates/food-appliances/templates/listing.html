@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% from "_parts.html" import tiles %}
+{% block main %}
+<p class="kicker">{{ APPLIANCES[appliance][0] }}</p>
+<h1>{{ heading }}</h1>
+{{ tiles(items, 'h2') }}
+{% endblock %}

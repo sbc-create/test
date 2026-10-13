@@ -1,0 +1,63 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/svinye-nozhki-i-ushi-gril-191469",
+ "title": "Свиные ножки и уши гриль",
+ "servings": 40,
+ "prep_minutes": null,
+ "cook_minutes": 22,
+ "total_minutes": 22,
+ "ingredients": [
+  {
+   "name": "Свиное ухо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Свиная нога",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Панировочные сухари",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "name": "Дижонская горчица",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   0,
+   3
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 6,
+    "max": null,
+    "step": 3
+   },
+   {
+    "min": 6,
+    "max": null,
+    "step": 3
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "6a7b7fa5b7f4aed519117d5fb78309635245aee7234c1ebc71050837a6e65e4e",
+ "record_id": "fa-842b1b6d9859",
+ "step_count": 4,
+ "fetched_at": "2026-10-12T06:57:50Z"
+}

@@ -1,0 +1,98 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/file-indeyki-na-grile-s-sousom-guakamole-191482",
+ "title": "Филе индейки на гриле с соусом гуакамоле",
+ "servings": 4,
+ "prep_minutes": 120,
+ "cook_minutes": 40,
+ "total_minutes": 160,
+ "ingredients": [
+  {
+   "name": "Филе индейки",
+   "quantity": 350.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Лимон",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 20.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Авокадо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Красный лук, 0.5 головок",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Помидоры",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Кинза",
+   "quantity": 2.0,
+   "unit": "sprig"
+  },
+  {
+   "name": "Лайм",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Перец чили",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   9,
+   10
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 5,
+    "max": null,
+    "step": 10
+   },
+   {
+    "min": 15,
+    "max": null,
+    "step": 10
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "5859c14ab3d0523edeb6218b599e8b0ec5d34b5336619cb31b8b6067193a5e5e",
+ "record_id": "fa-8d675349d7b4",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:57:46Z"
+}

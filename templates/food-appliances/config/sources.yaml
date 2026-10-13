@@ -1,0 +1,9 @@
+# Источники food-appliances. Хост должен быть и здесь, и в inventory/network-allowlist.yaml.
+schema_version: 1
+sources:
+  - host: www.sharkninja.com
+    role: ux_reference
+  - host: eda.rambler.ru
+    role: ux_reference_and_facts
+  - host: 1000.menu
+    role: ux_reference

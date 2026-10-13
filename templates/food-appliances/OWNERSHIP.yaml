@@ -1,0 +1,22 @@
+template: food-appliances
+branch: claude/template-food-appliances-b
+variant_id: step-console   # вариант B; A — ветка claude/template-food-appliances, порт 8850
+worktree: /home/claude/wt-template-food-appliances-b
+base_commit: 979df30   # вариант A (claude/template-food-appliances)
+owner_scope:
+  write: [templates/food-appliances/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста аудита/импорта по заданию NIGHT-CONTINUE-02, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  browser_storage_namespace: "fab.steps.<slug>"
+  process: "python3 -m techkitchen.server (pid var/food-appliances/run/preview.pid)"
+  bind: 127.0.0.1:8866
+  data: templates/food-appliances/data (факты без текста шагов, черновики, content.json)
+  private: var/food-appliances/private (текст шагов источника, 0700, вне git)
+  build: var/food-appliances/build/<commit>
+  qa_dependencies: templates/food-appliances/qa (axe-core 4.13.0, свой lockfile)
+network_contracts: []
+shared_with_other_templates: []

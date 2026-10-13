@@ -1,0 +1,52 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/molochnaya-kukuruznaya-kasha-v-multivarke-138704",
+ "title": "Молочная кукурузная каша в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 55,
+ "total_minutes": 55,
+ "ingredients": [
+  {
+   "name": "Кукурузная крупа",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молоко",
+   "quantity": 1.0,
+   "unit": "l"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   0,
+   1
+  ],
+  "modes": [
+   {
+    "name": "Молочная каша",
+    "step": 1
+   }
+  ],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "d9953c16c5fc440c4dd14bf6ec629ca8a0c963cb9999e3811d676bd4a545ea8e",
+ "record_id": "fa-9d0bcac295cf",
+ "step_count": 3,
+ "fetched_at": "2026-10-12T06:59:04Z"
+}

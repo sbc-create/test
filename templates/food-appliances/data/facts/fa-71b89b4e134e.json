@@ -1,0 +1,87 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kartofel-s-byodryshkami-tushyonye-po-provanski-v-multivarke-192381",
+ "title": "Картофель с бёдрышками, тушённый по-провански в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 90,
+ "total_minutes": 90,
+ "ingredients": [
+  {
+   "name": "Картофель",
+   "quantity": 1.0,
+   "unit": "kg"
+  },
+  {
+   "name": "Свежий перец",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "бедро куриное",
+   "quantity": 1000.0,
+   "unit": "g"
+  },
+  {
+   "name": "Черный душистый перец",
+   "quantity": 5.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Гвоздика",
+   "quantity": 5.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "прованские травы",
+   "quantity": 5.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Зелень",
+   "quantity": 1.0,
+   "unit": "bunch"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   8
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 60,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "33bb9b7e558019a785306fcdd517659da7fb4b2131e4efbc7f0b8bde908e75fb",
+ "record_id": "fa-71b89b4e134e",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:56:39Z"
+}

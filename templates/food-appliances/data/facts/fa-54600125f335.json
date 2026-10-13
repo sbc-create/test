@@ -1,0 +1,77 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kefal-na-grile-i-v-duhovke-v-tomatnom-marinade-189711",
+ "title": "Кефаль на гриле и в духовке в томатном маринаде",
+ "servings": 6,
+ "prep_minutes": 180,
+ "cook_minutes": 30,
+ "total_minutes": 210,
+ "ingredients": [
+  {
+   "name": "Кефаль",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливовидные томаты в собственном соку , 1 банка",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 1.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Черный перец горошком",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Баклажаны",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Капуста брокколи",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Цветная капуста",
+   "quantity": 400.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   2
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 2
+   }
+  ],
+  "times": [
+   {
+    "min": 20,
+    "max": null,
+    "step": 2
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "9f39146f6321f9e5f8818b55ed42e9e60610d410e860d30f31800381da69d94d",
+ "record_id": "fa-54600125f335",
+ "step_count": 5,
+ "fetched_at": "2026-10-12T06:58:01Z"
+}

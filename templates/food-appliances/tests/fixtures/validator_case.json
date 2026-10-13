@@ -1,0 +1,38 @@
+{
+ "_note": "Синтетическая тестовая фикстура (не из источника): проверяет логику валидатора без закрытых снимков.",
+ "record_id": "fa-fixture000001",
+ "facts": {
+  "source_url": "https://example.invalid/fixture",
+  "title": "Тестовая каша",
+  "servings": 2,
+  "ingredients": [
+   {"raw": "Крупа, 1 стакан", "name": "Крупа", "quantity": 1.0, "unit": "cup"},
+   {"raw": "Вода, 2 стакана", "name": "Вода", "quantity": 2.0, "unit": "cup"}
+  ],
+  "appliance": {"kind": "multivarka", "modes": [{"name": "крупы", "step": 1}], "temperatures": [], "times": [{"min": 25, "max": null, "step": 1}]},
+  "record_id": "fa-fixture000001",
+  "step_count": 2
+ },
+ "source_steps": [
+  "Промыть крупу и выложить в чашу.",
+  "Залить водой, включить режим «крупы» на 25 минут."
+ ],
+ "draft": {
+  "record_id": "fa-fixture000001",
+  "title": "Тестовая каша",
+  "slug": "testovaya-kasha",
+  "seo_title": "Тестовая каша",
+  "seo_description": "Синтетический черновик для проверки валидатора.",
+  "intro": "Синтетический черновик для проверки валидатора.",
+  "ingredients": [
+   {"fact_index": 0, "display_name": "Крупа"},
+   {"fact_index": 1, "display_name": "Вода"}
+  ],
+  "steps": [
+   {"text": "Промойте крупу, переложите в чашу.", "source_steps": [0]},
+   {"text": "Добавьте воду и готовьте на программе «крупы» 25 минут.", "source_steps": [1]}
+  ],
+  "tags": [],
+  "producer": {"mode": "manual_standin"}
+ }
+}
