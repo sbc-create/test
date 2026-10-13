@@ -1363,7 +1363,7 @@
       "check": "checks/next_episode_title.py (копия снимка, настоящая витрина)",
       "status": "session",
       "review": "Видимое изменение: выпуск после просмотра человеком.",
-      "evidence": "13.10: ветка claude/review-anime-t071 (animedia-icu 6547bca, без пуша): «Следующая серия: 3 серия — 18 октября, вс, 11:00 (МСК)» у ao-asi-2 = событию расписания; прежний код rc=1, ветка rc=0; полный run.sh пройден (launcher-refuses под SITE_DATA_DIR — ложный, в чистом окружении rc=0).",
+      "evidence": "13.10: ветка claude/review-anime-t071 (animedia-icu 6547bca, без пуша): «Следующая серия: 3 серия — 18 октября, вс, 11:00 (МСК)» у ao-asi-2 = событию расписания; прежний код rc=1, ветка rc=0; полный run.sh пройден (launcher-refuses под SITE_DATA_DIR — ложный, в чистом окружении rc=0). 14.10 ночь: переносы на ветках просмотра — animedia.space claude/review-anime-t071 5ba45c5 (run.sh rc=0), animeg0.site claude/review-anime-t071 d7e854e (метод в ВидАнимеГо — boundaries.py отклонил первую попытку в чужом классе; run.sh пройден).",
       "dependencies": "просмотр человеком; оценка эффекта — по запросам «дата выхода» в Вебмастере (B023), не раньше 14 дней после выпуска"
     },
     {
