@@ -1,6 +1,6 @@
 {
- "commit_head": "94e6dfb96c7ecf77243b9e8be051ede16cf91d0c",
- "at": "2026-10-12T23:31:33Z",
+ "commit_head": "8403a5a92bf53c8aa76ac76af598f8dc6b458e85",
+ "at": "2026-10-13T01:00:06Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -63,51 +63,51 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 156,
+   "lcp_ms": 380,
    "cls": 0
   },
   "mobile:party": {
-   "lcp_ms": 72,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:chars": {
-   "lcp_ms": 200,
+   "lcp_ms": 76,
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 68,
+   "lcp_ms": 100,
    "cls": 0
   },
   "mobile:build": {
-   "lcp_ms": 72,
+   "lcp_ms": 76,
    "cls": 0
   },
   "mobile:quest": {
-   "lcp_ms": 32,
+   "lcp_ms": 48,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 84,
+   "lcp_ms": 108,
    "cls": 0
   },
   "desktop:party": {
-   "lcp_ms": 60,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:chars": {
-   "lcp_ms": 60,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:character": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:build": {
-   "lcp_ms": 72,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:quest": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -116,17 +116,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8860/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/94e6dfb/home-mobile.png",
-  "docs/screenshots/94e6dfb/party-mobile.png",
-  "docs/screenshots/94e6dfb/chars-mobile.png",
-  "docs/screenshots/94e6dfb/character-mobile.png",
-  "docs/screenshots/94e6dfb/build-mobile.png",
-  "docs/screenshots/94e6dfb/quest-mobile.png",
-  "docs/screenshots/94e6dfb/home-desktop.png",
-  "docs/screenshots/94e6dfb/party-desktop.png",
-  "docs/screenshots/94e6dfb/chars-desktop.png",
-  "docs/screenshots/94e6dfb/character-desktop.png",
-  "docs/screenshots/94e6dfb/build-desktop.png",
-  "docs/screenshots/94e6dfb/quest-desktop.png"
+  "docs/screenshots/8403a5a/home-mobile.png",
+  "docs/screenshots/8403a5a/party-mobile.png",
+  "docs/screenshots/8403a5a/chars-mobile.png",
+  "docs/screenshots/8403a5a/character-mobile.png",
+  "docs/screenshots/8403a5a/build-mobile.png",
+  "docs/screenshots/8403a5a/quest-mobile.png",
+  "docs/screenshots/8403a5a/home-desktop.png",
+  "docs/screenshots/8403a5a/party-desktop.png",
+  "docs/screenshots/8403a5a/chars-desktop.png",
+  "docs/screenshots/8403a5a/character-desktop.png",
+  "docs/screenshots/8403a5a/build-desktop.png",
+  "docs/screenshots/8403a5a/quest-desktop.png"
  ]
 }

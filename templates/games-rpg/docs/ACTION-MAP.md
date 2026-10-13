@@ -1,6 +1,6 @@
 # Карта действий games-rpg, вариант B (party-planner)
 
-Проверено на commit `94e6dfb` в Chromium: `bin/games-rpg qa --shots docs/screenshots/94e6dfb --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `8403a5a` в Chromium: `bin/games-rpg qa --shots docs/screenshots/8403a5a --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -30,6 +30,6 @@
 | nojs_stages_listed | PASS | `8` |
 | nojs_party_works | PASS | `True` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 31 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 35 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 30 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
