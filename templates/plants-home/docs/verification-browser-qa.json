@@ -1,6 +1,6 @@
 {
- "commit_head": "163ff51642b14a1e500a210dccbf6dbd4c634b1d",
- "at": "2026-10-13T13:55:09Z",
+ "commit_head": "ebae2afb8df813a5ef0d334fe41631ab3ff0258a",
+ "at": "2026-10-13T14:31:51Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -98,63 +98,63 @@
  },
  "perf_lab": {
   "mobile:mine": {
-   "lcp_ms": 164,
+   "lcp_ms": 160,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 56,
+   "lcp_ms": 48,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 68,
+   "lcp_ms": 96,
    "cls": 0
   },
   "mobile:plant": {
-   "lcp_ms": 116,
+   "lcp_ms": 76,
    "cls": 0
   },
   "mobile:light": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "mobile:problem": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "mobile:empty-filter": {
-   "lcp_ms": 36,
-   "cls": 0
-  },
-  "mobile:diagnose": {
-   "lcp_ms": 128,
-   "cls": 0
-  },
-  "mobile:compare": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "desktop:mine": {
-   "lcp_ms": 132,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:catalog": {
-   "lcp_ms": 72,
-   "cls": 0
-  },
-  "desktop:plant": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "desktop:light": {
    "lcp_ms": 60,
    "cls": 0
   },
-  "desktop:problem": {
+  "mobile:problem": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "mobile:empty-filter": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:diagnose": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:compare": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:mine": {
+   "lcp_ms": 128,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:catalog": {
    "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:plant": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:light": {
+   "lcp_ms": 440,
+   "cls": 0
+  },
+  "desktop:problem": {
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:empty-filter": {
@@ -162,11 +162,11 @@
    "cls": 0
   },
   "desktop:diagnose": {
-   "lcp_ms": 72,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:compare": {
-   "lcp_ms": 88,
+   "lcp_ms": 104,
    "cls": 0
   }
  },
@@ -175,23 +175,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8869/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/163ff51/mine-mobile.png",
-  "docs/screenshots/163ff51/home-mobile.png",
-  "docs/screenshots/163ff51/catalog-mobile.png",
-  "docs/screenshots/163ff51/plant-mobile.png",
-  "docs/screenshots/163ff51/light-mobile.png",
-  "docs/screenshots/163ff51/problem-mobile.png",
-  "docs/screenshots/163ff51/empty-filter-mobile.png",
-  "docs/screenshots/163ff51/diagnose-mobile.png",
-  "docs/screenshots/163ff51/compare-mobile.png",
-  "docs/screenshots/163ff51/mine-desktop.png",
-  "docs/screenshots/163ff51/home-desktop.png",
-  "docs/screenshots/163ff51/catalog-desktop.png",
-  "docs/screenshots/163ff51/plant-desktop.png",
-  "docs/screenshots/163ff51/light-desktop.png",
-  "docs/screenshots/163ff51/problem-desktop.png",
-  "docs/screenshots/163ff51/empty-filter-desktop.png",
-  "docs/screenshots/163ff51/diagnose-desktop.png",
-  "docs/screenshots/163ff51/compare-desktop.png"
+  "docs/screenshots/ebae2af/mine-mobile.png",
+  "docs/screenshots/ebae2af/home-mobile.png",
+  "docs/screenshots/ebae2af/catalog-mobile.png",
+  "docs/screenshots/ebae2af/plant-mobile.png",
+  "docs/screenshots/ebae2af/light-mobile.png",
+  "docs/screenshots/ebae2af/problem-mobile.png",
+  "docs/screenshots/ebae2af/empty-filter-mobile.png",
+  "docs/screenshots/ebae2af/diagnose-mobile.png",
+  "docs/screenshots/ebae2af/compare-mobile.png",
+  "docs/screenshots/ebae2af/mine-desktop.png",
+  "docs/screenshots/ebae2af/home-desktop.png",
+  "docs/screenshots/ebae2af/catalog-desktop.png",
+  "docs/screenshots/ebae2af/plant-desktop.png",
+  "docs/screenshots/ebae2af/light-desktop.png",
+  "docs/screenshots/ebae2af/problem-desktop.png",
+  "docs/screenshots/ebae2af/empty-filter-desktop.png",
+  "docs/screenshots/ebae2af/diagnose-desktop.png",
+  "docs/screenshots/ebae2af/compare-desktop.png"
  ]
 }

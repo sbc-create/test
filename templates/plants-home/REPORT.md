@@ -60,3 +60,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–384 м�
 | `bash bin/plants-home build --commit HEAD` | 0 | собрано из 163ff51 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на ebae2af (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Контент: спатифиллум — ночной перепад 10 °F (около 5,6 °C), пересчёт в calc.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/plants-home test` | 0 | 19 passed in 0.94s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m flora.qa --shots docs/screenshots/ebae2af --out docs/verification-browser-qa.json` | 0 | 42 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8869 '/moi-rasteniya/?r=aloe-vera&r=krassula-ovalnaya&r=sansevieriya-tryohpolosnaya' '/katalog/?sort=uhod&vid=tablica' '/katalog/?svet=solnce&uhod=Medium' '/poisk/?q=Monstera' /nesushchestvuet/` | 0 | 48 URL × 4 ширины, 0 замечаний |
+| `bash bin/plants-home build --commit HEAD` | 0 | собрано из ebae2af |
+
+Лабораторный LCP (loopback, без троттлинга) — до 440 мс. Карта действий — `docs/ACTION-MAP.md`.
