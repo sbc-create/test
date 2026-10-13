@@ -27,3 +27,10 @@ def test_titles_and_descriptions_fit(app):
         desc = html.unescape(re.search(r'<meta name="description" content="([^"]*)"', page).group(1))
         assert 20 <= len(desc) <= 160, (path, desc)
         assert len(title) <= 70 or not title.endswith(suffix), (path, title)
+
+
+def test_every_title_fits_70(app):
+    for path in app.sitemap_urls():
+        _, page, _ = app.route(path, {})
+        title = html.unescape(re.search(r"<title>(.*?)</title>", page, re.S).group(1).strip())
+        assert len(title) <= 70, (path, title)
