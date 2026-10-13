@@ -501,6 +501,21 @@
       "check": "три полных прогона подряд rc=0",
       "status": "verified",
       "evidence": "an1mego 4553016, animeg0 fdc3fbb, an1meg0 522640e: опрос страницы записи до появления (предел 30 с, отказ с названной причиной); stand_root во всех трёх, data_chain через общий модуль. Полные прогоны rc=0: 124/184/153 PASS, пропусков стенда 0."
+    },
+    {
+      "id": "T027",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/catalog/",
+        "https://an1mego.site/catalog/?view=big&page=2"
+      ],
+      "problem": "Листалка каталога AnimeGo ссылается на /catalog/?view=big&page=N — это noindex, follow с canonical на /catalog/?page=N; канонические страницы листалки (index, follow) не получают ни одной прямой внутренней ссылки (замер 13.10 ~01:00Z). Граница листалки при этом верна: 358 — 200, 359 — 404.",
+      "norm": "внутренние ссылки — на канонические адреса",
+      "expected": "ссылки листалки в режиме по умолчанию — /catalog/?page=N; dense/list сохраняют view",
+      "check": "checks/pagination_links.py; bash checks/run.sh; живой HTML /catalog/",
+      "status": "session",
+      "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут."
     }
   ]
 }
