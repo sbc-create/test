@@ -19,12 +19,12 @@
 {% endif %}
 <meta name="theme-color" content="#f3ece0">
 <link rel="icon" href="{{ asset('img/whisk.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/book.css') }}">
+<link rel="stylesheet" href="{{ asset('css/batch.css') }}">
 {% for ld in meta.ld_json() %}<script type="application/ld+json">{{ ld | safe }}</script>
 {% endfor %}
-<script src="{{ asset('js/book.js') }}" defer></script>
+<script src="{{ asset('js/batch.js') }}" defer></script>
 </head>
-<body class="k-{{ meta.kind }}">
+<body data-ns="{{ site.cfg.storage_namespace }}" class="k-{{ meta.kind }}">
 <a class="skip" href="#text">К тексту</a>
 <header class="spine">
   <div class="spine__in">
@@ -32,7 +32,7 @@
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
   </div>
   <nav class="toc-nav" aria-label="Разделы книги">
-    <a href="/recepty/">Оглавление</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
+    <a href="/pechem/" data-b-link>Пеку несколько</a><a href="/recepty/">Оглавление</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
   </nav>
 </header>
 {% if meta.crumbs|length > 1 %}

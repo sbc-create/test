@@ -1,26 +1,11 @@
 {% extends "base.html" %}
-{% from "_parts.html" import toc %}
+{% from "_pickb.html" import pick %}
 {% block main %}
 <section class="frontis">
   <p class="frontis__kicker">Книга рецептов выпечки</p>
-  <h1>Тесто и десерты</h1>
-  <p class="frontis__lead">Кексы, хлеб, пироги и заварные пирожные. У каждого рецепта — температура, время и форма, если их называет источник, и предупреждения прямо в шагах.</p>
+  <h1>Пеку несколько — один список</h1>
+  <p class="frontis__lead">Отметьте рецепты на выходные: продукты сложатся в один список (граммы с граммами, штуки со штуками), а рецепты встанут по температуре духовки. Все числа — из рецептов-источников.</p>
 </section>
-<section class="chapter" aria-labelledby="ch-dough">
-  <h2 id="ch-dough"><span class="chapter__no">I</span> Виды теста</h2>
-  <ul class="doughs">
-  {% for k, items in site.doughs().items() %}
-    <li><a href="/testo/{{ k }}/"><b>{{ DOUGH[k][0] }}</b><span>{{ DOUGH[k][1] }}</span><i>{{ items|length }} рецепт{{ 'а' if items|length in [2,3,4] else 'ов' }}</i></a></li>
-  {% endfor %}
-  </ul>
-</section>
-<section class="chapter" aria-labelledby="ch-new">
-  <h2 id="ch-new"><span class="chapter__no">II</span> Новые страницы книги</h2>
-  {{ toc(latest) }}
-  <p class="more"><a href="/recepty/">Всё оглавление →</a></p>
-</section>
-<section class="chapter" aria-labelledby="ch-tags">
-  <h2 id="ch-tags"><span class="chapter__no">III</span> По продукту и поводу</h2>
-  <ul class="tags">{% for k, items in site.tags().items() %}<li><a href="/teg/{{ k }}/">{{ TAGS[k] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul>
-</section>
+{{ pick() }}
+<p class="more"><a href="/recepty/">Оглавление книги →</a></p>
 {% endblock %}
