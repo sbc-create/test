@@ -1,6 +1,7 @@
 """Приёмочные тесты food-appliances."""
 
 import copy
+import gzip
 import json
 import re
 import sys
@@ -50,16 +51,50 @@ def test_12_full_recipes_two_appliances(app):
 
 
 @NEEDS_PRIVATE
-def test_drafts_valid_and_mode_invention_rejected():
+def test_all_drafts_pass_validation():
     files = list(drafts.DRAFTS.glob("*.json"))
-    assert all(not drafts.validate(json.loads(p.read_text())) for p in files)
-    d = json.loads(next(p for p in files if "890d59" in p.name).read_text())
+    assert files and all(not drafts.validate(json.loads(p.read_text())) for p in files)
+
+
+def _fixture(tmp_path, monkeypatch):
+    """Синтетическая фикстура вместо закрытых снимков: факты и «исходные шаги» во временном каталоге."""
+    case = json.loads((ROOT / "tests" / "fixtures" / "validator_case.json").read_text())
+    facts, private = tmp_path / "facts", tmp_path / "private"
+    facts.mkdir()
+    private.mkdir()
+    (facts / f"{case['record_id']}.json").write_text(json.dumps(case["facts"], ensure_ascii=False))
+    (private / f"{case['record_id']}.json.gz").write_bytes(
+        gzip.compress(json.dumps({"steps": case["source_steps"]}, ensure_ascii=False).encode())
+    )
+    monkeypatch.setattr(drafts, "FACTS", facts)
+    monkeypatch.setattr(drafts, "PRIVATE", private)
+    return case["draft"]
+
+
+def test_validator_accepts_fixture_and_rejects_invented_mode_and_number(tmp_path, monkeypatch):
+    d = _fixture(tmp_path, monkeypatch)
+    assert drafts.validate(d) == []
     bad = copy.deepcopy(d)
-    bad["steps"][1]["text"] = "Обжарьте мясо на режиме «Турбо» 7–10 минут."
+    bad["steps"][1]["text"] = "Добавьте воду и готовьте на режиме «Турбо» 25 минут."
     assert any("режим «Турбо»" in e for e in drafts.validate(bad))
     bad = copy.deepcopy(d)
-    bad["steps"][-1]["text"] = "Готовьте на режиме «плов» 95 минут, затем перемешайте."
+    bad["steps"][1]["text"] = "Добавьте воду и готовьте на программе «крупы» 95 минут."
     assert any("число 95" in e for e in drafts.validate(bad))
+
+
+def test_drafts_consistent_with_public_facts():
+    """Без закрытых снимков: черновики против фактов из git — индексы ингредиентов, номера шагов источника,
+    названия режимов в кавычках (полная сверка текста — test_all_drafts_pass_validation)."""
+    for p in drafts.DRAFTS.glob("*.json"):
+        d = json.loads(p.read_text())
+        f = json.loads((drafts.FACTS / f"{d['record_id']}.json").read_text())
+        assert sorted(i["fact_index"] for i in d["ingredients"]) == list(range(len(f["ingredients"]))), p.name
+        n = f["step_count"]
+        assert all(0 <= r < n for s in d["steps"] for r in s["source_steps"]), p.name
+        modes = {m["name"].lower() for m in (f.get("appliance") or {}).get("modes", [])}
+        for s in d["steps"]:
+            for q in drafts.QUOTED.findall(s["text"]):
+                assert q.lower() in modes, (p.name, q)
 
 
 def test_mode_parser_handles_alternatives_and_prepositions():
