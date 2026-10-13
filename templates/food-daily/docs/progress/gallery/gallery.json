@@ -1,5 +1,5 @@
 {
- "probed_at": "2026-10-13T21:26:32Z",
+ "probed_at": "2026-10-13T21:41:10Z",
  "variants": [
   {
    "site": "food-daily",
@@ -10,7 +10,7 @@
    "port": 8847,
    "pr": 95,
    "branch": "claude/template-food-daily",
-   "head": "40f8869",
+   "head": "a7a2e94",
    "evidence": {
     "commit": "e69bf15",
     "at": "2026-10-13T08:18:50Z",
@@ -86,7 +86,7 @@
    "port": 8876,
    "pr": 124,
    "branch": "claude/template-food-daily-c",
-   "head": "6663171",
+   "head": "4121565",
    "evidence": {
     "commit": "9514da0",
     "at": "2026-10-13T15:12:01Z",
@@ -162,7 +162,7 @@
    "port": 8864,
    "pr": 112,
    "branch": "claude/template-food-baking-b",
-   "head": "e26066a",
+   "head": "3202315",
    "evidence": {
     "commit": "4356f03",
     "at": "2026-10-13T14:26:40Z",
@@ -314,7 +314,7 @@
    "port": 8873,
    "pr": 121,
    "branch": "claude/template-food-weekly-c",
-   "head": "118eac6",
+   "head": "1d7cf83",
    "evidence": {
     "commit": "2526dfb",
     "at": "2026-10-13T21:15:20Z",
@@ -390,7 +390,7 @@
    "port": 8866,
    "pr": 114,
    "branch": "claude/template-food-appliances-b",
-   "head": "6a624a8",
+   "head": "e2ae237",
    "evidence": {
     "commit": "1973778",
     "at": "2026-10-13T14:28:25Z",
@@ -542,7 +542,7 @@
    "port": 8867,
    "pr": 115,
    "branch": "claude/template-home-practical-c",
-   "head": "45cd003",
+   "head": "e3ad4da",
    "evidence": {
     "commit": "6b316b8",
     "at": "2026-10-13T14:29:19Z",
@@ -656,7 +656,7 @@
    "port": 8868,
    "pr": 116,
    "branch": "claude/template-garden-season-c",
-   "head": "8e5addd",
+   "head": "97f7bd6",
    "evidence": {
     "commit": "2e58fb6",
     "at": "2026-10-13T14:30:33Z",
@@ -770,7 +770,7 @@
    "port": 8869,
    "pr": 117,
    "branch": "claude/template-plants-home-c",
-   "head": "8d7cfee",
+   "head": "85a668a",
    "evidence": {
     "commit": "ebae2af",
     "at": "2026-10-13T14:31:51Z",
@@ -884,7 +884,7 @@
    "port": 8870,
    "pr": 118,
    "branch": "claude/template-games-story-c",
-   "head": "ac0a5ca",
+   "head": "79d2753",
    "evidence": {
     "commit": "852774a",
     "at": "2026-10-13T15:16:17Z",
@@ -998,7 +998,7 @@
    "port": 8871,
    "pr": 119,
    "branch": "claude/template-games-rpg-c",
-   "head": "32e2c91",
+   "head": "d950fc7",
    "evidence": {
     "commit": "d54ced9",
     "at": "2026-10-13T15:13:18Z",
@@ -1112,7 +1112,7 @@
    "port": 8872,
    "pr": 120,
    "branch": "claude/template-games-survival-c",
-   "head": "5ff6362",
+   "head": "2debb36",
    "evidence": {
     "commit": "c3cc336",
     "at": "2026-10-13T15:14:17Z",

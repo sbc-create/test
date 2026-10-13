@@ -12,16 +12,16 @@ node_modules, скриншоты (в git). Миграций нет: у 9 сай�
 
 | сайт | комплект | ветка и коммит | размер | тесты в изолированном каталоге | URL / ресурсы / ошибки | закрытая часть |
 | --- | --- | --- | --- | --- | --- | --- |
-| food-appliances | `food-appliances-6a624a8` | `claude/template-food-appliances-b` `6a624a8` | 96 КБ | 24 passed, 1 skipped in 1.52s | 26 / 3 / 0 | — |
-| food-baking | `food-baking-e26066a` | `claude/template-food-baking-b` `e26066a` | 110 КБ | 34 passed, 1 skipped in 1.43s | 26 / 3 / 0 | — |
-| food-daily | `food-daily-6663171` | `claude/template-food-daily-c` `6663171` | 16889 КБ | 141 passed in 12.43s | 53 / 3 / 0 | база: 24 материалов, 50 версий |
-| food-weekly | `food-weekly-118eac6` | `claude/template-food-weekly-c` `118eac6` | 63 КБ | 30 passed in 1.12s | 35 / 3 / 0 | — |
-| games-rpg | `games-rpg-32e2c91` | `claude/template-games-rpg-c` `32e2c91` | 89 КБ | 22 passed in 1.72s | 36 / 4 / 0 | — |
-| games-story | `games-story-ac0a5ca` | `claude/template-games-story-c` `ac0a5ca` | 77 КБ | 21 passed in 4.18s | 26 / 4 / 0 | — |
-| games-survival | `games-survival-5ff6362` | `claude/template-games-survival-c` `5ff6362` | 95 КБ | 28 passed in 1.32s | 37 / 4 / 0 | — |
-| garden-season | `garden-season-8e5addd` | `claude/template-garden-season-c` `8e5addd` | 132 КБ | 21 passed in 1.26s | 60 / 4 / 0 | — |
-| home-practical | `home-practical-45cd003` | `claude/template-home-practical-c` `45cd003` | 103 КБ | 23 passed in 1.47s | 51 / 10 / 0 | — |
-| plants-home | `plants-home-8d7cfee` | `claude/template-plants-home-c` `8d7cfee` | 120 КБ | 21 passed in 1.27s | 43 / 8 / 0 | — |
+| food-appliances | `food-appliances-e2ae237` | `claude/template-food-appliances-b` `e2ae237` | 97 КБ | 24 passed, 1 skipped in 1.11s | 26 / 3 / 0 | — |
+| food-baking | `food-baking-3202315` | `claude/template-food-baking-b` `3202315` | 110 КБ | 34 passed, 1 skipped in 1.98s | 26 / 3 / 0 | — |
+| food-daily | `food-daily-4121565` | `claude/template-food-daily-c` `4121565` | 16889 КБ | 141 passed in 12.33s | 53 / 3 / 0 | база: 24 материалов, 50 версий |
+| food-weekly | `food-weekly-1d7cf83` | `claude/template-food-weekly-c` `1d7cf83` | 63 КБ | 30 passed in 1.45s | 35 / 3 / 0 | — |
+| games-rpg | `games-rpg-d950fc7` | `claude/template-games-rpg-c` `d950fc7` | 89 КБ | 22 passed in 1.25s | 36 / 4 / 0 | — |
+| games-story | `games-story-79d2753` | `claude/template-games-story-c` `79d2753` | 77 КБ | 21 passed in 1.03s | 26 / 4 / 0 | — |
+| games-survival | `games-survival-2debb36` | `claude/template-games-survival-c` `2debb36` | 96 КБ | 28 passed in 1.56s | 37 / 4 / 0 | — |
+| garden-season | `garden-season-97f7bd6` | `claude/template-garden-season-c` `97f7bd6` | 133 КБ | 21 passed in 2.50s | 60 / 4 / 0 | — |
+| home-practical | `home-practical-e3ad4da` | `claude/template-home-practical-c` `e3ad4da` | 103 КБ | 23 passed in 1.37s | 51 / 10 / 0 | — |
+| plants-home | `plants-home-85a668a` | `claude/template-plants-home-c` `85a668a` | 120 КБ | 21 passed in 1.33s | 43 / 8 / 0 | — |
 
 ## Как проверено (фактически выполнено, scratchpad `kit_check.py`, итог — `kit-check.json`)
 

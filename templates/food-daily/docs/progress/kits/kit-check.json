@@ -1,11 +1,11 @@
 {
- "food-appliances-6a624a8": {
-  "kit": "food-appliances-6a624a8",
+ "food-appliances-e2ae237": {
+  "kit": "food-appliances-e2ae237",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "24 passed, 1 skipped in 1.52s"
+   "24 passed, 1 skipped in 1.11s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -17,13 +17,13 @@
    "bad": []
   }
  },
- "food-baking-e26066a": {
-  "kit": "food-baking-e26066a",
+ "food-baking-3202315": {
+  "kit": "food-baking-3202315",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "34 passed, 1 skipped in 1.43s"
+   "34 passed, 1 skipped in 1.98s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -35,13 +35,13 @@
    "bad": []
   }
  },
- "food-daily-6663171": {
-  "kit": "food-daily-6663171",
+ "food-daily-4121565": {
+  "kit": "food-daily-4121565",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "141 passed in 12.43s"
+   "141 passed in 12.33s"
   ],
   "test_failed": [],
   "restore_verify_db": {
@@ -67,13 +67,13 @@
    "bad": []
   }
  },
- "food-weekly-118eac6": {
-  "kit": "food-weekly-118eac6",
+ "food-weekly-1d7cf83": {
+  "kit": "food-weekly-1d7cf83",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "30 passed in 1.12s"
+   "30 passed in 1.45s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -85,13 +85,13 @@
    "bad": []
   }
  },
- "games-rpg-32e2c91": {
-  "kit": "games-rpg-32e2c91",
+ "games-rpg-d950fc7": {
+  "kit": "games-rpg-d950fc7",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "22 passed in 1.72s"
+   "22 passed in 1.25s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -103,13 +103,13 @@
    "bad": []
   }
  },
- "games-story-ac0a5ca": {
-  "kit": "games-story-ac0a5ca",
+ "games-story-79d2753": {
+  "kit": "games-story-79d2753",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "21 passed in 4.18s"
+   "21 passed in 1.03s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -121,13 +121,13 @@
    "bad": []
   }
  },
- "games-survival-5ff6362": {
-  "kit": "games-survival-5ff6362",
+ "games-survival-2debb36": {
+  "kit": "games-survival-2debb36",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "28 passed in 1.32s"
+   "28 passed in 1.56s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -139,13 +139,13 @@
    "bad": []
   }
  },
- "garden-season-8e5addd": {
-  "kit": "garden-season-8e5addd",
+ "garden-season-97f7bd6": {
+  "kit": "garden-season-97f7bd6",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "21 passed in 1.26s"
+   "21 passed in 2.50s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -157,13 +157,13 @@
    "bad": []
   }
  },
- "home-practical-45cd003": {
-  "kit": "home-practical-45cd003",
+ "home-practical-e3ad4da": {
+  "kit": "home-practical-e3ad4da",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "23 passed in 1.47s"
+   "23 passed in 1.37s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
@@ -175,13 +175,13 @@
    "bad": []
   }
  },
- "plants-home-8d7cfee": {
-  "kit": "plants-home-8d7cfee",
+ "plants-home-85a668a": {
+  "kit": "plants-home-85a668a",
   "sha256sum": 0,
   "has_git": false,
   "test": [
    0,
-   "21 passed in 1.27s"
+   "21 passed in 1.33s"
   ],
   "test_failed": [],
   "healthz_after_s": 0.25,
