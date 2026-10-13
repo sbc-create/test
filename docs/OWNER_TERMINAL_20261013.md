@@ -466,9 +466,18 @@ SwapTotal 4 095 МиБ,  SwapFree 75 МиБ      ← своп занят на 98
 процесса витрины за ночь **1 908 МиБ** (`lordfilm47-space`), следующие 1 761 и
 1 485. Значение **2,5 ГиБ** выше любого наблюдённого пика с запасом ~30 %.
 
+Точные имена юнитов всех витрин печатает карта имён — угадывать их не нужно, и
+у одной ячейки имя учётной записи не совпадает с именем каталога:
+
 ```bash
-# для каждой витрины: <unit> из реестра, например nova-lordfilm47-space.service
-sudo systemctl set-property --runtime <unit> MemoryHigh=2.5G
+python3 automation/local/cell-name-map.py
+```
+
+Затем для каждой витрины:
+
+```bash
+sudo systemctl set-property --runtime nova-lordfilm47-space.service MemoryHigh=2.5G
+# …и так по каждому unit из колонки «unit-суффикс»: nova-<суффикс>.service
 ```
 
 `--runtime` намеренно: свойство действует до перезагрузки и не правит файл
