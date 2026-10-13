@@ -100,7 +100,8 @@
       "expected": "www → 308 на корень; на www нет self-canonical.",
       "status": "blocked",
       "owner_action": "root: команда §4 docs/verification/www-mirrors-20261012.md (коммит 6d20f68) — по одному домену; zonafilm12.site — после спада нагрузки.",
-      "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)"
+      "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)",
+      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа."
     },
     {
       "id": "B002",
@@ -424,7 +425,8 @@
       "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
       "status": "blocked",
       "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200. Замер сессии 13.10 ~03:05Z: yummyani7.site/sitemap/titles.xml — 200, 1,6 МБ, 0,4 с (горячий кеш); 504 Архитектора 13.10 — та же холодная генерация, новой причины нет. 13.10 замер: на холодном обращении /sitemap/titles.xml, seasons.xml (и episodes.xml у yummyani7.info) — 504 или тайм-аут >40 с на всех 5 Yummy; повтор — 200 за 0,2–0,9 с. Робот, попавший на холодный кеш, получает 504.",
-      "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч). Режим держится только на meta robots (X-Robots-Tag у Yummy нет): сверка automation/local/indexing-live-snapshot.py --compare. Патч maxPages применять только вместе со сборкой карты заранее в файл или разбиением titles.xml на части с отдельным кешем (scratchpad yummy-sitemap-cap.patch, раздел «ВАЖНО»)."
+      "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч). Режим держится только на meta robots (X-Robots-Tag у Yummy нет): сверка automation/local/indexing-live-snapshot.py --compare. Патч maxPages применять только вместе со сборкой карты заранее в файл или разбиением titles.xml на части с отдельным кешем (scratchpad yummy-sitemap-cap.patch, раздел «ВАЖНО»).",
+      "dependencies": "13.10 Архитектор: прогрев дочерних карт сразу после сборки (а не подъём таймаута) — после P0 бэкапа"
     },
     {
       "id": "T019",
@@ -695,7 +697,7 @@
       "check": "curl -I http://<домен>/ → 301/308 Location https://…",
       "status": "blocked",
       "owner_action": "Владелец: шаг 6 docs/OWNER_TERMINAL_20261013.md (http-redirect-install.py). HSTS — отдельным решением (необратимо на срок max-age).",
-      "evidence": "Подтверждено независимо Архитектором (13.10 ~02:30Z, переходы не следовались): те же 9 / 8, 4 planned без DNS. Инструмент automation/host/http-redirect-install.py (показ: изменилось бы 9, отказов 0; ACME-путь проверяется до правки; --rollback)."
+      "evidence": "Подтверждено независимо Архитектором (13.10 ~02:30Z, переходы не следовались): те же 9 / 8, 4 planned без DNS. Инструмент automation/host/http-redirect-install.py (показ: изменилось бы 9, отказов 0; ACME-путь проверяется до правки; --rollback). 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа."
     },
     {
       "id": "T035",
@@ -1314,7 +1316,7 @@
       "problem": "Логи nginx (www-data:adm 0640) сессии не читаются — обход YandexBot/Googlebot не измерен.",
       "status": "blocked",
       "owner_action": "Владелец: sudo usermod -aG adm claude (или выгрузка строк YandexBot/Googlebot по доменам). Приёмка: суточный отчёт обхода по 17 доменам. Отдельное решение владельца: добавить $host в log_format общего журнала (приём уже используется в журнале webmaster_verification) — без него обход по доменам не измерить; правка затрагивает весь журнал.",
-      "dependencies": "владелец",
+      "dependencies": "P0 бэкапа (место на диске, решение владельца) → установка журнала роботов Архитектором с потолком rotate 14 × maxsize 50M (согласовано 13.10); разбор lords-0N — разовая команда владельца",
       "evidence": "13.10, измерение Архитектора: для /var/log/nginx/access.log свой log_format не объявлен — действует combined, в нём нет $host/$server_name; счёт обхода по доменам из общего журнала невозможен (по первому полю — IP клиента). Свои журналы есть у lords-01/02/03 (lords-0N.access.log) — по ним разбивка законна. Для остальных доменов — только общее число обращений каждого робота. 13.10: анализатор seo_operator/crawl_log.py (122a879) — TSV seo_bots и combined lords-0N; роботы — кандидаты, подлинность по обратному DNS. Конфиг nginx/logrotate/ACL — Архитектор; установка — после решения по месту (бэкап требует 43,89 ГиБ при 14,84 свободных, docs/OWNER_BLOCK_20261013_BACKUP_P0.md в ветке Архитектора); предложен потолок журнала rotate 14 × maxsize 50M. Существующие lords-0N.access.log (www-data:adm 0640) сессии не читаются — нужна разовая команда владельца: sudo python3 -m seo_operator.crawl_log --format combined --domain lordfilm47.space /var/log/nginx/lords-01.access.log* --out var/crawl/lords-01.json (и для lords-02/03)."
     },
     {
