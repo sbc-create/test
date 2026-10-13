@@ -21,7 +21,7 @@ SHOTS = {
     "calendar": "/kalendar/?region=or-west",
     "work": WORK,
     "crop": "/kultura/chesnok/",
-    "empty-month": "/kalendar/dekabr/",
+    "december": "/kalendar/dekabr/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/kalendar/",
@@ -114,7 +114,8 @@ def run(shots: Path | None) -> dict:
             pg.locator(".pager a").first.click()
         A["pager_prev_month"] = pg.url.endswith("/kalendar/oktyabr/")
         pg.goto(BASE + "/kalendar/dekabr/")
-        A["empty_month_honest"] = pg.locator(".empty a[href*='oregonstate.edu']").count() == 1
+        # после пополнения работ декабрь не пуст; пустой месяц проверяется тестом на копии сайта
+        A["december_lists_new_works"] = pg.locator("a[href='/rabota/mulcha-kruglyj-god/']").count() >= 1
         # календарь: фильтр, сброс, пустое сочетание, история
         pg.goto(BASE + "/kalendar/")
         total = pg.locator(".cal__m li a").count()
