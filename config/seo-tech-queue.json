@@ -541,6 +541,21 @@
       "problem": "С ~00:20Z 13.10 GitHub Actions не запускает CI: «The job was not started because an Actions budget is preventing further use» (site-an1mego-site 38327604432, site-zonafilm-space 38327896855). Исполнитель выпуска требует зелёный CI коммита — выпуски невозможны. Часть бюджета ночью израсходована SEO: ~25 пушей только проверок (сторож T019 в 19 репозиториев, стенды T023/T026), каждый — прогон CI ~6 мин.",
       "evidence": "Готово к выпуску и ждёт CI: T027 — an1mego c6dbda7, animeg0 737b60b, an1meg0 6f0722f; T028 — zonafilm-space 3ce4acc, zonafilm12-site 099f26c, zonafilm-cc c0d409e; T028 Lords — lordfilm47, 1lordserials1, lordserials22-info (проверки идут). После восстановления: gh run rerun по последнему коммиту каждой ветки, затем штатный factory cell trigger.",
       "owner_action": "Владелец (организация sbc-create на GitHub): поднять лимит расходов Actions или дождаться сброса бюджета; сообщить SEO/Архитектору, когда CI снова запускается."
+    },
+    {
+      "id": "T029",
+      "site": "Lords/Zona (общий каталог), Animedia, AnimeGo",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/master-kung-fu-2/",
+        "https://zonafilm.space/title/master-kung-fu/"
+      ],
+      "problem": "Одинаковый <title> и H1 у разных произведений с одним названием: каталог Lords/Zona — 3 952 названия, 10 576 записей (1 108 совпадают и годом); Animedia/AnimeGo — 197 названий, 403 записи (замер 13.10 ~01:50Z). Пример: «Мастер кунг-фу» 2004 и 2012 — «Мастер кунг-фу — смотреть онлайн — Zona Cinema» у обоих.",
+      "norm": "уникальный <title> страницы",
+      "expected": "при повторе названия — год в <title>, совпал год — оригинальное название; уникальные не меняются; только поля снимка",
+      "check": "checks/title_disambig.py; bash checks/run.sh; живой <title> пары master-kung-fu",
+      "status": "session",
+      "evidence": "zonafilm-space aae36bf, zonafilm12-site ad59758 (локально, не запушено — B019): расчёт 10 576 → 274 неуникальных; прогоны rc=0. Остальные семейства — следом."
     }
   ]
 }
