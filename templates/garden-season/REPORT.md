@@ -60,3 +60,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/garden-season build --commit HEAD` | 0 | собрано из aae3ff2 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 304 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на ceb8900 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/garden-season test` | 0 | 19 passed in 1.10s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m sezon.qa --shots docs/screenshots/ceb8900 --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8868 '/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1' '/moj-uchastok/?region=moskva&k=chesnok' '/moj-uchastok/?region=uk&k=golubika' /nesushchestvuet/` | 0 | 64 URL × 4 ширины, 0 замечаний |
+| `bash bin/garden-season build --commit HEAD` | 0 | собрано из ceb8900 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 188 мс. Карта действий — `docs/ACTION-MAP.md`.
