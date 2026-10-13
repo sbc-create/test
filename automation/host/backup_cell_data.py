@@ -43,7 +43,16 @@ import sys
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
-sys.path.insert(0, str(КОРЕНЬ))
+
+#: Реестр ячеек, которым пользуется ХОСТ. Это корневая копия привилегированного
+#: исполнителя (`site-cell-executor.service`, WorkingDirectory
+#: /usr/local/lib/site-factory-cell): именно из неё он берёт размещение витрин.
+#: Рабочая копия репозитория сюда не годится — измерено 2026-10-13: в
+#: /srv/site-factory/repo нет ни config/site-cells.json, ни factory/cell вовсе,
+#: это более старый checkout. Поэтому и пакет factory здесь НЕ импортируется:
+#: сценарий бэкапа запускается из той самой старой копии, и импорт упал бы
+#: ModuleNotFoundError — проверено.
+РЕЕСТР_ХОСТА = Path("/usr/local/lib/site-factory-cell/config/site-cells.json")
 
 #: Что заведомо поставляется заново и копировать его незачем. Берётся из
 #: контракта витрины, когда он есть; эти образцы — для витрин без контракта.
@@ -73,20 +82,79 @@ def _внутри(корень: Path, элемент: str) -> bool:
     return ".." not in Path(элемент).parts
 
 
-def план(реестр: Path | None = None, *, корень_репозиториев: Path = КОРЕНЬ,
+#: Куда установщик записал основание для относительных `repo.path`. Файл лежит
+#: рядом с корневой копией реестра и читается всеми (0644), а правило — то же,
+#: что у `factory.cell.registry.корень_репозиториев`. Без него относительные
+#: пути разрешались бы от места ЭТОГО файла, то есть от более старой рабочей
+#: копии: измерено 2026-10-13 — контракты не находились у 20 витрин из 28, и
+#: план вырождался в «весь каталог минус поставляемое».
+ОТМЕТКА_УСТАНОВКИ = РЕЕСТР_ХОСТА.parent.parent / "cell-install.json"
+
+
+def корень_репозиториев_для(реестр: Path) -> Path:
+    """Основание для относительных `repo.path` рядом с этим реестром."""
+    отметка = реестр.parent.parent / "cell-install.json"
+    for кандидат in (отметка, ОТМЕТКА_УСТАНОВКИ):
+        if not кандидат.is_file():
+            continue
+        try:
+            значение = json.loads(кандидат.read_text(encoding="utf-8")).get(
+                "site_repos_root")
+        except (OSError, ValueError):
+            continue
+        if значение:
+            return Path(значение)
+    return КОРЕНЬ
+
+
+def выбрать_реестр(реестр: Path | None = None) -> Path:
+    """Какой реестр читать. Явный путь важнее, корневая копия важнее рабочей."""
+    if реестр is not None:
+        return реестр
+    if РЕЕСТР_ХОСТА.is_file():
+        return РЕЕСТР_ХОСТА
+    return КОРЕНЬ / "config" / "site-cells.json"
+
+
+def _ячейки(реестр: Path) -> list[dict]:
+    """Записи реестра. Нечитаемый реестр — ОТКАЗ, а не пустой план.
+
+    Пустой план здесь опаснее исключения: бэкап прошёл бы успешно и без данных
+    ячеек, то есть вернул бы ровно тот пробел, который и закрывается.
+    """
+    try:
+        данные = json.loads(реестр.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as ош:
+        raise ПланОтвергнут(
+            f"реестр ячеек {реестр} не прочитан ({type(ош).__name__}): план сбора "
+            "не строится, и пустым он быть не вправе") from None
+    ячейки = данные.get("cells") or данные.get("sites") or []
+    if isinstance(ячейки, dict):
+        ячейки = list(ячейки.values())
+    if not ячейки:
+        raise ПланОтвергнут(f"в реестре {реестр} нет ни одной ячейки")
+    return ячейки
+
+
+def план(реестр: Path | None = None, *, корень: Path | None = None,
          шум=sys.stderr) -> list[tuple[str, str, str]]:
     """Строки плана сбора. Контракт витрины — источник, не этот файл."""
-    from factory.cell import registry
-
+    путь_реестра = выбрать_реестр(реестр)
+    корень_репозиториев = корень or корень_репозиториев_для(путь_реестра)
     итог: list[tuple[str, str, str]] = []
-    for ячейка in registry.all_cells(реестр):
-        рв = ячейка.runtime or {}
-        каталог = str(рв.get("data_dir") or "").strip()
-        if not каталог:
-            print(f"ПРОПУСК\t{ячейка.site_id}\tкаталог данных в реестре не записан",
+    for запись in _ячейки(путь_реестра):
+        site_id = str(запись.get("site_id") or "").strip()
+        if not site_id:
+            print("ПРОПУСК\t(без site_id)\tзапись реестра без идентификатора",
                   file=шум)
             continue
-        путь_репо = str((ячейка.repo or {}).get("path") or "").strip()
+        рв = запись.get("runtime") or {}
+        каталог = str(рв.get("data_dir") or "").strip()
+        if not каталог:
+            print(f"ПРОПУСК\t{site_id}\tкаталог данных в реестре не записан",
+                  file=шум)
+            continue
+        путь_репо = str((запись.get("repo") or {}).get("path") or "").strip()
         файл = None
         if путь_репо:
             п = Path(путь_репо)
@@ -96,22 +164,22 @@ def план(реестр: Path | None = None, *, корень_репозито�
             try:
                 данные = json.loads(файл.read_text(encoding="utf-8"))
             except (OSError, ValueError) as ош:
-                print(f"УНКОНТРАКТ\t{ячейка.site_id}\tconfig/site.json не читается: "
+                print(f"УНКОНТРАКТ\t{site_id}\tconfig/site.json не читается: "
                       f"{type(ош).__name__}", file=шум)
                 данные = {}
             контракт = list((данные.get("data_contract") or {}).get("user_writable") or [])
         if not контракт:
-            print(f"УНКОНТРАКТ\t{ячейка.site_id}\tконтракт данных не объявлен: "
+            print(f"УНКОНТРАКТ\t{site_id}\tконтракт данных не объявлен: "
                   f"каталог берётся целиком минус поставляемое", file=шум)
-            итог.append((ячейка.site_id, каталог, "*"))
+            итог.append((site_id, каталог, "*"))
             continue
         for шаблон in контракт:
-            элемент = шаблон.format(site=ячейка.site_id)
+            элемент = шаблон.format(site=site_id)
             if not _внутри(Path(каталог), элемент):
                 raise ПланОтвергнут(
-                    f"{ячейка.site_id}: элемент контракта {элемент!r} уводит за "
+                    f"{site_id}: элемент контракта {элемент!r} уводит за "
                     f"пределы {каталог} — план сбора не строится")
-            итог.append((ячейка.site_id, каталог, элемент))
+            итог.append((site_id, каталог, элемент))
     return итог
 
 
