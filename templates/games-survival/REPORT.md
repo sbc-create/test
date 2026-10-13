@@ -88,3 +88,17 @@ Meta description: у разделов — из данных (число мате
 | `bash bin/games-survival build --commit HEAD` | 0 | собрано из 711e2ca |
 
 Лабораторный LCP (loopback, без троттлинга) — до 140 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на c3cc336 (13.10.2026)
+
+Пункты галереи (13.10.2026). «Из чего» учитывает слоты сетки источника: связь печь ← булыжник согласована с планировщиком, тест на симметрию.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-survival test` | 0 | 26 passed in 1.20s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m craft.qa --shots docs/screenshots/c3cc336 --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8872 '/iz-togo-chto-est/?est=doski&est=palka&est=ugol' '/iz-togo-chto-est/?est=almaz' '/planirovshchik/?item=zabor&n=64' /nesushchestvuet/` | 0 | 41 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-survival build --commit HEAD` | 0 | собрано из c3cc336 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
