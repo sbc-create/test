@@ -225,3 +225,20 @@ def test_buildings_in_planner(app):
     assert recipe_inputs(s, s.by_slug["krovat"]) is None  # шерсти на сайте нет — не цель планировщика
     _, html, _ = get(app, s.by_slug["dver"].url)
     assert "пока не разобран надёжно" in html
+
+
+def test_meta_descriptions_fit_snippet_and_sections_are_informative(app):
+    from craft.server import SNIPPET_MAX, plural, snippet
+
+    assert snippet("Раз. Два три.", 8) == "Раз."
+    assert snippet("слово " * 40).endswith("…") and len(snippet("слово " * 40)) <= SNIPPET_MAX
+    s = app.site
+    for path in re.findall(r"<loc>https?://[^/]+(/[^<]*)</loc>", get(app, "/sitemap.xml")[1]):
+        _, html, _ = get(app, path)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+        assert 20 <= len(desc) <= SNIPPET_MAX, (path, len(desc))
+    _, html, _ = get(app, "/minecraft/postrojki/")
+    n = len(s.sections("minecraft")["postrojki"][1])
+    word = plural(n, "материал", "материала", "материалов")
+    cur = s.version.src["java_current"]
+    assert f'content="Постройки Minecraft: {n} {word} по minecraft.wiki, версия Java Edition {cur}."' in html
