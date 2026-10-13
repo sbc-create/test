@@ -1,6 +1,6 @@
 {
- "commit_head": "08a4d44d716d8f6a753b5719302dbd62f107f426",
- "at": "2026-10-13T14:33:10Z",
+ "commit_head": "852774ab0c7aa30adb857b4dd9499e98c7ea3abe",
+ "at": "2026-10-13T15:16:17Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -74,11 +74,11 @@
  },
  "perf_lab": {
   "mobile:where": {
-   "lcp_ms": 120,
+   "lcp_ms": 132,
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 64,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:home": {
@@ -86,7 +86,7 @@
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 72,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:guide": {
@@ -94,47 +94,47 @@
    "cls": 0
   },
   "mobile:collectibles": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "mobile:videos": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "mobile:farewell": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "desktop:where": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:character": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 72,
-   "cls": 0
-  },
-  "desktop:game": {
    "lcp_ms": 64,
    "cls": 0
   },
-  "desktop:guide": {
+  "mobile:videos": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:farewell": {
+   "lcp_ms": 36,
+   "cls": 0
+  },
+  "desktop:where": {
+   "lcp_ms": 104,
+   "cls": 0
+  },
+  "desktop:character": {
    "lcp_ms": 56,
    "cls": 0
   },
+  "desktop:home": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:guide": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
   "desktop:collectibles": {
-   "lcp_ms": 52,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:videos": {
-   "lcp_ms": 40,
+   "lcp_ms": 216,
    "cls": 0
   },
   "desktop:farewell": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0
   }
  },
@@ -143,21 +143,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8870/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/08a4d44/where-mobile.png",
-  "docs/screenshots/08a4d44/character-mobile.png",
-  "docs/screenshots/08a4d44/home-mobile.png",
-  "docs/screenshots/08a4d44/game-mobile.png",
-  "docs/screenshots/08a4d44/guide-mobile.png",
-  "docs/screenshots/08a4d44/collectibles-mobile.png",
-  "docs/screenshots/08a4d44/videos-mobile.png",
-  "docs/screenshots/08a4d44/farewell-mobile.png",
-  "docs/screenshots/08a4d44/where-desktop.png",
-  "docs/screenshots/08a4d44/character-desktop.png",
-  "docs/screenshots/08a4d44/home-desktop.png",
-  "docs/screenshots/08a4d44/game-desktop.png",
-  "docs/screenshots/08a4d44/guide-desktop.png",
-  "docs/screenshots/08a4d44/collectibles-desktop.png",
-  "docs/screenshots/08a4d44/videos-desktop.png",
-  "docs/screenshots/08a4d44/farewell-desktop.png"
+  "docs/screenshots/852774a/where-mobile.png",
+  "docs/screenshots/852774a/character-mobile.png",
+  "docs/screenshots/852774a/home-mobile.png",
+  "docs/screenshots/852774a/game-mobile.png",
+  "docs/screenshots/852774a/guide-mobile.png",
+  "docs/screenshots/852774a/collectibles-mobile.png",
+  "docs/screenshots/852774a/videos-mobile.png",
+  "docs/screenshots/852774a/farewell-mobile.png",
+  "docs/screenshots/852774a/where-desktop.png",
+  "docs/screenshots/852774a/character-desktop.png",
+  "docs/screenshots/852774a/home-desktop.png",
+  "docs/screenshots/852774a/game-desktop.png",
+  "docs/screenshots/852774a/guide-desktop.png",
+  "docs/screenshots/852774a/collectibles-desktop.png",
+  "docs/screenshots/852774a/videos-desktop.png",
+  "docs/screenshots/852774a/farewell-desktop.png"
  ]
 }

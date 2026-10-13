@@ -88,3 +88,17 @@ Meta description глав ≤160 символов: целые предложен
 | `bash bin/games-story build --commit HEAD` | 0 | собрано из 08a4d44 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 120 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 852774a (13.10.2026)
+
+VideoObject выводится только при всех обязательных полях (название, превью, дата загрузки из источника); сейчас ни у одного видео даты нет — разметки нет, видео на страницах остаются.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 19 passed in 0.72s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m saga.qa --shots docs/screenshots/852774a --out docs/verification-browser-qa.json` | 0 | 34 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8870 '/igra/celeste/gde-ya/?q=mess' '/igra/celeste/gde-ya/?q=zzzz' /nesushchestvuet/` | 0 | 29 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-story build --commit HEAD` | 0 | собрано из 852774a |
+
+Лабораторный LCP (loopback, без троттлинга) — до 216 мс. Карта действий — `docs/ACTION-MAP.md`.
