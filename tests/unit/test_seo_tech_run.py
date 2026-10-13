@@ -249,3 +249,17 @@ def test_excluded_new_lords_domains_never_taken(среда):
 def test_real_queue_has_no_task_on_excluded_domains():
     задачи = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))["tasks"]
     assert [з["id"] for з in задачи if tech_run.вне_продвижения(з)] == []
+
+
+def test_excluded_list_matches_editor_and_needs_no_package():
+    """Один перечень на оба прогона; модуль грузится и без пакета seo_operator."""
+    import importlib.util
+    import sys as _sys
+    from seo_operator import editor_run
+    assert tech_run.ВНЕ_ПРОДВИЖЕНИЯ == editor_run.ВНЕ_ПРОДВИЖЕНИЯ
+    код = ("import importlib.util,sys\n"
+           f"sp=importlib.util.spec_from_file_location('m', {str(ROOT / 'seo_operator' / 'tech_run.py')!r})\n"
+           "m=importlib.util.module_from_spec(sp); sp.loader.exec_module(m)\n"
+           "print(m.вне_продвижения({'site': 'lordfilm.group'}))")
+    r = subprocess.run([_sys.executable, "-I", "-c", код], cwd="/", capture_output=True, text=True)
+    assert r.returncode == 0 and r.stdout.strip() == "lordfilm.group", r.stderr[-300:]

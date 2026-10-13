@@ -37,6 +37,17 @@ STALE_S = 2 * 3600
 ГОТОВО = {"verified", "released", "live_verified", "done"}
 
 
+#: Восемь новых доменов Lords вне продвижения — тот же перечень, что
+#: editor_run.ВНЕ_ПРОДВИЖЕНИЯ (равенство держит тест). Здесь литерал, а не
+#: импорт: приёмка механизма (automation/local/seo-tech-mechanism-audit.py)
+#: грузит этот файл из временного дерева без пакета seo_operator, и любой импорт
+#: соседнего модуля там падает. После слияния — реестр ячеек
+#: (promotion.excluded, область periodic_seo_edits).
+ВНЕ_ПРОДВИЖЕНИЯ = ("lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
+                   "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
+                   "lordserial.net.ru")
+
+
 class ВнеПродвижения(ValueError):
     """Задача касается домена, исключённого владельцем из продвижения."""
 
@@ -49,7 +60,6 @@ def вне_продвижения(задача: dict) -> str | None:
     пишется руками, поэтому сверка идёт по доменам в `site` и по имени
     репозитория в `repo` (`lordfilm-group` для `lordfilm.group`).
     """
-    from seo_operator.editor_run import ВНЕ_ПРОДВИЖЕНИЯ  # noqa: PLC0415 — editor_run тяжёлый, нужен только здесь
     домены = set(re.findall(r"[a-z0-9-]+(?:\.[a-z0-9-]+)+", str(задача.get("site", "")).lower()))
     репо = Path(str(задача.get("repo", ""))).name.lower()
     for д in ВНЕ_ПРОДВИЖЕНИЯ:
