@@ -382,7 +382,7 @@
       "expected": "titles.xml без потолка 8000; 366 слагов в карте",
       "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
       "status": "blocked",
-      "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200.",
+      "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200. Замер сессии 13.10 ~03:05Z: yummyani7.site/sitemap/titles.xml — 200, 1,6 МБ, 0,4 с (горячий кеш); 504 Архитектора 13.10 — та же холодная генерация, новой причины нет.",
       "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч). Режим держится только на meta robots (X-Robots-Tag у Yummy нет): сверка automation/local/indexing-live-snapshot.py --compare. Патч maxPages применять только вместе со сборкой карты заранее в файл или разбиением titles.xml на части с отдельным кешем (scratchpad yummy-sitemap-cap.patch, раздел «ВАЖНО»)."
     },
     {
@@ -658,7 +658,22 @@
       "expected": "«<раздел> на <сайт>: N <запись/записи/записей> каталога — смотреть онлайн[ — страница K].»",
       "check": "checks/section_description.py (стенд на снимке)",
       "status": "session",
-      "evidence": "zonafilm-space, zonafilm12-site: правка в ВидЗона.каталог, стенд — PASS; полные прогоны идут. zonafilm-cc и Animedia — следом."
+      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом."
+    },
+    {
+      "id": "T037",
+      "site": "animedia.space, animedia.icu",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/sitemap.xml",
+        "https://animedia.space/title/kot-v-sapogah-2-poslednee-zhelanie-2022/"
+      ],
+      "problem": "Замер Архитектора 13.10: в карте Animedia нет 528 живых тайтлов (у AnimeGo на том же каталоге — все 8 589).",
+      "norm": "sitemap: все индексируемые канонические страницы; noindex-страницы в карту не входят",
+      "expected": "вне карты только страницы с noindex",
+      "check": "множество слагов каталога минус множество /title/ из живой карты == records из data/animedia-02-admission.json",
+      "status": "done",
+      "evidence": "Сессия 13.10 ~03:00Z: в карте 8 061, в каталоге 8 589, вне карты 528 = ровно 528 записей вне тематического допуска (exclude 239 + review 289), пересечение с картой 0, необъяснённых 0. Страницы отдают 200 и noindex, follow (4 из 4 проверены, маршрут_тайтла: _допуск != ДОПУЩЕНО). Ошибки сборщика нет. Остаток — решение человека по 289 записям review:* (anime_admission), не техническая правка."
     }
   ]
 }
