@@ -1019,7 +1019,7 @@
       "check": "checks/home_genre_links.py (как в T049): все ссылки /genre/ подвала — 200 и index",
       "status": "session",
       "review": "Видимое изменение подвала (одна ссылка меняется): выпуск после просмотра человеком, вместе с T049.",
-      "evidence": "13.10 ~13:15Z, живые главные lordfilm47.space, 1lordserials1.online, lordserials22.info: первая ссылка колонки «Жанры» подвала — /genre/zapadnyykontent/."
+      "evidence": "13.10 ~13:15Z, живые главные lordfilm47.space, 1lordserials1.online, lordserials22.info: первая ссылка колонки «Жанры» подвала — /genre/zapadnyykontent/. 14.10 ночь: образец на ветке claude/review-lords-t054 (lordfilm47-space 7a4a392, без пуша): выборка подвала пропускает служебные разделы (_служебный_раздел_жанра; после T064 — и «азиатский контент»); checks/home_genre_links.py: прежний код rc=1, ветка rc=0; run.sh rc=0 (38 PASS)."
     },
     {
       "id": "T055",
