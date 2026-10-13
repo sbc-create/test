@@ -1,0 +1,18 @@
+# Вкладка «SEO — ОТЧЁТ» (решение владельца 2026-10-08, docs/SEO_REGULAR_RUN.md §4).
+#
+# Пользовательский юнит (linger у claude включён): root не нужен. Поднимает
+# tmux-сессию seo-report с seo-report-view.py, только если её нет. Причина
+# юнита: 10.10–13.10 вкладка не работала — окно, запущенное вручную, завершилось,
+# и поднять его было некому; отчёты 11–13.10 сформированы, но не показаны (B021).
+#
+# KillMode=process: если сервера tmux ещё нет, его запускает этот вызов, и
+# завершение oneshot не должно его убить.
+[Unit]
+Description=SEO report tab: keep tmux session seo-report alive
+Documentation=file:///home/claude/wt-portable-site-cell-01/docs/SEO_REGULAR_RUN.md
+
+[Service]
+Type=oneshot
+KillMode=process
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/bin/sh -c 'tmux has-session -t seo-report 2>/dev/null || tmux new-session -d -s seo-report -n "SEO — ОТЧЁТ" "python3 /home/claude/wt-portable-site-cell-01/automation/local/seo-report-view.py"'

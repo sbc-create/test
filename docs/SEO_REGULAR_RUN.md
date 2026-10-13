@@ -83,6 +83,19 @@ SEO-назначения нет, `/etc/cron.hourly` пуст. Почасовая
 tmux new-session -A -s seo-report -n "SEO — ОТЧЁТ" "python3 /home/claude/wt-portable-site-cell-01/automation/local/seo-report-view.py"
 ```
 
+Окно, запущенное вручную, никто не поднимал после завершения: 10.10–13.10 вкладки
+не было, отчёты 11–13.10 не показаны (B021). Устойчивый запуск — пользовательский
+таймер (linger у claude включён, root не нужен), раз в 5 минут поднимает сессию
+`seo-report`, если её нет. Установка — одна команда от пользователя claude:
+
+```bash
+export XDG_RUNTIME_DIR=/run/user/1001; D=/home/claude/wt-portable-site-cell-01/automation/local/systemd-user; systemctl --user link $D/seo-report-view.service && systemctl --user enable --now $D/seo-report-view.timer
+```
+
+Проверка: `tmux attach -t seo-report` (выход — Ctrl-b d); после запуска вкладка
+сразу выводит последний непоказанный отчёт, `~/.seo-report-view.json` меняет `shown`.
+Видел ли отчёт владелец, вкладка знать не может — это подтверждает только он.
+
 Вкладка показывает новый отчёт в 10:00 МСК (или сразу, если он появился позже),
 прошлые отчёты повторно не выводит, об отсутствующем к 10:10 отчёте говорит
 прямо. Прямого вывода в работающую сессию Claude нет: текст в неё можно

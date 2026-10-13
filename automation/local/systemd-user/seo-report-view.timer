@@ -1,0 +1,12 @@
+# Проверка вкладки «SEO — ОТЧЁТ» каждые 5 минут: упавшее окно поднимается
+# до показа в 10:00 МСК, а не через трое суток.
+[Unit]
+Description=SEO report tab watchdog
+
+[Timer]
+OnBootSec=2min
+OnUnitActiveSec=5min
+Unit=seo-report-view.service
+
+[Install]
+WantedBy=timers.target
