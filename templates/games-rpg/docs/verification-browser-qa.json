@@ -1,6 +1,6 @@
 {
- "commit_head": "79cccd401ad9993d8bca48776c02036800ec9228",
- "at": "2026-10-13T01:00:55Z",
+ "commit_head": "f5eb3d471bb8fa7ab9e43f64bdf176aacba69ce5",
+ "at": "2026-10-13T01:34:46Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -67,59 +67,59 @@
  },
  "perf_lab": {
   "mobile:compare": {
-   "lcp_ms": 188,
+   "lcp_ms": 168,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 76,
+   "lcp_ms": 104,
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:section": {
-   "lcp_ms": 52,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 84,
+   "lcp_ms": 92,
    "cls": 0
   },
   "mobile:build": {
-   "lcp_ms": 40,
-   "cls": 0
-  },
-  "mobile:quest": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "desktop:compare": {
-   "lcp_ms": 128,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 124,
-   "cls": 0
-  },
-  "desktop:game": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "desktop:section": {
    "lcp_ms": 48,
    "cls": 0
   },
+  "mobile:quest": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
+  "desktop:compare": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:section": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
   "desktop:character": {
-   "lcp_ms": 80,
+   "lcp_ms": 88,
    "cls": 0
   },
   "desktop:build": {
-   "lcp_ms": 60,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:quest": {
-   "lcp_ms": 60,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -128,19 +128,19 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8871/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/79cccd4/compare-mobile.png",
-  "docs/screenshots/79cccd4/home-mobile.png",
-  "docs/screenshots/79cccd4/game-mobile.png",
-  "docs/screenshots/79cccd4/section-mobile.png",
-  "docs/screenshots/79cccd4/character-mobile.png",
-  "docs/screenshots/79cccd4/build-mobile.png",
-  "docs/screenshots/79cccd4/quest-mobile.png",
-  "docs/screenshots/79cccd4/compare-desktop.png",
-  "docs/screenshots/79cccd4/home-desktop.png",
-  "docs/screenshots/79cccd4/game-desktop.png",
-  "docs/screenshots/79cccd4/section-desktop.png",
-  "docs/screenshots/79cccd4/character-desktop.png",
-  "docs/screenshots/79cccd4/build-desktop.png",
-  "docs/screenshots/79cccd4/quest-desktop.png"
+  "docs/screenshots/f5eb3d4/compare-mobile.png",
+  "docs/screenshots/f5eb3d4/home-mobile.png",
+  "docs/screenshots/f5eb3d4/game-mobile.png",
+  "docs/screenshots/f5eb3d4/section-mobile.png",
+  "docs/screenshots/f5eb3d4/character-mobile.png",
+  "docs/screenshots/f5eb3d4/build-mobile.png",
+  "docs/screenshots/f5eb3d4/quest-mobile.png",
+  "docs/screenshots/f5eb3d4/compare-desktop.png",
+  "docs/screenshots/f5eb3d4/home-desktop.png",
+  "docs/screenshots/f5eb3d4/game-desktop.png",
+  "docs/screenshots/f5eb3d4/section-desktop.png",
+  "docs/screenshots/f5eb3d4/character-desktop.png",
+  "docs/screenshots/f5eb3d4/build-desktop.png",
+  "docs/screenshots/f5eb3d4/quest-desktop.png"
  ]
 }

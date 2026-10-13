@@ -1,6 +1,6 @@
 # Карта действий games-rpg, вариант C (index-compare)
 
-Проверено на commit `79cccd4` в Chromium: `python3 -m quest.qa --shots docs/screenshots/79cccd4 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `f5eb3d4` в Chromium: `python3 -m quest.qa --shots docs/screenshots/f5eb3d4 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -32,6 +32,6 @@
 | unknown_type_400_alert | PASS | `True` |
 | nojs_stages_listed | PASS | `8` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 36 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 39 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 32 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
