@@ -1779,3 +1779,28 @@ def test_last_outcome_returns_the_latest_result_for_the_url(tmp_path):
     ev.write_text("\n".join(json.dumps(r) for r in rows), encoding="utf-8")
     assert regular.last_outcome(ev, "https://zonafilm12.site/title/aynali")["same_in_row"] == 2
     assert regular.last_outcome(ev, "https://zonafilm12.site/title/drugoe") is None
+
+
+def test_calendar_day_section_never_breaks_the_report(tmp_path):
+    """13.10: отчёт 10:00 несёт вчерашние сутки МСК; сбой раздела отчёт не роняет."""
+    day = dt.date(2026, 10, 12)
+    assert "не подключён" in regular.calendar_day_section(None, day)
+
+    broken = tmp_path / "broken.py"
+    broken.write_text(
+        "def собрать(д):\n    raise RuntimeError('x')\ndef отрисовать(о):\n    return ''\n",
+        encoding="utf-8",
+    )
+    text = regular.calendar_day_section(broken, day)
+    assert "## Вчера по календарю МСК (2026-10-12, 00:00–23:59)" in text
+    assert "Не сформировано: RuntimeError" in text
+
+    ok = tmp_path / "ok.py"
+    ok.write_text(
+        "def собрать(д):\n    return {'день': д.isoformat()}\n"
+        "def отрисовать(о):\n    return f\"# Выпуск редактора за {о['день']}\\n\\n## Адреса\\n\"\n",
+        encoding="utf-8",
+    )
+    text = regular.calendar_day_section(ok, day)
+    assert "### Выпуск редактора за 2026-10-12" in text
+    assert "\n### Адреса" in text and "\n## Адреса" not in text

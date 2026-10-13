@@ -98,6 +98,8 @@ SOURCES = {
     "changes_ledger_runs": REPO_ROOT / "var" / "editor-runs" / "ledger.jsonl",
     "facts_snapshots": Path("/srv/lords/.frontend"),
     "coverage_blockers": REPO_ROOT / "config" / "editor-coverage-blockers.json",
+    # Календарные сутки МСК (владелец 13.10: отчёт — за вчерашний день 00:00–23:59).
+    "calendar_day_script": REPO_ROOT / "automation" / "local" / "editor-day-report.py",
 }
 
 #: Домены Animedia и их снимки фактов: только у этого семейства есть факты,
@@ -1836,6 +1838,30 @@ def _page_cell(metrics: dict, key: str) -> str:
     return f"не измерено ({cell.get('not_measured', metrics.get('not_measured'))})"
 
 
+def calendar_day_section(script: Path | None, day: dt.date) -> str:
+    """Вчерашние календарные сутки МСК — разделом в конце отчёта 10:00.
+
+    Основной отчёт считает «сутки до формирования» (05:40Z → 05:40Z). Сбой
+    календарного раздела отчёт не останавливает: он выходит с названной причиной.
+    """
+    head = f"\n\n## Вчера по календарю МСК ({day.isoformat()}, 00:00–23:59)\n\n"
+    if not script or not Path(script).is_file():
+        return head + "Не сформировано: календарный отчёт не подключён к этому прогону.\n"
+    try:
+        import importlib.util
+
+        spec = importlib.util.spec_from_file_location("editor_day_report", script)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        body = mod.отрисовать(mod.собрать(day))
+    except Exception as exc:  # noqa: BLE001 — раздел не должен ронять отчёт
+        return head + f"Не сформировано: {type(exc).__name__}. Вручную: python3 {script} --date {day}\n"
+    # заголовок первого уровня скрипта — подзаголовок раздела
+    return head + body.replace("# Выпуск редактора", "### Выпуск редактора", 1).replace(
+        "\n## Адреса", "\n### Адреса", 1
+    )
+
+
 def render_daily(report: dict) -> str:
     lines: list[str] = []
     add = lines.append
@@ -3167,7 +3193,9 @@ def step_daily_report(ctx: Context) -> Any:
     report["editor"]["candidates_left"] = len(cands)
     out_dir = ctx.root / "reports" / "daily"
     _write_json(out_dir / f"{report['date_msk']}.json", report)
-    text = render_daily(report)
+    text = render_daily(report) + calendar_day_section(
+        ctx.sources.get("calendar_day_script"), (ctx.now.astimezone(MSK) - dt.timedelta(days=1)).date()
+    )
     (out_dir / f"{report['date_msk']}.md").write_text(text, encoding="utf-8")
     # Единый «последний отчёт»: тот же текст, перезаписывается атомарно.
     latest = ctx.root / "reports" / "LATEST.md"
