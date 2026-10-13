@@ -48,3 +48,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–212 м�
 
 Редактор: было NOT_RUN (секрет не создавался), теперь проверен на изолированной копии этого коммита; способ и
 ограничения — в `docs/verification-editor.json`. Решение «editor_rejected» записывалось только в копию БД.
+
+## Обновление на 2f441f3 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из B: подбор «Что есть дома» (/iz-holodilnika/: выбор, результаты с «есть / ещё нужно», память выбора, пустой выбор блокируется, неизвестный продукт — 400), в каталоге — порядок и вид-таблица (не индексируются). Редактор не менялся — его проверка остаётся в docs/verification-editor.json.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 128 passed in 12.96s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/2f441f3 --out docs/verification-browser-qa.json` | 0 | 51 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8876 '/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8' '/iz-holodilnika/?est=kurica&est=ris' '/iz-holodilnika/?est=kvantovyj' '/recepty/?sort=vremya&vid=tablica' '/poisk/?q=творог' /nesushchestvuet/` | 0 | 59 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из 2f441f3 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 504 мс. Карта действий — `docs/ACTION-MAP.md`.

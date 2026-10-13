@@ -1,6 +1,6 @@
 # Карта действий food-daily, вариант C (party-list)
 
-Проверено на commit `fff36e7` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/fff36e7 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `2f441f3` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/2f441f3 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -38,6 +38,17 @@
 | party_home_remembers_choice | PASS | `True` |
 | party_bad_guests_400_alert | PASS | `True` |
 | party_storage_namespace_own | PASS | `True` |
+| fridge_header_link | PASS | `True` |
+| fridge_hint_counts_two | PASS | `True` |
+| fridge_first_has_both_plov | PASS | `True` |
+| fridge_results_listed | PASS | `6` |
+| fridge_remembers_selection | PASS | `True` |
+| fridge_clear_forgets_selection | PASS | `True` |
+| fridge_empty_submit_blocked | PASS | `True` |
+| fridge_unknown_product_400_alert | PASS | `True` |
+| catalog_table_sort_by_time | PASS | `True` |
+| catalog_view_noindex | PASS | `True` |
+| storage_namespace_own_after_fridge | PASS | `True` |
 | nojs_recipe_steps | PASS | `7` |
 | nojs_ingredients | PASS | `6` |
 | nojs_fav_button_hidden | PASS | `True` |

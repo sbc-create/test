@@ -1,17 +1,21 @@
 {
  "base": "http://127.0.0.1:8876",
- "commit_head": "fff36e7efefcf0ef426fbfd456213bacfd343bdb",
- "at": "2026-10-13T08:13:13Z",
+ "commit_head": "2f441f30c10f1d2150c6492211afd16979d970f6",
+ "at": "2026-10-13T12:56:57Z",
  "scenarios": {
   "mobile:party:no_hscroll": true,
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
+  "mobile:fridge:no_hscroll": true,
+  "mobile:catalog-table:no_hscroll": true,
   "mobile:recipe:no_hscroll": true,
   "mobile:tag:no_hscroll": true,
   "mobile:article:no_hscroll": true,
   "desktop:party:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:catalog:no_hscroll": true,
+  "desktop:fridge:no_hscroll": true,
+  "desktop:catalog-table:no_hscroll": true,
   "desktop:recipe:no_hscroll": true,
   "desktop:tag:no_hscroll": true,
   "desktop:article:no_hscroll": true,
@@ -45,6 +49,17 @@
   "party_home_remembers_choice": true,
   "party_bad_guests_400_alert": true,
   "party_storage_namespace_own": true,
+  "fridge_header_link": true,
+  "fridge_hint_counts_two": true,
+  "fridge_first_has_both_plov": true,
+  "fridge_results_listed": 6,
+  "fridge_remembers_selection": true,
+  "fridge_clear_forgets_selection": true,
+  "fridge_empty_submit_blocked": true,
+  "fridge_unknown_product_400_alert": true,
+  "catalog_table_sort_by_time": true,
+  "catalog_view_noindex": true,
+  "storage_namespace_own_after_fridge": true,
   "nojs_recipe_steps": 7,
   "nojs_ingredients": 6,
   "nojs_fav_button_hidden": true
@@ -53,12 +68,16 @@
   "mobile:party": [],
   "mobile:home": [],
   "mobile:catalog": [],
+  "mobile:fridge": [],
+  "mobile:catalog-table": [],
   "mobile:recipe": [],
   "mobile:tag": [],
   "mobile:article": [],
   "desktop:party": [],
   "desktop:home": [],
   "desktop:catalog": [],
+  "desktop:fridge": [],
+  "desktop:catalog-table": [],
   "desktop:recipe": [],
   "desktop:tag": [],
   "desktop:article": []
@@ -67,128 +86,168 @@
   "mobile:party": [],
   "mobile:home": [],
   "mobile:catalog": [],
+  "mobile:fridge": [],
+  "mobile:catalog-table": [],
   "mobile:recipe": [],
   "mobile:tag": [],
   "mobile:article": [],
   "desktop:party": [],
   "desktop:home": [],
   "desktop:catalog": [],
+  "desktop:fridge": [],
+  "desktop:catalog-table": [],
   "desktop:recipe": [],
   "desktop:tag": [],
   "desktop:article": []
  },
  "perf_lab": {
   "mobile:party": {
-   "lcp_ms": 256,
+   "lcp_ms": 504,
    "cls": 0,
-   "ttfb_ms": 51,
-   "dom_ms": 160,
-   "bytes": 49327,
+   "ttfb_ms": 113,
+   "dom_ms": 309,
+   "bytes": 53723,
    "requests": 3
   },
   "mobile:home": {
-   "lcp_ms": 72,
+   "lcp_ms": 56,
    "cls": 0,
-   "ttfb_ms": 10,
-   "dom_ms": 36,
-   "bytes": 10891,
+   "ttfb_ms": 7,
+   "dom_ms": 28,
+   "bytes": 11215,
    "requests": 3
   },
   "mobile:catalog": {
-   "lcp_ms": 104,
+   "lcp_ms": 144,
    "cls": 0,
-   "ttfb_ms": 43,
-   "dom_ms": 66,
-   "bytes": 16813,
+   "ttfb_ms": 45,
+   "dom_ms": 97,
+   "bytes": 17471,
+   "requests": 3
+  },
+  "mobile:fridge": {
+   "lcp_ms": 72,
+   "cls": 0,
+   "ttfb_ms": 14,
+   "dom_ms": 34,
+   "bytes": 10389,
+   "requests": 3
+  },
+  "mobile:catalog-table": {
+   "lcp_ms": 76,
+   "cls": 0,
+   "ttfb_ms": 10,
+   "dom_ms": 55,
+   "bytes": 10879,
    "requests": 3
   },
   "mobile:recipe": {
-   "lcp_ms": 124,
-   "cls": 0,
-   "ttfb_ms": 26,
-   "dom_ms": 71,
-   "bytes": 22899,
+   "lcp_ms": 84,
+   "cls": 0.0104,
+   "ttfb_ms": 28,
+   "dom_ms": 83,
+   "bytes": 23119,
    "requests": 3
   },
   "mobile:tag": {
-   "lcp_ms": 52,
+   "lcp_ms": 48,
    "cls": 0,
-   "ttfb_ms": 8,
-   "dom_ms": 33,
-   "bytes": 11698,
+   "ttfb_ms": 12,
+   "dom_ms": 31,
+   "bytes": 11918,
    "requests": 3
   },
   "mobile:article": {
-   "lcp_ms": 80,
+   "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 20,
-   "dom_ms": 53,
-   "bytes": 13279,
+   "ttfb_ms": 21,
+   "dom_ms": 41,
+   "bytes": 13499,
    "requests": 3
   },
   "desktop:party": {
-   "lcp_ms": 124,
+   "lcp_ms": 192,
    "cls": 0,
    "ttfb_ms": 6,
-   "dom_ms": 28,
-   "bytes": 49327,
+   "dom_ms": 35,
+   "bytes": 53723,
    "requests": 3
   },
   "desktop:home": {
    "lcp_ms": 72,
    "cls": 0,
-   "ttfb_ms": 5,
-   "dom_ms": 28,
-   "bytes": 10891,
+   "ttfb_ms": 4,
+   "dom_ms": 22,
+   "bytes": 11215,
    "requests": 3
   },
   "desktop:catalog": {
-   "lcp_ms": 100,
+   "lcp_ms": 92,
    "cls": 0,
    "ttfb_ms": 7,
+   "dom_ms": 32,
+   "bytes": 17471,
+   "requests": 3
+  },
+  "desktop:fridge": {
+   "lcp_ms": 76,
+   "cls": 0,
+   "ttfb_ms": 4,
+   "dom_ms": 30,
+   "bytes": 10389,
+   "requests": 3
+  },
+  "desktop:catalog-table": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "ttfb_ms": 9,
    "dom_ms": 31,
-   "bytes": 16813,
+   "bytes": 10879,
    "requests": 3
   },
   "desktop:recipe": {
-   "lcp_ms": 88,
+   "lcp_ms": 112,
    "cls": 0,
-   "ttfb_ms": 8,
+   "ttfb_ms": 4,
    "dom_ms": 32,
-   "bytes": 22899,
+   "bytes": 23119,
    "requests": 3
   },
   "desktop:tag": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0,
-   "ttfb_ms": 4,
-   "dom_ms": 33,
-   "bytes": 11698,
+   "ttfb_ms": 10,
+   "dom_ms": 42,
+   "bytes": 11918,
    "requests": 3
   },
   "desktop:article": {
-   "lcp_ms": 64,
+   "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 4,
-   "dom_ms": 29,
-   "bytes": 13279,
+   "ttfb_ms": 6,
+   "dom_ms": 37,
+   "bytes": 13499,
    "requests": 3
   }
  },
  "console_errors": [],
  "screenshots": [
-  "docs/screenshots/fff36e7/party-mobile.png",
-  "docs/screenshots/fff36e7/home-mobile.png",
-  "docs/screenshots/fff36e7/catalog-mobile.png",
-  "docs/screenshots/fff36e7/recipe-mobile.png",
-  "docs/screenshots/fff36e7/tag-mobile.png",
-  "docs/screenshots/fff36e7/article-mobile.png",
-  "docs/screenshots/fff36e7/party-desktop.png",
-  "docs/screenshots/fff36e7/home-desktop.png",
-  "docs/screenshots/fff36e7/catalog-desktop.png",
-  "docs/screenshots/fff36e7/recipe-desktop.png",
-  "docs/screenshots/fff36e7/tag-desktop.png",
-  "docs/screenshots/fff36e7/article-desktop.png"
+  "docs/screenshots/2f441f3/party-mobile.png",
+  "docs/screenshots/2f441f3/home-mobile.png",
+  "docs/screenshots/2f441f3/catalog-mobile.png",
+  "docs/screenshots/2f441f3/fridge-mobile.png",
+  "docs/screenshots/2f441f3/catalog-table-mobile.png",
+  "docs/screenshots/2f441f3/recipe-mobile.png",
+  "docs/screenshots/2f441f3/tag-mobile.png",
+  "docs/screenshots/2f441f3/article-mobile.png",
+  "docs/screenshots/2f441f3/party-desktop.png",
+  "docs/screenshots/2f441f3/home-desktop.png",
+  "docs/screenshots/2f441f3/catalog-desktop.png",
+  "docs/screenshots/2f441f3/fridge-desktop.png",
+  "docs/screenshots/2f441f3/catalog-table-desktop.png",
+  "docs/screenshots/2f441f3/recipe-desktop.png",
+  "docs/screenshots/2f441f3/tag-desktop.png",
+  "docs/screenshots/2f441f3/article-desktop.png"
  ],
  "accessibility": {
   "axe_version": "4.13.0",
@@ -196,6 +255,22 @@
    "mobile:/": {
     "violations": [],
     "passes": 37
+   },
+   "mobile:/iz-holodilnika/": {
+    "violations": [],
+    "passes": 36
+   },
+   "mobile:/iz-holodilnika/?est=kurica&est=ris": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/iz-holodilnika/?est=kvantovyj": {
+    "violations": [],
+    "passes": 40
+   },
+   "mobile:/recepty/?sort=vremya&vid=tablica": {
+    "violations": [],
+    "passes": 46
    },
    "mobile:/recepty/": {
     "violations": [],
@@ -256,6 +331,22 @@
    "desktop:/": {
     "violations": [],
     "passes": 36
+   },
+   "desktop:/iz-holodilnika/": {
+    "violations": [],
+    "passes": 35
+   },
+   "desktop:/iz-holodilnika/?est=kurica&est=ris": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/iz-holodilnika/?est=kvantovyj": {
+    "violations": [],
+    "passes": 39
+   },
+   "desktop:/recepty/?sort=vremya&vid=tablica": {
+    "violations": [],
+    "passes": 45
    },
    "desktop:/recepty/": {
     "violations": [],
@@ -322,6 +413,7 @@
      "A:К содержимому",
      "A:Будни на кухне",
      "A:На компанию",
+     "A:Что есть дома",
      "A:Поиск",
      "A:Избранное",
      "A:Покупки",
@@ -329,8 +421,7 @@
      "A:Завтраки",
      "A:Супы",
      "A:Вторые блюда",
-     "A:Гарниры",
-     "A:Салаты"
+     "A:Гарниры"
     ]
    },
    "/recept/syrniki-s-ezhevikoj/": {
@@ -340,6 +431,7 @@
      "A:К содержимому",
      "A:Будни на кухне",
      "A:На компанию",
+     "A:Что есть дома",
      "A:Поиск",
      "A:Избранное",
      "A:Покупки",
@@ -347,8 +439,7 @@
      "A:Завтраки",
      "A:Супы",
      "A:Вторые блюда",
-     "A:Гарниры",
-     "A:Салаты"
+     "A:Гарниры"
     ]
    }
   }
@@ -356,6 +447,10 @@
  "axe": {
   "version": "4.13.0",
   "mobile:/": [],
+  "mobile:/iz-holodilnika/": [],
+  "mobile:/iz-holodilnika/?est=kurica&est=ris": [],
+  "mobile:/iz-holodilnika/?est=kvantovyj": [],
+  "mobile:/recepty/?sort=vremya&vid=tablica": [],
   "mobile:/recepty/": [],
   "mobile:/recepty/supy/": [],
   "mobile:/recepty/zavtraki/": [],
@@ -371,6 +466,10 @@
   "mobile:/poisk/?q=zzz": [],
   "mobile:/nesushchestvuet/": [],
   "desktop:/": [],
+  "desktop:/iz-holodilnika/": [],
+  "desktop:/iz-holodilnika/?est=kurica&est=ris": [],
+  "desktop:/iz-holodilnika/?est=kvantovyj": [],
+  "desktop:/recepty/?sort=vremya&vid=tablica": [],
   "desktop:/recepty/": [],
   "desktop:/recepty/supy/": [],
   "desktop:/recepty/zavtraki/": [],
@@ -390,12 +489,16 @@
   "mobile:party:no_hscroll": true,
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
+  "mobile:fridge:no_hscroll": true,
+  "mobile:catalog-table:no_hscroll": true,
   "mobile:recipe:no_hscroll": true,
   "mobile:tag:no_hscroll": true,
   "mobile:article:no_hscroll": true,
   "desktop:party:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:catalog:no_hscroll": true,
+  "desktop:fridge:no_hscroll": true,
+  "desktop:catalog-table:no_hscroll": true,
   "desktop:recipe:no_hscroll": true,
   "desktop:tag:no_hscroll": true,
   "desktop:article:no_hscroll": true,
@@ -420,6 +523,17 @@
   "party_home_remembers_choice": true,
   "party_bad_guests_400_alert": true,
   "party_storage_namespace_own": true,
+  "fridge_header_link": true,
+  "fridge_hint_counts_two": true,
+  "fridge_first_has_both_plov": true,
+  "fridge_results_listed": 6,
+  "fridge_remembers_selection": true,
+  "fridge_clear_forgets_selection": true,
+  "fridge_empty_submit_blocked": true,
+  "fridge_unknown_product_400_alert": true,
+  "catalog_table_sort_by_time": true,
+  "catalog_view_noindex": true,
+  "storage_namespace_own_after_fridge": true,
   "nojs_recipe_steps": 7,
   "nojs_ingredients": 6,
   "nojs_fav_button_hidden": true
