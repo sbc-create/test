@@ -170,3 +170,7 @@ home, garden, plants, games-story, games-rpg, games-survival. Следующие
 
 Обновление 00:29Z: food-baking C (#123; bake-batch, 8875; 32 действия PASS, axe 0, 30 URL × 4 — 0). Третьи варианты: 9 сайтов из 10.
 Осталось: food-daily C, утренний отчёт.
+
+Обновление 01:26Z: все 30 вариантов (A/B/C × 10) с актуальными доказательствами; ночью углублены plants (19 видов), garden (18 работ),
+games-rpg (8 предметов), games-survival (постройки, кирка); убраны сдвиги макета; утренний отчёт — docs/progress/MORNING-REPORT-2026-10-13.md.
+Следующее: home-practical — новые инструкции из allowlist (IKEA), если хватит времени; финальная сверка превью.
