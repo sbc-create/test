@@ -158,3 +158,15 @@ def test_no_cross_template_code():
             and p.name != "test_games_story.py"
         ):
             assert not bad.search(p.read_text(errors="replace")), p
+
+
+def test_meta_descriptions_fit_snippet(app):
+    from saga.server import SNIPPET_MAX, snippet
+
+    assert snippet("Раз. Два три.", 8) == "Раз."
+    long_clause = "Начало фразы " + "и ещё слова " * 8 + ", хвост " + "без точки " * 10
+    assert snippet(long_clause).endswith("слова…")
+    for path in re.findall(r"<loc>https?://[^/]+(/[^<]*)</loc>", get(app, "/sitemap.xml")[1]):
+        _, html, _ = get(app, path)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+        assert 20 <= len(desc) <= SNIPPET_MAX, (path, len(desc))
