@@ -174,8 +174,10 @@ def run(shots: Path | None) -> dict:
             pg.locator(".seq__t a").first.click()
         A["problem_item_opens_material"] = pg.url.endswith(MAT)
         pg.goto(BASE + "/")
+        if not pg.locator(".rooms-bar").is_visible():  # телефон: панель помещений скрыта, путь — через «Меню»
+            pg.locator(".menu summary").click()
         with pg.expect_navigation():
-            pg.locator(".rooms-bar a", has_text="Что мешает").click()
+            pg.locator("a[href='/problemy/']:visible").first.click()
         A["problems_nav_link"] = pg.url.endswith("/problemy/") and pg.locator(".problems li").count() == 6
         pg.goto(BASE + MAT)
         pg.click("[data-check-reset]")
