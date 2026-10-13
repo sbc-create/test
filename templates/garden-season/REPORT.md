@@ -31,3 +31,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–140 м�
 | наполнение | 18 работ по календарям OSU Extension и RHS (4 добавлены ночью 13.10); сроков для России нет — не придуманы; тексты — manual_standin, не Qwen |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 720bccc (13.10.2026)
+
+Meta description длиннее одного предложения теперь режется по запятой или тире (а не посреди фразы, как «…с которыми нельзя…»); у garden-season описания работ были до 263 символов — теперь ≤160. Тест проверяет все URL sitemap (20–160 символов) и случай с запятой.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/garden-season test` | 0 | 14 passed in 0.82s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m sezon.qa --shots docs/screenshots/720bccc --out docs/verification-browser-qa.json` | 0 | 29 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8854 '/poisk/?q=газон' /nesushchestvuet/` | 0 | 61 URL × 4 ширины, 0 замечаний |
+| `bash bin/garden-season build --commit HEAD` | 0 | собрано из 720bccc |
+
+Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.

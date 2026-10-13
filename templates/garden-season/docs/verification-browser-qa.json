@@ -1,6 +1,6 @@
 {
- "commit_head": "a08279b225de3409d8b75d855ab7805934519bf1",
- "at": "2026-10-13T01:23:07Z",
+ "commit_head": "720bcccf2915ff52d5bc62a44608ad6a9b258f36",
+ "at": "2026-10-13T08:39:11Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -81,7 +81,7 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 120,
+   "lcp_ms": 160,
    "cls": 0
   },
   "mobile:region": {
@@ -89,43 +89,43 @@
    "cls": 0
   },
   "mobile:region-filtered": {
-   "lcp_ms": 68,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:work": {
-   "lcp_ms": 108,
+   "lcp_ms": 80,
    "cls": 0
   },
   "mobile:crop": {
-   "lcp_ms": 68,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:december": {
-   "lcp_ms": 72,
+   "lcp_ms": 40,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 140,
+   "lcp_ms": 88,
    "cls": 0
   },
   "desktop:region": {
-   "lcp_ms": 64,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:region-filtered": {
-   "lcp_ms": 60,
+   "lcp_ms": 44,
    "cls": 0
   },
   "desktop:work": {
-   "lcp_ms": 64,
+   "lcp_ms": 92,
    "cls": 0
   },
   "desktop:crop": {
-   "lcp_ms": 60,
+   "lcp_ms": 48,
    "cls": 0
   },
   "desktop:december": {
-   "lcp_ms": 64,
+   "lcp_ms": 56,
    "cls": 0
   }
  },
@@ -134,17 +134,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/a08279b/home-mobile.png",
-  "docs/screenshots/a08279b/region-mobile.png",
-  "docs/screenshots/a08279b/region-filtered-mobile.png",
-  "docs/screenshots/a08279b/work-mobile.png",
-  "docs/screenshots/a08279b/crop-mobile.png",
-  "docs/screenshots/a08279b/december-mobile.png",
-  "docs/screenshots/a08279b/home-desktop.png",
-  "docs/screenshots/a08279b/region-desktop.png",
-  "docs/screenshots/a08279b/region-filtered-desktop.png",
-  "docs/screenshots/a08279b/work-desktop.png",
-  "docs/screenshots/a08279b/crop-desktop.png",
-  "docs/screenshots/a08279b/december-desktop.png"
+  "docs/screenshots/720bccc/home-mobile.png",
+  "docs/screenshots/720bccc/region-mobile.png",
+  "docs/screenshots/720bccc/region-filtered-mobile.png",
+  "docs/screenshots/720bccc/work-mobile.png",
+  "docs/screenshots/720bccc/crop-mobile.png",
+  "docs/screenshots/720bccc/december-mobile.png",
+  "docs/screenshots/720bccc/home-desktop.png",
+  "docs/screenshots/720bccc/region-desktop.png",
+  "docs/screenshots/720bccc/region-filtered-desktop.png",
+  "docs/screenshots/720bccc/work-desktop.png",
+  "docs/screenshots/720bccc/crop-desktop.png",
+  "docs/screenshots/720bccc/december-desktop.png"
  ]
 }

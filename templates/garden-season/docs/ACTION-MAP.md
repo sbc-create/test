@@ -1,6 +1,6 @@
 # Карта действий garden-season, вариант B (region-timeline)
 
-Проверено на commit `a08279b` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/a08279b --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `720bccc` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/720bccc --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
