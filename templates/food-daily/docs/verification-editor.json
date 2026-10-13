@@ -1,6 +1,6 @@
 {
- "commit_head": "fff36e7",
- "method": "изолированная копия шаблона из коммита fff36e7 на 127.0.0.1:8882; учётка создана штатным `python3 -m fooddaily.editor_secret` с FOOD_DAILY_C_EDITOR_SECRET=<scratchpad>/secret/editor.json (0600, вне репозитория, удалена после проверки); БД — копия БД food-daily A (наполнение B/C — тот же снимок); рабочее превью и данные ветки не изменялись",
+ "commit_head": "ad0073b",
+ "method": "изолированная копия шаблона из коммита ad0073b на 127.0.0.1:8882; база — копия собственной базы C (после editorial clone-db и правок v2–v4); учётка создана штатным `python3 -m fooddaily.editor_secret` с FOOD_DAILY_C_EDITOR_SECRET=<scratchpad>/secret/editor.json (0600, вне репозитория, удалена после проверки); рабочее превью и база ветки не изменялись",
  "robots_rule": "Disallow: /",
  "actions": {
   "no_auth_401_with_challenge": true,
@@ -47,5 +47,12 @@
  "console": {
   "mobile": [],
   "desktop": []
+ },
+ "versions_check": {
+  "item_200": true,
+  "shows_three_versions": true,
+  "diff_200": true,
+  "diff_has_old_and_new_tip": true,
+  "notes_visible_to_editor": true
  }
 }
