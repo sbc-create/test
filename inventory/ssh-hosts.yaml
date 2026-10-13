@@ -6,7 +6,7 @@ hosts:
     port: 22
     deploy_user: k2deploy
     auth: publickey_only
-    ssh_key_secret_ref: file:/home/claude/.ssh/recipient-20260930
+    ssh_key_secret_ref: file:/home/claude/.ssh/k2deploy-zomro-01
     known_hosts_entry_ref: inventory/known_hosts.d/k2-zomro-01
     strict_host_key_checking: yes
     sudo_allowlist: []

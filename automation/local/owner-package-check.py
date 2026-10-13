@@ -47,9 +47,24 @@ import importlib.util
 import json
 import re
 import sys
+
+import yaml
 from pathlib import Path
+from typing import NamedTuple
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
+
+
+class БлокКоманд(NamedTuple):
+    """Команды одного блока и узел, на котором они исполняются.
+
+    `узел is None` — блок для ЭТОЙ машины: пути проверяются здесь. Иначе
+    локальные пути не проверяются вовсе, и это сказано в сводке: проверка,
+    которая молча ничего не смотрит, доверия не несёт.
+    """
+
+    узел: str | None
+    команды: list[tuple[Path | None, str]]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 
 #: Сценарии, которым нужен реестр рядом с собой (читают $SRC_ROOT/config/...).
@@ -77,15 +92,20 @@ def каталоги_и_команды(текст: str) -> list[tuple[Path | Non
     команде нет: `python3 -m <модуль>`.
     """
     итог: list[tuple[Path | None, str]] = []
-    for сырое in _строки_блоков(текст):
-        for кат, команда in сырое:
-            итог.append((кат, команда))
+    for блок in _строки_блоков(текст):
+        итог += блок.команды
     return итог
 
 
-def _строки_блоков(текст: str) -> list[list[tuple[Path | None, str]]]:
-    блоки_: list[list[tuple[Path | None, str]]] = []
+#: Метка блока, исполняемого на другой машине: `# host: <ref из inventory>`.
+МЕТКА_ХОСТА = re.compile(r"^\s*#\s*host:\s*([\w.-]+)\s*$", re.M)
+
+
+def _строки_блоков(текст: str) -> list[БлокКоманд]:
+    блоки_: list[БлокКоманд] = []
     for кусок in re.findall(r"```bash\n(.*?)```", текст, re.S):
+        найдено = МЕТКА_ХОСТА.search(кусок)
+        узел = найдено.group(1) if найдено else None
         текущий: Path | None = None
         собранные: list[tuple[Path | None, str]] = []
         for команда in _склеить(кусок):
@@ -97,7 +117,7 @@ def _строки_блоков(текст: str) -> list[list[tuple[Path | None, 
                     continue
                 if сл:
                     собранные.append((текущий, ч))
-        блоки_.append(собранные)
+        блоки_.append(БлокКоманд(узел, собранные))
     return блоки_
 
 
@@ -278,10 +298,34 @@ def проверить(док: Path, *, строгий_каталог: bool = Tr
     беды: list[str] = []
     известные = site_id_ы()
     каталоги_проверены: set[Path] = set()
+    узлы = inventory_хосты()
     for блок in _строки_блоков(док.read_text(encoding="utf-8")):
-        беды += _проверить_блок(блок, известные, каталоги_проверены,
+        if блок.узел is not None:
+            # Метка действует только для утверждённого хоста. Иначе она была
+            # бы способом отключить проверку одной строкой комментария.
+            if блок.узел not in узлы:
+                беды.append(f"метка «# host: {блок.узел}» указывает на хост вне "
+                            f"inventory/ssh-hosts.yaml — блок не проверяется и "
+                            f"не может быть помечен")
+            continue
+        беды += _проверить_блок(блок.команды, известные, каталоги_проверены,
                                 строгий_каталог, корень)
     return беды
+
+
+def inventory_хосты() -> set[str]:
+    """Имена и адреса хостов из реестра — для метки блока."""
+    try:
+        д = yaml.safe_load((КОРЕНЬ / "inventory" / "ssh-hosts.yaml")
+                           .read_text(encoding="utf-8")) or {}
+    except (OSError, ValueError):
+        return set()
+    итог: set[str] = set()
+    for з in д.get("hosts") or []:
+        for ключ in ("ref", "hostname"):
+            if з.get(ключ):
+                итог.add(str(з[ключ]))
+    return итог
 
 
 def это_заготовка(значение: str | Path) -> bool:
@@ -391,8 +435,15 @@ def main() -> int:
         print(f"ОТКАЗ: нет {док}", file=sys.stderr)
         return 2
     команды = блоки(док.read_text(encoding="utf-8"))
+    удалённые = [б for б in _строки_блоков(док.read_text(encoding="utf-8"))
+                 if б.узел is not None]
     беды = проверить(док, строгий_каталог=not а.relaxed_cwd)
     print(f"документ: {док.name}; команд в блоках: {len(команды)}")
+    if удалённые:
+        всего = sum(len(б.команды) for б in удалённые)
+        узлы = ", ".join(sorted({str(б.узел) for б in удалённые}))
+        print(f"блоков для другой машины: {len(удалённые)} ({всего} команд, "
+              f"узлы: {узлы}) — их пути проверяются ТАМ, не здесь")
     if not беды:
         print("расхождений нет: каждый сценарий на месте, реестр и заготовки рядом с ним, "
               "все --site есть в реестре")
