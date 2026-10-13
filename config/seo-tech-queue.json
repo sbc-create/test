@@ -653,8 +653,8 @@
       "norm": "sitemap: все индексируемые канонические страницы",
       "expected": "канонические адреса разделов жанров (те, что объявляет canonical: /catalog/?genre=<код>) в карте сайта; разметка не меняется",
       "check": "число жанровых адресов в /sitemap.xml = числу непустых жанров; каждый 200 и index",
-      "status": "released",
-      "evidence": "zonafilm-space и zonafilm12-site: РАЗДЕЛЫ_КАРТЫ обёрнут — при обходе добавляет /catalog/?genre=<код> (как ссылка и canonical), один код на имя жанра (наибольший состав), без технической метки «западный контент»: 97 и 96 разделов жанров; выборка 16 адресов на живом — все 200, index, canonical на себя. checks/sitemap_genres.py. zonafilm-cc — отдельно (карта через lords_sitemap_layer в serve.py). zonafilm-cc: src/serve.py — РазделыСЖанрами поверх перечня lords_sitemap_layer (96 жанров), run.sh rc=0. Коммиты ЛОКАЛЬНО: zonafilm-space fe52e03, zonafilm12-site f6bf5bc, zonafilm-cc — последний в ветке. 13.10 ~21:25Z (результаты исполнителя zona-0N-code-* 21:23–21:25Z): невидимая часть партии Б Zona выпущена — GitHub 81e717e (zonafilm-space), 65d0ba5 (zonafilm12), 147d765 (zonafilm-cc) поверх правки CI (манифест шаблона из репозитория); CI success 38468596759/38468599369/38468603118; исполнитель zona-01/02/03 — ok/live_verified. Живые карты zonafilm.space 98 и zonafilm12 97 разделов жанров; zonafilm.cc — 0: гонка запуска (T073)."
+      "status": "live_verified",
+      "evidence": "zonafilm-space и zonafilm12-site: РАЗДЕЛЫ_КАРТЫ обёрнут — при обходе добавляет /catalog/?genre=<код> (как ссылка и canonical), один код на имя жанра (наибольший состав), без технической метки «западный контент»: 97 и 96 разделов жанров; выборка 16 адресов на живом — все 200, index, canonical на себя. checks/sitemap_genres.py. zonafilm-cc — отдельно (карта через lords_sitemap_layer в serve.py). zonafilm-cc: src/serve.py — РазделыСЖанрами поверх перечня lords_sitemap_layer (96 жанров), run.sh rc=0. Коммиты ЛОКАЛЬНО: zonafilm-space fe52e03, zonafilm12-site f6bf5bc, zonafilm-cc — последний в ветке. 13.10 ~21:25Z (результаты исполнителя zona-0N-code-* 21:23–21:25Z): невидимая часть партии Б Zona выпущена — GitHub 81e717e (zonafilm-space), 65d0ba5 (zonafilm12), 147d765 (zonafilm-cc) поверх правки CI (манифест шаблона из репозитория); CI success 38468596759/38468599369/38468603118; исполнитель zona-01/02/03 — ok/live_verified. Живые карты zonafilm.space 98 и zonafilm12 97 разделов жанров; zonafilm.cc — 0: гонка запуска (T073). 13.10 21:52Z: zonafilm-cc b5742cb — CI success 38471180499, zona-02 ok/live_verified; живая карта zonafilm.cc пересобрана 21:52:58Z — 63 881 адрес, разделов жанров 97 (до правки 0)."
     },
     {
       "id": "T033",
@@ -1395,9 +1395,9 @@
       "norm": "T032; REQ-SEO-CRAWL",
       "expected": "разделы жанров в карте после каждого перезапуска",
       "check": "checks/sitemap_genres_race.py",
-      "status": "verified",
+      "status": "live_verified",
       "dependencies": "нет",
-      "evidence": "zonafilm-cc b5742cb (GitHub): РазделыСЖанрами ждёт индекс до 120 с; проверка: прежний код rc=1, правка rc=0; полный run.sh 54 PASS (cell-unit — только в рабочей копии под другим именем, в основной PASS). CI ждёт."
+      "evidence": "zonafilm-cc b5742cb (GitHub): РазделыСЖанрами ждёт индекс до 120 с; проверка: прежний код rc=1, правка rc=0; полный run.sh 54 PASS (cell-unit — только в рабочей копии под другим именем, в основной PASS). 13.10 21:52Z: zonafilm-cc b5742cb — CI success 38471180499, zona-02 ok/live_verified; живая карта zonafilm.cc пересобрана 21:52:58Z — 63 881 адрес, разделов жанров 97 (до правки 0)."
     }
   ]
 }
