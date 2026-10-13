@@ -1,6 +1,6 @@
 # Карта действий food-daily, вариант C (party-list)
 
-Проверено на commit `7e7fb52` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/7e7fb52 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `6e1f1dc` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/6e1f1dc --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |

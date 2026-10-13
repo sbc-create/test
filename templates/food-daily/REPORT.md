@@ -90,3 +90,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–212 м�
 | `bash bin/food-daily build --commit HEAD` | 0 | собрано из 7e7fb52 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 224 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 6e1f1dc (13.10.2026)
+
+Редакционный механизм: изолированная база варианта (editorial clone-db — копия базы A, сверена со снимком C: 22 из 22), правки только новыми версиями (editorial revise: конфликт базы, числа — из записи источника, ворота публикации). Подсказка к чечевичному супу исправлена (v2): новая версия в базе, на странице после пересборки снимка, сохраняется после двух перезапусков превью. Разбор подсказок и замен (моделью, не человеком): на страницах 9 подсказок и 2 замены со ссылкой на шаг источника; 21 подсказка и 20 замен — в editor_notes (22 версии). Браузерная проверка редактора /redaktor/ — NOT RUN: пароль действующего превью C в секрете вне репозитория не читался; история версий проверена через CLI (editorial diff) и тесты tests/test_editorial_revise.py.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 137 passed in 14.50s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/6e1f1dc --out docs/verification-browser-qa.json` | 0 | 53 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8876 '/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8' '/iz-holodilnika/?est=kurica&est=ris' '/iz-holodilnika/?est=kvantovyj' '/recepty/?sort=vremya&vid=tablica' '/poisk/?q=творог' /nesushchestvuet/` | 0 | 59 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из 6e1f1dc |
+
+Лабораторный LCP (loopback, без троттлинга) — до 184 мс. Карта действий — `docs/ACTION-MAP.md`.
