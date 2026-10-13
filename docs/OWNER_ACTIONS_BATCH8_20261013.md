@@ -130,7 +130,7 @@ python3 automation/local/assign-publisher-id.py --site lords-10 --publisher-id <
 | проверено | результат |
 | --- | --- |
 | таймер установлен и включён | да: `/etc/systemd/system/site-factory-backup.timer` и ссылка в `timers.target.wants` |
-| живой сценарий свежий | да: `/srv/site-factory/repo/.../site-factory-backup.sh`, 249 строк, прежнее исправление прав на consumer-файлы на месте |
+| живой сценарий свежий | да: `/srv/site-factory/repo/.../site-factory-backup.sh` — 13.10 15:32 перенесена версия со сбором данных витрин (19 428 Б); прежняя сохранена рядом как `.before-cell-data-63d3b489` и совпадала с версией репозитория до правки побайтово |
 | свежесть копий | **последний архив 29.09**; свежее нет ни одного |
 | последняя копия С ЗАПИСЬЮ о проверке | 23.09, 20 суток назад; содержимое записи мне НЕ ИЗМЕРЕНО — `0640 root:root` |
 | архивы без записи о проверке | 24.09 и 29.09 — не подтверждены, доверять им нечем |
@@ -337,13 +337,28 @@ sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/launch-new-site
 **Условие остановки:** `healthz` не отвечает или юнит не поднялся — витрина
 остаётся незапущенной, остальные семь не трогаем.
 
+### Путь запуска: важно, и это измерено
+
+Сценарии запуска, nginx, TLS и регистрации у производителя берут и реестр
+ячеек, и заготовки от СВОЕГО расположения (`SRC_ROOT=$(dirname $0)/../..`,
+дальше `$SRC_ROOT/config/site-cells.json` и
+`$SRC_ROOT/automation/host/nginx-site/<site>.conf`). В `/srv/site-factory/repo`
+их нет вовсе — измерено 13.10: ни `install-site-nginx.sh`, ни
+`config/site-cells.json`, ни заготовок партии. Поэтому все они запускаются из
+**рабочего дерева** `/home/claude/wt-nova-publish-memory-02`, и в первой
+редакции этого пакета у меня было указано неверно: команда отказала бы сразу
+словами «No such file or directory».
+
+Из живой копии `/srv/site-factory/repo` запускаются только два сценария, и они
+там действительно есть: `site-factory-backup.sh` и `backup-retention.sh`.
+
 ### Шаг 3.2. nginx и сертификат
 
 ```bash
-sudo bash /srv/site-factory/repo/automation/host/install-site-nginx.sh --site lords-10 --dry-run
-sudo bash /srv/site-factory/repo/automation/host/install-site-nginx.sh --site lords-10
+sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/install-site-nginx.sh --site lords-10 --dry-run
+sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/install-site-nginx.sh --site lords-10
 sudo nginx -t
-sudo bash /srv/site-factory/repo/automation/host/install-site-tls.sh --site lords-10
+sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/install-site-tls.sh --site lords-10
 ```
 
 Ключ именно `--site`, не позиционный аргумент: проверено по заголовкам обоих
@@ -366,10 +381,10 @@ successful`; certbot выдаёт сертификат на `lordfilm.group` **�
 ### Шаг 3.3. Производитель каталога
 
 ```bash
-sudo python3 /srv/site-factory/repo/automation/host/apply-publisher-patch.py --site lords-10
-sudo python3 /srv/site-factory/repo/automation/host/apply-publisher-patch.py --site lords-10 --apply
-sudo bash /srv/site-factory/repo/automation/host/install-publisher-cell-paths.sh --dry-run
-sudo bash /srv/site-factory/repo/automation/host/install-publisher-cell-paths.sh
+sudo python3 /home/claude/wt-nova-publish-memory-02/automation/host/apply-publisher-patch.py --site lords-10
+sudo python3 /home/claude/wt-nova-publish-memory-02/automation/host/apply-publisher-patch.py --site lords-10 --apply
+sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/install-publisher-cell-paths.sh --dry-run
+sudo bash /home/claude/wt-nova-publish-memory-02/automation/host/install-publisher-cell-paths.sh
 ```
 
 **Ожидаемый результат:** первая команда (сухой прогон) печатает «будет
