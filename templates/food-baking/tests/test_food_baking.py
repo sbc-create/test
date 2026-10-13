@@ -12,6 +12,15 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from bakebook import drafts  # noqa: E402
+
+# Черновики сверяются с закрытыми снимками источников (var/<сайт>/private/*.json.gz): сырой текст страниц
+# в git не хранится (права и срок хранения). В чистой копии без var/ эти тесты не выполняются — SKIPPED
+# с причиной; в рабочей копии со снимками выполняются как обычно.
+NEEDS_PRIVATE = pytest.mark.skipif(
+    not any(drafts.PRIVATE.glob("*.json.gz")),
+    reason="нет закрытых снимков источников var/<сайт>/private — проверка черновиков не выполнялась",
+)
+
 from bakebook.net import Client, Refused, Robots  # noqa: E402
 from bakebook.server import App  # noqa: E402
 from bakebook.site import Site  # noqa: E402
@@ -43,11 +52,13 @@ def test_at_least_12_full_recipes_in_several_groups(app):
     assert all(len(r.ingredients) >= 2 and len(r.steps) >= 2 and r.servings for r in s.recipes)
 
 
+@NEEDS_PRIVATE
 def test_all_drafts_pass_validation():
     out = {p.name: drafts.validate(json.loads(p.read_text())) for p in drafts.DRAFTS.glob("*.json")}
     assert not {k: v for k, v in out.items() if v}
 
 
+@NEEDS_PRIVATE
 def test_validator_rejects_invented_oven_number():
     d = json.loads(next(drafts.DRAFTS.glob("*.json")).read_text())
     bad = copy.deepcopy(d)
@@ -55,6 +66,7 @@ def test_validator_rejects_invented_oven_number():
     assert any("число 999" in e for e in drafts.validate(bad))
 
 
+@NEEDS_PRIVATE
 def test_validator_rejects_reordered_and_missing_ingredient():
     d = json.loads(next(drafts.DRAFTS.glob("*.json")).read_text())
     bad = copy.deepcopy(d)
