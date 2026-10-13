@@ -25,6 +25,7 @@ from __future__ import annotations
 
 import datetime as _dt
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
@@ -339,3 +340,101 @@ def test_по_умолчанию_исключается_свой_pid(модул�
     найдено, пояснение = модуль.прогоны_сбора(корень)
     assert найдено == []
     assert str(os.getpid()) in пояснение
+
+def _юнит_и_окружение(tmp_path, *, артефакты: dict[str, int], метка: float | None):
+    """Собрать юнит, каталог артефактов и метку срабатывания для прогона главной."""
+    юнит = tmp_path / "analytics-cabinet.timer"
+    юнит.write_text(ЮНИТ_ТЕКСТ)
+    wants = tmp_path / "wants"
+    wants.write_text("x")
+    каталог = tmp_path / "analytics"
+    каталог.mkdir()
+    for имя, когда in артефакты.items():
+        ф = каталог / имя
+        ф.write_text("{}")
+        os.utime(ф, (когда, когда))
+    stamp = tmp_path / "stamp"
+    if метка is not None:
+        stamp.write_text("x")
+        os.utime(stamp, (метка, метка))
+    пусто = _проц(tmp_path, btime=1_760_000_000, записи={})
+    return юнит, wants, каталог, stamp, пусто
+
+
+def test_окно_уже_сбора_называется_отдельной_строкой(модуль, tmp_path, capsys):
+    """13.10 прогон шёл 25+ мин: при ширине 15 мин артефакт вышел бы за окно."""
+    день = _dt.date(2026, 10, 13)
+    открылось = _dt.datetime(2026, 10, 13, 5, 0, tzinfo=UTC)
+    срабатывание = открылось + _dt.timedelta(minutes=3, seconds=28)
+    артефакт = открылось + _dt.timedelta(minutes=34)
+    юнит, wants, каталог, stamp, проц = _юнит_и_окружение(
+        tmp_path,
+        артефакты={f"analytics-{день}.json": артефакт.timestamp()},
+        метка=срабатывание.timestamp())
+    модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                    "--stamp", str(stamp), "--days", "1",
+                    "--artifacts", str(каталог), "--proc", str(проц)])
+    напечатано = capsys.readouterr().out
+    assert "ПРЕДЕЛ ОКНА" in напечатано
+    assert "нужно не меньше 34 мин" in напечатано
+    # Проверять «ПОДТВЕРЖДЁН нет в выводе» нельзя: это слово стоит в заголовке
+    # инструмента. Смотрю строку самих суток.
+    строка = next(с for с in напечатано.splitlines()
+                  if с.startswith(f"  {день}  "))
+    assert модуль.НЕОТЛИЧИМО in строка, f"вердикт суток подменён: {строка}"
+    assert модуль.ПОДТВЕРЖДЁН not in строка
+
+
+def test_предел_окна_молчит_когда_артефакт_внутри_окна(модуль, tmp_path, capsys):
+    день = _dt.date(2026, 10, 13)
+    открылось = _dt.datetime(2026, 10, 13, 5, 0, tzinfo=UTC)
+    юнит, wants, каталог, stamp, проц = _юнит_и_окружение(
+        tmp_path,
+        артефакты={f"analytics-{день}.json":
+                   (открылось + _dt.timedelta(minutes=7)).timestamp()},
+        метка=(открылось + _dt.timedelta(minutes=3)).timestamp())
+    модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                    "--stamp", str(stamp), "--days", "1",
+                    "--artifacts", str(каталог), "--proc", str(проц)])
+    напечатано = capsys.readouterr().out
+    assert "ПРЕДЕЛ ОКНА" not in напечатано
+    assert модуль.ПОДТВЕРЖДЁН in напечатано
+
+
+def test_предел_окна_молчит_когда_таймер_не_срабатывал_в_окне(модуль, tmp_path, capsys):
+    """Метка вне окна — значит это не затянувшийся прогон по расписанию."""
+    день = _dt.date(2026, 10, 13)
+    открылось = _dt.datetime(2026, 10, 13, 5, 0, tzinfo=UTC)
+    юнит, wants, каталог, stamp, проц = _юнит_и_окружение(
+        tmp_path,
+        артефакты={f"analytics-{день}.json":
+                   (открылось + _dt.timedelta(minutes=40)).timestamp()},
+        метка=(открылось + _dt.timedelta(hours=5)).timestamp())
+    модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                    "--stamp", str(stamp), "--days", "1",
+                    "--artifacts", str(каталог), "--proc", str(проц)])
+    напечатано = capsys.readouterr().out
+    assert "ПРЕДЕЛ ОКНА" not in напечатано
+
+
+def test_длительность_идущего_прогона_печатается(модуль, tmp_path, capsys):
+    юнит = tmp_path / "analytics-cabinet.timer"
+    юнит.write_text(ЮНИТ_ТЕКСТ)
+    wants = tmp_path / "wants"
+    wants.write_text("x")
+    каталог = tmp_path / "analytics"
+    каталог.mkdir()
+    (каталог / "analytics-2026-10-01.json").write_text("{}")
+    # Старт процесса — 10 минут назад от текущего момента.
+    uptime = float(Path("/proc/uptime").read_text().split()[0])
+    btime = int(_dt.datetime.now(tz=UTC).timestamp() - uptime)
+    тики = int((uptime - 600) * 100)
+    проц = _проц(tmp_path, btime=btime,
+                 записи={31337: ("python3 -m seo_operator.cli analytics-collect",
+                                 max(тики, 0))})
+    модуль.главная(["--unit", str(юнит), "--wants", str(wants),
+                    "--stamp", str(tmp_path / "нет"), "--days", "1",
+                    "--artifacts", str(каталог), "--proc", str(проц)])
+    напечатано = capsys.readouterr().out
+    assert "прогон ИДЁТ прямо сейчас: pid 31337" in напечатано
+    assert "идёт 10 мин" in напечатано
