@@ -21,6 +21,7 @@ case "${1:-help}" in
   stop) if alive; then kill "$(cat "$PIDFILE")"; echo "остановлен"; else echo "не запущен"; fi; rm -f "$PIDFILE" ;;
   restart) bash "$HERE/bin/games-story" stop; bash "$HERE/bin/games-story" start ;;
   status) if alive; then echo "работает, pid $(cat "$PIDFILE")"; health; else echo "не запущен"; exit 3; fi ;;
+  kit) shift; exec python3 -m saga.kit "$@" ;;   # комплект переноса: build --out <каталог> | verify-db
   test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" --basetemp "$REPO/var/games-story/pytest" "$HERE/tests" "$@" ;;
   *) echo "команды: sources content build qa start stop restart status test" ;;
 esac
