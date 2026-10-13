@@ -514,8 +514,8 @@
       "norm": "внутренние ссылки — на канонические адреса",
       "expected": "ссылки листалки в режиме по умолчанию — /catalog/?page=N; dense/list сохраняют view",
       "check": "checks/pagination_links.py; bash checks/run.sh; живой HTML /catalog/",
-      "status": "session",
-      "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут."
+      "status": "verified",
+      "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут. Полные прогоны rc=0 (25/28/27 исполнено, пропусков 0); закоммичено c6dbda7, 737b60b, 6f0722f. Выпуск ждёт CI (B019)."
     },
     {
       "id": "T028",
@@ -530,9 +530,9 @@
       "norm": "внутренние ссылки — на канонические адреса",
       "expected": "ссылки листалки разделов = канонический адрес страницы (без подразумеваемых sort/kind/section)",
       "check": "живой HTML листалки /movies/ /series/ /catalog/; canonical целевой страницы = её адрес",
-      "status": "blocked",
-      "evidence": "Zona СДЕЛАНО (код, проверки rc=0, выпуск подан): zonafilm-space 3ce4acc и zonafilm12-site 099f26c — запрос_строкой не пишет _подразумеваемое (sort, mode), регрессия pager_links.py (на прежнем коде ?sort=newest&page=2); zonafilm-cc c0d409e — правка поверх закреплённого шаблона в src/serve.py (ВидЗона.листалка без сортировки по умолчанию: title для /collections, newest для остальных). Lords НЕ сделано: lordfilm47 (kind=Фильм/Сериал), 1lordserials1 (kind), lordserials22.info (kind+section, цель noindex) — правка в src/lords-frontend.py, а это закреплённое ядро (AGENTS.md правило 3: ядро меняется отдельной задачей и коммитом); адаптер lords01-frontend.py по своему описанию разметку страниц не трогает. Попутно: sha256 ядер четырёх Lords разные (e06ab10b4507, 84f772189472, ddedc74e2675, ce163cf91def) при утверждении в lords01-frontend.py «байт в байт совпадающее с ядром соседа lords-02».",
-      "owner_action": "Архитектор (ядро Lords): ссылки листалки разделов без подставленных маршрутом kind/section (как у lordserial33.biz: /movies/?page=2) — правкой ядра либо разрешением на правку в адаптере ячейки; и сверка утверждения «ядро байт в байт с lords-02»."
+      "status": "verified",
+      "evidence": "Zona СДЕЛАНО (код, проверки rc=0, выпуск подан): zonafilm-space 3ce4acc и zonafilm12-site 099f26c — запрос_строкой не пишет _подразумеваемое (sort, mode), регрессия pager_links.py (на прежнем коде ?sort=newest&page=2); zonafilm-cc c0d409e — правка поверх закреплённого шаблона в src/serve.py (ВидЗона.листалка без сортировки по умолчанию: title для /collections, newest для остальных). Lords НЕ сделано: lordfilm47 (kind=Фильм/Сериал), 1lordserials1 (kind), lordserials22.info (kind+section, цель noindex) — правка в src/lords-frontend.py, а это закреплённое ядро (AGENTS.md правило 3: ядро меняется отдельной задачей и коммитом); адаптер lords01-frontend.py по своему описанию разметку страниц не трогает. Попутно: sha256 ядер четырёх Lords разные (e06ab10b4507, 84f772189472, ddedc74e2675, ce163cf91def) при утверждении в lords01-frontend.py «байт в байт совпадающее с ядром соседа lords-02». 13.10 ~01:40Z Lords по решению Архитектора: automation/host/apply-pager-route-params.py (4af6ad3), источник и ядра lordfilm47 c6c2d7e, 1lordserials1 793543b, lordserials22-info 598ef85; поведенческая pager_route_params.py (на непривёденном lordserial33 падает); прогоны rc=0. Все девять коммитов (Zona 3, Lords 3) ждут CI — B019. Строка «байт в байт с lords-02» в lords01-frontend.py lordfilm47 исправлена.",
+      "owner_action": ""
     },
     {
       "id": "B019",
