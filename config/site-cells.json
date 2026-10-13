@@ -935,7 +935,9 @@
     {
       "site_id": "lords-10",
       "domain": "lordfilm.group",
-      "aliases": [],
+      "aliases": [
+        "www.lordfilm.group"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1014,7 +1016,9 @@
     {
       "site_id": "lords-11",
       "domain": "lordfilm.spb.ru",
-      "aliases": [],
+      "aliases": [
+        "www.lordfilm.spb.ru"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1093,7 +1097,9 @@
     {
       "site_id": "lords-12",
       "domain": "lordfilm.msk.ru",
-      "aliases": [],
+      "aliases": [
+        "www.lordfilm.msk.ru"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1172,7 +1178,9 @@
     {
       "site_id": "lords-13",
       "domain": "lordserial.su",
-      "aliases": [],
+      "aliases": [
+        "www.lordserial.su"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1251,7 +1259,9 @@
     {
       "site_id": "lords-14",
       "domain": "lordserial.group",
-      "aliases": [],
+      "aliases": [
+        "www.lordserial.group"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1330,7 +1340,9 @@
     {
       "site_id": "lords-15",
       "domain": "lordserial.spb.ru",
-      "aliases": [],
+      "aliases": [
+        "www.lordserial.spb.ru"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1409,7 +1421,9 @@
     {
       "site_id": "lords-16",
       "domain": "lordserial.msk.ru",
-      "aliases": [],
+      "aliases": [
+        "www.lordserial.msk.ru"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
@@ -1488,7 +1502,9 @@
     {
       "site_id": "lords-17",
       "domain": "lordserial.net.ru",
-      "aliases": [],
+      "aliases": [
+        "www.lordserial.net.ru"
+      ],
       "status": "planned",
       "repo": {
         "kind": "remote",
