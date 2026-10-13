@@ -1,0 +1,16 @@
+{
+ "id": "src-d50a9910ee",
+ "url": "https://minecraft.wiki/w/Raw_Iron",
+ "fetched_at": "2026-10-12T22:26:28Z",
+ "page_sha256": "4cc6e601a0ffb1e5328fb5cd73aa9232ab0ce608cba78fb45d6515cc67f393a7",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "resource",
+ "name": "Raw Iron",
+ "lead": [
+  "Raw iron is an item obtained by mining iron ore . It can be smelted in a furnace or blast furnace to produce iron ingots , which are used in crafting.",
+  "Iron ore and deepslate iron ore mined with a stone pickaxe or a higher-tier pickaxe drop 1 unit of raw iron. When mined with a pickaxe enchanted with Fortune , the ore can drop an additional unit per level of the enchantment, up to a maximum of 4 units with Fortune III. If mined with a pickaxe enchanted with Silk Touch , the ore block itself is dropped instead."
+ ]
+}

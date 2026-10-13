@@ -1,0 +1,21 @@
+{
+ "slug": "biom-ravniny",
+ "game": "minecraft",
+ "type": "biome",
+ "src": "src-b11ea9dd8d",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Биом: равнины",
+ "summary": "Равнины — распространённые травянистые биомы Верхнего мира с открытым рельефом и цветами.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "biom-les"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

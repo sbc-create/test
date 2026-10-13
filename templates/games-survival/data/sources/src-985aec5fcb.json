@@ -1,0 +1,16 @@
+{
+ "id": "src-985aec5fcb",
+ "url": "https://minecraft.wiki/w/Desert",
+ "fetched_at": "2026-10-12T22:26:34Z",
+ "page_sha256": "1c0865fff7d32b923706cb70fa4cee9a8df0affc00cb7fdb6a88c62a20c5215d",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "biome",
+ "name": "Desert",
+ "lead": [
+  "A desert is an expansive arid biome mainly consisting of sand . It is notable for its many structures such as desert pyramids and villages , and its dangerous hostile mob variants.",
+  "Deserts generate in areas with very high temperatures. Despite being uncommon, deserts make up around 2.4% of the Overworld by area since they tend to be quite large."
+ ]
+}

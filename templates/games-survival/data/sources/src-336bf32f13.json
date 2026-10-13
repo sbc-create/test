@@ -1,0 +1,58 @@
+{
+ "id": "src-336bf32f13",
+ "url": "https://minecraft.wiki/w/Shovel",
+ "fetched_at": "2026-10-13T01:27:05Z",
+ "page_sha256": "5f8df4522c3ba87b791341f8d55e75c4220fb88f255e4e9fc962c301c51494a0",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Shovel",
+ "lead": [
+  "A shovel is a tiered tool that can quickly break sand , gravel , and dirt -related blocks. Shovels also have a unique use interaction with dirt-related blocks and snow layers ‌ [ Bedrock Edition only ] and can turn them into dirt paths or snowballs respectively.",
+  "In ancient_city/city_center/city_center_2 , there exists a furnace with a wooden shovel inside."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+   "slots": 3,
+   "alternatives_in_first_slot": 20,
+   "slot_items": [
+    "Oak Planks",
+    "Stick",
+    "Stick"
+   ],
+   "result": "Wooden Shovel",
+   "results": [
+    "Wooden Shovel",
+    "Golden Shovel",
+    "Stone Shovel",
+    "Copper Shovel",
+    "Iron Shovel",
+    "Diamond Shovel"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Matching Damaged Shovels",
+   "slots": 2,
+   "alternatives_in_first_slot": 7,
+   "slot_items": [
+    "Wooden Shovel",
+    "Wooden Shovel"
+   ],
+   "result": "Wooden Shovel",
+   "results": [
+    "Wooden Shovel",
+    "Stone Shovel",
+    "Copper Shovel",
+    "Iron Shovel",
+    "Golden Shovel",
+    "Diamond Shovel",
+    "Netherite Shovel"
+   ],
+   "count": 1
+  }
+ ]
+}

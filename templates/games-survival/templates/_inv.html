@@ -1,0 +1,11 @@
+{% macro inv_form(opts, have=[]) %}
+<form class="inv" action="/iz-togo-chto-est/" method="get" data-inv-form>
+  <fieldset><legend>Что есть в инвентаре?</legend>
+  {% for t, label in [('resource', 'Ресурсы'), ('item', 'Предметы и блоки'), ('building', 'Постройки')] %}{% set group = opts|selectattr('type', 'equalto', t)|list %}{% if group %}
+    <p class="inv__group">{{ label }}</p>
+    <ul class="inv__list">{% for e in group %}<li><label><input type="checkbox" name="est" value="{{ e.slug }}"{% if e.slug in have %} checked{% endif %}><span>{{ e.short }} <small lang="en">{{ e.name }}</small></span></label></li>{% endfor %}</ul>
+  {% endif %}{% endfor %}</fieldset>
+  <p class="inv__go"><button type="submit" class="btn">Что можно сделать</button> <span data-inv-count aria-live="polite"></span></p>
+</form>
+{% endmacro %}
+{% macro need_list(ns, missing) %}{% for n in ns %}<span class="need{% if n in missing %} need--miss{% endif %}">{% if n.entry %}<a href="{{ n.entry.url }}">{{ n.entry.short }}</a>{% else %}<span lang="en">{{ n.title }}</span>{% endif %} × {{ n.qty }}</span>{% if not loop.last %} + {% endif %}{% endfor %}{% endmacro %}

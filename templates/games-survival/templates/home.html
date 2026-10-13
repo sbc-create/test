@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% from "_inv.html" import inv_form %}
+{% block main %}
+<section class="hero" aria-labelledby="h-main"><h1 id="h-main">Что сделать из того, что есть?</h1>
+<p class="lead">Отметьте, что лежит в инвентаре, — покажем, что можно собрать прямо сейчас и чего не хватает до следующего предмета. Ингредиенты и количества — из сетки крафта источника{% if site.version and site.version.src.java_current %} (Java Edition {{ site.version.src.java_current }}){% endif %}.</p></section>
+{{ inv_form(app.inventory_options()) }}
+<section aria-labelledby="h-more"><h2 id="h-more">Ещё</h2>
+<ul class="chips"><li><a href="/planirovshchik/">Планировщик: сколько нужно на N штук</a></li>{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() %}<li><a href="/{{ gid }}/{{ sec }}/">{{ label }}</a></li>{% endfor %}{% endfor %}</ul></section>
+{% endblock %}

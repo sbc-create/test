@@ -1,0 +1,55 @@
+{
+ "id": "src-7a7d1e03f6",
+ "url": "https://minecraft.wiki/w/Planks",
+ "fetched_at": "2026-10-12T22:26:08Z",
+ "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Planks",
+ "lead": [
+  "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems.",
+  "Planks can be broken by hand, but using an axe speeds up the process."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Matching Log or Matching Stem or Matching Stripped Log or Matching Stripped Stem or Matching Wood or Matching Hyphae or Matching Stripped Wood or Matching Stripped Hyphae",
+   "slots": 1,
+   "alternatives_in_first_slot": 48,
+   "slot_items": [
+    "Oak Log"
+   ],
+   "result": "Oak Planks",
+   "results": [
+    "Oak Planks",
+    "Spruce Planks",
+    "Birch Planks",
+    "Jungle Planks",
+    "Acacia Planks",
+    "Dark Oak Planks",
+    "Mangrove Planks",
+    "Cherry Planks",
+    "Pale Oak Planks",
+    "Poplar Planks",
+    "Crimson Planks",
+    "Warped Planks"
+   ],
+   "count": 4
+  },
+  {
+   "ingredients": "Block of Bamboo or Block of Stripped Bamboo",
+   "slots": 1,
+   "alternatives_in_first_slot": 2,
+   "slot_items": [
+    "Block of Bamboo"
+   ],
+   "result": "Bamboo Planks",
+   "results": [
+    "Bamboo Planks"
+   ],
+   "count": 2
+  }
+ ]
+}

@@ -1,0 +1,65 @@
+{
+ "id": "src-f04b885346",
+ "url": "https://minecraft.wiki/w/Iron_Ingot",
+ "fetched_at": "2026-10-12T22:26:19Z",
+ "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Iron Ingot",
+ "lead": [
+  "An iron ingot is a metal ingot smelted from raw iron that is used to craft many items and tools .",
+  "Smelting raw iron in a furnace or blast furnace is the most common way to obtain iron ingots."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Block of Iron",
+   "slots": 1,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Block of Iron"
+   ],
+   "result": "Iron Ingot",
+   "results": [
+    "Iron Ingot"
+   ],
+   "count": 9
+  },
+  {
+   "ingredients": "Iron Nugget",
+   "slots": 9,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget",
+    "Iron Nugget"
+   ],
+   "result": "Iron Ingot",
+   "results": [
+    "Iron Ingot"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Iron",
+   "slots": 1,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Iron"
+   ],
+   "result": "Iron Ingot",
+   "results": [
+    "Iron Ingot"
+   ],
+   "count": 1
+  }
+ ]
+}

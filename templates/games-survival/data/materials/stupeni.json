@@ -1,0 +1,22 @@
+{
+ "slug": "stupeni",
+ "game": "minecraft",
+ "type": "building",
+ "src": "src-c7c5312bdc",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Ступеньки: 6 блоков — 4 ступеньки",
+ "summary": "Ступеньки позволяют подниматься на блок без прыжка. Все ступеньки крафтятся одинаково: из 6 блоков получается 4 ступеньки того же вида.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "doski",
+  "bulyzhnik"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

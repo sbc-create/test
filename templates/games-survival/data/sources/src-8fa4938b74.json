@@ -1,0 +1,16 @@
+{
+ "id": "src-8fa4938b74",
+ "url": "https://minecraft.wiki/w/Log",
+ "fetched_at": "2026-10-12T22:26:21Z",
+ "page_sha256": "f7bafd57ff92081df1f44d4b3eafbae3887577cf506a6d1229cef5f00c193065",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "resource",
+ "name": "Log",
+ "lead": [
+  "A log or stem is a naturally occurring block found in trees or huge fungi , primarily used as a building block and to create planks , a versatile crafting ingredient. There are currently ten types of logs: oak , spruce , birch , jungle , acacia , dark oak , mangrove , cherry , pale oak and poplar ; and two types of stems: crimson and warped .",
+  "Logs and stems can be broken by hand, but using an axe is faster. Logs and stems drop themselves when broken with any tool."
+ ]
+}

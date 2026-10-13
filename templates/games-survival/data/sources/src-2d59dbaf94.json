@@ -1,0 +1,18 @@
+{
+ "id": "src-2d59dbaf94",
+ "url": "https://minecraft.wiki/",
+ "fetched_at": "2026-10-12T22:26:39Z",
+ "page_sha256": "0aef7b984e4f26cb4a1f844df8cc9a34b6a0aed075ef176b5ec50c16e2db4840",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "version",
+ "name": "Minecraft Wiki",
+ "lead": [
+  "Welcome to the most comprehensive wiki about the Minecraft franchise , proudly community-run since 2009. Anyone can contribute!",
+  "Minecraft is a 3D sandbox adventure game developed by Mojang Studios , where players can interact with a fully customizable three-dimensional world made of blocks and entities . Its diverse gameplay options allow players to choose the way they play, creating infinite possibilities."
+ ],
+ "java_versions": [],
+ "java_current": "26.3"
+}

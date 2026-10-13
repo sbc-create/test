@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Источники</h1>
+<ul class="srclist">{% for s in site.sources.values() %}<li><a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }}</a> <span>— {{ s.publisher }}, прочитан {{ s.fetched_at[:10] }}</span></li>{% endfor %}</ul>
+{% endblock %}

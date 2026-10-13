@@ -1,0 +1,162 @@
+{
+ "id": "src-930ee91150",
+ "url": "https://minecraft.wiki/w/Shield",
+ "fetched_at": "2026-10-12T22:26:17Z",
+ "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Shield",
+ "lead": [
+  "A shield is a defensive tool that can be used to block damage from melee attacks, ranged attacks and explosions. Shields are temporarily disabled when hit by an axe or attacked by a warden using its melee attack while blocking, and certain damage sources ignore a shield's protection. Shields can have ornamental banner designs applied to them.",
+  "Shields are used for blocking incoming attacks. Using ‌ [ JE only ] or sneaking ‌ [ BE only ] causes a player to slow to a sneaking pace, and after 5 game ticks (0.25 seconds) , non-piercing attacks coming from in front of the player are blocked, dealing no damage. Shields deal knockback when blocking melee attacks‌ [ BE only ] , unless the entity is immune to knockback. When the shield blocks an attack of 3 HP or stronger, it takes durability damage equal to the strength of the attack rounded up. When a player enters a boat, their shields exhibit the blocking animation. In Bedrock Edition , a shield cannot be activated for ? ticks [ check the code ] after attacking. In Java Edition , attacking while shielding does not perform an attack, while in Bedrock Edition attacks can be performed but lower the shield when doing so."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks + Iron Ingot",
+   "slots": 7,
+   "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Iron Ingot",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks"
+   ],
+   "result": "Shield",
+   "results": [
+    "Shield"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Shield + Matching Banner",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "White Banner"
+   ],
+   "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Shield + Matching Banner",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "White Banner"
+   ],
+   "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Damaged Shield",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Shield",
+    "Shield"
+   ],
+   "result": "Shield",
+   "results": [
+    "Shield"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Matching Wool + Any Planks + Iron Ingot",
+   "slots": 7,
+   "alternatives_in_first_slot": 16,
+   "slot_items": [
+    "White Wool",
+    "Oak Planks",
+    "White Wool",
+    "Oak Planks",
+    "Iron Ingot",
+    "White Wool",
+    "Oak Planks"
+   ],
+   "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Any Planks + Iron Ingot",
+   "slots": 7,
+   "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Iron Ingot",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks"
+   ],
+   "result": "Shield",
+   "results": [
+    "Shield"
+   ],
+   "count": 1
+  }
+ ]
+}

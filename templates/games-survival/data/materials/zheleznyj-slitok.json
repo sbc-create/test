@@ -1,0 +1,23 @@
+{
+ "slug": "zheleznyj-slitok",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-f04b885346",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Железный слиток",
+ "summary": "Слиток выплавляют из сырого железа; из него делают многие предметы и инструменты. Блок железа разбирается на 9 слитков, а 9 самородков собираются в слиток.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "syroe-zhelezo",
+  "pech",
+  "vedro"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

@@ -1,0 +1,16 @@
+{
+ "id": "src-b11ea9dd8d",
+ "url": "https://minecraft.wiki/w/Plains",
+ "fetched_at": "2026-10-12T22:26:30Z",
+ "page_sha256": "ca9a5edc340228a6090638e9b139355c772f798263a867c50b8e8bbcdf662559",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "biome",
+ "name": "Plains",
+ "lead": [
+  "The plains are common grassland biomes in the Overworld with wide, open terrain and flowers .",
+  "Plains are the second-most common Overworld biome after forests , covering about 10.2% of its area. This is due to both their abundance and their potential to grow very large. They generate across a broad range of moderate temperatures when humidity is low to moderate."
+ ]
+}

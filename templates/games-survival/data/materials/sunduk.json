@@ -1,0 +1,22 @@
+{
+ "slug": "sunduk",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-1c1de0a8fd",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Сундук: хранилище базы",
+ "summary": "Сундук делается из 8 досок любого вида; два соседних сундука образуют большой сундук, который вмещает вдвое больше.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "doski",
+  "verstak"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

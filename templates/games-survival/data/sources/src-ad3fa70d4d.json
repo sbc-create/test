@@ -1,0 +1,66 @@
+{
+ "id": "src-ad3fa70d4d",
+ "url": "https://minecraft.wiki/w/Fence",
+ "fetched_at": "2026-10-12T23:21:40Z",
+ "page_sha256": "2e9aef8d1691f23497cadd9e9d096229d6d4e099af2b9014c0ecc2be1301d837",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Fence",
+ "lead": [
+  "A fence is a barrier block that cannot normally be jumped over, similar to a wall . Unlike a wall, a player (but not mobs ) can see through the openings in a fence.",
+  "While fences appear to be a single block tall and have a hitbox height of one block, their collision box (for entities) is 1.5 blocks tall , meaning most mobs cannot jump over them without the Jump Boost status effect. They are transparent to light and have visual gaps in the model. Spiders can climb over a fence, just like any other vertical object. Camels can walk over fences."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Matching Planks + Stick",
+   "slots": 6,
+   "alternatives_in_first_slot": 13,
+   "slot_items": [
+    "Oak Planks",
+    "Stick",
+    "Oak Planks",
+    "Oak Planks",
+    "Stick",
+    "Oak Planks"
+   ],
+   "result": "Oak Fence",
+   "results": [
+    "Oak Fence",
+    "Spruce Fence",
+    "Birch Fence",
+    "Jungle Fence",
+    "Acacia Fence",
+    "Dark Oak Fence",
+    "Mangrove Fence",
+    "Cherry Fence",
+    "Pale Oak Fence",
+    "Poplar Fence",
+    "Bamboo Fence",
+    "Crimson Fence",
+    "Warped Fence"
+   ],
+   "count": 3
+  },
+  {
+   "ingredients": "Nether Bricks + Nether Brick",
+   "slots": 6,
+   "alternatives_in_first_slot": 1,
+   "slot_items": [
+    "Nether Bricks",
+    "Nether Brick",
+    "Nether Bricks",
+    "Nether Bricks",
+    "Nether Brick",
+    "Nether Bricks"
+   ],
+   "result": "Nether Brick Fence",
+   "results": [
+    "Nether Brick Fence"
+   ],
+   "count": 6
+  }
+ ]
+}

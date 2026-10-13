@@ -1,0 +1,2130 @@
+{
+ "site_id": "games-survival",
+ "ownership": {
+  "contract": "games-ownership/1",
+  "games": {
+   "celeste": {
+    "owner": "games-story",
+    "title": "Celeste",
+    "wiki": "celeste.ink"
+   },
+   "baldurs-gate-3": {
+    "owner": "games-rpg",
+    "title": "Baldur's Gate 3",
+    "wiki": "bg3.wiki"
+   },
+   "minecraft": {
+    "owner": "games-survival",
+    "title": "Minecraft",
+    "wiki": "minecraft.wiki"
+   }
+  }
+ },
+ "items": [
+  {
+   "slug": "biom-les",
+   "game": "minecraft",
+   "type": "biome",
+   "src": "src-9579a8cc05",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Биом: лес",
+   "summary": "Лес густо покрыт дубами и берёзами — удобное место за брёвнами. По данным вики, это самый распространённый наземный биом Верхнего мира, около 12% его площади.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "brevno",
+    "biom-ravniny"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "d026a06b07b447c00173d2b8593be0bafd7f8d424edf7d3b09b64ae256ea6f0a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "biom-pustynya",
+   "game": "minecraft",
+   "type": "biome",
+   "src": "src-985aec5fcb",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Биом: пустыня",
+   "summary": "Пустыня — обширный засушливый биом в основном из песка; в ней встречаются пустынные пирамиды и деревни, а также опасные разновидности враждебных мобов.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "biom-ravniny"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 2,
+   "text_hash": "38d67cbc9afe6f895a270fd700dd65690c18fde0401d74b004767ee5dad13c18",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "biom-ravniny",
+   "game": "minecraft",
+   "type": "biome",
+   "src": "src-b11ea9dd8d",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Биом: равнины",
+   "summary": "Равнины — распространённые травянистые биомы Верхнего мира с открытым рельефом и цветами.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "biom-les"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "8feac5ba4a74352bb134819ad30bef593b794fc07701b86c7f8ab340e9d5174a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "biom-tajga",
+   "game": "minecraft",
+   "type": "biome",
+   "src": "src-82215d6f2e",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Биом: тайга",
+   "summary": "Тайга — влажный и холодный биом с папоротниками, елями и соснами; здесь часто появляются лисы и волки.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "biom-les"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "9d69f39ff727a8448467aa695d7b57fe09df2a4e89647006cb3182bed09941db",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "brevno",
+   "game": "minecraft",
+   "type": "resource",
+   "src": "src-8fa4938b74",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Бревно: первый ресурс",
+   "summary": "Бревно добывают из деревьев; из него делают доски — с этого начинается почти вся ранняя цепочка крафта.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "e9143e1a084e40ee3d111a5aa3eeacaf76482e34453962c6e6e3fddfbb4c4adc",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "bulyzhnik",
+   "game": "minecraft",
+   "type": "resource",
+   "src": "src-ccd9178392",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Булыжник",
+   "summary": "Булыжник получают, добывая камень; он идёт в крафт и на строительство.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "pech"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "474b70f93d27023b5f9398ff12bfdb7d74d810bb5104425a24adfcda236646fd",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "doski",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-7a7d1e03f6",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Доски: из чего и сколько",
+   "summary": "Доски — основа ранних рецептов. По сетке источника из одного бревна или ствола получается 4 доски, из блока бамбука — 2.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "brevno",
+    "palka",
+    "verstak"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "0152fa450bb6f82c09ed6b40622a77a0b0398d9184c0db6f0c582aeb946b488b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "dver",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-429987c579",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Дверь: преграда, которую можно открыть",
+   "summary": "Дверь — переключаемая преграда для существ. Ставится только на полный твёрдый блок снизу и занимает два блока в высоту.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "4b0312da1f89c6e4beca59e5077ffd7b9150d60547c7f329756353d6e41b5b05",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "fakel",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-d4b63de502",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Факел: уголь и палка",
+   "summary": "Факел ломается мгновенно чем угодно. По сетке источника уголь или древесный уголь и палка дают 4 факела.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "ugol",
+    "palka"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "e3faed535445277df1ebbbd0456afae3dd36753132239f00f3064b518685e58b",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "kirka",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-7b76afa6f7",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Кирка: инструмент для камня и руды",
+   "summary": "Кирка нужна, чтобы добывать большинство каменных блоков и руд; её уровень определяет, какие блоки она соберёт. По данным вики, кирки любого уровня делают из двух палок и трёх единиц материала своего уровня — в сетке источника это 5 занятых клеток и 1 кирка.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "doski",
+    "zheleznyj-slitok",
+    "bulyzhnik"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ae159fd41f25c12fc3fa86e767f761250c8b18872ee1a3cecf2cb409a3ad75b9",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "krovat",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-b827b5ae81",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Кровать: ночь и точка возрождения",
+   "summary": "Кровать позволяет в Верхнем мире переспать ночь и переносит точку возрождения к кровати, пока её не сломали и не загородили. По сетке источника шерсть одного цвета и доски дают 1 кровать.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "544f802f12bab52e843f1c45372210d7a2eb84554c9ee5129c5c7291fec867da",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "lestnica",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-a9ad1e6170",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Лестница: 7 палок — 3 лестницы",
+   "summary": "Лестница позволяет подниматься по вертикали; ставится только на боковые стороны блоков. Из 7 палок получается 3 лестницы.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "87c787c212bc8c8dd4b5f65f714011b39861a5ad47e66bae92d555aaa16c1325",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "lopata",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-336bf32f13",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Лопата: песок, гравий и земля",
+   "summary": "Лопата быстро копает песок, гравий и землю. В сетке источника рецепт занимает 3 клетки — материал своего уровня и палки — и даёт 1 лопату.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "28a00fc27cce20d1094559594d8df3fea857399f4391ebeb8b2d81addda4ba87",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "mech",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-dddfa2fa81",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Меч: оружие ближнего боя",
+   "summary": "Меч — оружие ближнего боя; он быстрее ломает паутину, листья и бамбук. По данным вики, все мечи, кроме незеритового, делают из палки и двух единиц материала — 3 занятые клетки и 1 меч.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "zheleznyj-slitok"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "d651fdc4021b0bbe665bd0c206b531a61ebdd26c195573bcb38712719603708f",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "palka",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-9cea39e37a",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Палка: 2 доски — 4 палки",
+   "summary": "Палка нужна для инструментов, факелов и лестниц. По сетке источника из двух досок получается 4 палки; есть и рецепт из бамбука.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "fakel",
+    "lestnica"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "ca9cd67c460d44a09461783ca01c9e41f5bb9bc35ad624783fcfc13816eeaaf8",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "pech",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-8157fe9f03",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Печь: переплавка и готовка",
+   "summary": "Печь работает двумя способами: переплавляет руду и готовит еду, если положить внутрь топливо и подходящий предмет. Делается из 8 блоков каменного уровня.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "bulyzhnik",
+    "zheleznyj-slitok",
+    "ugol"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "66448209a8834642ac644b57be4a693a6a544bc79365eb48f52a0a55deae0828",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "shchit",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-930ee91150",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Щит: защита от атак",
+   "summary": "Щит блокирует урон от ближних и дальних атак и взрывов; удар топором временно отключает его. Делается из досок и железного слитка.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "zheleznyj-slitok",
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "3bdd0c9078233c58ee578650bbdd44f2d4e00c67cfe3c4b12ff89447bb4f7a3a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "stupeni",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-c7c5312bdc",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Ступеньки: 6 блоков — 4 ступеньки",
+   "summary": "Ступеньки позволяют подниматься на блок без прыжка. Все ступеньки крафтятся одинаково: из 6 блоков получается 4 ступеньки того же вида.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "bulyzhnik"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "84cd249e61c017fc664729d2a155622b4651b9617ce3415931564a0738e9f193",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "sunduk",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-1c1de0a8fd",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Сундук: хранилище базы",
+   "summary": "Сундук делается из 8 досок любого вида; два соседних сундука образуют большой сундук, который вмещает вдвое больше.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "verstak"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "9ccf7cbd2968d4176fefbe00387865fcb56b865659843711e65fd170d70d88fe",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "syroe-zhelezo",
+   "game": "minecraft",
+   "type": "resource",
+   "src": "src-d50a9910ee",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Сырое железо",
+   "summary": "Сырое железо добывают из железной руды и переплавляют в печи или плавильне в железные слитки.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "zheleznyj-slitok",
+    "pech"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "c509ae1b6fa692fb2b1c71368651e2ea72d05a2af2d864cfd669ac6d442397dc",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "topor",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-3ca8a7f9ee",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Топор: дерево и растения",
+   "summary": "Топор быстро рубит древесину и растения; как оружие он бьёт сильно, но медленно. По данным вики, топоры любого уровня делают из 2 палок и 3 единиц материала своего уровня — в сетке источника 5 занятых клеток и 1 топор.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "doski",
+    "brevno"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "6d3c81c2ed11baecbda50b7de0bb6711a992714b0de5ea2d632192de5961bc9a",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "ugol",
+   "game": "minecraft",
+   "type": "resource",
+   "src": "src-d304033453",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Уголь",
+   "summary": "Уголь добывают в основном из угольной руды; он нужен для факелов и костров, а также служит топливом.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "fakel",
+    "pech"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "17e3e6f41a6b3e97b46cd42d349e2d54a8e2720d82a0c43bd9134db02a090607",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "vedro",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-553de39ee4",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Ведро: вода, лава, молоко",
+   "summary": "Ведро переносит воду, лаву, молоко и другие вещества. Делается из 3 железных слитков.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "zheleznyj-slitok"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "dda53da58641cbfa38c469e45fc374e44864e284b693495354975e903a094f80",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "versiya",
+   "game": "minecraft",
+   "type": "version",
+   "src": "src-2d59dbaf94",
+   "also": [],
+   "title": "Версия игры: Java Edition 26.3",
+   "summary": "Главная страница вики на день чтения называет текущей версию Java Edition 26.3. Рецепты сверены со страницами вики, прочитанными в тот же день.",
+   "points": [],
+   "tips": [],
+   "related": [],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "e586dbc939338e2b504e18c843df282a2032066609a1477b2512f9103cbb8af0",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "verstak",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-73a470da69",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Верстак: доступ ко всем рецептам",
+   "summary": "Верстак открывает все рецепты крафта, включая те, что недоступны в сетке инвентаря. Делается из 4 досок любого вида.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "pech",
+    "sunduk"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "25bd8e82cbc6acb0b5b68570551523678b7f9b878c8afc64c810a98f65dc662a",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zabor",
+   "game": "minecraft",
+   "type": "building",
+   "src": "src-ad3fa70d4d",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Забор: 6 слотов — 3 забора",
+   "summary": "Забор — барьер, через который обычно не перепрыгнуть; игрок, в отличие от мобов, видит сквозь просветы. Высота столкновения — 1,5 блока. По сетке источника доски и палки в 6 слотах дают 3 забора.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "doski",
+    "palka"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "7be302ae70467672eab8ec08f3697dc69a7974b52d6f877c9c28fe8888b4fb6f",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "zheleznyj-slitok",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-f04b885346",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Железный слиток",
+   "summary": "Слиток выплавляют из сырого железа; из него делают многие предметы и инструменты. Блок железа разбирается на 9 слитков, а 9 самородков собираются в слиток.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "syroe-zhelezo",
+    "pech",
+    "vedro"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "6d1ddd51f6e44432001024eb06aee644df9f8dac11e6c0b493d3367df6e2b73f",
+   "published_at": "2026-10-12",
+   "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  }
+ ],
+ "sources": {
+  "src-1c1de0a8fd": {
+   "id": "src-1c1de0a8fd",
+   "url": "https://minecraft.wiki/w/Chest",
+   "fetched_at": "2026-10-12T22:26:02Z",
+   "page_sha256": "990949009a86e83c0fb5891b84f3b2371fe1f73489cdd210035cdcd563bf78a4",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Chest",
+   "lead": [
+    "A large chest (or \"double chest\") is the combination of two adjacent chests, and can store twice as many items.",
+    "A chest can be broken using anything, but an axe is the fastest. Chests always drop themselves when mined. If the chest contains items, the items are also dropped when the chest is broken. If one half of a large chest is destroyed, the corresponding items from the destroyed chest (in Java Edition , the top three rows for the left-hand chest or the bottom three for the chest on the right; in Bedrock Edition , the top three for whichever half was placed first or the bottom three for whichever half was placed last) are dropped and the remaining half continues to function as a small chest."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks",
+     "slots": 8,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Chest",
+     "results": [
+      "Chest"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Copper Ingot + Chest",
+     "slots": 9,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Chest",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot",
+      "Copper Ingot"
+     ],
+     "result": "Copper Chest",
+     "results": [
+      "Copper Chest"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Chest + Matching Boat",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Chest",
+      "Oak Boat"
+     ],
+     "result": "Oak Boat with Chest",
+     "results": [
+      "Oak Boat with Chest",
+      "Spruce Boat with Chest",
+      "Birch Boat with Chest",
+      "Jungle Boat with Chest",
+      "Acacia Boat with Chest",
+      "Dark Oak Boat with Chest",
+      "Mangrove Boat with Chest",
+      "Cherry Boat with Chest",
+      "Pale Oak Boat with Chest",
+      "Poplar Boat with Chest",
+      "Bamboo Raft with Chest"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Chest + Minecart",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Chest",
+      "Minecart"
+     ],
+     "result": "Minecart with Chest",
+     "results": [
+      "Minecart with Chest"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Tripwire Hook + Chest",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Tripwire Hook",
+      "Chest"
+     ],
+     "result": "Trapped Chest",
+     "results": [
+      "Trapped Chest"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-2d59dbaf94": {
+   "id": "src-2d59dbaf94",
+   "url": "https://minecraft.wiki/",
+   "fetched_at": "2026-10-12T22:26:39Z",
+   "page_sha256": "0aef7b984e4f26cb4a1f844df8cc9a34b6a0aed075ef176b5ec50c16e2db4840",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "version",
+   "name": "Minecraft Wiki",
+   "lead": [
+    "Welcome to the most comprehensive wiki about the Minecraft franchise , proudly community-run since 2009. Anyone can contribute!",
+    "Minecraft is a 3D sandbox adventure game developed by Mojang Studios , where players can interact with a fully customizable three-dimensional world made of blocks and entities . Its diverse gameplay options allow players to choose the way they play, creating infinite possibilities."
+   ],
+   "java_versions": [],
+   "java_current": "26.3"
+  },
+  "src-336bf32f13": {
+   "id": "src-336bf32f13",
+   "url": "https://minecraft.wiki/w/Shovel",
+   "fetched_at": "2026-10-13T01:27:05Z",
+   "page_sha256": "5f8df4522c3ba87b791341f8d55e75c4220fb88f255e4e9fc962c301c51494a0",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Shovel",
+   "lead": [
+    "A shovel is a tiered tool that can quickly break sand , gravel , and dirt -related blocks. Shovels also have a unique use interaction with dirt-related blocks and snow layers ‌ [ Bedrock Edition only ] and can turn them into dirt paths or snowballs respectively.",
+    "In ancient_city/city_center/city_center_2 , there exists a furnace with a wooden shovel inside."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 3,
+     "alternatives_in_first_slot": 20,
+     "slot_items": [
+      "Oak Planks",
+      "Stick",
+      "Stick"
+     ],
+     "result": "Wooden Shovel",
+     "results": [
+      "Wooden Shovel",
+      "Golden Shovel",
+      "Stone Shovel",
+      "Copper Shovel",
+      "Iron Shovel",
+      "Diamond Shovel"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Shovels",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "slot_items": [
+      "Wooden Shovel",
+      "Wooden Shovel"
+     ],
+     "result": "Wooden Shovel",
+     "results": [
+      "Wooden Shovel",
+      "Stone Shovel",
+      "Copper Shovel",
+      "Iron Shovel",
+      "Golden Shovel",
+      "Diamond Shovel",
+      "Netherite Shovel"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-3ca8a7f9ee": {
+   "id": "src-3ca8a7f9ee",
+   "url": "https://minecraft.wiki/w/Axe",
+   "fetched_at": "2026-10-13T01:27:03Z",
+   "page_sha256": "848717615c82fd44aef88789ce0515ef8de253f862cc4f7540bd73ec5c82dff5",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Axe",
+   "lead": [
+    "An axe is a tiered tool that can quickly break wood and plant blocks, and a melee weapon with high attack damage but low attack speed .‌ [ JE only ] It has the special ability to perform crushing blows , which disable the use of a target's shield.",
+    "Wooden, golden, stone, copper, iron, and diamond axes are crafted using 2 sticks and 3 identical units of tool material. This recipe can be flipped horizontally."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 5,
+     "alternatives_in_first_slot": 20,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Stick",
+      "Stick"
+     ],
+     "result": "Wooden Axe",
+     "results": [
+      "Wooden Axe",
+      "Golden Axe",
+      "Stone Axe",
+      "Copper Axe",
+      "Iron Axe",
+      "Diamond Axe"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Axes",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "slot_items": [
+      "Wooden Axe",
+      "Wooden Axe"
+     ],
+     "result": "Wooden Axe",
+     "results": [
+      "Wooden Axe",
+      "Stone Axe",
+      "Copper Axe",
+      "Iron Axe",
+      "Golden Axe",
+      "Diamond Axe",
+      "Netherite Axe"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-429987c579": {
+   "id": "src-429987c579",
+   "url": "https://minecraft.wiki/w/Door",
+   "fetched_at": "2026-10-12T23:21:35Z",
+   "page_sha256": "fad97dd6409b873e84506cee9876f41b53d287e35aac9eae4d801ae42df1815a",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Door",
+   "lead": [
+    "A door is a block that serves as a switchable barrier to entity movement.",
+    "Doors must be supported by a full solid block face beneath them. The bottom half of the door is placed where the player is aiming, with the top half extending one block above. If there is not enough space for the door, or not an appropriate supporting block underneath the base, no action is performed."
+   ],
+   "recipes": []
+  },
+  "src-553de39ee4": {
+   "id": "src-553de39ee4",
+   "url": "https://minecraft.wiki/w/Bucket",
+   "fetched_at": "2026-10-12T22:26:15Z",
+   "page_sha256": "7dc98b8393e42097d0882ae9e7b45f8354b8d0a2ce8eb706cb7653ef31edf424",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Bucket",
+   "lead": [
+    "A bucket is a utility item used to carry water , lava , milk , powder snow , and sulfur cubes .",
+    "Using a water , lava , or powder snow bucket empties the bucket, resulting in a regular empty bucket. Emptying a bucket of sulfur cube also returns an empty bucket, but other buckets of mob do not, giving a water bucket instead."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Iron Ingot",
+     "slots": 3,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot"
+     ],
+     "result": "Bucket",
+     "results": [
+      "Bucket"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-73a470da69": {
+   "id": "src-73a470da69",
+   "url": "https://minecraft.wiki/w/Crafting_Table",
+   "fetched_at": "2026-10-12T22:25:57Z",
+   "page_sha256": "072f3c0f8644876a3de5ae7a44a826c62e125a61bd6d6c3d989e4def05076b50",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Crafting Table",
+   "lead": [
+    "A crafting table is a utility block that gives access to all crafting recipes, including many not available from the inventory 's crafting grid.",
+    "Crafting tables can be mined by hand or with any tool, but axes are the quickest."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks",
+     "slots": 4,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Crafting Table",
+     "results": [
+      "Crafting Table"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-7a7d1e03f6": {
+   "id": "src-7a7d1e03f6",
+   "url": "https://minecraft.wiki/w/Planks",
+   "fetched_at": "2026-10-12T22:26:08Z",
+   "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Planks",
+   "lead": [
+    "Planks are common blocks used as building blocks and in crafting recipes. They are usually one of the first things that a player crafts in Survival mode. There are currently 13 variants of planks, which can be differentiated into three categories: Overworld planks made from tree logs, bamboo planks made from blocks of bamboo , and nonflammable Nether planks made from huge fungus stems.",
+    "Planks can be broken by hand, but using an axe speeds up the process."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Matching Log or Matching Stem or Matching Stripped Log or Matching Stripped Stem or Matching Wood or Matching Hyphae or Matching Stripped Wood or Matching Stripped Hyphae",
+     "slots": 1,
+     "alternatives_in_first_slot": 48,
+     "slot_items": [
+      "Oak Log"
+     ],
+     "result": "Oak Planks",
+     "results": [
+      "Oak Planks",
+      "Spruce Planks",
+      "Birch Planks",
+      "Jungle Planks",
+      "Acacia Planks",
+      "Dark Oak Planks",
+      "Mangrove Planks",
+      "Cherry Planks",
+      "Pale Oak Planks",
+      "Poplar Planks",
+      "Crimson Planks",
+      "Warped Planks"
+     ],
+     "count": 4
+    },
+    {
+     "ingredients": "Block of Bamboo or Block of Stripped Bamboo",
+     "slots": 1,
+     "alternatives_in_first_slot": 2,
+     "slot_items": [
+      "Block of Bamboo"
+     ],
+     "result": "Bamboo Planks",
+     "results": [
+      "Bamboo Planks"
+     ],
+     "count": 2
+    }
+   ]
+  },
+  "src-7b76afa6f7": {
+   "id": "src-7b76afa6f7",
+   "url": "https://minecraft.wiki/w/Pickaxe",
+   "fetched_at": "2026-10-12T22:26:13Z",
+   "page_sha256": "e9f195af6eb5785f33d019856524a32437141d92ee2a300b473685eb9ccd10ee",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Pickaxe",
+   "lead": [
+    "A pickaxe is a tiered tool that is required to mine most types of stone , ores , and blocks crafted from stone or ores. The mining level of a given pickaxe determines which blocks it can collect.",
+    "Wooden, golden, stone, copper, iron, and diamond pickaxes are crafted using two sticks and three of the tier’s material."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 5,
+     "alternatives_in_first_slot": 20,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Stick",
+      "Stick"
+     ],
+     "result": "Wooden Pickaxe",
+     "results": [
+      "Wooden Pickaxe",
+      "Golden Pickaxe",
+      "Stone Pickaxe",
+      "Copper Pickaxe",
+      "Iron Pickaxe",
+      "Diamond Pickaxe"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Pickaxes",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "slot_items": [
+      "Wooden Pickaxe",
+      "Wooden Pickaxe"
+     ],
+     "result": "Wooden Pickaxe",
+     "results": [
+      "Wooden Pickaxe",
+      "Stone Pickaxe",
+      "Copper Pickaxe",
+      "Iron Pickaxe",
+      "Golden Pickaxe",
+      "Diamond Pickaxe",
+      "Netherite Pickaxe"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-8157fe9f03": {
+   "id": "src-8157fe9f03",
+   "url": "https://minecraft.wiki/w/Furnace",
+   "fetched_at": "2026-10-12T22:25:59Z",
+   "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Furnace",
+   "lead": [
+    "A furnace is a block with two functions: it can be used for either smelting or cooking , by placing fuel and an appropriate item inside together.",
+    "A furnace can be picked up using any pickaxe . If mined without a pickaxe, it does not drop itself."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any stone-tier block",
+     "slots": 8,
+     "alternatives_in_first_slot": 3,
+     "slot_items": [
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone",
+      "Cobblestone"
+     ],
+     "result": "Furnace",
+     "results": [
+      "Furnace"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Iron Ingot + Furnace + Smooth Stone",
+     "slots": 9,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot",
+      "Iron Ingot",
+      "Furnace",
+      "Iron Ingot",
+      "Smooth Stone",
+      "Smooth Stone",
+      "Smooth Stone"
+     ],
+     "result": "Blast Furnace",
+     "results": [
+      "Blast Furnace"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Furnace + Minecart",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Furnace",
+      "Minecart"
+     ],
+     "result": "Minecart with Furnace",
+     "results": [
+      "Minecart with Furnace"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-82215d6f2e": {
+   "id": "src-82215d6f2e",
+   "url": "https://minecraft.wiki/w/Taiga",
+   "fetched_at": "2026-10-12T22:26:36Z",
+   "page_sha256": "e264169f80e9ece67a6fd1f9fb35ee56d993b775459bd4df308abfd90ac36ee7",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "biome",
+   "name": "Taiga",
+   "lead": [
+    "The taiga is a humid and cold biome comprising a grassland forested with small and large ferns, pale aquamarine-green grass, spruce and pine trees. Foxes and wolves commonly spawn here.",
+    "Taigas generate in the moderately high humidity zones of cold temperature areas, as well as the highest humidity zones of frozen areas. They commonly border old growth taigas , forests , and snowy taigas , and less frequently birch forests . In cold temperature areas, they can generate in any type of terrain; flatlands near shattered windswept forests and swamps , rolling slopes and plateaus, or mountains with groves on the slopes."
+   ]
+  },
+  "src-8fa4938b74": {
+   "id": "src-8fa4938b74",
+   "url": "https://minecraft.wiki/w/Log",
+   "fetched_at": "2026-10-12T22:26:21Z",
+   "page_sha256": "f7bafd57ff92081df1f44d4b3eafbae3887577cf506a6d1229cef5f00c193065",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "resource",
+   "name": "Log",
+   "lead": [
+    "A log or stem is a naturally occurring block found in trees or huge fungi , primarily used as a building block and to create planks , a versatile crafting ingredient. There are currently ten types of logs: oak , spruce , birch , jungle , acacia , dark oak , mangrove , cherry , pale oak and poplar ; and two types of stems: crimson and warped .",
+    "Logs and stems can be broken by hand, but using an axe is faster. Logs and stems drop themselves when broken with any tool."
+   ]
+  },
+  "src-930ee91150": {
+   "id": "src-930ee91150",
+   "url": "https://minecraft.wiki/w/Shield",
+   "fetched_at": "2026-10-12T22:26:17Z",
+   "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Shield",
+   "lead": [
+    "A shield is a defensive tool that can be used to block damage from melee attacks, ranged attacks and explosions. Shields are temporarily disabled when hit by an axe or attacked by a warden using its melee attack while blocking, and certain damage sources ignore a shield's protection. Shields can have ornamental banner designs applied to them.",
+    "Shields are used for blocking incoming attacks. Using ‌ [ JE only ] or sneaking ‌ [ BE only ] causes a player to slow to a sneaking pace, and after 5 game ticks (0.25 seconds) , non-piercing attacks coming from in front of the player are blocked, dealing no damage. Shields deal knockback when blocking melee attacks‌ [ BE only ] , unless the entity is immune to knockback. When the shield blocks an attack of 3 HP or stronger, it takes durability damage equal to the strength of the attack rounded up. When a player enters a boat, their shields exhibit the blocking animation. In Bedrock Edition , a shield cannot be activated for ? ticks [ check the code ] after attacking. In Java Edition , attacking while shielding does not perform an attack, while in Bedrock Edition attacks can be performed but lower the shield when doing so."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks + Iron Ingot",
+     "slots": 7,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Iron Ingot",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Shield",
+     "results": [
+      "Shield"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Shield + Matching Banner",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "White Banner"
+     ],
+     "result": "White Shield",
+     "results": [
+      "White Shield",
+      "Light Gray Shield",
+      "Gray Shield",
+      "Black Shield",
+      "Brown Shield",
+      "Red Shield",
+      "Orange Shield",
+      "Yellow Shield",
+      "Lime Shield",
+      "Green Shield",
+      "Cyan Shield",
+      "Light Blue Shield",
+      "Blue Shield",
+      "Purple Shield",
+      "Magenta Shield",
+      "Pink Shield"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Shield + Matching Banner",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "White Banner"
+     ],
+     "result": "White Shield",
+     "results": [
+      "White Shield",
+      "Light Gray Shield",
+      "Gray Shield",
+      "Black Shield",
+      "Brown Shield",
+      "Red Shield",
+      "Orange Shield",
+      "Yellow Shield",
+      "Lime Shield",
+      "Green Shield",
+      "Cyan Shield",
+      "Light Blue Shield",
+      "Blue Shield",
+      "Purple Shield",
+      "Magenta Shield",
+      "Pink Shield"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Damaged Shield",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Shield",
+      "Shield"
+     ],
+     "result": "Shield",
+     "results": [
+      "Shield"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Wool + Any Planks + Iron Ingot",
+     "slots": 7,
+     "alternatives_in_first_slot": 16,
+     "slot_items": [
+      "White Wool",
+      "Oak Planks",
+      "White Wool",
+      "Oak Planks",
+      "Iron Ingot",
+      "White Wool",
+      "Oak Planks"
+     ],
+     "result": "White Shield",
+     "results": [
+      "White Shield",
+      "Light Gray Shield",
+      "Gray Shield",
+      "Black Shield",
+      "Brown Shield",
+      "Red Shield",
+      "Orange Shield",
+      "Yellow Shield",
+      "Lime Shield",
+      "Green Shield",
+      "Cyan Shield",
+      "Light Blue Shield",
+      "Blue Shield",
+      "Purple Shield",
+      "Magenta Shield",
+      "Pink Shield"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Any Planks + Iron Ingot",
+     "slots": 7,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Iron Ingot",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Shield",
+     "results": [
+      "Shield"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-9579a8cc05": {
+   "id": "src-9579a8cc05",
+   "url": "https://minecraft.wiki/w/Forest",
+   "fetched_at": "2026-10-12T22:26:32Z",
+   "page_sha256": "8e0601c9309a79cb6cfddd562fc8757eea23dbe1ab39101ad17e2c893eda71d8",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "biome",
+   "name": "Forest",
+   "lead": [
+    "The forest is a lush biome densely covered with oak and birch trees. Woods wolves spawn here. The forest is the most common Overworld surface biome in Minecraft , making up about 12% of its area.",
+    "Forests generate in a broad range of moderate temperatures, with a somewhat more restrictive medium humidity requirement."
+   ]
+  },
+  "src-985aec5fcb": {
+   "id": "src-985aec5fcb",
+   "url": "https://minecraft.wiki/w/Desert",
+   "fetched_at": "2026-10-12T22:26:34Z",
+   "page_sha256": "1c0865fff7d32b923706cb70fa4cee9a8df0affc00cb7fdb6a88c62a20c5215d",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "biome",
+   "name": "Desert",
+   "lead": [
+    "A desert is an expansive arid biome mainly consisting of sand . It is notable for its many structures such as desert pyramids and villages , and its dangerous hostile mob variants.",
+    "Deserts generate in areas with very high temperatures. Despite being uncommon, deserts make up around 2.4% of the Overworld by area since they tend to be quite large."
+   ]
+  },
+  "src-9cea39e37a": {
+   "id": "src-9cea39e37a",
+   "url": "https://minecraft.wiki/w/Stick",
+   "fetched_at": "2026-10-12T22:26:11Z",
+   "page_sha256": "35c622e98a7b20fa57f327493afd6a8e05d4a8daa87c464abc5a21a2df952382",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Stick",
+   "lead": [
+    "All leaf types have a 2% chance to drop 1–2 sticks when they decay or when broken using a tool without Silk Touch . Using a tool with Fortune increases these chances to 2.2%, 2.5%, and 3.3% for Fortune I, II, and III respectively.",
+    "Issues relating to \"Stick\" are maintained on the bug tracker . Issues should be reported and viewed there ."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks",
+     "slots": 2,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Stick",
+     "results": [
+      "Stick"
+     ],
+     "count": 4
+    },
+    {
+     "ingredients": "Bamboo",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Bamboo",
+      "Bamboo"
+     ],
+     "result": "Stick",
+     "results": [
+      "Stick"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-a9ad1e6170": {
+   "id": "src-a9ad1e6170",
+   "url": "https://minecraft.wiki/w/Ladder",
+   "fetched_at": "2026-10-12T22:26:05Z",
+   "page_sha256": "693e3318d641afe7849781154eca6b5470e78106b4ce29f8c49e26325595a832",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Ladder",
+   "lead": [
+    "The ladder is a block used for climbing vertically or horizontally. They can be placed only on the sides of other blocks.",
+    "Ladders generate naturally in library rooms of strongholds and in intersection rooms with a wooden ceiling. Ladders can also be found in village structures such as plains and taiga temples and many small or medium houses, as well as in churches. They may also be found leading to the basements of igloos , in end ships on the pillar leading up to the crow's nest, and in rail rooms of woodland mansions . Ladders can also generate in ancient cities , trail ruins , trial chambers , and in end cities ."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Stick",
+     "slots": 7,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick",
+      "Stick"
+     ],
+     "result": "Ladder",
+     "results": [
+      "Ladder"
+     ],
+     "count": 3
+    }
+   ]
+  },
+  "src-ad3fa70d4d": {
+   "id": "src-ad3fa70d4d",
+   "url": "https://minecraft.wiki/w/Fence",
+   "fetched_at": "2026-10-12T23:21:40Z",
+   "page_sha256": "2e9aef8d1691f23497cadd9e9d096229d6d4e099af2b9014c0ecc2be1301d837",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Fence",
+   "lead": [
+    "A fence is a barrier block that cannot normally be jumped over, similar to a wall . Unlike a wall, a player (but not mobs ) can see through the openings in a fence.",
+    "While fences appear to be a single block tall and have a hitbox height of one block, their collision box (for entities) is 1.5 blocks tall , meaning most mobs cannot jump over them without the Jump Boost status effect. They are transparent to light and have visual gaps in the model. Spiders can climb over a fence, just like any other vertical object. Camels can walk over fences."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Matching Planks + Stick",
+     "slots": 6,
+     "alternatives_in_first_slot": 13,
+     "slot_items": [
+      "Oak Planks",
+      "Stick",
+      "Oak Planks",
+      "Oak Planks",
+      "Stick",
+      "Oak Planks"
+     ],
+     "result": "Oak Fence",
+     "results": [
+      "Oak Fence",
+      "Spruce Fence",
+      "Birch Fence",
+      "Jungle Fence",
+      "Acacia Fence",
+      "Dark Oak Fence",
+      "Mangrove Fence",
+      "Cherry Fence",
+      "Pale Oak Fence",
+      "Poplar Fence",
+      "Bamboo Fence",
+      "Crimson Fence",
+      "Warped Fence"
+     ],
+     "count": 3
+    },
+    {
+     "ingredients": "Nether Bricks + Nether Brick",
+     "slots": 6,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Nether Bricks",
+      "Nether Brick",
+      "Nether Bricks",
+      "Nether Bricks",
+      "Nether Brick",
+      "Nether Bricks"
+     ],
+     "result": "Nether Brick Fence",
+     "results": [
+      "Nether Brick Fence"
+     ],
+     "count": 6
+    }
+   ]
+  },
+  "src-b11ea9dd8d": {
+   "id": "src-b11ea9dd8d",
+   "url": "https://minecraft.wiki/w/Plains",
+   "fetched_at": "2026-10-12T22:26:30Z",
+   "page_sha256": "ca9a5edc340228a6090638e9b139355c772f798263a867c50b8e8bbcdf662559",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "biome",
+   "name": "Plains",
+   "lead": [
+    "The plains are common grassland biomes in the Overworld with wide, open terrain and flowers .",
+    "Plains are the second-most common Overworld biome after forests , covering about 10.2% of its area. This is due to both their abundance and their potential to grow very large. They generate across a broad range of moderate temperatures when humidity is low to moderate."
+   ]
+  },
+  "src-b827b5ae81": {
+   "id": "src-b827b5ae81",
+   "url": "https://minecraft.wiki/w/Bed",
+   "fetched_at": "2026-10-12T23:21:37Z",
+   "page_sha256": "8720c12c21830d1f0867e0d8063fb7a0051a142be232bd3eda9acb73b81cf925",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Bed",
+   "lead": [
+    "A bed is a dyeable utility block that allows a player in the Overworld to sleep through the night and change their spawn point to within a few blocks of the bed, as long as it is not broken or obstructed. Villagers sleep in beds at night and require spare beds to produce offspring .",
+    "Beds are used by pressing the use item button while looking at the bed."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Matching Wool + Any Planks",
+     "slots": 6,
+     "alternatives_in_first_slot": 16,
+     "slot_items": [
+      "White Wool",
+      "White Wool",
+      "White Wool",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "White Bed",
+     "results": [
+      "White Bed",
+      "Light Gray Bed",
+      "Gray Bed",
+      "Black Bed",
+      "Brown Bed",
+      "Red Bed",
+      "Orange Bed",
+      "Yellow Bed",
+      "Lime Bed",
+      "Green Bed",
+      "Cyan Bed",
+      "Light Blue Bed",
+      "Blue Bed",
+      "Purple Bed",
+      "Magenta Bed",
+      "Pink Bed"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Any Bed + Matching Dye",
+     "slots": 2,
+     "alternatives_in_first_slot": 16,
+     "slot_items": [
+      "White Bed",
+      "White Dye"
+     ],
+     "result": "White Bed",
+     "results": [
+      "White Bed",
+      "Light Gray Bed",
+      "Gray Bed",
+      "Black Bed",
+      "Brown Bed",
+      "Red Bed",
+      "Orange Bed",
+      "Yellow Bed",
+      "Lime Bed",
+      "Green Bed",
+      "Cyan Bed",
+      "Light Blue Bed",
+      "Blue Bed",
+      "Purple Bed",
+      "Magenta Bed",
+      "Pink Bed"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Any Dyed Bed + Bleach",
+     "slots": 2,
+     "alternatives_in_first_slot": 15,
+     "slot_items": [
+      "Light Gray Bed",
+      "Bleach"
+     ],
+     "result": "White Bed",
+     "results": [
+      "White Bed"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Any Bed + Bone Meal or Lapis Lazuli or Cocoa Beans or Ink Sac",
+     "slots": 2,
+     "alternatives_in_first_slot": 16,
+     "slot_items": [
+      "White Bed",
+      "Bone Meal"
+     ],
+     "result": "White Bed",
+     "results": [
+      "White Bed",
+      "Blue Bed",
+      "Brown Bed",
+      "Black Bed"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-c7c5312bdc": {
+   "id": "src-c7c5312bdc",
+   "url": "https://minecraft.wiki/w/Stairs",
+   "fetched_at": "2026-10-12T23:21:42Z",
+   "page_sha256": "ba41adc487ee6109dea96a13499d46d1607163e0633c816efea407a5b823c083",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Stairs",
+   "lead": [
+    "Stairs are blocks that allow mobs and players to change elevation without jumping.",
+    "All stairs have the same crafting recipe format, where six blocks result in four stairs of the same type. Like axes , the crafting recipe of stairs can be horizontally flipped."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Planks , Bamboo Mosaic , stone blocks, brick blocks, Quartz Block , Smooth Quartz , Cut Copper , Wool , or Concrete",
+     "slots": 6,
+     "alternatives_in_first_slot": 90,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks",
+      "Oak Planks"
+     ],
+     "result": "Oak Stairs",
+     "results": [
+      "Oak Stairs",
+      "Spruce Stairs",
+      "Birch Stairs",
+      "Jungle Stairs",
+      "Acacia Stairs",
+      "Dark Oak Stairs",
+      "Mangrove Stairs",
+      "Cherry Stairs",
+      "Pale Oak Stairs",
+      "Poplar Stairs",
+      "Bamboo Stairs",
+      "Crimson Stairs",
+      "Warped Stairs",
+      "Bamboo Mosaic Stairs",
+      "Stone Stairs",
+      "Cobblestone Stairs",
+      "Mossy Cobblestone Stairs",
+      "Stone Brick Stairs",
+      "Mossy Stone Brick Stairs",
+      "Granite Stairs",
+      "Polished Granite Stairs",
+      "Diorite Stairs",
+      "Polished Diorite Stairs",
+      "Andesite Stairs",
+      "Polished Andesite Stairs",
+      "Cobbled Deepslate Stairs",
+      "Polished Deepslate Stairs",
+      "Deepslate Brick Stairs",
+      "Deepslate Tile Stairs",
+      "Tuff Stairs",
+      "Polished Tuff Stairs",
+      "Tuff Brick Stairs",
+      "Brick Stairs",
+      "Mud Brick Stairs",
+      "Sandstone Stairs",
+      "Smooth Sandstone Stairs",
+      "Red Sandstone Stairs",
+      "Smooth Red Sandstone Stairs",
+      "Prismarine Stairs",
+      "Prismarine Brick Stairs",
+      "Dark Prismarine Stairs",
+      "Nether Brick Stairs",
+      "Red Nether Brick Stairs",
+      "Blackstone Stairs",
+      "Polished Blackstone Stairs",
+      "Polished Blackstone Brick Stairs",
+      "End Stone Brick Stairs",
+      "Purpur Stairs",
+      "Quartz Stairs",
+      "Smooth Quartz Stairs",
+      "Cut Copper Stairs",
+      "Exposed Cut Copper Stairs",
+      "Weathered Cut Copper Stairs",
+      "Oxidized Cut Copper Stairs",
+      "Waxed Cut Copper Stairs",
+      "Waxed Exposed Cut Copper Stairs",
+      "Waxed Weathered Cut Copper Stairs",
+      "Waxed Oxidized Cut Copper Stairs",
+      "White Wool Stairs",
+      "Light Gray Wool Stairs",
+      "Gray Wool Stairs",
+      "Black Wool Stairs",
+      "Brown Wool Stairs",
+      "Red Wool Stairs",
+      "Orange Wool Stairs",
+      "Yellow Wool Stairs",
+      "Lime Wool Stairs",
+      "Green Wool Stairs",
+      "Cyan Wool Stairs",
+      "Light Blue Wool Stairs",
+      "Blue Wool Stairs",
+      "Purple Wool Stairs",
+      "Magenta Wool Stairs",
+      "Pink Wool Stairs",
+      "White Concrete Stairs",
+      "Light Gray Concrete Stairs",
+      "Gray Concrete Stairs",
+      "Black Concrete Stairs",
+      "Brown Concrete Stairs",
+      "Red Concrete Stairs",
+      "Orange Concrete Stairs",
+      "Yellow Concrete Stairs",
+      "Lime Concrete Stairs",
+      "Green Concrete Stairs",
+      "Cyan Concrete Stairs",
+      "Light Blue Concrete Stairs",
+      "Blue Concrete Stairs",
+      "Purple Concrete Stairs",
+      "Magenta Concrete Stairs",
+      "Pink Concrete Stairs"
+     ],
+     "count": 4
+    }
+   ]
+  },
+  "src-ccd9178392": {
+   "id": "src-ccd9178392",
+   "url": "https://minecraft.wiki/w/Cobblestone",
+   "fetched_at": "2026-10-12T22:26:24Z",
+   "page_sha256": "eaefa7f1cd549f91b930fe35a653683b96151bf2e31d4501fdf91bc1b6e7cac6",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "resource",
+   "name": "Cobblestone",
+   "lead": [
+    "Cobblestone is a common block obtained from mining stone . It is mainly used for crafting or as a building block.",
+    "The suitable tool to break cobblestone is pickaxe . Cobblestone needs to be broken using a pickaxe, otherwise the breaking time will increase and the block drops nothing."
+   ]
+  },
+  "src-d304033453": {
+   "id": "src-d304033453",
+   "url": "https://minecraft.wiki/w/Coal",
+   "fetched_at": "2026-10-12T22:26:26Z",
+   "page_sha256": "13d6c36389364d94d2c9a9b132fa55e9b62068cbabef66cb40a6881c728c6c86",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "resource",
+   "name": "Coal",
+   "lead": [
+    "Coal is a mineral item mainly obtained from coal ore . It is primarily used for crafting torches and campfires , in addition to being used as fuel .",
+    "Coal ore when mined using a pickaxe drops 1 piece of coal. If the pickaxe is enchanted with Fortune , it may drop an extra piece per level of Fortune, up to a maximum of 4 with Fortune III."
+   ]
+  },
+  "src-d4b63de502": {
+   "id": "src-d4b63de502",
+   "url": "https://minecraft.wiki/w/Torch",
+   "fetched_at": "2026-10-12T22:26:03Z",
+   "page_sha256": "ba3079b6758be3fe2f518039ed21e330c51fe6f6e0d6dbff8e865fdd621550c0",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "block",
+   "name": "Torch",
+   "lead": [
+    "Torches can be broken instantly using anything, and drop themselves as an item.",
+    "When lava flows into a torch's space, it will be destroyed without dropping anything."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Coal or Charcoal + Stick",
+     "slots": 2,
+     "alternatives_in_first_slot": 2,
+     "slot_items": [
+      "Coal",
+      "Stick"
+     ],
+     "result": "Torch",
+     "results": [
+      "Torch"
+     ],
+     "count": 4
+    },
+    {
+     "ingredients": "Cerium Chloride or Mercuric Chloride or Potassium Chloride or Tungsten Chloride + Torch",
+     "slots": 2,
+     "alternatives_in_first_slot": 4,
+     "slot_items": [
+      "Cerium Chloride",
+      "Torch"
+     ],
+     "result": "Blue Torch",
+     "results": [
+      "Blue Torch",
+      "Red Torch",
+      "Purple Torch",
+      "Green Torch"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Magnesium + Torch",
+     "slots": 2,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Magnesium",
+      "Torch"
+     ],
+     "result": "Underwater Torch",
+     "results": [
+      "Underwater Torch"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-d50a9910ee": {
+   "id": "src-d50a9910ee",
+   "url": "https://minecraft.wiki/w/Raw_Iron",
+   "fetched_at": "2026-10-12T22:26:28Z",
+   "page_sha256": "4cc6e601a0ffb1e5328fb5cd73aa9232ab0ce608cba78fb45d6515cc67f393a7",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "resource",
+   "name": "Raw Iron",
+   "lead": [
+    "Raw iron is an item obtained by mining iron ore . It can be smelted in a furnace or blast furnace to produce iron ingots , which are used in crafting.",
+    "Iron ore and deepslate iron ore mined with a stone pickaxe or a higher-tier pickaxe drop 1 unit of raw iron. When mined with a pickaxe enchanted with Fortune , the ore can drop an additional unit per level of the enchantment, up to a maximum of 4 units with Fortune III. If mined with a pickaxe enchanted with Silk Touch , the ore block itself is dropped instead."
+   ]
+  },
+  "src-dddfa2fa81": {
+   "id": "src-dddfa2fa81",
+   "url": "https://minecraft.wiki/w/Sword",
+   "fetched_at": "2026-10-13T01:27:07Z",
+   "page_sha256": "7629dc9e75d98b140489eb7e0294b697ebc32975788d265e687ddee122928c8f",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Sword",
+   "lead": [
+    "A sword is a tiered melee weapon that can be swung to deal damage and can break blocks such as cobwebs , leaves , and bamboo more quickly. In Java Edition , it has the special ability to perform sweep attacks , which damage nearby entities and knock them back.",
+    "All swords except netherite are crafted using a stick and two of the tier's material."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 3,
+     "alternatives_in_first_slot": 20,
+     "slot_items": [
+      "Oak Planks",
+      "Oak Planks",
+      "Stick"
+     ],
+     "result": "Wooden Sword",
+     "results": [
+      "Wooden Sword",
+      "Golden Sword",
+      "Stone Sword",
+      "Copper Sword",
+      "Iron Sword",
+      "Diamond Sword"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Swords",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "slot_items": [
+      "Wooden Sword",
+      "Wooden Sword"
+     ],
+     "result": "Wooden Sword",
+     "results": [
+      "Wooden Sword",
+      "Stone Sword",
+      "Copper Sword",
+      "Iron Sword",
+      "Golden Sword",
+      "Diamond Sword",
+      "Netherite Sword"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-f04b885346": {
+   "id": "src-f04b885346",
+   "url": "https://minecraft.wiki/w/Iron_Ingot",
+   "fetched_at": "2026-10-12T22:26:19Z",
+   "page_sha256": "f00403a3ec39651ced99508d3f6d6ce1b4c8664485040f0070798342ca5b0908",
+   "parser": "gsv-facts/1.1.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Iron Ingot",
+   "lead": [
+    "An iron ingot is a metal ingot smelted from raw iron that is used to craft many items and tools .",
+    "Smelting raw iron in a furnace or blast furnace is the most common way to obtain iron ingots."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Block of Iron",
+     "slots": 1,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Block of Iron"
+     ],
+     "result": "Iron Ingot",
+     "results": [
+      "Iron Ingot"
+     ],
+     "count": 9
+    },
+    {
+     "ingredients": "Iron Nugget",
+     "slots": 9,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget",
+      "Iron Nugget"
+     ],
+     "result": "Iron Ingot",
+     "results": [
+      "Iron Ingot"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Iron",
+     "slots": 1,
+     "alternatives_in_first_slot": 1,
+     "slot_items": [
+      "Iron"
+     ],
+     "result": "Iron Ingot",
+     "results": [
+      "Iron Ingot"
+     ],
+     "count": 1
+    }
+   ]
+  }
+ }
+}

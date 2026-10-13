@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% set full_title = meta.title ~ (' · ' ~ site.cfg.name if meta.kind != 'home' else '') %}
+<title>{{ full_title if full_title|length <= 70 else meta.title }}</title>
+<meta name="description" content="{{ meta.description }}">
+<meta name="robots" content="{{ robots }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">{% endif %}
+<link rel="stylesheet" href="{{ asset('css/inv.css') }}">
+<link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
+{% for x in meta.ld %}<script type="application/ld+json">{{ x|tojson }}</script>
+{% endfor %}
+<script src="{{ asset('js/inv.js') }}" defer></script>
+</head>
+<body data-ns="{{ site.cfg.storage_namespace }}">
+<a class="skip" href="#main">К содержимому</a>
+<header class="hd">
+  <a class="logo" href="/"><img src="{{ asset('img/logo.svg') }}" alt="" width="32" height="32"><span>База выживания</span></a>
+  {% if site.version and site.version.src.java_current %}<a class="patch" href="{{ site.version.url }}">Java Edition {{ site.version.src.java_current }}</a>{% endif %}
+  <nav class="hd__nav" aria-label="Разделы"><a href="/iz-togo-chto-est/" data-inv-link>Из того, что есть</a><a href="/planirovshchik/">Планировщик</a>{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() %}<a href="/{{ gid }}/{{ sec }}/">{{ label }}</a>{% endfor %}{% endfor %}</nav>
+  <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту"><label class="sr" for="fq">Предмет, ресурс, биом</label><input id="fq" name="q" type="search" placeholder="Факел, железо"><button type="submit">Найти</button></form>
+</header>
+{% if meta.crumbs|length > 1 %}
+<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>
+{% endif %}
+<main id="main" tabindex="-1">
+{% block main %}{% endblock %}
+</main>
+<footer class="ft">
+  <p>Рецепты и факты — из открытой вики игры (Minecraft Wiki) с датой чтения и версией; связи «из чего → во что» строятся из рецептов источника. Тексты наши, подготовлены с помощью ИИ и пока не проверены редакцией. Названия игр и предметов принадлежат правообладателям.</p>
+  <nav aria-label="О сайте"><a href="/kak-my-rabotaem/">Как мы работаем</a> <a href="/istochniki/">Источники</a></nav>
+</footer>
+</body>
+</html>

@@ -1,0 +1,22 @@
+{
+ "slug": "shchit",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-930ee91150",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Щит: защита от атак",
+ "summary": "Щит блокирует урон от ближних и дальних атак и взрывов; удар топором временно отключает его. Делается из досок и железного слитка.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "zheleznyj-slitok",
+  "doski"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

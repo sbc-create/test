@@ -1,0 +1,21 @@
+{
+ "slug": "vedro",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-553de39ee4",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Ведро: вода, лава, молоко",
+ "summary": "Ведро переносит воду, лаву, молоко и другие вещества. Делается из 3 железных слитков.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "zheleznyj-slitok"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

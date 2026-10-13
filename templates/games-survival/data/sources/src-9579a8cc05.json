@@ -1,0 +1,16 @@
+{
+ "id": "src-9579a8cc05",
+ "url": "https://minecraft.wiki/w/Forest",
+ "fetched_at": "2026-10-12T22:26:32Z",
+ "page_sha256": "8e0601c9309a79cb6cfddd562fc8757eea23dbe1ab39101ad17e2c893eda71d8",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "biome",
+ "name": "Forest",
+ "lead": [
+  "The forest is a lush biome densely covered with oak and birch trees. Woods wolves spawn here. The forest is the most common Overworld surface biome in Minecraft , making up about 12% of its area.",
+  "Forests generate in a broad range of moderate temperatures, with a somewhat more restrictive medium humidity requirement."
+ ]
+}

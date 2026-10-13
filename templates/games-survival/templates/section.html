@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ label }}</h1>
+<div class="tablewrap"><table class="tbl tbl--cat"><thead><tr><th scope="col">Название</th><th scope="col"><span lang="en">Wiki</span></th>{% if sec != 'biomy' %}<th scope="col">Куда идёт</th>{% endif %}<th scope="col">Действие</th></tr></thead>
+<tbody>{% for e in items %}{% set u = uses(e) %}<tr><th scope="row"><a href="{{ e.url }}">{{ e.short }}</a></th><td lang="en">{{ e.name }}</td>{% if sec != 'biomy' %}<td data-label="Куда идёт">{% if u %}{% for x, q, c in u %}{{ x.short }}{% if not loop.last %}, {% endif %}{% endfor %}{% else %}—{% endif %}</td>{% endif %}{% if recipe_inputs(e) %}<td><a href="/planirovshchik/?item={{ e.slug }}&amp;n={{ recipe_inputs(e)[0].count }}">Посчитать</a></td>{% else %}<td class="nil">—</td>{% endif %}</tr>{% endfor %}</tbody></table></div>
+{% endblock %}
