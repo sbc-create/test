@@ -194,3 +194,36 @@ def test_wrapper_refuses_before_claim_without_prompt():
     текст = (ROOT / "automation" / "host" / "editor" / "seo-tech-run.sh").read_text(encoding="utf-8")
     assert текст.index("test -s docs/seo-tech/SEO_TECH_RUN_PROMPT.md") < текст.index("seo-tech-next")
     assert 'RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"' in текст
+
+
+def test_order_follows_allocation_lagging_direction_first(tmp_path):
+    """Доли 50/50 (владелец 13.10): первыми — задачи отставшего направления,
+    при равенстве — Lords; Zona и сеть — после; внутри группы порядок очереди."""
+    задачи = [{"id": "T901", "status": "queued", "direction": "anime"},
+              {"id": "T902", "status": "queued", "direction": "zona"},
+              {"id": "T903", "status": "queued", "direction": "lords"},
+              {"id": "T904", "status": "queued", "direction": "anime"}]
+    s = tmp_path / "state"
+    s.mkdir()
+    сейчас = dt.datetime(2026, 10, 13, 12, 0, tzinfo=dt.timezone.utc)
+    порядок = [з["id"] for з in tech_run.candidates(задачи, state=s, now=сейчас,
+                                                    доли={"anime": 0.5, "lords": 0.5})]
+    assert порядок == ["T903", "T901", "T904", "T902"]
+    (s / "claims.jsonl").write_text("".join(
+        json.dumps({"run_id": f"R{i}", "task_id": "T903", "at": "2026-10-13T1{}:00:00Z".format(i)}) + "\n"
+        for i in range(2)), encoding="utf-8")
+    порядок = [з["id"] for з in tech_run.candidates(задачи, state=s, now=сейчас,
+                                                    доли={"anime": 0.5, "lords": 0.5})]
+    assert порядок == ["T901", "T904", "T903", "T902"]
+
+
+def test_real_queue_has_allocation_and_directions():
+    очередь = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))
+    assert очередь["allocation"]["anime"] == 0.5 and очередь["allocation"]["lords"] == 0.5
+    for з in очередь["tasks"]:
+        assert з.get("direction") in {"anime", "lords", "zona", "network"}, з["id"]
+    вне = ("lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
+           "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru", "lordserial.net.ru")
+    for з in очередь["tasks"]:
+        if з["direction"] == "lords":
+            assert not any(д in з.get("site", "") for д in вне), з["id"]

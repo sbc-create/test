@@ -1,0 +1,27 @@
+{
+  "schema_version": "1",
+  "note": "Образец очереди технического SEO.",
+  "allocation": {
+    "anime": 0.5,
+    "lords": 0.5,
+    "window_h": 24
+  },
+  "tasks": [
+    {
+      "id": "T900",
+      "site": "lordfilm47.space",
+      "direction": "zona-lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "problem": "description раздела без факта",
+      "check": "checks/section_description.py",
+      "status": "queued"
+    },
+    {
+      "id": "B900",
+      "site": "сеть",
+      "direction": "network",
+      "problem": "бюджет CI исчерпан",
+      "status": "blocked"
+    }
+  ]
+}

@@ -9,6 +9,12 @@
   "properties": {
     "schema_version": {"type": "string", "minLength": 1},
     "note": {"type": "string"},
+    "allocation": {
+      "description": "Доли плановой работы по направлениям (владелец 2026-10-13: 50/50). Порядок взятия задач — seo_operator/tech_run.candidates.",
+      "type": "object", "required": ["anime", "lords"], "additionalProperties": false,
+      "properties": {"note": {"type": "string"}, "anime": {"type": "number", "minimum": 0, "maximum": 1},
+                     "lords": {"type": "number", "minimum": 0, "maximum": 1}, "window_h": {"type": "integer", "minimum": 1}}
+    },
     "tasks": {
       "type": "array",
       "items": {"$ref": "#/$defs/task"}
@@ -33,7 +39,8 @@
         "status": {"enum": ["queued", "session", "blocked", "verified", "released", "live_verified", "done"]},
         "evidence": {"type": "string"},
         "review": {"type": "string"},
-        "owner_action": {"type": "string"}
+        "owner_action": {"type": "string"},
+        "direction": {"enum": ["anime", "lords", "zona", "network"], "description": "Направление для долей: anime — Animedia/AnimeGo/Yummy; lords — lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info; zona и network в доли не входят."}
       },
       "allOf": [
         {

@@ -107,8 +107,47 @@ def task_state(state: Path = STATE, now: dt.datetime | None = None) -> dict[str,
     return итог
 
 
-def candidates(задачи: list[dict], state: Path = STATE, now: dt.datetime | None = None) -> list[dict]:
-    """Задачи queued без вердикта, без живого замка и с запасом попыток — по порядку очереди."""
+#: Доли по направлениям (владелец 2026-10-13): 50 % — аниме, 50 % — действующие
+#: Lordfilm/Lordserial. Zona и сетевые задачи в доли не входят и идут после.
+ДОЛИ_ПО_УМОЛЧАНИЮ = {"anime": 0.5, "lords": 0.5, "window_h": 24}
+
+
+def load_allocation(путь: Path = QUEUE) -> dict[str, Any]:
+    try:
+        raw = json.loads(путь.read_text(encoding="utf-8")).get("allocation") or {}
+    except (OSError, ValueError):
+        raw = {}
+    return {**ДОЛИ_ПО_УМОЛЧАНИЮ, **{к: в for к, в in raw.items() if к != "note"}}
+
+
+def захваты_по_направлениям(задачи: list[dict], state: Path, now: dt.datetime,
+                            hours: int = 24) -> dict[str, int]:
+    """Сколько захватов за окно пришлось на каждое направление (выделенный ресурс)."""
+    направление = {з["id"]: з.get("direction") for з in задачи}
+    счёт = {"anime": 0, "lords": 0}
+    начало = now - dt.timedelta(hours=hours)
+    for к in _claims(state):
+        try:
+            когда = dt.datetime.fromisoformat(str(к.get("at", "")).replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        н = направление.get(к.get("task_id"))
+        if когда >= начало and н in счёт:
+            счёт[н] += 1
+    return счёт
+
+
+def candidates(задачи: list[dict], state: Path = STATE, now: dt.datetime | None = None,
+               доли: dict | None = None) -> list[dict]:
+    """Задачи queued без вердикта, без живого замка и с запасом попыток.
+
+    Порядок — по долям направлений: первыми задачи направления, сильнее
+    отставшего от своей доли за окно (при равенстве — Lords), затем другого,
+    затем вне долей (Zona, сеть); внутри группы — порядок очереди. Без этого
+    первой всегда шла бы верхняя задача файла, и направление, чьи задачи
+    записаны выше, забирало бы весь ресурс.
+    """
+    now = now or _сейчас()
     сводка = task_state(state, now)
     итог = []
     for з in задачи:
@@ -118,7 +157,12 @@ def candidates(задачи: list[dict], state: Path = STATE, now: dt.datetime |
         if с.get("status") in ГОТОВО or с.get("failures", 0) >= MAX_ATTEMPTS or с.get("open_claim"):
             continue
         итог.append(з)
-    return итог
+    доли = доли or load_allocation()
+    счёт = захваты_по_направлениям(задачи, state, now, int(доли.get("window_h", 24)))
+    всего = sum(счёт.values())
+    первое = min(счёт, key=lambda н: (счёт[н] - float(доли.get(н, 0.5)) * всего, н != "lords"))
+    ранг = {первое: 0, ("anime" if первое == "lords" else "lords"): 1}
+    return sorted(итог, key=lambda з: ранг.get(з.get("direction"), 2))
 
 
 def next_task(задачи: list[dict], state: Path = STATE, now: dt.datetime | None = None) -> dict | None:

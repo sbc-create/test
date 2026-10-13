@@ -1,10 +1,17 @@
 {
   "schema_version": "1",
   "note": "Очередь технического SEO. Определения задач; состояние прогонов — var/seo-tech/ (runs.jsonl, claims.jsonl). status: queued — может взять фоновый прогон (только готовит ветку, без push и выпуска); session — ведёт сессия; blocked — ждёт внешнего действия (owner_action — точное действие); live_verified — выпущено и подтверждено на живом сайте (build в заголовке + итог исполнителя). Статусы verified/released/live_verified ставит сессия по следам, не фоновый прогон.",
+  "allocation": {
+    "note": "Владелец 2026-10-13: 50 % плановой SEO-работы — аниме-сайты (Animedia, AnimeGo, Yummy), 50 % — действующие продвигаемые Lordfilm/Lordserial (lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info). Доли — к новым задачам и рабочему ресурсу, отдельно для контента (config/editor-run.json allocation, editor_run.НАПРАВЛЕНИЯ) и техработы (эта очередь, поле direction; порядок — tech_run.candidates). Zona — не Lords. Восемь новых доменов (lordfilm.group, lordfilm.spb.ru, lordfilm.msk.ru, lordserial.su, lordserial.group, lordserial.spb.ru, lordserial.msk.ru, lordserial.net.ru) — только техническая подготовка, вне продвижения и вне редакционных очередей. Пока публикация Lords на паузе, доля Lords — техработа и подготовка проверенных изменений.",
+    "anime": 0.5,
+    "lords": 0.5,
+    "window_h": 24
+  },
   "tasks": [
     {
       "id": "T001",
       "site": "zonafilm.cc",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-cc",
       "urls": [
         "https://zonafilm.cc/"
@@ -20,6 +27,7 @@
     {
       "id": "T002",
       "site": "12 витрин (Lords ×4, Zona ×3, AnimeGo ×3, Animedia ×2)",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "urls": [
         "https://lordserial33.biz/title/jamai-2-0/",
@@ -37,6 +45,7 @@
     {
       "id": "T003",
       "site": "an1mego.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/title/ey-u-tebya-ushki-torchat/"
@@ -53,6 +62,7 @@
     {
       "id": "T004",
       "site": "animeg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/animeg0-site",
       "urls": [
         "https://animeg0.site/title/ey-u-tebya-ushki-torchat/"
@@ -68,6 +78,7 @@
     {
       "id": "T005",
       "site": "an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1meg0-site",
       "urls": [
         "https://an1meg0.site/title/ey-u-tebya-ushki-torchat/"
@@ -83,6 +94,7 @@
     {
       "id": "B001",
       "site": "www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc",
+      "direction": "network",
       "problem": "www-зеркала: 200, index, canonical на себя — дубли сайтов.",
       "norm": "SEO_KNOWLEDGE_PACK §1 (единый канонический хост)",
       "expected": "www → 308 на корень; на www нет self-canonical.",
@@ -93,6 +105,7 @@
     {
       "id": "B002",
       "site": "17 доменов",
+      "direction": "network",
       "problem": "GA4 не подключён: нет ресурсов, ID, сервисного аккаунта, разрешения сети.",
       "status": "blocked",
       "owner_action": "docs/seo-operator/GA4_CONNECTION_PACKAGE.md §4: ресурсы и тройки домен → G-ID → Property ID; сервисный аккаунт site-factory-ga4-reader@<ID проекта>.iam.gserviceaccount.com с ролью «Читатель»; задание на analyticsdata.googleapis.com и oauth2.googleapis.com в inventory/network-allowlist.yaml.",
@@ -101,6 +114,7 @@
     {
       "id": "B003",
       "site": "все домены с Метрикой",
+      "direction": "network",
       "problem": "Метрика 11.10 не выгружена: сессия — BLOCKED_SECRET, analytics-cabinet 12.10 05:04Z не записал результат.",
       "status": "blocked",
       "owner_action": "root: journalctl -u analytics-cabinet.service --since \"2026-10-12 04:55\" и выгрузка за 11.10/10.10 командой из отчёта 12.10 (docs/seo-operator/REPORT_20261012_1012.md).",
@@ -109,6 +123,7 @@
     {
       "id": "B004",
       "site": "7 доменов Lords/Zona",
+      "direction": "zona",
       "problem": "PAUSED_PUBLISH на 7 доменах Lords/Zona: служба MCP затирала поля editorial-overrides.json.",
       "status": "blocked",
       "owner_action": "Архитектор: исправить сборку накладки (factory/qwen/editorial.py: применить_правки / запись целиком) — actor и reason сохраняются у записей, которых публикация не касается; затем установка в службу (перезапуск site-factory-mcp — владелец), переснять снимок, пробная публикация на zonafilm.space, --compare код 0 → снятие паузы по одной витрине.",
@@ -117,6 +132,7 @@
     {
       "id": "B005",
       "site": "zonafilm12.site",
+      "direction": "zona",
       "problem": "Перегрузка внешним потоком: главная 504, затем 200 за ~18 с.",
       "status": "blocked",
       "owner_action": "root: sudo journalctl -u nginx --since \"-15min\" | tail -50 → limit_req или запрет источника → sudo systemctl restart nova-zonafilm12-site.service.",
@@ -125,6 +141,7 @@
     {
       "id": "B006",
       "site": "технический SEO-цикл",
+      "direction": "network",
       "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
       "status": "blocked",
       "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer.",
@@ -133,6 +150,7 @@
     {
       "id": "T006",
       "site": "lordserial33.biz",
+      "direction": "lords",
       "repo": "var/site-repos/lordserial33-biz",
       "urls": [
         "https://lordserial33.biz/anime/"
@@ -147,6 +165,7 @@
     {
       "id": "T007",
       "site": "lordserial33.biz, lordfilm47.space, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
       "repo": "var/site-repos/<lords>",
       "urls": [
         "https://lordserial33.biz/catalog/",
@@ -162,6 +181,7 @@
     {
       "id": "T008",
       "site": "10 ячеек (1lordserials1-online, animedia-icu, animeg0-site, lordserial33-biz, yummyani-biz, yummyani-site, yummyani7-info, yummyani7-site, zonafilm-space, zonafilm12-site)",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "problem": "artifact_sha256 в template-manifest.json не совпадает ни с одним файлом точки входа — ложное заявление о происхождении.",
       "expected": "build_id: worktree-unbuilt и пустая цифра (прецедент lordfilm47-space 26.09) либо верная цифра.",
@@ -172,6 +192,7 @@
     {
       "id": "B007",
       "site": "lordfilm47.space ↔ 1lordserials1.online",
+      "direction": "lords",
       "problem": "CSU-4: основной текст /catalog/ совпадает на 91 % — один каталог под несколькими индексируемыми доменами.",
       "status": "blocked",
       "owner_action": "Решение владельца (Архитектор, cross-site-gate-20261012.md §4): принять риск, развести каталоги (разный состав/порядок по профилю сайта) или закрыть дублирующий каталог от индекса на одном из доменов. Тексты-заглушки для «уникальности» не пишем."
@@ -179,6 +200,7 @@
     {
       "id": "T009",
       "site": "17 ячеек: Lords, Zona, Animedia, Yummy",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "urls": [],
       "problem": "checks/fails_closed.py не доказывал отказ запуска с каталогом данных ЧУЖОГО сайта: у 12 копий проверка кончалась на «neighbour_site_ids не пуст», у 5 подставлялся /srv/<site_id>/data — такого пути на машине нет (каталоги названы по репозиторию), то есть проверялось только «каталога нет → отказ». Находка Архитектора (site-checks-drift.py 9137034) + измерение SEO 12.10; шаблон исправлен Архитектором 7729da7.",
@@ -191,6 +213,7 @@
     {
       "id": "T010",
       "site": "20 ячеек (вкл. 3 AnimeGo)",
+      "direction": "anime",
       "repo": "var/site-repos/*",
       "urls": [],
       "problem": "checks/no_secrets.py: у 16 копий нет поиска значения внутри хранимых файлов; у трёх AnimeGo нет сторожа «git отвечает не про этот проект» (дерево без .git → rc=0 на прежней копии, rc=1 на новой — воспроизведено) и нет запрета имён *-catalog.json (отслеживаемый снимок каталога → rc=0 на прежней копии).",
@@ -203,6 +226,7 @@
     {
       "id": "B008",
       "site": "yummyani7.info, yummyani7.site",
+      "direction": "anime",
       "status": "blocked",
       "problem": "в ветках по два чужих неотправленных коммита (4fabe14/1e25dc0 и 1d95ba3/5dddc43: накладки и модерация комментариев). Push коммитов T009/T010 унёс бы их с собой.",
       "owner_action": "Автор коммитов 4fabe14, 1e25dc0, 1d95ba3, 5dddc43 решает их судьбу (отправить или отозвать). После этого SEO отправляет 5fbd8c80eba6 и 9d2544830c5b."
@@ -210,6 +234,7 @@
     {
       "id": "B009",
       "site": "zonafilm.cc",
+      "direction": "zona",
       "status": "verified",
       "problem": "site-manifest.json (c75a34b, 2026-09-22): в блоке publisher значение совпадает с живым publisher_id 1lordserials1.online/lordserials22.info, ссылка ведёт на lords-01; живой zonafilm.cc отдаёт другой ID, lords-01 — тоже другой. Похоже на копию чужого манифеста. Плеер не трогаем.",
       "owner_action": "Архитектор/владелец: подтвердить, читает ли кто-то site-manifest.json[publisher] при запуске, и привести блок к zona-02 (своё значение и ссылка) или убрать значение, оставив только ссылку.",
@@ -218,6 +243,7 @@
     {
       "id": "B010",
       "site": "yummyani.biz, yummyani.org, yummyani.site, yummyani7.info, yummyani7.site",
+      "direction": "anime",
       "status": "blocked",
       "problem": "D177 (три места publisher_id: файл плеера, объявление в config/site.json, учёт реестра) описывает Lords/Zona/AnimeGo. У пяти Yummy своего плеера нет: воспроизведение — верхний поток Next.js, player.json и LORDS_PLAYER_CONFIG отсутствуют по решению (yummyani-org/run.py check_player, docstring). Пустой publisher_id_expected у Yummy ВЕРЕН: объявление без плеера даёт отказ run.py --check (измерено Архитектором: «сайт объявляет publisher_id …, но LORDS_PLAYER_CONFIG не задан»). Идентификатор, который отдают карточки Yummy, приходит из верхнего потока; где он живёт и кем учитывается — не установлено. Поправка 12.10: прежняя формулировка («сверка выключена, вписать значение») была ошибочной — её исполнение сломало бы пять витрин.",
       "owner_action": "Владелец: (1) где у Yummy задаётся publisher_id (конфигурация верхнего потока Next.js); (2) нужно ли вообще вести его учёт в реестре, если ни плеера, ни объявления у семейства нет. До ответа publisher_id_expected у Yummy НЕ заполняется, учёт в реестре по одному источнику не заполняется (ни SEO, ни Архитектором)."
@@ -225,6 +251,7 @@
     {
       "id": "B011",
       "site": "animedia.space (animedia-02), zonafilm.space (zona-01)",
+      "direction": "network",
       "status": "blocked",
       "problem": "Один и тот же publisher_id в учёте у двух ячеек, обе витрины его отдают (измерение Архитектора bec65ab; SEO-сверка 12.10: значение отдают ещё an1mego/an1meg0/animeg0). D177: идентификатор принадлежит конкретному домену.",
       "owner_action": "Владелец: подтвердить, что общий идентификатор у нескольких доменов допустим, или выдать отдельные. Правкой не трогаем: это настройка плеера и выплат.",
@@ -233,6 +260,7 @@
     {
       "id": "T011",
       "site": "zonafilm.cc (zona-02)",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-cc",
       "urls": [],
       "problem": "Единственная ячейка без checks/fails_closed.py. `run.py --check` без --data-dir даёт код 0: run.py::данные() берёт --data-dir → ZONA02_DATA → config/runtime.json[data_root] (= /srv/zonafilm-cc/data). Изоляция держится (с --data-dir /srv/zonafilm-space/data → код 1, нет zona-02-catalog.json — измерение Архитектора), умолчание указывает на СВОЙ каталог, но правило «не угадывай каталог данных» не выполнено и не проверяется.",
@@ -245,6 +273,7 @@
     {
       "id": "T012",
       "site": "15 ячеек с checks/activate_scenarios.py",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "urls": [],
       "problem": "Фиксированный порт 9801 в activate_scenarios: параллельные прогоны падали на «Address already in use» (поймано 12.10 на 1lordserials1-online). Шаблон 83f51e7 подбирает свободную пару портов, но требует publisher_id_expected в config/site.json — у пяти Yummy его нет по решению (плеер — верхний поток Next.js, B010), у lords-08/-09 не объявлен; animedia-space несёт собственную, приспособленную под свою раскладку редакцию.",
@@ -258,6 +287,7 @@
     {
       "id": "T013",
       "site": "lords-01, lords-05..09 (6 ячеек с manifest_stamp)",
+      "direction": "lords",
       "repo": "var/site-repos/*",
       "urls": [],
       "problem": "D207: artifact_sha256 считался по одной точке входа, а правка модуля оформления меняет рантайм, не меняя цифры (animeg0-site: exit=0 → exit=1 через 25 мин). Шаблоны 6dd9247: build_release штампует artifact_sha256 по всему рантайму и code_file_sha256 по точке входа, manifest_stamp сверяет обе.",
@@ -270,6 +300,7 @@
     {
       "id": "T014",
       "site": "1lordserials1.online (lords-03)",
+      "direction": "lords",
       "repo": "var/site-repos/1lordserials1-online",
       "urls": [],
       "problem": "config/template-manifest.json: template_origin есть, но source_commit в нём пуст; manifest_stamp ячейка не несёт, поэтому никто этого не видит (находка Архитектора). Неоднозначность: note того же блока говорит «коммит поднят с 515fcf0b39de до 72bf12afb2a7 (ветка claude/lords-episode-zero-515fcf0)», а monorepo_commit и pins.source_commit = ac4e439e4cd9.",
@@ -283,6 +314,7 @@
     {
       "id": "B012",
       "site": "все ячейки (исполнитель выпусков)",
+      "direction": "network",
       "status": "blocked",
       "problem": "Копия шаблонов проверок у исполнителя (/usr/local/lib/site-factory-cell, root, от 2026-10-01) отстала от дерева фабрики по пяти проверкам: activate_scenarios, entrypoint_present, fails_closed, manifest_stamp, no_secrets. Ячейка с checks/deploy_request.py (1lordserials1-online) требует побайтового совпадения со ВСТАНОВЛЕННОЙ копией, поэтому новые шаблоны (свободный порт, пропуск сверки плеера) в неё не доходят. Побайтово не совпадают с установленной 96 копий по восьми проверкам (site-checks-drift.py 65c5150), из них до 12.10: verify_pins 15, ascii_shell_identifiers 5, compiles 1. Сторож договора стоит у одной ячейки из девятнадцати; ставить его остальным до переустановки нельзя — все станут красными. Той же переустановкой обновляется установленный реестр /usr/local/lib/site-factory-cell/config/site-cells.json (2026-10-09 12:46, root 0600): правки реестра 12.10 (статусы, publisher_id, animego-04 data_owner f47af91) в нём отсутствуют. zonafilm-cc/checks/cell_unit.py при недоступном файле откатывается к реестру дерева — безопасно (проверено Архитектором). Следствие договора: у 1lordserials1-online (копия исполнителя, 696ec80) остался постоянный порт 9801 — единственная из 15 копий; два параллельных прогона этой ячейки поймают «Address already in use». До переустановки её проверки гоняются по одной. После переустановки в установленный реестр попадут и правки паспорта 12.10: 13 статусов, 5 publisher_id, animego-04 data_owner.",
       "owner_action": "Владелец (root), без спешки: повторный `sudo bash automation/host/install-cell-executor.sh --dry-run` (ожидается ровно 2 файла), затем без флага. Законность копий шаблонов в ячейках — B013.",
@@ -291,6 +323,7 @@
     {
       "id": "B013",
       "site": "все ячейки (шаблоны проверок)",
+      "direction": "network",
       "status": "blocked",
       "problem": "Правки шаблонов проверок Архитектора (83f51e7, f198891, 9dc003f, 3615c82, 6dd9247 и др.) копировались из его коммитов прямо в ячейки и в дерево службы (/home/claude/wt-portable-site-cell-01, factory/cell/site_checks) не попали: там activate_scenarios.py без свободного порта (grep «свободная_пара» = 0, SEO 12.10). Установщик поставил исполнителю эту старую версию — копии в ячейках по договору deploy_request незаконны, новая ячейка с deploy_request упрётся в расхождение.",
       "expected": "шаблоны Архитектора в дереве службы → переустановка исполнителя → site-checks-drift.py: 0 расхождений с установленной копией → f198891 в 1lordserials1-online → решение о deploy_request для остальных ячеек",
@@ -301,6 +334,7 @@
     {
       "id": "B014",
       "site": "animedia.space, animedia.icu",
+      "direction": "anime",
       "repo": "var/site-repos/animedia-space",
       "problem": "tests/unit/test_qwen_indexing_operation.py::test_в_рантайме_не_осталось_буквального_запрета_страниц красный на обеих Animedia (полный прогон 12.10): тест (c5c5f5b, 05.10) признаёт вычисляемой мету robots только с «мета_роботов(», а блок лишних ключей, поставленный инструментом automation/host/apply-unknown-keys-noindex.py (450171d), вычисляет её через _закрытые_роботы(). Поведение витрины верно: блок срабатывает только на странице без noindex и всегда отдаёт noindex — закрытый сайт он открыть не может. Попытка SEO перевести блок на мета_роботов() отвергнута проверками витрины (query-keys исполняет блок изолированно — NameError; pins разошлись) и откачена без коммита.",
       "expected": "тест и инструмент согласованы; tests/unit/test_qwen_indexing_operation.py зелёный",
@@ -312,6 +346,7 @@
     {
       "id": "T015",
       "site": "7 витрин Lords/Zona (общий каталог 62 978)",
+      "direction": "zona",
       "repo": "seo_operator",
       "problem": "Запас кандидатов редактора (regular.editor_candidates, GAP_BACKFILL) упорядочен одинаково для всех семи витрин (imdb_rating, год). Внутри одного пересчёта тайтл достаётся одному домену (taken по work_key), но между пересчётами тайтл, опубликованный на одной витрине, может быть взят другой: published учитывается по (домен, слаг). Пул годных D200: ~10 000 на витрину, всего 70 022 (замер Архитектора 12.10).",
       "expected": "решение: разносить ли тайтлы между витринами сети (уникальный тайтл — одна витрина) или допускать один тайтл на нескольких; при разнесении — тест в tests/unit/test_seo_regular.py",
@@ -322,6 +357,7 @@
     {
       "id": "B015",
       "site": "lordserials22.site, lordserials22.space, lordserial101.site, lordfilm077.site (lords-06..09)",
+      "direction": "network",
       "problem": "Домены не разрешаются в DNS (socket.getaddrinfo: gaierror, 12.10 ~20:35Z, проверены все домены config/site-cells.json — у остальных 15 живых разрешение есть). В паспорте статус planned. Отсюда 0 посетителей в Метрике за 7 дней у lordserials22.site/.space (cabinet-latest.json 12.10 10:11Z) и отсутствие счётчика у lordfilm077/lordserial101: сайты не опубликованы, а не плохо оптимизированы. SEO-работа по ним до публикации не даёт визитов.",
       "status": "blocked",
       "owner_action": "Владелец: решение о запуске lords-06..09 — делегирование доменов и записи DNS (вне manifest фабрика DNS не меняет), затем выделение ячеек и выпуск. До решения SEO по этим четырём не ведётся."
@@ -329,6 +365,7 @@
     {
       "id": "T016",
       "site": "animedia.space (animedia-02)",
+      "direction": "anime",
       "repo": "var/site-repos/animedia-space",
       "urls": [
         "https://animedia.space/"
@@ -344,6 +381,7 @@
     {
       "id": "T017",
       "site": "animedia.space, animedia.icu",
+      "direction": "anime",
       "repo": "var/site-repos/animedia-space",
       "urls": [
         "https://animedia.space/title/adept-svyatogo-znaka-2-specvypuski/"
@@ -359,6 +397,7 @@
     {
       "id": "T018",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/title/verhovnyy-bog-2/"
@@ -373,6 +412,7 @@
     {
       "id": "B016",
       "site": "yummyani.site (и прочие Yummy на том же коде)",
+      "direction": "anime",
       "repo": "/srv/sites/yummyani-staging/repo",
       "urls": [
         "https://yummyani.site/sitemap/titles.xml",
@@ -389,6 +429,7 @@
     {
       "id": "T019",
       "site": "все 21 ячейка витрин",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "problem": "checks/run.sh ячеек не сверяет число объявленных проверок с исполненными: строка с неверной обёрткой (check при функции step) молчит — так visible-breadcrumbs не исполнялась на трёх AnimeGo с 4f71b49 до 12.10. Сторожа счёта нет ни в одной из 21 (automation/local/run-sh-guard-audit.py, Архитектор, код 3).",
       "norm": "проверка, которая не исполнилась, не может считаться пройденной",
@@ -400,6 +441,7 @@
     {
       "id": "T020",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/title/sbornik-istoriy-gose-aoyamy/"
@@ -414,6 +456,7 @@
     {
       "id": "B017",
       "site": "yummyani.site (и прочие Yummy на том же коде)",
+      "direction": "anime",
       "repo": "/srv/sites/yummyani-staging/repo",
       "urls": [
         "https://yummyani.site/anime/vechnaya-volya-4",
@@ -429,6 +472,7 @@
     {
       "id": "T021",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/catalog/?genre=%D0%B0%D0%BD%D0%B8%D0%BC%D0%B5"
@@ -442,6 +486,7 @@
     {
       "id": "B018",
       "site": "animedia.icu, animedia.space, an1mego.site, animeg0.site, an1meg0.site, lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "network",
       "problem": "Публичный /healthz девяти витрин отдаёт 24–26 полей: пути файловой системы, хеши содержимого, идентификаторы версий, в т.ч. git-коммиты приватных репозиториев (замер Архитектора 12.10, acdac37). Yummy и Zona по тому же адресу отдают только {\"ok\": …}. Решениями D150/D166/D187 состав ответа не закрыт (они про индексацию служебных путей).",
       "status": "blocked",
       "evidence": "SEO состав не меняет: /healthz читает исполнитель при проверке выпуска на живом (build_id), правка без решения может сломать live_verified. Значения в отчёт не выносятся.",
@@ -450,6 +495,7 @@
     {
       "id": "T022",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/title/stalnoy-angel-kurumi-2/",
@@ -465,6 +511,7 @@
     {
       "id": "T023",
       "site": "an1mego.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "problem": "В наборе проверок an1mego нет checks/data_chain.py (есть у an1meg0) — поэтому регрессия 31f05ba954a3 (таблица характеристик тайтла потеряла Тип/Эпизоды/Статус) прошла run.sh и вышла на живой сайт; поймал data_chain соседней ячейки.",
       "expected": "data_chain (или эквивалентная проверка характеристик тайтла на синтетическом снимке) в наборе an1mego и animeg0",
@@ -475,6 +522,7 @@
     {
       "id": "T024",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/title/verhovnyy-bog-2/"
@@ -488,6 +536,7 @@
     {
       "id": "T025",
       "site": "lordserial33.biz, zonafilm.cc, zonafilm12.site, animedia.space, an1mego.site",
+      "direction": "network",
       "repo": "var/site-repos/*",
       "problem": "Ячейки семейства исполняют один код, а наборы проверок у них разные (automation/local/family-checks-drift.py, Архитектор 0dea340): lordserial33-biz без activate_scenarios/artifact_contents/manifest_stamp (есть у шести родственников); zonafilm-cc и zonafilm12-site без activate_scenarios; zonafilm-cc без ascii_shell_identifiers/compiles/entrypoint_present, а вместо no_secrets — no_data_or_secrets, проверяющая только имена файлов, не содержимое; animedia-space без compiles; an1mego-site без data_chain (из-за этого регрессия 31f05ba954a3 вышла на живой).",
       "expected": "у каждой ячейки — шаблонные проверки, которые несёт её родня; no_data_or_secrets zonafilm-cc усилена до сканирования содержимого",
@@ -499,6 +548,7 @@
     {
       "id": "T026",
       "site": "animeg0.site (и прочие AnimeGo)",
+      "direction": "anime",
       "repo": "var/site-repos/animeg0-site",
       "problem": "checks/sections_update.py плавает: после записи снимка ждёт фиксированные 6 с (time.sleep(6)) и затем открывает /title/<slug>/; в полном прогоне 12.10 ~23:45Z получила HTTP-ошибку (страница ещё не перечитана), отдельным запуском и повторным полным — проходит (184 PASS). До stand_root эта проверка не исполнялась вовсе.",
       "expected": "ожидание перечитывания по признаку (опрос до появления записи с пределом), а не фиксированная пауза",
@@ -509,6 +559,7 @@
     {
       "id": "T027",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/catalog/",
@@ -524,6 +575,7 @@
     {
       "id": "T028",
       "site": "zonafilm.space, zonafilm.cc, zonafilm12.site, lordfilm47.space, lordserials22.info, 1lordserials1.online",
+      "direction": "network",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/movies/?sort=newest&page=2",
@@ -541,6 +593,7 @@
     {
       "id": "B019",
       "site": "все ячейки (CI GitHub Actions sbc-create/site-*)",
+      "direction": "network",
       "status": "blocked",
       "problem": "С ~00:20Z 13.10 GitHub Actions не запускает CI: «The job was not started because an Actions budget is preventing further use» (site-an1mego-site 38327604432, site-zonafilm-space 38327896855). Исполнитель выпуска требует зелёный CI коммита — выпуски невозможны. Часть бюджета ночью израсходована SEO: ~25 пушей только проверок (сторож T019 в 19 репозиториев, стенды T023/T026), каждый — прогон CI ~6 мин.",
       "evidence": "Готово к выпуску и ждёт CI: T027 — an1mego c6dbda7, animeg0 737b60b, an1meg0 6f0722f; T028 — zonafilm-space 3ce4acc, zonafilm12-site 099f26c, zonafilm-cc c0d409e; T028 Lords — lordfilm47, 1lordserials1, lordserials22-info (проверки идут). После восстановления: gh run rerun по последнему коммиту каждой ветки, затем штатный factory cell trigger. Перепроверено 13.10 03:42Z: gh run rerun 38327896855 (site-zonafilm-space, T028) — задание release не стартовало: «The job was not started because an Actions budget is preventing further use.» Перепроверено 13.10 08:16Z: gh run rerun 38327896855 — снова «The job was not started because an Actions budget is preventing further use».",
@@ -549,6 +602,7 @@
     {
       "id": "T029",
       "site": "Lords/Zona (общий каталог), Animedia, AnimeGo",
+      "direction": "network",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/title/master-kung-fu-2/",
@@ -564,17 +618,19 @@
     {
       "id": "T030",
       "site": "zonafilm.cc, lordfilm47.space, zonafilm.space, yummyani.site",
+      "direction": "network",
       "repo": "var/site-repos/zonafilm-cc",
       "problem": "Холодные страницы тайтлов медленные: TTFB по 6 случайным тайтлам — zonafilm.cc медиана 1,72 с (макс 2,8), lordfilm47.space 0,83 (1,4), zonafilm.space 0,60 (1,25); главная zonafilm.space стабильно ~0,8 с (5 замеров), yummyani.site 0,26–1,39 с. Повторные (горячие) страницы Lords — 0,03 с. Замер 13.10 ~01:30Z при loadavg 8,5 на 12 CPU (часть нагрузки — прогоны проверок SEO), то есть причина не установлена.",
       "norm": "скорость отдачи (приоритет 5 задания); бюджет обхода",
       "expected": "профиль рендера холодной страницы тайтла на стенде; причина названа; цель — TTFB < 0,5 с",
       "check": "повторный замер TTFB при обычной нагрузке; профиль cProfile стенда",
       "status": "verified",
-      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно."
+      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно. 13.10 ~12:30Z: Lords (4) — полный checks/run.sh на урезанном снимке, similar-features PASS."
     },
     {
       "id": "T031",
       "site": "zonafilm.space, zonafilm.cc, zonafilm12.site, animedia.space, animedia.icu",
+      "direction": "network",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/title/13-dush/"
@@ -589,6 +645,7 @@
     {
       "id": "T032",
       "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "problem": "Разделы жанров Zona почти без внутреннего входа: из 98 имён жанров ссылки есть у 6 (только с главной); /catalog/, /movies/, карточка — 0; в sitemap.xml (62 986 адресов) — 0 разделов жанров. Разделы отвечают 200 и индексируются, но обходчику недостижимы (замер Архитектора 13.10).",
       "norm": "sitemap: все индексируемые канонические страницы",
@@ -600,6 +657,7 @@
     {
       "id": "T033",
       "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/catalog/?genre=kriminal",
@@ -614,6 +672,7 @@
     {
       "id": "T034",
       "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/catalog/"
@@ -629,6 +688,7 @@
     {
       "id": "B020",
       "site": "animedia.icu, animedia.space, an1meg0.site, lordserials22.info, zonafilm.space, zonafilm.cc, zonafilm12.site, yummyani7.site, yummyani7.info",
+      "direction": "network",
       "problem": "По http эти 9 доменов отдают страницу 200 без перехода на https (canonical на https есть — дубль смягчён, но http-версия обходится и отдаётся); у остальных 8 — 301/308 на https. HSTS по https отдаёт только yummyani.site (max-age=31536000), у прочих 16 — нет (замер 13.10 ~02:45Z, главная и страница тайтла).",
       "norm": "один канонический протокол; http → https постоянным переходом",
       "expected": "http → 301/308 на https у всех 17; HSTS — решение владельца (необратимо на срок max-age)",
@@ -640,6 +700,7 @@
     {
       "id": "T035",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/genre/drama/",
@@ -654,6 +715,7 @@
     {
       "id": "T036",
       "site": "Zona (3), Animedia (2)",
+      "direction": "network",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/catalog/?genre=drama"
@@ -667,6 +729,7 @@
     {
       "id": "T037",
       "site": "animedia.space, animedia.icu",
+      "direction": "anime",
       "repo": "var/site-repos/animedia-space",
       "urls": [
         "https://animedia.space/sitemap.xml",
@@ -682,6 +745,7 @@
     {
       "id": "T038",
       "site": "фабрика (seo_operator)",
+      "direction": "network",
       "repo": ".",
       "problem": "seo_operator/technical_seo.py: ONP-002 (title > 60) уровня medium с рекомендацией «сократить до 60», ONP-005 (description > 160) — «сократить до 160»; seo_operator/pipeline.py propose() по ONP-002 сам режет title срезом page.title[:60] — посреди слова/сущности. Противоречит knowledge/SEO_KNOWLEDGE_PACK.md REQ-SEO-META п.3: «жёсткий лимит символов не является критерием истины: проверяются уникальность, читаемость, отсутствие обрезанных сущностей». Замечание Архитектора 13.10. Живых вызовов нет: propose/apply_canary — только tests/operator/test_pipeline.py и scripts/demo_canary.py (вся демо-гипотеза канарейки — «сокращение title до 60»).",
       "norm": "REQ-SEO-META п.3 (база знаний выше кода фабрики, CLAUDE.md «Источники истины»)",
@@ -693,6 +757,7 @@
     {
       "id": "T039",
       "site": "zonafilm.space, zonafilm12.site",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/catalog/"
@@ -707,6 +772,7 @@
     {
       "id": "T040",
       "site": "zonafilm12.site (и zonafilm.space — то же ядро)",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm12-site",
       "urls": [
         "https://zonafilm12.site/"
@@ -722,6 +788,7 @@
     {
       "id": "T041",
       "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/an1mego-site",
       "urls": [
         "https://an1mego.site/sitemap.xml"
@@ -736,6 +803,7 @@
     {
       "id": "T042",
       "site": "animedia.space, animedia.icu",
+      "direction": "anime",
       "repo": "var/site-repos/animedia-space",
       "urls": [
         "https://animedia.space/sitemap.xml",
@@ -751,6 +819,7 @@
     {
       "id": "T043",
       "site": "сеть (title-overlays.json Animedia/AnimeGo/Yummy)",
+      "direction": "anime",
       "repo": "factory/qwen",
       "problem": "Происхождение опубликованного текста пишется в два поля: 273 записи — provenance {author, prepared_by, facts_source, written_at, sources}, 3 записи (content_id repair-009-1-rev1, другой путь публикации) — source_manifest {source_type, source_id, facts} без provenance; у них тело и в body, и в description. Пробела нет, но проверка, читающая одно поле, даст ложный пробел (замер Архитектора 13.10).",
       "expected": "решение: свести поля к одному или закрепить правило «проверка происхождения читает оба»; тест на запись каждого пути",
@@ -761,6 +830,7 @@
     {
       "id": "T044",
       "site": "Zona (3), Lords (4)",
+      "direction": "lords",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/catalog/?genre=west_content",
@@ -772,11 +842,12 @@
       "expected": "(1) раздел метки — noindex, follow, страница остаётся (без видимых изменений, выезжает без просмотра); (2) метка не показывается жанром в карточке и подвале — видимое изменение, на просмотр",
       "check": "checks/technical_genre_noindex.py (стенд): оба кода метки — 200 и noindex в мета-теге и X-Robots-Tag; обычный жанр и /catalog/ — index",
       "status": "verified",
-      "evidence": "(1) Zona: zonafilm-space и zonafilm12 — признак _служебный_раздел_жанра в причинах ужесточения _отдать (рядом с лишними ключами и поиском); zonafilm-cc — обёртка шаблонной _лишние_ключи_запроса в serve.py. Стенд PASS на трёх; на коде до правки — rc=1 (оба кода index). Полные наборы идут. Lords — следом (ядро из automation/host/lords-frontend.py, маршрут /genre/<код>/). Zona коммиты: zonafilm-space de4c868, zonafilm12 0de3707, zonafilm-cc 6c9c036 — полные run.sh rc=0 (у zonafilm12 известный пропуск genre-alias-canonical). Lords: у метки два кода с РАЗНЫМИ наборами (lordfilm47: west_content 5 858, zapadnyykontent 35 313; замер Архитектора) — только noindex на оба, без канонизации. Коммиты lordfilm47 6990682, lordserial33 e7a8682, 1lordserials1 3edacb3, lordserials22 0e8c974; проверка в процессе без снимка (стенд Lords убит по памяти 13.10 ~04:15Z, oom_kill 29→30) — признак и подключение PASS, на прежнем ядре rc=1; полный run.sh Lords не запускался, стендовая приёмка — после пределов памяти. (2) видимая часть — не начата."
+      "evidence": "(1) Zona: zonafilm-space и zonafilm12 — признак _служебный_раздел_жанра в причинах ужесточения _отдать (рядом с лишними ключами и поиском); zonafilm-cc — обёртка шаблонной _лишние_ключи_запроса в serve.py. Стенд PASS на трёх; на коде до правки — rc=1 (оба кода index). Полные наборы идут. Lords — следом (ядро из automation/host/lords-frontend.py, маршрут /genre/<код>/). Zona коммиты: zonafilm-space de4c868, zonafilm12 0de3707, zonafilm-cc 6c9c036 — полные run.sh rc=0 (у zonafilm12 известный пропуск genre-alias-canonical). Lords: у метки два кода с РАЗНЫМИ наборами (lordfilm47: west_content 5 858, zapadnyykontent 35 313; замер Архитектора) — только noindex на оба, без канонизации. Коммиты lordfilm47 6990682, lordserial33 e7a8682, 1lordserials1 3edacb3, lordserials22 0e8c974; проверка в процессе без снимка (стенд Lords убит по памяти 13.10 ~04:15Z, oom_kill 29→30) — признак и подключение PASS, на прежнем ядре rc=1; полный run.sh Lords не запускался, стендовая приёмка — после пределов памяти. (2) видимая часть — не начата. 13.10 ~12:30Z: приёмка Lords проведена полным checks/run.sh на урезанной копии снимка каждой ячейки (каждая 20-я запись) под пределом 3 ГиБ — technical-genre-noindex PASS на четырёх, OOM нет (RSS стенда ~90 МиБ)."
     },
     {
       "id": "B021",
       "site": "вся сеть (отчёт владельцу)",
+      "direction": "network",
       "problem": "Утренний отчёт к 10:00 МСК владельцу не доставляется (12.10 и 13.10). Вкладка показа seo-report-view.py (единственный механизм по решению 08.10, MOD-13) не работает с 10.10: ~/.seo-report-view.json shown=2026-10-10 (изменён 10.10 11:59Z), процесса нет; отчёты 11–13.10 сформированы вовремя (05:49Z), но не выведены. Адреса «CEO-чата» в проекте нет; Telegram отменён владельцем 08.10; публикация страницей (Artifact, Claude Docs) и запуск вкладки (tmux) отклонены сторожем сессии 13.10.",
       "norm": "отчёт за вчерашние сутки МСК у владельца к 10:00 МСК даже при неполной аналитике; доставка подтверждается ответом канала (id сообщения/ссылка), а не путём к файлу",
       "expected": "канал назван владельцем и доставка подтверждена идентификатором",
@@ -788,6 +859,7 @@
     {
       "id": "T045",
       "site": "animeg0.site",
+      "direction": "anime",
       "repo": "var/site-repos/animeg0-site",
       "urls": [
         "https://animeg0.site/"
@@ -802,6 +874,7 @@
     {
       "id": "T046",
       "site": "zonafilm.space, zonafilm12.site",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/",
@@ -818,6 +891,7 @@
     {
       "id": "T047",
       "site": "zonafilm.space, zonafilm12.site, zonafilm.cc",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.cc/title/boec-baki/season-1/episode-1/"
@@ -827,7 +901,83 @@
       "expected": "description серии с фактами — только когда источник даст поля серии и страница их покажет",
       "check": "стенд: серия с блоком episode-facts, факты блока в description",
       "status": "blocked",
-      "evidence": "13.10 ~11:20Z: правка «факты блока → description» написана и откатана без коммита — на снимке 0 серий с блоком, правка была бы мёртвым кодом. BLOCKED_INPUT: в источнике Zona нет полей серии; придумывать их нельзя (CLOSED_WORLD)."
+      "evidence": "13.10 ~11:20Z: правка «факты блока → description» написана и откатана без коммита — на снимке 0 серий с блоком, правка была бы мёртвым кодом. BLOCKED_INPUT: в источнике Zona нет полей серии; придумывать их нельзя (CLOSED_WORLD).",
+      "owner_action": "Владелец (поставщик снимка Zona): решить, отдавать ли в снимке поля серии — название, дата выхода, длительность. Без источника задача не выполняется; придумывать поля нельзя (CLOSED_WORLD)."
+    },
+    {
+      "id": "T048",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/movies/",
+        "https://1lordserials1.online/catalog/"
+      ],
+      "problem": "description разделов /catalog/, /movies/, /series/ — «Фильмы на Lordfilm: подборка из каталога.», 41–55 знаков без факта на всех четырёх (живой замер 13.10 ~12:00Z), хотя страница показывает «N записей в выборке» (lordserial33 — «в разделе», свой вид lords02_view.py). В отчёте 13.10 — кандидаты META_THIN: lordfilm47 /movies/ (28), 1lordserials1 /catalog/ (27).",
+      "norm": "SEO_KNOWLEDGE_PACK: description — содержательный пересказ страницы",
+      "expected": "«<Раздел> на <сайт>: N записей каталога — смотреть онлайн[ — страница K].», N = видимому",
+      "check": "checks/section_description.py (стенд на урезанной копии снимка ячейки)",
+      "verify_live": "meta description /catalog/, /movies/, /series/ на четырёх доменах",
+      "status": "verified",
+      "evidence": "Локально (B019): lordfilm47 9aefb44, lordserial33 05e34eb, 1lordserials1 d83ad9b, lordserials22-info 8ec1e4f. Стенд на урезанном снимке (каждая 20-я запись, ~90 МиБ) — PASS на четырёх; отрицательная проба на прежнем коде rc=1 (lordfilm47 — ядро, lordserial33 — lords02_view). Полный checks/run.sh на урезанном снимке под пределом 3 ГиБ: все PASS (lordfilm47 33, lordserial33 32, 1lordserials1 38, lordserials22 33); launcher-refuses под SITE_DATA_DIR ложно падает — в чистом окружении rc=0."
+    },
+    {
+      "id": "T049",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/"
+      ],
+      "problem": "На главной lordserial33.biz ни одной ссылки на разделы жанров (/genre/…): 0, у трёх других витрин Lords — по 20 (живой замер 13.10 ~12:00Z). Вход в жанры — только с карточек (3 ссылки) и из фильтра каталога.",
+      "norm": "задание п.3 — кликабельные жанры и внутренние ссылки на работающие разделы",
+      "expected": "блок разделов жанров на главной (как у lordfilm47), цели 200, index, self-canonical",
+      "check": "стенд: число ссылок /genre/<код>/ на / ≥ 12, все цели 200",
+      "status": "session",
+      "review": "Видимое изменение главной: выпуск после просмотра человеком."
+    },
+    {
+      "id": "T050",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/no-such-page-xyz/"
+      ],
+      "problem": "Страница 404 на всех четырёх витринах Lords несёт <meta name=\"robots\" content=\"index, follow\"> (живой замер 13.10). Ответ 404 сам исключает страницу из индекса, но сигнал противоречит статусу.",
+      "norm": "SEO_KNOWLEDGE_PACK: сигналы индексации согласованы со статусом ответа",
+      "expected": "404 — noindex в мета-теге (и X-Robots-Tag, если ставится); видимое не меняется",
+      "check": "стенд: /no-such-page/ → 404 и noindex",
+      "status": "session"
+    },
+    {
+      "id": "T051",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordserial33.biz/title/lcher-prise/season-1/episode-1/"
+      ],
+      "problem": "description страницы серии — «<сериал> — N сезон, M серия: смотреть онлайн на Lordserial.» (~63 знака). Фактов серии в источнике нет: у сезонов Lords только счётчики eps/avail (урезанный снимок 13.10: 1 099 записей с сезонами, полей серии 0).",
+      "norm": "SEO_KNOWLEDGE_PACK: description — пересказ страницы; факты только из источника",
+      "expected": "описание серии с фактами, которые страница показывает (число серий сезона, год и жанры произведения — если видимы на странице серии)",
+      "check": "стенд: факты description есть в видимом тексте страницы серии",
+      "status": "session"
+    },
+    {
+      "id": "T052",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/series/"
+      ],
+      "problem": "Видимая строка раздела «N записей в выборке» не согласует слово с числом: «931 записей», «61 записей» (стенд 13.10). У lordserial33 — «N записей в разделе», то же.",
+      "norm": "публичный текст грамотен (D-публичные формулировки)",
+      "expected": "«931 запись», «61 запись», «2 записи» — функцией _записей ядра",
+      "check": "стенд: число и слово видимой строки согласованы на /series/, /catalog/ и фасете",
+      "status": "session",
+      "review": "Видимый текст: выпуск после просмотра человеком."
     }
   ]
 }
