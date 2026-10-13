@@ -41,6 +41,40 @@ def cmd_registry(args) -> int:
     return 0
 
 
+def cmd_promotion(args) -> int:
+    """Объявить или снять исключение сайта из общего продвижения.
+
+    Операция только над паспортом: содержимое витрины, её выпуск и проверки
+    доступности она не трогает. Причина и основание обязательны — исключение
+    без них через месяц неотличимо от случайной правки.
+    """
+    if not args.site:
+        print("BLOCKED_INPUT: операции promotion нужен --site", file=sys.stderr)
+        return 2
+    if args.exclude == args.include:
+        print("BLOCKED_INPUT: нужен ровно один из --exclude / --include",
+              file=sys.stderr)
+        return 2
+    области = tuple(
+        s.strip() for s in (args.scopes or "").split(",") if s.strip()
+    ) or registry.ОБЛАСТИ_ПРОДВИЖЕНИЯ
+    сохраняется = tuple(s.strip() for s in (args.keeps or "").split(",") if s.strip())
+    try:
+        ячейка = registry.объявить_исключение(
+            args.site, excluded=bool(args.exclude),
+            reason=args.reason or "", authority=args.authority or "",
+            scopes=области, keeps=сохраняется,
+            path=Path(args.registry) if getattr(args, "registry", None) else None)
+    except registry.RegistryError as exc:
+        текст = str(exc)
+        print(текст if текст.startswith("BLOCKED_") else f"BLOCKED_INPUT: {текст}",
+              file=sys.stderr)
+        return 2
+    _print({"site_id": ячейка.site_id, "domain": ячейка.domain,
+            "promotion": ячейка.promotion})
+    return 0
+
+
 def cmd_templates(args) -> int:
     pool = templates.load()
     free = templates.free_templates()
@@ -496,6 +530,7 @@ ACTIONS = {
     "newsite": cmd_newsite,
     "relocate-data": cmd_relocate_data,
     "registry": cmd_registry,
+    "promotion": cmd_promotion,
     "templates": cmd_templates,
     "reserve": cmd_reserve,
     "repo": cmd_repo,
@@ -541,6 +576,18 @@ def register(subparsers) -> None:
                              "доставка содержимого в ячейку отказывает")
     parser.add_argument("--registry",
                         help="файл реестра ячеек (по умолчанию config/site-cells.json)")
+    parser.add_argument("--exclude", action="store_true",
+                        help="объявить исключение из общего продвижения")
+    parser.add_argument("--include", action="store_true",
+                        help="снять исключение из общего продвижения")
+    # `--reason` объявлен ниже один раз на весь разбор: у операции promotion он
+    # обязателен, у прочих — причина для журнала. Второе объявление
+    # argparse отвергает.
+    parser.add_argument("--authority", help="чьим решением (обязательно для promotion)")
+    parser.add_argument("--scopes",
+                        help="области через запятую; по умолчанию все известные")
+    parser.add_argument("--keeps",
+                        help="что продолжает работать, через запятую")
     parser.add_argument("--no-register", dest="no_register", action="store_true",
                         help="не записывать ячейку в реестр: сайт не будет "
                              "получать доставку содержимого")

@@ -395,6 +395,14 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
     """Публичные домены сети из реестра ячеек и реестра аналитики.
 
     Тестовые имена (`*.localhost`, `*.test`) не являются сайтами сети.
+
+    Исключённые из продвижения домены отсюда НЕ убираются, и это не
+    недоделка. Этот список — вход проверок доступности, карт сайта и
+    технического SEO, а исключение касается продвижения: редакционной
+    очереди, генерации текстов, периодических правок, блоков продвижения и
+    плана трафика. Убрать домен здесь значило бы заодно снять с него
+    поддержку. Поэтому признак едет вместе со строкой (`promotion_excluded`),
+    и читают его те обработчики, которых он касается.
     """
     cells = _read_json(sources["cells"], {}).get("cells") or []
     analytics = {
@@ -406,14 +414,21 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
         domain = str(cell.get("domain") or "")
         if not domain or domain.endswith((".localhost", ".test")) or domain == "localhost":
             continue
+        promotion = cell.get("promotion") or {}
         out[domain] = {
             "domain": domain,
             "site_id": cell.get("site_id"),
             "open_authorized": bool((cell.get("indexing") or {}).get("open_authorized")),
+            "promotion_excluded": bool(promotion.get("excluded")),
+            "promotion_scopes": list(promotion.get("scopes") or ()),
         }
     for domain in analytics:
         if domain and domain not in out:
-            out[domain] = {"domain": domain, "site_id": None, "open_authorized": None}
+            # Домен из реестра аналитики, которого нет в реестре ячеек: про
+            # продвижение здесь неизвестно ничего. `False` сказал бы «не
+            # исключён», то есть выдал бы пробел учёта за решение владельца.
+            out[domain] = {"domain": domain, "site_id": None, "open_authorized": None,
+                           "promotion_excluded": None, "promotion_scopes": []}
     for domain, item in out.items():
         prop = analytics.get(domain) or {}
         webmaster = prop.get("webmaster") or {}

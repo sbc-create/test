@@ -652,10 +652,29 @@ def _work(
 
 def allowed_domains() -> list[str]:
     """Домены, на которых редактор публикует: шлюз (EDITOR_DOMAINS) и кандидаты
-    (regular.EDITOR_SITES). Единственный источник для промпта модели."""
+    (regular.EDITOR_SITES). Единственный источник для промпта модели.
+
+    Из объединения вычитаются домены, исключённые владельцем из продвижения
+    (`promotion.excluded` в реестре ячеек). Вычитание здесь, а не доверие тому,
+    что имени нет в перечнях: перечни пополняются по мере приёмки витрин, и
+    пополняет их общий прогон. Пока запрет был отсутствием имени, одна такая
+    правка его отменяла, и домен возвращался в продвижение молча.
+
+    Недоступный реестр не разрешает публикацию: список сужается до пустого, и
+    редактор останавливается с названной причиной, а не публикует «на всякий
+    случай» на всех доменах подряд.
+    """
+    from factory.cell import registry as cell_registry
     from seo_operator import regular
 
-    return sorted(set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES))
+    все = set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES)
+    try:
+        исключены = cell_registry.исключённые_домены()
+    except (OSError, ValueError, cell_registry.RegistryError) as ош:
+        raise RuntimeError(
+            "BLOCKED_INPUT: реестр ячеек не прочитан, исключение из продвижения "
+            f"не проверить: {type(ош).__name__}: {ош}") from None
+    return sorted(д for д in все if д.lower() not in исключены)
 
 
 def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:

@@ -158,6 +158,18 @@ class Cell:
     #: исполнитель: разрешение на снятие запрета спрашивается там, где запрет
     #: снимается, а не только в вызывающей операции.
     indexing: dict[str, Any] = field(default_factory=dict)
+    #: Подключённая аналитика действующего сайта: счётчик и его состояние.
+    #: Поле появилось в файле раньше, чем в этой модели, и записью паспорта
+    #: снималось — измерено 2026-10-13: блок есть у 15 ячеек из 33.
+    analytics: dict[str, Any] = field(default_factory=dict)
+    #: Исключение из общего продвижения, объявленное владельцем: `excluded` —
+    #: исключён ли сайт, `scopes` — из чего именно, `keeps` — что продолжает
+    #: работать, `reason`/`authority` — почему и чьим решением.
+    #:
+    #: Отсутствие блока означает «не исключён»: так поведение действующих
+    #: сайтов не меняется от появления поля. Обратное (отсутствие = исключён)
+    #: выключило бы продвижение всей сети одной правкой кода.
+    promotion: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -207,6 +219,17 @@ class Cell:
             "resources": dict(self.resources),
             "runtime": dict(self.runtime),
             "release": dict(self.release),
+            # `indexing` и `promotion` перечислены здесь не для полноты.
+            # Измерено 2026-10-13 на копии действующего реестра: блок indexing
+            # есть у 19 ячеек из 33, а `register(replace=True)` его снимал —
+            # печать паспорта его не перечисляла. Для indexing потеря ведёт в
+            # безопасную сторону (режим без файла состояния вычисляется
+            # закрытым), но записанная причина пропадала вместе с блоком; для
+            # promotion потеря отменяла бы само исключение из продвижения, то
+            # есть следующая общая выкладка подключила бы домен обратно.
+            "indexing": dict(self.indexing),
+            "analytics": dict(self.analytics),
+            "promotion": dict(self.promotion),
         }
 
 
@@ -229,8 +252,95 @@ def _cell(raw: dict[str, Any]) -> Cell:
         runtime=raw.get("runtime") or {},
         release=raw.get("release") or {},
         indexing=raw.get("indexing") or {},
+        analytics=raw.get("analytics") or {},
+        promotion=raw.get("promotion") or {},
         status=raw.get("status", "planned"),
     )
+
+
+#: Из чего именно исключается сайт. Названия здесь — не ярлыки: каждое читает
+#: свой обработчик, и проверка `tests/unit/test_promotion_exclusion.py` падает,
+#: если обработчик перестал его читать.
+ОБЛАСТИ_ПРОДВИЖЕНИЯ = (
+    "editorial_queue",        # общая редакционная очередь
+    "seo_queue",              # общая SEO-очередь
+    "description_generation",  # генерация описаний
+    "comment_generation",     # генерация комментариев
+    "periodic_seo_edits",     # периодические автоматические SEO-правки
+    "promotion_blocks",       # блоки продвижения на странице
+    "cross_site_links",       # межсайтовая перелинковка
+    "traffic_plan",           # план выхода на целевой трафик
+)
+
+
+def исключён_из_продвижения(cell: Cell, область: str | None = None) -> bool:
+    """Исключён ли сайт из общего продвижения (целиком или в одной области).
+
+    Отсутствие блока — «не исключён»: действующие сайты поля не имеют, и
+    появление поля их поведение не меняет. Если область названа, но в `scopes`
+    её нет, ответ — «не исключён в этой области»: исключение, записанное
+    наполовину, не должно читаться как полное.
+    """
+    блок = cell.promotion or {}
+    if not блок.get("excluded"):
+        return False
+    if область is None:
+        return True
+    области = блок.get("scopes") or ()
+    return область in области
+
+
+def исключённые_домены(path: Path | None = None,
+                       область: str | None = None) -> frozenset[str]:
+    """Домены (и псевдонимы) всех исключённых ячеек — одним множеством.
+
+    Обработчикам нужен именно такой ответ: не «список сайтов продвижения», а
+    «кого в него не брать». Разница важна, потому что общий прогон строит свой
+    список сам, из реестра, и запрет должен быть проверкой на его пути, а не
+    отсутствием имени в чьём-то перечне.
+    """
+    итог: set[str] = set()
+    for cell in all_cells(path):
+        if исключён_из_продвижения(cell, область):
+            итог.update(d.lower() for d in cell.domains)
+    return frozenset(итог)
+
+
+def объявить_исключение(site_id_или_домен: str, *, excluded: bool,
+                        reason: str, authority: str,
+                        scopes: tuple[str, ...] = ОБЛАСТИ_ПРОДВИЖЕНИЯ,
+                        keeps: tuple[str, ...] = (),
+                        path: Path | None = None) -> Cell:
+    """Записать исключение в паспорт ячейки.
+
+    Причина и основание обязательны: исключение без них через месяц
+    неотличимо от случайной правки, а снять его будет некому и незачем.
+    Неизвестная область — отказ, а не молчаливое добавление: обработчика у
+    придуманного имени нет, и запись обещала бы запрет, которого никто не
+    исполняет.
+    """
+    reason = (reason or "").strip()
+    authority = (authority or "").strip()
+    if not reason or not authority:
+        raise RegistryError(
+            "BLOCKED_INPUT: исключению из продвижения нужны и reason, и authority")
+    чужие = [s for s in scopes if s not in ОБЛАСТИ_ПРОДВИЖЕНИЯ]
+    if чужие:
+        raise RegistryError(
+            f"неизвестные области продвижения {чужие}; известны: "
+            f"{list(ОБЛАСТИ_ПРОДВИЖЕНИЯ)}")
+    from dataclasses import replace as _replace
+
+    было = resolve(site_id_или_домен, path)
+    блок: dict[str, Any] = {
+        "excluded": bool(excluded),
+        "scopes": list(scopes),
+        "keeps": list(keeps),
+        "reason": reason,
+        "authority": authority,
+        "recorded_at": utc_now(),
+    }
+    return register(_replace(было, promotion=блок), path=path, replace=True)
 
 
 def load(path: Path | None = None) -> dict[str, Any]:

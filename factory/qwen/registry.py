@@ -511,6 +511,19 @@ def путь_доставки(s: "Сайт") -> str:
     "posts-unpublish": ("posts",),
 }
 
+#: Операции, которые НЕ предлагаются сайту, исключённому владельцем из общего
+#: продвижения (`promotion.excluded` в реестре ячеек). Это ровно те, что
+#: добавляют на витрину редакционный материал.
+#:
+#: Чего здесь нет и почему. `unpublish` и `posts-unpublish` остаются: снятие
+#: уже опубликованного ведёт в безопасную сторону, и запирать содержимое на
+#: витрине исключение не должно. Читающие операции (`sites`, `status`,
+#: `diagnose`, `indexing`, `facts`, `posts-status`, `confirm`) тоже остаются:
+#: сайт без продвижения — работающий сайт под поддержкой, а не выключенный.
+ОПЕРАЦИИ_ПРОДВИЖЕНИЯ = frozenset({
+    "prepare", "publish", "restore", "rollback", "posts-prepare", "posts-publish",
+})
+
 
 @dataclass
 class Сайт:
@@ -531,6 +544,11 @@ class Сайт:
     editorial_store: str = ""
     editorial_items: int | None = None
     indexing: str = ""
+    #: Исключён ли сайт владельцем из общего продвижения (`promotion.excluded`
+    #: в реестре ячеек). Умолчание — False: у действующих сайтов блока нет, и
+    #: появление поля их перечень операций не меняет.
+    promotion_excluded: bool = False
+    promotion_reason: str = ""
     public_http: str = ""
     handover_state: str = "unknown"
     handover_reason: str = ""
@@ -684,6 +702,13 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
                 if (pathlib.Path(s.repo_path) / "src").is_dir() else []
             s.template_entrypoint = найдено[0] if найдено else ""
         s.template_family = (я.get("template") or {}).get("template_id") or ""
+        продвижение = я.get("promotion") or {}
+        s.promotion_excluded = bool(продвижение.get("excluded"))
+        s.promotion_reason = str(продвижение.get("reason") or "")
+        if s.promotion_excluded:
+            s.notes.append(
+                "исключён из общего продвижения: "
+                f"{s.promotion_reason or 'причина в паспорте не записана'}")
         s.adapter = АДАПТЕРЫ_ПО_РАНТАЙМУ.get(s.template_entrypoint, "")
         if not s.adapter:
             # Рабочей копии у витрины может не быть вовсе: часть сайтов
@@ -781,6 +806,12 @@ def доступные_операции(s: Сайт, *, мех: str = "") -> lis
     # `rollback` в перечне значило бы предложить операцию, которая откажет.
     if (мех or механизм(s)) == "editorial-queue" and "rollback" in операции:
         операции.remove("rollback")
+    # Исключение из продвижения снимает операции, добавляющие материал. Снятие
+    # здесь, а в не вызывающей команде: перечень операций читают и человек, и
+    # автоматика, и предложить операцию, которая не должна исполняться, —
+    # значит рано или поздно её исполнить.
+    if s.promotion_excluded:
+        операции = [о for о in операции if о not in ОПЕРАЦИИ_ПРОДВИЖЕНИЯ]
     return sorted(set(операции))
 
 
