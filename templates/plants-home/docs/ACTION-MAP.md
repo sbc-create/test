@@ -1,7 +1,7 @@
 # Карта действий plants-home, вариант B (pick-and-diagnose)
 
-Проверено на commit `694e764` в Chromium: `bin/plants-home qa` → `docs/verification-browser-qa.json`, exit 0.
-Каждая строка — действие с проверкой результата (описание — в `flora/qa.py` под тем же именем).
+Проверено на commit `e73b076` в Chromium: `python3 -m flora.qa --shots docs/screenshots/e73b076 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
 | --- | --- | --- |
@@ -25,11 +25,11 @@
 | checklist_reset | PASS | `True` |
 | print_button_calls_print | PASS | `True` |
 | print_hides_navigation | PASS | `True` |
-| search_keyboard_results | PASS | `1` |
+| search_keyboard_results | PASS | `2` |
 | search_no_results_message | PASS | `True` |
 | 404_has_search_and_home | PASS | `True` |
 | nojs_pick_works | PASS | `True` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 43 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 45 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 44 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |

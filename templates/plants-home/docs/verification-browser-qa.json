@@ -1,6 +1,6 @@
 {
- "commit_head": "694e76436b018147f11994da0005d21603c609c0",
- "at": "2026-10-12T21:44:12Z",
+ "commit_head": "e73b076f53825963b3862ad143b221340a3fbf12",
+ "at": "2026-10-13T00:45:36Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -22,7 +22,7 @@
   "checklist_reset": true,
   "print_button_calls_print": true,
   "print_hides_navigation": true,
-  "search_keyboard_results": 1,
+  "search_keyboard_results": 2,
   "search_no_results_message": true,
   "404_has_search_and_home": true,
   "nojs_pick_works": true,
@@ -77,51 +77,51 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 172,
+   "lcp_ms": 128,
    "cls": 0
   },
   "mobile:pick-result": {
-   "lcp_ms": 68,
+   "lcp_ms": 260,
    "cls": 0
   },
   "mobile:compare": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "mobile:plant": {
    "lcp_ms": 96,
    "cls": 0
   },
+  "mobile:plant": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
   "mobile:diagnose": {
-   "lcp_ms": 56,
+   "lcp_ms": 68,
    "cls": 0
   },
   "mobile:empty-pick": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 120,
+   "lcp_ms": 128,
    "cls": 0
   },
   "desktop:pick-result": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:compare": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "desktop:plant": {
    "lcp_ms": 76,
    "cls": 0
   },
+  "desktop:plant": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
   "desktop:diagnose": {
-   "lcp_ms": 68,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:empty-pick": {
-   "lcp_ms": 60,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -130,17 +130,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8856/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/694e764/home-mobile.png",
-  "docs/screenshots/694e764/pick-result-mobile.png",
-  "docs/screenshots/694e764/compare-mobile.png",
-  "docs/screenshots/694e764/plant-mobile.png",
-  "docs/screenshots/694e764/diagnose-mobile.png",
-  "docs/screenshots/694e764/empty-pick-mobile.png",
-  "docs/screenshots/694e764/home-desktop.png",
-  "docs/screenshots/694e764/pick-result-desktop.png",
-  "docs/screenshots/694e764/compare-desktop.png",
-  "docs/screenshots/694e764/plant-desktop.png",
-  "docs/screenshots/694e764/diagnose-desktop.png",
-  "docs/screenshots/694e764/empty-pick-desktop.png"
+  "docs/screenshots/e73b076/home-mobile.png",
+  "docs/screenshots/e73b076/pick-result-mobile.png",
+  "docs/screenshots/e73b076/compare-mobile.png",
+  "docs/screenshots/e73b076/plant-mobile.png",
+  "docs/screenshots/e73b076/diagnose-mobile.png",
+  "docs/screenshots/e73b076/empty-pick-mobile.png",
+  "docs/screenshots/e73b076/home-desktop.png",
+  "docs/screenshots/e73b076/pick-result-desktop.png",
+  "docs/screenshots/e73b076/compare-desktop.png",
+  "docs/screenshots/e73b076/plant-desktop.png",
+  "docs/screenshots/e73b076/diagnose-desktop.png",
+  "docs/screenshots/e73b076/empty-pick-desktop.png"
  ]
 }
