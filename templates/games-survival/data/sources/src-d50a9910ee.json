@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Raw_Iron",
  "fetched_at": "2026-10-12T22:26:28Z",
  "page_sha256": "4cc6e601a0ffb1e5328fb5cd73aa9232ab0ce608cba78fb45d6515cc67f393a7",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",

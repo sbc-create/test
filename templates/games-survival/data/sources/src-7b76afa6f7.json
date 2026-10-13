@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Pickaxe",
  "fetched_at": "2026-10-12T22:26:13Z",
  "page_sha256": "e9f195af6eb5785f33d019856524a32437141d92ee2a300b473685eb9ccd10ee",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -13,5 +13,48 @@
   "A pickaxe is a tiered tool that is required to mine most types of stone , ores , and blocks crafted from stone or ores. The mining level of a given pickaxe determines which blocks it can collect.",
   "Wooden, golden, stone, copper, iron, and diamond pickaxes are crafted using two sticks and three of the tier’s material."
  ],
- "recipes": []
+ "recipes": [
+  {
+   "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+   "slots": 5,
+   "alternatives_in_first_slot": 20,
+   "slot_items": [
+    "Oak Planks",
+    "Oak Planks",
+    "Oak Planks",
+    "Stick",
+    "Stick"
+   ],
+   "result": "Wooden Pickaxe",
+   "results": [
+    "Wooden Pickaxe",
+    "Golden Pickaxe",
+    "Stone Pickaxe",
+    "Copper Pickaxe",
+    "Iron Pickaxe",
+    "Diamond Pickaxe"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Matching Damaged Pickaxes",
+   "slots": 2,
+   "alternatives_in_first_slot": 7,
+   "slot_items": [
+    "Wooden Pickaxe",
+    "Wooden Pickaxe"
+   ],
+   "result": "Wooden Pickaxe",
+   "results": [
+    "Wooden Pickaxe",
+    "Stone Pickaxe",
+    "Copper Pickaxe",
+    "Iron Pickaxe",
+    "Golden Pickaxe",
+    "Diamond Pickaxe",
+    "Netherite Pickaxe"
+   ],
+   "count": 1
+  }
+ ]
 }

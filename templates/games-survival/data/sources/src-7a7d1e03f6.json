@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Planks",
  "fetched_at": "2026-10-12T22:26:08Z",
  "page_sha256": "cc7e914767a892c115a9df4c2d2f041ced6e7496ce979066d723d76e55cc20c7",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -22,6 +22,20 @@
     "Oak Log"
    ],
    "result": "Oak Planks",
+   "results": [
+    "Oak Planks",
+    "Spruce Planks",
+    "Birch Planks",
+    "Jungle Planks",
+    "Acacia Planks",
+    "Dark Oak Planks",
+    "Mangrove Planks",
+    "Cherry Planks",
+    "Pale Oak Planks",
+    "Poplar Planks",
+    "Crimson Planks",
+    "Warped Planks"
+   ],
    "count": 4
   },
   {
@@ -32,6 +46,9 @@
     "Block of Bamboo"
    ],
    "result": "Bamboo Planks",
+   "results": [
+    "Bamboo Planks"
+   ],
    "count": 2
   }
  ]

@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Bed",
  "fetched_at": "2026-10-12T23:21:37Z",
  "page_sha256": "8720c12c21830d1f0867e0d8063fb7a0051a142be232bd3eda9acb73b81cf925",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -27,6 +27,24 @@
     "Oak Planks"
    ],
    "result": "White Bed",
+   "results": [
+    "White Bed",
+    "Light Gray Bed",
+    "Gray Bed",
+    "Black Bed",
+    "Brown Bed",
+    "Red Bed",
+    "Orange Bed",
+    "Yellow Bed",
+    "Lime Bed",
+    "Green Bed",
+    "Cyan Bed",
+    "Light Blue Bed",
+    "Blue Bed",
+    "Purple Bed",
+    "Magenta Bed",
+    "Pink Bed"
+   ],
    "count": 1
   },
   {
@@ -38,6 +56,24 @@
     "White Dye"
    ],
    "result": "White Bed",
+   "results": [
+    "White Bed",
+    "Light Gray Bed",
+    "Gray Bed",
+    "Black Bed",
+    "Brown Bed",
+    "Red Bed",
+    "Orange Bed",
+    "Yellow Bed",
+    "Lime Bed",
+    "Green Bed",
+    "Cyan Bed",
+    "Light Blue Bed",
+    "Blue Bed",
+    "Purple Bed",
+    "Magenta Bed",
+    "Pink Bed"
+   ],
    "count": 1
   },
   {
@@ -49,6 +85,9 @@
     "Bleach"
    ],
    "result": "White Bed",
+   "results": [
+    "White Bed"
+   ],
    "count": 1
   },
   {
@@ -60,6 +99,12 @@
     "Bone Meal"
    ],
    "result": "White Bed",
+   "results": [
+    "White Bed",
+    "Blue Bed",
+    "Brown Bed",
+    "Black Bed"
+   ],
    "count": 1
   }
  ]

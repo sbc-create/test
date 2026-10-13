@@ -225,3 +225,10 @@ def test_buildings_in_planner(app):
     assert recipe_inputs(s, s.by_slug["krovat"]) is None  # шерсти на сайте нет — не цель планировщика
     _, html, _ = get(app, s.by_slug["dver"].url)
     assert "пока не разобран надёжно" in html
+
+
+def test_tiered_tool_not_in_planner_but_wood_variants_are(app):
+    s = app.site
+    assert recipe_inputs(s, s.by_slug["kirka"]) is None  # уровни инструмента — не один предмет
+    assert recipe_inputs(s, s.by_slug["doski"]) is not None  # породы дерева — равноценные доски
+    assert "kirka" not in {e.slug for e in app.targets()}

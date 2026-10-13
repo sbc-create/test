@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Furnace",
  "fetched_at": "2026-10-12T22:25:59Z",
  "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -29,6 +29,9 @@
     "Cobblestone"
    ],
    "result": "Furnace",
+   "results": [
+    "Furnace"
+   ],
    "count": 1
   },
   {
@@ -47,6 +50,9 @@
     "Smooth Stone"
    ],
    "result": "Blast Furnace",
+   "results": [
+    "Blast Furnace"
+   ],
    "count": 1
   },
   {
@@ -58,6 +64,9 @@
     "Minecart"
    ],
    "result": "Minecart with Furnace",
+   "results": [
+    "Minecart with Furnace"
+   ],
    "count": 1
   }
  ]

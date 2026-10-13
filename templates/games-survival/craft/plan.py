@@ -10,6 +10,7 @@ import math
 from dataclasses import dataclass, field
 
 MAX_N = 64
+TIERS = {"Wooden", "Stone", "Iron", "Golden", "Diamond", "Copper", "Netherite"}
 
 
 @dataclass
@@ -45,6 +46,9 @@ def match(site, title: str):
 def recipe_inputs(site, e) -> tuple[dict, list] | None:
     """Первый рецепт предмета, все слоты которого — материалы сайта: (рецепт, [(материал, штук на крафт)])."""
     for r in e.recipes:
+        tiers = {x.split()[0] for x in r.get("results", [])} & TIERS
+        if len(tiers) > 1:  # сетка перебирает уровни инструмента (кирка): первый кадр — лишь один из уровней
+            continue
         ents = [match(site, t) for t in r.get("slot_items", [])]
         if ents and all(ents) and e not in ents:
             per: dict = {}

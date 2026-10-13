@@ -3,7 +3,7 @@
  "url": "https://minecraft.wiki/w/Shield",
  "fetched_at": "2026-10-12T22:26:17Z",
  "page_sha256": "f1045aa18d38d90bb14589f4e8c280eb16f468ce5ec1aebd2dec20f161c95197",
- "parser": "gsv-facts/1.1.1",
+ "parser": "gsv-facts/1.1.2",
  "kind": "wiki",
  "publisher": "Minecraft Wiki",
  "game": "minecraft",
@@ -28,6 +28,9 @@
     "Oak Planks"
    ],
    "result": "Shield",
+   "results": [
+    "Shield"
+   ],
    "count": 1
   },
   {
@@ -39,6 +42,24 @@
     "White Banner"
    ],
    "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
    "count": 1
   },
   {
@@ -50,6 +71,24 @@
     "White Banner"
    ],
    "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
    "count": 1
   },
   {
@@ -61,6 +100,9 @@
     "Shield"
    ],
    "result": "Shield",
+   "results": [
+    "Shield"
+   ],
    "count": 1
   },
   {
@@ -77,6 +119,24 @@
     "Oak Planks"
    ],
    "result": "White Shield",
+   "results": [
+    "White Shield",
+    "Light Gray Shield",
+    "Gray Shield",
+    "Black Shield",
+    "Brown Shield",
+    "Red Shield",
+    "Orange Shield",
+    "Yellow Shield",
+    "Lime Shield",
+    "Green Shield",
+    "Cyan Shield",
+    "Light Blue Shield",
+    "Blue Shield",
+    "Purple Shield",
+    "Magenta Shield",
+    "Pink Shield"
+   ],
    "count": 1
   },
   {
@@ -93,6 +153,9 @@
     "Oak Planks"
    ],
    "result": "Shield",
+   "results": [
+    "Shield"
+   ],
    "count": 1
   }
  ]
