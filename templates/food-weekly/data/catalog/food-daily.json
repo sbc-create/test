@@ -1,13 +1,13 @@
 {
  "site_id": "food-daily",
  "schema": "recipe-catalog/1",
- "fetched_at": "2026-10-12T06:40:19Z",
- "source_generated_at": "2026-10-11T22:49:24Z",
+ "fetched_at": "2026-10-13T21:14:34Z",
+ "source_generated_at": "2026-10-13T15:10:52Z",
  "integration_status": "preview_adapter",
  "items": [
   {
    "content_id": "fd-bca48b116558",
-   "version": 1,
+   "version": 2,
    "slug": "zapechennaya-cvetnaya-kapusta",
    "path": "/recept/zapechennaya-cvetnaya-kapusta/",
    "title": "Запечённая цветная капуста с паприкой",
@@ -51,7 +51,7 @@
   },
   {
    "content_id": "fd-b1ff827b4cfa",
-   "version": 1,
+   "version": 2,
    "slug": "tvorozhnaya-zapekanka-na-zheltkah",
    "path": "/recept/tvorozhnaya-zapekanka-na-zheltkah/",
    "title": "Творожная запеканка на желтках",
@@ -119,7 +119,7 @@
   },
   {
    "content_id": "fd-3aa08c363c0b",
-   "version": 1,
+   "version": 2,
    "slug": "syrniki-s-ezhevikoj",
    "path": "/recept/syrniki-s-ezhevikoj/",
    "title": "Сырники с ежевикой внутри",
@@ -169,7 +169,7 @@
   },
   {
    "content_id": "fd-553b74d4001c",
-   "version": 1,
+   "version": 2,
    "slug": "sup-s-frikadelkami",
    "path": "/recept/sup-s-frikadelkami/",
    "title": "Суп с фрикадельками и сладким перцем",
@@ -243,7 +243,7 @@
   },
   {
    "content_id": "fd-c2e2b979d50a",
-   "version": 1,
+   "version": 2,
    "slug": "salat-s-kuricej-gribami-i-yajcom",
    "path": "/recept/salat-s-kuricej-gribami-i-yajcom/",
    "title": "Салат с курицей, жареными грибами и яйцом",
@@ -317,7 +317,7 @@
   },
   {
    "content_id": "fd-2154b0ca14e2",
-   "version": 3,
+   "version": 4,
    "slug": "pyshnye-oladi-na-kefire",
    "path": "/recept/pyshnye-oladi-na-kefire/",
    "title": "Пышные оладьи на кефире",
@@ -367,7 +367,7 @@
   },
   {
    "content_id": "fd-1bf8a4fff455",
-   "version": 1,
+   "version": 2,
    "slug": "pshennaya-kasha-s-tykvoj",
    "path": "/recept/pshennaya-kasha-s-tykvoj/",
    "title": "Пшённая каша с тыквой на молоке",
@@ -417,7 +417,7 @@
   },
   {
    "content_id": "fd-4fe655a71fa2",
-   "version": 1,
+   "version": 2,
    "slug": "plov-s-kuricej",
    "path": "/recept/plov-s-kuricej/",
    "title": "Плов с курицей на сковороде",
@@ -485,7 +485,7 @@
   },
   {
    "content_id": "fd-a4c90f2456c4",
-   "version": 1,
+   "version": 2,
    "slug": "makarony-po-flotski",
    "path": "/recept/makarony-po-flotski/",
    "title": "Макароны по-флотски с отварной свининой",
@@ -565,7 +565,7 @@
   },
   {
    "content_id": "fd-0d2ec1ad68ea",
-   "version": 1,
+   "version": 2,
    "slug": "kurinyj-sup-s-syrnymi-klyockami",
    "path": "/recept/kurinyj-sup-s-syrnymi-klyockami/",
    "title": "Куриный суп с сырными клёцками",
@@ -657,9 +657,9 @@
   },
   {
    "content_id": "fd-c62b237c3214",
-   "version": 1,
-   "slug": "kurica-v-slivochnom-souse",
-   "path": "/recept/kurica-v-slivochnom-souse/",
+   "version": 3,
+   "slug": "kurica-v-smetanno-chesnochnom-souse",
+   "path": "/recept/kurica-v-smetanno-chesnochnom-souse/",
    "title": "Курица в сметанно-чесночном соусе в духовке",
    "category": "vtorye-blyuda",
    "category_label": "Вторые блюда",
@@ -725,7 +725,7 @@
   },
   {
    "content_id": "fd-7798c76d4624",
-   "version": 1,
+   "version": 2,
    "slug": "grecheskij-salat",
    "path": "/recept/grecheskij-salat/",
    "title": "Греческий салат с брынзой",
@@ -811,7 +811,7 @@
   },
   {
    "content_id": "fd-7ae95ed0f7be",
-   "version": 1,
+   "version": 2,
    "slug": "domashnyaya-shaurma",
    "path": "/recept/domashnyaya-shaurma/",
    "title": "Домашняя шаурма с курицей",
@@ -873,7 +873,7 @@
   },
   {
    "content_id": "fd-bfb12300a18a",
-   "version": 1,
+   "version": 3,
    "slug": "chechevichnyj-sup-s-ovoshchami",
    "path": "/recept/chechevichnyj-sup-s-ovoshchami/",
    "title": "Чечевичный суп с овощами",
@@ -965,7 +965,7 @@
   },
   {
    "content_id": "fd-00d47e5b9672",
-   "version": 1,
+   "version": 2,
    "slug": "bliny-na-moloke-i-kefire",
    "path": "/recept/bliny-na-moloke-i-kefire/",
    "title": "Блины на молоке и кефире",
@@ -1027,7 +1027,7 @@
   },
   {
    "content_id": "fd-3a0282bb1a67",
-   "version": 1,
+   "version": 2,
    "slug": "tykvennyj-sup-pyure",
    "path": "/recept/tykvennyj-sup-pyure/",
    "title": "Тыквенный суп-пюре с плавленым сыром",
@@ -1107,7 +1107,7 @@
   },
   {
    "content_id": "fd-1ac4020e5ad5",
-   "version": 1,
+   "version": 2,
    "slug": "tefteli-v-tomatnom-souse",
    "path": "/recept/tefteli-v-tomatnom-souse/",
    "title": "Тефтели с рисом в томатном соусе",
@@ -1193,7 +1193,7 @@
   },
   {
    "content_id": "fd-dc8abf6706fd",
-   "version": 1,
+   "version": 2,
    "slug": "shakshuka-s-bekonom",
    "path": "/recept/shakshuka-s-bekonom/",
    "title": "Шакшука-скрэмбл с беконом",
@@ -1243,7 +1243,7 @@
   },
   {
    "content_id": "fd-4b788c4aa5fb",
-   "version": 1,
+   "version": 2,
    "slug": "mintaj-v-slivkah",
    "path": "/recept/mintaj-v-slivkah/",
    "title": "Минтай в сливках на сковороде",
@@ -1305,7 +1305,7 @@
   },
   {
    "content_id": "fd-334626e219a7",
-   "version": 1,
+   "version": 2,
    "slug": "lenivye-vareniki",
    "path": "/recept/lenivye-vareniki/",
    "title": "Ленивые вареники из творога",
@@ -1349,7 +1349,7 @@
   },
   {
    "content_id": "fd-e8ccd8bca77b",
-   "version": 1,
+   "version": 2,
    "slug": "grechka-po-kupecheski",
    "path": "/recept/grechka-po-kupecheski/",
    "title": "Гречка по-купечески с мясом и грибами",
@@ -1429,7 +1429,7 @@
   },
   {
    "content_id": "fd-0610c913e699",
-   "version": 1,
+   "version": 2,
    "slug": "domashnie-kotlety",
    "path": "/recept/domashnie-kotlety/",
    "title": "Домашние котлеты с картофелем и хлебом",

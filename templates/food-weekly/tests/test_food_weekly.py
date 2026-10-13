@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 import pytest
+import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -97,7 +98,8 @@ def test_urls_canonical_and_swaps_not_indexed(app):
 
 def test_recipe_links_go_to_registry_origin_not_copies(app):
     _, html, _ = get(app, "/menyu/bystraya-nedelya-dlya-dvoih/")
-    links = re.findall(r'href="(http://127\.0\.0\.1:8847/recept/[a-z0-9-]+/)"', html)
+    origin = yaml.safe_load((ROOT / "config" / "network.yaml").read_text())["sites"]["food-daily"]["origin"]["preview"]
+    links = re.findall(rf'href="({re.escape(origin)}/recept/[a-z0-9-]+/)"', html)
     assert len(links) >= 21
     assert "Ход работы" not in html and "Как готовить" not in html  # тексты рецептов не копируются
 
