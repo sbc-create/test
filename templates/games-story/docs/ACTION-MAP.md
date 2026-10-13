@@ -1,6 +1,6 @@
 # Карта действий games-story, вариант C (atlas)
 
-Проверено на commit `3174e66` в Chromium: `python3 -m saga.qa --shots docs/screenshots/3174e66 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `3ca1947` в Chromium: `python3 -m saga.qa --shots docs/screenshots/3ca1947 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |

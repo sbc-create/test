@@ -60,3 +60,17 @@ Meta description глав ≤160 символов: целые предложен
 | `bash bin/games-story build --commit HEAD` | 0 | собрано из 3174e66 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 176 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 3ca1947 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 19 passed in 0.64s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m saga.qa --shots docs/screenshots/3ca1947 --out docs/verification-browser-qa.json` | 0 | 34 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8870 '/igra/celeste/gde-ya/?q=mess' '/igra/celeste/gde-ya/?q=zzzz' /nesushchestvuet/` | 0 | 29 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-story build --commit HEAD` | 0 | собрано из 3ca1947 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 140 мс. Карта действий — `docs/ACTION-MAP.md`.
