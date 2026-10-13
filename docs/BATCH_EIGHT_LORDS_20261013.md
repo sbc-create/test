@@ -585,6 +585,7 @@ delete, transfer, archive, rename, fork и unarchive — это написано
 Сделано штатным сценарием, по одному вызову на витрину:
 
 ```bash
+cd /home/claude/wt-nova-publish-memory-02
 bash automation/host/finish-new-site-repo.sh --dry-run var/new-sites/lords-10
 bash automation/host/finish-new-site-repo.sh           var/new-sites/lords-10
 ```
@@ -654,6 +655,7 @@ publisher_id не заработает»), воспроизведение не �
 0 удалений):
 
 ```bash
+cd /home/claude/wt-nova-publish-memory-02
 python3 automation/host/apply-publisher-patch.py --site lords-10          # сухой
 python3 automation/host/apply-publisher-patch.py --site lords-10 --apply  # запись
 ```
@@ -666,12 +668,13 @@ python3 automation/host/apply-publisher-patch.py --site lords-10 --apply  # за
 ### Шаг 4. Выпуск, nginx, сертификат
 
 ```bash
+cd /home/claude/wt-nova-publish-memory-02
 python3 -m factory cell content   --site lords-10          # снимок есть и свеж
 python3 -m factory cell deliver   --site lords-10          # данные в ячейку
 python3 -m factory cell release   --site lords-10          # сборка и выпуск
 python3 -m factory cell verify    --site lords-10          # вердикт по витрине
-sudo bash automation/host/install-site-nginx.sh lords-10   # заготовка уже лежит
-sudo bash automation/host/install-site-tls.sh   lords-10   # сертификат на apex и www
+sudo bash automation/host/install-site-nginx.sh --site lords-10   # заготовка уже лежит
+sudo bash automation/host/install-site-tls.sh   --site lords-10   # сертификат на apex и www
 ```
 
 Экономно: сначала **один** представитель каждого профиля (lords-10 и lords-13)

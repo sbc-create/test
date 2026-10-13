@@ -127,9 +127,29 @@ publisher ID CI остаётся красным. Для lords-06 и lords-07 п�
 ## 6. Как проверить, что удержание снято
 
 ```bash
-python3 /tmp/whois4.py lordserials22.site lordserials22.space lordserial101.site lordfilm077.site
+python3 /home/claude/wt-portable-site-cell-01/automation/local/registry-whois.py \
+    lordserials22.site lordserials22.space lordserial101.site lordfilm077.site
 dig NS lordserial101.site @8.8.8.8 +noall +answer
 ```
+
+**Поправка 13.10 вечером.** Здесь стоял `/tmp/whois4.py` — черновик прошлой
+сессии, которого больше нет: команда отказала бы словами «No such file or
+directory». Заменён закоммиченным инструментом с тем же назначением
+(`automation/local/registry-whois.py`, прямой сокет на whois:43, только чтение).
+
+Измерено этой командой **2026-10-13T20:01:51Z** — удержание держится на всех
+четырёх:
+
+| домен | статус реестра | обновлён |
+| --- | --- | --- |
+| lordserials22.site | `clientTransferProhibited, serverHold` | 2026-09-27T06:58:05Z |
+| lordserials22.space | `clientTransferProhibited, serverHold` | 2026-09-27T06:58:05Z |
+| lordserial101.site | `clientTransferProhibited, serverHold` | 2026-10-10T09:24:05Z |
+| lordfilm077.site | `clientTransferProhibited, serverHold` | 2026-10-10T09:56:59Z |
+
+Признак снятия — исчезновение `serverHold` из строки статуса и новое время
+обновления. Пока он на месте, шаги выпуска по этим доменам не начинаются:
+`certbot` не подтвердит владение, и отказ придёт уже на сертификате.
 
 Снятие подтверждает ОТСУТСТВИЕ `serverHold` в ответе реестра и `NOERROR` с той
 же парой NS у резолвера. Пока в ответе `serverHold` — ограничение в силе, и ни
