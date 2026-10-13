@@ -1,6 +1,7 @@
 """Приёмочные тесты food-baking: контент, SEO, функции, изоляция."""
 
 import copy
+import gzip
 import json
 import re
 import sys
@@ -58,22 +59,53 @@ def test_all_drafts_pass_validation():
     assert not {k: v for k, v in out.items() if v}
 
 
-@NEEDS_PRIVATE
-def test_validator_rejects_invented_oven_number():
-    d = json.loads(next(drafts.DRAFTS.glob("*.json")).read_text())
-    bad = copy.deepcopy(d)
+def _fixture(tmp_path, monkeypatch):
+    """Синтетическая фикстура вместо закрытых снимков: факты и «исходные шаги» во временном каталоге."""
+    case = json.loads((ROOT / "tests" / "fixtures" / "validator_case.json").read_text())
+    facts, private = tmp_path / "facts", tmp_path / "private"
+    facts.mkdir()
+    private.mkdir()
+    (facts / f"{case['record_id']}.json").write_text(json.dumps(case["facts"], ensure_ascii=False))
+    (private / f"{case['record_id']}.json.gz").write_bytes(
+        gzip.compress(json.dumps({"steps": case["source_steps"]}, ensure_ascii=False).encode())
+    )
+    monkeypatch.setattr(drafts, "FACTS", facts)
+    monkeypatch.setattr(drafts, "PRIVATE", private)
+    return case["draft"]
+
+
+def test_validator_accepts_clean_fixture(tmp_path, monkeypatch):
+    assert drafts.validate(_fixture(tmp_path, monkeypatch)) == []
+
+
+def test_validator_rejects_invented_oven_number(tmp_path, monkeypatch):
+    bad = copy.deepcopy(_fixture(tmp_path, monkeypatch))
     bad["steps"][-1]["text"] += " Выпекайте при 999 градусах."
     assert any("число 999" in e for e in drafts.validate(bad))
 
 
-@NEEDS_PRIVATE
-def test_validator_rejects_reordered_and_missing_ingredient():
-    d = json.loads(next(drafts.DRAFTS.glob("*.json")).read_text())
-    bad = copy.deepcopy(d)
+def test_validator_rejects_reordered_and_missing_ingredient(tmp_path, monkeypatch):
+    bad = copy.deepcopy(_fixture(tmp_path, monkeypatch))
     bad["steps"].reverse()
     bad["ingredients"] = bad["ingredients"][:-1]
     errs = drafts.validate(bad)
     assert any("порядок" in e for e in errs) and any("ингредиенты" in e for e in errs)
+
+
+def test_drafts_consistent_with_public_facts():
+    """Без закрытых снимков: черновики против фактов из git — индексы ингредиентов, номера шагов,
+    температура духовки (полная сверка текста — test_all_drafts_pass_validation)."""
+    for p in drafts.DRAFTS.glob("*.json"):
+        d = json.loads(p.read_text())
+        f = json.loads((drafts.FACTS / f"{d['record_id']}.json").read_text())
+        assert sorted(i["fact_index"] for i in d["ingredients"]) == list(range(len(f["ingredients"]))), p.name
+        n = f.get("step_count")
+        if n:
+            assert all(0 <= r < n for s in d["steps"] for r in s["source_steps"]), p.name
+        oven = {str(x["value_c"]) for x in (f.get("oven") or {}).get("temperatures", [])}
+        for s in d["steps"]:
+            for x in re.findall(r"(\d+)\s*°C", s["text"]):
+                assert x in oven, (p.name, x)
 
 
 def test_oven_facts_only_from_source(app):
