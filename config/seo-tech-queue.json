@@ -590,6 +590,20 @@
       "norm": "sitemap: все индексируемые канонические страницы",
       "expected": "канонические адреса разделов жанров (те, что объявляет canonical: /catalog/?genre=<код>) в карте сайта; разметка не меняется",
       "check": "число жанровых адресов в /sitemap.xml = числу непустых жанров; каждый 200 и index",
+      "status": "session",
+      "evidence": "zonafilm-space и zonafilm12-site: РАЗДЕЛЫ_КАРТЫ обёрнут — при обходе добавляет /catalog/?genre=<код> (как ссылка и canonical), один код на имя жанра (наибольший состав), без технической метки «западный контент»: 97 и 96 разделов жанров; выборка 16 адресов на живом — все 200, index, canonical на себя. checks/sitemap_genres.py. zonafilm-cc — отдельно (карта через lords_sitemap_layer в serve.py)."
+    },
+    {
+      "id": "T033",
+      "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/?genre=kriminal",
+        "https://zonafilm.space/catalog/?genre=criminal"
+      ],
+      "problem": "У 29 из 98 имён жанров Zona по два кода с разным составом (genre_names): «криминал» — kriminal 7 511 и criminal 63, «ужасы» — uzhasy 6 227 и horror 93, «фэнтези», «приключения» и т. д. Оба раздела отвечают 200, index, canonical на себя — два раздела с одним названием (замер 13.10 ~02:10Z). В карту (T032) идёт один код на имя — с наибольшим составом; сами дубли на витрине остаются.",
+      "expected": "один раздел на имя жанра: малый код — canonical на большой (или 308), либо объединение составов",
+      "check": "для каждого имени — ровно один индексируемый раздел",
       "status": "queued"
     }
   ]
