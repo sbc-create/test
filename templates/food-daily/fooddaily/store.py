@@ -222,6 +222,17 @@ class Store:
             reason=f"откат к v{to_version}",
         )
 
+    def rename_slug(self, content_id: str, new_slug: str, *, actor: str) -> str:
+        with self.tx():
+            old = self.current(content_id)["slug"]
+            if self.db.execute(
+                "SELECT 1 FROM content WHERE slug=? AND content_id<>?", (new_slug, content_id)
+            ).fetchone():
+                raise ValueError(f"адрес {new_slug!r} уже занят")
+            self.db.execute("UPDATE content SET slug=?, updated_at=? WHERE content_id=?", (new_slug, now(), content_id))
+            self.audit(actor, "slug_renamed", content_id=content_id, old=old, new=new_slug)
+        return old
+
     def set_publish(self, content_id: str, status: str, *, actor: str) -> None:
         assert status in PUBLISH
         with self.tx():

@@ -143,6 +143,41 @@ def revise(st: Store, content_id: str, changes: dict, *, base_version: int, acto
     return {"content_id": content_id, "version": new, "base": base_version}
 
 
+REDIRECTS = ROOT / "data" / "redirects.json"
+SLUG = re.compile(r"[a-z0-9]+(?:-[a-z0-9]+)*")
+
+
+def rename(st: Store, content_id: str, new_slug: str, *, base_version: int, actor: str, reason: str) -> dict:
+    """Новый адрес рецепта: версия черновика с новым slug, переименование в базе и постоянный (301) редирект
+    со старого адреса; цепочки редиректов схлопываются, чтобы старые ссылки вели сразу на новый адрес."""
+    if not SLUG.fullmatch(new_slug) or len(new_slug) > 80:
+        raise ValueError(f"недопустимый адрес {new_slug!r}")
+    cur = json.loads(st.version(content_id)["payload_json"])
+    old = st.current(content_id)["slug"]
+    if old == new_slug:
+        raise ValueError("адрес не меняется")
+    if st.db.execute("SELECT 1 FROM content WHERE slug=?", (new_slug,)).fetchone():
+        raise ValueError(f"адрес {new_slug!r} уже занят")
+    payload = {**cur, "draft": {**cur["draft"], "slug": new_slug}}
+    v = st.version(content_id)
+    new = st.add_version(
+        content_id,
+        payload,
+        base_version=base_version,
+        source_ids=json.loads(v["source_ids_json"]),
+        producer={"mode": "editorial_revision", "by": actor, "note": "смена адреса; не проверка человеком"},
+        actor=actor,
+        reason=reason,
+    )
+    st.rename_slug(content_id, new_slug, actor=actor)
+    red = json.loads(REDIRECTS.read_text()) if REDIRECTS.exists() else {}
+    old_path, new_path = f"/recept/{old}/", f"/recept/{new_slug}/"
+    red = {k: (new_path if v == old_path else v) for k, v in red.items()}
+    red[old_path] = new_path
+    REDIRECTS.write_text(json.dumps(dict(sorted(red.items())), ensure_ascii=False, indent=1) + "\n")
+    return {"content_id": content_id, "version": new, "old": old_path, "new": new_path}
+
+
 def snapshot(st: Store) -> dict:
     items = []
     for row in st.db.execute(
@@ -212,6 +247,12 @@ def main(argv=None) -> int:
     rv2.add_argument("--draft-file", required=True, help="JSON: поля черновика, которые заменяются целиком")
     rv2.add_argument("--reason", required=True)
     rv2.add_argument("--actor", default="food-daily-editorial-cli")
+    rn = sub.add_parser("rename", help="новый адрес рецепта с постоянным редиректом со старого")
+    rn.add_argument("content_id")
+    rn.add_argument("--base", type=int, required=True)
+    rn.add_argument("--to", dest="new_slug", required=True)
+    rn.add_argument("--reason", required=True)
+    rn.add_argument("--actor", default="food-daily-editorial-cli")
     a = ap.parse_args(argv)
     if a.cmd == "clone-db":
         try:
@@ -247,6 +288,13 @@ def main(argv=None) -> int:
                 actor=a.actor,
                 reason=a.reason,
             )
+        except (ValueError, VersionConflict) as e:
+            print(json.dumps({"error": str(e)}, ensure_ascii=False))
+            return 2
+        print(json.dumps(out, ensure_ascii=False))
+    elif a.cmd == "rename":
+        try:
+            out = rename(st, a.content_id, a.new_slug, base_version=a.base, actor=a.actor, reason=a.reason)
         except (ValueError, VersionConflict) as e:
             print(json.dumps({"error": str(e)}, ensure_ascii=False))
             return 2

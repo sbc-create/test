@@ -65,6 +65,8 @@ class App:
             year=time.strftime("%Y"),
         )
         self.csrf_key = secrets.token_bytes(32)
+        red = ROOT / "data" / "redirects.json"
+        self.redirects = json.loads(red.read_text()) if red.exists() else {}
 
     def asset(self, rel: str) -> str:
         return f"/static/{rel}?v={self.hashes.get(rel, '0')}"
@@ -75,6 +77,8 @@ class App:
     # ---- маршруты ---------------------------------------------------------
     def route(self, path: str, query: dict) -> tuple[int, str, dict]:
         s = self.site
+        if path in self.redirects:  # старые адреса материалов — постоянный редирект на текущий
+            return 301, "", {"Location": self.redirects[path]}
         q1 = lambda k: (query.get(k) or [""])[0].strip()  # noqa: E731
         if path == "/":
             meta = seo.Meta(

@@ -1029,7 +1029,7 @@ T = [
         3,
         1,
         "all",
-        "/recept/kurica-v-slivochnom-souse/",
+        "/recept/kurica-v-smetanno-chesnochnom-souse/",
     ),
     (
         "kurica-karri",

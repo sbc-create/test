@@ -91,3 +91,22 @@ def test_clone_db_refuses_existing_and_mismatch(tmp_path, monkeypatch):
     (tmp_path / "snap.json").write_text(json.dumps(snap))
     with pytest.raises(ValueError, match="не совпадает"):
         editorial.clone_db(src, tmp_path / "clone2" / "food-daily.sqlite3")
+
+
+def test_rename_versions_slug_and_collapses_redirect_chain(tmp_path, monkeypatch):
+    st = make_store(tmp_path)
+    red = tmp_path / "redirects.json"
+    red.write_text(json.dumps({"/recept/staryj/": "/recept/sup/"}))
+    monkeypatch.setattr(editorial, "REDIRECTS", red)
+    out = editorial.rename(st, "fd-1", "sup-novyj", base_version=1, actor="c", reason="r")
+    assert out["version"] == 2 and st.current("fd-1")["slug"] == "sup-novyj"
+    assert json.loads(st.version("fd-1")["payload_json"])["draft"]["slug"] == "sup-novyj"
+    assert json.loads(red.read_text()) == {
+        "/recept/staryj/": "/recept/sup-novyj/",
+        "/recept/sup/": "/recept/sup-novyj/",
+    }
+    assert any(a["action"] == "slug_renamed" for a in st.audit_for("fd-1"))
+    with pytest.raises(ValueError):
+        editorial.rename(st, "fd-1", "Плохой адрес", base_version=2, actor="c", reason="r")
+    with pytest.raises(ValueError):
+        editorial.rename(st, "fd-1", "sup-novyj", base_version=2, actor="c", reason="r")

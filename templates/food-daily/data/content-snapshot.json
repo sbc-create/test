@@ -1,7 +1,7 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-13T14:59:27Z",
+ "generated_at": "2026-10-13T15:10:52Z",
  "items": [
   {
    "content_id": "fd-00d47e5b9672",
@@ -2932,16 +2932,16 @@
   },
   {
    "content_id": "fd-c62b237c3214",
-   "slug": "kurica-v-slivochnom-souse",
-   "version": 2,
+   "slug": "kurica-v-smetanno-chesnochnom-souse",
+   "version": 3,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-13T14:59:13Z",
+   "updated_at": "2026-10-13T15:10:52Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
    "producer_mode": "editorial_revision",
    "draft": {
     "title": "Курица в сметанно-чесночном соусе в духовке",
-    "slug": "kurica-v-slivochnom-souse",
+    "slug": "kurica-v-smetanno-chesnochnom-souse",
     "seo_title": "Курица в сливочном соусе со сметаной и чесноком",
     "seo_description": "Окорочка, обжаренные с чесноком, запекаются 40–50 минут при 180 градусах в соусе из сметаны, молока и прованских трав.",
     "intro": "Куриные окорочка сначала подрумянивают на смеси двух масел с чесноком, затем запекают в соусе из сметаны и молока. Соус получается густым — его удобно подавать к гарниру.",
