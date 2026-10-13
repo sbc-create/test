@@ -1,6 +1,6 @@
 # Карта действий games-survival, вариант A (craft-tree)
 
-Проверено на commit `e5e1a10` в Chromium: `bin/games-survival qa --shots docs/screenshots/e5e1a10 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `7965fdf` в Chromium: `bin/games-survival qa --shots docs/screenshots/7965fdf --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -27,6 +27,6 @@
 | history_back_returns | PASS | `True` |
 | nojs_recipes_and_links | PASS | `True` |
 | nojs_print_hidden | PASS | `True` |
-| ширины 320/390/768/1440 × 33 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 34 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 30 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
