@@ -39,3 +39,10 @@ def test_every_use_links_both_ways(app):
         for x, _, _ in uses(s, e):
             assert x.url in page_links(app, e), (e.slug, x.slug)  # материал → продукт
             assert e.url in page_links(app, x), (x.slug, e.slug)  # продукт → материал
+
+
+def test_made_from_matches_planner_both_ways(app):
+    s = app.site
+    for e in s.entries:
+        for x, _, _ in uses(s, e):
+            assert e in s.made_from(x), (e.slug, x.slug)  # модель связей и планировщик согласованы

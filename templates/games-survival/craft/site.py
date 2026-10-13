@@ -84,8 +84,9 @@ class Site:
         return out
 
     def made_from(self, e: Entry) -> list[Entry]:
-        """Материалы сайта, названные в ингредиентах рецептов e (по тексту источника)."""
-        ing = " ".join(r["ingredients"] for r in e.recipes)
+        """Материалы сайта, названные в ингредиентах рецептов e: текст ингредиентов и содержимое слотов сетки
+        источника (как у планировщика — «Any stone-tier block» в тексте, Cobblestone в слотах)."""
+        ing = " ".join(r["ingredients"] + " " + " ".join(r.get("slot_items") or []) for r in e.recipes)
         return [
             x
             for x in self.entries
