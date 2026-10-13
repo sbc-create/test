@@ -1,0 +1,72 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/tort-chereshnya-192683",
+ "title": "Торт черешня",
+ "servings": 8,
+ "prep_minutes": 1440,
+ "cook_minutes": 45,
+ "total_minutes": 1485,
+ "ingredients": [
+  {
+   "raw": "Крекеры, 300 г",
+   "name": "Крекеры",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сметана 20%-ная, 700 г",
+   "name": "Сметана 20%-ная",
+   "quantity": 700.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сахар, 1 стакан",
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "raw": "Ванильный сахар, на кончике ножа",
+   "name": "Ванильный сахар, на кончике ножа",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "raw": "Желатин, 25 г",
+   "name": "Желатин",
+   "quantity": 25.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Желе для торта Dr.Oetker, 1 штука",
+   "name": "Желе для торта Dr.Oetker",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Шоколад, 200 г",
+   "name": "Шоколад",
+   "quantity": 200.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [],
+  "bake_times": [],
+  "forms": [],
+  "caution_steps": [
+   14
+  ]
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества",
+  "температура духовки в источнике не названа"
+ ],
+ "complete": false,
+ "content_hash": "88c1235ff80fb2884cf406b0c8fe14ec84d7a12b05387ee1054516fe5a4d56bb",
+ "record_id": "fb-ecdf561f835c",
+ "group_hint": "tort",
+ "step_count": 16,
+ "fetched_at": "2026-10-12T06:01:04Z"
+}

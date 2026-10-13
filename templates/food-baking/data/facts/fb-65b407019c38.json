@@ -1,0 +1,85 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/bystrye-bulochki-s-yablokom-iz-sloenogo-testa-192817",
+ "title": "Быстрые пирожки с яблоком из слоеного теста",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 59,
+ "total_minutes": 59,
+ "ingredients": [
+  {
+   "raw": "Яблоко, 2 штуки",
+   "name": "Яблоко",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Слоеное тесто, 1 кусок",
+   "name": "Слоеное тесто, 1 кусок",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "raw": "Тростниковый сахар, 3 столовые ложки",
+   "name": "Тростниковый сахар",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Корица, по вкусу",
+   "name": "Корица",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "raw": "Сливочное масло, 30 г",
+   "name": "Сливочное масло",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Яичный желток, 1 штука",
+   "name": "Яичный желток",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 160,
+    "step": 8
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 30,
+    "max": null,
+    "step": 8
+   }
+  ],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 7
+   },
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 8
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "c7abb74b7e63bb69dcb20db15d77700a02532f50432ddab4b78289f5c823d623",
+ "record_id": "fb-65b407019c38",
+ "group_hint": "bulochki",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:00:55Z"
+}

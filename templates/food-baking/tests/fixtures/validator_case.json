@@ -1,0 +1,42 @@
+{
+ "_note": "Синтетическая тестовая фикстура (не из источника): проверяет логику валидатора без закрытых снимков.",
+ "record_id": "fb-fixture000001",
+ "facts": {
+  "source_url": "https://example.invalid/fixture",
+  "title": "Тестовое печенье",
+  "servings": 4,
+  "ingredients": [
+   {"raw": "Мука, 200 г", "name": "Мука", "quantity": 200.0, "unit": "g"},
+   {"raw": "Сахар, 50 г", "name": "Сахар", "quantity": 50.0, "unit": "g"},
+   {"raw": "Масло, 100 г", "name": "Масло", "quantity": 100.0, "unit": "g"}
+  ],
+  "oven": {"temperatures": [{"value_c": 180, "step": 2}], "times": []},
+  "record_id": "fb-fixture000001"
+ },
+ "source_steps": [
+  "Соединить муку и сахар в миске.",
+  "Добавить размягчённое масло и замесить тесто.",
+  "Выпекать при 180 градусах 15 минут."
+ ],
+ "draft": {
+  "record_id": "fb-fixture000001",
+  "title": "Тестовое печенье",
+  "slug": "testovoe-pechene",
+  "seo_title": "Тестовое печенье",
+  "seo_description": "Синтетический черновик для проверки валидатора.",
+  "intro": "Синтетический черновик для проверки валидатора.",
+  "ingredients": [
+   {"fact_index": 0, "display_name": "Мука"},
+   {"fact_index": 1, "display_name": "Сахар"},
+   {"fact_index": 2, "display_name": "Масло"}
+  ],
+  "steps": [
+   {"text": "Смешайте сухие продукты.", "source_steps": [0]},
+   {"text": "Вмешайте мягкое масло.", "source_steps": [1]},
+   {"text": "Пеките 15 минут при 180 °C.", "source_steps": [2]}
+  ],
+  "pitfalls": [{"text": "Температура — 180 °C.", "source_step": 2}],
+  "tags": [],
+  "producer": {"mode": "manual_standin"}
+ }
+}

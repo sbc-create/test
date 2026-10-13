@@ -1,0 +1,127 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/profitroli-lebedi-191306",
+ "title": "Пирожные «Лебеди»",
+ "servings": 12,
+ "prep_minutes": null,
+ "cook_minutes": 120,
+ "total_minutes": 120,
+ "ingredients": [
+  {
+   "raw": "Вода, 100 мл",
+   "name": "Вода",
+   "quantity": 100.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Молоко, 100 мл",
+   "name": "Молоко",
+   "quantity": 100.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Сливочное масло, 95 г",
+   "name": "Сливочное масло",
+   "quantity": 95.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сахар, 3 г",
+   "name": "Сахар",
+   "quantity": 3.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Соль, 3 г",
+   "name": "Соль",
+   "quantity": 3.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Пшеничная мука, 120 г",
+   "name": "Пшеничная мука",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 200 г",
+   "name": "Куриное яйцо",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сливки 33%-ные, 250 мл",
+   "name": "Сливки 33%-ные",
+   "quantity": 250.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Ванильная паста, 1 чайная ложка",
+   "name": "Ванильная паста",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сахарная пудра, 30 г",
+   "name": "Сахарная пудра",
+   "quantity": 30.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 160,
+    "step": 0
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 5
+   },
+   {
+    "min": 20,
+    "max": null,
+    "step": 5
+   },
+   {
+    "min": 20,
+    "max": null,
+    "step": 6
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 6
+   }
+  ],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 5
+   },
+   {
+    "text": "Противень",
+    "diameter_cm": null,
+    "step": 5
+   },
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 6
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "ef4625dce192a843336f67b32f9d3660ef443853bf9b0c508d9c8ed25ef9fbe1",
+ "record_id": "fb-ff2a9a4da259",
+ "group_hint": "zavarnoe",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:01:22Z"
+}

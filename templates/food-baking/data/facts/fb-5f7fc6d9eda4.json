@@ -1,0 +1,99 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/kruassan-s-maskarpone-i-yagodami-186416",
+ "title": "Круассан с маскарпоне и ягодами",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 15,
+ "total_minutes": 15,
+ "ingredients": [
+  {
+   "raw": "Круассан, 4 штуки",
+   "name": "Круассан",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сыр креметте, 100 г",
+   "name": "Сыр креметте",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сыр маскарпоне, 100 г",
+   "name": "Сыр маскарпоне",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Nutella®, 240 г",
+   "name": "Nutella®",
+   "quantity": 240.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сливки, 60 мл",
+   "name": "Сливки",
+   "quantity": 60.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Клубника, 80 г",
+   "name": "Клубника",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Малина, 60 г",
+   "name": "Малина",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Голубика, 60 г",
+   "name": "Голубика",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Ежевика, 60 г",
+   "name": "Ежевика",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Мята, по вкусу",
+   "name": "Мята",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "raw": "Сахарная пудра, по вкусу",
+   "name": "Сахарная пудра",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [],
+  "bake_times": [
+   {
+    "min": 2,
+    "max": 3,
+    "step": 5
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "температура духовки в источнике не названа"
+ ],
+ "complete": true,
+ "content_hash": "ca28e559ba35d44521fe77c711b8ad366d8f3c3f8162236569664aca941d8da4",
+ "record_id": "fb-5f7fc6d9eda4",
+ "group_hint": "sloyki",
+ "step_count": 12,
+ "fetched_at": "2026-10-12T06:01:10Z"
+}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Редактор: состояние материалов</h1>
+<p class="lead">Только чтение. Изменение текста — новая версия через черновик и `drafts build`; история — ниже.</p>
+<div class="tw" tabindex="0" role="region" aria-label="Таблица материалов"><table class="ed"><tr><th>рецепт</th><th>версия</th><th>проверка</th><th>исполнитель</th><th>замечания</th></tr>
+{% for r in recipes %}{% set d = drafts.get(r.raw.record_id, {}) %}<tr><td><a href="{{ r.url }}">{{ r.slug }}</a></td><td>v{{ r.version }}</td><td>{{ r.review_status }}</td><td>{{ r.raw.producer_mode }}</td><td>{{ (d.get('editor_notes') or [])|join('; ') }}</td></tr>{% endfor %}
+</table></div>
+<h2>История версий</h2>
+<ol class="note">{% for h in history %}<li>{{ h.at }} · {{ h.slug }} · v{{ h.version }} · {{ h.producer.mode }}</li>{% endfor %}</ol>
+{% endblock %}

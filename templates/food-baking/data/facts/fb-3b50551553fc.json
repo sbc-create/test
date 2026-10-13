@@ -1,0 +1,90 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/olivkovyy-hleb-191676",
+ "title": "Оливковый хлеб",
+ "servings": 12,
+ "prep_minutes": 180,
+ "cook_minutes": 90,
+ "total_minutes": 270,
+ "ingredients": [
+  {
+   "raw": "Пшеничная мука, 600 г",
+   "name": "Пшеничная мука",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Молоко, 200 мл",
+   "name": "Молоко",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Вода, 200 мл",
+   "name": "Вода",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Сухие дрожжи, 1 чайная ложка",
+   "name": "Сухие дрожжи",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Оливки без косточек, 140 г",
+   "name": "Оливки без косточек",
+   "quantity": 140.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Вяленые помидоры, 100 г",
+   "name": "Вяленые помидоры",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сыр фета, 150 г",
+   "name": "Сыр фета",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Тыквенные семечки, 3 столовые ложки",
+   "name": "Тыквенные семечки",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Соль, 1 чайная ложка",
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "tsp"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 8
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 35,
+    "max": 40,
+    "step": 9
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "f909a494e2fba2ff9bdd02e18b21cf1d00a097b9f78c9bdc1ee4771025c5d56c",
+ "record_id": "fb-3b50551553fc",
+ "group_hint": "hleb",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:00:49Z"
+}
