@@ -1,6 +1,6 @@
 # Карта действий games-survival, вариант C (inventory-first)
 
-Проверено на commit `31c0a92` в Chromium: `bin/games-survival qa --shots docs/screenshots/31c0a92 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `7cc1254` в Chromium: `bin/games-survival qa --shots docs/screenshots/7cc1254 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |

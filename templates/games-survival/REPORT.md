@@ -60,3 +60,17 @@ Meta description: у разделов — из данных (число мате
 | `bash bin/games-survival build --commit HEAD` | 0 | собрано из 31c0a92 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 524 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 7cc1254 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-survival test` | 0 | 25 passed in 1.04s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m craft.qa --shots docs/screenshots/7cc1254 --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8872 '/iz-togo-chto-est/?est=doski&est=palka&est=ugol' '/iz-togo-chto-est/?est=almaz' '/planirovshchik/?item=zabor&n=64' /nesushchestvuet/` | 0 | 41 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-survival build --commit HEAD` | 0 | собрано из 7cc1254 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 172 мс. Карта действий — `docs/ACTION-MAP.md`.
