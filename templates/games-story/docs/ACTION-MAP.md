@@ -1,6 +1,6 @@
 # Карта действий games-story, вариант A (chapter-guides)
 
-Проверено на commit `1b5e5ae` в Chromium: `bin/games-story qa` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `ff3ed16` в Chromium: `bin/games-story qa` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `saga/qa.py` под тем же именем).
 
 | проверка | статус | фактический результат |

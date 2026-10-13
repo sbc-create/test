@@ -1,6 +1,6 @@
 {
- "commit_head": "1b5e5aee5c4d5957c61c5eb6dbdcb61f4bb024be",
- "at": "2026-10-12T21:57:45Z",
+ "commit_head": "ff3ed1660dfed51c5e5399be8c17ec1b0d193781",
+ "at": "2026-10-13T08:43:16Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -59,47 +59,47 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 160,
+   "lcp_ms": 188,
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:guide": {
-   "lcp_ms": 116,
+   "lcp_ms": 68,
    "cls": 0
   },
   "mobile:collectibles": {
-   "lcp_ms": 56,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:videos": {
-   "lcp_ms": 44,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:farewell": {
-   "lcp_ms": 48,
+   "lcp_ms": 40,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 140,
+   "lcp_ms": 112,
    "cls": 0
   },
   "desktop:game": {
-   "lcp_ms": 52,
+   "lcp_ms": 48,
    "cls": 0
   },
   "desktop:guide": {
-   "lcp_ms": 52,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:collectibles": {
-   "lcp_ms": 56,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:videos": {
-   "lcp_ms": 48,
+   "lcp_ms": 44,
    "cls": 0
   },
   "desktop:farewell": {
@@ -112,17 +112,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8857/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/1b5e5ae/home-mobile.png",
-  "docs/screenshots/1b5e5ae/game-mobile.png",
-  "docs/screenshots/1b5e5ae/guide-mobile.png",
-  "docs/screenshots/1b5e5ae/collectibles-mobile.png",
-  "docs/screenshots/1b5e5ae/videos-mobile.png",
-  "docs/screenshots/1b5e5ae/farewell-mobile.png",
-  "docs/screenshots/1b5e5ae/home-desktop.png",
-  "docs/screenshots/1b5e5ae/game-desktop.png",
-  "docs/screenshots/1b5e5ae/guide-desktop.png",
-  "docs/screenshots/1b5e5ae/collectibles-desktop.png",
-  "docs/screenshots/1b5e5ae/videos-desktop.png",
-  "docs/screenshots/1b5e5ae/farewell-desktop.png"
+  "docs/screenshots/ff3ed16/home-mobile.png",
+  "docs/screenshots/ff3ed16/game-mobile.png",
+  "docs/screenshots/ff3ed16/guide-mobile.png",
+  "docs/screenshots/ff3ed16/collectibles-mobile.png",
+  "docs/screenshots/ff3ed16/videos-mobile.png",
+  "docs/screenshots/ff3ed16/farewell-mobile.png",
+  "docs/screenshots/ff3ed16/home-desktop.png",
+  "docs/screenshots/ff3ed16/game-desktop.png",
+  "docs/screenshots/ff3ed16/guide-desktop.png",
+  "docs/screenshots/ff3ed16/collectibles-desktop.png",
+  "docs/screenshots/ff3ed16/videos-desktop.png",
+  "docs/screenshots/ff3ed16/farewell-desktop.png"
  ]
 }

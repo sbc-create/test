@@ -30,3 +30,17 @@ LCP (лаборатория, loopback, без троттлинга) 44–160 м�
 | наполнение | 1 игра (Celeste), 11 глав по Celeste Wiki; 2 проверенных видео (интервью разработчиков, не прохождение); тексты — `manual_standin`, не Qwen, без редакторской проверки. Вики других сюжетных игр закрыты (403) — ограничение наполнения |
 | внешние интеграции | YouTube — только проверка oEmbed и плеер по нажатию; рекламы и счётчиков нет |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на ff3ed16 (13.10.2026)
+
+Meta description глав ≤160 символов: целые предложения, иначе по запятой или тире (было до 204 символов, обрезалось в выдаче). Тест проверяет все URL sitemap (20–160 символов). Дополнительные URL проверки ширин (поиск и 404) в этой записи заданы заново: прежняя команда в отчёте сокращена «…».
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 11 passed in 0.40s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m saga.qa --shots docs/screenshots/ff3ed16 --out docs/verification-browser-qa.json` | 0 | 23 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8857 '/poisk/?q=Madeline' /nesushchestvuet/` | 0 | 19 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-story build --commit HEAD` | 0 | собрано из ff3ed16 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 188 мс. Карта действий — `docs/ACTION-MAP.md`.
