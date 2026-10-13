@@ -206,6 +206,30 @@ class App:
             return self.page(
                 "material.html", mt.title, mt.summary, mt.url, crumbs, [self.howto_ld(mt)], "material", mt=mt
             )
+        if path == "/problemy/":  # перенесено из варианта B
+            crumbs = [home, ("Что мешает дома", path)]
+            return self.page(
+                "problems.html",
+                "Что мешает дома: выберите проблему",
+                "Начните с того, что не так, — и получите инструкции по порядку с чек-листами.",
+                path,
+                crumbs,
+                kind="problems",
+            )
+        m = re.fullmatch(r"/problemy/([a-z0-9-]+)/", path)
+        if m and m.group(1) in s.problems:
+            pr = s.problems[m.group(1)]
+            crumbs = [home, ("Что мешает дома", "/problemy/"), (pr["title"], path)]
+            return self.page(
+                "problem.html",
+                pr["title"],
+                pr["symptom"] + " Инструкции по порядку с чек-листами.",
+                path,
+                crumbs,
+                [self.items_ld(pr["items"])],
+                "problem",
+                pr=pr,
+            )
         if path == "/podborki/":
             crumbs = [home, ("Подборки", path)]
             return self.page(
@@ -362,6 +386,7 @@ class App:
         urls = [
             "/",
             "/obhod/plan/",
+            "/problemy/",
             "/pomeshcheniya/",
             "/zadachi/",
             "/podborki/",
@@ -369,6 +394,7 @@ class App:
             "/kak-my-proveryaem/",
         ]
         urls += [f"/obhod/{r}/" for r in self.audit_rooms()]
+        urls += [f"/problemy/{p}/" for p in s.problems]
         urls += [f"/pomeshcheniya/{r}/" for r in ROOMS if s.in_room(r)]
         urls += [f"/zadachi/{t}/" for t in TASKS if s.for_task(t)]
         urls += [f"/podborki/{c}/" for c in s.collections]

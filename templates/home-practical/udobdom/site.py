@@ -117,6 +117,12 @@ class Site:
         self.sources = data["sources"]
         self.materials = [Material(x, self.sources) for x in data["items"]]
         self.by_slug = {m.slug: m for m in self.materials}
+        probs = yaml.safe_load((ROOT / "config" / "problems.yaml").read_text())["problems"]
+        self.problems = {  # проблема показывается, только если все её материалы опубликованы
+            p["slug"]: {**p, "items": [self.by_slug[x] for x in p["materials"]]}
+            for p in probs
+            if all(x in self.by_slug for x in p["materials"])
+        }
         cols = yaml.safe_load((ROOT / "config" / "collections.yaml").read_text())["collections"]
         self.collections = {c["slug"]: {**c, "items": self.with_tag(c["tag"])} for c in cols}
         self.collections = {k: v for k, v in self.collections.items() if len(v["items"]) >= 2}
@@ -134,6 +140,9 @@ class Site:
         if not o:
             raise RuntimeError("origin не задан (BLOCKED_INPUT)")
         return o.rstrip("/") + path
+
+    def problems_for(self, m: Material) -> list[dict]:
+        return [p for p in self.problems.values() if m in p["items"]]
 
     def related(self, m: Material) -> list[Material]:
         return [self.by_slug[s] for s in m.related_slugs if s in self.by_slug]

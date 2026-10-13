@@ -225,3 +225,23 @@ main:focus { outline: none; }
 .plan-need { background: var(--sand); border-radius: 10px; padding: 2px 16px 12px; margin: 14px 0; }
 .plan-need small { color: var(--ink-2); }
 @media print { .actions, .audit__go, .steps-bar, .plan-done { display: none !important; } .plan-need { background: none; } }
+
+/* ---- «Что мешает дома» — перенесено из варианта B ---- */
+.problems { list-style: none; counter-reset: p; padding: 0; margin: 16px 0; display: grid; gap: 8px; }
+.problems a { counter-increment: p; display: grid; grid-template-columns: 44px 1fr auto; gap: 2px 12px; align-items: baseline; padding: 14px 16px; background: var(--card); border: 1px solid var(--line); border-left: 6px solid var(--ink); color: var(--ink); text-decoration: none; }
+.problems a::before { content: counter(p, decimal-leading-zero); grid-row: 1 / 3; font: 700 1.3rem ui-monospace, Menlo, monospace; color: var(--muted); }
+.problems b { font-size: 1.12rem; }
+.problems span { grid-column: 2; color: var(--ink-2); }
+.problems em { grid-row: 1; grid-column: 3; font-style: normal; font-weight: 700; background: var(--sand); padding: 0 8px; border-radius: 3px; white-space: nowrap; }
+.problems a:hover { border-left-color: var(--green-2); background: #fbfcfd; }
+.seq { padding-left: 0; list-style: none; counter-reset: s; display: grid; gap: 10px; }
+.seq li { counter-increment: s; background: var(--card); border: 1px solid var(--line); padding: 10px 16px 12px 56px; position: relative; }
+.seq li::before { content: counter(s); position: absolute; left: 14px; top: 12px; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; display: grid; place-items: center; font-weight: 700; }
+.seq__t { margin: 4px 0 2px; font-size: 1.1rem; }
+.seq__t a { display: inline-block; padding-block: 2px; min-height: 24px; }
+.seq__m { margin: 0; color: var(--muted); font-size: .88rem; }
+.seq__p { margin: 6px 0 0; font-weight: 700; color: var(--green); }
+.solves { margin: 4px 0 0; color: var(--ink-2); } .solves a { display: inline-block; min-height: 24px; }
+.plain--chips { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; } .plain--chips a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; background: var(--card); border: 1px solid var(--line); border-radius: 999px; text-decoration: none; font-weight: 600; }
+@media (max-width: 560px) { .problems a { grid-template-columns: 34px 1fr; } .problems em { grid-row: auto; grid-column: 2; justify-self: start; } }
+.hint { color: var(--muted); }

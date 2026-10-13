@@ -133,4 +133,10 @@
     dones.forEach(function (b) { b.hidden = false; b.checked = done0.indexOf(b.getAttribute("data-done")) !== -1; b.addEventListener("change", function () { syncp(true); }); });
     syncp(false);
   }
+  // Прогресс решений на странице проблемы (перенесено из B): по отметкам чек-листа инструкции
+  document.querySelectorAll(".seq li[data-slug]").forEach(function (li) {
+    var done = read("check:" + li.getAttribute("data-slug") + ":v" + li.getAttribute("data-version"), []);
+    var total = +li.getAttribute("data-checks"), p = li.querySelector("[data-progress]");
+    if (Array.isArray(done) && done.length) { p.hidden = false; p.textContent = done.length >= total ? "Чек-лист выполнен полностью" : "Отмечено в чек-листе: " + done.length + " из " + total; }
+  });
 })();

@@ -31,6 +31,7 @@
       <nav aria-label="Помещения и разделы (меню)">
         <ul>
           {% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/">{{ v }}</a></li>{% endfor %}
+          <li><a href="/problemy/">Что мешает дома</a></li>
           <li><a href="/zadachi/">Каталог задач</a></li>
           <li><a href="/podborki/">Подборки</a></li>
         </ul>
@@ -40,7 +41,8 @@
   <nav class="rooms-bar" aria-label="Помещения">
     <ul>
       {% for k, v in ROOMS.items() %}<li><a href="/pomeshcheniya/{{ k }}/"{% if room is defined and room == k %} aria-current="page"{% endif %}>{{ v }}</a></li>{% endfor %}
-      <li class="rooms-bar__sep"><a href="/zadachi/">Все задачи</a></li>
+      <li class="rooms-bar__sep"><a href="/problemy/"{% if meta.kind in ('problems', 'problem') %} aria-current="page"{% endif %}>Что мешает</a></li>
+      <li><a href="/zadachi/">Все задачи</a></li>
       <li><a href="/podborki/">Подборки</a></li>
     </ul>
   </nav>

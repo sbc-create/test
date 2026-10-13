@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ pr.title }}</h1>
+<p class="lead">{{ pr.symptom }}</p>
+<p class="hint">Решения по порядку. Прогресс — по отметкам в чек-листе каждой инструкции на этом устройстве.</p>
+<ol class="seq">
+  {% for m in pr['items'] %}
+  <li data-slug="{{ m.slug }}" data-version="{{ m.version }}" data-checks="{{ m.checklist|length }}">
+    <h2 class="seq__t"><a href="{{ m.url }}">{{ m.title }}</a></h2>
+    <p class="seq__m">{{ m.room_label }} · {{ m.task_label }} · чек-лист: {{ m.checklist|length }} {{ plural(m.checklist|length, 'пункт', 'пункта', 'пунктов') }}</p>
+    <p>{{ m.summary }}</p>
+    <p class="seq__p" data-progress hidden></p>
+  </li>
+  {% endfor %}
+</ol>
+<p><a href="/problemy/">Все проблемы</a></p>
+{% endblock %}

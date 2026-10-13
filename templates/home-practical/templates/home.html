@@ -12,6 +12,10 @@
     <li><a href="/obhod/{{ r }}/"><span class="route__n">{{ loop.index }}</span><span class="route__name">{{ ROOMS[r] }}</span><span class="route__lede">{{ ROOM_LEDE[r] }}</span><span class="route__q">{{ n }} {{ plural(n, 'вопрос', 'вопроса', 'вопросов') }}</span></a></li>
   {% endfor %}</ol>
 </section>
+<section class="block" aria-labelledby="h-prob">
+  <h2 id="h-prob">Что мешает дома</h2>
+  <ul class="plain plain--chips">{% for p in site.problems.values() %}<li><a href="/problemy/{{ p.slug }}/">{{ p.title }}</a></li>{% endfor %}</ul>
+</section>
 <section class="block" aria-labelledby="h-other">
   <h2 id="h-other">Если знаете, что ищете</h2>
   <form class="find find--big" action="/poisk/" method="get" role="search" aria-label="Поиск на главной">

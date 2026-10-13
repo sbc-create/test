@@ -24,6 +24,7 @@ SHOTS = {
     "material": MAT,
     "collection": "/podborki/krepim-k-stene/",
     "empty-filter": "/zadachi/?pomeshchenie=kuhnya&zadacha=mebel",
+    "problem": "/problemy/mebel-mozhet-upast/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/pomeshcheniya/",
@@ -38,6 +39,7 @@ AXE_PAGES = list(SHOTS.values()) + [
     "/poisk/?q=квантовый",
     "/sohranennoe/",
     "/nesushchestvuet/",
+    "/problemy/",
 ]
 PERF = """() => new Promise(res => { let lcp = 0, cls = 0;
   new PerformanceObserver(l => { for (const e of l.getEntries()) lcp = e.startTime; }).observe({type: 'largest-contentful-paint', buffered: true});
@@ -158,6 +160,24 @@ def run(shots: Path | None) -> dict:
             True,
         ]
         A["checklist_status_text"] = pg.locator("[data-check-status]").inner_text()
+        # «Что мешает дома» (перенесено из B): материал → проблема, прогресс чек-листа виден в списке решений
+        with pg.expect_navigation():
+            pg.locator(".solves a").first.click()
+        A["problem_link_from_material"] = "/problemy/" in pg.url
+        n_checks = pg.locator(".seq li").first.get_attribute("data-checks")
+        A["problem_shows_checklist_progress"] = (
+            pg.locator(".seq li").first.locator("[data-progress]").inner_text()
+            == f"Отмечено в чек-листе: 2 из {n_checks}"
+        )
+        A["problem_untouched_items_no_progress"] = pg.locator(".seq li").nth(1).locator("[data-progress]").is_hidden()
+        with pg.expect_navigation():
+            pg.locator(".seq__t a").first.click()
+        A["problem_item_opens_material"] = pg.url.endswith(MAT)
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".rooms-bar a", has_text="Что мешает").click()
+        A["problems_nav_link"] = pg.url.endswith("/problemy/") and pg.locator(".problems li").count() == 6
+        pg.goto(BASE + MAT)
         pg.click("[data-check-reset]")
         pg.reload()
         A["checklist_reset"] = not any(boxes.nth(i).is_checked() for i in range(boxes.count()))
