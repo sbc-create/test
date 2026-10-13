@@ -146,3 +146,39 @@ def test_длительность_удержания_по_медиане_пар�
         for ч, м in ((1, 10), (2, 18), (3, 30))), encoding="utf-8")
     assert editor_run._длительность_партии(состояние) == 18 * 60
     assert editor_run._длительность_партии(tmp_path / "нет") == 1200
+
+
+def test_раздел_отчёта_по_направлениям(tmp_path):
+    """Ежедневный отчёт показывает доли раздельно: слоты, удержания, страницы,
+    стадии техзадач; отклонение и причина названы; Zona не попадает в Lords."""
+    from seo_operator import regular
+
+    журнал = tmp_path / "gate.jsonl"
+    журнал.write_text("".join(json.dumps({"at": at, "gate": г}, ensure_ascii=False) + "\n" for at, г in (
+        ("2026-10-13T10:00:00Z", {"run": True, "allocated": "anime"}),
+        ("2026-10-13T10:40:00Z", {"run": False, "state": "allocation_hold", "allocated": "lords",
+                                  "reason": "доля «lords» без работы: публикация на паузе"}),
+        ("2026-10-13T11:20:00Z", {"run": True, "allocated": "anime"}),
+    )), encoding="utf-8")
+    очередь = tmp_path / "q.json"
+    очередь.write_text(json.dumps({"tasks": [
+        {"id": "T1", "direction": "lords", "status": "verified"},
+        {"id": "T2", "direction": "lords", "status": "live_verified"},
+        {"id": "T3", "direction": "anime", "status": "blocked"},
+        {"id": "T4", "direction": "zona", "status": "verified"}]}), encoding="utf-8")
+    опубликовано = [{"url": "https://yummyani.site/anime/a"}, {"url": "https://zonafilm.space/title/b/"}]
+    текст = regular.allocation_section(СЕЙЧАС, gate_log=журнал, queue=очередь, published=опубликовано)
+    строка_lords = next(с for с in текст.splitlines() if с.startswith("| Lords"))
+    assert "| 0 | 1 | 0 | 1 / 0 / 1 / 0 / 0 |" in строка_lords
+    строка_аниме = next(с for с in текст.splitlines() if с.startswith("| Аниме"))
+    assert "| 2 | 0 | 1 | 0 / 0 / 0 / 0 / 1 |" in строка_аниме
+    assert "Вне долей (Zona и прочие): 1" in текст
+    assert "Отклонение от 50/50" in текст and "публикация на паузе" in текст
+
+
+def test_раздел_отчёта_не_роняет_отчёт(tmp_path):
+    from seo_operator import regular
+
+    текст = regular.allocation_section(СЕЙЧАС, gate_log=tmp_path / "нет", queue=tmp_path / "нет.json",
+                                       published=[])
+    assert "Не сформировано" in текст

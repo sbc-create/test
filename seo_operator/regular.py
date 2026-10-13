@@ -1862,6 +1862,83 @@ def calendar_day_section(script: Path | None, day: dt.date) -> str:
     )
 
 
+def allocation_section(now: dt.datetime, *, gate_log: Path | None = None,
+                       queue: Path | None = None, published: list[dict] | None = None) -> str:
+    """Раздел «Направления 50/50»: аниме и действующие Lords, отдельно контент и техработа.
+
+    Владелец 2026-10-13: доли 50/50; в отчёте — выделенная работа, фактически
+    выполненное, опубликованное и проверенное, блокеры и причина отклонения.
+    Сбой раздела отчёт не останавливает: он выходит с названной причиной.
+    """
+    head = "\n\n## Направления 50/50: аниме и действующие Lords (сутки до формирования)\n\n"
+    try:
+        from seo_operator import editor_run
+
+        начало = now - dt.timedelta(days=1)
+        журнал = gate_log or (editor_run.STATE / "gate.jsonl")
+        партии = {"anime": 0, "lords": 0}
+        удержания = {"anime": 0, "lords": 0}
+        причины: list[str] = []
+        try:
+            строки = журнал.read_text(encoding="utf-8").splitlines()
+        except OSError:
+            строки = []
+        for строка in строки:
+            try:
+                запись = json.loads(строка)
+                когда = dt.datetime.fromisoformat(str(запись.get("at", "")).replace("Z", "+00:00"))
+            except (ValueError, TypeError):
+                continue
+            решение = запись.get("gate") or {}
+            куда = решение.get("allocated")
+            if когда < начало or куда not in партии:
+                continue
+            if решение.get("run"):
+                партии[куда] += 1
+            elif решение.get("state") == "allocation_hold":
+                удержания[куда] += 1
+                if решение.get("reason") and решение["reason"] not in причины:
+                    причины.append(решение["reason"])
+        страницы = {"anime": set(), "lords": set(), "вне": set()}
+        for row in published if published is not None else published_since(начало):
+            домен = row["url"].split("/")[2]
+            страницы[editor_run.направление_домена(домен) or "вне"].add(row["url"])
+        очередь = json.loads((queue or (REPO_ROOT / "config" / "seo-tech-queue.json")).read_text(encoding="utf-8"))
+        тех = {н: {} for н in ("anime", "lords")}
+        for з in очередь.get("tasks") or []:
+            if з.get("direction") in тех:
+                тех[з["direction"]][з["status"]] = тех[з["direction"]].get(з["status"], 0) + 1
+    except Exception as exc:  # noqa: BLE001 — раздел не должен ронять отчёт
+        return head + f"Не сформировано: {type(exc).__name__}: {str(exc)[:200]}\n"
+    имена = {"anime": "Аниме (Animedia, AnimeGo, Yummy)",
+             "lords": "Lords (lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info)"}
+    out = [head.rstrip("\n"), "",
+           "| направление | партий редактора | удержано долей | страниц опубликовано и проверено | "
+           "техзадачи: подготовлено (verified) / выпущено / проверено на сайте / ждут просмотра или в работе / блокер |",
+           "| --- | --- | --- | --- | --- |"]
+    for н in ("anime", "lords"):
+        т = тех[н]
+        out.append(f"| {имена[н]} | {партии[н]} | {удержания[н]} | {len(страницы[н])} | "
+                   f"{т.get('verified', 0)} / {т.get('released', 0)} / "
+                   f"{т.get('live_verified', 0) + т.get('done', 0)} / {т.get('session', 0) + т.get('queued', 0)} / "
+                   f"{т.get('blocked', 0)} |")
+    if страницы["вне"]:
+        out.append(f"\nВне долей (Zona и прочие): {len(страницы['вне'])} страниц — в долю Lords не засчитываются.")
+    выделено = {н: партии[н] + удержания[н] for н in партии}
+    всего = sum(выделено.values())
+    if всего and abs(выделено["lords"] / всего - 0.5) > 0.1:
+        out.append(f"\n**Отклонение от 50/50:** Lords {выделено['lords']} из {всего} слотов редактора.")
+    if удержания["lords"] or (not партии["lords"] and len(страницы["anime"]) > len(страницы["lords"])):
+        out.append("\n**Почему публикаций Lords нет или меньше:** "
+                   + ("; ".join(причины) if причины else
+                      "публикация Lords на паузе (PAUSED_PUBLISH) — редакционная доля удерживается и уходит в техработу")
+                   + ". Следующий шаг: шаги 2 и 1 владельца (установка исполнителя, перезапуск моста MCP), "
+                     "затем pause-lift-readiness.py → ГОТОВО и пробная публикация со сверкой.")
+    out.append("\nСтадии считаются раздельно: «подготовлено» — проверено локально, не выпущено; «выпущено» — "
+               "активировано исполнителем; «проверено на сайте» — живая страница сверена.")
+    return "\n".join(out) + "\n"
+
+
 def render_daily(report: dict) -> str:
     lines: list[str] = []
     add = lines.append
@@ -3193,7 +3270,9 @@ def step_daily_report(ctx: Context) -> Any:
     report["editor"]["candidates_left"] = len(cands)
     out_dir = ctx.root / "reports" / "daily"
     _write_json(out_dir / f"{report['date_msk']}.json", report)
-    text = render_daily(report) + calendar_day_section(
+    text = render_daily(report) + allocation_section(
+        ctx.now, published=report["published_24h"]
+    ) + calendar_day_section(
         ctx.sources.get("calendar_day_script"), (ctx.now.astimezone(MSK) - dt.timedelta(days=1)).date()
     )
     (out_dir / f"{report['date_msk']}.md").write_text(text, encoding="utf-8")
