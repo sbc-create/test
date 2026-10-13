@@ -1,0 +1,32 @@
+{
+ "id": "src-a6b25399f5",
+ "url": "https://bg3.wiki/wiki/The_Blood_of_Lathander",
+ "fetched_at": "2026-10-13T00:57:59Z",
+ "page_sha256": "f1a4807652d20497d61eaa50b1b7eaf06a1adad86d25b2349d9694005c3942ae",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "The Blood of Lathander",
+ "lead": [
+  "The Blood of Lathander is a legendary + 3 Mace found through the ⁠ Find the Blood of Lathander quest. It continuously sheds light, blinds nearby Fiends and Undead with its light, can prevent death as well as heal its wielder, and allows the wielder to cast Sunbeam ."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Legendary",
+  "weight_kg": 1.8,
+  "damage": [
+   {
+    "hand": null,
+    "dice": "1d6 + 3",
+    "type": "Bludgeoning"
+   }
+  ],
+  "extra_damage": [],
+  "armour_class": null,
+  "category": "Maces",
+  "enchantment": 3,
+  "found_in": "Crèche Y'llek"
+ }
+}

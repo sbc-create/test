@@ -1,0 +1,27 @@
+{
+ "slug": "predmet-helldusk-armour",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-3f6447046c",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Helldusk Armour — легендарные латы",
+ "summary": "Легендарные тяжёлые латы с классом доспеха 21 и весом 20 кг. По данным вики, их можно носить без владения доспехами; они дают сопротивление огню, снижают урон на 3 от всех источников и дают заклинание Fly.",
+ "points": [
+  "Редкость: легендарный (Legendary)",
+  "Класс доспеха: 21",
+  "Вес: 20 кг",
+  "Где найти: House of Hope"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-adamantine-splint"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}
