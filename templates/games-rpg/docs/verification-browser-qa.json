@@ -1,6 +1,6 @@
 {
- "commit_head": "2bb97b82f0a667c648d7530ed3c656f2ca66ea18",
- "at": "2026-10-13T01:33:10Z",
+ "commit_head": "8e3bb4923dcb1d03cd9863fb1c24ea66a89df944",
+ "at": "2026-10-13T08:26:55Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -58,11 +58,11 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 160,
+   "lcp_ms": 136,
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 44,
+   "lcp_ms": 60,
    "cls": 0
   },
   "mobile:section": {
@@ -70,19 +70,19 @@
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 76,
+   "lcp_ms": 100,
    "cls": 0
   },
   "mobile:build": {
-   "lcp_ms": 60,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:quest": {
-   "lcp_ms": 44,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 116,
+   "lcp_ms": 120,
    "cls": 0
   },
   "desktop:game": {
@@ -94,15 +94,15 @@
    "cls": 0
   },
   "desktop:character": {
-   "lcp_ms": 56,
+   "lcp_ms": 76,
    "cls": 0
   },
   "desktop:build": {
-   "lcp_ms": 72,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:quest": {
-   "lcp_ms": 64,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -111,17 +111,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8859/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/2bb97b8/home-mobile.png",
-  "docs/screenshots/2bb97b8/game-mobile.png",
-  "docs/screenshots/2bb97b8/section-mobile.png",
-  "docs/screenshots/2bb97b8/character-mobile.png",
-  "docs/screenshots/2bb97b8/build-mobile.png",
-  "docs/screenshots/2bb97b8/quest-mobile.png",
-  "docs/screenshots/2bb97b8/home-desktop.png",
-  "docs/screenshots/2bb97b8/game-desktop.png",
-  "docs/screenshots/2bb97b8/section-desktop.png",
-  "docs/screenshots/2bb97b8/character-desktop.png",
-  "docs/screenshots/2bb97b8/build-desktop.png",
-  "docs/screenshots/2bb97b8/quest-desktop.png"
+  "docs/screenshots/8e3bb49/home-mobile.png",
+  "docs/screenshots/8e3bb49/game-mobile.png",
+  "docs/screenshots/8e3bb49/section-mobile.png",
+  "docs/screenshots/8e3bb49/character-mobile.png",
+  "docs/screenshots/8e3bb49/build-mobile.png",
+  "docs/screenshots/8e3bb49/quest-mobile.png",
+  "docs/screenshots/8e3bb49/home-desktop.png",
+  "docs/screenshots/8e3bb49/game-desktop.png",
+  "docs/screenshots/8e3bb49/section-desktop.png",
+  "docs/screenshots/8e3bb49/character-desktop.png",
+  "docs/screenshots/8e3bb49/build-desktop.png",
+  "docs/screenshots/8e3bb49/quest-desktop.png"
  ]
 }
