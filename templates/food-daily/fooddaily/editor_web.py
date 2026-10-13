@@ -89,8 +89,9 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
         jobs = dict(st.db.execute("SELECT status, count(*) FROM jobs GROUP BY 1").fetchall())
         body = (
             f"<h1>Материалы ({len(rows)})</h1><p>Задания: {html.escape(json.dumps(jobs, ensure_ascii=False))}</p>"
+            '<div class="tw" tabindex="0" role="region" aria-label="Таблица материалов">'
             "<table><tr><th>slug</th><th>версия</th><th>проверка</th><th>кухня</th><th>публикация</th></tr>"
-            f"{trs}</table>"
+            f"{trs}</table></div>"
         )
         return h._send(200, _page(app, "Материалы", body))
     cid = parts[0]
@@ -105,7 +106,8 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
     diff_html = ""
     if a and b:
         diff_html = (
-            f"<h2>Diff v{a} → v{b}</h2><pre>{html.escape(editorial.diff(st, cid, a, b)) or '(нет различий)'}</pre>"
+            f'<h2>Diff v{a} → v{b}</h2><pre tabindex="0" aria-label="Diff v{a} → v{b}">'
+            f"{html.escape(editorial.diff(st, cid, a, b)) or '(нет различий)'}</pre>"
         )
     csrf = app.csrf(user)
     vrows = "".join(
@@ -139,15 +141,19 @@ def handle(h, app, method: str, u: urllib.parse.SplitResult):
 <form method=post><input type=hidden name=csrf value={csrf}><input type=hidden name=action value=publish><button>В preview</button></form>
 <form method=post><input type=hidden name=csrf value={csrf}><input type=hidden name=action value=unpublish><button>Снять</button></form>
 <form method=post><input type=hidden name=csrf value={csrf}><input type=hidden name=action value=review>
-<input type=hidden name=version value={row['current_version']}><input name=reviewer placeholder="имя редактора" required>
-<select name=status><option value=editor_approved>одобрить</option><option value=editor_rejected>отклонить</option></select>
-<input name=note placeholder="комментарий"><button>Записать проверку</button></form>
+<input type=hidden name=version value={row['current_version']}>
+<label>Редактор <input name=reviewer placeholder="имя редактора" required></label>
+<label>Решение <select name=status><option value=editor_approved>одобрить</option>
+<option value=editor_rejected>отклонить</option></select></label>
+<label>Комментарий <input name=note placeholder="комментарий"></label><button>Записать проверку</button></form>
 </div>
 <p><a href="/recept/{row['slug']}/">Открыть страницу в preview</a></p>
 <h2>Версии</h2><ol>{vrows}</ol>
-<form><input type=hidden name=x value=1>Сравнить: <input name=a size=3 value={max(1, row['current_version'] - 1)}> →
-<input name=b size=3 value={row['current_version']}><button>diff</button></form>{diff_html}
-<h2>Черновик (v{row['current_version']})</h2><pre>{html.escape(json.dumps(payload['draft'], ensure_ascii=False, indent=1))}</pre>
+<form class=diff><input type=hidden name=x value=1>Сравнить:
+<label>с версии <input name=a size=3 inputmode=numeric value={max(1, row['current_version'] - 1)}></label> →
+<label>по версию <input name=b size=3 inputmode=numeric value={row['current_version']}></label>
+<button>diff</button></form>{diff_html}
+<h2>Черновик (v{row['current_version']})</h2><pre tabindex="0" aria-label="Черновик v{row['current_version']}">{html.escape(json.dumps(payload['draft'], ensure_ascii=False, indent=1))}</pre>
 <h2>Журнал</h2><ul>{audit}</ul>"""
     )
     return h._send(200, _page(app, payload["draft"]["title"], body))
