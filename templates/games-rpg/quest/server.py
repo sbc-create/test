@@ -44,6 +44,26 @@ def plural(n: int, one: str, few: str, many: str) -> str:
     return one if n % 10 == 1 else few if 2 <= n % 10 <= 4 else many
 
 
+SNIPPET_MAX = 160  # длиннее поисковики обрезают посреди фразы
+
+
+def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
+    """Описание для meta: целые предложения до limit символов; если первое длиннее — по слову с «…»."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
+    if cut >= limit // 3:
+        return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
+
+
+def section_description(site: Site, gid: str, label: str, n: int) -> str:
+    game = site.games[gid]
+    ver = f", сверено с {site.version.src['name']}" if site.version else ""
+    return f"{label} {game['title']}: {n} {plural(n, 'материал', 'материала', 'материалов')} по {game['wiki']}{ver}."
+
+
 class App:
     def __init__(self, site: Site | None = None):
         self.site = site or Site()
@@ -139,7 +159,7 @@ class App:
             return self.page(
                 "section.html",
                 f"{s.games[gid]['title']}: {label.lower()}",
-                f"{label} — {s.games[gid]['title']}.",
+                section_description(s, gid, label, len(items)),
                 path,
                 crumbs,
                 [self.items_ld(items)],
@@ -157,7 +177,14 @@ class App:
                 crumbs.append((s.sections(e.game)[e.section][0], f"/{e.game}/{e.section}/"))
             crumbs.append((e.title, e.url))
             return self.page(
-                "entry.html", f"{e.title} — {s.games[e.game]['title']}", e.summary, e.url, crumbs, [], "entry", e=e
+                "entry.html",
+                f"{e.title} — {s.games[e.game]['title']}",
+                snippet(e.summary),
+                e.url,
+                crumbs,
+                [],
+                "entry",
+                e=e,
             )
         if path == "/kak-my-rabotaem/":
             crumbs = [home, ("Как мы работаем", path)]

@@ -152,3 +152,18 @@ def test_items_section_and_passport_from_source(app):
     assert '<dd>1d10 + 1 <span lang="en">Slashing</span></dd>' in html
     _, html, _ = get(app, s.by_slug["predmet-adamantine-splint"].url)
     assert "<dt>Класс доспеха</dt><dd>18</dd>" in html and "gp" not in html  # цена не показывается
+
+
+def test_meta_descriptions_fit_snippet_and_sections_are_informative(app):
+    from quest.server import SNIPPET_MAX, snippet
+
+    assert snippet("Раз. Два три.", 8) == "Раз."
+    assert snippet("слово " * 40).endswith("…") and len(snippet("слово " * 40)) <= SNIPPET_MAX
+    s = app.site
+    for path in re.findall(r"<loc>https?://[^/]+(/[^<]*)</loc>", get(app, "/sitemap.xml")[1]):
+        _, html, _ = get(app, path)
+        desc = re.search(r'<meta name="description" content="([^"]*)"', html).group(1)
+        assert 20 <= len(desc) <= SNIPPET_MAX, (path, len(desc))
+    _, html, _ = get(app, "/baldurs-gate-3/personazhi/")
+    n = len(s.sections("baldurs-gate-3")["personazhi"][1])
+    assert f'content="Персонажи Baldur&#39;s Gate 3: {n} материалов по bg3.wiki, сверено с Patch 8."' in html
