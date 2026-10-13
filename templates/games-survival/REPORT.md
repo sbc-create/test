@@ -102,3 +102,13 @@ Meta description: у разделов — из данных (число мате
 | `bash bin/games-survival build --commit HEAD` | 0 | собрано из c3cc336 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #120 перенацелен с `claude/template-games-survival-b` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 120 --base claude/template-games-survival-b`.
+- Комплект переноса — `bash bin/games-survival kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`games-survival-5ff6362`): `sha256sum -c` — 0, тесты — 28 passed in 1.32s,
+  запуск на 8910 — `/healthz` за 0.25 с, главная 200 (`inventory-first`),
+  37 URL и 4 ресурсов — 0 ошибок.
