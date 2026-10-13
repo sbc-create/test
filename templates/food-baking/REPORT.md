@@ -57,3 +57,8 @@ commit): **12 из 12**. Production — нет: домен (BLOCKED_INPUT), пр
 ## Обновление b758e94
 
 Подсказка поиска сокращена (FB-09). `python3 qa/viewports.py 8848 /poisk/?q=печенье /nesushchestvuet/` → exit 0, 27 URL × 4 ширины — 0 замечаний (`docs/verification-viewports.json`). `bin/food-baking test` → 20 passed. Браузерная приёмка не перезапускалась: изменён только текст подсказки.
+
+## Обновление на 79bf0b8 (ночь 12–13.10, после вариантов B и C)
+
+Изменения: метатеги варианта `book-spread` (тест), подсказка поиска (FB-09). Перезапущено на 79bf0b8: `python3 -m bakebook.qa --shots docs/screenshots/79bf0b8 --out docs/verification-browser-qa.json` → exit 0, 21 сценарий без провалов, axe 4.13.0 — 0 нарушений, 10 скриншотов;
+`python3 qa/viewports.py 8848 /poisk/?q=печенье /nesushchestvuet/` → exit 0, 27 URL × 4 ширины — 0 замечаний (`docs/verification-viewports.json`); `bin/food-baking test` → 21 passed.
