@@ -1045,8 +1045,9 @@
       "norm": "задание п.3 — ошибочные страницы; T050",
       "expected": "404/410 HTML — noindex, follow в мета и X-Robots-Tag; страницы 200 не задеты",
       "check": "проверка 404 на стенде витрины: noindex в мета и заголовке; главная без noindex",
-      "status": "session",
-      "dependencies": "нет (невидимая правка; выпуск — CI + cell trigger)"
+      "status": "live_verified",
+      "dependencies": "нет (невидимая правка; выпуск — CI + cell trigger)",
+      "evidence": "Коммиты an1mego 8018891, animeg0 1ccabbf, an1meg0 a30534e, animedia-icu bf9014c, animedia-space 7902534; checks/error_noindex.py на настоящей витрине (синтетический снимок, режим OPEN): прежний код rc=1, правка rc=0; полные run.sh пройдены. 13.10 ~15:40Z: CI success (38418783866 и соседи); исполнитель animego-02/03/04 (после access-check), animedia-01/02 — ok/live_verified. Живые 5 доменов: /no-such-xyz/ — 404, noindex, follow (мета и X-Robots-Tag); / — index, follow."
     },
     {
       "id": "T057",
@@ -1060,8 +1061,9 @@
       "norm": "задание п.3 — метаданные; SEO_KNOWLEDGE_PACK §4 п.2 (description описывает видимый контент)",
       "expected": "description «Подборки <сайт>: N тематических подборок каталога — …» с N, равным числу видимых подборок",
       "check": "стенд: число в description = числу ссылок /collection/ на странице",
-      "status": "session",
-      "dependencies": "нет"
+      "status": "live_verified",
+      "dependencies": "нет",
+      "evidence": "Коммиты lordfilm47 3160ca6, lordserial33 b3bca46 (lords02_collections), 1lordserials1 ddbef6b (overlay/view.py), lordserials22-info ed384fc; checks/collections_hub_meta.py: прежний код rc=1, правка rc=0 (стенд: «5 подборок на Lordfilm: Недавно добавленные, Новые фильмы, Высокие оценки и другие.»). В той же партии checks/fails_closed.py без SITE_DATA_DIR — полный run.sh на урезанном снимке rc=0 целиком на четырёх. 13.10 ~16:20Z: CI success (38421320595 и соседи); исполнитель lords-01 3160ca6984af, lords-02 b3bca46c1b78, lords-03 ddbef6bf3b4b, lords-05 ed384fc1e6a9 — ok/live_verified. Живые /collections/: «5 подборок на Lordfilm: …» (видимых 5), lordserial33 8/8, 1lordserials1 12/12, lordserials22-info 4/4; title «Подборки: смотреть онлайн — <сайт>»."
     },
     {
       "id": "T058",
@@ -1096,6 +1098,55 @@
       "check": "стенд: числа description есть в видимом тексте страницы",
       "status": "queued",
       "dependencies": "образец — T058; для фонового исполнителя — после установки таймера"
+    },
+    {
+      "id": "T060",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/new/"
+      ],
+      "problem": "description /new/ — «Обновления каталога витрины Lordserial: 240 записей каталога — смотреть онлайн.»: «витрина» — внутреннее слово, оборот кривой (переименование раздела в lords02_view.py, аудит 13.10 ~15:15Z).",
+      "norm": "публичные формулировки — слова посетителя (public_wording)",
+      "expected": "«Обновления каталога на Lordserial: N записей каталога — смотреть онлайн.»",
+      "check": "checks/lords02_surfaces.py (описание /new/)",
+      "status": "live_verified",
+      "dependencies": "нет; выпуск — в партии T057",
+      "evidence": "lordserial33 b3bca46 (в партии T057): сторож на прежнем коде rc=1, на правке rc=0; полный run.sh rc=0. 13.10 ~16:20Z, живая lordserial33.biz/new/: «Обновления каталога на Lordserial: 240 записей каталога — смотреть онлайн.»"
+    },
+    {
+      "id": "T061",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/catalog/"
+      ],
+      "problem": "description /catalog/ AnimeGo без числа («Каталог аниме AnimeGo: фильтры по жанрам, типу, годам и статусу выпуска.»), у разделов жанров число есть; но на самой /catalog/ число тайтлов не показано (замер 13.10 ~15:50Z) — описание с числом сказало бы больше, чем страница.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2 — description описывает видимый контент",
+      "expected": "видимая строка «N тайтлов в каталоге» в вступлении и то же N в description",
+      "status": "session",
+      "review": "Видимое изменение (строка с числом во вступлении каталога): выпуск после просмотра.",
+      "dependencies": "просмотр человеком; приоритет ниже T062"
+    },
+    {
+      "id": "T062",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/",
+        "https://an1mego.site/catalog/"
+      ],
+      "problem": "На главной и /catalog/ AnimeGo ни одной ссылки на раздел жанра (аудит 13.10 ~15:15Z: 0 ссылок /catalog/?genre=…); жанры — поля формы фильтра. Разделы жанров канонические и в карте (T035, T041), но вход в них — только с карточек тайтлов (4–5 ссылок).",
+      "norm": "задание п.3 — кликабельные жанры и внутренние ссылки на работающие разделы",
+      "expected": "блок ссылок на разделы жанров (канонические /catalog/?genre=<имя>, без служебных) на главной или в каталоге; цели 200, index",
+      "check": "стенд: ссылки на разделы жанров на / и /catalog/ есть, все 200 и index, служебных нет",
+      "status": "session",
+      "review": "Видимое изменение: выпуск после просмотра человеком.",
+      "dependencies": "просмотр человеком",
+      "evidence": "13.10 ~16:10Z: образец на ветке claude/review-anime-t062 (an1mego 20ff105, без пуша): строка «Жанры» в подвале — 12 разделов с наибольшим числом тайтлов, канонический /catalog/?genre=<имя>, без служебных. checks/home_genre_links.py на копии снимка: прежний код rc=1 (0 ссылок на / и /catalog/), ветка rc=0; полный run.sh пройден. animeg0/an1meg0 — после одобрения образца."
     }
   ]
 }
