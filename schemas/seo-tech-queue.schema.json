@@ -40,6 +40,7 @@
         "evidence": {"type": "string"},
         "review": {"type": "string"},
         "owner_action": {"type": "string"},
+        "dependencies": {"type": "string", "minLength": 1},
         "direction": {"enum": ["anime", "lords", "zona", "network"], "description": "Направление для долей: anime — Animedia/AnimeGo/Yummy; lords — lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info; zona и network в доли не входят."}
       },
       "allOf": [

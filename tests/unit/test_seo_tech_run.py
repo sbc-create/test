@@ -263,3 +263,61 @@ def test_excluded_list_matches_editor_and_needs_no_package():
            "print(m.вне_продвижения({'site': 'lordfilm.group'}))")
     r = subprocess.run([_sys.executable, "-I", "-c", код], cwd="/", capture_output=True, text=True)
     assert r.returncode == 0 and r.stdout.strip() == "lordfilm.group", r.stderr[-300:]
+
+
+def test_queue_schema_accepts_dependencies_and_rejects_empty():
+    import jsonschema
+    схема = json.loads((ROOT / "schemas" / "seo-tech-queue.schema.json").read_text(encoding="utf-8"))
+    задача = {"id": "T999", "site": "an1mego.site", "problem": "p", "status": "session", "direction": "anime"}
+    очередь = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))
+    def с(доп):
+        return {**очередь, "tasks": [{**задача, **доп}]}
+    jsonschema.validate(с({"dependencies": "нет"}), схема)
+    with pytest.raises(jsonschema.ValidationError):
+        jsonschema.validate(с({"dependencies": ""}), схема)
+
+
+МИНИ_СТЕНД = """import json
+from pathlib import Path
+def урезать(откуда, куда, шаг=20):
+    к = json.loads(next(Path(откуда).glob("*-catalog.json")).read_text())
+    к["items"] = к["items"][::шаг]
+    (Path(куда) / "x-catalog.json").write_text(json.dumps(к))
+"""
+ПРОВЕРКА_СО_СТЕНДОМ = """import json, os, sys
+from pathlib import Path
+д = os.environ.get("SITE_DATA_DIR")
+if not д:
+    print("НЕ ИЗМЕРЕНО"); sys.exit(2)
+assert len(json.loads((Path(д) / "x-catalog.json").read_text())["items"]) == 2
+текст = (Path(__file__).resolve().parent.parent / "page.html").read_text()
+sys.exit(0 if "<h1>" in текст else 1)
+"""
+
+
+def test_lords_like_repo_gets_trimmed_snapshot_on_claim_and_verify(среда, monkeypatch, tmp_path):
+    """Витрина с checks/mini_stand.py: захват готовит урезанный снимок, вердикт прогоняет проверки на нём."""
+    репо = среда["репо"]
+    (репо / "checks" / "mini_stand.py").write_text(МИНИ_СТЕНД)
+    _git(репо, "-c", "user.email=t@t", "-c", "user.name=t", "add", ".")
+    _git(репо, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "стенд")
+    данные = tmp_path / "srv" / репо.name / "data"
+    данные.mkdir(parents=True)
+    (данные / "x-catalog.json").write_text(json.dumps({"items": list(range(40))}))
+    monkeypatch.setattr(tech_run, "КОРНИ_ДАННЫХ", (tmp_path / "srv",))
+    захват = _сделать(среда, "M1", проверка=ПРОВЕРКА_СО_СТЕНДОМ)
+    assert Path(захват["stand_data"]).is_dir()
+    итог = tech_run.verify("M1", state=среда["state"])
+    assert итог["verdict"] == "VERIFIED", итог
+    assert not (среда["state"] / "mini" / "M1").exists()  # снимок убран после вердикта
+
+
+def test_snapshot_failure_does_not_break_claim(среда, monkeypatch, tmp_path):
+    репо = среда["репо"]
+    (репо / "checks" / "mini_stand.py").write_text("def урезать(*a, **k):\n    raise MemoryError\n")
+    данные = tmp_path / "srv" / репо.name / "data"
+    данные.mkdir(parents=True)
+    (данные / "x-catalog.json").write_text("{}")
+    monkeypatch.setattr(tech_run, "КОРНИ_ДАННЫХ", (tmp_path / "srv",))
+    assert tech_run.снимок_стенда(репо, tmp_path / "mini") == {}
+    assert not (tmp_path / "mini").exists()

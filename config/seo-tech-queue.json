@@ -819,13 +819,14 @@
     {
       "id": "T043",
       "site": "сеть (title-overlays.json Animedia/AnimeGo/Yummy)",
-      "direction": "anime",
+      "direction": "network",
       "repo": "factory/qwen",
       "problem": "Происхождение опубликованного текста пишется в два поля: 273 записи — provenance {author, prepared_by, facts_source, written_at, sources}, 3 записи (content_id repair-009-1-rev1, другой путь публикации) — source_manifest {source_type, source_id, facts} без provenance; у них тело и в body, и в description. Пробела нет, но проверка, читающая одно поле, даст ложный пробел (замер Архитектора 13.10).",
       "expected": "решение: свести поля к одному или закрепить правило «проверка происхождения читает оба»; тест на запись каждого пути",
-      "status": "queued",
+      "status": "blocked",
       "check": "перечень title-overlays.json: у каждой записи provenance или source_manifest; тест на оба пути публикации",
-      "evidence": "Сессия 13.10 ~04:25Z: в фабрике проверки, требующей provenance, нет — factory/qwen/editorial.py валидатор накладки проверяет только тип source_manifest (строка ~960). Единственный читатель одного поля — editorial.состояние(): \"author\": provenance.author → у трёх записей source_manifest выдаст None, то есть отчёт состояния покажет их без автора. Правка затрагивает factory/ (новая цифра состава для владельца) — отложена до решения по сведению полей. Замер сессии wt-portable-site-cell-01-97 13.10 11:10 МСК (automation/local/overlay-provenance.py в её ветви): 294 записи, 291 provenance, 3 source_manifest (stage2-ongoing-019fc72d, batch10-15-24-y-okrug-tokio, repair-009-1-rev1 — yummyani.site), без обоих полей 0; читатель одного поля даёт 3 ложных пробела (--one-field-check). Валидатор в factory/ отложен: сдвигает цифру состава 06f74262107c."
+      "evidence": "Сессия 13.10 ~04:25Z: в фабрике проверки, требующей provenance, нет — factory/qwen/editorial.py валидатор накладки проверяет только тип source_manifest (строка ~960). Единственный читатель одного поля — editorial.состояние(): \"author\": provenance.author → у трёх записей source_manifest выдаст None, то есть отчёт состояния покажет их без автора. Правка затрагивает factory/ (новая цифра состава для владельца) — отложена до решения по сведению полей. Замер сессии wt-portable-site-cell-01-97 13.10 11:10 МСК (automation/local/overlay-provenance.py в её ветви): 294 записи, 291 provenance, 3 source_manifest (stage2-ongoing-019fc72d, batch10-15-24-y-okrug-tokio, repair-009-1-rev1 — yummyani.site), без обоих полей 0; читатель одного поля даёт 3 ложных пробела (--one-field-check). Валидатор в factory/ отложен: сдвигает цифру состава 06f74262107c.",
+      "owner_action": "Архитектор: решение по сведению полей происхождения (provenance / source_manifest) — правка в factory/qwen/editorial.py, зона Архитектора. Фоновый прогон её брать не должен: 13.10 ~15:10Z она была единственным кандидатом очереди."
     },
     {
       "id": "T044",
@@ -1030,6 +1031,71 @@
       "verify_live": "X-Robots-Tag и мета на /title/lcher-prise/season-2/episode-1/ и /season-1/episode-1/ четырёх доменов",
       "status": "live_verified",
       "evidence": "Коммиты lordfilm47 575a757, lordserial33 4d63932, 1lordserials1 55fc479 (вкл. overlay/apply.py — обёртка _отдать роняла ответ на новом аргументе, проверка поймала), lordserials22-info 6bf64da; прежний код — rc=1; полный run.sh на урезанном снимке PASS на четырёх. 13.10 ~14:30Z: CI success (38408504651, 38408509625, 38408512812, 38408517271); исполнитель — lords-01 575a757be8f3, lords-02 4d639327714c, lords-03 55fc47999b9e, lords-05 6bf64dad408b: ok/live_verified. Живые четыре домена: /title/lcher-prise/season-2/episode-1/ и /season-2/ — noindex, follow (мета и X-Robots-Tag), /season-1/episode-1/ — index, follow; кука сообщества 1lordserials1 (l3_v) на месте."
+    },
+    {
+      "id": "T056",
+      "site": "an1mego.site, animeg0.site, an1meg0.site, animedia.icu, animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/no-such-xyz/",
+        "https://animedia.icu/no-such-xyz/"
+      ],
+      "problem": "Страница ошибки 404 (несуществующий адрес, ?page=99999) отдаёт <meta name=\"robots\" content=\"index, follow\"> и X-Robots-Tag index, follow — живой аудит 13.10 ~15:15Z на an1mego.site и animedia.icu; тот же дефект, что T050 у Lords.",
+      "norm": "задание п.3 — ошибочные страницы; T050",
+      "expected": "404/410 HTML — noindex, follow в мета и X-Robots-Tag; страницы 200 не задеты",
+      "check": "проверка 404 на стенде витрины: noindex в мета и заголовке; главная без noindex",
+      "status": "session",
+      "dependencies": "нет (невидимая правка; выпуск — CI + cell trigger)"
+    },
+    {
+      "id": "T057",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/collections/"
+      ],
+      "problem": "description хаба /collections/ — 21 знак у lordfilm47 («Подборки …»), 45 у lordserial33; на странице 5–12 подборок с числом записей — описание этого не говорит (аудит 13.10 ~15:15Z).",
+      "norm": "задание п.3 — метаданные; SEO_KNOWLEDGE_PACK §4 п.2 (description описывает видимый контент)",
+      "expected": "description «Подборки <сайт>: N тематических подборок каталога — …» с N, равным числу видимых подборок",
+      "check": "стенд: число в description = числу ссылок /collection/ на странице",
+      "status": "session",
+      "dependencies": "нет"
+    },
+    {
+      "id": "T058",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/collections/",
+        "https://animedia.icu/new/",
+        "https://animedia.icu/schedule/"
+      ],
+      "problem": "description разделов Animedia короткие и без содержания: /collections/ 21 знак, /new/ 32, /schedule/ 36 (аудит 13.10 ~15:15Z); у /catalog/ — 65.",
+      "norm": "задание п.3 — метаданные; SEO_KNOWLEDGE_PACK §4 п.2",
+      "expected": "description каждого раздела говорит, что на странице (число подборок / записей из видимого текста)",
+      "check": "стенд: числа description есть в видимом тексте страницы",
+      "status": "queued",
+      "dependencies": "нет; для фонового исполнителя (seo-tech-run.timer) — после его установки"
+    },
+    {
+      "id": "T059",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/collections/",
+        "https://animedia.space/new/",
+        "https://animedia.space/schedule/"
+      ],
+      "problem": "То же, что T058, на animedia.space: короткие description разделов /collections/, /new/, /schedule/.",
+      "norm": "задание п.3 — метаданные; SEO_KNOWLEDGE_PACK §4 п.2",
+      "expected": "как T058",
+      "check": "стенд: числа description есть в видимом тексте страницы",
+      "status": "queued",
+      "dependencies": "образец — T058; для фонового исполнителя — после установки таймера"
     }
   ]
 }

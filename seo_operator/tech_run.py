@@ -48,6 +48,41 @@ STALE_S = 2 * 3600
                    "lordserial.net.ru")
 
 
+#: Где на машине лежат каталоги данных витрин (имя — имя репозитория).
+КОРНИ_ДАННЫХ = (Path("/srv"),)
+
+
+def снимок_стенда(репо: Path, куда: Path) -> dict[str, str]:
+    """Урезанный снимок для витрин с checks/mini_stand.py (Lords) — окружение проверок.
+
+    Полный снимок Lords (63 тыс. записей) на живом хосте стенд не поднимает:
+    память (ночные OOM 12–13.10), а юнит прогона ограничен MemoryMax=2G. Каждая
+    двадцатая запись — тем же `mini_stand.урезать`, что и у проверок витрины
+    (замер 13.10: пик 615 МиБ, 4 с). Без mini_stand.py или без данных — {}:
+    проверки тогда честно скажут «НЕ ИЗМЕРЕНО», и вердикт не выйдет VERIFIED.
+    """
+    модуль = репо / "checks" / "mini_stand.py"
+    if not модуль.is_file():
+        return {}
+    источник = next((к for корень in КОРНИ_ДАННЫХ
+                     for к in (корень / репо.name / "data", корень / f"site-{репо.name}" / "data")
+                     if any(к.glob("*-catalog.json"))), None)
+    if источник is None:
+        return {}
+    if not any(куда.glob("*-catalog.json")):
+        import importlib.util
+        try:
+            спец = importlib.util.spec_from_file_location(f"mini_stand_{репо.name}", модуль)
+            мини = importlib.util.module_from_spec(спец)
+            спец.loader.exec_module(мини)
+            куда.mkdir(parents=True, exist_ok=True)
+            мини.урезать(источник, куда)
+        except Exception:  # noqa: BLE001 — сбой снимка не роняет захват: проверки скажут «не измерено»
+            shutil.rmtree(куда, ignore_errors=True)
+            return {}
+    return {"SITE_DATA_DIR": str(куда), "SITEMAP_CHECK_DATA": str(куда)}
+
+
 class ВнеПродвижения(ValueError):
     """Задача касается домена, исключённого владельцем из продвижения."""
 
@@ -244,6 +279,9 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
         raise
     запись = {"run_id": run_id, "task_id": задача["id"], "at": now.strftime("%Y-%m-%dT%H:%M:%SZ"),
               "repo": задача["repo"], "base_sha": база, "branch": ветка, "worktree": str(копия)}
+    стенд = снимок_стенда(репо, state / "mini" / run_id)
+    if стенд:
+        запись["stand_data"] = стенд["SITE_DATA_DIR"]
     with open(state / "claims.jsonl", "a", encoding="utf-8") as fh:
         fh.write(json.dumps(запись, ensure_ascii=False) + "\n")
     (state / "next.json").write_text(json.dumps({**запись, "task": задача}, ensure_ascii=False, indent=1),
@@ -308,9 +346,11 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
     return убрано
 
 
-def _прогнать(каталог: Path, команда: list[str], предел: int) -> tuple[int, str]:
+def _прогнать(каталог: Path, команда: list[str], предел: int,
+              среда: dict[str, str] | None = None) -> tuple[int, str]:
     try:
-        r = subprocess.run(команда, cwd=каталог, capture_output=True, text=True, timeout=предел)
+        r = subprocess.run(команда, cwd=каталог, capture_output=True, text=True, timeout=предел,
+                           env=среда)
         return r.returncode, (r.stdout + r.stderr)[-1500:]
     except subprocess.TimeoutExpired:
         return 124, f"предел {предел} с исчерпан"
@@ -352,12 +392,14 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
                 if wt.exists():
                     _git(репо, "worktree", "remove", "--force", str(wt), check=False)
                 _git(репо, "worktree", "add", "-q", "--detach", str(wt), sha)
+            стенд = снимок_стенда(репо, state / "mini" / run_id)
+            среда = {**os.environ, **стенд} if стенд else None
             try:
                 # Проверка ветки — на коде базы: обязана упасть (D203).
                 (база_wt / проверка).parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy(голова_wt / проверка, база_wt / проверка)
-                rc_база, вывод_база = _прогнать(база_wt, ["python3", проверка], 600)
-                rc_голова, вывод_голова = _прогнать(голова_wt, ["python3", проверка], 600)
+                rc_база, вывод_база = _прогнать(база_wt, ["python3", проверка], 600, среда)
+                rc_голова, вывод_голова = _прогнать(голова_wt, ["python3", проверка], 600, среда)
                 # Коды проверок: 1 — дефект на месте, 2 — проверка не смогла
                 # выполниться. Необработанное исключение Python тоже даёт 1,
                 # поэтому трассировка в выводе — признак непригодности, а не дефекта.
@@ -374,13 +416,14 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
                 if not шаги["check_passes_on_branch"]:
                     заметки.append(f"проверка на ветке: {вывод_голова[-300:]}")
                 if run_all:
-                    rc_все, вывод_все = _прогнать(голова_wt, ["bash", "checks/run.sh"], 1800)
+                    rc_все, вывод_все = _прогнать(голова_wt, ["bash", "checks/run.sh"], 1800, среда)
                     шаги["run_all_passes"] = rc_все == 0
                     if rc_все:
                         заметки.append(f"checks/run.sh: {вывод_все[-400:]}")
             finally:
                 for wt in (база_wt, голова_wt):
                     _git(репо, "worktree", "remove", "--force", str(wt), check=False)
+                shutil.rmtree(state / "mini" / run_id, ignore_errors=True)
 
     нужно = ["branch_exists", "has_commit", "not_pushed", "check_declared", "check_in_branch",
              "check_usable", "check_fails_on_base", "check_passes_on_branch"] + (["run_all_passes"] if run_all else [])
