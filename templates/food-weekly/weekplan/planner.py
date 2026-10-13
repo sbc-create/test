@@ -126,6 +126,36 @@ def resolve(plan: dict, catalogs: dict, swaps: dict) -> tuple[list[dict], list[s
     return days, notes
 
 
+def custom_days(catalogs: dict, picks: dict[tuple[int, str], str]) -> tuple[list[dict], list[str]]:
+    """Своя неделя: по одному блюду на приём пищи; блюдо — только из каталога и только своей категории."""
+    notes, days = [], []
+    items = catalogs["food-daily"]["items"]
+    for n in range(1, 8):
+        row = {}
+        for meal in MEALS:
+            slug = picks.get((n, meal))
+            it = items.get(slug) if slug else None
+            if slug and (not it or it["category"] not in MEAL_CATEGORIES[meal]):
+                notes.append(f"«{slug}» не подходит для дня {n} ({MEALS[meal].lower()}) — пропущено.")
+                it = None
+            row[meal] = (
+                [
+                    {
+                        "site": "food-daily",
+                        "slug": slug,
+                        "item": it,
+                        "swapped": False,
+                        "original": slug,
+                        "key": f"d{n}-{meal}",
+                    }
+                ]
+                if it
+                else []
+            )
+        days.append(row)
+    return days, notes
+
+
 def alternatives(catalogs: dict, site: str, meal: str) -> list[dict]:
     return sorted(
         (x for x in catalogs[site]["items"].values() if x["category"] in MEAL_CATEGORIES[meal]),

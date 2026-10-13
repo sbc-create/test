@@ -1,12 +1,11 @@
 {% extends "base.html" %}
 {% block main %}
 <section class="intro">
-  <h1>Меню на неделю — и список покупок, который считается сам</h1>
-  <p>Выберите план на семь дней. Любое блюдо можно заменить, а список покупок пересчитается по рецептам и числу людей.</p>
+  <h1>Соберите свою неделю — список покупок посчитается сам</h1>
+  <p class="lead">Выберите блюда на каждый день из каталога рецептов или возьмите готовый план за основу и поменяйте что хотите. Покупки считаются по рецептам и числу людей.</p>
+  <p><a class="btn btn--big" href="/svoya-nedelya/">Собрать свою неделю</a></p>
 </section>
-<section aria-labelledby="h-plans"><h2 id="h-plans">Планы</h2>
-<div class="plans">{% for p in app.plans.values() %}{% include "_plancard.html" %}{% endfor %}</div></section>
-<section class="steps3" aria-labelledby="h-how"><h2 id="h-how">Как это работает</h2>
-<ol><li><b>Выберите неделю</b> — на двоих, на семью или сезонную.</li><li><b>Замените блюда</b>, которые не подходят: только на блюда того же приёма пищи.</li><li><b>Откройте список покупок</b> — продукты сложены по единицам, ничего не пересчитано «на глаз».</li></ol>
-<p><a href="/kak-planirovat/">Подробнее о планировании →</a></p></section>
+<section aria-labelledby="h-seed"><h2 id="h-seed">Начать с готового плана</h2>
+<ul class="seedlist">{% for p in app.plans.values() %}<li><a href="/menyu/{{ p.slug }}/"><b>{{ p.title }}</b></a><span>{{ p.people }} чел. · {{ p.description }}</span></li>{% endfor %}</ul>
+<p class="note">На странице «Своя неделя» любой план можно взять за основу и изменить.</p></section>
 {% endblock %}

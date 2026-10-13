@@ -1,7 +1,8 @@
 template: food-weekly
-branch: claude/template-food-weekly
-worktree: /home/claude/wt-template-food-weekly
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main, не ветки других шаблонов
+variant_id: own-week   # вариант C; A — week-grid (8849), B — agenda-trips (8865)
+branch: claude/template-food-weekly-c
+worktree: /home/claude/wt-template-food-weekly-c
+base_commit: 1c18349   # вариант A (claude/template-food-weekly)
 owner_scope:
   write: [templates/food-weekly/**]
   shared_files_touched:
@@ -11,7 +12,7 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m weekplan.server (pid var/food-weekly/run/preview.pid)"
-  bind: 127.0.0.1:8849
+  bind: 127.0.0.1:8873
   data: templates/food-weekly/data (планы + снимок каталога food-daily)
   build: var/food-weekly/build/<commit>
   qa_dependencies: templates/food-weekly/qa (axe-core 4.13.0, свой lockfile)

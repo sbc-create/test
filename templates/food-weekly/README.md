@@ -1,4 +1,7 @@
-# food-weekly — «Меню на неделю»
+# food-weekly — «Меню на неделю», вариант C `own-week`
+
+Вариант C: своя неделя из каталога (или план как основа) → список покупок на 1–8 чел. Порт 8873, ключи `fwc.*`.
+Вариант A — ветка `claude/template-food-weekly`, B — `claude/template-food-weekly-b`.
 
 Третий сайт сети (PRACTICAL-NETWORK-NIGHT-CONTINUE-02). Ветка `claude/template-food-weekly`,
 worktree `/home/claude/wt-template-food-weekly`, база `origin/main` `a7f7cb6`. Весь сайт — `templates/food-weekly/`.
@@ -19,7 +22,7 @@ worktree `/home/claude/wt-template-food-weekly`, база `origin/main` `a7f7cb6
 | подборки | `/podborki/`, `/podborki/<id>/` (≥3 блюд) |
 
 ```bash
-bash templates/food-weekly/bin/food-weekly start | stop | status | restart   # только этот preview, 127.0.0.1:8849
+bash templates/food-weekly/bin/food-weekly start | stop | status | restart   # только этот preview, 127.0.0.1:8873
 bash templates/food-weekly/bin/food-weekly catalog    # обновить снимок каталога food-daily (preview должен работать)
 bash templates/food-weekly/bin/food-weekly test
 bash templates/food-weekly/bin/food-weekly build --commit HEAD

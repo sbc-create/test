@@ -11,11 +11,18 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8849"
+BASE = "http://127.0.0.1:8873"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 PLAN = "/menyu/bystraya-nedelya-dlya-dvoih/"
-SHOTS = {"home": "/", "catalog": "/menyu/", "week": PLAN, "day": PLAN + "den-3/", "shopping": PLAN + "pokupki/"}
+SHOTS = {
+    "own": "/svoya-nedelya/?d1-breakfast=syrniki-s-ezhevikoj&d1-dinner=plov-s-kuricej&d2-lunch=grecheskij-salat&lyudi=3",
+    "home": "/",
+    "catalog": "/menyu/",
+    "week": PLAN,
+    "day": PLAN + "den-3/",
+    "shopping": PLAN + "pokupki/",
+}
 AXE_PAGES = [
     "/",
     "/menyu/",
@@ -103,6 +110,38 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + "/")
         pg.keyboard.press("Tab")
         S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        # --- вариант C: своя неделя ---
+        pg.evaluate("localStorage.clear(); 0")
+        with pg.expect_navigation():
+            pg.locator(".intro .btn--big").click()
+        S["home_cta_opens_own_week"] = pg.url.endswith("/svoya-nedelya/") and pg.locator(".own select").count() == 21
+        pg.select_option("#s-1-breakfast", "syrniki-s-ezhevikoj")
+        pg.select_option("#s-1-dinner", "plov-s-kuricej")
+        S["own_count_updates"] = pg.locator("[data-own-count]").inner_text() == "Выбрано блюд: 2 из 21"
+        pg.fill("#lyudi", "4")
+        with pg.expect_navigation():
+            pg.click(".own__go .btn")
+        S["own_week_shopping_listed"] = (
+            pg.locator(".own-result .buy li").count() > 0 and "на 4 чел." in pg.locator("#h-buy").inner_text()
+        )
+        S["own_selection_kept"] = pg.locator("#s-1-dinner").input_value() == "plov-s-kuricej"
+        pg.locator(".own-result .buy input").first.check()
+        pg.reload()
+        S["own_bought_persists"] = pg.locator(".own-result .buy input").first.is_checked()
+        pg.goto(BASE + "/menyu/")
+        S["header_link_returns_to_own_week"] = "d1-dinner=plov-s-kuricej" in (
+            pg.locator("[data-own-link]").get_attribute("href") or ""
+        )
+        pg.goto(BASE + "/svoya-nedelya/")
+        with pg.expect_navigation():
+            pg.locator(".seeds a").first.click()
+        S["seed_from_plan_fills_week"] = (
+            pg.locator(".own select").evaluate_all("els => els.filter(e => e.value).length") >= 7
+            and pg.locator(".own-result").count() == 1
+        )
+        resp = pg.goto(BASE + "/svoya-nedelya/?lyudi=0")
+        S["bad_people_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        S["storage_namespace_own"] = all(k.startswith("fwc.") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
@@ -112,6 +151,7 @@ def run(shots: Path | None) -> dict:
         S["nojs_swap_works"] = pg.locator(".dish--swapped").count() >= 1
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

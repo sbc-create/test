@@ -155,5 +155,5 @@ def test_day_abbreviations_are_correct(app):
 
 def test_variant_identity_meta(app):
     _, html, _ = app.route("/", {})
-    assert '<meta name="site-factory-variant-id" content="week-grid">' in html
+    assert '<meta name="site-factory-variant-id" content="own-week">' in html
     assert '<meta name="site-factory-variant-version" content="1">' in html

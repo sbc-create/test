@@ -15,16 +15,16 @@
 <meta property="og:description" content="{{ meta.description }}">
 <meta name="theme-color" content="#1f2a44">
 <link rel="icon" href="{{ asset('img/grid.svg') }}" type="image/svg+xml">
-<link rel="stylesheet" href="{{ asset('css/planner.css') }}">
+<link rel="stylesheet" href="{{ asset('css/own.css') }}">
 {% for x in meta.ld %}<script type="application/ld+json">{{ x | tojson }}</script>
 {% endfor %}
-<script src="{{ asset('js/planner.js') }}" defer></script>
+<script src="{{ asset('js/own.js') }}" defer></script>
 </head>
-<body>
+<body data-ns="{{ app.cfg.storage_namespace }}">
 <a class="skip" href="#main">К содержимому</a>
 <header class="bar">
   <a class="logo" href="/"><span class="logo__grid" aria-hidden="true"></span>Меню<b>на неделю</b></a>
-  <nav aria-label="Основное"><a href="/menyu/">Планы</a><a href="/podborki/">Подборки</a><a href="/kak-planirovat/">Как планировать</a></nav>
+  <nav aria-label="Основное"><a href="/svoya-nedelya/" data-own-link>Своя неделя</a><a href="/menyu/">Планы</a><a href="/podborki/">Подборки</a><a href="/kak-planirovat/">Как планировать</a></nav>
 </header>
 {% if meta.crumbs|length > 1 %}<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>{% endif %}
 <main id="main">{% block main %}{% endblock %}</main>

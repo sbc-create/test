@@ -55,6 +55,13 @@ class Meta:
     kind: str = "page"
 
 
+def plural(n: int, one: str, few: str, many: str) -> str:
+    n = abs(n) % 100
+    if 11 <= n <= 14:
+        return many
+    return one if n % 10 == 1 else few if 2 <= n % 10 <= 4 else many
+
+
 class App:
     def __init__(self, cfg_path: Path | None = None):
         self.cfg = yaml.safe_load((cfg_path or ROOT / "config" / "site.yaml").read_text())
@@ -74,7 +81,11 @@ class App:
             if p.is_file()
         }
         self.env.globals.update(
-            app=self, MEALS=planner.MEALS, DAYS=planner.DAYS, asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}"
+            app=self,
+            MEALS=planner.MEALS,
+            DAYS=planner.DAYS,
+            plural=plural,
+            asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}",
         )
 
     # --- адреса -----------------------------------------------------------
@@ -123,6 +134,8 @@ class App:
     # --- маршруты -----------------------------------------------------------
     def route(self, path: str, q: dict):
         g = lambda k: (q.get(k) or [""])[0]  # noqa: E731
+        if path == "/svoya-nedelya/":
+            return self.own_week(q)
         if path == "/":
             meta = Meta(
                 f"{self.cfg['name']} — готовые планы и список покупок",
@@ -270,8 +283,59 @@ class App:
             )
         return self.not_found()
 
+    def own_week(self, q: dict):
+        """Своя неделя: без выбора — индексируемая форма; с выбором — noindex без canonical; люди вне 1–8 — 400."""
+        g = lambda k: (q.get(k) or [""])[0].strip()  # noqa: E731
+        picks = {(n, meal): g(f"d{n}-{meal}") for n in range(1, 8) for meal in planner.MEALS if g(f"d{n}-{meal}")}
+        raw_people = g("lyudi") or "2"
+        error = None
+        people = int(raw_people) if raw_people.isdigit() else 0
+        if not 1 <= people <= 8:
+            error, people = "Число людей — от 1 до 8.", 2
+        days, notes = planner.custom_days(self.catalogs, picks)
+        chosen = sum(len(day[m]) for day in days for m in planner.MEALS)
+        sl = planner.shopping_list(days, people) if chosen else {"items": [], "to_taste": []}
+        asked = bool(picks) or bool(g("lyudi"))
+        crumbs = [("Главная", "/"), ("Своя неделя", "/svoya-nedelya/")]
+        meta = Meta(
+            f"Своя неделя: {chosen} {plural(chosen, 'блюдо', 'блюда', 'блюд')}"
+            if chosen
+            else "Своя неделя: соберите меню сами",
+            "Выберите блюда на каждый день из каталога «Будней на кухне» — список покупок посчитается по рецептам.",
+            None if asked else self.abs("/svoya-nedelya/"),
+            not asked,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "own",
+        )
+        alts = {meal: planner.alternatives(self.catalogs, "food-daily", meal) for meal in planner.MEALS}
+        seeds = {
+            slug: "&".join(
+                f"d{n}-{meal}={day[meal][0]['slug']}"
+                for n, day in enumerate(p["days"], 1)
+                for meal in planner.MEALS
+                if day[meal]
+            )
+            + f"&lyudi={p['people']}"
+            for slug, p in self.plans.items()
+        }
+        body = self.render(
+            "own_week.html",
+            meta,
+            days=days,
+            picks=picks,
+            people=people,
+            alts=alts,
+            sl=sl,
+            notes=notes,
+            chosen=chosen,
+            error=error,
+            seeds=seeds,
+        )
+        return (400 if error else 200), body, {}
+
     def sitemap_urls(self):
-        urls = ["/", "/menyu/", "/kak-planirovat/", "/podborki/"]
+        urls = ["/", "/svoya-nedelya/", "/menyu/", "/kak-planirovat/", "/podborki/"]
         for slug in self.plans:
             urls += [f"/menyu/{slug}/", f"/menyu/{slug}/pokupki/"] + [f"/menyu/{slug}/den-{n}/" for n in range(1, 8)]
         urls += [
