@@ -1,6 +1,6 @@
 # Карта действий garden-season, вариант C (my-plot)
 
-Проверено на commit `1f5b068` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/1f5b068 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `70b57c0` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/70b57c0 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -28,7 +28,7 @@
 | whole_card_clickable | PASS | `True` |
 | search_keyboard_results | PASS | `1` |
 | search_clear | PASS | `True` |
-| search_by_month | PASS | `11` |
+| search_by_month | PASS | `12` |
 | search_no_results_message | PASS | `True` |
 | 404_has_search_and_home | PASS | `True` |
 | plot_from_home_shows_only_allowed_regions | PASS | `True` |
@@ -42,6 +42,6 @@
 | nojs_work_steps | PASS | `5` |
 | nojs_print_hidden | PASS | `True` |
 | nojs_filter_works | PASS | `True` |
-| ширины 320/390/768/1440 × 63 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 64 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 48 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
