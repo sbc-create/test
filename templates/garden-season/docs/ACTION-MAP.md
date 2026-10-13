@@ -1,6 +1,6 @@
 # Карта действий garden-season, вариант C (my-plot)
 
-Проверено на commit `1a9ce80` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/1a9ce80 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `aae3ff2` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/aae3ff2 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -38,6 +38,9 @@
 | home_form_remembers_choice | PASS | `True` |
 | unknown_region_400_alert | PASS | `True` |
 | no_works_honest_empty_state | PASS | `True` |
+| header_plot_link_shows_region | PASS | `True` |
+| header_plot_link_keeps_choice | PASS | `True` |
+| header_plot_link_opens_plan | PASS | `True` |
 | storage_namespace_own | PASS | `True` |
 | nojs_work_steps | PASS | `5` |
 | nojs_print_hidden | PASS | `True` |

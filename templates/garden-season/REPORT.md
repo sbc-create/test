@@ -46,3 +46,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/garden-season build --commit HEAD` | 0 | собрано из 1a9ce80 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 376 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на aae3ff2 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Идея из B: в шапке «Мой участок: <регион>» — ссылка на последний показанный участок (без JS — на форму). Исправлено: неизвестный регион (400) и выбор без работ больше не перезаписывают запомненный участок. Дополнительно: шапка с заполненным хранилищем на 320/390/768/1440 px (/, /kalendar/, /kultury/) — без горизонтального скролла (scratchpad hdr_check.py, exit 0).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/garden-season test` | 0 | 18 passed in 1.12s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m sezon.qa --shots docs/screenshots/aae3ff2 --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8868 '/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1' '/moj-uchastok/?region=moskva&k=chesnok' '/moj-uchastok/?region=uk&k=golubika' /nesushchestvuet/` | 0 | 64 URL × 4 ширины, 0 замечаний |
+| `bash bin/garden-season build --commit HEAD` | 0 | собрано из aae3ff2 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 304 мс. Карта действий — `docs/ACTION-MAP.md`.
