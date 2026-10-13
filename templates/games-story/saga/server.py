@@ -108,14 +108,24 @@ class App:
             ],
         }
 
-    def video_ld(self, v: dict):
-        return {
-            "@context": "https://schema.org",
-            "@type": "VideoObject",
-            "name": v["name"],
-            "embedUrl": f"https://www.youtube-nocookie.com/embed/{v['video_id']}",
-            "url": v["url"],
-        }
+    VIDEO_REQUIRED = ("name", "thumbnail_url", "upload_date")  # обязательные поля VideoObject для поиска
+
+    def video_ld(self, v: dict) -> list[dict]:
+        """VideoObject — только при всех обязательных полях из источника. Неполная разметка — ошибка для
+        поисковиков, а дату загрузки и превью выдумывать нельзя: без них разметки нет, плеер на странице остаётся."""
+        if not all(v.get(k) for k in self.VIDEO_REQUIRED):
+            return []
+        return [
+            {
+                "@context": "https://schema.org",
+                "@type": "VideoObject",
+                "name": v["name"],
+                "thumbnailUrl": v["thumbnail_url"],
+                "uploadDate": v["upload_date"],
+                "embedUrl": f"https://www.youtube-nocookie.com/embed/{v['video_id']}",
+                "url": v["url"],
+            }
+        ]
 
     def page(self, tpl, title, desc, path, crumbs, ld=(), kind="page", **ctx):
         meta = Meta(
@@ -226,7 +236,7 @@ class App:
                 snippet(g.summary),
                 g.url,
                 crumbs,
-                [self.video_ld(v) for v in g.videos],
+                [x for v in g.videos for x in self.video_ld(v)],
                 "guide",
                 g=g,
             )
@@ -238,7 +248,7 @@ class App:
                 "Видео, проверенные через oEmbed: существуют, канал известен, встраивание разрешено.",
                 path,
                 crumbs,
-                [self.video_ld(v) for v in s.videos],
+                [x for v in s.videos for x in self.video_ld(v)],
                 "videos",
             )
         if path == "/kak-my-rabotaem/":

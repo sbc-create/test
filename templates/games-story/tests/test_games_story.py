@@ -97,7 +97,11 @@ def test_video_is_facade_with_verified_metadata(app):
         assert v["embeddable"] and f'data-vid="{v["video_id"]}"' in html and v["channel"] in htmlmod.unescape(html)
     ld = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
     vids = [x for x in ld if x["@type"] == "VideoObject"]
-    assert len(vids) == len(app.site.videos) and all("uploadDate" not in x and "duration" not in x for x in vids)
+    # VideoObject только полный (решение 13.10.2026): у видео нет даты загрузки в источнике — разметки нет,
+    # дата и длительность не выдумываются
+    complete = [v for v in app.site.videos if all(v.get(k) for k in app.VIDEO_REQUIRED)]
+    assert len(vids) == len(complete) == 0
+    assert all("uploadDate" not in v and "duration" not in v for v in app.site.videos)
 
 
 def test_404s_and_other_sites_games(app):
