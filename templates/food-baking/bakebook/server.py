@@ -37,6 +37,27 @@ HEADERS = {
 }
 
 
+def plural(n: int, one: str, few: str, many: str) -> str:
+    m = abs(n) % 100
+    if 11 <= m <= 14:
+        return many
+    return one if m % 10 == 1 else few if 2 <= m % 10 <= 4 else many
+
+
+def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
+    """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
+    out, shown = head, 0
+    for t in titles:
+        nxt = out + (": " if not shown else ", ") + t
+        tail = "." if shown + 1 == len(titles) else " и другие."
+        if len(nxt + tail) > limit:
+            break
+        out, shown = nxt, shown + 1
+    if not shown:
+        return head + "."
+    return out + ("." if shown == len(titles) else " и другие.")
+
+
 @dataclass
 class Meta:
     title: str
@@ -279,7 +300,10 @@ class App:
             items = s.tags()[key]
             meta = self.listing(
                 f"Выпечка: {TAGS[key].lower()}",
-                f"Рецепты с темой «{TAGS[key]}»: {len(items)}.",
+                with_examples(
+                    f"«{TAGS[key]}» — {len(items)} {plural(len(items), 'рецепт', 'рецепта', 'рецептов')}",
+                    [r.title for r in items],
+                ),
                 path,
                 [("Главная", "/"), ("Рецепты", "/recepty/"), (TAGS[key], path)],
                 items,
