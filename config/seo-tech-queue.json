@@ -569,8 +569,8 @@
       "norm": "внутренние ссылки — на канонические адреса",
       "expected": "ссылки листалки в режиме по умолчанию — /catalog/?page=N; dense/list сохраняют view",
       "check": "checks/pagination_links.py; bash checks/run.sh; живой HTML /catalog/",
-      "status": "verified",
-      "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут. Полные прогоны rc=0 (25/28/27 исполнено, пропусков 0); закоммичено c6dbda7, 737b60b, 6f0722f. Выпуск ждёт CI (B019)."
+      "status": "live_verified",
+      "evidence": "Правка в ВидАнимеГо (boundaries: мои области не тронуты) во всех трёх, регрессия pagination_links.py; полные прогоны идут. Полные прогоны rc=0 (25/28/27 исполнено, пропусков 0); закоммичено c6dbda7, 737b60b, 6f0722f. Выпуск ждёт CI (B019). 13.10 ~19:05Z: коммиты c6dbda7, 737b60b, 6f0722f — в удалённых ветках, выпущены с последующими партиями AnimeGo; живые /catalog/ трёх доменов: листалка /catalog/?page=N, view= в ссылках нет."
     },
     {
       "id": "T028",
@@ -613,7 +613,7 @@
       "expected": "при повторе названия — год в <title>, совпал год — оригинальное название; уникальные не меняются; только поля снимка",
       "check": "checks/title_disambig.py; bash checks/run.sh; живой <title> пары master-kung-fu",
       "status": "verified",
-      "evidence": "Готово в 12 ячейках, полные прогоны rc=0, ЛОКАЛЬНЫЕ коммиты (не запушены — B019): zonafilm-space aae36bf, zonafilm12-site ad59758, zonafilm-cc ffa6302 (обёртка в src/serve.py), lordfilm47 33aca11, 1lordserials1 e777861, lordserials22-info 5580a70, lordserial33 4098af6 (ядра Lords — automation/host/apply-title-disambig.py, b67730b), animedia-space f98a95d, animedia-icu f229119, an1mego a0d60eb, animeg0 e0f0892, an1meg0 7af8649. Расчёт Lords/Zona: неуникальных <title> 10 576 → 274. ПОРЯДОК ВЫЕЗДА после B019: по одному пушу на ячейку (в нём T027/T028 уже лежат в origin), CI, затем factory cell trigger; живая сверка — <title> пары master-kung-fu (2004/2012). Остаток (замер Архитектора 13.10): у Lords разделы /genre/west_content/ и /genre/zapadnyykontent/ — разные наборы с одинаковыми title и H1; T029 касается только тайтлов. После T044 оба раздела noindex, поэтому для выдачи это снято. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б."
+      "evidence": "Готово в 12 ячейках, полные прогоны rc=0, ЛОКАЛЬНЫЕ коммиты (не запушены — B019): zonafilm-space aae36bf, zonafilm12-site ad59758, zonafilm-cc ffa6302 (обёртка в src/serve.py), lordfilm47 33aca11, 1lordserials1 e777861, lordserials22-info 5580a70, lordserial33 4098af6 (ядра Lords — automation/host/apply-title-disambig.py, b67730b), animedia-space f98a95d, animedia-icu f229119, an1mego a0d60eb, animeg0 e0f0892, an1meg0 7af8649. Расчёт Lords/Zona: неуникальных <title> 10 576 → 274. ПОРЯДОК ВЫЕЗДА после B019: по одному пушу на ячейку (в нём T027/T028 уже лежат в origin), CI, затем factory cell trigger; живая сверка — <title> пары master-kung-fu (2004/2012). Остаток (замер Архитектора 13.10): у Lords разделы /genre/west_content/ и /genre/zapadnyykontent/ — разные наборы с одинаковыми title и H1; T029 касается только тайтлов. После T044 оба раздела noindex, поэтому для выдачи это снято. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б. 13.10 ~19:05Z, живые: Lords ×4 — «Мастер кунг-фу (2012)» / «(2004)»; AnimeGo ×3 и Animedia ×2 — «Крушила Джо (1983)» / «(1989)». Остаток — см. T069. Zona — партия Б."
     },
     {
       "id": "T030",
@@ -1097,8 +1097,9 @@
       "norm": "задание п.3 — метаданные; SEO_KNOWLEDGE_PACK §4 п.2",
       "expected": "как T058",
       "check": "стенд: числа description есть в видимом тексте страницы",
-      "status": "queued",
-      "dependencies": "образец — T058 (animedia-icu 5ffb659: правка трёх описаний и checks/section_meta_visible.py); для фонового исполнителя после установки seo-tech-run.timer"
+      "status": "live_verified",
+      "dependencies": "нет (образец T058)",
+      "evidence": "Сделано сессией (исполнитель не установлен): animedia-space a1e745a — те же три описания и checks/section_meta_visible.py; прежний код rc=1, правка rc=0; полный run.sh пройден. 13.10 ~18:55Z: CI success 38435421113; animedia-02 a1e745a860ad — ok/live_verified. Живая animedia.space: «Подборки аниме на Animedia: 12 подборок…», «…: 4175 записей каталога…», «…: 70 выходов на неделе…»."
     },
     {
       "id": "T060",
@@ -1236,6 +1237,21 @@
       "status": "live_verified",
       "dependencies": "нет",
       "evidence": "an1mego 6b6dded, animeg0 8a4c082, an1meg0 0a4778a; checks/sitemap_years.py: прежний код rc=1, правка rc=0; полные run.sh пройдены. 13.10 ~18:25Z: CI success (38433475711 и соседи); animego-02/03/04 — ok/live_verified. Живые sitemap: 8 705 адресов, по 41 разделу /year/ на трёх доменах."
+    },
+    {
+      "id": "T069",
+      "site": "Lords ×4, AnimeGo ×3, Animedia ×2",
+      "direction": "network",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/title/tripleksogolik-kletka/",
+        "https://an1mego.site/title/tripleksogolik-kletka-2/"
+      ],
+      "problem": "После T029 одинаковый <title> остаётся у записей с совпавшими названием, годом И оригинальным названием: аниме-каталог — 82 записи, Lords — 237 (замер по снимкам 13.10 ~19:10Z). Тип (tv/movie) различает лишь 6 и 60 из них (пример: «Триплексоголик: Клетка (xxxHOLiC Rou, 2010)» — tv kp 521094 и movie kp 1077286). Остальные, по всей видимости, одно произведение дважды в источнике — вопрос дублей данных, не заголовка.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.1 — уникальный title; дубли — канонизация по данным, не по догадке",
+      "expected": "(а) третий шаг различения — тип (сериал/фильм), если он виден на странице; (б) решение по дублям-записям источника (одна запись или canonical) — только по данным",
+      "status": "session",
+      "dependencies": "(а) — малый выигрыш, после очереди; (б) — решение владельца/Архитектора о склейке записей источника"
     }
   ]
 }
