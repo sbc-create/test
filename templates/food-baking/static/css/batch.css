@@ -122,6 +122,8 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 .empty { padding: 20px; background: var(--flour); }
 .ed { border-collapse: collapse; width: 100%; font-size: .9rem; }
 .ed td, .ed th { border-bottom: 1px solid var(--rule); padding: 6px; text-align: left; vertical-align: top; }
+.tw { overflow-x: auto; max-width: 100%; }
+.ed td, .note li { overflow-wrap: anywhere; }
 .colophon { max-width: 1120px; margin: 0 auto; padding: 0 16px 40px; font-size: .88rem; color: var(--ink-2); }
 .colophon nav { display: flex; gap: 16px; flex-wrap: wrap; }
 @media print { .spine, .crumbs, .colophon, .timers, .tags { display: none !important; } .sheet { box-shadow: none; border: 0; background: #fff; } .oven { background: #fff; color: #000; border: 1px solid #000; } .oven h2, .oven dt { color: #000; } }
