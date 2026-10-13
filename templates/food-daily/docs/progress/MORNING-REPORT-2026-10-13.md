@@ -1,0 +1,106 @@
+# Утренний отчёт: сеть практических сайтов, ночь 12–13.10.2026
+
+Старт ночи — 2026-10-12T20:00Z (23:00 МСК). Все сайты — закрытые preview на 127.0.0.1 (`noindex, nofollow`, robots `Disallow: /`).
+Ничего не слито в main, доменов, DNS, production и открытой индексации нет.
+
+## Ссылки
+
+Черновые PR (все draft; B и C — с базой на ветке A, у games-survival C — на ветке B):
+
+| сайт | A | B | C |
+| --- | --- | --- | --- |
+| food-daily «Будни на кухне» | [#95](https://github.com/sbc-create/test/pull/95) | [#111](https://github.com/sbc-create/test/pull/111) | [#124](https://github.com/sbc-create/test/pull/124) |
+| food-baking «Тесто и десерты» | [#96](https://github.com/sbc-create/test/pull/96) | [#112](https://github.com/sbc-create/test/pull/112) | [#123](https://github.com/sbc-create/test/pull/123) |
+| food-weekly «Меню на неделю» | [#97](https://github.com/sbc-create/test/pull/97) | [#113](https://github.com/sbc-create/test/pull/113) | [#121](https://github.com/sbc-create/test/pull/121) |
+| food-appliances «Готовим в технике» | [#98](https://github.com/sbc-create/test/pull/98) | [#114](https://github.com/sbc-create/test/pull/114) | [#122](https://github.com/sbc-create/test/pull/122) |
+| home-practical «Удобный дом» | [#99](https://github.com/sbc-create/test/pull/99) | [#100](https://github.com/sbc-create/test/pull/100) | [#115](https://github.com/sbc-create/test/pull/115) |
+| garden-season «Дача по сезону» | [#101](https://github.com/sbc-create/test/pull/101) | [#102](https://github.com/sbc-create/test/pull/102) | [#116](https://github.com/sbc-create/test/pull/116) |
+| plants-home «Домашние растения» | [#103](https://github.com/sbc-create/test/pull/103) | [#104](https://github.com/sbc-create/test/pull/104) | [#117](https://github.com/sbc-create/test/pull/117) |
+| games-story «Сюжет пройден» | [#105](https://github.com/sbc-create/test/pull/105) | [#106](https://github.com/sbc-create/test/pull/106) | [#118](https://github.com/sbc-create/test/pull/118) |
+| games-rpg «Гайды RPG» | [#107](https://github.com/sbc-create/test/pull/107) | [#108](https://github.com/sbc-create/test/pull/108) | [#119](https://github.com/sbc-create/test/pull/119) |
+| games-survival «База выживания» | [#109](https://github.com/sbc-create/test/pull/109) | [#110](https://github.com/sbc-create/test/pull/110) | [#120](https://github.com/sbc-create/test/pull/120) |
+
+Preview (loopback, доступ — SSH-туннель): A 8847–8850 (food), 8851, 8853, 8855, 8857, 8859, 8861; B 8852, 8854, 8856, 8858, 8860, 8862–8866;
+C 8867–8876. Порт каждого варианта — в таблицах ниже. Отчёт варианта — `templates/<сайт>/REPORT.md` в его ветке,
+карта действий — `docs/ACTION-MAP.md`, скриншоты 390 и 1440 px — `docs/screenshots/<commit>/`.
+
+## Сайты и варианты
+
+Колонки «действия», «axe», «ширины» — из `docs/verification-*.json` того же коммита (фактически запущено этой ночью).
+«Ширины» — все URL из sitemap плюс страницы с параметрами и 404 × 320/390/768/1440: горизонтальный скролл, обрезанные подсказки,
+`href="#"`, зоны нажатия < 24 px, ошибки консоли.
+
+### Еда
+
+| вариант | порт | проверено на | что это | действий PASS | axe | ширины |
+| --- | --- | --- | --- | --- | --- | --- |
+| food-daily A classic-cards | 8847 | d05068d | каталог карточек, рецепт с пересчётом порций, покупки, избранное, режим готовки | 26 | 0 | 53 URL, 0 |
+| food-daily B fridge-first | 8863 | 0f52eaf | «что есть дома» → подбор с недостающим, каталог-таблица, отметки шагов | 31 | 0 | 57 URL, 0 |
+| food-daily C party-list | 8876 | ff00ced | несколько блюд на 1–20 гостей → общий пересчитанный список | 36 | 0 | 56 URL, 0 |
+| food-baking A book-spread | 8848 | 79bf0b8 | книга: оглавление, разворот рецепта, таймеры, виды теста, разборы ошибок | 21 | 0 | 27 URL, 0 |
+| food-baking B oven-bench | 8864 | 3f222ce | по температуре духовки, таблица сравнения, пекарский процент из граммов | 33 | 0 | 29 URL, 0 |
+| food-baking C bake-batch | 8875 | ff617d0 | пеку несколько: общий список продуктов и группы духовки | 32 | 0 | 30 URL, 0 |
+| food-weekly A week-grid | 8849 | 1c18349 | готовые планы 7 × 3, замены без JS, список покупок | 20 | 0 | 36 URL, 0 |
+| food-weekly B agenda-trips | 8865 | 96c0c98 | таблица планов, повестка по дням, две закупки | 26 | 0 | 36 URL, 0 |
+| food-weekly C own-week | 8873 | a613ec9 | своя неделя из каталога (или план как основа) → покупки на 1–8 чел. | 31 | 0 | 38 URL, 0 |
+| food-appliances A device-panel | 8850 | 7575262 | прибор → рецепты, табло режим/°C/время со ссылками на шаги | 17 | 0 | 27 URL, 0 |
+| food-appliances B step-console | 8866 | a9c3ec0 | таблица сравнения, настройки прибора в шагах, таймеры, отметки | 30 | 0 | 27 URL, 0 |
+| food-appliances C device-queue | 8874 | 0c83044 | очередь рецептов по прибору и температуре, сумма времени | 28 | 0 | 30 URL, 0 |
+
+### Дом, сад, растения
+
+| вариант | порт | проверено на | что это | действий PASS | axe | ширины |
+| --- | --- | --- | --- | --- | --- | --- |
+| home-practical A rooms-cards | 8851 | 06d708c | комнаты → карточки инструкций, задачи с фильтрами, чек-лист, сохранённое | 32 | 0 | 41 URL, 0 |
+| home-practical B problem-checklists | 8852 | 819b934 | «что мешает» → шаги-чек-листы, компактный каталог | 34 | 0 | 49 URL, 0 |
+| home-practical C home-audit | 8867 | d0bd2dc | обход квартиры по 6 помещениям → личный план с «Что понадобится» | 44 | 0 | 48 URL, 0 |
+| garden-season A month-calendar | 8853 | 31fec6c | год по месяцам, у каждого срока — регион источника | 29 | 0 | 58 URL, 0 |
+| garden-season B region-timeline | 8854 | 65f5054 | сначала регион, лента по нему | 29 | 0 | 59 URL, 0 |
+| garden-season C my-plot | 8868 | 0b9f676 | регион + культуры → личный календарь без смешивания регионов | 37 | 0 | 59 URL, 0 |
+| plants-home A plant-catalog | 8855 | f034b3f | каталог видов с фильтрами по условиям | 24 | 0 | 40 URL, 0 |
+| plants-home B pick-and-diagnose | 8856 | 694e764 | подбор по условиям, сравнение, «что случилось» | 25 | 0 | 43 URL, 0 |
+| plants-home C my-collection | 8869 | 6012c0d | мои растения → сводка ядовитости и света, этикетки ухода | 34 | 0 | 40 URL, 0 |
+
+### Игры (одна игра — один сайт, реестр games-ownership/1)
+
+| вариант | порт | проверено на | что это | действий PASS | axe | ширины |
+| --- | --- | --- | --- | --- | --- | --- |
+| games-story A chapter-guides | 8857 | 1b5e5ae | Celeste: главы, маршрут, коллекции, 2 проверенных видео (фасад) | 23 | 0 | 19 URL, 0 |
+| games-story B progress-tracker | 8858 | 423ba88 | трекер собранного по главам | 26 | 0 | 22 URL, 0 |
+| games-story C atlas | 8870 | 34fc4b9 | «Где я?» по чекпоинтам, персонажи по главам, механики | 31 | 0 | 29 URL, 0 |
+| games-rpg A codex-sections | 8859 | 14d7192 | Baldur's Gate 3: спутники, билды, квесты, механики, предметы, Patch 8 | 20 | 0 | 29 URL, 0 |
+| games-rpg B party-planner | 8860 | 94e6dfb | планировщик отряда, таблица персонажей, предметы | 25 | 0 | 31 URL, 0 |
+| games-rpg C index-compare | 8871 | c656d3e | указатель А–Я, сравнение предметов | 27 | 0 | 32 URL, 0 |
+| games-survival A craft-tree | 8861 | e5e1a10 | Minecraft: рецепты по сетке, связи «из чего → во что», постройки | 22 | 0 | 33 URL, 0 |
+| games-survival B craft-planner | 8862 | 9e5892b | планировщик крафта по слотам сетки, базовые ресурсы | 27 | 0 | 37 URL, 0 |
+| games-survival C inventory-first | 8872 | 90475ab | что сделать из того, что есть в инвентаре | 36 | 0 | 37 URL, 0 |
+
+Для каждого варианта также запущены: тесты шаблона, `ruff check` + `ruff format --check`, `tests/unit/test_permission_matrix.py`
+(192 passed), сборка из коммита (`build --commit HEAD`). Команды и exit code — в REPORT.md варианта.
+
+## Готовность
+
+| слой | состояние |
+| --- | --- |
+| интерфейс | 30 вариантов готовы к просмотру: у каждого свои CSS/JS, порт, пространство localStorage и метатеги `site-factory-variant-id/version`; все действия проверены по результату, без JS ключевые страницы работают |
+| контент | только факты открытых источников из allowlist (eda.rambler.ru, IKEA, CPSC, OSU Extension, RHS, NC State Extension, celeste.ink, bg3.wiki, minecraft.wiki); тексты — черновики сессии Claude (`manual_standin`), **не** Qwen; редакция не проверяла, блюда не готовились; сроков сада для России в источниках нет — не придуманы |
+| интеграции | реклама и счётчики выключены; каталог food-daily для food-weekly — снимок; видео games-story — 2 ролика, проверенные по oEmbed, плеер грузится только по нажатию |
+| production | заблокирован везде: нет домена и `production_authorized` (BLOCKED_INPUT); переключатель режима проверен тестами |
+
+## Что нашли и исправили этой ночью (по проверкам, не по догадке)
+
+- Food-сайты A: подсказки поиска обрезались на 320–390 px (food-baking FB-09, food-daily FD-14); сокращения дней «Че/Пя/Су/Во» (food-weekly FW-08); не было метатегов варианта у 4 food A.
+- games-survival A: ремонт щита считался рецептом (GV-10); добавлен раздел «Постройки» (GV-11).
+- games-rpg A: добавлен раздел «Предметы» (GR-08, без цены); запрет цен ложно срабатывал на «рубящего» — уточнён с тестом.
+- home-practical C: переход по номеру комнаты терял свежие отметки (HP-C4).
+- games-story C: при переходе на светлую тему белые на белом заголовки — axe не поймал, найдено скриншотом (GS-C3).
+- Ряд контрастов, зон нажатия и горизонтальных прокруток в B/C — исправлены до коммита доказательств.
+
+## Ограничения и что не сделано
+
+- Общий CI (lint) красный на всех PR из-за существующих ошибок в shared `tests/unit` и `factory/contracts` — не в шаблонах; shared core не менялся.
+- PR вариантов B/C открыты от более ранних коммитов A; в A после этого были небольшие коммиты (исправления выше), поэтому при слиянии возможны конфликты в документах.
+- Редакторы food-сайтов (`/redaktor/`) в B/C не проверялись — секреты для них не создавались (NOT_RUN в отчётах).
+- Рецепты кирки и двери (minecraft.wiki) не разобраны надёжно — не показаны; таблицы прогрессии кастеров bg3 не прошли проверку правдоподобия — скрыты.
+- Независимые агенты-ревьюеры запрещены хуком проекта (default-deny для Agent) — вся проверка сделана в этой сессии.
+- Qwen не перезапускался; ни один текст не выдан за его вывод.
