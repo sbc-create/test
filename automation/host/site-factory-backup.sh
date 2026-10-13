@@ -94,6 +94,53 @@ collect "$REPO/var/"            "factory-var/"
 collect /etc/site-factory/      "etc-site-factory/"
 collect /etc/nginx/sites-available/ "etc-nginx-sites/"
 collect /srv/sites/             "srv-sites/"
+
+# Данные ЯЧЕЕК. До 2026-10-13 их здесь не было вовсе: сбор шёл по
+# `/srv/sites/`, а каталоги данных ячеек живут в `/srv/<учётная запись>/data` —
+# это другой путь, и ни одна из 28 ячеек в архив не попадала. Восстановить
+# оценки, комментарии и опубликованные правки редактора было бы нечем.
+#
+# Берётся не весь каталог: измерено, что данные ячеек весят 1,81 ГиБ, а
+# невосстановимая их часть — 25,74 МиБ (1,39 %). Остальное заново положит
+# производитель. План сбора строит `backup_cell_data.py` по КОНТРАКТУ ДАННЫХ
+# каждой витрины, поэтому новая ячейка попадает в копию сама, без правки этого
+# файла. Отказ плана (элемент контракта уводит за пределы каталога данных)
+# останавливает прогон: это вход из репозитория витрины, и доверять ему нельзя.
+CELL_PLAN="$WORK/cell-data-plan.tsv"
+if ! python3 "$REPO/automation/host/backup_cell_data.py" \
+        >"$CELL_PLAN" 2>"$WORK/cell-data-plan.log"; then
+  tail -5 "$WORK/cell-data-plan.log" >&2 || true
+  fail "план сбора данных ячеек не построен — см. $WORK/cell-data-plan.log"
+fi
+CELL_ITEMS=0
+while IFS=$'\t' read -r cell_id cell_dir cell_item; do
+  [ -n "$cell_id" ] || continue
+  if [ "$cell_item" = "*" ]; then
+    # Витрина без объявленного контракта: каталог целиком, минус поставляемое.
+    [ -d "$cell_dir" ] || continue
+    mkdir -p "$STAGE/srv-cells/$cell_id"
+    rsync -a --quiet \
+          --exclude='*-catalog.json' --exclude='*-details.json' \
+          --exclude='*-details.nums.json' \
+          --exclude='*.pem' --exclude='*.key' --exclude='.env' \
+          "${CONSUMER_EXCLUDES[@]}" \
+          "$cell_dir/" "$STAGE/srv-cells/$cell_id/" \
+      || fail "rsync данных ячейки $cell_id"
+    CELL_ITEMS=$((CELL_ITEMS + 1))
+    continue
+  fi
+  [ -e "$cell_dir/$cell_item" ] || continue
+  mkdir -p "$STAGE/srv-cells/$cell_id"
+  rsync -a --quiet \
+        --exclude='*.pem' --exclude='*.key' --exclude='.env' \
+        "${CONSUMER_EXCLUDES[@]}" \
+        "$cell_dir/$cell_item" "$STAGE/srv-cells/$cell_id/" \
+    || fail "rsync $cell_id/$cell_item"
+  CELL_ITEMS=$((CELL_ITEMS + 1))
+done < "$CELL_PLAN"
+# Строка в журнал прогона — обычным echo: функции `log` в этом сценарии нет,
+# и вызов несуществующей свалил бы весь бэкап на украшении отчёта.
+echo "данные ячеек: собрано элементов $CELL_ITEMS из плана $(wc -l < "$CELL_PLAN")"
 # The encrypted Secret Hub store. Without it a restore has no way to regenerate
 # the consumer files excluded above, and the backup would only look complete.
 # Ciphertext is safe to archive precisely because the master key is not: it lives
