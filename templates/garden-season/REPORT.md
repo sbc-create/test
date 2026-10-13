@@ -74,3 +74,17 @@ Meta description длиннее одного предложения теперь
 | `bash bin/garden-season build --commit HEAD` | 0 | собрано из ceb8900 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 188 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 2e58fb6 (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/garden-season test` | 0 | 19 passed in 1.02s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m sezon.qa --shots docs/screenshots/2e58fb6 --out docs/verification-browser-qa.json` | 0 | 40 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8868 '/moj-uchastok/?region=or-west&k=chesnok&k=tomaty&obshchie=1' '/moj-uchastok/?region=moskva&k=chesnok' '/moj-uchastok/?region=uk&k=golubika' /nesushchestvuet/` | 0 | 64 URL × 4 ширины, 0 замечаний |
+| `bash bin/garden-season build --commit HEAD` | 0 | собрано из 2e58fb6 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 188 мс. Карта действий — `docs/ACTION-MAP.md`.
