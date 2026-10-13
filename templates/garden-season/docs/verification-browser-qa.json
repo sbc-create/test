@@ -1,6 +1,6 @@
 {
- "commit_head": "2ba827da6c51f32a4ff785cb47025068138d05df",
- "at": "2026-10-13T01:22:00Z",
+ "commit_head": "b4e32db8eaac9a4b3e269310b8789487da0bc7c2",
+ "at": "2026-10-13T08:38:05Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -83,11 +83,11 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 208,
+   "lcp_ms": 136,
    "cls": 0
   },
   "mobile:month": {
-   "lcp_ms": 68,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:calendar": {
@@ -95,7 +95,7 @@
    "cls": 0
   },
   "mobile:work": {
-   "lcp_ms": 112,
+   "lcp_ms": 104,
    "cls": 0
   },
   "mobile:crop": {
@@ -103,31 +103,31 @@
    "cls": 0
   },
   "mobile:december": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 472,
-   "cls": 0
-  },
-  "desktop:month": {
-   "lcp_ms": 72,
-   "cls": 0
-  },
-  "desktop:calendar": {
    "lcp_ms": 68,
    "cls": 0
   },
+  "desktop:home": {
+   "lcp_ms": 96,
+   "cls": 0
+  },
+  "desktop:month": {
+   "lcp_ms": 140,
+   "cls": 0
+  },
+  "desktop:calendar": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
   "desktop:work": {
-   "lcp_ms": 64,
+   "lcp_ms": 108,
    "cls": 0
   },
   "desktop:crop": {
-   "lcp_ms": 52,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:december": {
-   "lcp_ms": 72,
+   "lcp_ms": 52,
    "cls": 0
   }
  },
@@ -136,17 +136,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8853/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/2ba827d/home-mobile.png",
-  "docs/screenshots/2ba827d/month-mobile.png",
-  "docs/screenshots/2ba827d/calendar-mobile.png",
-  "docs/screenshots/2ba827d/work-mobile.png",
-  "docs/screenshots/2ba827d/crop-mobile.png",
-  "docs/screenshots/2ba827d/december-mobile.png",
-  "docs/screenshots/2ba827d/home-desktop.png",
-  "docs/screenshots/2ba827d/month-desktop.png",
-  "docs/screenshots/2ba827d/calendar-desktop.png",
-  "docs/screenshots/2ba827d/work-desktop.png",
-  "docs/screenshots/2ba827d/crop-desktop.png",
-  "docs/screenshots/2ba827d/december-desktop.png"
+  "docs/screenshots/b4e32db/home-mobile.png",
+  "docs/screenshots/b4e32db/month-mobile.png",
+  "docs/screenshots/b4e32db/calendar-mobile.png",
+  "docs/screenshots/b4e32db/work-mobile.png",
+  "docs/screenshots/b4e32db/crop-mobile.png",
+  "docs/screenshots/b4e32db/december-mobile.png",
+  "docs/screenshots/b4e32db/home-desktop.png",
+  "docs/screenshots/b4e32db/month-desktop.png",
+  "docs/screenshots/b4e32db/calendar-desktop.png",
+  "docs/screenshots/b4e32db/work-desktop.png",
+  "docs/screenshots/b4e32db/crop-desktop.png",
+  "docs/screenshots/b4e32db/december-desktop.png"
  ]
 }
