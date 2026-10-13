@@ -159,6 +159,8 @@ def test_meta_descriptions_fit_snippet_and_sections_are_informative(app):
 
     assert snippet("Раз. Два три.", 8) == "Раз."
     assert snippet("слово " * 40).endswith("…") and len(snippet("слово " * 40)) <= SNIPPET_MAX
+    long_clause = "Начало фразы " + "и ещё слова " * 8 + ", хвост " + "без точки " * 10
+    assert snippet(long_clause).endswith("слова…")  # режется по запятой, а не посреди хвоста
     s = app.site
     for path in re.findall(r"<loc>https?://[^/]+(/[^<]*)</loc>", get(app, "/sitemap.xml")[1]):
         _, html, _ = get(app, path)

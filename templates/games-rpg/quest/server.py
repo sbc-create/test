@@ -48,13 +48,17 @@ SNIPPET_MAX = 160  # длиннее поисковики обрезают пос
 
 
 def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
-    """Описание для meta: целые предложения до limit символов; если первое длиннее — по слову с «…»."""
+    """Описание для meta: целые предложения до limit символов; иначе — по запятой или тире, в крайнем случае по слову, с «…»."""
     text = " ".join(text.split())
     if len(text) <= limit:
         return text
     cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
     if cut >= limit // 3:
         return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    for sep in (", ", " — "):
+        cut = text.rfind(sep, 0, limit - 1)
+        if cut >= limit // 2:
+            return text[:cut].rstrip(",;:—– ") + "…"
     return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
 
 
