@@ -32,9 +32,6 @@ import sys
 import tempfile
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import card_facts_block  # noqa: E402  — рядом, не пакет
-
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
 #: Типы узлов, описывающих само произведение. Остальные (`WebSite`,
@@ -152,7 +149,7 @@ def проверить(домен: str, сколько: int) -> list[str]:
         видимо = видимый_текст(т)
         print(f"   {адрес}: узлов {len(собрано)} {типы}")
 
-        if not any("BreadcrumbList" == т2 for т2 in типы):
+        if not any(т2 == "BreadcrumbList" for т2 in типы):
             видимые, чем = видимые_крошки(т)
             замечания.append(
                 f"{домен}{адрес}: узла BreadcrumbList в ld+json нет; видимые "

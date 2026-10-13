@@ -33,9 +33,6 @@ import tempfile
 from pathlib import Path
 from urllib.parse import unquote, urljoin
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-import card_facts_block  # noqa: E402  — рядом, не пакет
-
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 #: Формы адреса карточки. Две, и это измерено (см. pager-bounds-probe).
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
