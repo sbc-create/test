@@ -1,5 +1,5 @@
 {
- "probed_at": "2026-10-13T08:46:14Z",
+ "probed_at": "2026-10-13T13:38:06Z",
  "variants": [
   {
    "site": "food-daily",
@@ -10,7 +10,7 @@
    "port": 8847,
    "pr": 95,
    "branch": "claude/template-food-daily",
-   "head": "6aa6873",
+   "head": "df3a060",
    "evidence": {
     "commit": "e69bf15",
     "at": "2026-10-13T08:18:50Z",
@@ -36,7 +36,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-daily",
@@ -73,7 +74,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-daily",
@@ -84,19 +86,19 @@
    "port": 8876,
    "pr": 124,
    "branch": "claude/template-food-daily-c",
-   "head": "2478e8e",
+   "head": "3706231",
    "evidence": {
-    "commit": "fff36e7",
-    "at": "2026-10-13T08:13:13Z",
-    "pass": 36,
+    "commit": "2f441f3",
+    "at": "2026-10-13T12:56:57Z",
+    "pass": 51,
     "fail": [],
     "axe": 0,
-    "urls": 56,
+    "urls": 59,
     "vp_issues": 0,
-    "lcp_max": 256,
-    "cls_max": 0
+    "lcp_max": 504,
+    "cls_max": 0.0104
    },
-   "shots_dir": "templates/food-daily/docs/screenshots/fff36e7/",
+   "shots_dir": "templates/food-daily/docs/screenshots/2f441f3/",
    "live": {
     "status": 200,
     "variant_id": "party-list",
@@ -110,7 +112,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "food-baking",
@@ -147,7 +150,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-baking",
@@ -158,19 +162,19 @@
    "port": 8864,
    "pr": 112,
    "branch": "claude/template-food-baking-b",
-   "head": "dcf8f7b",
+   "head": "493b4a3",
    "evidence": {
-    "commit": "229f66b",
-    "at": "2026-10-13T08:10:06Z",
-    "pass": 33,
+    "commit": "37fe950",
+    "at": "2026-10-13T13:00:47Z",
+    "pass": 44,
     "fail": [],
     "axe": 0,
-    "urls": 29,
+    "urls": 31,
     "vp_issues": 0,
-    "lcp_max": 288,
+    "lcp_max": 284,
     "cls_max": 0
    },
-   "shots_dir": "templates/food-baking/docs/screenshots/229f66b/",
+   "shots_dir": "templates/food-baking/docs/screenshots/37fe950/",
    "live": {
     "status": 200,
     "variant_id": "oven-bench",
@@ -184,7 +188,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "food-baking",
@@ -221,7 +226,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-weekly",
@@ -258,7 +264,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-weekly",
@@ -295,7 +302,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-weekly",
@@ -306,19 +314,19 @@
    "port": 8873,
    "pr": 121,
    "branch": "claude/template-food-weekly-c",
-   "head": "7030868",
+   "head": "2d98376",
    "evidence": {
-    "commit": "a613ec9",
-    "at": "2026-10-13T00:16:37Z",
-    "pass": 31,
+    "commit": "8397dc4",
+    "at": "2026-10-13T13:03:54Z",
+    "pass": 35,
     "fail": [],
     "axe": 0,
-    "urls": 38,
+    "urls": 39,
     "vp_issues": 0,
-    "lcp_max": 636,
-    "cls_max": 0
+    "lcp_max": 172,
+    "cls_max": 0.0055
    },
-   "shots_dir": "templates/food-weekly/docs/screenshots/a613ec9/",
+   "shots_dir": "templates/food-weekly/docs/screenshots/8397dc4/",
    "live": {
     "status": 200,
     "variant_id": "own-week",
@@ -332,7 +340,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "food-appliances",
@@ -369,7 +378,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "food-appliances",
@@ -380,19 +390,19 @@
    "port": 8866,
    "pr": 114,
    "branch": "claude/template-food-appliances-b",
-   "head": "560a573",
+   "head": "b68b028",
    "evidence": {
-    "commit": "a9c3ec0",
-    "at": "2026-10-12T23:18:27Z",
-    "pass": 30,
+    "commit": "838da4a",
+    "at": "2026-10-13T13:07:49Z",
+    "pass": 42,
     "fail": [],
     "axe": 0,
-    "urls": 27,
+    "urls": 30,
     "vp_issues": 0,
     "lcp_max": 160,
     "cls_max": 0
    },
-   "shots_dir": "templates/food-appliances/docs/screenshots/a9c3ec0/",
+   "shots_dir": "templates/food-appliances/docs/screenshots/838da4a/",
    "live": {
     "status": 200,
     "variant_id": "step-console",
@@ -406,7 +416,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "food-appliances",
@@ -443,7 +454,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "home-practical",
@@ -480,7 +492,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "home-practical",
@@ -517,7 +530,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "home-practical",
@@ -528,19 +542,19 @@
    "port": 8867,
    "pr": 115,
    "branch": "claude/template-home-practical-c",
-   "head": "cfc8817",
+   "head": "846cc22",
    "evidence": {
-    "commit": "d0bd2dc",
-    "at": "2026-10-12T23:40:40Z",
-    "pass": 44,
+    "commit": "f2dc0bf",
+    "at": "2026-10-13T13:12:22Z",
+    "pass": 49,
     "fail": [],
     "axe": 0,
-    "urls": 48,
+    "urls": 55,
     "vp_issues": 0,
-    "lcp_max": 148,
+    "lcp_max": 268,
     "cls_max": 0
    },
-   "shots_dir": "templates/home-practical/docs/screenshots/d0bd2dc/",
+   "shots_dir": "templates/home-practical/docs/screenshots/f2dc0bf/",
    "live": {
     "status": 200,
     "variant_id": "home-audit",
@@ -554,7 +568,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "garden-season",
@@ -591,7 +606,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "garden-season",
@@ -628,7 +644,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "garden-season",
@@ -639,19 +656,19 @@
    "port": 8868,
    "pr": 116,
    "branch": "claude/template-garden-season-c",
-   "head": "9952ecc",
+   "head": "7a569af",
    "evidence": {
-    "commit": "1a9ce80",
-    "at": "2026-10-13T08:40:12Z",
-    "pass": 37,
+    "commit": "aae3ff2",
+    "at": "2026-10-13T13:14:45Z",
+    "pass": 40,
     "fail": [],
     "axe": 0,
     "urls": 64,
     "vp_issues": 0,
-    "lcp_max": 376,
-    "cls_max": 0.0521
+    "lcp_max": 304,
+    "cls_max": 0.217
    },
-   "shots_dir": "templates/garden-season/docs/screenshots/1a9ce80/",
+   "shots_dir": "templates/garden-season/docs/screenshots/aae3ff2/",
    "live": {
     "status": 200,
     "variant_id": "my-plot",
@@ -665,7 +682,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "plants-home",
@@ -702,7 +720,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "plants-home",
@@ -739,7 +758,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "plants-home",
@@ -750,19 +770,19 @@
    "port": 8869,
    "pr": 117,
    "branch": "claude/template-plants-home-c",
-   "head": "4eb4257",
+   "head": "7abc637",
    "evidence": {
-    "commit": "e6408ee",
-    "at": "2026-10-13T01:12:03Z",
-    "pass": 34,
+    "commit": "595c7d6",
+    "at": "2026-10-13T13:19:29Z",
+    "pass": 42,
     "fail": [],
     "axe": 0,
-    "urls": 45,
+    "urls": 48,
     "vp_issues": 0,
-    "lcp_max": 384,
+    "lcp_max": 264,
     "cls_max": 0
    },
-   "shots_dir": "templates/plants-home/docs/screenshots/e6408ee/",
+   "shots_dir": "templates/plants-home/docs/screenshots/595c7d6/",
    "live": {
     "status": 200,
     "variant_id": "my-collection",
@@ -776,7 +796,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "games-story",
@@ -813,7 +834,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-story",
@@ -850,7 +872,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-story",
@@ -861,19 +884,19 @@
    "port": 8870,
    "pr": 118,
    "branch": "claude/template-games-story-c",
-   "head": "2957a3b",
+   "head": "da3666c",
    "evidence": {
-    "commit": "8664df8",
-    "at": "2026-10-13T08:44:43Z",
-    "pass": 31,
+    "commit": "3174e66",
+    "at": "2026-10-13T13:23:25Z",
+    "pass": 34,
     "fail": [],
     "axe": 0,
     "urls": 29,
     "vp_issues": 0,
-    "lcp_max": 128,
+    "lcp_max": 176,
     "cls_max": 0
    },
-   "shots_dir": "templates/games-story/docs/screenshots/8664df8/",
+   "shots_dir": "templates/games-story/docs/screenshots/3174e66/",
    "live": {
     "status": 200,
     "variant_id": "atlas",
@@ -887,7 +910,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "games-rpg",
@@ -924,7 +948,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-rpg",
@@ -961,7 +986,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-rpg",
@@ -972,19 +998,19 @@
    "port": 8871,
    "pr": 119,
    "branch": "claude/template-games-rpg-c",
-   "head": "394852c",
+   "head": "faf4de3",
    "evidence": {
-    "commit": "3a559de",
-    "at": "2026-10-13T08:37:11Z",
-    "pass": 27,
+    "commit": "307c3e7",
+    "at": "2026-10-13T13:30:44Z",
+    "pass": 33,
     "fail": [],
     "axe": 0,
-    "urls": 39,
+    "urls": 42,
     "vp_issues": 0,
-    "lcp_max": 180,
+    "lcp_max": 1260,
     "cls_max": 0
    },
-   "shots_dir": "templates/games-rpg/docs/screenshots/3a559de/",
+   "shots_dir": "templates/games-rpg/docs/screenshots/307c3e7/",
    "live": {
     "status": 200,
     "variant_id": "index-compare",
@@ -998,7 +1024,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   },
   {
    "site": "games-survival",
@@ -1035,7 +1062,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-survival",
@@ -1072,7 +1100,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": false
   },
   {
    "site": "games-survival",
@@ -1083,19 +1112,19 @@
    "port": 8872,
    "pr": 120,
    "branch": "claude/template-games-survival-c",
-   "head": "3218ed4",
+   "head": "82aa862",
    "evidence": {
-    "commit": "e0f9abf",
-    "at": "2026-10-13T08:31:05Z",
-    "pass": 36,
+    "commit": "31c0a92",
+    "at": "2026-10-13T13:33:09Z",
+    "pass": 40,
     "fail": [],
     "axe": 0,
     "urls": 41,
     "vp_issues": 0,
-    "lcp_max": 280,
+    "lcp_max": 524,
     "cls_max": 0
    },
-   "shots_dir": "templates/games-survival/docs/screenshots/e0f9abf/",
+   "shots_dir": "templates/games-survival/docs/screenshots/31c0a92/",
    "live": {
     "status": 200,
     "variant_id": "inventory-first",
@@ -1109,7 +1138,8 @@
     },
     "ok": true,
     "why": ""
-   }
+   },
+   "primary": true
   }
  ]
 }
