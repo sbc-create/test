@@ -1,0 +1,7 @@
+{% macro pick(picked=[]) %}
+<form class="bform" action="/pechem/" method="get" data-b-form>
+  <fieldset><legend>Что будете печь?</legend>
+  <ul class="bpick">{% for r in site.recipes %}<li><label><input type="checkbox" name="r" value="{{ r.slug }}"{% if r.slug in picked %} checked{% endif %}><span><b>{{ r.title }}</b><small>{% if r.temps %}{{ r.temps|join('→') }} °C{% else %}без духовки{% endif %}{% if r.total %} · {{ r.total }}{% endif %}</small></span></label></li>{% endfor %}</ul></fieldset>
+  <p class="bform__go"><button type="submit" class="bbtn">Собрать список</button> <span data-b-count aria-live="polite"></span></p>
+</form>
+{% endmacro %}

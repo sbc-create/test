@@ -79,5 +79,5 @@ def test_recipe_sheet_has_marks_and_timers_at_steps(app):
 def test_storage_namespace_is_own():
     js = (ROOT / "static" / "js" / "bench.js").read_text()
     keys = set(re.findall(r'"(fbb?\.[a-z]+\.)', js))
-    assert keys == {"fbb.steps.", "fbb.weigh."}
+    assert keys == {"fbb.steps.", "fbb.weigh.", "fbb.batch.", "fbb.bought."}
     assert not (ROOT / "static" / "js" / "book.js").exists() and not (ROOT / "static" / "css" / "book.css").exists()

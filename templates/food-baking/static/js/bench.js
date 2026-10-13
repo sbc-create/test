@@ -40,4 +40,26 @@
   }
   var f = document.querySelector("[data-autosubmit]");
   if (f) f.addEventListener("change", function () { f.submit(); });
+  /* ---- «Пеку несколько» (перенесено из C): выбор помнится, пустой выбор не отправляется, отметки купленного ---- */
+  var picked = new URLSearchParams(location.search).getAll("r");
+  if (location.pathname === "/pechem/" && picked.length) store.set("fbb.batch.v1", picked);
+  var saved = store.get("fbb.batch.v1", []);
+  if (saved.length) document.querySelectorAll("[data-b-link]").forEach(function (a) { a.href = "/pechem/?" + saved.map(function (s) { return "r=" + encodeURIComponent(s); }).join("&"); });
+  document.querySelectorAll("[data-b-form]").forEach(function (fm) {
+    var boxes = fm.querySelectorAll("input[name=r]"), out = fm.querySelector("[data-b-count]");
+    if (!picked.length && saved.length) boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) !== -1; });
+    var upd = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); out.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один рецепт"; return n; };
+    fm.addEventListener("change", upd); upd();
+    fm.addEventListener("submit", function (e) { if (!upd()) { e.preventDefault(); boxes[0].focus(); } });
+  });
+  var bl = document.querySelector("[data-blist]");
+  if (bl) {
+    var bkey = "fbb.bought." + location.search, got = store.get(bkey, []);
+    bl.querySelectorAll("input").forEach(function (cb) {
+      cb.checked = got.indexOf(cb.value) !== -1;
+      cb.addEventListener("change", function () { var v = []; bl.querySelectorAll("input:checked").forEach(function (x) { v.push(x.value); }); store.set(bkey, v); });
+    });
+  }
+  var pr = document.querySelector("[data-print]");
+  if (pr) { pr.hidden = false; pr.addEventListener("click", function () { window.print(); }); }
 })();

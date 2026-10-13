@@ -32,7 +32,7 @@
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
   </div>
   <nav class="toc-nav" aria-label="Разделы книги">
-    <a href="/#po-temperature">По температуре</a><a href="/recepty/">Таблица рецептов</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
+    <a href="/#po-temperature">По температуре</a><a href="/recepty/">Таблица рецептов</a><a href="/pechem/" data-b-link>Пеку несколько</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
   </nav>
 </header>
 {% if meta.crumbs|length > 1 %}

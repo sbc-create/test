@@ -24,9 +24,13 @@ SHOTS = {
     "recipe_pct": "/recept/yablochnoe-myagkoe-pechene/",
     "dough": "/testo/zavarnoe/",
     "pitfalls": "/oshibki/zavarnoe/",
+    "batch": "/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom",
 }
 AXE_PAGES = [
     "/",
+    "/pechem/",
+    "/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom",
+    "/pechem/?r=neizvestno",
     "/recepty/",
     "/recepty/?sort=temp",
     "/recept/yablochnoe-myagkoe-pechene/",
@@ -147,6 +151,31 @@ def run(shots: Path | None) -> dict:
         S["search_case_spaces"] = pg.locator(".toc__row").count() > 0
         pg.goto(BASE + "/poisk/?q=печенье")
         S["search_pechene"] = pg.locator(".toc__row").count() > 0
+        # «Пеку несколько» (перенесено из C): пустой выбор, счётчик, группы духовки, список, память, 400
+        pg.goto(BASE + "/pechem/")
+        pg.evaluate("localStorage.clear(); 0")
+        pg.reload()
+        url0 = pg.url
+        pg.click(".bform .bbtn")
+        S["batch_empty_submit_blocked"] = pg.url == url0
+        pg.locator(".bpick label", has_text="Лимонный кекс").click()
+        pg.locator(".bpick label", has_text="Мягкое печенье").click()
+        pg.locator(".bpick label", has_text="без выпечки").click()
+        S["batch_count_updates"] = pg.locator("[data-b-count]").inner_text() == "Отмечено: 3"
+        with pg.expect_navigation():
+            pg.click(".bform .bbtn")
+        S["batch_oven_groups_shown"] = pg.locator(".ovenline b").all_inner_texts() == ["180 °C", "Без духовки"]
+        S["batch_combined_list_rows"] = pg.locator(".blist li").count()
+        pg.locator(".blist input").first.check()
+        pg.reload()
+        S["batch_bought_mark_persists"] = pg.locator(".blist input").first.is_checked()
+        pg.goto(BASE + "/recepty/")
+        S["batch_header_link_keeps_choice"] = "r=" in (pg.locator("[data-b-link]").get_attribute("href") or "")
+        pg.goto(BASE + "/pechem/")
+        S["batch_form_remembers_choice"] = pg.locator(".bpick input:checked").count() == 3
+        resp = pg.goto(BASE + "/pechem/?r=neizvestno")
+        S["batch_unknown_recipe_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        S["batch_storage_namespace_own"] = all(k.startswith("fbb.") for k in pg.evaluate("Object.keys(localStorage)"))
         resp = pg.goto(BASE + "/nesushchestvuet/")
         S["real_404"] = resp.status == 404
         ctx.close()

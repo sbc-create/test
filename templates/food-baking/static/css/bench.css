@@ -176,3 +176,27 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 .timer[data-running] { background: var(--wine-2); color: #fff; }
 .reset { display: inline-block; min-height: 24px; }
 @media print { .temp-jump, .done, .timer, .reset-btn, .filters { display: none !important; } }
+
+/* ---- «Пеку несколько» — перенесено из варианта C ---- */
+.bform fieldset { border: 1px solid var(--rule); border-radius: 10px; background: var(--page); padding: 10px 14px; margin: 14px 0; min-width: 0; }
+.bform legend { font-weight: 800; padding: 0 6px; }
+.bpick { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.bpick label { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border: 2px solid var(--rule); border-radius: 8px; cursor: pointer; min-height: 44px; background: #fff; }
+.bpick input, .blist input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--wine-2); }
+.bpick small { display: block; color: var(--muted); font-size: .85rem; }
+.bpick label:has(input:checked) { border-color: var(--wine-2); background: var(--butter); }
+.bpick label:has(input:focus-visible) { outline: 3px solid var(--wine); outline-offset: 2px; }
+.bform__go { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-weight: 700; }
+.bbtn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: var(--wine-2); color: #fff; font: 700 1rem var(--sans); cursor: pointer; }
+.bbtn--line { background: #fff; color: var(--wine-2); border: 2px solid var(--wine-2); }
+.ovenline { list-style: none; padding: 0; display: grid; gap: 8px; }
+.ovenline li { background: var(--page); border: 1px solid var(--rule); border-left: 8px solid var(--wine-2); border-radius: 8px; padding: 8px 12px; }
+.ovenline b { display: block; font-size: 1.1rem; } .ovenline span { display: block; color: var(--ink-2); }
+.blist { list-style: none; padding: 0; display: grid; gap: 4px; }
+.blist li { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
+.blist label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.blist small { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; }
+.blist li:has(input:checked) span { text-decoration: line-through; color: var(--muted); }
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+.taste { color: var(--ink-2); }
+@media print { .bform, .actions, #izmenit { display: none !important; } }

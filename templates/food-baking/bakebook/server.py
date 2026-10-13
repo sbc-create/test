@@ -158,6 +158,22 @@ class App:
     def route(self, path: str, q: dict) -> tuple[int, str, dict]:
         s = self.site
         g = lambda k: (q.get(k) or [""])[0].strip()  # noqa: E731
+        if path == "/pechem/":
+            want = [x for x in q.get("r", []) if x][:20]
+            bs = s.bake_set(want)
+            error = "Таких рецептов в книге нет — отметьте из списка." if want and not bs["recipes"] else None
+            n = len(bs["recipes"])
+            meta = Meta(
+                f"Пеку несколько: {n} {'рецепт' if n % 10 == 1 and n % 100 != 11 else ('рецепта' if n % 10 in (2, 3, 4) and n % 100 not in (12, 13, 14) else 'рецептов')}"
+                if n
+                else "Пеку несколько: общий список продуктов",
+                "Отметьте рецепты — сайт сложит продукты в один список и расставит рецепты по температуре духовки.",
+                None if want else s.abs(path),
+                not want,
+                kind="batch",
+            )
+            meta.crumbs = [("Главная", "/"), ("Пеку несколько", path)]
+            return (400 if error else 200), self.render("batch.html", meta, bs=bs, picked=want, error=error), {}
         if path == "/":
             meta = Meta(
                 f"{s.cfg['name']} — книга рецептов выпечки",
@@ -309,6 +325,7 @@ class App:
         urls = [
             ("/", s.recipes[0].updated_at if s.recipes else None),
             ("/recepty/", None),
+            ("/pechem/", None),
             ("/testo/", None),
             ("/o-proekte/", None),
         ]
