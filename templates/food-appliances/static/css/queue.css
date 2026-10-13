@@ -98,3 +98,4 @@ main { max-width: 1180px; margin: 0 auto; padding: 8px 16px 40px; }
 @media print { .qform, .actions, .qdone, #izmenit { display: none !important; } }
 .btn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: var(--graphite); color: #fff; font: 700 1rem var(--sans); cursor: pointer; text-decoration: none; }
 .btn--line { background: #fff; color: var(--graphite); border: 2px solid var(--graphite); }
+.actions { min-height: 44px; } /* место под кнопку печати, которую показывает JS: без сдвига макета */
