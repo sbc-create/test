@@ -1,0 +1,22 @@
+{
+ "slug": "lopata",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-336bf32f13",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Лопата: песок, гравий и земля",
+ "summary": "Лопата быстро копает песок, гравий и землю. В сетке источника рецепт занимает 3 клетки — материал своего уровня и палки — и даёт 1 лопату.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "palka",
+  "doski"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

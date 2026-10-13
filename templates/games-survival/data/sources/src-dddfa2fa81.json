@@ -1,0 +1,58 @@
+{
+ "id": "src-dddfa2fa81",
+ "url": "https://minecraft.wiki/w/Sword",
+ "fetched_at": "2026-10-13T01:27:07Z",
+ "page_sha256": "7629dc9e75d98b140489eb7e0294b697ebc32975788d265e687ddee122928c8f",
+ "parser": "gsv-facts/1.1.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Sword",
+ "lead": [
+  "A sword is a tiered melee weapon that can be swung to deal damage and can break blocks such as cobwebs , leaves , and bamboo more quickly. In Java Edition , it has the special ability to perform sweep attacks , which damage nearby entities and knock them back.",
+  "All swords except netherite are crafted using a stick and two of the tier's material."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+   "slots": 3,
+   "alternatives_in_first_slot": 20,
+   "slot_items": [
+    "Oak Planks",
+    "Oak Planks",
+    "Stick"
+   ],
+   "result": "Wooden Sword",
+   "results": [
+    "Wooden Sword",
+    "Golden Sword",
+    "Stone Sword",
+    "Copper Sword",
+    "Iron Sword",
+    "Diamond Sword"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Matching Damaged Swords",
+   "slots": 2,
+   "alternatives_in_first_slot": 7,
+   "slot_items": [
+    "Wooden Sword",
+    "Wooden Sword"
+   ],
+   "result": "Wooden Sword",
+   "results": [
+    "Wooden Sword",
+    "Stone Sword",
+    "Copper Sword",
+    "Iron Sword",
+    "Golden Sword",
+    "Diamond Sword",
+    "Netherite Sword"
+   ],
+   "count": 1
+  }
+ ]
+}
