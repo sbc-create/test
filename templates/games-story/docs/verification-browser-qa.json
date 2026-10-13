@@ -1,6 +1,6 @@
 {
- "commit_head": "8664df8e8540b099b14b9dd95e8668cf66cb4863",
- "at": "2026-10-13T08:44:43Z",
+ "commit_head": "8a1fc82e1a57803d6ca774a9adee528df22815b4",
+ "at": "2026-10-13T13:22:11Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -10,13 +10,16 @@
   "route_rendered": true,
   "progress_persists_after_reload": true,
   "game_page_shows_chapter_progress": true,
+  "home_tally_red_from_source": true,
+  "home_tally_sides": true,
+  "home_tally_full_chapters": true,
   "progress_reset": true,
   "pager_next_chapter": true,
   "pager_prev_chapter": true,
   "toc_jumps": true,
   "video_no_iframe_before_click": true,
   "video_iframe_after_click": true,
-  "video_external_request_only_after_click": true,
+  "video_external_request_only_after_click": false,
   "print_button_calls_print": true,
   "print_hides_navigation": true,
   "search_keyboard_results": 9,
@@ -71,27 +74,27 @@
  },
  "perf_lab": {
   "mobile:where": {
-   "lcp_ms": 128,
+   "lcp_ms": 132,
    "cls": 0
   },
   "mobile:character": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "mobile:home": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "mobile:game": {
-   "lcp_ms": 76,
-   "cls": 0
-  },
-  "mobile:guide": {
    "lcp_ms": 64,
    "cls": 0
   },
+  "mobile:home": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "mobile:guide": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
   "mobile:collectibles": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:videos": {
@@ -99,39 +102,39 @@
    "cls": 0
   },
   "mobile:farewell": {
-   "lcp_ms": 60,
+   "lcp_ms": 44,
    "cls": 0
   },
   "desktop:where": {
-   "lcp_ms": 108,
+   "lcp_ms": 124,
    "cls": 0
   },
   "desktop:character": {
-   "lcp_ms": 60,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 60,
+   "lcp_ms": 108,
    "cls": 0
   },
   "desktop:game": {
-   "lcp_ms": 72,
+   "lcp_ms": 84,
    "cls": 0
   },
   "desktop:guide": {
-   "lcp_ms": 60,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:collectibles": {
-   "lcp_ms": 52,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:videos": {
-   "lcp_ms": 64,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:farewell": {
-   "lcp_ms": 56,
+   "lcp_ms": 76,
    "cls": 0
   }
  },
@@ -140,21 +143,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8870/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/8664df8/where-mobile.png",
-  "docs/screenshots/8664df8/character-mobile.png",
-  "docs/screenshots/8664df8/home-mobile.png",
-  "docs/screenshots/8664df8/game-mobile.png",
-  "docs/screenshots/8664df8/guide-mobile.png",
-  "docs/screenshots/8664df8/collectibles-mobile.png",
-  "docs/screenshots/8664df8/videos-mobile.png",
-  "docs/screenshots/8664df8/farewell-mobile.png",
-  "docs/screenshots/8664df8/where-desktop.png",
-  "docs/screenshots/8664df8/character-desktop.png",
-  "docs/screenshots/8664df8/home-desktop.png",
-  "docs/screenshots/8664df8/game-desktop.png",
-  "docs/screenshots/8664df8/guide-desktop.png",
-  "docs/screenshots/8664df8/collectibles-desktop.png",
-  "docs/screenshots/8664df8/videos-desktop.png",
-  "docs/screenshots/8664df8/farewell-desktop.png"
+  "docs/screenshots/8a1fc82/where-mobile.png",
+  "docs/screenshots/8a1fc82/character-mobile.png",
+  "docs/screenshots/8a1fc82/home-mobile.png",
+  "docs/screenshots/8a1fc82/game-mobile.png",
+  "docs/screenshots/8a1fc82/guide-mobile.png",
+  "docs/screenshots/8a1fc82/collectibles-mobile.png",
+  "docs/screenshots/8a1fc82/videos-mobile.png",
+  "docs/screenshots/8a1fc82/farewell-mobile.png",
+  "docs/screenshots/8a1fc82/where-desktop.png",
+  "docs/screenshots/8a1fc82/character-desktop.png",
+  "docs/screenshots/8a1fc82/home-desktop.png",
+  "docs/screenshots/8a1fc82/game-desktop.png",
+  "docs/screenshots/8a1fc82/guide-desktop.png",
+  "docs/screenshots/8a1fc82/collectibles-desktop.png",
+  "docs/screenshots/8a1fc82/videos-desktop.png",
+  "docs/screenshots/8a1fc82/farewell-desktop.png"
  ]
 }

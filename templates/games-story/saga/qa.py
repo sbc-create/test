@@ -142,6 +142,10 @@ def run(shots: Path | None) -> dict:
             pg.locator("iframe.vid__frame").first.get_attribute("src")
             == "https://www.youtube-nocookie.com/embed/JVUIz-dGyK4"
         )
+        for _ in range(30):  # iframe с loading="lazy" запрашивает не мгновенно — ждём до 3 с, без ослабления проверки
+            if external:
+                break
+            pg.wait_for_timeout(100)
         A["video_external_request_only_after_click"] = bool(external) and all(
             "youtube-nocookie.com" in u for u in external
         )
