@@ -7,7 +7,7 @@
 Главное в одной строке: **восемь ячеек созданы, закреплены одной версией,
 исключены из продвижения записью, которую читают обработчики, у каждой свой
 приватный репозиторий с отправленным кодом и пройденным прогоном CI, и все
-восемь доведены до единственного оставшегося входа владельца — publisher_id.**
+восемь доведены до оставшихся входов владельца — publisher_id на домен и возвращённое резервное копирование.**
 Публичные адреса ещё не отданы. Объявить сайт выпущенным по созданной ячейке и
 готовому конфигу нельзя, и здесь этого не сделано.
 
@@ -103,14 +103,14 @@ lordfilm47.space — это смена закрепления на более р
 
 | домен | site_id | NS фактические | совпало | HTTPS | шаблон | версия | репозиторий (приватный) | прогон CI | тех. SEO | Метрика | вне продвижения | блокер |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| lordfilm.group | lords-10 | april, pablo .ns.cloudflare.com | да | нет: 443 отдаёт чужой сертификат | lords-films | `96222882`/`2e5c3c0d` | site-lordfilm-group, `6444b7c` | 38406868912 — 1 мин, FAIL на publisher_id | 13/14 PASS локально и в CI | нет | да (8 областей) | publisher_id |
-| lordfilm.spb.ru | lords-11 | lina, vin .ns.cloudflare.com | да | нет, то же | lords-films | то же | site-lordfilm-spb-ru, `8e2317f` | 38407258592 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
-| lordfilm.msk.ru | lords-12 | lina, vin | да | нет, то же | lords-films | то же | site-lordfilm-msk-ru, `e199596` | 38407273840 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
-| lordserial.su | lords-13 | april, pablo | да | нет, то же | lords-serials | то же | site-lordserial-su, `3b6c40f` | 38406922502 — 1 мин, FAIL на publisher_id | 13/14 PASS локально и в CI | нет | да | publisher_id |
-| lordserial.group | lords-14 | april, pablo | да | нет, то же | lords-serials | то же | site-lordserial-group, `750ebb6` | 38407289018 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
-| lordserial.spb.ru | lords-15 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-spb-ru, `83446bc` | 38407308882 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
-| lordserial.msk.ru | lords-16 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-msk-ru, `0956227` | 38407323854 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
-| lordserial.net.ru | lords-17 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-net-ru, `9ea82f6` | 38407344391 — 1 мин, то же | общая проверка версии | нет | да | publisher_id |
+| lordfilm.group | lords-10 | april, pablo .ns.cloudflare.com | да | нет: 443 отдаёт чужой сертификат | lords-films | `96222882`/`2e5c3c0d` | site-lordfilm-group, `6444b7c` | 38406868912 — 1 мин, FAIL на publisher_id | 13/14 PASS локально и в CI | нет | да (8 областей) | publisher_id; бэкап (общий) |
+| lordfilm.spb.ru | lords-11 | lina, vin .ns.cloudflare.com | да | нет, то же | lords-films | то же | site-lordfilm-spb-ru, `8e2317f` | 38407258592 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
+| lordfilm.msk.ru | lords-12 | lina, vin | да | нет, то же | lords-films | то же | site-lordfilm-msk-ru, `e199596` | 38407273840 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
+| lordserial.su | lords-13 | april, pablo | да | нет, то же | lords-serials | то же | site-lordserial-su, `3b6c40f` | 38406922502 — 1 мин, FAIL на publisher_id | 13/14 PASS локально и в CI | нет | да | publisher_id; бэкап (общий) |
+| lordserial.group | lords-14 | april, pablo | да | нет, то же | lords-serials | то же | site-lordserial-group, `750ebb6` | 38407289018 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
+| lordserial.spb.ru | lords-15 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-spb-ru, `83446bc` | 38407308882 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
+| lordserial.msk.ru | lords-16 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-msk-ru, `0956227` | 38407323854 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
+| lordserial.net.ru | lords-17 | lina, vin | да | нет, то же | lords-serials | то же | site-lordserial-net-ru, `9ea82f6` | 38407344391 — 1 мин, то же | общая проверка версии | нет | да | publisher_id; бэкап (общий) |
 
 Все восемь репозиториев — в учётной записи `sbc-create`, приватные, ветвь
 `claude/extract-<домен через дефисы>`, по одному коммиту закреплённого шаблона.
@@ -511,7 +511,7 @@ Topvisor. Процедура полностью: `knowledge verify` до пра�
 
 ## 8. Блокеры и точная минимальная инструкция владельцу
 
-Остался ОДИН вход владельца. Секретных значений здесь нет и быть не должно.
+Осталось ДВА входа владельца: publisher_id на домен (шаг 2) и возвращённое резервное копирование (шаг 2a). Секретных значений здесь нет и быть не должно.
 
 ### Шаг 1 — СДЕЛАНО. Репозитории витрин (восемь штук)
 
