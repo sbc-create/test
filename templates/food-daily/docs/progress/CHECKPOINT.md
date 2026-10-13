@@ -161,3 +161,6 @@ B 94e6dfb/1c61c07; 4 GET bg3.wiki, без цены; ложное срабаты�
 Обновление 00:12Z: games-survival C (#120; inventory-first, 8872; 36 действий PASS, axe 0, 37 URL × 4 — 0). Третьи варианты есть у
 home, garden, plants, games-story, games-rpg, games-survival. Следующие: (1) C для food-сайтов — по очереди, если хватит времени;
 (2) утренний отчёт (за ~40 минут до конца окна).
+
+Обновление 00:17Z: food-weekly C (#121; own-week, 8873; 31 действие PASS, axe 0, 38 URL × 4 — 0). Третьи варианты: 7 сайтов.
+Следующие: (1) C для food-baking / food-appliances / food-daily — по времени; (2) утренний отчёт.
