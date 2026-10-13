@@ -3,7 +3,7 @@
 {% from "_parts.html" import region_chip %}
 {% block main %}
 {% if months %}
-<h1>Мой участок: {{ REGIONS[region] }}</h1>
+<h1 data-plot-region="{{ REGIONS[region] }}">Мой участок: {{ REGIONS[region] }}</h1>
 <p class="lead">{% for c in crops %}{{ CROPS[c] }}{% if not loop.last %}, {% endif %}{% endfor %}{% if crops and general %} и {% endif %}{% if general %}общие работы{% endif %}. Месяцы без работ пропущены. Отмечайте сделанное — отметки хранятся в этом браузере.</p>
 {% if region in ('or-west', 'or-east', 'or-local') %}<p class="note">Для района Орегона показаны и сроки «весь штат»: источник даёт их для всего Орегона, у каждой строки подписано, к какому региону она относится.</p>{% endif %}
 <p class="plot__progress" data-plot-progress aria-live="polite"></p>

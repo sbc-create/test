@@ -214,6 +214,13 @@ def run(shots: Path | None) -> dict:
         A["unknown_region_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
         pg.goto(BASE + "/moj-uchastok/?region=uk&k=golubika")
         A["no_works_honest_empty_state"] = pg.locator(".empty h2").inner_text() == "Для этого выбора работ нет"
+        # регион в шапке (идея из B): последний показанный участок; 400 и пустой выбор его не перезаписывают
+        link = pg.locator("[data-plot-link]")
+        A["header_plot_link_shows_region"] = link.inner_text() == "Мой участок: Западный Орегон"
+        A["header_plot_link_keeps_choice"] = "region=or-west" in (link.get_attribute("href") or "")
+        with pg.expect_navigation():
+            link.click()
+        A["header_plot_link_opens_plan"] = pg.locator(".plot__m").count() > 0 and "or-west" in pg.url
         A["storage_namespace_own"] = all(k.startswith("gs-plot:") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
 

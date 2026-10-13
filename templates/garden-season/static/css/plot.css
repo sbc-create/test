@@ -200,3 +200,6 @@ main:focus { outline: none; }
 .links { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; }
 .links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--moss); border-radius: 8px; text-decoration: none; font-weight: 700; color: var(--moss); }
 @media print { .plot-form, .actions, .plot__done { display: none !important; } }
+
+/* регион в шапке — из последнего «Моего участка» (идея варианта B) */
+.hd__nav a.myplot { font-weight: 800; }

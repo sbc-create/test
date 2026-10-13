@@ -30,7 +30,14 @@
   // Мой участок: помним последний выбор для пустой формы, отмечаем сделанное по месяцам
   var form = document.querySelector("[data-plot-form]");
   var q = new URLSearchParams(location.search);
-  if (location.pathname === "/moj-uchastok/" && q.get("region")) write("plot", location.search);
+  // запоминаем только показанный план: неизвестный регион (400) и выбор без работ не перезаписывают последний участок
+  var shown = location.pathname === "/moj-uchastok/" && q.get("region") && document.querySelector("[data-plot-region]");
+  if (shown) { write("plot", location.search); write("plot-region", shown.getAttribute("data-plot-region")); }
+  // регион в шапке (идея из B): берётся из последнего «Моего участка», ссылка ведёт к нему
+  var lastPlot = read("plot", ""), lastReg = read("plot-region", "");
+  document.querySelectorAll("[data-plot-link]").forEach(function (a) {
+    if (lastPlot && lastReg) { a.href = "/moj-uchastok/" + lastPlot; a.textContent = "Мой участок: " + lastReg; }
+  });
   if (form && location.pathname === "/" ) {
     var last = read("plot", "");
     if (last) {

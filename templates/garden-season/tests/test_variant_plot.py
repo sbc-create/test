@@ -61,3 +61,12 @@ def test_plot_page_states(app):
     assert get(app, "/moj-uchastok/", {"region": ["uk"]})[0] == 400
     st, html, _ = get(app, "/moj-uchastok/", {"region": ["uk"], "k": ["golubika"]})
     assert st == 200 and "Для этого выбора работ нет" in html
+
+
+def test_header_plot_link_and_region_marker(app):
+    _, html, _ = get(app, "/")
+    assert '<a class="myplot" href="/moj-uchastok/" data-plot-link>Мой участок</a>' in html  # без JS — форма
+    _, html, _ = get(app, "/moj-uchastok/", {"region": ["or-west"], "k": ["chesnok"]})
+    assert re.search(r'<h1 data-plot-region="[^"]+">Мой участок: ', html)
+    _, html, _ = get(app, "/moj-uchastok/", {"region": ["uk"], "k": ["golubika"]})
+    assert "data-plot-region" not in html  # пустой выбор не становится «моим участком»
