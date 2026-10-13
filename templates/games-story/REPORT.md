@@ -102,3 +102,13 @@ VideoObject выводится только при всех обязательн
 | `bash bin/games-story build --commit HEAD` | 0 | собрано из 852774a |
 
 Лабораторный LCP (loopback, без троттлинга) — до 216 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #118 перенацелен с `claude/template-games-story` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 118 --base claude/template-games-story`.
+- Комплект переноса — `bash bin/games-story kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`games-story-ac0a5ca`): `sha256sum -c` — 0, тесты — 21 passed in 4.18s,
+  запуск на 8908 — `/healthz` за 0.25 с, главная 200 (`atlas`),
+  26 URL и 4 ресурсов — 0 ошибок.
