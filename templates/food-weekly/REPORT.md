@@ -42,3 +42,8 @@
 Production — нет: домен (BLOCKED_INPUT); соседний сайт рецептов не опубликован, поэтому
 ссылки ведут в его закрытый preview; планы не проверены редактором.
 Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**.
+
+## Обновление на 1c18349 (ночь 12–13.10, после вариантов B и C)
+
+Изменения: метатеги варианта `week-grid` (тест), сокращения дней (FW-08). Перезапущено на 1c18349: `python3 -m weekplan.qa --shots docs/screenshots/1c18349 --out docs/verification-browser-qa.json` → exit 0, 20 сценариев без провалов, axe 4.13.0 — 0 нарушений, 10 скриншотов;
+`python3 qa/viewports.py 8849 '/menyu/bystraya-nedelya-dlya-dvoih/?s=…' /nesushchestvuet/` → exit 0, 36 URL × 4 ширины — 0 замечаний (`docs/verification-viewports.json`); `bin/food-weekly test` → 14 passed.
