@@ -1,6 +1,6 @@
 # Карта действий games-rpg, вариант B (party-planner)
 
-Проверено на commit `108d51e` в Chromium: `bin/games-rpg qa --shots docs/screenshots/108d51e --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `21d25cf` в Chromium: `bin/games-rpg qa --shots docs/screenshots/21d25cf --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |

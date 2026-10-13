@@ -45,3 +45,17 @@ Meta description: у разделов — из данных (число мате
 | `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 108d51e |
 
 Лабораторный LCP (loopback, без троттлинга) — до 152 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 21d25cf (13.10.2026)
+
+Meta description длиннее одного предложения теперь режется по запятой или тире (а не посреди фразы, как «…с которыми нельзя…»); у garden-season описания работ были до 263 символов — теперь ≤160. Тест проверяет все URL sitemap (20–160 символов) и случай с запятой.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-rpg test` | 0 | 14 passed in 0.59s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m quest.qa --shots docs/screenshots/21d25cf --out docs/verification-browser-qa.json` | 0 | 25 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8860 '/otryad/?s=gale&s=karlach' '/poisk/?q=Gale' /nesushchestvuet/` | 0 | 38 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-rpg build --commit HEAD` | 0 | собрано из 21d25cf |
+
+Лабораторный LCP (loopback, без троттлинга) — до 160 мс. Карта действий — `docs/ACTION-MAP.md`.
