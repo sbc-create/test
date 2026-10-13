@@ -1,29 +1,33 @@
-# Отчёт garden-season, вариант B «Дача по сезону: от региона» (region-timeline)
+# Отчёт garden-season, вариант B «Дача по сезону» (region-timeline)
 
-Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `65f50540e2baf0c72e62b739558ca498f3c5054c`, ветка `claude/template-garden-season-b` (начата с 18e1723 варианта A).
+Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**. Проверенный код: `410502a109e1127d748829469565d6fe12f7e434`, ветка `claude/template-garden-season-b` (вариант A 18e1723).
 
 ## Как открыть
 
-- Preview B: `http://127.0.0.1:8854/`; вариант A для сравнения — `http://127.0.0.1:8853/`. Отличия — `docs/VARIANTS.md`.
-- Скриншоты (390 и 1440 px): `docs/screenshots/65f5054/` — главная, регион, регион с фильтром, работа, культура, пустой декабрь.
-- Артефакт: `var/garden-season/build/65f5054…/` — 60 файлов.
+- Preview: `http://127.0.0.1:8854/` (loopback, `noindex, nofollow`). Вариант A для сравнения — http://127.0.0.1:8853/; отличия — docs/VARIANTS.md.
+- Скриншоты (390 и 1440 px): `docs/screenshots/410502a/` — главная, регион, лента региона, месяц, работа, культура.
+- Артефакт: `var/garden-season/build/410502a…/` — 64 файлов.
 
-## Проверки на 65f5054 (фактически запущены)
+## Проверки на 410502a (фактически запущены)
 
 | команда | exit | результат |
 | --- | --- | --- |
-| `bin/garden-season test` | 0 | 13 passed |
-| `ruff check .` + `ruff format --check .` | 0 | чисто |
-| `bin/garden-season build --commit HEAD` | 0 | 60 файлов |
-| `bin/garden-season qa …` | 0 | 29 действий PASS, axe 0 на 44 стр.×ширин |
-| `python3 qa/viewports.py 8854 …` | 0 | 59 URL × 4 ширины — 0 замечаний |
+| `bash bin/garden-season test` | 0 | 0 — 13 passed |
+| `ruff check . + ruff format --check .` | 0 | 0 — чисто |
+| `pytest tests/unit/test_permission_matrix.py` | 0 | 0 — 192 passed |
+| `bash bin/garden-season build --commit HEAD` | 0 | 0 — 64 файла, var/garden-season/build/410502a… |
+| `python3 -m sezon.qa …` | 0 | 0 — 29 действий PASS; axe 0 |
+| `python3 qa/viewports.py 8854 …` | 0 | 0 — 60 URL × 4 ширины, 0 замечаний |
+| `python3 -m sezon.qa --shots docs/screenshots/410502a --out docs/verification-browser-qa.json …` | 0 | 29 действий PASS; axe 0 на 44 стр.×ширин |
+| `python3 qa/viewports.py 8854 …` | 0 | 60 URL × 4 ширины — 0 замечаний |
 
-LCP (лаборатория, loopback) 32–160 мс. Карта действий — `docs/ACTION-MAP.md`.
+LCP (лаборатория, loopback, без троттлинга) 52–160 мс. Карта действий — `docs/ACTION-MAP.md`.
 
 ## Готовность
 
 | слой | состояние |
 | --- | --- |
-| интерфейс | готов: выбор и запоминание региона, лента года региона с фильтрами, шкала сроков работы, культуры по регионам, месяцы, подборки, поиск, чек-лист, печать |
-| наполнение | тот же снимок, что в A: 14 работ, регионы Орегона и Великобритании; сроков для России нет |
-| production | заблокирован: нет домена; A и B — варианты одного сайта |
+| интерфейс | готов: сначала регион (запоминается), лента региона с фильтрами, месяцы, работы, культуры, поиск, 404 |
+| наполнение | 17 работ по календарям OSU Extension и RHS (3 добавлены ночью 13.10); сроков для России нет — не придуманы; тексты — manual_standin, не Qwen |
+| внешние интеграции | нет (реклама и счётчики выключены) |
+| production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |

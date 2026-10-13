@@ -1,7 +1,7 @@
 # Карта действий garden-season, вариант B (region-timeline)
 
-Проверено на commit `65f5054` в Chromium: `bin/garden-season qa` → `docs/verification-browser-qa.json`, exit 0.
-Каждая строка — действие с проверкой результата (описание проверки — в `sezon/qa.py` под тем же именем).
+Проверено на commit `410502a` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/410502a --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
 | --- | --- | --- |
@@ -25,7 +25,7 @@
 | print_button_calls_print | PASS | `True` |
 | print_hides_navigation | PASS | `True` |
 | month_pager_next | PASS | `True` |
-| empty_month_honest | PASS | `True` |
+| december_lists_new_works | PASS | `True` |
 | search_keyboard_results | PASS | `1` |
 | search_clear | PASS | `True` |
 | search_no_results_message | PASS | `True` |
@@ -34,6 +34,6 @@
 | nojs_print_hidden | PASS | `True` |
 | nojs_region_filter_works | PASS | `True` |
 | nojs_header_links_to_regions | PASS | `True` |
-| ширины 320/390/768/1440 × 59 URL | PASS | 0 замечаний (`docs/verification-viewports.json`) |
+| ширины 320/390/768/1440 × 60 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 44 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
