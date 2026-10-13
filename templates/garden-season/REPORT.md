@@ -88,3 +88,13 @@ Meta description длиннее одного предложения теперь
 | `bash bin/garden-season build --commit HEAD` | 0 | собрано из 2e58fb6 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 188 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Перенос и PR (13.10.2026)
+
+- `origin/main` с исправлением lint (PR #71, 304c3d6) влит в ветку обычным merge; `ruff check .` по репозиторию — чисто.
+- PR #116 перенацелен с `claude/template-garden-season` на `main`: на старой базе был конфликт слияния, и GitHub не запускал CI для PR.
+  Слияния нет, PR остаётся черновиком; вернуть прежнюю базу — `gh pr edit 116 --base claude/template-garden-season`.
+- Комплект переноса — `bash bin/garden-season kit build --out <каталог>` (состав и команды — в его `INSTALL.md`).
+  Проверен в изолированном каталоге без git (`garden-season-8e5addd`): `sha256sum -c` — 0, тесты — 21 passed in 1.26s,
+  запуск на 8906 — `/healthz` за 0.25 с, главная 200 (`my-plot`),
+  60 URL и 4 ресурсов — 0 ошибок.
