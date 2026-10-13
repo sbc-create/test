@@ -1,7 +1,7 @@
 # Карта действий plants-home, вариант A (plant-catalog)
 
-Проверено на commit `f034b3f` в Chromium: `bin/plants-home qa` → `docs/verification-browser-qa.json`, exit 0.
-Каждая строка — действие с проверкой результата (описание — в `flora/qa.py` под тем же именем).
+Проверено на commit `c32e8c2` в Chromium: `python3 -m flora.qa --shots docs/screenshots/c32e8c2 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
 | --- | --- | --- |
@@ -21,7 +21,7 @@
 | checklist_reset | PASS | `True` |
 | print_button_calls_print | PASS | `True` |
 | print_hides_navigation | PASS | `True` |
-| search_keyboard_results | PASS | `1` |
+| search_keyboard_results | PASS | `2` |
 | search_clear | PASS | `True` |
 | search_by_latin | PASS | `1` |
 | search_no_results_message | PASS | `True` |
@@ -29,6 +29,6 @@
 | nojs_plant_sections | PASS | `6` |
 | nojs_print_hidden | PASS | `True` |
 | nojs_filter_works | PASS | `True` |
-| ширины 320/390/768/1440 × 40 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 43 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 42 страниц×ширин | PASS | 0 нарушений |
-| формы с обязательными полями, пагинация, сохранённое | NOT_RUN | в варианте нет |
+| формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
