@@ -556,6 +556,16 @@
       "check": "checks/title_disambig.py; bash checks/run.sh; живой <title> пары master-kung-fu",
       "status": "verified",
       "evidence": "Готово в 12 ячейках, полные прогоны rc=0, ЛОКАЛЬНЫЕ коммиты (не запушены — B019): zonafilm-space aae36bf, zonafilm12-site ad59758, zonafilm-cc ffa6302 (обёртка в src/serve.py), lordfilm47 33aca11, 1lordserials1 e777861, lordserials22-info 5580a70, lordserial33 4098af6 (ядра Lords — automation/host/apply-title-disambig.py, b67730b), animedia-space f98a95d, animedia-icu f229119, an1mego a0d60eb, animeg0 e0f0892, an1meg0 7af8649. Расчёт Lords/Zona: неуникальных <title> 10 576 → 274. ПОРЯДОК ВЫЕЗДА после B019: по одному пушу на ячейку (в нём T027/T028 уже лежат в origin), CI, затем factory cell trigger; живая сверка — <title> пары master-kung-fu (2004/2012)."
+    },
+    {
+      "id": "T030",
+      "site": "zonafilm.cc, lordfilm47.space, zonafilm.space, yummyani.site",
+      "repo": "var/site-repos/zonafilm-cc",
+      "problem": "Холодные страницы тайтлов медленные: TTFB по 6 случайным тайтлам — zonafilm.cc медиана 1,72 с (макс 2,8), lordfilm47.space 0,83 (1,4), zonafilm.space 0,60 (1,25); главная zonafilm.space стабильно ~0,8 с (5 замеров), yummyani.site 0,26–1,39 с. Повторные (горячие) страницы Lords — 0,03 с. Замер 13.10 ~01:30Z при loadavg 8,5 на 12 CPU (часть нагрузки — прогоны проверок SEO), то есть причина не установлена.",
+      "norm": "скорость отдачи (приоритет 5 задания); бюджет обхода",
+      "expected": "профиль рендера холодной страницы тайтла на стенде; причина названа; цель — TTFB < 0,5 с",
+      "check": "повторный замер TTFB при обычной нагрузке; профиль cProfile стенда",
+      "status": "queued"
     }
   ]
 }
