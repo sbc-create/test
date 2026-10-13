@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 import time
 from pathlib import Path
@@ -23,6 +24,8 @@ SHOTS = {
     "party": "/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8",
     "home": "/",
     "catalog": "/recepty/",
+    "fridge": "/iz-holodilnika/?est=kurica&est=ris",
+    "catalog-table": "/recepty/?sort=vremya&vid=tablica",
     "recipe": "/recept/syrniki-s-ezhevikoj/",
     "tag": "/produkty/kurica/",
     "article": "/sovety/priznaki-gotovnosti/",
@@ -81,6 +84,10 @@ PERF_JS = r"""
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 AXE_PAGES = [
     "/",
+    "/iz-holodilnika/",
+    "/iz-holodilnika/?est=kurica&est=ris",
+    "/iz-holodilnika/?est=kvantovyj",
+    "/recepty/?sort=vremya&vid=tablica",
     "/recepty/",
     "/recepty/supy/",
     "/recepty/zavtraki/",
@@ -283,6 +290,51 @@ def run(shots_dir: Path | None) -> dict:
         resp = page.goto(BASE + "/na-kompaniyu/?gosti=50")
         S["party_bad_guests_400_alert"] = resp.status == 400 and page.locator(".err[role=alert]").count() == 1
         S["party_storage_namespace_own"] = all(k.startswith("fdc.") for k in page.evaluate("Object.keys(localStorage)"))
+        # перенесено из B: подбор «что есть дома» — выбор, результаты, память, пустой выбор, неверный продукт
+        with page.expect_navigation():
+            page.locator(".tools a", has_text="Что есть дома").click()
+        S["fridge_header_link"] = page.url.endswith("/iz-holodilnika/")
+        page.locator(".pick__item", has_text="Курица").click()
+        page.locator(".pick__item", has_text="Рис").click()
+        hint = page.locator("[data-fridge-hint]").inner_text()
+        with page.expect_navigation():
+            page.click(".pick .btn")
+        first = page.locator(".match__t").first.inner_text()
+        rows = page.locator(".match__row").count()
+        page.goto(BASE + "/iz-holodilnika/")
+        remembered = page.locator("input[value=kurica]").is_checked() and page.locator("input[value=ris]").is_checked()
+        page.goto(BASE + "/iz-holodilnika/?est=kurica&est=ris")
+        with page.expect_navigation():
+            page.click("[data-fridge-clear]")
+        cleared = not page.locator("input[value=kurica]").is_checked()
+        url_before = page.url
+        page.click(".pick .btn")
+        empty_blocked = page.url == url_before and "хотя бы один" in page.locator("[data-fridge-hint]").inner_text()
+        resp = page.goto(BASE + "/iz-holodilnika/?est=kvantovyj")
+        S["fridge_hint_counts_two"] = hint == "Отмечено: 2"
+        S["fridge_first_has_both_plov"] = first == "Плов с курицей на сковороде"
+        S["fridge_results_listed"] = rows
+        S["fridge_remembers_selection"] = remembered
+        S["fridge_clear_forgets_selection"] = cleared
+        S["fridge_empty_submit_blocked"] = empty_blocked
+        S["fridge_unknown_product_400_alert"] = resp.status == 400 and page.locator(".err[role=alert]").count() == 1
+        # перенесено из B: каталог — сортировка по времени и вид-таблица применяются сразу
+        page.goto(BASE + "/recepty/")
+        with page.expect_navigation():
+            page.select_option("select[name=sort]", "vremya")
+        with page.expect_navigation():
+            page.select_option("select[name=vid]", "tablica")
+        times = page.locator(".cat td[data-label='Время']").all_inner_texts()
+
+        def mins(t):
+            m = re.fullmatch(r"(?:(\d+) ч)?\s*(?:(\d+) мин)?", t.strip())
+            return int(m.group(1) or 0) * 60 + int(m.group(2) or 0) if m and t.strip() != "—" else 10**6
+
+        S["catalog_table_sort_by_time"] = bool(times) and [mins(x) for x in times] == sorted(mins(x) for x in times)
+        S["catalog_view_noindex"] = "noindex" in (page.locator("meta[name=robots]").get_attribute("content") or "")
+        S["storage_namespace_own_after_fridge"] = all(
+            k.startswith("fdc.") for k in page.evaluate("Object.keys(localStorage)")
+        )
         # без JS рецепт целиком в HTML
         ctx.close()
         res["accessibility"] = axe_and_keyboard(browser)

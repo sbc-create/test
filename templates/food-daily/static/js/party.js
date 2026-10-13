@@ -8,7 +8,7 @@
     get: function (k, d) { try { var v = localStorage.getItem(k); return v ? JSON.parse(v) : d; } catch (e) { return d; } },
     set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* приватный режим */ } }
   };
-  var FAV = "fdc.fav.v1", LIST = "fdc.list.v1", PARTY = "fdc.party.v1";
+  var FAV = "fdc.fav.v1", LIST = "fdc.list.v1", PARTY = "fdc.party.v1", FRIDGE = "fdc.fridge.v1";
 
   function fmt(q) {
     if (q === null || isNaN(q)) return "";
@@ -191,6 +191,25 @@
       cb.addEventListener("change", function () { var v = []; pl.querySelectorAll("input:checked").forEach(function (x) { v.push(x.value); }); store.set(bkey, v); });
     });
   }
+
+  /* ---- подбор «что есть дома» (перенесено из B): помним выбор, считаем отмеченные, пустой выбор не отправляем ---- */
+  document.querySelectorAll("[data-fridge-form]").forEach(function (f) {
+    var boxes = f.querySelectorAll("input[name=est]"), hint = f.querySelector("[data-fridge-hint]");
+    var fromUrl = new URLSearchParams(location.search).getAll("est");
+    if (fromUrl.length) store.set(FRIDGE, fromUrl);
+    else if (!document.querySelector(".match")) {
+      var saved = store.get(FRIDGE, []);
+      boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) >= 0; });
+    }
+    var count = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); return n; };
+    var upd = function () { var n = count(); if (hint) hint.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один продукт"; };
+    f.addEventListener("change", upd); upd();
+    f.addEventListener("submit", function (e) {
+      if (!count()) { e.preventDefault(); if (hint) hint.textContent = "Отметьте хотя бы один продукт"; boxes[0].focus(); }
+    });
+    var clr = f.querySelector("[data-fridge-clear]");
+    if (clr) clr.addEventListener("click", function () { store.set(FRIDGE, []); });
+  });
 
   syncFav();
 })();
