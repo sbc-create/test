@@ -134,3 +134,10 @@ bash templates/food-daily/bin/food-daily import plan --hosts eda-rambler --topic
 Техническая готовность к production — **нет**: внешние условия — домен (BLOCKED_INPUT), права на контент (BLOCKED_RIGHTS), проверка редактором (0 из 22), CI-гейт (FAIL по общему линту), изображения блюд (нет; Recipe без `image` не годится для расширенного результата).
 Статус: **READY_FOR_REVIEW_WITH_BLOCKERS**.
 Qwen: ночной прогон не подтверждён (ветки и файлов нет), реальных Qwen-результатов 0.
+
+## Обновление на d05068d (ночь 12–13.10, после вариантов B и C)
+
+Добавлены метатеги варианта `classic-cards` (тест) и исправлена обрезанная подсказка на 404 (FD-14). Перезапущено на d05068d:
+`python3 -m fooddaily.qa_browser --shots docs/screenshots/d05068d --out docs/verification/browser-qa.json` → exit 0, 26 сценариев
+без провалов, axe 4.13.0 — 0 нарушений, 10 скриншотов; `python3 qa/viewports.py 8847 /poisk/?q=тыква /nesushchestvuet/` → exit 0,
+53 URL × 4 ширины — 0 замечаний (`docs/verification/viewports-d05068d.json`); `bin/food-daily test` → 116 passed.
