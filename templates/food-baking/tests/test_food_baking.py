@@ -188,5 +188,5 @@ def test_content_has_no_source_step_text():
 
 def test_variant_identity_meta(app):
     _, html, _ = app.route("/", {})
-    assert '<meta name="site-factory-variant-id" content="book-spread">' in html
+    assert '<meta name="site-factory-variant-id" content="bake-batch">' in html
     assert '<meta name="site-factory-variant-version" content="1">' in html

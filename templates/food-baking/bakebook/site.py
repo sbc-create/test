@@ -209,6 +209,38 @@ class Site:
             if words and all(w in r.search_text or (len(w) > 5 and w[:-2] in r.search_text) for w in words)
         ]
 
+    def bake_set(self, slugs: list[str]) -> dict:
+        """Несколько рецептов: общий список продуктов и порядок духовки — только арифметика над числами источника.
+        Складываются строки с одинаковым названием и единицей (кг → г, л → мл); остальное — отдельными строками."""
+        rs = [self.by_slug[s] for s in dict.fromkeys(slugs) if s in self.by_slug]
+        conv = {"kg": ("g", 1000), "l": ("ml", 1000)}
+        rows: dict = {}
+        loose: dict = {}
+        for r in rs:
+            for i in r.raw["ingredients"]:
+                name = i["name"].strip()
+                key = name.lower().replace("ё", "е")
+                if i["unit"] == "to_taste" or i["quantity"] is None:
+                    loose.setdefault(key, {"name": name, "recipes": []})["recipes"].append(r.title)
+                    continue
+                unit, k = conv.get(i["unit"], (i["unit"], 1))
+                e = rows.setdefault((key, unit), {"name": name, "unit": unit, "q": 0.0, "recipes": []})
+                e["q"] += i["quantity"] * k
+                e["recipes"].append(r.title)
+        items = [
+            {**e, "amount": qty(round(e["q"], 2), e["unit"])}
+            for e in sorted(rows.values(), key=lambda e: e["name"].lower())
+        ]
+        oven: dict = {}
+        for r in rs:
+            oven.setdefault(r.temps[0] if r.temps else None, []).append(r)
+        return {
+            "recipes": rs,
+            "items": items,
+            "loose": sorted(loose.values(), key=lambda e: e["name"].lower()),
+            "oven": sorted(oven.items(), key=lambda kv: (kv[0] is None, -(kv[0] or 0))),
+        }
+
     def filter(self, dough: str = "", oven: str = "") -> list[Recipe]:
         items = self.recipes
         if dough:

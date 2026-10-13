@@ -1,8 +1,8 @@
-/* food-baking — «Тесто и десерты»: книга рецептов. Собственная система,
-   не связана ни с одним другим шаблоном сети. */
+/* food-baking, вариант bake-batch — «Тесто и десерты»: пеку несколько. Кремовый лист, шоколад, ягодно-розовые метки,
+   список покупок с чекбоксами. Только этот вариант. */
 :root {
-  --flour: #f3ece0; --page: #fffbf3; --rule: #e7dcc8; --ink: #2b1d1a; --ink-2: #5a4640; --muted: #6e5a52;
-  --wine: #5b2333; --wine-2: #7a2f45; --butter: #f3d9a4; --butter-2: #e8bf6a; --sage: #4c5f3e;
+  --flour: #fbf5f2; --page: #ffffff; --rule: #ecd9d3; --ink: #2a1712; --ink-2: #523a32; --muted: #6a4f46;
+  --wine: #4a2418; --wine-2: #a0244f; --butter: #fde2ea; --butter-2: #e88aa6; --sage: #3f5b3a;
   --serif: "Bodoni Moda", "Didot", "Bodoni 72", "PT Serif", Georgia, "Times New Roman", serif;
   --sans: "Avenir Next", "Segoe UI", system-ui, sans-serif;
   color-scheme: light;
@@ -43,7 +43,7 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 
 /* лист */
 .sheet { max-width: 1120px; margin: 16px auto 40px; padding: 28px clamp(16px, 4vw, 56px) 48px; background: var(--page);
-  background-image: repeating-linear-gradient(to bottom, transparent 0 31px, var(--rule) 31px 32px);
+  
   box-shadow: 0 1px 0 #d8cbb4, 0 20px 40px -30px rgba(43, 29, 26, .5); border-left: 6px double var(--wine); }
 @media (max-width: 600px) { .sheet { margin: 0 0 24px; border-left-width: 3px; } }
 .kicker { margin: 0; font: 700 .76rem/1.4 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--sage); }
@@ -126,3 +126,27 @@ input[type="checkbox"] { width: 24px; height: 24px; accent-color: var(--wine); f
 .colophon nav { display: flex; gap: 16px; flex-wrap: wrap; }
 @media print { .spine, .crumbs, .colophon, .timers, .tags { display: none !important; } .sheet { box-shadow: none; border: 0; background: #fff; } .oven { background: #fff; color: #000; border: 1px solid #000; } .oven h2, .oven dt { color: #000; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---- вариант C: пеку несколько ---- */
+.bform fieldset { border: 1px solid var(--rule); border-radius: 10px; background: var(--page); padding: 10px 14px; margin: 14px 0; min-width: 0; }
+.bform legend { font-weight: 800; padding: 0 6px; }
+.bpick { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); }
+.bpick label { display: grid; grid-template-columns: 28px 1fr; gap: 8px; align-items: start; padding: 8px 10px; border: 2px solid var(--rule); border-radius: 8px; cursor: pointer; min-height: 44px; background: #fff; }
+.bpick input, .blist input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--wine-2); }
+.bpick small { display: block; color: var(--muted); font-size: .85rem; }
+.bpick label:has(input:checked) { border-color: var(--wine-2); background: var(--butter); }
+.bpick label:has(input:focus-visible) { outline: 3px solid var(--wine); outline-offset: 2px; }
+.bform__go { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-weight: 700; }
+.bbtn { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 0; border-radius: 8px; background: var(--wine-2); color: #fff; font: 700 1rem var(--sans); cursor: pointer; }
+.bbtn--line { background: #fff; color: var(--wine-2); border: 2px solid var(--wine-2); }
+.ovenline { list-style: none; padding: 0; display: grid; gap: 8px; }
+.ovenline li { background: var(--page); border: 1px solid var(--rule); border-left: 8px solid var(--wine-2); border-radius: 8px; padding: 8px 12px; }
+.ovenline b { display: block; font-size: 1.1rem; } .ovenline span { display: block; color: var(--ink-2); }
+.blist { list-style: none; padding: 0; display: grid; gap: 4px; }
+.blist li { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; padding: 6px 0; border-bottom: 1px dashed var(--rule); }
+.blist label { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+.blist small { grid-column: 1 / -1; color: var(--muted); font-size: .85rem; }
+.blist li:has(input:checked) span { text-decoration: line-through; color: var(--muted); }
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: 8px; font-weight: 700; }
+.taste { color: var(--ink-2); }
+@media print { .bform, .actions, #izmenit { display: none !important; } }

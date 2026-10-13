@@ -14,10 +14,11 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8848"
+BASE = "http://127.0.0.1:8875"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 SHOTS = {
+    "batch": "/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom",
     "home": "/",
     "catalog": "/recepty/",
     "recipe": "/recept/keks-s-kabachkom-i-ananasom/",
@@ -111,6 +112,29 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + "/")
         pg.keyboard.press("Tab")
         S["first_tab_skip"] = pg.evaluate("document.activeElement.className") == "skip"
+        # --- вариант C: пеку несколько ---
+        pg.evaluate("localStorage.clear(); 0")
+        url0 = pg.url
+        pg.click(".bform .bbtn")
+        S["empty_batch_submit_blocked"] = pg.url == url0
+        pg.locator(".bpick label", has_text="Лимонный кекс").click()
+        pg.locator(".bpick label", has_text="Мягкое печенье").click()
+        pg.locator(".bpick label", has_text="без выпечки").click()
+        S["batch_count_updates"] = pg.locator("[data-b-count]").inner_text() == "Отмечено: 3"
+        with pg.expect_navigation():
+            pg.click(".bform .bbtn")
+        S["oven_groups_shown"] = pg.locator(".ovenline b").all_inner_texts() == ["180 °C", "Без духовки"]
+        S["combined_list_listed"] = pg.locator(".blist li").count() > 0
+        pg.locator(".blist input").first.check()
+        pg.reload()
+        S["bought_mark_persists"] = pg.locator(".blist input").first.is_checked()
+        pg.goto(BASE + "/recepty/")
+        S["header_link_keeps_batch"] = "r=" in (pg.locator("[data-b-link]").get_attribute("href") or "")
+        pg.goto(BASE + "/")
+        S["home_form_remembers_batch"] = pg.locator(".bpick input:checked").count() == 3
+        resp = pg.goto(BASE + "/pechem/?r=neizvestno")
+        S["unknown_recipe_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        S["storage_namespace_own"] = all(k.startswith("fbc.") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
@@ -122,6 +146,7 @@ def run(shots: Path | None) -> dict:
         )
         ctx.close()
         br.close()
+    res["actions"] = dict(S)
     return res
 
 

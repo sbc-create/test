@@ -1,4 +1,7 @@
-# food-baking — «Тесто и десерты»
+# food-baking — «Тесто и десерты», вариант C `bake-batch`
+
+Вариант C: пеку несколько — общий список продуктов и группы духовки по температурам. Порт 8875, ключи `fbc.*`.
+Вариант A — ветка `claude/template-food-baking`, B — `claude/template-food-baking-b`.
 
 Второй сайт сети (PRACTICAL-NETWORK-NIGHT-CONTINUE-02). Отдельная ветка
 `claude/template-food-baking`, worktree `/home/claude/wt-template-food-baking`,
@@ -25,7 +28,7 @@
 ## Команды (из корня worktree)
 
 ```bash
-bash templates/food-baking/bin/food-baking start | stop | status | restart   # только этот preview, 127.0.0.1:8848
+bash templates/food-baking/bin/food-baking start | stop | status | restart   # только этот preview, 127.0.0.1:8875
 bash templates/food-baking/bin/food-baking test                              # тесты шаблона
 bash templates/food-baking/bin/food-baking import --per-group 3              # факты с eda.rambler.ru (повтор не скачивает известное)
 bash templates/food-baking/bin/food-baking import --reextract                # пересчёт фактов о духовке без сети
