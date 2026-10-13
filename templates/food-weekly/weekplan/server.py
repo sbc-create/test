@@ -185,17 +185,25 @@ class App:
                 own = f"{base}pokupki/"
                 crumbs.append(("Список покупок", own))
                 sl = planner.shopping_list(days, plan["people"])
+                trips = [  # перенесено из B: две закупки по дням плана
+                    ("Закупка 1: понедельник — среда", planner.shopping_list(days[:3], plan["people"]), "1"),
+                    ("Закупка 2: четверг — воскресенье", planner.shopping_list(days[3:], plan["people"]), "2"),
+                ]
                 meta = Meta(
                     f"Список покупок: {plan['title']}",
-                    f"Все продукты плана «{plan['title']}» на {plan['people']} чел., "
-                    "сложенные по единицам измерения.",
+                    f"Продукты плана «{plan['title']}» на {plan['people']} чел. двумя закупками "
+                    "(пн–ср и чт–вс) и одним списком, по единицам измерения.",
                     None if swaps else self.abs(own),
                     not swaps,
                     crumbs,
                     [self.crumbs_ld(crumbs)],
                     "shopping",
                 )
-                return 200, self.render("shopping.html", meta, plan=plan, sl=sl, qs=qs, swaps=swaps, notes=notes), {}
+                return (
+                    200,
+                    self.render("shopping.html", meta, plan=plan, sl=sl, trips=trips, qs=qs, swaps=swaps, notes=notes),
+                    {},
+                )
             meta = Meta(
                 plan["title"],
                 plan["description"],

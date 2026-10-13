@@ -105,6 +105,28 @@ def run(shots: Path | None) -> dict:
         pg.locator(".buy input").first.check()
         pg.reload()
         S["bought_mark_persists"] = pg.locator(".buy input").first.is_checked()
+        # перенесено из B: две закупки — ссылка из недели с заменами и якорем, счётчик, отметки отдельно
+        pg.goto(BASE + PLAN + "?s=d1-breakfast-0:lenivye-vareniki")
+        with pg.expect_navigation():
+            pg.locator(".actions a", has_text="Закупка 1").click()
+        S["trip_link_keeps_swaps_and_anchor"] = ("s=" in pg.url or "zamena=" in pg.url) and pg.url.endswith(
+            "#zakupka-1"
+        )
+        boxes = pg.locator("#zakupka-1 .buy input")
+        total = boxes.count()
+        for k in range(total):
+            boxes.nth(k).uncheck()
+        boxes.nth(0).check()
+        boxes.nth(1).check()
+        cnt = pg.locator("#zakupka-1 .trip__count").inner_text()
+        S["trip_counter_counts_left"] = cnt.startswith(f"Осталось купить: {total - 2} ") and cnt.endswith(
+            f" из {total}"
+        )
+        pg.reload()
+        S["trip_marks_persist_separately"] = (
+            boxes.nth(0).is_checked() and not pg.locator("#zakupka-2 .buy input").first.is_checked()
+        )
+        S["trip_whole_list_present"] = pg.locator("#zakupka-all .buy li").count() >= total
         pg.goto(BASE + PLAN + "?s=d1-breakfast-0:plov-s-kuricej")
         S["invalid_swap_warning"] = pg.locator(".warn").count() >= 1
         pg.goto(BASE + "/")

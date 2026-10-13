@@ -3,7 +3,7 @@
 <header class="weekhead">
   <h1>{{ plan.title }}</h1>
   <p class="lead">{{ plan.description }} На {{ plan.people }} чел.</p>
-  <p class="actions"><a class="btn" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}">Список покупок{% if swaps %} (с заменами){% endif %}</a>{% if swaps %} <a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/">Сбросить замены ({{ swaps|length }})</a>{% endif %}</p>
+  <p class="actions"><a class="btn" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}">Список покупок{% if swaps %} (с заменами){% endif %}</a> <a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}#zakupka-1">Закупка 1: пн–ср</a> <a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/pokupki/{{ qs }}#zakupka-2">Закупка 2: чт–вс</a>{% if swaps %} <a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/">Сбросить замены ({{ swaps|length }})</a>{% endif %}</p>
   {% for n in notes %}<p class="warn">{{ n }}</p>{% endfor %}
 </header>
 <div class="week" role="table" aria-label="План на неделю">

@@ -1,13 +1,25 @@
 {% extends "base.html" %}
+{% macro buylist(sl, key) %}
+<ul class="buy" data-list="{{ plan.slug }}:{{ key }}">
+{% for it in sl['items'] %}<li><label><input type="checkbox" value="{{ it.name }}|{{ it.unit }}"> <span class="buy__name">{{ it.name }}</span></label> <b>{{ it.amount }}</b>{% if it.hint %} <small>({{ it.hint }})</small>{% endif %}<small class="buy__for">{{ it.recipes|join(', ') }}</small></li>{% endfor %}
+</ul>
+{% if sl.to_taste %}<p class="taste"><b>По вкусу и без количества:</b> {{ sl.to_taste|map(attribute='name')|join(', ') }}</p>{% endif %}
+{% endmacro %}
 {% block main %}
 <p class="kicker">{{ plan.title }} · {{ plan.people }} чел.{% if swaps %} · с заменами ({{ swaps|length }}){% endif %}</p>
 <h1>Список покупок</h1>
-<p class="lead">Сумма продуктов из всех рецептов недели, пересчитанная на {{ plan.people }} чел. Одинаковые продукты в разных единицах не складываются — пересчёта граммов в штуки сайт не делает.</p>
+<p class="lead">Сумма продуктов из рецептов недели, пересчитанная на {{ plan.people }} чел., — двумя закупками, чтобы к концу недели продукты были свежими. Одинаковые продукты в разных единицах не складываются — пересчёта граммов в штуки сайт не делает.</p>
 {% for nt in notes %}<p class="warn">{{ nt }}</p>{% endfor %}
 <p class="actions"><a class="btn btn--ghost" href="/menyu/{{ plan.slug }}/{{ qs }}">← К неделе</a> <button class="btn" type="button" data-print hidden>Печать</button></p>
-<ul class="buy" data-list="{{ plan.slug }}">
-{% for it in sl['items'] %}<li><label><input type="checkbox" value="{{ it.name }}|{{ it.unit }}"> <span class="buy__name">{{ it.name }}</span></label> <b>{{ it.amount }}</b>{% if it.hint %} <small>({{ it.hint }})</small>{% endif %}<small class="buy__for">{{ it.recipes|join(', ') }}</small></li>{% endfor %}
-</ul>
-{% if sl.to_taste %}<h2>По вкусу и без количества</h2><ul class="buy buy--taste">{% for it in sl.to_taste %}<li><span class="buy__name">{{ it.name }}</span><small class="buy__for">{{ it.recipes|join(', ') }}</small></li>{% endfor %}</ul>{% endif %}
-<p class="note">Количества — из рецептов-источников; рецепты ещё не проверены редакцией. Вода в список не включена.</p>
+<nav class="trips" aria-label="Закупки"><a href="#zakupka-1">Закупка 1: пн–ср</a><a href="#zakupka-2">Закупка 2: чт–вс</a><a href="#zakupka-all">Всё одним списком</a></nav>
+{% for title, tsl, key in trips %}
+<section class="trip" id="zakupka-{{ key }}" aria-labelledby="h-trip-{{ key }}">
+  <h2 id="h-trip-{{ key }}">{{ title }}</h2>
+  <p class="trip__count" data-count="{{ plan.slug }}:{{ key }}" aria-live="polite">{{ tsl['items']|length }} {{ 'позиция' if tsl['items']|length % 10 == 1 and tsl['items']|length % 100 != 11 else ('позиции' if tsl['items']|length % 10 in [2,3,4] and tsl['items']|length % 100 not in [12,13,14] else 'позиций') }}</p>
+  {{ buylist(tsl, key) }}
+</section>
+{% endfor %}
+<details class="all" id="zakupka-all"><summary>Всё одной закупкой ({{ sl['items']|length }})</summary>
+{{ buylist(sl, 'all') }}</details>
+<p class="note">Количества — из рецептов-источников; рецепты ещё не проверены редакцией. Вода в список не включена. Деление на закупки — по дням плана, а не по срокам хранения продуктов.</p>
 {% endblock %}

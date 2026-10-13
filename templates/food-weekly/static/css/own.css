@@ -103,3 +103,13 @@ main { max-width: 1200px; margin: 0 auto; padding: 8px 16px 40px; }
 .seedlist a { display: inline-block; min-height: 24px; } .seedlist span { display: block; color: var(--muted); }
 .taste { color: var(--ink-2); }
 @media print { .own, .seeds, .actions { display: none !important; } }
+
+/* ---- две закупки — перенесено из варианта B ---- */
+.trips { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+.trips a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border: 2px solid var(--accent); border-radius: 8px; color: var(--accent); font-weight: 700; text-decoration: none; }
+.trip { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 4px 16px 12px; margin: 14px 0; scroll-margin-top: 12px; }
+.trip h2 { border-bottom: 3px solid var(--l); padding-bottom: 6px; }
+.trip__count { font-weight: 700; color: var(--accent); }
+.all { margin: 14px 0; background: var(--card); border: 1px dashed var(--line); border-radius: 12px; padding: 10px 16px; scroll-margin-top: 12px; }
+.all summary { cursor: pointer; font-weight: 800; min-height: 44px; display: flex; align-items: center; }
+@media print { .trips, .all { display: none !important; } }
