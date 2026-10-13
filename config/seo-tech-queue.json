@@ -622,6 +622,16 @@
       "check": "число ссылок /catalog/?genre= на /catalog/ ≥ числу жанров в карте; цели 200, index",
       "status": "queued",
       "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+    },
+    {
+      "id": "B020",
+      "site": "animedia.icu, animedia.space, an1meg0.site, lordserials22.info, zonafilm.space, zonafilm.cc, zonafilm12.site, yummyani7.site, yummyani7.info",
+      "problem": "По http эти 9 доменов отдают страницу 200 без перехода на https (canonical на https есть — дубль смягчён, но http-версия обходится и отдаётся); у остальных 8 — 301/308 на https. HSTS по https отдаёт только yummyani.site (max-age=31536000), у прочих 16 — нет (замер 13.10 ~02:45Z, главная и страница тайтла).",
+      "norm": "один канонический протокол; http → https постоянным переходом",
+      "expected": "http → 301/308 на https у всех 17; HSTS — решение владельца (необратимо на срок max-age)",
+      "check": "curl -I http://<домен>/ → 301/308 Location https://…",
+      "status": "blocked",
+      "owner_action": "Владелец/Архитектор (nginx, root): серверный блок listen 80 у 9 доменов — return 308 https://$host$request_uri (образец — yummyani.org/.site); HSTS включать отдельным решением."
     }
   ]
 }
