@@ -1,6 +1,6 @@
 # Карта действий food-baking, вариант B (oven-bench)
 
-Проверено на commit `229f66b` в Chromium: `python3 -m bakebook.qa --shots docs/screenshots/229f66b --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `37fe950` в Chromium: `python3 -m bakebook.qa --shots docs/screenshots/37fe950 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -34,6 +34,15 @@
 | filter_empty | PASS | `True` |
 | search_case_spaces | PASS | `True` |
 | search_pechene | PASS | `True` |
+| batch_empty_submit_blocked | PASS | `True` |
+| batch_count_updates | PASS | `True` |
+| batch_oven_groups_shown | PASS | `True` |
+| batch_combined_list_rows | PASS | `20` |
+| batch_bought_mark_persists | PASS | `True` |
+| batch_header_link_keeps_choice | PASS | `True` |
+| batch_form_remembers_choice | PASS | `True` |
+| batch_unknown_recipe_400_alert | PASS | `True` |
+| batch_storage_namespace_own | PASS | `True` |
 | real_404 | PASS | `True` |
 | nojs_steps | PASS | `True` |
 | nojs_pitfalls | PASS | `True` |

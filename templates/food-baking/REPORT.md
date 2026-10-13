@@ -48,3 +48,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–256 м�
 
 Редактор: было NOT_RUN (секрет не создавался), теперь проверен на изолированной копии этого коммита; способ и
 ограничения — в `docs/verification-editor.json`. Решение «editor_rejected» записывалось только в копию БД.
+
+## Обновление на 37fe950 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из C: «Пеку несколько» (/pechem/: общий список продуктов по нескольким рецептам, группы по температуре духовки, отметки купленного, память выбора, пустой выбор блокируется, неизвестный рецепт — 400). Отметки «отвешено» в B уже были (marks_persist_after_reload, reset_clears_marks) — перенос не нужен. Редактор не менялся.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-baking test` | 0 | 30 passed in 0.77s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m bakebook.qa --shots docs/screenshots/37fe950 --out docs/verification-browser-qa.json` | 0 | 44 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8864 '/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom' '/pechem/?r=neizvestno' '/recepty/?sort=temp' '/poisk/?q=печенье' /nesushchestvuet/` | 0 | 31 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-baking build --commit HEAD` | 0 | собрано из 37fe950 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 284 мс. Карта действий — `docs/ACTION-MAP.md`.

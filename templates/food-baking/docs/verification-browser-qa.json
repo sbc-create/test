@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8864",
- "commit_head": "229f66beef3ddad537cb4ac964103843b8413dd7",
- "at": "2026-10-13T08:10:06Z",
+ "commit_head": "37fe95066c12c3c983e3487424c0aa62ffed233f",
+ "at": "2026-10-13T13:00:47Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -9,12 +9,14 @@
   "mobile:recipe_pct:no_hscroll": true,
   "mobile:dough:no_hscroll": true,
   "mobile:pitfalls:no_hscroll": true,
+  "mobile:batch:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:catalog:no_hscroll": true,
   "desktop:recipe:no_hscroll": true,
   "desktop:recipe_pct:no_hscroll": true,
   "desktop:dough:no_hscroll": true,
   "desktop:pitfalls:no_hscroll": true,
+  "desktop:batch:no_hscroll": true,
   "first_tab_skip": true,
   "temp_jump_anchor": true,
   "temp_row_opens_recipe_at_180": true,
@@ -32,6 +34,15 @@
   "filter_empty": true,
   "search_case_spaces": true,
   "search_pechene": true,
+  "batch_empty_submit_blocked": true,
+  "batch_count_updates": true,
+  "batch_oven_groups_shown": true,
+  "batch_combined_list_rows": 20,
+  "batch_bought_mark_persists": true,
+  "batch_header_link_keeps_choice": true,
+  "batch_form_remembers_choice": true,
+  "batch_unknown_recipe_400_alert": true,
+  "batch_storage_namespace_own": true,
   "real_404": true,
   "nojs_steps": true,
   "nojs_pitfalls": true,
@@ -40,6 +51,9 @@
  "axe": {
   "version": "4.13.0",
   "mobile:/": [],
+  "mobile:/pechem/": [],
+  "mobile:/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom": [],
+  "mobile:/pechem/?r=neizvestno": [],
   "mobile:/recepty/": [],
   "mobile:/recepty/?sort=temp": [],
   "mobile:/recept/yablochnoe-myagkoe-pechene/": [],
@@ -55,6 +69,9 @@
   "mobile:/poisk/?q=zzz": [],
   "mobile:/nesushchestvuet/": [],
   "desktop:/": [],
+  "desktop:/pechem/": [],
+  "desktop:/pechem/?r=limonnyj-keks&r=yablochnoe-myagkoe-pechene&r=tort-bez-vypechki-s-vinogradom": [],
+  "desktop:/pechem/?r=neizvestno": [],
   "desktop:/recepty/": [],
   "desktop:/recepty/?sort=temp": [],
   "desktop:/recept/yablochnoe-myagkoe-pechene/": [],
@@ -72,83 +89,97 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 288,
+   "lcp_ms": 224,
    "cls": 0,
-   "bytes": 28033
+   "bytes": 32504
   },
   "mobile:catalog": {
-   "lcp_ms": 100,
+   "lcp_ms": 84,
    "cls": 0,
-   "bytes": 11853
+   "bytes": 11915
   },
   "mobile:recipe": {
-   "lcp_ms": 128,
+   "lcp_ms": 284,
    "cls": 0,
-   "bytes": 17440
+   "bytes": 17502
   },
   "mobile:recipe_pct": {
-   "lcp_ms": 64,
+   "lcp_ms": 48,
    "cls": 0,
-   "bytes": 13250
+   "bytes": 13312
   },
   "mobile:dough": {
-   "lcp_ms": 80,
+   "lcp_ms": 64,
    "cls": 0,
-   "bytes": 5915
+   "bytes": 5977
   },
   "mobile:pitfalls": {
-   "lcp_ms": 40,
+   "lcp_ms": 52,
    "cls": 0,
-   "bytes": 5979
+   "bytes": 6041
+  },
+  "mobile:batch": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "bytes": 13174
   },
   "desktop:home": {
    "lcp_ms": 108,
    "cls": 0,
-   "bytes": 28033
+   "bytes": 32504
   },
   "desktop:catalog": {
    "lcp_ms": 84,
    "cls": 0,
-   "bytes": 11853
+   "bytes": 11915
   },
   "desktop:recipe": {
-   "lcp_ms": 100,
+   "lcp_ms": 128,
    "cls": 0,
-   "bytes": 17440
+   "bytes": 17502
   },
   "desktop:recipe_pct": {
-   "lcp_ms": 60,
+   "lcp_ms": 64,
    "cls": 0,
-   "bytes": 13250
+   "bytes": 13312
   },
   "desktop:dough": {
-   "lcp_ms": 60,
+   "lcp_ms": 68,
    "cls": 0,
-   "bytes": 5915
+   "bytes": 5977
   },
   "desktop:pitfalls": {
-   "lcp_ms": 60,
+   "lcp_ms": 56,
    "cls": 0,
-   "bytes": 5979
+   "bytes": 6041
+  },
+  "desktop:batch": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "bytes": 13174
   }
  },
  "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 400 (Bad Request)",
   "mobile: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "desktop: Failed to load resource: the server responded with a status of 400 (Bad Request)",
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found)"
  ],
  "screenshots": [
-  "docs/screenshots/229f66b/home-mobile.png",
-  "docs/screenshots/229f66b/catalog-mobile.png",
-  "docs/screenshots/229f66b/recipe-mobile.png",
-  "docs/screenshots/229f66b/recipe_pct-mobile.png",
-  "docs/screenshots/229f66b/dough-mobile.png",
-  "docs/screenshots/229f66b/pitfalls-mobile.png",
-  "docs/screenshots/229f66b/home-desktop.png",
-  "docs/screenshots/229f66b/catalog-desktop.png",
-  "docs/screenshots/229f66b/recipe-desktop.png",
-  "docs/screenshots/229f66b/recipe_pct-desktop.png",
-  "docs/screenshots/229f66b/dough-desktop.png",
-  "docs/screenshots/229f66b/pitfalls-desktop.png"
+  "docs/screenshots/37fe950/home-mobile.png",
+  "docs/screenshots/37fe950/catalog-mobile.png",
+  "docs/screenshots/37fe950/recipe-mobile.png",
+  "docs/screenshots/37fe950/recipe_pct-mobile.png",
+  "docs/screenshots/37fe950/dough-mobile.png",
+  "docs/screenshots/37fe950/pitfalls-mobile.png",
+  "docs/screenshots/37fe950/batch-mobile.png",
+  "docs/screenshots/37fe950/home-desktop.png",
+  "docs/screenshots/37fe950/catalog-desktop.png",
+  "docs/screenshots/37fe950/recipe-desktop.png",
+  "docs/screenshots/37fe950/recipe_pct-desktop.png",
+  "docs/screenshots/37fe950/dough-desktop.png",
+  "docs/screenshots/37fe950/pitfalls-desktop.png",
+  "docs/screenshots/37fe950/batch-desktop.png"
  ],
  "actions": {
   "mobile:home:no_hscroll": true,
@@ -157,12 +188,14 @@
   "mobile:recipe_pct:no_hscroll": true,
   "mobile:dough:no_hscroll": true,
   "mobile:pitfalls:no_hscroll": true,
+  "mobile:batch:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:catalog:no_hscroll": true,
   "desktop:recipe:no_hscroll": true,
   "desktop:recipe_pct:no_hscroll": true,
   "desktop:dough:no_hscroll": true,
   "desktop:pitfalls:no_hscroll": true,
+  "desktop:batch:no_hscroll": true,
   "first_tab_skip": true,
   "temp_jump_anchor": true,
   "temp_row_opens_recipe_at_180": true,
@@ -180,6 +213,15 @@
   "filter_empty": true,
   "search_case_spaces": true,
   "search_pechene": true,
+  "batch_empty_submit_blocked": true,
+  "batch_count_updates": true,
+  "batch_oven_groups_shown": true,
+  "batch_combined_list_rows": 20,
+  "batch_bought_mark_persists": true,
+  "batch_header_link_keeps_choice": true,
+  "batch_form_remembers_choice": true,
+  "batch_unknown_recipe_400_alert": true,
+  "batch_storage_namespace_own": true,
   "real_404": true,
   "nojs_steps": true,
   "nojs_pitfalls": true,
