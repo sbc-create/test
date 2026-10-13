@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 44–152 м�
 | наполнение | тот же набор, что у A: Celeste — 11 материалов глав по celeste.ink, 2 видео (проверены по oEmbed); тексты — manual_standin, не Qwen |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 8664df8 (13.10.2026)
+
+Meta description глав ≤160 символов: целые предложения, иначе по запятой или тире (было до 204 символов, обрезалось в выдаче). Тест проверяет все URL sitemap (20–160 символов).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-story test` | 0 | 16 passed in 0.51s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m saga.qa --shots docs/screenshots/8664df8 --out docs/verification-browser-qa.json` | 0 | 31 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8870 '/igra/celeste/gde-ya/?q=mess' '/igra/celeste/gde-ya/?q=zzzz' /nesushchestvuet/` | 0 | 29 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-story build --commit HEAD` | 0 | собрано из 8664df8 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 128 мс. Карта действий — `docs/ACTION-MAP.md`.
