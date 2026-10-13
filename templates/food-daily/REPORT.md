@@ -76,3 +76,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–212 м�
 | `bash bin/food-daily build --commit HEAD` | 0 | собрано из 043e2f5 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 7e7fb52 (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 129 passed in 6.76s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/7e7fb52 --out docs/verification-browser-qa.json` | 0 | 51 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8876 '/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8' '/iz-holodilnika/?est=kurica&est=ris' '/iz-holodilnika/?est=kvantovyj' '/recepty/?sort=vremya&vid=tablica' '/poisk/?q=творог' /nesushchestvuet/` | 0 | 59 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из 7e7fb52 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 224 мс. Карта действий — `docs/ACTION-MAP.md`.
