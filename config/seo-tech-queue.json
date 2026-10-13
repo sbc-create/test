@@ -53,11 +53,11 @@
       "problem": "На странице тайтла нет видимых хлебных крошек; после T002 у неё нет и BreadcrumbList.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "Видимые крошки «<Сайт> / Каталог / <Название>» из реальной иерархии в <nav aria-label=\"Хлебные крошки\">; разметку построит общий слой.",
-      "check": "checks/title_breadcrumbs.py",
+      "check": "checks/title_breadcrumbs.py (настоящая витрина на синтетическом снимке)",
       "verify_live": "<nav aria-label=\"Хлебные крошки\"> на /title/<slug>/ и совпадающий BreadcrumbList",
-      "status": "verified",
+      "status": "session",
       "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
-      "evidence": "Подготовлено штатным механизмом очереди (seo-tech-next, ручной запуск сессии 20261012T1200Z-session): ветка claude/seo-tech-t003-20261012t1200z-session в var/site-repos/an1mego-site, коммит aebcaaea03f4, НЕ отправлена. seo-tech-verify: VERIFIED — все 9 шагов (check_fails_on_base, check_passes_on_branch, run_all_passes, not_pushed). Выпуск — после просмотра человеком (видимое изменение интерфейса). Принято Архитектором: seo-tech-mechanism-audit.py 24/24 по следам живого дерева; gh api — ветки нет на удалённом репозитории, коммит aebcaaea03f4 только локально. 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть."
+      "evidence": "Подготовлено штатным механизмом очереди (seo-tech-next, ручной запуск сессии 20261012T1200Z-session): ветка claude/seo-tech-t003-20261012t1200z-session в var/site-repos/an1mego-site, коммит aebcaaea03f4, НЕ отправлена. seo-tech-verify: VERIFIED — все 9 шагов (check_fails_on_base, check_passes_on_branch, run_all_passes, not_pushed). Выпуск — после просмотра человеком (видимое изменение интерфейса). Принято Архитектором: seo-tech-mechanism-audit.py 24/24 по следам живого дерева; gh api — ветки нет на удалённом репозитории, коммит aebcaaea03f4 только локально. 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть. 13.10 ~14:45Z: подготовлено на ветке claude/review-anime-t003 (an1mego 71a0e50, без пуша) на нынешнем коде; проверка переписана на поднятие витрины (редакция aebcaaea на заглушках ломалась на нынешнем коде); прежний код rc=1, ветка rc=0; полный run.sh пройден без пропусков. Выпуск — после просмотра человеком."
     },
     {
       "id": "T004",
@@ -70,10 +70,10 @@
       "problem": "То же, что T003.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "То же, что T003.",
-      "check": "checks/title_breadcrumbs.py",
-      "status": "queued",
+      "check": "checks/title_breadcrumbs.py (настоящая витрина на синтетическом снимке)",
+      "status": "session",
       "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
-      "evidence": " 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть."
+      "evidence": " 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть. 13.10 ~14:45Z: подготовлено на ветке claude/review-anime-t004 (animeg0 14f87d3, без пуша) на нынешнем коде; проверка переписана на поднятие витрины (редакция aebcaaea на заглушках ломалась на нынешнем коде); прежний код rc=1, ветка rc=0; полный run.sh пройден без пропусков. Выпуск — после просмотра человеком."
     },
     {
       "id": "T005",
@@ -86,10 +86,10 @@
       "problem": "То же, что T003.",
       "norm": "SEO_KNOWLEDGE_PACK §4 п.4",
       "expected": "То же, что T003.",
-      "check": "checks/title_breadcrumbs.py",
-      "status": "queued",
+      "check": "checks/title_breadcrumbs.py (настоящая витрина на синтетическом снимке)",
+      "status": "session",
       "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
-      "evidence": " 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть."
+      "evidence": " 13.10 замер Архитектора по сети: у трёх AnimeGo нет ни BreadcrumbList, ни видимых крошек (6 карточек из 6); у Lords/Zona/Animedia/Yummy узел есть. 13.10 ~14:45Z: подготовлено на ветке claude/review-anime-t005 (an1meg0 6010ce6, без пуша) на нынешнем коде; проверка переписана на поднятие витрины (редакция aebcaaea на заглушках ломалась на нынешнем коде); прежний код rc=1, ветка rc=0; полный run.sh пройден без пропусков. Выпуск — после просмотра человеком."
     },
     {
       "id": "B001",
@@ -625,7 +625,7 @@
       "expected": "профиль рендера холодной страницы тайтла на стенде; причина названа; цель — TTFB < 0,5 с",
       "check": "повторный замер TTFB при обычной нагрузке; профиль cProfile стенда",
       "status": "verified",
-      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно. 13.10 ~12:30Z: Lords (4) — полный checks/run.sh на урезанном снимке, similar-features PASS. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б."
+      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно. 13.10 ~12:30Z: Lords (4) — полный checks/run.sh на урезанном снимке, similar-features PASS. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б. 13.10 ~13:25Z, живой замер после выпуска Lords ×4 (8 холодных тайтлов на домен, разброс по каталогу): lordfilm47.space медиана 0,37 с (макс 0,95), lordserial33.biz 0,22 (0,74), 1lordserials1.online 0,43 (1,11), lordserials22.info 0,41 (1,35) — цель < 0,5 с по медиане достигнута на Lords; хвост до 1,35 с остаётся. Zona — после партии Б."
     },
     {
       "id": "T031",
@@ -709,8 +709,8 @@
       "problem": "Латинский код жанра даёт второй индексируемый раздел: /genre/drama/ (canonical → /catalog/?genre=drama) и /catalog/?genre=драма — один и тот же раздел (24 из 24 карточек, 65 страниц), каждый canonical на себя, оба index. И у латинского варианта title/H1/description несут код: «Аниме в жанре «drama»». Карточка ссылается на русское имя (?genre=драма), ld+json — имена (замер Архитектора 13.10, три AnimeGo).",
       "expected": "(а) один канонический адрес раздела жанра (латинский код → canonical на имя); (б) в title/H1/description — имя жанра, а не код",
       "check": "canonical /catalog/?genre=drama → /catalog/?genre=драма; H1 «Аниме в жанре «драма»»",
-      "status": "released",
-      "evidence": "Сессия 13.10 ~03:30Z: в снимке AnimeGo genre_codes нет ни у одного из 8 589 тайтлов — карточки всегда ссылаются на ?genre=<имя>; панель фильтров и /genre/<код>/ — на код. Решение по expected: ?genre=<код> → имя из индекса (genre_names), H1/title/description — имя, canonical — ?genre=<имя> побайтно как у карточки. ВидАнимеГо.список, 3 ячейки; checks/genre_landing.py: код даёт тот же H1 и canonical, что имя, и страница 2 — canonical имени с page=2. Отрицательная проба (код из HEAD) — rc=1: H1 «boevik», canonical ?genre=boevik. Полные наборы идут. Локальные коммиты (B019): an1mego f3baaa6, animeg0 9c16276, an1meg0 abc90c7; полные run.sh — rc=0 на всех трёх (манифест перештампован tools/stamp_manifest.py: manifest_and_entrypoint ловил artifact_sha256). 13.10 ~11:58Z: AnimeGo ×3 выпущены (activated/live_verified по главной); живую сверку canonical алиаса — следующим замером."
+      "status": "live_verified",
+      "evidence": "Сессия 13.10 ~03:30Z: в снимке AnimeGo genre_codes нет ни у одного из 8 589 тайтлов — карточки всегда ссылаются на ?genre=<имя>; панель фильтров и /genre/<код>/ — на код. Решение по expected: ?genre=<код> → имя из индекса (genre_names), H1/title/description — имя, canonical — ?genre=<имя> побайтно как у карточки. ВидАнимеГо.список, 3 ячейки; checks/genre_landing.py: код даёт тот же H1 и canonical, что имя, и страница 2 — canonical имени с page=2. Отрицательная проба (код из HEAD) — rc=1: H1 «boevik», canonical ?genre=boevik. Полные наборы идут. Локальные коммиты (B019): an1mego f3baaa6, animeg0 9c16276, an1meg0 abc90c7; полные run.sh — rc=0 на всех трёх (манифест перештампован tools/stamp_manifest.py: manifest_and_entrypoint ловил artifact_sha256). 13.10 ~11:58Z: AnimeGo ×3 выпущены (activated/live_verified по главной); живую сверку canonical алиаса — следующим замером. 13.10 ~14:00Z, живые an1mego/animeg0/an1meg0: /genre/drama/ → 308 /catalog/?genre=drama → 200, canonical /catalog/?genre=драма, H1 «Аниме в жанре «драма»»."
     },
     {
       "id": "T036",
@@ -797,8 +797,8 @@
       "norm": "sitemap: все индексируемые канонические страницы; задание п.3",
       "expected": "в карте — по адресу на имя жанра с записями, адрес канонический (T035: ?genre=<имя>), без служебных «аниме», «западный контент», «азиатский контент»",
       "check": "checks/sitemap_genres.py (образец, в CI тоже): 4 жанра образца, служебные исключены, каждый адрес карты — canonical на себя и H1 раздела; реальный снимок an1mego — 55 разделов, все 200 и self-canonical",
-      "status": "released",
-      "evidence": "Сессия 13.10 ~04:00Z: _РазделыКарты в 3 AnimeGo (литерал РАЗДЕЛЫ_КАРТЫ не тронут — его разбирают проверки); на прежнем коде — rc=1 (жанров 0). Полные наборы идут. Коммиты (локально, B019): an1mego 4ffee4b, animeg0 c051c0f, an1meg0 8a1f974; полные run.sh — rc=0, пропусков нет. 13.10 ~11:58Z: AnimeGo ×3 выпущены; карта перестраивается прогоном обновления ячейки — сверка разделов жанров в sitemap после него."
+      "status": "live_verified",
+      "evidence": "Сессия 13.10 ~04:00Z: _РазделыКарты в 3 AnimeGo (литерал РАЗДЕЛЫ_КАРТЫ не тронут — его разбирают проверки); на прежнем коде — rc=1 (жанров 0). Полные наборы идут. Коммиты (локально, B019): an1mego 4ffee4b, animeg0 c051c0f, an1meg0 8a1f974; полные run.sh — rc=0, пропусков нет. 13.10 ~11:58Z: AnimeGo ×3 выпущены; карта перестраивается прогоном обновления ячейки — сверка разделов жанров в sitemap после него. 13.10 ~14:00Z, живые sitemap.xml трёх AnimeGo: по 55 адресов /catalog/?genre=<имя>, служебных («западный», «азиатский», «аниме») нет."
     },
     {
       "id": "T042",
@@ -964,7 +964,8 @@
       "norm": "SEO_KNOWLEDGE_PACK: description — пересказ страницы; факты только из источника",
       "expected": "описание серии с фактами, которые страница показывает (число серий сезона, год и жанры произведения — если видимы на странице серии)",
       "check": "стенд: факты description есть в видимом тексте страницы серии",
-      "status": "session"
+      "status": "session",
+      "evidence": "13.10 ~13:40Z, живая серия lordserial33/lordfilm47 /title/lcher-prise/season-1/episode-1/: видимы только «Серия 1 из 52» и «1 сезон 13 серий» — года, страны и жанров на странице серии нет, значит в description их ставить нельзя. Остаётся «из 13» сезона; выигрыш мал, задача после T055 (серии без дорожки — noindex)."
     },
     {
       "id": "T052",
@@ -1013,6 +1014,22 @@
       "status": "session",
       "review": "Видимое изменение подвала (одна ссылка меняется): выпуск после просмотра человеком, вместе с T049.",
       "evidence": "13.10 ~13:15Z, живые главные lordfilm47.space, 1lordserials1.online, lordserials22.info: первая ссылка колонки «Жанры» подвала — /genre/zapadnyykontent/."
+    },
+    {
+      "id": "T055",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordserial33.biz/title/lcher-prise/season-2/episode-1/"
+      ],
+      "problem": "Серия без дорожки (data-off) и сезон «доступно 0» — 200, «Эта серия пока недоступна», index, follow, canonical на себя; карточка ссылается на них. По снимкам 13.10: 42 912 таких серий у lords-01/02/03, 55 033 у lords-05 (из ~594 тыс.). В sitemap серий нет — обход по ссылкам.",
+      "norm": "задание п.3 — дубликаты и ошибки страниц; SEO_KNOWLEDGE_PACK — тонкие страницы не просятся в индекс",
+      "expected": "noindex, follow (мета и X-Robots-Tag) на серии без дорожки и сезоне без доступных серий; серия с дорожкой — без изменений",
+      "check": "checks/unavailable_episode_noindex.py (урезанный стенд)",
+      "verify_live": "X-Robots-Tag и мета на /title/lcher-prise/season-2/episode-1/ и /season-1/episode-1/ четырёх доменов",
+      "status": "live_verified",
+      "evidence": "Коммиты lordfilm47 575a757, lordserial33 4d63932, 1lordserials1 55fc479 (вкл. overlay/apply.py — обёртка _отдать роняла ответ на новом аргументе, проверка поймала), lordserials22-info 6bf64da; прежний код — rc=1; полный run.sh на урезанном снимке PASS на четырёх. 13.10 ~14:30Z: CI success (38408504651, 38408509625, 38408512812, 38408517271); исполнитель — lords-01 575a757be8f3, lords-02 4d639327714c, lords-03 55fc47999b9e, lords-05 6bf64dad408b: ok/live_verified. Живые четыре домена: /title/lcher-prise/season-2/episode-1/ и /season-2/ — noindex, follow (мета и X-Robots-Tag), /season-1/episode-1/ — index, follow; кука сообщества 1lordserials1 (l3_v) на месте."
     }
   ]
 }
