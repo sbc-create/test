@@ -1,0 +1,146 @@
+{
+ "commit_head": "c656d3e8dd25975db4d0423ac115a521f73fb03d",
+ "at": "2026-10-13T00:05:46Z",
+ "actions": {
+  "keyboard_first_tab_is_skip": true,
+  "skip_moves_focus_to_main": true,
+  "nav_opens_section": true,
+  "whole_card_opens_entry": true,
+  "abilities_shown": true,
+  "patch_badge_opens_version": true,
+  "build_progression_rows": 12,
+  "build_no_hscroll_on_phone": true,
+  "quest_stages_persist": true,
+  "quest_stages_reset": true,
+  "print_button_calls_print": true,
+  "print_hides_navigation": true,
+  "ref_jumps_to_source": true,
+  "search_keyboard_results": 1,
+  "search_clear": true,
+  "search_no_results_message": true,
+  "404_has_search_and_home": true,
+  "history_back_returns": true,
+  "type_filter_narrows": true,
+  "type_filter_reset": true,
+  "letter_jump": true,
+  "compare_opens_table": true,
+  "compare_no_hscroll_on_phone": true,
+  "compare_row_opens_item": true,
+  "unknown_type_400_alert": true,
+  "nojs_stages_listed": 8,
+  "nojs_print_hidden": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/baldurs-gate-3/sravnenie-predmetov/": [],
+  "mobile:/": [],
+  "mobile:/baldurs-gate-3/": [],
+  "mobile:/baldurs-gate-3/personazhi/": [],
+  "mobile:/baldurs-gate-3/personazhi/gale/": [],
+  "mobile:/baldurs-gate-3/bildy/klass-voin/": [],
+  "mobile:/baldurs-gate-3/kvesty/kvest-spasti-halsina/": [],
+  "mobile:/baldurs-gate-3/bildy/": [],
+  "mobile:/baldurs-gate-3/bildy/klass-volshebnik/": [],
+  "mobile:/baldurs-gate-3/mehaniki/mehanika-preimushchestvo/": [],
+  "mobile:/baldurs-gate-3/versiya/versiya-patch-8/": [],
+  "mobile:/kak-my-rabotaem/": [],
+  "mobile:/istochniki/": [],
+  "mobile:/poisk/?q=Gale": [],
+  "mobile:/poisk/?q=квантовый": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/baldurs-gate-3/sravnenie-predmetov/": [],
+  "desktop:/": [],
+  "desktop:/baldurs-gate-3/": [],
+  "desktop:/baldurs-gate-3/personazhi/": [],
+  "desktop:/baldurs-gate-3/personazhi/gale/": [],
+  "desktop:/baldurs-gate-3/bildy/klass-voin/": [],
+  "desktop:/baldurs-gate-3/kvesty/kvest-spasti-halsina/": [],
+  "desktop:/baldurs-gate-3/bildy/": [],
+  "desktop:/baldurs-gate-3/bildy/klass-volshebnik/": [],
+  "desktop:/baldurs-gate-3/mehaniki/mehanika-preimushchestvo/": [],
+  "desktop:/baldurs-gate-3/versiya/versiya-patch-8/": [],
+  "desktop:/kak-my-rabotaem/": [],
+  "desktop:/istochniki/": [],
+  "desktop:/poisk/?q=Gale": [],
+  "desktop:/poisk/?q=квантовый": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:compare": {
+   "lcp_ms": 180,
+   "cls": 0
+  },
+  "mobile:home": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "mobile:game": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:section": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:character": {
+   "lcp_ms": 340,
+   "cls": 0
+  },
+  "mobile:build": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:quest": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:compare": {
+   "lcp_ms": 116,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:game": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:section": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:character": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:build": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:quest": {
+   "lcp_ms": 64,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8871/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8871/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/c656d3e/compare-mobile.png",
+  "docs/screenshots/c656d3e/home-mobile.png",
+  "docs/screenshots/c656d3e/game-mobile.png",
+  "docs/screenshots/c656d3e/section-mobile.png",
+  "docs/screenshots/c656d3e/character-mobile.png",
+  "docs/screenshots/c656d3e/build-mobile.png",
+  "docs/screenshots/c656d3e/quest-mobile.png",
+  "docs/screenshots/c656d3e/compare-desktop.png",
+  "docs/screenshots/c656d3e/home-desktop.png",
+  "docs/screenshots/c656d3e/game-desktop.png",
+  "docs/screenshots/c656d3e/section-desktop.png",
+  "docs/screenshots/c656d3e/character-desktop.png",
+  "docs/screenshots/c656d3e/build-desktop.png",
+  "docs/screenshots/c656d3e/quest-desktop.png"
+ ]
+}
