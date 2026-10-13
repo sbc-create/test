@@ -12,11 +12,12 @@ import argparse
 import difflib
 import json
 import re
+import sqlite3
 from pathlib import Path
 
-from .pipeline import open_store
+from .pipeline import DB_PATH, open_store
 from .quality import publish_blockers
-from .store import SITE_ID, Store, now
+from .store import SITE_ID, Store, VersionConflict, now
 
 ROOT = Path(__file__).resolve().parents[1]
 SNAPSHOT = ROOT / "data" / "content-snapshot.json"
@@ -53,6 +54,93 @@ def diff(st: Store, content_id: str, a: int, b: int) -> str:
     ta = json.dumps(va["draft"], ensure_ascii=False, indent=1).splitlines()
     tb = json.dumps(vb["draft"], ensure_ascii=False, indent=1).splitlines()
     return "\n".join(difflib.unified_diff(ta, tb, f"v{a}", f"v{b}", lineterm=""))
+
+
+NUM = re.compile(r"\d+(?:[.,]\d+)?")
+REVISABLE = {"title", "seo_title", "seo_description", "intro", "steps", "tips", "substitutions", "editor_notes"}
+
+
+def _num(n: str) -> str:
+    return str(float(n.replace(",", "."))).rstrip("0").rstrip(".")
+
+
+TEXT_KEYS = {"title", "seo_title", "seo_description", "intro", "text", "readiness_cue", "note", "to"}
+
+
+def _strings(value, key: str | None = None) -> list[str]:
+    """Только читаемый текст черновика: служебные поля (индексы, ссылки на шаги) числами текста не считаются."""
+    if isinstance(value, dict):
+        return [s for k, v in value.items() for s in _strings(v, k)]
+    if isinstance(value, list):
+        return [s for v in value for s in _strings(v, key)]
+    return [value] if isinstance(value, str) and key in TEXT_KEYS else []
+
+
+def clone_db(src: Path, dst: Path = DB_PATH) -> dict:
+    """Изолированная редакционная база варианта: консистентная копия (SQLite backup) базы, из которой собран
+    снимок этого варианта. Отказ, если база уже есть или её текущие версии не совпадают со снимком."""
+    if dst.exists():
+        raise FileExistsError(f"{dst} уже есть — клонирование не перезаписывает базу")
+    if not src.exists():
+        raise FileNotFoundError(src)
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    with sqlite3.connect(f"file:{src}?mode=ro", uri=True) as a, sqlite3.connect(dst) as b:
+        a.backup(b)
+    st = Store(dst)
+    snap = json.loads(SNAPSHOT.read_text())
+    bad = []
+    for it in snap["items"]:
+        row = st.current(it["content_id"])
+        if row is None or row["current_version"] != it["version"]:
+            bad.append(it["slug"])
+            continue
+        draft = {
+            k: v
+            for k, v in json.loads(st.version(it["content_id"])["payload_json"])["draft"].items()
+            if k != "editor_notes"
+        }
+        if draft != it["draft"] or row["publish_status"] not in ("preview", "published"):
+            bad.append(it["slug"])
+    if bad:
+        raise ValueError(f"база не совпадает со снимком варианта: {bad}")
+    st.audit("food-daily-editorial-cli", "db_cloned", source=str(src), items=len(snap["items"]))
+    return {"db": str(dst), "items_checked": len(snap["items"])}
+
+
+def revise(st: Store, content_id: str, changes: dict, *, base_version: int, actor: str, reason: str) -> dict:
+    """Редакционная правка: новая версия с заменёнными полями черновика (через add_version — конфликт базы,
+    история, аудит). Числа в новом тексте должны быть в полной записи источника; ворота публикации те же."""
+    unknown = set(changes) - REVISABLE
+    if unknown:
+        raise ValueError(f"эти поля правкой не меняются: {sorted(unknown)}")
+    cur = json.loads(st.version(content_id)["payload_json"])
+    v = st.version(content_id)
+    sources = json.loads(v["source_ids_json"])
+    facts = " ".join(
+        r[0]
+        for r in st.db.execute(
+            f"SELECT facts_json FROM records WHERE record_id IN ({','.join('?' * len(sources))})", sources
+        )
+    )
+    allowed = {_num(n) for n in NUM.findall(facts)}
+    new_text = " ".join(_strings({k: changes[k] for k in changes if k != "editor_notes"}))
+    bad = sorted({n for n in NUM.findall(new_text) if _num(n) not in allowed})
+    if bad:
+        raise ValueError(f"числа без опоры в записи источника: {bad}")
+    payload = {**cur, "draft": {**cur["draft"], **changes}}
+    blockers = publish_blockers(payload)
+    if blockers:
+        raise ValueError(f"правка не проходит ворота публикации: {blockers}")
+    new = st.add_version(
+        content_id,
+        payload,
+        base_version=base_version,
+        source_ids=sources,
+        producer={"mode": "editorial_revision", "by": actor, "note": "правка в сессии фабрики; не проверка человеком"},
+        actor=actor,
+        reason=reason,
+    )
+    return {"content_id": content_id, "version": new, "base": base_version}
 
 
 def snapshot(st: Store) -> dict:
@@ -116,7 +204,22 @@ def main(argv=None) -> int:
     d.add_argument("b", type=int)
     sub.add_parser("snapshot")
     sub.add_parser("status")
+    c = sub.add_parser("clone-db", help="изолированная база варианта из базы, по которой собран его снимок")
+    c.add_argument("--from", dest="src", required=True)
+    rv2 = sub.add_parser("revise", help="правка черновика новой версией")
+    rv2.add_argument("content_id")
+    rv2.add_argument("--base", type=int, required=True)
+    rv2.add_argument("--draft-file", required=True, help="JSON: поля черновика, которые заменяются целиком")
+    rv2.add_argument("--reason", required=True)
+    rv2.add_argument("--actor", default="food-daily-editorial-cli")
     a = ap.parse_args(argv)
+    if a.cmd == "clone-db":
+        try:
+            print(json.dumps(clone_db(Path(a.src)), ensure_ascii=False))
+        except (FileExistsError, FileNotFoundError, ValueError) as e:
+            print(json.dumps({"error": str(e)}, ensure_ascii=False))
+            return 2
+        return 0
     st = open_store()
     actor = "food-daily-editorial-cli"
     if a.cmd == "publish-preview":
@@ -134,6 +237,20 @@ def main(argv=None) -> int:
         review(st, a.content_id, a.status, reviewer=a.reviewer, version=a.version, note=a.note)
     elif a.cmd == "diff":
         print(diff(st, a.content_id, a.a, a.b))
+    elif a.cmd == "revise":
+        try:
+            out = revise(
+                st,
+                a.content_id,
+                json.loads(Path(a.draft_file).read_text()),
+                base_version=a.base,
+                actor=a.actor,
+                reason=a.reason,
+            )
+        except (ValueError, VersionConflict) as e:
+            print(json.dumps({"error": str(e)}, ensure_ascii=False))
+            return 2
+        print(json.dumps(out, ensure_ascii=False))
     elif a.cmd == "snapshot":
         print(json.dumps(snapshot(st)))
     else:

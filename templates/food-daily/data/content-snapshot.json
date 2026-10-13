@@ -1,7 +1,7 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-11T22:49:24Z",
+ "generated_at": "2026-10-13T14:55:55Z",
  "items": [
   {
    "content_id": "fd-00d47e5b9672",
@@ -2543,12 +2543,12 @@
   {
    "content_id": "fd-bfb12300a18a",
    "slug": "chechevichnyj-sup-s-ovoshchami",
-   "version": 1,
+   "version": 2,
    "published_at": "2026-10-11T22:00:09Z",
-   "updated_at": "2026-10-11T21:59:00Z",
+   "updated_at": "2026-10-13T14:55:31Z",
    "review_status": "ai_draft",
    "cooking_status": "not_cooked",
-   "producer_mode": "manual_standin",
+   "producer_mode": "editorial_revision",
    "draft": {
     "title": "Чечевичный суп с овощами",
     "slug": "chechevichnyj-sup-s-ovoshchami",
@@ -2654,8 +2654,12 @@
     ],
     "tips": [
      {
-      "text": "Красная чечевица разваривается быстрее зелёной; время в рецепте рассчитано на быстроразваривающуюся.",
-      "verified": false
+      "text": "Вид чечевицы в источнике не указан. По шагам источника её варят 5–7 минут, затем вместе с картофелем ещё 7–10 минут — до готовности картофеля и чечевицы.",
+      "verified": false,
+      "source_steps": [
+       5,
+       7
+      ]
      }
     ],
     "substitutions": [
