@@ -120,10 +120,14 @@ sudo cp -a /usr/local/lib/site-factory-cell.prev /usr/local/lib/site-factory-cel
 
 ```bash
 sudo systemctl stop site-cell-executor.timer
-sudo rm -rf /usr/local/lib/site-factory-cell
+sudo mv /usr/local/lib/site-factory-cell /usr/local/lib/site-factory-cell.откат-$(date -u +%Y%m%dT%H%M%SZ)
 sudo mv /usr/local/lib/site-factory-cell.prev /usr/local/lib/site-factory-cell
 sudo systemctl start site-cell-executor.timer
 ```
+
+Новая копия здесь **отодвигается, а не удаляется**: откат делают, когда причина
+ещё не понята, и копия, из-за которой он понадобился, — это главная улика.
+`rm -rf` на этом шаге ничего не ускоряет и лишает разбора.
 
 ---
 
