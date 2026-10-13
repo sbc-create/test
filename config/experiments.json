@@ -19,6 +19,16 @@
       "verdict": "rollback",
       "verdict_reason": "ухудшение -8.4% хуже порога -3%",
       "evidence": "docs/seo-operator/demo-canary-rollback.md"
+    },
+    {
+      "experiment_id": "exp-animego-sitemap-fresh-episodes",
+      "site_id": "animego-03",
+      "hypothesis": "Свежие серии с дорожкой в карте сайта ускоряют обнаружение и индексацию страниц серий — главного типа входов из поиска (77 % у yummyani.site, аудит 13.10)",
+      "primary_metric": "страницы серий в событиях «появилась в поиске» Вебмастера и поисковые входы на страницы серий (Метрика) за 7 и 28 дней после переобхода",
+      "applicability": "animeg0.site: ~206 адресов /title/<slug>/season-N/episode-M/ из журнала свежих серий; контроль — an1mego.site и an1meg0.site (тот же код без серий в карте) и Lords (серий в карте нет)",
+      "scope_page_share": 0.024,
+      "phase": "canary",
+      "evidence": "docs/seo-operator/NIGHT_20261014.md §11; checks/sitemap_episodes.py; измерение заблокировано до B022/B023 (Метрика, Вебмастер)"
     }
   ]
 }
