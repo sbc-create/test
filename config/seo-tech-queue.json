@@ -1193,6 +1193,49 @@
       "status": "blocked",
       "owner_action": "Архитектор: подъём пина seo_layer у отставших витрин отдельной задачей выпуска с воротами D195; сессия файл не правит (закрыт от записи).",
       "dependencies": "Архитектор"
+    },
+    {
+      "id": "T066",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/collection/top_rated/"
+      ],
+      "problem": "Страницы подборок /collection/<ключ>/ — 200, index, canonical на себя, а в карте четырёх Lords ни одной (живые sitemap 13.10 ~16:30Z).",
+      "norm": "задание п.3 — sitemap; REQ-SEO-CRAWL",
+      "expected": "в карте — ровно подборки, показанные хабом /collections/",
+      "check": "checks/sitemap_years.py (урезанный стенд: подборки в карте = ссылкам хаба, 200/index/self)",
+      "status": "live_verified",
+      "dependencies": "нет",
+      "evidence": "lordfilm47 1112880, lordserial33 2f2c46f, 1lordserials1 892343f, lordserials22-info bb12315; стенд 5/5, 8/8, 12/12, 4/4; прежний код rc=1. 13.10 ~18:10Z: CI success (38431971299 и соседи); исполнитель lords-01 111288066757, lords-02 2f2c46f0199a, lords-03 892343fefae0, lords-05 bb12315ebd8d — ok/live_verified. Живые карты: подборки = ссылкам хаба (5/5, 8/8, 12/12, 4/4)."
+    },
+    {
+      "id": "T067",
+      "site": "animedia.icu, animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "problem": "Страницы подборок /collection/<ключ>/ и фасеты Animedia (жанры, годы) не в карте. Карту Animedia собирает скрипт обновления (automation/animedia-data-update.py), и он НАМЕРЕННО не повторяет перечень фасетов и подборок за рантаймом — второе правило разошлось бы с первым (решение в коде, то же основание, что у отложенной части T042 (б)).",
+      "norm": "REQ-SEO-CRAWL; не заводить второе правило отбора",
+      "expected": "рантайм отдаёт перечень своих разделов (как у Lords РазделыКарты/хаб), скрипт карты читает его",
+      "status": "session",
+      "dependencies": "решение по устройству карты Animedia (рантайм отдаёт перечень); до него — не делать"
+    },
+    {
+      "id": "T068",
+      "site": "an1mego.site, animeg0.site, an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/year/2020/"
+      ],
+      "problem": "/year/2020/ — 200, index, canonical на себя («Аниме 2020 года»), а в карте трёх AnimeGo ни одного раздела года (аудит 13.10 ~17:40Z; ?year=2020 ведёт canonical на /year/2020/).",
+      "norm": "задание п.3 — sitemap; REQ-SEO-CRAWL",
+      "expected": "/year/<гггг>/ в карте с порогом полной страницы плотной выдачи (42)",
+      "check": "checks/sitemap_years.py (перечень РАЗДЕЛЫ_КАРТЫ ядра на образце записей)",
+      "status": "live_verified",
+      "dependencies": "нет",
+      "evidence": "an1mego 6b6dded, animeg0 8a4c082, an1meg0 0a4778a; checks/sitemap_years.py: прежний код rc=1, правка rc=0; полные run.sh пройдены. 13.10 ~18:25Z: CI success (38433475711 и соседи); animego-02/03/04 — ok/live_verified. Живые sitemap: 8 705 адресов, по 41 разделу /year/ на трёх доменах."
     }
   ]
 }
