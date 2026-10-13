@@ -126,6 +126,88 @@ ansible -i var/ansible/hosts.yml k2-zomro-01 -m raw -a 'nproc; free -h; df -h /;
 ansible не доходил вовсе. Теперь инвентарь собирает
 `automation/local/render-ansible-inventory.py`.
 
+## 3а. Регистрация выполнена, но правила её не видят — одно действие
+
+Владелец внёс хост в `inventory/` **моего рабочего дерева**
+(`wt-nova-publish-memory-02`): запись на месте, пиннинг на месте, генератор
+дал «узлов в инвентаре: 1; отказов: 0», отпечаток пиннинга пересчитан и
+совпадает. Приёмка всё равно отвергается:
+
+```
+профиль: хост «k2-zomro-01» отсутствует в inventory/ssh-hosts.yaml
+```
+
+**Причина измерена, а не предположена.** Правила и профиль читают inventory из
+корня СЕССИИ (`CLAUDE_PROJECT_DIR`), а он — `wt-portable-site-cell-01`. Я
+спросил у самих правил каждого дерева, в отдельных процессах:
+
+| правила дерева | читают inventory из | видят хостов |
+| --- | --- | --- |
+| `wt-portable-site-cell-01` (дерево сессии) | своё дерево | **пусто** |
+| `wt-nova-publish-memory-02` (моё, где запись) | своё дерево | `145.63.129.86`, `k2-zomro-01` |
+
+**Проверено, что одного действия ХВАТИТ.** На копии инвентаря дерева сессии с
+добавленной записью те же правила дерева сессии отвечают на команду приёмки
+`pass` (вместо `deny G-REMOTE`), а профиль видит оба имени. Копия временная,
+живой отказ ею не снимается — решает по-прежнему хук сессии.
+
+### Один блок команд владельца
+
+```bash
+cd /home/claude/wt-portable-site-cell-01
+install -d -m 0755 inventory/known_hosts.d
+install -m 0644 /home/claude/wt-nova-publish-memory-02/inventory/known_hosts.d/k2-zomro-01 inventory/known_hosts.d/k2-zomro-01
+python3 -c "import pathlib; д=pathlib.Path('/home/claude/wt-nova-publish-memory-02/inventory/ssh-hosts.yaml').read_text(encoding='utf-8'); з=д.split('hosts:',1)[1].split('# hosts:',1)[0]; p=pathlib.Path('inventory/ssh-hosts.yaml'); t=p.read_text(encoding='utf-8'); assert 'hosts: []' in t, 'реестр уже не пуст — вставляйте вручную'; p.write_text(t.replace('hosts: []','hosts:'+з,1), encoding='utf-8')"
+python3 -m pytest tests/unit/test_inventory_security.py -q
+```
+
+**Ожидаемый результат.** Третья команда молчит (успех), тесты зелёные. После
+этого приёмку продолжаю я — запись в моём дереве уже есть, сгенерированный
+инвентарь (`var/ansible/hosts.yml`) и файл пиннинга указывают на
+существующие пути и не меняются.
+
+**Условие остановки.** Если третья команда скажет «реестр уже не пуст» —
+значит в дереве сессии есть свои записи; вставлять надо вручную, не затирая
+их. Если тест упадёт на `inventory_contains_no_secret_values` — остановиться:
+в реестр попало значение, а не ссылка.
+
+**Важно знать про это дерево.** `wt-portable-site-cell-01` — рабочее дерево
+SEO-сессии, ветвь `claude/nova-publish-memory-01`. Запись ляжет туда, и
+коммитить её будет та сессия или владелец; я в чужое дерево не пишу.
+
+## 3б. Что я выполню сразу после этого — одним прогоном
+
+Команды read-only, ни одной мутации на узле. Порядок и пороги названы ЗАРАНЕЕ,
+чтобы результат нельзя было подогнать под вывод.
+
+```bash
+cd /home/claude/wt-nova-publish-memory-02
+ansible -i var/ansible/hosts.yml k2-zomro-01 -m raw -a 'whoami; hostname; hostname -I; uptime'
+ansible -i var/ansible/hosts.yml k2-zomro-01 -m raw -a 'nproc; free -m; df -m / /srv 2>/dev/null; cat /etc/os-release'
+ansible -i var/ansible/hosts.yml k2-zomro-01 -m raw -a 'python3 -V; nginx -v 2>&1; systemctl --version | head -1; id; sudo -n true 2>&1 | head -1'
+ansible -i var/ansible/hosts.yml k2-zomro-01 -m raw -a 'ss -ltnp 2>/dev/null | head; ls -la /srv 2>&1 | head; systemctl is-system-running'
+```
+
+| что проверяю | ожидание | что значит отказ |
+| --- | --- | --- |
+| `whoami` | `k2deploy` | вошли не тем пользователем — запись в реестре не та |
+| `hostname` | `nova-amd-de-1-v-3-7150141-398436-main` | подключились не к тому узлу |
+| `hostname -I` | содержит `145.63.129.86` | адрес не тот, что в реестре |
+| `nproc` | 4 | ресурсы не те, что заявлены |
+| `free -m` | ≈10000 МиБ всего | то же |
+| `df -m /` | ≈70 ГиБ, свободно ≥60 | места под восемь ячеек (2,7 ГиБ) хватает с запасом |
+| `python3 -V` | есть, 3.12 на Ubuntu 24.04 | без python3 витрина не запустится |
+| `nginx -v` | может отсутствовать | тогда установка nginx — отдельное действие владельца |
+| `sudo -n true` | **отказ ожидаем** | прав sudo не выдавали; это норма, а не беда |
+| `systemctl is-system-running` | `running` или `degraded` | `offline`/`maintenance` — узел не готов |
+
+**Готовность к ночному развёртыванию** считается по тем же числам, а не «на
+глаз»: восемь ячеек Lords требуют ≈2,70 ГиБ диска (измерено: ≈346 МиБ на
+ячейку) и — по профилю памяти семейства — **≈7,8 ГиБ RSS**, что при 10 ГиБ
+всего не оставляет места ни nginx, ни системе, ни производителю каталога.
+Поэтому решение о числе ячеек на узел принимается ПОСЛЕ `free -m` с самого
+узла, и массовый запуск без этого не начинается.
+
 ## 4. Пригодность под lords-10…lords-17 — до аудита на самом узле
 
 Расчёт по измерению 27 действующих витрин управляющего узла:
