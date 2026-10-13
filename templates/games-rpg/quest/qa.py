@@ -161,7 +161,7 @@ def run(shots: Path | None) -> dict:
         A["letter_jump"] = pg.evaluate("location.hash") == target
         with pg.expect_navigation():
             pg.locator(".more .btn").click()
-        A["compare_opens_table"] = pg.url.endswith("/sravnenie-predmetov/") and pg.locator(".cmp tbody tr").count() == 4
+        A["compare_opens_table"] = pg.url.endswith("/sravnenie-predmetov/") and pg.locator(".cmp tbody tr").count() == 8
         A["compare_no_hscroll_on_phone"] = pg.evaluate("document.documentElement.scrollWidth <= innerWidth")
         with pg.expect_navigation():
             pg.locator(".cmp tbody th a").first.click()

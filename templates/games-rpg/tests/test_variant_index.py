@@ -40,13 +40,15 @@ def test_glossary_lists_every_entry_alphabetically(app):
 
 def test_type_filter_states(app):
     st, html, _ = get(app, "/", {"tip": ["item"]})
-    assert st == 200 and canon(html) is None and html.count('class="gl__row"') == 4
+    items = [e for e in app.site.entries if e.type == "item"]
+    assert st == 200 and canon(html) is None and html.count('class="gl__row"') == len(items)
     st, html, _ = get(app, "/", {"tip": ["xx"]})
     assert st == 400 and 'role="alert"' in html and canon(html) is None
 
 
 def test_items_comparison_from_infobox(app):
     st, html, _ = get(app, "/baldurs-gate-3/sravnenie-predmetov/")
-    assert st == 200 and html.count('<tr><th scope="row">') == 4
+    n_items = len([e for e in app.site.entries if e.type == "item"])
+    assert st == 200 and html.count('<tr><th scope="row">') == n_items
     assert '<td class="num" data-label="КД">18</td>' in html and "gp" not in html
     assert "/baldurs-gate-3/sravnenie-predmetov/" in app.sitemap_urls()
