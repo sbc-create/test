@@ -613,7 +613,7 @@
       "expected": "при повторе названия — год в <title>, совпал год — оригинальное название; уникальные не меняются; только поля снимка",
       "check": "checks/title_disambig.py; bash checks/run.sh; живой <title> пары master-kung-fu",
       "status": "verified",
-      "evidence": "Готово в 12 ячейках, полные прогоны rc=0, ЛОКАЛЬНЫЕ коммиты (не запушены — B019): zonafilm-space aae36bf, zonafilm12-site ad59758, zonafilm-cc ffa6302 (обёртка в src/serve.py), lordfilm47 33aca11, 1lordserials1 e777861, lordserials22-info 5580a70, lordserial33 4098af6 (ядра Lords — automation/host/apply-title-disambig.py, b67730b), animedia-space f98a95d, animedia-icu f229119, an1mego a0d60eb, animeg0 e0f0892, an1meg0 7af8649. Расчёт Lords/Zona: неуникальных <title> 10 576 → 274. ПОРЯДОК ВЫЕЗДА после B019: по одному пушу на ячейку (в нём T027/T028 уже лежат в origin), CI, затем factory cell trigger; живая сверка — <title> пары master-kung-fu (2004/2012). Остаток (замер Архитектора 13.10): у Lords разделы /genre/west_content/ и /genre/zapadnyykontent/ — разные наборы с одинаковыми title и H1; T029 касается только тайтлов. После T044 оба раздела noindex, поэтому для выдачи это снято."
+      "evidence": "Готово в 12 ячейках, полные прогоны rc=0, ЛОКАЛЬНЫЕ коммиты (не запушены — B019): zonafilm-space aae36bf, zonafilm12-site ad59758, zonafilm-cc ffa6302 (обёртка в src/serve.py), lordfilm47 33aca11, 1lordserials1 e777861, lordserials22-info 5580a70, lordserial33 4098af6 (ядра Lords — automation/host/apply-title-disambig.py, b67730b), animedia-space f98a95d, animedia-icu f229119, an1mego a0d60eb, animeg0 e0f0892, an1meg0 7af8649. Расчёт Lords/Zona: неуникальных <title> 10 576 → 274. ПОРЯДОК ВЫЕЗДА после B019: по одному пушу на ячейку (в нём T027/T028 уже лежат в origin), CI, затем factory cell trigger; живая сверка — <title> пары master-kung-fu (2004/2012). Остаток (замер Архитектора 13.10): у Lords разделы /genre/west_content/ и /genre/zapadnyykontent/ — разные наборы с одинаковыми title и H1; T029 касается только тайтлов. После T044 оба раздела noindex, поэтому для выдачи это снято. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б."
     },
     {
       "id": "T030",
@@ -625,7 +625,7 @@
       "expected": "профиль рендера холодной страницы тайтла на стенде; причина названа; цель — TTFB < 0,5 с",
       "check": "повторный замер TTFB при обычной нагрузке; профиль cProfile стенда",
       "status": "verified",
-      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно. 13.10 ~12:30Z: Lords (4) — полный checks/run.sh на урезанном снимке, similar-features PASS."
+      "evidence": "Локальный стенд zonafilm-cc (run.py на /srv/zonafilm-cc/data, без nginx и сети, 13.10 ~01:40Z): старт 23 с; холодная страница тайтла — медиана 0,64 с, макс 1,36 (8 тайтлов); повтор той же — 0,01 с (память страниц); первая главная 2,0 с, далее 0,01. Вывод: ~0,6 с — сам рендер холодной страницы; на живом сайте ещё ~1 с добавляют нагрузка машины и прокси. Следующий шаг — профиль рендера холодной страницы (в процессе службы). Профиль cProfile (10 холодных тайтлов zonafilm-cc): 9,35 из 9,82 с — Вид.похожие шаблона (полный проход каталога с построением множеств на каждый тайтл). zonafilm-cc 1b36573 (локально): src/similar_fast.py — признаки на снимок, кандидаты по типу, верх кучей; checks/similar_fast.py — совпадение с исходной функцией на 25 тайтлах реального снимка; вызов 0,9 → 0,11 с (медиана), построение признаков 2,9 с один раз на снимок; run.sh rc=0. Остальные ядра Lords/Zona — следом. zona-01/zona-03 (13.10 ~02:00Z): памяти страниц нет — каждый запрос тайтла платил полный проход (живой повтор той же страницы: zonafilm.space 0,52–0,98 с, zonafilm12.site 2,1–17,4 с — вероятная причина B005). В ядре: признаки на снимок + память итогов (срок 30 мин), прежний код — _похожие_полные; checks/similar_fast.py — полное совпадение на 25 тайтлах; run.sh rc=0. Коммиты ЛОКАЛЬНО (B019): zonafilm-cc 1b36573, zonafilm-space и zonafilm12-site — последние в ветке. Lords: повтор 0,03 с (память есть), холодный — отдельно. 13.10 ~12:30Z: Lords (4) — полный checks/run.sh на урезанном снимке, similar-features PASS. 13.10 ~12:20Z: Lords ×4 и AnimeGo/Animedia выпущены (activated/live_verified); Zona — партия Б."
     },
     {
       "id": "T031",
@@ -841,8 +841,8 @@
       "norm": "SEO_KNOWLEDGE_PACK: служебные/технические разделы не индексируются; дубли разделов",
       "expected": "(1) раздел метки — noindex, follow, страница остаётся (без видимых изменений, выезжает без просмотра); (2) метка не показывается жанром в карточке и подвале — видимое изменение, на просмотр",
       "check": "checks/technical_genre_noindex.py (стенд): оба кода метки — 200 и noindex в мета-теге и X-Robots-Tag; обычный жанр и /catalog/ — index",
-      "status": "verified",
-      "evidence": "(1) Zona: zonafilm-space и zonafilm12 — признак _служебный_раздел_жанра в причинах ужесточения _отдать (рядом с лишними ключами и поиском); zonafilm-cc — обёртка шаблонной _лишние_ключи_запроса в serve.py. Стенд PASS на трёх; на коде до правки — rc=1 (оба кода index). Полные наборы идут. Lords — следом (ядро из automation/host/lords-frontend.py, маршрут /genre/<код>/). Zona коммиты: zonafilm-space de4c868, zonafilm12 0de3707, zonafilm-cc 6c9c036 — полные run.sh rc=0 (у zonafilm12 известный пропуск genre-alias-canonical). Lords: у метки два кода с РАЗНЫМИ наборами (lordfilm47: west_content 5 858, zapadnyykontent 35 313; замер Архитектора) — только noindex на оба, без канонизации. Коммиты lordfilm47 6990682, lordserial33 e7a8682, 1lordserials1 3edacb3, lordserials22 0e8c974; проверка в процессе без снимка (стенд Lords убит по памяти 13.10 ~04:15Z, oom_kill 29→30) — признак и подключение PASS, на прежнем ядре rc=1; полный run.sh Lords не запускался, стендовая приёмка — после пределов памяти. (2) видимая часть — не начата. 13.10 ~12:30Z: приёмка Lords проведена полным checks/run.sh на урезанной копии снимка каждой ячейки (каждая 20-я запись) под пределом 3 ГиБ — technical-genre-noindex PASS на четырёх, OOM нет (RSS стенда ~90 МиБ)."
+      "status": "live_verified",
+      "evidence": "(1) Zona: zonafilm-space и zonafilm12 — признак _служебный_раздел_жанра в причинах ужесточения _отдать (рядом с лишними ключами и поиском); zonafilm-cc — обёртка шаблонной _лишние_ключи_запроса в serve.py. Стенд PASS на трёх; на коде до правки — rc=1 (оба кода index). Полные наборы идут. Lords — следом (ядро из automation/host/lords-frontend.py, маршрут /genre/<код>/). Zona коммиты: zonafilm-space de4c868, zonafilm12 0de3707, zonafilm-cc 6c9c036 — полные run.sh rc=0 (у zonafilm12 известный пропуск genre-alias-canonical). Lords: у метки два кода с РАЗНЫМИ наборами (lordfilm47: west_content 5 858, zapadnyykontent 35 313; замер Архитектора) — только noindex на оба, без канонизации. Коммиты lordfilm47 6990682, lordserial33 e7a8682, 1lordserials1 3edacb3, lordserials22 0e8c974; проверка в процессе без снимка (стенд Lords убит по памяти 13.10 ~04:15Z, oom_kill 29→30) — признак и подключение PASS, на прежнем ядре rc=1; полный run.sh Lords не запускался, стендовая приёмка — после пределов памяти. (2) видимая часть — не начата. 13.10 ~12:30Z: приёмка Lords проведена полным checks/run.sh на урезанной копии снимка каждой ячейки (каждая 20-я запись) под пределом 3 ГиБ — technical-genre-noindex PASS на четырёх, OOM нет (RSS стенда ~90 МиБ). 13.10 ~12:20Z: Lords ×4 выпущены (lords-01 d027fee6fba9, lords-02 013fdb0fadfd, lords-03 88a7cec0fc86, lords-05 b46b878164df — исполнитель activated/live_verified; CI 38394932266 и соседи success). Живой /genre/zapadnyykontent/ на четырёх Lords: 200, meta и X-Robots-Tag — noindex, follow. Проверка technical_genre_noindex в CI падала («нет манифеста шаблона /srv/lords/…», прогон 38392620067) — манифест из репозитория (4357213 и соседи); теперь измеряет в CI. Zona-часть — партия Б."
     },
     {
       "id": "B021",
@@ -918,8 +918,8 @@
       "expected": "«<Раздел> на <сайт>: N записей каталога — смотреть онлайн[ — страница K].», N = видимому",
       "check": "checks/section_description.py (стенд на урезанной копии снимка ячейки)",
       "verify_live": "meta description /catalog/, /movies/, /series/ на четырёх доменах",
-      "status": "verified",
-      "evidence": "Локально (B019): lordfilm47 9aefb44, lordserial33 05e34eb, 1lordserials1 d83ad9b, lordserials22-info 8ec1e4f. Стенд на урезанном снимке (каждая 20-я запись, ~90 МиБ) — PASS на четырёх; отрицательная проба на прежнем коде rc=1 (lordfilm47 — ядро, lordserial33 — lords02_view). Полный checks/run.sh на урезанном снимке под пределом 3 ГиБ: все PASS (lordfilm47 33, lordserial33 32, 1lordserials1 38, lordserials22 33); launcher-refuses под SITE_DATA_DIR ложно падает — в чистом окружении rc=0."
+      "status": "live_verified",
+      "evidence": "Локально (B019): lordfilm47 9aefb44, lordserial33 05e34eb, 1lordserials1 d83ad9b, lordserials22-info 8ec1e4f. Стенд на урезанном снимке (каждая 20-я запись, ~90 МиБ) — PASS на четырёх; отрицательная проба на прежнем коде rc=1 (lordfilm47 — ядро, lordserial33 — lords02_view). Полный checks/run.sh на урезанном снимке под пределом 3 ГиБ: все PASS (lordfilm47 33, lordserial33 32, 1lordserials1 38, lordserials22 33); launcher-refuses под SITE_DATA_DIR ложно падает — в чистом окружении rc=0. 13.10 ~12:20Z: Lords ×4 выпущены (lords-01 d027fee6fba9, lords-02 013fdb0fadfd, lords-03 88a7cec0fc86, lords-05 b46b878164df — исполнитель activated/live_verified; CI 38394932266 и соседи success). Живой /movies/: lordfilm47 «Фильмы на Lordfilm: 39041 запись каталога — смотреть онлайн.» — видимо 39041; lordserial33 33675 = 33675; 1lordserials1 39041; lordserials22-info 33675."
     },
     {
       "id": "T049",
@@ -948,7 +948,8 @@
       "norm": "SEO_KNOWLEDGE_PACK: сигналы индексации согласованы со статусом ответа",
       "expected": "404 — noindex в мета-теге (и X-Robots-Tag, если ставится); видимое не меняется",
       "check": "стенд: /no-such-page/ → 404 и noindex",
-      "status": "session"
+      "status": "live_verified",
+      "evidence": " 13.10 ~12:20Z: Lords ×4 выпущены (lords-01 d027fee6fba9, lords-02 013fdb0fadfd, lords-03 88a7cec0fc86, lords-05 b46b878164df — исполнитель activated/live_verified; CI 38394932266 и соседи success). Коммиты d17f6c3/b166a88/4b89860/23dafac. Живой /no-such-page-xyz/ на четырёх: 404, meta и X-Robots-Tag — noindex, follow."
     },
     {
       "id": "T051",
@@ -977,7 +978,24 @@
       "expected": "«931 запись», «61 запись», «2 записи» — функцией _записей ядра",
       "check": "стенд: число и слово видимой строки согласованы на /series/, /catalog/ и фасете",
       "status": "session",
-      "review": "Видимый текст: выпуск после просмотра человеком."
+      "review": "Видимый текст: выпуск после просмотра человеком.",
+      "evidence": " 13.10 ~12:15Z: подготовлено на ветке claude/review-lords-t052 (lordfilm47 ae10e85, без пуша): «931 запись в выборке»; проверка rc=0. Остальные три Lords — после одобрения образца."
+    },
+    {
+      "id": "T053",
+      "site": "lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/movies/"
+      ],
+      "problem": "<title> разделов — «Фильмы — Lordfilm», «Каталог — Lordserials»: беднее заголовка раздела жанра той же витрины («Драма: смотреть онлайн — Lordfilm»).",
+      "norm": "SEO_KNOWLEDGE_PACK: title — уникальный и описательный, один образец для однотипных страниц",
+      "expected": "«<Раздел>: смотреть онлайн[ — страница K] — <сайт>»",
+      "check": "checks/section_description.py (стенд на урезанном снимке)",
+      "verify_live": "<title> /movies/ на четырёх доменах",
+      "status": "live_verified",
+      "evidence": "Коммиты lordfilm47 d027fee, lordserial33 013fdb0 (вкл. префиксную замену имени /new/ в lords02_view.py — сторож lords02-surfaces), 1lordserials1 88a7cec, lordserials22-info b46b878; отрицательная проба rc=1; полный run.sh на урезанном снимке PASS. 13.10 ~12:20Z: Lords ×4 выпущены (lords-01 d027fee6fba9, lords-02 013fdb0fadfd, lords-03 88a7cec0fc86, lords-05 b46b878164df — исполнитель activated/live_verified; CI 38394932266 и соседи success). Живой /movies/: «Фильмы: смотреть онлайн — Lordfilm» (и т. д. на четырёх)."
     }
   ]
 }
