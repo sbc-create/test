@@ -32,3 +32,19 @@ LCP (лаборатория, loopback, без троттлинга) 48–256 м�
 | наполнение | тот же снимок, что у A: 13 рецептов (eda.rambler.ru, факты); тексты — manual_standin, не Qwen; редакция не проверяла и не пекла |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 229f66b (13.10.2026): редактор
+
+Исправлено: на 390 px таблица редактора давала горизонтальный скролл.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-baking test` | 0 | PASS |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m bakebook.qa --shots docs/screenshots/229f66b --out docs/verification-browser-qa.json` | 0 | 33 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8864 …` | 0 | 29 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-baking build --commit HEAD` | 0 | собрано из 229f66b |
+| приёмка редактора (scratchpad `ed_qa.py`) | 0 | 14 проверок PASS — `docs/verification-editor.json` |
+
+Редактор: было NOT_RUN (секрет не создавался), теперь проверен на изолированной копии этого коммита; способ и
+ограничения — в `docs/verification-editor.json`. Решение «editor_rejected» записывалось только в копию БД.

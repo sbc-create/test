@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8864",
- "commit_head": "3f222ce7bf5edcda38109c9429b6bbca0c5ba6ce",
- "at": "2026-10-12T23:06:10Z",
+ "commit_head": "229f66beef3ddad537cb4ac964103843b8413dd7",
+ "at": "2026-10-13T08:10:06Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -72,62 +72,62 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 256,
+   "lcp_ms": 288,
    "cls": 0,
-   "bytes": 27944
+   "bytes": 28033
   },
   "mobile:catalog": {
-   "lcp_ms": 204,
+   "lcp_ms": 100,
    "cls": 0,
    "bytes": 11853
   },
   "mobile:recipe": {
-   "lcp_ms": 188,
+   "lcp_ms": 128,
    "cls": 0,
    "bytes": 17440
   },
   "mobile:recipe_pct": {
-   "lcp_ms": 56,
+   "lcp_ms": 64,
    "cls": 0,
    "bytes": 13250
   },
   "mobile:dough": {
-   "lcp_ms": 76,
+   "lcp_ms": 80,
    "cls": 0,
    "bytes": 5915
   },
   "mobile:pitfalls": {
-   "lcp_ms": 48,
+   "lcp_ms": 40,
    "cls": 0,
    "bytes": 5979
   },
   "desktop:home": {
-   "lcp_ms": 244,
+   "lcp_ms": 108,
    "cls": 0,
-   "bytes": 27944
+   "bytes": 28033
   },
   "desktop:catalog": {
-   "lcp_ms": 92,
+   "lcp_ms": 84,
    "cls": 0,
    "bytes": 11853
   },
   "desktop:recipe": {
-   "lcp_ms": 76,
+   "lcp_ms": 100,
    "cls": 0,
    "bytes": 17440
   },
   "desktop:recipe_pct": {
-   "lcp_ms": 68,
+   "lcp_ms": 60,
    "cls": 0,
    "bytes": 13250
   },
   "desktop:dough": {
-   "lcp_ms": 76,
+   "lcp_ms": 60,
    "cls": 0,
    "bytes": 5915
   },
   "desktop:pitfalls": {
-   "lcp_ms": 52,
+   "lcp_ms": 60,
    "cls": 0,
    "bytes": 5979
   }
@@ -137,18 +137,18 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found)"
  ],
  "screenshots": [
-  "docs/screenshots/3f222ce/home-mobile.png",
-  "docs/screenshots/3f222ce/catalog-mobile.png",
-  "docs/screenshots/3f222ce/recipe-mobile.png",
-  "docs/screenshots/3f222ce/recipe_pct-mobile.png",
-  "docs/screenshots/3f222ce/dough-mobile.png",
-  "docs/screenshots/3f222ce/pitfalls-mobile.png",
-  "docs/screenshots/3f222ce/home-desktop.png",
-  "docs/screenshots/3f222ce/catalog-desktop.png",
-  "docs/screenshots/3f222ce/recipe-desktop.png",
-  "docs/screenshots/3f222ce/recipe_pct-desktop.png",
-  "docs/screenshots/3f222ce/dough-desktop.png",
-  "docs/screenshots/3f222ce/pitfalls-desktop.png"
+  "docs/screenshots/229f66b/home-mobile.png",
+  "docs/screenshots/229f66b/catalog-mobile.png",
+  "docs/screenshots/229f66b/recipe-mobile.png",
+  "docs/screenshots/229f66b/recipe_pct-mobile.png",
+  "docs/screenshots/229f66b/dough-mobile.png",
+  "docs/screenshots/229f66b/pitfalls-mobile.png",
+  "docs/screenshots/229f66b/home-desktop.png",
+  "docs/screenshots/229f66b/catalog-desktop.png",
+  "docs/screenshots/229f66b/recipe-desktop.png",
+  "docs/screenshots/229f66b/recipe_pct-desktop.png",
+  "docs/screenshots/229f66b/dough-desktop.png",
+  "docs/screenshots/229f66b/pitfalls-desktop.png"
  ],
  "actions": {
   "mobile:home:no_hscroll": true,
