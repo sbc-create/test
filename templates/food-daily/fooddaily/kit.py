@@ -1,7 +1,7 @@
 """Комплект переноса сайта food-daily: код из коммита, разрешённый экспорт контента, закрытая часть, команды.
 
 Состав (каталог <out>/food-daily-<sha7>/):
-  code.tar.gz     — templates/food-daily (без data/ и docs/screenshots/) и inventory/ из коммита (git archive);
+  code.tar.gz     — templates/food-daily (без data/ и docs/screenshots/), inventory/ и .gitignore из коммита;
   content.tar.gz  — templates/food-daily/data/: публичный контент из git (закрытые снимки источников не входят);
   private/        — только своя редакционная база var/food-daily/preview/*.sqlite3, если есть (SQLite backup,
                     права 0600)
@@ -155,7 +155,7 @@ def build(out: Path) -> dict:
     kit = out / f"{SITE}-{sha[:7]}"
     kit.mkdir(parents=True, exist_ok=False)
     raw = subprocess.run(
-        ["git", "archive", "--format=tar", sha, f"templates/{SITE}", "inventory"],
+        ["git", "archive", "--format=tar", sha, f"templates/{SITE}", "inventory", ".gitignore"],
         cwd=REPO,
         capture_output=True,
         check=True,
