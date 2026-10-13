@@ -6,3 +6,10 @@
 </article>
 {% endmacro %}
 {% macro grid(items, heading='h3') %}<div class="ecs">{% for e in items %}{{ card(e, heading) }}{% endfor %}</div>{% endmacro %}
+{% macro partyform(gid, slugs) %}
+<form class="pf" action="/otryad/" method="get" aria-label="Состав отряда">
+  <fieldset><legend>Выберите до 4 спутников</legend>
+  <div class="pf__opts">{% for e in site.characters(gid) %}<label><input type="checkbox" name="p" value="{{ e.slug }}"{% if e.slug in slugs %} checked{% endif %}><span><b>{{ e.src.name }}</b><small>{{ e.points[0] if e.points else '' }}</small></span></label>{% endfor %}</div></fieldset>
+  <button type="submit">Собрать отряд</button>
+</form>
+{% endmacro %}

@@ -190,6 +190,29 @@ class App:
                 "entry",
                 e=e,
             )
+        if path == "/otryad/":  # перенесено из варианта B
+            gid = next(iter(s.games))
+            known = {e.slug for e in s.characters(gid)}
+            asked = [x for x in q.get("p", []) if x]
+            slugs = list(dict.fromkeys(x for x in asked if x in known))[:4]
+            unknown = bool(asked) and not slugs
+            over = len([x for x in asked if x in known]) > 4
+            crumbs = [home, ("Отряд", path)]
+            meta = Meta(
+                "Планировщик отряда",
+                "Соберите отряд до 4 спутников и сравните классы и характеристики по данным вики.",
+                None if asked else s.abs(path),  # любой выбор — noindex без canonical
+                not asked,
+                crumbs,
+                [self.crumbs_ld(crumbs)],
+                "party",
+            )
+            party = s.party(gid, slugs)
+            return (
+                200,
+                self.render("party.html", meta, gid=gid, party=party, slugs=slugs, over=over, unknown=unknown),
+                {},
+            )
         if path == "/kak-my-rabotaem/":
             crumbs = [home, ("Как мы работаем", path)]
             return self.page(
@@ -260,7 +283,7 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/kak-my-rabotaem/", "/istochniki/"]
+        urls = ["/", "/otryad/", "/kak-my-rabotaem/", "/istochniki/"]
         for gid in s.games:
             secs = s.sections(gid)
             if secs:

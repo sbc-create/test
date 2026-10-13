@@ -95,3 +95,22 @@ main { max-width: 1100px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
   .cmp td::before { content: attr(data-label) ": "; color: var(--muted); font-family: var(--sans); }
 }
 .passport { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)) !important; } .passport dd { overflow-wrap: anywhere; font-size: 1.1rem; }
+
+/* ---- планировщик отряда — перенесено из варианта B ---- */
+.pf button { font: 700 .95rem var(--sans); min-height: 44px; padding: 0 16px; border: 0; border-radius: 4px; background: var(--gold-2); color: var(--wine); cursor: pointer; }
+.pf fieldset { border: 0; margin: 0 0 12px; padding: 0; min-width: 0; } .pf legend { font-weight: 800; margin-bottom: 8px; }
+.pf__opts { display: grid; gap: 8px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); }
+.pf__opts label { position: relative; display: block; }
+.pf__opts input { position: absolute; opacity: 0; inset: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.pf__opts span { display: grid; gap: 2px; padding: 10px 14px; border: 2px solid var(--line); border-radius: 6px; background: #fff; min-height: 56px; }
+.pf__opts small { color: var(--muted); }
+.pf__opts input:checked + span { border-color: var(--wine); background: var(--gold); }
+.pf__opts input:focus-visible + span { outline: 3px solid var(--focus); outline-offset: 2px; }
+.sum { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 4px 18px 14px; margin-top: 16px; }
+.sum a { padding-block: 2px; } .sum li a { display: inline-block; min-height: 24px; }
+.best { table-layout: fixed; } .best th:nth-child(1) { width: 40%; } .best th:nth-child(2) { width: 18%; } .best td, .best th { overflow-wrap: anywhere; }
+@media (max-width: 480px) { .sum { padding: 4px 12px 12px; } .best th, .best td { padding: 6px; font-size: .9rem; } }
+.best { border-collapse: collapse; width: 100%; background: #fff; }
+.best th, .best td { padding: 8px 10px; border-bottom: 1px solid var(--line); text-align: left; }
+.best thead th { background: var(--wine); color: #fff; font-size: .85rem; }
+.warn { background: #fff4d6; border: 1px solid var(--gold-2); padding: 8px 12px; border-radius: 6px; }

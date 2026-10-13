@@ -19,6 +19,7 @@ VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "hei
 QUEST = "/baldurs-gate-3/kvesty/kvest-spasti-halsina/"
 SHOTS = {
     "compare": "/baldurs-gate-3/sravnenie-predmetov/",
+    "party": "/otryad/?p=gale&p=karlach&p=shadowheart",
     "home": "/",
     "game": "/baldurs-gate-3/",
     "section": "/baldurs-gate-3/personazhi/",
@@ -175,11 +176,31 @@ def run(shots: Path | None) -> dict:
         resp = pg.goto(BASE + "/?tip=nesushchestvuet")
         A["unknown_type_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
         ctx.close()
+        # планировщик отряда (перенесено из B)
+        ctx = br.new_context(viewport=VIEW["mobile"], locale="ru-RU")
+        pg = ctx.new_page()
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".hd__nav a", has_text="Отряд").click()
+        pg.locator(".pf__opts label", has_text="Gale").click()
+        pg.locator(".pf__opts label", has_text="Karlach").click()
+        with pg.expect_navigation():
+            pg.locator(".pf button").click()
+        A["party_submits"] = "p=gale" in pg.url and "p=karlach" in pg.url
+        A["party_best_rows"] = pg.locator(".best tbody tr").count() == 6
+        A["party_noindex"] = "noindex" in (pg.locator("meta[name=robots]").get_attribute("content") or "")
+        pg.goto(BASE + "/otryad/?p=nikto")
+        A["party_unknown_warns"] = pg.locator(".warn[role=status]").count() == 1 and pg.locator(".empty").count() == 1
+        pg.goto(BASE + "/otryad/?p=gale&p=karlach&p=wyll&p=astarion&p=laezel")
+        A["party_limit_four"] = pg.locator(".sum li").count() == 4 and pg.locator(".warn").count() == 1
+        ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
         pg.goto(BASE + QUEST)
         A["nojs_stages_listed"] = pg.locator(".check li").count()
         A["nojs_print_hidden"] = not pg.locator("[data-print]").is_visible()
+        pg.goto(BASE + "/otryad/?p=wyll&p=astarion")
+        A["nojs_party_works"] = pg.locator(".best tbody tr").count() == 6
         ctx.close()
         br.close()
     return res
