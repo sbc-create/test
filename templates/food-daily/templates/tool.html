@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block main %}
+<header class="page-head">
+  <h1>{{ 'Избранное' if fav else 'Список покупок' }}</h1>
+  <p class="page-head__lead">Хранится только в этом браузере — регистрация не нужна.</p>
+</header>
+<script type="application/json" id="catalog">{{ catalog | safe }}</script>
+{% if fav %}
+<div data-fav-page>
+  <noscript><p class="empty">Для избранного нужен включённый JavaScript. Все рецепты доступны в <a href="/recepty/">каталоге</a>.</p></noscript>
+  <div class="grid" data-fav-grid></div>
+  <div class="empty" data-fav-empty hidden><h2>Пока пусто</h2><p>Нажмите на сердечко у рецепта, чтобы сохранить его здесь.</p><a class="btn" href="/recepty/">К рецептам</a></div>
+</div>
+{% else %}
+<div data-list-page>
+  <noscript><p class="empty">Для списка покупок нужен включённый JavaScript.</p></noscript>
+  <ul class="shop" data-list></ul>
+  <div class="empty" data-list-empty hidden><h2>Список пуст</h2><p>На странице рецепта нажмите «Добавить в список покупок».</p><a class="btn" href="/recepty/">К рецептам</a></div>
+  <p class="shop__actions" data-list-actions hidden><button class="btn btn--ghost" type="button" data-list-clear-done>Убрать купленное</button><button class="btn btn--ghost" type="button" data-list-clear>Очистить всё</button></p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,15 @@
+{
+ "urls": 59,
+ "pages_with_issues": 0,
+ "kinds": [],
+ "small_targets": [],
+ "cut": [],
+ "hscroll": [],
+ "hash": [],
+ "console": [
+  "320 http://127.0.0.1:8876/iz-holodilnika/?est=kvantovyj Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "390 http://127.0.0.1:8876/iz-holodilnika/?est=kvantovyj Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "768 http://127.0.0.1:8876/iz-holodilnika/?est=kvantovyj Failed to load resource: the server responded with a status of 400 (Bad Request)",
+  "1440 http://127.0.0.1:8876/iz-holodilnika/?est=kvantovyj Failed to load resource: the server responded with a status of 400 (Bad Request)"
+ ]
+}

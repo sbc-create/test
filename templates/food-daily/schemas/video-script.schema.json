@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "food-daily/video-script.schema.json",
+  "title": "Сценарий собственного кулинарного видео food-daily",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "content_id", "recipe_slug", "recipe_version", "title", "status", "ai_visual_label",
+               "continuity", "scenes", "voiceover_language", "subtitles", "target_duration_s", "rights", "ad_readiness"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "content_id": {"type": "string"},
+    "recipe_slug": {"type": "string"},
+    "recipe_version": {"type": "integer", "minimum": 1},
+    "title": {"type": "string"},
+    "status": {"enum": ["script_draft", "script_review", "script_approved"]},
+    "ai_visual_label": {"type": "string", "minLength": 10},
+    "continuity": {
+      "type": "object", "additionalProperties": false, "required": ["kitchen", "cookware", "lighting", "hands", "camera"],
+      "properties": {"kitchen": {"type": "string"}, "cookware": {"type": "array", "items": {"type": "string"}},
+                     "lighting": {"type": "string"}, "hands": {"type": "string"}, "camera": {"type": "string"}}
+    },
+    "scenes": {
+      "type": "array", "minItems": 6,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["n", "recipe_step", "ingredients", "action", "cookware", "dish_state", "duration_s", "voiceover", "on_screen", "shot"],
+        "properties": {
+          "n": {"type": "integer", "minimum": 1},
+          "recipe_step": {"type": ["integer", "null"], "minimum": 1},
+          "ingredients": {"type": "array", "items": {"type": "string"}},
+          "action": {"type": "string", "minLength": 5},
+          "cookware": {"type": "array", "items": {"type": "string"}},
+          "dish_state": {"type": "string"},
+          "duration_s": {"type": "number", "minimum": 3, "maximum": 30},
+          "voiceover": {"type": "string"},
+          "on_screen": {"type": "string"},
+          "shot": {"type": "string"}
+        }
+      }
+    },
+    "voiceover_language": {"const": "ru"},
+    "subtitles": {"const": "generate_from_voiceover"},
+    "target_duration_s": {"type": "number"},
+    "rights": {"type": "object"},
+    "ad_readiness": {"type": "object"}
+  }
+}

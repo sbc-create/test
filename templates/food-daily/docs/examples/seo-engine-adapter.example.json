@@ -1,0 +1,43 @@
+{
+ "note": "ПРИМЕР ФОРМЫ. Не выполнялся: учётной записи food-daily нет (BLOCKED_ACCESS). Значения-заполнители.",
+ "base_url": "http://127.0.0.1:8099",
+ "requires": [
+  "service account scoped to site_id=food-daily (не существует)"
+ ],
+ "steps": [
+  {
+   "method": "POST",
+   "path": "/api/v1/auth/login",
+   "body": {
+    "email": "<service account>",
+    "password": "<secret_ref>"
+   },
+   "expect": "cookie session"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/auth/me",
+   "expect": {
+    "role": "<read-only>",
+    "sites": [
+     "food-daily"
+    ]
+   },
+   "comment": "поле sites сейчас отсутствует — handoff"
+  },
+  {
+   "method": "GET",
+   "path": "/api/v1/editorial/drafts",
+   "query": {
+    "site_id": "food-daily"
+   },
+   "maps_to": "data/content-snapshot.json items"
+  },
+  {
+   "method": "GET",
+   "path": "/api/sites/food-daily/plan",
+   "maps_to": "рубрики и метаданные (сейчас локально)"
+  }
+ ],
+ "fallback": "при недоступности службы публичное чтение идёт из data/content-snapshot.json"
+}

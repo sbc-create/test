@@ -1,0 +1,49 @@
+{
+ "schema_version": 1,
+ "site_id": "games-story",
+ "note": "ПРИМЕР ФОРМЫ ДАННЫХ. Значения-заполнители, не настоящие ролики: в этой ветке YouTube API не вызывался.",
+ "guide": {
+  "game": "<игра>",
+  "guide_slug": "<slug-гайда>",
+  "section": "<задание или глава>"
+ },
+ "candidates": [
+  {
+   "video_id": "<11-символьный id из search.list>",
+   "channel_id": "<id канала>",
+   "title": "<из snippet.title>",
+   "search": {
+    "api": "youtube.v3.search.list",
+    "type": "video",
+    "videoEmbeddable": true,
+    "q": "<запрос>",
+    "checked_at": "<ISO-время>"
+   },
+   "verify": {
+    "api": "youtube.v3.videos.list",
+    "embeddable": null,
+    "privacy_status": null,
+    "duration_iso": null,
+    "region_restriction": null,
+    "checked_at": null
+   },
+   "relevance": {
+    "status": "unchecked",
+    "method": null,
+    "reviewer": null,
+    "note": null
+   },
+   "timestamps": [],
+   "timestamps_source": null,
+   "display": {
+    "mode": "embed",
+    "embed_url": "https://www.youtube-nocookie.com/embed/<video_id>",
+    "fallback": "https://www.youtube.com/watch?v=<video_id>"
+   },
+   "ads": {
+    "overlay_allowed": false,
+    "preroll_allowed": false
+   }
+  }
+ ]
+}

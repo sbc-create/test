@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{% if have %}Из того, что есть{% else %}Что приготовить из того, что есть дома{% endif %}</h1>
+<form class="pick pick--compact" action="/iz-holodilnika/" method="get" data-fridge-form>
+  <fieldset><legend>Отметьте продукты</legend>
+  <ul class="pick__list">{% for key, label, n in options %}<li><label class="pick__item"><input type="checkbox" name="est" value="{{ key }}"{% if key in have %} checked{% endif %}><span>{{ label }}</span></label></li>{% endfor %}</ul></fieldset>
+  <div class="pick__go"><button type="submit" class="btn">Подобрать</button>{% if have %}<a class="btn btn--ghost" href="/iz-holodilnika/" data-fridge-clear>Сбросить</a>{% endif %}<p class="pick__hint" data-fridge-hint aria-live="polite"></p></div>
+</form>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if have %}
+<p class="count-line" role="status">{{ rows|length }} {{ 'рецепт' if rows|length % 10 == 1 and rows|length % 100 != 11 else ('рецепта' if rows|length % 10 in [2,3,4] and rows|length % 100 not in [12,13,14] else 'рецептов') }} с выбранными продуктами.</p>
+<ol class="match">{% for r, got, miss in rows %}<li class="match__row">
+  <a class="match__t" href="{{ r.url }}">{{ r.title }}</a>
+  <p class="match__meta">{{ r.category_label }}{% if r.time_label %} · {{ r.time_label }}{% endif %}</p>
+  <p class="match__have"><b>Есть:</b> {{ got|join(', ') }}</p>
+  <p class="match__miss">{% if miss %}<b>Ещё нужно из списка:</b> {{ miss|join(', ') }}{% else %}<b>Из продуктов списка больше ничего не нужно.</b> Полный состав — в рецепте.{% endif %}</p>
+</li>{% endfor %}</ol>
+<p class="note">Учитываются только главные продукты рецепта (темы). Соль, масло, специи и остальной состав — на странице рецепта.</p>
+{% endif %}
+{% endblock %}
