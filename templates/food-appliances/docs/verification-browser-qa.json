@@ -1,6 +1,6 @@
 {
- "commit_head": "8953b3ac3f8e15eb5aa992d66b7a8ab03ec5eb2b",
- "at": "2026-10-12T20:07:31Z",
+ "commit_head": "7575262796fe54239a25ee15897d68be4e7d4447",
+ "at": "2026-10-13T00:39:54Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:appliance:no_hscroll": true,
@@ -45,11 +45,11 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 176,
+   "lcp_ms": 164,
    "cls": 0
   },
   "mobile:appliance": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:category": {
@@ -57,39 +57,39 @@
    "cls": 0
   },
   "mobile:recipe": {
-   "lcp_ms": 56,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:mode": {
-   "lcp_ms": 60,
+   "lcp_ms": 44,
    "cls": 0
   },
   "mobile:guide": {
-   "lcp_ms": 36,
+   "lcp_ms": 44,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 116,
+   "lcp_ms": 140,
    "cls": 0
   },
   "desktop:appliance": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "desktop:category": {
-   "lcp_ms": 44,
-   "cls": 0
-  },
-  "desktop:recipe": {
-   "lcp_ms": 80,
-   "cls": 0
-  },
-  "desktop:mode": {
    "lcp_ms": 56,
    "cls": 0
   },
+  "desktop:category": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "desktop:recipe": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:mode": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
   "desktop:guide": {
-   "lcp_ms": 44,
+   "lcp_ms": 56,
    "cls": 0
   }
  },
@@ -98,17 +98,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8850/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/8953b3a/home-mobile.png",
-  "docs/screenshots/8953b3a/appliance-mobile.png",
-  "docs/screenshots/8953b3a/category-mobile.png",
-  "docs/screenshots/8953b3a/recipe-mobile.png",
-  "docs/screenshots/8953b3a/mode-mobile.png",
-  "docs/screenshots/8953b3a/guide-mobile.png",
-  "docs/screenshots/8953b3a/home-desktop.png",
-  "docs/screenshots/8953b3a/appliance-desktop.png",
-  "docs/screenshots/8953b3a/category-desktop.png",
-  "docs/screenshots/8953b3a/recipe-desktop.png",
-  "docs/screenshots/8953b3a/mode-desktop.png",
-  "docs/screenshots/8953b3a/guide-desktop.png"
+  "docs/screenshots/7575262/home-mobile.png",
+  "docs/screenshots/7575262/appliance-mobile.png",
+  "docs/screenshots/7575262/category-mobile.png",
+  "docs/screenshots/7575262/recipe-mobile.png",
+  "docs/screenshots/7575262/mode-mobile.png",
+  "docs/screenshots/7575262/guide-mobile.png",
+  "docs/screenshots/7575262/home-desktop.png",
+  "docs/screenshots/7575262/appliance-desktop.png",
+  "docs/screenshots/7575262/category-desktop.png",
+  "docs/screenshots/7575262/recipe-desktop.png",
+  "docs/screenshots/7575262/mode-desktop.png",
+  "docs/screenshots/7575262/guide-desktop.png"
  ]
 }

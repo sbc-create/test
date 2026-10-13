@@ -43,3 +43,8 @@
 - Мобильная шапка: placeholder поиска обрезан («Блюдо, продукт, р…»).
 - Хлебные крошки на 390 px переносят «/» в начало строки.
 - Гриль: нужны источники с полными фактами режима/температуры.
+
+## Обновление на 7575262 (ночь 12–13.10, после вариантов B и C)
+
+Изменения: метатеги варианта `device-panel` (тест). Перезапущено на 7575262: `python3 -m techkitchen.qa --shots docs/screenshots/7575262 --out docs/verification-browser-qa.json` → exit 0, 17 сценариев без провалов, axe 4.13.0 — 0 нарушений, 12 скриншотов;
+`python3 qa/viewports.py 8850 /poisk/?q=тушение /nesushchestvuet/` → exit 0, 27 URL × 4 ширины — 0 замечаний (`docs/verification-viewports.json`); `bin/food-appliances test` → 13 passed.
