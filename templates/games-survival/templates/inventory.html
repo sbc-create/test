@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% from "_inv.html" import inv_form, need_list %}
+{% block main %}
+<h1>Что сделать из того, что есть</h1>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if have %}
+<p class="lead">Отмечено: {% for s in have %}{{ site.by_slug[s].short }}{% if not loop.last %}, {% endif %}{% endfor %}. Количества — на один крафт, по занятым слотам сетки источника.</p>
+<section aria-labelledby="h-now"><h2 id="h-now">Можно сделать сейчас: {{ now|length }}</h2>
+{% if now %}<ul class="crafts">{% for e, r, ns, miss in now %}<li class="craft"><a class="craft__t" href="{{ e.url }}">{{ e.short }}</a> <span class="craft__out" lang="en">{{ r.result }} × {{ r.count }}</span><span class="craft__need">{{ need_list(ns, miss) }}</span></li>{% endfor %}</ul>
+{% else %}<p class="note">Из отмеченного целиком ничего не собирается — смотрите, чего не хватает.</p>{% endif %}</section>
+<section aria-labelledby="h-almost"><h2 id="h-almost">Не хватает одного ингредиента: {{ almost|length }}</h2>
+{% if almost %}<ul class="crafts">{% for e, r, ns, miss in almost %}<li class="craft craft--almost"><a class="craft__t" href="{{ e.url }}">{{ e.short }}</a> <span class="craft__out" lang="en">{{ r.result }} × {{ r.count }}</span><span class="craft__need">{{ need_list(ns, miss) }}</span><span class="craft__miss">Не хватает: {% set m = miss[0] %}{% if m.entry %}<a href="{{ m.entry.url }}">{{ m.entry.short }}</a>{% else %}<span lang="en">{{ m.title }}</span> (на сайте нет){% endif %} × {{ m.qty }}</span></li>{% endfor %}</ul>
+{% else %}<p class="note">Нет рецептов, где не хватает ровно одного ингредиента.</p>{% endif %}</section>
+<p class="note">Учитываются рецепты, которые разобраны со страниц источника; переплавка в печи не учитывается. Вид досок и брёвен не различается: «Доски» подходят к любому рецепту с досками.</p>
+<h2 id="izmenit">Изменить выбор</h2>
+{% endif %}
+{{ inv_form(opts, have) }}
+{% endblock %}

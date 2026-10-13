@@ -1,17 +1,9 @@
 {% extends "base.html" %}
+{% from "_inv.html" import inv_form %}
 {% block main %}
-<section class="hero" aria-labelledby="h-main"><h1 id="h-main">Что будем делать?</h1>
-<p class="lead">Выберите предмет и сколько штук нужно — получите шаги крафта по порядку и список базовых ресурсов. Количества — из сетки крафта источника{% if site.version and site.version.src.java_current %} (Java Edition {{ site.version.src.java_current }}){% endif %}.</p>
-{% set targets = site.entries|selectattr('type', 'in', ['item', 'building'])|list %}
-<form class="pf" action="/planirovshchik/" method="get" aria-label="Планировщик крафта">
-  <label for="pi">Предмет</label><select id="pi" name="item">{% for e in targets if recipe_inputs(e) %}<option value="{{ e.slug }}">{{ e.short }}</option>{% endfor %}</select>
-  <label for="pn">Сколько</label><input id="pn" name="n" type="number" inputmode="numeric" min="1" max="{{ MAX_N }}" value="1" required>
-  <button type="submit" class="btn">Посчитать</button>
-</form></section>
-<section aria-labelledby="h-t"><h2 id="h-t">Быстрый выбор</h2>
-<ul class="tiles">{% for e in targets if recipe_inputs(e) %}{% set ri = recipe_inputs(e) %}<li><a href="/planirovshchik/?item={{ e.slug }}&amp;n={{ ri[0].count }}"><b>{{ e.short }}</b><span>{{ ri[0].count }} шт. за крафт</span></a></li>{% endfor %}</ul></section>
-{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() if sec != 'predmety' %}
-<section aria-labelledby="h-{{ sec }}"><div class="head"><h2 id="h-{{ sec }}">{{ label }}</h2><a href="/{{ gid }}/{{ sec }}/">Таблица: {{ items|length }}</a></div>
-<ul class="chips">{% for e in items %}<li><a href="{{ e.url }}">{{ e.short }}</a></li>{% endfor %}</ul></section>
-{% endfor %}{% endfor %}
+<section class="hero" aria-labelledby="h-main"><h1 id="h-main">Что сделать из того, что есть?</h1>
+<p class="lead">Отметьте, что лежит в инвентаре, — покажем, что можно собрать прямо сейчас и чего не хватает до следующего предмета. Ингредиенты и количества — из сетки крафта источника{% if site.version and site.version.src.java_current %} (Java Edition {{ site.version.src.java_current }}){% endif %}.</p></section>
+{{ inv_form(app.inventory_options()) }}
+<section aria-labelledby="h-more"><h2 id="h-more">Ещё</h2>
+<ul class="chips"><li><a href="/planirovshchik/">Планировщик: сколько нужно на N штук</a></li>{% for gid in site.games %}{% for sec, (label, items) in site.sections(gid).items() %}<li><a href="/{{ gid }}/{{ sec }}/">{{ label }}</a></li>{% endfor %}{% endfor %}</ul></section>
 {% endblock %}

@@ -16,3 +16,7 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 
 В sitemap 27 URL, все 200, canonical на себя, один H1, уникальные title, нет `href="#"` (тест).
 Разметка HowTo/Recipe не используется: рецепт крафта — не кулинарный рецепт, а автора и дат для Article нет.
+
+## Вариант C (inventory-first)
+
+`/iz-togo-chto-est/` без параметров — index, canonical на себя, в sitemap; с выбором (`?est=`) — noindex без canonical; только неизвестные материалы — 400.

@@ -1,4 +1,4 @@
-"""Приёмочные тесты games-survival (вариант craft-planner)."""
+"""Приёмочные тесты games-survival (вариант inventory-first)."""
 
 import copy
 import json
@@ -174,7 +174,7 @@ def test_search(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="craft-planner"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="inventory-first"' in html
     assert get(app, "/robots.txt")[1].strip().endswith("Disallow: /")
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)

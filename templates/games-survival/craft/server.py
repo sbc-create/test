@@ -1,4 +1,4 @@
-"""SSR-сервер games-survival (вариант craft-planner)."""
+"""SSR-сервер games-survival (вариант inventory-first)."""
 
 from __future__ import annotations
 
@@ -61,6 +61,7 @@ class App:
             if p.is_file()
         }
         self.env.globals.update(
+            app=self,
             site=self.site,
             plural=plural,
             asset=lambda rel: f"/static/{rel}?v={h.get(rel, '0')}",
@@ -158,6 +159,8 @@ class App:
             return self.page(
                 "entry.html", f"{e.title} — {s.games[e.game]['title']}", e.summary, e.url, crumbs, [], "entry", e=e
             )
+        if path == "/iz-togo-chto-est/":
+            return self.inventory(q)
         if path == "/planirovshchik/":
             return self.planner(q)
         if path == "/kak-my-rabotaem/":
@@ -203,7 +206,7 @@ class App:
 
     def sitemap_urls(self):
         s = self.site
-        urls = ["/", "/planirovshchik/", "/kak-my-rabotaem/", "/istochniki/"]
+        urls = ["/", "/iz-togo-chto-est/", "/planirovshchik/", "/kak-my-rabotaem/", "/istochniki/"]
         for gid in s.games:
             secs = s.sections(gid)
             if secs:
@@ -249,6 +252,39 @@ class App:
             "planner.html", meta, targets=targets, p=p, error=error, slug=slug, n=n if p else (raw[:4] or 1)
         )
         return (200 if p else 400), body, {}
+
+    def inventory_options(self):
+        from craft.inventory import options
+
+        return options(self.site)
+
+    def inventory(self, q: dict):
+        """Без выбора — индексируемая форма; с выбором — noindex без canonical; только неизвестные материалы — 400."""
+        from craft.inventory import craftable, options
+
+        s = self.site
+        raw = [x for x in q.get("est", []) if x][:60]
+        opts = options(s)
+        known = {e.slug for e in opts}
+        have = [x for x in dict.fromkeys(raw) if x in known]
+        crumbs = [("Главная", "/"), ("Из того, что есть", "/iz-togo-chto-est/")]
+        error = "Таких материалов на сайте нет — отметьте из списка." if raw and not have else None
+        now, almost = craftable(s, set(have)) if have else ([], [])
+        meta = Meta(
+            f"Из того, что есть: {len(have)} {plural(len(have), 'материал', 'материала', 'материалов')}"
+            if have
+            else "Что сделать из того, что есть",
+            "Отметьте, что есть в инвентаре, — покажем, что можно сделать сейчас и чего не хватает, по сетке крафта источника.",
+            None if raw else s.abs("/iz-togo-chto-est/"),
+            not raw,
+            crumbs,
+            [self.crumbs_ld(crumbs)],
+            "inventory",
+        )
+        body = self.render(
+            "inventory.html", meta, opts=opts, have=have, now=now, almost=almost, error=error, asked=bool(raw)
+        )
+        return (400 if error else 200), body, {}
 
     def sitemap(self):
         rows = "\n".join(f"<url><loc>{self.site.abs(p)}</loc></url>" for p in self.sitemap_urls())

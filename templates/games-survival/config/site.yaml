@@ -1,13 +1,13 @@
 site_id: games-survival
 name: "База выживания"
-variant_id: craft-planner      # вариант B: цель и количество → шаги и базовые ресурсы; компактный каталог
+variant_id: inventory-first    # вариант C: что есть в инвентаре → что можно сделать сейчас и чего не хватает
 variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
-  preview: "http://127.0.0.1:8862"
+  preview: "http://127.0.0.1:8872"
   production: null               # BLOCKED_INPUT: домен не выбран
-server: {bind: 127.0.0.1, port: 8862}
-storage_namespace: "gsv-plan"
+server: {bind: 127.0.0.1, port: 8872}
+storage_namespace: "gsv-inv"
 ads: {adapter: disabled}
 analytics: {adapter: disabled}

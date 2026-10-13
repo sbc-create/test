@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-survival (craft-planner): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-survival (inventory-first): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,11 +11,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8862"
+BASE = "http://127.0.0.1:8872"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 ITEM = "/minecraft/predmety/palka/"
 SHOTS = {
+    "inventory": "/iz-togo-chto-est/?est=doski&est=palka&est=ugol",
     "home": "/",
     "planner": "/planirovshchik/?item=fakel&n=16",
     "game": "/minecraft/",
@@ -90,7 +91,7 @@ def run(shots: Path | None) -> dict:
         # --- действия на телефоне, с проверкой результата ---
         ctx = br.new_context(viewport=VIEW["mobile"], locale="ru-RU")
         pg = ctx.new_page()
-        pg.goto(BASE + "/")
+        pg.goto(BASE + "/planirovshchik/")  # вариант C: форма планировщика — на своей странице
         pg.keyboard.press("Tab")
         A["keyboard_first_tab_is_skip"] = pg.evaluate("document.activeElement.className") == "skip"
         pg.keyboard.press("Enter")
@@ -110,11 +111,11 @@ def run(shots: Path | None) -> dict:
         A["steps_persist_after_reload"] = (
             boxes.nth(0).is_checked() and boxes.nth(1).is_checked() and not boxes.nth(2).is_checked()
         )
-        A["storage_uses_variant_namespace"] = pg.evaluate("Object.keys(localStorage)") == ["gsv-plan:steps:fakel-16"]
+        A["storage_uses_variant_namespace"] = pg.evaluate("Object.keys(localStorage)") == ["gsv-inv:steps:fakel-16"]
         pg.click("[data-steps-reset]")
         A["steps_reset_clears"] = (
             boxes.nth(0).is_checked() is False
-            and pg.evaluate("localStorage.getItem('gsv-plan:steps:fakel-16')") == "[]"
+            and pg.evaluate("localStorage.getItem('gsv-inv:steps:fakel-16')") == "[]"
         )
         pg.evaluate("window.__printed = 0; window.print = () => { window.__printed++; }; 0")  # «; 0»: не функция
         pg.click("[data-print]")
@@ -167,6 +168,29 @@ def run(shots: Path | None) -> dict:
         )
         pg.go_back()
         A["history_back_returns"] = "/poisk/" in pg.url
+        # --- вариант C: инвентарь ---
+        pg.evaluate("localStorage.clear(); 0")
+        pg.goto(BASE + "/")
+        url0 = pg.url
+        pg.click(".inv .btn")
+        A["empty_inventory_submit_blocked"] = pg.url == url0
+        pg.locator(".inv__list label", has_text="Доски").click()
+        pg.locator(".inv__list label", has_text="Палка").click()
+        A["inv_count_updates"] = pg.locator("[data-inv-count]").inner_text() == "Отмечено: 2"
+        with pg.expect_navigation():
+            pg.click(".inv .btn")
+        A["craftable_now_listed"] = pg.locator("#h-now").inner_text() == "Можно сделать сейчас: 6"
+        A["almost_names_missing"] = pg.locator(".craft--almost .craft__miss", has_text="Уголь").count() == 1
+        with pg.expect_navigation():
+            pg.locator(".craft__t", has_text="Факел").click()
+        A["craft_row_opens_item"] = pg.url.endswith("/predmety/fakel/")
+        pg.goto(BASE + "/poisk/?q=x")
+        A["header_link_keeps_inventory"] = "est=doski" in (pg.locator("[data-inv-link]").get_attribute("href") or "")
+        pg.goto(BASE + "/")
+        A["home_form_remembers_inventory"] = pg.locator("input[value=doski]").is_checked()
+        resp = pg.goto(BASE + "/iz-togo-chto-est/?est=almaz")
+        A["unknown_material_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
+        A["storage_namespace_own"] = all(k.startswith("gsv-inv:") for k in pg.evaluate("Object.keys(localStorage)"))
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()
