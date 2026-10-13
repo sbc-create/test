@@ -1,0 +1,26 @@
+{
+ "slug": "predmet-blood-of-lathander",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-a6b25399f5",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: The Blood of Lathander — булава +3",
+ "summary": "Легендарная булава +3: 1d6 + 3 дробящего урона. По данным вики, её получают в задании «Find the Blood of Lathander»; она постоянно светится и ослепляет ближайших исчадий и нежить своим светом.",
+ "points": [
+  "Редкость: легендарный (Legendary), зачарование +3",
+  "Урон: 1d6 + 3 дробящего",
+  "Где найти: Crèche Y'llek"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-sword-of-justice"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

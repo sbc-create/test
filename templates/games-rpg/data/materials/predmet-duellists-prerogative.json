@@ -1,0 +1,27 @@
+{
+ "slug": "predmet-duellists-prerogative",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-d111dea770",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Duellist's Prerogative — рапира +3",
+ "summary": "Легендарная рапира +3: 1d8 + 3 колющего урона и ещё 1d4 некротического. По данным вики, она повышает шанс критического удара и даёт дополнительную реакцию, если вторая рука свободна.",
+ "points": [
+  "Редкость: легендарный (Legendary), зачарование +3",
+  "Урон: 1d8 + 3 колющего",
+  "Дополнительно: 1d4 некротического",
+  "Где найти: Lora's House"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-phalar-aluve"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

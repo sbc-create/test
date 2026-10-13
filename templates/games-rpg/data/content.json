@@ -417,6 +417,69 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "predmet-blood-of-lathander",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-a6b25399f5",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: The Blood of Lathander — булава +3",
+   "summary": "Легендарная булава +3: 1d6 + 3 дробящего урона. По данным вики, её получают в задании «Find the Blood of Lathander»; она постоянно светится и ослепляет ближайших исчадий и нежить своим светом.",
+   "points": [
+    "Редкость: легендарный (Legendary), зачарование +3",
+    "Урон: 1d6 + 3 дробящего",
+    "Где найти: Crèche Y'llek"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-sword-of-justice"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "5e4f1250351cf7cbc1b19db5139c573129d168b9c627f3b5c78a4d7c9c31f9c3",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-duellists-prerogative",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-d111dea770",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Duellist's Prerogative — рапира +3",
+   "summary": "Легендарная рапира +3: 1d8 + 3 колющего урона и ещё 1d4 некротического. По данным вики, она повышает шанс критического удара и даёт дополнительную реакцию, если вторая рука свободна.",
+   "points": [
+    "Редкость: легендарный (Legendary), зачарование +3",
+    "Урон: 1d8 + 3 колющего",
+    "Дополнительно: 1d4 некротического",
+    "Где найти: Lora's House"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-phalar-aluve"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "e7a1dfd49e192e3486c7c33df9184f201d8e7a61b3299dcbb394c7daec6f15e7",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "predmet-everburn-blade",
    "game": "baldurs-gate-3",
    "type": "item",
@@ -446,6 +509,70 @@
    "text_hash": "7de39738eba79e11686939be9b01733cc5c52568a2696d16c04eab88c597d75e",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-helldusk-armour",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-3f6447046c",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Helldusk Armour — легендарные латы",
+   "summary": "Легендарные тяжёлые латы с классом доспеха 21 и весом 20 кг. По данным вики, их можно носить без владения доспехами; они дают сопротивление огню, снижают урон на 3 от всех источников и дают заклинание Fly.",
+   "points": [
+    "Редкость: легендарный (Legendary)",
+    "Класс доспеха: 21",
+    "Вес: 20 кг",
+    "Где найти: House of Hope"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-adamantine-splint"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "d12df9ca9572e1dbb9cebe2aba79a3bb08b6094fc026618197511d4dae519a5e",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "predmet-nyrulna",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "src": "src-40a20e3590",
+   "also": [
+    "src-07bd2e5b20"
+   ],
+   "title": "Предмет: Nyrulna — трезубец +3",
+   "summary": "Легендарный трезубец +3: 1d6 + 3 колющего одной рукой, 1d8 + 3 двумя, плюс 1d6 урона звуком. По данным вики, его можно метнуть — он взрывается и возвращается к владельцу.",
+   "points": [
+    "Редкость: легендарный (Legendary), зачарование +3",
+    "Одной рукой: 1d6 + 3 колющего",
+    "Двумя руками: 1d8 + 3 колющего",
+    "Дополнительно: 1d6 звуком"
+   ],
+   "tips": [],
+   "related": [
+    "predmet-everburn-blade"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "checklist": [],
+   "version": 1,
+   "text_hash": "f54d491c7d3094b361752e136702d2dce2849e3ad7a5df6ce57bbdac0a1bb8d4",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
    "review_status": "ai_draft"
   },
   {
@@ -772,6 +899,76 @@
    ],
    "progression_parsed": true
   },
+  "src-3f6447046c": {
+   "id": "src-3f6447046c",
+   "url": "https://bg3.wiki/wiki/Helldusk_Armour",
+   "fetched_at": "2026-10-13T00:58:03Z",
+   "page_sha256": "303bf02a980786481ff724601ff66ddd4fd5245daf074cbb2798d8b51916606c",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Helldusk Armour",
+   "lead": [
+    "Helldusk Armour is a legendary heavy Armour which can be worn without any proficiency. It grants Fire resistance, reduces damage by 3 from all sources, and grants the Fly spell.",
+    "Carixim , soul-stuffed forgemaster of hellish Avernus , hammers away ceaselessly at new creations. Questions of morality and destiny do not concern him. Conscience is for his betters. He works with cheer, his swollen skin moaning soothingly."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Legendary",
+    "weight_kg": 20.0,
+    "damage": [],
+    "extra_damage": [],
+    "armour_class": 21,
+    "category": "Heavy Armour",
+    "enchantment": 0,
+    "found_in": "House of Hope"
+   }
+  },
+  "src-40a20e3590": {
+   "id": "src-40a20e3590",
+   "url": "https://bg3.wiki/wiki/Nyrulna",
+   "fetched_at": "2026-10-13T00:58:05Z",
+   "page_sha256": "e17f1d0558f805cff5b4f11c79457e917710766bc1a3c6362b29488de907e11f",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Nyrulna",
+   "lead": [
+    "Nyrulna is a legendary +3 Trident which can be thrown to create an explosion that deals Thunder damage in an area. It grants additional movement speed and jump distance and returns to the wielder after being thrown.",
+    "The forgemaster Lirrico designed this weapon for the champion of the wind goddess Akadi . A key component in the forging was his home city's wind, and for a year after the weapon was made, no wind blew there at all."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Legendary",
+    "weight_kg": 1.8,
+    "damage": [
+     {
+      "hand": "One-handed",
+      "dice": "1d6 + 3",
+      "type": "Piercing"
+     },
+     {
+      "hand": "Two-handed",
+      "dice": "1d8 + 3",
+      "type": "Piercing"
+     }
+    ],
+    "extra_damage": [
+     {
+      "dice": "1d6",
+      "type": "Thunder"
+     }
+    ],
+    "armour_class": null,
+    "category": "Tridents",
+    "enchantment": 3,
+    "found_in": "Jungle"
+   }
+  },
   "src-6608eb1dfd": {
    "id": "src-6608eb1dfd",
    "url": "https://bg3.wiki/wiki/Adamantine_Splint_Armour",
@@ -888,6 +1085,38 @@
     "found_in": "Risen Road Toll House"
    }
   },
+  "src-a6b25399f5": {
+   "id": "src-a6b25399f5",
+   "url": "https://bg3.wiki/wiki/The_Blood_of_Lathander",
+   "fetched_at": "2026-10-13T00:57:59Z",
+   "page_sha256": "f1a4807652d20497d61eaa50b1b7eaf06a1adad86d25b2349d9694005c3942ae",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "The Blood of Lathander",
+   "lead": [
+    "The Blood of Lathander is a legendary + 3 Mace found through the ⁠ Find the Blood of Lathander quest. It continuously sheds light, blinds nearby Fiends and Undead with its light, can prevent death as well as heal its wielder, and allows the wielder to cast Sunbeam ."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Legendary",
+    "weight_kg": 1.8,
+    "damage": [
+     {
+      "hand": null,
+      "dice": "1d6 + 3",
+      "type": "Bludgeoning"
+     }
+    ],
+    "extra_damage": [],
+    "armour_class": null,
+    "category": "Maces",
+    "enchantment": 3,
+    "found_in": "Crèche Y'llek"
+   }
+  },
   "src-b9458ea969": {
    "id": "src-b9458ea969",
    "url": "https://bg3.wiki/wiki/Shadowheart",
@@ -978,6 +1207,44 @@
     "INT": 13,
     "WIS": 10,
     "CHA": 17
+   }
+  },
+  "src-d111dea770": {
+   "id": "src-d111dea770",
+   "url": "https://bg3.wiki/wiki/Duellist%27s_Prerogative",
+   "fetched_at": "2026-10-13T00:58:01Z",
+   "page_sha256": "324242aa0f61a1b48334f96c0b637560b20ce40cffa3117fa469e92e942642c6",
+   "parser": "grpg-facts/1.0",
+   "kind": "wiki",
+   "publisher": "bg3.wiki",
+   "game": "baldurs-gate-3",
+   "type": "item",
+   "name": "Duellist's Prerogative",
+   "lead": [
+    "Duellist's Prerogative is a legendary +3 Rapier that grants the wielder a greater chance of critical hits, and an extra reaction provided their off-hand is empty. The wielder can also use a reaction to grant additional Necrotic damage on a hit.",
+    "A blade gifted to Lora by her own mother, Lenore the Fleet. When challenged to duels, Lenore's opponents assumed she had received this nickname from some naval exploit. They found out how wrong they were when her blade blurred faster than the eye could follow."
+   ],
+   "patches": [],
+   "item": {
+    "rarity": "Legendary",
+    "weight_kg": 0.9,
+    "damage": [
+     {
+      "hand": null,
+      "dice": "1d8 + 3",
+      "type": "Piercing"
+     }
+    ],
+    "extra_damage": [
+     {
+      "dice": "1d4",
+      "type": "Necrotic"
+     }
+    ],
+    "armour_class": null,
+    "category": "Rapiers",
+    "enchantment": 3,
+    "found_in": "Lora's House"
    }
   },
   "src-e195885694": {
