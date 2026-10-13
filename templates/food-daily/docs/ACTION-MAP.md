@@ -1,6 +1,6 @@
 # Карта действий food-daily, вариант B (fridge-first)
 
-Проверено на commit `ae5fe38` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/ae5fe38 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `e85c2f0` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/e85c2f0 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -38,4 +38,31 @@
 | nojs_fav_button_hidden | PASS | `True` |
 | ширины 320/390/768/1440 × 57 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 38 страниц×ширин | PASS | 0 нарушений |
-| редактор (/redaktor/) — секрет B не создавался | NOT_RUN | в варианте нет |
+| редактор: без входа — 401 и запрос Basic Auth | PASS | `no_auth_401_with_challenge` |
+| редактор: неверный пароль — 401 | PASS | `wrong_password_401` |
+| редактор: чужое имя с верным паролем — 401 | PASS | `wrong_user_401` |
+| редактор: верные данные — 200 | PASS | `login_200` |
+| редактор: страница редактора — noindex | PASS | `editor_noindex` |
+| редактор: robots закрывает /redaktor/ (в preview — «Disallow: /») | PASS | `robots_disallow_redaktor` |
+| редактор: в sitemap нет /redaktor/ | PASS | `sitemap_has_no_redaktor` |
+| редактор: строк в списке столько же, сколько материалов в БД (24) | PASS | `list_rows_match_db` |
+| редактор: публичная страница выбранного рецепта — 200 | PASS | `public_page_200_before` |
+| редактор: параметр msg экранируется (<script> не исполняется) | PASS | `msg_param_escaped` |
+| редактор: POST без CSRF-токена — 403 | PASS | `post_without_csrf_403` |
+| редактор: POST без входа — 401 | PASS | `post_without_auth_401` |
+| редактор: после отклонённых POST страница не изменилась (200) | PASS | `public_page_200_after_refused_posts` |
+| редактор: ссылка из списка открывает материал | PASS | `list_link_opens_item` |
+| редактор: «Снять» → сообщение «снято с preview» | PASS | `unpublish_msg` |
+| редактор: статус публикации стал hidden | PASS | `unpublish_status_hidden` |
+| редактор: публичная страница после снятия — 404 | PASS | `public_page_404_after_unpublish` |
+| редактор: снимок сайта изменился только у этого материала | PASS | `snapshot_only_target_removed` |
+| редактор: «В preview» → страница снова 200 | PASS | `republish_restores_public_page` |
+| редактор: откат к v1 создаёт новую версию, а не стирает историю | PASS | `rollback_creates_new_version` |
+| редактор: diff между версиями показан | PASS | `diff_shown` |
+| редактор: решение редактора записано (статус editor_rejected на копии) | PASS | `review_recorded` |
+| редактор: журнал содержит действия editor:<имя> | PASS | `audit_log_has_editor_actions` |
+| редактор: нет горизонтального скролла на 390 и 1440 px | PASS | `no_hscroll_editor_pages` |
+| редактор: axe-core 4.13.0 — 0 нарушений | PASS | `axe_zero_editor_pages` |
+| редактор: нет ошибок консоли | PASS | `no_console_errors` |
+
+Редактор проверен на `e85c2f0` на изолированной копии (порт 8881): `docs/verification-editor.json`, способ — там же.

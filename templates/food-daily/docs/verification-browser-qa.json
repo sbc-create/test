@@ -1,7 +1,7 @@
 {
  "base": "http://127.0.0.1:8863",
- "commit_head": "ae5fe387f83f90d58c537e652d7a59fb09b0ba6d",
- "at": "2026-10-13T01:17:06Z",
+ "commit_head": "e85c2f0ee5290bb6452683b7da540387f5460a43",
+ "at": "2026-10-13T08:12:00Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:catalog:no_hscroll": true,
@@ -85,116 +85,116 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 148,
+   "lcp_ms": 168,
    "cls": 0,
-   "ttfb_ms": 31,
-   "dom_ms": 132,
+   "ttfb_ms": 47,
+   "dom_ms": 70,
    "bytes": 46571,
    "requests": 3
   },
   "mobile:catalog": {
-   "lcp_ms": 88,
+   "lcp_ms": 104,
    "cls": 0,
-   "ttfb_ms": 31,
+   "ttfb_ms": 44,
    "dom_ms": 61,
    "bytes": 10343,
    "requests": 3
   },
   "mobile:recipe": {
-   "lcp_ms": 64,
+   "lcp_ms": 100,
    "cls": 0,
-   "ttfb_ms": 7,
-   "dom_ms": 32,
+   "ttfb_ms": 25,
+   "dom_ms": 55,
    "bytes": 19494,
    "requests": 3
   },
   "mobile:fridge": {
-   "lcp_ms": 100,
+   "lcp_ms": 68,
    "cls": 0,
-   "ttfb_ms": 49,
-   "dom_ms": 79,
+   "ttfb_ms": 23,
+   "dom_ms": 49,
    "bytes": 10125,
    "requests": 3
   },
   "mobile:tag": {
-   "lcp_ms": 72,
+   "lcp_ms": 120,
    "cls": 0,
-   "ttfb_ms": 17,
-   "dom_ms": 41,
+   "ttfb_ms": 13,
+   "dom_ms": 35,
    "bytes": 11654,
    "requests": 3
   },
   "mobile:article": {
    "lcp_ms": 60,
    "cls": 0,
-   "ttfb_ms": 15,
-   "dom_ms": 44,
+   "ttfb_ms": 17,
+   "dom_ms": 40,
    "bytes": 13235,
    "requests": 3
   },
   "desktop:home": {
-   "lcp_ms": 132,
+   "lcp_ms": 124,
    "cls": 0,
-   "ttfb_ms": 9,
-   "dom_ms": 42,
+   "ttfb_ms": 6,
+   "dom_ms": 40,
    "bytes": 46571,
    "requests": 3
   },
   "desktop:catalog": {
    "lcp_ms": 84,
    "cls": 0,
-   "ttfb_ms": 9,
-   "dom_ms": 41,
+   "ttfb_ms": 4,
+   "dom_ms": 29,
    "bytes": 10343,
    "requests": 3
   },
   "desktop:recipe": {
-   "lcp_ms": 104,
+   "lcp_ms": 108,
    "cls": 0.0018,
-   "ttfb_ms": 16,
-   "dom_ms": 67,
+   "ttfb_ms": 5,
+   "dom_ms": 71,
    "bytes": 19494,
    "requests": 3
   },
   "desktop:fridge": {
-   "lcp_ms": 56,
+   "lcp_ms": 72,
    "cls": 0,
-   "ttfb_ms": 4,
-   "dom_ms": 25,
+   "ttfb_ms": 5,
+   "dom_ms": 33,
    "bytes": 10125,
    "requests": 3
   },
   "desktop:tag": {
-   "lcp_ms": 96,
+   "lcp_ms": 84,
    "cls": 0,
-   "ttfb_ms": 9,
+   "ttfb_ms": 7,
    "dom_ms": 37,
    "bytes": 11654,
    "requests": 3
   },
   "desktop:article": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0,
-   "ttfb_ms": 4,
-   "dom_ms": 33,
+   "ttfb_ms": 8,
+   "dom_ms": 28,
    "bytes": 13235,
    "requests": 3
   }
  },
  "console_errors": [],
  "screenshots": [
-  "docs/screenshots/ae5fe38/home-mobile.png",
-  "docs/screenshots/ae5fe38/catalog-mobile.png",
-  "docs/screenshots/ae5fe38/recipe-mobile.png",
-  "docs/screenshots/ae5fe38/fridge-mobile.png",
-  "docs/screenshots/ae5fe38/tag-mobile.png",
-  "docs/screenshots/ae5fe38/article-mobile.png",
-  "docs/screenshots/ae5fe38/home-desktop.png",
-  "docs/screenshots/ae5fe38/catalog-desktop.png",
-  "docs/screenshots/ae5fe38/recipe-desktop.png",
-  "docs/screenshots/ae5fe38/fridge-desktop.png",
-  "docs/screenshots/ae5fe38/tag-desktop.png",
-  "docs/screenshots/ae5fe38/article-desktop.png"
+  "docs/screenshots/e85c2f0/home-mobile.png",
+  "docs/screenshots/e85c2f0/catalog-mobile.png",
+  "docs/screenshots/e85c2f0/recipe-mobile.png",
+  "docs/screenshots/e85c2f0/fridge-mobile.png",
+  "docs/screenshots/e85c2f0/tag-mobile.png",
+  "docs/screenshots/e85c2f0/article-mobile.png",
+  "docs/screenshots/e85c2f0/home-desktop.png",
+  "docs/screenshots/e85c2f0/catalog-desktop.png",
+  "docs/screenshots/e85c2f0/recipe-desktop.png",
+  "docs/screenshots/e85c2f0/fridge-desktop.png",
+  "docs/screenshots/e85c2f0/tag-desktop.png",
+  "docs/screenshots/e85c2f0/article-desktop.png"
  ],
  "accessibility": {
   "axe_version": "4.13.0",

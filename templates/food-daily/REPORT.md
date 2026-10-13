@@ -32,3 +32,19 @@ LCP (лаборатория, loopback, без троттлинга) 56–148 м�
 | наполнение | тот же снимок, что у A: 22 рецепта, 3 совета; тексты — черновики сессии Claude (manual_standin), не Qwen; редактор не проверял; рецепты не готовились |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на e85c2f0 (13.10.2026): редактор
+
+Исправлено: на 390 px таблица редактора давала горизонтальный скролл, `<pre>` не был доступен с клавиатуры, поля diff и выбор решения были без подписей (axe: label, select-name, scrollable-region-focusable).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | PASS |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/e85c2f0 --out docs/verification-browser-qa.json` | 0 | 31 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8863 …` | 0 | 57 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из e85c2f0 |
+| приёмка редактора (scratchpad `ed_qa.py`) | 0 | 26 проверок PASS — `docs/verification-editor.json` |
+
+Редактор: было NOT_RUN (секрет не создавался), теперь проверен на изолированной копии этого коммита; способ и
+ограничения — в `docs/verification-editor.json`. Решение «editor_rejected» записывалось только в копию БД.
