@@ -169,6 +169,47 @@ from factory.lords.nova_publish import (  # noqa: E402
                 "port": 9118},
     "lords-09": {"unit": "nova-lordfilm077-site.service", "host": "lordfilm077.site",
                 "port": 9119},
+    # Партия из восьми витрин от 2026-10-13 (lordfilm.group, lordfilm.spb.ru,
+    # lordfilm.msk.ru, lordserial.su, lordserial.group, lordserial.spb.ru,
+    # lordserial.msk.ru, lordserial.net.ru). Причина записи та же, что у
+    # lords-08/09: без неё `опубликовать` отвечает «витрина lords-10 не входит
+    # в профиль публикации», снимка не возникает, и первый выпуск домена
+    # падает на stage_snapshot. Проверено на деле: `factory cell content
+    # --site lords-10` до этой правки отвечал `no-source` —
+    # «снимка lords-10-catalog.json нет в /srv/lords/.frontend».
+    #
+    # Каталог — тот же снимок поставщика, что у остальных витрин семейства:
+    # производитель пишет им байт-идентичные файлы, а направление витрины
+    # (фильмы или сериалы) задаёт её ПРОФИЛЬ, а не отдельный снимок. Именно
+    # поэтому восемь почти одинаковых витрин не требуют восьми обходов
+    # источника. Демонстрационный каталог здесь не подставляется: источник
+    # один и тот же рабочий.
+    #
+    # Юнит и порт взяты из реестра ячеек (config/site-cells.json), а не
+    # назначены здесь: служб на хосте ещё нет, их создаёт launch-new-site.sh
+    # под root. В сборке каталога юнит не участвует — он нужен только для
+    # подсказки о перезапуске в конце отчёта.
+    #
+    # Цена измерена перед правкой: пара снимков 102,4 МиБ на витрину, каталог
+    # витрины с данными и выпусками ~240–300 МиБ; на восемь — 2,70 ГиБ при
+    # 7,81 ГиБ свободных. Хватает, но диск занят на 96 %, и это отдельный
+    # стоящий риск, а не запас.
+    "lords-10": {"unit": "nova-lordfilm-group.service", "host": "lordfilm.group",
+                "port": 9125},
+    "lords-11": {"unit": "nova-lordfilm-spb-ru.service", "host": "lordfilm.spb.ru",
+                "port": 9126},
+    "lords-12": {"unit": "nova-lordfilm-msk-ru.service", "host": "lordfilm.msk.ru",
+                "port": 9127},
+    "lords-13": {"unit": "nova-lordserial-su.service", "host": "lordserial.su",
+                "port": 9128},
+    "lords-14": {"unit": "nova-lordserial-group.service", "host": "lordserial.group",
+                "port": 9129},
+    "lords-15": {"unit": "nova-lordserial-spb-ru.service", "host": "lordserial.spb.ru",
+                "port": 9133},
+    "lords-16": {"unit": "nova-lordserial-msk-ru.service", "host": "lordserial.msk.ru",
+                "port": 9134},
+    "lords-17": {"unit": "nova-lordserial-net-ru.service", "host": "lordserial.net.ru",
+                "port": 9135},
 }
 
 #: Обвал каталога больше чем на эту долю считается порчей источника, а не
