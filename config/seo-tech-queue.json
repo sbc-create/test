@@ -620,8 +620,9 @@
       "norm": "задание п.3 — внутренние ссылки на работающие разделы",
       "expected": "на /catalog/ — список ссылок на разделы жанров (главный код имени, как в карте T032)",
       "check": "число ссылок /catalog/?genre= на /catalog/ ≥ числу жанров в карте; цели 200, index",
-      "status": "queued",
-      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком."
+      "status": "session",
+      "review": "Видимое изменение интерфейса: ветка выпускается только после просмотра человеком.",
+      "evidence": " zonafilm-space cc8355d, zonafilm12 c6262ea (локально, после T040/T039): блок «Жанры» разметкой главной (.zgenres) на голом /catalog/; правило вынесено в разделы_жанров() — общее с картой T032; checks/catalog_genre_links.py: 97/97 и 96/96, на прежнем коде rc=1. zonafilm-cc — следом (обёртка serve.py). Ждёт просмотра человеком."
     },
     {
       "id": "B020",
@@ -645,8 +646,8 @@
       "problem": "Латинский код жанра даёт второй индексируемый раздел: /genre/drama/ (canonical → /catalog/?genre=drama) и /catalog/?genre=драма — один и тот же раздел (24 из 24 карточек, 65 страниц), каждый canonical на себя, оба index. И у латинского варианта title/H1/description несут код: «Аниме в жанре «drama»». Карточка ссылается на русское имя (?genre=драма), ld+json — имена (замер Архитектора 13.10, три AnimeGo).",
       "expected": "(а) один канонический адрес раздела жанра (латинский код → canonical на имя); (б) в title/H1/description — имя жанра, а не код",
       "check": "canonical /catalog/?genre=drama → /catalog/?genre=драма; H1 «Аниме в жанре «драма»»",
-      "status": "session",
-      "evidence": "Сессия 13.10 ~03:30Z: в снимке AnimeGo genre_codes нет ни у одного из 8 589 тайтлов — карточки всегда ссылаются на ?genre=<имя>; панель фильтров и /genre/<код>/ — на код. Решение по expected: ?genre=<код> → имя из индекса (genre_names), H1/title/description — имя, canonical — ?genre=<имя> побайтно как у карточки. ВидАнимеГо.список, 3 ячейки; checks/genre_landing.py: код даёт тот же H1 и canonical, что имя, и страница 2 — canonical имени с page=2. Отрицательная проба (код из HEAD) — rc=1: H1 «boevik», canonical ?genre=boevik. Полные наборы идут."
+      "status": "verified",
+      "evidence": "Сессия 13.10 ~03:30Z: в снимке AnimeGo genre_codes нет ни у одного из 8 589 тайтлов — карточки всегда ссылаются на ?genre=<имя>; панель фильтров и /genre/<код>/ — на код. Решение по expected: ?genre=<код> → имя из индекса (genre_names), H1/title/description — имя, canonical — ?genre=<имя> побайтно как у карточки. ВидАнимеГо.список, 3 ячейки; checks/genre_landing.py: код даёт тот же H1 и canonical, что имя, и страница 2 — canonical имени с page=2. Отрицательная проба (код из HEAD) — rc=1: H1 «boevik», canonical ?genre=boevik. Полные наборы идут. Локальные коммиты (B019): an1mego f3baaa6, animeg0 9c16276, an1meg0 abc90c7; полные run.sh — rc=0 на всех трёх (манифест перештампован tools/stamp_manifest.py: manifest_and_entrypoint ловил artifact_sha256)."
     },
     {
       "id": "T036",
@@ -658,8 +659,8 @@
       "problem": "description разделов каталога без фактов: Zona 14–23 знака («Драма на Zona Cinema.»), Animedia 18–36 («Ai аниме на Animedia.»), числа нет ни у одного; страница при этом показывает «Результаты: N». У Lords образец: «Жанр «аниме» на Lordfilm: 8103 записи каталога — …» (замер Архитектора 13.10).",
       "expected": "«<раздел> на <сайт>: N <запись/записи/записей> каталога — смотреть онлайн[ — страница K].»",
       "check": "checks/section_description.py (стенд на снимке)",
-      "status": "session",
-      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом. zonafilm-cc: обёртка ВидЗона.список в src/serve.py (шаблон закреплён), проверка ловит промах обёртки пометкой data-zx; стенд PASS, отрицательная проба rc=1. Animedia (2): ВидАнимедиа.список, сверка с видимым «Найдено N»; стенд PASS обе, отрицательная проба rc=1. Локальные коммиты: zonafilm-cc 5458176, animedia-icu ca5925e (run.sh rc=0); animedia-space — повторный прогон после поправки runtime_artifact_sha256 (entrypoint-present поймал второй отпечаток)."
+      "status": "verified",
+      "evidence": "zonafilm-space ebfce27, zonafilm12-site 1dd346c (локально, B019): ВидЗона.каталог; checks/section_description.py сверяет число в description с видимой строкой «Результаты: N» — стенд PASS на обеих, полный run.sh rc=0; отрицательная проба (+1 в description) rc=1. zonafilm-cc и Animedia — следом. zonafilm-cc: обёртка ВидЗона.список в src/serve.py (шаблон закреплён), проверка ловит промах обёртки пометкой data-zx; стенд PASS, отрицательная проба rc=1. Animedia (2): ВидАнимедиа.список, сверка с видимым «Найдено N»; стенд PASS обе, отрицательная проба rc=1. Локальные коммиты: zonafilm-cc 5458176, animedia-icu ca5925e (run.sh rc=0); animedia-space — повторный прогон после поправки runtime_artifact_sha256 (entrypoint-present поймал второй отпечаток). Все 5 ячеек закоммичены: zonafilm-space ebfce27, zonafilm12 1dd346c, zonafilm-cc 5458176, animedia-space 62a6366, animedia-icu ca5925e; run.sh rc=0 на всех."
     },
     {
       "id": "T037",
@@ -686,6 +687,35 @@
       "check": "tests/operator/test_technical_seo.py, tests/operator/test_pipeline.py; grep: нет среза title[:N] в propose",
       "status": "done",
       "evidence": "factory/seo/validate.py SEO-003-len — warning, page_audit.py TITLE_LONG — info: им правка не нужна. Сделано 13.10 ~03:40Z: ONP-002/ONP-005 → info, рекомендация по п.3; ветка ONP-002 в propose() удалена; тест dry-run теперь требует: ONP-002 найден, правки title нет; демо-канарейка на IDX-001, docs/seo-operator/demo-canary-rollback.md перегенерирован (было: title обрезан до «…которо»). pytest tests/operator: 286 passed."
+    },
+    {
+      "id": "T039",
+      "site": "zonafilm.space, zonafilm12.site",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/"
+      ],
+      "problem": "Голый /catalog/ говорит «Результаты в этой выборке: 62978» и показывает «Сбросить», хотя условий нет (zonafilm.cc — «в каталоге», без «Сбросить»). Причина: has_active/n_active в ВидЗона.список считают служебный ключ «_подразумеваемое» (= 'sort', ставит отбор) активным фильтром — исключены только «_unknown» и «sort». Замер 13.10 03:23Z, отбор на снимке: выбрано = {'sort': 'newest', '_подразумеваемое': 'sort'}.",
+      "expected": "служебные ключи «_*» не считаются условиями: «Результаты в каталоге», без «Сбросить», счётчик фильтров 0",
+      "check": "стенд: /catalog/ — «в каталоге», нет href «Сбросить»; /catalog/?genre=drama — «в этой выборке» и «Сбросить»",
+      "status": "session",
+      "review": "Видимое изменение интерфейса (текст и ссылка «Сбросить»): выпуск после просмотра человеком.",
+      "evidence": " zonafilm-space 2345050, zonafilm12 fd95d0d (локально): служебные ключи «_*» не условия; checks/catalog_scope.py, на состоянии до правки rc=1. Ждёт просмотра человеком."
+    },
+    {
+      "id": "T040",
+      "site": "zonafilm12.site (и zonafilm.space — то же ядро)",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/"
+      ],
+      "problem": "Главная zonafilm12.site живьём 1,9–21,6 с (замер Архитектора 13.10 ~03:35Z; /healthz 0,15 с, /catalog/ 1,0 с; zonafilm.cc 0,2–0,5 с). Профиль сессии (cProfile, стенд на снимке, без нагрузки): главная 0,6–0,7 с на КАЖДЫЙ запрос — новинка() вызывается 76 362 раза (весь каталог в выбрать() и _герои_кандидаты()), каждый раз os.environ (часы, окно) и разбор дат. Под нагрузкой — очередь под GIL за запросами тайтлов, где на живом ещё полные «Похожие» ~0,9 с (T030 не выпущен, B019). Опыт: память статуса новизны на записи — 0,65 → 0,45 с, HTML тот же: мало.",
+      "norm": "B005: установившийся TTFB ≤ 0,2 с; задание п.5 (скорость как видит посетитель)",
+      "expected": "(1) выпуск T030 снимает основную очередь; (2) главная — память на снимок и сутки со сроком ~60 с и фоновым пересчётом, как src/perf_memo.py у zonafilm.cc (там главная 0,2–0,5 с живьём)",
+      "check": "стенд: повторная главная ≤ 0,05 с, HTML идентичен прямому вызову; смена снимка/суток — пересчёт; живой TTFB главной после выпуска",
+      "status": "verified",
+      "owner_action": "B019 (выпуск T030)",
+      "evidence": " zonafilm12 c1699e6, zonafilm-space c739946 (локально, первыми в серии — выезжают без T039/T034): Обработчик._главная_из_памяти, ключ вид/хост/снимок/сутки, срок 60 с; checks/home_memo.py — тело равно прямому вызову, повтор без вызова вида (0,1 мс), сутки и срок — пересчёт. Живой TTFB — после выпуска (B019)."
     }
   ]
 }
