@@ -631,7 +631,8 @@
       "expected": "http → 301/308 на https у всех 17; HSTS — решение владельца (необратимо на срок max-age)",
       "check": "curl -I http://<домен>/ → 301/308 Location https://…",
       "status": "blocked",
-      "owner_action": "Владелец/Архитектор (nginx, root): серверный блок listen 80 у 9 доменов — return 308 https://$host$request_uri (образец — yummyani.org/.site); HSTS включать отдельным решением."
+      "owner_action": "Владелец: шаг 6 docs/OWNER_TERMINAL_20261013.md (http-redirect-install.py). HSTS — отдельным решением (необратимо на срок max-age).",
+      "evidence": "Подтверждено независимо Архитектором (13.10 ~02:30Z, переходы не следовались): те же 9 / 8, 4 planned без DNS. Инструмент automation/host/http-redirect-install.py (показ: изменилось бы 9, отказов 0; ACME-путь проверяется до правки; --rollback)."
     }
   ]
 }
