@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Механики {{ site.games[gid].title }} по главам</h1>
+<p class="lead">В какой главе появляется механика — по материалам глав.</p>
+<div class="tablewrap"><table class="atl">
+<thead><tr><th scope="col">Механика</th><th scope="col">Глава</th></tr></thead>
+<tbody>{% for m, g in site.mechanics_index(gid) %}<tr><th scope="row">{{ m }}</th><td><a href="{{ g.url }}" lang="en">{{ g.name }}</a></td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

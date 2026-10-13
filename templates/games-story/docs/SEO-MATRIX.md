@@ -15,3 +15,7 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 
 В sitemap 17 URL, все 200, canonical на себя, один H1, уникальные title (тест). VideoObject — только name, embedUrl, url:
 даты загрузки и длительности oEmbed не даёт, мы их не придумываем (тест).
+
+## Вариант C (atlas)
+
+`/igra/<игра>/personazhi/`, `/mehaniki/`, `/gde-ya/`, `/personazh/<слаг>/` — index, canonical на себя, в sitemap; `/gde-ya/?q=` — noindex без canonical; неизвестный персонаж — 404.

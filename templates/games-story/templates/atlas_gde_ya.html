@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Где я? Чекпоинты {{ site.games[gid].title }}</h1>
+<form class="where" action="/igra/{{ gid }}/gde-ya/" method="get" role="search" aria-label="Фильтр чекпоинтов">
+  <label for="cq">Название чекпоинта или главы</label>
+  <div class="where__row"><input id="cq" name="q" type="search" value="{{ q }}" data-cp-filter><button type="submit" class="btn">Найти</button>{% if q %}<a class="btn btn--line" href="/igra/{{ gid }}/gde-ya/">Сбросить</a>{% endif %}</div>
+</form>
+<p class="cp-count" data-cp-count aria-live="polite">{{ rows|length }} {{ plural(rows|length, 'чекпоинт', 'чекпоинта', 'чекпоинтов') }}</p>
+{% if rows %}
+<ol class="cps">{% for r in rows %}<li class="cp" data-cp="{{ (r.name ~ ' ' ~ r.guide.name)|lower }}">
+  <b lang="en">{{ r.name }}</b>
+  <span class="cp__where"><a href="{{ r.guide.url }}" lang="en">{{ r.guide.name }}</a>, чекпоинт {{ r.n }} из {{ r.of }}</span>
+  <span class="cp__next">Дальше: {% if r.next %}<span lang="en">{{ r.next }}</span>{% elif r.next_guide %}следующая глава — <a href="{{ r.next_guide.url }}" lang="en">{{ r.next_guide.name }}</a>{% else %}последний чекпоинт в списке{% endif %}</span>
+</li>{% endfor %}</ol>
+{% else %}<div class="empty" role="status"><h2>Такого чекпоинта нет</h2><p>Проверьте написание — названия чекпоинтов на английском, как в игре.</p></div>{% endif %}
+<p class="note">Названия и порядок чекпоинтов — из инфобоксов глав на вики.</p>
+{% endblock %}

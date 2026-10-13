@@ -133,6 +133,48 @@ class App:
                 gid=gid,
                 gs=gs,
             )
+        m = re.fullmatch(r"/igra/([a-z0-9-]+)/(personazhi|mehaniki|gde-ya)/", path)
+        if m and m.group(1) in s.games and s.for_game(m.group(1)):
+            gid, kind = m.group(1), m.group(2)
+            title = s.games[gid]["title"]
+            label = {"personazhi": "Персонажи", "mehaniki": "Механики по главам", "gde-ya": "Где я? Чекпоинты"}[kind]
+            crumbs = [home, (title, f"/igra/{gid}/"), (label, path)]
+            q1 = (q.get("q") or [""])[0].strip()[:60]
+            rows = s.checkpoints(gid)
+            if kind == "gde-ya" and q1:
+                ql = q1.lower()
+                rows = [r for r in rows if ql in r["name"].lower() or ql in r["guide"].name.lower()]
+            meta = Meta(
+                f"{title}: {label.lower()}" + (f" — «{q1}»" if q1 else ""),
+                {
+                    "personazhi": "В каких главах появляется каждый персонаж — по инфобоксам вики.",
+                    "mehaniki": "Какая механика в какой главе появляется.",
+                    "gde-ya": "Найдите свой чекпоинт: глава, номер и что дальше.",
+                }[kind],
+                None if q1 else s.abs(path),
+                not q1,
+                crumbs,
+                [self.crumbs_ld(crumbs)],
+                kind,
+            )
+            return 200, self.render(f"atlas_{kind.replace('-', '_')}.html", meta, gid=gid, rows=rows, q=q1), {}
+        m = re.fullmatch(r"/igra/([a-z0-9-]+)/personazh/([a-z0-9-]+)/", path)
+        if m and m.group(1) in s.games and m.group(2) in s.characters(m.group(1)):
+            gid, slug = m.group(1), m.group(2)
+            ch = s.characters(gid)[slug]
+            title = s.games[gid]["title"]
+            crumbs = [home, (title, f"/igra/{gid}/"), ("Персонажи", f"/igra/{gid}/personazhi/"), (ch["name"], path)]
+            return self.page(
+                "atlas_character.html",
+                f"{ch['name']} в {title}: главы",
+                f"Главы {title}, где появляется {ch['name']}, — по инфобоксам вики.",
+                path,
+                crumbs,
+                [],
+                "character",
+                gid=gid,
+                ch=ch,
+            )
         m = re.fullmatch(r"/igra/([a-z0-9-]+)/kollekcii/", path)
         if m and m.group(1) in s.games:
             gid = m.group(1)
@@ -217,6 +259,8 @@ class App:
         for gid in s.games:
             if s.for_game(gid):
                 urls += [f"/igra/{gid}/", f"/igra/{gid}/kollekcii/"]
+                urls += [f"/igra/{gid}/{k}/" for k in ("personazhi", "mehaniki", "gde-ya")]
+                urls += [f"/igra/{gid}/personazh/{c}/" for c in s.characters(gid)]
         urls += [g.url for g in s.guides]
         return urls
 

@@ -1,8 +1,8 @@
 template: games-story
-variant_id: chapter-guides
-branch: claude/template-games-story
-worktree: /home/claude/wt-template-games-story
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main
+variant_id: atlas   # вариант C; A — chapter-guides (8857), B — progress-tracker (8858)
+branch: claude/template-games-story-c
+worktree: /home/claude/wt-template-games-story-c
+base_commit: a45135b   # вариант A (claude/template-games-story)
 owner_scope:
   write: [templates/games-story/**]
   shared_files_touched:
@@ -12,12 +12,12 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m saga.server (pid var/games-story/run/preview.pid)"
-  bind: 127.0.0.1:8857
+  bind: 127.0.0.1:8870
   data: templates/games-story/data (факты глав, видео, гайды, content.json)
   private: var/games-story/private (страницы источников, 0700, вне git)
   build: var/games-story/build/<commit>
   qa_dependencies: templates/games-story/qa (axe-core 4.13.0, свой lockfile)
-  browser_storage_namespace: "gst-chapters"
+  browser_storage_namespace: "gst-atlas"
 network_contracts:
   - contract: "games-ownership/1 (config/ownership.yaml) — одинаковая копия в games-story, games-rpg, games-survival"
 shared_with_other_templates: []

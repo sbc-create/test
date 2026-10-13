@@ -1,7 +1,7 @@
 /* games-story (chapter-guides): прогресс по главе, сводка прогресса по главам, плеер по нажатию, печать. */
 (function () {
   "use strict";
-  var ns = document.body.getAttribute("data-ns") || "gst";
+  var ns = document.body.getAttribute("data-ns") || "gst-atlas";
   function read(k, d) { try { var v = localStorage.getItem(ns + ":" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function write(k, v) { try { localStorage.setItem(ns + ":" + k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   var g = document.querySelector(".guide[data-slug]");
@@ -33,4 +33,16 @@
     });
   });
   document.querySelectorAll("[data-print]").forEach(function (b) { b.hidden = false; b.addEventListener("click", function () { window.print(); }); });
+
+  // «Где я?»: фильтр чекпоинтов на лету (без JS работает форма)
+  var f = document.querySelector("[data-cp-filter]");
+  if (f) {
+    var items = document.querySelectorAll("[data-cp]"), out = document.querySelector("[data-cp-count]");
+    var forms = function (n) { var a = n % 100, b = n % 10; return a > 10 && a < 20 ? "чекпоинтов" : b === 1 ? "чекпоинт" : b > 1 && b < 5 ? "чекпоинта" : "чекпоинтов"; };
+    f.addEventListener("input", function () {
+      var q = f.value.trim().toLowerCase(), n = 0;
+      items.forEach(function (li) { var on = !q || li.getAttribute("data-cp").indexOf(q) !== -1; li.hidden = !on; if (on) n++; });
+      out.textContent = n + " " + forms(n);
+    });
+  }
 })();

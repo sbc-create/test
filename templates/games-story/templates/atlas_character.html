@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+{% block main %}
+<p class="kicker">Персонаж · {{ site.games[gid].title }}</p>
+<h1 lang="en">{{ ch.name }}</h1>
+<p class="lead">Появляется в {{ ch.guides|length }} {{ plural(ch.guides|length, 'главе', 'главах', 'главах') }} — по инфобоксам глав на вики.</p>
+<ol class="appear">{% for g in ch.guides %}<li><a href="{{ g.url }}"><b lang="en">{{ g.name }}</b></a><span>{{ g.summary }}</span></li>{% endfor %}</ol>
+<p><a href="/igra/{{ gid }}/personazhi/">Все персонажи</a></p>
+{% endblock %}

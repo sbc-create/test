@@ -1,10 +1,22 @@
 {% extends "base.html" %}
-{% from "_parts.html" import card %}
 {% block main %}
-<section class="hero"><h1>Сюжет пройден</h1><p class="lead">Гайды по сюжетным играм по главам: маршрут, новые механики, коллекционные предметы. Прогресс отмечается и сохраняется на этом устройстве.</p></section>
-{% for gid, gm in site.games.items() %}{% set gs = site.for_game(gid) %}{% if gs %}
-<section aria-labelledby="h-{{ gid }}"><div class="head"><h2 id="h-{{ gid }}">{{ gm.title }}</h2><a href="/igra/{{ gid }}/">Все главы</a></div>
-<div class="gcs">{% for g in gs %}{{ card(g) }}{% endfor %}</div></section>
+<section class="hero"><h1>Атлас игры: кто, что и где</h1>
+<p class="lead">Не знаете, в какой вы главе? Найдите чекпоинт. Хотите вспомнить персонажа или механику — увидите, в каких главах они встречаются. Всё по инфобоксам и страницам вики игры.</p></section>
+{% for gid, game in site.games.items() %}{% if site.for_game(gid) %}
+<form class="where" action="/igra/{{ gid }}/gde-ya/" method="get" role="search" aria-label="Найти чекпоинт">
+  <label for="wq"><b>Где я?</b> Название чекпоинта или главы</label>
+  <div class="where__row"><input id="wq" name="q" type="search" placeholder="Например, Huge Mess"><button type="submit" class="btn">Найти</button></div>
+</form>
+<div class="atlas">
+  <section class="atlas__panel" aria-labelledby="h-ch"><h2 id="h-ch"><a href="/igra/{{ gid }}/personazhi/">Персонажи</a></h2>
+    <ul class="chips">{% for slug, c in site.characters(gid).items() %}<li><a href="/igra/{{ gid }}/personazh/{{ slug }}/"><span lang="en">{{ c.name }}</span> <small>{{ c.guides|length }} {{ plural(c.guides|length, 'глава', 'главы', 'глав') }}</small></a></li>{% endfor %}</ul></section>
+  <section class="atlas__panel" aria-labelledby="h-me"><h2 id="h-me"><a href="/igra/{{ gid }}/mehaniki/">Механики</a></h2>
+    {% set mi = site.mechanics_index(gid) %}<p>{{ mi|length }} {{ plural(mi|length, 'механика', 'механики', 'механик') }} в {{ site.for_game(gid)|length }} главах.</p>
+    <ul class="mini">{% for m, g in mi[:5] %}<li>{{ m }} — <a href="{{ g.url }}">{{ g.name }}</a></li>{% endfor %}</ul></section>
+  <section class="atlas__panel" aria-labelledby="h-cp"><h2 id="h-cp"><a href="/igra/{{ gid }}/gde-ya/">Чекпоинты</a></h2>
+    <p>{{ site.checkpoints(gid)|length }} чекпоинтов по порядку глав — с тем, что идёт следом.</p></section>
+</div>
+<section aria-labelledby="h-gl"><h2 id="h-gl">Главы {{ game.title }}</h2>
+  <ol class="chapters">{% for g in site.for_game(gid) %}<li><a href="{{ g.url }}"><span lang="en">{{ g.name }}</span></a></li>{% endfor %}</ol></section>
 {% endif %}{% endfor %}
-<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец, гайды не дублируются.</p>
 {% endblock %}

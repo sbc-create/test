@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Персонажи {{ site.games[gid].title }}</h1>
+<p class="lead">По инфобоксам глав на вики: кто появляется в какой главе. Описаний персонажей сайт не пишет.</p>
+<div class="tablewrap"><table class="atl">
+<thead><tr><th scope="col">Персонаж</th><th scope="col" class="num">Глав</th><th scope="col">Где</th></tr></thead>
+<tbody>{% for slug, c in site.characters(gid).items() %}<tr><th scope="row"><a href="/igra/{{ gid }}/personazh/{{ slug }}/" lang="en">{{ c.name }}</a></th><td class="num">{{ c.guides|length }}</td><td>{% for g in c.guides %}<span lang="en">{{ g.name }}</span>{% if not loop.last %}, {% endif %}{% endfor %}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% endblock %}

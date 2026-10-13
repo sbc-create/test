@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-story (chapter-guides): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-story (atlas): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,11 +11,13 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8857"
+BASE = "http://127.0.0.1:8870"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 GUIDE = "/igra/celeste/glava-1-forsaken-city/"
 SHOTS = {
+    "where": "/igra/celeste/gde-ya/",
+    "character": "/igra/celeste/personazh/theo/",
     "home": "/",
     "game": "/igra/celeste/",
     "guide": GUIDE,
@@ -161,6 +163,36 @@ def run(shots: Path | None) -> dict:
         A["404_has_search_and_home"] = (
             pg.locator(".nf form").count() == 1 and pg.locator(".nf a[href='/']").count() == 1
         )
+        # --- вариант C: атлас ---
+        pg.goto(BASE + "/")
+        pg.fill("#wq", "Huge Mess")
+        with pg.expect_navigation():
+            pg.press("#wq", "Enter")
+        A["home_where_am_i_finds_checkpoint"] = (
+            pg.locator(".cp").count() == 1 and "Celestial Resort" in pg.locator(".cp__where").inner_text()
+        )
+        with pg.expect_navigation():
+            pg.locator(".cp__where a").click()
+        A["checkpoint_opens_chapter"] = pg.url.endswith("/igra/celeste/glava-3-celestial-resort/")
+        pg.goto(BASE + "/igra/celeste/gde-ya/")
+        total = pg.locator(".cp").count()
+        pg.fill("[data-cp-filter]", "start")
+        A["live_filter_narrows"] = 0 < pg.locator(".cp:not([hidden])").count() < total and pg.locator(
+            "[data-cp-count]"
+        ).inner_text().startswith(str(pg.locator(".cp:not([hidden])").count()))
+        pg.fill("[data-cp-filter]", "")
+        A["live_filter_clears"] = pg.locator(".cp:not([hidden])").count() == total
+        pg.goto(BASE + "/")
+        with pg.expect_navigation():
+            pg.locator(".chips a", has_text="Theo").click()
+        A["character_chip_opens_page"] = pg.url.endswith("/personazh/theo/") and pg.locator(".appear li").count() >= 1
+        with pg.expect_navigation():
+            pg.locator(".appear a").first.click()
+        A["character_page_links_chapter"] = "/igra/celeste/" in pg.url and pg.locator("h1").count() == 1
+        pg.goto(BASE + "/igra/celeste/mehaniki/")
+        A["mechanics_table_rows"] = pg.locator(".atl tbody tr").count() >= 10
+        resp = pg.goto(BASE + "/igra/celeste/personazh/nikto/")
+        A["unknown_character_404"] = resp.status == 404
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()

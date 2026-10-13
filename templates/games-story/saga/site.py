@@ -85,6 +85,39 @@ class Site:
         i = gs.index(g)
         return (gs[i - 1] if i > 0 else None, gs[i + 1] if i + 1 < len(gs) else None)
 
+    def characters(self, game: str) -> dict[str, dict]:
+        """Персонаж → главы, где его называет инфобокс источника. Слаг — из латинского имени."""
+        out: dict[str, dict] = {}
+        for g in self.for_game(game):
+            for name in g.characters:
+                slug = re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+                out.setdefault(slug, {"name": name, "guides": []})["guides"].append(g)
+        return dict(sorted(out.items(), key=lambda kv: (-len(kv[1]["guides"]), kv[1]["name"])))
+
+    def mechanics_index(self, game: str) -> list[tuple[str, Guide]]:
+        return [(m, g) for g in self.for_game(game) for m in g.mechanics]
+
+    def checkpoints(self, game: str) -> list[dict]:
+        """Все чекпоинты по порядку глав; у каждого — следующий в той же главе (или переход в следующую главу)."""
+        everything = self.for_game(game)
+        gs = [g for g in everything if g.checkpoints]
+        rows = []
+        for g in gs:
+            gi = everything.index(g)
+            for i, cp in enumerate(g.checkpoints):
+                nxt = g.checkpoints[i + 1] if i + 1 < len(g.checkpoints) else None
+                rows.append(
+                    {
+                        "name": cp,
+                        "guide": g,
+                        "n": i + 1,
+                        "of": len(g.checkpoints),
+                        "next": nxt,
+                        "next_guide": everything[gi + 1] if nxt is None and gi + 1 < len(everything) else None,
+                    }
+                )
+        return rows
+
     def related(self, g: Guide) -> list[Guide]:
         return [self.by_slug[s] for s in g.related_slugs if s in self.by_slug]
 

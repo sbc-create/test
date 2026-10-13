@@ -107,7 +107,7 @@ def test_404s_and_other_sites_games(app):
 
 def test_preview_closed_and_production_switch(app):
     _, html, _ = get(app, "/")
-    assert 'content="noindex, nofollow"' in html and 'content="chapter-guides"' in html
+    assert 'content="noindex, nofollow"' in html and 'content="atlas"' in html
     s = copy.copy(app.site)
     s.cfg = copy.deepcopy(app.site.cfg)
     s.cfg.update(mode="production", production_authorized=True)
