@@ -487,7 +487,9 @@
       "problem": "Ячейки семейства исполняют один код, а наборы проверок у них разные (automation/local/family-checks-drift.py, Архитектор 0dea340): lordserial33-biz без activate_scenarios/artifact_contents/manifest_stamp (есть у шести родственников); zonafilm-cc и zonafilm12-site без activate_scenarios; zonafilm-cc без ascii_shell_identifiers/compiles/entrypoint_present, а вместо no_secrets — no_data_or_secrets, проверяющая только имена файлов, не содержимое; animedia-space без compiles; an1mego-site без data_chain (из-за этого регрессия 31f05ba954a3 вышла на живой).",
       "expected": "у каждой ячейки — шаблонные проверки, которые несёт её родня; no_data_or_secrets zonafilm-cc усилена до сканирования содержимого",
       "check": "family-checks-drift.py — 0 потерь; bash checks/run.sh каждой затронутой ячейки rc=0",
-      "status": "queued"
+      "status": "blocked",
+      "evidence": "13.10 ~00:45Z разобрано по случаям. СДЕЛАНО: zonafilm-cc 82c7b3e — шаблонная no_secrets (содержимое) рядом с no_data_or_secrets (только имена) + ascii_shell_identifiers, run.sh rc=0. НЕ ПОТЕРЯ: animedia-space compiles — три строки py_compile (рантайм, апдейтер, инструмент) шире шаблона; zonafilm-cc compiles — run-py-compiles + site-modules-compile; an1mego data_chain — была подключена, но пропускалась (T023, исправлено). ОСТАЁТСЯ: activate_scenarios у lordserial33-biz, zonafilm-cc, zonafilm12-site; artifact_contents и manifest_stamp у lordserial33-biz; entrypoint_present у zonafilm-cc — проверки механики выпуска (активация, состав артефакта, штамп D207), у этих ячеек своя схема выпуска (lords02_release_path, deploy_smoke/activation_verified).",
+      "owner_action": "Архитектор (шаблоны механики выпуска — его): решить по каждой из трёх ячеек — переводить ли на шаблонные activate_scenarios/artifact_contents/manifest_stamp/entrypoint_present (потребуется tools/build_release.py и сценарии deploy/ шаблона) или признать их собственные проверки эквивалентными."
     },
     {
       "id": "T026",
