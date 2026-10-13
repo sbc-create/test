@@ -73,6 +73,24 @@ def plural(n: int, one: str, few: str, many: str) -> str:
     return one if n % 10 == 1 else few if 2 <= n % 10 <= 4 else many
 
 
+SNIPPET_MAX = 160  # длиннее поисковики обрезают посреди фразы
+
+
+def snippet(text: str, limit: int = SNIPPET_MAX) -> str:
+    """Описание для meta: целые предложения до limit символов; иначе — по запятой или тире, в крайнем случае по слову, с «…»."""
+    text = " ".join(text.split())
+    if len(text) <= limit:
+        return text
+    cut = max(text.rfind(". ", 0, limit), text.rfind("; ", 0, limit))
+    if cut >= limit // 3:
+        return text[: cut + 1].rstrip(";") + ("" if text[cut] == "." else ".")
+    for sep in (", ", " — "):
+        cut = text.rfind(sep, 0, limit - 1)
+        if cut >= limit // 2:
+            return text[:cut].rstrip(",;:—– ") + "…"
+    return text[: text.rfind(" ", 0, limit - 1)].rstrip(",;:—– ") + "…"
+
+
 class App:
     def __init__(self, site: Site | None = None):
         self.site = site or Site()
@@ -238,7 +256,7 @@ class App:
                 (w.crop_label or w.type_label, f"/kultura/{w.crop}/" if w.crop else f"/tip/{w.type}/"),
                 (w.title, w.url),
             ]
-            return self.page("work.html", w.title, w.summary, w.url, crumbs, [self.howto_ld(w)], "work", w=w)
+            return self.page("work.html", w.title, snippet(w.summary), w.url, crumbs, [self.howto_ld(w)], "work", w=w)
         if path == "/regiony/":
             crumbs = [home, ("Регионы", path)]
             return self.page(
