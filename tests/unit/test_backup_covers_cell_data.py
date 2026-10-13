@@ -68,6 +68,30 @@ def _ячейка(tmp_path, site_id="lords-10", *, контракт=None, data_d
     return реестр
 
 
+def _запись(site_id, domain, *, контракт=None, data_dir=None):
+    """Одна запись реестра без записи на диск — для проверок полноты."""
+    з = {
+        "site_id": site_id, "domain": domain, "aliases": [], "status": "live",
+        "repo": {"kind": "local", "path": f"var/site-repos/{site_id}"},
+        "template": {"template_id": "lords-films"}, "pins": {},
+        "deploy_target": {}, "publisher": {}, "data": {}, "deployed": {},
+        "content_revision": None, "last_update": None, "backup": {},
+        "resources": {}, "release": {},
+        "runtime": {"port": 9125, "unit": f"nova-{site_id}.service",
+                    **({"data_dir": data_dir} if data_dir else {})},
+    }
+    return з
+
+
+def _реестр_из(tmp_path, *записи):
+    """Реестр из готовых записей — для проверок полноты."""
+    путь = tmp_path / "site-cells.json"
+    путь.write_text(json.dumps({"schema_version": registry.SCHEMA_VERSION,
+                                "cells": list(записи)}, ensure_ascii=False),
+                    encoding="utf-8")
+    return путь
+
+
 def test_план_берёт_объявленное_контрактом(tmp_path):
     реестр = _ячейка(tmp_path, контракт=["site-data", "{site}-community.json",
                                          "editorial-overrides.json"],
@@ -202,3 +226,34 @@ def test_по_умолчанию_берётся_корневая_копия_ре
         assert м.выбрать_реестр() == м.РЕЕСТР_ХОСТА
     явный = Path("/tmp/какой-то-реестр.json")
     assert м.выбрать_реестр(явный) == явный, "явный путь обязан быть сильнее"
+
+
+# --- обязательный состав, а не порог количества ----------------------------
+
+def test_полнота_ловит_публичную_ячейку_без_каталога_данных(tmp_path):
+    """Порог «витрин не меньше N» этого не видит, а копии у витрины не будет.
+
+    Ровно это и случилось 13.10: в плане не было animedia-01 — действующей
+    витрины animedia.icu, — потому что в её паспорте отсутствовал
+    `runtime.data_dir`. Счётчик витрин оставался зелёным.
+    """
+    м = _модуль()
+    путь = _реестр_из(tmp_path, _запись("animedia-01", "animedia.icu"))
+    покрытые, пробелы = м.полнота(путь)
+    assert покрытые == []
+    assert any("нет runtime.data_dir" in п for п in пробелы), пробелы
+
+
+def test_полнота_не_требует_каталога_у_непубличных(tmp_path):
+    """Пилот и локальные стенды наружу не смотрят: копии им не нужны."""
+    м = _модуль()
+    путь = _реестр_из(tmp_path, _запись("pilot-local", "pilot.localhost.test"))
+    покрытые, пробелы = м.полнота(путь)
+    assert (покрытые, пробелы) == ([], [])
+
+
+def test_полнота_на_действующем_реестре_без_пробелов():
+    м = _модуль()
+    покрытые, пробелы = м.полнота(КОРЕНЬ / "config" / "site-cells.json")
+    assert пробелы == [], "\n".join(пробелы)
+    assert len(покрытые) >= 25, f"покрыто всего {len(покрытые)}"

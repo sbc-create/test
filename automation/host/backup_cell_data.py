@@ -39,6 +39,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -183,17 +184,72 @@ def план(реестр: Path | None = None, *, корень: Path | None = No
     return итог
 
 
+#: Непубличные имена: пилот и локальные стенды. У них каталога данных нет и не
+#: должно быть, и требовать его значило бы требовать копию того, чего не
+#: существует. Признак — суффикс, а не перечень имён.
+НЕПУБЛИЧНЫЕ = (".localhost", ".localhost.test", ".test", ".local", ".invalid")
+
+
+def полнота(реестр: Path | None = None) -> tuple[list[str], list[str]]:
+    """(покрытые витрины, названные пробелы) по ОБЯЗАТЕЛЬНОМУ составу.
+
+    Порог «витрин не меньше N» проверкой состава не является: он зелёный и
+    тогда, когда выпала именно та витрина, чьи данные невосстановимы. Поэтому
+    здесь спрашивается про КАЖДУЮ публичную ячейку: объявлен ли у неё каталог
+    данных и попала ли она в план. Любой «нет» — названный пробел, а не
+    молчаливый пропуск.
+
+    Повод: 13.10 в плане не было animedia-01 — действующей витрины
+    animedia.icu, — потому что в её паспорте отсутствовал `runtime.data_dir`.
+    Счётчик витрин этого не показывал.
+    """
+    путь = выбрать_реестр(реестр)
+    строки = план(путь, шум=open(os.devnull, "w"))
+    в_плане = {с for с, _, _ in строки}
+    покрытые, пробелы = [], []
+    for запись in _ячейки(путь):
+        site_id = str(запись.get("site_id") or "")
+        домен = str(запись.get("domain") or "")
+        if not site_id or домен.endswith(НЕПУБЛИЧНЫЕ):
+            continue
+        каталог = str((запись.get("runtime") or {}).get("data_dir") or "").strip()
+        if not каталог:
+            пробелы.append(f"{site_id} ({домен}): в паспорте нет runtime.data_dir — "
+                           "данные витрины не попадут в копию")
+            continue
+        if site_id not in в_плане:
+            пробелы.append(f"{site_id} ({домен}): каталог объявлен ({каталог}), "
+                           "но витрины нет в плане сбора")
+            continue
+        покрытые.append(site_id)
+    return покрытые, пробелы
+
+
 def main() -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--registry", help="путь к реестру ячеек (по умолчанию — штатный)")
     р.add_argument("--check", action="store_true",
                    help="только сводка, без TSV: сколько витрин и элементов")
+    р.add_argument("--completeness", action="store_true",
+                   help="обязательный состав: каждая публичная ячейка покрыта "
+                        "или пробел назван; код 1 при любом пробеле")
     а = р.parse_args()
     try:
         строки = план(Path(а.registry) if а.registry else None)
     except ПланОтвергнут as ош:
         print(f"ОТКАЗ: {ош}", file=sys.stderr)
         return 2
+    if а.completeness:
+        покрытые, пробелы = полнота(Path(а.registry) if а.registry else None)
+        print(f"публичных витрин покрыто: {len(покрытые)}")
+        if not пробелы:
+            print("пробелов нет: у каждой публичной ячейки объявлен каталог "
+                  "данных и она есть в плане сбора")
+            return 0
+        print(f"ПРОБЕЛЫ ({len(пробелы)}):")
+        for п_ in пробелы:
+            print(f"   {п_}")
+        return 1
     if а.check:
         витрин = len({с for с, _, _ in строки})
         целиком = sum(1 for _, _, э in строки if э == "*")
