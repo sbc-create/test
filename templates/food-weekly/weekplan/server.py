@@ -55,6 +55,20 @@ class Meta:
     kind: str = "page"
 
 
+def with_examples(head: str, titles: list[str], limit: int = 160) -> str:
+    """Описание из данных: «<head>: название, название…» — столько названий, сколько помещается в limit."""
+    out, shown = head, 0
+    for t in titles:
+        nxt = out + (": " if not shown else ", ") + t
+        tail = "." if shown + 1 == len(titles) else " и другие."
+        if len(nxt + tail) > limit:
+            break
+        out, shown = nxt, shown + 1
+    if not shown:
+        return head + "."
+    return out + ("." if shown == len(titles) else " и другие.")
+
+
 def plural(n: int, one: str, few: str, many: str) -> str:
     n = abs(n) % 100
     if 11 <= n <= 14:
@@ -249,24 +263,25 @@ class App:
             if len(items) < 3:
                 return self.not_found()
             crumbs = [("Главная", "/"), ("Подборки", "/podborki/"), (title, path)]
-            meta = Meta(title, desc, self.abs(path), True, crumbs, [self.crumbs_ld(crumbs)], "collection")
+            seo_desc = desc if len(desc) >= 50 else with_examples(desc.rstrip("."), [x["title"] for x in items])
+            meta = Meta(title, seo_desc, self.abs(path), True, crumbs, [self.crumbs_ld(crumbs)], "collection")
             return 200, self.render("collection.html", meta, title=title, desc=desc, items=items), {}
         if path == "/podborki/":
             crumbs = [("Главная", "/"), ("Подборки", path)]
+            live = {
+                k: v
+                for k, v in COLLECTIONS.items()
+                if sum(1 for x in self.catalogs["food-daily"]["items"].values() if v[2](x)) >= 3
+            }
             meta = Meta(
                 "Подборки блюд для планов",
-                "Наборы блюд для замены в планах недели.",
+                with_examples("Наборы блюд для замены в планах недели", [v[0] for v in live.values()]),
                 self.abs(path),
                 True,
                 crumbs,
                 [self.crumbs_ld(crumbs)],
                 "collections",
             )
-            live = {
-                k: v
-                for k, v in COLLECTIONS.items()
-                if sum(1 for x in self.catalogs["food-daily"]["items"].values() if v[2](x)) >= 3
-            }
             return 200, self.render("collections.html", meta, cols=live), {}
         if path == "/robots.txt":
             body = (
