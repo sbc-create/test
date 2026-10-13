@@ -1,6 +1,6 @@
 {
- "commit_head": "a9c3ec0e6b949d9750b02fb048a23176236bb704",
- "at": "2026-10-12T23:18:27Z",
+ "commit_head": "f80e324d4192320200319a2953cb42be8b7cc382",
+ "at": "2026-10-13T13:06:44Z",
  "scenarios": {
   "mobile:home:no_hscroll": true,
   "mobile:appliance:no_hscroll": true,
@@ -9,6 +9,7 @@
   "mobile:recipe_console:no_hscroll": true,
   "mobile:mode:no_hscroll": true,
   "mobile:guide:no_hscroll": true,
+  "mobile:queue:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:appliance:no_hscroll": true,
   "desktop:category:no_hscroll": true,
@@ -16,6 +17,7 @@
   "desktop:recipe_console:no_hscroll": true,
   "desktop:mode:no_hscroll": true,
   "desktop:guide:no_hscroll": true,
+  "desktop:queue:no_hscroll": true,
   "first_tab_skip": true,
   "device_opens_own_table": true,
   "table_row_opens_recipe": true,
@@ -28,6 +30,16 @@
   "reset_clears": true,
   "search_by_mode_results": true,
   "modes_nav_opens_guide": true,
+  "display_link_jumps_to_step": true,
+  "queue_empty_submit_blocked": true,
+  "queue_count_updates": true,
+  "queue_two_devices": true,
+  "queue_aerogril_grouped_by_temp": true,
+  "queue_done_mark_persists": true,
+  "queue_header_link_keeps_choice": true,
+  "queue_form_remembers_choice": true,
+  "queue_unknown_recipe_400_alert": true,
+  "queue_storage_namespace_own": true,
   "real_404": true,
   "nojs_steps_and_settings": true,
   "nojs_timers_and_marks_hidden": true,
@@ -42,10 +54,13 @@
   "mobile:/recept/zharkoe-v-multivarke/": [],
   "mobile:/rezhim/multivarka-vypechka/": [],
   "mobile:/kak-chitat-rezhimy/": [],
+  "mobile:/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke": [],
   "mobile:/recept/syrniki-v-aerogrile/": [],
   "mobile:/poisk/?q=тушение": [],
   "mobile:/poisk/?q=zzz": [],
   "mobile:/nesushchestvuet/": [],
+  "mobile:/ochered/": [],
+  "mobile:/ochered/?r=neizvestno": [],
   "desktop:/": [],
   "desktop:/pribor/multivarka/": [],
   "desktop:/pribor/aerogril/kurica/": [],
@@ -53,88 +68,103 @@
   "desktop:/recept/zharkoe-v-multivarke/": [],
   "desktop:/rezhim/multivarka-vypechka/": [],
   "desktop:/kak-chitat-rezhimy/": [],
+  "desktop:/ochered/?r=syrniki-v-aerogrile&r=semga-v-aerogrile&r=plov-v-multivarke": [],
   "desktop:/recept/syrniki-v-aerogrile/": [],
   "desktop:/poisk/?q=тушение": [],
   "desktop:/poisk/?q=zzz": [],
-  "desktop:/nesushchestvuet/": []
+  "desktop:/nesushchestvuet/": [],
+  "desktop:/ochered/": [],
+  "desktop:/ochered/?r=neizvestno": []
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 160,
+   "lcp_ms": 168,
    "cls": 0
   },
   "mobile:appliance": {
-   "lcp_ms": 76,
+   "lcp_ms": 92,
    "cls": 0
   },
   "mobile:category": {
-   "lcp_ms": 60,
+   "lcp_ms": 52,
    "cls": 0
   },
   "mobile:recipe": {
-   "lcp_ms": 84,
+   "lcp_ms": 108,
    "cls": 0
   },
   "mobile:recipe_console": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "mobile:mode": {
-   "lcp_ms": 48,
-   "cls": 0
-  },
-  "mobile:guide": {
-   "lcp_ms": 36,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "desktop:appliance": {
    "lcp_ms": 64,
    "cls": 0
   },
-  "desktop:category": {
+  "mobile:mode": {
    "lcp_ms": 56,
+   "cls": 0
+  },
+  "mobile:guide": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:queue": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 136,
+   "cls": 0
+  },
+  "desktop:appliance": {
+   "lcp_ms": 56,
+   "cls": 0
+  },
+  "desktop:category": {
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:recipe": {
-   "lcp_ms": 104,
+   "lcp_ms": 92,
    "cls": 0
   },
   "desktop:recipe_console": {
-   "lcp_ms": 68,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:mode": {
-   "lcp_ms": 48,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:guide": {
-   "lcp_ms": 56,
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "desktop:queue": {
+   "lcp_ms": 88,
    "cls": 0
   }
  },
  "console_errors": [
   "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8866/nesushchestvuet/",
-  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8866/nesushchestvuet/"
+  "mobile: Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:8866/ochered/?r=neizvestno",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8866/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 400 (Bad Request) @ http://127.0.0.1:8866/ochered/?r=neizvestno"
  ],
  "screenshots": [
-  "docs/screenshots/a9c3ec0/home-mobile.png",
-  "docs/screenshots/a9c3ec0/appliance-mobile.png",
-  "docs/screenshots/a9c3ec0/category-mobile.png",
-  "docs/screenshots/a9c3ec0/recipe-mobile.png",
-  "docs/screenshots/a9c3ec0/recipe_console-mobile.png",
-  "docs/screenshots/a9c3ec0/mode-mobile.png",
-  "docs/screenshots/a9c3ec0/guide-mobile.png",
-  "docs/screenshots/a9c3ec0/home-desktop.png",
-  "docs/screenshots/a9c3ec0/appliance-desktop.png",
-  "docs/screenshots/a9c3ec0/category-desktop.png",
-  "docs/screenshots/a9c3ec0/recipe-desktop.png",
-  "docs/screenshots/a9c3ec0/recipe_console-desktop.png",
-  "docs/screenshots/a9c3ec0/mode-desktop.png",
-  "docs/screenshots/a9c3ec0/guide-desktop.png"
+  "docs/screenshots/f80e324/home-mobile.png",
+  "docs/screenshots/f80e324/appliance-mobile.png",
+  "docs/screenshots/f80e324/category-mobile.png",
+  "docs/screenshots/f80e324/recipe-mobile.png",
+  "docs/screenshots/f80e324/recipe_console-mobile.png",
+  "docs/screenshots/f80e324/mode-mobile.png",
+  "docs/screenshots/f80e324/guide-mobile.png",
+  "docs/screenshots/f80e324/queue-mobile.png",
+  "docs/screenshots/f80e324/home-desktop.png",
+  "docs/screenshots/f80e324/appliance-desktop.png",
+  "docs/screenshots/f80e324/category-desktop.png",
+  "docs/screenshots/f80e324/recipe-desktop.png",
+  "docs/screenshots/f80e324/recipe_console-desktop.png",
+  "docs/screenshots/f80e324/mode-desktop.png",
+  "docs/screenshots/f80e324/guide-desktop.png",
+  "docs/screenshots/f80e324/queue-desktop.png"
  ],
  "actions": {
   "mobile:home:no_hscroll": true,
@@ -144,6 +174,7 @@
   "mobile:recipe_console:no_hscroll": true,
   "mobile:mode:no_hscroll": true,
   "mobile:guide:no_hscroll": true,
+  "mobile:queue:no_hscroll": true,
   "desktop:home:no_hscroll": true,
   "desktop:appliance:no_hscroll": true,
   "desktop:category:no_hscroll": true,
@@ -151,6 +182,7 @@
   "desktop:recipe_console:no_hscroll": true,
   "desktop:mode:no_hscroll": true,
   "desktop:guide:no_hscroll": true,
+  "desktop:queue:no_hscroll": true,
   "first_tab_skip": true,
   "device_opens_own_table": true,
   "table_row_opens_recipe": true,
@@ -163,6 +195,16 @@
   "reset_clears": true,
   "search_by_mode_results": true,
   "modes_nav_opens_guide": true,
+  "display_link_jumps_to_step": true,
+  "queue_empty_submit_blocked": true,
+  "queue_count_updates": true,
+  "queue_two_devices": true,
+  "queue_aerogril_grouped_by_temp": true,
+  "queue_done_mark_persists": true,
+  "queue_header_link_keeps_choice": true,
+  "queue_form_remembers_choice": true,
+  "queue_unknown_recipe_400_alert": true,
+  "queue_storage_namespace_own": true,
   "real_404": true,
   "nojs_steps_and_settings": true,
   "nojs_timers_and_marks_hidden": true,
