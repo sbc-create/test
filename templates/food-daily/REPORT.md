@@ -62,3 +62,17 @@ LCP (лаборатория, loopback, без троттлинга) 60–212 м�
 | `bash bin/food-daily build --commit HEAD` | 0 | собрано из 2f441f3 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 504 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 043e2f5 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-daily test` | 0 | 129 passed in 11.72s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m fooddaily.qa_browser --shots docs/screenshots/043e2f5 --out docs/verification-browser-qa.json` | 0 | 51 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8876 '/na-kompaniyu/?r=plov-s-kuricej&r=grecheskij-salat&gosti=8' '/iz-holodilnika/?est=kurica&est=ris' '/iz-holodilnika/?est=kvantovyj' '/recepty/?sort=vremya&vid=tablica' '/poisk/?q=творог' /nesushchestvuet/` | 0 | 59 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-daily build --commit HEAD` | 0 | собрано из 043e2f5 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 164 мс. Карта действий — `docs/ACTION-MAP.md`.
