@@ -99,13 +99,13 @@ api-token и publisher-id».
 
 ```bash
 # сухой прогон: ничего не меняет, печатает, что изменится
-python3 automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР>
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР>
 
 # запись во все три места сразу, с проверкой согласия после записи
-python3 automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР> --apply
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР> --apply
 
 # если номер решено разделить с уже существующим доменом
-python3 automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР> --apply --allow-shared
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/assign-publisher-id.py --site lords-10 --publisher-id <НОМЕР> --apply --allow-shared
 ```
 
 Инструмент отвергает негодную форму, отозванный номер и совместное
@@ -417,7 +417,7 @@ systemctl list-timers seo-tech-run.timer
 **Приёмка через час, без root:**
 
 ```bash
-python3 automation/local/autocontinue-cycles.py --kind tech
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/autocontinue-cycles.py --kind tech
 ```
 
 **Ожидаемый результат:** два последовательных прогона взяли **разные** задачи и
