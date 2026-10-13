@@ -1,0 +1,182 @@
+{
+ "base": "http://127.0.0.1:8875",
+ "commit_head": "ff617d03e8c56ffdd6068da2d7c41261d6b6d3f9",
+ "at": "2026-10-13T00:28:27Z",
+ "scenarios": {
+  "mobile:batch:no_hscroll": true,
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:recipe:no_hscroll": true,
+  "mobile:dough:no_hscroll": true,
+  "mobile:pitfalls:no_hscroll": true,
+  "desktop:batch:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:recipe:no_hscroll": true,
+  "desktop:dough:no_hscroll": true,
+  "desktop:pitfalls:no_hscroll": true,
+  "timer_counts_down_from_source_80_min": "Осталось 79:59 · стоп",
+  "weigh_checkbox": true,
+  "oven_temp_text": "175 °C",
+  "filter_zavarnoe_rows": 2,
+  "filter_empty": "Таких рецептов пока нет",
+  "search_case_spaces": 2,
+  "search_pechene": 4,
+  "first_tab_skip": true,
+  "empty_batch_submit_blocked": true,
+  "batch_count_updates": true,
+  "oven_groups_shown": true,
+  "combined_list_listed": true,
+  "bought_mark_persists": true,
+  "header_link_keeps_batch": true,
+  "home_form_remembers_batch": true,
+  "unknown_recipe_400_alert": true,
+  "storage_namespace_own": true,
+  "nojs_steps": 9,
+  "nojs_pitfalls": 2,
+  "nojs_timers_hidden": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/recepty/": [],
+  "mobile:/recepty/page/2/": [],
+  "mobile:/recept/limonnyj-keks/": [],
+  "mobile:/recept/pirozhnye-lebedi/": [],
+  "mobile:/recept/tort-bez-vypechki-s-vinogradom/": [],
+  "mobile:/recept/olivkovyj-hleb/": [],
+  "mobile:/testo/": [],
+  "mobile:/testo/keksovoe/": [],
+  "mobile:/oshibki/zavarnoe/": [],
+  "mobile:/teg/shokolad/": [],
+  "mobile:/poisk/?q=zzz": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/recepty/": [],
+  "desktop:/recepty/page/2/": [],
+  "desktop:/recept/limonnyj-keks/": [],
+  "desktop:/recept/pirozhnye-lebedi/": [],
+  "desktop:/recept/tort-bez-vypechki-s-vinogradom/": [],
+  "desktop:/recept/olivkovyj-hleb/": [],
+  "desktop:/testo/": [],
+  "desktop:/testo/keksovoe/": [],
+  "desktop:/oshibki/zavarnoe/": [],
+  "desktop:/teg/shokolad/": [],
+  "desktop:/poisk/?q=zzz": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:batch": {
+   "lcp_ms": 212,
+   "cls": 0,
+   "bytes": 30077
+  },
+  "mobile:home": {
+   "lcp_ms": 52,
+   "cls": 0,
+   "bytes": 7272
+  },
+  "mobile:catalog": {
+   "lcp_ms": 80,
+   "cls": 0,
+   "bytes": 11027
+  },
+  "mobile:recipe": {
+   "lcp_ms": 100,
+   "cls": 0,
+   "bytes": 15063
+  },
+  "mobile:dough": {
+   "lcp_ms": 56,
+   "cls": 0,
+   "bytes": 5922
+  },
+  "mobile:pitfalls": {
+   "lcp_ms": 48,
+   "cls": 0,
+   "bytes": 5986
+  },
+  "desktop:batch": {
+   "lcp_ms": 180,
+   "cls": 0,
+   "bytes": 30077
+  },
+  "desktop:home": {
+   "lcp_ms": 76,
+   "cls": 0,
+   "bytes": 7272
+  },
+  "desktop:catalog": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "bytes": 11027
+  },
+  "desktop:recipe": {
+   "lcp_ms": 104,
+   "cls": 0,
+   "bytes": 15063
+  },
+  "desktop:dough": {
+   "lcp_ms": 64,
+   "cls": 0,
+   "bytes": 5922
+  },
+  "desktop:pitfalls": {
+   "lcp_ms": 56,
+   "cls": 0,
+   "bytes": 5986
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found)",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found)"
+ ],
+ "screenshots": [
+  "docs/screenshots/ff617d0/batch-mobile.png",
+  "docs/screenshots/ff617d0/home-mobile.png",
+  "docs/screenshots/ff617d0/catalog-mobile.png",
+  "docs/screenshots/ff617d0/recipe-mobile.png",
+  "docs/screenshots/ff617d0/dough-mobile.png",
+  "docs/screenshots/ff617d0/pitfalls-mobile.png",
+  "docs/screenshots/ff617d0/batch-desktop.png",
+  "docs/screenshots/ff617d0/home-desktop.png",
+  "docs/screenshots/ff617d0/catalog-desktop.png",
+  "docs/screenshots/ff617d0/recipe-desktop.png",
+  "docs/screenshots/ff617d0/dough-desktop.png",
+  "docs/screenshots/ff617d0/pitfalls-desktop.png"
+ ],
+ "actions": {
+  "mobile:batch:no_hscroll": true,
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:recipe:no_hscroll": true,
+  "mobile:dough:no_hscroll": true,
+  "mobile:pitfalls:no_hscroll": true,
+  "desktop:batch:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:recipe:no_hscroll": true,
+  "desktop:dough:no_hscroll": true,
+  "desktop:pitfalls:no_hscroll": true,
+  "timer_counts_down_from_source_80_min": "Осталось 79:59 · стоп",
+  "weigh_checkbox": true,
+  "oven_temp_text": "175 °C",
+  "filter_zavarnoe_rows": 2,
+  "filter_empty": "Таких рецептов пока нет",
+  "search_case_spaces": 2,
+  "search_pechene": 4,
+  "first_tab_skip": true,
+  "empty_batch_submit_blocked": true,
+  "batch_count_updates": true,
+  "oven_groups_shown": true,
+  "combined_list_listed": true,
+  "bought_mark_persists": true,
+  "header_link_keeps_batch": true,
+  "home_form_remembers_batch": true,
+  "unknown_recipe_400_alert": true,
+  "storage_namespace_own": true,
+  "nojs_steps": 9,
+  "nojs_pitfalls": 2,
+  "nojs_timers_hidden": true
+ }
+}
