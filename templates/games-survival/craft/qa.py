@@ -178,7 +178,7 @@ def run(shots: Path | None) -> dict:
         A["inv_count_updates"] = pg.locator("[data-inv-count]").inner_text() == "Отмечено: 2"
         with pg.expect_navigation():
             pg.click(".inv .btn")
-        A["craftable_now_listed"] = pg.locator("#h-now").inner_text() == "Можно сделать сейчас: 7"
+        A["craftable_now_listed"] = pg.locator("#h-now").inner_text() == "Можно сделать сейчас: 10"
         A["almost_names_missing"] = pg.locator(".craft--almost .craft__miss", has_text="Уголь").count() == 1
         with pg.expect_navigation():
             pg.locator(".craft__t", has_text="Факел").click()
