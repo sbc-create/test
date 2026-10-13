@@ -24,6 +24,13 @@ Preview (loopback, доступ — SSH-туннель): A 8847–8850 (food), 8
 C 8867–8876. Порт каждого варианта — в таблицах ниже. Отчёт варианта — `templates/<сайт>/REPORT.md` в его ветке,
 карта действий — `docs/ACTION-MAP.md`, скриншоты 390 и 1440 px — `docs/screenshots/<commit>/`.
 
+## Галерея и рекомендации (13.10, утро)
+
+- Галерея всех 30 вариантов: `docs/progress/gallery/index.html` (открыть файлом или `python3 -m http.server 8877 --bind 127.0.0.1` в этой папке).
+  Сборка: `python3 build_gallery.py` (exit 0, 30 вариантов, 0 проблем; превью перепроверены — данные в `gallery.json`).
+  Проверка страницы: `python3 check_gallery.py` → `check-result.json` (320/390/768/1440 × светлая/тёмная, axe 0, exit 0).
+- Предложение, какой вариант брать: `docs/progress/RECOMMENDATIONS.md` — ждёт решения владельца.
+
 ## Сайты и варианты
 
 Колонки «действия», «axe», «ширины» — из `docs/verification-*.json` того же коммита (фактически запущено этой ночью).
