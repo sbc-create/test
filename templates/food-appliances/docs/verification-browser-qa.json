@@ -1,6 +1,6 @@
 {
- "commit_head": "0c83044babae391e5e28f2c7254fdedee8e2ce77",
- "at": "2026-10-13T00:22:05Z",
+ "commit_head": "bb5a44db441d2562ffcc1ce426142445de8005af",
+ "at": "2026-10-13T01:11:20Z",
  "scenarios": {
   "mobile:queue:no_hscroll": true,
   "mobile:home:no_hscroll": true,
@@ -58,23 +58,23 @@
  },
  "perf_lab": {
   "mobile:queue": {
-   "lcp_ms": 208,
+   "lcp_ms": 168,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 52,
+   "lcp_ms": 72,
    "cls": 0
   },
   "mobile:appliance": {
-   "lcp_ms": 68,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:category": {
-   "lcp_ms": 52,
+   "lcp_ms": 44,
    "cls": 0
   },
   "mobile:recipe": {
-   "lcp_ms": 92,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:mode": {
@@ -86,27 +86,27 @@
    "cls": 0
   },
   "desktop:queue": {
-   "lcp_ms": 112,
-   "cls": 0.0229
+   "lcp_ms": 132,
+   "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 64,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:appliance": {
-   "lcp_ms": 88,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:category": {
-   "lcp_ms": 52,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:recipe": {
-   "lcp_ms": 72,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:mode": {
-   "lcp_ms": 60,
+   "lcp_ms": 52,
    "cls": 0
   },
   "desktop:guide": {
@@ -119,20 +119,20 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8874/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/0c83044/queue-mobile.png",
-  "docs/screenshots/0c83044/home-mobile.png",
-  "docs/screenshots/0c83044/appliance-mobile.png",
-  "docs/screenshots/0c83044/category-mobile.png",
-  "docs/screenshots/0c83044/recipe-mobile.png",
-  "docs/screenshots/0c83044/mode-mobile.png",
-  "docs/screenshots/0c83044/guide-mobile.png",
-  "docs/screenshots/0c83044/queue-desktop.png",
-  "docs/screenshots/0c83044/home-desktop.png",
-  "docs/screenshots/0c83044/appliance-desktop.png",
-  "docs/screenshots/0c83044/category-desktop.png",
-  "docs/screenshots/0c83044/recipe-desktop.png",
-  "docs/screenshots/0c83044/mode-desktop.png",
-  "docs/screenshots/0c83044/guide-desktop.png"
+  "docs/screenshots/bb5a44d/queue-mobile.png",
+  "docs/screenshots/bb5a44d/home-mobile.png",
+  "docs/screenshots/bb5a44d/appliance-mobile.png",
+  "docs/screenshots/bb5a44d/category-mobile.png",
+  "docs/screenshots/bb5a44d/recipe-mobile.png",
+  "docs/screenshots/bb5a44d/mode-mobile.png",
+  "docs/screenshots/bb5a44d/guide-mobile.png",
+  "docs/screenshots/bb5a44d/queue-desktop.png",
+  "docs/screenshots/bb5a44d/home-desktop.png",
+  "docs/screenshots/bb5a44d/appliance-desktop.png",
+  "docs/screenshots/bb5a44d/category-desktop.png",
+  "docs/screenshots/bb5a44d/recipe-desktop.png",
+  "docs/screenshots/bb5a44d/mode-desktop.png",
+  "docs/screenshots/bb5a44d/guide-desktop.png"
  ],
  "actions": {
   "mobile:queue:no_hscroll": true,
