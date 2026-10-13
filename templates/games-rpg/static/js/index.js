@@ -1,7 +1,7 @@
-/* games-rpg (codex-sections): отметки этапов квеста, печать. */
+/* games-rpg (index-compare): отметки этапов квеста, печать. */
 (function () {
   "use strict";
-  var ns = document.body.getAttribute("data-ns") || "grpg";
+  var ns = document.body.getAttribute("data-ns") || "grpg-index";
   function read(k, d) { try { var v = localStorage.getItem(ns + ":" + k); return v ? JSON.parse(v) : d; } catch (e) { return d; } }
   function write(k, v) { try { localStorage.setItem(ns + ":" + k, JSON.stringify(v)); return true; } catch (e) { return false; } }
   var g = document.querySelector(".entry[data-slug]");

@@ -1,7 +1,7 @@
-/* games-rpg, вариант codex-sections — «Гайды RPG»: кодекс. Пергамент, бордо, старое золото, serif-заголовки.
+/* games-rpg, вариант index-compare — «Гайды RPG»: указатель. Белая страница, индиго, моноширинные буквы-разделители.
    Без графики и логотипов игры. Только этот вариант. */
-:root { --bg: #f5efe2; --card: #fffaf0; --ink: #26170f; --ink-2: #4a3628; --muted: #5f4d40; --wine: #6e1f2b; --wine-2: #8c2a3a;
-  --gold: #b8892a; --gold-2: #f1dfae; --line: #dccfb4; --focus: #1f5aa6; --serif: "Cormorant Garamond", Georgia, serif;
+:root { --bg: #f6f7fb; --card: #ffffff; --ink: #161a2e; --ink-2: #363c5a; --muted: #4a5070; --wine: #2f3a8f; --wine-2: #3a47a8;
+  --gold: #5b65c7; --gold-2: #e3e6fa; --line: #d5d9ec; --focus: #c2410c; --serif: ui-monospace, "JetBrains Mono", Menlo, monospace;
   --sans: "Source Sans 3", "Segoe UI", system-ui, sans-serif; color-scheme: light; }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -14,7 +14,7 @@ h1 { font: 700 clamp(2rem, 1.4rem + 2.2vw, 3rem)/1.1 var(--serif); margin: .3em 
 h2 { font: 700 1.6rem/1.2 var(--serif); margin: 1.3em 0 .5em; } h3 { font: 700 1.3rem var(--serif); margin: 1.2em 0 .5em; }
 h3 a { text-decoration: none; display: inline-block; padding-block: 2px; min-height: 24px; }
 .lead { color: var(--ink-2); font-size: 1.08rem; max-width: 46em; } .note { color: var(--muted); }
-.kicker { margin: 14px 0 0; color: #6b4f10; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
+.kicker { margin: 14px 0 0; color: #2f3a8f; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; font-size: .8rem; }
 .hd { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; padding: 8px 16px; background: var(--wine); color: #fff; border-bottom: 4px solid var(--gold); }
 .logo { display: inline-flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; font: 700 1.35rem var(--serif); min-height: 44px; }
 .patch { color: var(--wine); background: var(--gold-2); border-radius: 4px; padding: 0 10px; min-height: 36px; display: inline-flex; align-items: center; font-weight: 700; text-decoration: none; font-size: .9rem; }
@@ -68,3 +68,30 @@ main { max-width: 1100px; margin: 0 auto; padding: 4px 16px 44px; } main:focus {
 .ft a { color: #fff; display: inline-block; padding-block: 4px; min-height: 24px; }
 @media (max-width: 720px) { .find { flex-basis: 100%; max-width: none; margin-left: 0; } body { font-size: 16px; } }
 @media print { .hd, .crumbs, .ft, .skip, [data-print], [data-check-reset] { display: none !important; } body { background: #fff; } }
+
+/* ---- вариант C: указатель и сравнение ---- */
+.err { background: #fde8e8; border: 1px solid #b42318; color: #7a1b12; padding: 10px 14px; border-radius: 6px; font-weight: 700; }
+.types { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+.types a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 2px solid var(--wine); color: var(--wine); text-decoration: none; font-weight: 700; }
+.types a[aria-current] { background: var(--wine); color: #fff; }
+.az { position: sticky; top: 0; z-index: 2; display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 0; background: var(--bg); }
+.az a { display: grid; place-items: center; min-width: 36px; min-height: 36px; border-radius: 6px; background: var(--card); border: 1px solid var(--line); color: var(--ink); text-decoration: none; font: 700 1rem var(--serif); }
+.letter { scroll-margin-top: 56px; } .letter h2 { font: 800 1.6rem var(--serif); color: var(--wine); border-bottom: 2px solid var(--line); margin: 1em 0 .4em; }
+.gl { margin: 0; display: grid; gap: 8px; }
+.gl__row { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; }
+.gl dt a { font-weight: 800; color: var(--ink); display: inline-block; min-height: 24px; }
+.gl__type { font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-left: 6px; }
+.gl dd { margin: 2px 0 0; color: var(--ink-2); }
+.more { margin: 18px 0; }
+.cmp { width: 100%; border-collapse: collapse; background: var(--card); }
+.cmp th, .cmp td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.cmp thead th { background: var(--wine); color: #fff; font-size: .85rem; }
+.cmp tbody th a { font-weight: 800; color: var(--ink); display: inline-block; min-height: 24px; }
+.num { text-align: right !important; white-space: nowrap; font-family: var(--serif); }
+@media (max-width: 760px) {
+  .cmp, .cmp tbody { display: block; } .cmp thead { display: none; }
+  .cmp tr { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .cmp th, .cmp td { border: 0; padding: 2px 10px; text-align: left !important; white-space: normal; } .cmp tbody th { grid-column: 1 / -1; }
+  .cmp td::before { content: attr(data-label) ": "; color: var(--muted); font-family: var(--sans); }
+}
+.passport { grid-template-columns: repeat(auto-fit, minmax(min(100%, 140px), 1fr)) !important; } .passport dd { overflow-wrap: anywhere; font-size: 1.1rem; }

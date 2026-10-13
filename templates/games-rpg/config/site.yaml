@@ -1,13 +1,13 @@
 site_id: games-rpg
 name: "Гайды RPG"
-variant_id: codex-sections       # вариант A: разделы по типам (персонажи, билды, квесты, механики)
+variant_id: index-compare        # вариант C: указатель А–Я по всем сущностям и сравнение предметов
 variant_version: "1"
 mode: preview
 production_authorized: false
 origin:
-  preview: "http://127.0.0.1:8859"
+  preview: "http://127.0.0.1:8871"
   production: null               # BLOCKED_INPUT: домен не выбран
-server: {bind: 127.0.0.1, port: 8859}
-storage_namespace: "grpg-codex"
+server: {bind: 127.0.0.1, port: 8871}
+storage_namespace: "grpg-index"
 ads: {adapter: disabled}
 analytics: {adapter: disabled}

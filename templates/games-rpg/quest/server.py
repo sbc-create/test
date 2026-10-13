@@ -1,4 +1,4 @@
-"""SSR-сервер games-rpg (вариант codex-sections)."""
+"""SSR-сервер games-rpg (вариант index-compare)."""
 
 from __future__ import annotations
 
@@ -99,15 +99,24 @@ class App:
         s = self.site
         home = ("Главная", "/")
         if path == "/":
-            return self.page(
-                "home.html",
-                "Гайды RPG — персонажи, билды, квесты и механики с версией игры",
-                "Справочник по ролевым играм: спутники, основы билдов по классам, квесты и механики — с указанием патча.",
-                "/",
-                [],
-                [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
-                "home",
-            )
+            return self.glossary(q)
+        m = re.fullmatch(r"/([a-z0-9-]+)/sravnenie-predmetov/", path)
+        if m and m.group(1) in s.games:
+            gid = m.group(1)
+            items = [e for e in s.entries if e.game == gid and e.type == "item" and e.item]
+            if items:
+                crumbs = [home, (s.games[gid]["title"], f"/{gid}/"), ("Сравнение предметов", path)]
+                return self.page(
+                    "compare_items.html",
+                    f"{s.games[gid]['title']}: сравнение предметов",
+                    "Редкость, вид, урон, класс доспеха и вес предметов — из инфобоксов вики, без цены.",
+                    path,
+                    crumbs,
+                    [],
+                    "compare",
+                    gid=gid,
+                    items=items,
+                )
         m = re.fullmatch(r"/([a-z0-9-]+)/", path)
         if m and m.group(1) in s.games and s.sections(m.group(1)):
             gid = m.group(1)
@@ -191,6 +200,33 @@ class App:
             )
         return self.not_found()
 
+    def glossary(self, q: dict):
+        """Указатель А–Я по всем материалам. ?tip= — фильтр по типу (noindex); неизвестный тип — 400."""
+        s = self.site
+        from quest.content import TYPES
+
+        tip = (q.get("tip") or [""])[0]
+        error = None
+        if tip and tip not in TYPES:
+            error, tip = "Такого раздела нет — показан весь указатель.", ""
+        entries = sorted((e for e in s.entries if not tip or e.type == tip), key=lambda e: e.src["name"].lower())
+        letters: dict = {}
+        for e in entries:
+            letters.setdefault(e.src["name"][:1].upper(), []).append(e)
+        meta = Meta(
+            "Гайды RPG — указатель от А до Я: персонажи, классы, квесты, механики, предметы"
+            if not tip
+            else f"Указатель: {TYPES[tip].lower()}",
+            "Все материалы справочника в одном списке по алфавиту, с типом и короткой справкой; сравнение предметов.",
+            None if tip or error else s.abs("/"),
+            not (tip or error),
+            [],
+            [{"@context": "https://schema.org", "@type": "WebSite", "name": s.cfg["name"], "url": s.abs("/")}],
+            "home",
+        )
+        body = self.render("home.html", meta, letters=letters, tip=tip, types=TYPES, error=error)
+        return (400 if error else 200), body, {}
+
     def sitemap_urls(self):
         s = self.site
         urls = ["/", "/kak-my-rabotaem/", "/istochniki/"]
@@ -199,6 +235,8 @@ class App:
             if secs:
                 urls.append(f"/{gid}/")
                 urls += [f"/{gid}/{sec}/" for sec in secs]
+                if any(e.type == "item" and e.game == gid for e in s.entries):
+                    urls.append(f"/{gid}/sravnenie-predmetov/")
         urls += [e.url for e in s.entries]
         return urls
 

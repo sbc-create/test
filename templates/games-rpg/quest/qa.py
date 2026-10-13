@@ -1,4 +1,4 @@
-"""Браузерная приёмка games-rpg (codex-sections): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
+"""Браузерная приёмка games-rpg (index-compare): карта действий (результат, а не наличие кнопки), axe-core, скриншоты, метрики (лаб.)."""
 
 from __future__ import annotations
 
@@ -11,11 +11,12 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 ROOT = Path(__file__).resolve().parents[1]
-BASE = "http://127.0.0.1:8859"
+BASE = "http://127.0.0.1:8871"
 AXE = ROOT / "qa" / "node_modules" / "axe-core" / "axe.min.js"
 VIEW = {"mobile": {"width": 390, "height": 844}, "desktop": {"width": 1440, "height": 900}}
 QUEST = "/baldurs-gate-3/kvesty/kvest-spasti-halsina/"
 SHOTS = {
+    "compare": "/baldurs-gate-3/sravnenie-predmetov/",
     "home": "/",
     "game": "/baldurs-gate-3/",
     "section": "/baldurs-gate-3/personazhi/",
@@ -145,6 +146,30 @@ def run(shots: Path | None) -> dict:
         )
         pg.go_back()
         A["history_back_returns"] = "/poisk/" in pg.url
+        # --- вариант C: указатель и сравнение ---
+        pg.goto(BASE + "/")
+        total = pg.locator(".gl__row").count()
+        with pg.expect_navigation():
+            pg.locator(".types a", has_text="Предметы").click()
+        A["type_filter_narrows"] = 0 < pg.locator(".gl__row").count() < total and "tip=item" in pg.url
+        with pg.expect_navigation():
+            pg.locator(".types a", has_text="Все").click()
+        A["type_filter_reset"] = pg.locator(".gl__row").count() == total
+        last = pg.locator(".az a").last
+        target = last.get_attribute("href")
+        last.click()
+        A["letter_jump"] = pg.evaluate("location.hash") == target
+        with pg.expect_navigation():
+            pg.locator(".more .btn").click()
+        A["compare_opens_table"] = pg.url.endswith("/sravnenie-predmetov/") and pg.locator(".cmp tbody tr").count() == 4
+        A["compare_no_hscroll_on_phone"] = pg.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        with pg.expect_navigation():
+            pg.locator(".cmp tbody th a").first.click()
+        A["compare_row_opens_item"] = (
+            "/predmety/" in pg.url and pg.locator("h2", has_text="Паспорт предмета").count() == 1
+        )
+        resp = pg.goto(BASE + "/?tip=nesushchestvuet")
+        A["unknown_type_400_alert"] = resp.status == 400 and pg.locator(".err[role=alert]").count() == 1
         ctx.close()
         ctx = br.new_context(java_script_enabled=False)
         pg = ctx.new_page()

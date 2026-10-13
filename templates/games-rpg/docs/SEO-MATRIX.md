@@ -14,3 +14,7 @@ Preview закрыт (`noindex, nofollow`, robots `Disallow: /`); production —
 
 В sitemap 27 URL (с разделом «Предметы»), все 200, canonical на себя, один H1, уникальные title (тест). Разметка Article/HowTo не используется:
 у материалов нет автора и дат, которые можно было бы честно указать в ней.
+
+## Вариант C (index-compare)
+
+`/` — указатель, index; `/?tip=…` — noindex без canonical (неизвестный тип — 400). `/<игра>/sravnenie-predmetov/` — index, в sitemap.

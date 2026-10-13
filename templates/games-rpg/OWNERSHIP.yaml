@@ -1,8 +1,8 @@
 template: games-rpg
-variant_id: codex-sections
-branch: claude/template-games-rpg
-worktree: /home/claude/wt-template-games-rpg
-base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main
+variant_id: index-compare   # вариант C; A — codex-sections (8859), B — party-planner (8860)
+branch: claude/template-games-rpg-c
+worktree: /home/claude/wt-template-games-rpg-c
+base_commit: 0e68f8a   # вариант A (claude/template-games-rpg), с предметами
 owner_scope:
   write: [templates/games-rpg/**]
   shared_files_touched:
@@ -12,12 +12,12 @@ owner_scope:
       why: "тест точного состава allowlist"
 runtime:
   process: "python3 -m quest.server (pid var/games-rpg/run/preview.pid)"
-  bind: 127.0.0.1:8859
+  bind: 127.0.0.1:8871
   data: templates/games-rpg/data (факты, материалы, content.json)
   private: var/games-rpg/private (страницы источника, 0700, вне git)
   build: var/games-rpg/build/<commit>
   qa_dependencies: templates/games-rpg/qa (axe-core 4.13.0, свой lockfile)
-  browser_storage_namespace: "grpg-codex"
+  browser_storage_namespace: "grpg-index"
 network_contracts:
   - contract: "games-ownership/1 (config/ownership.yaml) — одинаковая копия в games-story, games-rpg, games-survival"
 shared_with_other_templates: []
