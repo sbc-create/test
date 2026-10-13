@@ -3,7 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>{{ meta.title }}{% if meta.page_type != 'home' %}{{ site.cfg.seo.title_suffix }}{% endif %}</title>
+{% set full_title = meta.title ~ (site.cfg.seo.title_suffix if meta.page_type != 'home' else '') %}
+<title>{{ full_title if full_title|length <= 70 else meta.title }}</title>
 <meta name="description" content="{{ meta.description }}">
 <meta name="robots" content="{{ meta.robots(site) }}">
 <meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">

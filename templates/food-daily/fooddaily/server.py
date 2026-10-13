@@ -150,7 +150,10 @@ class App:
             meta = seo.listing_meta(
                 s,
                 title=f"{label}: рецепты",
-                description=desc,
+                description=seo.with_examples(
+                    f"{desc} {len(items)} {seo.plural(len(items), 'рецепт', 'рецепта', 'рецептов')}",
+                    [r.title for r in items],
+                ),
                 path=f"/recepty/{key}/",
                 crumbs=[("Главная", "/"), ("Рецепты", "/recepty/"), (label, f"/recepty/{key}/")],
                 page=n,
@@ -182,10 +185,12 @@ class App:
             label = TAGS[key][0]
             items = pages_map[key]
             title = f"Рецепты: {label.lower()}" if kind == "product" else f"{label}: рецепты"
-            desc = (
-                f"Рецепты, где есть {label.lower()}: {len(items)} шт."
+            n_items = len(items)
+            desc = seo.with_examples(
+                f"{label} в {n_items} {seo.plural(n_items, 'рецепте', 'рецептах', 'рецептах')}"
                 if kind == "product"
-                else f"Рецепты, которые готовятся так: {label.lower()}. {len(items)} шт."
+                else f"{label.capitalize()} — {n_items} {seo.plural(n_items, 'рецепт', 'рецепта', 'рецептов')}",
+                [r.title for r in items],
             )
             meta = seo.listing_meta(
                 s,
@@ -222,7 +227,7 @@ class App:
             meta = seo.listing_meta(
                 s,
                 title=title,
-                description=desc,
+                description=seo.with_examples(desc.rstrip(".") + ". В подборке", [r.title for r in items]),
                 path=path,
                 crumbs=[("Главная", "/"), ("Подборки", "/podborki/"), (title, path)],
                 page=1,
@@ -252,10 +257,9 @@ class App:
             title = TAG_KIND_LABEL[kind]
             meta = seo.Meta(
                 title=f"{title}: рецепты по темам",
-                description=(
-                    "Рецепты, сгруппированные по главному продукту."
-                    if kind == "product"
-                    else "Рецепты, сгруппированные по способу приготовления."
+                description=seo.with_examples(
+                    "Рецепты по главному продукту" if kind == "product" else "Рецепты по способу приготовления",
+                    [label.lower() for _, label, *_ in rows],
                 ),
                 canonical=s.abs(path),
                 index=True,
