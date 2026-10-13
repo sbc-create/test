@@ -46,3 +46,17 @@ LCP (лаборатория, loopback, без троттлинга) 56–148 м�
 | `bash bin/home-practical build --commit HEAD` | 0 | собрано из f2dc0bf |
 
 Лабораторный LCP (loopback, без троттлинга) — до 268 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 9194af9 (13.10.2026)
+
+Технический SEO (13.10.2026): описания списков (теги, подборки, разделы, типы работ, проблемы) собираются из названий материалов в пределах 160 знаков, длинные описания режутся по границе фразы; суффикс сайта в заголовке выводится, только если заголовок с ним не длиннее 70 знаков. Новый тест tests/test_snippets.py проверяет все URL sitemap (описание 20–160, суффикс — в пределах 70).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/home-practical test` | 0 | 21 passed in 0.97s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m udobdom.qa --shots docs/screenshots/9194af9 --out docs/verification-browser-qa.json` | 0 | 49 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8867 '/obhod/plan/?m=aksessuary-na-odnoj-veshalke' '/zadachi/?pomeshchenie=kuhnya&zadacha=mebel' '/poisk/?q=полка' /nesushchestvuet/` | 0 | 55 URL × 4 ширины, 0 замечаний |
+| `bash bin/home-practical build --commit HEAD` | 0 | собрано из 9194af9 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 128 мс. Карта действий — `docs/ACTION-MAP.md`.

@@ -1,6 +1,6 @@
 {
- "commit_head": "f2dc0bf51b99613d95bfcb6bf53de46125509689",
- "at": "2026-10-13T13:12:22Z",
+ "commit_head": "9194af91cfdef30a775e5d9feb20f51b08f76c7b",
+ "at": "2026-10-13T13:52:33Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -105,7 +105,7 @@
  },
  "perf_lab": {
   "mobile:audit_room": {
-   "lcp_ms": 116,
+   "lcp_ms": 128,
    "cls": 0
   },
   "mobile:audit_plan": {
@@ -113,39 +113,39 @@
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 80,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:room": {
-   "lcp_ms": 84,
+   "lcp_ms": 92,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "mobile:material": {
-   "lcp_ms": 84,
-   "cls": 0
-  },
-  "mobile:collection": {
    "lcp_ms": 56,
    "cls": 0
   },
+  "mobile:material": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
+  "mobile:collection": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
   "mobile:empty-filter": {
-   "lcp_ms": 268,
+   "lcp_ms": 48,
    "cls": 0
   },
   "mobile:problem": {
-   "lcp_ms": 44,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:audit_room": {
-   "lcp_ms": 76,
+   "lcp_ms": 96,
    "cls": 0
   },
   "desktop:audit_plan": {
-   "lcp_ms": 84,
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:home": {
@@ -153,27 +153,27 @@
    "cls": 0
   },
   "desktop:room": {
-   "lcp_ms": 68,
-   "cls": 0
-  },
-  "desktop:catalog": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "desktop:material": {
    "lcp_ms": 76,
    "cls": 0
   },
+  "desktop:catalog": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
+  "desktop:material": {
+   "lcp_ms": 100,
+   "cls": 0
+  },
   "desktop:collection": {
-   "lcp_ms": 60,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:empty-filter": {
-   "lcp_ms": 60,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:problem": {
-   "lcp_ms": 60,
+   "lcp_ms": 72,
    "cls": 0
   }
  },
@@ -182,23 +182,23 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8867/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/f2dc0bf/audit_room-mobile.png",
-  "docs/screenshots/f2dc0bf/audit_plan-mobile.png",
-  "docs/screenshots/f2dc0bf/home-mobile.png",
-  "docs/screenshots/f2dc0bf/room-mobile.png",
-  "docs/screenshots/f2dc0bf/catalog-mobile.png",
-  "docs/screenshots/f2dc0bf/material-mobile.png",
-  "docs/screenshots/f2dc0bf/collection-mobile.png",
-  "docs/screenshots/f2dc0bf/empty-filter-mobile.png",
-  "docs/screenshots/f2dc0bf/problem-mobile.png",
-  "docs/screenshots/f2dc0bf/audit_room-desktop.png",
-  "docs/screenshots/f2dc0bf/audit_plan-desktop.png",
-  "docs/screenshots/f2dc0bf/home-desktop.png",
-  "docs/screenshots/f2dc0bf/room-desktop.png",
-  "docs/screenshots/f2dc0bf/catalog-desktop.png",
-  "docs/screenshots/f2dc0bf/material-desktop.png",
-  "docs/screenshots/f2dc0bf/collection-desktop.png",
-  "docs/screenshots/f2dc0bf/empty-filter-desktop.png",
-  "docs/screenshots/f2dc0bf/problem-desktop.png"
+  "docs/screenshots/9194af9/audit_room-mobile.png",
+  "docs/screenshots/9194af9/audit_plan-mobile.png",
+  "docs/screenshots/9194af9/home-mobile.png",
+  "docs/screenshots/9194af9/room-mobile.png",
+  "docs/screenshots/9194af9/catalog-mobile.png",
+  "docs/screenshots/9194af9/material-mobile.png",
+  "docs/screenshots/9194af9/collection-mobile.png",
+  "docs/screenshots/9194af9/empty-filter-mobile.png",
+  "docs/screenshots/9194af9/problem-mobile.png",
+  "docs/screenshots/9194af9/audit_room-desktop.png",
+  "docs/screenshots/9194af9/audit_plan-desktop.png",
+  "docs/screenshots/9194af9/home-desktop.png",
+  "docs/screenshots/9194af9/room-desktop.png",
+  "docs/screenshots/9194af9/catalog-desktop.png",
+  "docs/screenshots/9194af9/material-desktop.png",
+  "docs/screenshots/9194af9/collection-desktop.png",
+  "docs/screenshots/9194af9/empty-filter-desktop.png",
+  "docs/screenshots/9194af9/problem-desktop.png"
  ]
 }
