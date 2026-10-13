@@ -21,7 +21,7 @@ SHOTS = {
     "region-filtered": "/region/or-west/?tip=uhod",
     "work": WORK,
     "crop": "/kultura/chesnok/",
-    "empty-month": "/kalendar/dekabr/",
+    "december": "/kalendar/dekabr/",
 }
 AXE_PAGES = list(SHOTS.values()) + [
     "/regiony/",
@@ -159,7 +159,8 @@ def run(shots: Path | None) -> dict:
             pg.locator(".pager a").last.click()
         A["month_pager_next"] = pg.url.endswith("/kalendar/noyabr/")
         pg.goto(BASE + "/kalendar/dekabr/")
-        A["empty_month_honest"] = pg.locator(".empty a[href*='oregonstate.edu']").count() == 1
+        # после пополнения работ декабрь не пуст; пустой месяц проверяется тестом на копии сайта
+        A["december_lists_new_works"] = pg.locator("a[href='/rabota/mulcha-kruglyj-god/']").count() >= 1
         pg.goto(BASE + "/")
         pg.fill("#fq", "чеснок")
         with pg.expect_navigation():

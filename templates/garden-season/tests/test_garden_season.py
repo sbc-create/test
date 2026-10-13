@@ -120,9 +120,16 @@ def test_month_page_groups_by_region_and_empty_month(app):
     _, html, _ = get(app, "/kalendar/fevral/")
     heads = re.findall(r'<section aria-labelledby="h-([a-z-]+)"><h2', html)
     assert heads == [r for r in content.REGIONS if r in heads] and {"or-all", "or-west", "or-east"} <= set(heads)
-    st, html, _ = get(app, "/kalendar/dekabr/")
+    # Пустой месяц: после пополнения работ пустых месяцев нет — проверяем на копии сайта без декабрьских работ
+    s = copy.copy(app.site)
+    s.works = [w for w in app.site.works if 12 not in w.months]
+    empty = App(s)
+    st, html, _ = get(empty, "/kalendar/dekabr/")
     assert (
-        st == 200 and 'class="empty"' in html and canon(html) is None and "/kalendar/dekabr/" not in app.sitemap_urls()
+        st == 200
+        and 'class="empty"' in html
+        and canon(html) is None
+        and "/kalendar/dekabr/" not in empty.sitemap_urls()
     )
     assert get(app, "/kalendar/xx/")[0] == 404
 
