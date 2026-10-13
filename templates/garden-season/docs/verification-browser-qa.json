@@ -1,6 +1,6 @@
 {
- "commit_head": "410502a109e1127d748829469565d6fe12f7e434",
- "at": "2026-10-13T00:54:21Z",
+ "commit_head": "a08279b225de3409d8b75d855ab7805934519bf1",
+ "at": "2026-10-13T01:23:07Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -81,43 +81,43 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 156,
+   "lcp_ms": 120,
    "cls": 0
   },
   "mobile:region": {
-   "lcp_ms": 88,
-   "cls": 0
-  },
-  "mobile:region-filtered": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "mobile:work": {
-   "lcp_ms": 160,
-   "cls": 0
-  },
-  "mobile:crop": {
-   "lcp_ms": 56,
-   "cls": 0
-  },
-  "mobile:december": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "desktop:home": {
-   "lcp_ms": 104,
-   "cls": 0
-  },
-  "desktop:region": {
    "lcp_ms": 80,
    "cls": 0
   },
-  "desktop:region-filtered": {
+  "mobile:region-filtered": {
    "lcp_ms": 68,
    "cls": 0
   },
-  "desktop:work": {
+  "mobile:work": {
+   "lcp_ms": 108,
+   "cls": 0
+  },
+  "mobile:crop": {
    "lcp_ms": 68,
+   "cls": 0
+  },
+  "mobile:december": {
+   "lcp_ms": 72,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 140,
+   "cls": 0
+  },
+  "desktop:region": {
+   "lcp_ms": 64,
+   "cls": 0
+  },
+  "desktop:region-filtered": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:work": {
+   "lcp_ms": 64,
    "cls": 0
   },
   "desktop:crop": {
@@ -125,7 +125,7 @@
    "cls": 0
   },
   "desktop:december": {
-   "lcp_ms": 56,
+   "lcp_ms": 64,
    "cls": 0
   }
  },
@@ -134,17 +134,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8854/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/410502a/home-mobile.png",
-  "docs/screenshots/410502a/region-mobile.png",
-  "docs/screenshots/410502a/region-filtered-mobile.png",
-  "docs/screenshots/410502a/work-mobile.png",
-  "docs/screenshots/410502a/crop-mobile.png",
-  "docs/screenshots/410502a/december-mobile.png",
-  "docs/screenshots/410502a/home-desktop.png",
-  "docs/screenshots/410502a/region-desktop.png",
-  "docs/screenshots/410502a/region-filtered-desktop.png",
-  "docs/screenshots/410502a/work-desktop.png",
-  "docs/screenshots/410502a/crop-desktop.png",
-  "docs/screenshots/410502a/december-desktop.png"
+  "docs/screenshots/a08279b/home-mobile.png",
+  "docs/screenshots/a08279b/region-mobile.png",
+  "docs/screenshots/a08279b/region-filtered-mobile.png",
+  "docs/screenshots/a08279b/work-mobile.png",
+  "docs/screenshots/a08279b/crop-mobile.png",
+  "docs/screenshots/a08279b/december-mobile.png",
+  "docs/screenshots/a08279b/home-desktop.png",
+  "docs/screenshots/a08279b/region-desktop.png",
+  "docs/screenshots/a08279b/region-filtered-desktop.png",
+  "docs/screenshots/a08279b/work-desktop.png",
+  "docs/screenshots/a08279b/crop-desktop.png",
+  "docs/screenshots/a08279b/december-desktop.png"
  ]
 }

@@ -1,6 +1,6 @@
 # Карта действий garden-season, вариант B (region-timeline)
 
-Проверено на commit `410502a` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/410502a --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `a08279b` в Chromium: `python3 -m sezon.qa --shots docs/screenshots/a08279b --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -34,6 +34,6 @@
 | nojs_print_hidden | PASS | `True` |
 | nojs_region_filter_works | PASS | `True` |
 | nojs_header_links_to_regions | PASS | `True` |
-| ширины 320/390/768/1440 × 60 URL | PASS | 0 замечаний |
+| ширины 320/390/768/1440 × 61 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 44 страниц×ширин | PASS | 0 нарушений |
 | формы с обязательными полями, пагинация | NOT_RUN | в варианте нет |
