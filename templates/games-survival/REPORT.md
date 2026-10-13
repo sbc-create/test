@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 44–304 м�
 | наполнение | как в A/B: Minecraft (Java Edition 26.3), 14 предметов/блоков (из досок и палок — деревянные инструменты), 4 постройки, 4 ресурса, 4 биома; тексты — manual_standin, не Qwen |
 | внешние интеграции | нет (реклама и счётчики выключены) |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на e0f9abf (13.10.2026)
+
+Meta description: у разделов — из данных (число материалов, вики-источник, версия игры) вместо «Раздел — Игра.» (22–29 символов); у материалов — целые предложения до 160 символов (было до 263 и обрезалось в выдаче посреди фразы). Новый тест проверяет все URL sitemap: 20–160 символов.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/games-survival test` | 0 | 22 passed in 0.82s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m craft.qa --shots docs/screenshots/e0f9abf --out docs/verification-browser-qa.json` | 0 | 36 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8872 '/iz-togo-chto-est/?est=doski&est=palka&est=ugol' '/iz-togo-chto-est/?est=almaz' '/planirovshchik/?item=zabor&n=64' /nesushchestvuet/` | 0 | 41 URL × 4 ширины, 0 замечаний |
+| `bash bin/games-survival build --commit HEAD` | 0 | собрано из e0f9abf |
+
+Лабораторный LCP (loopback, без троттлинга) — до 280 мс. Карта действий — `docs/ACTION-MAP.md`.
