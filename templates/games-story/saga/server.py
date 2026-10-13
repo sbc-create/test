@@ -166,8 +166,16 @@ class App:
                 f"{title}: {label.lower()}" + (f" — «{q1}»" if q1 else ""),
                 {
                     "personazhi": "В каких главах появляется каждый персонаж — по инфобоксам вики.",
-                    "mehaniki": "Какая механика в какой главе появляется.",
-                    "gde-ya": "Найдите свой чекпоинт: глава, номер и что дальше.",
+                    "mehaniki": (
+                        f"Какая механика в какой главе {title} появляется: "
+                        f"{len({m for m, _ in s.mechanics_index(gid)})} "
+                        f"{plural(len({m for m, _ in s.mechanics_index(gid)}), 'механика', 'механики', 'механик')}"
+                        " по страницам вики."
+                    ),
+                    "gde-ya": (
+                        f"{len(s.checkpoints(gid))} {plural(len(s.checkpoints(gid)), 'чекпоинт', 'чекпоинта', 'чекпоинтов')}"
+                        f" {title} по порядку глав: найдите свой — глава, номер и что дальше."
+                    ),
                 }[kind],
                 None if q1 else s.abs(path),
                 not q1,
@@ -243,7 +251,13 @@ class App:
             )
         if path == "/istochniki/":
             crumbs = [home, ("Источники", path)]
-            return self.page("sources.html", "Источники гайдов", "Страницы вики и проверенные видео.", path, crumbs)
+            return self.page(
+                "sources.html",
+                "Источники гайдов",
+                "Страницы вики и проверенные видео, по которым составлены гайды, с датой чтения каждой страницы.",
+                path,
+                crumbs,
+            )
         if path == "/poisk/":
             qq = (q.get("q") or [""])[0].strip()[:120]
             meta = Meta(
