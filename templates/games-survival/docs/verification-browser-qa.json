@@ -1,6 +1,6 @@
 {
- "commit_head": "7965fdf76ddaecd45818c73bd1ea9e4963f06fa8",
- "at": "2026-10-13T01:04:05Z",
+ "commit_head": "a14b00d6327bf4522ecfb5d8767f056f50b81916",
+ "at": "2026-10-13T01:28:05Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -60,35 +60,35 @@
  },
  "perf_lab": {
   "mobile:home": {
-   "lcp_ms": 160,
+   "lcp_ms": 156,
    "cls": 0
   },
   "mobile:game": {
-   "lcp_ms": 60,
-   "cls": 0
-  },
-  "mobile:section": {
-   "lcp_ms": 48,
-   "cls": 0
-  },
-  "mobile:item": {
-   "lcp_ms": 124,
-   "cls": 0
-  },
-  "mobile:resource": {
-   "lcp_ms": 64,
-   "cls": 0
-  },
-  "mobile:biome": {
    "lcp_ms": 52,
    "cls": 0
   },
+  "mobile:section": {
+   "lcp_ms": 44,
+   "cls": 0
+  },
+  "mobile:item": {
+   "lcp_ms": 112,
+   "cls": 0
+  },
+  "mobile:resource": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "mobile:biome": {
+   "lcp_ms": 40,
+   "cls": 0
+  },
   "desktop:home": {
-   "lcp_ms": 136,
+   "lcp_ms": 112,
    "cls": 0
   },
   "desktop:game": {
-   "lcp_ms": 68,
+   "lcp_ms": 80,
    "cls": 0
   },
   "desktop:section": {
@@ -96,7 +96,7 @@
    "cls": 0
   },
   "desktop:item": {
-   "lcp_ms": 116,
+   "lcp_ms": 96,
    "cls": 0
   },
   "desktop:resource": {
@@ -113,17 +113,17 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8861/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/7965fdf/home-mobile.png",
-  "docs/screenshots/7965fdf/game-mobile.png",
-  "docs/screenshots/7965fdf/section-mobile.png",
-  "docs/screenshots/7965fdf/item-mobile.png",
-  "docs/screenshots/7965fdf/resource-mobile.png",
-  "docs/screenshots/7965fdf/biome-mobile.png",
-  "docs/screenshots/7965fdf/home-desktop.png",
-  "docs/screenshots/7965fdf/game-desktop.png",
-  "docs/screenshots/7965fdf/section-desktop.png",
-  "docs/screenshots/7965fdf/item-desktop.png",
-  "docs/screenshots/7965fdf/resource-desktop.png",
-  "docs/screenshots/7965fdf/biome-desktop.png"
+  "docs/screenshots/a14b00d/home-mobile.png",
+  "docs/screenshots/a14b00d/game-mobile.png",
+  "docs/screenshots/a14b00d/section-mobile.png",
+  "docs/screenshots/a14b00d/item-mobile.png",
+  "docs/screenshots/a14b00d/resource-mobile.png",
+  "docs/screenshots/a14b00d/biome-mobile.png",
+  "docs/screenshots/a14b00d/home-desktop.png",
+  "docs/screenshots/a14b00d/game-desktop.png",
+  "docs/screenshots/a14b00d/section-desktop.png",
+  "docs/screenshots/a14b00d/item-desktop.png",
+  "docs/screenshots/a14b00d/resource-desktop.png",
+  "docs/screenshots/a14b00d/biome-desktop.png"
  ]
 }
