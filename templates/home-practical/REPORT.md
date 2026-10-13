@@ -60,3 +60,17 @@ LCP (лаборатория, loopback, без троттлинга) 56–148 м�
 | `bash bin/home-practical build --commit HEAD` | 0 | собрано из 9194af9 |
 
 Лабораторный LCP (loopback, без троттлинга) — до 128 мс. Карта действий — `docs/ACTION-MAP.md`.
+
+## Обновление на 6b316b8 (13.10.2026)
+
+Чистая копия: у сервера появился --port, у браузерной приёмки — QA_BASE (проверка рядом с действующим превью на 8901–8910, см. RUN-LOCAL.md в ветке claude/template-food-daily). Проверка контента моделью и скриптами (не человеком; статусы ai_draft не менялись). Контент: чек-лист крепления комода и стеллажа — «если потянуть за ремень», как в CPSC (версии 2).
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/home-practical test` | 0 | 21 passed in 1.15s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m udobdom.qa --shots docs/screenshots/6b316b8 --out docs/verification-browser-qa.json` | 0 | 49 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8867 '/obhod/plan/?m=aksessuary-na-odnoj-veshalke' '/zadachi/?pomeshchenie=kuhnya&zadacha=mebel' '/poisk/?q=полка' /nesushchestvuet/` | 0 | 55 URL × 4 ширины, 0 замечаний |
+| `bash bin/home-practical build --commit HEAD` | 0 | собрано из 6b316b8 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 136 мс. Карта действий — `docs/ACTION-MAP.md`.
