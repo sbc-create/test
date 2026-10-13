@@ -1,6 +1,6 @@
 # Карта действий games-rpg, вариант C (index-compare)
 
-Проверено на commit `5227702` в Chromium: `python3 -m quest.qa --shots docs/screenshots/5227702 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `3a559de` в Chromium: `python3 -m quest.qa --shots docs/screenshots/3a559de --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
