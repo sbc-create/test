@@ -341,6 +341,60 @@
    "review_status": "ai_draft"
   },
   {
+   "slug": "lopata",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-336bf32f13",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Лопата: песок, гравий и земля",
+   "summary": "Лопата быстро копает песок, гравий и землю. В сетке источника рецепт занимает 3 клетки — материал своего уровня и палки — и даёт 1 лопату.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "doski"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "28a00fc27cce20d1094559594d8df3fea857399f4391ebeb8b2d81addda4ba87",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "mech",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-dddfa2fa81",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Меч: оружие ближнего боя",
+   "summary": "Меч — оружие ближнего боя; он быстрее ломает паутину, листья и бамбук. По данным вики, все мечи, кроме незеритового, делают из палки и двух единиц материала — 3 занятые клетки и 1 меч.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "zheleznyj-slitok"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "d651fdc4021b0bbe665bd0c206b531a61ebdd26c195573bcb38712719603708f",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
+   "review_status": "ai_draft"
+  },
+  {
    "slug": "palka",
    "game": "minecraft",
    "type": "item",
@@ -502,6 +556,34 @@
    "text_hash": "c509ae1b6fa692fb2b1c71368651e2ea72d05a2af2d864cfd669ac6d442397dc",
    "published_at": "2026-10-12",
    "updated_at": "2026-10-12",
+   "review_status": "ai_draft"
+  },
+  {
+   "slug": "topor",
+   "game": "minecraft",
+   "type": "item",
+   "src": "src-3ca8a7f9ee",
+   "also": [
+    "src-2d59dbaf94"
+   ],
+   "title": "Топор: дерево и растения",
+   "summary": "Топор быстро рубит древесину и растения; как оружие он бьёт сильно, но медленно. По данным вики, топоры любого уровня делают из 2 палок и 3 единиц материала своего уровня — в сетке источника 5 занятых клеток и 1 топор.",
+   "points": [],
+   "tips": [],
+   "related": [
+    "palka",
+    "doski",
+    "brevno"
+   ],
+   "producer": {
+    "mode": "manual_standin",
+    "by": "Claude (сессия фабрики)",
+    "note": "не результат Qwen"
+   },
+   "version": 1,
+   "text_hash": "6d3c81c2ed11baecbda50b7de0bb6711a992714b0de5ea2d632192de5961bc9a",
+   "published_at": "2026-10-13",
+   "updated_at": "2026-10-13",
    "review_status": "ai_draft"
   },
   {
@@ -759,6 +841,104 @@
    ],
    "java_versions": [],
    "java_current": "26.3"
+  },
+  "src-336bf32f13": {
+   "id": "src-336bf32f13",
+   "url": "https://minecraft.wiki/w/Shovel",
+   "fetched_at": "2026-10-13T01:27:05Z",
+   "page_sha256": "5f8df4522c3ba87b791341f8d55e75c4220fb88f255e4e9fc962c301c51494a0",
+   "parser": "gsv-facts/1.0.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Shovel",
+   "lead": [
+    "A shovel is a tiered tool that can quickly break sand , gravel , and dirt -related blocks. Shovels also have a unique use interaction with dirt-related blocks and snow layers ‌ [ Bedrock Edition only ] and can turn them into dirt paths or snowballs respectively.",
+    "In ancient_city/city_center/city_center_2 , there exists a furnace with a wooden shovel inside."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 3,
+     "alternatives_in_first_slot": 20,
+     "result": "Wooden Shovel",
+     "results": [
+      "Wooden Shovel",
+      "Golden Shovel",
+      "Stone Shovel",
+      "Copper Shovel",
+      "Iron Shovel",
+      "Diamond Shovel"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Shovels",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "result": "Wooden Shovel",
+     "results": [
+      "Wooden Shovel",
+      "Stone Shovel",
+      "Copper Shovel",
+      "Iron Shovel",
+      "Golden Shovel",
+      "Diamond Shovel",
+      "Netherite Shovel"
+     ],
+     "count": 1
+    }
+   ]
+  },
+  "src-3ca8a7f9ee": {
+   "id": "src-3ca8a7f9ee",
+   "url": "https://minecraft.wiki/w/Axe",
+   "fetched_at": "2026-10-13T01:27:03Z",
+   "page_sha256": "848717615c82fd44aef88789ce0515ef8de253f862cc4f7540bd73ec5c82dff5",
+   "parser": "gsv-facts/1.0.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Axe",
+   "lead": [
+    "An axe is a tiered tool that can quickly break wood and plant blocks, and a melee weapon with high attack damage but low attack speed .‌ [ JE only ] It has the special ability to perform crushing blows , which disable the use of a target's shield.",
+    "Wooden, golden, stone, copper, iron, and diamond axes are crafted using 2 sticks and 3 identical units of tool material. This recipe can be flipped horizontally."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 5,
+     "alternatives_in_first_slot": 20,
+     "result": "Wooden Axe",
+     "results": [
+      "Wooden Axe",
+      "Golden Axe",
+      "Stone Axe",
+      "Copper Axe",
+      "Iron Axe",
+      "Diamond Axe"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Axes",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "result": "Wooden Axe",
+     "results": [
+      "Wooden Axe",
+      "Stone Axe",
+      "Copper Axe",
+      "Iron Axe",
+      "Golden Axe",
+      "Diamond Axe",
+      "Netherite Axe"
+     ],
+     "count": 1
+    }
+   ]
   },
   "src-429987c579": {
    "id": "src-429987c579",
@@ -1603,6 +1783,55 @@
    "lead": [
     "Raw iron is an item obtained by mining iron ore . It can be smelted in a furnace or blast furnace to produce iron ingots , which are used in crafting.",
     "Iron ore and deepslate iron ore mined with a stone pickaxe or a higher-tier pickaxe drop 1 unit of raw iron. When mined with a pickaxe enchanted with Fortune , the ore can drop an additional unit per level of the enchantment, up to a maximum of 4 units with Fortune III. If mined with a pickaxe enchanted with Silk Touch , the ore block itself is dropped instead."
+   ]
+  },
+  "src-dddfa2fa81": {
+   "id": "src-dddfa2fa81",
+   "url": "https://minecraft.wiki/w/Sword",
+   "fetched_at": "2026-10-13T01:27:07Z",
+   "page_sha256": "7629dc9e75d98b140489eb7e0294b697ebc32975788d265e687ddee122928c8f",
+   "parser": "gsv-facts/1.0.2",
+   "kind": "wiki",
+   "publisher": "Minecraft Wiki",
+   "game": "minecraft",
+   "type": "item",
+   "name": "Sword",
+   "lead": [
+    "A sword is a tiered melee weapon that can be swung to deal damage and can break blocks such as cobwebs , leaves , and bamboo more quickly. In Java Edition , it has the special ability to perform sweep attacks , which damage nearby entities and knock them back.",
+    "All swords except netherite are crafted using a stick and two of the tier's material."
+   ],
+   "recipes": [
+    {
+     "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+     "slots": 3,
+     "alternatives_in_first_slot": 20,
+     "result": "Wooden Sword",
+     "results": [
+      "Wooden Sword",
+      "Golden Sword",
+      "Stone Sword",
+      "Copper Sword",
+      "Iron Sword",
+      "Diamond Sword"
+     ],
+     "count": 1
+    },
+    {
+     "ingredients": "Matching Damaged Swords",
+     "slots": 2,
+     "alternatives_in_first_slot": 7,
+     "result": "Wooden Sword",
+     "results": [
+      "Wooden Sword",
+      "Stone Sword",
+      "Copper Sword",
+      "Iron Sword",
+      "Golden Sword",
+      "Diamond Sword",
+      "Netherite Sword"
+     ],
+     "count": 1
+    }
    ]
   },
   "src-f04b885346": {

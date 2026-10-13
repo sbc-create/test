@@ -186,3 +186,8 @@ def test_pickaxe_animated_grid_keeps_all_results(app):
     assert all("Damaged" not in r["ingredients"] for r in k.recipes)  # ремонт — не рецепт
     _, html, _ = get(app, k.url)
     assert "Wooden Pickaxe / Golden Pickaxe" in html and "анимирована" in html
+
+
+def test_price_filter_has_no_false_positive_on_chopping():
+    assert content.FORBIDDEN.search("стоит 120 руб.") and content.FORBIDDEN.search("за 300 рублей")
+    assert not content.FORBIDDEN.search("топор быстро рубит древесину")

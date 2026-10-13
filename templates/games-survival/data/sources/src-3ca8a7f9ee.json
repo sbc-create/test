@@ -1,0 +1,49 @@
+{
+ "id": "src-3ca8a7f9ee",
+ "url": "https://minecraft.wiki/w/Axe",
+ "fetched_at": "2026-10-13T01:27:03Z",
+ "page_sha256": "848717615c82fd44aef88789ce0515ef8de253f862cc4f7540bd73ec5c82dff5",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Axe",
+ "lead": [
+  "An axe is a tiered tool that can quickly break wood and plant blocks, and a melee weapon with high attack damage but low attack speed .‌ [ JE only ] It has the special ability to perform crushing blows , which disable the use of a target's shield.",
+  "Wooden, golden, stone, copper, iron, and diamond axes are crafted using 2 sticks and 3 identical units of tool material. This recipe can be flipped horizontally."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks or Gold Ingot or Any stone-tier block or Copper Ingot or Iron Ingot or Diamond + Stick",
+   "slots": 5,
+   "alternatives_in_first_slot": 20,
+   "result": "Wooden Axe",
+   "results": [
+    "Wooden Axe",
+    "Golden Axe",
+    "Stone Axe",
+    "Copper Axe",
+    "Iron Axe",
+    "Diamond Axe"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Matching Damaged Axes",
+   "slots": 2,
+   "alternatives_in_first_slot": 7,
+   "result": "Wooden Axe",
+   "results": [
+    "Wooden Axe",
+    "Stone Axe",
+    "Copper Axe",
+    "Iron Axe",
+    "Golden Axe",
+    "Diamond Axe",
+    "Netherite Axe"
+   ],
+   "count": 1
+  }
+ ]
+}
