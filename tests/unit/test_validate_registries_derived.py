@@ -20,8 +20,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-import pytest
-
 REAL_REPO = Path(__file__).resolve().parents[2]
 SCRIPT_NAME = "validate_registries.py"
 
