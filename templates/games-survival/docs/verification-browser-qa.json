@@ -1,6 +1,6 @@
 {
- "commit_head": "90475abeb75c5c142433275242a9eae4776135d9",
- "at": "2026-10-13T00:11:20Z",
+ "commit_head": "1fa907b8e7b54ef0f65a9b1d625017116dde1b8b",
+ "at": "2026-10-13T01:07:21Z",
  "actions": {
   "keyboard_first_tab_is_skip": true,
   "skip_moves_focus_to_main": true,
@@ -82,7 +82,7 @@
  },
  "perf_lab": {
   "mobile:inventory": {
-   "lcp_ms": 164,
+   "lcp_ms": 160,
    "cls": 0
   },
   "mobile:home": {
@@ -90,7 +90,7 @@
    "cls": 0
   },
   "mobile:planner": {
-   "lcp_ms": 76,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:game": {
@@ -102,43 +102,43 @@
    "cls": 0
   },
   "mobile:item": {
-   "lcp_ms": 60,
+   "lcp_ms": 68,
    "cls": 0
   },
   "mobile:resource": {
-   "lcp_ms": 64,
+   "lcp_ms": 48,
    "cls": 0
   },
   "mobile:biome": {
-   "lcp_ms": 40,
+   "lcp_ms": 44,
    "cls": 0
   },
   "desktop:inventory": {
-   "lcp_ms": 136,
+   "lcp_ms": 108,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 60,
+   "lcp_ms": 68,
    "cls": 0
   },
   "desktop:planner": {
-   "lcp_ms": 52,
-   "cls": 0
-  },
-  "desktop:game": {
    "lcp_ms": 72,
    "cls": 0
   },
+  "desktop:game": {
+   "lcp_ms": 68,
+   "cls": 0
+  },
   "desktop:section": {
-   "lcp_ms": 48,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:item": {
-   "lcp_ms": 48,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:resource": {
-   "lcp_ms": 56,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:biome": {
@@ -153,21 +153,21 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8872/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/90475ab/inventory-mobile.png",
-  "docs/screenshots/90475ab/home-mobile.png",
-  "docs/screenshots/90475ab/planner-mobile.png",
-  "docs/screenshots/90475ab/game-mobile.png",
-  "docs/screenshots/90475ab/section-mobile.png",
-  "docs/screenshots/90475ab/item-mobile.png",
-  "docs/screenshots/90475ab/resource-mobile.png",
-  "docs/screenshots/90475ab/biome-mobile.png",
-  "docs/screenshots/90475ab/inventory-desktop.png",
-  "docs/screenshots/90475ab/home-desktop.png",
-  "docs/screenshots/90475ab/planner-desktop.png",
-  "docs/screenshots/90475ab/game-desktop.png",
-  "docs/screenshots/90475ab/section-desktop.png",
-  "docs/screenshots/90475ab/item-desktop.png",
-  "docs/screenshots/90475ab/resource-desktop.png",
-  "docs/screenshots/90475ab/biome-desktop.png"
+  "docs/screenshots/1fa907b/inventory-mobile.png",
+  "docs/screenshots/1fa907b/home-mobile.png",
+  "docs/screenshots/1fa907b/planner-mobile.png",
+  "docs/screenshots/1fa907b/game-mobile.png",
+  "docs/screenshots/1fa907b/section-mobile.png",
+  "docs/screenshots/1fa907b/item-mobile.png",
+  "docs/screenshots/1fa907b/resource-mobile.png",
+  "docs/screenshots/1fa907b/biome-mobile.png",
+  "docs/screenshots/1fa907b/inventory-desktop.png",
+  "docs/screenshots/1fa907b/home-desktop.png",
+  "docs/screenshots/1fa907b/planner-desktop.png",
+  "docs/screenshots/1fa907b/game-desktop.png",
+  "docs/screenshots/1fa907b/section-desktop.png",
+  "docs/screenshots/1fa907b/item-desktop.png",
+  "docs/screenshots/1fa907b/resource-desktop.png",
+  "docs/screenshots/1fa907b/biome-desktop.png"
  ]
 }
