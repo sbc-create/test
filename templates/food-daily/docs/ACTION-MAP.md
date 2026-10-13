@@ -1,6 +1,6 @@
 # Карта действий food-daily, вариант B (fridge-first)
 
-Проверено на commit `0f52eaf` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/0f52eaf --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `ae5fe38` в Chromium: `python3 -m fooddaily.qa_browser --shots docs/screenshots/ae5fe38 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -38,4 +38,4 @@
 | nojs_fav_button_hidden | PASS | `True` |
 | ширины 320/390/768/1440 × 57 URL | PASS | 0 замечаний |
 | axe-core 4.13.0 × 38 страниц×ширин | PASS | 0 нарушений |
-| редактор (/redaktor/) — нужен секрет B, не создавался | NOT_RUN | в варианте нет |
+| редактор (/redaktor/) — секрет B не создавался | NOT_RUN | в варианте нет |
