@@ -1,6 +1,6 @@
 # Карта действий food-weekly, вариант C (own-week)
 
-Проверено на commit `a613ec9` в Chromium: `python3 -m weekplan.qa --shots docs/screenshots/a613ec9 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
+Проверено на commit `8397dc4` в Chromium: `python3 -m weekplan.qa --shots docs/screenshots/8397dc4 --out docs/verification-browser-qa.json` → `docs/verification-browser-qa.json`, exit 0.
 Каждая строка — действие с проверкой результата (описание — в `docs/verification-browser-qa.json` под тем же именем).
 
 | проверка | статус | фактический результат |
@@ -33,6 +33,10 @@
 | header_link_returns_to_own_week | PASS | `True` |
 | seed_from_plan_fills_week | PASS | `True` |
 | bad_people_400_alert | PASS | `True` |
+| trip_link_keeps_swaps_and_anchor | PASS | `True` |
+| trip_counter_counts_left | PASS | `True` |
+| trip_marks_persist_separately | PASS | `True` |
+| trip_whole_list_present | PASS | `True` |
 | storage_namespace_own | PASS | `True` |
 | nojs_week_dishes | PASS | `23` |
 | nojs_swap_works | PASS | `True` |

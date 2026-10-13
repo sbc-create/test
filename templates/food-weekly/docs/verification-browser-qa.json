@@ -1,6 +1,6 @@
 {
- "commit_head": "a613ec99c41567f1b5bad4f726c288d9450f3af0",
- "at": "2026-10-13T00:16:37Z",
+ "commit_head": "8397dc49963d53e2efac893d347bdcbf3adf7def",
+ "at": "2026-10-13T13:03:54Z",
  "scenarios": {
   "mobile:own:no_hscroll": true,
   "mobile:home:no_hscroll": true,
@@ -18,11 +18,15 @@
   "swapped_marker": 1,
   "shopping_after_swap_url": true,
   "shopping_rows_before_after": [
-   110,
-   110
+   201,
+   195
   ],
   "shopping_changed_after_swap": true,
   "bought_mark_persists": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip_counter_counts_left": true,
+  "trip_marks_persist_separately": true,
+  "trip_whole_list_present": true,
   "invalid_swap_warning": true,
   "first_tab_skip": true,
   "home_cta_opens_own_week": true,
@@ -62,51 +66,51 @@
  },
  "perf_lab": {
   "mobile:own": {
-   "lcp_ms": 204,
+   "lcp_ms": 172,
    "cls": 0
   },
   "mobile:home": {
-   "lcp_ms": 52,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:catalog": {
-   "lcp_ms": 60,
+   "lcp_ms": 64,
    "cls": 0
   },
   "mobile:week": {
-   "lcp_ms": 108,
+   "lcp_ms": 88,
    "cls": 0
   },
   "mobile:day": {
-   "lcp_ms": 48,
+   "lcp_ms": 56,
    "cls": 0
   },
   "mobile:shopping": {
-   "lcp_ms": 68,
-   "cls": 0
+   "lcp_ms": 100,
+   "cls": 0.0055
   },
   "desktop:own": {
-   "lcp_ms": 116,
+   "lcp_ms": 128,
    "cls": 0
   },
   "desktop:home": {
-   "lcp_ms": 60,
+   "lcp_ms": 56,
    "cls": 0
   },
   "desktop:catalog": {
-   "lcp_ms": 68,
+   "lcp_ms": 60,
    "cls": 0
   },
   "desktop:week": {
-   "lcp_ms": 68,
+   "lcp_ms": 72,
    "cls": 0
   },
   "desktop:day": {
-   "lcp_ms": 636,
+   "lcp_ms": 52,
    "cls": 0
   },
   "desktop:shopping": {
-   "lcp_ms": 72,
+   "lcp_ms": 68,
    "cls": 0
   }
  },
@@ -115,18 +119,18 @@
   "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8873/nesushchestvuet/"
  ],
  "screenshots": [
-  "docs/screenshots/a613ec9/own-mobile.png",
-  "docs/screenshots/a613ec9/home-mobile.png",
-  "docs/screenshots/a613ec9/catalog-mobile.png",
-  "docs/screenshots/a613ec9/week-mobile.png",
-  "docs/screenshots/a613ec9/day-mobile.png",
-  "docs/screenshots/a613ec9/shopping-mobile.png",
-  "docs/screenshots/a613ec9/own-desktop.png",
-  "docs/screenshots/a613ec9/home-desktop.png",
-  "docs/screenshots/a613ec9/catalog-desktop.png",
-  "docs/screenshots/a613ec9/week-desktop.png",
-  "docs/screenshots/a613ec9/day-desktop.png",
-  "docs/screenshots/a613ec9/shopping-desktop.png"
+  "docs/screenshots/8397dc4/own-mobile.png",
+  "docs/screenshots/8397dc4/home-mobile.png",
+  "docs/screenshots/8397dc4/catalog-mobile.png",
+  "docs/screenshots/8397dc4/week-mobile.png",
+  "docs/screenshots/8397dc4/day-mobile.png",
+  "docs/screenshots/8397dc4/shopping-mobile.png",
+  "docs/screenshots/8397dc4/own-desktop.png",
+  "docs/screenshots/8397dc4/home-desktop.png",
+  "docs/screenshots/8397dc4/catalog-desktop.png",
+  "docs/screenshots/8397dc4/week-desktop.png",
+  "docs/screenshots/8397dc4/day-desktop.png",
+  "docs/screenshots/8397dc4/shopping-desktop.png"
  ],
  "actions": {
   "mobile:own:no_hscroll": true,
@@ -145,11 +149,15 @@
   "swapped_marker": 1,
   "shopping_after_swap_url": true,
   "shopping_rows_before_after": [
-   110,
-   110
+   201,
+   195
   ],
   "shopping_changed_after_swap": true,
   "bought_mark_persists": true,
+  "trip_link_keeps_swaps_and_anchor": true,
+  "trip_counter_counts_left": true,
+  "trip_marks_persist_separately": true,
+  "trip_whole_list_present": true,
   "invalid_swap_warning": true,
   "first_tab_skip": true,
   "home_cta_opens_own_week": true,

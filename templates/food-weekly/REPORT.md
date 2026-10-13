@@ -32,3 +32,17 @@ LCP (лаборатория, loopback, без троттлинга) 48–636 м�
 | наполнение | те же 3 плана и снимок каталога food-daily, что у A; планы — manual_standin, не Qwen |
 | внешние интеграции | каталог рецептов food-daily — снимок от 2026-10-12 (preview_adapter); реклама и счётчики выключены |
 | production | заблокирован: нет домена и `production_authorized` (BLOCKED_INPUT) |
+
+## Обновление на 8397dc4 (13.10.2026)
+
+Основной вариант (решение владельца 13.10.2026). Перенесено из B: покупки плана двумя закупками (пн–ср, чт–вс) и одним списком; у каждой закупки свой счётчик «осталось купить» и свои отметки; ссылки на закупки из недели сохраняют замены. Своя неделя не менялась.
+
+| команда | exit | результат |
+| --- | --- | --- |
+| `bash bin/food-weekly test` | 0 | 22 passed in 0.63s |
+| `ruff check . && ruff format --check .` | 0 | чисто |
+| `python3 -m weekplan.qa --shots docs/screenshots/8397dc4 --out docs/verification-browser-qa.json` | 0 | 35 действий PASS, axe 0 |
+| `python3 qa/viewports.py 8873 '/menyu/bystraya-nedelya-dlya-dvoih/pokupki/?s=d1-breakfast-0:lenivye-vareniki' '/svoya-nedelya/?d1-breakfast=lenivye-vareniki&lyudi=4' '/svoya-nedelya/?lyudi=50' /nesushchestvuet/` | 0 | 39 URL × 4 ширины, 0 замечаний |
+| `bash bin/food-weekly build --commit HEAD` | 0 | собрано из 8397dc4 |
+
+Лабораторный LCP (loopback, без троттлинга) — до 172 мс. Карта действий — `docs/ACTION-MAP.md`.
