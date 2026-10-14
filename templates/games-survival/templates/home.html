@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<section class="hero"><h1>База выживания</h1><p class="lead">Из чего что делается: рецепты по сетке крафта, ресурсы и биомы. Каждая связь «из чего → во что» взята из рецептов источника{% if site.version %}, версия — {{ site.version.src.java_current and 'Java Edition ' ~ site.version.src.java_current }}{% endif %}.</p></section>
+{% for gid, gm in site.games.items() %}
+<section aria-labelledby="h-chain"><h2 id="h-chain">С чего начать</h2>
+<ol class="chain">{% for slug in ('brevno', 'doski', 'palka', 'verstak', 'fakel') %}{% if slug in site.by_slug %}{% set e = site.by_slug[slug] %}<li><a href="{{ e.url }}">{{ e.title.split(':')[0] }}</a></li>{% endif %}{% endfor %}</ol></section>
+{% for sec, (label, items) in site.sections(gid).items() %}<section aria-labelledby="h-{{ sec }}"><div class="head"><h2 id="h-{{ sec }}">{{ label }}</h2><a href="/{{ gid }}/{{ sec }}/">Все: {{ items|length }}</a></div>{{ grid(items[:4], 'h3') }}</section>{% endfor %}
+{% endfor %}
+{% endblock %}

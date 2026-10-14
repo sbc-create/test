@@ -1,0 +1,21 @@
+{
+ "slug": "brevno",
+ "game": "minecraft",
+ "type": "resource",
+ "src": "src-8fa4938b74",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Бревно: первый ресурс",
+ "summary": "Бревно добывают из деревьев; из него делают доски — с этого начинается почти вся ранняя цепочка крафта.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "doski"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

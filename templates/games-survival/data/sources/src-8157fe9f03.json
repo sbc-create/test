@@ -1,0 +1,48 @@
+{
+ "id": "src-8157fe9f03",
+ "url": "https://minecraft.wiki/w/Furnace",
+ "fetched_at": "2026-10-12T22:25:59Z",
+ "page_sha256": "555053e766812ed4c84fed1ba86731a52158804d799a265ccfa1594df3f6b6d2",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Furnace",
+ "lead": [
+  "A furnace is a block with two functions: it can be used for either smelting or cooking , by placing fuel and an appropriate item inside together.",
+  "A furnace can be picked up using any pickaxe . If mined without a pickaxe, it does not drop itself."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any stone-tier block",
+   "slots": 8,
+   "alternatives_in_first_slot": 3,
+   "result": "Furnace",
+   "results": [
+    "Furnace"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Iron Ingot + Furnace + Smooth Stone",
+   "slots": 9,
+   "alternatives_in_first_slot": 1,
+   "result": "Blast Furnace",
+   "results": [
+    "Blast Furnace"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Furnace + Minecart",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Minecart with Furnace",
+   "results": [
+    "Minecart with Furnace"
+   ],
+   "count": 1
+  }
+ ]
+}

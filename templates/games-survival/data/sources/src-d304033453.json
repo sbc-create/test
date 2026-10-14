@@ -1,0 +1,16 @@
+{
+ "id": "src-d304033453",
+ "url": "https://minecraft.wiki/w/Coal",
+ "fetched_at": "2026-10-12T22:26:26Z",
+ "page_sha256": "13d6c36389364d94d2c9a9b132fa55e9b62068cbabef66cb40a6881c728c6c86",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "resource",
+ "name": "Coal",
+ "lead": [
+  "Coal is a mineral item mainly obtained from coal ore . It is primarily used for crafting torches and campfires , in addition to being used as fuel .",
+  "Coal ore when mined using a pickaxe drops 1 piece of coal. If the pickaxe is enchanted with Fortune , it may drop an extra piece per level of Fortune, up to a maximum of 4 with Fortune III."
+ ]
+}

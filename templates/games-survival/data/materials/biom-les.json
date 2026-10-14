@@ -1,0 +1,22 @@
+{
+ "slug": "biom-les",
+ "game": "minecraft",
+ "type": "biome",
+ "src": "src-9579a8cc05",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Биом: лес",
+ "summary": "Лес густо покрыт дубами и берёзами — удобное место за брёвнами. По данным вики, это самый распространённый наземный биом Верхнего мира, около 12% его площади.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "brevno",
+  "biom-ravniny"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

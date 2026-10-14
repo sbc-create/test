@@ -1,0 +1,8 @@
+{% macro card(e, heading='h3') %}
+<article class="ec ec--{{ e.type }}">
+  <p class="ec__k">{{ e.src.name }}</p>
+  <{{ heading }} class="ec__t"><a href="{{ e.url }}">{{ e.title }}</a></{{ heading }}>
+  <p class="ec__d">{{ e.summary[:150] }}{% if e.summary|length > 150 %}…{% endif %}</p>
+</article>
+{% endmacro %}
+{% macro grid(items, heading='h3') %}<div class="ecs">{% for e in items %}{{ card(e, heading) }}{% endfor %}</div>{% endmacro %}

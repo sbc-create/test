@@ -1,0 +1,17 @@
+{
+ "slug": "versiya",
+ "game": "minecraft",
+ "type": "version",
+ "src": "src-2d59dbaf94",
+ "also": [],
+ "title": "Версия игры: Java Edition 26.3",
+ "summary": "Главная страница вики на день чтения называет текущей версию Java Edition 26.3. Рецепты сверены со страницами вики, прочитанными в тот же день.",
+ "points": [],
+ "tips": [],
+ "related": [],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

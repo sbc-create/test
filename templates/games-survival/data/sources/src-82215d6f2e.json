@@ -1,0 +1,16 @@
+{
+ "id": "src-82215d6f2e",
+ "url": "https://minecraft.wiki/w/Taiga",
+ "fetched_at": "2026-10-12T22:26:36Z",
+ "page_sha256": "e264169f80e9ece67a6fd1f9fb35ee56d993b775459bd4df308abfd90ac36ee7",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "biome",
+ "name": "Taiga",
+ "lead": [
+  "The taiga is a humid and cold biome comprising a grassland forested with small and large ferns, pale aquamarine-green grass, spruce and pine trees. Foxes and wolves commonly spawn here.",
+  "Taigas generate in the moderately high humidity zones of cold temperature areas, as well as the highest humidity zones of frozen areas. They commonly border old growth taigas , forests , and snowy taigas , and less frequently birch forests . In cold temperature areas, they can generate in any type of terrain; flatlands near shattered windswept forests and swamps , rolling slopes and plateaus, or mountains with groves on the slopes."
+ ]
+}

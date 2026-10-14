@@ -1,0 +1,21 @@
+{
+ "slug": "lestnica",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-a9ad1e6170",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Лестница: 7 палок — 3 лестницы",
+ "summary": "Лестница позволяет подниматься по вертикали; ставится только на боковые стороны блоков. Из 7 палок получается 3 лестницы.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "palka"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

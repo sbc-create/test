@@ -1,0 +1,22 @@
+{
+ "slug": "syroe-zhelezo",
+ "game": "minecraft",
+ "type": "resource",
+ "src": "src-d50a9910ee",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Сырое железо",
+ "summary": "Сырое железо добывают из железной руды и переплавляют в печи или плавильне в железные слитки.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "zheleznyj-slitok",
+  "pech"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

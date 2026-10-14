@@ -1,0 +1,38 @@
+{
+ "id": "src-9cea39e37a",
+ "url": "https://minecraft.wiki/w/Stick",
+ "fetched_at": "2026-10-12T22:26:11Z",
+ "page_sha256": "35c622e98a7b20fa57f327493afd6a8e05d4a8daa87c464abc5a21a2df952382",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "item",
+ "name": "Stick",
+ "lead": [
+  "All leaf types have a 2% chance to drop 1–2 sticks when they decay or when broken using a tool without Silk Touch . Using a tool with Fortune increases these chances to 2.2%, 2.5%, and 3.3% for Fortune I, II, and III respectively.",
+  "Issues relating to \"Stick\" are maintained on the bug tracker . Issues should be reported and viewed there ."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks",
+   "slots": 2,
+   "alternatives_in_first_slot": 13,
+   "result": "Stick",
+   "results": [
+    "Stick"
+   ],
+   "count": 4
+  },
+  {
+   "ingredients": "Bamboo",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Stick",
+   "results": [
+    "Stick"
+   ],
+   "count": 1
+  }
+ ]
+}

@@ -1,0 +1,78 @@
+{
+ "id": "src-1c1de0a8fd",
+ "url": "https://minecraft.wiki/w/Chest",
+ "fetched_at": "2026-10-12T22:26:02Z",
+ "page_sha256": "990949009a86e83c0fb5891b84f3b2371fe1f73489cdd210035cdcd563bf78a4",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Chest",
+ "lead": [
+  "A large chest (or \"double chest\") is the combination of two adjacent chests, and can store twice as many items.",
+  "A chest can be broken using anything, but an axe is the fastest. Chests always drop themselves when mined. If the chest contains items, the items are also dropped when the chest is broken. If one half of a large chest is destroyed, the corresponding items from the destroyed chest (in Java Edition , the top three rows for the left-hand chest or the bottom three for the chest on the right; in Bedrock Edition , the top three for whichever half was placed first or the bottom three for whichever half was placed last) are dropped and the remaining half continues to function as a small chest."
+ ],
+ "recipes": [
+  {
+   "ingredients": "Any Planks",
+   "slots": 8,
+   "alternatives_in_first_slot": 13,
+   "result": "Chest",
+   "results": [
+    "Chest"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Copper Ingot + Chest",
+   "slots": 9,
+   "alternatives_in_first_slot": 1,
+   "result": "Copper Chest",
+   "results": [
+    "Copper Chest"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Chest + Matching Boat",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Oak Boat with Chest",
+   "results": [
+    "Oak Boat with Chest",
+    "Spruce Boat with Chest",
+    "Birch Boat with Chest",
+    "Jungle Boat with Chest",
+    "Acacia Boat with Chest",
+    "Dark Oak Boat with Chest",
+    "Mangrove Boat with Chest",
+    "Cherry Boat with Chest",
+    "Pale Oak Boat with Chest",
+    "Poplar Boat with Chest",
+    "Bamboo Raft with Chest"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Chest + Minecart",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Minecart with Chest",
+   "results": [
+    "Minecart with Chest"
+   ],
+   "count": 1
+  },
+  {
+   "ingredients": "Tripwire Hook + Chest",
+   "slots": 2,
+   "alternatives_in_first_slot": 1,
+   "result": "Trapped Chest",
+   "results": [
+    "Trapped Chest"
+   ],
+   "count": 1
+  }
+ ]
+}

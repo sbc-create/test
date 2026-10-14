@@ -1,0 +1,13 @@
+site_id: games-survival
+name: "База выживания"
+variant_id: craft-tree           # вариант A: дерево крафта — ресурс → предмет, связи из рецептов
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8861"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8861}
+storage_namespace: "gsv-tree"
+ads: {adapter: disabled}
+analytics: {adapter: disabled}

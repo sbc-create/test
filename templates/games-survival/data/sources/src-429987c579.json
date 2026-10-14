@@ -1,0 +1,17 @@
+{
+ "id": "src-429987c579",
+ "url": "https://minecraft.wiki/w/Door",
+ "fetched_at": "2026-10-12T23:21:35Z",
+ "page_sha256": "fad97dd6409b873e84506cee9876f41b53d287e35aac9eae4d801ae42df1815a",
+ "parser": "gsv-facts/1.0.2",
+ "kind": "wiki",
+ "publisher": "Minecraft Wiki",
+ "game": "minecraft",
+ "type": "block",
+ "name": "Door",
+ "lead": [
+  "A door is a block that serves as a switchable barrier to entity movement.",
+  "Doors must be supported by a full solid block face beneath them. The bottom half of the door is placed where the player is aiming, with the top half extending one block above. If there is not enough space for the door, or not an appropriate supporting block underneath the base, no action is performed."
+ ],
+ "recipes": []
+}

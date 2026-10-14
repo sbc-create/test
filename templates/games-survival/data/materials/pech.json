@@ -1,0 +1,23 @@
+{
+ "slug": "pech",
+ "game": "minecraft",
+ "type": "item",
+ "src": "src-8157fe9f03",
+ "also": [
+  "src-2d59dbaf94"
+ ],
+ "title": "Печь: переплавка и готовка",
+ "summary": "Печь работает двумя способами: переплавляет руду и готовит еду, если положить внутрь топливо и подходящий предмет. Делается из 8 блоков каменного уровня.",
+ "points": [],
+ "tips": [],
+ "related": [
+  "bulyzhnik",
+  "zheleznyj-slitok",
+  "ugol"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}
