@@ -1785,7 +1785,7 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10376",
+        "publisher_id": null,
         "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
         "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
@@ -1866,7 +1866,7 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10371",
+        "publisher_id": null,
         "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
         "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
