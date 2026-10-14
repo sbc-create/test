@@ -210,13 +210,22 @@ def main(argv=None) -> int:
     p.add_argument("--out")
 
     p = sub.add_parser("seo-tech-next", help="техническое SEO: захватить следующую задачу очереди (без модели)")
-    p.add_argument("--run-id", required=True)
+    p.add_argument("--run-id", default="")
+    p.add_argument("--peek", action="store_true",
+                   help="только узнать, есть ли готовая задача: без захвата, уборки и модели (код 10 — есть, 0 — нет)")
     p = sub.add_parser("seo-tech-verify", help="техническое SEO: вердикт прогона по следам (ветка, D203, run.sh)")
     p.add_argument("--run-id", required=True)
     p.add_argument("--no-run-all", action="store_true", help="не гонять полный checks/run.sh")
     p.add_argument("--record", action="store_true", help="дописать вердикт в var/seo-tech/runs.jsonl")
     p.add_argument("--extra", default="{}", help="JSON-поля к записи (trigger, model_exit, …)")
     sub.add_parser("seo-tech-status", help="техническое SEO: состояние задач очереди по следам")
+    p = sub.add_parser("seo-tech-publish", help="техническое SEO: выпустить проверенные ветки штатным путём (без модели)")
+    p.add_argument("--dry-run", action="store_true", help="только сведения и решение, без push и заявок")
+    p.add_argument("--limit", type=int, default=5)
+    sub.add_parser("seo-tech-publish-status", help="техническое SEO: подготовлено / опубликовано по задачам")
+    p = sub.add_parser("seo-tech-backlog", help="техническое SEO: пополнить очередь (диагностика, аудит ссылок, переносы)")
+    p.add_argument("--if-older", type=int, default=0, help="пропустить, если прошлый проход моложе N секунд")
+    p.add_argument("--links", choices=("auto", "yes", "no"), default="auto", help="аудит внутренних ссылок (auto — раз в сутки)")
 
     p = sub.add_parser("webmaster-apply-mapping",
                        help="перенести подтверждённые Вебмастером host_id в реестр (только локально)")
@@ -311,6 +320,18 @@ def main(argv=None) -> int:
 
         # Коды: 10 — задача захвачена (var/seo-tech/next.json), 0 — работы нет,
         # 3 — неисправность (очередь не читается, git отказал) — не тихий 0.
+        if args.peek:
+            try:
+                готовые = [з["id"] for з in tech_run.candidates(tech_run.load_queue())]
+            except Exception as exc:  # noqa: BLE001
+                print(json.dumps({"ready": None, "state": "error", "reason": f"{type(exc).__name__}: {exc}"[:400]},
+                                 ensure_ascii=False))
+                return 3
+            print(json.dumps({"ready": готовые}, ensure_ascii=False))
+            return 10 if готовые else 0
+        if not args.run_id:
+            print(json.dumps({"run": False, "state": "error", "reason": "нужен --run-id"}, ensure_ascii=False))
+            return 3
         try:
             убрано = tech_run.prune_worktrees()
             захват = tech_run.claim_next(tech_run.load_queue(), args.run_id)
@@ -325,6 +346,26 @@ def main(argv=None) -> int:
             return 3
         print(json.dumps({"run": True, **захват}, ensure_ascii=False))
         return 10
+    if args.command == "seo-tech-publish":
+        from seo_operator import tech_publish
+
+        итог = tech_publish.run(dry_run=args.dry_run, limit=args.limit)
+        print(json.dumps(итог, ensure_ascii=False, indent=1))
+        return 0
+    if args.command == "seo-tech-publish-status":
+        from seo_operator import tech_publish
+
+        print(json.dumps(tech_publish.status(), ensure_ascii=False, indent=1))
+        return 0
+    if args.command == "seo-tech-backlog":
+        from seo_operator import tech_backlog, tech_run
+
+        if args.if_older and not tech_backlog.due(tech_run.STATE, args.if_older):
+            print(json.dumps({"skipped": "прошлый проход моложе --if-older"}, ensure_ascii=False))
+            return 0
+        итог = tech_backlog.run(links={"auto": None, "yes": True, "no": False}[args.links])
+        print(json.dumps(итог, ensure_ascii=False, indent=1))
+        return 0
     if args.command == "seo-tech-verify":
         from seo_operator import tech_run
 

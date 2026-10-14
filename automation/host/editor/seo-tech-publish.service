@@ -1,0 +1,35 @@
+# Выпуск проверенных веток технического SEO (seo-tech-publish.sh). Без модели.
+# В отличие от seo-tech-run, здесь есть учётные данные git (push в ветку выпуска) и запись
+# в очередь исполнителя ячеек (/var/lib/site-cells) — ровно то, что делает сессия при выпуске.
+[Unit]
+Description=Техническое SEO сети: выпуск проверенных веток (seo-tech-publish)
+After=network-online.target
+Wants=network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=HOME=/home/claude
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-publish.sh
+SuccessExitStatus=0 75
+TimeoutStartSec=8000
+Nice=10
+CPUQuota=50%
+MemoryMax=2G
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectKernelTunables=yes
+RestrictSUIDSGID=yes
+InaccessiblePaths=/etc/site-factory
+InaccessiblePaths=/home/claude/.ssh
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ReadWritePaths=/home/claude/.config/gh
+ReadWritePaths=/var/lib/site-cells
+
+[Install]
+WantedBy=multi-user.target

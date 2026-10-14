@@ -30,10 +30,17 @@ from pathlib import Path
 from typing import Any
 
 REPO = Path(__file__).resolve().parents[1]
-QUEUE = REPO / "config" / "seo-tech-queue.json"
-STATE = REPO / "var" / "seo-tech"
+# Переопределения окружением — для приёмки и тестов на отдельном состоянии, чтобы
+# проверка механизма не тратила попытки настоящих задач.
+QUEUE = Path(os.environ.get("SEO_TECH_QUEUE") or REPO / "config" / "seo-tech-queue.json")
+STATE = Path(os.environ.get("SEO_TECH_STATE") or REPO / "var" / "seo-tech")
+#: Задачи, поставленные пополнением очереди (tech_backlog): лежат в состоянии, а не в
+#: отслеживаемом config/ — служба не правит файлы git; сессия переносит их в очередь.
+AUTO_QUEUE_NAME = "auto-tasks.json"
 MAX_ATTEMPTS = 3
 STALE_S = 2 * 3600
+#: Исходы прогона, которые НЕ считаются неудачной попыткой.
+НЕ_НЕУДАЧА = {"VERIFIED", "NO_TASK", "SUPERSEDED"}
 ГОТОВО = {"verified", "released", "live_verified", "done"}
 
 
@@ -114,12 +121,28 @@ def _git(репо: Path, *арг: str, check: bool = True) -> str:
     return r.stdout.strip()
 
 
-def load_queue(путь: Path = QUEUE) -> list[dict[str, Any]]:
+def load_queue(путь: Path = QUEUE, state: Path | None = None) -> list[dict[str, Any]]:
+    """Очередь: config/seo-tech-queue.json плюс задачи пополнения из состояния.
+
+    Задача пополнения с id, уже занятым в config, отбрасывается: решение сессии
+    в config главнее автоматического.
+    """
     данные = json.loads(путь.read_text(encoding="utf-8"))
     задачи = данные["tasks"]
     ид = [з["id"] for з in задачи]
     if len(ид) != len(set(ид)):
         raise ValueError("в очереди повторяются id задач")
+    авто = (state or STATE) / AUTO_QUEUE_NAME
+    if авто.is_file():
+        try:
+            добавка = json.loads(авто.read_text(encoding="utf-8")).get("tasks") or []
+        except (OSError, ValueError):
+            добавка = []
+        известные = set(ид)
+        for з in добавка:
+            if isinstance(з, dict) and з.get("id") and з["id"] not in известные:
+                задачи.append({**з, "source": з.get("source") or "auto"})
+                известные.add(з["id"])
     return задачи
 
 
@@ -145,12 +168,54 @@ def _замок(state: Path, task_id: str) -> Path:
     return state / "claims" / f"{task_id}.claim"
 
 
-def _замок_свеж(замок: Path, now: dt.datetime) -> bool:
+def _boot_id() -> str:
     try:
+        return Path("/proc/sys/kernel/random/boot_id").read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+
+def _старт_процесса(pid: int) -> str:
+    """Время старта процесса (поле 22 /proc/<pid>/stat) — отличает переиспользованный pid."""
+    try:
+        stat = Path(f"/proc/{pid}/stat").read_text(encoding="utf-8")
+    except OSError:
+        return ""
+    return stat.rsplit(")", 1)[-1].split()[19] if ")" in stat else ""
+
+
+def владелец_замка() -> dict[str, str]:
+    """Чей это захват: процесс обёртки (SEO_TECH_OWNER_PID) или родитель команды."""
+    pid = int(os.environ.get("SEO_TECH_OWNER_PID") or os.getppid())
+    return {"pid": str(pid), "start": _старт_процесса(pid), "boot": _boot_id()}
+
+
+def _поля_замка(текст: str) -> dict[str, str]:
+    return dict(ч.split("=", 1) for ч in текст.split() if "=" in ч)
+
+
+def _замок_свеж(замок: Path, now: dt.datetime) -> bool:
+    """Живой ли захват.
+
+    С 14.10 замок несёт pid, время старта и boot_id владельца: захват свеж, пока
+    жив ИМЕННО этот процесс в ЭТОЙ загрузке. Остановка службы, OOM, перезагрузка
+    освобождают задачу сразу, а не через STALE_S. Старый формат (без pid) — по
+    возрасту, как прежде.
+    """
+    try:
+        текст = замок.read_text(encoding="utf-8")
         возраст = now.timestamp() - замок.stat().st_mtime
     except FileNotFoundError:
         return False
-    return возраст < STALE_S
+    if возраст >= STALE_S:
+        return False  # предел сверху: даже живой, но зависший владелец не держит задачу вечно
+    поля = _поля_замка(текст)
+    if поля.get("pid"):
+        if поля.get("boot") and поля["boot"] != _boot_id():
+            return False
+        старт = _старт_процесса(int(поля["pid"]))
+        return bool(старт) and старт == поля.get("start", старт)
+    return True
 
 
 def task_state(state: Path = STATE, now: dt.datetime | None = None) -> dict[str, dict[str, Any]]:
@@ -164,9 +229,15 @@ def task_state(state: Path = STATE, now: dt.datetime | None = None) -> dict[str,
     for р in _runs(state):
         з = итог.setdefault(р["task_id"], {"failures": 0})
         з["last"] = р
-        if р.get("verdict") == "VERIFIED":
+        вердикт = р.get("verdict")
+        if вердикт == "VERIFIED":
             з["status"] = "verified"
-        elif р.get("verdict") != "NO_TASK":
+        elif вердикт == "SUPERSEDED":
+            # Подготовленная ветка устарела (база ушла вперёд, выпуск не fast-forward):
+            # задача снова готовится — с чистым счётом попыток.
+            з.pop("status", None)
+            з["failures"] = 0
+        elif вердикт not in НЕ_НЕУДАЧА:
             з["failures"] += 1
     for замок in sorted((state / "claims").glob("*.claim")) if (state / "claims").is_dir() else []:
         if _замок_свеж(замок, now):
@@ -259,10 +330,31 @@ def связать_неотслеживаемые(репо: Path, копия: Pa
         # «файла нет» (его штатно обходит checks/stand_root.py) в PermissionError.
         if (источник.is_file() and os.access(источник, os.R_OK)
                 and not цель.exists() and not цель.is_symlink()):
+            if относ == "config/player.json" and not _плеер_совпадает(источник, копия):
+                # Устаревший player.json (14.10: publisher_id сменён Архитектором, файл клона
+                # прежний) уронил бы стенд «publisher_id …, а сайт объявляет …». Без ссылки
+                # checks/stand_root.py соберёт плеер из публичного publisher_id_expected.
+                continue
             цель.parent.mkdir(parents=True, exist_ok=True)
             цель.symlink_to(источник)
             связано.append(относ)
     return связано
+
+
+def _плеер_совпадает(плеер: Path, копия: Path) -> bool:
+    """publisher_id файла плеера равен publisher_id_expected сайта (значения не печатаются)."""
+    try:
+        ожидаемый = str(json.loads((копия / "config" / "site.json").read_text(encoding="utf-8"))
+                        .get("publisher_id_expected") or "").strip()
+    except (OSError, ValueError):
+        return True  # сверять не с чем — прежнее поведение (ссылка)
+    if not ожидаемый:
+        return True
+    try:
+        фактический = str(json.loads(плеер.read_text(encoding="utf-8")).get("publisher_id") or "").strip()
+    except (OSError, ValueError):
+        return False
+    return ожидаемый == фактический
 
 
 def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime | None = None) -> dict[str, Any]:
@@ -287,11 +379,13 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
             break
         except FileExistsError:
             if попытка == 1 and not _замок_свеж(замок, now):
-                замок.unlink(missing_ok=True)
+                закрыть_брошенный(замок, state, now)
                 continue
             raise ЗанятоДругимПрогоном(задача["id"]) from None
+    владелец = владелец_замка()
     with os.fdopen(дескр, "w", encoding="utf-8") as fh:
-        fh.write(f"{run_id} {now.strftime('%Y-%m-%dT%H:%M:%SZ')}\n")
+        fh.write(f"{run_id} {now.strftime('%Y-%m-%dT%H:%M:%SZ')} "
+                 f"pid={владелец['pid']} start={владелец['start']} boot={владелец['boot']}\n")
     try:
         репо = REPO / задача["repo"]
         база = _git(репо, "rev-parse", "HEAD")
@@ -315,12 +409,57 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
     return запись
 
 
+def закрыть_брошенный(замок: Path, state: Path, now: dt.datetime) -> str | None:
+    """Снять неживой замок; если его прогон не оставил итога — записать INTERRUPTED.
+
+    Прерванная попытка (тайм-аут, остановка службы, OOM, перезагрузка) засчитывается
+    в MAX_ATTEMPTS: задача, которая каждый раз роняет исполнитель, не крутится вечно.
+    """
+    try:
+        текст = замок.read_text(encoding="utf-8").split()
+    except FileNotFoundError:
+        return None
+    run_id = текст[0] if текст else ""
+    task_id = замок.stem
+    if run_id and run_id not in {р.get("run_id") for р in _runs(state)}:
+        record({"run_id": run_id, "task_id": task_id, "verdict": "INTERRUPTED", "steps": {},
+                "notes": ["прогон прерван до вердикта: владелец замка не жив "
+                          "(тайм-аут, остановка службы, OOM или перезагрузка)"]},
+               {"trigger": "recovery", "finished_at": now.strftime("%Y-%m-%dT%H:%M:%SZ")}, state)
+    замок.unlink(missing_ok=True)
+    return run_id or None
+
+
+def закрыть_брошенные(state: Path = STATE, now: dt.datetime | None = None) -> list[str]:
+    """Все неживые замки задач — до выбора задачи (вызывается в начале каждого прогона)."""
+    now = now or _сейчас()
+    папка = state / "claims"
+    закрыто = []
+    for замок in sorted(папка.glob("*.claim")) if папка.is_dir() else []:
+        if not _замок_свеж(замок, now):
+            if закрыть_брошенный(замок, state, now):
+                закрыто.append(замок.stem)
+    return закрыто
+
+
 def claim_next(задачи: list[dict], run_id: str, state: Path = STATE) -> dict[str, Any] | None:
-    """Взять первую задачу, которую удалось захватить атомарно; занятые пропускаются."""
+    """Взять первую задачу, которую удалось захватить атомарно.
+
+    Занятые пропускаются. Ошибка захвата одной задачи (нет репозитория, git отказал)
+    записывается ей как неудачная попытка CLAIM_FAILED и не останавливает очередь.
+    """
     for з in candidates(задачи, state):
         try:
             return claim(з, run_id, state)
         except ЗанятоДругимПрогоном:
+            continue
+        except ВнеПродвижения:
+            continue
+        except Exception as ош:  # noqa: BLE001 — одна задача не держит остальные
+            record({"run_id": f"{run_id}-{з['id'].lower()}-claim", "task_id": з["id"],
+                    "verdict": "CLAIM_FAILED", "steps": {},
+                    "notes": [f"захват не удался: {type(ош).__name__}: {str(ош)[:300]}"]},
+                   {"trigger": "claim", "finished_at": _сейчас().strftime("%Y-%m-%dT%H:%M:%SZ")}, state)
             continue
     return None
 
@@ -335,6 +474,7 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
     """
     now = now or _сейчас()
     убрано: list[str] = []
+    закрыть_брошенные(state, now)
     корень = state / "wt"
     if not корень.is_dir():
         return убрано

@@ -4,53 +4,224 @@
   "title": "SEO technical queue",
   "description": "Очередь технической SEO-работы (seo_operator/tech_run.py). Блокер без названного действия владельца — не блокер, а остановка без причины; задача в очереди без проверки и репозитория не может быть взята таймером и подтверждена seo-tech-verify. Эти условия обязательны.",
   "type": "object",
-  "required": ["schema_version", "tasks"],
+  "required": [
+    "schema_version",
+    "tasks"
+  ],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"type": "string", "minLength": 1},
-    "note": {"type": "string"},
+    "schema_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "note": {
+      "type": "string"
+    },
     "allocation": {
       "description": "Доли плановой работы по направлениям (владелец 2026-10-13: 50/50). Порядок взятия задач — seo_operator/tech_run.candidates.",
-      "type": "object", "required": ["anime", "lords"], "additionalProperties": false,
-      "properties": {"note": {"type": "string"}, "anime": {"type": "number", "minimum": 0, "maximum": 1},
-                     "lords": {"type": "number", "minimum": 0, "maximum": 1}, "window_h": {"type": "integer", "minimum": 1}}
+      "type": "object",
+      "required": [
+        "anime",
+        "lords"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "type": "string"
+        },
+        "anime": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "lords": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "window_h": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
     },
     "tasks": {
       "type": "array",
-      "items": {"$ref": "#/$defs/task"}
+      "items": {
+        "$ref": "#/$defs/task"
+      }
     }
   },
   "$defs": {
-    "text": {"type": "string", "minLength": 1},
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
     "task": {
       "type": "object",
-      "required": ["id", "site", "problem", "status"],
+      "required": [
+        "id",
+        "site",
+        "problem",
+        "status"
+      ],
       "additionalProperties": false,
       "properties": {
-        "id": {"type": "string", "pattern": "^[TB][0-9]{3}$"},
-        "site": {"$ref": "#/$defs/text"},
-        "repo": {"$ref": "#/$defs/text"},
-        "urls": {"type": "array", "items": {"type": "string"}},
-        "problem": {"$ref": "#/$defs/text"},
-        "norm": {"type": "string"},
-        "expected": {"type": "string"},
-        "check": {"type": "string"},
-        "verify_live": {"type": "string"},
-        "status": {"enum": ["queued", "session", "blocked", "verified", "released", "live_verified", "done"]},
-        "evidence": {"type": "string"},
-        "review": {"type": "string"},
-        "owner_action": {"type": "string"},
-        "dependencies": {"type": "string", "minLength": 1},
-        "direction": {"enum": ["anime", "lords", "zona", "network"], "description": "Направление для долей: anime — Animedia/AnimeGo/Yummy; lords — lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info; zona и network в доли не входят."}
+        "id": {
+          "type": "string",
+          "pattern": "^([TB][0-9]{3}|A[0-9]{4})$",
+          "description": "T/B — задачи и блокеры сессии; A#### — задачи пополнения очереди (seo_operator/tech_backlog.py)."
+        },
+        "site": {
+          "$ref": "#/$defs/text"
+        },
+        "repo": {
+          "$ref": "#/$defs/text"
+        },
+        "urls": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "problem": {
+          "$ref": "#/$defs/text"
+        },
+        "norm": {
+          "type": "string"
+        },
+        "expected": {
+          "type": "string"
+        },
+        "check": {
+          "type": "string"
+        },
+        "verify_live": {
+          "type": "string"
+        },
+        "status": {
+          "enum": [
+            "queued",
+            "session",
+            "blocked",
+            "verified",
+            "released",
+            "live_verified",
+            "done"
+          ]
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "review": {
+          "type": "string"
+        },
+        "owner_action": {
+          "type": "string"
+        },
+        "dependencies": {
+          "type": "string",
+          "minLength": 1
+        },
+        "direction": {
+          "enum": [
+            "anime",
+            "lords",
+            "zona",
+            "network"
+          ],
+          "description": "Направление для долей: anime — Animedia/AnimeGo/Yummy; lords — lordfilm47.space, lordserial33.biz, 1lordserials1.online, lordserials22.info; zona и network в доли не входят."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Подпись происхождения задачи пополнения (auto:<источник>:…) — защита от повторной постановки."
+        },
+        "port_to": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Домены, на которые задачу переносить после выпуска (tech_backlog.from_ports)."
+        },
+        "live_check": {
+          "type": "array",
+          "description": "Проверка работающего сайта после выпуска (seo_operator/tech_publish.py): без неё выпуск — released, а не live_verified.",
+          "items": {
+            "type": "object",
+            "required": [
+              "url"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "url": {
+                "type": "string",
+                "pattern": "^https://"
+              },
+              "status": {
+                "type": "integer"
+              },
+              "contains": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "absent": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
       },
       "allOf": [
         {
-          "if": {"properties": {"status": {"const": "blocked"}}},
-          "then": {"required": ["owner_action"], "properties": {"owner_action": {"minLength": 1}}}
+          "if": {
+            "properties": {
+              "status": {
+                "const": "blocked"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "owner_action"
+            ],
+            "properties": {
+              "owner_action": {
+                "minLength": 1
+              }
+            }
+          }
         },
         {
-          "if": {"properties": {"status": {"const": "queued"}}},
-          "then": {"required": ["check", "repo"], "properties": {"check": {"minLength": 1}, "repo": {"minLength": 1}}}
+          "if": {
+            "properties": {
+              "status": {
+                "const": "queued"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "check",
+              "repo"
+            ],
+            "properties": {
+              "check": {
+                "minLength": 1
+              },
+              "repo": {
+                "minLength": 1
+              }
+            }
+          }
         }
       ]
     }

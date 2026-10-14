@@ -1,0 +1,13 @@
+# Через 5 минут после завершения прошлого прохода; страховка — раз в 15 минут.
+[Unit]
+Description=Техническое SEO сети: выпуск проверенных веток
+
+[Timer]
+OnActiveSec=3min
+OnUnitInactiveSec=5min
+OnCalendar=*:7/15
+AccuracySec=30s
+Unit=seo-tech-publish.service
+
+[Install]
+WantedBy=timers.target

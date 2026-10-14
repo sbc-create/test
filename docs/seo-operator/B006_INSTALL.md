@@ -1,191 +1,133 @@
-# B006 — установка seo-tech-run на claude-control-01 (один блок для владельца)
+# B006 — самостоятельный цикл технического SEO: установка на claude-control-01
 
-Подготовлено 14.10. Всё, кроме двух команд `sudo`, сессия проверила сама. Установка — действие root, потому что юнит ставится в `/etc/systemd/system`.
+Окончательная редакция — 14.10, вечер. Заменяет утреннюю. Всё, кроме блока команд root, сессия сделала и проверила сама; доказательства — в разделе «Что проверено до установки».
 
-## Что ставится
+## Что получится после установки
 
-- **Учётная запись запуска:** `claude:claude`. Это не root; прогоны редактора идут под ней же.
-- **Рабочий каталог:** `/home/claude/wt-portable-site-cell-01`.
-- **Сценарий:** `automation/host/editor/seo-tech-run.sh` (полный текст — ниже).
-- **Юнит:** `automation/host/editor/seo-tech-run.b006.service`. Взят §7 Архитектора (`ca37c4e`), запись разрешена только в `~/.claude` и `var/` репозитория. Добавлен запрет доступа к `/etc/site-factory`.
-- **Таймер:** `automation/host/editor/seo-tech-run.b006.timer`, каждые 30 минут в :12 и :42. Это вне сетки editor-run. Если задачи `queued` нет, прогон выходит за секунды и модель не вызывает.
+| Звено | Служба | Модель | Что делает |
+| --- | --- | --- | --- |
+| Подготовка | `seo-tech-run.service` по таймеру `seo-tech-run.timer` | да | берёт следующую задачу `queued`, Claude Code без интерфейса готовит ветку в отдельной рабочей копии, вердикт по следам (VERIFIED / INCOMPLETE) |
+| Пополнение | внутри подготовки, когда очередь пуста (не чаще раза в час) | нет | ставит задачи из диагностики регулярной проверки, аудита ссылок и страниц (раз в сутки) и переносов (`port_to`) в `var/seo-tech/auto-tasks.json` |
+| Выпуск | `seo-tech-publish.service` по таймеру `seo-tech-publish.timer` | нет | выпускает VERIFIED штатным путём: fast-forward ветки выпуска → CI → `factory cell trigger` → итог исполнителя → проверка работающего сайта |
 
-## Свойства, подтверждённые сессией
+**Ритм.** Следующая задача начинается через минуту после завершения предыдущей (`OnUnitInactiveSec=1min`). Страховка — запуск раз в 15 минут. Пустая очередь проверяется командой `seo-tech-next --peek` без модели, около секунды.
 
-| Свойство | Как обеспечено | Доказательство |
-| --- | --- | --- |
-| Берёт следующую задачу | `tech_run.candidates()`: статус `queued`, без вердикта, без живого захвата, попыток меньше 3; порядок — по долям направлений | тесты `test_next_task_skips_live_claim_retries_and_done`, `test_order_follows_allocation_lagging_direction_first`; 14.10 вручную взяты подряд T078 → T079 → T080, T083 → T084, T088 → T089 |
-| Сохраняет прогресс | `var/seo-tech/claims.jsonl`, `runs.jsonl`, `next.json` и ветка с коммитом в `.git` витрины; всё на диске, перезапуск не теряет | 14.10 вердикты T083 записаны и пересчитаны повторно по тем же следам |
-| Нет одновременных дублей | `flock -n` на `var/seo-tech/run.lock` — второй запуск выходит с кодом 75; атомарный захват задачи; зависший захват старше 2 ч снимается один раз | замер 14.10 15:37Z: при занятом замке rc=75, захвата нет; тесты `test_claim_is_atomic_second_claim_refused`, `test_stale_lock_is_reclaimed_once`, `test_run_id_cannot_claim_twice` |
-| Ошибки | нет задания — 70 до захвата; сбой захвата — 70; модель не справилась или тайм-аут 1 500 с — вердикт INCOMPLETE, код 2, попытка засчитана (не больше 3); итог решает проверка по следам, а не самоотчёт | тесты `test_wrapper_refuses_before_claim_without_prompt`, `test_no_commit_is_not_verified`, `test_exit_code_2_is_unusable`; 14.10 T083 INCOMPLETE ×2 → дефект найден и исправлен (d080112) |
-| Не публикует | учётные данные git закрыты юнитом; вердикт требует, чтобы ветки на удалённом не было | шаг `not_pushed` в каждом вердикте |
-| Пустая очередь | выход 0 без вызова модели | замер 14.10 15:37Z: rc=0, записей прогона 0 |
+**Один исполнитель.** `flock` на `var/seo-tech/run.lock`; второй запуск выходит с кодом 75. Systemd не запускает второй экземпляр активного oneshot.
 
-Очередь к установке: T090, T091, T092 — перенос T086 на три Lords, `queued`. Сессия их не берёт: они оставлены для проверки первого цикла таймера.
+**Подготовка и выпуск разделены.**
+- У подготовки нет учётных данных git: `InaccessiblePaths=~/.config/gh, ~/.ssh`.
+- У выпуска нет модели.
+- **VERIFIED** — проверенная подготовка, а не публикация.
+- **Опубликовано** — исполнитель установил выпуск (stage `live_verified`) и работающий сайт прошёл проверку здоровья.
+- **`live_verified` задачи** — проверка работающего сайта по полю `live_check`. Без `live_check` итог честно `released`.
 
-## Команды владельца (claude-control-01, root)
+**Изменения Архитектора (Zona, publisher_id).** Выпуск ждёт, а не выпускает, если:
+- на ветке выпуска есть невыпущенный коммит, например чужой publisher_id;
+- голова ветки выпуска не равна живому коммиту;
+- общий клон грязный или не на живом коммите.
+
+Если ветка задачи не стоит на живом коммите, задача уходит на повторную подготовку (SUPERSEDED), а не перебазируется вслепую. Если правка уже на сайте через чужой выпуск, она только проверяется.
+
+## Восстановление и ошибки
+
+| Случай | Что происходит |
+| --- | --- |
+| Тайм-аут модели | `timeout -k 60 1500`: SIGTERM, через 60 с SIGKILL; вердикт INCOMPLETE записан, попытка засчитана |
+| Зависла проверка | вердикт под `timeout -k 60 2400`; если его добили — следующий прогон закрывает захват как INTERRUPTED |
+| `systemctl stop`, тайм-аут юнита, OOM, перезагрузка | systemd убивает все процессы юнита. Захват несёт pid, время старта и boot_id владельца, поэтому мёртвый владелец освобождает задачу сразу: INTERRUPTED, попытка засчитана. Предел сверху — 2 ч, даже если владелец жив, но завис |
+| Погиб только сценарий, а процесс модели остался | модель держит `run.lock` до своего тайм-аута (≤ 1 560 с), второго исполнителя не возникает; затем задача восстанавливается как выше |
+| Повторы | не больше 3 неудачных попыток (INCOMPLETE, INTERRUPTED, CLAIM_FAILED) на задачу; дальше она в `var/seo-tech/attention.json` для сессии, а очередь идёт дальше |
+| Захват одной задачи невозможен (нет репозитория, git отказал) | записывается CLAIM_FAILED, берётся следующая задача |
+| Нет файла задания, исполнителя, git, timeout, модуля | код 70 **до** захвата: попытка не тратится |
+| Состояние недоступно для записи, файл блокировки не открывается | код 73 — не путается с «занято» (75) |
+
+## Что проверено до установки (сессия, 14.10)
+
+- **Тесты.** `tests/unit/test_seo_tech_b006.py` и `tests/unit/test_seo_tech_run.py` — 51 passed: восстановление, счёт попыток, устойчивость очереди, слияние задач пополнения, решения выпуска (в том числе «чужой невыпущенный коммит» и «клон не на живом»), пополнение, коды обёртки 73/75/70.
+- **Имитация полного цикла настоящей обёрткой** — `automation/local/seo-tech-b006-sim.py`, модель подменена, всё остальное штатное:
+  - две задачи подряд, вторая через 61 с после первой без ручного запуска;
+  - SIGKILL всего прогона → INTERRUPTED → та же задача доведена до VERIFIED;
+  - пустая очередь — код 0 без модели.
+  - Отчёт — `var/test-seo-tech/sim/20261014T173501-15dc/report.json` (повтор: `python3 automation/local/seo-tech-b006-sim.py`).
+- **Приёмочный сценарий** `automation/local/seo-tech-acceptance.py` проверен на этой имитации: rc 0.
+- **Выпуск — сухой прогон на настоящем состоянии** (`seo-tech-publish --dry-run`): уже опубликованные сессией T078–T089 не трогаются, чужие коммиты распознаются.
+- **Пополнение на настоящих данных:** 0 задач. Сайты по автоматическим признакам чисты: 84 проверенные ссылки и 15 страниц на двух сайтах, без отклонений; в тестах на заведомых дефектах задачи ставятся.
+
+## Блок владельца (root на claude-control-01)
+
+Перед запуском блока — записать время, оно нужно для приёмки:
 
 ```bash
-# 1. Предусловия (§7 Архитектора; при невыполнении команда сама откажет)
-bash -o pipefail -c '
+УСТАНОВКА=$(date -u +%Y-%m-%dT%H:%M:%SZ); echo "$УСТАНОВКА"
+```
+
+```bash
+set -euo pipefail
 КОРЕНЬ=/home/claude/wt-portable-site-cell-01
-test -s "$КОРЕНЬ/config/seo-tech-queue.json" || { echo "ОТКАЗ: нет очереди"; exit 1; }
-python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$КОРЕНЬ/config/seo-tech-queue.json" || { echo "ОТКАЗ: очередь не JSON"; exit 1; }
-test -s "$КОРЕНЬ/automation/host/editor/seo-tech-run.sh" || { echo "ОТКАЗ: нет сценария"; exit 1; }
-(cd "$КОРЕНЬ" && sudo -u claude python3 -m seo_operator.cli seo-tech-verify --help >/dev/null 2>&1) || { echo "ОТКАЗ: нет seo-tech-verify"; exit 1; }
-echo "предусловия выполнены"'
+ED="$КОРЕНЬ/automation/host/editor"
+cd "$КОРЕНЬ"
 
-# 2. Установка
-sudo install -m 0644 /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-run.b006.service /etc/systemd/system/seo-tech-run.service
-sudo install -m 0644 /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-run.b006.timer   /etc/systemd/system/seo-tech-run.timer
-sudo systemd-analyze verify /etc/systemd/system/seo-tech-run.service /etc/systemd/system/seo-tech-run.timer
-sudo systemctl daemon-reload
-sudo systemctl enable --now seo-tech-run.timer && echo "ГОТОВО: таймер включён"
+# 1. Источники: дерево на ожидаемом коммите и файлы совпадают с отпечатками
+sudo -u claude git -C "$КОРЕНЬ" log -1 --format='%H %s'
+sudo -u claude sha256sum -c "$ED/B006.sha256"
+bash -n "$ED/seo-tech-run.sh" && bash -n "$ED/seo-tech-publish.sh"
+sudo -u claude python3 -m pytest -q tests/unit/test_seo_tech_b006.py tests/unit/test_seo_tech_run.py
+ПИК=0; sudo -u claude python3 -m seo_operator.cli seo-tech-next --peek || ПИК=$?; echo "peek rc=$ПИК (10 — есть задачи, 0 — нет; иное — ОСТАНОВИТЬСЯ)"; [ "$ПИК" = 0 ] || [ "$ПИК" = 10 ]
+sudo -u claude gh auth status
 
-# 3. Проверка сразу после установки
-systemctl list-timers seo-tech-run.timer --no-pager
+# 2. Сохранить прежнюю конфигурацию (если была)
+ЗАПАС=/root/systemd-backup-seo-tech-$(date -u +%Y%m%dT%H%M%SZ); mkdir -p "$ЗАПАС"
+for f in seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer; do
+  [ -e "/etc/systemd/system/$f" ] && cp -a "/etc/systemd/system/$f" "$ЗАПАС/" || true
+done
+ls -la "$ЗАПАС"
+
+# 3. Установка и проверка юнитов
+for f in seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer; do
+  install -m 0644 "$ED/$f" "/etc/systemd/system/$f"
+done
+systemd-analyze verify /etc/systemd/system/seo-tech-run.service /etc/systemd/system/seo-tech-run.timer \
+  /etc/systemd/system/seo-tech-publish.service /etc/systemd/system/seo-tech-publish.timer
+systemctl daemon-reload
+
+# 4. Включение таймеров и первый запуск
+systemctl enable --now seo-tech-run.timer seo-tech-publish.timer
+systemctl start --no-block seo-tech-run.service
+systemctl list-timers 'seo-tech-*' --no-pager
+systemctl status seo-tech-run.service --no-pager | head -15
 ```
 
-## Проверка полного цикла без открытого чата
-
-Через 30–60 минут после установки:
+**Откат установки:**
 
 ```bash
-journalctl -u seo-tech-run.service --since "-2h" --no-pager | tail -40   # root или группа adm
-tail -3 /home/claude/wt-portable-site-cell-01/var/seo-tech/gate.jsonl          # "trigger": "systemd-timer", next_rc 10
-tail -1 /home/claude/wt-portable-site-cell-01/var/seo-tech/runs.jsonl          # T090: "verdict": "VERIFIED", "trigger": "systemd-timer"
-systemctl --failed --no-pager | grep seo-tech || echo "сбоев юнита нет"
+systemctl disable --now seo-tech-run.timer seo-tech-publish.timer
+systemctl stop seo-tech-run.service seo-tech-publish.service
+rm -f /etc/systemd/system/seo-tech-{run,publish}.{service,timer}
+cp -a "$ЗАПАС"/* /etc/systemd/system/ 2>/dev/null || true
+systemctl daemon-reload
 ```
 
-Признаки успешного цикла:
-- в `gate.jsonl` запись с `"trigger": "systemd-timer"`;
-- в `runs.jsonl` вердикт по T090 с тем же триггером;
-- в репозитории lordfilm47-space локальная ветка `claude/seo-tech-t090-…`, без удалённого двойника.
+## Приёмка после установки
 
-Сессия проверит это по следам, когда получит доступ к чату. Выпуск подготовленной ветки остаётся за сессией (`cell trigger`), не за таймером.
+Одного `timer=enabled` недостаточно. Нужны три подтверждения.
 
-## Известный риск
+1. **Две задачи подряд без ручного запуска второй.** В очереди T090, T091, T092 (`queued`), каждая 5–15 минут. Примерно через 40 минут:
+   ```bash
+   sudo -u claude python3 /home/claude/wt-portable-site-cell-01/automation/local/seo-tech-acceptance.py --since "$УСТАНОВКА"
+   ```
+   Раздел A, `ok: true`: пара задач с `gap_s` ≤ 120.
+2. **Восстановление после прерывания.** Пока идёт прогон (`systemctl is-active seo-tech-run.service` → `activating`), прервать его:
+   ```bash
+   systemctl kill --signal=SIGKILL seo-tech-run.service
+   ```
+   Через 2–3 минуты повторить приёмочный сценарий. Раздел B, `ok: true`: запись INTERRUPTED, и та же задача снова взята таймером.
+3. **Состояние публикации.** Раздел C сценария: по каждой задаче — подготовка (вердикт) и выпуск (итог `seo-tech-publish`: `live_verified`, `released`, `waiting` с причиной). Журнал — `var/seo-tech/publish.jsonl`.
 
-`MemoryMax=2G`. Ручные прогоны 14.10 шли без этого предела. Lords проверяются на урезанном снимке. Animedia поднимает стенд на полном снимке (~70 МБ JSON); если упрётся в предел, юнит упадёт по памяти (OOM в журнале). Тогда поднять предел до 3G.
+Сессия при следующем входе сама прогонит приёмку и отчитается по A, B, C.
 
-## Полный текст сценария `automation/host/editor/seo-tech-run.sh`
+## Известные ограничения
 
-```bash
-#!/usr/bin/env bash
-# Один прогон технического SEO: захват задачи → Claude Code без интерфейса готовит
-# ветку в отдельной рабочей копии → вердикт ПО СЛЕДАМ (seo-tech-verify) → запись.
-#
-#   seo-tech-run.sh                 — штатно (из seo-tech-run.service)
-#   CLAUDE_BIN=/path seo-tech-run.sh — подмена исполнителя для проверки обёртки
-#
-# Push, PR и выпуск прогону не принадлежат: учётные данные git закрыты юнитом
-# (InaccessiblePaths), а вердикт требует, чтобы у ветки не было удалённого двойника.
-# Коды: 0 — VERIFIED или честное «задач нет»; 2 — неполный (юнит падает — это
-# уведомление); 75 — занято другим прогоном; 70 — шаг захвата неисправен.
-set -uo pipefail
-
-REPO=/home/claude/wt-portable-site-cell-01
-STATE="$REPO/var/seo-tech"
-CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
-TRIGGER="${SEO_TECH_TRIGGER:-manual}"
-LIMIT_S="${SEO_TECH_TIMEOUT:-1500}"
-
-mkdir -p "$STATE"
-cd "$REPO" || exit 1
-
-exec 9>"$STATE/run.lock"
-if ! flock -n 9; then
-  echo "seo-tech-run: идёт другой прогон" >&2
-  exit 75
-fi
-
-# Задание проверяется ДО захвата: без него прогон съел бы попытку исправной
-# задачи (приёмка Архитектора 12.10, seo-tech-wrapper-audit.py).
-test -s docs/seo-tech/SEO_TECH_RUN_PROMPT.md || { echo "seo-tech-run: нет файла задания" >&2; exit 70; }
-
-# Секунды плюс PID: два прогона в одну секунду не делят один идентификатор
-# (иначе вердикт уходил первой совпавшей задаче — измерено приёмкой).
-RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)-$$"
-STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-NEXT="$(python3 -m seo_operator.cli seo-tech-next --run-id "$RUN_ID")"
-NEXT_RC=$?
-printf '{"at": "%s", "trigger": "%s", "run_id": "%s", "next_rc": %s}\n' "$STARTED" "$TRIGGER" "$RUN_ID" "$NEXT_RC" >> "$STATE/gate.jsonl"
-case "$NEXT_RC" in
-  10) ;;
-  0) exit 0 ;;
-  *) echo "seo-tech-run: захват неисправен (код $NEXT_RC): $NEXT" >&2; exit 70 ;;
-esac
-
-PROMPT="$(sed "s/{{RUN_ID}}/$RUN_ID/g" docs/seo-tech/SEO_TECH_RUN_PROMPT.md)"
-timeout "$LIMIT_S" "$CLAUDE_BIN" -p "$PROMPT" --output-format json \
-  --max-turns "${SEO_TECH_MAX_TURNS:-150}" \
-  > "$STATE/$RUN_ID.claude.json" 2> "$STATE/$RUN_ID.stderr"
-MODEL_RC=$?
-FINISHED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-
-EXTRA="$(printf '{"trigger": "%s", "started_at": "%s", "finished_at": "%s", "model_exit": %s}' \
-  "$TRIGGER" "$STARTED" "$FINISHED" "$MODEL_RC")"
-python3 -m seo_operator.cli seo-tech-verify --run-id "$RUN_ID" --record --extra "$EXTRA" \
-  > "$STATE/$RUN_ID.verify.json"
-exit $(( $? == 0 ? 0 : 2 ))
-```
-
-## Полный текст `seo-tech-run.b006.service`
-
-```ini
-[Unit]
-Description=Техническое SEO сети: один подготовительный прогон (seo-tech-run)
-After=network-online.target
-Wants=network-online.target
-StartLimitIntervalSec=0
-
-[Service]
-Type=oneshot
-User=claude
-Group=claude
-WorkingDirectory=/home/claude/wt-portable-site-cell-01
-Environment=HOME=/home/claude
-Environment=PYTHONDONTWRITEBYTECODE=1
-Environment=SEO_TECH_TRIGGER=systemd-timer
-ExecStart=/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-run.sh
-# 0 — VERIFIED или «задач нет»; 75 — занято другим прогоном (не сбой).
-# 2 — неполный вердикт, 70 — неисправен шаг захвата: юнит падает и виден в systemctl --failed.
-SuccessExitStatus=0 75
-TimeoutStartSec=1800
-Nice=10
-CPUQuota=50%
-MemoryMax=2G
-NoNewPrivileges=yes
-PrivateTmp=yes
-ProtectSystem=strict
-ProtectKernelTunables=yes
-RestrictSUIDSGID=yes
-# «Только готовит ветку» — свойство юнита: без учётных данных git push невозможен.
-InaccessiblePaths=/home/claude/.config/gh
-InaccessiblePaths=/home/claude/.ssh
-InaccessiblePaths=/etc/site-factory
-# Пишет только: состояние Claude Code и var/ репозитория (очередь-состояние, рабочие копии, .git витрин).
-ReadWritePaths=/home/claude/.claude
-ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
-
-[Install]
-WantedBy=multi-user.target
-```
-
-## Полный текст `seo-tech-run.b006.timer`
-
-```ini
-[Unit]
-Description=Техническое SEO сети: прогон каждые 30 минут (seo-tech-run)
-
-[Timer]
-# :12 и :42 — вне пятиминутной сетки editor-run. Нет задачи queued — выход 0 за секунды, без модели.
-OnCalendar=*:12/30
-Persistent=false
-AccuracySec=10s
-Unit=seo-tech-run.service
-
-[Install]
-WantedBy=timers.target
-```
+- `MemoryMax=3G` у подготовки — с запасом под стенд Animedia на полном снимке. Свободно около 5 ГиБ при исчерпанном swap. При OOM задача восстанавливается (INTERRUPTED), но повторяется до 3 раз.
+- Yummy в пополнение и выпуск не входит: код страниц — в контейнере Next.js, вне ячеек (B016, T081 — действие владельца).
+- Восемь новых доменов Lords — вне продвижения и вне цикла (CLOSED).
+- Пополнение не придумывает работу: при чистых сайтах очередь пустеет. Задачи сессии и переносы (`port_to`) по-прежнему ставит сессия в `config/seo-tech-queue.json`.

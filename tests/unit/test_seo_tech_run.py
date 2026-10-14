@@ -15,6 +15,15 @@ from seo_operator import tech_run
 
 ROOT = Path(__file__).resolve().parents[2]
 
+
+@pytest.fixture
+def tmp_path():
+    """Временный каталог внутри var/ (правило тестов: не писать за пределы var/ и artifacts/)."""
+    путь = ROOT / "var" / "test-seo-tech" / ("tmp-" + uuid.uuid4().hex[:8])
+    путь.mkdir(parents=True)
+    yield путь
+    shutil.rmtree(путь, ignore_errors=True)
+
 ПРОВЕРКА_ПАДАЮЩАЯ_НА_БАЗЕ = '''import sys
 from pathlib import Path
 текст = (Path(__file__).resolve().parent.parent / "page.html").read_text()
