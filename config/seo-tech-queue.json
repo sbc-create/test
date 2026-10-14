@@ -1498,8 +1498,8 @@
       ],
       "problem": "Как T078 (an1mego.site, выпущено 14.10): на animeg0.site ссылка на /random/ (303 на случайный тайтл) с каждой страницы, в robots.txt путь не закрыт.",
       "verify_live": "после выпуска: https://animeg0.site/robots.txt содержит Disallow: /random/",
-      "status": "queued",
-      "evidence": "14.10: перенос T078 (7808784, an1mego). Поставлено queued — для фонового прогона seo-tech-run."
+      "status": "live_verified",
+      "evidence": "14.10: перенос T078 (7808784, an1mego). Поставлено queued — для фонового прогона seo-tech-run. 14.10: фоновый прогон 20261014T121500Z-1684935 — VERIFIED (run.sh 35/35); diff просмотрен сессией (как T078); выпущено a065374, CI 38563416328, animego-03 ok 12:26Z; живой robots.txt animeg0.site — «Disallow: /random/», главная и карта 200."
     },
     {
       "direction": "anime",
@@ -1535,6 +1535,22 @@
       "status": "blocked",
       "owner_action": "владельцу исходника Next.js Yummy (верхний поток): в блоке new-episodes строить href через канонический путь public-title-route, а не slug--providerTitleId; выпуск контейнера — его процессом. Сессия не меняет чужой код и не переписывает HTML/RSC в прокси.",
       "evidence": "14.10 ~12:10Z: замер главных пяти Yummy — yummyani.site 55/102, yummyani.biz 55/102, yummyani.org 37/102, yummyani7.site и .info 0/65; /catalog — 0 у всех. Пример: …/stranniki-duhovnogo-mira--01a067b1-… → 308 → /anime/stranniki-duhovnogo-mira. Копии исходника найдены только в /home/claude/work-templates/{theme-ym,yummy-fixture} (сборка живого контейнера из них не подтверждена)."
+    },
+    {
+      "id": "T082",
+      "site": "an1meg0.site (канарейка; animeg0.site занят T074, an1mego.site — контроль)",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://animeg0.site/title/protivostoyanie-svyatogo/season-1/episode-160/"
+      ],
+      "problem": "Аудит разметки 14.10: страницы серий AnimeGo отдают только WebSite — нет TVEpisode (номер серии, сезон, сериал) и BreadcrumbList; у Animedia и Lords на сериях есть и то и другое. Серии — главный тип входов из поиска (аудит 13.10).",
+      "norm": "SEO_KNOWLEDGE_PACK: структурированная разметка только для видимого содержимого; образец — TVEpisode Lords/Animedia (episodeNumber, name, url, partOfSeason, partOfSeries)",
+      "expected": "канарейка: TVEpisode на страницах серий части тайтлов animeg0.site (≤10 % страниц сайта), значения — из видимого H1/навигации; запись в config/experiments.json; остальные серии и сайты — контроль",
+      "check": "checks/episode_jsonld.py (стенд): у серии в выборке — TVEpisode, episodeNumber и сезон равны видимым; у серии вне выборки — нет",
+      "verify_live": "после выпуска: разметка на сериях выборки, Rich Results-валидность (структура), контроль без изменений",
+      "status": "session",
+      "evidence": "14.10 ~12:15Z: выборка JSON-LD 7 сайтов. animeg0.site: тайтлы — WebSite + Movie/TVSeries (без BreadcrumbList — это T003–T005), серии (2 из 2) — только WebSite. Lords (lordserials22.info) и Animedia (animedia.icu) на сериях — WebSite, BreadcrumbList, TVEpisode. Изменение-гипотеза — только канарейкой. 14.10 12:20Z: подготовлено и проверено — an1meg0-site dd5bb85 (ветка claude/seo-t082-canary): ВидАнимеГо.серия передаёт schema_эпизода только тайтлам выборки (860 из 8 622, ~13 400 страниц серий, 9,6 % страниц сайта); checks/episode_jsonld.py база rc=1, правка rc=0; run.sh 33/33. Эксперимент exp-animego-episode-jsonld в config/experiments.json (canary). Выпуск — вместе с T080 одним продвижением ветки."
     }
   ]
 }

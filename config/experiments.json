@@ -39,6 +39,16 @@
       "scope_page_share": 0.008,
       "phase": "canary",
       "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023"
+    },
+    {
+      "experiment_id": "exp-animego-episode-jsonld",
+      "site_id": "animego-04",
+      "hypothesis": "Разметка TVEpisode (номер серии, сезон, сериал — из видимого H1) на страницах серий помогает поисковику понять страницу серии и показать её на запросы о серии; серии — главный тип входов из поиска",
+      "primary_metric": "поисковые входы и показы страниц серий выборки против серий контроля того же сайта (Метрика, Вебмастер) за 7 и 28 дней после выпуска",
+      "applicability": "an1meg0.site: серии 860 из 8 622 тайтлов (детерминированная выборка по слагу), ~13 400 страниц; контроль — прочие серии an1meg0.site и an1mego.site; animeg0.site не входит (там канарейка карты серий exp-animego-sitemap-fresh-episodes)",
+      "scope_page_share": 0.096,
+      "phase": "canary",
+      "evidence": "docs/seo-operator/DAY_20261014.md §7; checks/episode_jsonld.py (база rc=1, правка rc=0); измерение — после выгрузок Метрики, Вебмастер заблокирован B023"
     }
   ]
 }
