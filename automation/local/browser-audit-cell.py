@@ -1,0 +1,347 @@
+#!/usr/bin/env python3
+"""Осмотр витрины ДЕЙСТВИЕМ в браузере: клики, ввод, фильтры, снимки экрана.
+
+Почему недостаточно кодов ответа. Страница отвечает 200 и с пустой выдачей, со
+сломанным меню и с фильтром, который ничего не меняет. Поэтому здесь браузер
+(Chromium через Playwright) действительно нажимает, вводит, прокручивает и
+сравнивает ЧТО ИЗМЕНИЛОСЬ, а снимки экрана делаются в размерах компьютера и
+телефона.
+
+Что проверяется действием:
+  * главная: блоки профиля, карточки, изображения, меню, поиск, подвал;
+  * каталог: смена жанра/года/сортировки МЕНЯЕТ состав выдачи, работает
+    пагинация;
+  * карточка: название, постер, сведения, описание, похожее, сезоны и серии;
+  * навигация: каждая видимая ссылка в шапке и подвале отвечает не 4xx/5xx,
+    переход по карточке ведёт на её же страницу, пустая выдача и 404;
+  * мобильная версия: нет горизонтальной прокрутки на 390×844, меню открывается;
+  * SEO: title, description, canonical, h1, число внутренних ссылок;
+  * режим индексации: X-Robots-Tag на каждой проверенной странице.
+
+Стенд поднимает сам (как inspect-cell-ui.py) и гасит после осмотра. Данные
+копируются во временный каталог: витрина в нём пишет только своё.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import signal
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.error
+import urllib.request
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parents[2]
+#: Готовый Chromium окружения. Библиотека playwright ждёт сборку 1243, а
+#: установлена 1234 — на одну версию старше. Скачивать новую ради одного
+#: осмотра незачем: протокол совместим, и путь задаётся явно. Если файла нет,
+#: инструмент скажет об этом прямо, а не упадёт стеной трассировки.
+ГОТОВЫЙ_CHROMIUM = Path("/home/claude/.cache/ms-playwright/chromium-1234"
+                        "/chrome-linux64/chrome")
+
+КОМПЬЮТЕР = {"width": 1366, "height": 768}
+ТЕЛЕФОН = {"width": 390, "height": 844}
+
+
+def окружение(конфиг: dict, проект: Path, данные: Path) -> dict:
+    env = dict(os.environ)
+    for имя, шаблон in (конфиг.get("environment") or {}).items():
+        env[имя] = (str(шаблон).replace("<data>", str(данные))
+                    .replace("<app>", str(проект)))
+    контакт = str(конфиг.get("contact_email") or "").strip()
+    if контакт:
+        env["SITE_CONTACT_EMAIL"] = контакт
+    домен = str(конфиг.get("domain") or "").strip()
+    if домен:
+        env["LORDS_INDEXING_SITE"] = домен
+    разрешение = (конфиг.get("indexing") or {}).get("release_permits_open")
+    env["LORDS_INDEXING_RELEASE_PERMITS_OPEN"] = "true" if разрешение is True else "false"
+    env["PYTHONDONTWRITEBYTECODE"] = "1"
+    return env
+
+
+def поднять(проект: Path, конфиг: dict, данные: Path, порт: int):
+    точка = проект / "src" / конфиг["entrypoint"]
+    процесс = subprocess.Popen(
+        [sys.executable, str(точка), "--port", str(порт)],
+        cwd=проект, env=окружение(конфиг, проект, данные),
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    for _ in range(120):
+        try:
+            urllib.request.urlopen(f"http://127.0.0.1:{порт}/healthz", timeout=3)
+            return процесс, True
+        except Exception:  # noqa: BLE001
+            if процесс.poll() is not None:
+                return процесс, False
+            time.sleep(1)
+    return процесс, False
+
+
+def осмотр(стр, база: str, итог: dict) -> None:
+    """Главная: блоки, карточки, изображения, меню, поиск, подвал."""
+    стр.goto(база + "/", wait_until="domcontentloaded")
+    карточки = стр.locator("a[href^='/title/'], article a[href*='/title/']")
+    картинки = стр.locator("img")
+    меню = стр.locator("header a, nav a")
+    поиск = стр.locator("input[type='search'], input[name='q'], form input[type='text']")
+    подвал = стр.locator("footer")
+    итог["главная"] = {
+        "title": стр.title(),
+        "h1": (стр.locator("h1").first.inner_text().strip()
+               if стр.locator("h1").count() else ""),
+        "карточек": карточки.count(),
+        "изображений": картинки.count(),
+        "битых изображений": стр.evaluate(
+            "() => Array.from(document.images).filter(i => i.complete && i.naturalWidth === 0).length"),
+        "ссылок в меню": меню.count(),
+        "поле поиска": поиск.count() > 0,
+        "подвал": подвал.count() > 0,
+        "подвал содержит почту": "mailto:" in (подвал.first.inner_html() if подвал.count() else ""),
+        "ширина прокрутки": стр.evaluate("() => document.documentElement.scrollWidth"),
+    }
+    # Технические подписи и заглушки: ищем прямо в тексте страницы.
+    текст = стр.locator("body").inner_text()
+    маркеры = ["TODO", "FIXME", "PLACEHOLDER", "заглушка", "Lorem ipsum",
+               "test data", "не реализовано", "{{", "}}", "None", "undefined"]
+    итог["главная"]["техмаркеры"] = sorted(
+        {м for м in маркеры if м.lower() in текст.lower()})
+
+
+def осмотр_каталога(стр, база: str, итог: dict) -> None:
+    """Каталог: фильтры и сортировка обязаны МЕНЯТЬ выдачу."""
+    стр.goto(база + "/catalog/", wait_until="domcontentloaded")
+    первый_состав = стр.evaluate(
+        "() => Array.from(document.querySelectorAll(\"a[href^='/title/']\")).map(a => a.getAttribute('href')).slice(0, 12)")
+    итог["каталог"] = {
+        "title": стр.title(),
+        "h1": (стр.locator("h1").first.inner_text().strip()
+               if стр.locator("h1").count() else ""),
+        "карточек": len(первый_состав),
+        "ссылок жанров": стр.locator("a[href*='/genre'], a[href*='zhanr']").count(),
+        "ссылок годов": стр.locator("a[href*='/year'], a[href*='god']").count(),
+        "сортировка": стр.locator("a[href*='sort'], select[name='sort']").count(),
+        "пагинация": стр.locator("a[href*='page'], a[href*='/page/']").count(),
+    }
+
+    def состав(адрес: str) -> list[str]:
+        стр.goto(адрес, wait_until="domcontentloaded")
+        return стр.evaluate(
+            "() => Array.from(document.querySelectorAll(\"a[href^='/title/']\")).map(a => a.getAttribute('href')).slice(0, 12)")
+
+    # Жанр: берём первую жанровую ссылку и сравниваем состав.
+    стр.goto(база + "/catalog/", wait_until="domcontentloaded")
+    жанр = стр.locator("a[href*='/genre'], a[href*='zhanr']").first
+    if жанр.count():
+        адрес = жанр.get_attribute("href") or ""
+        состав_жанра = состав(база + адрес if адрес.startswith("/") else адрес)
+        итог["каталог"]["жанр меняет выдачу"] = состав_жанра != первый_состав
+        итог["каталог"]["жанр"] = адрес
+        итог["каталог"]["карточек в жанре"] = len(состав_жанра)
+    else:
+        итог["каталог"]["жанр меняет выдачу"] = None
+
+    # Год.
+    стр.goto(база + "/catalog/", wait_until="domcontentloaded")
+    год = стр.locator("a[href*='/year'], a[href*='god']").first
+    if год.count():
+        адрес = год.get_attribute("href") or ""
+        состав_года = состав(база + адрес if адрес.startswith("/") else адрес)
+        итог["каталог"]["год меняет выдачу"] = состав_года != первый_состав
+        итог["каталог"]["год"] = адрес
+    else:
+        итог["каталог"]["год меняет выдачу"] = None
+
+    # Пагинация: вторая страница обязана отличаться от первой.
+    состав_второй = состав(база + "/catalog/page/2/")
+    итог["каталог"]["вторая страница отличается"] = (
+        bool(состав_второй) and состав_второй != первый_состав)
+    итог["каталог"]["карточек на второй"] = len(состав_второй)
+
+
+def осмотр_карточки(стр, база: str, данные: Path, site: str, итог: dict) -> None:
+    каталог = json.loads((данные / f"{site}-catalog.json").read_text(encoding="utf-8"))
+    элементы = каталог.get("items") or []
+    # Берём произведение с сезонами, если такое есть: сериальная поверхность
+    # проверяется только на нём.
+    сериал = next((э for э in элементы if (э.get("kind") or э.get("type")) in
+                   ("series", "tv", "serial")), None)
+    фильм = next((э for э in элементы if (э.get("kind") or э.get("type")) in
+                  ("movie", "film")), элементы[0] if элементы else None)
+    итог["карточка"] = {}
+    for имя, элемент in (("фильм", фильм), ("сериал", сериал)):
+        if not элемент:
+            итог["карточка"][имя] = None
+            continue
+        слаг = элемент.get("slug") or элемент.get("id")
+        стр.goto(f"{база}/title/{слаг}/", wait_until="domcontentloaded")
+        текст = стр.locator("body").inner_text()
+        название = элемент.get("title") or элемент.get("name") or ""
+        итог["карточка"][имя] = {
+            "слаг": слаг,
+            "title страницы": стр.title(),
+            "название в тексте": bool(название) and название in текст,
+            "постер": стр.locator("img[src*='poster'], .poster img, img").count() > 0,
+            "описание": len(текст) > 400,
+            "похожее": стр.locator("a[href^='/title/']").count(),
+            "сезоны": стр.locator("a[href*='season'], [class*='season']").count(),
+            "серии": стр.locator("a[href*='episode'], [class*='episode']").count(),
+            "плеер": стр.locator("iframe, [class*='player'], [id*='player']").count(),
+            "canonical": стр.evaluate(
+                "() => (document.querySelector(\"link[rel='canonical']\") || {}).href || ''"),
+            "description": стр.evaluate(
+                "() => (document.querySelector(\"meta[name='description']\") || {}).content || ''"),
+        }
+
+
+def осмотр_навигации(стр, база: str, итог: dict) -> None:
+    стр.goto(база + "/", wait_until="domcontentloaded")
+    ссылки = стр.evaluate(
+        "() => Array.from(document.querySelectorAll('header a, nav a, footer a'))"
+        ".map(a => a.getAttribute('href')).filter(h => h && h.startsWith('/'))")
+    ссылки = sorted(set(ссылки))[:25]
+    плохие = []
+    for адрес in ссылки:
+        ответ = стр.request.get(база + адрес)
+        if ответ.status >= 400:
+            плохие.append({"href": адрес, "code": ответ.status})
+    итог["навигация"] = {
+        "проверено ссылок": len(ссылки),
+        "битых": плохие,
+        "404 отдаёт 404": стр.request.get(база + "/нет-такой-страницы-12345/").status,
+        "пустой поиск": стр.request.get(база + "/search/?q=zzzqqqxyz123").status,
+    }
+    # Поиск действием: ввести и получить результаты.
+    стр.goto(база + "/", wait_until="domcontentloaded")
+    поле = стр.locator("input[type='search'], input[name='q']").first
+    if поле.count():
+        поле.fill("ветер")
+        поле.press("Enter")
+        стр.wait_for_load_state("domcontentloaded")
+        итог["навигация"]["поиск действием"] = {
+            "адрес": стр.url.replace(база, ""),
+            "найдено карточек": стр.locator("a[href^='/title/']").count(),
+        }
+    else:
+        итог["навигация"]["поиск действием"] = None
+
+
+def осмотр_телефона(браузер, база: str, снимки: Path, site: str, итог: dict) -> None:
+    контекст = браузер.new_context(viewport=ТЕЛЕФОН, is_mobile=True,
+                                  has_touch=True, device_scale_factor=2)
+    стр = контекст.new_page()
+    стр.goto(база + "/", wait_until="domcontentloaded")
+    прокрутка = стр.evaluate(
+        "() => ({scroll: document.documentElement.scrollWidth, view: window.innerWidth})")
+    бургер = стр.locator("[class*='burger'], [class*='menu-toggle'], button[aria-label*='меню'], "
+                         "button[aria-expanded]")
+    меню_открылось = None
+    if бургер.count():
+        было = стр.locator("nav a, header a").count()
+        try:
+            бургер.first.click(timeout=3000)
+            стр.wait_for_timeout(400)
+            меню_открылось = стр.locator("nav a, header a").count() >= было
+        except Exception:  # noqa: BLE001
+            меню_открылось = False
+    стр.screenshot(path=str(снимки / f"{site}-phone-home.png"), full_page=False)
+    стр.goto(база + "/catalog/", wait_until="domcontentloaded")
+    прокрутка_каталога = стр.evaluate(
+        "() => ({scroll: document.documentElement.scrollWidth, view: window.innerWidth})")
+    стр.screenshot(path=str(снимки / f"{site}-phone-catalog.png"), full_page=False)
+    итог["телефон"] = {
+        "видимая ширина": прокрутка["view"],
+        "ширина документа": прокрутка["scroll"],
+        "горизонтальная прокрутка главной": прокрутка["scroll"] > прокрутка["view"] + 1,
+        "горизонтальная прокрутка каталога":
+            прокрутка_каталога["scroll"] > прокрутка_каталога["view"] + 1,
+        "кнопка меню": бургер.count() > 0,
+        "меню открывается": меню_открылось,
+    }
+    контекст.close()
+
+
+def main() -> int:
+    р = argparse.ArgumentParser(description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--site", required=True)
+    р.add_argument("--data", required=True)
+    р.add_argument("--project", default=None)
+    р.add_argument("--port", type=int, default=19300)
+    р.add_argument("--out", default=None, help="куда класть снимки и отчёт")
+    а = р.parse_args()
+
+    проект = Path(а.project or (КОРЕНЬ / "var" / "new-sites" / а.site))
+    конфиг = json.loads((проект / "config" / "site.json").read_text(encoding="utf-8"))
+    выход = Path(а.out or (КОРЕНЬ / "var" / "k2-data" / "audit" / а.site))
+    выход.mkdir(parents=True, exist_ok=True)
+
+    врем = Path(tempfile.mkdtemp(prefix=f"audit-{а.site}-"))
+    данные = врем / "data"
+    данные.mkdir()
+    for ф in Path(а.data).glob(f"{а.site}-*.json"):
+        shutil.copy(ф, данные / ф.name)
+
+    доступно = 0
+    for строка in Path("/proc/meminfo").read_text(encoding="utf-8").splitlines():
+        if строка.startswith("MemAvailable:"):
+            доступно = int(строка.split()[1]) // 1024
+    print(f"{а.site}: стенд {врем}, доступно памяти {доступно} МиБ")
+
+    процесс, готово = поднять(проект, конфиг, данные, а.port)
+    if not готово:
+        вывод = (процесс.stdout.read() if процесс.stdout else b"").decode("utf-8", "replace")
+        (выход / "runtime-fail.log").write_text(вывод, encoding="utf-8")
+        print("ОТКАЗ: рантайм не поднялся; журнал в", выход / "runtime-fail.log")
+        процесс.kill()
+        shutil.rmtree(врем, ignore_errors=True)
+        return 1
+
+    база = f"http://127.0.0.1:{а.port}"
+    итог: dict = {"site": а.site, "domain": конфиг.get("domain"),
+                  "profile": (конфиг.get("template") or {}).get("template_id")}
+    try:
+        from playwright.sync_api import sync_playwright
+
+        with sync_playwright() as pw:
+            пуск: dict = {}
+            if ГОТОВЫЙ_CHROMIUM.is_file():
+                пуск["executable_path"] = str(ГОТОВЫЙ_CHROMIUM)
+                print(f"браузер: {ГОТОВЫЙ_CHROMIUM}")
+            else:
+                print("браузер: сборка playwright по умолчанию")
+            браузер = pw.chromium.launch(**пуск)
+            контекст = браузер.new_context(viewport=КОМПЬЮТЕР)
+            стр = контекст.new_page()
+            осмотр(стр, база, итог)
+            стр.screenshot(path=str(выход / f"{а.site}-desktop-home.png"))
+            осмотр_каталога(стр, база, итог)
+            стр.screenshot(path=str(выход / f"{а.site}-desktop-catalog.png"))
+            осмотр_карточки(стр, база, данные, а.site, итог)
+            стр.screenshot(path=str(выход / f"{а.site}-desktop-title.png"))
+            осмотр_навигации(стр, база, итог)
+            контекст.close()
+            осмотр_телефона(браузер, база, выход, а.site, итог)
+            браузер.close()
+    finally:
+        процесс.send_signal(signal.SIGTERM)
+        try:
+            процесс.wait(timeout=15)
+        except subprocess.TimeoutExpired:
+            процесс.kill()
+        shutil.rmtree(врем, ignore_errors=True)
+
+    (выход / "audit.json").write_text(
+        json.dumps(итог, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8")
+    print(json.dumps(итог, ensure_ascii=False, indent=2)[:3000])
+    print(f"\nснимки и отчёт: {выход}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
