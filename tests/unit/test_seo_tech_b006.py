@@ -298,3 +298,16 @@ def test_cleanup_touches_only_own_worktrees(среда):
     assert len(снято) == 1
     оставшиеся = [p.name for p in (репо / ".git" / "worktrees").iterdir()]
     assert "чужая-копия" in оставшиеся
+
+
+def test_non_lords_repo_gets_cell_snapshot_path(tmp_path, monkeypatch):
+    """T093 14.10: без mini_stand проверке передаётся снимок ячейки, а не «нет снимка»."""
+    данные = tmp_path / "srv" / "an1mego-site" / "data"
+    данные.mkdir(parents=True)
+    (данные / "animego-02-catalog.json").write_text("{}")
+    репо = tmp_path / "an1mego-site"
+    (репо / "checks").mkdir(parents=True)
+    monkeypatch.setattr(tech_run, "КОРНИ_ДАННЫХ", (tmp_path / "srv",))
+    среда = tech_run.снимок_стенда(репо, tmp_path / "mini")
+    assert среда == {"SITE_DATA_DIR": str(данные), "SITEMAP_CHECK_DATA": str(данные)}
+    assert not (tmp_path / "mini").exists()  # снимок ячейки не копируется и не урезается

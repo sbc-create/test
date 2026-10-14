@@ -69,13 +69,17 @@ def снимок_стенда(репо: Path, куда: Path) -> dict[str, str]:
     проверки тогда честно скажут «НЕ ИЗМЕРЕНО», и вердикт не выйдет VERIFIED.
     """
     модуль = репо / "checks" / "mini_stand.py"
-    if not модуль.is_file():
-        return {}
     источник = next((к for корень in КОРНИ_ДАННЫХ
                      for к in (корень / репо.name / "data", корень / f"site-{репо.name}" / "data")
                      if any(к.glob("*-catalog.json"))), None)
     if источник is None:
         return {}
+    if not модуль.is_file():
+        # Витрины без урезанного стенда (AnimeGo, Animedia, Zona): проверки читают снимок ячейки
+        # сами и копируют его. В рабочей копии прогона имя каталога другое, и путь
+        # /srv/<имя репозитория>/data проверка не находила — «НЕ ИЗМЕРЕНО» и на базе, и на ветке
+        # (T093 14.10). Снимок только читается.
+        return {"SITE_DATA_DIR": str(источник), "SITEMAP_CHECK_DATA": str(источник)}
     if not any(куда.glob("*-catalog.json")):
         import importlib.util
         try:
