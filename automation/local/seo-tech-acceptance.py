@@ -58,8 +58,16 @@ def main() -> int:
     таймер = [р for р in runs if р.get("trigger") == args.trigger and р.get("started_at")]
     таймер.sort(key=lambda р: р["started_at"])
     пары = []
+    def конец(р: dict) -> dt.datetime:
+        # Конец прогона — запись вердикта (его файл), а не конец работы модели:
+        # после модели идёт проверка по следам, она длится минуты.
+        f = state / f"{р['run_id']}.verify.json"
+        if f.exists():
+            return dt.datetime.fromtimestamp(f.stat().st_mtime, dt.timezone.utc)
+        return _t(р["finished_at"])
+
     for a, b in zip(таймер, таймер[1:]):
-        зазор = (_t(b["started_at"]) - _t(a["finished_at"])).total_seconds()
+        зазор = (_t(b["started_at"]) - конец(a)).total_seconds()
         пары.append({"first": [a["task_id"], a.get("verdict")], "second": [b["task_id"], b.get("verdict")],
                      "gap_s": зазор, "ok": a["task_id"] != b["task_id"] and 0 <= зазор <= 120})
     A = {"timer_runs": len(таймер), "pairs": пары[-3:], "ok": any(п["ok"] for п in пары)}
