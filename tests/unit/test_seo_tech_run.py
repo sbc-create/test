@@ -321,3 +321,29 @@ def test_snapshot_failure_does_not_break_claim(среда, monkeypatch, tmp_path
     monkeypatch.setattr(tech_run, "КОРНИ_ДАННЫХ", (tmp_path / "srv",))
     assert tech_run.снимок_стенда(репо, tmp_path / "mini") == {}
     assert not (tmp_path / "mini").exists()
+
+
+def test_untracked_launch_file_linked_not_copied(tmp_path):
+    """config/player.json — ссылкой в рабочую копию; нечитаемый не связывается (T083, 14.10)."""
+    import os
+    репо, копия = tmp_path / "repo", tmp_path / "wt"
+    (репо / "config").mkdir(parents=True)
+    копия.mkdir()
+    (репо / "config" / "player.json").write_text("{}", encoding="utf-8")
+    assert tech_run.связать_неотслеживаемые(репо, копия) == ["config/player.json"]
+    цель = копия / "config" / "player.json"
+    assert цель.is_symlink() and цель.resolve() == (репо / "config" / "player.json").resolve()
+    # Повтор ничего не меняет; уже существующий файл копии не трогается.
+    assert tech_run.связать_неотслеживаемые(репо, копия) == []
+    # Нечитаемый источник не связывается: «нет файла» обходит stand_root, PermissionError — нет.
+    другая = tmp_path / "wt2"
+    другая.mkdir()
+    os.chmod(репо / "config" / "player.json", 0)
+    try:
+        if not os.access(репо / "config" / "player.json", os.R_OK):
+            assert tech_run.связать_неотслеживаемые(репо, другая) == []
+            assert not (другая / "config" / "player.json").exists()
+    finally:
+        os.chmod(репо / "config" / "player.json", 0o644)
+    # Источника нет — нечего связывать.
+    assert tech_run.связать_неотслеживаемые(tmp_path / "нет", tmp_path / "wt3") == []

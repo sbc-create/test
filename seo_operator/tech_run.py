@@ -240,6 +240,31 @@ def next_task(задачи: list[dict], state: Path = STATE, now: dt.datetime | 
     return к[0] if к else None
 
 
+#: Файлы рабочей копии витрины, которых нет в git, но без которых витрина не
+#: стартует: `config/player.json` (в .gitignore, у части ячеек — root 0600).
+#: Рабочая копия прогона и копии вердикта получают на них ССЫЛКУ из основной
+#: копии репозитория — содержимое не читается и никуда не копируется. Без этого
+#: стендовые проверки Animedia (sitemap_live, section_description) падали в
+#: копиях вердикта на «витрина не поднялась» и на коде базы, и на ветке:
+#: T083 14.10 — вердикт INCOMPLETE дважды при исправной правке.
+НЕОТСЛЕЖИВАЕМЫЕ_ДЛЯ_ЗАПУСКА = ("config/player.json",)
+
+
+def связать_неотслеживаемые(репо: Path, копия: Path) -> list[str]:
+    """Ссылки на неотслеживаемые файлы запуска; возвращает связанные пути."""
+    связано = []
+    for относ in НЕОТСЛЕЖИВАЕМЫЕ_ДЛЯ_ЗАПУСКА:
+        источник, цель = репо / относ, копия / относ
+        # Нечитаемый источник (root 0600) не связывается: ссылка превратила бы
+        # «файла нет» (его штатно обходит checks/stand_root.py) в PermissionError.
+        if (источник.is_file() and os.access(источник, os.R_OK)
+                and not цель.exists() and not цель.is_symlink()):
+            цель.parent.mkdir(parents=True, exist_ok=True)
+            цель.symlink_to(источник)
+            связано.append(относ)
+    return связано
+
+
 def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime | None = None) -> dict[str, Any]:
     """АТОМАРНЫЙ захват (O_EXCL на файл-замок задачи) + отдельная рабочая копия на новой ветке.
 
@@ -274,6 +299,7 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
         копия = state / "wt" / run_id
         копия.parent.mkdir(parents=True, exist_ok=True)
         _git(репо, "worktree", "add", "-q", "-b", ветка, str(копия), база)
+        связать_неотслеживаемые(репо, копия)
     except Exception:
         замок.unlink(missing_ok=True)
         raise
@@ -392,6 +418,7 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
                 if wt.exists():
                     _git(репо, "worktree", "remove", "--force", str(wt), check=False)
                 _git(репо, "worktree", "add", "-q", "--detach", str(wt), sha)
+                связать_неотслеживаемые(репо, wt)
             стенд = снимок_стенда(репо, state / "mini" / run_id)
             среда = {**os.environ, **стенд} if стенд else None
             try:
