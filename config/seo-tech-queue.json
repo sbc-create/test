@@ -1517,6 +1517,24 @@
       "verify_live": "после выпуска: https://an1meg0.site/robots.txt содержит Disallow: /random/",
       "status": "queued",
       "evidence": "14.10: перенос T078 (7808784, an1mego). Поставлено queued — для фонового прогона seo-tech-run."
+    },
+    {
+      "id": "T081",
+      "site": "yummyani.site, yummyani.org, yummyani.biz",
+      "direction": "anime",
+      "repo": "верхний поток Next.js Yummy (контейнер yummyani-*-web); исходник не в var/site-repos",
+      "urls": [
+        "https://yummyani.site/",
+        "https://yummyani.site/anime/stranniki-duhovnogo-mira--01a067b1-030f-7f4b-b995-38cb0c2bb71a"
+      ],
+      "problem": "Обход 14.10: на главных yummyani.site и .biz 55 из 102 ссылок /anime/ (yummyani.org — 37) ведут на /anime/<slug>--<uuid>, который отвечает 308 на /anime/<slug>. Источник — блок «Новые серии» (data-home-block=\"new-episodes\", data-shelf=\"top-carousel\"). У yummyani7.site/.info и в /catalog/ всех Yummy таких ссылок 0. Каждый обход главной даёт до 55 лишних переходов, а ссылочный вес уходит через 308.",
+      "norm": "внутренние ссылки ведут на канонический адрес (public-title-route.ts: «Canonical public path segment. Never the provider UUID and never {slug}--{uuid}»)",
+      "expected": "ссылки блока «Новые серии» — /anime/<slug> без --<uuid>; 308 остаётся только для старых внешних ссылок",
+      "check": "после правки: на главной 0 ссылок /anime/ с --<uuid> (замер этой задачи)",
+      "verify_live": "главные трёх доменов: ссылок /anime/…--<uuid> 0",
+      "status": "blocked",
+      "owner_action": "владельцу исходника Next.js Yummy (верхний поток): в блоке new-episodes строить href через канонический путь public-title-route, а не slug--providerTitleId; выпуск контейнера — его процессом. Сессия не меняет чужой код и не переписывает HTML/RSC в прокси.",
+      "evidence": "14.10 ~12:10Z: замер главных пяти Yummy — yummyani.site 55/102, yummyani.biz 55/102, yummyani.org 37/102, yummyani7.site и .info 0/65; /catalog — 0 у всех. Пример: …/stranniki-duhovnogo-mira--01a067b1-… → 308 → /anime/stranniki-duhovnogo-mira. Копии исходника найдены только в /home/claude/work-templates/{theme-ym,yummy-fixture} (сборка живого контейнера из них не подтверждена)."
     }
   ]
 }
