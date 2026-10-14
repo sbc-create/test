@@ -81,6 +81,9 @@ def main() -> int:
     р.add_argument("--data", required=True, help="каталог с данными каталога")
     р.add_argument("--port", type=int, default=19200)
     р.add_argument("--keep", action="store_true", help="не удалять временные данные")
+    р.add_argument("--log-dir", default=None,
+                   help="куда сохранить вывод рантайма (иначе только при отказе "
+                        "и только в консоль)")
     а = р.parse_args()
 
     проект = Path(а.project or (КОРЕНЬ / "var" / "new-sites" / а.site))
@@ -97,6 +100,15 @@ def main() -> int:
         shutil.copy(ф, данные / ф.name)
     скопировано = sorted(п.name for п in данные.iterdir())
     print(f"стенд: {врем}; данных файлов {len(скопировано)}: {', '.join(скопировано)}")
+
+    # Память на управляющем узле делится со всеми сессиями, и отказ подъёма
+    # чаще всего означает её нехватку, а не дефект витрины. Печатаем ДО старта,
+    # чтобы в отчёте было чем отличить одно от другого.
+    доступно = 0
+    for строка in Path("/proc/meminfo").read_text(encoding="utf-8").splitlines():
+        if строка.startswith("MemAvailable:"):
+            доступно = int(строка.split()[1]) // 1024
+    print(f"доступно памяти перед запуском: {доступно} МиБ")
 
     env = окружение(конфиг, проект, данные)
     плеер = Path(env.get("LORDS_PLAYER_CONFIG", ""))
@@ -121,6 +133,12 @@ def main() -> int:
         вывод = (процесс.stdout.read() if процесс.stdout else b"").decode("utf-8", "replace")
         print("ОТКАЗ: рантайм не поднялся")
         print("\n".join(вывод.splitlines()[-12:]))
+        if а.log_dir:
+            журнал = Path(а.log_dir)
+            журнал.mkdir(parents=True, exist_ok=True)
+            файл = журнал / f"{а.site}-runtime.log"
+            файл.write_text(вывод, encoding="utf-8")
+            print(f"полный вывод рантайма: {файл}")
         процесс.kill()
         if not а.keep:
             shutil.rmtree(врем, ignore_errors=True)
