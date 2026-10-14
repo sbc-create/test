@@ -87,13 +87,33 @@ def test_re_registering_requires_explicit_replace(reg: Path):
     registry.register(_cell("alpha", "alpha.test"), path=reg, replace=True)
 
 
-@pytest.mark.parametrize("retired", ["10331", "10333"])
-def test_retired_publisher_id_is_refused(reg: Path, retired: str):
+# Действующих отозванных значений нет (D213: 10331 и 10333 назначены владельцем
+# доменам zonafilm.space и animedia.space), и проверять механизм на них больше
+# нельзя — они разрешены. Поэтому набор подменяется на время проверки: сам
+# механизм обязан работать и тогда, когда отозванных нет ни одного.
+@pytest.mark.parametrize("retired", ["19001", "19002"])
+def test_retired_publisher_id_is_refused(reg: Path, retired: str, monkeypatch):
+    monkeypatch.setattr(registry, "RETIRED_PUBLISHER_IDS",
+                        frozenset({"19001", "19002"}))
     with pytest.raises(RetiredPublisherId):
         registry.register(
             _cell("alpha", "alpha.test",
                   publisher={"provider": "cdnvideohub", "publisher_id": retired}),
             path=reg)
+
+
+def test_assigned_publisher_ids_are_not_refused(reg: Path):
+    """Назначенные владельцем значения проходят регистрацию.
+
+    Проверка «от обратного» к предыдущей: пока 10331 и 10333 стояли в наборе,
+    витрины zonafilm.space и animedia.space не поднялись бы вовсе.
+    """
+    for номер in ("10331", "10332", "10333"):
+        registry.register(
+            _cell(f"cell{номер}", f"d{номер}.test",
+                  publisher={"provider": "cdnvideohub", "publisher_id": номер}),
+            path=reg)
+        assert registry.resolve(f"cell{номер}", path=reg).publisher["publisher_id"] == номер
 
 
 def test_retired_set_shrinks_only_by_a_named_decision():
@@ -111,11 +131,13 @@ def test_retired_set_shrinks_only_by_a_named_decision():
     записанным. Отсюда и форма проверки: не «набор непустой», а «набор ровно
     такой, и 10332 исключён осознанно».
     """
-    assert registry.RETIRED_PUBLISHER_IDS == frozenset({"10331", "10333"}), (
-        "состав отозванных изменился без решения: 10331 и 10333 отвергаются, "
-        "10332 исключён решением D120 от 2026-10-01 (animedia.icu). Любое "
-        "другое изменение набора — отдельное решение с записью в DECISIONS.md")
-    assert "10332" not in registry.RETIRED_PUBLISHER_IDS
+    assert registry.RETIRED_PUBLISHER_IDS == frozenset(), (
+        "состав отозванных изменился без решения: 10332 исключён решением D137 "
+        "от 2026-10-01 (animedia.icu), 10331 и 10333 — решением D213 от "
+        "2026-10-14 (zonafilm.space и animedia.space). Набор пуст; любое "
+        "изменение — отдельное решение с записью в DECISIONS.md")
+    for назначенный in ("10331", "10332", "10333"):
+        assert назначенный not in registry.RETIRED_PUBLISHER_IDS
 
 
 def test_owner_assigned_publisher_id_registers(reg: Path):

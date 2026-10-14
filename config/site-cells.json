@@ -123,7 +123,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10252"
+        "publisher_id": "10333",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected",
+        "note": ""
       },
       "data": {
         "database": "<data>/site-data/animedia-community.json",
@@ -182,7 +184,9 @@
         "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.space.json; флаг в реестре без него разрешением не считается",
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.space.json",
         "open_authorization_id": "e89c03de-05c0-49d0-9882-9b3ba34525a0"
-      }
+      },
+      "analytics": {},
+      "promotion": {}
     },
     {
       "site_id": "animego-02",
@@ -633,10 +637,6 @@
         "family": "lords",
         "note": "Профиль lords-animation версии 1.1.0, раздел во владении /animation/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": "lords-animation",
         "modules": {},
@@ -644,12 +644,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10238",
+        "publisher_id": "10368",
         "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
-        "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": "2026-10-12T15:11:09.763695+00:00",
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-lordserials22-info.service",
         "previous_unit": null,
@@ -688,7 +698,7 @@
         },
         "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T22:47:19Z; домен счётчика по ответу API — lordserials22.info. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T15:11:09.763695+00:00"
+      "promotion": {}
     },
     {
       "site_id": "lords-06",
@@ -1762,10 +1772,6 @@
         "family": "yummy",
         "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": null,
         "modules": {},
@@ -1773,11 +1779,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "publisher_id": "10376",
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": "2026-10-12T11:34:25.020961+00:00",
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-yummyani7-site.service",
         "previous_unit": null,
@@ -1816,7 +1833,7 @@
         },
         "note": "счётчик 113109087 создан службой, отчёт var/analytics/connect-yummyani7.site.json от 2026-09-27T22:47:25Z; домен счётчика по ответу API — yummyani7.site. проект 33762615 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T11:34:25.020961+00:00"
+      "promotion": {}
     },
     {
       "site_id": "yummy-08",
@@ -1836,10 +1853,6 @@
         "family": "yummy",
         "note": "ПРОФИЛЬ ШАБЛОНА НЕ НАЗНАЧЕН — вход владельца. Свободных шаблонов в пуле нет (все четыре закреплены), поэтому нужен либо новый шаблон, либо экземпляр проверенного выпуска: назвать repo@commit витрины-образца. Подставлять похожий профиль соседнего домена нельзя."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": null,
         "modules": {},
@@ -1847,11 +1860,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте."
+        "publisher_id": "10371",
+        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": "2026-10-12T11:34:25.044166+00:00",
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-yummyani7-info.service",
         "previous_unit": null,
@@ -1890,7 +1914,7 @@
         },
         "note": "счётчик 113109089 создан службой, отчёт var/analytics/connect-yummyani7.info.json от 2026-09-27T22:47:26Z; домен счётчика по ответу API — yummyani7.info. проект 33762646 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T11:34:25.044166+00:00"
+      "promotion": {}
     },
     {
       "site_id": "yummy-biz",
@@ -2128,8 +2152,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": "10252",
-        "note": "Назначен владельцем именно этому домену 2026-09-29 вместо 10238. 10238 остаётся у lordfilm47.space и zonafilm.cc и здесь не меняется. Значение публичное — оно стоит в разметке страницы атрибутом data-publisher-id; секрет — пара учётных данных, она живёт в Secret Hub по ссылке player.publisher_id_ref профиля витрины."
+        "publisher_id": "10331",
+        "note": "Назначен владельцем именно этому домену 2026-09-29 вместо 10238. 10238 остаётся у lordfilm47.space и zonafilm.cc и здесь не меняется. Значение публичное — оно стоит в разметке страницы атрибутом data-publisher-id; секрет — пара учётных данных, она живёт в Secret Hub по ссылке player.publisher_id_ref профиля витрины.",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
       },
       "data": {
         "database": null,
@@ -2156,6 +2181,13 @@
         "data_owner": "pipeline",
         "delivery": "release-queue"
       },
+      "release": {},
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm.space.json",
+        "open_authorization_id": "f0fca3ce-0abc-43e2-b42d-2121d8f3e0cd",
+        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm.space.json; флаг в реестре без него разрешением не считается"
+      },
       "analytics": {
         "topvisor_project_id": 33238820,
         "topvisor_verified_at": "2026-09-27T23:15:42Z",
@@ -2165,12 +2197,7 @@
         },
         "note": "проект 33238820 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "indexing": {
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm.space.json",
-        "open_authorization_id": "f0fca3ce-0abc-43e2-b42d-2121d8f3e0cd",
-        "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm.space.json; флаг в реестре без него разрешением не считается"
-      }
+      "promotion": {}
     },
     {
       "site_id": "zona-02",
@@ -2274,10 +2301,6 @@
         "family": "zona",
         "note": "Экземпляр из site-zonafilm-space@75a33eaf46ea — выпуска, проверенного публично. Из свободного пула не выдавался: пул пуст, пополнение — вход владельца."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": "zona-nova",
         "modules": {},
@@ -2285,6 +2308,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
+      "publisher": {
+        "provider": "cdnvideohub",
+        "publisher_id": "10372",
+        "note": "Назначен владельцем именно этому домену и только ему. В реестре ячеек отсутствовал, хотя в config/site.json репозитория сайта стоит publisher_id_expected=10261 — два источника правды расходились.",
+        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
+      },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": "2026-10-12T11:34:25.278484+00:00",
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-zonafilm12-site.service",
         "previous_unit": null,
@@ -2313,11 +2352,6 @@
         "open_authorization_id": "9ce4686d-48b8-4160-8991-b4b1e1e221b7",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm12.site.json; флаг в реестре без него разрешением не считается"
       },
-      "publisher": {
-        "provider": "cdnvideohub",
-        "publisher_id": "10261",
-        "note": "Назначен владельцем именно этому домену и только ему. В реестре ячеек отсутствовал, хотя в config/site.json репозитория сайта стоит publisher_id_expected=10261 — два источника правды расходились."
-      },
       "analytics": {
         "metrika_counter_id": 113109081,
         "metrika_verified_at": null,
@@ -2330,7 +2364,7 @@
         },
         "note": "счётчик 113109081 создан службой, отчёт var/analytics/connect-zonafilm12.site.json от 2026-09-27T22:47:17Z; домен счётчика по ответу API — zonafilm12.site. проект 33762526 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T11:34:25.278484+00:00"
+      "promotion": {}
     }
   ]
 }
