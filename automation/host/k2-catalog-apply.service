@@ -1,0 +1,28 @@
+[Unit]
+# Приём доставленного каталога витрин узла K2.
+#
+# Доставку привозит k2deploy во входящий каталог своего дома; установку в
+# данные витрины делает этот юнит от root — потому что каталог данных
+# принадлежит только самой витрине (0750), и ослаблять это ради доставки
+# нельзя. Проверки комплекта идут ДО установки, отказ оставляет входящее
+# нетронутым.
+Description=K2: установка доставленного каталога витрин
+After=network-online.target
+ConditionPathIsDirectory=/home/k2deploy/stage/incoming
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/k2-catalog-apply.sh
+# Записывает только в данные витрин и во входящий каталог: всё остальное
+# дерево остаётся только для чтения.
+ProtectSystem=strict
+ReadWritePaths=/srv /home/k2deploy/stage/incoming
+ProtectHome=false
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+TimeoutStartSec=900
+
+[Install]
+WantedBy=multi-user.target
