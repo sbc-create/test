@@ -462,6 +462,27 @@ def main() -> int:
             стр.screenshot(path=str(выход / f"{а.site}-desktop-title.png"))
             осмотр_навигации(стр, база, итог)
             контекст.close()
+            # Согласованная палитра семейства — тёмная (`theme: lords_dark` в
+            # профиле). Безголовый браузер по умолчанию сообщает светлую
+            # системную тему, поэтому тёмная снимается отдельным контекстом.
+            # Светлые снимки остаются: посетитель со светлой системой увидит
+            # именно их.
+            тёмный = браузер.new_context(viewport=КОМПЬЮТЕР, color_scheme="dark")
+            т_стр = тёмный.new_page()
+            т_стр.goto(база + "/", wait_until="domcontentloaded")
+            дождаться_картинок(т_стр)
+            итог.setdefault("тема", {})["палитра на снимке"] = т_стр.evaluate(
+                "() => getComputedStyle(document.body).backgroundColor")
+            т_стр.screenshot(path=str(выход / f"{а.site}-desktop-home-dark.png"))
+            тёмный.close()
+            т_тел = браузер.new_context(viewport=ТЕЛЕФОН, color_scheme="dark",
+                                        is_mobile=True, has_touch=True)
+            т_стр2 = т_тел.new_page()
+            т_стр2.goto(база + "/", wait_until="domcontentloaded")
+            дождаться_картинок(т_стр2)
+            т_стр2.screenshot(path=str(выход / f"{а.site}-phone-home-dark.png"),
+                              full_page=False)
+            т_тел.close()
             осмотр_телефона(браузер, база, выход, а.site, итог)
             браузер.close()
     finally:
