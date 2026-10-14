@@ -24,11 +24,23 @@ snapshot="${K2_SNAPSHOT:-/srv/site-factory/repo/var/lords/lords/catalog-cache/lo
 work="$repo_root/var/k2-data/deliver"
 publisher="$repo_root/var/k2-data/publisher/automation/host/nova-catalog-publish.py"
 
-sites="$*"
+# `--from-staging <каталог>` берёт уже собранный издателем комплект вместо
+# нового прогона: когда восемь витрин собраны одним прогоном, повторять его по
+# разу на витрину — это 20 минут и лишний износ диска.
+from_staging=""
+sites=""
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --from-staging) from_staging="${2:?нужен каталог}"; shift ;;
+    *) sites="$sites $1" ;;
+  esac
+  shift
+done
+sites="$(printf '%s' "$sites" | sed 's/^ *//')"
 [ -n "$sites" ] || { echo "нужен хотя бы один site_id" >&2; exit 2; }
 cd "$repo_root" || exit 1
 
-if [ ! -f "$publisher" ]; then
+if [ -z "$from_staging" ] && [ ! -f "$publisher" ]; then
   echo "==> собираю совместимого издателя"
   python3 automation/local/make-k2-publisher.py || exit 1
 fi
@@ -36,15 +48,26 @@ fi
 list="$(printf '%s' "$sites" | tr ' ' ',')"
 rm -rf "$work"; mkdir -p "$work"
 
-echo "==> издатель собирает каталог для: $list"
-python3 automation/local/run-k2-publisher.py -- \
-    --sites "$list" --snapshot "$snapshot" \
-    --staging-out "$work" \
-    --report-dir "$repo_root/var/k2-data/publish-reports" \
-    > "$work/publish.log" 2>&1
-rc=$?
-tail -3 "$work/publish.log" | sed 's/^/   /'
-[ "$rc" = 0 ] || { echo "издатель завершился кодом $rc — доставка не начиналась"; exit 1; }
+if [ -n "$from_staging" ]; then
+  echo "==> беру готовый комплект из $from_staging"
+  for site in $sites; do
+    for kind in catalog details; do
+      src="$from_staging/$site-$kind.json"
+      [ -f "$src" ] || { echo "[x] нет $src"; exit 1; }
+      cp "$src" "$work/$site-$kind.json"
+    done
+  done
+else
+  echo "==> издатель собирает каталог для: $list"
+  python3 automation/local/run-k2-publisher.py -- \
+      --sites "$list" --snapshot "$snapshot" \
+      --staging-out "$work" \
+      --report-dir "$repo_root/var/k2-data/publish-reports" \
+      > "$work/publish.log" 2>&1
+  rc=$?
+  tail -3 "$work/publish.log" | sed 's/^/   /'
+  [ "$rc" = 0 ] || { echo "издатель завершился кодом $rc — доставка не начиналась"; exit 1; }
+fi
 
 for site in $sites; do
   box="$work/$site"
