@@ -1586,7 +1586,7 @@
       "verify_live": "после выпуска: у всех строк aeps__row главной animedia.space страница серии без data-state=unavailable",
       "status": "queued",
       "review": "видимое изменение состава блока (строк меньше на недоступные) — выпуск после просмотра человеком",
-      "evidence": "14.10: аудит целей внутренних ссылок (link_targets.py): /title/syunmao-li/season-1/episode-14/ — noindex, follow, data-state=unavailable, ссылка с главной из блока aeps."
+      "evidence": "14.10: аудит целей внутренних ссылок (link_targets.py): /title/syunmao-li/season-1/episode-14/ — noindex, follow, data-state=unavailable, ссылка с главной из блока aeps. 14.10: фоновый прогон 20261014T135158Z-2201127 — VERIFIED 9/9 с первой попытки; diff просмотрен; ветка claude/review-anime-t084 c9992b0 отправлена для просмотра (пакет §8–9). Не опубликовано: видимое."
     },
     {
       "id": "T085",
