@@ -36,10 +36,26 @@ const projects = [
   },
 ];
 
+// Бюджет времени у движков разный, потому что разная у них скорость, и это
+// измерено на этом хосте, а не предположено. Три загрузки одной живой страницы,
+// медиана: chromium 1160 мс, webkit 1948 мс, firefox 12 759 мс — firefox
+// медленнее в одиннадцать раз и разбросан сильнее всех (5405…13 938 мс).
+//
+// Общий timeout 45 000 мс подобран под chromium, и для него он просторен. Для
+// firefox под `workers: 2` он оказывался на грани: пять тестов падали с
+// «page.goto timeout 45s», и причина числилась неустановленной. Движок при
+// этом исправен — ту же страницу он открывает и отдаёт код 200.
+//
+// Поднимать общий timeout было бы неверно: он перестал бы ловить замедление
+// chromium, ради которого и выставлен. Поэтому бюджет поднят адресно и с
+// запасом к измеренному, а не «на глаз в большую сторону».
+const FIREFOX_TIMEOUT = 180_000;
+const WEBKIT_TIMEOUT = 90_000;
+
 if (process.env.FACTORY_ALL_BROWSERS === '1') {
   projects.push(
-    { name: 'firefox', use: { ...devices['Desktop Firefox'] } },
-    { name: 'webkit', use: { ...devices['Desktop Safari'] } },
+    { name: 'firefox', timeout: FIREFOX_TIMEOUT, use: { ...devices['Desktop Firefox'] } },
+    { name: 'webkit', timeout: WEBKIT_TIMEOUT, use: { ...devices['Desktop Safari'] } },
   );
 }
 

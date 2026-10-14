@@ -31,6 +31,12 @@
           "synthetic": {
             "type": "boolean",
             "description": "True for fixture tenants used in dry-runs. Synthetic sites must never be treated as real inventory."
+          },
+          "indexing_expected": {
+            "type": "string",
+            "enum": ["open", "closed"],
+            "default": "closed",
+            "description": "The indexing state the owner has decided for this site. Omitting it means closed: opening is a written decision, never a default. The daily cycle compares the live layers against this value and reports drift in either direction."
           }
         }
       }

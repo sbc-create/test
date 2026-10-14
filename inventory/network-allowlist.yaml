@@ -56,3 +56,76 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- девять рабочих доменов: SEO-baseline и LIVE-проверка -----------------
+  # Шесть записей внесены заданием «ночной автономный SEO-цикл — шесть
+  # LIVE-сайтов» (2026-08-29) и до сих пор жили только в ветке
+  # claude/seo-operator-live-11; в main их не было, поэтому оператор не имел
+  # права даже прочитать собственные сайты. Ещё три — zonafilm.space,
+  # animedia.icu, animedia.space — внесены заданием
+  # SEO-PREINDEX-READINESS-LOCKED-01 (2026-09-15): владелец перечислил их в
+  # тексте задания, каждый подтверждён живым ответом HTTP 200 и профилем
+  # config/site-profiles/<site_id>.json.
+  #
+  # Разрешены ровно HTTPS GET и HEAD: SEO-оператор читает отрисованный DOM,
+  # коды ответов, canonical, robots.txt и sitemap. Записи на эти хосты не
+  # выполняются — публикация идёт через deploy-слой, а не прямым запросом.
+  #
+  # amd.online сюда НЕ внесён сознательно: это чужой сайт AniMedia.Online, а не
+  # наша витрина. Обходить чужой сайт оператору незачем и нельзя.
+  - ref: yummy-live-site
+    host: yummyani.site
+    purpose: "SEO: read-only baseline и LIVE-проверка (коды, canonical, robots, sitemap, DOM)"
+    methods: [GET, HEAD]
+  - ref: yummy-live-org
+    host: yummyani.org
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: yummy-live-biz
+    host: yummyani.biz
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-lordfilm47
+    host: lordfilm47.space
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-lordserial33
+    host: lordserial33.biz
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: lords-live-1lordserials1
+    host: 1lordserials1.online
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: zona-live-zonafilm
+    host: zonafilm.space
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: animedia-live-icu
+    host: animedia.icu
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+  - ref: animedia-live-space
+    host: animedia.space
+    purpose: "SEO: read-only baseline и LIVE-проверка"
+    methods: [GET, HEAD]
+
+  # --- первоисточники SEO-правил (только чтение) ---------------------------
+  # Регламент требует опираться на первичные источники и фиксировать URL и дату
+  # проверки, а не на пересказы.
+  - ref: google-search-central
+    host: developers.google.com
+    purpose: "официальная документация Google Search Central (structured data, canonical, sitemap)"
+    methods: [GET, HEAD]
+  - ref: schema-org
+    host: schema.org
+    purpose: "официальный словарь типов schema.org для JSON-LD"
+    methods: [GET, HEAD]
+
+  # --- Метрика: проверка фактической загрузки тега -------------------------
+  # Регламент прямо запрещает считать наличие тега в HTML доказательством его
+  # работы. Проверка требует увидеть реальное обращение к хосту счётчика.
+  - ref: yandex-metrika-tag
+    host: mc.yandex.ru
+    purpose: "Метрика: подтверждение фактической загрузки tag.js и отправки pageview"
+    methods: [GET, HEAD]
