@@ -56,3 +56,23 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- garden-season: источники и референсы (только чтение) -----------------
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026:
+  # «для сада — профильные садовые проекты, ботанические организации и университетские
+  # справочники». Только GET, robots.txt, пауза между запросами.
+  - ref: garden-season-rhs
+    host: www.rhs.org.uk
+    purpose: "garden-season: садоводческая организация (Великобритания) — сезонные работы и уход за культурами"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: garden-season-osu-extension
+    host: extension.oregonstate.edu
+    purpose: "garden-season: университетский справочник (Орегон, США) — сроки и уход за культурами"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: garden-season-supersadovnik
+    host: www.supersadovnik.ru
+    purpose: "garden-season: русский журнал о саде и огороде (референс подачи)"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

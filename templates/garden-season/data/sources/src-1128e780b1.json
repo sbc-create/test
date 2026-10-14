@@ -1,0 +1,207 @@
+{
+ "id": "src-1128e780b1",
+ "url": "https://extension.oregonstate.edu/catalog/em-9615-november-garden-calendar",
+ "fetched_at": "2026-10-12T21:02:06Z",
+ "page_sha256": "73393b4b425fe805852144918cd1dd9d572755981798e8e4afdc8f86f3946fa3",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "November garden calendar",
+ "month": 11,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "October 2020",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m11-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Force spring bulbs for indoor blooms in December."
+  },
+  {
+   "id": "m11-02",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Service lawn mower."
+  },
+  {
+   "id": "m11-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Check potatoes in storage and remove any going bad."
+  },
+  {
+   "id": "m11-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Place a portable cold frame over rows of winter vegetables."
+  },
+  {
+   "id": "m11-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Place mulch around berries for winter protection."
+  },
+  {
+   "id": "m11-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Cover rhubarb and asparagus beds with composted manure and straw."
+  },
+  {
+   "id": "m11-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Rake and compost leaves that are free of diseases and insects. Use mulch to prevent erosion and compaction from rain."
+  },
+  {
+   "id": "m11-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "To protect built-in sprinkler systems, drain the system and insulate the valve mechanisms."
+  },
+  {
+   "id": "m11-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Clean and oil your lawnmower and other garden equipment and tools before storing them for winter. Drain and store hoses carefully to avoid damage from freezing. Renew mulch around perennial flowerbeds after removing weeds."
+  },
+  {
+   "id": "m11-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Protect tender evergreens from drying wind."
+  },
+  {
+   "id": "m11-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Tie limbs of upright evergreens to prevent breakage by snow or ice."
+  },
+  {
+   "id": "m11-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Trim chrysanthemums to 4 to 6 inches after they finish blooming."
+  },
+  {
+   "id": "m11-13",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Leave ornamental grasses up in winter to provide texture in the landscape. Cut them back a few inches above the ground in early spring."
+  },
+  {
+   "id": "m11-14",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Last chance to plant cover crops for soil building. You can also use a 3- to 4-inch layer of leaves, spread over the garden plot, to eliminate winter weeds, suppress early spring weeds and prevent soil compaction by rain.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-15",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Watch for wet soil and drainage problems in yard during heavy rains. Tiling, ditching and French drains are possible solutions. Consider rain gardens and bioswales as a long-term solution.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-16",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Take cuttings of rhododendrons and camellias for propagation; propagate begonias from leaf cuttings.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-17",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune roses (tea and floribunda, but NOT climbers and ramblers) to around 3 feet in height to prevent winter damage.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-18",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "If there is no snow cover and the ground is warm enough, water your newly planted perennials, trees and shrubs every 6 to 8 weeks. Give them a deep soaking to keep them from drying out.",
+   "region_label": "Central/eastern Oregon"
+  },
+  {
+   "id": "m11-19",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "Wrap the trunks of young, thin-barked trees (maples, aspen, ash) with paper tree wrap late in the month to prevent sunscald. Remove in April. Wrap new trees two to three years in a row until the outer bark has thickened.",
+   "region_label": "Central/eastern Oregon"
+  },
+  {
+   "id": "m11-20",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant a window garden of lettuce, chives and parsley."
+  },
+  {
+   "id": "m11-21",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "It's a good time to plant trees and shrubs. Consider varieties that supply food and shelter to birds, such as sumac, elderberry, flowering currant and mock orange."
+  },
+  {
+   "id": "m11-22",
+   "section": "Planting/propagation",
+   "region": "or-west",
+   "text": "Still time to plant spring-flowering bulbs, such as tulips, daffodils, hyacinths and crocuses. Don't delay.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-23",
+   "section": "Planting/propagation",
+   "region": "or-west",
+   "text": "Good time to plant garlic for harvest next summer, and to transplant landscape trees and shrubs.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Rake and destroy leaves from fruit trees that were diseased this year. Remove and discard mummified fruit."
+  },
+  {
+   "id": "m11-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check firewood for insect infestations. Burn affected wood first and don't store inside."
+  },
+  {
+   "id": "m11-26",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Treat peaches four weeks after leaf fall spray for peach leaf curl and shothole diseases."
+  },
+  {
+   "id": "m11-27",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Moss appearing in lawn may mean too much shade or poor drainage. Correct site conditions if moss is bothersome.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-28",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Bait garden for slugs during rainy periods. Use traps or phosphate baits, which are pet-safe.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m11-29",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m11-30",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Reduce fertilizer applications."
+  }
+ ]
+}

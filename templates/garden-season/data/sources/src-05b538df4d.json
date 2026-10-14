@@ -1,0 +1,179 @@
+{
+ "id": "src-05b538df4d",
+ "url": "https://extension.oregonstate.edu/catalog/em-9543-july-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:52Z",
+ "page_sha256": "0cf25d7238a211be2d57a0a47760cdbc891ae4eee77aaee46ccac01a5d5ca91c",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "July garden calendar",
+ "month": 7,
+ "region_scope": "Орегон, США",
+ "caveat": "Recommendations are not necessarily applicable to all areas of Oregon.",
+ "published": "June 2021",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m07-01",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If you want a green lawn, water frequently during periods of heat and drought stress. Irrigate a quarter inch four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+  },
+  {
+   "id": "m07-02",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Mound soil up around the base of your potato plants. Gather and eat a few \"new\" potatoes from each hill when plants begin to flower."
+  },
+  {
+   "id": "m07-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "To reduce evaporation, water vegetable and flower gardens in the early morning. Water the soil rather than leaves to reduce disease. Water deeply and infrequently to encourage root growth."
+  },
+  {
+   "id": "m07-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Pay careful attention to watering and feeding hanging baskets of flowers or vegetable plantings during extended periods of hot weather."
+  },
+  {
+   "id": "m07-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Weed and fertilize rhubarb and asparagus beds. A mulch of compost or rotted cow manure works well as fertilizer. Water deeply to develop crowns for next year."
+  },
+  {
+   "id": "m07-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Mulch with paper, plastic, sawdust, etc. to conserve soil moisture."
+  },
+  {
+   "id": "m07-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Stake tall-growing flowering plants such as delphinium, hollyhocks, and lupine. Stake tomatoes as necessary."
+  },
+  {
+   "id": "m07-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Make compost of lawn clippings and garden plants that are ready to be recycled. Do not use clippings if lawn has been treated with herbicide, including \"weed-and-feed\" products. Do not compost diseased plants unless you are using the \"hot compost\" method (120 degrees to 150 degrees F)."
+  },
+  {
+   "id": "m07-09",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Beets, bush beans, carrots, cauliflower, broccoli, lettuce, kale and peas planted in midsummer provide fall and winter crops. Get more tips on what to plant now in Fall and Winter Vegetable Gardening in the Pacific Northwest."
+  },
+  {
+   "id": "m07-10",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Dig spring bulbs when tops have died down; divide and store or replant."
+  },
+  {
+   "id": "m07-11",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "First planting of Chinese cabbage, kohlrabi, and rutabagas.",
+   "region_label": "Oregon Coast"
+  },
+  {
+   "id": "m07-12",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control hollyhock rust by sanitation, picking affected leaves, or spraying with a registered fungicide. Read and follow label directions."
+  },
+  {
+   "id": "m07-13",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Watch for cutworm damage in garden. In July, climbing cutworms become a problem and large portions of foliage will begin to disappear on established plants. Use barriers, remove by hand, use beneficial nematodes when soil temperature is above 55 degrees F, or spray with Bt-k according to label directions."
+  },
+  {
+   "id": "m07-14",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Begin to monitor for early and late blight on tomatoes. Correct by pruning for air circulation, picking off affected leaves, and/or treat with approved fungicide.",
+   "when": "Late July"
+  },
+  {
+   "id": "m07-15",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Place traps to catch adult apple maggot flies. You can use pheromone traps to monitor presence of pests."
+  },
+  {
+   "id": "m07-16",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray filbert trees for filbertworm, as necessary.",
+   "when": "July 10"
+  },
+  {
+   "id": "m07-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray peach and prune trees for peach tree borer and peach twig borer, as necessary.",
+   "when": "July 10-15"
+  },
+  {
+   "id": "m07-18",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Third spray for codling moth in apple and pear trees, as necessary.",
+   "when": "July 17-23"
+  },
+  {
+   "id": "m07-19",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Cover blueberry bushes with netting to keep birds from eating the entire crop."
+  },
+  {
+   "id": "m07-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor camellias, holly and maple trees for scale insects. Treat if necessary."
+  },
+  {
+   "id": "m07-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor rhododendrons for adult root weevils. Look for fresh evidence of feeding (notching). Try sticky trap products on plant trunks to trap adult weevils. Manage root weevils with beneficial nematodes (if soil temperature is above 55 degrees F). If root weevils are a consistent problem, consider removing plants and choosing resistant varieties."
+  },
+  {
+   "id": "m07-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spider mites can become a problem on ornamental plants, vegetables and fruit plants during hot, dry weather. Watch for dusty-looking foliage, loss of color and the presence of tiny mites. Wash infested areas with water or spray with appropriate pesticides. For more information visit the PNW Insect Management Handbook Landscape Pests - Spider Mites."
+  },
+  {
+   "id": "m07-23",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "If necessary, spray for corn earworm as silking begins. Protect bees from spray.",
+   "region_label": "East of the Cascades"
+  },
+  {
+   "id": "m07-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Continue monitoring raspberry, blackberry, blueberry, cherry and other plants that produce soft fruits and berries for spotted wing drosophila. If the flies are present, use an integrated and least-toxic approach to manage the pests. Learn how to monitor for drosophila flies and larval infestations in fruit."
+  },
+  {
+   "id": "m07-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check leafy vegetables for caterpillars. Remove caterpillars as they appear. Use Bt-k, if necessary."
+  },
+  {
+   "id": "m07-26",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose and bacterial canker of stone fruit. Sterilize tools before each new cut."
+  }
+ ]
+}

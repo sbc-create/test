@@ -1,0 +1,165 @@
+{
+ "id": "src-5c0419c8cc",
+ "url": "https://extension.oregonstate.edu/catalog/em-9587-september-garden-calendar",
+ "fetched_at": "2026-10-12T21:02:00Z",
+ "page_sha256": "cb59f93c650576fbbce600d1481f301b6f724dc1e5ddb44de109a584977ddaba",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "September garden calendar",
+ "month": 9,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "August 2020",
+ "reviewed": "2026",
+ "items": [
+  {
+   "id": "m09-01",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest winter squash when the \"ground spot\" changes from white to a cream or gold color."
+  },
+  {
+   "id": "m09-02",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Pick and store winter squash; mulch carrots, parsnips and beets for winter harvesting."
+  },
+  {
+   "id": "m09-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Protect tomatoes; pick green tomatoes and ripen indoors if frost threatens."
+  },
+  {
+   "id": "m09-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Reduce water on trees, shrubs and vines east of Cascades to harden them for winter."
+  },
+  {
+   "id": "m09-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Stake tall flowers to keep them from blowing over in fall winds."
+  },
+  {
+   "id": "m09-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Dig, clean and store tuberous begonias if frost threatens."
+  },
+  {
+   "id": "m09-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest potatoes when the tops die down. Store them in a dark location."
+  },
+  {
+   "id": "m09-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Optimal time for establishing a new lawn is August through mid-September."
+  },
+  {
+   "id": "m09-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Aerate lawns."
+  },
+  {
+   "id": "m09-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Apply 1 pound nitrogen per 1,000 square feet to lawns. Reduce risks of run-off into local waterways by not fertilizing just prior to rain, and not over-irrigating so that water runs off of lawn and onto sidewalk or street.",
+   "when": "Early-September"
+  },
+  {
+   "id": "m09-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-local",
+   "text": "Stop irrigating your lawn after Labor Day to suppress European crane fly populations.",
+   "region_label": "Willamette Valley"
+  },
+  {
+   "id": "m09-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Recycle disease-free plant material and kitchen vegetable and fruit scraps into compost."
+  },
+  {
+   "id": "m09-13",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Divide peonies and iris."
+  },
+  {
+   "id": "m09-14",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant or transplant woody ornamentals and mature herbaceous perennials. Fall planting of trees, shrubs and perennials can encourage healthy root growth over the winter."
+  },
+  {
+   "id": "m09-15",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant daffodils, tulips and crocus for spring bloom. Work calcium and phosphorus into the soil below the bulbs at planting time. Remember when purchasing bulbs, the size of the bulb is directly correlated to the size of the flower yet to come in spring."
+  },
+  {
+   "id": "m09-16",
+   "section": "Planting/propagation",
+   "region": "or-west",
+   "text": "Plant seeds of overwintering cover crops by September or early October so they get established before the weather turns cold and wet.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m09-17",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Apply parasitic nematodes to moist soil beneath rhododendrons and azaleas that show root weevil damage (notched leaves)."
+  },
+  {
+   "id": "m09-18",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control slugs as necessary. Least toxic management options include barriers and traps. Baits are also available for slug control; use caution around pets. Read and follow all label directions prior to using baits, or any other chemical control."
+  },
+  {
+   "id": "m09-19",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor trailing berries for leaf and cane spot. Treat if necessary."
+  },
+  {
+   "id": "m09-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "As necessary, apply copper spray for peach and cherry trees at the recommended timing."
+  },
+  {
+   "id": "m09-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray for juniper twig blight, as necessary, after pruning away dead and infected twigs."
+  },
+  {
+   "id": "m09-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Continue monitoring late-season soft fruits and berries for Spotted Wing Drosophila (SWD). If SWD are present, use an integrated and least toxic approach to manage the pests."
+  },
+  {
+   "id": "m09-23",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Spray susceptible varieties of potatoes and tomatoes for early and late blight.",
+   "region_label": "Coastal and Western valleys"
+  },
+  {
+   "id": "m09-24",
+   "section": "Indoor gardening",
+   "region": "or-all",
+   "text": "Clean houseplants, check for insects, and repot and fertilize if necessary; then bring them indoors."
+  }
+ ]
+}

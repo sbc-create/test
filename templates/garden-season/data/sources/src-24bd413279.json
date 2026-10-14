@@ -1,0 +1,28 @@
+{
+ "id": "src-24bd413279",
+ "url": "https://www.rhs.org.uk/vegetables/garlic/grow-your-own",
+ "fetched_at": "2026-10-12T21:03:16Z",
+ "page_sha256": "38b59399b9ebc23c982847052b07148bf385b640b730dd0c82b0cd8f25ac42ca",
+ "parser": "gs-facts/1.0",
+ "kind": "organization",
+ "publisher": "Royal Horticultural Society (RHS)",
+ "name": "How to grow garlic — RHS Guide",
+ "region_scope": "Великобритания",
+ "quotes": [
+  {
+   "id": "autumn",
+   "region": "uk",
+   "quote": "It's grown from cloves, which are best planted in autumn, and is ready to harvest the following year, in late spring and summer."
+  },
+  {
+   "id": "october",
+   "region": "uk",
+   "quote": "is best planted in October"
+  },
+  {
+   "id": "harvest",
+   "region": "uk",
+   "quote": "Harvest garlic when the leaves turn yellow and then leave them to dry in the sun"
+  }
+ ]
+}

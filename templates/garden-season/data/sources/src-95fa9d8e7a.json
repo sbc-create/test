@@ -1,0 +1,195 @@
+{
+ "id": "src-95fa9d8e7a",
+ "url": "https://extension.oregonstate.edu/catalog/em-9476-april-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:41Z",
+ "page_sha256": "1546039ef1b1674880298249e4133fa7a82d76c7c8d104af2dc728e9c4c7699d",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "April garden calendar",
+ "month": 4,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "March 2021",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m04-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Write in your garden journal throughout the growing season."
+  },
+  {
+   "id": "m04-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Prepare garden soil for spring planting. Incorporate generous amounts of organic materials and other amendments, using the results of a soil analysis as a guide."
+  },
+  {
+   "id": "m04-03",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Prepare raised beds in areas where cold soils and poor drainage are a continuing problem. Incorporate generous amounts (at least 2 inches) of organic materials."
+  },
+  {
+   "id": "m04-04",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Use a soil thermometer to help you know when to plant vegetables. When the soil is consistently above 60 degrees Fahrenheit, some warm-season vegetables (beans, sweet corn) can be planted."
+  },
+  {
+   "id": "m04-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Allow foliage of spring-flowering bulbs to brown and die down before removing."
+  },
+  {
+   "id": "m04-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Apply commercial fertilizers, manure or compost to cane, bush (gooseberries, currants, and blueberries), and trailing berries."
+  },
+  {
+   "id": "m04-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Place compost or decomposed manure around perennial vegetables, such as asparagus and rhubarb."
+  },
+  {
+   "id": "m04-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Cut back ornamental grasses to a few inches above the ground."
+  },
+  {
+   "id": "m04-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Cover transplants to protect against late spring frosts."
+  },
+  {
+   "id": "m04-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "This is an optimum time to fertilize lawns. Apply 1 pound nitrogen per 1,000 square feet of lawn. Reduce risks of runoff into local waterways by not fertilizing just prior to rain, and not overirrigating so that water runs off the lawn and onto the sidewalk or street."
+  },
+  {
+   "id": "m04-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "De-thatch and renovate lawns. If moss has been a problem, scratch the surface before seeding with perennial ryegrass.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m04-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune and shape or thin spring-blooming shrubs and trees after blossoms fade.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m04-13",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "If snow mold was a problem, scratch the surface. If turf damage is severe, seed with Kentucky bluegrass.",
+   "region_label": "Central/Eastern Oregon"
+  },
+  {
+   "id": "m04-14",
+   "section": "Maintenance and cleanup",
+   "region": "or-local",
+   "text": "Prune your deciduous trees and shrubs, using proper techniques.",
+   "region_label": "Central Oregon and higher elevations of eastern Oregon"
+  },
+  {
+   "id": "m04-15",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Plant gladioli, hardy transplants of alyssum, phlox and marigolds, if weather and soil conditions permit."
+  },
+  {
+   "id": "m04-16",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "It's a great time to start a vegetable garden. Among the vegetables you can plant, consider: Oregon Coast: Beets, cabbage, carrots, cauliflower, celery, chard, slicing cucumbers, endive, leeks, lettuce, onion sets, peas and potatoes."
+  },
+  {
+   "id": "m04-17",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Broccoli, Brussels sprouts, cabbage, carrots, cauliflower, chard, chives, endive, leeks, lettuce, peas, radishes, rhubarb, rutabagas, spinach and turnips.",
+   "region_label": "Western valleys, Portland, Roseburg, Medford"
+  },
+  {
+   "id": "m04-18",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Peas, radishes, lettuce, spinach and turnips.",
+   "region_label": "Central Oregon and higher elevations of Eastern Oregon (late April)"
+  },
+  {
+   "id": "m04-19",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Snap and lima beans, beets, broccoli, Brussels sprouts, cabbage, carrots, cauliflower, chard, chives, sweet corn, slicing and pickling cucumbers, kohlrabi, leeks, lettuce, onion sets, parsnips, peas, potatoes, pumpkins, radishes, rhubarb, rutabagas, summer and winter squash, and turnips.",
+   "region_label": "Columbia and Snake River valleys, Ontario"
+  },
+  {
+   "id": "m04-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Clean up hiding places for slugs, sowbugs and millipedes. Least toxic management options for slugs include barriers and traps. Baits are also available for slug control; use caution around pets. Read and follow all label directions prior to using baits or any other chemical control."
+  },
+  {
+   "id": "m04-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor strawberries for spittlebugs and aphids; if present, wash off with water or use insecticidal soap as a contact spray. Follow label directions."
+  },
+  {
+   "id": "m04-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If necessary, spray apples and pears when buds appear for scab. See Managing Diseases and Insects in Home Orchards."
+  },
+  {
+   "id": "m04-23",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Cut and remove weeds near the garden to remove potential sources of plant disease."
+  },
+  {
+   "id": "m04-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Use floating row covers to keep insects such as beet leaf miners, cabbage maggot adult flies and carrot rust flies away from susceptible crops."
+  },
+  {
+   "id": "m04-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Help prevent damping off of seedlings by providing adequate ventilation."
+  },
+  {
+   "id": "m04-26",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Place pheromone traps in apple or pear trees in late April to monitor codling moth activity.",
+   "region_label": "Southwest Oregon"
+  },
+  {
+   "id": "m04-27",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Manage weeds while they are small and actively growing with light cultivation or herbicides. Once the weed has gone to bud, herbicides are less effective.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m04-28",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Spray stone fruits, such as cherries, plums, peaches and apricots, for brown rot blossom blight, if necessary.",
+   "region_label": "Western Oregon"
+  }
+ ]
+}

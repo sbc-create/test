@@ -1,0 +1,245 @@
+{
+ "id": "src-138c3cca29",
+ "url": "https://extension.oregonstate.edu/catalog/em-9611-october-garden-calendar",
+ "fetched_at": "2026-10-12T21:02:03Z",
+ "page_sha256": "9e9d66eb171ce3e36a7a17601dde5d4b0d5432ae1fed1605bd9facbb6a7dd26f",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "October garden calendar",
+ "month": 10,
+ "region_scope": "Орегон, США",
+ "caveat": "Recommendations in this calendar are not necessarily applicable to all areas of Oregon.",
+ "published": "September 2020",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m10-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "If needed, improve soil drainage of lawns before rain begins."
+  },
+  {
+   "id": "m10-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "To become an OSU Master Gardener volunteer, register with your local Extension office. For additional information, visit OSU Master Gardener."
+  },
+  {
+   "id": "m10-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Recycle disease-free plant material and kitchen vegetable and fruit scraps into compost."
+  },
+  {
+   "id": "m10-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Drain or blow out your irrigation system and insulate valve mechanisms in preparation of winter."
+  },
+  {
+   "id": "m10-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Use newspaper or cardboard covered by mulch to discourage winter and spring annual weeds or remove a lawn area for conversion to garden beds. For conversion, work in the paper and mulch as organic matter once the lawn grass has died."
+  },
+  {
+   "id": "m10-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Clean and paint greenhouses and cold frames for plant storage and winter growth."
+  },
+  {
+   "id": "m10-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest sunflower heads; use seed for bird feed or roast for personal use."
+  },
+  {
+   "id": "m10-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Dig and store potatoes; keep in darkness, moderate humidity, temperature about 40°F. Discard unused potatoes if they sprout. Don't use as seed potatoes for next year."
+  },
+  {
+   "id": "m10-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest and immediately dry filberts and walnuts; dry at 95°–100°F."
+  },
+  {
+   "id": "m10-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Ripen green tomatoes indoors. Check often and discard rotting fruit."
+  },
+  {
+   "id": "m10-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Harvest and store apples; keep at about 40°F, moderate humidity."
+  },
+  {
+   "id": "m10-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Place mulch over roots of roses, azaleas, rhododendrons and berries for winter protection."
+  },
+  {
+   "id": "m10-13",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Trim or stake bushy herbaceous perennials to prevent wind damage."
+  },
+  {
+   "id": "m10-14",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "To suppress future pest problems, clean up annual flower beds by removing diseased plant materials, overwintering areas for insect pests; mulch with manure or garden compost to feed the soil and suppress weeds."
+  },
+  {
+   "id": "m10-15",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Cover asparagus and rhubarb beds with a mulch of manure or compost."
+  },
+  {
+   "id": "m10-16",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Clean, sharpen and oil tools and equipment before storing for winter."
+  },
+  {
+   "id": "m10-17",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Store garden supplies and fertilizers in a safe, dry place out of reach of children."
+  },
+  {
+   "id": "m10-18",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune out dead fruiting canes in raspberries."
+  },
+  {
+   "id": "m10-19",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Harvest squash and pumpkins; keep in dry area at 55°–60°F.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m10-20",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Spade organic material and lime into garden soil, as indicated by soil test results (if necessary and the weather permits).",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m10-21",
+   "section": "Maintenance and cleanup",
+   "region": "or-east",
+   "text": "Prune evergreens.",
+   "region_label": "Central/eastern Oregon"
+  },
+  {
+   "id": "m10-22",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Dig and divide rhubarb. (Should be done about every 4 years.)"
+  },
+  {
+   "id": "m10-23",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant garlic for harvesting next summer."
+  },
+  {
+   "id": "m10-24",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Propagate chrysanthemums, fuchsias and geraniums by stem cuttings."
+  },
+  {
+   "id": "m10-25",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Save seeds from the vegetable and flower garden. Dry, date, label, and store in a cool and dry location."
+  },
+  {
+   "id": "m10-26",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Plant ground covers, trees and shrubs."
+  },
+  {
+   "id": "m10-27",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Dig and store geraniums, tuberous begonias, dahlias and gladiolas."
+  },
+  {
+   "id": "m10-28",
+   "section": "Planting/propagation",
+   "region": "or-all",
+   "text": "Pot and store tulips and daffodils to force into early bloom, indoors, in December and January."
+  },
+  {
+   "id": "m10-29",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Remove and dispose of windfall apples that might be harboring apple maggot or codling moth larvae."
+  },
+  {
+   "id": "m10-30",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Rake and destroy diseased leaves (apple, cherry, rose, etc.), or hot compost diseased leaves."
+  },
+  {
+   "id": "m10-31",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Spray apple and stone fruit trees at leaf fall to prevent various fungal and bacterial diseases."
+  },
+  {
+   "id": "m10-32",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If moles and gophers are a problem, consider traps."
+  },
+  {
+   "id": "m10-33",
+   "section": "Pest monitoring and management",
+   "region": "or-west",
+   "text": "Control fall-germinating lawn weeds while they are small. Hand weeding and weeding tools are particularly effective at this stage.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m10-34",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Monitor landscape plants for problems. Don't treat unless a problem is identified."
+  },
+  {
+   "id": "m10-35",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Reduce water, place in cool area (50–55°F) and increase time in shade or darkness (12–14 hours) to force Christmas cactus to bloom in late December.",
+   "when": "Early October"
+  },
+  {
+   "id": "m10-36",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-all",
+   "text": "Place hanging pots of fuchsias where they won't freeze. Don't cut back until spring."
+  },
+  {
+   "id": "m10-37",
+   "section": "Houseplants and indoor gardening",
+   "region": "or-west",
+   "text": "Check/treat houseplants for disease and insects before bringing indoors.",
+   "region_label": "Western Oregon"
+  }
+ ]
+}

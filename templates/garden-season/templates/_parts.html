@@ -1,0 +1,12 @@
+{% macro region_chip(r, label=None) %}<span class="rg rg--{{ r }}"><span class="rg__dot" aria-hidden="true"></span>{{ REGIONS[r] }}{% if label and r in ('or-local', 'or-east') %}: <span lang="en">{{ label }}</span>{% endif %}</span>{% endmacro %}
+
+{% macro card(w, heading='h3') %}
+<article class="wk">
+  <p class="wk__meta">{{ w.type_label }}{% if w.crop_label %} · {{ w.crop_label }}{% endif %}</p>
+  <{{ heading }} class="wk__t"><a href="{{ w.url }}">{{ w.title }}</a></{{ heading }}>
+  <p class="wk__months" aria-label="Месяцы">{% for m in w.months %}<span>{{ MONTHS[m - 1][:3] }}</span>{% endfor %}</p>
+  <p class="wk__regions">{% for r in w.regions %}{{ region_chip(r) }}{% endfor %}</p>
+</article>
+{% endmacro %}
+
+{% macro grid(items, heading='h3') %}<div class="wks">{% for w in items %}{{ card(w, heading) }}{% endfor %}</div>{% endmacro %}

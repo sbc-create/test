@@ -1,0 +1,227 @@
+{
+ "id": "src-f60feacc36",
+ "url": "https://extension.oregonstate.edu/catalog/em-9539-august-garden-calendar",
+ "fetched_at": "2026-10-12T21:01:57Z",
+ "page_sha256": "92606409a6ad2ee71aa7246939c3c6b5a579dd1d2c38b15343dd0b049b016069",
+ "parser": "gs-facts/1.0",
+ "kind": "university",
+ "publisher": "Oregon State University Extension Service",
+ "name": "August garden calendar",
+ "month": 8,
+ "region_scope": "Орегон, США",
+ "caveat": "These tips are not necessarily applicable to all areas of Oregon.",
+ "published": "July 2020",
+ "reviewed": "2025",
+ "items": [
+  {
+   "id": "m08-01",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "The optimal time for establishing a new lawn is August through mid-September."
+  },
+  {
+   "id": "m08-02",
+   "section": "Planning",
+   "region": "or-all",
+   "text": "Dampwood termites begin flying late this month. Make sure your home is free of wet wood or places where wood and soil are in contact."
+  },
+  {
+   "id": "m08-03",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Make compost out of lawn clippings and garden plants that are ready to be recycled. Don't use clippings if the lawn has been treated with herbicide, including \"weed-and-feed\" products. Don't compost diseased plants unless you are using the \"hot compost\" method (120 degrees to 150 degrees Fahrenheit)."
+  },
+  {
+   "id": "m08-04",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Fertilize cucumbers, summer squash and broccoli to maintain production while you continue harvesting."
+  },
+  {
+   "id": "m08-05",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Clean and fertilize strawberry beds."
+  },
+  {
+   "id": "m08-06",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Use mulch to protect ornamentals and garden plants from hot weather damage. If needed, provide temporary shade, especially for recent plantings."
+  },
+  {
+   "id": "m08-07",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Camellias need deep watering to develop flower buds for next spring."
+  },
+  {
+   "id": "m08-08",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune raspberries, boysenberries and other caneberries after harvest. Check raspberries for holes made by crown borers, near the soil line, at the base of the plant. Remove infested wood before adults emerge (approximately mid-August)."
+  },
+  {
+   "id": "m08-09",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Monitor garden irrigation closely so crops and ornamentals don't dry out."
+  },
+  {
+   "id": "m08-10",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "If you want your lawn to stay green, you'll have to water frequently during periods of heat and drought stress. Irrigate 0.25 inches four to six times per week from June through August. Measure your water use by placing an empty tuna can where your irrigation water lands."
+  },
+  {
+   "id": "m08-11",
+   "section": "Maintenance and cleanup",
+   "region": "or-all",
+   "text": "Prune cherry trees before fall rains begin to allow callusing in dry weather. This will minimize the spread of bacterial canker."
+  },
+  {
+   "id": "m08-12",
+   "section": "Maintenance and cleanup",
+   "region": "or-west",
+   "text": "Prune out dead fruiting canes in trailing blackberries and train new primocanes prior the to end of the month.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m08-13",
+   "section": "Maintenance and cleanup",
+   "region": "or-local",
+   "text": "Prune away excess vegetation and new blossoms on tomatoes after mid-August. Concentrate on ripening set fruit.",
+   "region_label": "High elevations, Central and Eastern Oregon"
+  },
+  {
+   "id": "m08-14",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Plant winter cover crops in vacant space in the vegetable garden"
+  },
+  {
+   "id": "m08-15",
+   "section": "Planting and propagation",
+   "region": "or-all",
+   "text": "Plant winter kale, Brussels sprouts, turnips, parsnips, parsley and Chinese cabbage."
+  },
+  {
+   "id": "m08-16",
+   "section": "Planting and propagation",
+   "region": "or-west",
+   "text": "Mid-summer planting of peas; use enation-virus-resistant varieties. Plant fall crops of cabbage, cauliflower and broccoli.",
+   "region_label": "Western Oregon"
+  },
+  {
+   "id": "m08-17",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Plant spinach.",
+   "region_label": "Oregon Coast"
+  },
+  {
+   "id": "m08-18",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Plant cauliflower, broccoli, Brussels sprouts, spinach, turnips and parsnips.",
+   "region_label": "Western valleys, Portland, Roseburg, Medford"
+  },
+  {
+   "id": "m08-19",
+   "section": "Planting and propagation",
+   "region": "or-local",
+   "text": "Plant Chinese cabbage and endive.",
+   "region_label": "Columbia and Snake River Valleys, Ontario"
+  },
+  {
+   "id": "m08-20",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Remove cankered limbs from fruit and nut trees for control of diseases such as apple anthracnose and bacterial canker of stone fruit. Sterilize tools before each new cut."
+  },
+  {
+   "id": "m08-21",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check apple maggot traps; spray tree if needed."
+  },
+  {
+   "id": "m08-22",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Control yellowjackets and wasps with traps and lures as necessary. Keep in mind they are beneficial insects and help control pest insects in the home garden."
+  },
+  {
+   "id": "m08-23",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If necessary, spray for walnut husk fly.",
+   "when": "First week"
+  },
+  {
+   "id": "m08-24",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If necessary, second spray for peach tree borer and/or peach twig borer.",
+   "when": "First week"
+  },
+  {
+   "id": "m08-25",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "If necessary, second spray of filbert trees for filbertworm.",
+   "when": "First week"
+  },
+  {
+   "id": "m08-26",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check for root weevils in ornamental shrubs and flowers; codling moth and spider mite in apple trees; scale insects in camellias, holly and maples. Treat as necessary."
+  },
+  {
+   "id": "m08-27",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Watch for corn earworm on early corn. Treat as needed."
+  },
+  {
+   "id": "m08-28",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "For mite control on ornamentals and most vegetables, hose off foliage, spray with approved miticide if necessary."
+  },
+  {
+   "id": "m08-29",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Check leafy vegetables for caterpillars. Pick off caterpillars as they appear. Use Bt-k, if necessary."
+  },
+  {
+   "id": "m08-30",
+   "section": "Pest monitoring and management",
+   "region": "or-all",
+   "text": "Continue monitoring peaches, plums, prunes, figs, fall-bearing raspberries and strawberries, and other plants that produce soft fruits and berries for Spotted Wing Drosophila. If SWD are present, use an integrated and least toxic approach to manage the pests."
+  },
+  {
+   "id": "m08-31",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Corn may need protection from earworm. Spray new silks with appropriate pesticides if necessary.",
+   "region_label": "Willamette Valley"
+  },
+  {
+   "id": "m08-32",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Check for tomato hornworm. Remove them if found.",
+   "region_label": "East of Cascades"
+  },
+  {
+   "id": "m08-33",
+   "section": "Pest monitoring and management",
+   "region": "or-local",
+   "text": "Spray potatoes and tomatoes for early and late blight.",
+   "region_label": "Coastal and western valleys"
+  }
+ ]
+}
