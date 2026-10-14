@@ -1649,7 +1649,7 @@
       "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
       "status": "queued",
       "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
-      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049)."
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T140646Z-2293845 — VERIFIED 9/9; diff просмотрен (тот же фильтр, что T054); ветка claude/review-lords-t088 a14a9af отправлена. Не опубликовано: ждёт решения по T054."
     },
     {
       "id": "T089",
@@ -1666,7 +1666,7 @@
       "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
       "status": "queued",
       "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
-      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049)."
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T141030Z-2320528 — VERIFIED 9/9; diff просмотрен; ветка claude/review-lords-t089 0f60b01 (база ebfeb82 с канарейкой T087) отправлена. Не опубликовано: ждёт решения по T054; на lords-05 выпуск одной веткой с T072/T076."
     }
   ]
 }
