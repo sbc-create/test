@@ -259,7 +259,12 @@ def опубликовать_одну(к: dict, state: Path, *, dry_run: bool = 
         if ci != "success":
             # cancelled — обычно чужой push в ту же ветку: следующий проход решит заново.
             return _записать(state, {**база, "outcome": f"ci_{ci}"})
-        co = _git(репо, "checkout", "-q", "--detach", head)
+        # Общий клон: если он стоит на ветке выпуска (так держит его Архитектор), ветка
+        # продвигается fast-forward и клон остаётся на ней; иначе — отделённый HEAD на голове.
+        if _git(репо, "branch", "--show-current").stdout.strip() == ветка:
+            co = _git(репо, "merge", "-q", "--ff-only", head)
+        else:
+            co = _git(репо, "checkout", "-q", "--detach", head)
         if co.returncode:
             return _записать(state, {**база, "outcome": "checkout_failed", "reason": co.stderr.strip()[-300:]})
         t2 = _trigger(c["site_id"], confirm=True)
