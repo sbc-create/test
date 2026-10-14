@@ -133,12 +133,18 @@ flex:1 1 80px;min-width:80px;max-width:100%}"""
 #: ради имени — менять одно на другое. Кегль 14px вместо 16 даёт около 12 %
 #: ширины, то есть примерно двадцать три пикселя: имя помещается с запасом.
 КЕГЛЬ_БЫЛО = ".hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:16px;"
-КЕГЛЬ_СТАЛО = ".hd__logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;"
+#: Фиксированные 14px спасли короткое имя (lordserial.su), но измерение по всей
+#: партии показало: у длинных (lordserial.msk.ru — семнадцать знаков) имя всё
+#: ещё режется на 390 пикселях. Поэтому кегль плавающий: `clamp` даёт 12.5px
+#: на узком экране и 14px на широком, а межбуквенный интервал на телефоне
+#: убирается совсем — он добавлял имени почти пять пикселей ни за чем.
+КЕГЛЬ_СТАЛО = (".hd__logo{display:flex;align-items:center;gap:8px;font-weight:800;"
+               "font-size:clamp(11.5px,3.2vw,14px);")
 
 МОБ_ЛОГО_БЫЛО = ("letter-spacing:.3px;text-transform:uppercase;color:@INK@;flex:0 1 auto;\n"
                  "max-width:min(62vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}")
-МОБ_ЛОГО_СТАЛО = ("letter-spacing:.2px;text-transform:uppercase;color:@INK@;flex:0 1 auto;\n"
-                  "max-width:min(52vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}")
+МОБ_ЛОГО_СТАЛО = ("letter-spacing:0;text-transform:uppercase;color:@INK@;flex:0 1 auto;\n"
+                  "max-width:min(56vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}")
 
 
 #: Подзаголовок и «О каталоге» — по НАПРАВЛЕНИЮ витрины. Тексты взяты из
