@@ -49,6 +49,16 @@
       "scope_page_share": 0.096,
       "phase": "canary",
       "evidence": "docs/seo-operator/DAY_20261014.md §7; checks/episode_jsonld.py (база rc=1, правка rc=0); измерение — после выгрузок Метрики, Вебмастер заблокирован B023"
+    },
+    {
+      "experiment_id": "exp-lords-title-kind-year",
+      "site_id": "lords-05",
+      "hypothesis": "Вид и год в <title> страницы тайтла (из видимых фактов карточки) повышают совпадение с запросами вида «<название> сериал 2026» и кликабельность сниппета",
+      "primary_metric": "поисковые входы на страницы тайтлов выборки против контроля того же сайта (Метрика, search_landing_pages) за 7 и 28 дней; показы и CTR — после возвращения Вебмастера (B023)",
+      "applicability": "lordserials22.info: 5 283 из 64 508 тайтлов (выборка по слагу, без одноимённых); контроль — прочие тайтлы lords-05 и lords-01..03",
+      "scope_page_share": 0.082,
+      "phase": "canary",
+      "evidence": "docs/seo-operator/DAY_20261014.md §8; checks/title_kind_year.py (база rc=1, правка rc=0)"
     }
   ]
 }

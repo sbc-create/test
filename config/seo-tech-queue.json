@@ -1617,6 +1617,22 @@
       "status": "session",
       "review": "видимое изменение строки жанров — выпуск после просмотра; сначала образец на одном сайте",
       "evidence": "14.10 ~12:35Z: link_targets.py — lordserial33.biz /title/siniy-zontik/ ссылается на /genre/zapadnyykontent/ (noindex, follow). 14.10: подготовлено и проверено — lordserial33-biz 339e700 на ветке claude/review-lords-t086 (отправлена для просмотра): card_service_genre прежний rc=1, ветка rc=0; run.sh на урезанном снимке rc=0. Скриншоты — docs/seo-operator/review-20261014 §7. Не опубликовано: видимое."
+    },
+    {
+      "id": "T087",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/title/escaype-live/"
+      ],
+      "problem": "Поисковые входы lordserials22.info: 79 % — тайтлы, 18 % — серии. <title> тайтла без вида и года, хотя они в видимых фактах карточки.",
+      "norm": "SEO_KNOWLEDGE_PACK: title — точное название страницы из её содержимого; изменение-гипотеза — канарейкой (≤10 % страниц, запись в experiments.json)",
+      "expected": "у тайтлов выборки «<название> (<вид>, <год>)» в <title>; контроль без изменений; оценка через 7 и 28 дней",
+      "check": "checks/title_kind_year.py",
+      "verify_live": "<title> выборки с видом и годом, контроля — прежний",
+      "status": "live_verified",
+      "evidence": "14.10: ebfeb82, CI 38566959973, lords-05 ok 12:56Z. Живой: escaype-live → «Escaype Live (сериал, 2022) — смотреть онлайн — …», story-9-months-ki — так же; контроль akademiya-vedm, preduprezhdenie — прежний <title>. robots с Sitemap, серий в карте (T075) 499. Эксперимент exp-lords-title-kind-year (canary, 8,2 % страниц)."
     }
   ]
 }
