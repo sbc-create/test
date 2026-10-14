@@ -55,8 +55,11 @@ def measure(ref: str) -> dict:
     out_dir = PATHS.root / "artifacts" / "reference"
     out_dir.mkdir(parents=True, exist_ok=True)
 
-    chromium = Path(os.environ.get("FACTORY_CHROMIUM",
-                                   "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"))
+    # Путь к сборке ищется там же, где и для браузерной приёмки: номер
+    # сборки, вписанный числом, объявлял установленный браузер отсутствующим.
+    from factory.seo.render_check import chromium_path
+
+    chromium = Path(chromium_path() or "")
     if not chromium.exists():
         summary = {"ref": ref, "url": url, "status": "unavailable_tool",
                    "reason": f"Chromium не найден по пути {chromium}",

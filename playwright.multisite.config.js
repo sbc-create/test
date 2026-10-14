@@ -3,7 +3,8 @@
 // стенд правилами Chromium: так проверяется настоящий заголовок Host, а не подмена.
 const { defineConfig, devices } = require('@playwright/test');
 
-const CHROMIUM = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const { chromiumPath } = require('./tools/chromium-path');
+const CHROMIUM = chromiumPath();
 const PORT = process.env.FACTORY_MULTISITE_PORT || '3000';
 
 const hostRules = ['site-a.localhost', 'site-b.localhost', 'site-c.localhost']

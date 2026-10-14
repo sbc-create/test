@@ -11,7 +11,8 @@ const path = require('path');
 const url = process.argv[2];
 const outDir = process.argv[3];
 const viewports = process.argv[4].split(',').map(Number);
-const executablePath = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const { chromiumPath } = require('../../tools/chromium-path');
+const executablePath = chromiumPath();
 
 const measureInPage = () => {
   const round = (value) => Math.round(value * 100) / 100;

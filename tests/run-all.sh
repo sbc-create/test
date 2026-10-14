@@ -196,7 +196,9 @@ else
   # playwright-конфига. Жёсткий путь оставлен запасным вариантом: имя каталога
   # содержит ревизию Playwright и меняется вместе с ней, поэтому проверка по
   # одному только этому пути объявляла бы установленный браузер отсутствующим.
-  CHROMIUM_BIN="${FACTORY_CHROMIUM:-/opt/pw-browsers/chromium-1194/chrome-linux/chrome}"
+  # Путь берётся тем же поиском, что и в остальных местах: имя каталога
+  # содержит ревизию Playwright и меняется вместе с ней.
+  CHROMIUM_BIN="$(python3 -c "from factory.seo.render_check import chromium_path; print(chromium_path() or '')" 2>/dev/null || true)"
   if [ -x "$CHROMIUM_BIN" ]; then
     run "payload-browser"   "python3 tests/tools/browser_multisite.py"
   else

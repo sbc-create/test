@@ -24,7 +24,8 @@ const OUT = arg('--out', '.');
 // любым пользователем машины, и пароль стенда утекал бы всем локальным
 // процессам на всё время прогона.
 const AUTH = process.env.FACTORY_STAGING_AUTH || '';
-const EXECUTABLE = arg('--executable', process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome');
+const { chromiumPath } = require('./chromium-path');
+const EXECUTABLE = arg('--executable', chromiumPath());
 const VIEWPORTS = [
   { name: 'mobile-360', width: 360, height: 780, isMobile: true },
   { name: 'mobile-390', width: 390, height: 844, isMobile: true },

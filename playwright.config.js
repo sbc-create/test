@@ -5,7 +5,10 @@
 // и шаг помечается SKIPPED, а не выдаётся за пройденный.
 const { defineConfig, devices } = require('@playwright/test');
 
-const CHROMIUM = process.env.FACTORY_CHROMIUM || '/opt/pw-browsers/chromium-1194/chrome-linux/chrome';
+const { chromiumPath } = require('./tools/chromium-path');
+// Путь к сборке — из одного места: номер сборки, вписанный числом,
+// выключал весь e2e на машине с другой сборкой.
+const CHROMIUM = chromiumPath();
 const BASE_URL = process.env.FACTORY_BASE_URL || 'http://127.0.0.1:8082';
 const AUTH = process.env.FACTORY_STAGING_AUTH || '';
 

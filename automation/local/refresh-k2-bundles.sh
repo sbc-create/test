@@ -58,7 +58,10 @@ for site in $sites; do
   got_head="$(printf '%s' "$out" | sed -n 's/.*head=\([0-9a-f]*\).*/\1/p' | head -1)"
   got_marker="$(printf '%s' "$out" | sed -n 's/.*marker=\([0-9]*\).*/\1/p' | head -1)"
   if [ "$got_sum" = "$sum" ] && [ "$got_head" = "$head_sha" ] && [ "${got_marker:-0}" -gt 0 ]; then
-    echo "$site: голова $head_sha, сумма сошлась, признак «$marker» найден ($got_marker раз)"
+    # Фигурные скобки обязательны: за именем сразу идёт «»», и граница имени
+  # перестаёт быть очевидной — сторож ASCII-имён прочитал здесь «marker»»
+  # как одно имя. Читателю она тоже не очевидна.
+    echo "$site: голова $head_sha, сумма сошлась, признак «${marker}» найден (${got_marker} раз)"
     ok=$((ok + 1))
   else
     echo "[x] $site: сумма '$got_sum' против '$sum'; голова '$got_head' против '$head_sha'; признак '$got_marker'"

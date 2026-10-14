@@ -28,7 +28,11 @@ def free_port() -> int:
 
 
 def main() -> int:
-    chromium = Path(os.environ.get("FACTORY_CHROMIUM", "/opt/pw-browsers/chromium-1194/chrome-linux/chrome"))
+    # Общий поиск сборки: см. factory/seo/render_check.chromium_path.
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
+    from factory.seo.render_check import chromium_path
+
+    chromium = Path(chromium_path() or "")
     if not chromium.exists():
         print(f"SKIPPED: Chromium не найден по пути {chromium}; браузерная приёмка не выполнялась")
         return 2

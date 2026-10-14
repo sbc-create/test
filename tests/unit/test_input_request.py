@@ -14,9 +14,27 @@ def test_collect_returns_structured_items():
 
 def test_known_gaps_are_reported():
     fields = {item["field"] for item in collect()}
-    for expected in ("dle_license", "dle_distribution", "dle_paths_profile", "ssh_host",
+    for expected in ("dle_license", "dle_distribution", "dle_paths_profile",
                      "vk_catalog", "vk_player_contract", "vk_ads_contract"):
         assert expected in fields, f"в запросе нет: {expected}"
+
+
+def test_ssh_host_requested_exactly_while_inventory_is_empty():
+    """`ssh_host` — не вечный пункт списка, а СЛЕДСТВИЕ пустого реестра.
+
+    13 октября владелец передал первый SSH-хост, и пункт из запроса ушёл —
+    правильно. Проверка, перечислявшая `ssh_host` поимённо, после этого
+    падала на верном поведении. Теперь проверяется само правило: пункт есть
+    тогда и только тогда, когда в реестре нет ни одного хоста.
+    """
+    from factory import inventory
+
+    есть_хосты = bool(inventory.load("ssh-hosts.yaml").get("hosts"))
+    fields = {item["field"] for item in collect()}
+    assert ("ssh_host" in fields) is not есть_хосты, (
+        "запрос расходится с реестром: хосты "
+        f"{'есть' if есть_хосты else 'отсутствуют'}, а пункт "
+        f"{'присутствует' if 'ssh_host' in fields else 'отсутствует'}")
 
 
 def test_no_secret_values_in_examples():

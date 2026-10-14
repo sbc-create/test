@@ -20,11 +20,40 @@ CHROMIUM_CANDIDATES = (
     "/opt/pw-browsers/chromium/chrome-linux/chrome",
 )
 
+#: Где искать сборку, когда точного пути в списке нет.
+#:
+#: Номер сборки в списке выше закреплён числом (1194), и этим он стареет
+#: ровно так же, как дата в коде: на машине с chromium-1234 и chromium-1243
+#: проверка сообщала «исполняемый Chromium не найден» и отдавала статус
+#: `unavailable` — то есть вся браузерная приёмка молча переставала
+#: выполняться из-за номера каталога. Поэтому ниже идёт поиск по шаблону,
+#: от НОВОЙ сборки к старой; явный `FACTORY_CHROMIUM` по-прежнему главнее.
+КАТАЛОГИ_СБОРОК = (
+    Path("/opt/pw-browsers"),
+    Path.home() / ".cache" / "ms-playwright",
+)
+ИМЕНА_ВНУТРИ = ("chrome-linux/chrome", "chrome-linux64/chrome")
+
+
+def _по_шаблону() -> list[Path]:
+    найдено: list[Path] = []
+    for корень in КАТАЛОГИ_СБОРОК:
+        if not корень.is_dir():
+            continue
+        for каталог in sorted(корень.glob("chromium-*"), reverse=True):
+            for хвост in ИМЕНА_ВНУТРИ:
+                кандидат = каталог / хвост
+                if кандидат.exists():
+                    найдено.append(кандидат)
+    return найдено
+
 
 def chromium_path() -> str | None:
     for candidate in CHROMIUM_CANDIDATES:
         if candidate and Path(candidate).exists():
             return candidate
+    for кандидат in _по_шаблону():
+        return str(кандидат)
     return shutil.which("chromium") or shutil.which("google-chrome")
 
 
