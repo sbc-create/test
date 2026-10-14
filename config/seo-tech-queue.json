@@ -1466,6 +1466,23 @@
       "verify_live": "после выпуска: ?genre=aziatskiykontent — noindex; в карте нет",
       "status": "session",
       "evidence": "14.10: найдено при подготовке скриншотов T034. Живой zonafilm12: ?genre=aziatskiykontent — 200, «index, follow», H1 «Азиатский контент», адрес в sitemap-*.xml (98 разделов жанров). Правка — следом, на ветке claude/review-zona-batchb, до выпуска T034."
+    },
+    {
+      "id": "T078",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/robots.txt",
+        "https://an1mego.site/random/"
+      ],
+      "problem": "Обход 13–14.10: с каждой страницы AnimeGo две ссылки на /random/ — 303 на случайный тайтл; в robots.txt путь не закрыт (у Yummy закрыт: Disallow: /catalog/random). Обходчик получает бесконечный набор переходов вместо страниц.",
+      "norm": "служебные пути без собственного содержимого закрыты в robots.txt (СЛУЖЕБНЫЕ_ЗАПРЕТЫ, src/indexing_mode.py); переход на случайную страницу — не страница",
+      "expected": "в открытом режиме robots.txt содержит «Disallow: /random/»; ссылки и сам переход для посетителя не меняются; закрытый режим не меняется",
+      "check": "checks/robots_random.py",
+      "verify_live": "после выпуска: https://an1mego.site/robots.txt содержит Disallow: /random/",
+      "status": "queued",
+      "evidence": "14.10: найдено аудитом обхода (crawl 13.10: /random/ 303 на трёх AnimeGo; robots трёх AnimeGo без /random/). Поставлено как queued — первая задача для проверки фонового механизма seo-tech-run (B006) от начала до конца; одна витрина, без видимых изменений. Перенос на animeg0.site и an1meg0.site — после вердикта."
     }
   ]
 }
