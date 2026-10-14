@@ -40,6 +40,22 @@ def модуль_юнитов():
     return м
 
 
+def перечитывание_из_реестра() -> dict[str, str]:
+    """site_id → `runtime.reload` прямо из реестра.
+
+    Через `install-cell-units.ячейки()` это поле не приходит: оно ему не нужно.
+    Брать его оттуда значило бы получать `None` у всех и не заметить этого.
+    """
+    данные = json.loads((КОРЕНЬ / "config" / "site-cells.json")
+                        .read_text(encoding="utf-8"))
+    итог: dict[str, str] = {}
+    for c in данные.get("cells") or []:
+        значение = (c.get("runtime") or {}).get("reload")
+        if значение:
+            итог[c["site_id"]] = str(значение)
+    return итог
+
+
 def сумма(путь: Path) -> str:
     return hashlib.sha256(путь.read_bytes()).hexdigest()
 
@@ -101,9 +117,15 @@ def main() -> int:
         апстрим = выход / "cells" / f"{site_id}.upstream"
         апстрим.write_text(f"server 127.0.0.1:{я['port']};\n", encoding="utf-8")
         файлы.append(f"cells/{апстрим.name}")
+        # Как витрина подхватывает новый снимок: `mtime` — сама, `restart` —
+        # только перезапуском службы. Поле приходит из реестра; отсутствие
+        # трактуется как `restart`, потому что устаревший каталог при живом
+        # ответе 200 — это молчащая неправда, а лишний перезапуск — всего лишь
+        # лишний перезапуск.
+        перечитывание = (перечитывание_из_реестра().get(site_id) or "restart")
         опись["cells"][site_id] = {
             "domain": я["domain"], "account": я["account"], "port": я["port"],
-            "unit": я["unit"],
+            "unit": я["unit"], "reload": перечитывание,
             "files": {ф: сумма(выход / ф) for ф in файлы},
         }
 

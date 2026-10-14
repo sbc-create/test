@@ -171,7 +171,51 @@ PY
             "$box/$site-data-provenance.json" "$data/"
   log "$site: установлено в $data (владелец $account, режим 0640)"
 
-  # 4. Входящий комплект убирается, чтобы следующий прогон не ставил то же
+  # 4. Витрина обязана УВИДЕТЬ новый снимок. У этой партии реестр объявляет
+  # `reload: restart` — рантайм читает каталог при старте, а не по mtime.
+  # Установить данные и не перезапустить значило бы оставить старый каталог
+  # при свежих файлах на диске: снаружи сайт отвечает 200, и отличить это
+  # неоткуда. Если служба не запущена — перезапускать нечего, и это говорится.
+  read -r unit reload <<EOF
+$(python3 - "$manifest" "$site" <<'PY'
+import json, sys
+cells = json.load(open(sys.argv[1], encoding="utf-8")).get("cells") or {}
+cell = cells.get(sys.argv[2]) or {}
+print(cell.get("unit", ""), cell.get("reload", "restart"))
+PY
+)
+EOF
+  port=$(python3 - "$manifest" "$site" <<'PY'
+import json, sys
+cells = json.load(open(sys.argv[1], encoding="utf-8")).get("cells") or {}
+print((cells.get(sys.argv[2]) or {}).get("port", ""))
+PY
+)
+  if [ "$reload" = "mtime" ]; then
+    log "$site: рантайм перечитывает снимок сам (reload=mtime), перезапуск не нужен"
+  elif [ -z "$unit" ]; then
+    log "$site: юнит в описи не назван — перезапуск пропущен"
+  elif ! systemctl is-active --quiet "$unit" 2>/dev/null; then
+    log "$site: служба $unit не запущена — перезапускать нечего"
+  elif systemctl restart "$unit"; then
+    log "$site: $unit перезапущен (reload=$reload)"
+    back=0
+    for _ in $(seq 1 90); do
+      if curl -fsS --max-time 3 "127.0.0.1:$port/healthz" >/dev/null 2>&1; then back=1; break; fi
+      sleep 1
+    done
+    if [ "$back" = 1 ]; then
+      log "$site: после перезапуска healthz отвечает"
+    else
+      bad "$site: после перезапуска healthz молчит 90 с — смотреть журнал юнита"
+      failed=$((failed + 1))
+    fi
+  else
+    bad "$site: перезапуск $unit не удался"
+    failed=$((failed + 1))
+  fi
+
+  # 5. Входящий комплект убирается, чтобы следующий прогон не ставил то же
   # второй раз; суммы и провенанс остаются рядом с данными.
   rm -rf "$box"
   applied=$((applied + 1))
