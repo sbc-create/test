@@ -1017,9 +1017,9 @@
       "norm": "задание п.3 — внутренние ссылки на работающие разделы; T044",
       "expected": "колонка «Жанры» подвала без служебных меток (_служебный_раздел_жанра), восьмой слот — следующий настоящий жанр",
       "check": "checks/home_genre_links.py (как в T049): все ссылки /genre/ подвала — 200 и index",
-      "status": "session",
+      "status": "live_verified",
       "review": "Видимое изменение подвала (одна ссылка меняется): выпуск после просмотра человеком, вместе с T049.",
-      "evidence": "13.10 ~13:15Z, живые главные lordfilm47.space, 1lordserials1.online, lordserials22.info: первая ссылка колонки «Жанры» подвала — /genre/zapadnyykontent/. 14.10 ночь: образец на ветке claude/review-lords-t054 (lordfilm47-space 7a4a392, без пуша): выборка подвала пропускает служебные разделы (_служебный_раздел_жанра; после T064 — и «азиатский контент»); checks/home_genre_links.py: прежний код rc=1, ветка rc=0; run.sh rc=0 (38 PASS)."
+      "evidence": "13.10 ~13:15Z, живые главные lordfilm47.space, 1lordserials1.online, lordserials22.info: первая ссылка колонки «Жанры» подвала — /genre/zapadnyykontent/. 14.10 ночь: образец на ветке claude/review-lords-t054 (lordfilm47-space 7a4a392, без пуша): выборка подвала пропускает служебные разделы (_служебный_раздел_жанра; после T064 — и «азиатский контент»); checks/home_genre_links.py: прежний код rc=1, ветка rc=0; run.sh rc=0 (38 PASS). 14.10: выпущено 7a4a392, CI 38581012793, lords-01 ok 14:37Z; живой подвал lordfilm47.space — 8 жанров, меток нет."
     },
     {
       "id": "T055",
@@ -1381,9 +1381,9 @@
       "norm": "SEO_KNOWLEDGE_PACK §4 п.1 — уникальный title и понятный H1",
       "expected": "«Аниме», «Дорамы» в title, H1 и описании",
       "check": "checks/section_titles_distinct.py (урезанный стенд)",
-      "status": "session",
+      "status": "live_verified",
       "review": "Видимое изменение (H1): выпуск после просмотра.",
-      "evidence": "Ветка claude/review-lords-t072 (lordserials22-info 5ff451f, без пуша); прежний код rc=1, ветка rc=0; полный run.sh rc=0 (38 PASS). 14.10: ветка перебазирована на ff8a4b0 (без этого выпуск откатил бы канарейку T075), замок пересчитан b06c255; добавлен T076; ветка отправлена на GitHub для просмотра; скриншоты — docs/seo-operator/review-20261014.",
+      "evidence": "Ветка claude/review-lords-t072 (lordserials22-info 5ff451f, без пуша); прежний код rc=1, ветка rc=0; полный run.sh rc=0 (38 PASS). 14.10: ветка перебазирована на ff8a4b0 (без этого выпуск откатил бы канарейку T075), замок пересчитан b06c255; добавлен T076; ветка отправлена на GitHub для просмотра; скриншоты — docs/seo-operator/review-20261014. 14.10: выпущено одной веткой с T076 и T089 поверх ebfeb82 (T087): 851b7ef, run.sh на урезанном снимке 40 PASS, CI 38585272497, lords-05 ok 15:04Z; живые /anime/ и /dorama/ — title и H1 «Аниме»/«Дорамы».",
       "dependencies": "просмотр человеком"
     },
     {
@@ -1448,8 +1448,8 @@
       "expected": "у голых разделов маршрута нет плашек и «Сбросить»; выбранный год даёт плашку «Год» и «Сбросить»",
       "check": "checks/route_section_chip.py (урезанный стенд): прежний код rc=1",
       "verify_live": "после выпуска: на живых /anime/ и /dorama/ нет «section:» и filt__reset",
-      "status": "session",
-      "evidence": "14.10: подготовлено и проверено — f93fa23 на ветке claude/review-lords-t072 (вместе с T072, перебазировано на ff8a4b0); route_section_chip: прежний rc=1, ветка rc=0; run.sh на урезанном снимке 38 PASS / 0 FAIL. Не опубликовано: видимое изменение, ждёт просмотра (docs/seo-operator/review-20261014)."
+      "status": "live_verified",
+      "evidence": "14.10: подготовлено и проверено — f93fa23 на ветке claude/review-lords-t072 (вместе с T072, перебазировано на ff8a4b0); route_section_chip: прежний rc=1, ветка rc=0; run.sh на урезанном снимке 38 PASS / 0 FAIL. Не опубликовано: видимое изменение, ждёт просмотра (docs/seo-operator/review-20261014). 14.10: выпущено 851b7ef (с T072, T089), lords-05 ok 15:04Z; живой /anime/ — плашек и «Сбросить» нет, /anime/?year=2024 — плашка «Год: 2024» и «Сбросить»."
     },
     {
       "id": "T077",
@@ -1614,9 +1614,9 @@
       "problem": "Факты карточки тайтла Lords: жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (noindex, follow — служебная метка T044/T064). У Zona строка жанров карточки метку не выводит.",
       "norm": "служебные метки поставщика — не жанр для посетителя (T044); внутренние ссылки — на индексируемые страницы",
       "expected": "в фактах карточки служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) не выводятся ссылкой (или не выводятся вовсе — как у Zona)",
-      "status": "session",
+      "status": "live_verified",
       "review": "видимое изменение строки жанров — выпуск после просмотра; сначала образец на одном сайте",
-      "evidence": "14.10 ~12:35Z: link_targets.py — lordserial33.biz /title/siniy-zontik/ ссылается на /genre/zapadnyykontent/ (noindex, follow). 14.10: подготовлено и проверено — lordserial33-biz 339e700 на ветке claude/review-lords-t086 (отправлена для просмотра): card_service_genre прежний rc=1, ветка rc=0; run.sh на урезанном снимке rc=0. Скриншоты — docs/seo-operator/review-20261014 §7. Не опубликовано: видимое."
+      "evidence": "14.10 ~12:35Z: link_targets.py — lordserial33.biz /title/siniy-zontik/ ссылается на /genre/zapadnyykontent/ (noindex, follow). 14.10: подготовлено и проверено — lordserial33-biz 339e700 на ветке claude/review-lords-t086 (отправлена для просмотра): card_service_genre прежний rc=1, ветка rc=0; run.sh на урезанном снимке rc=0. Скриншоты — docs/seo-operator/review-20261014 §7. Не опубликовано: видимое. 14.10: выпущено 339e700, CI 38584120888, lords-02 ok 14:56Z; живой /title/siniy-zontik/ — «фэнтези · драма · комедия · семейный», ссылки на метку нет."
     },
     {
       "id": "T087",
@@ -1647,9 +1647,9 @@
       "expected": "выборка подвала ядра пропускает разделы, для которых _служебный_раздел_жанра истинно; слот получает следующий настоящий жанр",
       "check": "checks/home_genre_links.py",
       "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
-      "status": "queued",
+      "status": "live_verified",
       "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
-      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T140646Z-2293845 — VERIFIED 9/9; diff просмотрен (тот же фильтр, что T054); ветка claude/review-lords-t088 a14a9af отправлена. Не опубликовано: ждёт решения по T054."
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T140646Z-2293845 — VERIFIED 9/9; diff просмотрен (тот же фильтр, что T054); ветка claude/review-lords-t088 a14a9af отправлена. Не опубликовано: ждёт решения по T054. 14.10: CI a14a9af на ветке выпуска упал (код 2 «не измерено» без снимка считался провалом) — исправлено регистрацией шага, как у T089 (021891d); CI 38583040948, lords-03 ok 14:50Z; живой подвал 1lordserials1.online — 8 жанров, меток нет."
     },
     {
       "id": "T089",
@@ -1664,9 +1664,9 @@
       "expected": "выборка подвала ядра пропускает разделы, для которых _служебный_раздел_жанра истинно; слот получает следующий настоящий жанр",
       "check": "checks/home_genre_links.py",
       "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
-      "status": "queued",
+      "status": "live_verified",
       "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
-      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T141030Z-2320528 — VERIFIED 9/9; diff просмотрен; ветка claude/review-lords-t089 0f60b01 (база ebfeb82 с канарейкой T087) отправлена. Не опубликовано: ждёт решения по T054; на lords-05 выпуск одной веткой с T072/T076."
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T141030Z-2320528 — VERIFIED 9/9; diff просмотрен; ветка claude/review-lords-t089 0f60b01 (база ebfeb82 с канарейкой T087) отправлена. Не опубликовано: ждёт решения по T054; на lords-05 выпуск одной веткой с T072/T076. 14.10: выпущено 851b7ef (с T072, T076), lords-05 ok 15:04Z; живой подвал lordserials22.info — 8 жанров, меток нет; канарейка T087 на месте."
     }
   ]
 }
