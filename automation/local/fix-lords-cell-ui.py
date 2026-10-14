@@ -119,6 +119,19 @@ def _контакт_подвала() -> str:
 МЕТКА_БЫЛО = '<span class="hd__mark" aria-hidden="true">{html.escape(self.се["метка"])}</span>'
 МЕТКА_СТАЛО = '<span class="hd__mark" aria-hidden="true">{html.escape(_метка_по_имени(self.имя) or self.се["метка"])}</span>'
 
+#: Телефон: ряд шапки теснее, и имя режется там даже после правок для
+#: компьютера — на снимке 390×844 стояло «LORDSE». Поле поиска на телефоне
+#: сжимается до 80 пикселей (в него всё равно вводят на отдельном экране), имя
+#: получает кегль 15px и до 52vw.
+МОБ_БЫЛО = """.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
+flex:1 1 auto;min-width:0;max-width:100%}"""
+МОБ_СТАЛО = """.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
+flex:1 1 80px;min-width:80px;max-width:100%}"""
+МОБ_ЛОГО_БЫЛО = ("letter-spacing:.3px;text-transform:uppercase;color:@INK@;flex:0 1 auto;\n"
+                 "max-width:min(62vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}")
+МОБ_ЛОГО_СТАЛО = ("letter-spacing:.2px;text-transform:uppercase;color:@INK@;flex:0 1 auto;\n"
+                  "max-width:min(52vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}")
+
 СТИЛЬ_ЯКОРЬ = ".hd__mark{width:30px;height:30px;"
 
 
@@ -190,6 +203,10 @@ def main() -> int:
                           "стиль строки контакта")
         отчёт.append(с)
     текст, с = правка(текст, ПОИСК_БЫЛО, ПОИСК_СТАЛО, "поиск в шапке сжимаем")
+    отчёт.append(с)
+    текст, с = правка(текст, МОБ_БЫЛО, МОБ_СТАЛО, "поиск на телефоне сжимаем")
+    отчёт.append(с)
+    текст, с = правка(текст, МОБ_ЛОГО_БЫЛО, МОБ_ЛОГО_СТАЛО, "имя на телефоне")
     отчёт.append(с)
     # Правило меню, как и правило имени, переписывалось дважды: принимаем
     # любое прежнее состояние, иначе повторный прогон отказывает на файле,

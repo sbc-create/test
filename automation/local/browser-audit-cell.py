@@ -322,12 +322,18 @@ def осмотр_телефона(браузер, база: str, снимки: P
             меню_открылось = стр.locator("nav a, header a").count() >= было
         except Exception:  # noqa: BLE001
             меню_открылось = False
+    # Имя сайта режется и на телефоне — там ряд ещё теснее. Измеряем, а не
+    # смотрим: на снимке это заметно только если знать, как имя пишется.
+    итог.setdefault("телефон", {})["логотип"] = стр.evaluate(
+        "() => {const l=document.querySelector('.hd__logo');"
+        "return l ? {text:l.innerText.trim(), need:l.scrollWidth, have:l.clientWidth,"
+        " clipped:l.scrollWidth > l.clientWidth + 1} : null;}")
     стр.screenshot(path=str(снимки / f"{site}-phone-home.png"), full_page=False)
     стр.goto(база + "/catalog/", wait_until="domcontentloaded")
     прокрутка_каталога = стр.evaluate(
         "() => ({scroll: document.documentElement.scrollWidth, view: window.innerWidth})")
     стр.screenshot(path=str(снимки / f"{site}-phone-catalog.png"), full_page=False)
-    итог["телефон"] = {
+    итог["телефон"].update({
         "видимая ширина": прокрутка["view"],
         "ширина документа": прокрутка["scroll"],
         "горизонтальная прокрутка главной": прокрутка["scroll"] > прокрутка["view"] + 1,
@@ -335,7 +341,7 @@ def осмотр_телефона(браузер, база: str, снимки: P
             прокрутка_каталога["scroll"] > прокрутка_каталога["view"] + 1,
         "кнопка меню": бургер.count() > 0,
         "меню открывается": меню_открылось,
-    }
+    })
     контекст.close()
 
 
