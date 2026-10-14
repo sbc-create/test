@@ -1,0 +1,182 @@
+diff --git a/src/modules/catalog/shelf-canonical-href.ts b/src/modules/catalog/shelf-canonical-href.ts
+new file mode 100644
+--- /dev/null
++++ b/src/modules/catalog/shelf-canonical-href.ts
+@@ -0,0 +1,59 @@
++import { PUBLIC_TITLE_SEPARATOR } from "@/modules/catalog/public-title-route";
++
++/**
++ * T081 (2026-10-14): watcher shelves on the home page know a title only by its
++ * provider id, so their links use the composite segment `{human}--{id}`, which
++ * the router answers with 308 to the canonical `/anime/{slug}`. On yummyani.site
++ * and .biz 55 of 102 title links on the home page went through that redirect.
++ *
++ * Here a composite segment is replaced with the canonical slug ONLY when the
++ * registry already has one for that provider id. The lookup is read-only: no
++ * slug is allocated or changed from a shelf (that stays with the title page).
++ * No canonical slug yet — the composite link stays and the router still works.
++ */
++export type CanonicalSlugLookup = (providerTitleId: string) => Promise<string | null>;
++
++type CardWithHref = { titleId: string; href: string };
++
++export function replaceCompositeSegment(href: string, providerTitleId: string, slug: string): string {
++  const marker = `${PUBLIC_TITLE_SEPARATOR}${providerTitleId}`;
++  const segments = href.split("/");
++  const index = segments.findIndex((segment) => segment.endsWith(marker));
++  if (index < 0) {
++    return href;
++  }
++  segments[index] = slug;
++  return segments.join("/");
++}
++
++export async function canonicalizeShelfHrefs<T extends CardWithHref>(
++  cards: readonly T[],
++  lookup: CanonicalSlugLookup,
++): Promise<T[]> {
++  const ids = [
++    ...new Set(
++      cards
++        .filter((card) => card.titleId && card.href.includes(`${PUBLIC_TITLE_SEPARATOR}${card.titleId}`))
++        .map((card) => card.titleId),
++    ),
++  ];
++  const slugs = new Map<string, string>();
++  const chunkSize = 25;
++  for (let index = 0; index < ids.length; index += chunkSize) {
++    const chunk = ids.slice(index, index + chunkSize);
++    const found = await Promise.all(chunk.map((id) => lookup(id).catch(() => null)));
++    chunk.forEach((id, position) => {
++      const slug = found[position]?.trim();
++      if (slug && !slug.includes(PUBLIC_TITLE_SEPARATOR)) {
++        slugs.set(id, slug);
++      }
++    });
++  }
++  if (slugs.size === 0) {
++    return [...cards];
++  }
++  return cards.map((card) => {
++    const slug = slugs.get(card.titleId);
++    return slug ? { ...card, href: replaceCompositeSegment(card.href, card.titleId, slug) } : card;
++  });
++}
+diff --git a/src/modules/catalog/public-title-registry.ts b/src/modules/catalog/public-title-registry.ts
+--- a/src/modules/catalog/public-title-registry.ts
++++ b/src/modules/catalog/public-title-registry.ts
+@@ -184,6 +184,19 @@
+   return chosen;
+ }
+ 
++/**
++ * Canonical public slug already registered for a provider id — read only (T081).
++ * Never allocates or changes a slug; `null` when the title has none yet.
++ */
++export async function canonicalPublicSlugOf(providerTitleId: string): Promise<string | null> {
++  const id = providerTitleId.trim();
++  if (!id || !isProviderTitleId(id)) {
++    return null;
++  }
++  const rows = await store().listByProvider(id);
++  return rows.find((row) => row.canonical)?.slug ?? null;
++}
++
+ export async function registerCanonicalPublicSlug(title: TitleSlugSource): Promise<string> {
+   const providerTitleId = title.slug.trim();
+   if (!providerTitleId) {
+diff --git a/src/modules/catalog/catalog-query.ts b/src/modules/catalog/catalog-query.ts
+--- a/src/modules/catalog/catalog-query.ts
++++ b/src/modules/catalog/catalog-query.ts
+@@ -11,6 +11,7 @@
+ } from "@/modules/catalog/home-shelves";
+ import { overlayEnrichedCounts } from "@/modules/catalog/episode-overlay";
+ import { readEvents } from "@/modules/catalog/watcher-events";
++import { canonicalizeShelfHrefs } from "@/modules/catalog/shelf-canonical-href";
+ import {
+   newEpisodeCards as watcherEpisodeCards,
+   newSeasonCards as watcherSeasonCards,
+@@ -74,6 +75,7 @@
+ import {
+   attachPublicSlug,
+   attachPublicSlugs,
++  canonicalPublicSlugOf,
+   lookupPublicTitleRoute,
+ } from "./public-title-registry";
+ import { CDNVIDEOHUB_DEFAULT_LIST_LIMIT } from "./infrastructure/cdnvideohub/constants";
+@@ -950,11 +952,16 @@
+   // не измениться вовсе. Поэтому событийные полки строятся из наблюдений, а не
+   // из выборки, и оба чтения — это два дешёвых обращения к файлам.
+   const [watcherSnapshot, watcherEvents] = await Promise.all([readWatcherSnapshot(), readEvents()]);
+-  const watchedEpisodes = watcherEpisodeCards(watcherEvents, watcherSnapshot);
+-  const watchedOngoing = watcherOngoingCards(watcherSnapshot);
+-  const watchedTitles = watcherTitleCards(watcherEvents, watcherSnapshot);
+-  const watchedSeasons = watcherSeasonCards(watcherEvents, watcherSnapshot);
+-  const watchedPlayback = watcherPlaybackCards(watcherEvents, watcherSnapshot);
++  // Ссылки полок наблюдателя — сразу на канонический адрес, если реестр его уже
++  // знает (T081: иначе каждая карточка вела через 308 со «slug--uuid»).
++  const canonical = (cards: ShelfCard[]) => canonicalizeShelfHrefs(cards, canonicalPublicSlugOf);
++  const [watchedEpisodes, watchedOngoing, watchedTitles, watchedSeasons, watchedPlayback] = await Promise.all([
++    canonical(watcherEpisodeCards(watcherEvents, watcherSnapshot)),
++    canonical(watcherOngoingCards(watcherSnapshot)),
++    canonical(watcherTitleCards(watcherEvents, watcherSnapshot)),
++    canonical(watcherSeasonCards(watcherEvents, watcherSnapshot)),
++    canonical(watcherPlaybackCards(watcherEvents, watcherSnapshot)),
++  ]);
+   // Число заявленных и доступных серий есть только в detail, а его собирает
+   // фоновый обход в снимок. Накладываем готовое одним дешёвым чтением вместо
+   // сотен detail-запросов на каждую отрисовку главной.
+diff --git a/tests/unit/shelf-canonical-href.test.ts b/tests/unit/shelf-canonical-href.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/unit/shelf-canonical-href.test.ts
+@@ -0,0 +1,49 @@
++import { describe, expect, it, vi } from "vitest";
++
++import { canonicalizeShelfHrefs, replaceCompositeSegment } from "@/modules/catalog/shelf-canonical-href";
++
++// T081: home-page watcher shelves linked to `/anime/{human}--{uuid}`, answered 308.
++const ID = "01a067b1-030f-7f4b-b995-38cb0c2bb71a";
++const OTHER = "019fb2ac-e04b-78df-bdf4-e50fafdae2ff";
++
++describe("shelf links go straight to the canonical title address (T081)", () => {
++  it("replaces only the composite segment of the same provider id", () => {
++    expect(replaceCompositeSegment(`/anime/stranniki-duhovnogo-mira--${ID}`, ID, "stranniki-duhovnogo-mira")).toBe(
++      "/anime/stranniki-duhovnogo-mira",
++    );
++    expect(replaceCompositeSegment(`/anime/x--${ID}/season/2/episode/5`, ID, "x")).toBe("/anime/x/season/2/episode/5");
++    expect(replaceCompositeSegment(`/anime/x--${OTHER}`, ID, "x")).toBe(`/anime/x--${OTHER}`);
++  });
++
++  it("uses the registered slug and keeps the composite link when none is registered", async () => {
++    const lookup = vi.fn(async (id: string) => (id === ID ? "stranniki-duhovnogo-mira" : null));
++    const cards = [
++      { titleId: ID, href: `/anime/stranniki-duhovnogo-mira--${ID}`, name: "a" },
++      { titleId: OTHER, href: `/anime/syunmao-li--${OTHER}`, name: "b" },
++      { titleId: "plain", href: "/anime/already-canonical", name: "c" },
++    ];
++    const out = await canonicalizeShelfHrefs(cards, lookup);
++    expect(out.map((c) => c.href)).toEqual([
++      "/anime/stranniki-duhovnogo-mira",
++      `/anime/syunmao-li--${OTHER}`,
++      "/anime/already-canonical",
++    ]);
++    // Canonical links are not looked up; each provider id at most once.
++    expect(lookup).toHaveBeenCalledTimes(2);
++    expect(out[0]?.name).toBe("a");
++  });
++
++  it("never fails the shelf when the registry is unavailable", async () => {
++    const cards = [{ titleId: ID, href: `/anime/x--${ID}` }];
++    const out = await canonicalizeShelfHrefs(cards, async () => {
++      throw new Error("db down");
++    });
++    expect(out).toEqual(cards);
++  });
++
++  it("ignores a lookup answer that is itself composite", async () => {
++    const cards = [{ titleId: ID, href: `/anime/x--${ID}` }];
++    const out = await canonicalizeShelfHrefs(cards, async () => `x--${ID}`);
++    expect(out[0]?.href).toBe(`/anime/x--${ID}`);
++  });
++});
