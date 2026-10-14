@@ -1,0 +1,120 @@
+{
+ "prompt_id": "TEMPLATE-POSTDEPLOY-REMEDIATION-03",
+ "scope": "частичный: только два доказанных дефекта слоёв; визуальная переработка и контракт коллекций заблокированы пересечением с PR #74/#76",
+ "defects_fixed": [
+  {
+   "id": "A",
+   "title": "заглушка постера поверх загруженного изображения",
+   "root_cause": ".zt__none позиционирован, у .zhead__img не было своей позиции и z-index — правило есть в ЗОНА_СТИЛЬ_1_1 и потеряно в ЗОНА_СТИЛЬ и АНИМЕДИА_СТИЛЬ",
+   "fix": ".zhead__ps img,.zhead__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}",
+   "before": {
+    "placeholder_on_top": true,
+    "viewports": [
+     390,
+     768,
+     1440
+    ]
+   },
+   "after": {
+    "placeholder_on_top": false,
+    "viewports": [
+     390,
+     768,
+     1440
+    ]
+   }
+  },
+  {
+   "id": "B",
+   "title": "вложенная картинка баннера не заполняла контейнер",
+   "root_cause": "разметка <div class=zban__img><img></div>; правило ширины адресовало контейнер, а не картинку",
+   "fix": ".zban__img{position:absolute;inset:0} + .zban__img img{width:100%;height:100%;object-fit:cover} + min-height у .zban",
+   "before_gap_px": {
+    "390": 0,
+    "768": 51,
+    "1440": 723
+   },
+   "after_gap_px": {
+    "390": 0,
+    "768": 0,
+    "1440": 0
+   }
+  }
+ ],
+ "error_path_verified": {
+  "provider_500": "картинка скрывается (img[hidden]), заглушка «постер не открылся» становится видимой"
+ },
+ "blast_radius": {
+  "artifact_serves": 6,
+  "lords_byte_identical": true,
+  "lords_routes_checked": 6,
+  "zona_1_1_0_byte_identical": true,
+  "zona_routes_checked": 7,
+  "animedia_changed": true,
+  "note": "zona-01 стоит на design_version 1.1.0 и исполняет ЗОНА_СТИЛЬ_1_1, поэтому её байты не меняются; правка ЗОНА_СТИЛЬ готовит версию 1.2.0, которой пока не отдаётся ни одна витрина"
+ },
+ "long_series_1212": {
+  "count": 1212,
+  "unique": 1212,
+  "gaps": 0,
+  "max_height_px": {
+   "390": 440,
+   "768": 520,
+   "1440": 520
+  },
+  "page_overflow": false
+ },
+ "measurements": [
+  {
+   "label": "before",
+   "vw": 390,
+   "gapW": 0,
+   "placeholderOnTop": true,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/before/title-390.png"
+  },
+  {
+   "label": "before",
+   "vw": 768,
+   "gapW": 51,
+   "placeholderOnTop": true,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/before/title-768.png"
+  },
+  {
+   "label": "before",
+   "vw": 1440,
+   "gapW": 723,
+   "placeholderOnTop": true,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/before/title-1440.png"
+  },
+  {
+   "label": "after",
+   "vw": 390,
+   "gapW": 0,
+   "placeholderOnTop": false,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/after/title-390.png"
+  },
+  {
+   "label": "after",
+   "vw": 768,
+   "gapW": 0,
+   "placeholderOnTop": false,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/after/title-768.png"
+  },
+  {
+   "label": "after",
+   "vw": 1440,
+   "gapW": 0,
+   "placeholderOnTop": false,
+   "shot": "/tmp/claude-1001/-home-claude-wt-yummy-013/96c5d8cb-6d1a-4956-8133-7ebee8cee863/scratchpad/fix-pairs/after/title-1440.png"
+  }
+ ],
+ "not_done": [
+  "визуальное соответствие >=80%",
+  "единый CollectionSpec/resolver",
+  "CTA parity 4/4 на Animedia",
+  "развод /catalog//new//collections/",
+  "Zona mobile nav и фильтрованные H1",
+  "soft-404 семантика"
+ ],
+ "blocked_by": "PR #74 и #76 переписывают те же функции (выбрать, полоса, маршрут_1_1, оболочка) и вводят канонический factory/lords/collection_contract.py, которого нет в этой ветке"
+}

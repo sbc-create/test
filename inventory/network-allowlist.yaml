@@ -56,3 +56,70 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- собственные публичные витрины: только приёмка --------------------------
+  # Внесены заданием TEMPLATES-YUMMY-EPISODES-LIVE-DEPLOY-013: без записи живая
+  # проверка выкаченного релиза неисполнима — guard отклоняет запрос к домену,
+  # которого нет в этом файле, и приёмка остаётся словом вместо измерения.
+  #
+  # Это не расширение периметра интеграций: перечислены ровно пять уже
+  # работающих собственных доменов, и только читающие методы. Ни один из них не
+  # принимает от фабрики форм, credentials и записи. Значение каждого host взято
+  # из совпадения двух независимых источников на этом же хосте — nginx
+  # `server_name` (/etc/nginx/sites-available/<domain>.conf, для animedia —
+  # Description юнита) и `domains[]` в config/site-profiles/<site_id>.json;
+  # для Yummy третьим совпадением служит YUMMY_VARIANT_DOMAIN в ExecStart юнита.
+  # Wildcard намеренно нет: он разрешил бы поддомен, которого никто не проверял.
+  - ref: yummyani-site-public
+    host: yummyani.site
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts, индексация"
+    methods: [GET, HEAD]
+  - ref: yummyani-org-public
+    host: yummyani.org
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts"
+    methods: [GET, HEAD]
+  - ref: yummyani-biz-public
+    host: yummyani.biz
+    purpose: "приёмка выкаченного релиза: episode selector, footer, contacts"
+    methods: [GET, HEAD]
+  - ref: animedia-icu-public
+    host: animedia.icu
+    purpose: "приёмка выкаченного релиза: footer и contact-блок"
+    methods: [GET, HEAD]
+  - ref: animedia-space-public
+    host: animedia.space
+    purpose: "приёмка выкаченного релиза: footer и contact-блок"
+    methods: [GET, HEAD]
+  # Внесён заданием TEMPLATE-ZONA-INPUT-MEASURE-02 (OWNER_AUTHORIZATION=
+  # EXACT_INVENTORY_GET_HEAD_AND_READ_ONLY_MEASUREMENT). Приёмка
+  # TEMPLATE-POSTDEPLOY-ACCEPTANCE-01 остановилась на BLOCKED_INPUT именно здесь:
+  # витрина выложена и обслуживается, но без записи guard отклоняет запрос, и
+  # третья витрина остаётся неизмеренной. Значение host взято из совпадения двух
+  # независимых источников на этом же хосте: nginx `server_name` в
+  # /etc/nginx/lords/zona-01.conf и `canonical_domain` витрины zona-01 в
+  # /srv/lords/.frontend/indexing-policy.json. Методы — только читающие: витрина
+  # не принимает от фабрики ни форм, ни credentials, ни записи.
+  #
+  # nginx отвечает и на www.zonafilm.space, но это имя намеренно не внесено:
+  # задание разрешило ровно одно имя, а alias никто не измерял.
+  - ref: zonafilm-space-public
+    host: zonafilm.space
+    purpose: "приёмка выкаченного релиза: baseline витрины Zona"
+    methods: [GET, HEAD]
+
+  # --- референсы визуального сравнения --------------------------------------
+  # Названы владельцем в задании YUMMY/ANIMEDIA/ZONA как «подтверждённые
+  # референсы». Без них сравнение с оригиналом неисполнимо, и остаётся только
+  # честный UNVERIFIED — процент сходства без парных скриншотов был бы
+  # выдуманным числом.
+  #
+  # Только чтение и только эти два имени: витрины сравниваются по снятым
+  # страницам, ничего туда не отправляется.
+  - ref: animedia-reference
+    host: amd.online
+    purpose: "референс оформления Animedia: парные скриншоты для сравнения"
+    methods: [GET, HEAD]
+  - ref: zona-reference
+    host: w140.zona.plus
+    purpose: "референс оформления Zona: парные скриншоты для сравнения"
+    methods: [GET, HEAD]

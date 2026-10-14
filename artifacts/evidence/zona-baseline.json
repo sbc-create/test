@@ -1,0 +1,757 @@
+{
+ "prompt_id": "TEMPLATE-ZONA-INPUT-MEASURE-02",
+ "kind": "read-only baseline, no remediation",
+ "host": "zonafilm.space",
+ "reference": "w140.zona.plus",
+ "measured_at": "2026-09-16",
+ "note": "Лабораторные измерения из сессионного окружения, не полевые CWV. Третьи стороны (mc.yandex.ru, plapi.cdnvideohub.com) блокируются измерительной средой — их ошибки не относятся к витрине.",
+ "visual_similarity": {
+  "composition": 25,
+  "geometry": 18,
+  "styling": 30,
+  "density": 25,
+  "responsiveness": 55,
+  "weighted_total": 28.75,
+  "weights": {
+   "composition": 0.25,
+   "geometry": 0.25,
+   "styling": 0.2,
+   "density": 0.15,
+   "responsiveness": 0.15
+  }
+ },
+ "shelves": [
+  {
+   "title": "Кинопортал: что смотреть и где это найти",
+   "cta_url": null,
+   "cta_label": null,
+   "card_count": 8,
+   "cards": [
+    "/title/poceluy-smerti/",
+    "/title/nimrody/",
+    "/title/zhenschina-naverhu/",
+    "/title/opolchenie/",
+    "/title/posledniy-obraschennyy/",
+    "/title/portrety-apokalipsisa/",
+    "/title/sestra-muzha/",
+    "/title/makario-leyva/"
+   ]
+  },
+  {
+   "title": "Кино",
+   "cta_url": "/catalog/?kind=Фильм",
+   "cta_label": "Открыть весь раздел",
+   "card_count": 6,
+   "cards": [
+    "/title/poceluy-smerti/",
+    "/title/nimrody/",
+    "/title/zhenschina-naverhu/",
+    "/title/opolchenie/",
+    "/title/posledniy-obraschennyy/",
+    "/title/portrety-apokalipsisa/"
+   ]
+  },
+  {
+   "title": "Сериалы",
+   "cta_url": "/catalog/?kind=Сериал",
+   "cta_label": "Открыть весь раздел",
+   "card_count": 6,
+   "cards": [
+    "/title/dom-na-vsyu-zhizn/",
+    "/title/bashnya-poznaniya/",
+    "/title/sofi-zhizn-s-chistogo-lista/",
+    "/title/schastlivyy-gorod/",
+    "/title/bez-sleda-4/",
+    "/title/novyy-rekrut/"
+   ]
+  }
+ ],
+ "cta_match": [
+  {
+   "shelf": "Кино",
+   "cta": "/catalog/?kind=Фильм",
+   "shelf_n": 6,
+   "dest_n": 0,
+   "prefix_order_match": false,
+   "subset": false
+  },
+  {
+   "shelf": "Сериалы",
+   "cta": "/catalog/?kind=Сериал",
+   "shelf_n": 6,
+   "dest_n": 0,
+   "prefix_order_match": false,
+   "subset": false
+  }
+ ],
+ "genres": [
+  {
+   "genre": "/catalog/?genre=action",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "97",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=adventures",
+   "items": 47,
+   "h1": "Весь каталог",
+   "count": "47",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=anime",
+   "items": 42,
+   "h1": "Весь каталог",
+   "count": "42",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=comedy",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "172",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=criminal",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "64",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=detective",
+   "items": 42,
+   "h1": "Весь каталог",
+   "count": "42",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=dorama",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "780",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=drama",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "301",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=fantastic",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "49",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=fantasy",
+   "items": 45,
+   "h1": "Весь каталог",
+   "count": "45",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=horror",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "94",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=melodrama",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "71",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=triller",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "145",
+   "identical_to_unfiltered": false
+  },
+  {
+   "genre": "/catalog/?genre=west_content",
+   "items": 48,
+   "h1": "Весь каталог",
+   "count": "702",
+   "identical_to_unfiltered": false
+  }
+ ],
+ "links": {
+  "checked": 179,
+  "problems": 0,
+  "status_all_200": true,
+  "redirects_total": 0
+ },
+ "performance": {
+  "mobile-cold": {
+   "ttfb_p50": 76.6,
+   "ttfb_p95": 582.2,
+   "load_p50": 1545.2,
+   "load_p95": 2715.1,
+   "requests": 14,
+   "transfer_kb": 102
+  },
+  "mobile-warm": {
+   "ttfb_p50": 51.5,
+   "ttfb_p95": 54.5,
+   "load_p50": 137.6,
+   "load_p95": 190.3,
+   "requests": 11,
+   "transfer_kb": 13
+  },
+  "desktop-cold": {
+   "ttfb_p50": 71.8,
+   "ttfb_p95": 82.5,
+   "load_p50": 885.1,
+   "load_p95": 1034.7,
+   "requests": 14,
+   "transfer_kb": 102
+  },
+  "desktop-warm": {
+   "ttfb_p50": 48.3,
+   "ttfb_p95": 55.7,
+   "load_p50": 151,
+   "load_p95": 160.1,
+   "requests": 11,
+   "transfer_kb": 13
+  }
+ },
+ "render_metrics": [
+  {
+   "site": "zonafilm.space",
+   "page": "home",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 4979,
+   "hOverflow": false,
+   "imgTotal": 20,
+   "imgBroken": 0,
+   "textLen": 6260
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "home",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 4528,
+   "hOverflow": false,
+   "imgTotal": 20,
+   "imgBroken": 0,
+   "textLen": 6260
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "home",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 3665,
+   "hOverflow": false,
+   "imgTotal": 20,
+   "imgBroken": 0,
+   "textLen": 6260
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "catalog",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 9852,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21823
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "catalog",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 9077,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21823
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "catalog",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 8545,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21823
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "new",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 9852,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21821
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "new",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 9077,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21821
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "new",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 8545,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 21821
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "collection",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 9857,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 18230
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "collection",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 9077,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 18230
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "collection",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 8545,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 18230
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "genre",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 8799,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 9114
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "genre",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 9077,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 9114
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "genre",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 8545,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 9114
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "title",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 3829,
+   "hOverflow": false,
+   "imgTotal": 8,
+   "imgBroken": 0,
+   "textLen": 1274
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "title",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 3305,
+   "hOverflow": false,
+   "imgTotal": 8,
+   "imgBroken": 0,
+   "textLen": 1274
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "title",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2940,
+   "hOverflow": false,
+   "imgTotal": 8,
+   "imgBroken": 0,
+   "textLen": 1274
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "pagination",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 9829,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 20643
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "pagination",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 9077,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 20643
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "pagination",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 8545,
+   "hOverflow": false,
+   "imgTotal": 48,
+   "imgBroken": 0,
+   "textLen": 20643
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "notfound",
+   "vp": "390",
+   "status": 404,
+   "scrollH": 1275,
+   "hOverflow": false,
+   "imgTotal": 0,
+   "imgBroken": 0,
+   "textLen": 454
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "notfound",
+   "vp": "768",
+   "status": 404,
+   "scrollH": 1176,
+   "hOverflow": false,
+   "imgTotal": 0,
+   "imgBroken": 0,
+   "textLen": 454
+  },
+  {
+   "site": "zonafilm.space",
+   "page": "notfound",
+   "vp": "1440",
+   "status": 404,
+   "scrollH": 900,
+   "hOverflow": false,
+   "imgTotal": 0,
+   "imgBroken": 0,
+   "textLen": 454
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "home",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 1878,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 2400
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "home",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 2138,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2400
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "home",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2095,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2400
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "catalog",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 5129,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "catalog",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 4085,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "catalog",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2401,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "new",
+   "vp": "390",
+   "status": 404,
+   "scrollH": 1164,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 223
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "new",
+   "vp": "768",
+   "status": 404,
+   "scrollH": 1344,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 223
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "new",
+   "vp": "1440",
+   "status": 404,
+   "scrollH": 1220,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 223
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "collection",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 5129,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "collection",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 4085,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "collection",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2401,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2663
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "genre",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 5033,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 2457
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "genre",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 4028,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2457
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "genre",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2358,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2457
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "title",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 1514,
+   "hOverflow": true,
+   "imgTotal": 5,
+   "imgBroken": 0,
+   "textLen": 816
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "title",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 1739,
+   "hOverflow": false,
+   "imgTotal": 2,
+   "imgBroken": 0,
+   "textLen": 827
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "title",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 1723,
+   "hOverflow": false,
+   "imgTotal": 2,
+   "imgBroken": 0,
+   "textLen": 827
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "pagination",
+   "vp": "390",
+   "status": 200,
+   "scrollH": 5153,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 2824
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "pagination",
+   "vp": "768",
+   "status": 200,
+   "scrollH": 4100,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2824
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "pagination",
+   "vp": "1440",
+   "status": 200,
+   "scrollH": 2416,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 2824
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "notfound",
+   "vp": "390",
+   "status": 404,
+   "scrollH": 1164,
+   "hOverflow": true,
+   "imgTotal": 4,
+   "imgBroken": 0,
+   "textLen": 223
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "notfound",
+   "vp": "768",
+   "status": 404,
+   "scrollH": 1344,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 223
+  },
+  {
+   "site": "w140.zona.plus",
+   "page": "notfound",
+   "vp": "1440",
+   "status": 404,
+   "scrollH": 1220,
+   "hOverflow": false,
+   "imgTotal": 1,
+   "imgBroken": 0,
+   "textLen": 223
+  }
+ ]
+}
