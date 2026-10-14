@@ -73,7 +73,11 @@ def поднять(проект: Path, конфиг: dict, данные: Path, �
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     for _ in range(120):
         try:
-            urllib.request.urlopen(f"http://127.0.0.1:{порт}/healthz", timeout=3)
+            # Таймаут 12 с, а не 3: первый ответ /healthz на этом рантайме
+            # занимает около четырёх секунд, и трёхсекундный пробник рвал
+            # соединение раньше ответа — в журнале витрины оставались
+            # BrokenPipe, а стенд считался не поднявшимся.
+            urllib.request.urlopen(f"http://127.0.0.1:{порт}/healthz", timeout=12)
             return процесс, True
         except Exception:  # noqa: BLE001
             if процесс.poll() is not None:
