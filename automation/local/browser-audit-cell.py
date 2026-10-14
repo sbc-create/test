@@ -114,6 +114,20 @@ def осмотр(стр, база: str, итог: dict) -> None:
             "() => {const l=document.querySelector('.hd__logo');"
             "return l ? {text:l.innerText.trim(), need:l.scrollWidth, have:l.clientWidth,"
             " clipped:l.scrollWidth > l.clientWidth + 1} : null;}"),
+        # Меню обрезается так же молча, как имя: ряд без переноса просто
+        # уводит последние пункты за край.
+        # «Не помещается» и «потеряно» — разные вещи: ряд с прокруткой не
+        # теряет пунктов, их достают колесом и свайпом. Первая редакция
+        # считала обрезкой любое превышение.
+        "меню": стр.evaluate(
+            "() => {const n=document.querySelector('.hd__nav');"
+            "if(!n) return null;"
+            "const ov=getComputedStyle(n).overflowX;"
+            "const over=n.scrollWidth > n.clientWidth + 1;"
+            "return {need:n.scrollWidth, have:n.clientWidth,"
+            " overflowing:over, scrollable:(ov==='auto'||ov==='scroll'),"
+            " lost: over && !(ov==='auto'||ov==='scroll'),"
+            " links:n.querySelectorAll('a').length};}"),
         "подвал mailto": стр.evaluate(
             "() => !!document.querySelector('footer a[href^=\"mailto:\"]')"),
     }
