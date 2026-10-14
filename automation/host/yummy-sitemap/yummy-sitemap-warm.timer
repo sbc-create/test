@@ -1,0 +1,13 @@
+# Раз в 5 минут: инвентарь карты живёт час, окно холодного кеша — не больше 5 минут.
+# Снять после выкладки b016-sitemap-swr.patch (там устаревший инвентарь отдаётся сразу).
+[Unit]
+Description=Yummy: прогрев карт сайта каждые 5 минут (B016)
+
+[Timer]
+OnCalendar=*:2/5
+Persistent=false
+AccuracySec=30s
+Unit=yummy-sitemap-warm.service
+
+[Install]
+WantedBy=timers.target

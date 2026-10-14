@@ -1,0 +1,268 @@
+diff --git a/src/lib/seo/sitemap-catalog.ts b/src/lib/seo/sitemap-catalog.ts
+--- a/src/lib/seo/sitemap-catalog.ts
++++ b/src/lib/seo/sitemap-catalog.ts
+@@ -10,43 +10,124 @@
+   type SitemapInventory,
+ } from "./sitemap-inventory";
+ 
++// B016 (2026-10-14): the inventory used to live in Redis for exactly one hour,
++// and the first request after expiry rebuilt it synchronously — 80 sequential
++// list pages plus 40 detail calls, 35–57 s. Behind a 30 s proxy timeout
++// (yummyani7.site/.info) that request answered 504, and a crawler that fetches
++// sitemaps rarely almost always arrived after expiry. Parallel requests for
++// titles/seasons/episodes each started their own rebuild.
++//
++// Now: the last good inventory is kept (DATA_TTL_SEC) and served immediately;
++// freshness is a separate marker (FRESH_TTL_SEC). A stale inventory is
++// refreshed in the background by exactly one worker (Redis lock + in-process
++// single flight). Only a cold start with no stored inventory waits for the
++// build, and concurrent requests share that one build.
+ const CACHE_KEY = "seo:sitemap-inventory:v4-anime";
+-const CACHE_TTL_SEC = 3600;
++const FRESH_KEY = "seo:sitemap-inventory:v4-anime:fresh";
++const LOCK_KEY = "seo:sitemap-inventory:v4-anime:lock";
++const FRESH_TTL_SEC = 3600;
++const DATA_TTL_SEC = 7 * 24 * 3600;
++const LOCK_TTL_SEC = 300;
+ const DETAIL_LIMIT = 40;
+ 
++let inflight: Promise<SitemapInventory | null> | null = null;
++
++type RedisLike = Awaited<ReturnType<typeof getRedis>>;
++
++async function redisOrNull(): Promise<RedisLike | null> {
++  try {
++    return await getRedis();
++  } catch {
++    return null; // Cache is optional.
++  }
++}
++
++async function buildInventory(): Promise<SitemapInventory> {
++  const titles = await walkAnimeCatalogList();
++  const details = [];
++  for (const title of titles.slice(0, DETAIL_LIMIT)) {
++    const detail = await getCatalogTitle(title.slug);
++    details.push(detail ?? title);
++  }
++  const rest = titles.slice(DETAIL_LIMIT);
++  return inventoryFromTitles([...details, ...rest], new Date(SEO_CONTENT_UPDATED_AT));
++}
++
++function isEmpty(inventory: SitemapInventory): boolean {
++  return (inventory.titles ?? []).length === 0;
++}
++
++/** One rebuild per process at a time; across processes — the Redis lock. */
++function refresh(redis: RedisLike | null, needLock: boolean): Promise<SitemapInventory | null> {
++  if (inflight) {
++    return inflight;
++  }
++  inflight = (async () => {
++    if (redis && needLock) {
++      const got = await redis.set(LOCK_KEY, String(Date.now()), { NX: true, EX: LOCK_TTL_SEC }).catch(() => null);
++      if (!got) {
++        return null; // Another worker is rebuilding; keep serving what we have.
++      }
++    }
++    try {
++      const inventory = await buildInventory();
++      // An empty walk (provider outage) must not replace a good inventory.
++      if (redis && !isEmpty(inventory)) {
++        await redis.set(CACHE_KEY, JSON.stringify(inventory), { EX: DATA_TTL_SEC }).catch(() => null);
++        await redis.set(FRESH_KEY, "1", { EX: FRESH_TTL_SEC }).catch(() => null);
++      }
++      return inventory;
++    } finally {
++      if (redis && needLock) {
++        await redis.del(LOCK_KEY).catch(() => null);
++      }
++    }
++  })().finally(() => {
++    inflight = null;
++  });
++  return inflight;
++}
++
+ export async function loadSitemapInventory(): Promise<SitemapInventory> {
+-  try {
+-    const redis = await getRedis();
+-    const cached = await redis.get(CACHE_KEY);
+-    if (cached) {
+-      return reviveInventory(JSON.parse(cached) as SitemapInventory);
++  const redis = await redisOrNull();
++  let cached: SitemapInventory | null = null;
++  let fresh = false;
++  if (redis) {
++    try {
++      const [raw, marker] = await Promise.all([redis.get(CACHE_KEY), redis.get(FRESH_KEY)]);
++      cached = raw ? reviveInventory(JSON.parse(raw) as SitemapInventory) : null;
++      fresh = Boolean(marker);
++    } catch {
++      cached = null;
+     }
+-  } catch {
+-    // Cache is optional.
+   }
+ 
++  if (cached) {
++    if (!fresh) {
++      // Stale-while-revalidate: answer now, rebuild in the background.
++      void refresh(redis, true).catch((error: unknown) => {
++        log("warn", "sitemap inventory refresh failed", {
++          kind: error instanceof Error ? error.name : "unknown",
++        });
++      });
++    }
++    return cached;
++  }
++
++  // Cold start: nothing stored yet — build once, shared by concurrent requests.
+   try {
+-    const titles = await walkAnimeCatalogList();
+-    const details = [];
+-    for (const title of titles.slice(0, DETAIL_LIMIT)) {
+-      const detail = await getCatalogTitle(title.slug);
+-      details.push(detail ?? title);
+-    }
+-    const rest = titles.slice(DETAIL_LIMIT);
+-    const inventory = inventoryFromTitles([...details, ...rest], new Date(SEO_CONTENT_UPDATED_AT));
+-    try {
+-      const redis = await getRedis();
+-      await redis.set(CACHE_KEY, JSON.stringify(inventory), { EX: CACHE_TTL_SEC });
+-    } catch {
+-      // ignore
+-    }
+-    return inventory;
++    return (await refresh(redis, false)) ?? emptySitemapInventory();
+   } catch (error) {
+     log("warn", "sitemap inventory unavailable", {
+       kind: error instanceof Error ? error.name : "unknown",
+     });
+     return emptySitemapInventory();
+   }
++}
++
++/** Test hook: forget the in-process build. */
++export function __resetSitemapInventoryForTests(): void {
++  inflight = null;
+ }
+ 
+ function reviveInventory(value: SitemapInventory): SitemapInventory {
+diff --git a/tests/unit/sitemap-inventory-cache.test.ts b/tests/unit/sitemap-inventory-cache.test.ts
+new file mode 100644
+--- /dev/null
++++ b/tests/unit/sitemap-inventory-cache.test.ts
+@@ -0,0 +1,112 @@
++import { beforeEach, describe, expect, it, vi } from "vitest";
++
++// B016: the sitemap inventory must be served from cache even when stale, be
++// rebuilt in the background by one worker, and never block a request behind a
++// full catalog walk unless nothing has ever been stored.
++
++const store = new Map<string, string>();
++const redis = {
++  get: vi.fn(async (key: string) => store.get(key) ?? null),
++  set: vi.fn(async (key: string, value: string, opts?: { NX?: boolean }) => {
++    if (opts?.NX && store.has(key)) return null;
++    store.set(key, value);
++    return "OK";
++  }),
++  del: vi.fn(async (key: string) => (store.delete(key) ? 1 : 0)),
++};
++vi.mock("@/lib/redis", () => ({ getRedis: async () => redis }));
++vi.mock("@/lib/logger", () => ({ log: vi.fn() }));
++
++let walkCalls = 0;
++let releaseWalk: () => void = () => {};
++let walkGate: Promise<void> = Promise.resolve();
++const title = (slug: string) => ({ slug, title: slug, updatedAt: "2026-10-01T00:00:00Z" });
++vi.mock("@/modules/catalog/catalog-query", () => ({
++  walkAnimeCatalogList: vi.fn(async () => {
++    walkCalls += 1;
++    await walkGate;
++    return [title("a"), title("b")];
++  }),
++  getCatalogTitle: vi.fn(async () => null),
++}));
++vi.mock("@/lib/seo/sitemap-inventory", () => ({
++  emptySitemapInventory: () => ({ titles: [], seasons: [], episodes: [], images: [] }),
++  inventoryFromTitles: (titles: { slug: string }[]) => ({
++    titles: titles.map((t) => ({ path: `/anime/${t.slug}`, lastModified: new Date(0), images: [] })),
++    seasons: [],
++    episodes: [],
++    images: [],
++  }),
++}));
++vi.mock("@/lib/seo/copy", () => ({ SEO_CONTENT_UPDATED_AT: "2026-10-01T00:00:00Z" }));
++
++const KEY = "seo:sitemap-inventory:v4-anime";
++const FRESH = `${KEY}:fresh`;
++const LOCK = `${KEY}:lock`;
++const stored = { titles: [{ path: "/anime/old", lastModified: new Date(0).toISOString(), images: [] }], seasons: [], episodes: [], images: [] };
++
++async function load() {
++  const mod = await import("@/lib/seo/sitemap-catalog");
++  return mod;
++}
++
++describe("sitemap inventory cache (B016)", () => {
++  beforeEach(async () => {
++    store.clear();
++    walkCalls = 0;
++    walkGate = Promise.resolve();
++    vi.clearAllMocks();
++    (await load()).__resetSitemapInventoryForTests();
++  });
++
++  it("serves a stale inventory immediately and refreshes it once in the background", async () => {
++    store.set(KEY, JSON.stringify(stored)); // no FRESH marker → stale
++    walkGate = new Promise((resolve) => (releaseWalk = resolve));
++    const { loadSitemapInventory } = await load();
++    const results = await Promise.all([loadSitemapInventory(), loadSitemapInventory(), loadSitemapInventory()]);
++    // All three answered from the stale copy without waiting for the walk.
++    for (const r of results) expect(r.titles.map((t) => t.path)).toEqual(["/anime/old"]);
++    expect(walkCalls).toBe(1); // one background rebuild, not three
++    releaseWalk();
++    await vi.waitFor(() => expect(store.has(FRESH)).toBe(true));
++    expect(JSON.parse(store.get(KEY)!).titles.map((t: { path: string }) => t.path)).toEqual(["/anime/a", "/anime/b"]);
++    expect(store.has(LOCK)).toBe(false); // lock released
++  });
++
++  it("does not rebuild a fresh inventory", async () => {
++    store.set(KEY, JSON.stringify(stored));
++    store.set(FRESH, "1");
++    const { loadSitemapInventory } = await load();
++    await loadSitemapInventory();
++    expect(walkCalls).toBe(0);
++  });
++
++  it("leaves the rebuild to the worker holding the lock", async () => {
++    store.set(KEY, JSON.stringify(stored));
++    store.set(LOCK, "other-process");
++    const { loadSitemapInventory } = await load();
++    const r = await loadSitemapInventory();
++    expect(r.titles.map((t) => t.path)).toEqual(["/anime/old"]);
++    await new Promise((resolve) => setTimeout(resolve, 0));
++    expect(walkCalls).toBe(0);
++  });
++
++  it("builds once on a cold start and shares the build between concurrent requests", async () => {
++    const { loadSitemapInventory } = await load();
++    const [a, b] = await Promise.all([loadSitemapInventory(), loadSitemapInventory()]);
++    expect(walkCalls).toBe(1);
++    expect(a.titles).toHaveLength(2);
++    expect(b.titles).toHaveLength(2);
++    expect(store.has(KEY)).toBe(true);
++  });
++
++  it("does not overwrite a good inventory with an empty walk", async () => {
++    store.set(KEY, JSON.stringify(stored));
++    const cq = await import("@/modules/catalog/catalog-query");
++    vi.mocked(cq.walkAnimeCatalogList).mockResolvedValueOnce([]);
++    const { loadSitemapInventory } = await load();
++    await loadSitemapInventory();
++    await vi.waitFor(() => expect(store.has(LOCK)).toBe(false));
++    expect(JSON.parse(store.get(KEY)!).titles.map((t: { path: string }) => t.path)).toEqual(["/anime/old"]);
++  });
++});

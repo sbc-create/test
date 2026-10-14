@@ -1,0 +1,18 @@
+# Прогрев карт сайта Yummy (B016): один проход по пяти доменам. Только чтение по HTTPS.
+[Unit]
+Description=Yummy: прогрев карт сайта (B016, временная мера)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+ExecStart=/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/yummy-sitemap/yummy-sitemap-warm.sh
+TimeoutStartSec=1200
+Nice=10
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+InaccessiblePaths=/etc/site-factory

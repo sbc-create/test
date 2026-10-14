@@ -145,8 +145,8 @@
       "direction": "network",
       "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
       "status": "blocked",
-      "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer.",
-      "evidence": "Предусловия выполнены и приняты Архитектором независимо: механизм 23/23, обёртка 20/20, расхождений 0 (docs/verification/autocontinue-mechanism-20261012.md, 188b43a); тесты tests/unit/test_seo_tech_run.py 17/17. Осталось только действие root. 14.10: механизм проверен сессией от захвата до вердикта на реальной задаче T078 (VERIFIED 9/9, выпущено и сверено на живом сайте сессией). Таймер по-прежнему не установлен — действие root."
+      "owner_action": "root на claude-control-01: блок «Команды владельца» в docs/seo-operator/B006_INSTALL.md (предусловия → install двух файлов → systemd-analyze verify → enable --now); проверка цикла — раздел «Проверка полного цикла».",
+      "evidence": "Предусловия выполнены и приняты Архитектором независимо: механизм 23/23, обёртка 20/20, расхождений 0 (docs/verification/autocontinue-mechanism-20261012.md, 188b43a); тесты tests/unit/test_seo_tech_run.py 17/17. Осталось только действие root. 14.10: механизм проверен сессией от захвата до вердикта на реальной задаче T078 (VERIFIED 9/9, выпущено и сверено на живом сайте сессией). Таймер по-прежнему не установлен — действие root. 14.10 15:40Z: блок установки — docs/seo-operator/B006_INSTALL.md (юнит и таймер — automation/host/editor/seo-tech-run.b006.{service,timer}); проверено сессией: flock (rc 75 при занятом замке), пустая очередь — rc 0 без модели, тесты 26/26; в очереди для первого цикла таймера — T090–T092 (queued)."
     },
     {
       "id": "T006",
@@ -424,8 +424,8 @@
       "expected": "titles.xml без потолка 8000; 366 слагов в карте",
       "check": "число <loc> в /sitemap/titles.xml; присутствие 366 слагов",
       "status": "blocked",
-      "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200. Замер сессии 13.10 ~03:05Z: yummyani7.site/sitemap/titles.xml — 200, 1,6 МБ, 0,4 с (горячий кеш); 504 Архитектора 13.10 — та же холодная генерация, новой причины нет. 13.10 замер: на холодном обращении /sitemap/titles.xml, seasons.xml (и episodes.xml у yummyani7.info) — 504 или тайм-аут >40 с на всех 5 Yummy; повтор — 200 за 0,2–0,9 с. Робот, попавший на холодный кеш, получает 504. 14.10 ~13:00Z, повторный замер (один проход, по 6 частей): yummyani7.site и yummyani7.info — titles.xml, seasons.xml, episodes.xml 504 ровно через 30 с (предел прокси); yummyani.site titles.xml — 200 за 57 с, yummyani.org — 49 с, yummyani.biz — 50 с; static/images — 0,1–0,6 с. То есть через сутки после замера 13.10 холодная генерация та же, и обходчик на yummyani7.* получает 504 на всех картах страниц контента. Выкладка контейнера — вне factory cell trigger (Python-слой Yummy без неизменяемого релиза, README репозитория), поэтому сессия исправить не может: действие владельца без изменений. Вес для приоритета (Метрика, неделя по 13.10, поисковые входы по типу страницы): yummyani7.site — 1 716 входов, 87 % на страницы тайтлов; yummyani7.info — 304, 91 % на тайтлы. Именно их карта (titles.xml) отдаёт обходчику 504.",
-      "owner_action": "Владелец (решение о выкладке контейнера Next.js yummyani-staging — путь выкладки вне factory cell trigger, SEO его не использует): применить патч из отдельной рабочей копии от чистого 97c88d2 (рабочая копия /srv/sites/yummyani-staging/repo держит брошенную с 20.09 грязную ветку — её не трогать), пересобрать контейнер. ОБЯЗАТЕЛЬНО до и после: SEO_INDEXING_ENABLED=true и на живой https://yummyani.site/ X-Robots-Tag и meta robots = index (2336594/7f1a5a3: пересоздание контейнера уже давало NOINDEX, P0; витрина — ~1547 из ~1962 посетителей сети в сутки). Затем: <loc> в /sitemap/titles.xml > 8000, 366 слагов на месте (кеш redis до 1 ч). Режим держится только на meta robots (X-Robots-Tag у Yummy нет): сверка automation/local/indexing-live-snapshot.py --compare. Патч maxPages применять только вместе со сборкой карты заранее в файл или разбиением titles.xml на части с отдельным кешем (scratchpad yummy-sitemap-cap.patch, раздел «ВАЖНО»).",
+      "evidence": "Кандидат правки готов: scratchpad yummy-sitemap-cap.patch (maxPages 300 + предупреждение при упоре). Выборка 40 адресов карты — все 200; 8 из 366 недостающих — все 200. Замер сессии 13.10 ~03:05Z: yummyani7.site/sitemap/titles.xml — 200, 1,6 МБ, 0,4 с (горячий кеш); 504 Архитектора 13.10 — та же холодная генерация, новой причины нет. 13.10 замер: на холодном обращении /sitemap/titles.xml, seasons.xml (и episodes.xml у yummyani7.info) — 504 или тайм-аут >40 с на всех 5 Yummy; повтор — 200 за 0,2–0,9 с. Робот, попавший на холодный кеш, получает 504. 14.10 ~13:00Z, повторный замер (один проход, по 6 частей): yummyani7.site и yummyani7.info — titles.xml, seasons.xml, episodes.xml 504 ровно через 30 с (предел прокси); yummyani.site titles.xml — 200 за 57 с, yummyani.org — 49 с, yummyani.biz — 50 с; static/images — 0,1–0,6 с. То есть через сутки после замера 13.10 холодная генерация та же, и обходчик на yummyani7.* получает 504 на всех картах страниц контента. Выкладка контейнера — вне factory cell trigger (Python-слой Yummy без неизменяемого релиза, README репозитория), поэтому сессия исправить не может: действие владельца без изменений. Вес для приоритета (Метрика, неделя по 13.10, поисковые входы по типу страницы): yummyani7.site — 1 716 входов, 87 % на страницы тайтлов; yummyani7.info — 304, 91 % на тайтлы. Именно их карта (titles.xml) отдаёт обходчику 504. 14.10 15:30Z — ПРИЧИНА УСТАНОВЛЕНА: src/lib/seo/sitemap-catalog.ts (97c88d2) — инвентарь в Redis с TTL 3600 с; первый запрос после истечения строит его синхронно (80 страниц списка + 40 деталей последовательно, 35–57 с), параллельные запросы строят каждый свой; nginx yummyani7.* proxy_read_timeout 30s (/etc/nginx/lords/yummy-07-tls.conf, -08), yummyani.site — 60s. Обходчик ходит редко и почти всегда попадает на истёкший кеш. ИСПРАВЛЕНИЕ ПОДГОТОВЛЕНО: automation/host/yummy-sitemap/b016-sitemap-swr.patch — последний исправный инвентарь отдаётся сразу, обновление в фоне одним исполнителем (замок Redis + single-flight), холодный старт — одна общая сборка, пустой обход не затирает исправный инвентарь. Тесты: 5 новых (на прежнем коде 2 падают), весь набор vitest 530/530, eslint чисто; patch --dry-run на 97c88d2 — rc 0. ВРЕМЕННАЯ МЕРА проверена: прогрев (automation/host/yummy-sitemap/yummy-sitemap-warm.sh) — проход 1: yummyani7.* 504, остальные 39–48 с; через 75 с проход 2 — все 15 карт 200 за 0,13–0,79 с. Пока таймер не установлен, сессия прогревает раз в 5 минут сама.",
+      "owner_action": "(1) Основное: применить automation/host/yummy-sitemap/b016-sitemap-swr.patch к чистому 97c88d2 в отдельной рабочей копии и пересобрать контейнеры Yummy своим процессом выкладки (вне factory cell trigger). (2) До выкладки — временная мера, root: sudo install -m 0644 automation/host/yummy-sitemap/yummy-sitemap-warm.{service,timer} /etc/systemd/system/ && sudo systemctl daemon-reload && sudo systemctl enable --now yummy-sitemap-warm.timer; снять после (1). (3) Альтернатива (2), если удобнее Архитектору: proxy_read_timeout 120s для location /sitemap в /etc/nginx/lords/yummy-07-tls.conf и yummy-08-tls.conf.",
       "dependencies": "13.10 Архитектор: прогрев дочерних карт сразу после сборки (а не подъём таймаута) — после P0 бэкапа"
     },
     {
@@ -1667,6 +1667,54 @@
       "status": "live_verified",
       "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
       "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049). 14.10: фоновый прогон 20261014T141030Z-2320528 — VERIFIED 9/9; diff просмотрен; ветка claude/review-lords-t089 0f60b01 (база ebfeb82 с канарейкой T087) отправлена. Не опубликовано: ждёт решения по T054; на lords-05 выпуск одной веткой с T072/T076. 14.10: выпущено 851b7ef (с T072, T076), lords-05 ok 15:04Z; живой подвал lordserials22.info — 8 жанров, меток нет; канарейка T087 на месте."
+    },
+    {
+      "id": "T090",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/title/siniy-zontik/"
+      ],
+      "problem": "Перенос T086 (lordserial33.biz, выпущено 339e700 14.10): в фактах карточки тайтла lordfilm47.space жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (служебная метка, noindex, follow).",
+      "norm": "служебные метки поставщика (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) — не жанр для посетителя (T044/T064); внутренние ссылки — на индексируемые страницы",
+      "expected": "в фактах карточки метки не выводятся; если других жанров нет — строки «Жанр» нет; прочие жанры — ссылками",
+      "check": "checks/card_service_genre.py",
+      "verify_live": "после выпуска: в фактах /title/<слаг>/ нет «западный контент» и ссылки на его раздел",
+      "status": "queued",
+      "evidence": "14.10: согласованный перенос T086 (решение владельца 14.10 — выпуск рутинных правок согласованных задач). Оставлено в очереди queued для первого цикла таймера seo-tech-run (B006): проверка полного цикла без открытого чата."
+    },
+    {
+      "id": "T091",
+      "site": "1lordserials1.online",
+      "direction": "lords",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [
+        "https://1lordserials1.online/title/siniy-zontik/"
+      ],
+      "problem": "Перенос T086 (lordserial33.biz, выпущено 339e700 14.10): в фактах карточки тайтла 1lordserials1.online жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (служебная метка, noindex, follow).",
+      "norm": "служебные метки поставщика (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) — не жанр для посетителя (T044/T064); внутренние ссылки — на индексируемые страницы",
+      "expected": "в фактах карточки метки не выводятся; если других жанров нет — строки «Жанр» нет; прочие жанры — ссылками",
+      "check": "checks/card_service_genre.py",
+      "verify_live": "после выпуска: в фактах /title/<слаг>/ нет «западный контент» и ссылки на его раздел",
+      "status": "queued",
+      "evidence": "14.10: согласованный перенос T086 (решение владельца 14.10 — выпуск рутинных правок согласованных задач). Оставлено в очереди queued для первого цикла таймера seo-tech-run (B006): проверка полного цикла без открытого чата."
+    },
+    {
+      "id": "T092",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/title/siniy-zontik/"
+      ],
+      "problem": "Перенос T086 (lordserial33.biz, выпущено 339e700 14.10): в фактах карточки тайтла lordserials22.info жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (служебная метка, noindex, follow).",
+      "norm": "служебные метки поставщика (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) — не жанр для посетителя (T044/T064); внутренние ссылки — на индексируемые страницы",
+      "expected": "в фактах карточки метки не выводятся; если других жанров нет — строки «Жанр» нет; прочие жанры — ссылками",
+      "check": "checks/card_service_genre.py",
+      "verify_live": "после выпуска: в фактах /title/<слаг>/ нет «западный контент» и ссылки на его раздел",
+      "status": "queued",
+      "evidence": "14.10: согласованный перенос T086 (решение владельца 14.10 — выпуск рутинных правок согласованных задач). Оставлено в очереди queued для первого цикла таймера seo-tech-run (B006): проверка полного цикла без открытого чата."
     }
   ]
 }
