@@ -42,6 +42,7 @@ run() {
   local took=$((SECONDS - start))
   local status="FAIL"; [ $code -eq 0 ] && status="PASS"
   record "$name" "$cmd" "$code" "$status" "${took}s"
+  FACTORY_LAST_CODE=$code
   echo "   -> exit=$code (${took}s)"
 }
 
@@ -106,6 +107,14 @@ else
     PW_REPORT="artifacts/qa/pilot-local/playwright-report.json"
     rm -f "$PW_REPORT"
     run "e2e-playwright" "npx playwright test && test -s \"$PW_REPORT\""
+    # Стенд никем не присматривается. Если встроенный сервер исчезнет посреди
+    # прогона, каждая следующая проверка падает с ERR_CONNECTION_REFUSED и
+    # выглядит как дефект страницы — измерено 14.10: 27 прошли, 17 упали так,
+    # а в одиночку тот же прогон дал 44 passed. Разбор только НАЗЫВАЕТ причину;
+    # шаг остаётся FAIL, повтором статус здесь не добывается.
+    if [ "${FACTORY_LAST_CODE:-0}" != "0" ]; then
+      python3 tests/tools/e2e_diagnosis.py "$FACTORY_BASE_URL" || true
+    fi
     if [ ! -s "$PW_REPORT" ]; then
       echo "   ВНИМАНИЕ: отчёт $PW_REPORT не создан — шаг не может считаться доказанным"
     fi

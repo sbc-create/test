@@ -563,13 +563,53 @@ def consistency_report(path: Path | None = None) -> list[str]:
         if site_id and domain:
             known.setdefault(site_id, set()).add(domain)
 
+    # Третий источник — пакет самой ячейки. Переносимая ячейка живёт в
+    # собственном репозитории и несёт идентичность там (`config/site.json`),
+    # а не в `config/site-profiles` и не в `sites/`. Без него сверка шумела на
+    # две трети записей одной и той же неверной фразой — 23 замечания из 33
+    # ячеек, измерено 2026-10-14, — и в этом шуме тонуло настоящее
+    # расхождение.
+    for cell in all_cells(path):
+        try:
+            пакет = cell.repo_path / "config" / "site.json"
+        except RegistryError:
+            # Путь уводит за пределы корня репозиториев: читать оттуда нельзя,
+            # и послабления тут быть не может. Ячейка останется неизвестной.
+            continue
+        if not пакет.is_file():
+            continue
+        try:
+            данные = json.loads(пакет.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        site_id = данные.get("site_id")
+        domain = данные.get("domain")
+        if site_id and domain:
+            known.setdefault(site_id, set()).add(domain)
+
+    # Обратный указатель: он отличает «фабрика не знает такой витрины» от
+    # «знает тот же домен под другим именем». Второе — расхождение
+    # идентичности, и называть его надо прямо.
+    по_домену: dict[str, set[str]] = {}
+    for site_id, домены in known.items():
+        for домен in домены:
+            по_домену.setdefault(домен, set()).add(site_id)
+
     for cell in all_cells(path):
         declared = known.get(cell.site_id)
         if not declared:
-            problems.append(
-                f"{cell.site_id}: ни профиля, ни пакета сайта — реестр ссылается "
-                "на сайт, которого фабрика не знает"
-            )
+            другие = sorted(по_домену.get(cell.domain, set()))
+            if другие:
+                problems.append(
+                    f"{cell.site_id}: источник идентичности знает домен "
+                    f"{cell.domain} под именем {другие} — одна витрина под двумя "
+                    "именами, и выкладка пойдёт не тем site_id"
+                )
+            else:
+                problems.append(
+                    f"{cell.site_id}: ни профиля, ни пакета сайта, ни пакета самой "
+                    "ячейки — реестр ссылается на сайт, которого фабрика не знает"
+                )
             continue
         if cell.domain not in declared:
             problems.append(

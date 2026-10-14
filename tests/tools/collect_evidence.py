@@ -2,6 +2,26 @@
 
 Запускается после `bash tests/run-all.sh`: в git попадает не весь runtime-вывод,
 а фиксированный набор файлов, по которым можно проверить заявленные результаты.
+
+Два правила, и оба появились из измеренных потерь
+-------------------------------------------------
+
+1. **Сборщик трогает только СВОИ файлы.** Прежняя редакция удаляла
+   `artifacts/evidence` целиком (`shutil.rmtree`), оставляя `README.md`, и
+   вместе со своими копиями уносила ЧУЖИЕ наборы, лежащие в git:
+   `arch-player-content-010/`, `lords-template-1.1.0/`, `portable-site-cell/`,
+   `playback/`, `new-sites/` — 57 файлов, измерено 2026-10-14 по `git status`
+   после полного прогона. Инструмент, который ведёт набор доказательств, сам
+   его и стирал, а следующий коммит зафиксировал бы пропажу как намеренную.
+
+2. **Своя копия удаляется только тогда, когда её есть чем заменить.** Вторая
+   редакция чистила весь свой список и этим удаляла доказательства, которые на
+   этом хосте воспроизвести НЕЧЕМ: шаг `payload-blueprint` здесь пропускается
+   (нет зависимостей приложения), и восемь файлов `multisite-*` исчезли из
+   набора — измерено в том же прогоне. Поэтому файл, для которого источник
+   отсутствует, остаётся как есть: он документирует прогон на машине, которая
+   этот шаг выполняет. Какие шаги шли в ЭТОМ прогоне, видно из `run-all.json`,
+   где у каждого стоит статус и exit code.
 """
 import json
 import shutil
@@ -20,44 +40,44 @@ if not jobs:
 latest = max(jobs, key=lambda p: json.loads(p.read_text(encoding="utf-8")).get("finished_at", ""))
 job = json.loads(latest.read_text(encoding="utf-8"))
 
-readme = (evidence / "README.md").read_text(encoding="utf-8") if (evidence / "README.md").exists() else ""
-shutil.rmtree(evidence, ignore_errors=True)
-evidence.mkdir(parents=True)
-if readme:
-    (evidence / "README.md").write_text(readme, encoding="utf-8")
-
-shutil.copy(latest, evidence / "job-result.json")
-for src, name in (
-    (PATHS.artifacts / "qa" / "run-all.json", "run-all.json"),
-    (PATHS.artifacts / "env" / "env-report.json", "env-report.json"),
-    (PATHS.artifacts / "input-request" / "input-request.json", "input-request.json"),
-    (PATHS.artifacts / "qa" / SITE / "screenshots.md", "screenshots.md"),
-):
-    if src.exists():
-        shutil.copy(src, evidence / name)
-
 qa_dir = PATHS.artifacts / "qa" / SITE / job["job_id"]
-for name in ("seo-lint.json", "seo-crawl.json", "seo-render.json", "security-smoke.json",
-             "acceptance-routes.json", "performance-budget.json", "major-findings-budget.json",
-             "browser-audit.json"):
-    if (qa_dir / name).exists():
-        shutil.copy(qa_dir / name, evidence / name)
-
 seo_dir = PATHS.artifacts / "seo" / SITE / job["job_id"]
-for name in ("seo-report.json", "seo-report.md"):
-    if (seo_dir / name).exists():
-        shutil.copy(seo_dir / name, evidence / name)
-
-# Доказательства второго blueprint лежат в var/artifacts: собираются тем же
-# прогоном, но другими инструментами. Без них отчёт по payload-next-multisite
-# опирался бы на слова, а не на файлы.
 multisite = PATHS.var / "artifacts"
-for name in ("restore-proof.json", "cross-site-uniqueness.json", "mutation-isolation.json",
-             "secret-scan.json", "admin-smoke.json", "frontend-http.json",
-             "performance-lab.json", "playwright-multisite.json"):
-    src = multisite / name
-    if src.exists():
-        shutil.copy(src, evidence / f"multisite-{name}")
+
+#: Что сборщик считает своим: имя в наборе → откуда берётся. Всё, чего в этой
+#: таблице нет, принадлежит другим работам и не трогается.
+СВОИ: list[tuple[str, object]] = [
+    ("job-result.json", latest),
+    ("run-all.json", PATHS.artifacts / "qa" / "run-all.json"),
+    ("env-report.json", PATHS.artifacts / "env" / "env-report.json"),
+    ("input-request.json", PATHS.artifacts / "input-request" / "input-request.json"),
+    ("screenshots.md", PATHS.artifacts / "qa" / SITE / "screenshots.md"),
+]
+for имя in ("seo-lint.json", "seo-crawl.json", "seo-render.json", "security-smoke.json",
+            "acceptance-routes.json", "performance-budget.json",
+            "major-findings-budget.json", "browser-audit.json"):
+    СВОИ.append((имя, qa_dir / имя))
+for имя in ("seo-report.json", "seo-report.md"):
+    СВОИ.append((имя, seo_dir / имя))
+# Доказательства второго blueprint: собираются тем же прогоном, но другими
+# инструментами, и на хосте без зависимостей приложения не собираются вовсе.
+for имя in ("restore-proof.json", "cross-site-uniqueness.json", "mutation-isolation.json",
+            "secret-scan.json", "admin-smoke.json", "frontend-http.json",
+            "performance-lab.json", "playwright-multisite.json"):
+    СВОИ.append((f"multisite-{имя}", multisite / имя))
+
+evidence.mkdir(parents=True, exist_ok=True)
+обновлено: list[str] = []
+сохранено: list[str] = []
+for имя, источник in СВОИ:
+    цель = evidence / имя
+    if источник.exists():
+        shutil.copy(источник, цель)
+        обновлено.append(имя)
+    elif цель.exists():
+        # Заменить нечем. Удалить значило бы потерять доказательство, которое
+        # этот хост воспроизвести не может.
+        сохранено.append(имя)
 
 playwright = PATHS.artifacts / "qa" / SITE / "playwright-report.json"
 if playwright.exists():
@@ -66,5 +86,11 @@ if playwright.exists():
         "stats": data.get("stats", {}),
         "projects": sorted({s.get("title", "") for s in data.get("suites", [])}),
     }, ensure_ascii=False, indent=2), encoding="utf-8")
+    обновлено.append("playwright-summary.json")
+elif (evidence / "playwright-summary.json").exists():
+    сохранено.append("playwright-summary.json")
 
-print(f"evidence обновлён: {len(list(evidence.iterdir()))} файлов из задания {job['job_id']} ({job['status']})")
+print(f"evidence обновлён: {len(обновлено)} файлов из задания {job['job_id']} "
+      f"({job['status']}); сохранено без замены: {len(сохранено)}"
+      + (f" ({', '.join(сохранено)})" if сохранено else "")
+      + "; чужие наборы в каталоге не тронуты")

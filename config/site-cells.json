@@ -951,7 +951,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-10",
+        "path": "var/new-sites/lords-10",
         "remote": "https://github.com/sbc-create/site-lordfilm-group"
       },
       "template": {
@@ -959,7 +959,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1032,7 +1035,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-11",
+        "path": "var/new-sites/lords-11",
         "remote": "https://github.com/sbc-create/site-lordfilm-spb-ru"
       },
       "template": {
@@ -1040,7 +1043,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1113,7 +1119,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-12",
+        "path": "var/new-sites/lords-12",
         "remote": "https://github.com/sbc-create/site-lordfilm-msk-ru"
       },
       "template": {
@@ -1121,7 +1127,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1194,7 +1203,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-13",
+        "path": "var/new-sites/lords-13",
         "remote": "https://github.com/sbc-create/site-lordserial-su"
       },
       "template": {
@@ -1202,7 +1211,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1275,7 +1287,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-14",
+        "path": "var/new-sites/lords-14",
         "remote": "https://github.com/sbc-create/site-lordserial-group"
       },
       "template": {
@@ -1283,7 +1295,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1356,7 +1371,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-15",
+        "path": "var/new-sites/lords-15",
         "remote": "https://github.com/sbc-create/site-lordserial-spb-ru"
       },
       "template": {
@@ -1364,7 +1379,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1437,7 +1455,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-16",
+        "path": "var/new-sites/lords-16",
         "remote": "https://github.com/sbc-create/site-lordserial-msk-ru"
       },
       "template": {
@@ -1445,7 +1463,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1518,7 +1539,7 @@
       "status": "planned",
       "repo": {
         "kind": "remote",
-        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-17",
+        "path": "var/new-sites/lords-17",
         "remote": "https://github.com/sbc-create/site-lordserial-net-ru"
       },
       "template": {
@@ -1526,7 +1547,10 @@
         "family": "lords"
       },
       "pins": {},
-      "deploy_target": {},
+      "deploy_target": {
+        "ref": "k2-zomro-01",
+        "server": null
+      },
       "publisher": {
         "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
       },
@@ -1785,9 +1809,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
-        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
+        "publisher_id": "10376",
+        "note": "Витрина Yummy: плеера у ячейки нет, страницу отдаёт верхний поток Next.js, и `LORDS_PLAYER_CONFIG` в окружении ячейки отсутствует намеренно — объявление publisher_id_expected в пакете валит пусковую проверку «LORDS_PLAYER_CONFIG не задан» и витрина не поднимается вовсе. Номер закрепляется за ЭТОЙ витриной переменной контура CDNVIDEOHUB_PUBLISHER_ID_PINNED (deploy/compose.yaml): точка входа образа предпочитает её общему файлу направления /run/cdnvideohub/publisher-id, одному на всё семейство. Тем же способом закреплены соседи (yummyani.org 10377, yummyani.biz 10375). Назначение владельца 2026-10-14, решение D214; применяет и сверяет automation/local/yummy-publisher-id.py из этого же учёта.",
+        "publisher_id_ref": "repo://deploy/compose.yaml#services.web.environment.CDNVIDEOHUB_PUBLISHER_ID_PINNED"
       },
       "data": {},
       "deployed": {},
@@ -1866,9 +1890,9 @@
       },
       "publisher": {
         "provider": "cdnvideohub",
-        "publisher_id": null,
-        "note": "PUBLISHER_ID НЕ НАЗНАЧЕН — вход владельца. Свой на домен: 10238 объявлен у пяти витрин, 10252 у двух, и переносить их на новый домен значит смешать показы в чужом отчёте.",
-        "publisher_id_ref": "repo://config/site.json#publisher_id_expected"
+        "publisher_id": "10371",
+        "note": "Витрина Yummy: плеера у ячейки нет, страницу отдаёт верхний поток Next.js, и `LORDS_PLAYER_CONFIG` в окружении ячейки отсутствует намеренно — объявление publisher_id_expected в пакете валит пусковую проверку «LORDS_PLAYER_CONFIG не задан» и витрина не поднимается вовсе. Номер закрепляется за ЭТОЙ витриной переменной контура CDNVIDEOHUB_PUBLISHER_ID_PINNED (deploy/compose.yaml): точка входа образа предпочитает её общему файлу направления /run/cdnvideohub/publisher-id, одному на всё семейство. Тем же способом закреплены соседи (yummyani.org 10377, yummyani.biz 10375). Назначение владельца 2026-10-14, решение D214; применяет и сверяет automation/local/yummy-publisher-id.py из этого же учёта.",
+        "publisher_id_ref": "repo://deploy/compose.yaml#services.web.environment.CDNVIDEOHUB_PUBLISHER_ID_PINNED"
       },
       "data": {},
       "deployed": {},
