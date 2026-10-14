@@ -55,55 +55,68 @@
 
 ## Блок владельца (root на claude-control-01)
 
-Перед запуском блока — записать время, оно нужно для приёмки:
-
-```bash
-УСТАНОВКА=$(date -u +%Y-%m-%dT%H:%M:%SZ); echo "$УСТАНОВКА"
-```
+Выполнен 14.10 в 18:38:15Z (время — `var/seo-tech/b006-installed-at.txt`). Ниже — исправленная редакция для повторной установки: латинские имена переменных, юниты проверяются до установки, ошибка резервного копирования останавливает блок.
 
 ```bash
 set -euo pipefail
-КОРЕНЬ=/home/claude/wt-portable-site-cell-01
-ED="$КОРЕНЬ/automation/host/editor"
-cd "$КОРЕНЬ"
+INSTALLED_AT=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+REPO_ROOT=/home/claude/wt-portable-site-cell-01
+UNIT_SRC="$REPO_ROOT/automation/host/editor"
+UNITS="seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer"
+cd "$REPO_ROOT"
 
-# 1. Источники: дерево на ожидаемом коммите и файлы совпадают с отпечатками
-sudo -u claude git -C "$КОРЕНЬ" log -1 --format='%H %s'
-sudo -u claude sha256sum -c "$ED/B006.sha256"
-bash -n "$ED/seo-tech-run.sh" && bash -n "$ED/seo-tech-publish.sh"
+# 1. Источники: коммит, отпечатки, синтаксис, тесты, очередь, доступ к GitHub
+sudo -u claude git -C "$REPO_ROOT" log -1 --format='%H %s'
+sudo -u claude sha256sum -c "$UNIT_SRC/B006.sha256"
+bash -n "$UNIT_SRC/seo-tech-run.sh"
+bash -n "$UNIT_SRC/seo-tech-publish.sh"
 sudo -u claude python3 -m pytest -q tests/unit/test_seo_tech_b006.py tests/unit/test_seo_tech_run.py
-ПИК=0; sudo -u claude python3 -m seo_operator.cli seo-tech-next --peek || ПИК=$?; echo "peek rc=$ПИК (10 — есть задачи, 0 — нет; иное — ОСТАНОВИТЬСЯ)"; [ "$ПИК" = 0 ] || [ "$ПИК" = 10 ]
+PEEK_RC=0
+sudo -u claude python3 -m seo_operator.cli seo-tech-next --peek || PEEK_RC=$?
+echo "peek rc=$PEEK_RC (10 — есть задачи, 0 — нет)"
+[ "$PEEK_RC" = 0 ] || [ "$PEEK_RC" = 10 ]
 sudo -u claude gh auth status
 
-# 2. Сохранить прежнюю конфигурацию (если была)
-ЗАПАС=/root/systemd-backup-seo-tech-$(date -u +%Y%m%dT%H%M%SZ); mkdir -p "$ЗАПАС"
-for f in seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer; do
-  [ -e "/etc/systemd/system/$f" ] && cp -a "/etc/systemd/system/$f" "$ЗАПАС/" || true
-done
-ls -la "$ЗАПАС"
+# 2. Юниты проверяются ДО установки — по исходным файлам
+(cd "$UNIT_SRC" && systemd-analyze verify $UNITS)
 
-# 3. Установка и проверка юнитов
-for f in seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer; do
-  install -m 0644 "$ED/$f" "/etc/systemd/system/$f"
+# 3. Сохранить прежнюю конфигурацию; ошибка копирования останавливает блок
+BACKUP_DIR=/root/systemd-backup-seo-tech-$(date -u +%Y%m%dT%H%M%SZ)
+mkdir -p "$BACKUP_DIR"
+for unit in $UNITS; do
+  if [ -e "/etc/systemd/system/$unit" ]; then
+    cp -a "/etc/systemd/system/$unit" "$BACKUP_DIR/"
+    echo "сохранён $unit"
+  else
+    echo "прежнего $unit нет"
+  fi
 done
-systemd-analyze verify /etc/systemd/system/seo-tech-run.service /etc/systemd/system/seo-tech-run.timer \
-  /etc/systemd/system/seo-tech-publish.service /etc/systemd/system/seo-tech-publish.timer
+ls -la "$BACKUP_DIR"
+
+# 4. Установка и повторная проверка установленных юнитов
+for unit in $UNITS; do
+  install -m 0644 "$UNIT_SRC/$unit" "/etc/systemd/system/$unit"
+done
+(cd /etc/systemd/system && systemd-analyze verify $UNITS)
 systemctl daemon-reload
 
-# 4. Включение таймеров и первый запуск
+# 5. Включение таймеров и первый запуск
 systemctl enable --now seo-tech-run.timer seo-tech-publish.timer
 systemctl start --no-block seo-tech-run.service
+echo "$INSTALLED_AT" | sudo -u claude tee "$REPO_ROOT/var/seo-tech/b006-installed-at.txt"
 systemctl list-timers 'seo-tech-*' --no-pager
-systemctl status seo-tech-run.service --no-pager | head -15
 ```
 
-**Откат установки:**
+**Откат установки** (ошибки не скрываются):
 
 ```bash
+set -euo pipefail
 systemctl disable --now seo-tech-run.timer seo-tech-publish.timer
 systemctl stop seo-tech-run.service seo-tech-publish.service
-rm -f /etc/systemd/system/seo-tech-{run,publish}.{service,timer}
-cp -a "$ЗАПАС"/* /etc/systemd/system/ 2>/dev/null || true
+for unit in seo-tech-run.service seo-tech-run.timer seo-tech-publish.service seo-tech-publish.timer; do
+  rm -f "/etc/systemd/system/$unit"
+  if [ -e "$BACKUP_DIR/$unit" ]; then cp -a "$BACKUP_DIR/$unit" /etc/systemd/system/; fi
+done
 systemctl daemon-reload
 ```
 
@@ -113,7 +126,7 @@ systemctl daemon-reload
 
 1. **Две задачи подряд без ручного запуска второй.** В очереди T090, T091, T092 (`queued`), каждая 5–15 минут. Примерно через 40 минут:
    ```bash
-   sudo -u claude python3 /home/claude/wt-portable-site-cell-01/automation/local/seo-tech-acceptance.py --since "$УСТАНОВКА"
+   sudo -u claude python3 /home/claude/wt-portable-site-cell-01/automation/local/seo-tech-acceptance.py --since "$(cat /home/claude/wt-portable-site-cell-01/var/seo-tech/b006-installed-at.txt)"
    ```
    Раздел A, `ok: true`: пара задач с `gap_s` ≤ 120.
 2. **Восстановление после прерывания.** Пока идёт прогон (`systemctl is-active seo-tech-run.service` → `activating`), прервать его:
