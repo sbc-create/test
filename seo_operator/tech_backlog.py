@@ -219,13 +219,17 @@ def from_pages(cells: dict[str, dict], fetch: Fetch = _fetch, *, per_site: int =
         if код != 200:
             continue
         адреса: list[str] = []
-        for часть in re.findall(r"<loc>([^<]+)</loc>", индекс)[-2:]:
+        прочие: list[str] = []
+        части = re.findall(r"<loc>([^<]+)</loc>", индекс)
+        for часть in части[:1] + части[-2:]:
             try:
                 _, _, тело = fetch(html.unescape(часть))
             except Exception:  # noqa: BLE001
                 continue
-            адреса += [html.unescape(u) for u in re.findall(r"<loc>([^<]+/title/[^<]+)</loc>", тело)]
-        отобрано = адреса[:: max(1, len(адреса) // per_site)][:per_site] if адреса else []
+            for u in (html.unescape(x) for x in re.findall(r"<loc>([^<]+)</loc>", тело)):
+                (адреса if "/title/" in u else прочие).append(u)
+        шаг = lambda xs: xs[:: max(1, len(xs) // per_site)][:per_site] if xs else []
+        отобрано = шаг(адреса) + шаг([u for u in прочие if not u.endswith(".xml")])
         беды = []
         for u in отобрано:
             try:
@@ -233,10 +237,12 @@ def from_pages(cells: dict[str, dict], fetch: Fetch = _fetch, *, per_site: int =
             except Exception:  # noqa: BLE001
                 continue
             if код != 200:
-                беды.append((u, f"код {код}"))
+                беды.append((u, f"в карте, но код {код}"))
                 continue
             if _noindex(тело):
-                continue  # закрыта намеренно (например, серия без дорожки) — не дефект этой выборки
+                # В карте — только индексируемые страницы: noindex у адреса карты — дефект карты.
+                беды.append((u, "в карте, но noindex"))
+                continue
             канон = re.search(r'<link rel="canonical" href="([^"]*)"', тело)
             if not канон:
                 беды.append((u, "нет canonical"))
@@ -258,8 +264,8 @@ def from_pages(cells: dict[str, dict], fetch: Fetch = _fetch, *, per_site: int =
         итог.append({
             "site": домен, "direction": c["direction"], "repo": c["repo"],
             "urls": sorted({u for u, _ in беды})[:5],
-            "problem": "Аудит страниц тайтлов (выборка из карты): " + "; ".join(f"{u} — {б}" for u, б in беды[:6]),
-            "norm": "страница тайтла: canonical на себя, содержательный description, один H1, разбираемый JSON-LD",
+            "problem": "Аудит адресов карты сайта (выборка тайтлов и разделов): " + "; ".join(f"{u} — {б}" for u, б in беды[:6]),
+            "norm": "в карте — только индексируемые страницы 200 с canonical на себя; у страницы — содержательный description, один H1, разбираемый JSON-LD",
             "expected": "все отклонения выборки устранены; проверка поднимает витрину и проверяет те же признаки",
             "check": "checks/auto_title_page.py",
             "verify_live": "после выпуска выборка тех же адресов без отклонений",

@@ -311,3 +311,19 @@ def test_non_lords_repo_gets_cell_snapshot_path(tmp_path, monkeypatch):
     среда = tech_run.снимок_стенда(репо, tmp_path / "mini")
     assert среда == {"SITE_DATA_DIR": str(данные), "SITEMAP_CHECK_DATA": str(данные)}
     assert not (tmp_path / "mini").exists()  # снимок ячейки не копируется и не урезается
+
+
+def test_backlog_pages_flags_sitemap_entries_that_are_not_indexable():
+    стр = {
+        "https://a.test/sitemap.xml": (200, "", "<loc>https://a.test/s-1.xml</loc>"),
+        "https://a.test/s-1.xml": (200, "", "<loc>https://a.test/title/x/</loc><loc>https://a.test/genre/y/</loc><loc>https://a.test/old/</loc>"),
+        "https://a.test/title/x/": (200, "", '<link rel="canonical" href="https://a.test/title/x/"><meta name="description" content="достаточно длинное описание страницы"><h1>X</h1>'),
+        "https://a.test/genre/y/": (200, "", '<meta name="robots" content="noindex, follow"><h1>Y</h1>'),
+        "https://a.test/old/": (404, "", ""),
+    }
+    out = tech_backlog.from_pages({"a.test": {"repo": "r", "direction": "lords", "site_id": "a"}},
+                                  lambda u: стр.get(u, (200, "", "")), per_site=5)
+    assert len(out) == 1
+    assert "genre/y/ — в карте, но noindex" in out[0]["problem"]
+    assert "old/ — в карте, но код 404" in out[0]["problem"]
+    assert "title/x/" not in out[0]["problem"]
