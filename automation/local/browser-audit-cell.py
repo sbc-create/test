@@ -222,10 +222,15 @@ def осмотр_каталога(стр, база: str, итог: dict) -> None
     # дефекты — проверка выдумала требование вместо того, чтобы прочитать
     # ссылку.
     стр.goto(база + "/catalog/", wait_until="domcontentloaded")
+    # Шаблон — ТОЛЬКО адрес с номером страницы. Прежний искал «page|стр|след»
+    # по склейке href и текста и на сериальном каталоге выбрал ссылку
+    # произведения: проверка пагинации сравнивала каталог с карточкой фильма и
+    # разницу считала успехом.
     следующая = стр.evaluate(
         "() => {const a=Array.from(document.querySelectorAll('a[href]'))"
-        ".find(x => /page|стр|след/i.test(x.getAttribute('href')+' '+x.innerText));"
-        "return a ? a.getAttribute('href') : '';}")
+        ".map(x => x.getAttribute('href') || '')"
+        ".find(h => /\\/page\\/\\d|[?&]page=\\d/.test(h));"
+        "return a || '';}")
     итог["каталог"]["ссылка следующей"] = следующая
     if следующая:
         состав_второй = состав(база + следующая if следующая.startswith("/") else следующая)
@@ -242,10 +247,19 @@ def осмотр_карточки(стр, база: str, данные: Path, sit
     элементы = каталог.get("items") or []
     # Берём произведение с сезонами, если такое есть: сериальная поверхность
     # проверяется только на нём.
-    сериал = next((э for э in элементы if (э.get("kind") or э.get("type")) in
-                   ("series", "tv", "serial")), None)
-    фильм = next((э for э in элементы if (э.get("kind") or э.get("type")) in
-                  ("movie", "film")), элементы[0] if элементы else None)
+    # Вид в снимке каталога записан по-русски («Фильм», «Сериал»,
+    # «Мультфильм»). Прежний отбор по английским значениям давал сериал None на
+    # всех пяти сериальных витринах — сезоны и серии не проверялись ни разу, а
+    # фильм брался первым попавшимся элементом.
+    СЕРИАЛЬНЫЕ = ("Сериал", "series", "tv", "serial")
+    ФИЛЬМОВЫЕ = ("Фильм", "Мультфильм", "movie", "film")
+
+    def вид(э):
+        return str(э.get("kind") or э.get("type") or "")
+
+    сериал = next((э for э in элементы if вид(э) in СЕРИАЛЬНЫЕ), None)
+    фильм = next((э for э in элементы if вид(э) in ФИЛЬМОВЫЕ),
+                 элементы[0] if элементы else None)
     итог["карточка"] = {}
     for имя, элемент in (("фильм", фильм), ("сериал", сериал)):
         if not элемент:
@@ -264,7 +278,14 @@ def осмотр_карточки(стр, база: str, данные: Path, sit
             "похожее": стр.locator("a[href^='/title/']").count(),
             "сезоны": стр.locator("a[href*='season'], [class*='season']").count(),
             "серии": стр.locator("a[href*='episode'], [class*='episode']").count(),
-            "плеер": стр.locator("iframe, [class*='player'], [id*='player']").count(),
+            # Признак рамки — атрибут `data-player`, а не слово «player» в
+            # классе: классы здесь `pl`/`pl__frame`, и прежний селектор давал
+            # ноль на каждой карточке.
+            "плеер": стр.locator("[data-player], iframe").count(),
+            "состояние плеера": стр.evaluate(
+                "() => {const n=document.querySelector('[data-player]');"
+                "return n ? (n.getAttribute('data-state') || '') : null;}"),
+            "сюжет из источника": стр.locator(".plot p:not(.none)").count() > 0,
             "canonical": стр.evaluate(
                 "() => (document.querySelector(\"link[rel='canonical']\") || {}).href || ''"),
             "description": стр.evaluate(
@@ -382,8 +403,18 @@ def main() -> int:
         return 1
 
     база = f"http://127.0.0.1:{а.port}"
+    # Происхождение осмотра: снимки без коммита — картинки без адреса.
+    # Запись делается ДО измерений, чтобы в отчёте стоял тот коммит, который
+    # измерялся, а не тот, что оказался в репозитории потом.
+    _вг = ["git", "-C", str(проект)]
+    коммит = subprocess.run(_вг + ["rev-parse", "--short=12", "HEAD"],
+                            capture_output=True, text=True).stdout.strip()
+    грязно = subprocess.run(_вг + ["status", "--porcelain"],
+                            capture_output=True, text=True).stdout.strip()
     итог: dict = {"site": а.site, "domain": конфиг.get("domain"),
-                  "profile": (конфиг.get("template") or {}).get("template_id")}
+                  "profile": (конфиг.get("template") or {}).get("template_id"),
+                  "коммит": коммит,
+                  "незакоммиченных файлов": len(грязно.splitlines())}
     try:
         from playwright.sync_api import sync_playwright
 
