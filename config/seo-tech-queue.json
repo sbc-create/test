@@ -1633,6 +1633,40 @@
       "verify_live": "<title> выборки с видом и годом, контроля — прежний",
       "status": "live_verified",
       "evidence": "14.10: ebfeb82, CI 38566959973, lords-05 ok 12:56Z. Живой: escaype-live → «Escaype Live (сериал, 2022) — смотреть онлайн — …», story-9-months-ki — так же; контроль akademiya-vedm, preduprezhdenie — прежний <title>. robots с Sitemap, серий в карте (T075) 499. Эксперимент exp-lords-title-kind-year (canary, 8,2 % страниц)."
+    },
+    {
+      "id": "T088",
+      "site": "1lordserials1.online",
+      "direction": "lords",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [
+        "https://1lordserials1.online/"
+      ],
+      "problem": "Перенос T054 (образец lordfilm47 7a4a392, на просмотре): подвал главной 1lordserials1.online, колонка «Жанры» — ссылка на /genre/zapadnyykontent/ (служебная метка, noindex, follow — T044/T064); замер 14.10 ~14:15Z.",
+      "norm": "внутренние ссылки подвала — на индексируемые разделы; служебные метки (_служебный_раздел_жанра) не жанр для посетителя",
+      "expected": "выборка подвала ядра пропускает разделы, для которых _служебный_раздел_жанра истинно; слот получает следующий настоящий жанр",
+      "check": "checks/home_genre_links.py",
+      "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
+      "status": "queued",
+      "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049)."
+    },
+    {
+      "id": "T089",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/"
+      ],
+      "problem": "Перенос T054 (образец lordfilm47 7a4a392, на просмотре): подвал главной lordserials22.info, колонка «Жанры» — ссылка на /genre/zapadnyykontent/ (служебная метка, noindex, follow — T044/T064); замер 14.10 ~14:15Z.",
+      "norm": "внутренние ссылки подвала — на индексируемые разделы; служебные метки (_служебный_раздел_жанра) не жанр для посетителя",
+      "expected": "выборка подвала ядра пропускает разделы, для которых _служебный_раздел_жанра истинно; слот получает следующий настоящий жанр",
+      "check": "checks/home_genre_links.py",
+      "verify_live": "после выпуска: в подвале главной нет /genre/zapadnyykontent/ и /genre/aziatskiykontent/; все /genre/ подвала — 200 и index",
+      "status": "queued",
+      "review": "видимое (одна ссылка подвала меняется) — выпуск после одобрения образца T054",
+      "evidence": "14.10 ~14:15Z: подвалы главных Lords — ссылка на метку у lordfilm47.space (T054, ветка просмотра), 1lordserials1.online и lordserials22.info; у lordserial33.biz нет (T049)."
     }
   ]
 }
