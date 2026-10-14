@@ -452,6 +452,8 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # PRACTICAL-NETWORK-NIGHT-CONTINUE-02: референсы и источник food-baking
+            "www.kingarthurbaking.com", "sallysbakingaddiction.com", "eda.rambler.ru",
         }
 
 

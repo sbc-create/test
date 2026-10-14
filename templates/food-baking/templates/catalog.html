@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_parts.html" import toc %}
+{% block main %}
+<h1>{{ 'Подбор выпечки' if filtered else 'Оглавление' }}</h1>
+<p class="lead">{{ total }} рецептов{% if filtered %} по выбранным условиям{% endif %}.</p>
+<form class="filters" method="get" action="/recepty/" data-autosubmit>
+  <label>Вид теста <select name="testo"><option value="">любой</option>{% for k in site.doughs() %}<option value="{{ k }}"{% if flt.dough == k %} selected{% endif %}>{{ DOUGH[k][0] }}</option>{% endfor %}</select></label>
+  <label>Духовка <select name="duhovka"><option value="">неважно</option><option value="da"{% if flt.oven == 'da' %} selected{% endif %}>нужна</option><option value="net"{% if flt.oven == 'net' %} selected{% endif %}>без духовки</option></select></label>
+  <button type="submit">Показать</button>{% if filtered %} <a href="/recepty/">Сбросить</a>{% endif %}
+</form>
+{% if items %}{{ toc(items, 'h2') }}{% else %}<div class="empty"><h2>Таких рецептов пока нет</h2><p>Уберите одно из условий или откройте <a href="/recepty/">всё оглавление</a>.</p></div>{% endif %}
+{% if pages > 1 and not filtered %}<nav class="pager" aria-label="Страницы">{% for p in range(1, pages + 1) %}{% if p == n %}<span aria-current="page">{{ p }}</span>{% else %}<a href="{{ '/recepty/' if p == 1 else '/recepty/page/' ~ p ~ '/' }}">{{ p }}</a>{% endif %}{% endfor %}</nav>{% endif %}
+{% endblock %}

@@ -1,0 +1,79 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/prostye-bulochki-s-bananom-iz-sloenogo-testa-192818",
+ "title": "Простые булочки с бананом из слоеного теста",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 59,
+ "total_minutes": 59,
+ "ingredients": [
+  {
+   "raw": "Слоеное тесто, 1 кусок",
+   "name": "Слоеное тесто, 1 кусок",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "raw": "Бананы, 3 штуки",
+   "name": "Бананы",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сахар, 2 столовые ложки",
+   "name": "Сахар",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Корица, 2 чайные ложки",
+   "name": "Корица",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сливочное масло, 50 г",
+   "name": "Сливочное масло",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Яичный желток, 1 штука",
+   "name": "Яичный желток",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 170,
+    "step": 9
+   }
+  ],
+  "bake_times": [],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 9
+   },
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 11
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "36c26939dcfa52d2829e28a74e460ee71d5ba2996912a1526ee49ccdf0061ab2",
+ "record_id": "fb-02c938ba9635",
+ "group_hint": "bulochki",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:00:52Z"
+}

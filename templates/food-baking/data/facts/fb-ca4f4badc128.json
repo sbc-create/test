@@ -1,0 +1,93 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/zavarnye-bliny-na-kefire-191300",
+ "title": "Заварные блины на кефире",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 30,
+ "total_minutes": 30,
+ "ingredients": [
+  {
+   "raw": "Кефир, 500 мл",
+   "name": "Кефир",
+   "quantity": 500.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Куриное яйцо, 2 штуки",
+   "name": "Куриное яйцо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сахар, 2 столовые ложки",
+   "name": "Сахар",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Соль, щепотка",
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "raw": "Пшеничная мука, 300 г",
+   "name": "Пшеничная мука",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Кипяток, 250 мл",
+   "name": "Кипяток",
+   "quantity": 250.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Растительное масло, 3 столовые ложки",
+   "name": "Растительное масло",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Разрыхлитель, 1 чайная ложка",
+   "name": "Разрыхлитель",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Ванилин, щепотка",
+   "name": "Ванилин",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "raw": "Сливочное масло, по вкусу",
+   "name": "Сливочное масло",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [],
+  "bake_times": [
+   {
+    "min": 2,
+    "max": null,
+    "step": 9
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "температура духовки в источнике не названа"
+ ],
+ "complete": true,
+ "content_hash": "c8b0265211e2b67b6c8b013030a27c0f71936009dda9942199ef715adad3bab1",
+ "record_id": "fb-ca4f4badc128",
+ "group_hint": "zavarnoe",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:01:24Z"
+}

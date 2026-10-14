@@ -1,0 +1,64 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/plyushki-s-koricey-bystrye-192402",
+ "title": "Плюшки с корицей быстрые",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 45,
+ "total_minutes": 45,
+ "ingredients": [
+  {
+   "raw": "Слоеное тесто, 1 кусок",
+   "name": "Слоеное тесто, 1 кусок",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "raw": "Корица, 2 столовые ложки",
+   "name": "Корица",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Сахар, 2 столовые ложки",
+   "name": "Сахар",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Куриное яйцо, 1 штука",
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 7
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 20,
+    "max": 30,
+    "step": 7
+   }
+  ],
+  "forms": [],
+  "caution_steps": [
+   8
+  ]
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "1b5123ada180ab1310f0c4a2cc3813023fa11df7b32f9c9fd2185ed1eeec8a05",
+ "record_id": "fb-82b52363adc8",
+ "group_hint": "bulochki",
+ "step_count": 9,
+ "fetched_at": "2026-10-12T06:00:58Z"
+}
