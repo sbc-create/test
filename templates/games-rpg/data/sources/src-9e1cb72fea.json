@@ -1,0 +1,33 @@
+{
+ "id": "src-9e1cb72fea",
+ "url": "https://bg3.wiki/wiki/Sword_of_Justice",
+ "fetched_at": "2026-10-12T23:26:24Z",
+ "page_sha256": "601c0dbc760332499a902c98184ee8415790fa3e153d1e1b88c7acb1e6dc7df4",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Sword of Justice",
+ "lead": [
+  "Sword of Justice is an uncommon +1 greatsword that grants its wielder the Tyr's Protection spell.",
+  "The words 'Deliverance. Justice. Vengeance.' are engraved on the base of this sword. They echo in your mind."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Uncommon",
+  "weight_kg": 2.7,
+  "damage": [
+   {
+    "hand": null,
+    "dice": "2d6 + 1",
+    "type": "Slashing"
+   }
+  ],
+  "extra_damage": [],
+  "armour_class": null,
+  "category": "Greatswords",
+  "enchantment": 1,
+  "found_in": "Risen Road Toll House"
+ }
+}

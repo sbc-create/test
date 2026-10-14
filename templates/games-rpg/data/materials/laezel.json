@@ -1,0 +1,27 @@
+{
+ "slug": "laezel",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "src": "src-f89ddc7048",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Lae'zel: воин-гитьянки",
+ "summary": "Персонаж-«origin» и спутница, с которой возможен роман для героя любого пола. Гитьянки, воин с предысторией «Солдат». Если не играть за неё, впервые встречается на Наутилоиде в прологе.",
+ "points": [
+  "Класс: воин (Fighter)",
+  "Раса: гитьянки",
+  "Предыстория: Soldier"
+ ],
+ "tips": [],
+ "related": [
+  "klass-voin",
+  "kvest-yasli-gityanki"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

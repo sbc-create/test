@@ -1,0 +1,38 @@
+{
+ "id": "src-e195885694",
+ "url": "https://bg3.wiki/wiki/Everburn_Blade",
+ "fetched_at": "2026-10-12T23:26:20Z",
+ "page_sha256": "647d78d1d6cb7208c870698b9cf48d0d2fa391aaf1524d8f27dc7b49ec87e7e3",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Everburn Blade",
+ "lead": [
+  "Everburn Blade is an uncommon greatsword that deals additional ⁠ ⁠ Fire damage.",
+  "Silent flames surge the length of the blade as soon as it clears the scabbard."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Uncommon",
+  "weight_kg": 2.7,
+  "damage": [
+   {
+    "hand": null,
+    "dice": "2d6",
+    "type": "Slashing"
+   }
+  ],
+  "extra_damage": [
+   {
+    "dice": "1d4",
+    "type": "Fire"
+   }
+  ],
+  "armour_class": null,
+  "category": "Greatswords",
+  "enchantment": 0,
+  "found_in": "Nautiloid"
+ }
+}

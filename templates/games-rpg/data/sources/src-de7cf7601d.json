@@ -1,0 +1,25 @@
+{
+ "id": "src-de7cf7601d",
+ "url": "https://bg3.wiki/wiki/Minsc",
+ "fetched_at": "2026-10-13T01:31:59Z",
+ "page_sha256": "05b906d61309ecbe2265c1bda397bbcef9d983ce2a4bf18fa4ff9c12aea9344f",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Minsc",
+ "lead": [
+  "Minsc of Rashemen is a recruitable Companion . He and Jaheira return from both Baldur's Gate and Baldur's Gate II: Shadows of Amn and are the only two recruitable companions who cannot be romanced . He is a Human and a Hunter Ranger with the Folk Hero background.",
+  "Can make an additional attack after an unarmed or weapon attack."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 12,
+  "DEX": 17,
+  "CON": 13,
+  "INT": 8,
+  "WIS": 15,
+  "CHA": 10
+ }
+}

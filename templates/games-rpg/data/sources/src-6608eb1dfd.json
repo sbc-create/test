@@ -1,0 +1,27 @@
+{
+ "id": "src-6608eb1dfd",
+ "url": "https://bg3.wiki/wiki/Adamantine_Splint_Armour",
+ "fetched_at": "2026-10-12T23:26:26Z",
+ "page_sha256": "4b03dfdeef7b2f6572999cf9cfd91c42ad0c62ebfc45bffe2b8514fb083fc51f",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Adamantine Splint Armour",
+ "lead": [
+  "Adamantine Splint Armour is a very rare Heavy Armour that reduces all incoming damage by 2 and sends attackers Reeling . In addition, attacks cannot land Critical Hits on the wearer.",
+  "The adamantine plates lock and slide together perfectly - offering protection against even the deadliest of blades."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Very rare",
+  "weight_kg": 19.0,
+  "damage": [],
+  "extra_damage": [],
+  "armour_class": 18,
+  "category": "Heavy Armour",
+  "enchantment": 0,
+  "found_in": "Adamantine Forge"
+ }
+}

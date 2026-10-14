@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<section class="hero"><h1>Гайды RPG</h1><p class="lead">Справочник по ролевым играм: спутники, основы билдов по классам, квесты и механики. У каждого материала — источник и версия игры.</p></section>
+{% for gid, gm in site.games.items() %}{% set secs = site.sections(gid) %}{% if secs %}
+<section aria-labelledby="h-{{ gid }}"><div class="head"><h2 id="h-{{ gid }}">{{ gm.title }}</h2><a href="/{{ gid }}/">Весь справочник</a></div>
+{% if site.version %}<p class="ver">Сверено с: <a href="{{ site.version.url }}">{{ site.version.src.name }}</a></p>{% endif %}
+{% for sec, (label, items) in secs.items() %}<h3><a href="/{{ gid }}/{{ sec }}/">{{ label }}</a></h3>{{ grid(items[:3], 'h4') }}{% endfor %}
+</section>
+{% endif %}{% endfor %}
+<p class="note">Другие игры сети ведут соседние сайты: у каждой игры один сайт-владелец.</p>
+{% endblock %}

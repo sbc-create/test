@@ -1,0 +1,13 @@
+site_id: games-rpg
+name: "Гайды RPG"
+variant_id: codex-sections       # вариант A: разделы по типам (персонажи, билды, квесты, механики)
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8859"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8859}
+storage_namespace: "grpg-codex"
+ads: {adapter: disabled}
+analytics: {adapter: disabled}

@@ -56,3 +56,12 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- games-rpg: источники (только чтение) ---
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026: «для игр — руководства,
+  # официальные материалы и качественные вики с указанием версии игры». Только GET, robots.txt, пауза.
+  - ref: games-rpg-bg3-wiki
+    host: bg3.wiki
+    purpose: "games-rpg: bg3.wiki — квесты, персонажи, предметы, механики, патч"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

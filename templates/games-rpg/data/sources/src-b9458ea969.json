@@ -1,0 +1,25 @@
+{
+ "id": "src-b9458ea969",
+ "url": "https://bg3.wiki/wiki/Shadowheart",
+ "fetched_at": "2026-10-12T22:08:48Z",
+ "page_sha256": "2b6fe01cb55f8d0cb581d16fc2bf17e6efe6c1ffebc9584e2d9b3898236bb923",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Shadowheart",
+ "lead": [
+  "Shadowheart (born Jenevelle Hallowleaf) is an Origin character and a recruitable companion who can be romanced by characters of any gender. She is a high half-elf and a Trickery Domain Cleric with the Acolyte background. Shadowheart can be first found on the Nautiloid during the prologue where she serves as a temporary companion, and can be properly recruited at various points in Act One .",
+  "When within 9 m (30 ft) of a wolf, must roll a DC 15 WIS save or become Frightened ."
+ ],
+ "patches": [],
+ "abilities": {
+  "STR": 13,
+  "DEX": 13,
+  "CON": 14,
+  "INT": 10,
+  "WIS": 17,
+  "CHA": 8
+ }
+}

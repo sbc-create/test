@@ -1,0 +1,27 @@
+{
+ "id": "src-e9fef0292b",
+ "url": "https://bg3.wiki/wiki/Gale",
+ "fetched_at": "2026-10-12T22:08:52Z",
+ "page_sha256": "11cf1f8743528337401aca8e7ed586b3317c2740dbe7445ef9a814b2d185ead4",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "character",
+ "name": "Gale",
+ "lead": [
+  "Gale Dekarios is an Origin Character and recruitable Companion who can be romanced by characters of any gender. He is a human wizard with the Sage background. Gale can be first found at the Roadside Cliffs waypoint during Act One .",
+  "A scholar and prodigy in the arcane arts, Gale is committed to unlocking the secrets of the Weave no matter the cost."
+ ],
+ "patches": [
+  "Patch 8"
+ ],
+ "abilities": {
+  "STR": 8,
+  "DEX": 13,
+  "CON": 15,
+  "INT": 17,
+  "WIS": 10,
+  "CHA": 12
+ }
+}

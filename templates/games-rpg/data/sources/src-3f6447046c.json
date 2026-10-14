@@ -1,0 +1,27 @@
+{
+ "id": "src-3f6447046c",
+ "url": "https://bg3.wiki/wiki/Helldusk_Armour",
+ "fetched_at": "2026-10-13T00:58:03Z",
+ "page_sha256": "303bf02a980786481ff724601ff66ddd4fd5245daf074cbb2798d8b51916606c",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Helldusk Armour",
+ "lead": [
+  "Helldusk Armour is a legendary heavy Armour which can be worn without any proficiency. It grants Fire resistance, reduces damage by 3 from all sources, and grants the Fly spell.",
+  "Carixim , soul-stuffed forgemaster of hellish Avernus , hammers away ceaselessly at new creations. Questions of morality and destiny do not concern him. Conscience is for his betters. He works with cheer, his swollen skin moaning soothingly."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Legendary",
+  "weight_kg": 20.0,
+  "damage": [],
+  "extra_damage": [],
+  "armour_class": 21,
+  "category": "Heavy Armour",
+  "enchantment": 0,
+  "found_in": "House of Hope"
+ }
+}

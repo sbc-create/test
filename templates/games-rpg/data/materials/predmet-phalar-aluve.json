@@ -1,0 +1,27 @@
+{
+ "slug": "predmet-phalar-aluve",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "src": "src-842ac8926e",
+ "also": [
+  "src-07bd2e5b20"
+ ],
+ "title": "Предмет: Phalar Aluve — меч в камне",
+ "summary": "Редкий длинный меч +1, который можно держать одной или двумя руками: 1d8 + 1 одной рукой, 1d10 + 1 двумя. Застрял в камне в Underdark; способы освободить его перечислены на странице вики.",
+ "points": [
+  "Редкость: редкий (Rare), зачарование +1",
+  "Одной рукой: 1d8 + 1 рубящего",
+  "Двумя руками: 1d10 + 1 рубящего",
+  "Где найти: Underdark"
+ ],
+ "tips": [],
+ "related": [
+  "predmet-everburn-blade"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ },
+ "checklist": []
+}

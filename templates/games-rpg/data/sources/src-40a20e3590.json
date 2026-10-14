@@ -1,0 +1,43 @@
+{
+ "id": "src-40a20e3590",
+ "url": "https://bg3.wiki/wiki/Nyrulna",
+ "fetched_at": "2026-10-13T00:58:05Z",
+ "page_sha256": "e17f1d0558f805cff5b4f11c79457e917710766bc1a3c6362b29488de907e11f",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Nyrulna",
+ "lead": [
+  "Nyrulna is a legendary +3 Trident which can be thrown to create an explosion that deals Thunder damage in an area. It grants additional movement speed and jump distance and returns to the wielder after being thrown.",
+  "The forgemaster Lirrico designed this weapon for the champion of the wind goddess Akadi . A key component in the forging was his home city's wind, and for a year after the weapon was made, no wind blew there at all."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Legendary",
+  "weight_kg": 1.8,
+  "damage": [
+   {
+    "hand": "One-handed",
+    "dice": "1d6 + 3",
+    "type": "Piercing"
+   },
+   {
+    "hand": "Two-handed",
+    "dice": "1d8 + 3",
+    "type": "Piercing"
+   }
+  ],
+  "extra_damage": [
+   {
+    "dice": "1d6",
+    "type": "Thunder"
+   }
+  ],
+  "armour_class": null,
+  "category": "Tridents",
+  "enchantment": 3,
+  "found_in": "Jungle"
+ }
+}

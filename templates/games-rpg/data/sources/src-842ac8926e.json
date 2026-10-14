@@ -1,0 +1,37 @@
+{
+ "id": "src-842ac8926e",
+ "url": "https://bg3.wiki/wiki/Phalar_Aluve",
+ "fetched_at": "2026-10-12T23:26:22Z",
+ "page_sha256": "a7e5182197142d1429e257d6213968afd1da50e6975449d5475fba9c59f6d418",
+ "parser": "grpg-facts/1.0",
+ "kind": "wiki",
+ "publisher": "bg3.wiki",
+ "game": "baldurs-gate-3",
+ "type": "item",
+ "name": "Phalar Aluve",
+ "lead": [
+  "Phalar Aluve is a rare +1 Longsword that can be made to Sing or Shriek , granting nearby allies or enemies a bonus to Attack Rolls or damage rolls, depending on the choice."
+ ],
+ "patches": [],
+ "item": {
+  "rarity": "Rare",
+  "weight_kg": 1.35,
+  "damage": [
+   {
+    "hand": "One-handed",
+    "dice": "1d8 + 1",
+    "type": "Slashing"
+   },
+   {
+    "hand": "Two-handed",
+    "dice": "1d10 + 1",
+    "type": "Slashing"
+   }
+  ],
+  "extra_damage": [],
+  "armour_class": null,
+  "category": "Longswords",
+  "enchantment": 1,
+  "found_in": "Underdark"
+ }
+}
