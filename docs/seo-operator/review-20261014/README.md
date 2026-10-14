@@ -19,6 +19,7 @@
 | 4 | animeg0.site | [`claude/review-anime-t071`](https://github.com/sbc-create/site-animeg0-site/compare/c8bb9ec...claude/review-anime-t071) d7e854e | T071, то же для AnimeGo (класс .ag-next) | next_episode_title на копии живого снимка: PASS «3 серия — 18 октября, вс, 11:00 (МСК)»; CI success 38554685026 | низкий |
 | 5 | animedia.icu | [`claude/review-anime-t071`](https://github.com/sbc-create/site-animedia-icu/compare/f7694c4...claude/review-anime-t071) 6547bca | T071, исходный образец | прежний rc=1, ветка rc=0 (13.10) | низкий |
 | 6 | Zona ×3 | `claude/review-zona-batchb`: [zonafilm12](https://github.com/sbc-create/site-zonafilm12-site/compare/7ecfdb1...claude/review-zona-batchb) b68e1fd, [zonafilm.cc](https://github.com/sbc-create/site-zonafilm-cc/compare/b5742cb...claude/review-zona-batchb) 5a001ec, [zonafilm.space](https://github.com/sbc-create/site-zonafilm-space/compare/81e717e...claude/review-zona-batchb) 5868d7b | T034, T039 (видимые), T044, T046 (невидимые), см. §6 | zonafilm12 run.sh 41 PASS / 0 FAIL; catalog_scope, catalog_genre_links (97), sitemap_genres_race — rc=0 | средний: см. §6 |
+| 7 | lordserial33.biz | [`claude/review-lords-t086`](https://github.com/sbc-create/site-lordserial33-biz/compare/2f2c46f...claude/review-lords-t086) 339e700 | T086: из фактов карточки «Жанр» убрана служебная метка «западный контент» (её раздел noindex; метка стоит и у индийских фильмов) | card_service_genre: прежний rc=1, ветка rc=0; run.sh на урезанном снимке rc=0 | низкий |
 
 Все ветки содержат выпущенный код целиком: выпуск не откатит канарейки T074/T075 и правки ночи. T072 перебазирован на ff8a4b0 — без этого выпуск убрал бы канарейку T075.
 
@@ -120,3 +121,17 @@
 | site-zonafilm-space | 5868d7b | success, 38554696141 |
 
 Zona — следующий коммит T077 (zonafilm12 6d67605, zonafilm-cc e31341e, zonafilm-space 6592da4): отправка после полного run.sh, CI допишу.
+
+## 7. lordserial33.biz — T086
+
+Факты карточки тайтла:
+- было: «Жанр: триллер · криминал · детектив · западный контент», последняя ссылка ведёт в закрытый от индекса раздел метки;
+- стало: только настоящие жанры;
+- если метка была единственным «жанром», строки «Жанр» нет.
+
+После одобрения — перенос на остальные Lords.
+
+| до | после |
+| --- | --- |
+| ![](img/t086-title_cyber_vaar-desktop-before-focus.jpg) | ![](img/t086-title_cyber_vaar-desktop-after-focus.jpg) |
+| ![](img/t086-title_magiya_lyubvi_2-desktop-before-focus.jpg) | ![](img/t086-title_magiya_lyubvi_2-desktop-after-focus.jpg) |

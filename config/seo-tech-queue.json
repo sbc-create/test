@@ -1616,7 +1616,7 @@
       "expected": "в фактах карточки служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) не выводятся ссылкой (или не выводятся вовсе — как у Zona)",
       "status": "session",
       "review": "видимое изменение строки жанров — выпуск после просмотра; сначала образец на одном сайте",
-      "evidence": "14.10 ~12:35Z: link_targets.py — lordserial33.biz /title/siniy-zontik/ ссылается на /genre/zapadnyykontent/ (noindex, follow)."
+      "evidence": "14.10 ~12:35Z: link_targets.py — lordserial33.biz /title/siniy-zontik/ ссылается на /genre/zapadnyykontent/ (noindex, follow). 14.10: подготовлено и проверено — lordserial33-biz 339e700 на ветке claude/review-lords-t086 (отправлена для просмотра): card_service_genre прежний rc=1, ветка rc=0; run.sh на урезанном снимке rc=0. Скриншоты — docs/seo-operator/review-20261014 §7. Не опубликовано: видимое."
     }
   ]
 }
