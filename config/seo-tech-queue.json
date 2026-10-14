@@ -146,7 +146,7 @@
       "problem": "Автопродолжения технической работы между ходами нет (CronCreate запрещён профилем).",
       "status": "blocked",
       "owner_action": "root: команда §7 docs/verification/autocontinue-technical-seo-20261012.md (коммит ca37c4e) — сначала проверка предусловий, затем юнит seo-tech-run.service/timer.",
-      "evidence": "Предусловия выполнены и приняты Архитектором независимо: механизм 23/23, обёртка 20/20, расхождений 0 (docs/verification/autocontinue-mechanism-20261012.md, 188b43a); тесты tests/unit/test_seo_tech_run.py 17/17. Осталось только действие root."
+      "evidence": "Предусловия выполнены и приняты Архитектором независимо: механизм 23/23, обёртка 20/20, расхождений 0 (docs/verification/autocontinue-mechanism-20261012.md, 188b43a); тесты tests/unit/test_seo_tech_run.py 17/17. Осталось только действие root. 14.10: механизм проверен сессией от захвата до вердикта на реальной задаче T078 (VERIFIED 9/9, выпущено и сверено на живом сайте сессией). Таймер по-прежнему не установлен — действие root."
     },
     {
       "id": "T006",
@@ -1481,8 +1481,42 @@
       "expected": "в открытом режиме robots.txt содержит «Disallow: /random/»; ссылки и сам переход для посетителя не меняются; закрытый режим не меняется",
       "check": "checks/robots_random.py",
       "verify_live": "после выпуска: https://an1mego.site/robots.txt содержит Disallow: /random/",
+      "status": "live_verified",
+      "evidence": "14.10: найдено аудитом обхода (crawl 13.10: /random/ 303 на трёх AnimeGo; robots трёх AnimeGo без /random/). Поставлено как queued — первая задача для проверки фонового механизма seo-tech-run (B006) от начала до конца; одна витрина, без видимых изменений. Перенос на animeg0.site и an1meg0.site — после вердикта. 14.10: фоновый прогон 20261014T115806Z-1596566 (обёртка seo-tech-run.sh вручную, trigger manual-session): 11:58–12:05Z, 40 ходов, вердикт по следам VERIFIED 9/9 (проверка падает на базе и проходит на ветке, run.sh 31/31, ветка не отправлена). Сессия просмотрела diff (ЗАПРЕТЫ_ВИТРИНЫ в animego-frontend.py, общий indexing_mode.py не тронут) и выпустила: 7808784, CI 38561957573, animego-02 ok 12:14Z. Живой robots.txt an1mego.site — «Disallow: /random/» перед «Allow: /»; главная и карта 200."
+    },
+    {
+      "direction": "anime",
+      "norm": "служебные пути без собственного содержимого закрыты в robots.txt (СЛУЖЕБНЫЕ_ЗАПРЕТЫ, src/indexing_mode.py); переход на случайную страницу — не страница",
+      "expected": "в открытом режиме robots.txt содержит «Disallow: /random/»; ссылки и сам переход для посетителя не меняются; закрытый режим не меняется",
+      "check": "checks/robots_random.py",
+      "id": "T079",
+      "site": "animeg0.site",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/robots.txt",
+        "https://animeg0.site/random/"
+      ],
+      "problem": "Как T078 (an1mego.site, выпущено 14.10): на animeg0.site ссылка на /random/ (303 на случайный тайтл) с каждой страницы, в robots.txt путь не закрыт.",
+      "verify_live": "после выпуска: https://animeg0.site/robots.txt содержит Disallow: /random/",
       "status": "queued",
-      "evidence": "14.10: найдено аудитом обхода (crawl 13.10: /random/ 303 на трёх AnimeGo; robots трёх AnimeGo без /random/). Поставлено как queued — первая задача для проверки фонового механизма seo-tech-run (B006) от начала до конца; одна витрина, без видимых изменений. Перенос на animeg0.site и an1meg0.site — после вердикта."
+      "evidence": "14.10: перенос T078 (7808784, an1mego). Поставлено queued — для фонового прогона seo-tech-run."
+    },
+    {
+      "direction": "anime",
+      "norm": "служебные пути без собственного содержимого закрыты в robots.txt (СЛУЖЕБНЫЕ_ЗАПРЕТЫ, src/indexing_mode.py); переход на случайную страницу — не страница",
+      "expected": "в открытом режиме robots.txt содержит «Disallow: /random/»; ссылки и сам переход для посетителя не меняются; закрытый режим не меняется",
+      "check": "checks/robots_random.py",
+      "id": "T080",
+      "site": "an1meg0.site",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/robots.txt",
+        "https://an1meg0.site/random/"
+      ],
+      "problem": "Как T078 (an1mego.site, выпущено 14.10): на an1meg0.site ссылка на /random/ (303 на случайный тайтл) с каждой страницы, в robots.txt путь не закрыт.",
+      "verify_live": "после выпуска: https://an1meg0.site/robots.txt содержит Disallow: /random/",
+      "status": "queued",
+      "evidence": "14.10: перенос T078 (7808784, an1mego). Поставлено queued — для фонового прогона seo-tech-run."
     }
   ]
 }
