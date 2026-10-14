@@ -219,6 +219,8 @@ def main(argv=None) -> int:
     p.add_argument("--record", action="store_true", help="дописать вердикт в var/seo-tech/runs.jsonl")
     p.add_argument("--extra", default="{}", help="JSON-поля к записи (trigger, model_exit, …)")
     sub.add_parser("seo-tech-status", help="техническое SEO: состояние задач очереди по следам")
+    p = sub.add_parser("seo-tech-finalize", help="техническое SEO: штамп манифеста и замок штатными инструментами после модели")
+    p.add_argument("--run-id", required=True)
     p = sub.add_parser("seo-tech-publish", help="техническое SEO: выпустить проверенные ветки штатным путём (без модели)")
     p.add_argument("--dry-run", action="store_true", help="только сведения и решение, без push и заявок")
     p.add_argument("--limit", type=int, default=5)
@@ -346,6 +348,12 @@ def main(argv=None) -> int:
             return 3
         print(json.dumps({"run": True, **захват}, ensure_ascii=False))
         return 10
+    if args.command == "seo-tech-finalize":
+        from seo_operator import tech_run
+
+        итог = tech_run.довести(args.run_id)
+        print(json.dumps(итог, ensure_ascii=False))
+        return 0
     if args.command == "seo-tech-publish":
         from seo_operator import tech_publish
 

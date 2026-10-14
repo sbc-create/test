@@ -647,6 +647,52 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
             "verdict": "VERIFIED" if полный else "INCOMPLETE", "steps": шаги, "notes": заметки}
 
 
+#: Штатные инструменты витрины, которые приводят служебные файлы в соответствие с кодом.
+#: Шаг механический и детерминированный, поэтому выполняется обёрткой после модели, а не
+#: заданием модели (14.10: T101 три раза без перештамповки манифеста — INCOMPLETE).
+ИНСТРУМЕНТЫ_ДОВОДКИ = ("tools/stamp_manifest.py", "tools/update_pins.py")
+
+
+def довести(run_id: str, state: Path = STATE) -> dict[str, Any]:
+    """После модели: штамп манифеста и замок штатными инструментами, отдельным коммитом.
+
+    Только если модель сделала коммит поверх базы; инструменты отсутствуют — ничего.
+    Вердикт после этого проверяет ветку как обычно (manifest_and_entrypoint, verify_pins).
+    """
+    захват = next((к for к in _claims(state) if к["run_id"] == run_id), None)
+    if захват is None:
+        return {"run_id": run_id, "done": False, "reason": "захвата нет"}
+    копия = Path(захват["worktree"])
+    if not копия.is_dir():
+        return {"run_id": run_id, "done": False, "reason": "рабочей копии нет"}
+    голова = _git(копия, "rev-parse", "HEAD", check=False)
+    if not голова or голова == захват["base_sha"]:
+        return {"run_id": run_id, "done": False, "reason": "коммита поверх базы нет — доводить нечего"}
+    выполнено = []
+    for инструмент in ИНСТРУМЕНТЫ_ДОВОДКИ:
+        if (копия / инструмент).is_file():
+            r = subprocess.run(["python3", инструмент], cwd=копия, capture_output=True, text=True, timeout=300)
+            выполнено.append({"tool": инструмент, "rc": r.returncode})
+            if r.returncode:
+                return {"run_id": run_id, "done": False, "tools": выполнено,
+                        "reason": f"{инструмент}: {(r.stdout + r.stderr).strip()[-200:]}"}
+    if not выполнено:
+        return {"run_id": run_id, "done": False, "reason": "инструментов доводки в репозитории нет"}
+    пути = [п for п in ("config/template-manifest.json", "pins.lock.json") if (копия / п).exists()]
+    закоммичено = False
+    if пути and _git(копия, "status", "--porcelain", "--", *пути, check=False):
+        _git(копия, "add", "--", *пути, check=False)
+        r = subprocess.run(["git", "-C", str(копия), "-c", "user.name=seo-tech-run",
+                            "-c", "user.email=seo-tech-run@localhost", "commit", "-q", "-m",
+                            "штамп манифеста и замок — штатные инструменты витрины (доводка seo-tech-run)"],
+                           capture_output=True, text=True, timeout=120)
+        закоммичено = r.returncode == 0
+        if not закоммичено:
+            return {"run_id": run_id, "done": False, "tools": выполнено,
+                    "reason": f"коммит доводки не удался: {(r.stdout + r.stderr).strip()[-200:]}"}
+    return {"run_id": run_id, "done": True, "tools": выполнено, "committed": закоммичено}
+
+
 def record(результат: dict[str, Any], extra: dict[str, Any], state: Path = STATE) -> dict[str, Any]:
     запись = {**результат, **extra}
     state.mkdir(parents=True, exist_ok=True)

@@ -327,3 +327,25 @@ def test_backlog_pages_flags_sitemap_entries_that_are_not_indexable():
     assert "genre/y/ — в карте, но noindex" in out[0]["problem"]
     assert "old/ — в карте, но код 404" in out[0]["problem"]
     assert "title/x/" not in out[0]["problem"]
+
+
+def test_finalize_runs_repo_tools_and_commits(среда):
+    """T101 14.10: штамп манифеста — шаг механизма, а не модели."""
+    s, репо = среда["state"], среда["репо"]
+    (репо / "tools").mkdir()
+    (репо / "config").mkdir(exist_ok=True)
+    (репо / "config" / "template-manifest.json").write_text("исходный")
+    (репо / "tools" / "stamp_manifest.py").write_text(
+        "import hashlib, pathlib\nr = pathlib.Path(__file__).resolve().parents[1]\n"
+        "(r / 'config' / 'template-manifest.json').write_text(hashlib.sha256((r / 'page.html').read_bytes()).hexdigest())\n")
+    _git(репо, "-c", "user.email=t@t", "-c", "user.name=t", "add", ".")
+    _git(репо, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-q", "-m", "инструмент")
+    захват = tech_run.claim(среда["задачи"][0], "FZ1", state=s)
+    копия = Path(захват["worktree"])
+    assert tech_run.довести("FZ1", state=s)["reason"].startswith("коммита поверх базы нет")
+    (копия / "page.html").write_text("<h1>x</h1>")
+    _git(копия, "-c", "user.email=t@t", "-c", "user.name=t", "commit", "-qam", "правка")
+    итог = tech_run.довести("FZ1", state=s)
+    assert итог.get("done") and итог.get("committed"), итог
+    assert "штамп манифеста" in _git(копия, "log", "-1", "--format=%s")
+    assert _git(копия, "status", "--porcelain") == ""

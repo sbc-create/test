@@ -89,6 +89,10 @@ timeout -k "$GRACE_S" "$LIMIT_S" "$CLAUDE_BIN" -p "$PROMPT" --output-format json
 MODEL_RC=$?
 FINISHED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
+# Доводка: штамп манифеста и замок штатными инструментами витрины — механически, не моделью.
+timeout -k 30 600 python3 -m seo_operator.cli seo-tech-finalize --run-id "$RUN_ID" \
+  > "$STATE/$RUN_ID.finalize.json" 2>&1
+
 EXTRA="$(printf '{"trigger": "%s", "started_at": "%s", "finished_at": "%s", "model_exit": %s}' \
   "$TRIGGER" "$STARTED" "$FINISHED" "$MODEL_RC")"
 # Вердикт тоже под пределом: зависшая проверка не держит исполнителя. Предел — всё, что
