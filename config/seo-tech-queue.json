@@ -1383,7 +1383,7 @@
       "check": "checks/section_titles_distinct.py (урезанный стенд)",
       "status": "session",
       "review": "Видимое изменение (H1): выпуск после просмотра.",
-      "evidence": "Ветка claude/review-lords-t072 (lordserials22-info 5ff451f, без пуша); прежний код rc=1, ветка rc=0; полный run.sh rc=0 (38 PASS).",
+      "evidence": "Ветка claude/review-lords-t072 (lordserials22-info 5ff451f, без пуша); прежний код rc=1, ветка rc=0; полный run.sh rc=0 (38 PASS). 14.10: ветка перебазирована на ff8a4b0 (без этого выпуск откатил бы канарейку T075), замок пересчитан b06c255; добавлен T076; ветка отправлена на GitHub для просмотра; скриншоты — docs/seo-operator/review-20261014.",
       "dependencies": "просмотр человеком"
     },
     {
@@ -1433,6 +1433,39 @@
       "status": "live_verified",
       "evidence": "lordserials22-info ff8a4b0; прежний код rc=1; CI 38479217612; lords-05 ok/live_verified. Живая карта — 64 407 адресов, из них 500 серий, выборка 10 — 200 и index; контроль lordfilm47.space — 0 серий. Эксперимент exp-lords-sitemap-ongoing-episodes, фаза canary. В полном run.sh indexing-live-switch («Sitemap: в robots.txt» в открытом режиме) падает и на прежнем коде — устаревший seo_layer ждёт 300 с (T065).",
       "dependencies": "оценка — после B022/B023; окна 7 и 28 дней от первого события появления серий в Вебмастере"
+    },
+    {
+      "id": "T076",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/anime/",
+        "https://lordserials22.info/dorama/"
+      ],
+      "problem": "Живой сайт 14.10: на /anime/ и /dorama/ (разделы маршрута, МАРШРУТЫ_ВИДА) плашка «section: anime»/«section: dorama» и «Сбросить» — внутреннее имя ключа как выбранное посетителем условие; у остальных Lords разделы вида без плашек.",
+      "norm": "интерфейс показывает только выбранные посетителем условия; внутренние ключи не выводятся",
+      "expected": "у голых разделов маршрута нет плашек и «Сбросить»; выбранный год даёт плашку «Год» и «Сбросить»",
+      "check": "checks/route_section_chip.py (урезанный стенд): прежний код rc=1",
+      "verify_live": "после выпуска: на живых /anime/ и /dorama/ нет «section:» и filt__reset",
+      "status": "session",
+      "evidence": "14.10: подготовлено и проверено — f93fa23 на ветке claude/review-lords-t072 (вместе с T072, перебазировано на ff8a4b0); route_section_chip: прежний rc=1, ветка rc=0; run.sh на урезанном снимке 38 PASS / 0 FAIL. Не опубликовано: видимое изменение, ждёт просмотра (docs/seo-operator/review-20261014)."
+    },
+    {
+      "id": "T077",
+      "site": "zonafilm.space, zonafilm.cc, zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/catalog/?genre=aziatskiykontent"
+      ],
+      "problem": "«Азиатский контент» — метка поставщика (на Lords признана служебной и закрыта, T064), а на Zona её раздел 200, index, в карте сайта (живая карта zonafilm12 14.10) и в блоке «Жанры» ветки T034. На Zona служебной считается только «западный контент» (_ТЕХНИЧЕСКИЕ_ЖАНРЫ, T044).",
+      "norm": "T044/T064: разделы служебных меток поставщика — noindex, follow и вне карты",
+      "expected": "«азиатский контент» в _ТЕХНИЧЕСКИЕ_ЖАНРЫ: раздел noindex, follow; нет в карте и в блоке жанров /catalog/",
+      "check": "checks/technical_genre_noindex.py дополнить вторым кодом метки; checks/sitemap_genres — без метки",
+      "verify_live": "после выпуска: ?genre=aziatskiykontent — noindex; в карте нет",
+      "status": "session",
+      "evidence": "14.10: найдено при подготовке скриншотов T034. Живой zonafilm12: ?genre=aziatskiykontent — 200, «index, follow», H1 «Азиатский контент», адрес в sitemap-*.xml (98 разделов жанров). Правка — следом, на ветке claude/review-zona-batchb, до выпуска T034."
     }
   ]
 }
