@@ -86,6 +86,24 @@ def поднять(проект: Path, конфиг: dict, данные: Path, �
     return процесс, False
 
 
+def дождаться_картинок(стр, предел_мс: int = 15000) -> int:
+    """Дождаться загрузки изображений перед снимком; вернуть число незагруженных.
+
+    Переход ждёт `domcontentloaded`, а постеры помечены `loading="lazy"` и
+    приходят с внешнего хоста: снимок сразу после перехода показывал пустые
+    рамки там, где разметка полна. Предел конечный — недоступный хост не
+    должен подвешивать осмотр, он должен попасть в отчёт числом.
+    """
+    try:
+        стр.wait_for_function(
+            "() => Array.from(document.images).every(i => i.complete)",
+            timeout=предел_мс)
+    except Exception:  # noqa: BLE001
+        pass
+    return стр.evaluate(
+        "() => Array.from(document.images).filter(i => !i.complete).length")
+
+
 def осмотр(стр, база: str, итог: dict) -> None:
     """Главная: блоки, карточки, изображения, меню, поиск, подвал."""
     стр.goto(база + "/", wait_until="domcontentloaded")
@@ -349,10 +367,13 @@ def осмотр_телефона(браузер, база: str, снимки: P
         "() => {const l=document.querySelector('.hd__logo');"
         "return l ? {text:l.innerText.trim(), need:l.scrollWidth, have:l.clientWidth,"
         " clipped:l.scrollWidth > l.clientWidth + 1} : null;}")
+    итог["телефон"]["незагруженных изображений перед снимком"] = (
+        дождаться_картинок(стр))
     стр.screenshot(path=str(снимки / f"{site}-phone-home.png"), full_page=False)
     стр.goto(база + "/catalog/", wait_until="domcontentloaded")
     прокрутка_каталога = стр.evaluate(
         "() => ({scroll: document.documentElement.scrollWidth, view: window.innerWidth})")
+    дождаться_картинок(стр)
     стр.screenshot(path=str(снимки / f"{site}-phone-catalog.png"), full_page=False)
     итог["телефон"].update({
         "видимая ширина": прокрутка["view"],
@@ -429,10 +450,15 @@ def main() -> int:
             контекст = браузер.new_context(viewport=КОМПЬЮТЕР)
             стр = контекст.new_page()
             осмотр(стр, база, итог)
+            итог["главная"]["незагруженных изображений перед снимком"] = (
+                дождаться_картинок(стр))
             стр.screenshot(path=str(выход / f"{а.site}-desktop-home.png"))
             осмотр_каталога(стр, база, итог)
+            итог["каталог"]["незагруженных изображений перед снимком"] = (
+                дождаться_картинок(стр))
             стр.screenshot(path=str(выход / f"{а.site}-desktop-catalog.png"))
             осмотр_карточки(стр, база, данные, а.site, итог)
+            дождаться_картинок(стр)
             стр.screenshot(path=str(выход / f"{а.site}-desktop-title.png"))
             осмотр_навигации(стр, база, итог)
             контекст.close()
