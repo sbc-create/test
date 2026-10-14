@@ -278,3 +278,18 @@ def test_wrapper_uses_kill_after_grace():
     assert 'timeout -k "$GRACE_S" "$LIMIT_S"' in текст
     assert "timeout -k 60 \"$VERIFY_LIMIT_S\"" in текст
     assert текст.index("--peek") < текст.index('seo-tech-next --run-id')
+
+
+def test_cleanup_touches_only_own_worktrees(среда):
+    """PrivateTmp службы: чужие рабочие копии (в /tmp сессии) не снимаются (14.10)."""
+    s, репо = среда["state"], среда["репо"]
+    своя = s / "wt" / "R9"
+    чужая = среда["корень"] / "чужая-копия"
+    _git(репо, "worktree", "add", "-q", "--detach", str(своя))
+    _git(репо, "worktree", "add", "-q", "--detach", str(чужая))
+    shutil.rmtree(своя)
+    shutil.rmtree(чужая)  # для службы с PrivateTmp копия сессии тоже «исчезла»
+    снято = tech_run.убрать_свои_ссылки(репо, s)
+    assert len(снято) == 1
+    оставшиеся = [p.name for p in (репо / ".git" / "worktrees").iterdir()]
+    assert "чужая-копия" in оставшиеся

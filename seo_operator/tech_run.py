@@ -507,9 +507,31 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
     except (OSError, ValueError, KeyError):
         pass
     for репо in репозитории:
-        if (репо / ".git").exists():
-            _git(репо, "worktree", "prune", check=False)
+        убрать_свои_ссылки(репо, state)
     return убрано
+
+
+def убрать_свои_ссылки(репо: Path, state: Path) -> list[str]:
+    """Снять служебные записи git ТОЛЬКО своих рабочих копий (state/wt/…), каталога которых нет.
+
+    Глобальный `git worktree prune` здесь нельзя (14.10): служба живёт с PrivateTmp, и
+    рабочие копии сессий в /tmp для неё «отсутствуют» — prune снимал их записи, рабочие
+    копии сессий теряли связь с репозиторием. Чужие записи не трогаются вовсе.
+    """
+    служебные = репо / ".git" / "worktrees"
+    if not служебные.is_dir():
+        return []
+    свои = str((state / "wt").resolve())
+    снято = []
+    for запись in sorted(служебные.iterdir()):
+        try:
+            цель = Path((запись / "gitdir").read_text(encoding="utf-8").strip()).parent
+        except OSError:
+            continue
+        if str(цель).startswith(свои + os.sep) and not цель.exists():
+            shutil.rmtree(запись, ignore_errors=True)
+            снято.append(запись.name)
+    return снято
 
 
 def _прогнать(каталог: Path, команда: list[str], предел: int,
