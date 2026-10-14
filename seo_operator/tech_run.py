@@ -332,13 +332,34 @@ def связать_неотслеживаемые(репо: Path, копия: Pa
                 and not цель.exists() and not цель.is_symlink()):
             if относ == "config/player.json" and not _плеер_совпадает(источник, копия):
                 # Устаревший player.json (14.10: publisher_id сменён Архитектором, файл клона
-                # прежний) уронил бы стенд «publisher_id …, а сайт объявляет …». Без ссылки
-                # checks/stand_root.py соберёт плеер из публичного publisher_id_expected.
+                # прежний) уронил бы стенд «publisher_id …, а сайт объявляет …». Ссылки нет —
+                # в копию кладётся фикстура из ПУБЛИЧНОГО publisher_id_expected (так же делает
+                # checks/stand_root.py). Без неё стенды Lords (mini_stand) не поднимались вовсе:
+                # T092 14.10 — INCOMPLETE, «стенд не поднялся» и на базе, и на ветке.
+                if _фикстура_плеера(копия):
+                    связано.append(относ + " (фикстура)")
                 continue
             цель.parent.mkdir(parents=True, exist_ok=True)
             цель.symlink_to(источник)
             связано.append(относ)
     return связано
+
+
+def _фикстура_плеера(копия: Path) -> bool:
+    """config/player.json копии из publisher_id_expected (значение публичное: витрина отдаёт его атрибутом)."""
+    try:
+        ожидаемый = str(json.loads((копия / "config" / "site.json").read_text(encoding="utf-8"))
+                        .get("publisher_id_expected") or "").strip()
+    except (OSError, ValueError):
+        return False
+    if not ожидаемый:
+        return False
+    цель = копия / "config" / "player.json"
+    цель.parent.mkdir(parents=True, exist_ok=True)
+    цель.write_text(json.dumps({"publisher_id": ожидаемый, "source_mode": "provider-id",
+                                "provenance": "фикстура проверки: publisher_id_expected из config/site.json"},
+                               ensure_ascii=False), encoding="utf-8")
+    return True
 
 
 def _плеер_совпадает(плеер: Path, копия: Path) -> bool:

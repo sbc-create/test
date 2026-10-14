@@ -22,7 +22,7 @@ CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${SEO_TECH_TRIGGER:-manual}"
 LIMIT_S="${SEO_TECH_TIMEOUT:-1500}"          # модель
 GRACE_S="${SEO_TECH_GRACE:-60}"              # после SIGTERM — SIGKILL
-VERIFY_LIMIT_S="${SEO_TECH_VERIFY_TIMEOUT:-2400}"
+UNIT_BUDGET_S="${SEO_TECH_UNIT_BUDGET:-4500}"  # = TimeoutStartSec юнита: после него systemd убьёт всё
 BACKLOG_EVERY_S="${SEO_TECH_BACKLOG_EVERY:-3600}"
 export SEO_TECH_STATE="$STATE"
 export SEO_TECH_OWNER_PID=$$                 # захват живёт ровно столько, сколько этот процесс
@@ -91,8 +91,15 @@ FINISHED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 
 EXTRA="$(printf '{"trigger": "%s", "started_at": "%s", "finished_at": "%s", "model_exit": %s}' \
   "$TRIGGER" "$STARTED" "$FINISHED" "$MODEL_RC")"
-# Вердикт тоже под пределом: зависшая проверка не держит исполнителя. Если его добьют,
-# итога не будет — следующий прогон закроет захват как INTERRUPTED (попытка засчитана).
+# Вердикт тоже под пределом: зависшая проверка не держит исполнителя. Предел — всё, что
+# осталось от бюджета юнита (минус запас), а не фиксированные 40 мин: полный run.sh Lords
+# под CPUQuota юнита идёт дольше (T092, 14.10). Явный SEO_TECH_VERIFY_TIMEOUT — сверху.
+VERIFY_LIMIT_S=$(( UNIT_BUDGET_S - SECONDS - 180 ))
+if [ -n "${SEO_TECH_VERIFY_TIMEOUT:-}" ] && [ "$SEO_TECH_VERIFY_TIMEOUT" -lt "$VERIFY_LIMIT_S" ]; then
+  VERIFY_LIMIT_S="$SEO_TECH_VERIFY_TIMEOUT"
+fi
+[ "$VERIFY_LIMIT_S" -lt 300 ] && VERIFY_LIMIT_S=300
+# Если вердикт добьют, итога не будет — следующий прогон закроет захват как INTERRUPTED.
 timeout -k 60 "$VERIFY_LIMIT_S" python3 -m seo_operator.cli seo-tech-verify --run-id "$RUN_ID" --record --extra "$EXTRA" \
   > "$STATE/$RUN_ID.verify.json"
 VERIFY_RC=$?

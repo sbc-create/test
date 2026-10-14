@@ -123,9 +123,14 @@ def test_stale_player_is_not_linked(tmp_path):
     (копия / "config").mkdir(parents=True)
     (репо / "config" / "player.json").write_text(json.dumps({"publisher_id": "1"}))
     (копия / "config" / "site.json").write_text(json.dumps({"publisher_id_expected": "2"}))
-    assert tech_run.связать_неотслеживаемые(репо, копия) == []
+    # Несовпадение: не ссылка на устаревший файл, а фикстура из публичного ожидаемого значения.
+    assert tech_run.связать_неотслеживаемые(репо, копия) == ["config/player.json (фикстура)"]
+    цель = копия / "config" / "player.json"
+    assert not цель.is_symlink() and json.loads(цель.read_text())["publisher_id"] == "2"
+    цель.unlink()
     (копия / "config" / "site.json").write_text(json.dumps({"publisher_id_expected": "1"}))
     assert tech_run.связать_неотслеживаемые(репо, копия) == ["config/player.json"]
+    assert цель.is_symlink()
 
 
 # ------------------------------------------------------------------ выпуск
