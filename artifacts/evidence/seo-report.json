@@ -2,7 +2,7 @@
   "site_id": "pilot-local",
   "partial": false,
   "missing_reports": [],
-  "passed": false,
+  "passed": true,
   "reports": [
     {
       "name": "seo-lint",
@@ -43,232 +43,208 @@
     },
     {
       "name": "seo-render",
-      "passed": false,
-      "executed": false,
+      "passed": true,
+      "executed": true,
       "counts": {
-        "status": "failed",
-        "exit_code": 2
+        "status": "ok",
+        "exit_code": 0,
+        "viewports": [
+          "mobile-360",
+          "mobile-390",
+          "tablet-768",
+          "laptop-1024",
+          "desktop-1440"
+        ],
+        "pages": 14,
+        "screenshots": 15,
+        "lab_lcp_ms_max": 812,
+        "lab_cls_max": 0,
+        "lab_transfer_bytes_max": 11382,
+        "progressive_enhancement": {
+          "items_before": 12,
+          "items_after": 16,
+          "has_button": true,
+          "items_without_js": 4,
+          "pagination_links_without_js": 2
+        },
+        "note": "Лабораторные метрики. Полевые Core Web Vitals ими не подменяются."
       },
       "totals": {
-        "critical": 1,
-        "major": 0,
+        "critical": 0,
+        "major": 20,
         "minor": 0
       },
       "findings": [
         {
-          "check": "browser",
-          "severity": "critical",
-          "url": "http://127.0.0.1:8082",
-          "message": "Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/lekcii/page/2/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/lekcii/page/2/\", waiting until \"load\"\u001b[22m\n",
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/",
+          "message": "[mobile-360] Мало видимого текста: 83 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+          "message": "[mobile-360] Мало видимого текста: 171 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/zapis-3/",
+          "message": "[mobile-360] Мало видимого текста: 113 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/",
+          "message": "[mobile-360] Мало видимого текста: 96 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/",
+          "message": "[mobile-390] Мало видимого текста: 83 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+          "message": "[mobile-390] Мало видимого текста: 171 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/zapis-3/",
+          "message": "[mobile-390] Мало видимого текста: 113 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/",
+          "message": "[mobile-390] Мало видимого текста: 96 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/",
+          "message": "[tablet-768] Мало видимого текста: 83 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+          "message": "[tablet-768] Мало видимого текста: 171 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/zapis-3/",
+          "message": "[tablet-768] Мало видимого текста: 113 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/",
+          "message": "[tablet-768] Мало видимого текста: 96 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/",
+          "message": "[laptop-1024] Мало видимого текста: 83 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+          "message": "[laptop-1024] Мало видимого текста: 171 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/zapis-3/",
+          "message": "[laptop-1024] Мало видимого текста: 113 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/",
+          "message": "[laptop-1024] Мало видимого текста: 96 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/",
+          "message": "[desktop-1440] Мало видимого текста: 83 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+          "message": "[desktop-1440] Мало видимого текста: 171 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/zapis-3/",
+          "message": "[desktop-1440] Мало видимого текста: 113 символов",
+          "rule": ""
+        },
+        {
+          "check": "thin-content",
+          "severity": "major",
+          "url": "/news/",
+          "message": "[desktop-1440] Мало видимого текста: 96 символов",
           "rule": ""
         }
       ]
     },
     {
       "name": "security-smoke",
-      "passed": false,
+      "passed": true,
       "executed": true,
       "counts": {
         "checked_paths": 8,
-        "root_status": 0
+        "root_status": 200
       },
       "totals": {
-        "critical": 14,
+        "critical": 0,
         "major": 0,
         "minor": 0
       },
-      "findings": [
-        {
-          "check": "headers",
-          "severity": "critical",
-          "url": "/",
-          "message": "Отсутствует заголовок X-Content-Type-Options.",
-          "rule": ""
-        },
-        {
-          "check": "headers",
-          "severity": "critical",
-          "url": "/",
-          "message": "Отсутствует заголовок X-Frame-Options.",
-          "rule": ""
-        },
-        {
-          "check": "headers",
-          "severity": "critical",
-          "url": "/",
-          "message": "Отсутствует заголовок Referrer-Policy.",
-          "rule": ""
-        },
-        {
-          "check": "headers",
-          "severity": "critical",
-          "url": "/",
-          "message": "Отсутствует заголовок Content-Security-Policy.",
-          "rule": ""
-        },
-        {
-          "check": "staging",
-          "severity": "critical",
-          "url": "/",
-          "message": "Staging не отдаёт X-Robots-Tag: noindex.",
-          "rule": ""
-        },
-        {
-          "check": "staging",
-          "severity": "critical",
-          "url": "/",
-          "message": "Staging доступен без авторизации (HTTP 0). robots.txt защитой не считается.",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/.env",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/.git/config",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/routes.json",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/build-manifest.json",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/shared/logs/php-server.log",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/backups/",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/install.php",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        },
-        {
-          "check": "exposure",
-          "severity": "critical",
-          "url": "/engine/data/config.php",
-          "message": "Служебный путь доступен публично (HTTP 0).",
-          "rule": ""
-        }
-      ]
+      "findings": []
     },
     {
       "name": "acceptance-routes",
-      "passed": false,
+      "passed": true,
       "executed": true,
       "counts": {
         "routes": 11
       },
       "totals": {
-        "critical": 11,
+        "critical": 0,
         "major": 0,
         "minor": 0
       },
-      "findings": [
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/lekcii/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/lekcii/page/2/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/lekcii/material-01/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/praktikum/serial-fikstura/season-1/episode-1/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/praktikum/serial-fikstura/season-1/episode-3/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/news/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/legal/terms/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/search/",
-          "message": "Ожидался 200, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/lekcii/page/999/",
-          "message": "Ожидался 404, получен 0.",
-          "rule": ""
-        },
-        {
-          "check": "acceptance",
-          "severity": "critical",
-          "url": "/arhiv/",
-          "message": "Ожидался 404, получен 0.",
-          "rule": ""
-        }
-      ]
+      "findings": []
     },
     {
       "name": "major-findings-budget",
@@ -276,7 +252,7 @@
       "executed": true,
       "counts": {
         "status": "ok",
-        "major": 0,
+        "major": 20,
         "budget": 25
       },
       "totals": {
@@ -288,13 +264,13 @@
     },
     {
       "name": "performance-budget",
-      "passed": false,
-      "executed": false,
+      "passed": true,
+      "executed": true,
       "counts": {
-        "status": "failed",
-        "lab_lcp_ms_max": null,
-        "lab_cls_max": null,
-        "lab_transfer_bytes_max": null,
+        "status": "ok",
+        "lab_lcp_ms_max": 812,
+        "lab_cls_max": 0,
+        "lab_transfer_bytes_max": 11382,
         "budgets": {
           "lab_lcp_ms": 2500,
           "lab_cls": 0.1,
@@ -308,24 +284,16 @@
         "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."
       },
       "totals": {
-        "critical": 1,
+        "critical": 0,
         "major": 0,
         "minor": 0
       },
-      "findings": [
-        {
-          "check": "performance",
-          "severity": "critical",
-          "url": "-",
-          "message": "Метрики не собраны: браузерная проверка недоступна (failed).",
-          "rule": ""
-        }
-      ]
+      "findings": []
     }
   ],
   "totals": {
-    "critical": 27,
-    "major": 0,
+    "critical": 0,
+    "major": 20,
     "minor": 0
   }
 }

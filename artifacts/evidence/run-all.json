@@ -5,21 +5,21 @@
       "command": "python3 -m factory knowledge verify",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "claude-config",
       "command": "python3 -m factory selfcheck",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-python",
       "command": "python3 -m compileall -q factory tools .claude/hooks tests > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-php",
@@ -40,14 +40,14 @@
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "3s"
+      "note": "2s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "954s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "894s"
     },
     {
       "check": "validate-pilot",
@@ -61,42 +61,42 @@
       "command": "python3 -m factory plan --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "build-pilot",
       "command": "python3 -m factory build --site pilot-local --force > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "integration-fast",
       "command": "python3 -m pytest tests/integration -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "15s"
+      "note": "14s"
     },
     {
       "check": "cell-pilot",
       "command": "PYTHONPATH=. python3 tests/tools/cell_pilot.py --evidence artifacts/evidence/portable-site-cell/pilot.json > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "5s"
+      "note": "2s"
     },
     {
       "check": "integration-slow",
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "25s"
+      "note": "23s"
     },
     {
       "check": "seo-lint",
       "command": "python3 -m factory seo-lint --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "blueprint-profile-gate",
@@ -108,30 +108,30 @@
     {
       "check": "deploy-pilot",
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
-      "exit_code": "2",
-      "status": "FAIL",
-      "note": "31s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "121s"
     },
     {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
-      "exit_code": "1",
-      "status": "FAIL",
+      "exit_code": "0",
+      "status": "PASS",
       "note": "0s"
     },
     {
       "check": "browser-audit",
       "command": "python3 tests/tools/check_browser_audit.py",
-      "exit_code": "1",
-      "status": "FAIL",
+      "exit_code": "0",
+      "status": "PASS",
       "note": "0s"
     },
     {
       "check": "e2e-playwright",
       "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
-      "exit_code": "1",
-      "status": "FAIL",
-      "note": "65s"
+      "exit_code": "0",
+      "status": "PASS",
+      "note": "27s"
     },
     {
       "check": "cross-browser",
@@ -176,7 +176,7 @@
       "note": "0s"
     }
   ],
-  "passed": 17,
-  "failed": 5,
+  "passed": 22,
+  "failed": 0,
   "skipped": 3
 }
