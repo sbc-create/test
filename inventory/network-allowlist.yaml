@@ -56,3 +56,29 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- home-practical: референсы и источники фактов (только чтение) ----------
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026:
+  # «Источники выбирай самостоятельно … официальные инструкции производителя …
+  # материалы профильных организаций … реальные сайты о доме и хранении».
+  # Только GET, robots.txt, пауза между запросами.
+  - ref: home-practical-ikea
+    host: www.ikea.com
+    purpose: "home-practical: мебельный каталог (референс) и документация производителя (нагрузки, крепление)"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: home-practical-cpsc
+    host: www.cpsc.gov
+    purpose: "home-practical: профильная организация по безопасности — крепление мебели от опрокидывания"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: home-practical-anchorit
+    host: www.anchorit.gov
+    purpose: "home-practical: официальная программа CPSC «Anchor It!» (ссылка с cpsc.gov) — крепление мебели и ТВ"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: home-practical-ivd
+    host: www.ivd.ru
+    purpose: "home-practical: русский журнал о доме и хранении (референс подачи)"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

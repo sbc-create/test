@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Источники</h1>
+<p class="lead">Числа и требования в инструкциях взяты только отсюда. Каждый источник открыт и прочитан; дата — день чтения.</p>
+<ul class="srclist">
+  {% for s in site.used_sources() %}
+  <li><b>{{ SOURCE_KIND[s.kind] }}</b> · <a href="{{ s.url }}" rel="nofollow noopener" lang="en">{{ s.name }}</a> <span>— прочитан {{ s.fetched_at[:10] }}</span></li>
+  {% endfor %}
+</ul>
+{% endblock %}

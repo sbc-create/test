@@ -452,6 +452,8 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # СЕТКА ПРАКТИЧЕСКИХ САЙТОВ (ночь 12–13.10.2026): референсы и источники home-practical
+            "www.ikea.com", "www.cpsc.gov", "www.anchorit.gov", "www.ivd.ru",
         }
 
 

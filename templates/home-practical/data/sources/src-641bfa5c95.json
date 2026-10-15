@@ -1,0 +1,34 @@
+{
+ "id": "src-641bfa5c95",
+ "url": "https://www.ikea.com/gb/en/p/fagelfjaellet-chest-of-3-drawers-off-white-40611640/",
+ "fetched_at": "2026-10-12T20:23:49Z",
+ "page_sha256": "9a15fdf3f5f337f299ee7fd53ce58f8e26029b58d5348ec74445992008137b97",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "FÅGELFJÄLLET chest of 3 drawers, off-white, 82x51x78 cm",
+ "article": "406.116.40",
+ "measures": {
+  "Depth": "51 cm",
+  "Depth of drawer (inside)": "38 cm",
+  "Height": "78 cm",
+  "Storage capacity": "130 l",
+  "Width": "82 cm",
+  "Width of drawer (inside)": "71 cm",
+  "Drawer pull-out": "24.7 cm"
+ },
+ "good_to_know": [
+  "The chest of drawers holds approximately 75 medium-sized T-shirts."
+ ],
+ "safety": [
+  "WARNING! Tipping hazard – this product must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe clean with a cloth dampened in a mild cleaner.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/fagelfjaellet-chest-of-3-drawers-off-white__AA-2621423-3-100.pdf"
+ ],
+ "notes": []
+}

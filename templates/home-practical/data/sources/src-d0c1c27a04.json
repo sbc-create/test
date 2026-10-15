@@ -1,0 +1,33 @@
+{
+ "id": "src-d0c1c27a04",
+ "url": "https://www.ikea.com/gb/en/p/lack-wall-shelf-white-90282180/",
+ "fetched_at": "2026-10-12T20:23:55Z",
+ "page_sha256": "b883993a00363ba8623f28e8fc6831ab9c6cdddbc7a740a51cc10a7cc29e4e65",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "LACK wall shelf, white, 110x26 cm",
+ "article": "902.821.80",
+ "measures": {
+  "Length": "110 cm",
+  "Depth": "26 cm",
+  "Thickness": "5 cm",
+  "Max. load": "10 kg"
+ },
+ "good_to_know": [
+  "Hidden suspension brackets are included.",
+  "Combines with other products in the LACK series.",
+  "Screws for wall mounting sold separately."
+ ],
+ "safety": [
+  "WARNING! Falling hazard – to reduce the risk of this product falling down, it must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe clean with a cloth dampened in a mild cleaner.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/lack-wall-shelf-white__AA-24442-15-100.pdf"
+ ],
+ "notes": []
+}

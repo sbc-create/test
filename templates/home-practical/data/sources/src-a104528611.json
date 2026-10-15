@@ -1,0 +1,36 @@
+{
+ "id": "src-a104528611",
+ "url": "https://www.ikea.com/gb/en/p/billy-bookcase-brown-walnut-effect-50508652/",
+ "fetched_at": "2026-10-12T20:23:53Z",
+ "page_sha256": "c3b17004bb8e90e00709b356260d6801a238faaf86742d570c7690cb92ac4a1f",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "BILLY bookcase, brown walnut effect, 80x28x202 cm",
+ "article": "505.086.52",
+ "measures": {
+  "Width": "80 cm",
+  "Depth": "28 cm",
+  "Height": "202 cm",
+  "Max. load/shelf": "30 kg"
+ },
+ "good_to_know": [
+  "Keep in mind that you need enough space between the top of the furniture and the ceiling to be able to anchor the product to the wall.",
+  "1 fixed shelf and 4 adjustable shelves included.",
+  "May be completed with doors; available in different colours and designs.",
+  "May be completed with extra shelves to add storage space.",
+  "May be completed with BILLY height extension unit in the same width and depth for added vertical storage.",
+  "Product is possible to recycle or use for energy recovery, if available in your community."
+ ],
+ "safety": [
+  "WARNING! Tipping hazard – this product must be securely anchored. Use suitable screws and plugs for your home. If you are uncertain, seek professional advice."
+ ],
+ "care": [
+  "Wipe clean with a cloth dampened in a mild cleaner.",
+  "Wipe dry with a clean cloth."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/billy-bookcase-brown-walnut-effect__AA-2289108-3-100.pdf"
+ ],
+ "notes": []
+}

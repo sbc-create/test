@@ -1,0 +1,33 @@
+{
+ "id": "src-2cac158478",
+ "url": "https://www.ikea.com/gb/en/p/hemmafixare-shoe-box-fabric-striped-white-grey-40503914/",
+ "fetched_at": "2026-10-12T20:24:04Z",
+ "page_sha256": "33a3f3bd30e75b00d9394b79088bac5adbb426366aba5e3d0be515f94813bd2b",
+ "parser": "hp-facts/1.0",
+ "kind": "manufacturer",
+ "publisher": "IKEA",
+ "name": "HEMMAFIXARE shoe box, fabric striped/white/grey, 23x34x19 cm",
+ "article": "405.039.14",
+ "measures": {
+  "Depth": "34 cm",
+  "Height": "19 cm",
+  "Width": "23 cm"
+ },
+ "good_to_know": [
+  "Designed for PAX wardrobes."
+ ],
+ "safety": [],
+ "care": [
+  "Do not wash.",
+  "Do not bleach.",
+  "Do not tumble dry.",
+  "Do not iron.",
+  "Do not dryclean.",
+  "Wipe clean with a cloth dampened in water.",
+  "Remove dust with a lint remover."
+ ],
+ "assembly_pdf": [
+  "https://www.ikea.com/gb/en/assembly_instructions/hemmafixare-shoe-box-fabric-striped-white-grey__AA-2285830-1-2.pdf"
+ ],
+ "notes": []
+}
