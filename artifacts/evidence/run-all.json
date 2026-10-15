@@ -19,7 +19,7 @@
       "command": "python3 -m compileall -q factory tools .claude/hooks tests > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-php",
@@ -40,14 +40,14 @@
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "2s"
+      "note": "11s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "791s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "881s"
     },
     {
       "check": "validate-pilot",
@@ -75,21 +75,21 @@
       "command": "python3 -m pytest tests/integration -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "6s"
+      "note": "15s"
     },
     {
       "check": "cell-pilot",
       "command": "PYTHONPATH=. python3 tests/tools/cell_pilot.py --evidence artifacts/evidence/portable-site-cell/pilot.json > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "6s"
+      "note": "3s"
     },
     {
       "check": "integration-slow",
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "18s"
+      "note": "19s"
     },
     {
       "check": "seo-lint",
@@ -110,14 +110,14 @@
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "125s"
+      "note": "126s"
     },
     {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "browser-audit",
@@ -131,7 +131,7 @@
       "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
       "exit_code": "0",
       "status": "PASS",
-      "note": "25s"
+      "note": "29s"
     },
     {
       "check": "cross-browser",
@@ -176,7 +176,7 @@
       "note": "0s"
     }
   ],
-  "passed": 22,
-  "failed": 0,
+  "passed": 21,
+  "failed": 1,
   "skipped": 3
 }

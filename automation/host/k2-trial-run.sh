@@ -47,6 +47,18 @@ echo "files=$(git -C "$stand/src" ls-files | wc -l)"
 
 # 2. Данные — КОПИЕЙ: пробный прогон не вправе менять доставленный набор.
 cp -a "$data_src" "$stand/data"
+
+# 2a. Файл плеера — оттуда же, откуда его берёт настоящий запуск
+# (`k2-launch-site.sh`: $stage/player/<site>-player.json -> config/player.json).
+# Иначе прогон упирается в отказ пускателя «нет config/player.json» и проверяет
+# не витрину, а отсутствие файла. Файл не выдумывается: нет его — нет и прогона.
+player_src="$HOME/stage/player/$site-player.json"
+if [ -f "$player_src" ]; then
+  install -m 0600 "$player_src" "$stand/src/config/player.json"
+  echo "player_file=installed"
+else
+  echo "player_file=absent"
+fi
 cd "$stand/src" || exit 1
 nohup python3 run.py --port "$port" --data-dir "$stand/data" >"$log" 2>&1 &
 app_pid=$!
@@ -87,6 +99,23 @@ if [ -n "$title" ]; then
   code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 25 "127.0.0.1:$port/title/$title/")
   bytes=$(curl -s -o /dev/null -w '%{size_download}' --max-time 25 "127.0.0.1:$port/title/$title/")
   echo "route /title/<первый>/ code=$code bytes=$bytes"
+  # Номер издателя в разметке карточки: сверяется с назначенным, а не печатается.
+  # Проверка отвечает на вопрос «тот ли номер уехал на страницу», и для этого
+  # достаточно совпадения — значение в журнал не идёт.
+  assigned=$(python3 -c "
+import json,sys
+try:
+    print(json.load(open('$stand/src/config/player.json',encoding='utf-8')).get('publisher_id',''))
+except Exception:
+    print('')
+")
+  if [ -n "$assigned" ]; then
+    hits=$(curl -s --max-time 25 "127.0.0.1:$port/title/$title/" \
+           | grep -c "data-publisher-id=\"$assigned\"" || true)
+    echo "publisher_matches_assigned=$hits"
+  else
+    echo "publisher_matches_assigned=нет файла плеера"
+  fi
 fi
 
 sleep "$warm"

@@ -18,6 +18,15 @@ set -uo pipefail
 
 marker="${1:?нужен признак правки, например _контакт_подвала}"
 shift
+# Файл, в котором признак ищут. По умолчанию рантайм витрины — там живёт
+# большинство правок, — но правка пускателя или проверок лежит в другом файле,
+# и тогда проверка признака честно возвращала ноль, а отчёт говорил «отказ»
+# при состоявшейся доставке (измерено 2026-10-15 на правке `run.py`).
+marker_file="src/lords-frontend.py"
+if [ "${1:-}" = "--in" ]; then
+  marker_file="${2:?нужен путь внутри репозитория витрины}"
+  shift 2
+fi
 sites="$*"
 [ -n "$sites" ] || { echo "нужен хотя бы один site_id" >&2; exit 2; }
 
@@ -52,7 +61,7 @@ for site in $sites; do
     rm -rf /tmp/verify-$site;
     git clone --quiet bundles/$site.bundle /tmp/verify-$site;
     echo head=\$(git -C /tmp/verify-$site rev-parse --short=12 HEAD);
-    echo marker=\$(grep -c '$marker' /tmp/verify-$site/src/lords-frontend.py);
+    echo marker=\$(grep -c '$marker' /tmp/verify-$site/$marker_file);
     rm -rf /tmp/verify-$site" 2>&1)"
   got_sum="$(printf '%s' "$out" | sed -n 's/.*sum=\([0-9a-f]*\).*/\1/p' | head -1)"
   got_head="$(printf '%s' "$out" | sed -n 's/.*head=\([0-9a-f]*\).*/\1/p' | head -1)"
@@ -61,7 +70,7 @@ for site in $sites; do
     # Фигурные скобки обязательны: за именем сразу идёт «»», и граница имени
   # перестаёт быть очевидной — сторож ASCII-имён прочитал здесь «marker»»
   # как одно имя. Читателю она тоже не очевидна.
-    echo "$site: голова $head_sha, сумма сошлась, признак «${marker}» найден (${got_marker} раз)"
+    echo "$site: голова $head_sha, сумма сошлась, признак «${marker}» найден в ${marker_file} (${got_marker} раз)"
     ok=$((ok + 1))
   else
     echo "[x] $site: сумма '$got_sum' против '$sum'; голова '$got_head' против '$head_sha'; признак '$got_marker'"
