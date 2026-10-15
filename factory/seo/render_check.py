@@ -35,12 +35,22 @@ CHROMIUM_CANDIDATES = (
 ИМЕНА_ВНУТРИ = ("chrome-linux/chrome", "chrome-linux64/chrome")
 
 
+def _номер_сборки(каталог: Path) -> tuple[int, str]:
+    """Номер сборки числом. Строковое сравнение ставит 980 выше 1243."""
+    хвост = каталог.name.rsplit("-", 1)[-1]
+    return (int(хвост) if хвост.isdigit() else -1, каталог.name)
+
+
 def _по_шаблону() -> list[Path]:
     найдено: list[Path] = []
     for корень in КАТАЛОГИ_СБОРОК:
         if not корень.is_dir():
             continue
-        for каталог in sorted(корень.glob("chromium-*"), reverse=True):
+        # Сортировка по ЧИСЛУ: пока у сборок одинаковое число цифр, строковая
+        # сортировка случайно совпадает с правдой, а на `chromium-980` рядом с
+        # `chromium-1243` выбрала бы старую — и молча.
+        for каталог in sorted(корень.glob("chromium-*"), key=_номер_сборки,
+                              reverse=True):
             for хвост in ИМЕНА_ВНУТРИ:
                 кандидат = каталог / хвост
                 if кандидат.exists():

@@ -22,6 +22,12 @@ const ЗАКРЕПЛЁННЫЕ = [
 const КОРНИ = ['/opt/pw-browsers', path.join(os.homedir(), '.cache', 'ms-playwright')];
 const ХВОСТЫ = ['chrome-linux/chrome', 'chrome-linux64/chrome'];
 
+function номерСборки(имя) {
+  const хвост = имя.slice(имя.lastIndexOf('-') + 1);
+  const число = Number.parseInt(хвост, 10);
+  return Number.isNaN(число) ? -1 : число;
+}
+
 function поШаблону() {
   const найдено = [];
   for (const корень of КОРНИ) {
@@ -33,8 +39,10 @@ function поШаблону() {
     }
     записи
       .filter((имя) => имя.startsWith('chromium-'))
-      .sort()
-      .reverse()
+      // Сортировка по ЧИСЛУ: строковая ставит `chromium-980` выше
+      // `chromium-1243`, и поиск «от новой сборки к старой» молча выбрал бы
+      // старую. Пока у сборок одинаковое число цифр, разницы не видно.
+      .sort((а, б) => номерСборки(б) - номерСборки(а))
       .forEach((имя) => {
         for (const хвост of ХВОСТЫ) {
           const кандидат = path.join(корень, имя, хвост);
