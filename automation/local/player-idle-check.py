@@ -37,9 +37,20 @@ import json
 import sys
 import time
 
+from pathlib import Path
 from playwright.sync_api import sync_playwright
 
-ХРОМ = "/home/claude/.cache/ms-playwright/chromium-1234/chrome-linux64/chrome"
+КОРЕНЬ_ФАБРИКИ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(КОРЕНЬ_ФАБРИКИ))
+
+from factory.seo.render_check import chromium_path  # noqa: E402
+
+#: Путь к готовой сборке Chromium. Номер сборки здесь НЕ вписывается числом:
+#: закреплённый номер однажды выключил браузерную приёмку целиком (на машине с
+#: другой сборкой проверка сообщала «Chromium не найден»). Поиск общий —
+#: `factory.seo.render_check.chromium_path`: явный `FACTORY_CHROMIUM`, затем
+#: известные каталоги, затем шаблон от новой сборки к старой.
+ХРОМ = chromium_path() or ""
 #: Те же проверенные формы адреса карточки, что у `playback-check.py`.
 ПРЕФИКСЫ = ("/title/", "/anime/")
 #: Состояния, при которых посетитель видит отказ, а не ожидание.

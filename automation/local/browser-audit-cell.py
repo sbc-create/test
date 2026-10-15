@@ -41,8 +41,17 @@ from pathlib import Path
 #: установлена 1234 — на одну версию старше. Скачивать новую ради одного
 #: осмотра незачем: протокол совместим, и путь задаётся явно. Если файла нет,
 #: инструмент скажет об этом прямо, а не упадёт стеной трассировки.
-ГОТОВЫЙ_CHROMIUM = Path("/home/claude/.cache/ms-playwright/chromium-1234"
-                        "/chrome-linux64/chrome")
+КОРЕНЬ_ФАБРИКИ = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(КОРЕНЬ_ФАБРИКИ))
+
+from factory.seo.render_check import chromium_path  # noqa: E402
+
+#: Путь к готовой сборке Chromium. Номер сборки здесь НЕ вписывается числом:
+#: закреплённый номер однажды выключил браузерную приёмку целиком (на машине с
+#: другой сборкой проверка сообщала «Chromium не найден»). Поиск общий —
+#: `factory.seo.render_check.chromium_path`: явный `FACTORY_CHROMIUM`, затем
+#: известные каталоги, затем шаблон от новой сборки к старой.
+ГОТОВЫЙ_CHROMIUM = Path(chromium_path() or "")
 
 КОМПЬЮТЕР = {"width": 1366, "height": 768}
 ТЕЛЕФОН = {"width": 390, "height": 844}
