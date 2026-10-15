@@ -1295,7 +1295,7 @@
       "status": "blocked",
       "owner_action": "Владелец/Архитектор: открыть исходящее до api.webmaster.yandex.net:443 (пакет Архитектора, шаг 7б); подтвердить права на animedia.space. Приёмка: pages_in_search measured=true по 16 сайтам.",
       "dependencies": "владелец, Архитектор",
-      "evidence": "14.10 11:00Z: выгрузка 14.10 — 5 показателей Вебмастера на 17 доменах «webmaster: сеть недоступна (URLError)», Метрика по тем же доменам измерена. С хоста TCP 443 до api.webmaster.yandex.net (213.180.193.61 и 2a02:6b8::2:61) — тайм-аут 8 с по IPv4 и IPv6; webmaster.yandex.ru (87.250.251.217) и api-metrika.yandex.net (87.250.251.47) — соединение за 0,04 с. Значит, не «Яндекс недоступен», а не проходит конкретный адрес API Вебмастера. Правила ufw из сессии не читаются (Permission denied) — фильтр на хосте или у провайдера не установлен и не исключён. Нужна проверка владельцем/Архитектором (блок владельца в MORNING_20261014.md)."
+      "evidence": "14.10 11:00Z: выгрузка 14.10 — 5 показателей Вебмастера на 17 доменах «webmaster: сеть недоступна (URLError)», Метрика по тем же доменам измерена. С хоста TCP 443 до api.webmaster.yandex.net (213.180.193.61 и 2a02:6b8::2:61) — тайм-аут 8 с по IPv4 и IPv6; webmaster.yandex.ru (87.250.251.217) и api-metrika.yandex.net (87.250.251.47) — соединение за 0,04 с. Значит, не «Яндекс недоступен», а не проходит конкретный адрес API Вебмастера. Правила ufw из сессии не читаются (Permission denied) — фильтр на хосте или у провайдера не установлен и не исключён. Нужна проверка владельцем/Архитектором (блок владельца в MORNING_20261014.md). | 15.10 15:26Z: TCP 443 до api.webmaster.yandex.net 213.180.193.61 и 2a02:6b8::2:61 — тайм-аут 8 с; api-metrika.yandex.net, webmaster.yandex.ru, oauth.yandex.ru — 0,03–0,07 с. Нужна возможность: исходящий HTTPS с claude-control-01 до api.webmaster.yandex.net:443."
     },
     {
       "id": "B024",
@@ -2916,6 +2916,17 @@
       ],
       "status": "queued",
       "evidence": "15.10 ~14:10Z: поставлено взамен T123; сбой — не код задачи (одинаков у T123 и другой задачи на той же витрине; на базе в сессии три шага PASS)."
+    },
+    {
+      "id": "B031",
+      "site": "yummyani.site, yummyani.org, yummyani.biz, yummyani7.site, yummyani7.info",
+      "direction": "anime",
+      "repo": "верхний поток Next.js Yummy (src/seo-core/truncate.ts joinTitle)",
+      "problem": "<title> страниц тайтла/сезона/серии обрезает НАЗВАНИЕ по границе слова при длине > 70 (DOCUMENT_TITLE_MAX), сохраняя «— N сезон» и бренд: «Я ведьма, которую возлюбленный попросил создать любовное | YummyAnime» (H1 — «…любовное зелье»), «Невероятное приключение ДжоДжо: Гонка — 7 сезон» (H1 — «…Гонка «Стальной шар»»). Замер 15.10 по топ-посадочным из поиска: yummyani7.site 7 из 10, yummyani.site 11 из 20, yummyani7.info 2 из 10. Правило закреплено тестом репозитория (tests/unit/seo-core.test.ts «preserves season and episode numbers for a long Russian title»), а SEO_KNOWLEDGE_PACK §4 п.3: лимит символов — не критерий, обрезанные сущности запрещены. Конфликт: файлы сайта выше пакета знаний — молча не меняется.",
+      "expected": "решение владельца: порядок сокращения «шаблонный хвост → бренд», название не обрезается; канарейка — yummyani7.site/.info, .org, .biz; yummyani.site (страницы ДжоДжо S7 — 9,4 тыс. поисковых входов/неделю) — контроль до оценки через 7 дней",
+      "status": "blocked",
+      "owner_action": "решение по правилу title Yummy (конфликт правила репозитория и SEO_KNOWLEDGE_PACK §4 п.3); при «да» сессия готовит патч к трём живым базам с тестом и включает его в выпуск по сценарию B016 только для канареечных витрин",
+      "evidence": "15.10 ~15:35Z: var/seo-goal/landing-audit-20261015.json; код — src/seo-core/truncate.ts (joinTitle, lastWordBoundary), constants.ts DOCUMENT_TITLE_MAX = 70."
     }
   ]
 }
