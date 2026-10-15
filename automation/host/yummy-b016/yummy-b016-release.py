@@ -74,10 +74,17 @@ FRESH_TTL = int(_env("YB_FRESH_TTL", "3600"))       # FRESH_TTL_SEC патча S
 LOCK_TTL = int(_env("YB_LOCK_TTL", "300"))          # LOCK_TTL_SEC патча SWR
 SLEEP = time.sleep
 
-COMMON = ["b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch"]
+B016 = ["b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch"]
+WORDING = "yummy-public-wording.patch"  # тексты для посетителя (15.10)
 TAG_RE = re.compile(r"^yummyani/web:rel-[0-9a-f]{12}$")
 KEPT = re.compile(r"PUBLISHER|CDNVIDEOHUB|^SEO_INDEXING_ENABLED$|^TITLE_OVERLAYS|^SITE_PROFILE$|^REDIS_URL$|^DATABASE_URL$")
 PARTS = ("titles", "seasons", "episodes")
+# Состояние инвентаря — заголовок x-sitemap-inventory контейнера. Публичный домен
+# обслуживает ячейка-прокси (D160), и она этот заголовок не передаёт (замер 15.10
+# 16:15Z: у публичного ответа заголовка нет, у 127.0.0.1:3102/3103 — «fresh; age=…»).
+# Поэтому код, время и полнота меряются на публичном домене, а состояние кеша
+# читается у того же контейнера на его локальном порту — тоже только чтение.
+STATE_PORTS = json.loads(_env("YB_STATE_PORTS", json.dumps({"yummyani.site": 3101, "yummyani.org": 3102, "yummyani.biz": 3103})))
 
 
 @dataclasses.dataclass(frozen=True)
@@ -86,7 +93,7 @@ class Tenant:
     var: str
     domain: str
     base: str   # 12 знаков живого коммита
-    t081: str
+    patches: tuple  # патчи поверх ЭТОЙ базы, по порядку
 
     @property
     def container(self) -> str:
@@ -94,10 +101,15 @@ class Tenant:
 
 
 # Порядок выкладки: biz → org → site (самый посещаемый — последним).
+# Выпуск 15.10 15:38Z (var/yummy-b016/20261015T153835Z): biz и org приняты с B016/T081
+# (их живые базы теперь — коммиты того выпуска), site отклонён проверкой T081 и откачен:
+# у базы 054c617 карусель «Актуальное» строится отдельно (actualCards) — для неё свой
+# вариант T081. Тексты для посетителя — новым патчем на всех трёх.
 TENANTS = [
-    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "4c5796eae24c", "t081-shelf-canonical-href.4c5796e.patch"),
-    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "8be8d8b5bdf2", "t081-shelf-canonical-href.patch"),
-    Tenant("web-site", "WEB_SITE_IMAGE", "yummyani.site", "054c6170519d", "t081-shelf-canonical-href.patch"),
+    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "21184803b90f", (WORDING,)),
+    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "8f159f3f9de3", (WORDING,)),
+    Tenant("web-site", "WEB_SITE_IMAGE", "yummyani.site", "054c6170519d",
+           (*B016, WORDING, "t081-shelf-canonical-href.054c617.patch")),
 ]
 BY_SERVICE = {t.service: t for t in TENANTS}
 
@@ -282,7 +294,7 @@ def check_patches() -> None:
         if got != want:
             raise Stop(3, f"{p.name}: sha256 {got[:12]}… ≠ {want[:12]}…")
     names = {Path(l.split(None, 1)[1].strip()).name for l in PATCH_SUMS.read_text().splitlines() if l.strip()}
-    for need in COMMON + sorted({t.t081 for t in TENANTS}):
+    for need in sorted({p for t in TENANTS for p in t.patches}):
         if need not in names:
             raise Stop(3, f"{need} не перечислен в {PATCH_SUMS}")
 
@@ -360,19 +372,20 @@ def preflight(state: Path | None = None) -> dict:
 # ------------------------------------------------------------------ сборка
 def build_one(t: Tenant, state: Path) -> dict:
     """Рабочая копия живой базы + патчи + коммит + сборка + неизменяемый тег. Только тег наружу."""
-    wt = BUILD_ROOT / t.base
+    # Своя папка на каждый выпуск: рабочие копии прошлого выпуска не мешают новому.
+    wt = BUILD_ROOT / state.name / t.base
     if wt.exists():
         raise Stop(4, f"{wt} уже есть — удалите: git -C {APP_REPO} worktree remove {wt}")
-    BUILD_ROOT.mkdir(parents=True, exist_ok=True)
+    wt.parent.mkdir(parents=True, exist_ok=True)
     sh(["git", "-C", str(APP_REPO), "worktree", "add", "--detach", str(wt), t.base], code=4, what=f"worktree {t.base}")
-    for p in COMMON + [t.t081]:
+    for p in t.patches:
         sh(["patch", "-d", str(wt), "-p1", "--forward", "--batch", "--no-backup-if-mismatch", "-i", str(PATCH_DIR / p)],
            code=4, what=f"патч {p} на {t.base}")
     if sh(["git", "-C", str(wt), "status", "--porcelain"], code=4, what="status").strip() == "":
         raise Stop(4, f"{t.base}: патчи ничего не изменили")
     sh(["git", "-C", str(wt), "add", "-A"], code=4, what="git add")
     sh(["git", "-C", str(wt), "-c", "user.name=yummy-b016", "-c", "user.email=yummy-b016@localhost", "commit", "-q",
-        "-m", f"B016/T081 поверх {t.base}: карта без синхронной сборки и без потолка 8000; полки — канонические ссылки"],
+        "-m", f"поверх {t.base}: " + ", ".join(t.patches)],
        code=4, what=f"коммит {t.base}")
     sha = sh(["git", "-C", str(wt), "rev-parse", "HEAD"], code=4, what="rev-parse").strip()
     if not re.fullmatch(r"[0-9a-f]{40}", sha):
@@ -492,10 +505,28 @@ def inv_state(header: str) -> tuple[str, int | None]:
     return m.group(1), (int(m.group(2)) if m.group(2).isdigit() else None)
 
 
+def container_state(domain: str, part: str) -> str:
+    port = STATE_PORTS.get(domain)
+    if not port:
+        return ""
+    try:
+        with urllib.request.urlopen(urllib.request.Request(f"http://127.0.0.1:{port}/sitemap/{part}.xml",
+                                                           headers={"User-Agent": "yummy-b016-accept"}), timeout=120) as r:
+            return r.headers.get("x-sitemap-inventory") or ""
+    except Exception:  # noqa: BLE001
+        return ""
+
+
 def sweep(domains: list[str]) -> list[dict]:
     jobs = [(d, p) for d in domains for p in PARTS]
+
+    def one(dp):
+        r = {"domain": dp[0], "part": dp[1], **fetch(dp[0], f"/sitemap/{dp[1]}.xml")}
+        if not r["inventory"]:
+            r["inventory"] = container_state(dp[0], dp[1])
+        return r
     with ThreadPoolExecutor(len(jobs)) as ex:
-        res = list(ex.map(lambda dp: {"domain": dp[0], "part": dp[1], **fetch(dp[0], f"/sitemap/{dp[1]}.xml")}, jobs))
+        res = list(ex.map(one, jobs))
     for r in res:
         log(f"  {r['domain']} {r['part']}.xml {r['code']} {r['t']:.2f}s loc={r['loc']} [{r['inventory']}]")
     return res
@@ -561,7 +592,7 @@ def accept(state: Path, domains: list[str] | None = None) -> dict:
         while time.monotonic() < deadline:
             SLEEP(20)
             r = fetch(domains[0], "/sitemap/titles.xml")
-            s, a = inv_state(r["inventory"])
+            s, a = inv_state(r["inventory"] or container_state(domains[0], "titles"))
             if r["code"] == 200 and s == "fresh" and a is not None and a < LOCK_TTL + 180:
                 refreshed = True
                 break
@@ -607,7 +638,7 @@ def backup_databases(state: Path, journal: Journal) -> None:
     Копия — условие выпуска (правила фабрики), а не средство отката: откат БД не делается.
     """
     cmd = json.loads(os.environ["YB_BACKUP_CMD"]) if os.environ.get("YB_BACKUP_CMD") else [
-        "bash", str(BUILD_ROOT / TENANTS[0].base / "deploy/staging/backup.sh")]
+        "bash", str(BUILD_ROOT / state.name / TENANTS[0].base / "deploy/staging/backup.sh")]
     sh(cmd, code=5, what="резервная копия БД", timeout=3600)
     journal.write("backup", "yummyani-staging databases", 0)
 

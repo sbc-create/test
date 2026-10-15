@@ -82,6 +82,7 @@ def world(tmp_path, monkeypatch):
         return f"--- /dev/null\n+++ b/{name}\n@@ -0,0 +1 @@\n+{line}\n"
     (patches / "b016-sitemap-swr.v2.patch").write_text(newfile("swr.txt", "swr"))
     (patches / "b016-sitemap-cap.patch").write_text(newfile("cap.txt", "cap"))
+    (patches / "yummy-public-wording.patch").write_text(newfile("wording.txt", "wording"))
     (patches / "t081-shelf-canonical-href.patch").write_text(newfile("t081.txt", "t081"))
     (patches / "t081-shelf-canonical-href.4c5796e.patch").write_text(newfile("t081.txt", "t081 rebased"))
     import hashlib
@@ -122,15 +123,16 @@ def world(tmp_path, monkeypatch):
     monkeypatch.setenv("FAKE_CHECK_LOG", str(check_log))
     monkeypatch.setenv("YB_BACKUP_CMD", json.dumps(["true"]))
     T = mod.Tenant
-    tenants = [T("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", bases["web-biz"][:12], "t081-shelf-canonical-href.4c5796e.patch"),
-               T("web-org", "WEB_ORG_IMAGE", "yummyani.org", bases["web-org"][:12], "t081-shelf-canonical-href.patch"),
-               T("web-site", "WEB_SITE_IMAGE", "yummyani.site", bases["web-site"][:12], "t081-shelf-canonical-href.patch")]
+    common = ("b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch", "yummy-public-wording.patch")
+    tenants = [T("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", bases["web-biz"][:12], common + ("t081-shelf-canonical-href.4c5796e.patch",)),
+               T("web-org", "WEB_ORG_IMAGE", "yummyani.org", bases["web-org"][:12], common + ("t081-shelf-canonical-href.patch",)),
+               T("web-site", "WEB_SITE_IMAGE", "yummyani.site", bases["web-site"][:12], common + ("t081-shelf-canonical-href.patch",))]
     for k, v in {"APP_REPO": app, "BUILD_ROOT": tmp_path / "build", "ENV_FILE": env_file, "BASE_COMPOSE_DIR": basecompose,
                  "BASE_COMPOSE_SHA": _git(basecompose, "rev-parse", "HEAD")[:12], "OVERRIDES": overrides,
                  "PATCH_DIR": patches, "PATCH_SUMS": sums, "STATE_ROOT": tmp_path / "state", "WARM_PAUSE": tmp_path / "warm-pause.json",
                  "DOCKER": str(FIX / "fake_docker.py"), "CHECK": [sys.executable, str(FIX / "fake_check.py")],
                  "TENANTS": tenants, "BY_SERVICE": {t.service: t for t in tenants},
-                 "HEALTH_TIMEOUT": 0.2, "HEALTH_POLL": 0.01, "SLEEP": lambda s: None}.items():
+                 "HEALTH_TIMEOUT": 0.2, "HEALTH_POLL": 0.01, "SLEEP": lambda s: None, "STATE_PORTS": {}}.items():
         monkeypatch.setattr(mod, k, v)
 
     class W:
@@ -158,7 +160,7 @@ def test_build_prints_only_tags(world, capsys):
 def test_build_git_and_patch_failures_stop_release(world, how):
     t = world.mod.TENANTS[0]
     if how == "worktree_exists":
-        (world.mod.BUILD_ROOT / t.base).mkdir(parents=True)
+        (world.mod.BUILD_ROOT / world.tmp.name / t.base).mkdir(parents=True)
     elif how == "bad_patch":
         p = world.mod.PATCH_DIR / "b016-sitemap-cap.patch"
         p.write_text("--- a/app.txt\n+++ b/app.txt\n@@ -1 +1 @@\n-нет такой строки\n+x\n")
@@ -170,7 +172,7 @@ def test_build_git_and_patch_failures_stop_release(world, how):
         hook.write_text("#!/bin/sh\nexit 1\n")
         hook.chmod(0o755)
     elif how == "missing_patch":
-        t = world.mod.Tenant(t.service, t.var, t.domain, t.base, "нет-такого.patch")
+        t = world.mod.Tenant(t.service, t.var, t.domain, t.base, t.patches + ("нет-такого.patch",))
     with pytest.raises(world.mod.Stop) as e:
         world.mod.build_one(t, world.tmp)
     assert e.value.code == 4
