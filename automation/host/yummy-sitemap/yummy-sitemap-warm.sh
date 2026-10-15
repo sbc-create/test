@@ -11,6 +11,13 @@
 # Только чтение по HTTPS, только домены Yummy из списка ниже, ничего не пишет на диск
 # кроме журнала службы. Код выхода 0 всегда, если сеть есть: 504 на холодном — ожидаемо.
 set -u
+# Управляемая пауза (приёмка B016, yummy-b016-release.py accept): файл с крайним сроком.
+# Просроченная пауза не действует — прогрев возобновится сам, даже если приёмка оборвалась.
+PAUSE_FILE="$(cd "$(dirname "$0")/../../.." && pwd)/var/yummy-sitemap/warm-pause.json"
+if [ -f "$PAUSE_FILE" ] && python3 -c 'import json,sys,time; sys.exit(0 if json.load(open(sys.argv[1]))["until"] > time.time() else 1)' "$PAUSE_FILE" 2>/dev/null; then
+  echo "warm paused: $PAUSE_FILE"
+  exit 0
+fi
 DOMAINS="yummyani7.site yummyani7.info yummyani.site yummyani.org yummyani.biz"
 PARTS="titles seasons episodes"
 for d in $DOMAINS; do
