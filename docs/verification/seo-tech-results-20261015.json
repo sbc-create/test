@@ -1,0 +1,96 @@
+{
+ "schema": "seo-tech-queue-results/1.0",
+ "reported_at": "2026-10-15T20:55:00Z",
+ "reported_by": "claude/nova-publish-memory-02 (линия выпусков фабрики)",
+ "note": "Результаты измерены на живых страницах. Статус в очереди ставит её владелец: файл очереди лежит в другой рабочей копии, и эта сессия в неё не пишет.",
+ "results": [
+  {
+   "id": "B016",
+   "site": "yummyani.site, yummyani.org, yummyani.biz, yummyani7.site, yummyani7.info",
+   "queue_status_now": "blocked",
+   "proposed_status": "live_verified",
+   "evidence": "Выпуск 17:10 на трёх арендаторах (код 0, приёмка ok: true) и закрепление образа rel-a520a24afb20 на двух контурах yummyani7 20:40–20:50. Карта titles.xml: 8 329 адресов у трёх и 8 330 у двух (было ровно 8 000). Заголовок x-sitemap-inventory присутствует на всех пяти. Холодный путь проверен при ВЫКЛЮЧЕННОМ прогреве: при stale; age=3738 публичный ответ 200 за 0,17 с, затем перестройка в фоне.",
+   "verify_live": "адресов в titles.xml > 8000 на всех пяти витринах"
+  },
+  {
+   "id": "T081",
+   "site": "yummyani.site, yummyani.org, yummyani.biz",
+   "queue_status_now": "blocked",
+   "proposed_status": "live_verified",
+   "evidence": "на главных трёх витрин ссылок /anime/<slug>--<uuid> ноль из 101 (было 55, 55 и 37); у yummyani7.site и .info — ноль из 47 у каждой",
+   "verify_live": "главные: ссылок /anime/…--<uuid> 0"
+  },
+  {
+   "id": "T132",
+   "site": "animedia.icu",
+   "queue_status_now": "queued",
+   "proposed_status": "live_verified",
+   "evidence": "перемерено 19:30: восемь ссылок дня на /schedule/, ответов не-200 ноль; закрыл выпуск витрины 15:58 (releases/7fb87d322a67), не этой линией",
+   "verify_live": "ссылки дня на /schedule/ отвечают 200"
+  },
+  {
+   "id": "T126",
+   "site": "animedia.icu",
+   "queue_status_now": "queued",
+   "proposed_status": "live_verified",
+   "evidence": "на /genres/ формулировок «внутренней кухни» нет (21:05)",
+   "verify_live": "description /genres/ без отсылок к источнику"
+  },
+  {
+   "id": "T127",
+   "site": "zonafilm.space",
+   "queue_status_now": "queued",
+   "proposed_status": "live_verified",
+   "evidence": "на /collections/ формулировок нет (21:05)",
+   "verify_live": "description /collections/ без отсылок к источнику"
+  },
+  {
+   "id": "T128",
+   "site": "zonafilm.cc",
+   "queue_status_now": "queued",
+   "proposed_status": "live_verified",
+   "evidence": "на /collections/ формулировок нет (21:05)",
+   "verify_live": "description /collections/ без отсылок к источнику"
+  },
+  {
+   "id": "T150",
+   "site": "animedia.space",
+   "queue_status_now": "queued",
+   "proposed_status": "live_verified",
+   "evidence": "на главной формулировок «внутренней кухни» нет (21:05); закрыли выпуски витрины 18:14 и 18:41",
+   "verify_live": "главная без отсылок к источнику"
+  },
+  {
+   "id": "B031",
+   "site": "yummyani.site, yummyani.org, yummyani.biz, yummyani7.site, yummyani7.info",
+   "queue_status_now": "blocked",
+   "proposed_status": "blocked",
+   "evidence": "ЖИВО, и моя первая мера соврала: искала многоточие, которого нет — обрезка идёт по границе слова молча. Измерено по сравнению <title> с <h1> на самом длинном названии сети: «Меня выгнали из гильдии героев, потому что я был плохим | YummyAnime» при полном названии «…был плохим компаньоном, поэтому я решил неспешно жить в глуши». Три варианта порядка сокращения измерены на четырёх настоящих названиях (automation/local/check-title-order.py) и переданы владельцу пунктом 10: решение требуется потому, что предлагаемый порядок противоречит двум утверждениям теста репозитория.",
+   "verify_live": "название в <title> совпадает с названием в <h1> на странице произведения"
+  },
+  {
+   "id": "B017",
+   "site": "yummyani.site (и прочие Yummy)",
+   "queue_status_now": "blocked",
+   "proposed_status": "blocked",
+   "evidence": "ЖИВО: на странице произведения ссылок на жанровые страницы ноль (21:05). Код приложения, не настройка",
+   "verify_live": "на странице произведения жанры — ссылки, а не текст"
+  },
+  {
+   "id": "T140",
+   "site": "zonafilm.space",
+   "queue_status_now": "queued",
+   "proposed_status": "queued",
+   "evidence": "ЖИВО: на /new/ «по дате премьеры из источника» (21:05). Формулировка есть в таблице замен SEO — нужен выпуск линии витрины",
+   "verify_live": "/new/ без отсылок к источнику"
+  },
+  {
+   "id": "T145",
+   "site": "lordserial33.biz",
+   "queue_status_now": "queued",
+   "proposed_status": "queued",
+   "evidence": "ЖИВО: на главной «в источнике» (21:05). Пять формулировок и их адреса в коде — docs/verification/public-wording-check-holes-20261015.md",
+   "verify_live": "главная без отсылок к источнику"
+  }
+ ]
+}

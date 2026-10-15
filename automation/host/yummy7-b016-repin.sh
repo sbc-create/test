@@ -33,18 +33,25 @@ for arg in "$@"; do
 done
 
 case "$project" in
-  yummyani7-info) domain="yummyani7.info"; app_port=3105 ;;
-  yummyani7-site) domain="yummyani7.site"; app_port=3104 ;;
+  yummyani7-info) domain="yummyani7.info"; app_port=3105; publisher="10371" ;;
+  yummyani7-site) domain="yummyani7.site"; app_port=3104; publisher="10376" ;;
   *) echo "неизвестный проект: $project" >&2; exit 2 ;;
 esac
 
 repo="${YUMMY7_REPO:-/home/claude/wt-nova-publish-memory-02/var/site-repos/$project}"
 compose="$repo/deploy/compose.yaml"
-new_image="${YUMMY7_IMAGE:-yummyani/web:rel-21184803b90f}"
+# Целевой образ: собран 15.10 17:11 из базы 21184803b90f (= 4c5796eae24c +
+# B016 + T081) с патчем текстов для посетителя и принят на yummyani.biz.
+# Один образ обслуживает все публикации, арендатор приходит SITE_PROFILE.
+new_image="${YUMMY7_IMAGE:-yummyani/web:rel-a520a24afb20}"
 # Файл переменных контура. Compose подставляет из него пароль базы и прочее;
 # значение секрета сценарий не читает и не печатает — только передаёт файл
 # в `docker compose --env-file`, как это делает выпуск трёх арендаторов.
-env_file="${YUMMY7_ENV_FILE:-/srv/sites/yummyani-staging/runtime/compose.vars}"
+# Умолчание выводится из ИМЕНИ ПРОЕКТА. Прежде здесь стоял контур трёх
+# арендаторов, где объявлены PG_BIZ/ORG/SITE и нет паролей этих контуров, —
+# отсюда вывод «секрет не закреплён», который оказался неверным: пароли
+# закреплены в собственных файлах контуров.
+env_file="${YUMMY7_ENV_FILE:-/srv/sites/$project/runtime/compose.vars}"
 stamp="$(date -u +%Y%m%dT%H%M%SZ)"
 backup="$compose.bak.$stamp"
 
@@ -132,8 +139,12 @@ done
 code="$(curl -s -o /dev/null -w '%{http_code}' --max-time 40 "https://$domain/" || true)"
 [ "$code" = "200" ] || { restore; die "сайт отвечает $code"; }
 
-links="$(curl -s --max-time 40 "https://$domain/" | grep -o 'href="/anime/[^"]*"' | sort -u | wc -l)"
-uuid_links="$(curl -s --max-time 40 "https://$domain/" | grep -o 'href="/anime/[^"]*--[0-9a-f]\{8\}-[^"]*"' | sort -u | wc -l)"
+# `|| true` обязателен: при пустом совпадении grep выходит кодом 1, а под
+# `set -o pipefail` это роняет весь сценарий — ровно это и случилось 15.10
+# после закрепления образа: проверки не дошли до конца, хотя витрина
+# работала и образ был закреплён.
+links="$(curl -s --max-time 40 "https://$domain/" | grep -o 'href="/anime/[^"]*"' | sort -u | wc -l || true)"
+uuid_links="$(curl -s --max-time 40 "https://$domain/" | grep -o 'href="/anime/[^"]*--[0-9a-f]\{8\}-[^"]*"' | sort -u | wc -l || true)"
 log "после правки: сайт 200, ссылок /anime/ $links, из них составных $uuid_links"
 [ "$uuid_links" = "0" ] || { restore; die "появились составные ссылки: $uuid_links"; }
 
@@ -142,9 +153,52 @@ inv="$(curl -s -o /dev/null -D - --max-time 90 -H "Host: $domain" \
 [ -n "$inv" ] || { restore; die "нет заголовка x-sitemap-inventory — не новый код"; }
 log "инвентарь карты: $inv"
 
-urls="$(curl -s --max-time 120 "https://$domain/sitemap/titles.xml" | grep -c '<loc>' || true)"
+# Карта опрашивается ДО перестройки инвентаря, а не один раз. Смысл
+# исправления SWR именно в том, что несвежий инвентарь отдаётся сразу, а
+# перестраивается в фоне: первое чтение после переключения образа законно
+# возвращает прежние 8 000 из кеша. Один замер здесь однажды откатил
+# ИСПРАВНУЮ витрину (yummyani7.info 15.10 20:43), и это была ошибка меры, а
+# не отказ выпуска.
+urls=0
+for i in $(seq 1 30); do
+  urls="$(curl -s --max-time 120 "https://$domain/sitemap/titles.xml" | grep -c '<loc>' || true)"
+  [ "$urls" -gt 8000 ] && break
+  log "адресов $urls — инвентарь ещё прежний, ждём перестройку (${i}/30)"
+  sleep 10
+done
 log "адресов в titles.xml: $urls (до правки было ровно 8000)"
-[ "$urls" -gt 8000 ] || { restore; die "потолок 8000 не снят: $urls"; }
+[ "$urls" -gt 8000 ] || { restore; die "потолок 8000 не снят за 5 минут: $urls"; }
+
+# publisher_id ОБЯЗАН остаться прежним и равным утверждённому владельцем:
+# смена образа не имеет права его потерять, а чужой номер даёт пустой плеер.
+pid="$(docker inspect "$project-web-1" --format '{{range .Config.Env}}{{println .}}{{end}}' \
+       | sed -n 's/^CDNVIDEOHUB_PUBLISHER_ID_PINNED=//p' | tr -d '\r')"
+# Фигурные скобки обязательны: за именем сразу идёт «»», и сторож ASCII-имён
+# читает «pid»» как одно имя. Тот же случай уже описан в refresh-k2-bundles.sh.
+[ "$pid" = "$publisher" ] || { restore; die "publisher_id после выпуска «${pid}», утверждён «${publisher}»"; }
+log "publisher_id сохранён: $publisher"
+
+# Тексты для посетителя: формулировок «внутренней кухни» на главной быть не
+# должно. Проверяются те, что патч удаляет.
+home="$(curl -s --max-time 40 "https://$domain/")"
+for phrase in "без выдуманных фактов" "переданные данные" "Алгоритмические списки не выдаются"; do
+  if printf '%s' "$home" | grep -qF "$phrase"; then
+    restore; die "на главной осталась формулировка: $phrase"
+  fi
+done
+log "тексты: ни одной удаляемой формулировки на главной"
+
+# Плеер на странице произведения: элемент и номер издателя на месте.
+first_title="$(curl -s --max-time 90 "https://$domain/sitemap/titles.xml" \
+               | grep -o '<loc>[^<]*</loc>' | head -1 | sed 's/<[^>]*>//g')"
+if [ -n "$first_title" ]; then
+  page="$(curl -s --max-time 60 "$first_title")"
+  printf '%s' "$page" | grep -q "video-player" || { restore; die "на странице произведения нет элемента плеера: $first_title"; }
+  printf '%s' "$page" | grep -q "$publisher" || { restore; die "на странице произведения нет номера издателя"; }
+  log "плеер: элемент и издатель на месте ($first_title)"
+else
+  log "плеер: адрес произведения из карты не получен — НЕ ПРОВЕРЕНО"
+fi
 
 log "готово: $project на $new_image, карта без потолка, сайт отвечает"
 log "копия прежнего файла оставлена: $backup"
