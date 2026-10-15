@@ -2210,8 +2210,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~07:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+      "status": "live_verified",
+      "evidence": "15.10 ~07:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308). | 15.10: VERIFIED → live_verified; живая сверка ~10:10Z: /title/charli-i-lola/ и /title/preduprezhdenie/ — JSON-LD без «западный контент», ссылок genre=west_content 0, ссылок на синонимы adventures/cartoon/family 0."
     },
     {
       "id": "T114",
