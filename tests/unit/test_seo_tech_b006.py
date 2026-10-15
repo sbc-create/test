@@ -395,3 +395,29 @@ def test_run_all_note_keeps_exception_line_of_failed_step():
     заметка = tech_run.причина_run_all(1, вывод)
     assert "section-meta-visible   FAIL ⇒" in заметка and "ConnectionRefusedError" in заметка
     assert "ПРОВЕРКИ ОТКАЗАЛИ" in tech_run.причина_run_all(1, "x PASS\nПРОВЕРКИ ОТКАЗАЛИ\n")
+
+
+def test_publisher_reads_live_commit_when_trigger_refuses_early(tmp_path, monkeypatch):
+    """lordserial33.biz 15.10: триггер отказал («кандидат старше работающего» из-за
+    планового CI на другой ветке) и не сообщил живой коммит — выпуск ждал вечно."""
+    from seo_operator import tech_publish
+    репо = tmp_path / "var" / "site-repos" / "x"
+    репо.mkdir(parents=True)
+    _git(репо, "init", "-q", "-b", "claude/extract-x-seo-01")
+    _git(репо, "config", "user.email", "t@t")
+    _git(репо, "config", "user.name", "t")
+    (репо / "a.txt").write_text("1")
+    _git(репо, "add", "-A")
+    _git(репо, "commit", "-q", "-m", "live")
+    живой = _git(репо, "rev-parse", "HEAD")
+    (репо / "a.txt").write_text("2")
+    _git(репо, "commit", "-qam", "task")
+    голова = _git(репо, "rev-parse", "HEAD")
+    monkeypatch.setattr(tech_publish, "REPO", tmp_path)
+    monkeypatch.setattr(tech_publish, "_ячейка_по_репо", lambda repo: {"site_id": "x-01", "domain": "x.test"})
+    monkeypatch.setattr(tech_publish, "_trigger", lambda site_id, confirm: {"action": "ошибка", "blocked": "кандидат старше работающего"})
+    monkeypatch.setattr(tech_publish, "_живой_по_странице", lambda site_id: живой)
+    итог = tech_publish.опубликовать_одну({"task": {"id": "T900"}, "head": голова, "repo": "var/site-repos/x"},
+                                          tmp_path / "state", dry_run=True)
+    assert итог["facts"]["live"] == живой and итог["facts"]["live_in_head"] is True
+    assert итог["reason"] != "живой коммит не определён"

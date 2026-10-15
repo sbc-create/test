@@ -144,6 +144,15 @@ def _trigger(site_id: str, confirm: bool) -> dict:
         return {"action": "ошибка", "blocked": (r.stdout + r.stderr)[-400:]}
 
 
+def _живой_по_странице(site_id: str) -> str:
+    """Живой коммит ячейки по публичному build-id (как у factory.cell.trigger). Только чтение."""
+    try:
+        from factory.cell import registry as реестр, trigger as триггер
+        return триггер.живой_коммит(реестр.resolve(site_id)) or ""
+    except Exception:  # noqa: BLE001 — нет ответа — решение «ждать», как и прежде
+        return ""
+
+
 def _ci(gh_repo: str, ветка: str, sha: str, ждать_с: int) -> str:
     конец = time.time() + ждать_с
     while True:
@@ -227,6 +236,17 @@ def опубликовать_одну(к: dict, state: Path, *, dry_run: bool = 
     else:
         ветка = t.get("branch") or ""
         live = t.get("live_commit") or ""
+        if not live:
+            # Триггер мог отказать до ответа о живом коммите: «кандидат старше
+            # работающего», когда последний успешный CI — плановый прогон на другой
+            # разрешённой ветке (lordserial33.biz 15.10: schedule на 761ae97 при
+            # живом 321bd7e). Тогда живой коммит читается тем же способом, что у
+            # триггера — по публичному build-id, только чтение; ветка выпуска —
+            # та, на которой стоит клон. После отправки головы задачи CI на ветке
+            # выпуска даст свежий прогон, и триггер возьмёт его.
+            live = _живой_по_странице(c["site_id"])
+        if not ветка:
+            ветка = _git(репо, "branch", "--show-current").stdout.strip()
         _git(репо, "fetch", "-q", "origin", ветка)
         remote = _git(репо, "rev-parse", "FETCH_HEAD").stdout.strip()
         live_full = _git(репо, "rev-parse", "--verify", "-q", f"{live}^{{commit}}").stdout.strip() if live else ""
