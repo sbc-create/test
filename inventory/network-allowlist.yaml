@@ -56,3 +56,23 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- games-story: источники (только чтение) --------------------------------
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026: «для игр — руководства,
+  # официальные материалы и качественные вики с указанием версии игры»; «видео — реальные ссылки или
+  # официальный embed». Только GET, robots.txt, пауза.
+  - ref: games-story-wikipedia
+    host: en.wikipedia.org
+    purpose: "games-story: Википедия — сведения об игре (платформы, даты, версии)"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: games-story-celeste-wiki
+    host: celeste.ink
+    purpose: "games-story: Celeste Wiki — главы, коллекционные предметы, маршруты, версия игры"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: games-story-youtube-oembed
+    host: www.youtube.com
+    purpose: "games-story: проверка видео через oEmbed (существует, название, канал, встраивание) — без скачивания"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

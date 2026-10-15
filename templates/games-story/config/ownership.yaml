@@ -1,0 +1,7 @@
+# Реестр владения играми сети (контракт games-ownership/1). Одинаковая копия лежит в каждом игровом шаблоне.
+# У игры ровно один сайт-владелец: гайды по игре публикуются только там. Изменение — новой версией контракта.
+contract: games-ownership/1
+games:
+  celeste: {owner: games-story, title: "Celeste", wiki: "celeste.ink"}
+  baldurs-gate-3: {owner: games-rpg, title: "Baldur's Gate 3", wiki: "bg3.wiki"}
+  minecraft: {owner: games-survival, title: "Minecraft", wiki: "minecraft.wiki"}

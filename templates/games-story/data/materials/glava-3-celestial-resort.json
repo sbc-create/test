@@ -1,0 +1,28 @@
+{
+ "slug": "glava-3-celestial-resort",
+ "game": "celeste",
+ "src": "src-2c70852702",
+ "also": [],
+ "title": "Глава 3. Celestial Resort: заброшенный отель",
+ "summary": "Глава проходит в обветшалом отеле Celestial Resort. Хозяин отеля — призрак мистер Осиро, а главные препятствия — пылевые комки (Dust Bunnies), хотя шипы тоже встречаются.",
+ "mechanics": [
+  "Пылевые комки (Dust Bunnies)"
+ ],
+ "tips": [],
+ "videos": [],
+ "checklist": [
+  "A-сторона пройдена",
+  "Все клубники главы собраны",
+  "B-сторона пройдена",
+  "C-сторона пройдена"
+ ],
+ "related": [
+  "glava-2-old-site",
+  "glava-4-golden-ridge"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

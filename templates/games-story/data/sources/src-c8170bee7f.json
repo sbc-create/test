@@ -1,0 +1,42 @@
+{
+ "id": "src-c8170bee7f",
+ "url": "https://celeste.ink/wiki/Old_Site",
+ "fetched_at": "2026-10-12T21:50:48Z",
+ "page_sha256": "d85222d097059cb41ac9d9a12ef42e3fc7044b1e6638a52f86b7b40187eb149f",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Old Site",
+ "chapter": 2,
+ "strawberries": "18 • 3",
+ "sides": "2A • 2B • 2C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Theo",
+  "Bird"
+ ],
+ "levels": [
+  {
+   "level": "2A",
+   "strawberries": "18 • 1"
+  }
+ ],
+ "checkpoints": [
+  "Start",
+  "Intervention",
+  "Awake"
+ ],
+ "lead": "Old Site is the second chapter of Celeste . Preceded by Forsaken City and succeeded by Celestial Resort , most of it occurs during one of Madeline's dreams. It introduces Badeline for the first time, and also adds several new mechanics, including Dream Blocks , Seeded Strawberries , and Touch switches (also known as coins or shields).",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 18
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

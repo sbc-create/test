@@ -1,0 +1,33 @@
+{
+ "slug": "glava-6-reflection",
+ "game": "celeste",
+ "src": "src-7abc727e57",
+ "also": [
+  "src-2042208adc"
+ ],
+ "title": "Глава 6. Reflection: перья и бой с Badeline",
+ "summary": "Шестая глава вводит пять механик: перья, блоки Kevin, отталкивающие бамперы, бой с Badeline и движущиеся блоки Badeline. Красных клубник в этой главе нет — только золотые.",
+ "mechanics": [
+  "Перья (полёт)",
+  "Блоки Kevin",
+  "Бамперы",
+  "Бой с Badeline"
+ ],
+ "tips": [],
+ "videos": [],
+ "checklist": [
+  "A-сторона пройдена",
+  "Все клубники главы собраны",
+  "B-сторона пройдена",
+  "C-сторона пройдена"
+ ],
+ "related": [
+  "glava-5-mirror-temple",
+  "glava-7-the-summit"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

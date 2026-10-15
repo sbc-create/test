@@ -1,0 +1,49 @@
+{
+ "id": "src-809b877919",
+ "url": "https://celeste.ink/wiki/The_Summit",
+ "fetched_at": "2026-10-12T21:50:59Z",
+ "page_sha256": "a1ccfe59013f3a2478e71c422c118bc2b377c93492d048dc90133ac63b1d69c5",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "The Summit",
+ "chapter": 7,
+ "strawberries": "47 • 3",
+ "sides": "7A • 7B • 7C",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Bird",
+  "Granny"
+ ],
+ "levels": [
+  {
+   "level": "7A",
+   "strawberries": "47 • 1"
+  },
+  {
+   "level": "7B",
+   "strawberries": "1"
+  },
+  {
+   "level": "7C",
+   "strawberries": "1"
+  }
+ ],
+ "checkpoints": [
+  "Start to 2500M",
+  "3000M"
+ ],
+ "lead": "The Summit is the seventh chapter of Celeste . Preceded by Reflection and succeeded by Core , it's a throwback to the previous chapters, reusing most things from them, paired with the newly obtained second dash. Unlike the previous chapter, The Summit is a bit of a step up in difficulty, featuring a lot of platforming with no safe ground underneath. The last subchapter features checkpoint flags numbered from 30 to 01, with the number decreasing as the player ascends. It effectively serves as the end of Celeste 's main storyline; the Epilogue occurs after the events of The Summit.",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 47
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

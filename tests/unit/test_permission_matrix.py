@@ -452,6 +452,8 @@ class TestProfileProperties:
             "yandex.ru",
             "yandex.com",
             "public-api.cdnvideohub.com",
+            # СЕТКА ПРАКТИЧЕСКИХ САЙТОВ (ночь 12–13.10.2026): источники games-story
+            "celeste.ink", "en.wikipedia.org", "www.youtube.com",
         }
 
 

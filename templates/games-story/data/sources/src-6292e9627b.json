@@ -1,0 +1,34 @@
+{
+ "id": "src-6292e9627b",
+ "url": "https://celeste.ink/wiki/Golden_Ridge",
+ "fetched_at": "2026-10-12T21:50:53Z",
+ "page_sha256": "44f809351321923baae0086aca676582873cff74e5f7ec9ceaec8bba8f85a96d",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Golden Ridge",
+ "chapter": 4,
+ "strawberries": "29 • 3",
+ "sides": "4A • 4B • 4C",
+ "characters": [
+  "Madeline",
+  "Bird",
+  "Granny",
+  "Theo",
+  "Badeline"
+ ],
+ "levels": [],
+ "checkpoints": [],
+ "lead": "Golden Ridge is the fourth chapter of Celeste . Preceded by the Celestial Resort and succeeded by Mirror Temple , it takes place on a windy cliff which scales Celeste Mountain. Within Celeste 's main narrative plot, this chapter marks a significant turning point, being the \"middle\" chapter among the seven main chapters of the story. This chapter introduces several new elements to the game, including bouncy clouds and green bubbles ; it also marks Granny 's first appearance since the prologue .",
+ "berries": [
+  {
+   "kind": "Strawberry",
+   "count": 29
+  },
+  {
+   "kind": "Golden Strawberries",
+   "count": 3
+  }
+ ]
+}

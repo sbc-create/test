@@ -1,0 +1,30 @@
+{
+ "slug": "glava-2-old-site",
+ "game": "celeste",
+ "src": "src-c8170bee7f",
+ "also": [],
+ "title": "Глава 2. Old Site: сон и первая встреча с Badeline",
+ "summary": "Большая часть главы проходит во сне Мадлен. Здесь впервые появляется Badeline, а также блоки сна (Dream Blocks), клубники-семена и переключатели-монеты.",
+ "mechanics": [
+  "Блоки сна (Dream Blocks)",
+  "Клубники-семена (Seeded Strawberries)",
+  "Переключатели касанием (Touch switches)"
+ ],
+ "tips": [],
+ "videos": [],
+ "checklist": [
+  "A-сторона пройдена",
+  "Все клубники главы собраны",
+  "B-сторона пройдена",
+  "C-сторона пройдена"
+ ],
+ "related": [
+  "glava-1-forsaken-city",
+  "glava-3-celestial-resort"
+ ],
+ "producer": {
+  "mode": "manual_standin",
+  "by": "Claude (сессия фабрики)",
+  "note": "не результат Qwen"
+ }
+}

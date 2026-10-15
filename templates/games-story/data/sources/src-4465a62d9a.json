@@ -1,0 +1,26 @@
+{
+ "id": "src-4465a62d9a",
+ "url": "https://celeste.ink/wiki/Epilogue",
+ "fetched_at": "2026-10-12T21:51:02Z",
+ "page_sha256": "23cbeb5d45d7a8c3e77e8aa782370451a48d2fafe9896bb3022cfa89fdf1bd2b",
+ "parser": "gst-facts/1.0",
+ "kind": "wiki",
+ "publisher": "Celeste Wiki",
+ "game": "celeste",
+ "name": "Epilogue",
+ "chapter": null,
+ "strawberries": null,
+ "sides": "A-Side only",
+ "characters": [
+  "Madeline",
+  "Badeline",
+  "Theo",
+  "Granny",
+  "Mr. Oshiro",
+  "Bird"
+ ],
+ "levels": [],
+ "checkpoints": [],
+ "lead": "The Epilogue is the final chapter of \"main game\" Celeste , and occurs after The Summit , following Madeline's descent from the peak of Celeste Mountain . It is the shortest chapter in Celeste , because most of it consists of cutscenes.",
+ "berries": []
+}
