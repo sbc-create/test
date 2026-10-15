@@ -243,7 +243,7 @@ A-записи (управляющий узел 45.131.182.225), с нужным
 | --- | --- | --- | --- |
 | 1 | перевод A-записей восьми на 145.63.129.86 | [`OWNER_DNS_TLS_K2_20261015.md`](OWNER_DNS_TLS_K2_20261015.md) | `dig +short A <домен> @8.8.8.8` |
 | 2 | сертификаты по готовым блокам TLS (после п. 1) | там же | `public-acceptance.py <домены>` |
-| 3 | включение таймера доставки: `systemctl --user enable --now k2-catalog-deliver.user.timer` | [`k2-catalog-cycle-20261015.md`](verification/k2-catalog-cycle-20261015.md) | ссылка в `timers.target.wants` |
+| 3 | таймер доставки: сначала слияние ветки и перенос в `/srv/site-factory/repo`, потом постоянный `WorkingDirectory`, и лишь затем `systemctl --user enable --now k2-catalog-deliver.user.timer` | [`k2-catalog-cycle-20261015.md`](verification/k2-catalog-cycle-20261015.md) | ссылка в `timers.target.wants` и прогон доставки |
 | 4 | срок хранения копий «до публикации» (раздел заполняется ~за 6 суток) | [`OWNER_DISK_P0_20261015.md`](OWNER_DISK_P0_20261015.md) | свободное место и отказ публикации |
 | 5 | одна правка nginx: `www → апекс` (срочно) и `http → https` | [`OWNER_HTTPS_WWW_20261015.md`](OWNER_HTTPS_WWW_20261015.md) | приёмка 17 доменов — за SEO-сессией |
 | 6 | удаление прежних копий восьми (только ПОСЛЕ п. 1–2 и подтверждённой работы) | раздел «Прежние копии» | `du -sm` до и после |
