@@ -1,8 +1,8 @@
 # SEO-отчёт — pilot-local
 
-Итог: PASSED
+Итог: FAILED
 
-Критических: 0, серьёзных: 20, малых: 0
+Критических: 27, серьёзных: 0, малых: 0
 
 ## seo-lint — passed
 
@@ -16,53 +16,65 @@
 
 Находок нет.
 
-## seo-render — passed
+## seo-render — FAILED
 
-Счётчики: `{"status": "ok", "exit_code": 0, "viewports": ["mobile-360", "mobile-390", "tablet-768", "laptop-1024", "desktop-1440"], "pages": 14, "screenshots": 15, "lab_lcp_ms_max": 812, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "progressive_enhancement": {"items_before": 12, "items_after": 16, "has_button": true, "items_without_js": 4, "pagination_links_without_js": 2}, "note": "Лабораторные метрики. Полевые Core Web Vitals ими не подменяются."}`
+Счётчики: `{"status": "failed", "exit_code": 2}`
 
 | severity | check | url | сообщение |
 |---|---|---|---|
-| major | thin-content | `/praktikum/serial-fikstura/season-1/` | [mobile-360] Мало видимого текста: 83 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/episode-1/` | [mobile-360] Мало видимого текста: 171 символов |
-| major | thin-content | `/news/zapis-3/` | [mobile-360] Мало видимого текста: 113 символов |
-| major | thin-content | `/news/` | [mobile-360] Мало видимого текста: 96 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/` | [mobile-390] Мало видимого текста: 83 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/episode-1/` | [mobile-390] Мало видимого текста: 171 символов |
-| major | thin-content | `/news/zapis-3/` | [mobile-390] Мало видимого текста: 113 символов |
-| major | thin-content | `/news/` | [mobile-390] Мало видимого текста: 96 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/` | [tablet-768] Мало видимого текста: 83 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/episode-1/` | [tablet-768] Мало видимого текста: 171 символов |
-| major | thin-content | `/news/zapis-3/` | [tablet-768] Мало видимого текста: 113 символов |
-| major | thin-content | `/news/` | [tablet-768] Мало видимого текста: 96 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/` | [laptop-1024] Мало видимого текста: 83 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/episode-1/` | [laptop-1024] Мало видимого текста: 171 символов |
-| major | thin-content | `/news/zapis-3/` | [laptop-1024] Мало видимого текста: 113 символов |
-| major | thin-content | `/news/` | [laptop-1024] Мало видимого текста: 96 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/` | [desktop-1440] Мало видимого текста: 83 символов |
-| major | thin-content | `/praktikum/serial-fikstura/season-1/episode-1/` | [desktop-1440] Мало видимого текста: 171 символов |
-| major | thin-content | `/news/zapis-3/` | [desktop-1440] Мало видимого текста: 113 символов |
-| major | thin-content | `/news/` | [desktop-1440] Мало видимого текста: 96 символов |
+| critical | browser | `http://127.0.0.1:8082` | Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/lekcii/material-04/
+Call log:
+[2m  - navigating to "http://127.0.0.1:8082/lekcii/mat |
 
-## security-smoke — passed
+## security-smoke — FAILED
 
-Счётчики: `{"checked_paths": 8, "root_status": 200}`
+Счётчики: `{"checked_paths": 8, "root_status": 0}`
 
-Находок нет.
+| severity | check | url | сообщение |
+|---|---|---|---|
+| critical | headers | `/` | Отсутствует заголовок X-Content-Type-Options. |
+| critical | headers | `/` | Отсутствует заголовок X-Frame-Options. |
+| critical | headers | `/` | Отсутствует заголовок Referrer-Policy. |
+| critical | headers | `/` | Отсутствует заголовок Content-Security-Policy. |
+| critical | staging | `/` | Staging не отдаёт X-Robots-Tag: noindex. |
+| critical | staging | `/` | Staging доступен без авторизации (HTTP 0). robots.txt защитой не считается. |
+| critical | exposure | `/.env` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/.git/config` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/routes.json` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/build-manifest.json` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/shared/logs/php-server.log` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/backups/` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/install.php` | Служебный путь доступен публично (HTTP 0). |
+| critical | exposure | `/engine/data/config.php` | Служебный путь доступен публично (HTTP 0). |
 
-## acceptance-routes — passed
+## acceptance-routes — FAILED
 
 Счётчики: `{"routes": 11}`
 
-Находок нет.
+| severity | check | url | сообщение |
+|---|---|---|---|
+| critical | acceptance | `/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/lekcii/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/lekcii/page/2/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/lekcii/material-01/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/praktikum/serial-fikstura/season-1/episode-1/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/praktikum/serial-fikstura/season-1/episode-3/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/news/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/legal/terms/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/search/` | Ожидался 200, получен 0. |
+| critical | acceptance | `/lekcii/page/999/` | Ожидался 404, получен 0. |
+| critical | acceptance | `/arhiv/` | Ожидался 404, получен 0. |
 
 ## major-findings-budget — passed
 
-Счётчики: `{"status": "ok", "major": 20, "budget": 25}`
+Счётчики: `{"status": "ok", "major": 0, "budget": 25}`
 
 Находок нет.
 
-## performance-budget — passed
+## performance-budget — FAILED
 
-Счётчики: `{"status": "ok", "lab_lcp_ms_max": 812, "lab_cls_max": 0, "lab_transfer_bytes_max": 11382, "budgets": {"lab_lcp_ms": 2500, "lab_cls": 0.1, "lab_total_bytes": 800000, "field_targets": {"lcp_ms": 2500, "inp_ms": 200, "cls": 0.1}}, "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."}`
+Счётчики: `{"status": "failed", "lab_lcp_ms_max": null, "lab_cls_max": null, "lab_transfer_bytes_max": null, "budgets": {"lab_lcp_ms": 2500, "lab_cls": 0.1, "lab_total_bytes": 800000, "field_targets": {"lcp_ms": 2500, "inp_ms": 200, "cls": 0.1}}, "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."}`
 
-Находок нет.
+| severity | check | url | сообщение |
+|---|---|---|---|
+| critical | performance | `-` | Метрики не собраны: браузерная проверка недоступна (failed). |

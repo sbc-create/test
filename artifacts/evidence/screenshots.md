@@ -6,13 +6,12 @@
 
 Снято `tools/browser-audit.js` на брейкпоинтах 360, 390, 768, 1024, 1440 px.
 
-Задание: `pilot-local-create-20261015T085517Z-d4238b`
+Задание: `pilot-local-create-20261015T133941Z-a78e37`
 
 | Файл | Байт | SHA-256 (первые 16) |
 |---|---:|---|
 | `screenshot-desktop-1440-_.png` | 47934 | `3e57bb04fa135615` |
 | `screenshot-desktop-1440-_lekcii_.png` | 43954 | `4b5d4a94c6257827` |
-| `screenshot-desktop-1440-_praktikum_serial_fikstura_season_1_episode_1_.png` | 38609 | `5fd0d97486b1a754` |
 | `screenshot-laptop-1024-_.png` | 37315 | `ea5d97d071aa653a` |
 | `screenshot-laptop-1024-_lekcii_.png` | 37555 | `7ba35ecdfaad344e` |
 | `screenshot-laptop-1024-_praktikum_serial_fikstura_season_1_episode_1_.png` | 35067 | `61076d8dc7e6682f` |

@@ -5,49 +5,49 @@
       "command": "python3 -m factory knowledge verify",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "claude-config",
       "command": "python3 -m factory selfcheck",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-python",
       "command": "python3 -m compileall -q factory tools .claude/hooks tests > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-php",
       "command": "find automation themes -name '*.php' -print0 | xargs -0 -r -n1 php -l > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-js",
       "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js tests/e2e-multisite/*.js playwright.config.js playwright.multisite.config.js; do node --check \"$f\" || exit 1; done",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "static-yaml",
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "2s"
+      "note": "8s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "894s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "1004s"
     },
     {
       "check": "validate-pilot",
@@ -68,28 +68,28 @@
       "command": "python3 -m factory build --site pilot-local --force > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "integration-fast",
       "command": "python3 -m pytest tests/integration -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "14s"
+      "note": "58s"
     },
     {
       "check": "cell-pilot",
       "command": "PYTHONPATH=. python3 tests/tools/cell_pilot.py --evidence artifacts/evidence/portable-site-cell/pilot.json > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "2s"
+      "note": "5s"
     },
     {
       "check": "integration-slow",
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "23s"
+      "note": "26s"
     },
     {
       "check": "seo-lint",
@@ -108,30 +108,30 @@
     {
       "check": "deploy-pilot",
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "121s"
+      "exit_code": "2",
+      "status": "FAIL",
+      "note": "119s"
     },
     {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "0s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "1s"
     },
     {
       "check": "browser-audit",
       "command": "python3 tests/tools/check_browser_audit.py",
-      "exit_code": "0",
-      "status": "PASS",
+      "exit_code": "1",
+      "status": "FAIL",
       "note": "0s"
     },
     {
       "check": "e2e-playwright",
       "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "27s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "73s"
     },
     {
       "check": "cross-browser",
@@ -145,7 +145,7 @@
       "command": "ansible-playbook --syntax-check automation/ansible/deploy-site.yml",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "3s"
     },
     {
       "check": "nginx-config-test",
@@ -176,7 +176,7 @@
       "note": "0s"
     }
   ],
-  "passed": 22,
-  "failed": 0,
+  "passed": 17,
+  "failed": 5,
   "skipped": 3
 }

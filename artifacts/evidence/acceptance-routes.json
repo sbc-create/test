@@ -1,14 +1,92 @@
 {
   "name": "acceptance-routes",
-  "passed": true,
+  "passed": false,
   "executed": true,
   "counts": {
     "routes": 11
   },
   "totals": {
-    "critical": 0,
+    "critical": 11,
     "major": 0,
     "minor": 0
   },
-  "findings": []
+  "findings": [
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/lekcii/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/lekcii/page/2/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/lekcii/material-01/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/praktikum/serial-fikstura/season-1/episode-1/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/praktikum/serial-fikstura/season-1/episode-3/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/news/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/legal/terms/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/search/",
+      "message": "Ожидался 200, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/lekcii/page/999/",
+      "message": "Ожидался 404, получен 0.",
+      "rule": ""
+    },
+    {
+      "check": "acceptance",
+      "severity": "critical",
+      "url": "/arhiv/",
+      "message": "Ожидался 404, получен 0.",
+      "rule": ""
+    }
+  ]
 }
