@@ -500,6 +500,77 @@ def тег_метрики() -> str:
         "</script>"
         f'<noscript><div><img src="https://mc.yandex.ru/watch/{н}" '
         'style="position:absolute;left:-9999px" alt=""></div></noscript>'
+        + цели_метрики(н)
+    )
+
+
+#: Цели Метрики этой витрины — ЗАКРЫТЫЙ список. Имена совпадают с
+#: `config/analytics.json`, где у каждой уже есть goal_id; придумывать их
+#: здесь нечего и нельзя.
+#:
+#: `comment_submit` в списке есть, но из разметки НЕ отправляется: у Yummy он
+#: уходит по приёму сервером, а здесь форма сообщества уходит обычным POST с
+#: переходом, и «отправлено» не равно «принято». Событие принадлежит модулю
+#: сообщества и приедет его выпуском.
+ЦЕЛИ_МЕТРИКИ = (
+    "title_view",       # открыта страница произведения
+    "search",           # поисковый запрос отправлен (сама фраза не передаётся)
+    "filter_apply",     # применён фильтр каталога (значения не передаются)
+    "season_select",    # выбран сезон
+    "episode_select",   # выбрана серия
+    "player_start",     # площадка запросила воспроизведение
+    "player_ready",     # плеер поднялся
+    "player_error",     # запуск не состоялся
+)
+
+
+def цели_метрики(номер: str) -> str:
+    """Отправка целей. Ни одного параметра — только имя из закрытого списка.
+
+    Почему параметров нет вовсе. Метрика позволяет передать с целью
+    произвольные данные, и один такой вызов из обработчика поиска вынес бы
+    поисковую фразу в отчёт. Поэтому единственная точка отправки —
+    `window.__sfGoal(имя)`, и третьего аргумента у неё не существует: вызов
+    «с данными» написать нечем.
+
+    Почему тип страницы определяется по адресу, а не по разметке. Маршруты
+    витрины свои и стабильные (`/title/<слаг>/season-N/episode-M/`), а метку
+    в разметку пришлось бы добавить в четыре оболочки — четыре места, где
+    легко разойтись. Адрес уже есть и уже верен.
+    """
+    имена = ",".join(f'"{и}"' for и in ЦЕЛИ_МЕТРИКИ)
+    return (
+        "<script>(function(){"
+        "if(window.__sfGoal){return;}"
+        f"var C={номер},L=[{имена}],S={{}};"
+        # Имя вне списка не отправляется: опечатка в вызове не должна
+        # заводить в кабинете цель-призрак, которой нет в реестре.
+        "function g(n){try{"
+        "if(L.indexOf(n)<0){return;}"
+        "if(typeof window.ym!=='function'){return;}"
+        "window.ym(C,'reachGoal',n);"
+        "}catch(e){}}"
+        "window.__sfGoal=g;"
+        # Один раз на загрузку страницы: повтор того же события в одном визите
+        # исказил бы отчёт.
+        "window.__sfGoalOnce=function(n){if(S[n]){return;}S[n]=1;g(n);};"
+        "var p=location.pathname||'';"
+        "if(/^\\/title\\//.test(p)){window.__sfGoalOnce('title_view');}"
+        "document.addEventListener('submit',function(e){"
+        "var f=e&&e.target; if(!f||!f.getAttribute){return;}"
+        "var a=f.getAttribute('action')||'';"
+        "if(f.getAttribute('role')==='search'||/\\/search\\//.test(a)){g('search');}"
+        "else if((f.className||'').indexOf('filt__form')>=0){g('filter_apply');}"
+        "},true);"
+        "document.addEventListener('click',function(e){"
+        "var n=e&&e.target,a=null;"
+        "while(n&&n!==document){if(n.tagName==='A'&&n.getAttribute('href')){a=n;break;}n=n.parentNode;}"
+        "if(!a){return;}"
+        "var h=a.getAttribute('href')||'';"
+        "if(/\\/season-\\d+\\/episode-\\d+\\/?$/.test(h)){g('episode_select');}"
+        "else if(/\\/season-\\d+\\/?$/.test(h)){g('season_select');}"
+        "},true);"
+        "})();</script>"
     )
 
 #: Контракт многоисточниковых оценок. Единственное место, где объявлено,
@@ -3581,6 +3652,16 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  }
  function state(k,t,p){
   if(отказ&&k==='ok') return;
+  /* Цели плеера уходят ОТСЮДА: это единственная воронка его состояний, и
+     ставить отправку в каждое место перехода значило бы разойтись на первой
+     же правке. Имя — из закрытого списка, параметров нет. */
+  try{
+   var о=window.__sfGoalOnce;
+   if(о){
+    if(k==='ok'){ о('player_ready'); }
+    else if(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable'){ о('player_error'); }
+   }
+  }catch(e){}
   /* Hard failures hide the component. Soft/active states never cover a live iframe. */
   var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
   if(hard){ отказ=true; clearTimers(); }
@@ -3634,6 +3715,11 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   n.setAttribute('data-title-id', c.id||'');
   n.setAttribute('data-aggregator', c.aggregator||'');
   host.appendChild(n);
+  /* player_start — площадка ЗАПРОСИЛА воспроизведение, а не факт первого
+     кадра: у провайдера в зафиксированном контракте события начала показа
+     нет. Та же формулировка, что у Yummy, чтобы одна цель не значила на
+     разных витринах разное. */
+  try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_start'); } }catch(e){}
   bind(n, ++token);
  }
  function markPlaying(evName, ct){
