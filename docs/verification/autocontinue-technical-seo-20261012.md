@@ -137,16 +137,22 @@ SEO-сессии), то есть машинно читаемой очереди 
 Ставить юнит и таймер — root. Команда **сама отказывается**, если предусловия
 не выполнены: это тот же принцип различающего шага, применённый к установке.
 
+Имена переменных исправлены на ASCII 2026-10-15: в прежней записи они были
+кириллицей (`КОРЕНЬ=`, `ОЧЕРЕДЬ=`, `СЦЕНАРИЙ=`), а bash такое присваиванием не
+считает. Команда не отказалась бы — она напечатала бы ЛОЖНЫЙ отказ «нет
+очереди», потому что переменная осталась пустой. Проверка на это теперь есть:
+`tests/unit/test_shell_ascii_identifiers.py::test_команды_в_документах_только_ascii`.
+
 ```bash
 bash -o pipefail -c '
-КОРЕНЬ=/home/claude/wt-portable-site-cell-01
-ОЧЕРЕДЬ="$КОРЕНЬ/config/seo-tech-queue.json"
-СЦЕНАРИЙ="$КОРЕНЬ/automation/host/editor/seo-tech-run.sh"
-test -s "$ОЧЕРЕДЬ" || { echo "ОТКАЗ: нет очереди $ОЧЕРЕДЬ — ставить таймер не на что"; exit 1; }
-python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$ОЧЕРЕДЬ" \
+ROOT=/home/claude/wt-portable-site-cell-01
+QUEUE="$ROOT/config/seo-tech-queue.json"
+SCRIPT="$ROOT/automation/host/editor/seo-tech-run.sh"
+test -s "$QUEUE" || { echo "ОТКАЗ: нет очереди $QUEUE — ставить таймер не на что"; exit 1; }
+python3 -c "import json,sys; json.load(open(sys.argv[1]))" "$QUEUE" \
   || { echo "ОТКАЗ: очередь не разбирается как JSON"; exit 1; }
-test -x "$СЦЕНАРИЙ" || { echo "ОТКАЗ: нет исполняемого $СЦЕНАРИЙ"; exit 1; }
-(cd "$КОРЕНЬ" && python3 -m seo_operator.cli seo-tech-verify --help >/dev/null 2>&1) \
+test -x "$SCRIPT" || { echo "ОТКАЗ: нет исполняемого $SCRIPT"; exit 1; }
+(cd "$ROOT" && python3 -m seo_operator.cli seo-tech-verify --help >/dev/null 2>&1) \
   || { echo "ОТКАЗ: нет проверяющего шага seo-tech-verify — таймер стал бы автономностью без вердикта"; exit 1; }
 echo "предусловия выполнены: очередь, сценарий и проверяющий шаг на месте"
 '
