@@ -81,6 +81,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "daily_search",
         # 2026-10-10: паспорт счётчика (часовой пояс) и неполные текущие сутки
         "counter_passport", "today_users", "today_search",
+        # 2026-10-15: профиль трафика по дням (источник × устройство × браузер) — всплески
+        "daily_traffic_profile",
     }
 
 

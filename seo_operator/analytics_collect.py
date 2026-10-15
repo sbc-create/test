@@ -344,6 +344,12 @@ EXTRA_METRIKA = (
         "Поисковые визиты и пользователи по дням и поисковым системам",
         "ym:s:users, ym:s:visits × ym:s:date × lastsignTrafficSource × lastsignSearchEngineRoot",
     ),
+    (
+        "daily_traffic_profile",
+        "Визиты по дням, источнику, типу устройства и браузеру (с отказами, глубиной, временем)",
+        "ym:s:visits, ym:s:bounceRate, ym:s:pageDepth, ym:s:avgVisitDurationSeconds × ym:s:date × "
+        "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser",
+    ),
 )
 
 
@@ -443,6 +449,33 @@ def _metrika_daily_and_search(
     except FactoryError as exc:
         out.append(
             _unmeasured("daily_search", EXTRA_METRIKA[2][1], exc.reason, EXTRA_METRIKA[2][2])
+        )
+    # Происхождение непоисковых всплесков (yummyani.site 13–15.10: прямые заходы без
+    # роста поиска, отказы 67 %): по дням, источнику, устройству и браузеру. Только чтение.
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=DAILY_WINDOW_FROM,
+            date2=date2,
+            metrics=["ym:s:visits", "ym:s:bounceRate", "ym:s:pageDepth", "ym:s:avgVisitDurationSeconds"],
+            dimensions=["ym:s:date", "ym:s:lastsignTrafficSource", "ym:s:deviceCategory", "ym:s:browser"],
+            limit=1000,
+        )
+        out.append(
+            Measurement(
+                key="daily_traffic_profile",
+                title=EXTRA_METRIKA[3][1],
+                measured=True,
+                value=report.get("data"),
+                source=EXTRA_METRIKA[3][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+                top_n=1000,
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured("daily_traffic_profile", EXTRA_METRIKA[3][1], exc.reason, EXTRA_METRIKA[3][2])
         )
     return out
 
