@@ -118,7 +118,12 @@ def test_скрипт_узла_зовёт_эту_политику():
     """Второй реализации того же решения в скрипте узла быть не должно."""
     т = (Path(__file__).resolve().parents[2]
          / "automation/host/nova-catalog-publish.py").read_text(encoding="utf-8")
-    assert "from factory.lords.publish_space import место_для_публикации" in т
+    # Импорт стал многострочным, когда к политике добавился помощник
+    # копии «до»: проверяется ФАКТ импорта из этого модуля, а не форма
+    # строки — иначе проверка падала бы на переносе, а не на подмене.
+    assert "from factory.lords.publish_space import" in т
+    assert "место_для_публикации" in т
+    assert "копия_до" in т
     assert "def место_на_разделе(" not in т
     assert 'отчёт["disk"] = место_для_публикации(' in т
     # Отказ стоит ДО создания каталога копий и до взятия замка.
@@ -130,3 +135,75 @@ def test_скрипт_узла_зовёт_эту_политику():
 def test_окружение_не_испорчено():
     assert "NOVA_PUBLISH_RESERVE_KB" not in os.environ or os.environ[
         "NOVA_PUBLISH_RESERVE_KB"].isdigit()
+
+# --- копия «до публикации» жёсткой ссылкой ---------------------------------
+
+def test_копия_до_делается_ссылкой(tmp_path):
+    """Тот же inode — значит нулевой расход места."""
+    и = файл(tmp_path / "details.json", 2048)
+    ц = tmp_path / "копии" / "details.json.before.pub-1"
+    assert publish_space.копия_до(и, ц) == "link"
+    assert ц.stat().st_ino == и.stat().st_ino
+    assert ц.read_bytes() == и.read_bytes()
+
+
+def test_ссылка_держит_состояние_ДО_замены(tmp_path):
+    """Главное свойство: публикация заменяет файл целиком, не правит на месте.
+
+    `os.replace` даёт цели НОВЫЙ inode, поэтому ссылка остаётся при прежних
+    байтах. Если бы писатель правил файл на месте, «копия» изменилась бы
+    вместе с ним — и откат вернул бы не то состояние. Эта проверка и есть
+    условие, при котором ссылка допустима.
+    """
+    и = tmp_path / "details.json"
+    и.write_bytes(b"BEFORE")
+    ц = tmp_path / "копии" / "details.json.before.pub-1"
+    publish_space.копия_до(и, ц)
+
+    врем = tmp_path / "details.json.tmp"
+    врем.write_bytes(b"AFTER")
+    import os
+    os.replace(врем, и)
+
+    assert и.read_bytes() == b"AFTER"
+    assert ц.read_bytes() == b"BEFORE", "ссылка изменилась вместе с целью"
+
+
+def test_правка_на_месте_ломала_бы_копию(tmp_path):
+    """Проверка «от обратного»: именно поэтому условие названо в документации.
+
+    Если писатель откроет файл на запись и перезапишет содержимое, ссылка
+    покажет новое — то есть копии «до» не станет. Проверка фиксирует это как
+    ИЗВЕСТНОЕ ограничение, а не как свойство, на которое можно не смотреть.
+    """
+    и = tmp_path / "details.json"
+    и.write_bytes(b"BEFORE")
+    ц = tmp_path / "копии" / "details.json.before.pub-1"
+    publish_space.копия_до(и, ц)
+    with open(и, "wb") as ф:          # правка НА МЕСТЕ, не через replace
+        ф.write(b"INPLACE")
+    assert ц.read_bytes() == b"INPLACE"
+
+
+def test_при_невозможности_ссылки_копируется(tmp_path, monkeypatch):
+    """Другое устройство или запрет — не повод остаться без копии."""
+    и = файл(tmp_path / "details.json", 1024)
+    ц = tmp_path / "копии" / "details.json.before.pub-1"
+
+    def нельзя(*а, **к):
+        raise OSError(18, "Invalid cross-device link")
+
+    monkeypatch.setattr(publish_space.os, "link", нельзя)
+    assert publish_space.копия_до(и, ц) == "copy"
+    assert ц.read_bytes() == и.read_bytes()
+    assert ц.stat().st_ino != и.stat().st_ino
+
+
+def test_публикатор_зовёт_помощника_а_не_copy2():
+    from pathlib import Path as П
+    т = (П(__file__).resolve().parents[2]
+         / "automation/host/nova-catalog-publish.py").read_text(encoding="utf-8")
+    assert "способ = копия_до(путь, копия)" in т
+    assert "shutil.copy2(путь, копия)" not in т
+    # Способ попадает в отчёт: иначе «ссылка» и «копия» неотличимы снаружи.
+    assert '"kind": способ' in т

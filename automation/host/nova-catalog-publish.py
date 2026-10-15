@@ -50,7 +50,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from factory.lords import rating_gateway  # noqa: E402
-from factory.lords.publish_space import место_для_публикации  # noqa: E402
+from factory.lords.publish_space import (  # noqa: E402
+    копия_до, место_для_публикации)
 from factory.lords.nova_publish import (  # noqa: E402
     PublishError, РеестрСлагов, загрузить_снимок, контрольная_сумма,
     покрытие, причины_отсутствия, проверить_контракт_рендерера, собрать_сайт)
@@ -648,9 +649,14 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
             for имя, путь in (("catalog", т.каталог), ("details", т.подробности)):
                 if путь.is_file():
                     копия = копии / f"{путь.name}.before.{run_id}"
-                    shutil.copy2(путь, копия)
+                    # Жёсткая ссылка вместо второго экземпляра тех же байтов:
+                    # замена файла идёт через `os.replace`, то есть цель
+                    # получает НОВЫЙ inode, а прежний остаётся за ссылкой
+                    # вместе с содержимым «до». Копии «до» занимали 25,50 ГиБ
+                    # и росли на ~1,3 ГиБ в сутки на разделе, где свободно 3 %.
+                    способ = копия_до(путь, копия)
                     образы[f"{site_id}.{имя}"] = {
-                        "backup": str(копия),
+                        "backup": str(копия), "kind": способ,
                         "sha256": hashlib.sha256(копия.read_bytes()).hexdigest()}
         отчёт["before_images"] = образы
         отчёт["rollback_command"] = " && ".join(
