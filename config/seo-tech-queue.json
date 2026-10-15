@@ -3039,6 +3039,106 @@
       "evidence": "15.10 ~20:20Z: после живой сверки представителя T139. Ответственный: SEO-сессия (фоновый цикл)."
     },
     {
+      "id": "T151",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/top/"
+      ],
+      "problem": "Повторный аудит 15.10 ~20:40Z (var/seo-audit/editorial-20261015-evening.json): на an1mego.site остались «Порядок по сводной оценке Animedia, собранной из подтверждённых источников» (у AnimeGo ещё и чужой бренд) и/или «Оценки пока нет: источники не прислали ни одного голоса.» — у этих строк вторая половина различалась по репозиториям, и первая таблица их не покрыла. Пары добавлены в ЗАМЕНЫ_2.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/top/",
+          "status": 200,
+          "absent": [
+            "источники не прислали"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~20:45Z: досдача редакционной волны. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T152",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/top/"
+      ],
+      "problem": "Повторный аудит 15.10 ~20:40Z (var/seo-audit/editorial-20261015-evening.json): на animeg0.site остались «Порядок по сводной оценке Animedia, собранной из подтверждённых источников» (у AnimeGo ещё и чужой бренд) и/или «Оценки пока нет: источники не прислали ни одного голоса.» — у этих строк вторая половина различалась по репозиториям, и первая таблица их не покрыла. Пары добавлены в ЗАМЕНЫ_2.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/top/",
+          "status": 200,
+          "absent": [
+            "собранной из подтверждённых"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~20:45Z: досдача редакционной волны. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T153",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/top/"
+      ],
+      "problem": "Повторный аудит 15.10 ~20:40Z (var/seo-audit/editorial-20261015-evening.json): на an1meg0.site остались «Порядок по сводной оценке Animedia, собранной из подтверждённых источников» (у AnimeGo ещё и чужой бренд) и/или «Оценки пока нет: источники не прислали ни одного голоса.» — у этих строк вторая половина различалась по репозиториям, и первая таблица их не покрыла. Пары добавлены в ЗАМЕНЫ_2.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/top/",
+          "status": 200,
+          "absent": [
+            "источники не прислали"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~20:45Z: досдача редакционной волны. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T154",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/top/"
+      ],
+      "problem": "Повторный аудит 15.10 ~20:40Z (var/seo-audit/editorial-20261015-evening.json): на animedia.icu остались «Порядок по сводной оценке Animedia, собранной из подтверждённых источников» (у AnimeGo ещё и чужой бренд) и/или «Оценки пока нет: источники не прислали ни одного голоса.» — у этих строк вторая половина различалась по репозиториям, и первая таблица их не покрыла. Пары добавлены в ЗАМЕНЫ_2.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/top/",
+          "status": 200,
+          "absent": [
+            "собранной из подтверждённых"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~20:45Z: досдача редакционной волны. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
       "id": "T137",
       "site": "lordserials22.info",
       "direction": "lords",
