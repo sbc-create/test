@@ -113,3 +113,11 @@ systemctl --user list-timers k2-catalog-deliver.user.timer
 отвечают, но закрыты от обхода. Открытие — отдельная заявка
 `factory cell submit --cell-operation indexing-nginx --mode open`, а не правка
 конфигурации, и выполняется по решению владельца.
+
+Состояние CLOSED проверено на узле витрин, а не по локальным путям
+управляющего узла: читатель режима в выложенном релизе есть у всех восьми
+(`src/indexing_mode.py`, 8237 байт, подключён `src/lords-frontend.py`),
+заголовок закрытия отдаёт само приложение, слой nginx управляется переменной
+ячейки `$cell_robots_lords_1X`. Нового выпуска для открытия НЕ требуется —
+измерение и правка инструмента, который утверждал обратное:
+[`docs/verification/k2-indexing-mode-20261015.md`](verification/k2-indexing-mode-20261015.md).

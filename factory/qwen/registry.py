@@ -35,6 +35,13 @@ from dataclasses import dataclass, field, asdict
 from typing import Any
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+
+#: Узел, на котором живёт фабрика. Не запрет, а СВЕРКА: пути `/srv/<учётная
+#: запись>/…` этот модуль читает с ТОЙ машины, где запущен, и для витрины,
+#: выложенной на другой узел, их отсутствие ничего о витрине не доказывает.
+#: Та же константа и с тем же смыслом — в `automation/host/launch-domain.py`
+#: (`ЭТОТ_УЗЕЛ`) и в `factory/qwen/mcp.py` (`ОЖИДАЕМЫЙ_ХОСТ`).
+ЭТОТ_УЗЕЛ = "claude-control-01"
 #: Реестр ячеек. Переменная `SITE_CELLS_REGISTRY` — та же, что у
 #: `factory.cell.registry.registry_path()`: изолированному стенду нужен свой
 #: реестр, и подменять боевой файл ради проверки нельзя. Два слоя обязаны
@@ -544,6 +551,15 @@ class Сайт:
     editorial_store: str = ""
     editorial_items: int | None = None
     indexing: str = ""
+    #: Узел, на который витрина ВЫКЛАДЫВАЕТСЯ (`deploy_target.ref` реестра
+    #: ячеек). Пусто — выкладка на этом узле. Поле нужно каждому выводу,
+    #: сделанному по локальным путям: без него «файла нет» неотличимо от
+    #: «спросили не ту машину».
+    deploy_target: str = ""
+    #: Можно ли вообще измерить выпуск с ЭТОГО узла. False — витрина живёт на
+    #: другом узле, и пустой `published_release` означает «не измерено», а не
+    #: «выпуска нет».
+    release_measurable_here: bool = True
     #: Исключён ли сайт владельцем из общего продвижения (`promotion.excluded`
     #: в реестре ячеек). Умолчание — False: у действующих сайтов блока нет, и
     #: появление поля их перечень операций не меняет.
@@ -735,8 +751,23 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
         аккаунт = ((я.get("runtime") or {}).get("account")
                    or домен.replace(".", "-"))
         s.account = аккаунт
+        s.deploy_target = str((я.get("deploy_target") or {}).get("ref") or "").strip()
         ссылка = pathlib.Path(f"/srv/{аккаунт}/current")
-        if ссылка.exists():
+        if s.deploy_target and s.deploy_target != ЭТОТ_УЗЕЛ:
+            # Витрина выложена на ДРУГОМ узле: каталогов `/srv/<учётная
+            # запись>/` здесь нет и быть не должно. Прежде поле выпуска в этом
+            # случае оставалось пустым, и читающий слой выдавал отсутствие
+            # ИЗМЕРЕНИЯ за отсутствие выпуска — у партии K2 вердикт режима
+            # индексации так сообщил «в выложенном релизе нет
+            # src/indexing_mode.py» о восьми витринах, у которых этот файл на
+            # их узле есть (измерено 2026-10-15: 8237 байт в
+            # /srv/lordfilm-group/current/src/ и /srv/lordserial-su/current/src/).
+            s.release_measurable_here = False
+            s.notes.append(
+                f"выкладка на {s.deploy_target}: выпуск, файлы релиза и "
+                "состояние служб измеряются ТАМ; пути этого узла о витрине "
+                "ничего не говорят")
+        elif ссылка.exists():
             s.published_release = pathlib.Path(ссылка.resolve()).name
         elif pathlib.Path(f"/srv/{аккаунт}/app").is_dir():
             s.published_release = "без releases/: прямая установка"
