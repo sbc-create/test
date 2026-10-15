@@ -298,6 +298,23 @@ def читатель_контейнера(домен: str) -> dict:
                        if "=" in кв)
             if домен not in (окр.get("SITE_URL") or ""):
                 continue
+            # Жив ли контейнер — только по `State`, и никогда по строке
+            # состояния. Измерено 2026-10-15 соседней сессией: `docker
+            # compose ps` показывал «Up 13 days (healthy)» у контейнера, у
+            # которого `inspect .State` отвечал `Status=exited`,
+            # `Running=false`, `ExitCode=1` и `FinishedAt=2026-10-10`. Строка
+            # устарела на пять суток, и по ней блок доложил «пять контейнеров
+            # healthy». Переменные мёртвого контейнера читаются как живые, и
+            # вердикт о режиме индексации оказался бы о том, чего нет.
+            состояние = (данные.get("State") or {})
+            if not состояние.get("Running"):
+                итог["reason"] = (
+                    f"контейнер {имя} найден, но не работает: "
+                    f"Status={состояние.get('Status')!r}, "
+                    f"ExitCode={состояние.get('ExitCode')}, "
+                    f"FinishedAt={состояние.get('FinishedAt')!r}. Переменные "
+                    "остановленного контейнера о работающем режиме не говорят")
+                return итог
             итог.update({
                 "found": True, "container": имя,
                 "SEO_INDEXING_ENABLED": окр.get("SEO_INDEXING_ENABLED"),
