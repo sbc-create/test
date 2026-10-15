@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-10-08T16:11:09Z",
+  "updated_at": "2026-10-15T16:05:00Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -258,6 +258,124 @@
       ]
     },
     {
+      "domain": "lordfilm.group",
+      "site_id": "lords-10",
+      "counter_name": "Lords — lordfilm.group",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm.group",
+        "www.lordfilm.group"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordfilm.msk.ru",
+      "site_id": "lords-12",
+      "counter_name": "Lords — lordfilm.msk.ru",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm.msk.ru",
+        "www.lordfilm.msk.ru"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordfilm.spb.ru",
+      "site_id": "lords-11",
+      "counter_name": "Lords — lordfilm.spb.ru",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm.spb.ru",
+        "www.lordfilm.spb.ru"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordfilm077.site",
+      "site_id": "lords-09",
+      "counter_name": "Lords — lordfilm077.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordfilm077.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+      ],
+      "last_checked_at": null
+    },
+    {
       "domain": "lordfilm47.space",
       "site_id": "lords-01",
       "counter_name": "Lords — lordfilm47.space",
@@ -301,6 +419,184 @@
         "season_select": 602711694,
         "title_view": 602711693
       }
+    },
+    {
+      "domain": "lordserial.group",
+      "site_id": "lords-14",
+      "counter_name": "Lords — lordserial.group",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial.group",
+        "www.lordserial.group"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordserial.msk.ru",
+      "site_id": "lords-16",
+      "counter_name": "Lords — lordserial.msk.ru",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial.msk.ru",
+        "www.lordserial.msk.ru"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordserial.net.ru",
+      "site_id": "lords-17",
+      "counter_name": "Lords — lordserial.net.ru",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial.net.ru",
+        "www.lordserial.net.ru"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordserial.spb.ru",
+      "site_id": "lords-15",
+      "counter_name": "Lords — lordserial.spb.ru",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial.spb.ru",
+        "www.lordserial.spb.ru"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordserial.su",
+      "site_id": "lords-13",
+      "counter_name": "Lords — lordserial.su",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial.su",
+        "www.lordserial.su"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+      ],
+      "last_checked_at": null
+    },
+    {
+      "domain": "lordserial101.site",
+      "site_id": "lords-08",
+      "counter_name": "Lords — lordserial101.site",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserial101.site"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": "META_TAG",
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "problems": [
+        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+        "девять целей не заведены: цели создаются вместе со счётчиком",
+        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+      ],
+      "last_checked_at": null
     },
     {
       "domain": "lordserial33.biz",
@@ -823,62 +1119,6 @@
         "title_view": 664258323
       },
       "last_checked_at": "2026-10-08T16:08:18Z"
-    },
-    {
-      "domain": "lordserial101.site",
-      "site_id": "lords-08",
-      "counter_name": "Lords — lordserial101.site",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial101.site"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordfilm077.site",
-      "site_id": "lords-09",
-      "counter_name": "Lords — lordfilm077.site",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm077.site"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
-      ],
-      "last_checked_at": null
     }
   ]
 }
