@@ -2765,6 +2765,133 @@
       "evidence": "15.10 ~14:10Z: поставлено взамен T125; сбой — не код задачи (одинаков у T125 и другой задачи на той же витрине; на базе в сессии три шага PASS)."
     },
     {
+      "id": "T132",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/schedule/",
+        "https://animedia.icu/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/episode-4/"
+      ],
+      "problem": "Живой замер 15.10 ~15:10Z на animedia.icu: ссылки расписания /schedule/ на серии строятся с season-1 независимо от сезона тайтла; 4 из 8 ссылок отвечают 404: /title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/episode-4/ (рабочая — season-7/episode-4/, так ссылается страница тайтла), nesravnennyy-boevoy-duh-2/season-1/episode-20/, put-asa-akt-ii-2-chast-2/season-1/episode-2/, raskolotaya-bitvoy-sineva-nebes-5/season-1/episode-57/.",
+      "norm": "внутренние ссылки ведут на существующую каноническую страницу (200), без 404",
+      "expected": "ссылка расписания на серию строится тем же правилом адреса серии, что и на странице тайтла (сезон из данных тайтла); если адреса серии нет (серия не опубликована) — ссылка на страницу тайтла. Все ссылки /schedule/ отвечают 200. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/schedule_episode_links.py",
+      "verify_live": "после выпуска: все ссылки /schedule/ на серии и тайтлы — 200",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/schedule/",
+          "status": 200,
+          "absent": [
+            "/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~15:10Z: найдено при проверке дефектов, заявленных владельцем 15.10. Ответственный: SEO-сессия, фоновый цикл seo-tech-run (прикладная правка витрины; инфраструктуры не касается)."
+    },
+    {
+      "id": "T133",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/schedule/",
+        "https://animedia.space/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/episode-4/"
+      ],
+      "problem": "Живой замер 15.10 ~15:10Z на animedia.space: ссылки расписания /schedule/ на серии строятся с season-1 независимо от сезона тайтла; 4 из 5 ссылок отвечают 404: /title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/episode-4/ (рабочая — season-7/episode-4/, так ссылается страница тайтла), nesravnennyy-boevoy-duh-2/season-1/episode-20/, put-asa-akt-ii-2-chast-2/season-1/episode-2/, raskolotaya-bitvoy-sineva-nebes-5/season-1/episode-57/.",
+      "norm": "внутренние ссылки ведут на существующую каноническую страницу (200), без 404",
+      "expected": "ссылка расписания на серию строится тем же правилом адреса серии, что и на странице тайтла (сезон из данных тайтла); если адреса серии нет (серия не опубликована) — ссылка на страницу тайтла. Все ссылки /schedule/ отвечают 200. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/schedule_episode_links.py",
+      "verify_live": "после выпуска: все ссылки /schedule/ на серии и тайтлы — 200",
+      "live_check": [
+        {
+          "url": "https://animedia.space/schedule/",
+          "status": 200,
+          "absent": [
+            "/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season-1/"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~15:10Z: найдено при проверке дефектов, заявленных владельцем 15.10. Ответственный: SEO-сессия, фоновый цикл seo-tech-run (прикладная правка витрины; инфраструктуры не касается)."
+    },
+    {
+      "id": "T134",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/"
+      ],
+      "problem": "Живой замер 15.10 ~15:10Z на animedia.icu: на странице тайтла «ДжоДжо: Гонка стального шара» строка «Следующая серия: 4 серия — 16 октября, пт, 11:00 (МСК)», хотя 4 серия сезона 7 уже доступна (ссылка season-7/episode-4 на той же странице, «доступно 4»). Противоречие видимых фактов.",
+      "norm": "видимые факты страницы не противоречат друг другу; дата следующей серии — только для серии, которой ещё нет среди доступных",
+      "expected": "«Следующая серия» показывается только для записи расписания с номером больше последней доступной серии того же сезона; если такой записи нет — строка не выводится (дата не придумывается). Аналогичные тайтлы с тем же расхождением исправляются тем же правилом. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/next_episode_consistent.py",
+      "verify_live": "после выпуска: на странице тайтла нет «Следующая серия: 4 серия»",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/",
+          "status": 200,
+          "absent": [
+            "Следующая серия: 4 серия"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~15:10Z: дефект, заявленный владельцем 15.10, подтверждён на animedia.icu, animedia.space, animeg0.site (an1mego/an1meg0 строку не показывают). Ответственный: SEO-сессия, фоновый цикл seo-tech-run (прикладная правка витрины; инфраструктуры не касается)."
+    },
+    {
+      "id": "T135",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/"
+      ],
+      "problem": "Живой замер 15.10 ~15:10Z на animedia.space: на странице тайтла «ДжоДжо: Гонка стального шара» строка «Следующая серия: 4 серия — 16 октября, пт, 11:00 (МСК)», хотя 4 серия сезона 7 уже доступна (ссылка season-7/episode-4 на той же странице, «доступно 4»). Противоречие видимых фактов.",
+      "norm": "видимые факты страницы не противоречат друг другу; дата следующей серии — только для серии, которой ещё нет среди доступных",
+      "expected": "«Следующая серия» показывается только для записи расписания с номером больше последней доступной серии того же сезона; если такой записи нет — строка не выводится (дата не придумывается). Аналогичные тайтлы с тем же расхождением исправляются тем же правилом. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/next_episode_consistent.py",
+      "verify_live": "после выпуска: на странице тайтла нет «Следующая серия: 4 серия»",
+      "live_check": [
+        {
+          "url": "https://animedia.space/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/",
+          "status": 200,
+          "absent": [
+            "Следующая серия: 4 серия"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~15:10Z: дефект, заявленный владельцем 15.10, подтверждён на animedia.icu, animedia.space, animeg0.site (an1mego/an1meg0 строку не показывают). Ответственный: SEO-сессия, фоновый цикл seo-tech-run (прикладная правка витрины; инфраструктуры не касается)."
+    },
+    {
+      "id": "T136",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/"
+      ],
+      "problem": "Живой замер 15.10 ~15:10Z на animeg0.site: на странице тайтла «ДжоДжо: Гонка стального шара» строка «Следующая серия: 4 серия — 16 октября, пт, 11:00 (МСК)», хотя 4 серия сезона 7 уже доступна (ссылка season-7/episode-4 на той же странице, «доступно 4»). Противоречие видимых фактов.",
+      "norm": "видимые факты страницы не противоречат друг другу; дата следующей серии — только для серии, которой ещё нет среди доступных",
+      "expected": "«Следующая серия» показывается только для записи расписания с номером больше последней доступной серии того же сезона; если такой записи нет — строка не выводится (дата не придумывается). Аналогичные тайтлы с тем же расхождением исправляются тем же правилом. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/next_episode_consistent.py",
+      "verify_live": "после выпуска: на странице тайтла нет «Следующая серия: 4 серия»",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/title/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/",
+          "status": 200,
+          "absent": [
+            "Следующая серия: 4 серия"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~15:10Z: дефект, заявленный владельцем 15.10, подтверждён на animedia.icu, animedia.space, animeg0.site (an1mego/an1meg0 строку не показывают). Ответственный: SEO-сессия, фоновый цикл seo-tech-run (прикладная правка витрины; инфраструктуры не касается)."
+    },
+    {
       "id": "T130",
       "site": "animedia.space",
       "direction": "anime",
