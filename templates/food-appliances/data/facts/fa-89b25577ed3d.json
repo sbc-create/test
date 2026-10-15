@@ -1,0 +1,91 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/plov-iz-utki-v-multivarke-152226",
+ "title": "Плов из утки в мультиварке",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 90,
+ "total_minutes": 90,
+ "ingredients": [
+  {
+   "name": "Утка",
+   "quantity": 750.0,
+   "unit": "g"
+  },
+  {
+   "name": "Рис",
+   "quantity": 450.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лук",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Сушеный барбарис",
+   "quantity": 0.3,
+   "unit": "tsp"
+  },
+  {
+   "name": "Кумин (зира)",
+   "quantity": 0.3,
+   "unit": "tsp"
+  },
+  {
+   "name": "Куркума",
+   "quantity": 0.3,
+   "unit": "tsp"
+  },
+  {
+   "name": "Свежемолотый черный перец",
+   "quantity": 0.3,
+   "unit": "tsp"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   7,
+   9
+  ],
+  "modes": [
+   {
+    "name": "Мясо",
+    "step": 1
+   },
+   {
+    "name": "Тушение",
+    "step": 1
+   },
+   {
+    "name": "Рис",
+    "step": 9
+   }
+  ],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "019369b88d0d1b9324c5c05430fc00c94c2da9b074ea97337fb630ecbe94dbf7",
+ "record_id": "fa-89b25577ed3d",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:59:01Z"
+}

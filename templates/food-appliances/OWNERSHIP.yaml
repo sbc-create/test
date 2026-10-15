@@ -1,0 +1,20 @@
+template: food-appliances
+branch: claude/template-food-appliances
+worktree: /home/claude/wt-template-food-appliances
+base_commit: a7f7cb6236fbc9770af949ef98eae511cd3c8fc4   # origin/main, не ветки других шаблонов
+owner_scope:
+  write: [templates/food-appliances/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста аудита/импорта по заданию NIGHT-CONTINUE-02, только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist"
+runtime:
+  process: "python3 -m techkitchen.server (pid var/food-appliances/run/preview.pid)"
+  bind: 127.0.0.1:8850
+  data: templates/food-appliances/data (факты без текста шагов, черновики, content.json)
+  private: var/food-appliances/private (текст шагов источника, 0700, вне git)
+  build: var/food-appliances/build/<commit>
+  qa_dependencies: templates/food-appliances/qa (axe-core 4.13.0, свой lockfile)
+network_contracts: []
+shared_with_other_templates: []

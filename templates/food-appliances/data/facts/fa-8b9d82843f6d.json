@@ -1,0 +1,83 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/bulgur-po-livanski-v-multivarke-114695",
+ "title": "Булгур по-ливански в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 70,
+ "total_minutes": 70,
+ "ingredients": [
+  {
+   "name": "Сливочное масло",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Булгур",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "name": "Бараний фарш",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "name": "Репчатый лук, 2 головки",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Молотый душистый перец",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Вода",
+   "quantity": 100.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   6,
+   7
+  ],
+  "modes": [
+   {
+    "name": "Мультиповар",
+    "step": 6
+   }
+  ],
+  "temperatures": [
+   {
+    "value_c": 120,
+    "step": 6
+   }
+  ],
+  "times": [
+   {
+    "min": 70,
+    "max": null,
+    "step": 6
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "11103e82a9444846cfeb8f12ebdd7f9ad64c39ec24fc776146f5604e48922bd3",
+ "record_id": "fa-8b9d82843f6d",
+ "step_count": 8,
+ "fetched_at": "2026-10-12T06:59:30Z"
+}

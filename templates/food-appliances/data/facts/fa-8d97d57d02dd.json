@@ -1,0 +1,82 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/ponchiki-s-yablokom-v-aerogrile-193207",
+ "title": "Пончики с яблоком в аэрогриле",
+ "servings": 10,
+ "prep_minutes": 90,
+ "cook_minutes": 60,
+ "total_minutes": 150,
+ "ingredients": [
+  {
+   "name": "Яблоко",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 350.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сухие дрожжи",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молоко",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 70.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотая корица",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Коричневый сахар",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лайм",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   11
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 11
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": 20,
+    "step": 11
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "466340d5f5c4e489cee1da40f8d3d6e98d70b289d54f166b7bfd7b4bf9d60a4e",
+ "record_id": "fa-8d97d57d02dd",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:57:07Z"
+}

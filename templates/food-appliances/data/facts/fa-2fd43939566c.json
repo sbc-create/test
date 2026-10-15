@@ -1,0 +1,59 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/pshennaya-kasha-v-multivarke-114773",
+ "title": "Пшенная каша в мультиварке",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 35,
+ "total_minutes": 35,
+ "ingredients": [
+  {
+   "name": "Пшено",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Вода",
+   "quantity": 2.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Завтраки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   0,
+   1,
+   2
+  ],
+  "modes": [
+   {
+    "name": "Крупы",
+    "step": 1
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 35,
+    "max": null,
+    "step": 1
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "f62f1876e7a0320ac77becd55e2ea13e1bcc2a59855653296733ae0cfef1922a",
+ "record_id": "fa-2fd43939566c",
+ "step_count": 3,
+ "fetched_at": "2026-10-12T06:59:28Z"
+}

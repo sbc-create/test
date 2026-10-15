@@ -1,0 +1,81 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/baranina-na-grile-s-tykvoy-i-ayvoy-191483",
+ "title": "Баранина на гриле с тыквой и айвой",
+ "servings": 2,
+ "prep_minutes": 720,
+ "cook_minutes": 120,
+ "total_minutes": 840,
+ "ingredients": [
+  {
+   "name": "Баранья нога",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Тыква",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Свежий розмарин",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Кумин (зира)",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Морская соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Семена кориандра",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Черный перец горошком",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Айва",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 50.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [
+   6
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "e21492790d0ac56762f8858e3d1313d10e9c52bd2f79552410cc7f5bfcbeaeb4",
+ "record_id": "fa-44b29757d64f",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:57:44Z"
+}

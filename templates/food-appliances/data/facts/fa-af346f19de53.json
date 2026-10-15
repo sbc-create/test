@@ -1,0 +1,103 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/farshirovannye-percy-v-multivarke-193210",
+ "title": "Фаршированные перцы в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Мясной фарш",
+   "quantity": 1.2,
+   "unit": "kg"
+  },
+  {
+   "name": "Репчатый лук",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сладкий перец",
+   "quantity": 1.2,
+   "unit": "kg"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сметана",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Томатная паста",
+   "quantity": 3.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Лавровый лист",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Вода",
+   "quantity": 1.0,
+   "unit": "l"
+  },
+  {
+   "name": "Рис басмати",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Петрушка",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Укроп",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 4.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   7,
+   9
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 45,
+    "max": null,
+    "step": 9
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "6f23ce24c8d090869d5f4b4f5cbfb741c44f0d8eb746fe5262c50fa9985dc3bf",
+ "record_id": "fa-af346f19de53",
+ "step_count": 12,
+ "fetched_at": "2026-10-12T06:56:30Z"
+}

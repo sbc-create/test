@@ -1,0 +1,49 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/shampinony-s-sousom-pesto-na-grile-190609",
+ "title": "Шампиньоны на гриле с песто",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 30,
+ "total_minutes": 30,
+ "ingredients": [
+  {
+   "name": "Шампиньоны",
+   "quantity": 10.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Песто",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый сушеный чеснок",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль с травами",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 70.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "95a9914237ab9cb81b620aa32f3f1525c51002b6c7f8faf3d4a26b996feeeaa0",
+ "record_id": "fa-4bfcc2f6874b",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:57:58Z"
+}

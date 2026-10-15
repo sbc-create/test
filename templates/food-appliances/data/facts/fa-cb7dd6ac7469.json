@@ -1,0 +1,133 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kartoshka-v-aerogrile-192643",
+ "title": "Картошка в аэрогриле",
+ "servings": 3,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Молодой картофель",
+   "quantity": 800.0,
+   "unit": "g"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 60.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Копченая паприка",
+   "quantity": 3.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": 2.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый сушеный чеснок",
+   "quantity": 3.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый кориандр",
+   "quantity": 2.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый кумин (зира)",
+   "quantity": 2.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 5.0,
+   "unit": "g"
+  },
+  {
+   "name": "Красный сыр чеддер",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Консервированный перец халапеньо",
+   "quantity": 60.0,
+   "unit": "g"
+  },
+  {
+   "name": "Зеленый лук",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Голубой сыр",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Бекон",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сливки 33%-ные",
+   "quantity": 110.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 1.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   5,
+   8,
+   9
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 5
+   },
+   {
+    "value_c": 180,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": 20,
+    "step": 5
+   },
+   {
+    "min": 35,
+    "max": 40,
+    "step": 8
+   },
+   {
+    "min": 3,
+    "max": null,
+    "step": 9
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "c9ae69e077fcd2366b9ace29b672427f1bee03432b22d78c0ddea7cbc45df2d5",
+ "record_id": "fa-cb7dd6ac7469",
+ "step_count": 12,
+ "fetched_at": "2026-10-12T06:57:24Z"
+}

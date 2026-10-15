@@ -1,0 +1,114 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zakuski/krokety-iz-foreli-v-aerogrile-191160",
+ "title": "Крокеты из форели в аэрогриле",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Филе форели",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Желтый сладкий перец",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Красный сладкий перец",
+   "quantity": 0.5,
+   "unit": "pcs"
+  },
+  {
+   "name": "Панировочные сухари",
+   "quantity": 40.0,
+   "unit": "g"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молотый сушеный чеснок",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Майонез",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Петрушка",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Вустерширский соус",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соус тартар",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Закуски",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   1,
+   8,
+   10
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 10,
+    "max": 12,
+    "step": 1
+   },
+   {
+    "min": 8,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "89181a1799da761328b1fd133e06ce0051f3f51640c3166b9d13f6cf6c0b167f",
+ "record_id": "fa-1f9face2e47e",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:57:32Z"
+}

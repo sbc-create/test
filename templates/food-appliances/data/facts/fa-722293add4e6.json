@@ -1,0 +1,113 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/plov-s-govyadinoy-v-multivarke-173377",
+ "title": "Плов с говядиной в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Говядина",
+   "quantity": 350.0,
+   "unit": "g"
+  },
+  {
+   "name": "Рис",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Репчатый лук, 2 головки",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Изюм",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 1.0,
+   "unit": "head"
+  },
+  {
+   "name": "Консервированный нут",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Вода",
+   "quantity": 300.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 5.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Специи для плова",
+   "quantity": 10.0,
+   "unit": "g"
+  },
+  {
+   "name": "Кумин (зира)",
+   "quantity": 0.5,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   5,
+   6,
+   8
+  ],
+  "modes": [
+   {
+    "name": "Жарка",
+    "step": 6
+   },
+   {
+    "name": "Плов",
+    "step": 8
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 20,
+    "max": null,
+    "step": 6
+   },
+   {
+    "min": 20,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "183e00a2e3a20c8eeda4aaf8865a142a1640501ee309c121488133bb27071011",
+ "record_id": "fa-722293add4e6",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:58Z"
+}

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ meta.title }}{% if meta.kind != 'home' %} · Готовим в технике{% endif %}</title>
+<meta name="description" content="{{ meta.description }}">
+<meta name="robots" content="{{ robots }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
+<meta property="og:url" content="{{ meta.canonical }}">
+{% endif %}
+<meta property="og:title" content="{{ meta.title }}">
+<meta property="og:description" content="{{ meta.description }}">
+<meta name="theme-color" content="#1c1f24">
+<link rel="icon" href="{{ asset('img/dial.svg') }}" type="image/svg+xml">
+<link rel="stylesheet" href="{{ asset('css/panel.css') }}">
+{% for x in meta.ld %}<script type="application/ld+json">{{ x | tojson }}</script>
+{% endfor %}
+</head>
+<body>
+<a class="skip" href="#main">К содержимому</a>
+<header class="console">
+  <a class="brand" href="/"><span class="brand__led" aria-hidden="true"></span>Готовим <b>в технике</b></a>
+  <nav class="devices" aria-label="Приборы">{% for k, (label, _) in APPLIANCES.items() %}{% if site.for_appliance(k) %}<a href="/pribor/{{ k }}/">{{ label }}</a>{% endif %}{% endfor %}<a href="/kak-chitat-rezhimy/">Режимы</a></nav>
+  <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по сайту"><label class="sr" for="fq">Блюдо, продукт или режим</label><input id="fq" name="q" type="search" placeholder="Блюдо или режим"><button type="submit">Найти</button></form>
+</header>
+{% if meta.crumbs|length > 1 %}<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>{% endif %}
+<main id="main">{% block main %}{% endblock %}</main>
+<footer class="foot"><p>Режимы, температура и время указаны ровно для того рецепта, где они записаны в источнике; у разных моделей приборов они могут отличаться. Тексты подготовлены с помощью ИИ и не проверены редакцией.</p></footer>
+</body>
+</html>

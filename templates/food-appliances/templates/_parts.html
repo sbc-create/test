@@ -1,0 +1,5 @@
+{% macro tiles(items, h='h3') -%}
+<ul class="tiles">
+{% for r in items %}<li class="tile tile--{{ r.appliance }}"><a href="{{ r.url }}"><span class="tile__dev">{{ r.appliance_label }}</span><{{ h }} class="tile__title">{{ r.title }}</{{ h }}><span class="tile__params">{% if r.temperatures %}<b>{{ r.temperatures[0].value_c }}°</b>{% endif %}{% for m in r.mode_names[:2] %}<b>{{ m }}</b>{% endfor %}{% if r.appliance_times %}<b>{{ r.appliance_times[-1]['min'] }}{% if r.appliance_times[-1]['max'] %}–{{ r.appliance_times[-1]['max'] }}{% endif %} мин</b>{% endif %}</span></a></li>{% endfor %}
+</ul>
+{%- endmacro %}

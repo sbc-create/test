@@ -1,0 +1,148 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/tykvennoe-karri-s-govyadinoy-v-multivarke-193208",
+ "title": "Тыквенное карри с говядиной в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Говядина",
+   "quantity": 800.0,
+   "unit": "g"
+  },
+  {
+   "name": "Тыква",
+   "quantity": 1.0,
+   "unit": "kg"
+  },
+  {
+   "name": "Желтая паста карри",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лемонграсс",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Листья лайма",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Кокосовые сливки",
+   "quantity": 380.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Куриный бульон",
+   "quantity": 500.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Кинза, 50 веточек",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "name": "Чеснок",
+   "quantity": 5.0,
+   "unit": "clove"
+  },
+  {
+   "name": "Перец чили",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Имбирь",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "name": "Коричневый сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Рыбный соус",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Красный сладкий перец",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Красный лук",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лайм",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Бобы эдамамэ",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "name": "Растительное масло",
+   "quantity": 30.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Вареный рис",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   6,
+   8
+  ],
+  "modes": [],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": 50,
+    "step": 6
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 6
+   },
+   {
+    "min": 20,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "e5fec0818772ba799510e1a54aa5d840016425c7ec4cc732114ea6ada0ef4a1a",
+ "record_id": "fa-8a49f5f74928",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:56:33Z"
+}

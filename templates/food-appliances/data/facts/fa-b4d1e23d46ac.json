@@ -1,0 +1,107 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurinye-kotlety-v-aerogrile-192642",
+ "title": "Куриные котлеты в аэрогриле",
+ "servings": 4,
+ "prep_minutes": 30,
+ "cook_minutes": 30,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Куриный фарш",
+   "quantity": 400.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лук-шалот",
+   "quantity": 80.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молоко",
+   "quantity": 200.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Белый хлеб",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Петрушка",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 40.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Панировочные сухари",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Морковь",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "name": "Молодые кабачки",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сладкий перец",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "aerogril",
+  "mention_steps": [
+   8
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 8
+   }
+  ],
+  "times": [
+   {
+    "min": 15,
+    "max": null,
+    "step": 8
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": true,
+ "content_hash": "20a7c20e16648dc69cf323d5a1f64179cfc66ec90ff8b58054382dadea8cf554",
+ "record_id": "fa-b4d1e23d46ac",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:57:27Z"
+}

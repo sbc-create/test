@@ -1,0 +1,93 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/sharlotka-v-multivarke-188882",
+ "title": "Шарлотка в мультиварке",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Пшеничная мука",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "name": "Куриное яйцо",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Сода",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Ванилин",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "name": "Яблоко",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Корица",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Мускатный орех",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Сливочное масло",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахарная пудра",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   8,
+   11
+  ],
+  "modes": [
+   {
+    "name": "Выпечка",
+    "step": 11
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 60,
+    "max": null,
+    "step": 11
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "41d6db661ad16f94bfb7a2ab221eaadd9adff82bcec2dce2cb69bf5d7cc368c3",
+ "record_id": "fa-9af05172eee2",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:56:45Z"
+}

@@ -1,0 +1,74 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/svinye-rebra-v-yablochnoy-glazuri-na-grile-189220",
+ "title": "Свиные ребра в яблочной глазури на гриле",
+ "servings": 6,
+ "prep_minutes": 240,
+ "cook_minutes": 60,
+ "total_minutes": 300,
+ "ingredients": [
+  {
+   "name": "Свиные ребра",
+   "quantity": 2.5,
+   "unit": "kg"
+  },
+  {
+   "name": "Яблочный сок",
+   "quantity": 1.0,
+   "unit": "l"
+  },
+  {
+   "name": "Дижонская горчица",
+   "quantity": 1.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Шрирача",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соль",
+   "quantity": 25.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Молотая паприка",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste"
+  },
+  {
+   "name": "Соевый соус",
+   "quantity": 30.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Яблочный уксус",
+   "quantity": 30.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "gril",
+  "mention_steps": [],
+  "modes": [],
+  "temperatures": [],
+  "times": []
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "795449562baeb4da976e30a174e0b097f50074f896552321b84a1bc705131fb6",
+ "record_id": "fa-dbd1c3ea496f",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:10Z"
+}

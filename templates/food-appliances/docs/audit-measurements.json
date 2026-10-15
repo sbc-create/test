@@ -1,0 +1,117 @@
+{
+ "at": "2026-10-12T06:54:57Z",
+ "mode": "server_html_no_js",
+ "hosts": {
+  "www.sharkninja.com": {
+   "start": {
+    "url": "https://www.sharkninja.com/discover/recipes",
+    "status": 200,
+    "html_kb": 468,
+    "has_h1": true,
+    "appliance_words": 73,
+    "mode_words": 167,
+    "temp": 0,
+    "time": 0,
+    "model_words": 1,
+    "recipe_jsonld": 0,
+    "ads": 0
+   },
+   "page0": {
+    "url": "https://www.sharkninja.com/discover/recipes/microwave-recipes",
+    "status": 200,
+    "html_kb": 454,
+    "has_h1": true,
+    "appliance_words": 69,
+    "mode_words": 218,
+    "temp": 0,
+    "time": 0,
+    "model_words": 1,
+    "recipe_jsonld": 0,
+    "ads": 0
+   },
+   "page1": {
+    "url": "https://www.sharkninja.com/discover/recipes/slushi-sundays",
+    "status": 200,
+    "html_kb": 334,
+    "has_h1": true,
+    "appliance_words": 71,
+    "mode_words": 125,
+    "temp": 0,
+    "time": 0,
+    "model_words": 1,
+    "recipe_jsonld": 0,
+    "ads": 0
+   },
+   "page2": {
+    "url": "https://www.sharkninja.com/discover/recipes/grilling-recipes",
+    "status": 200,
+    "html_kb": 461,
+    "has_h1": true,
+    "appliance_words": 334,
+    "mode_words": 193,
+    "temp": 0,
+    "time": 0,
+    "model_words": 1,
+    "recipe_jsonld": 0,
+    "ads": 0
+   }
+  },
+  "1000.menu": {
+   "start": {
+    "url": "https://1000.menu/",
+    "status": 200,
+    "html_kb": 112,
+    "has_h1": true,
+    "appliance_words": 4,
+    "mode_words": 27,
+    "temp": 0,
+    "time": 14,
+    "model_words": 0,
+    "recipe_jsonld": 0,
+    "ads": 25
+   },
+   "page0": {
+    "url": "https://1000.menu/cooking/111847-xek-v-aerogrile",
+    "status": 200,
+    "html_kb": 197,
+    "has_h1": true,
+    "appliance_words": 84,
+    "mode_words": 65,
+    "temp": 0,
+    "time": 14,
+    "model_words": 0,
+    "recipe_jsonld": 0,
+    "ads": 88
+   },
+   "page1": {
+    "url": "https://1000.menu/cooking/111827-bulochki-v-aerogrile",
+    "status": 200,
+    "html_kb": 205,
+    "has_h1": true,
+    "appliance_words": 112,
+    "mode_words": 68,
+    "temp": 0,
+    "time": 13,
+    "model_words": 0,
+    "recipe_jsonld": 0,
+    "ads": 88
+   }
+  },
+  "eda.rambler.ru": {
+   "start": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda",
+    "status": 200,
+    "html_kb": 496,
+    "has_h1": true,
+    "appliance_words": 8,
+    "mode_words": 21,
+    "temp": 3,
+    "time": 4,
+    "model_words": 1,
+    "recipe_jsonld": 0,
+    "ads": 3
+   }
+  }
+ },
+ "requests": 11
+}

@@ -1,0 +1,90 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/befstroganov-iz-telyatiny-s-gribami-v-multivarke-114418",
+ "title": "Бефстроганов из телятины с грибами в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Телятина",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "name": "Лук",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Белые грибы",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Сметана 20%-ная",
+   "quantity": 4.0,
+   "unit": "tbsp"
+  },
+  {
+   "name": "Сливки",
+   "quantity": 100.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Оливковое масло",
+   "quantity": 50.0,
+   "unit": "ml"
+  },
+  {
+   "name": "Пшеничная мука",
+   "quantity": 20.0,
+   "unit": "g"
+  },
+  {
+   "name": "Специи",
+   "quantity": null,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "modes": [],
+  "temperatures": [
+   {
+    "value_c": 120,
+    "step": 4
+   }
+  ],
+  "times": [
+   {
+    "min": 10,
+    "max": null,
+    "step": 2
+   },
+   {
+    "min": 10,
+    "max": null,
+    "step": 3
+   },
+   {
+    "min": 30,
+    "max": null,
+    "step": 4
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "6a23b1c34ecc020fb0da635035a368e62b1344b9d403e27cb1c518ead2123fab",
+ "record_id": "fa-dec6583b19ae",
+ "step_count": 5,
+ "fetched_at": "2026-10-12T06:59:44Z"
+}

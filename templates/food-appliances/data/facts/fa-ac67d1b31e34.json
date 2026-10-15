@@ -1,0 +1,68 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zagotovki/klubnichnoe-varene-v-multivarke-173848",
+ "title": "Клубничное варенье в мультиварке",
+ "servings": 10,
+ "prep_minutes": null,
+ "cook_minutes": 120,
+ "total_minutes": 120,
+ "ingredients": [
+  {
+   "name": "Клубника",
+   "quantity": 1.0,
+   "unit": "kg"
+  },
+  {
+   "name": "Сахар",
+   "quantity": 700.0,
+   "unit": "g"
+  },
+  {
+   "name": "Палочки корицы",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "name": "Лимонный сок",
+   "quantity": 50.0,
+   "unit": "ml"
+  }
+ ],
+ "source_category": "Заготовки",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   4,
+   6,
+   7
+  ],
+  "modes": [
+   {
+    "name": "Подогрев",
+    "step": 6
+   },
+   {
+    "name": "Тушение",
+    "step": 7
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 6
+   },
+   {
+    "min": 25,
+    "max": null,
+    "step": 7
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "76fd0476d1b061fb9eb8557c34405dc40e2c1f22cbd9812f925a1a5bae874186",
+ "record_id": "fa-ac67d1b31e34",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:58:41Z"
+}

@@ -1,0 +1,79 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/plov-s-fruktami-v-multivarke-104279",
+ "title": "Плов с фруктами в мультиварке",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "name": "Рис",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "name": "Яблоко",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Курага",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Апельсины",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Изюм",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Грецкие орехи",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Чернослив",
+   "quantity": 50.0,
+   "unit": "g"
+  },
+  {
+   "name": "Мед",
+   "quantity": 40.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Основные блюда",
+ "appliance": {
+  "appliance": "multivarka",
+  "mention_steps": [
+   5,
+   10,
+   12
+  ],
+  "modes": [
+   {
+    "name": "Плов",
+    "step": 10
+   }
+  ],
+  "temperatures": [],
+  "times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 10
+   }
+  ]
+ },
+ "parser_version": "fa-extract/1.0",
+ "complete": false,
+ "content_hash": "bc880760f869fc3af0b822972805e7899faa0de0623a2f1875fdfbe6ccd57b34",
+ "record_id": "fa-c8c045484825",
+ "step_count": 14,
+ "fetched_at": "2026-10-12T06:59:51Z"
+}

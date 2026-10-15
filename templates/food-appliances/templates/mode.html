@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<p class="kicker">{{ APPLIANCES[e.appliance][0] }} · режим</p>
+<h1>Режим «{{ e.name }}»</h1>
+<p class="lead">Рецепты, где этот режим назван в источнике. Время у каждого рецепта своё — сравнивайте, но не переносите.</p>
+<div class="tablewrap" role="region" aria-label="Рецепты с этим режимом" tabindex="0"><table class="modetable"><thead><tr><th scope="col">Рецепт</th><th scope="col">Шаг с режимом</th><th scope="col">Время в приборе</th></tr></thead><tbody>
+{% for r in e.recipes %}
+<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a></th><td>{% for m in r.modes if m.name|capitalize == e.name %}<a href="{{ r.url }}#shag-{{ m.step }}">шаг {{ m.step }}</a>{% if not loop.last %}, {% endif %}{% endfor %}</td><td>{% for t in r.appliance_times %}{{ t['min'] }}{% if t['max'] %}–{{ t['max'] }}{% endif %} мин{% if not loop.last %}; {% endif %}{% endfor %}</td></tr>
+{% endfor %}</tbody></table></div>
+{% endblock %}

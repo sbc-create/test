@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% from "_parts.html" import tiles %}
+{% block main %}
+<section class="hero"><h1>Выберите прибор</h1><p class="lead">Рецепты собраны вокруг техники: сначала прибор, потом блюдо. Режим, температура и время у каждого рецепта свои и взяты из его источника.</p></section>
+<ul class="device-pick">
+{% for k, (label, desc) in APPLIANCES.items() %}{% set items = site.for_appliance(k) %}{% if items %}
+<li><a href="/pribor/{{ k }}/" class="device device--{{ k }}"><span class="device__name">{{ label }}</span><span class="device__desc">{{ desc }}</span><span class="device__count">{{ items|length }} рецептов</span></a></li>
+{% endif %}{% endfor %}
+</ul>
+<h2>Новые рецепты</h2>
+{{ tiles(site.recipes[:6]) }}
+{% if site.modes() %}<h2>Режимы мультиварки</h2><ul class="modes">{% for k, e in site.modes().items() %}<li><a href="/rezhim/{{ k }}/">«{{ e.name }}» <small>{{ e.recipes|length }}</small></a></li>{% endfor %}</ul>{% endif %}
+{% endblock %}
