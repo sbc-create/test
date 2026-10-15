@@ -1,0 +1,87 @@
+{
+ "id": "src-8463ca219d",
+ "url": "https://plants.ces.ncsu.edu/plants/dracaena-trifasciata/",
+ "fetched_at": "2026-10-12T21:27:09Z",
+ "page_sha256": "0f3d0c0d337ba01697c0d413ae10778bb1c5f2c2fbe3274395c927cf2547ce58",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Dracaena trifasciata",
+ "common_names": [
+  "Golden Birds Nest",
+  "Good Luck Plant",
+  "Mother-in-law's Tongue",
+  "Snake Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Division",
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "West and West Central Africa"
+  ],
+  "Habit/Form:": [
+   "Clumping",
+   "Erect"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Alkaline (>8.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Flower Bloom Time:": [
+   "Spring"
+  ],
+  "Problems:": [
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Toxic if ingested: vomiting (occasionally with blood), depression, nausea, diarrhea, anorexia, hypersalivation, dilated pupils (cats). The sap can cause skin irritation."
+  ],
+  "Poison Toxic Principle:": [
+   "Saponins"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Sap/Juice",
+   "Stems"
+  ]
+ },
+ "description": [
+  "Snake plant is an erect, clumping, broadleaf evergreen, tropical herbaceous perennial in the asparagus family (Asparagaceae). It is native to central Africa. The species epithet means \"having three transverse stripes\" and refers to the pattern of variegation on the leaves (although there may be more than three stripes).",
+  "Place in a location where it will receive direct sunlight only part of the day, 2 to 6 hours, as it will tolerate very low light. Well-drained soil and careful watering are a must; do not overwater, as the roots will rot. In spring to autumn allow the soil to dry between waterings. In winter only water every one to two months. It tolerates low humidity and cool temperatures around 50 degrees. This plant is quite durable, easily grown, and difficult to kill.",
+  "In its native habitat, it blooms in the winter, but as a houseplant, it rarely blooms. Snake plant is grown in containers and is used as ground cover or filler in interior landscape designs."
+ ],
+ "problems": "No significant problems. Monitor for mealybugs and spider mites. Overwatering may cause root rot."
+}

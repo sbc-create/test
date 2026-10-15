@@ -56,3 +56,22 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- plants-home: источники и референсы (только чтение) -------------------
+  # Внесены заданием владельца «СЕТКА ПРАКТИЧЕСКИХ САЙТОВ», ночь 12–13.10.2026:
+  # «для растений — каталоги с условиями ухода». Только GET, robots.txt, пауза.
+  - ref: plants-home-ncsu-toolbox
+    host: plants.ces.ncsu.edu
+    purpose: "plants-home: университетский справочник NC State Extension (Plant Toolbox) — условия по конкретному виду"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: plants-home-rhs
+    host: www.rhs.org.uk
+    purpose: "plants-home: садоводческая организация — руководства по комнатным растениям"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13
+  - ref: plants-home-botanichka
+    host: www.botanichka.ru
+    purpose: "plants-home: русский журнал о растениях (референс подачи)"
+    methods: [GET]
+    provenance: СЕТКА ПРАКТИЧЕСКИХ САЙТОВ, ночь 2026-10-12/13

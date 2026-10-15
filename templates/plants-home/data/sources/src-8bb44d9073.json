@@ -1,0 +1,83 @@
+{
+ "id": "src-8bb44d9073",
+ "url": "https://plants.ces.ncsu.edu/plants/dracaena-angolensis/",
+ "fetched_at": "2026-10-13T00:42:37Z",
+ "page_sha256": "6bbfcd6520ca36bb6461c41626d2596e33769a65c452d8840a2618b457ed859e",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Dracaena angolensis",
+ "common_names": [
+  "African Spear",
+  "Brazil Saint Bárbara Sword",
+  "Cylindrical Snake Plant",
+  "Spear Sansevieria"
+ ],
+ "attrs": {
+  "Country Or Region Of Origin:": [
+   "Africa"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Slow"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Sand",
+   "Shallow Rocky"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry",
+   "Very Dry"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet",
+   "3 feet-6 feet"
+  ],
+  "Flower Bloom Time:": [
+   "Summer"
+  ],
+  "Problems:": [
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Toxic if ingested by cats and dogs: dilated pupils, vomiting, stomach upset, abdominal pain, drooling, weakness, depression. Keep this plant away from pets and children. Humans should not ingest this plant. Skin irritation can occur from the plant sap."
+  ],
+  "Poison Toxic Principle:": [
+   "saponin"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Sap/Juice",
+   "Stems"
+  ]
+ },
+ "description": [
+  "African spear is an easy-to-grow, succulent herbaceous perennial native to Africa. It is a member of the asparagus family (Asparagaceae). It has a dramatic form with subcylindrical, spiky leaves that resemble D. trifasicata in the variegation . The epithet is Latin for \"of Angola.\"",
+  "Grow this plant in a well-drained potting mix (one specific for cacti and succulents is good) and water only about every 2 weeks in summer and monthly in winter. Place it in a brightly lit window. If taken outdoors in the summer, only give it morning sun to avoid sunburn. Bring it indoors when the temperature falls below 55 degrees Fahrenheit.",
+  "The leaves grow from a rosette and are 1 inch wide and up to 7 feet tall with longitudinal stripes. It will occasionally bloom in a container. The plants are often sold as rooted leaf cuttings, sometimes with three or more leaves braided together or sometimes with their tips dipped in paint. These leaves will live for a long time. Eventually, new plants will arise for the base of the leaf cuttings."
+ ],
+ "problems": "Poisonous to Humans"
+}

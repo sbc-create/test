@@ -1,0 +1,74 @@
+{
+ "id": "src-677c7e4715",
+ "url": "https://plants.ces.ncsu.edu/plants/crassula-ovata/",
+ "fetched_at": "2026-10-12T21:27:28Z",
+ "page_sha256": "32d5a2ddc2baf7d4cdf9b83eccc12b68d4f8ac75b4a94cdbedbbe3e675839dd4",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Crassula ovata",
+ "common_names": [
+  "Baby Jade",
+  "Chinese rubber plant",
+  "Dwarf rubber plant",
+  "Jade Plant",
+  "Jade tree",
+  "Japanese rubber plant",
+  "Lucky Plant",
+  "Money Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Leaf Cutting",
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "South Africa"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Multi-stemmed",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Full sun (6 or more hours of direct sunlight a day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry",
+   "Very Dry"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet",
+   "3 feet-6 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "11a, 11b, 12a, 12b"
+  ],
+  "Flower Bloom Time:": [
+   "Spring"
+  ],
+  "Problems:": [
+   "Problem for Cats",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ]
+ },
+ "description": [
+  "Jade plant is a subtropical, broadleaf evergreen, flowering, succulent shrub in the stonecrop family. It is a native of South Africa and a popular, low maintenance, houseplant worldwide. The species name \"ovata\" means egg-shaped referring to the thick, fleshy leaves. As it matures, the plant takes the form of a miniature tree. Tiny pink flowers appear in the spring on plants grown outdoors.The genus name comes from the Latin crassus meaning thick, referring to the thick leaves. The species name means egg-shaped.",
+  "Plant in well-drained potting soil that contains a lot of loam and place the pot in a sunny location indoors that also provides some afternoon shade. Bright light and average to cool indoor temperatures are also essential for good plant health. Water in moderation when the soil is dry and reduce watering from fall to late winter. It does not usually bloom in home environments. If grown outdoors, it should be located in a site with partial shade.",
+  "Propagation is easily achieved by leaf cutting.",
+  "Clemson University Home and Garden Information Center has a factsheet on Jade Plants."
+ ],
+ "problems": "Aphids, scale, spider mites and mealybugs can be occasional problems. Leaf fall and root rot can result from over watering."
+}

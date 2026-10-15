@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% from "_parts.html" import light_icon %}
+{% block main %}
+<h1>Освещение</h1><p class="lead">Категории света — как их задаёт справочник. У вида может быть несколько подходящих категорий.</p>
+<ul class="lights">{% for slug, lv in site.lights().items() %}<li><a href="/svet/{{ slug }}/">{{ light_icon(slug) }}<b>{{ lv[1] }}</b><span>{{ lv[2] }}</span>{% set n = site.with_light(slug)|length %}<em>{{ n }} {{ plural(n, 'вид', 'вида', 'видов') }}</em></a></li>{% endfor %}</ul>
+{% endblock %}

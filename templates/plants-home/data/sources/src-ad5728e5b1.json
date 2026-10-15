@@ -1,0 +1,87 @@
+{
+ "id": "src-ad5728e5b1",
+ "url": "https://plants.ces.ncsu.edu/plants/dracaena-fragrans/",
+ "fetched_at": "2026-10-12T21:27:40Z",
+ "page_sha256": "2e7174c2e0809b12958e2634721c383209c13def7484cc78d3401ff92c031e1d",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Dracaena fragrans",
+ "common_names": [
+  "Corn Plant",
+  "Cornstalk Plant",
+  "Dracaena",
+  "Dragon Tree",
+  "Janet Craig Plant",
+  "Ribbon Plant",
+  "Striped Dracaena",
+  "Striped Dragon Palm",
+  "Warneckei Dracaena",
+  "Warneckii"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Tropical Africa"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Multi-trunked"
+  ],
+  "Growth Rate:": [
+   "Slow"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "3 feet-6 feet",
+   "6-feet-12 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b"
+  ],
+  "Problems:": [
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Toxic, if ingested, by cats, dogs, and humans: mouth irritation, stomach irritation, vomiting, loss of appetite depression, drooling, difficulty breathing. The sap may cause skin irritation."
+  ],
+  "Poison Toxic Principle:": [
+   "saponin"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Flowers",
+   "Fruits",
+   "Leaves",
+   "Roots",
+   "Sap/Juice",
+   "Stems"
+  ]
+ },
+ "description": [],
+ "problems": "Problem for Cats"
+}

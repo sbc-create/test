@@ -1,0 +1,67 @@
+{
+ "id": "src-24f34e09c8",
+ "url": "https://plants.ces.ncsu.edu/plants/ficus-elastica/",
+ "fetched_at": "2026-10-12T21:27:21Z",
+ "page_sha256": "d92efbe4ecd405a01ce7b1189d61496ea00207b17ae42ad4d5bffc7a46df6a2c",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Ficus elastica",
+ "common_names": [
+  "Indian Rubber Plant",
+  "Rubber Plant"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Layering",
+   "Root Cutting",
+   "Seed"
+  ],
+  "Country Or Region Of Origin:": [
+   "Southeast Asia: Nepal to China and Western Malesia"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Rounded"
+  ],
+  "Growth Rate:": [
+   "Rapid"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Clay",
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Alkaline (>8.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "9a, 9b, 10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Problems:": [
+   "Problem for Cats",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ]
+ },
+ "description": [
+  "The Rubber Plant is a broadleaf evergreen, flowering, tree in the Mulberry family typically grown as a popular ornamental house plant in temperate climates. In the wild and left to its own devices, the tree can grow to 100 feet high. When grown indoors, it rarely flowers and it is usually kept to 2 to 10 feet with training or support as needed. Whether indoors or out, Rubber Plant is noted for its foot-long, shiny, attractive leaves, dark green with pink or purple stipules. and variegated forms are available. The genus name comes from the Latin name for the edible fig. The species name refers to the milky sap that once was used to produce rubber.",
+  "Rubber Plant does best in partial shade or low light in dry soil and medium relative humidity with a temperature of greater than 55 degrees F. When grown indoors, plant in a soil-based potting mix under bright indirect light or partial shade and protection from the afternoon sun. Water regularly, but avoid overwatering. Reduce watering altogether when the plant is dormant (from fall to late winter).",
+  "Rubber Plant prefers to remain in one location and do not do well with drafts or cold temperatures. Use a damp soft cloth or sponge to clean dust off of leaves. Prune main branches to encourage a bushier habit, or leave them unpruned to encourage a tall, narrow, more tree-like form. Flowers will appear on either new or old growth. It can become a heavy plant that is best for large spaces. If the leaves are cut, the surface will drip sap. Rubber Plants in the wild are erect with a spreading crown, aerial roots, and initially epiphytic ( a plant that begins as a growth on the surface of another plant).",
+  "The Clemson Cooperative Extension Home and Garden Information Center has a fact sheet on Ficus elastica ."
+ ],
+ "problems": "Overwatering can cause loss of leaves as can temperature drops or cold drafts. It is normal for some bottom leaves to turn yellow and drop. Mealybugs, scales, and spider mites can be problematic."
+}

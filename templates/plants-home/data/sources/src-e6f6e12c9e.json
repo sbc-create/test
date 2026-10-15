@@ -1,0 +1,81 @@
+{
+ "id": "src-e6f6e12c9e",
+ "url": "https://plants.ces.ncsu.edu/plants/spathiphyllum/",
+ "fetched_at": "2026-10-13T00:42:22Z",
+ "page_sha256": "1b7b369c23c550b31d46f5a584f6fff6b27444bea83c2dd2a9837a1f77aa16c5",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Spathiphyllum",
+ "common_names": [
+  "Peace Lily",
+  "Spathe Flower",
+  "White Sails"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Division"
+  ],
+  "Country Or Region Of Origin:": [
+   "Mexico, Tropical America, Malesia, and Western Pacific"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Mounding",
+   "Rounded"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Deep shade (Less than 2 hours to no direct sunlight)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "High Organic Matter"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet",
+   "3 feet-6 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "11a, 11b, 12a, 12b"
+  ],
+  "Problems:": [
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Children",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Medium"
+  ],
+  "Poison Symptoms:": [
+   "The leaves of the Peace Lily can be poisonous if eaten in large quantities. Symptoms include severe pain in the mouth and a burning sensation to the lips, tongue, and throat, excessive drooling, vomiting (not horses), difficulty swallowing"
+  ],
+  "Poison Toxic Principle:": [
+   "Calcium oxalate crystals"
+  ],
+  "Causes Contact Dermatitis:": [
+   "No"
+  ],
+  "Poison Part:": [
+   "Leaves"
+  ]
+ },
+ "description": [
+  "Peace lily is a group of about 60 species of flowering plants that are semi-evergreen, perennial herbs typically grown as houseplants. They are members of the arum family (Araceae) and are native to Mexico, tropical America, Malesia and islands of the western Pacific. The genus name is Greek for \"spathe leaf,\" referring to the prominent spathe, which is a modified leaf.",
+  "Peace lilies prefer partial to deep shade. Do not place plants in direct sun. They enjoy warm conditions between 68 and 85 degrees F during the day and no more than a 10-degree drop at night. Cold and drafty conditions, specifically temperatures of 40 to 60 degrees F, will slow growth considerably. Extended periods below 40 degrees F can damage leaves, stems and roots. Keep the soil moist, but not soggy; allow it to dry between waterings. Watering from below works very well for peace lilies. Fertilize at one-quarter of the recommended strength and flush soil between applications of fertilizer. Over-fertilizing and salt build-up can burn the leaf tips and roots. The plant requires a large pot and should be kept somewhat pot-bound. Use a potting mix high in organic matter. Re-pot, when necessary, in February or March.",
+  "While peace lilies can grow up to 6 feet tall, they more typically reach 3 feet high and wide in an indoor setting. Dwarf cultivars are available. The plants have no specific bloom time, but flower freely.",
+  "These low-maintenance plants are popular as specimens or accents in interior groupings for their deep-green glossy foliage and showy, white blooms that change to pale green after 10 days and then remain lovely for at least another month."
+ ],
+ "problems": "Mealybugs are probably the most common insect indoors. Because of the wide foliage, cleaning the leaves regularly with a damp cloth to remove dust will help its appearance and remove some pests that tend to gather under the bottom of the leaves. Brown leaf tips are caused by excessive direct sunlight, underwatering, or low humidity."
+}

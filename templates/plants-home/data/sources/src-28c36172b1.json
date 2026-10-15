@@ -1,0 +1,90 @@
+{
+ "id": "src-28c36172b1",
+ "url": "https://plants.ces.ncsu.edu/plants/aloe-vera/",
+ "fetched_at": "2026-10-12T21:27:26Z",
+ "page_sha256": "d5c3a48c5f7a52dfc7f1afea332a80700e68cae39d894550a869d0125ef48a91",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Aloe vera",
+ "common_names": [
+  "Aloe",
+  "Aloe Vera",
+  "Barbados Aloe",
+  "Medicinal Aloe",
+  "Medicine Plant",
+  "True Aloe"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Division"
+  ],
+  "Country Or Region Of Origin:": [
+   "Arabian Peninsula"
+  ],
+  "Habit/Form:": [
+   "Erect"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Full sun (6 or more hours of direct sunlight a day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Acid (<6.0)",
+   "Alkaline (>8.0)",
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Occasionally Dry"
+  ],
+  "Available Space To Plant:": [
+   "12 inches-3 feet"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ],
+  "Flower Bloom Time:": [
+   "Spring",
+   "Winter"
+  ],
+  "Problems:": [
+   "Poisonous to Humans",
+   "Problem for Cats",
+   "Problem for Dogs",
+   "Problem for Horses"
+  ],
+  "Poison Severity:": [
+   "Low"
+  ],
+  "Poison Symptoms:": [
+   "Poisonous through ingestion or dermatitis. Symptoms may include: Abdominal cramping, diarrhea, red urine; skin irritation from latex."
+  ],
+  "Poison Toxic Principle:": [
+   "Anthraquinone glycoside"
+  ],
+  "Causes Contact Dermatitis:": [
+   "Yes"
+  ],
+  "Poison Part:": [
+   "Leaves"
+  ]
+ },
+ "description": [
+  "Aloe Vera is an evergreen succulent plant in the daylily family (Asphodelaceae) native to the Arabian Peninsula that has spread to many other regions and is considered invasive in some counties. The genus name is derived from the Arabic word alloeh , meaning \"bitter and shiny substance. The specific epithet comes from verus meaning \"true\" in Latin.",
+  "It is often grown indoors as a houseplant, but it can be an outdoor perennial in zones 10 and higher. Grow this plant in full sun to partial shade in very well-drained soils suitable for succulents. Allow the soil to completely dry between waterings. The pot used should also have several drainage holes and clay is best. Water less frequently in the winter months. It will grow 2 to 3 feet tall and spread by offsets. Propagation can be done by division.",
+  "The thick leaves contain a gell used in many commercial products. The stem can be broken and the gel applied to the skin and it is safe for most people. The leaves grow in a rosette and once the plant is at least three years old it will send up a stem with tubular orange to yellowish flowers near the tip that bloom from the bottom up. This plant has gained the Royal Horticultural Society's Award of Garden Merit.",
+  "Use this plant as a houseplant. It can be moved outdoors during the summer. In more temperate areas, aloe can be grown in a rock garden, winter garden or drought-tolerant garden."
+ ],
+ "problems": "Mealybugs and aphids are insects that may affect the health of your aloe plant. Diseases include scale, leaf spot, aloe rust, and sooty mold. Overwatering should be avoided, it can lead to the roots rotting."
+}

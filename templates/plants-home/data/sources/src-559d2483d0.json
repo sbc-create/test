@@ -1,0 +1,65 @@
+{
+ "id": "src-559d2483d0",
+ "url": "https://plants.ces.ncsu.edu/plants/peperomia-obtusifolia/",
+ "fetched_at": "2026-10-12T21:27:44Z",
+ "page_sha256": "c80d2c0bfadc18beb3e66918d09e73b2db430ce62ec60aa12a3cdcb9460afc32",
+ "parser": "ph-facts/1.0",
+ "kind": "university",
+ "publisher": "NC State Extension — Plant Toolbox",
+ "name": "Peperomia obtusifolia",
+ "common_names": [
+  "American Rubber Plant",
+  "Baby Rubberplant",
+  "Baby Rubber Plant",
+  "Oval Leaf Peperomia"
+ ],
+ "attrs": {
+  "Recommended Propagation Strategy:": [
+   "Leaf Cutting",
+   "Stem Cutting"
+  ],
+  "Country Or Region Of Origin:": [
+   "Florida to Tropical America"
+  ],
+  "Habit/Form:": [
+   "Erect",
+   "Open",
+   "Rounded",
+   "Spreading"
+  ],
+  "Growth Rate:": [
+   "Medium"
+  ],
+  "Maintenance:": [
+   "Low"
+  ],
+  "Light:": [
+   "Dappled Sunlight (Shade through upper canopy all day)",
+   "Partial Shade (Direct sunlight only part of the day, 2-6 hours)"
+  ],
+  "Soil Texture:": [
+   "Clay",
+   "Loam (Silt)",
+   "Sand"
+  ],
+  "Soil pH:": [
+   "Neutral (6.0-8.0)"
+  ],
+  "Soil Drainage:": [
+   "Good Drainage",
+   "Moist"
+  ],
+  "Available Space To Plant:": [
+   "Less than 12 inches"
+  ],
+  "USDA Plant Hardiness Zone:": [
+   "10a, 10b, 11a, 11b, 12a, 12b"
+  ]
+ },
+ "description": [
+  "Baby Rubber Plant is a tropical evergreen herbaceous shrub that is erect and bushy and grows up to 2 feet tall. It is native to South America, and it is a member of the Piperaceae or pepper family. The glossy cupped, obovate leaves on branched, distinct stems and petioles that are usually tinged pink are key ID features. Leaf attachment is a sub-peltate.",
+  "This plant tolerates low light for several months without stress, especially non-variegated cultivars. It is intolerant of wet soil, very dry soil, or very drafty sites. This plant prefers bright indirect light, dry soil, and medium to low relative humidity. Sunlight that is too strong or direct will burn the leaves.",
+  "This plant is commonly used as an interior specimen or desktop plant."
+ ],
+ "problems": "This plant has no serious pest or disease problems. Overwatering is a big problem and causes the leaves to yellow, and it can lead to root rot. Monitor for mealybugs, spider mites, and whiteflies."
+}
