@@ -349,3 +349,11 @@ def test_finalize_runs_repo_tools_and_commits(среда):
     assert итог.get("done") and итог.get("committed"), итог
     assert "штамп манифеста" in _git(копия, "log", "-1", "--format=%s")
     assert _git(копия, "status", "--porcelain") == ""
+
+
+def test_run_all_failure_note_keeps_fail_lines_above_the_tail():
+    """T114 15.10: строка FAIL была выше хвоста 400 знаков — в заметке вердикта одни PASS."""
+    вывод = "a   PASS\nperf-memo   FAIL  timeout 600s\n" + "x   PASS\n" * 60
+    заметка = tech_run.причина_run_all(1, вывод)
+    assert "perf-memo   FAIL  timeout 600s" in заметка and заметка.startswith("checks/run.sh rc=1")
+    assert "строк FAIL нет" in tech_run.причина_run_all(2, "x PASS\n")

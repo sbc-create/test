@@ -59,6 +59,18 @@ STALE_S = 2 * 3600
 КОРНИ_ДАННЫХ = (Path("/srv"),)
 
 
+def причина_run_all(rc: int, вывод: str) -> str:
+    """Причина провала checks/run.sh для вердикта: строки FAIL/TIMEOUT/ERROR + короткий хвост.
+
+    Раньше в заметку шёл только хвост 400 знаков, а run.sh печатает итоги по шагам,
+    и строка FAIL оставалась выше хвоста (T114 15.10: дважды INCOMPLETE, в заметке
+    одни PASS — причину по следам восстановить было нельзя).
+    """
+    плохие = [s.strip() for s in вывод.splitlines()
+              if re.search(r"\b(FAIL|FAILED|TIMEOUT|ERROR)\b", s) or "Traceback (most recent call last)" in s]
+    return f"checks/run.sh rc={rc}: " + ("; ".join(плохие[:12]) or "строк FAIL нет") + f" | хвост: {вывод[-200:]}"
+
+
 def снимок_стенда(репо: Path, куда: Path) -> dict[str, str]:
     """Урезанный снимок для витрин с checks/mini_stand.py (Lords) — окружение проверок.
 
@@ -633,7 +645,7 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
                     rc_все, вывод_все = _прогнать(голова_wt, ["bash", "checks/run.sh"], 1800, среда)
                     шаги["run_all_passes"] = rc_все == 0
                     if rc_все:
-                        заметки.append(f"checks/run.sh: {вывод_все[-400:]}")
+                        заметки.append(причина_run_all(rc_все, вывод_все))
             finally:
                 for wt in (база_wt, голова_wt):
                     _git(репо, "worktree", "remove", "--force", str(wt), check=False)
