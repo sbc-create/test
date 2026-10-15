@@ -589,7 +589,9 @@ def _прогнать(каталог: Path, команда: list[str], пред�
     try:
         r = subprocess.run(команда, cwd=каталог, capture_output=True, text=True, timeout=предел,
                            env=среда)
-        return r.returncode, (r.stdout + r.stderr)[-1500:]
+        # Вывод целиком (до 200 КБ): обрезка до 1500 знаков здесь прятала строку FAIL
+        # checks/run.sh от вердикта (T114 15.10). Короткие фрагменты режут вызывающие.
+        return r.returncode, (r.stdout + r.stderr)[-200_000:]
     except subprocess.TimeoutExpired:
         return 124, f"предел {предел} с исчерпан"
 

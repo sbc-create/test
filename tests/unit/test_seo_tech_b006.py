@@ -378,3 +378,11 @@ def test_cleanup_recognises_new_and_old_worktree_dirs(среда):
         shutil.rmtree(к)
     assert len(tech_run.убрать_свои_ссылки(репо, s)) == 2
     shutil.rmtree(tech_run.каталог_копий(s), ignore_errors=True)
+
+
+def test_run_output_is_not_cut_before_the_fail_line(tmp_path):
+    """_прогнать резал вывод до 1500 знаков — строка FAIL run.sh до вердикта не доходила (T114)."""
+    скрипт = tmp_path / "r.sh"
+    скрипт.write_text("echo 'early-step   FAIL'\nfor i in $(seq 1 300); do echo \"step-$i   PASS\"; done\nexit 1\n")
+    rc, вывод = tech_run._прогнать(tmp_path, ["bash", str(скрипт)], 30)
+    assert rc == 1 and "early-step   FAIL" in tech_run.причина_run_all(rc, вывод)
