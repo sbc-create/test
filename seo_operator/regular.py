@@ -3306,6 +3306,22 @@ def step_evaluate(ctx: Context) -> Any:
     return found
 
 
+def step_weekly_goal_review(ctx: Context) -> Any:
+    """Разбор цели «≥ 5 000 визитов/сутки на каждом сайте» по последней выгрузке (seo_operator.goal_review).
+
+    Две полные недели по 7 суток, органика Яндекса и Google раздельно, страницы с
+    поисковыми входами и концентрация, всплески, разрыв до цели. Пишет отчёт в
+    docs/seo-operator/goal-review/ и JSON в var/analytics/. Только чтение выгрузки.
+    """
+    from seo_operator import goal_review
+    выгрузка = ctx.root.parent / "analytics" / "cabinet-latest.json" if (ctx.root.parent / "analytics" / "cabinet-latest.json").exists() \
+        else goal_review.ROOT / "var" / "analytics" / "cabinet-latest.json"
+    if not выгрузка.exists():
+        return {"skipped": f"нет выгрузки {выгрузка}"}
+    goal_review.main(["--export", str(выгрузка)])
+    return {"export": str(выгрузка)}
+
+
 def step_weekly_priorities(ctx: Context) -> Any:
     """Пересмотр приоритетов: сначала критическое, затем видимость в поиске."""
     wow = week_over_week(ctx.sources["analytics_snapshots"], ctx.now.astimezone(MSK).date())
@@ -3475,6 +3491,7 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
         ("discover", step_discover),
         ("evaluate", step_evaluate),
         ("priorities", step_weekly_priorities),
+        ("goal_review", step_weekly_goal_review),
     ],
 }
 
