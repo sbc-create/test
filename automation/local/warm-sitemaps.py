@@ -50,7 +50,7 @@ def живые_домены() -> list[str]:
     try:
         данные = json.loads(РЕЕСТР.read_text(encoding="utf-8"))
     except (OSError, ValueError) as ош:
-        raise SystemExit(f"реестр ячеек не прочитан: {ош}")
+        raise SystemExit(f"реестр ячеек не прочитан: {ош}") from ош
     ячейки = данные.get("cells") if isinstance(данные, dict) else данные
     ячейки = ячейки if isinstance(ячейки, list) else list(ячейки.values())
     return [я["domain"] for я in ячейки
