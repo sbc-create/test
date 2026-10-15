@@ -1,0 +1,231 @@
+[b016 17:10:31Z] состояние выпуска: /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z
+[b016 17:10:31Z] preflight: хеши патчей
+[b016 17:10:31Z] preflight: базовый compose-файл
+[b016 17:10:31Z] $ git -C /home/claude/wt-yummy-mail-biz rev-parse HEAD
+[b016 17:10:31Z] $ git -C /home/claude/wt-yummy-mail-biz status --porcelain
+[b016 17:10:31Z] preflight: закреплённые образы
+[b016 17:10:31Z] preflight: итоговая конфигурация compose (три файла)
+[b016 17:10:31Z] $ docker compose -p yummyani-staging --project-directory /home/claude/wt-yummy-mail-biz -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars config --format json
+[b016 17:10:31Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:10:31Z] $ docker image inspect sha256:10f280fa56832489a2f202f56a3ee90b598e27623ad1e746b86e751818ea17c5
+[b016 17:10:31Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:10:31Z] $ docker image inspect sha256:855faf7c16085356a6d4a169c586c8b456dfbe63ac2f3915d49381d3ccae0975
+[b016 17:10:31Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:10:31Z] $ docker image inspect sha256:c02df9fbf001e9e56eee49bbb1f0668fd648b1c9c0e3eecf306e284fa9cbb7d8
+[b016 17:10:31Z] preflight: снимок до выпуска
+[b016 17:10:31Z] check snapshot /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/before.json
+yummyani-staging-web-site-1 054c6170519d healthy издатель на странице: 1
+yummyani-staging-web-org-1 8f159f3f9de3 healthy издатель на странице: 1
+yummyani-staging-web-biz-1 21184803b90f healthy издатель на странице: 1
+yummyani7-site-web-1 4c5796eae24c healthy издатель на странице: 1
+yummyani7-info-web-1 4c5796eae24c healthy издатель на странице: 1
+[b016 17:10:42Z] preflight: OK
+[b016 17:10:42Z] сборка web-biz поверх 21184803b90f
+[b016 17:10:42Z] $ git -C /srv/sites/yummyani-staging/repo worktree add --detach /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f 21184803b90f
+[b016 17:10:42Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/yummy-public-wording.patch
+[b016 17:10:42Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f status --porcelain
+[b016 17:10:42Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f add -A
+[b016 17:10:42Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f -c user.name=yummy-b016 -c user.email=yummy-b016@localhost commit -q -m поверх 21184803b90f: yummy-public-wording.patch
+[b016 17:10:42Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f rev-parse HEAD
+[b016 17:10:42Z] $ docker compose -p yummyani-staging --project-directory /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f -f /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f/compose.staging.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars --profile build build web-build
+ Image yummyani/web:staging Building 
+ Image yummyani/web:staging Built
+[b016 17:12:05Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:staging
+[b016 17:12:05Z] $ docker tag yummyani/web:staging yummyani/web:rel-a520a24afb20
+[b016 17:12:05Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:rel-a520a24afb20
+[b016 17:12:05Z] $ docker image inspect -f {{.Id}} yummyani/web:rel-a520a24afb20
+[b016 17:12:05Z] сборка web-org поверх 8f159f3f9de3
+[b016 17:12:05Z] $ git -C /srv/sites/yummyani-staging/repo worktree add --detach /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 8f159f3f9de3
+[b016 17:12:05Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/yummy-public-wording.patch
+[b016 17:12:05Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 status --porcelain
+[b016 17:12:05Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 add -A
+[b016 17:12:06Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 -c user.name=yummy-b016 -c user.email=yummy-b016@localhost commit -q -m поверх 8f159f3f9de3: yummy-public-wording.patch
+[b016 17:12:06Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 rev-parse HEAD
+[b016 17:12:06Z] $ docker compose -p yummyani-staging --project-directory /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3 -f /srv/sites/yummyani-staging/build-b016/20261015T171031Z/8f159f3f9de3/compose.staging.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars --profile build build web-build
+ Image yummyani/web:staging Building 
+ Image yummyani/web:staging Built
+[b016 17:13:40Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:staging
+[b016 17:13:40Z] $ docker tag yummyani/web:staging yummyani/web:rel-536082c25e7e
+[b016 17:13:40Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:rel-536082c25e7e
+[b016 17:13:40Z] $ docker image inspect -f {{.Id}} yummyani/web:rel-536082c25e7e
+[b016 17:13:40Z] сборка web-site поверх 054c6170519d
+[b016 17:13:40Z] $ git -C /srv/sites/yummyani-staging/repo worktree add --detach /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d 054c6170519d
+[b016 17:13:40Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/b016-sitemap-swr.v2.patch
+[b016 17:13:40Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/b016-sitemap-cap.patch
+[b016 17:13:40Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/yummy-public-wording.patch
+[b016 17:13:40Z] $ patch -d /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -p1 --forward --batch --no-backup-if-mismatch -i /home/claude/wt-portable-site-cell-01/var/yummy-patches/t081-shelf-canonical-href.054c617.patch
+[b016 17:13:40Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d status --porcelain
+[b016 17:13:40Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d add -A
+[b016 17:13:40Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -c user.name=yummy-b016 -c user.email=yummy-b016@localhost commit -q -m поверх 054c6170519d: b016-sitemap-swr.v2.patch, b016-sitemap-cap.patch, yummy-public-wording.patch, t081-shelf-canonical-href.054c617.patch
+[b016 17:13:40Z] $ git -C /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d rev-parse HEAD
+[b016 17:13:40Z] $ docker compose -p yummyani-staging --project-directory /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d -f /srv/sites/yummyani-staging/build-b016/20261015T171031Z/054c6170519d/compose.staging.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars --profile build build web-build
+ Image yummyani/web:staging Building 
+ Image yummyani/web:staging Built
+[b016 17:15:06Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:staging
+[b016 17:15:06Z] $ docker tag yummyani/web:staging yummyani/web:rel-c23018dd4a3a
+[b016 17:15:06Z] $ docker image inspect -f {{index .Config.Labels "org.opencontainers.image.revision"}} yummyani/web:rel-c23018dd4a3a
+[b016 17:15:06Z] $ docker image inspect -f {{.Id}} yummyani/web:rel-c23018dd4a3a
+[b016 17:15:07Z] $ bash /srv/sites/yummyani-staging/build-b016/20261015T171031Z/21184803b90f/deploy/staging/backup.sh
+[b016 17:15:28Z] выкладка web-biz (yummyani.biz) → yummyani/web:rel-a520a24afb20
+[b016 17:15:28Z] $ docker tag sha256:10f280fa56832489a2f202f56a3ee90b598e27623ad1e746b86e751818ea17c5 yummyani/web:rollback-b016-web-biz-20261015t171031z
+[b016 17:15:28Z] $ docker compose -p yummyani-staging --project-directory /home/claude/wt-yummy-mail-biz -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars up -d --no-deps --force-recreate web-biz
+ Container yummyani-staging-web-biz-1 Recreate 
+ Container yummyani-staging-web-biz-1 Recreated 
+ Container yummyani-staging-web-biz-1 Starting 
+ Container yummyani-staging-web-biz-1 Started
+[b016 17:15:32Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:35Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:38Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:41Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:44Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:44Z] yummyani-staging-web-biz-1: healthy
+[b016 17:15:44Z] $ docker inspect yummyani-staging-web-biz-1
+[b016 17:15:44Z] check snapshot /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-biz.json
+yummyani-staging-web-site-1 054c6170519d healthy издатель на странице: 1
+yummyani-staging-web-org-1 8f159f3f9de3 healthy издатель на странице: 1
+yummyani-staging-web-biz-1 a520a24afb20 healthy издатель на странице: 1
+yummyani7-site-web-1 4c5796eae24c healthy издатель на странице: 1
+yummyani7-info-web-1 4c5796eae24c healthy издатель на странице: 1
+[b016 17:15:58Z] check compare /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/before.json /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-biz.json --changed web-biz
+yummyani-staging-web-site-1 OK | 054c6170519d
+yummyani-staging-web-org-1 OK | 8f159f3f9de3
+yummyani-staging-web-biz-1 OK | a520a24afb20
+yummyani7-site-web-1 OK | 4c5796eae24c
+yummyani7-info-web-1 OK | 4c5796eae24c
+[b016 17:15:58Z] check links yummyani.biz
+yummyani.biz 200 ссылок /anime/ 101, с --uuid 0
+[b016 17:15:59Z] check sitemaps --max-seconds 90 yummyani.biz
+yummyani.biz static.xml 200 0.05s loc=20 
+yummyani.biz titles.xml 200 0.19s loc=8329 
+yummyani.biz seasons.xml 200 0.13s loc=50 
+yummyani.biz episodes.xml 200 0.33s loc=539 
+yummyani.biz images.xml 200 0.29s loc=8323
+[b016 17:16:00Z] check sitemaps --max-seconds 5 yummyani.biz
+yummyani.biz static.xml 200 0.03s loc=20 
+yummyani.biz titles.xml 200 0.41s loc=8329 
+yummyani.biz seasons.xml 200 0.16s loc=50 
+yummyani.biz episodes.xml 200 0.10s loc=539 
+yummyani.biz images.xml 200 0.31s loc=8323
+[b016 17:16:02Z] web-biz: принято
+[b016 17:16:02Z] выкладка web-org (yummyani.org) → yummyani/web:rel-536082c25e7e
+[b016 17:16:02Z] $ docker tag sha256:855faf7c16085356a6d4a169c586c8b456dfbe63ac2f3915d49381d3ccae0975 yummyani/web:rollback-b016-web-org-20261015t171031z
+[b016 17:16:02Z] $ docker compose -p yummyani-staging --project-directory /home/claude/wt-yummy-mail-biz -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars up -d --no-deps --force-recreate web-org
+ Container yummyani-staging-web-org-1 Recreate 
+ Container yummyani-staging-web-org-1 Recreated 
+ Container yummyani-staging-web-org-1 Starting 
+ Container yummyani-staging-web-org-1 Started
+[b016 17:16:07Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:10Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:13Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:16Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:19Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:19Z] yummyani-staging-web-org-1: healthy
+[b016 17:16:19Z] $ docker inspect yummyani-staging-web-org-1
+[b016 17:16:19Z] check snapshot /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-org.json
+yummyani-staging-web-site-1 054c6170519d healthy издатель на странице: 1
+yummyani-staging-web-org-1 536082c25e7e healthy издатель на странице: 1
+yummyani-staging-web-biz-1 a520a24afb20 healthy издатель на странице: 1
+yummyani7-site-web-1 4c5796eae24c healthy издатель на странице: 1
+yummyani7-info-web-1 4c5796eae24c healthy издатель на странице: 1
+[b016 17:16:42Z] check compare /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/before.json /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-org.json --changed web-biz web-org
+yummyani-staging-web-site-1 OK | 054c6170519d
+yummyani-staging-web-org-1 OK | 536082c25e7e
+yummyani-staging-web-biz-1 OK | a520a24afb20
+yummyani7-site-web-1 OK | 4c5796eae24c
+yummyani7-info-web-1 OK | 4c5796eae24c
+[b016 17:16:42Z] check links yummyani.org
+yummyani.org 200 ссылок /anime/ 101, с --uuid 0
+[b016 17:16:43Z] check sitemaps --max-seconds 90 yummyani.org
+yummyani.org static.xml 200 0.05s loc=23 
+yummyani.org titles.xml 200 0.22s loc=8329 
+yummyani.org seasons.xml 200 0.19s loc=50 
+yummyani.org episodes.xml 200 0.23s loc=539 
+yummyani.org images.xml 200 0.19s loc=8313
+[b016 17:16:44Z] check sitemaps --max-seconds 5 yummyani.org
+yummyani.org static.xml 200 0.06s loc=23 
+yummyani.org titles.xml 200 0.41s loc=8329 
+yummyani.org seasons.xml 200 0.15s loc=50 
+yummyani.org episodes.xml 200 0.12s loc=539 
+yummyani.org images.xml 200 0.24s loc=8313
+[b016 17:16:45Z] web-org: принято
+[b016 17:16:45Z] выкладка web-site (yummyani.site) → yummyani/web:rel-c23018dd4a3a
+[b016 17:16:45Z] $ docker tag sha256:c02df9fbf001e9e56eee49bbb1f0668fd648b1c9c0e3eecf306e284fa9cbb7d8 yummyani/web:rollback-b016-web-site-20261015t171031z
+[b016 17:16:46Z] $ docker compose -p yummyani-staging --project-directory /home/claude/wt-yummy-mail-biz -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml --env-file /srv/sites/yummyani-staging/runtime/compose.vars up -d --no-deps --force-recreate web-site
+ Container yummyani-staging-web-site-1 Recreate 
+ Container yummyani-staging-web-site-1 Recreated 
+ Container yummyani-staging-web-site-1 Starting 
+ Container yummyani-staging-web-site-1 Started
+[b016 17:16:51Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:16:54Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:16:57Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:17:00Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:17:03Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:17:03Z] yummyani-staging-web-site-1: healthy
+[b016 17:17:03Z] $ docker inspect yummyani-staging-web-site-1
+[b016 17:17:03Z] check snapshot /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-site.json
+yummyani-staging-web-site-1 c23018dd4a3a healthy издатель на странице: 1
+yummyani-staging-web-org-1 536082c25e7e healthy издатель на странице: 1
+yummyani-staging-web-biz-1 a520a24afb20 healthy издатель на странице: 1
+yummyani7-site-web-1 4c5796eae24c healthy издатель на странице: 1
+yummyani7-info-web-1 4c5796eae24c healthy издатель на странице: 1
+[b016 17:17:18Z] check compare /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/before.json /home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z/after-web-site.json --changed web-biz web-org web-site
+yummyani-staging-web-site-1 OK | c23018dd4a3a
+yummyani-staging-web-org-1 OK | 536082c25e7e
+yummyani-staging-web-biz-1 OK | a520a24afb20
+yummyani7-site-web-1 OK | 4c5796eae24c
+yummyani7-info-web-1 OK | 4c5796eae24c
+[b016 17:17:18Z] check links yummyani.site
+yummyani.site 200 ссылок /anime/ 101, с --uuid 0
+[b016 17:17:22Z] check sitemaps --max-seconds 90 yummyani.site
+yummyani.site static.xml 200 0.08s loc=20 
+yummyani.site titles.xml 200 0.29s loc=8000 
+yummyani.site seasons.xml 200 0.20s loc=50 
+yummyani.site episodes.xml 200 0.49s loc=539 
+yummyani.site images.xml 200 0.33s loc=7984
+[b016 17:17:24Z] check sitemaps --max-seconds 5 yummyani.site
+yummyani.site static.xml 200 0.06s loc=20 
+yummyani.site titles.xml 200 0.23s loc=8000 
+yummyani.site seasons.xml 200 0.28s loc=50 
+yummyani.site episodes.xml 200 0.40s loc=539 
+yummyani.site images.xml 200 0.25s loc=7984
+[b016 17:17:25Z] web-site: принято
+[b016 17:17:25Z] прогрев на паузе до 19:42:25Z
+[b016 17:17:25Z] приёмка 1/5: текущее состояние инвентаря
+[b016 17:17:27Z]   yummyani.biz titles.xml 200 0.58s loc=8329 [fresh; age=1592]
+[b016 17:17:27Z]   yummyani.biz seasons.xml 200 0.10s loc=50 [fresh; age=1592]
+[b016 17:17:27Z]   yummyani.biz episodes.xml 200 0.64s loc=539 [fresh; age=1592]
+[b016 17:17:27Z]   yummyani.org titles.xml 200 0.56s loc=8329 [fresh; age=1485]
+[b016 17:17:27Z]   yummyani.org seasons.xml 200 0.68s loc=50 [fresh; age=1485]
+[b016 17:17:27Z]   yummyani.org episodes.xml 200 0.12s loc=539 [fresh; age=1485]
+[b016 17:17:27Z]   yummyani.site titles.xml 200 0.92s loc=8000 [stale; age=unknown]
+[b016 17:17:27Z]   yummyani.site seasons.xml 200 0.43s loc=50 [stale; age=unknown]
+[b016 17:17:27Z]   yummyani.site episodes.xml 200 0.17s loc=539 [stale; age=unknown]
+[b016 17:17:27Z] приёмка 2/5: ждём устаревания инвентаря 2145 с (прогрев на паузе)
+[b016 17:53:12Z] приёмка 3/5: устаревший кеш — ответ сразу, перестройка в фоне
+[b016 17:53:13Z]   yummyani.biz titles.xml 200 0.17s loc=8329 [stale; age=3738]
+[b016 17:53:13Z]   yummyani.biz seasons.xml 200 0.26s loc=50 [stale; age=3738]
+[b016 17:53:13Z]   yummyani.biz episodes.xml 200 0.42s loc=539 [stale; age=3738]
+[b016 17:53:13Z]   yummyani.org titles.xml 200 1.00s loc=8329 [stale; age=3632]
+[b016 17:53:13Z]   yummyani.org seasons.xml 200 0.15s loc=50 [stale; age=3632]
+[b016 17:53:13Z]   yummyani.org episodes.xml 200 0.09s loc=539 [stale; age=3631]
+[b016 17:53:13Z]   yummyani.site titles.xml 200 1.03s loc=8329 [fresh; age=2097]
+[b016 17:53:13Z]   yummyani.site seasons.xml 200 0.67s loc=50 [fresh; age=2097]
+[b016 17:53:13Z]   yummyani.site episodes.xml 200 0.13s loc=540 [fresh; age=2097]
+[b016 17:53:13Z] приёмка 4/5: перестройка завершается без участия прогрева
+[b016 17:54:15Z] приёмка 5/5: полнота карт и ссылки T081
+[b016 17:54:17Z]   yummyani.biz titles.xml 200 0.42s loc=8329 [fresh; age=12]
+[b016 17:54:17Z]   yummyani.biz seasons.xml 200 0.14s loc=50 [fresh; age=12]
+[b016 17:54:17Z]   yummyani.biz episodes.xml 200 0.42s loc=540 [fresh; age=12]
+[b016 17:54:17Z]   yummyani.org titles.xml 200 0.72s loc=8329 [fresh; age=9]
+[b016 17:54:17Z]   yummyani.org seasons.xml 200 0.11s loc=50 [fresh; age=9]
+[b016 17:54:17Z]   yummyani.org episodes.xml 200 0.67s loc=540 [fresh; age=9]
+[b016 17:54:17Z]   yummyani.site titles.xml 200 1.11s loc=8329 [fresh; age=2161]
+[b016 17:54:17Z]   yummyani.site seasons.xml 200 0.10s loc=50 [fresh; age=2161]
+[b016 17:54:17Z]   yummyani.site episodes.xml 200 0.79s loc=540 [fresh; age=2161]
+[b016 17:54:17Z] check links yummyani.biz yummyani.org yummyani.site
+yummyani.biz 200 ссылок /anime/ 101, с --uuid 0 
+yummyani.org 200 ссылок /anime/ 101, с --uuid 0 
+yummyani.site 200 ссылок /anime/ 101, с --uuid 0
+[b016 17:54:21Z] прогрев возобновлён
+[b016 17:54:21Z] готово
+/home/claude/wt-portable-site-cell-01/var/yummy-b016/20261015T171031Z
