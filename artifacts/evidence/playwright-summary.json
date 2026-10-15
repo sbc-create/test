@@ -1,10 +1,10 @@
 {
   "stats": {
-    "startTime": "2026-10-15T13:41:45.323Z",
-    "duration": 68688.43800000001,
-    "expected": 0,
+    "startTime": "2026-10-15T14:28:16.430Z",
+    "duration": 24173.522,
+    "expected": 44,
     "skipped": 0,
-    "unexpected": 44,
+    "unexpected": 0,
     "flaky": 0
   },
   "projects": [
