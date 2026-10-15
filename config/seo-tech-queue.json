@@ -2185,6 +2185,287 @@
       "status": "blocked",
       "owner_action": "systemctl status analytics-cabinet.service --no-pager; journalctl -u analytics-cabinet.service --since '2026-10-15 05:00' --no-pager; после устранения причины: systemctl start analytics-cabinet.service и проверить, что обновился /home/claude/wt-portable-site-cell-01/var/analytics/cabinet-latest.json",
       "evidence": "15.10 05:41Z, замер сессии: stamp таймера 05:03:25Z, cabinet-latest.json 2026-10-14T05:08Z, stderr-файл 0 байт (с 27.09), процесса сбора нет; config/analytics.json на месте (ConditionPathExists выполнено). | 15.10 07:30Z: владелец получит журнал службы; до него причина — гипотеза."
+    },
+    {
+      "id": "T113",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/charli-i-lola/",
+        "https://zonafilm.space/title/preduprezhdenie/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на zonafilm.space: в карточке тайтла блок жанров рекомендаций (rbs) ведёт на /catalog/?genre=west_content — служебная метка «западный контент» (noindex, follow; T044), а JSON-LD карточки объявляет genre «западный контент», хотя в видимых жанрах её нет (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']). Кроме того, жанры той же карточки ведут на коды-синонимы /catalog/?genre=adventures, cartoon, family — их canonical указывает на основной код (priklyucheniya, animation, semeynyy; правило T033), то есть ссылка ведёт не на канонический адрес.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 (REQ-SEO-FACETS): у раздела один индексируемый адрес; внутренние ссылки — сразу на канонический адрес; служебные метки поставщика (T044/T077) не выводятся как жанр; разметка — только видимого (seo-session §5)",
+      "expected": "служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) исключены тем же правилом и в блоке rbs, и в JSON-LD genre; жанровые ссылки витрины строятся сразу на канонический код (тот, что в карте). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/genre_links_canonical.py",
+      "verify_live": "после выпуска: на карточках нет ссылки на genre=west_content, в JSON-LD нет «западный контент»",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "genre=west_content",
+            "\"западный контент\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T114",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/charli-i-lola/",
+        "https://zonafilm.cc/title/preduprezhdenie/",
+        "https://zonafilm.cc/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на zonafilm.cc: в карточке тайтла блок жанров рекомендаций (rbs) ведёт на /catalog/?genre=west_content — служебная метка «западный контент» (noindex, follow; T044), а JSON-LD карточки объявляет genre «западный контент», хотя в видимых жанрах её нет (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']). Кроме того, подборки главной ведут на коды detektiv, istoricheskiy, komediya (с &kind=…): этих кодов нет в карте, страница /catalog/?genre=detektiv — 200, index, canonical на себя, <title> общий «Каталог — Zona», а выдача та же, что у основного кода (detektiv и detective — по 5433 записи; detective — «Детектив — Zona»). Это дубли разделов без своего заголовка.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 (REQ-SEO-FACETS): у раздела один индексируемый адрес; внутренние ссылки — сразу на канонический адрес; служебные метки поставщика (T044/T077) не выводятся как жанр; разметка — только видимого (seo-session §5)",
+      "expected": "служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) исключены тем же правилом и в блоке rbs, и в JSON-LD genre; жанровые ссылки витрины строятся сразу на канонический код (тот, что в карте); коды detektiv/istoricheskiy/komediya — синонимы основного кода по правилу T033 (canonical на основной), подборки главной ссылаются на основной код. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/genre_links_canonical.py",
+      "verify_live": "после выпуска: на карточках нет ссылки на genre=west_content, в JSON-LD нет «западный контент»; ссылки подборок главной — на коды из карты",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "genre=west_content",
+            "\"западный контент\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T115",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/title/charli-i-lola/",
+        "https://zonafilm12.site/title/preduprezhdenie/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на zonafilm12.site: в карточке тайтла блок жанров рекомендаций (rbs) ведёт на /catalog/?genre=west_content — служебная метка «западный контент» (noindex, follow; T044), а JSON-LD карточки объявляет genre «западный контент», хотя в видимых жанрах её нет (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']).",
+      "norm": "SEO_KNOWLEDGE_PACK §3 (REQ-SEO-FACETS): у раздела один индексируемый адрес; внутренние ссылки — сразу на канонический адрес; служебные метки поставщика (T044/T077) не выводятся как жанр; разметка — только видимого (seo-session §5)",
+      "expected": "служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) исключены тем же правилом и в блоке rbs, и в JSON-LD genre; жанровые ссылки витрины строятся сразу на канонический код (тот, что в карте). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/genre_links_canonical.py",
+      "verify_live": "после выпуска: на карточках нет ссылки на genre=west_content, в JSON-LD нет «западный контент»",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "genre=west_content",
+            "\"западный контент\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T109",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/title/charli-i-lola/",
+        "https://lordfilm47.space/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на lordfilm47.space: JSON-LD карточки тайтла объявляет genre «западный контент» (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']), хотя в видимых фактах метки нет (T086/T090–T092 убрали её только из видимого). На главной в карточках полки (sec-rail) жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (200, noindex, follow).",
+      "norm": "seo-session §5: разметка только для содержимого, которое есть на странице; служебные метки поставщика (T044/T064/T086) не выводятся как жанр и не получают внутренних ссылок (раздел noindex)",
+      "expected": "служебные метки исключены из JSON-LD genre тем же правилом, что в видимых фактах (T086); в карточках полки главной метка не выводится и не ссылается. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/service_genre_markup.py",
+      "verify_live": "после выпуска: в JSON-LD карточки нет «западный контент»; на главной нет ссылки на /genre/zapadnyykontent/",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "\"западный контент\""
+          ]
+        },
+        {
+          "url": "https://lordfilm47.space/",
+          "status": 200,
+          "absent": [
+            "href=\"/genre/zapadnyykontent/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T110",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/title/charli-i-lola/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на lordserial33.biz: JSON-LD карточки тайтла объявляет genre «западный контент» (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']), хотя в видимых фактах метки нет (T086/T090–T092 убрали её только из видимого).",
+      "norm": "seo-session §5: разметка только для содержимого, которое есть на странице; служебные метки поставщика (T044/T064/T086) не выводятся как жанр и не получают внутренних ссылок (раздел noindex)",
+      "expected": "служебные метки исключены из JSON-LD genre тем же правилом, что в видимых фактах (T086). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/service_genre_markup.py",
+      "verify_live": "после выпуска: в JSON-LD карточки нет «западный контент»",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "\"западный контент\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T111",
+      "site": "1lordserials1.online",
+      "direction": "lords",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [
+        "https://1lordserials1.online/title/charli-i-lola/",
+        "https://1lordserials1.online/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на 1lordserials1.online: JSON-LD карточки тайтла объявляет genre «западный контент» (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']), хотя в видимых фактах метки нет (T086/T090–T092 убрали её только из видимого). На главной в карточках полки (sec-rail) жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (200, noindex, follow).",
+      "norm": "seo-session §5: разметка только для содержимого, которое есть на странице; служебные метки поставщика (T044/T064/T086) не выводятся как жанр и не получают внутренних ссылок (раздел noindex)",
+      "expected": "служебные метки исключены из JSON-LD genre тем же правилом, что в видимых фактах (T086); в карточках полки главной метка не выводится и не ссылается. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/service_genre_markup.py",
+      "verify_live": "после выпуска: в JSON-LD карточки нет «западный контент»; на главной нет ссылки на /genre/zapadnyykontent/",
+      "live_check": [
+        {
+          "url": "https://1lordserials1.online/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "\"западный контент\""
+          ]
+        },
+        {
+          "url": "https://1lordserials1.online/",
+          "status": 200,
+          "absent": [
+            "href=\"/genre/zapadnyykontent/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T112",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/title/charli-i-lola/",
+        "https://lordserials22.info/"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на lordserials22.info: JSON-LD карточки тайтла объявляет genre «западный контент» (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']), хотя в видимых фактах метки нет (T086/T090–T092 убрали её только из видимого). На главной в карточках полки (sec-rail) жанр «западный контент» — ссылка на /genre/zapadnyykontent/ (200, noindex, follow).",
+      "norm": "seo-session §5: разметка только для содержимого, которое есть на странице; служебные метки поставщика (T044/T064/T086) не выводятся как жанр и не получают внутренних ссылок (раздел noindex)",
+      "expected": "служебные метки исключены из JSON-LD genre тем же правилом, что в видимых фактах (T086); в карточках полки главной метка не выводится и не ссылается. lordserials22.info: правка одинакова для канарейки T087 и контроля. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/service_genre_markup.py",
+      "verify_live": "после выпуска: в JSON-LD карточки нет «западный контент»; на главной нет ссылки на /genre/zapadnyykontent/",
+      "live_check": [
+        {
+          "url": "https://lordserials22.info/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "\"западный контент\""
+          ]
+        },
+        {
+          "url": "https://lordserials22.info/",
+          "status": 200,
+          "absent": [
+            "href=\"/genre/zapadnyykontent/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T116",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/catalog/?page=2"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на an1mego.site: листалка /catalog/?page=2 ссылается на /catalog/?page=1, а он отвечает 308 → /catalog/ — внутренняя ссылка на переход (у Lords, Zona, Animedia ссылки на ?page=1 нет).",
+      "norm": "внутренние ссылки ведут на конечный канонический адрес со статусом 200 (без перехода)",
+      "expected": "ссылка на первую страницу листалки — на адрес без page (прочие параметры выборки сохраняются: ?genre=X&page=2 → ?genre=X); номера 2+ — как прежде. Одинаково на трёх AnimeGo (контроль канареек T074/T082 не смещается). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/pagination_first_link.py",
+      "verify_live": "после выпуска: на /catalog/?page=2 нет ссылки на ?page=1",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/catalog/?page=2",
+          "status": 200,
+          "absent": [
+            "href=\"/catalog/?page=1\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T117",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/catalog/?page=2"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на animeg0.site: листалка /catalog/?page=2 ссылается на /catalog/?page=1, а он отвечает 308 → /catalog/ — внутренняя ссылка на переход (у Lords, Zona, Animedia ссылки на ?page=1 нет).",
+      "norm": "внутренние ссылки ведут на конечный канонический адрес со статусом 200 (без перехода)",
+      "expected": "ссылка на первую страницу листалки — на адрес без page (прочие параметры выборки сохраняются: ?genre=X&page=2 → ?genre=X); номера 2+ — как прежде. Одинаково на трёх AnimeGo (контроль канареек T074/T082 не смещается). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/pagination_first_link.py",
+      "verify_live": "после выпуска: на /catalog/?page=2 нет ссылки на ?page=1",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/catalog/?page=2",
+          "status": 200,
+          "absent": [
+            "href=\"/catalog/?page=1\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+    },
+    {
+      "id": "T118",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/catalog/?page=2"
+      ],
+      "problem": "Живой замер 15.10 ~08:20Z на an1meg0.site: листалка /catalog/?page=2 ссылается на /catalog/?page=1, а он отвечает 308 → /catalog/ — внутренняя ссылка на переход (у Lords, Zona, Animedia ссылки на ?page=1 нет).",
+      "norm": "внутренние ссылки ведут на конечный канонический адрес со статусом 200 (без перехода)",
+      "expected": "ссылка на первую страницу листалки — на адрес без page (прочие параметры выборки сохраняются: ?genre=X&page=2 → ?genre=X); номера 2+ — как прежде. Одинаково на трёх AnimeGo (контроль канареек T074/T082 не смещается). Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/pagination_first_link.py",
+      "verify_live": "после выпуска: на /catalog/?page=2 нет ссылки на ?page=1",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/catalog/?page=2",
+          "status": 200,
+          "absent": [
+            "href=\"/catalog/?page=1\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~08:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
     }
   ]
 }
