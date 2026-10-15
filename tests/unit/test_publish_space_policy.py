@@ -207,3 +207,36 @@ def test_публикатор_зовёт_помощника_а_не_copy2():
     assert "shutil.copy2(путь, копия)" not in т
     # Способ попадает в отчёт: иначе «ссылка» и «копия» неотличимы снаружи.
     assert '"kind": способ' in т
+
+def test_откат_работает_и_до_первой_записи(tmp_path):
+    """`cp` без `--remove-destination` отказал бы: копия и цель — один inode.
+
+    Проверяется поведением, а не чтением строки: команда отката должна
+    восстанавливать содержимое и в случае, когда публикация ещё ничего не
+    писала, то есть копия «до» и цель физически один файл.
+    """
+    import subprocess
+    цель = tmp_path / "lords-01-catalog.json"
+    цель.write_bytes(b"BEFORE")
+    копия = tmp_path / "копии" / "lords-01-catalog.json.before.pub-1"
+    publish_space.копия_до(цель, копия)
+    assert цель.stat().st_ino == копия.stat().st_ino
+
+    без_ключа = subprocess.run(["cp", "-p", str(копия), str(цель)],
+                               capture_output=True, text=True)
+    assert без_ключа.returncode != 0
+    assert "same file" in (без_ключа.stderr or "")
+
+    с_ключом = subprocess.run(
+        ["cp", "-p", "--remove-destination", str(копия), str(цель)],
+        capture_output=True, text=True)
+    assert с_ключом.returncode == 0, с_ключом.stderr
+    assert цель.read_bytes() == b"BEFORE"
+
+
+def test_публикатор_печатает_откат_с_ключом():
+    from pathlib import Path as П
+    т = (П(__file__).resolve().parents[2]
+         / "automation/host/nova-catalog-publish.py").read_text(encoding="utf-8")
+    assert "cp -p --remove-destination" in т
+    assert "are the same file" in т     # причина названа рядом с командой
