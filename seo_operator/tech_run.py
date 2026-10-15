@@ -75,15 +75,26 @@ def _каталоги_копий(state: Path) -> list[Path]:
 
 
 def причина_run_all(rc: int, вывод: str) -> str:
-    """Причина провала checks/run.sh для вердикта: строки FAIL/TIMEOUT/ERROR + короткий хвост.
+    """Причина провала checks/run.sh для вердикта: строка FAIL + последние строки её вывода.
 
     Раньше в заметку шёл только хвост 400 знаков, а run.sh печатает итоги по шагам,
-    и строка FAIL оставалась выше хвоста (T114 15.10: дважды INCOMPLETE, в заметке
-    одни PASS — причину по следам восстановить было нельзя).
+    и строка FAIL оставалась выше хвоста (T114 15.10). Одной строки FAIL мало: у
+    animedia.space три шага падали с трассировкой только в службе, а сама
+    исключительная строка (последняя строка трассировки) в заметку не попадала (T123/T125).
+    Формат витрин различается: «шаг FAIL» с выводом «    | …» (Zona, Animedia) и
+    «ПРОВЕРКИ ОТКАЗАЛИ» в конце (AnimeGo) — берётся и то и другое.
     """
-    плохие = [s.strip() for s in вывод.splitlines()
-              if re.search(r"\b(FAIL|FAILED|TIMEOUT|ERROR)\b", s) or "Traceback (most recent call last)" in s]
-    return f"checks/run.sh rc={rc}: " + ("; ".join(плохие[:12]) or "строк FAIL нет") + f" | хвост: {вывод[-200:]}"
+    строки = вывод.splitlines()
+    куски: list[str] = []
+    for i, s in enumerate(строки):
+        if re.search(r"\b(FAIL|FAILED|TIMEOUT|ERROR)\b|ОТКАЗ", s) and not s.startswith("    |"):
+            хвост = []
+            for t in строки[i + 1:i + 60]:
+                if not t.startswith("    "):
+                    break
+                хвост.append(t.strip(" |"))
+            куски.append(s.strip() + (" ⇒ " + " / ".join(х for х in хвост[-3:] if х) if хвост else ""))
+    return f"checks/run.sh rc={rc}: " + ("; ".join(куски[:10]) or "строк FAIL нет") + f" | хвост: {вывод[-200:]}"
 
 
 def снимок_стенда(репо: Path, куда: Path) -> dict[str, str]:

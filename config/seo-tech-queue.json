@@ -2593,8 +2593,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "session",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10 ~14:10Z: попытки исчерпаны (сбой окружения службы на трёх стендовых шагах); заменена T130."
     },
     {
       "id": "T124",
@@ -2641,8 +2641,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "session",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10 ~14:10Z: попытки исчерпаны (сбой окружения службы на трёх стендовых шагах); заменена T131."
     },
     {
       "id": "T126",
@@ -2741,6 +2741,54 @@
       ],
       "status": "queued",
       "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T131",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/genres/"
+      ],
+      "problem": "Повтор T125 (три попытки 15.10 INCOMPLETE только в службе: в checks/run.sh animedia-space шаги section-meta-visible, next-episode-title, episode-unavailable-noindex падают с трассировкой; в сессии тот же вердикт проходит — VERIFIED). Если шаги снова упадут, заметка вердикта теперь несёт строку исключения. Исходная задача: Живой замер 15.10 ~12:10Z на animedia.space: description /genres/ — «Жанры аниме на Animedia.» без фактов, хотя страница показывает перечень разделов с числом тайтлов у каждого (например «8102 мультфильм», «3319 боевик»).",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /genres/ называет число разделов жанров, показанных на странице (с числом тайтлов у каждого) — то же число, что видно на странице, и вид содержимого; формулировка по образцу T036 для разделов. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: в description хаба — число разделов, совпадающее с видимым",
+      "live_check": [
+        {
+          "url": "https://animedia.space/genres/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~14:10Z: поставлено взамен T125; сбой — не код задачи (одинаков у T125 и другой задачи на той же витрине; на базе в сессии три шага PASS)."
+    },
+    {
+      "id": "T130",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/lists/",
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "Повтор T123 (три попытки 15.10 INCOMPLETE только в службе: в checks/run.sh animedia-space шаги section-meta-visible, next-episode-title, episode-unavailable-noindex падают с трассировкой; в сессии тот же вердикт проходит — VERIFIED). Если шаги снова упадут, заметка вердикта теперь несёт строку исключения. Исходная задача: Живой замер 15.10 ~12:10Z на animedia.space: /lists/ («Моё аниме» — личные отметки, хранятся в браузере; у посетителя без отметок «Всего отмечено: 0 … Здесь пока пусто», 0 ссылок на тайтлы) отвечает 200, «index, follow» и стоит в карте сайта (добавлен T042 (а) 13.10 по признаку «200, index, canonical на себя» — пересмотрено: самостоятельной ценности у страницы нет).",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ — meta robots «noindex, follow»; /lists/ убран из перечня разделов карты (РАЗДЕЛЫ_КАРТЫ скрипта обновления, T042); остальные разделы карты прежние. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — noindex, follow; после пересборки карты прогоном обновления /lists/ в ней нет",
+      "live_check": [
+        {
+          "url": "https://animedia.space/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~14:10Z: поставлено взамен T123; сбой — не код задачи (одинаков у T123 и другой задачи на той же витрине; на базе в сессии три шага PASS)."
     }
   ]
 }

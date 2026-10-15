@@ -386,3 +386,12 @@ def test_run_output_is_not_cut_before_the_fail_line(tmp_path):
     скрипт.write_text("echo 'early-step   FAIL'\nfor i in $(seq 1 300); do echo \"step-$i   PASS\"; done\nexit 1\n")
     rc, вывод = tech_run._прогнать(tmp_path, ["bash", str(скрипт)], 30)
     assert rc == 1 and "early-step   FAIL" in tech_run.причина_run_all(rc, вывод)
+
+
+def test_run_all_note_keeps_exception_line_of_failed_step():
+    """T123/T125 15.10: в заметке была строка FAIL и «Traceback», но не само исключение."""
+    вывод = ("a   PASS\nsection-meta-visible   FAIL\n    | Traceback (most recent call last):\n"
+             "    |   File \"x.py\", line 3\n    | ConnectionRefusedError: [Errno 111] refused\nb   PASS\n")
+    заметка = tech_run.причина_run_all(1, вывод)
+    assert "section-meta-visible   FAIL ⇒" in заметка and "ConnectionRefusedError" in заметка
+    assert "ПРОВЕРКИ ОТКАЗАЛИ" in tech_run.причина_run_all(1, "x PASS\nПРОВЕРКИ ОТКАЗАЛИ\n")
