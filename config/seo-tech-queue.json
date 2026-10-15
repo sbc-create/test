@@ -2238,8 +2238,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~07:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308)."
+      "status": "session",
+      "evidence": "15.10 ~07:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308). | 15.10 ~11:20Z: три попытки INCOMPLETE; причины — (1) cell-unit: копии прогонов были на глубину ниже var/site-repos (исправлено в механизме e88a8d5), (2) title-disambig: AttributeError в правке (src/genre_canonical.py:159). Заменена T119."
     },
     {
       "id": "T115",
@@ -2466,6 +2466,34 @@
       ],
       "status": "live_verified",
       "evidence": "15.10 ~07:30Z: глубокий аудит сессии (var/seo-audit/deep-20261015.json, scratchpad audit_deep.py): 12 витрин — пагинация, жанры/теги, метаданные, canonical, битые переходы, мобильные (моб. версии без расхождений, пагинация за последней — 404, ?page=1 — 308). | 15.10 VERIFIED → live_verified 08:41Z; живая сверка 08:50Z: как T116."
+    },
+    {
+      "id": "T119",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/charli-i-lola/",
+        "https://zonafilm.cc/title/preduprezhdenie/",
+        "https://zonafilm.cc/"
+      ],
+      "problem": "Повтор T114 (три попытки 15.10 INCOMPLETE). Причина установлена 15.10 ~11:20Z по полному выводу вердикта: checks/run.sh шаг title-disambig FAIL — AttributeError: 'types.SimpleNamespace' object has no attribute 'индекс' в src/genre_canonical.py:159 (обёртка тайтл → деталь_для_карточки(рантайм, self.индекс, …)); проверка title_disambig.py строит упрощённый вид без «индекс». Правка T114 обязана не ломать существующие проверки: обращение к индексу — только если он есть (иначе прежний путь). Исходная задача: Живой замер 15.10 ~07:25Z на zonafilm.cc: в карточке тайтла блок жанров рекомендаций (rbs) ведёт на /catalog/?genre=west_content — служебная метка «западный контент» (noindex, follow; T044), а JSON-LD карточки объявляет genre «западный контент», хотя в видимых жанрах её нет (/title/charli-i-lola/: ['мультфильм','семейный','западный контент']). Кроме того, подборки главной ведут на коды detektiv, istoricheskiy, komediya (с &kind=…): этих кодов нет в карте, страница /catalog/?genre=detektiv — 200, index, canonical на себя, <title> общий «Каталог — Zona», а выдача та же, что у основного кода (detektiv и detective — по 5433 записи; detective — «Детектив — Zona»). Это дубли разделов без своего заголовка.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 (REQ-SEO-FACETS): у раздела один индексируемый адрес; внутренние ссылки — сразу на канонический адрес; служебные метки поставщика (T044/T077) не выводятся как жанр; разметка — только видимого (seo-session §5)",
+      "expected": "служебные метки (_ТЕХНИЧЕСКИЕ_ЖАНРЫ) исключены тем же правилом и в блоке rbs, и в JSON-LD genre; жанровые ссылки витрины строятся сразу на канонический код (тот, что в карте); коды detektiv/istoricheskiy/komediya — синонимы основного кода по правилу T033 (canonical на основной), подборки главной ссылаются на основной код. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/genre_links_canonical.py",
+      "verify_live": "после выпуска: на карточках нет ссылки на genre=west_content, в JSON-LD нет «западный контент»; ссылки подборок главной — на коды из карты",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/title/charli-i-lola/",
+          "status": 200,
+          "absent": [
+            "genre=west_content",
+            "\"западный контент\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~11:20Z: поставлено сессией взамен T114 (попытки исчерпаны); вывод вердикта теперь полный (a093ee7), рабочие копии прогонов — на глубине var/site-repos (e88a8d5: cell-unit больше не падает в вердикте). Ветка последней попытки T114: claude/seo-tech-t114-20261015t095157z-4075510 (1990b09) — можно взять за основу."
     }
   ]
 }
