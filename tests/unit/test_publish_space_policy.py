@@ -48,13 +48,21 @@ def test_пик_и_остаток_считаются_отдельно(tmp_path):
     только копии «до». Отчёт, называющий одно число без имени, выглядит
     произвольным рядом с честным подсчётом другого.
     """
-    и = файл(tmp_path / "src" / "catalog.json", 4 * 1024 * 1024)
+    большой = файл(tmp_path / "src" / "details.json", 4 * 1024 * 1024)
+    малый = файл(tmp_path / "src" / "catalog.json", 1024 * 1024)
     итог = publish_space.место_для_публикации(
-        tmp_path, {"lords-01": {"catalog": str(и)}}, резерв_кб=1)
-    assert итог["write_peak_kb"] == 8 * 1024
-    assert итог["write_net_kb"] == 4 * 1024
+        tmp_path, {"lords-01": {"details": str(большой), "catalog": str(малый)}},
+        резерв_кб=1)
+    # Состав взят по коду публикатора: площадка сборки ВСЕХ витрин + копии
+    # «до» ВСЕХ витрин + ОДИН временный файл атомарной записи (os.replace
+    # идёт сразу после fsync, такие файлы не копятся).
+    assert итог["peak_parts_kb"] == {"staging_area": 5 * 1024,
+                                     "before_copies": 5 * 1024,
+                                     "atomic_temp": 4 * 1024}
+    assert итог["write_peak_kb"] == 14 * 1024
+    assert итог["write_net_kb"] == 5 * 1024
     assert итог["write_kb"] == итог["write_peak_kb"]
-    assert итог["left_after_run_kb"] - итог["left_to_sites_kb"] == 4 * 1024
+    assert итог["left_after_run_kb"] - итог["left_to_sites_kb"] == 9 * 1024
 
 
 def test_отказ_идёт_по_пику_и_говорит_об_этом(tmp_path):
