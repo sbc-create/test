@@ -2,6 +2,8 @@
 """Фактический `publisher_id` в ЗАПРОСАХ плеера, а не только в разметке.
 
     python3 automation/local/publisher-id-check.py <домен> [слаг]
+    python3 automation/local/publisher-id-check.py http://lordfilm.group/ \
+        --map=lordfilm.group=145.63.129.86      # до перевода DNS: на узел
 
 Зачем смотреть запросы, а не атрибут
 ------------------------------------
@@ -94,13 +96,41 @@ def главная(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
         return 2
+    # `--map <имя>=<адрес>` разрешает имя в заданный узел средствами самого
+    # Chromium. Нужно до перевода DNS: публичное имя ведёт на ПРЕЖНИЙ сервер,
+    # и проверка по имени измерила бы старую копию, а стенд меряет тот же код,
+    # но не тот путь — мимо nginx узла, его upstream и установленного там
+    # config/player.json. Заголовок Host при этом остаётся верным, поэтому
+    # nginx выбирает блок именно этой витрины; подмена Host через
+    # extraHTTPHeaders так не работает — Chromium его менять не даёт.
+    карта: list[str] = []
+    остаток: list[str] = []
+    for арг in argv:
+        if арг.startswith("--map="):
+            имя, _, адрес = арг[len("--map="):].partition("=")
+            if not (имя and адрес):
+                print(f"нужен вид --map=имя=адрес, получено {арг!r}")
+                return 2
+            карта.append(f"MAP {имя} {адрес}")
+        else:
+            остаток.append(арг)
+    argv = остаток
+    if not argv:
+        print("нужен домен или базовый адрес")
+        return 2
     домен = argv[0]
     слаг = argv[1] if len(argv) > 1 else ""
 
+    доводы = ["--autoplay-policy=no-user-gesture-required"]
+    if карта:
+        # Адрес плеера (`player.cdnvideohub.com`) правилу не подчиняется:
+        # перечислено только то, что названо явно, и запрос к провайдеру идёт
+        # обычным путём. Иначе проверка измеряла бы ещё и чужой origin.
+        доводы.append("--host-resolver-rules=" + ",".join(карта))
+        print("разрешение имени:", "; ".join(карта))
+
     with sync_playwright() as p:
-        б = p.chromium.launch(
-            executable_path=ХРОМ,
-            args=["--autoplay-policy=no-user-gesture-required"])
+        б = p.chromium.launch(executable_path=ХРОМ, args=доводы)
         к = б.new_context(ignore_https_errors=True,
                           viewport={"width": 1280, "height": 800})
         стр = к.new_page()
@@ -111,7 +141,10 @@ def главная(argv: list[str]) -> int:
         # База: домен превращается в https-адрес, а готовый адрес берётся как
         # есть. Так один инструмент проверяет и живую витрину, и локальный
         # стенд — мерки при этом одни и те же.
-        БАЗА = домен if домен.startswith("http") else f"https://{домен}"
+        # Хвостовая косая снимается: иначе адрес склеивался в
+        # `http://домен//`, и проверка ждала страницу, которой нет.
+        БАЗА = (домен if домен.startswith("http")
+                else f"https://{домен}").rstrip("/")
         if слаг:
             путь = f"/title/{слаг}/"
         else:
