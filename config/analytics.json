@@ -1,1124 +1,1116 @@
 {
-  "version": 1,
-  "provider": "yandex",
-  "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
-  "seo_indexing_enabled": false,
-  "updated_at": "2026-10-15T16:05:00Z",
-  "properties": [
-    {
-      "domain": "1lordserials1.online",
-      "site_id": "lords-03",
-      "counter_name": "Lords — 1lordserials1.online",
-      "counter_id": 112010277,
-      "counter_state": "created",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "1lordserials1.online"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:1lordserials1.online:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 602711797,
-        "episode_select": 602711777,
-        "filter_apply": 602711758,
-        "player_error": 602711796,
-        "player_ready": 602711795,
-        "player_start": 602711786,
-        "search": 602711757,
-        "season_select": 602711760,
-        "title_view": 602711759
-      }
-    },
-    {
-      "domain": "an1meg0.site",
-      "site_id": "animego-04",
-      "counter_name": "AnimeGo — an1meg0.site",
-      "counter_id": 113121466,
-      "counter_state": "created",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "an1meg0.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:an1meg0.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664398581,
-        "episode_select": 664398576,
-        "filter_apply": 664398572,
-        "player_error": 664398579,
-        "player_ready": 664398578,
-        "player_start": 664398577,
-        "search": 664398571,
-        "season_select": 664398575,
-        "title_view": 664398573
-      }
-    },
-    {
-      "domain": "an1mego.site",
-      "site_id": "animego-02",
-      "counter_name": "AnimeGo — an1mego.site",
-      "counter_id": 113105751,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "an1mego.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:an1mego.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [
-        "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105751,\"init\") на главной и в разделе, ровно одна инициализация. Идентификатор публичный. Ячейка и выпуск этого домена ведутся вне этого реестра (юнит nova-an1mego-site.service, каталог /srv/an1mego-site, таймер обновления) — запись нужна затем, чтобы домен не был невидим для аудита аналитики."
-      ]
-    },
-    {
-      "domain": "animedia.icu",
-      "site_id": "animedia-01",
-      "counter_name": "Animedia — animedia.icu",
-      "counter_id": 113288667,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "animedia.icu"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:animedia.icu:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 666920662,
-        "episode_select": 666920501,
-        "filter_apply": 666920498,
-        "player_error": 666920661,
-        "player_ready": 666920504,
-        "player_start": 666920502,
-        "search": 666920497,
-        "season_select": 666920500,
-        "title_view": 666920499
-      }
-    },
-    {
-      "domain": "animedia.space",
-      "site_id": "animedia-02",
-      "counter_name": "Animedia — animedia.space",
-      "counter_id": 113288760,
-      "counter_state": "created",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "animedia.space"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:animedia.space:443",
-        "verification_status": "VERIFICATION_FAILED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 666920701,
-        "episode_select": 666920695,
-        "filter_apply": 666920692,
-        "player_error": 666920699,
-        "player_ready": 666920698,
-        "player_start": 666920697,
-        "search": 666920691,
-        "season_select": 666920694,
-        "title_view": 666920693
-      }
-    },
-    {
-      "domain": "animeg0.site",
-      "site_id": "animego-03",
-      "counter_name": "AnimeGo — animeg0.site",
-      "counter_id": 113105753,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "animeg0.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:animeg0.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [
-        "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105753,\"init\"), одна инициализация на главной и в разделе. Ячейка ведётся вне этого реестра."
-      ]
-    },
-    {
-      "domain": "lordfilm.group",
-      "site_id": "lords-10",
-      "counter_name": "Lords — lordfilm.group",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm.group",
-        "www.lordfilm.group"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordfilm.msk.ru",
-      "site_id": "lords-12",
-      "counter_name": "Lords — lordfilm.msk.ru",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm.msk.ru",
-        "www.lordfilm.msk.ru"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordfilm.spb.ru",
-      "site_id": "lords-11",
-      "counter_name": "Lords — lordfilm.spb.ru",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm.spb.ru",
-        "www.lordfilm.spb.ru"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordfilm077.site",
-      "site_id": "lords-09",
-      "counter_name": "Lords — lordfilm077.site",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm077.site"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordfilm47.space",
-      "site_id": "lords-01",
-      "counter_name": "Lords — lordfilm47.space",
-      "counter_id": 112010269,
-      "counter_state": "created",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordfilm47.space"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:lordfilm47.space:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 602711699,
-        "episode_select": 602711695,
-        "filter_apply": 602711676,
-        "player_error": 602711698,
-        "player_ready": 602711697,
-        "player_start": 602711696,
-        "search": 602711675,
-        "season_select": 602711694,
-        "title_view": 602711693
-      }
-    },
-    {
-      "domain": "lordserial.group",
-      "site_id": "lords-14",
-      "counter_name": "Lords — lordserial.group",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial.group",
-        "www.lordserial.group"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial.msk.ru",
-      "site_id": "lords-16",
-      "counter_name": "Lords — lordserial.msk.ru",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial.msk.ru",
-        "www.lordserial.msk.ru"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial.net.ru",
-      "site_id": "lords-17",
-      "counter_name": "Lords — lordserial.net.ru",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial.net.ru",
-        "www.lordserial.net.ru"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial.spb.ru",
-      "site_id": "lords-15",
-      "counter_name": "Lords — lordserial.spb.ru",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial.spb.ru",
-        "www.lordserial.spb.ru"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial.su",
-      "site_id": "lords-13",
-      "counter_name": "Lords — lordserial.su",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial.su",
-        "www.lordserial.su"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
-        "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial101.site",
-      "site_id": "lords-08",
-      "counter_name": "Lords — lordserial101.site",
-      "counter_id": null,
-      "counter_state": "planned",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial101.site"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
-        "девять целей не заведены: цели создаются вместе со счётчиком",
-        "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
-      ],
-      "last_checked_at": null
-    },
-    {
-      "domain": "lordserial33.biz",
-      "site_id": "lords-02",
-      "counter_name": "Lords — lordserial33.biz",
-      "counter_id": 112010274,
-      "counter_state": "created",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserial33.biz"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:lordserial33.biz:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 602711756,
-        "episode_select": 602711752,
-        "filter_apply": 602711749,
-        "player_error": 602711755,
-        "player_ready": 602711754,
-        "player_start": 602711753,
-        "search": 602711744,
-        "season_select": 602711751,
-        "title_view": 602711750
-      }
-    },
-    {
-      "domain": "lordserials22.info",
-      "site_id": "lords-05",
-      "counter_name": "Lords — lordserials22.info",
-      "counter_id": 113109083,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserials22.info"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:lordserials22.info:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258339,
-        "episode_select": 664258335,
-        "filter_apply": 664258332,
-        "player_error": 664258338,
-        "player_ready": 664258337,
-        "player_start": 664258336,
-        "search": 664258331,
-        "season_select": 664258334,
-        "title_view": 664258333
-      },
-      "last_checked_at": "2026-10-08T16:08:18Z"
-    },
-    {
-      "domain": "lordserials22.site",
-      "site_id": "lords-06",
-      "counter_name": "Lords — lordserials22.site",
-      "counter_id": 113109084,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserials22.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258349,
-        "episode_select": 664258345,
-        "filter_apply": 664258341,
-        "player_error": 664258348,
-        "player_ready": 664258347,
-        "player_start": 664258346,
-        "search": 664258340,
-        "season_select": 664258344,
-        "title_view": 664258342
-      },
-      "last_checked_at": "2026-09-27T22:47:21Z"
-    },
-    {
-      "domain": "lordserials22.space",
-      "site_id": "lords-07",
-      "counter_name": "Lords — lordserials22.space",
-      "counter_id": 113109085,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "lordserials22.space"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": null,
-        "verification_status": "PLANNED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258374,
-        "episode_select": 664258370,
-        "filter_apply": 664258360,
-        "player_error": 664258373,
-        "player_ready": 664258372,
-        "player_start": 664258371,
-        "search": 664258350,
-        "season_select": 664258369,
-        "title_view": 664258368
-      },
-      "last_checked_at": "2026-09-27T22:47:23Z"
-    },
-    {
-      "domain": "yummyani.biz",
-      "site_id": "yummy-biz",
-      "counter_name": "YummyAnime — yummyani.biz",
-      "counter_id": 111881039,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani.biz"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:yummyani.biz:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 601108557,
-        "episode_select": 601108553,
-        "filter_apply": 601108550,
-        "player_error": 601108556,
-        "player_ready": 601108555,
-        "player_start": 601108554,
-        "search": 601108549,
-        "season_select": 601108552,
-        "title_view": 601108551
-      }
-    },
-    {
-      "domain": "yummyani.org",
-      "site_id": "yummy-org",
-      "counter_name": "YummyAnime — yummyani.org",
-      "counter_id": 111881038,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani.org"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:yummyani.org:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 601108548,
-        "episode_select": 601108544,
-        "filter_apply": 601108541,
-        "player_error": 601108547,
-        "player_ready": 601108546,
-        "player_start": 601108545,
-        "search": 601108540,
-        "season_select": 601108543,
-        "title_view": 601108542
-      }
-    },
-    {
-      "domain": "yummyani.site",
-      "site_id": "yummy-site",
-      "counter_name": "YummyAnime — yummyani.site",
-      "counter_id": 111881037,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": true,
-        "host_id": "https:yummyani.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 601108539,
-        "episode_select": 601108535,
-        "filter_apply": 601108532,
-        "player_error": 601108538,
-        "player_ready": 601108537,
-        "player_start": 601108536,
-        "search": 601108531,
-        "season_select": 601108534,
-        "title_view": 601108533
-      }
-    },
-    {
-      "domain": "yummyani7.info",
-      "site_id": "yummy-08",
-      "counter_name": "YummyAnime — yummyani7.info",
-      "counter_id": 113109089,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani7.info"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:yummyani7.info:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258409,
-        "episode_select": 664258405,
-        "filter_apply": 664258402,
-        "player_error": 664258408,
-        "player_ready": 664258407,
-        "player_start": 664258406,
-        "search": 664258401,
-        "season_select": 664258404,
-        "title_view": 664258403
-      },
-      "last_checked_at": "2026-10-08T16:08:18Z"
-    },
-    {
-      "domain": "yummyani7.site",
-      "site_id": "yummy-07",
-      "counter_name": "YummyAnime — yummyani7.site",
-      "counter_id": 113109087,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "yummyani7.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:yummyani7.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258400,
-        "episode_select": 664258396,
-        "filter_apply": 664258392,
-        "player_error": 664258399,
-        "player_ready": 664258398,
-        "player_start": 664258397,
-        "search": 664258391,
-        "season_select": 664258394,
-        "title_view": 664258393
-      },
-      "last_checked_at": "2026-10-08T16:08:18Z"
-    },
-    {
-      "domain": "zonafilm.cc",
-      "site_id": "zona-02",
-      "counter_name": "Zona Cinema — zonafilm.cc",
-      "counter_id": 113110481,
-      "counter_state": "created",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "zonafilm.cc"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:zonafilm.cc:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "last_checked_at": "2026-10-08T16:08:18Z",
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664270510,
-        "episode_select": 664270506,
-        "filter_apply": 664270503,
-        "player_error": 664270509,
-        "player_ready": 664270508,
-        "player_start": 664270507,
-        "search": 664270502,
-        "season_select": 664270505,
-        "title_view": 664270504
-      }
-    },
-    {
-      "domain": "zonafilm.space",
-      "site_id": "zona-01",
-      "counter_name": "Zona — zonafilm.space",
-      "counter_id": 112582938,
-      "counter_state": "reused",
-      "analytics_enabled": true,
-      "webvisor": false,
-      "allowed_hosts": [
-        "zonafilm.space"
-      ],
-      "goals": [],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:zonafilm.space:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [
-        "девять целей не заведены: счётчик перенесён из монолитной установки, цели в нём не создавались",
-        "поступление данных не подтверждено: доступа к кабинету Метрики нет, разметка на странице доказывает только отправку"
-      ],
-      "last_checked_at": "2026-10-08T16:08:18Z"
-    },
-    {
-      "domain": "zonafilm12.site",
-      "site_id": "zona-03",
-      "counter_name": "Zona — zonafilm12.site",
-      "counter_id": 113109081,
-      "counter_state": "reused",
-      "analytics_enabled": false,
-      "webvisor": false,
-      "allowed_hosts": [
-        "zonafilm12.site"
-      ],
-      "goals": [
-        "comment_submit",
-        "episode_select",
-        "filter_apply",
-        "player_error",
-        "player_ready",
-        "player_start",
-        "search",
-        "season_select",
-        "title_view"
-      ],
-      "webmaster": {
-        "enabled": false,
-        "host_id": "https:zonafilm12.site:443",
-        "verification_status": "VERIFIED",
-        "verification_type": "META_TAG",
-        "verification_marker": null,
-        "sitemap_submitted": false
-      },
-      "seo_indexing_enabled": false,
-      "problems": [],
-      "goal_ids": {
-        "comment_submit": 664258329,
-        "episode_select": 664258325,
-        "filter_apply": 664258322,
-        "player_error": 664258328,
-        "player_ready": 664258327,
-        "player_start": 664258326,
-        "search": 664258321,
-        "season_select": 664258324,
-        "title_view": 664258323
-      },
-      "last_checked_at": "2026-10-08T16:08:18Z"
-    }
-  ]
+ "version": 1,
+ "provider": "yandex",
+ "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
+ "seo_indexing_enabled": false,
+ "updated_at": "2026-10-15T16:05:00Z",
+ "properties": [
+  {
+   "domain": "1lordserials1.online",
+   "site_id": "lords-03",
+   "counter_name": "Lords — 1lordserials1.online",
+   "counter_id": 112010277,
+   "counter_state": "created",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "1lordserials1.online"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:1lordserials1.online:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 602711797,
+    "episode_select": 602711777,
+    "filter_apply": 602711758,
+    "player_error": 602711796,
+    "player_ready": 602711795,
+    "player_start": 602711786,
+    "search": 602711757,
+    "season_select": 602711760,
+    "title_view": 602711759
+   }
+  },
+  {
+   "domain": "an1meg0.site",
+   "site_id": "animego-04",
+   "counter_name": "AnimeGo — an1meg0.site",
+   "counter_id": 113121466,
+   "counter_state": "created",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "an1meg0.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:an1meg0.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664398581,
+    "episode_select": 664398576,
+    "filter_apply": 664398572,
+    "player_error": 664398579,
+    "player_ready": 664398578,
+    "player_start": 664398577,
+    "search": 664398571,
+    "season_select": 664398575,
+    "title_view": 664398573
+   }
+  },
+  {
+   "domain": "an1mego.site",
+   "site_id": "animego-02",
+   "counter_name": "AnimeGo — an1mego.site",
+   "counter_id": 113105751,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "an1mego.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:an1mego.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [
+    "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105751,\"init\") на главной и в разделе, ровно одна инициализация. Идентификатор публичный. Ячейка и выпуск этого домена ведутся вне этого реестра (юнит nova-an1mego-site.service, каталог /srv/an1mego-site, таймер обновления) — запись нужна затем, чтобы домен не был невидим для аудита аналитики."
+   ]
+  },
+  {
+   "domain": "animedia.icu",
+   "site_id": "animedia-01",
+   "counter_name": "Animedia — animedia.icu",
+   "counter_id": 113288667,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "animedia.icu"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:animedia.icu:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 666920662,
+    "episode_select": 666920501,
+    "filter_apply": 666920498,
+    "player_error": 666920661,
+    "player_ready": 666920504,
+    "player_start": 666920502,
+    "search": 666920497,
+    "season_select": 666920500,
+    "title_view": 666920499
+   }
+  },
+  {
+   "domain": "animedia.space",
+   "site_id": "animedia-02",
+   "counter_name": "Animedia — animedia.space",
+   "counter_id": 113288760,
+   "counter_state": "created",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "animedia.space"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:animedia.space:443",
+    "verification_status": "VERIFICATION_FAILED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 666920701,
+    "episode_select": 666920695,
+    "filter_apply": 666920692,
+    "player_error": 666920699,
+    "player_ready": 666920698,
+    "player_start": 666920697,
+    "search": 666920691,
+    "season_select": 666920694,
+    "title_view": 666920693
+   }
+  },
+  {
+   "domain": "animeg0.site",
+   "site_id": "animego-03",
+   "counter_name": "AnimeGo — animeg0.site",
+   "counter_id": 113105753,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "animeg0.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:animeg0.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [
+    "Счётчик прочитан с ПУБЛИЧНОЙ страницы домена: ym(113105753,\"init\"), одна инициализация на главной и в разделе. Ячейка ведётся вне этого реестра."
+   ]
+  },
+  {
+   "domain": "lordfilm.group",
+   "site_id": "lords-10",
+   "counter_name": "Lords — lordfilm.group",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordfilm.group"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordfilm.msk.ru",
+   "site_id": "lords-12",
+   "counter_name": "Lords — lordfilm.msk.ru",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordfilm.msk.ru"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordfilm.spb.ru",
+   "site_id": "lords-11",
+   "counter_name": "Lords — lordfilm.spb.ru",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordfilm.spb.ru"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordfilm077.site",
+   "site_id": "lords-09",
+   "counter_name": "Lords — lordfilm077.site",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordfilm077.site"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "counter_name": "Lords — lordfilm47.space",
+   "counter_id": 112010269,
+   "counter_state": "created",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordfilm47.space"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:lordfilm47.space:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 602711699,
+    "episode_select": 602711695,
+    "filter_apply": 602711676,
+    "player_error": 602711698,
+    "player_ready": 602711697,
+    "player_start": 602711696,
+    "search": 602711675,
+    "season_select": 602711694,
+    "title_view": 602711693
+   }
+  },
+  {
+   "domain": "lordserial.group",
+   "site_id": "lords-14",
+   "counter_name": "Lords — lordserial.group",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial.group"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial.msk.ru",
+   "site_id": "lords-16",
+   "counter_name": "Lords — lordserial.msk.ru",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial.msk.ru"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial.net.ru",
+   "site_id": "lords-17",
+   "counter_name": "Lords — lordserial.net.ru",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial.net.ru"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial.spb.ru",
+   "site_id": "lords-15",
+   "counter_name": "Lords — lordserial.spb.ru",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial.spb.ru"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial.su",
+   "site_id": "lords-13",
+   "counter_name": "Lords — lordserial.su",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial.su"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет: номер счётчика витрина получает переменной юнита (LORDS_METRIKA_COUNTER), и ставится она на узле выкладки k2-zomro-01 вместе с номером — то есть после создания счётчика",
+    "домен ещё не ведёт на узел витрины: A-запись указывает на прежний адрес, по публичному имени отдаётся 404. Сбор начнётся не раньше перевода DNS"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial101.site",
+   "site_id": "lords-08",
+   "counter_name": "Lords — lordserial101.site",
+   "counter_id": null,
+   "counter_state": "planned",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial101.site"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "счётчик не создан: создание идёт командой `analytics apply --confirm-writes`, ей нужен OAuth-токен из credential службы analytics-cabinet, и сессии он не читается. Запись в реестре — объявление домена, а не настроенная аналитика",
+    "девять целей не заведены: цели создаются вместе со счётчиком",
+    "разметки счётчика на странице нет и быть не может: витрина не подключена к nginx и выпуска не имеет (CI красный, см. publisher_id)"
+   ],
+   "last_checked_at": null
+  },
+  {
+   "domain": "lordserial33.biz",
+   "site_id": "lords-02",
+   "counter_name": "Lords — lordserial33.biz",
+   "counter_id": 112010274,
+   "counter_state": "created",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserial33.biz"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:lordserial33.biz:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 602711756,
+    "episode_select": 602711752,
+    "filter_apply": 602711749,
+    "player_error": 602711755,
+    "player_ready": 602711754,
+    "player_start": 602711753,
+    "search": 602711744,
+    "season_select": 602711751,
+    "title_view": 602711750
+   }
+  },
+  {
+   "domain": "lordserials22.info",
+   "site_id": "lords-05",
+   "counter_name": "Lords — lordserials22.info",
+   "counter_id": 113109083,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserials22.info"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:lordserials22.info:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258339,
+    "episode_select": 664258335,
+    "filter_apply": 664258332,
+    "player_error": 664258338,
+    "player_ready": 664258337,
+    "player_start": 664258336,
+    "search": 664258331,
+    "season_select": 664258334,
+    "title_view": 664258333
+   },
+   "last_checked_at": "2026-10-08T16:08:18Z"
+  },
+  {
+   "domain": "lordserials22.site",
+   "site_id": "lords-06",
+   "counter_name": "Lords — lordserials22.site",
+   "counter_id": 113109084,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserials22.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258349,
+    "episode_select": 664258345,
+    "filter_apply": 664258341,
+    "player_error": 664258348,
+    "player_ready": 664258347,
+    "player_start": 664258346,
+    "search": 664258340,
+    "season_select": 664258344,
+    "title_view": 664258342
+   },
+   "last_checked_at": "2026-09-27T22:47:21Z"
+  },
+  {
+   "domain": "lordserials22.space",
+   "site_id": "lords-07",
+   "counter_name": "Lords — lordserials22.space",
+   "counter_id": 113109085,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "lordserials22.space"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": null,
+    "verification_status": "PLANNED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258374,
+    "episode_select": 664258370,
+    "filter_apply": 664258360,
+    "player_error": 664258373,
+    "player_ready": 664258372,
+    "player_start": 664258371,
+    "search": 664258350,
+    "season_select": 664258369,
+    "title_view": 664258368
+   },
+   "last_checked_at": "2026-09-27T22:47:23Z"
+  },
+  {
+   "domain": "yummyani.biz",
+   "site_id": "yummy-biz",
+   "counter_name": "YummyAnime — yummyani.biz",
+   "counter_id": 111881039,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "yummyani.biz"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:yummyani.biz:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 601108557,
+    "episode_select": 601108553,
+    "filter_apply": 601108550,
+    "player_error": 601108556,
+    "player_ready": 601108555,
+    "player_start": 601108554,
+    "search": 601108549,
+    "season_select": 601108552,
+    "title_view": 601108551
+   }
+  },
+  {
+   "domain": "yummyani.org",
+   "site_id": "yummy-org",
+   "counter_name": "YummyAnime — yummyani.org",
+   "counter_id": 111881038,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "yummyani.org"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:yummyani.org:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 601108548,
+    "episode_select": 601108544,
+    "filter_apply": 601108541,
+    "player_error": 601108547,
+    "player_ready": 601108546,
+    "player_start": 601108545,
+    "search": 601108540,
+    "season_select": 601108543,
+    "title_view": 601108542
+   }
+  },
+  {
+   "domain": "yummyani.site",
+   "site_id": "yummy-site",
+   "counter_name": "YummyAnime — yummyani.site",
+   "counter_id": 111881037,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "yummyani.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": true,
+    "host_id": "https:yummyani.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 601108539,
+    "episode_select": 601108535,
+    "filter_apply": 601108532,
+    "player_error": 601108538,
+    "player_ready": 601108537,
+    "player_start": 601108536,
+    "search": 601108531,
+    "season_select": 601108534,
+    "title_view": 601108533
+   }
+  },
+  {
+   "domain": "yummyani7.info",
+   "site_id": "yummy-08",
+   "counter_name": "YummyAnime — yummyani7.info",
+   "counter_id": 113109089,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "yummyani7.info"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:yummyani7.info:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258409,
+    "episode_select": 664258405,
+    "filter_apply": 664258402,
+    "player_error": 664258408,
+    "player_ready": 664258407,
+    "player_start": 664258406,
+    "search": 664258401,
+    "season_select": 664258404,
+    "title_view": 664258403
+   },
+   "last_checked_at": "2026-10-08T16:08:18Z"
+  },
+  {
+   "domain": "yummyani7.site",
+   "site_id": "yummy-07",
+   "counter_name": "YummyAnime — yummyani7.site",
+   "counter_id": 113109087,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "yummyani7.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:yummyani7.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258400,
+    "episode_select": 664258396,
+    "filter_apply": 664258392,
+    "player_error": 664258399,
+    "player_ready": 664258398,
+    "player_start": 664258397,
+    "search": 664258391,
+    "season_select": 664258394,
+    "title_view": 664258393
+   },
+   "last_checked_at": "2026-10-08T16:08:18Z"
+  },
+  {
+   "domain": "zonafilm.cc",
+   "site_id": "zona-02",
+   "counter_name": "Zona Cinema — zonafilm.cc",
+   "counter_id": 113110481,
+   "counter_state": "created",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "zonafilm.cc"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:zonafilm.cc:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "last_checked_at": "2026-10-08T16:08:18Z",
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664270510,
+    "episode_select": 664270506,
+    "filter_apply": 664270503,
+    "player_error": 664270509,
+    "player_ready": 664270508,
+    "player_start": 664270507,
+    "search": 664270502,
+    "season_select": 664270505,
+    "title_view": 664270504
+   }
+  },
+  {
+   "domain": "zonafilm.space",
+   "site_id": "zona-01",
+   "counter_name": "Zona — zonafilm.space",
+   "counter_id": 112582938,
+   "counter_state": "reused",
+   "analytics_enabled": true,
+   "webvisor": false,
+   "allowed_hosts": [
+    "zonafilm.space"
+   ],
+   "goals": [],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:zonafilm.space:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [
+    "девять целей не заведены: счётчик перенесён из монолитной установки, цели в нём не создавались",
+    "поступление данных не подтверждено: доступа к кабинету Метрики нет, разметка на странице доказывает только отправку"
+   ],
+   "last_checked_at": "2026-10-08T16:08:18Z"
+  },
+  {
+   "domain": "zonafilm12.site",
+   "site_id": "zona-03",
+   "counter_name": "Zona — zonafilm12.site",
+   "counter_id": 113109081,
+   "counter_state": "reused",
+   "analytics_enabled": false,
+   "webvisor": false,
+   "allowed_hosts": [
+    "zonafilm12.site"
+   ],
+   "goals": [
+    "comment_submit",
+    "episode_select",
+    "filter_apply",
+    "player_error",
+    "player_ready",
+    "player_start",
+    "search",
+    "season_select",
+    "title_view"
+   ],
+   "webmaster": {
+    "enabled": false,
+    "host_id": "https:zonafilm12.site:443",
+    "verification_status": "VERIFIED",
+    "verification_type": "META_TAG",
+    "verification_marker": null,
+    "sitemap_submitted": false
+   },
+   "seo_indexing_enabled": false,
+   "problems": [],
+   "goal_ids": {
+    "comment_submit": 664258329,
+    "episode_select": 664258325,
+    "filter_apply": 664258322,
+    "player_error": 664258328,
+    "player_ready": 664258327,
+    "player_start": 664258326,
+    "search": 664258321,
+    "season_select": 664258324,
+    "title_view": 664258323
+   },
+   "last_checked_at": "2026-10-08T16:08:18Z"
+  }
+ ]
 }

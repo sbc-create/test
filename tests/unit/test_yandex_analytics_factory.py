@@ -454,7 +454,16 @@ COUNTERS_WITHOUT_MARKUP = {
 #: реестре и создать ему счётчик — разные состояния, и смешивать их нельзя:
 #: пустой счётчик на незапущенном домене собирал бы пустоту и мешал заметить
 #: настоящий.
-PLANNED_DOMAINS: tuple[str, ...] = ("lordserial101.site", "lordfilm077.site")
+#: Восемь витрин партии K2 заведены в реестре 2026-10-15 и стоят здесь по тому
+#: же правилу: счётчика нет нигде, создать его нечем без OAuth-токена службы
+#: кабинета, а объявить домен и создать ему счётчик — разные состояния. У них
+#: вдобавок ещё не переведён DNS: публичное имя отдаёт 404, собирать нечего.
+PLANNED_DOMAINS: tuple[str, ...] = (
+    "lordserial101.site", "lordfilm077.site",
+    "lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
+    "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
+    "lordserial.net.ru",
+)
 
 ALL_DOMAINS = sorted(
     {
@@ -606,6 +615,18 @@ WEBMASTER_STATUS = {
     # Хост в аккаунте есть, подтверждение не прошло — так ответил Вебмастер.
     "animedia.space": "VERIFICATION_FAILED",
     "lordfilm47.space": "VERIFIED",
+    # Восемь витрин партии K2: домены только созданы, в Вебмастер их никто не
+    # добавлял, и сверить это с API нельзя — сеть до api.webmaster.yandex.net
+    # не проходит (docs/OWNER_B023_WEBMASTER_20261015.md). PLANNED здесь — не
+    # предположение о сервисе, а наше собственное «не добавляли».
+    "lordfilm.group": "PLANNED",
+    "lordfilm.msk.ru": "PLANNED",
+    "lordfilm.spb.ru": "PLANNED",
+    "lordserial.group": "PLANNED",
+    "lordserial.msk.ru": "PLANNED",
+    "lordserial.net.ru": "PLANNED",
+    "lordserial.spb.ru": "PLANNED",
+    "lordserial.su": "PLANNED",
     # Под serverHold (docs/NAMECHEAP_SERVERHOLD.md): в аккаунте Вебмастера их нет.
     "lordfilm077.site": "PLANNED",
     "lordserial101.site": "PLANNED",
