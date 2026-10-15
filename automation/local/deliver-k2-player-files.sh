@@ -98,9 +98,9 @@ PY
   check="$(ansible -i "$inventory" "$host_ref" -m shell -a "
     python3 -c \"
 import json,sys
-данные=json.load(open('/home/k2deploy/stage/player/$site-player.json',encoding='utf-8'))
-print('match' if str(данные.get('publisher_id'))=='$number' else 'mismatch',
-      данные.get('source_mode'))
+loaded=json.load(open('/home/k2deploy/stage/player/$site-player.json',encoding='utf-8'))
+print('match' if str(loaded.get('publisher_id'))=='$number' else 'mismatch',
+      loaded.get('source_mode'))
 \"" 2>/dev/null | tail -1)"
   case "$check" in
     "match provider-id")

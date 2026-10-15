@@ -1,15 +1,114 @@
 {
   "name": "security-smoke",
-  "passed": true,
+  "passed": false,
   "executed": true,
   "counts": {
     "checked_paths": 8,
-    "root_status": 200
+    "root_status": 0
   },
   "totals": {
-    "critical": 0,
+    "critical": 14,
     "major": 0,
     "minor": 0
   },
-  "findings": []
+  "findings": [
+    {
+      "check": "headers",
+      "severity": "critical",
+      "url": "/",
+      "message": "Отсутствует заголовок X-Content-Type-Options.",
+      "rule": ""
+    },
+    {
+      "check": "headers",
+      "severity": "critical",
+      "url": "/",
+      "message": "Отсутствует заголовок X-Frame-Options.",
+      "rule": ""
+    },
+    {
+      "check": "headers",
+      "severity": "critical",
+      "url": "/",
+      "message": "Отсутствует заголовок Referrer-Policy.",
+      "rule": ""
+    },
+    {
+      "check": "headers",
+      "severity": "critical",
+      "url": "/",
+      "message": "Отсутствует заголовок Content-Security-Policy.",
+      "rule": ""
+    },
+    {
+      "check": "staging",
+      "severity": "critical",
+      "url": "/",
+      "message": "Staging не отдаёт X-Robots-Tag: noindex.",
+      "rule": ""
+    },
+    {
+      "check": "staging",
+      "severity": "critical",
+      "url": "/",
+      "message": "Staging доступен без авторизации (HTTP 0). robots.txt защитой не считается.",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/.env",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/.git/config",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/routes.json",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/build-manifest.json",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/shared/logs/php-server.log",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/backups/",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/install.php",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    },
+    {
+      "check": "exposure",
+      "severity": "critical",
+      "url": "/engine/data/config.php",
+      "message": "Служебный путь доступен публично (HTTP 0).",
+      "rule": ""
+    }
+  ]
 }

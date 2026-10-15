@@ -396,6 +396,20 @@ def проверить_ci(ячейка: dict) -> dict:
 def проверить_хост(ячейка: dict) -> dict:
     рв = ячейка.get("runtime") or {}
     site_id = ячейка["site_id"]
+    цель = str((ячейка.get("deploy_target") or {}).get("ref") or "").strip()
+    if цель and цель != ЭТОТ_УЗЕЛ:
+        # Размещение витрины — на ЕЁ узле, и ставит его сценарий узла. Прежний
+        # совет (`launch-new-site.sh` на управляющем узле) разместил бы витрину
+        # не на том сервере, а проверка путей этого узла ничего не говорит о
+        # другом: существование файлов на другой машине отсюда не измеряется.
+        return этап(
+            "server_staged",
+            НЕ_МОЁ,
+            f"размещение на {цель}: юнит, nginx и upstream ставятся ТАМ",
+            f"на {цель} от root: cd /home/k2deploy/stage && "
+            f"bash k2-launch-site.sh {site_id} "
+            f"(сухой прогон — тот же вызов с --dry-run)",
+        )
     юнит = Path("/etc/systemd/system") / (рв.get("unit") or "нет")
     conf = Path("/etc/nginx/lords") / f"{site_id}.conf"
     upstream = Path("/etc/nginx/cells") / f"{site_id}.upstream"

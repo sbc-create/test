@@ -20,19 +20,25 @@ report="$dest/k2-cells-$stamp.verified.json"
 
 [ -d "$stage/bundles" ] || { echo "error=нет $stage/bundles"; exit 2; }
 [ -d "$stage/data" ] || { echo "error=нет $stage/data"; exit 2; }
+# Каталог `player` включён с 2026-10-15: витрина без файла плеера не
+# запускается вовсе, и копия без него восстанавливала бы неполный
+# комплект. Значения в этих файлах публичны по устройству (атрибут
+# `data-publisher-id`, D89/D138); токена поставщика в комплекте нет.
+# Отсутствие каталога не делает копию невозможной: до назначения номеров
+# его и не было, поэтому он не в списке обязательных проверок выше.
 mkdir -p "$dest"
 
 echo "stage_mib=$(du -sm "$stage" | cut -f1)"
 echo "free_mib_before=$(df -Pm "$dest" | awk 'NR==2{print $4}')"
 
 # 1. Опись ДО упаковки: суммы считаются по источнику, а не по распакованному.
-( cd "$stage" && find bundles data units nginx cells -type f 2>/dev/null \
+( cd "$stage" && find bundles data player units nginx cells -type f 2>/dev/null \
     | sort | xargs sha256sum ) > "$sums"
 echo "files_in_manifest=$(wc -l < "$sums")"
 
 # 2. Архив.
 tar -C "$stage" -czf "$archive" \
-    --exclude="*.tar.gz" bundles data units nginx cells 2>/dev/null
+    --exclude="*.tar.gz" bundles data player units nginx cells 2>/dev/null
 echo "archive=$archive"
 echo "archive_mib=$(du -m "$archive" | cut -f1)"
 

@@ -45,6 +45,9 @@ from factory.seo.render_check import chromium_path  # noqa: E402
 ХРОМ = chromium_path() or ""
 #: Проверенные формы адреса карточки — те же, что в `registry.ФОРМА_АДРЕСА`.
 ПРЕФИКСЫ = ("/title/", "/anime/")
+#: Первым аргументом принимается домен ИЛИ готовый базовый адрес
+#: (`http://127.0.0.1:19400`): витрина, которая ещё не живёт публично,
+#: проверяется на локальном стенде теми же мерками.
 
 ОБХОД = """
 () => {
@@ -105,10 +108,14 @@ def главная(argv: list[str]) -> int:
         стр.on("request", lambda з: запросы.append(з.url)
                if "cdnvideohub" in з.url else None)
 
+        # База: домен превращается в https-адрес, а готовый адрес берётся как
+        # есть. Так один инструмент проверяет и живую витрину, и локальный
+        # стенд — мерки при этом одни и те же.
+        БАЗА = домен if домен.startswith("http") else f"https://{домен}"
         if слаг:
             путь = f"/title/{слаг}/"
         else:
-            стр.goto(f"https://{домен}/", wait_until="domcontentloaded",
+            стр.goto(f"{БАЗА}/", wait_until="domcontentloaded",
                      timeout=60000)
             путь = ""
             for префикс in ПРЕФИКСЫ:
@@ -121,7 +128,7 @@ def главная(argv: list[str]) -> int:
                       + ", ".join(ПРЕФИКСЫ))
                 б.close()
                 return 1
-        адрес = f"https://{домен}{путь}"
+        адрес = f"{БАЗА}{путь}"
         стр.goto(адрес, wait_until="load", timeout=60000)
         print("АДРЕС:", адрес)
 

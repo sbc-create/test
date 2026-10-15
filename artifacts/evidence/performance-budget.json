@@ -1,12 +1,12 @@
 {
   "name": "performance-budget",
-  "passed": true,
-  "executed": true,
+  "passed": false,
+  "executed": false,
   "counts": {
-    "status": "ok",
-    "lab_lcp_ms_max": 748,
-    "lab_cls_max": 0,
-    "lab_transfer_bytes_max": 11382,
+    "status": "failed",
+    "lab_lcp_ms_max": null,
+    "lab_cls_max": null,
+    "lab_transfer_bytes_max": null,
     "budgets": {
       "lab_lcp_ms": 2500,
       "lab_cls": 0.1,
@@ -20,9 +20,17 @@
     "field_targets_note": "Полевые LCP ≤ 2.5 s, INP ≤ 200 ms, CLS ≤ 0.1 на 75-м перцентиле измеряются только на реальном трафике."
   },
   "totals": {
-    "critical": 0,
+    "critical": 1,
     "major": 0,
     "minor": 0
   },
-  "findings": []
+  "findings": [
+    {
+      "check": "performance",
+      "severity": "critical",
+      "url": "-",
+      "message": "Метрики не собраны: браузерная проверка недоступна (failed).",
+      "rule": ""
+    }
+  ]
 }
