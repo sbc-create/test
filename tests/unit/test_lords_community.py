@@ -37,6 +37,15 @@ def витрина(tmp_path, monkeypatch):
     с.записать_плеер()
     # Канонический модуль кладётся на sys.path из СВОЕГО выпуска, а не
     # копируется в репозиторий шаблона.
+    #
+    # Остатки чужого импорта снимаются ДО загрузки, а не только после.
+    # Измерено 15.10: проверка «подключён тот модуль, который закреплён»
+    # проходила в одиночку и падала в полном прогоне 7 625 проверок — другой
+    # тест оставлял в `sys.modules` свой `community`, и `import community`
+    # возвращал его из кеша, минуя подготовленный путь. Порядок тестов не
+    # имеет права решать, какой модуль подключён.
+    for остаток in ("community", "community_http"):
+        sys.modules.pop(остаток, None)
     monkeypatch.syspath_prepend(str(МОДУЛЬ_ПУТЬ.parent))
     monkeypatch.setenv("LORDS_TEST_COMMUNITY", str(tmp_path / "community.json"))
     monkeypatch.setenv("LORDS_SITE_DOMAIN", "example.test")
