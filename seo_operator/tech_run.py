@@ -93,7 +93,10 @@ def причина_run_all(rc: int, вывод: str) -> str:
                 if not t.startswith("    "):
                     break
                 хвост.append(t.strip(" |"))
-            куски.append(s.strip() + (" ⇒ " + " / ".join(х for х in хвост[-3:] if х) if хвост else ""))
+            # Внутри вывода шага важнее строки с FAIL, чем последние три: у
+            # page_regressions последними идут PASS и «RESULT: FAILED» (T150 15.10).
+            главные = [х for х in хвост if "FAIL" in х and "RESULT" not in х] or хвост[-3:]
+            куски.append(s.strip() + (" ⇒ " + " / ".join(х for х in главные[:4] if х) if хвост else ""))
     return f"checks/run.sh rc={rc}: " + ("; ".join(куски[:10]) or "строк FAIL нет") + f" | хвост: {вывод[-200:]}"
 
 
