@@ -9,9 +9,12 @@
 **`http://` отдаёт 200 без перенаправления** — девять доменов из семнадцати
 опубликованных (`scratchpad/д24-http-на-https.py`, 2026-10-15):
 
-| отдаёт 200 по http (правка нужна) | уже отдаёт 308 (не трогаем) |
+| отдаёт 200 по http (правка нужна) | уже перенаправляет (не трогаем) |
 | --- | --- |
-| `animedia.icu`, `animedia.space`, `an1meg0.site`, `lordserials22.info`, `yummyani7.site`, `yummyani7.info`, `zonafilm.space`, `zonafilm.cc`, `zonafilm12.site` | `an1mego.site`, `animeg0.site`, `lordfilm47.space`, `lordserial33.biz`, `1lordserials1.online`, `yummyani.biz`, `yummyani.org`, `yummyani.site` |
+| `animedia.icu`, `animedia.space`, `an1meg0.site`, `lordserials22.info`, `yummyani7.site`, `yummyani7.info`, `zonafilm.space`, `zonafilm.cc`, `zonafilm12.site` | `308`: `lordfilm47.space`, `lordserial33.biz`, `1lordserials1.online`, `yummyani.biz`, `yummyani.org`, `yummyani.site`; `301`: `an1mego.site`, `animeg0.site` |
+
+Список сошёлся с независимым измерением SEO-сессии до домена; код `301` у двух
+доменов — её поправка, перемеренная здесь.
 
 Заголовка HSTS нет ни у одного домена сети — в эту операцию он не входит
 (отдельное решение: ошибка в HSTS не откатывается быстро).
@@ -26,6 +29,31 @@
 Срочность выросла: 2 октября эти домены были закрыты к индексации, сейчас
 открыты все семнадцать. Подробности и независимое измерение SEO-сессии —
 [`OWNER_WWW_MIRRORS_20261015.md`](OWNER_WWW_MIRRORS_20261015.md).
+
+## Порядок внутри операции: `www` первым
+
+Тяжесть у двух дефектов РАЗНАЯ, и это измерено, а не взвешено на глаз. По
+`http` все девять доменов отдают `<link rel="canonical">` на **https**-адрес
+(проверено 2026-10-15; `meta robots` при этом `index, follow`):
+
+```
+animedia.icu       canonical=https://animedia.icu/
+an1meg0.site       canonical=https://an1meg0.site/
+lordserials22.info canonical=https://lordserials22.info/
+zonafilm.cc        canonical=https://zonafilm.cc/        (и так все девять)
+```
+
+То есть http-адрес сам заявляет каноническим https, и дубль гасится
+указанием. У `www` было иначе: canonical вёл на САМ www-хост, то есть две пары
+имён конкурировали без разрешения. Поэтому:
+
+1. **`www → апекс` — срочное.** Без него в индекс попадают оба адреса.
+2. **`http → https` — обязательное, но не той же остроты.** Перенаправление
+   сильнее указания и экономит обход, однако индекс прямо сейчас не рвёт.
+
+Если правку придётся делить на два приёма, первым идёт `www`. Файлы
+подготовлены так, что оба изменения попадают в один файл домена и делаются
+одной перезагрузкой — делить незачем, но порядок назван.
 
 ## Чем правка подготовлена
 
