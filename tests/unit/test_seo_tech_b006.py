@@ -357,3 +357,24 @@ def test_run_all_failure_note_keeps_fail_lines_above_the_tail():
     заметка = tech_run.причина_run_all(1, вывод)
     assert "perf-memo   FAIL  timeout 600s" in заметка and заметка.startswith("checks/run.sh rc=1")
     assert "строк FAIL нет" in tech_run.причина_run_all(2, "x PASS\n")
+
+
+def test_run_worktrees_sit_at_site_repo_depth(среда):
+    """Проверки витрин ищут реестр как КОРЕНЬ.parents[2]/config (cell_unit.py): у копии прогона
+    это должен быть корень фабрики, как у var/site-repos/<репо> (T114 15.10)."""
+    state = tech_run.REPO / "var" / "seo-tech"
+    копия = tech_run.каталог_копий(state) / "R1"
+    assert копия.parents[2] == (tech_run.REPO / "var" / "site-repos" / "x").parents[2] == tech_run.REPO
+    assert (копия.parents[2] / "config" / "site-cells.json").is_file()
+
+
+def test_cleanup_recognises_new_and_old_worktree_dirs(среда):
+    s, репо = среда["state"], среда["репо"]
+    новая = tech_run.каталог_копий(s) / "R10"
+    старая = s / "wt" / "R11"
+    for к in (новая, старая):
+        к.parent.mkdir(parents=True, exist_ok=True)
+        _git(репо, "worktree", "add", "-q", "--detach", str(к))
+        shutil.rmtree(к)
+    assert len(tech_run.убрать_свои_ссылки(репо, s)) == 2
+    shutil.rmtree(tech_run.каталог_копий(s), ignore_errors=True)

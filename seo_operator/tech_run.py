@@ -59,6 +59,21 @@ STALE_S = 2 * 3600
 КОРНИ_ДАННЫХ = (Path("/srv"),)
 
 
+def каталог_копий(state: Path) -> Path:
+    """Каталог рабочих копий прогонов: var/seo-tech-wt/<id> — та же глубина, что var/site-repos/<репо>.
+
+    Проверки витрин ищут реестр фабрики относительно себя (`КОРЕНЬ.parents[2]/config/
+    site-cells.json`, checks/cell_unit.py zonafilm-cc). Из var/seo-tech/wt/<id> это var/,
+    реестра там нет — cell-unit падал только в вердикте (T114 15.10, трижды INCOMPLETE).
+    """
+    return state.parent / f"{state.name}-wt"
+
+
+def _каталоги_копий(state: Path) -> list[Path]:
+    """Свои каталоги копий: нынешний и прежний (state/wt, до 15.10) — для уборки переходного периода."""
+    return [каталог_копий(state), state / "wt"]
+
+
 def причина_run_all(rc: int, вывод: str) -> str:
     """Причина провала checks/run.sh для вердикта: строки FAIL/TIMEOUT/ERROR + короткий хвост.
 
@@ -427,7 +442,7 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
         репо = REPO / задача["repo"]
         база = _git(репо, "rev-parse", "HEAD")
         ветка = f"claude/seo-tech-{задача['id'].lower()}-{run_id.lower()}"
-        копия = state / "wt" / run_id
+        копия = каталог_копий(state) / run_id
         копия.parent.mkdir(parents=True, exist_ok=True)
         _git(репо, "worktree", "add", "-q", "-b", ветка, str(копия), база)
         связать_неотслеживаемые(репо, копия)
@@ -512,13 +527,11 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
     now = now or _сейчас()
     убрано: list[str] = []
     закрыть_брошенные(state, now)
-    корень = state / "wt"
-    if not корень.is_dir():
-        return убрано
     закрытые = {р["run_id"] for р in _runs(state)}
     захваты = {к["run_id"]: к for к in _claims(state)}
     репозитории: set[Path] = set()
-    for копия in sorted(корень.iterdir()):
+    копии = [к for корень in _каталоги_копий(state) if корень.is_dir() for к in sorted(корень.iterdir())]
+    for копия in копии:
         run_id = копия.name.split("-verify-")[0]
         к = захваты.get(run_id)
         замок = _замок(state, к["task_id"]) if к else None
@@ -549,7 +562,7 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
 
 
 def убрать_свои_ссылки(репо: Path, state: Path) -> list[str]:
-    """Снять служебные записи git ТОЛЬКО своих рабочих копий (state/wt/…), каталога которых нет.
+    """Снять служебные записи git ТОЛЬКО своих рабочих копий (каталог_копий и прежний state/wt), каталога которых нет.
 
     Глобальный `git worktree prune` здесь нельзя (14.10): служба живёт с PrivateTmp, и
     рабочие копии сессий в /tmp для неё «отсутствуют» — prune снимал их записи, рабочие
@@ -558,14 +571,14 @@ def убрать_свои_ссылки(репо: Path, state: Path) -> list[str]
     служебные = репо / ".git" / "worktrees"
     if not служебные.is_dir():
         return []
-    свои = str((state / "wt").resolve())
+    свои = [str(к.resolve()) for к in _каталоги_копий(state)]
     снято = []
     for запись in sorted(служебные.iterdir()):
         try:
             цель = Path((запись / "gitdir").read_text(encoding="utf-8").strip()).parent
         except OSError:
             continue
-        if str(цель).startswith(свои + os.sep) and not цель.exists():
+        if any(str(цель).startswith(к + os.sep) for к in свои) and not цель.exists():
             shutil.rmtree(запись, ignore_errors=True)
             снято.append(запись.name)
     return снято
@@ -611,8 +624,9 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
         файлы = _git(репо, "ls-tree", "-r", "-z", "--name-only", голова)
         шаги["check_in_branch"] = проверка in файлы.split("\0")
         if шаги["check_in_branch"]:
-            база_wt = state / "wt" / f"{run_id}-verify-base"
-            голова_wt = state / "wt" / f"{run_id}-verify-head"
+            база_wt = каталог_копий(state) / f"{run_id}-verify-base"
+            голова_wt = каталог_копий(state) / f"{run_id}-verify-head"
+            база_wt.parent.mkdir(parents=True, exist_ok=True)
             for wt, sha in ((база_wt, захват["base_sha"]), (голова_wt, голова)):
                 if wt.exists():
                     _git(репо, "worktree", "remove", "--force", str(wt), check=False)
