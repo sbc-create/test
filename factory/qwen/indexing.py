@@ -1051,6 +1051,8 @@ def проверить(site: str, *, mode: str, expect_release: str = "",
 
     итог: dict = {"site": s.domain, "site_id": s.site_id, "requested": режим,
                   "account": s.account, "published_release": s.published_release,
+                  "deploy_target": чужой_узел(s) or registry.ЭТОТ_УЗЕЛ,
+                  "release_measurable_here": not чужой_узел(s),
                   "ok": False, "blockers": [], "notes": []}
 
     # 1. Ожидаемый выпуск. Сверяется ИМЯ КАТАЛОГА ВЫПУСКА, а не поле манифеста:
@@ -1101,7 +1103,6 @@ def проверить(site: str, *, mode: str, expect_release: str = "",
     else:
         читатель = читатель_режима(s.account, s.adapter)
         итог["runtime_reader"] = str(читатель) if читатель else ""
-        итог["deploy_target"] = чужой_узел(s) or registry.ЭТОТ_УЗЕЛ
         if читатель is None and чужой_узел(s):
             # BLOCKED остаётся — но по верной причине. Файл состояния этого
             # узла витрине на другом узле не источник: её рантайм читает
@@ -1554,7 +1555,13 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
         return итог
 
     итог.update({"site": s.domain, "site_id": s.site_id, "adapter": s.adapter,
-                 "account": s.account, "published_release": s.published_release})
+                 "account": s.account, "published_release": s.published_release,
+                 # Поле есть у ЛЮБОГО вердикта, а не только там, где читатель
+                 # не нашёлся: вердикт без указания машины проверить нельзя, а
+                 # поле, появляющееся иногда, читается как «тут всё как
+                 # обычно».
+                 "deploy_target": чужой_узел(s) or registry.ЭТОТ_УЗЕЛ,
+                 "release_measurable_here": not чужой_узел(s)})
     к = контракт(s.adapter, аккаунт=s.account)
     итог["contract"] = к or None
     итог["mode_owner"] = (к or {}).get("mode_owner") or "unknown"
@@ -1622,7 +1629,6 @@ def готовность(site: str, *, доказать: bool = True) -> dict:
     else:
         читатель = читатель_режима(s.account, s.adapter)
         итог["runtime_reader"] = str(читатель) if читатель else ""
-        итог["deploy_target"] = чужой_узел(s) or registry.ЭТОТ_УЗЕЛ
         if читатель is None and чужой_узел(s):
             # Витрина выложена на ДРУГОМ узле. Публичные сигналы и слой nginx
             # измеряются по сети и остаются верными; файлы выпуска — нет.

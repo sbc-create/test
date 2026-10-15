@@ -77,3 +77,22 @@ def test_предпроверка_блокирует_по_верной_прич�
     assert итог["ok"] is False
     assert "k2-zomro-01" in блокеры, блокеры
     assert "до выпуска читателя" not in блокеры, блокеры
+
+def test_поле_узла_есть_в_любом_вердикте():
+    """Поле, появляющееся иногда, читается как «тут всё как обычно»."""
+    for сайт in ("yummyani7.site", "lords-10"):
+        итог = indexing.готовность(сайт, доказать=False)
+        if итог["status"] in ("ENV_UNAVAILABLE", "DOMAIN_UNKNOWN"):
+            pytest.skip(f"реестр этого окружения: {итог['status']}")
+        assert итог["deploy_target"], итог
+        assert итог["release_measurable_here"] == (
+            итог["deploy_target"] == registry.ЭТОТ_УЗЕЛ), итог
+
+
+def test_поле_узла_есть_в_предпроверке():
+    try:
+        итог = indexing.проверить("lords-10", mode="closed")
+    except indexing.Отказано as ош:
+        pytest.skip(f"предпроверка недоступна: {ош}")
+    assert итог["deploy_target"] == "k2-zomro-01"
+    assert итог["release_measurable_here"] is False
