@@ -2835,6 +2835,106 @@
       "evidence": "15.10 ~16:35Z: редакционная проверка сети (docs/seo-operator/EDITORIAL_REVIEW_20261015.md). Ответственный: SEO-сессия (фоновый цикл)."
     },
     {
+      "id": "T144",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/",
+        "https://lordfilm47.space/collections/"
+      ],
+      "problem": "Редакционная проверка 15.10: распространение на lordfilm47.space правки, проверенной на представителе семейства Lords (T137, lordserials22.info — live_verified). Аудит живых страниц: var/seo-audit/editorial-20261015.json.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/",
+          "status": 200,
+          "absent": [
+            "кинематографической сетке"
+          ]
+        },
+        {
+          "url": "https://lordfilm47.space/collections/",
+          "status": 200,
+          "absent": [
+            "оценкой источника"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~17:10Z: после живой сверки представителя T137. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T145",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/",
+        "https://lordserial33.biz/collections/"
+      ],
+      "problem": "Редакционная проверка 15.10: распространение на lordserial33.biz правки, проверенной на представителе семейства Lords (T137, lordserials22.info — live_verified). Аудит живых страниц: var/seo-audit/editorial-20261015.json.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/",
+          "status": 200,
+          "absent": [
+            "типу источника"
+          ]
+        },
+        {
+          "url": "https://lordserial33.biz/collections/",
+          "status": 200,
+          "absent": [
+            "в источнике"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~17:10Z: после живой сверки представителя T137. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T146",
+      "site": "1lordserials1.online",
+      "direction": "lords",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [
+        "https://1lordserials1.online/",
+        "https://1lordserials1.online/collections/"
+      ],
+      "problem": "Редакционная проверка 15.10: распространение на 1lordserials1.online правки, проверенной на представителе семейства Lords (T137, lordserials22.info — live_verified). Аудит живых страниц: var/seo-audit/editorial-20261015.json.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://1lordserials1.online/",
+          "status": 200,
+          "absent": [
+            "оценка источника"
+          ]
+        },
+        {
+          "url": "https://1lordserials1.online/collections/",
+          "status": 200,
+          "absent": [
+            "в жанрах источника",
+            "источник отнёс"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~17:10Z: после живой сверки представителя T137. Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
       "id": "T137",
       "site": "lordserials22.info",
       "direction": "lords",
@@ -2866,8 +2966,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~16:20Z: представитель семейства шаблона; остальные сайты семейства — после проверки этого на живом. Ответственный: SEO-сессия (фоновый цикл)."
+      "status": "live_verified",
+      "evidence": "15.10 ~16:20Z: представитель семейства шаблона; остальные сайты семейства — после проверки этого на живом. Ответственный: SEO-сессия (фоновый цикл). | 15.10 16:28Z live_verified; живая сверка ~17:10Z: на /, /collections/, /catalog/, /animation/, /movies/ прежних формулировок нет, навигация на месте; лид «В каталоге Lordserials Animation — фильмы, сериалы и мультфильмы…», подвал «…фильмы, сериалы, мультфильмы, аниме и дорамы…»."
     },
     {
       "id": "T138",
