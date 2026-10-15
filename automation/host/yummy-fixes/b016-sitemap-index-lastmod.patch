@@ -1,0 +1,99 @@
+--- a/src/lib/seo/sitemap.ts
++++ b/src/lib/seo/sitemap.ts
+@@ -116,19 +116,55 @@
+   return SITEMAP_FILE_IDS.map((id) => absoluteUrl(`/sitemap/${id}.xml`, env));
+ }
+ 
+-export function sitemapIndexXml(env: Env = getEnv()): string {
+-  const lastmod = sitemapLastModified().toISOString();
++/**
++ * Freshest `lastModified` among a part's own entries.
++ *
++ * The index is what a crawler reads first, and it decides from `<lastmod>`
++ * whether the nested map is worth re-fetching. Measured 2026-10-15 on all five
++ * Yummy tenants: every part declared `2026-08-21T00:00:00.000Z` while
++ * `titles.xml` and `images.xml` carried entries from `2026-10-12T07:43:13Z`.
++ * A frozen date tells the crawler nothing changed for two months — so the
++ * freshly uncapped URLs (8329 instead of 8000) never get revisited.
++ *
++ * The old constant stays as the fallback for a part with no dates at all.
++ */
++function partLastModified(
++  id: SitemapFileId,
++  inventory: SitemapInventory,
++  env: Env,
++): Date {
++  let newest: number | null = null;
++  for (const entry of buildSitemapFileEntries(id, env, inventory)) {
++    const value = entry.lastModified;
++    if (!value) {
++      continue;
++    }
++    const at = value instanceof Date ? value.getTime() : new Date(value).getTime();
++    if (Number.isFinite(at) && (newest === null || at > newest)) {
++      newest = at;
++    }
++  }
++  return newest === null ? sitemapLastModified() : new Date(newest);
++}
++
++export function sitemapIndexXmlFor(
++  inventory: SitemapInventory,
++  env: Env = getEnv(),
++): string {
+   const locs = sitemapIndexLocs(env);
+   if (locs.length === 0) {
+     return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"></urlset>\n`;
+   }
+-  const body = locs
+-    .map(
+-      (loc) =>
+-        `  <sitemap>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </sitemap>`,
+-    )
+-    .join("\n");
++  const body = SITEMAP_FILE_IDS.map((id, position) => {
++    const loc = locs[position];
++    const lastmod = partLastModified(id, inventory, env).toISOString();
++    return `  <sitemap>\n    <loc>${loc}</loc>\n    <lastmod>${lastmod}</lastmod>\n  </sitemap>`;
++  }).join("\n");
+   return `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${body}\n</sitemapindex>\n`;
++}
++
++export function sitemapIndexXml(env: Env = getEnv()): string {
++  return sitemapIndexXmlFor(emptySitemapInventory(), env);
+ }
+ 
+ export function buildSitemapFileEntries(
+--- a/src/app/sitemap.xml/route.ts
++++ b/src/app/sitemap.xml/route.ts
+@@ -1,18 +1,27 @@
+ import { getEnv } from "@/lib/env";
+ import { isIndexingEnabled } from "@/lib/seo/config";
+-import { sitemapIndexXml } from "@/lib/seo/sitemap";
++import { loadSitemapInventoryWithState } from "@/lib/seo/sitemap-catalog";
++import { sitemapIndexXmlFor } from "@/lib/seo/sitemap";
+ 
+ export const dynamic = "force-dynamic";
+ 
+-export function GET(): Response {
++/**
++ * The index declares each nested map's own freshest date, so a crawler can
++ * tell which part changed. It reads the same SWR-cached inventory the parts
++ * read, so no extra build is triggered: on a warm cache this is in-memory
++ * work, and on a cold one the SWR layer serves the last good inventory.
++ */
++export async function GET(): Promise<Response> {
+   const env = getEnv();
+   const indexing = isIndexingEnabled(env);
+-  return new Response(sitemapIndexXml(env), {
++  const loaded = await loadSitemapInventoryWithState();
++  return new Response(sitemapIndexXmlFor(loaded.inventory, env), {
+     status: 200,
+     headers: {
+       "content-type": "application/xml; charset=utf-8",
+       "cache-control": "no-store",
+       "x-robots-tag": indexing ? "index, follow" : "noindex, follow",
++      "x-sitemap-inventory": `${loaded.state}; age=${loaded.ageSec ?? "unknown"}`,
+     },
+   });
+ }
