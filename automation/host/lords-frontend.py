@@ -3715,11 +3715,6 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   n.setAttribute('data-title-id', c.id||'');
   n.setAttribute('data-aggregator', c.aggregator||'');
   host.appendChild(n);
-  /* player_start — площадка ЗАПРОСИЛА воспроизведение, а не факт первого
-     кадра: у провайдера в зафиксированном контракте события начала показа
-     нет. Та же формулировка, что у Yummy, чтобы одна цель не значила на
-     разных витринах разное. */
-  try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_start'); } }catch(e){}
   bind(n, ++token);
  }
  function markPlaying(evName, ct){
@@ -3756,6 +3751,17 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  }
  function bind(node, my){
   if(!node) return;
+  /* player_start — площадка ЗАПРОСИЛА воспроизведение, а не факт первого
+     кадра: у провайдера в зафиксированном контракте события начала показа
+     нет. Та же формулировка, что у Yummy, чтобы одна цель не значила на
+     разных витринах разное.
+     Отправка стоит ЗДЕСЬ, а не в mountAt: через mountAt идёт только перебор
+     источников после отказа, и цель оттуда означала бы «показ запрошен»
+     лишь у тех зрителей, у кого он сперва НЕ состоялся — в отчёте
+     player_start оказался бы много реже player_ready. bind вызывается на
+     обоих путях, а __sfGoalOnce не даёт перебору отправить вторую цель за
+     ту же загрузку. Поправка линии витрины 1lordserials1.online. */
+  try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_start'); } }catch(e){}
   snapshot(node);
   state('resolving');
   fitPlayerTree(node);
