@@ -2517,8 +2517,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "live_verified",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10: выпущено службой (live_verified); живая сверка ~14:15Z: /lists/ — 200, meta robots «noindex, follow»."
     },
     {
       "id": "T121",
@@ -2542,8 +2542,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "live_verified",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10: выпущено службой (live_verified); живая сверка ~14:15Z: /lists/ — 200, meta robots «noindex, follow»."
     },
     {
       "id": "T122",
@@ -2567,8 +2567,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "live_verified",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10: выпущено службой (live_verified); живая сверка ~14:15Z: /lists/ — 200, meta robots «noindex, follow»."
     },
     {
       "id": "T123",
@@ -2619,8 +2619,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+      "status": "live_verified",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет. | 15.10: выпущено службой (live_verified); живая сверка ~14:15Z: /lists/ — 200, meta robots «noindex, follow». Удаление /lists/ из карты — после пересборки карты прогоном обновления ячейки; сверить."
     },
     {
       "id": "T125",
