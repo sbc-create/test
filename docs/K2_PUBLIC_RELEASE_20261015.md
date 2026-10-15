@@ -266,7 +266,7 @@ A-записи (управляющий узел 45.131.182.225), с нужным
 | № | что | документ | чем проверится после |
 | --- | --- | --- | --- |
 | 1 | перевод A-записей восьми на 145.63.129.86 | [`OWNER_DNS_TLS_K2_20261015.md`](OWNER_DNS_TLS_K2_20261015.md) | `dig +short A <домен> @8.8.8.8` |
-| 2 | сертификаты по готовым блокам TLS (после п. 1) | там же | `public-acceptance.py <домены>` |
+| 2 | сертификаты: `K2_ACME_EMAIL=… bash /home/k2deploy/stage/k2-enable-tls.sh lords-1X` на узле, по одному домену (после п. 1) | там же | сценарий сам проверяет SAN, апекс, www и http; затем `public-acceptance.py <домены>` |
 | 3 | таймер доставки: сначала слияние ветки и перенос в `/srv/site-factory/repo`, потом постоянный `WorkingDirectory`, и лишь затем `systemctl --user enable --now k2-catalog-deliver.user.timer` | [`k2-catalog-cycle-20261015.md`](verification/k2-catalog-cycle-20261015.md) | ссылка в `timers.target.wants` и прогон доставки |
 | 4 | срок хранения копий «до публикации» (раздел заполняется ~за 6 суток) | [`OWNER_DISK_P0_20261015.md`](OWNER_DISK_P0_20261015.md) | свободное место и отказ публикации |
 | 5 | одна правка nginx: `www → апекс` (срочно) и `http → https` | [`OWNER_HTTPS_WWW_20261015.md`](OWNER_HTTPS_WWW_20261015.md) | приёмка 17 доменов — за SEO-сессией |
@@ -278,7 +278,10 @@ A-записи (управляющий узел 45.131.182.225), с нужным
 # 1. Убедиться, что имя ведёт на новый узел (а не поверить watcher-у на слово).
 dig +short A lordfilm.group @8.8.8.8
 
-# 2. Сертификаты и TLS-блоки — порядок в OWNER_DNS_TLS_K2_20261015.md, root на узле.
+# 2. Сертификаты и TLS-блоки: одна команда на домен, от root на узле.
+#    Сухой прогон ничего не выпускает и проверяет предусловия.
+#    K2_ACME_EMAIL='<адрес владельца>' bash /home/k2deploy/stage/k2-enable-tls.sh lords-10 --dry-run
+#    K2_ACME_EMAIL='<адрес владельца>' bash /home/k2deploy/stage/k2-enable-tls.sh lords-10
 
 # 3. Внешняя приёмка по каждому домену.
 python3 automation/local/public-acceptance.py lordfilm.group lordfilm.spb.ru \
