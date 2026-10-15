@@ -2182,9 +2182,9 @@
       "direction": "network",
       "problem": "Срез аналитики 15.10 пуст по отчётам: штатный analytics-cabinet (таймер 05:03:25Z) записал var/analytics/cabinet-latest.json в 06:01:26Z, измерено 19 из 441 — только паспорта счётчиков (API управления отвечает); все отчёты Метрики — HTTP 429, повторы исчерпаны (282 показателя); Вебмастер — URLError (B023). Прежние гипотезы (отказ до запуска: LoadCredential/изоляция) не подтвердились.",
       "expected": "ежедневная выгрузка в 05:00Z; причина отказа видна",
-      "status": "blocked",
+      "status": "done",
       "owner_action": "свежий срез 01–14.10 — одна команда из docs/seo-operator/METRIKA_SLICE_20261015.md п. 6 (systemd-run с тем же LoadCredential, два периода последовательно); при повторном 429 — проверить квоту/ответ API для токена.",
-      "evidence": "15.10 05:41Z, замер сессии: stamp таймера 05:03:25Z, cabinet-latest.json 2026-10-14T05:08Z, stderr-файл 0 байт (с 27.09), процесса сбора нет; config/analytics.json на месте (ConditionPathExists выполнено). | 15.10 07:30Z: владелец получит журнал службы; до него причина — гипотеза. | 15.10 13:55Z: файл службы 06:01:26Z найден; причина — HTTP 429 отчётного API. Доступная часть — docs/seo-operator/METRIKA_SLICE_20261015.md, artifacts/analytics/slice-20261015-available/."
+      "evidence": "15.10 05:41Z, замер сессии: stamp таймера 05:03:25Z, cabinet-latest.json 2026-10-14T05:08Z, stderr-файл 0 байт (с 27.09), процесса сбора нет; config/analytics.json на месте (ConditionPathExists выполнено). | 15.10 07:30Z: владелец получит журнал службы; до него причина — гипотеза. | 15.10 13:55Z: файл службы 06:01:26Z найден; причина — HTTP 429 отчётного API. Доступная часть — docs/seo-operator/METRIKA_SLICE_20261015.md, artifacts/analytics/slice-20261015-available/. | 15.10 14:42:48Z: свежий сбор var/analytics/slice-20261015-refresh.json — 301 из 441, HTTP 429 нет; отчёт docs/seo-operator/METRIKA_SLICE_20261015_REFRESH.md. Блокер снят; Вебмастер — по-прежнему B023."
     },
     {
       "id": "T113",
