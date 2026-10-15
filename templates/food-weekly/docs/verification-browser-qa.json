@@ -1,0 +1,110 @@
+{
+ "commit_head": "1c18349cded3c119825e472338440d968c78aaaa",
+ "at": "2026-10-13T00:39:13Z",
+ "scenarios": {
+  "mobile:home:no_hscroll": true,
+  "mobile:catalog:no_hscroll": true,
+  "mobile:week:no_hscroll": true,
+  "mobile:day:no_hscroll": true,
+  "mobile:shopping:no_hscroll": true,
+  "desktop:home:no_hscroll": true,
+  "desktop:catalog:no_hscroll": true,
+  "desktop:week:no_hscroll": true,
+  "desktop:day:no_hscroll": true,
+  "desktop:shopping:no_hscroll": true,
+  "swap_url_has_zamena_or_s": true,
+  "swapped_marker": 1,
+  "shopping_after_swap_url": true,
+  "shopping_rows_before_after": [
+   110,
+   110
+  ],
+  "shopping_changed_after_swap": true,
+  "bought_mark_persists": true,
+  "invalid_swap_warning": true,
+  "first_tab_skip": true,
+  "nojs_week_dishes": 23,
+  "nojs_swap_works": true
+ },
+ "axe": {
+  "version": "4.13.0",
+  "mobile:/": [],
+  "mobile:/menyu/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/den-1/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/pokupki/": [],
+  "mobile:/kak-planirovat/": [],
+  "mobile:/podborki/": [],
+  "mobile:/podborki/supy-dlya-obedov/": [],
+  "mobile:/menyu/bystraya-nedelya-dlya-dvoih/?s=d1-dinner-0:plov-s-kuricej": [],
+  "mobile:/nesushchestvuet/": [],
+  "desktop:/": [],
+  "desktop:/menyu/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/den-1/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/pokupki/": [],
+  "desktop:/kak-planirovat/": [],
+  "desktop:/podborki/": [],
+  "desktop:/podborki/supy-dlya-obedov/": [],
+  "desktop:/menyu/bystraya-nedelya-dlya-dvoih/?s=d1-dinner-0:plov-s-kuricej": [],
+  "desktop:/nesushchestvuet/": []
+ },
+ "perf_lab": {
+  "mobile:home": {
+   "lcp_ms": 112,
+   "cls": 0
+  },
+  "mobile:catalog": {
+   "lcp_ms": 48,
+   "cls": 0
+  },
+  "mobile:week": {
+   "lcp_ms": 80,
+   "cls": 0
+  },
+  "mobile:day": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "mobile:shopping": {
+   "lcp_ms": 76,
+   "cls": 0
+  },
+  "desktop:home": {
+   "lcp_ms": 84,
+   "cls": 0
+  },
+  "desktop:catalog": {
+   "lcp_ms": 52,
+   "cls": 0
+  },
+  "desktop:week": {
+   "lcp_ms": 92,
+   "cls": 0
+  },
+  "desktop:day": {
+   "lcp_ms": 60,
+   "cls": 0
+  },
+  "desktop:shopping": {
+   "lcp_ms": 84,
+   "cls": 0
+  }
+ },
+ "console_errors": [
+  "mobile: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8849/nesushchestvuet/",
+  "desktop: Failed to load resource: the server responded with a status of 404 (Not Found) @ http://127.0.0.1:8849/nesushchestvuet/"
+ ],
+ "screenshots": [
+  "docs/screenshots/1c18349/home-mobile.png",
+  "docs/screenshots/1c18349/catalog-mobile.png",
+  "docs/screenshots/1c18349/week-mobile.png",
+  "docs/screenshots/1c18349/day-mobile.png",
+  "docs/screenshots/1c18349/shopping-mobile.png",
+  "docs/screenshots/1c18349/home-desktop.png",
+  "docs/screenshots/1c18349/catalog-desktop.png",
+  "docs/screenshots/1c18349/week-desktop.png",
+  "docs/screenshots/1c18349/day-desktop.png",
+  "docs/screenshots/1c18349/shopping-desktop.png"
+ ]
+}

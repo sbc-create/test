@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>{{ title }}</h1>
+<p class="lead">{{ desc }}</p>
+<ul class="picks">{% for x in items %}<li><a href="{{ app.recipe_url('food-daily', x) }}">{{ x.title }}</a><span>{{ x.category_label }}{% if x.total_minutes %} · {{ x.total_minutes }} мин{% endif %}</span></li>{% endfor %}</ul>
+<p class="note">Рецепты — на сайте «Будни на кухне»; эту подборку можно использовать для замен в любом плане.</p>
+{% endblock %}

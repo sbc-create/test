@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block main %}
+<p class="kicker">{{ plan.title }}</p>
+<h1>{{ DAYS[n-1] }}</h1>
+{% for nt in notes %}<p class="warn">{{ nt }}</p>{% endfor %}
+<div class="dayview">
+{% for m, label in MEALS.items() %}
+  <section class="slot slot--{{ m }}"><h2>{{ label }}</h2>
+  {% for d in day[m] %}<p class="dish"><a href="{{ app.recipe_url(d.site, d.item) }}">{{ d.item.title }}</a><span class="dish__meta">{{ d.item.category_label }}{% if d.item.total_minutes %} · {{ d.item.total_minutes }} мин{% endif %} · рецепт на {{ d.item.servings }} порц., в плане — на {{ plan.people }}</span></p>{% endfor %}
+  </section>
+{% endfor %}
+</div>
+<nav class="daynav" aria-label="Дни">{% if n > 1 %}<a href="/menyu/{{ plan.slug }}/den-{{ n-1 }}/{{ qs }}">← {{ DAYS[n-2] }}</a>{% endif %}<a href="/menyu/{{ plan.slug }}/{{ qs }}">Вся неделя</a>{% if n < 7 %}<a href="/menyu/{{ plan.slug }}/den-{{ n+1 }}/{{ qs }}">{{ DAYS[n] }} →</a>{% endif %}</nav>
+{% endblock %}

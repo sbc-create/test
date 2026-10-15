@@ -1,0 +1,13 @@
+# Реестр сайтов сети, на которые меню недели ссылается, и хосты аудита.
+# Домены сайтов не выбраны: production-адресов нет (null), ссылки в preview
+# ведут на закрытый preview соседнего сайта на той же машине.
+schema_version: 1
+audit_hosts: [menunedeli.ru, www.mealime.com, www.plantoeat.com]
+sites:
+  food-daily:
+    name: "Будни на кухне"
+    catalog_feed: "http://127.0.0.1:8847/api/catalog.v1.json"   # контракт recipe-catalog/1
+    origin:
+      preview: "http://127.0.0.1:8847"
+      production: null
+    integration_status: preview_adapter   # не live: соседний сайт не опубликован

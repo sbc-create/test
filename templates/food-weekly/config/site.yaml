@@ -1,0 +1,11 @@
+site_id: food-weekly
+name: "Меню на неделю"          # рабочее название
+variant_id: week-grid   # вариант A; вариант B — ветка claude/template-food-weekly-b
+variant_version: "1"
+mode: preview
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8849"
+  production: null               # BLOCKED_INPUT: домен не выбран
+server: {bind: 127.0.0.1, port: 8849}
+ads: {adapter: disabled}

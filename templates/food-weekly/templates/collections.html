@@ -1,0 +1,5 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Подборки блюд для планов</h1>
+<ul class="cols">{% for k, (t, d, _) in cols.items() %}<li><a href="/podborki/{{ k }}/"><b>{{ t }}</b><span>{{ d }}</span></a></li>{% endfor %}</ul>
+{% endblock %}
