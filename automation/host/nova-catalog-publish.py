@@ -50,6 +50,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from factory.lords import rating_gateway  # noqa: E402
+from factory.lords.publish_space import место_для_публикации  # noqa: E402
 from factory.lords.nova_publish import (  # noqa: E402
     PublishError, РеестрСлагов, загрузить_снимок, контрольная_сумма,
     покрытие, причины_отсутствия, проверить_контракт_рендерера, собрать_сайт)
@@ -63,6 +64,7 @@ from factory.lords.nova_publish import (  # noqa: E402
 РЕЕСТР = ВАР / "slug-ledger.json"
 КОПИИ = ВАР / "publish-backups"
 ЗАМОК = ВАР / "nova-catalog-publish.lock"
+
 ОТЧЁТЫ = ВАР / "publish-reports"
 
 #: Витрины, чей каталог собирается из канонического снимка. Другие витрины
@@ -614,6 +616,8 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
                 shutil.copyfile(источник, черновик / f"{site_id}-{имя}.json")
         отчёт["staging_dir"] = str(черновик)
 
+    отчёт["disk"] = место_для_публикации(копии.parent, собранное, копии)
+
     if not применить:
         отчёт["note"] = ("без --apply production не изменяется")
         отчёт["peak_rss"] = пиковая_память()
@@ -621,6 +625,11 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         отчёт["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         return отчёт
 
+    if not отчёт["disk"].get("ok", True):
+        # Отказ ДО первой записи: ни копии, ни каталоги витрин не тронуты.
+        raise PublishError(
+            f"недостаточно места ДО ЗАПИСИ: {отчёт['disk'].get('reason')}. "
+            "Публикация не начиналась, прежние копии целы")
     копии.mkdir(parents=True, exist_ok=True)
     ЗАМОК.parent.mkdir(parents=True, exist_ok=True)
     with open(ЗАМОК, "w") as ф:
