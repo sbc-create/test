@@ -11,7 +11,7 @@
 
 Проверка идёт по ПАТЧЕННОЙ копии рантайма, а не по общей рабочей копии: та
 общая (`var/site-repos/animedia-icu`), и 15.10 в 14:08 по ней прошёл чужой
-выпуск. Патч — `automation/host/animedia-fixes/t132-t134-schedule-season-and-next.patch`.
+выпуск. Патч — `var/animedia-patches/t132-t134-schedule-season-and-next.patch`.
 """
 from __future__ import annotations
 
@@ -30,7 +30,10 @@ import pytest
 _ВЫЛОЖЕНО = pathlib.Path("/srv/animedia-icu/current/src/animedia-frontend.py")
 ИСТОЧНИК = (_ВЫЛОЖЕНО if _ВЫЛОЖЕНО.is_file()
             else КОРЕНЬ / "var/site-repos/animedia-icu/src/animedia-frontend.py")
-ПАТЧ = (КОРЕНЬ / "automation/host/animedia-fixes"
+#: Патч лежит ВНЕ отслеживаемого дерева: гигиена репозитория запрещает
+#: отслеживаемые *.patch (tests/unit/test_repo_hygiene.py), и для патчей в
+#: проекте уже есть место в var/ — там же лежат патчи выпуска B016.
+ПАТЧ = (КОРЕНЬ / "var/animedia-patches"
         / "t134-next-episode-already-released.patch")
 
 #: Данные ДжоДжо в той форме, в которой их читает рантайм: сезон 7 с
