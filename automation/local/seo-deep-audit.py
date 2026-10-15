@@ -17,7 +17,9 @@ from seo_operator import tech_backlog  # noqa: E402
 
 DESK = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36 seo-audit"
 MOB = "Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Mobile Safari/537.36 seo-audit"
-LINKS_PER_SITE = 150
+LINKS_PER_SITE = int(__import__("os").environ.get("AUDIT_LINKS", "150"))
+TITLES = int(__import__("os").environ.get("AUDIT_TITLES", "4"))
+SECTIONS = int(__import__("os").environ.get("AUDIT_SECTIONS", "0"))
 
 
 class _Без(urllib.request.HTTPRedirectHandler):
@@ -164,7 +166,7 @@ def аудит(домен):
             тайтлы += [u for u in (html.unescape(x) for x in re.findall(r"<loc>([^<]+)</loc>", т)) if "/title/" in u]
             if len(тайтлы) > 200:
                 break
-    выбор = тайтлы[:: max(1, len(тайтлы) // 4)][:4]
+    выбор = тайтлы[:: max(1, len(тайтлы) // TITLES)][:TITLES]
     for i, u in enumerate(выбор):
         путь = u[len(база):] if u.startswith(база) else u
         кт, тт, мт = страница(путь, f"title{i}")
@@ -177,6 +179,22 @@ def аудит(домен):
                     F("tag_not_link", u, g[1])
             elif g.lower() not in тексты:
                 F("genre_not_link", u, g)
+    # 3б. Разделы навигации (первый уровень, без параметров) и страницы серий с карточек
+    if SECTIONS:
+        разделы = []
+        for h in ссылки(домен, главная):
+            if re.fullmatch(r"/[a-z0-9-]+/", h) and h not in разделы and h not in ("/catalog/",):
+                разделы.append(h)
+        for j, h in enumerate(разделы[:SECTIONS]):
+            страница(h, f"section{j}")
+        серии = []
+        for путь_т, тело_т in list(тела.items()):
+            if "/title/" in путь_т:
+                серии += [x for x in ссылки(домен, тело_т) if re.search(r"/(episode|seriya|serija|watch|ep)[-/]|/season-\d+/|/\d+-seriya", x)]
+        for j, h in enumerate(dict.fromkeys(серии).keys()):
+            if j >= 3:
+                break
+            страница(h, f"episode{j}")
     # 4. Мобильные: те же статус, canonical, title, robots; viewport
     for ярлык, p in list(r["pages"].items()):
         if p.get("code") != 200 or "path" not in p:

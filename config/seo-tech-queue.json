@@ -818,7 +818,7 @@
       "expected": "(а) перечень дополнен измеренными разделами; (б) разделы жанров — отдельным шагом по правилу рантайма и только с допущенными записями (второе правило кодов в скрипте запрещено его же комментарием)",
       "check": "checks/sitemap_sections.py (стенд): каждый раздел перечня — 200, canonical на себя, без noindex; проба с /search/ — rc=1",
       "status": "session",
-      "evidence": "(а) сделано в обеих ячейках: space 8 разделов, icu 9 — стенд PASS; проба /search/ → «robots noindex, follow», rc=1. Полные наборы идут. (б) не начато: нужно правило набора жанров по допущенным записям из рантайма. (б): транслит() — только в рантайме (760 КБ), у скрипта обновления своя нормализовать(); набор кодов по допущенным записям без второго правила требует импорта рантайма в юнит обновления — отдельное решение. Пока разделы жанров достижимы через /genres/ из карты: 57 ссылок хаба, все на непустые разделы (живой обход 13.10). (а) коммиты (локально, B019): animedia-space a8b63c8, animedia-icu 90d9016; run.sh rc=0, пропусков нет. (б) 13.10 ~10:40Z — отложено решением SEO: набор кодов жанров без второго правила требует построения указателя рантайма внутри юнита обновления, то есть второй копии каталога в памяти раз в 10 минут; на хосте oom_kill 30 (13.10 ~04:15Z). Польза мала: все разделы жанров достижимы из карты через /genres/. Вернуться — когда рантайм сам отдаст перечень кодов (например, маршрутом карты). 13.10 ~12:04Z: (а) выпущено с Animedia ×2 (activated/live_verified); карта пересоберётся прогоном обновления. 13.10 (~16:30Z), живые sitemap: animedia.icu — /genres/, /top/, /lists/, /types/ в карте (8 082 адреса), animedia.space — /genres/, /top/, /lists/ (8 081). Часть (а) подтверждена; (б) — разделы жанров — отложена, см. выше."
+      "evidence": "(а) сделано в обеих ячейках: space 8 разделов, icu 9 — стенд PASS; проба /search/ → «robots noindex, follow», rc=1. Полные наборы идут. (б) не начато: нужно правило набора жанров по допущенным записям из рантайма. (б): транслит() — только в рантайме (760 КБ), у скрипта обновления своя нормализовать(); набор кодов по допущенным записям без второго правила требует импорта рантайма в юнит обновления — отдельное решение. Пока разделы жанров достижимы через /genres/ из карты: 57 ссылок хаба, все на непустые разделы (живой обход 13.10). (а) коммиты (локально, B019): animedia-space a8b63c8, animedia-icu 90d9016; run.sh rc=0, пропусков нет. (б) 13.10 ~10:40Z — отложено решением SEO: набор кодов жанров без второго правила требует построения указателя рантайма внутри юнита обновления, то есть второй копии каталога в памяти раз в 10 минут; на хосте oom_kill 30 (13.10 ~04:15Z). Польза мала: все разделы жанров достижимы из карты через /genres/. Вернуться — когда рантайм сам отдаст перечень кодов (например, маршрутом карты). 13.10 ~12:04Z: (а) выпущено с Animedia ×2 (activated/live_verified); карта пересоберётся прогоном обновления. 13.10 (~16:30Z), живые sitemap: animedia.icu — /genres/, /top/, /lists/, /types/ в карте (8 082 адреса), animedia.space — /genres/, /top/, /lists/ (8 081). Часть (а) подтверждена; (б) — разделы жанров — отложена, см. выше. | 15.10 ~12:10Z: /lists/ в карте пересмотрен (страница личных отметок без самостоятельной ценности) — T123/T124."
     },
     {
       "id": "T043",
@@ -2494,6 +2494,253 @@
       ],
       "status": "live_verified",
       "evidence": "15.10 ~11:20Z: поставлено сессией взамен T114 (попытки исчерпаны); вывод вердикта теперь полный (a093ee7), рабочие копии прогонов — на глубине var/site-repos (e88a8d5: cell-unit больше не падает в вердикте). Ветка последней попытки T114: claude/seo-tech-t114-20261015t095157z-4075510 (1990b09) — можно взять за основу. | 15.10: VERIFIED с первой попытки 11:40Z, служба выпуска → live_verified 11:46Z. Живая сверка 11:50Z: главная ссылается на comedy/detective/history (основные коды); detektiv/istoricheskiy/komediya — 200, canonical на основной код; JSON-LD без «западный контент», genre=west_content 0."
+    },
+    {
+      "id": "T120",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/lists/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на an1mego.site: /lists/ — служебная страница «Вход» (учётные записи не подключены; текст о том, что работает без входа; 0 ссылок на тайтлы) отвечает 200 и meta robots «index, follow», ссылка на неё — в навигации каждой страницы.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ отдаёт meta robots «noindex, follow» (и X-Robots-Tag, если витрина его ставит для noindex-страниц); страница и ссылки на неё остаются; в карте /lists/ нет. Одинаково на трёх AnimeGo. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — 200, noindex, follow",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T121",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/lists/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на animeg0.site: /lists/ — служебная страница «Вход» (учётные записи не подключены; текст о том, что работает без входа; 0 ссылок на тайтлы) отвечает 200 и meta robots «index, follow», ссылка на неё — в навигации каждой страницы.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ отдаёт meta robots «noindex, follow» (и X-Robots-Tag, если витрина его ставит для noindex-страниц); страница и ссылки на неё остаются; в карте /lists/ нет. Одинаково на трёх AnimeGo. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — 200, noindex, follow",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T122",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/lists/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на an1meg0.site: /lists/ — служебная страница «Вход» (учётные записи не подключены; текст о том, что работает без входа; 0 ссылок на тайтлы) отвечает 200 и meta robots «index, follow», ссылка на неё — в навигации каждой страницы.",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ отдаёт meta robots «noindex, follow» (и X-Robots-Tag, если витрина его ставит для noindex-страниц); страница и ссылки на неё остаются; в карте /lists/ нет. Одинаково на трёх AnimeGo. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — 200, noindex, follow",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T123",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/lists/",
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на animedia.space: /lists/ («Моё аниме» — личные отметки, хранятся в браузере; у посетителя без отметок «Всего отмечено: 0 … Здесь пока пусто», 0 ссылок на тайтлы) отвечает 200, «index, follow» и стоит в карте сайта (добавлен T042 (а) 13.10 по признаку «200, index, canonical на себя» — пересмотрено: самостоятельной ценности у страницы нет).",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ — meta robots «noindex, follow»; /lists/ убран из перечня разделов карты (РАЗДЕЛЫ_КАРТЫ скрипта обновления, T042); остальные разделы карты прежние. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — noindex, follow; после пересборки карты прогоном обновления /lists/ в ней нет",
+      "live_check": [
+        {
+          "url": "https://animedia.space/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T124",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/lists/",
+        "https://animedia.icu/sitemap.xml"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на animedia.icu: /lists/ («Моё аниме» — личные отметки, хранятся в браузере; у посетителя без отметок «Всего отмечено: 0 … Здесь пока пусто», 0 ссылок на тайтлы) отвечает 200, «index, follow» и стоит в карте сайта (добавлен T042 (а) 13.10 по признаку «200, index, canonical на себя» — пересмотрено: самостоятельной ценности у страницы нет).",
+      "norm": "SEO_KNOWLEDGE_PACK §3 п.5: страница без самостоятельной ценности — noindex,follow; в sitemap — только индексируемые канонические страницы",
+      "expected": "/lists/ — meta robots «noindex, follow»; /lists/ убран из перечня разделов карты (РАЗДЕЛЫ_КАРТЫ скрипта обновления, T042); остальные разделы карты прежние. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/lists_noindex.py",
+      "verify_live": "после выпуска: /lists/ — noindex, follow; после пересборки карты прогоном обновления /lists/ в ней нет",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/lists/",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T125",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/genres/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на animedia.space: description /genres/ — «Жанры аниме на Animedia.» без фактов, хотя страница показывает перечень разделов с числом тайтлов у каждого (например «8102 мультфильм», «3319 боевик»).",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /genres/ называет число разделов жанров, показанных на странице (с числом тайтлов у каждого) — то же число, что видно на странице, и вид содержимого; формулировка по образцу T036 для разделов. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: в description хаба — число разделов, совпадающее с видимым",
+      "live_check": [
+        {
+          "url": "https://animedia.space/genres/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T126",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/genres/",
+        "https://animedia.icu/types/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на animedia.icu: description /genres/ и /types/ — «Жанры аниме на Animedia.» / «Типы аниме на Animedia.» без фактов, хотя страница показывает перечень разделов с числом тайтлов у каждого (например «8102 мультфильм», «3319 боевик»).",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /genres/ и /types/ называет число разделов жанров/типов, показанных на странице — то же число, что видно на странице, и вид содержимого; формулировка по образцу T036 для разделов. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: в description хаба — число разделов, совпадающее с видимым",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/genres/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T127",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/collections/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на zonafilm.space: description /collections/ — «Подборки на Zona…» без фактов, хотя на странице видно «12 подборок» и число названий у каждой.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /collections/ называет число подборок — то же, что видно на странице («N подборок»), и вид содержимого; формулировка по образцу T036. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: description /collections/ с числом подборок, равным видимому",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/collections/",
+          "status": 200,
+          "contains": [
+            "подбор"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T128",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/collections/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на zonafilm.cc: description /collections/ — «Подборки на Zona…» без фактов, хотя на странице видно «12 подборок» и число названий у каждой.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /collections/ называет число подборок — то же, что видно на странице («N подборок»), и вид содержимого; формулировка по образцу T036. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: description /collections/ с числом подборок, равным видимому",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/collections/",
+          "status": 200,
+          "contains": [
+            "подбор"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
+    },
+    {
+      "id": "T129",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/collections/"
+      ],
+      "problem": "Живой замер 15.10 ~12:10Z на zonafilm12.site: description /collections/ — «Подборки на Zona…» без фактов, хотя на странице видно «12 подборок» и число названий у каждой.",
+      "norm": "SEO_KNOWLEDGE_PACK §4 п.2: description точно описывает видимый контент (как T036: число из видимой части страницы в description); новых фактов не вводить",
+      "expected": "description /collections/ называет число подборок — то же, что видно на странице («N подборок»), и вид содержимого; формулировка по образцу T036. Проверка поднимает витрину на КОПИИ снимка (снимок только читается): база — 1, правка — 0, без данных — 2.",
+      "check": "checks/hub_description.py",
+      "verify_live": "после выпуска: description /collections/ с числом подборок, равным видимому",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/collections/",
+          "status": 200,
+          "contains": [
+            "подбор"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "15.10 ~12:10Z: расширенный аудит сессии (automation/local/seo-deep-audit.py, AUDIT_TITLES=10 AUDIT_SECTIONS=12 AUDIT_LINKS=200; var/seo-audit/deep-20261015b.json): разделы навигации, страницы серий, 10 тайтлов, 200 ссылок, мобильные — прочих отклонений нет."
     }
   ]
 }
