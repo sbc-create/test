@@ -240,3 +240,30 @@ def test_публикатор_печатает_откат_с_ключом():
          / "automation/host/nova-catalog-publish.py").read_text(encoding="utf-8")
     assert "cp -p --remove-destination" in т
     assert "are the same file" in т     # причина названа рядом с командой
+
+def test_ссылка_не_экономит_место_после_замены(tmp_path):
+    """Вывод опыта 15.10, закреплённый проверкой: место НЕ экономится.
+
+    Я утверждал обратное («суточный прирост падает до нуля»), и это было
+    неверно. `os.replace` даёт цели новый inode, прежний остаётся за ссылкой —
+    то есть на диске лежат ДВЕ версии, ровно как при копировании. Проверка
+    стоит здесь, чтобы вывод не вернулся в документацию при следующей правке.
+    """
+    import os
+    цель = tmp_path / "details.json"
+    цель.write_bytes(b"V1" * 1024)
+    копия = tmp_path / "копии" / "details.json.before.pub-1"
+    publish_space.копия_до(цель, копия)
+    assert цель.stat().st_ino == копия.stat().st_ino
+    assert цель.stat().st_nlink == 2          # пока это один файл
+
+    врем = tmp_path / "details.json.tmp"
+    врем.write_bytes(b"V2" * 1024)
+    os.replace(врем, цель)
+
+    # Две РАЗНЫЕ записи с двумя наборами байт: место занято дважды.
+    assert цель.stat().st_ino != копия.stat().st_ino
+    assert цель.stat().st_nlink == 1
+    assert копия.stat().st_nlink == 1
+    assert цель.read_bytes()[:2] == b"V2"
+    assert копия.read_bytes()[:2] == b"V1"
