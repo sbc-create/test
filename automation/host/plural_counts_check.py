@@ -18,6 +18,8 @@ import pathlib
 import sys
 
 ФАЙЛ = pathlib.Path("src/lords-frontend.py")
+# Своя вёрстка lordserial33.biz: «N из M серий» на карточках (16.10 20:20Z «из 201 серий»).
+ДОП = (pathlib.Path("src/lords02_view.py"),)
 ЖЁСТКИЕ = (" серий", " сезона", " сезонов")
 
 
@@ -40,8 +42,11 @@ def главная() -> int:
         return 2
     текст = ФАЙЛ.read_text(encoding="utf-8")
     дерево = ast.parse(текст)
-    места = жёсткие_места(дерево)
-    провалы = [f"{ФАЙЛ}:{n}: число в f-строке перед жёстким «серий/сезона»" for n in места]
+    провалы = [f"{ФАЙЛ}:{n}: число в f-строке перед жёстким «серий/сезона»" for n in жёсткие_места(дерево)]
+    for доп in ДОП:
+        if доп.is_file():
+            провалы += [f"{доп}:{n}: число в f-строке перед жёстким «серий/сезона»"
+                        for n in жёсткие_места(ast.parse(доп.read_text(encoding="utf-8")))]
     функции = {у.name: у for у in дерево.body if isinstance(у, ast.FunctionDef)}
     if "_серий" in функции:
         ns: dict = {}

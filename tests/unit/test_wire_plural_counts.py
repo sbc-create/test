@@ -79,3 +79,29 @@ def test_сухой_прогон_не_пишет():
     assert (к / "src/lords-frontend.py").read_text(encoding="utf-8") == ОБРАЗЕЦ
     assert (к / "checks/run.sh").read_text(encoding="utf-8") == ПРОГОН
     assert not (к / "checks/plural_counts.py").exists()
+
+
+LORDS02 = '''def карточка(доступно, заявлено):
+    class Т:
+        @staticmethod
+        def склонение(n, одна, две, много):
+            n = abs(int(n))
+            if 11 <= n % 100 <= 14:
+                return много
+            return одна if n % 10 == 1 else (две if 2 <= n % 10 <= 4 else много)
+    return (f'<b>{доступно}</b> из '
+            f"{заявлено} серий доступно</span>")
+'''
+
+
+def test_lords02_родительный_после_из():
+    к = _копия("c")
+    (к / "src" / "lords02_view.py").write_text(LORDS02, encoding="utf-8")
+    shutil.copy(КОРЕНЬ / "automation/host/plural_counts_check.py", к / "checks/plural_counts.py")
+    assert м.главная(["--repo", str(к)]) == 0
+    assert _проверка(к) == 0
+    ns: dict = {}
+    exec((к / "src/lords02_view.py").read_text(encoding="utf-8"), ns)
+    assert ns["карточка"](70, 201) == "<b>70</b> из 201 серии доступно</span>"
+    assert ns["карточка"](6, 44) == "<b>6</b> из 44 серий доступно</span>"
+    assert ns["карточка"](6, 11) == "<b>6</b> из 11 серий доступно</span>"

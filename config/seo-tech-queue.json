@@ -4293,8 +4293,38 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "16.10 19:59Z: поставлено после живой проверки T180; инструмент и проверка те же (automation/local/wire-plural-counts.py, checks/plural_counts.py). | 16.10 20:17Z: опубликовано фоновым циклом (прогон 20261016T195941Z-2057744 VERIFIED), live_check пройден. 16.10 20:20Z: живая сверка — «24 серии», «21 серия», «4 серии», «4 сезона»; выборка 40 карточек: ошибок именительного падежа 0. Остаток другого шаблона — «из 201 серий» на карточках своей вёрстки lordserial33.biz (src/lords02_view.py, 6 вхождений в выборке) → T182. var/seo-audit/plural-live-20261016-T180-T181.json."
+    },
+    {
+      "direction": "lords",
+      "norm": "видимый текст карточки и страницы сезона грамматически верен: число серий/сезонов со склонением (SEO_KNOWLEDGE_PACK §4 — качество видимого содержимого; поручение владельца 16.10 — исправление технических текстов и ошибок индексируемых страниц)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-plural-counts.py --repo <worktree>` — он добавляет _число_мн/_серий/_сезонов перед def всего_серий(, заменяет ровно шаблоны своих таблиц ШАБЛОНЫ/ШАБЛОНЫ_RE/ШАБЛОНЫ_LORDS02 (в src/lords02_view.py — родительный после «из»), доставляет checks/plural_counts.py и вносит её в checks/run.sh после строки records-plural; руками ничего не дописывать и тексты не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть в ячейке, и полный checks/run.sh.",
+      "check": "checks/plural_counts.py",
+      "verify_live": "карточки сериалов: «24 серии», «21 серия», «4 сезона», страница сезона «В сезоне N серий» с верной формой; title/description/canonical/robots без изменений",
+      "id": "T182",
+      "site": "lordserial33.biz",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/title/giganty/",
+        "https://lordserial33.biz/"
+      ],
+      "problem": "Живой замер 16.10 20:20Z (var/seo-audit/plural-live-20261016-T180-T181.json): на карточках lordserial33.biz «70 из 201 серий доступно» (6 вхождений в выборке 40 карточек, напр. рекомендация Kaatelal & Sons на /title/giganty/). После «из» — родительный падеж: «из 44 серий», но «из 21 серии», «из 201 серии». Шаблон — своя вёрстка ячейки src/lords02_view.py (две строки: карточка и слайдер главной); комментарий в коде утверждает «после из N — всегда родительный множественного», это неверно для чисел на 1 (кроме 11).",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/title/giganty/",
+          "status": 200,
+          "absent": [
+            "из 201 серий"
+          ]
+        },
+        {
+          "url": "https://lordserial33.biz/",
+          "status": 200
+        }
+      ],
       "status": "queued",
-      "evidence": "16.10 19:59Z: поставлено после живой проверки T180; инструмент и проверка те же (automation/local/wire-plural-counts.py, checks/plural_counts.py)."
+      "evidence": "16.10 20:20Z: инструмент дополнен таблицей ШАБЛОНЫ_LORDS02 (Т.склонение(заявлено, 'серии', 'серий', 'серий'), функция уже есть в lords02_taxonomy), проверка checks/plural_counts.py читает и src/lords02_view.py; на копии ячейки: база rc=1, правка rc=0, checks/compiles.py rc=0; тест tests/unit/test_wire_plural_counts.py 3 passed («из 201 серии», «из 44 серий», «из 11 серий»)."
     }
   ]
 }
