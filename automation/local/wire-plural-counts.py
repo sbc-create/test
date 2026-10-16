@@ -124,8 +124,21 @@ def самопроверка() -> None:
             raise SystemExit(f"самопроверка: {n} → «{got}», ждали «{w}»")
 
 
+def файл_шаблона(корень: pathlib.Path) -> pathlib.Path | None:
+    """Файл, который витрина исполняет: entrypoint из config/site.json, иначе первый из ФАЙЛЫ.
+    У animedia-icu лежат оба (lords-frontend.py — наследство), исполняется animedia-frontend.py."""
+    import json
+    try:
+        вход = json.loads((корень / "config/site.json").read_text(encoding="utf-8")).get("entrypoint")
+    except (OSError, ValueError):
+        вход = None
+    if вход and f"src/{вход}" in ФАЙЛЫ and (корень / "src" / вход).is_file():
+        return корень / "src" / вход
+    return next((корень / ф for ф in ФАЙЛЫ if (корень / ф).is_file()), None)
+
+
 def править(корень: pathlib.Path, сухо: bool) -> int:
-    п = next((корень / ф for ф in ФАЙЛЫ if (корень / ф).is_file()), None)
+    п = файл_шаблона(корень)
     if п is None:
         print(f"{корень}: нет ни одного из {ФАЙЛЫ}")
         return 2

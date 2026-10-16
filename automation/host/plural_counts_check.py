@@ -38,6 +38,13 @@ def жёсткие_места(дерево: ast.AST) -> list[int]:
 
 def главная() -> int:
     ФАЙЛ = next((ф for ф in ФАЙЛЫ if ф.is_file()), None)
+    try:  # исполняемый файл — entrypoint из config/site.json (у animedia-icu лежат оба шаблона)
+        import json
+        вход = pathlib.Path("src") / json.loads(pathlib.Path("config/site.json").read_text(encoding="utf-8"))["entrypoint"]
+        if вход in ФАЙЛЫ and вход.is_file():
+            ФАЙЛ = вход
+    except (OSError, ValueError, KeyError, TypeError):
+        pass
     if ФАЙЛ is None:
         print(f"НЕ ИЗМЕРЕНО: нет ни одного из {[str(ф) for ф in ФАЙЛЫ]}")
         return 2
