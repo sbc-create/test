@@ -4253,8 +4253,48 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "16.10 19:35Z: инструмент automation/local/wire-plural-counts.py (тесты tests/unit/test_wire_plural_counts.py 2 passed; повторный запуск ничего не меняет); сухой прогон на копии ячейки: 2+1+3+2 замены, файл компилируется Python 3.10. Способ проверки эффекта: live_check публикатора + выборка 40 карточек (доля неверных форм должна стать 0); поисковый эффект отдельно не приписывается — правка качества текста. | 16.10 19:43Z: прогон 20261016T193616Z-1924733 INCOMPLETE — check_in_branch=false: поле check было описанием, а не файлом проверки. Исправлено: инструмент доставляет checks/plural_counts.py (automation/host/plural_counts_check.py; на копии ячейки lordfilm47: база rc=1, после правки rc=0) и нашёл пятый шаблон «Всего в произведении N серий» (страница серии). | 16.10 19:57Z: опубликовано фоновым циклом (fast-forward ветки выпуска), live_check публикатора пройден. 16.10 19:59Z: живая сверка сессии — radi-vstrechi-s-toboy «24 серии», nlo-4 «4 серии», derzhis-charli «4 сезона, 98 серий», серия «1 серия»; robots index,follow без изменений; выборка 40 карточек (seed 3): 37 вхождений, неверных 0 (до правки 11 из 37) — var/seo-audit/plural-live-20261016-T180.json."
+    },
+    {
+      "direction": "lords",
+      "norm": "видимый текст карточки и страницы сезона грамматически верен: число серий/сезонов со склонением (SEO_KNOWLEDGE_PACK §4 — качество видимого содержимого; поручение владельца 16.10 — исправление технических текстов и ошибок индексируемых страниц)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-plural-counts.py --repo <worktree>` — он добавляет _число_мн/_серий/_сезонов перед def всего_серий(, заменяет ровно шаблоны своих таблиц ШАБЛОНЫ/ШАБЛОНЫ_RE, доставляет checks/plural_counts.py и вносит её в checks/run.sh после строки records-plural; руками ничего не дописывать и тексты не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть в ячейке, и полный checks/run.sh.",
+      "check": "checks/plural_counts.py",
+      "verify_live": "карточки сериалов: «24 серии», «21 серия», «4 сезона», страница сезона «В сезоне N серий» с верной формой; title/description/canonical/robots без изменений",
+      "id": "T181",
+      "site": "lordserial33.biz",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/title/radi-vstrechi-s-toboy/",
+        "https://lordserial33.biz/title/derzhis-charli/",
+        "https://lordserial33.biz/title/gangster-5/season-1/"
+      ],
+      "problem": "Распространение T180 (lordfilm47.space, live_verified 19:57Z). Живой замер 16.10 19:30Z на lordserial33.biz: «24 серий» (/title/radi-vstrechi-s-toboy/), «21 серий» (/title/derzhis-charli/) — тот же шаблон Lords.",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/title/radi-vstrechi-s-toboy/",
+          "status": 200,
+          "absent": [
+            "24 серий"
+          ],
+          "contains": [
+            "24 серии"
+          ]
+        },
+        {
+          "url": "https://lordserial33.biz/title/derzhis-charli/",
+          "status": 200,
+          "absent": [
+            "21 серий"
+          ],
+          "contains": [
+            "21 серия"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "16.10 19:35Z: инструмент automation/local/wire-plural-counts.py (тесты tests/unit/test_wire_plural_counts.py 2 passed; повторный запуск ничего не меняет); сухой прогон на копии ячейки: 2+1+3+2 замены, файл компилируется Python 3.10. Способ проверки эффекта: live_check публикатора + выборка 40 карточек (доля неверных форм должна стать 0); поисковый эффект отдельно не приписывается — правка качества текста. | 16.10 19:43Z: прогон 20261016T193616Z-1924733 INCOMPLETE — check_in_branch=false: поле check было описанием, а не файлом проверки. Исправлено: инструмент доставляет checks/plural_counts.py (automation/host/plural_counts_check.py; на копии ячейки lordfilm47: база rc=1, после правки rc=0) и нашёл пятый шаблон «Всего в произведении N серий» (страница серии)."
+      "evidence": "16.10 19:59Z: поставлено после живой проверки T180; инструмент и проверка те же (automation/local/wire-plural-counts.py, checks/plural_counts.py)."
     }
   ]
 }
