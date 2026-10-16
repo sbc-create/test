@@ -4020,6 +4020,113 @@
       "status": "queued",
       "evidence": "16.10 13:23Z: живая сверка сессии (чипы разделов на трёх Zona). Ответственный: SEO-сессия (фоновый цикл).",
       "dependencies": "после выпуска T170 (тот же переходник)"
+    },
+    {
+      "direction": "lords",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на каталоге, жанре/годе, подборках и карточке без описания прежних формулировок нет, навигация на месте",
+      "id": "T174",
+      "site": "lordserial33.biz",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/catalog/",
+        "https://lordserial33.biz/title/gangster-5/",
+        "https://lordserial33.biz/collections/"
+      ],
+      "problem": "Живая сверка 16.10 13:29Z (var/seo-audit/wording-live-20261016-lords3.json): «записей в выборке»/«запись в выборке» (/catalog/, /year/2026/ и др.), «Описание для этой записи источник пока не передал» (3 стр., напр. /title/gangster-5/), «Неигровые сериалы с пометкой «документальный»» (/collections/). Пары уже в ЗАМЕНЫ_2 инструмента (блоки 16.10 «карточка без описания», «живая сверка T161/T164», «документальный»); сухой прогон инструмента на этом репозитории — 8–9 замен.",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/catalog/",
+          "status": 200,
+          "absent": [
+            "в выборке"
+          ]
+        },
+        {
+          "url": "https://lordserial33.biz/title/gangster-5/",
+          "status": 200,
+          "absent": [
+            "источник пока не передал"
+          ]
+        },
+        {
+          "url": "https://lordserial33.biz/collections/",
+          "status": 200,
+          "absent": [
+            "с пометкой «документальный»"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:29Z: живая сверка сессии (распространение T164/T167 на остальные Lords). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "direction": "lords",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на каталоге, жанре/годе, подборках и карточке без описания прежних формулировок нет, навигация на месте",
+      "id": "T175",
+      "site": "1lordserials1.online",
+      "repo": "var/site-repos/1lordserials1-online",
+      "urls": [
+        "https://1lordserials1.online/movies/",
+        "https://1lordserials1.online/title/gangster-5/"
+      ],
+      "problem": "Живая сверка 16.10 13:29Z (var/seo-audit/wording-live-20261016-lords3.json): «записей в выборке»/«запись в выборке» (/catalog/, /movies/, /series/, /animation/ — 8 стр.), «Описание для этой записи источник пока не передал» (/title/gangster-5/ и др.). Пары уже в ЗАМЕНЫ_2 инструмента (блоки 16.10 «карточка без описания», «живая сверка T161/T164», «документальный»); сухой прогон инструмента на этом репозитории — 8–9 замен.",
+      "live_check": [
+        {
+          "url": "https://1lordserials1.online/movies/",
+          "status": 200,
+          "absent": [
+            "в выборке"
+          ]
+        },
+        {
+          "url": "https://1lordserials1.online/title/gangster-5/",
+          "status": 200,
+          "absent": [
+            "источник пока не передал"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:29Z: живая сверка сессии (распространение T164/T167 на остальные Lords). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "direction": "lords",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на каталоге, жанре/годе, подборках и карточке без описания прежних формулировок нет, навигация на месте",
+      "id": "T176",
+      "site": "lordfilm47.space",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/genre/drama/",
+        "https://lordfilm47.space/title/oskolki-tishiny-illyuziya-idealnoy-zhizni/"
+      ],
+      "problem": "Живая сверка 16.10 13:29Z (var/seo-audit/wording-live-20261016-lords3.json): «записей в выборке» (/genre/drama/ и др.), «Оценок пока нет: источник их не передал» (/title/oskolki-tishiny-illyuziya-idealnoy-zhizni/). Пары уже в ЗАМЕНЫ_2 инструмента (блоки 16.10 «карточка без описания», «живая сверка T161/T164», «документальный»); сухой прогон инструмента на этом репозитории — 8–9 замен.",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/genre/drama/",
+          "status": 200,
+          "absent": [
+            "в выборке"
+          ]
+        },
+        {
+          "url": "https://lordfilm47.space/title/oskolki-tishiny-illyuziya-idealnoy-zhizni/",
+          "status": 200,
+          "absent": [
+            "источник их не передал"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:29Z: живая сверка сессии (распространение T164/T167 на остальные Lords). Ответственный: SEO-сессия (фоновый цикл)."
     }
   ]
 }
