@@ -4127,6 +4127,73 @@
       ],
       "status": "live_verified",
       "evidence": "16.10 13:29Z: живая сверка сессии (распространение T164/T167 на остальные Lords). Ответственный: SEO-сессия (фоновый цикл). 16.10 15:07Z: выпущена фоновым циклом; живая сверка var/seo-audit/wording-live-20261016-T174-T176.json — 20 стр., коды 200, находок 0; страницы live_check чисты (карточка без описания: «Описания пока нет: основные сведения о записи собраны в таблице ниже.»)."
+    },
+    {
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "id": "T177",
+      "site": "animedia.space",
+      "direction": "animedia",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/lists/",
+        "https://animedia.space/top/",
+        "https://animedia.space/collection/action/"
+      ],
+      "problem": "Живая сверка 16.10 16:54Z (var/seo-audit/wording-live-20261016-anime5.json): «историю просмотров витрина не ведёт» (/lists/), «Порядок задаёт сводная оценка Animedia (методика weighted-log-votes/1.0) по снимку от …» (/top/), «Данные снимка каталога от …» (/collection/action/, /collection/classic/, /collection/anime_movies/). Пары — ЗАМЕНЫ_2 инструмента, блок «16.10 16:53Z: живая сверка Animedia»; сухой прогон: animedia-space 4 замены, animedia-icu 2.",
+      "verify_live": "после выпуска: на «Моём аниме», топе и подборках прежних формулировок нет; дата обновления и порядок на месте, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://animedia.space/lists/",
+          "status": 200,
+          "absent": [
+            "витрина не ведёт"
+          ]
+        },
+        {
+          "url": "https://animedia.space/top/",
+          "status": 200,
+          "absent": [
+            "методика",
+            "по снимку"
+          ]
+        },
+        {
+          "url": "https://animedia.space/collection/action/",
+          "status": 200,
+          "absent": [
+            "Данные снимка каталога"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 16:54Z: живая сверка сессии (редакционная чистка Animedia). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "id": "T178",
+      "site": "animedia.icu",
+      "direction": "animedia",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/lists/"
+      ],
+      "problem": "Живая сверка 16.10 16:54Z (var/seo-audit/wording-live-20261016-anime5.json): «историю просмотров витрина не ведёт» (/lists/). Пары — ЗАМЕНЫ_2 инструмента, блок «16.10 16:53Z: живая сверка Animedia»; сухой прогон: animedia-space 4 замены, animedia-icu 2.",
+      "verify_live": "после выпуска: на «Моём аниме», топе и подборках прежних формулировок нет; дата обновления и порядок на месте, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/lists/",
+          "status": 200,
+          "absent": [
+            "витрина не ведёт"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 16:54Z: живая сверка сессии (редакционная чистка Animedia). Ответственный: SEO-сессия (фоновый цикл)."
     }
   ]
 }
