@@ -3816,8 +3816,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "16.10 11:39Z: живая сверка сессии. Ответственный: SEO-сессия (фоновый цикл)."
+      "status": "live_verified",
+      "evidence": "16.10 11:39Z: живая сверка сессии. Ответственный: SEO-сессия (фоновый цикл). 16.10 13:22Z: выпущена фоновым циклом (T168 12:50Z, T169 13:20Z); живая сверка var/seo-audit/wording-live-20261016-T168-T169.json — «в этой выборке», «Тематические выборки — не полный каталог» отсутствуют, коды 200, og:site_name на месте; остаток WIDE — названия фильмов и сюжет («Служебный роман», «ячейке»), и «тематические выборки» в описании главной — не технический текст. Найден отдельный дефект чипа раздела → T171/T172."
     },
     {
       "id": "T169",
@@ -3849,8 +3849,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "16.10 11:39Z: живая сверка сессии. Ответственный: SEO-сессия (фоновый цикл).",
+      "status": "live_verified",
+      "evidence": "16.10 11:39Z: живая сверка сессии. Ответственный: SEO-сессия (фоновый цикл). 16.10 13:22Z: выпущена фоновым циклом (T168 12:50Z, T169 13:20Z); живая сверка var/seo-audit/wording-live-20261016-T168-T169.json — «в этой выборке», «Тематические выборки — не полный каталог» отсутствуют, коды 200, og:site_name на месте; остаток WIDE — названия фильмов и сюжет («Служебный роман», «ячейке»), и «тематические выборки» в описании главной — не технический текст. Найден отдельный дефект чипа раздела → T171/T172.",
       "dependencies": "после выпуска T162 (тот же репозиторий)"
     },
     {
@@ -3878,6 +3878,148 @@
       "status": "queued",
       "evidence": "16.10 12:24Z: живая сверка сессии после T163. Ответственный: SEO-сессия (фоновый цикл).",
       "check": "checks/public_wording.py"
+    },
+    {
+      "id": "T171",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/doramas/"
+      ],
+      "problem": "Живая сверка 16.10 13:23Z: на /movies/, /series/, /animation/, /doramas/ активный фильтр раздела показан внутренним значением — чип «movie ×», «series ×», «animation ×», «dorama ×». Причина: подпись чипа берётся из локального словаря {Фильм, Сериал, Мультфильм}, где нет ключей разделов; в коде уже есть общий словарь ПОДПИСЬ_РАЗДЕЛА с этими ключами (Фильмы, Сериалы, Анимация, Дорамы).",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без внутренних значений и служебных ключей (SEO_KNOWLEDGE_PACK §4 п.2; задание владельца 15.10)",
+      "expected": "В src/lords-frontend.py в построении активных чипов заменить локальный словарь подписей kind на ПОДПИСЬ_РАЗДЕЛА.get(выбрано[\"kind\"], выбрано[\"kind\"]) — подписи только из этого словаря, новых текстов не сочинять. Добавить проверку в checks/ (или в существующую checks/public_wording.py): в отрисованных /movies/, /series/, /animation/, /doramas/ чип раздела — подпись из ПОДПИСЬ_РАЗДЕЛА, строки «<span>movie<a» и аналогов нет; на коде базы проверка падает, на правке проходит. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на четырёх разделах чип показывает русскую подпись раздела, ссылка «×» и навигация на месте",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/movies/",
+          "status": 200,
+          "absent": [
+            "<span>movie<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/series/",
+          "status": 200,
+          "absent": [
+            "<span>series<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/animation/",
+          "status": 200,
+          "absent": [
+            "<span>animation<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/doramas/",
+          "status": 200,
+          "absent": [
+            "<span>dorama<a"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:23Z: живая сверка сессии (чипы разделов на трёх Zona). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T172",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/movies/",
+        "https://zonafilm12.site/doramas/"
+      ],
+      "problem": "Живая сверка 16.10 13:23Z: на /movies/, /series/, /animation/, /doramas/ активный фильтр раздела показан внутренним значением — чип «movie ×», «series ×», «animation ×», «dorama ×». Причина: подпись чипа берётся из локального словаря {Фильм, Сериал, Мультфильм}, где нет ключей разделов; в коде уже есть общий словарь ПОДПИСЬ_РАЗДЕЛА с этими ключами (Фильмы, Сериалы, Анимация, Дорамы).",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без внутренних значений и служебных ключей (SEO_KNOWLEDGE_PACK §4 п.2; задание владельца 15.10)",
+      "expected": "В src/lords-frontend.py в построении активных чипов заменить локальный словарь подписей kind на ПОДПИСЬ_РАЗДЕЛА.get(выбрано[\"kind\"], выбрано[\"kind\"]) — подписи только из этого словаря, новых текстов не сочинять. Добавить проверку в checks/ (или в существующую checks/public_wording.py): в отрисованных /movies/, /series/, /animation/, /doramas/ чип раздела — подпись из ПОДПИСЬ_РАЗДЕЛА, строки «<span>movie<a» и аналогов нет; на коде базы проверка падает, на правке проходит. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на четырёх разделах чип показывает русскую подпись раздела, ссылка «×» и навигация на месте",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/movies/",
+          "status": 200,
+          "absent": [
+            "<span>movie<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/series/",
+          "status": 200,
+          "absent": [
+            "<span>series<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/animation/",
+          "status": 200,
+          "absent": [
+            "<span>animation<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/doramas/",
+          "status": 200,
+          "absent": [
+            "<span>dorama<a"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:23Z: живая сверка сессии (чипы разделов на трёх Zona). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "T173",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/movies/",
+        "https://zonafilm.cc/doramas/"
+      ],
+      "problem": "Живая сверка 16.10 13:23Z: на /movies/, /series/, /animation/, /doramas/ активный фильтр раздела показан внутренним значением — чип «movie ×», «series ×», «animation ×», «dorama ×». Причина: подпись чипа берётся из локального словаря {Фильм, Сериал, Мультфильм}, где нет ключей разделов; в коде уже есть общий словарь ПОДПИСЬ_РАЗДЕЛА с этими ключами (Фильмы, Сериалы, Анимация, Дорамы).",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без внутренних значений и служебных ключей (SEO_KNOWLEDGE_PACK §4 п.2; задание владельца 15.10)",
+      "expected": "Закреплённый шаблон не править. В переходник src/public_wording.py (ПОДМЕНЫ, готовая разметка) добавить узкие пары для чипа раздела: «<span>movie<a href=\"/movies/» → «<span>Фильмы<a href=\"/movies/», то же для series/Сериалы (/series/), animation/Анимация (/animation/), dorama/Дорамы (/doramas/); подписи — из ПОДПИСЬ_РАЗДЕЛА шаблона, дословно. Обещание установки (громкий отказ, если узора нет) — как у остальных пар. Проверка: на коде базы чипы с внутренним значением есть, на правке нет. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на четырёх разделах чип показывает русскую подпись раздела, ссылка «×» и навигация на месте",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/movies/",
+          "status": 200,
+          "absent": [
+            "<span>movie<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/series/",
+          "status": 200,
+          "absent": [
+            "<span>series<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/animation/",
+          "status": 200,
+          "absent": [
+            "<span>animation<a"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/doramas/",
+          "status": 200,
+          "absent": [
+            "<span>dorama<a"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 13:23Z: живая сверка сессии (чипы разделов на трёх Zona). Ответственный: SEO-сессия (фоновый цикл).",
+      "dependencies": "после выпуска T170 (тот же переходник)"
     }
   ]
 }
