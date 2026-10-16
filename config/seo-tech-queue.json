@@ -4329,7 +4329,7 @@
     {
       "direction": "anime",
       "norm": "видимый текст карточки и страницы сезона грамматически верен: число серий/сезонов со склонением (SEO_KNOWLEDGE_PACK §4 — качество видимого содержимого; поручение владельца 16.10 — исправление технических текстов и ошибок индексируемых страниц)",
-      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-plural-counts.py --repo <worktree>` — он добавляет _число_мн/_серий/_сезонов (и _из_серий — родительный после «из») перед def всего_серий( в src/animedia-frontend.py, заменяет ровно шаблоны своих таблиц ШАБЛОНЫ/ШАБЛОНЫ_RE, доставляет checks/plural_counts.py и вносит её в checks/run.sh после строки records-plural; руками ничего не дописывать и тексты не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть в ячейке, и полный checks/run.sh.",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-plural-counts.py --repo <worktree>` — он добавляет _число_мн/_серий/_сезонов (и _из_серий — родительный после «из») перед def всего_серий( в src/animedia-frontend.py, заменяет ровно шаблоны своих таблиц ШАБЛОНЫ/ШАБЛОНЫ_RE, доставляет checks/plural_counts.py и вносит её в checks/run.sh после строки records-plural; руками ничего не дописывать и тексты не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть в ячейке, и полный checks/run.sh. checks/plural_counts.py НЕ изменять и не дополнять: на CI-раннере нет снимка и манифеста шаблона, импорт витрины там падает (T183, 16.10 21:07Z).",
       "check": "checks/plural_counts.py",
       "verify_live": "карточки сериалов: «24 серии», «21 серия», «4 сезона», страница сезона «В сезоне N серий» с верной формой; title/description/canonical/robots без изменений",
       "id": "T183",
@@ -4353,7 +4353,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "16.10 20:41Z: инструмент automation/local/wire-plural-counts.py обобщён на src/animedia-frontend.py (+4 шаблона Animedia, _из_серий); на копии ячейки animedia-space: 11 замен, checks/plural_counts.py база rc=1, правка rc=0, синтаксис ok; повторный запуск ничего не меняет; tests/unit/test_wire_plural_counts.py 3 passed. animedia.icu: шаблонов нет (на копии проверка rc=0) — отдельно сверить живой сайт."
+      "evidence": "16.10 20:41Z: инструмент automation/local/wire-plural-counts.py обобщён на src/animedia-frontend.py (+4 шаблона Animedia, _из_серий); на копии ячейки animedia-space: 11 замен, checks/plural_counts.py база rc=1, правка rc=0, синтаксис ok; повторный запуск ничего не меняет; tests/unit/test_wire_plural_counts.py 3 passed. animedia.icu: шаблонов нет (на копии проверка rc=0) — отдельно сверить живой сайт. | 16.10 20:45Z: прогон 20261016T204151Z-2256499 VERIFIED, но исполнитель дописал в checks/plural_counts.py ярус, импортирующий витрину; 21:07Z публикатор: fast-forward → CI release 38965939726 FAILURE (plural-counts: нет манифеста шаблона /srv/lords/.frontend/template-manifest-animedia-01.json на раннере), ветка выпуска застряла на 2e9807c ≠ живому 97894ff. 16.10 21:24Z: SEO — исправляющий коммит 502c212 поверх 2e9807c (штатная статическая проверка фабрики, код витрины не тронут; ветка rc=0, живой код rc=1), обычный push в ветку выпуска (без force); CI release 38969127572 запущен 21:24Z."
     }
   ]
 }
