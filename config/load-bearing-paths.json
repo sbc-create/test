@@ -1,0 +1,56 @@
+{
+ "schema": "load-bearing-paths/1.0",
+ "updated_at": "2026-10-16T09:30:00Z",
+ "note": "Пути, удаление которых ломает работающие публичные витрины, хотя по виду они выглядят мусором. Запись машинная намеренно: предупреждение в документе читает владелец, а копию удаляет тот, кто освобождает место, и документа он может не читать. Проверка — automation/local/load-bearing-check.py и tests/unit/test_load_bearing_paths.py.",
+ "paths": [
+  {
+   "path": "/home/claude/wt-yummy-mail-biz/compose.staging.yaml",
+   "why": "Единственный источник файла выпуска, которым подняты ТРИ индексируемые витрины Yummy (yummyani.site, yummyani.org, yummyani.biz). Метка com.docker.compose.project.config_files у всех трёх контейнеров называет именно его. Копия под /srv расходится на 70 строк и держит SEO_INDEXING_ENABLED=false в общем якоре: выпуск из неё закроет org и biz. Содержимое здесь НЕ дублируется ссылкой.",
+   "measured_at": "2026-10-16T09:05:00Z",
+   "size_hint": "8,8 МБ вся копия, последний коммит 1 октября — выглядит самой выбрасываемой и является несущей",
+   "defect": "MOD-46",
+   "release_blocking": true,
+   "owner_action": "привести объявления режима индексации в файл выпуска под /srv; после этого путь перестанет быть несущим"
+  },
+  {
+   "path": "/home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml",
+   "why": "Переопределение, которое даёт yummyani.biz SEO_INDEXING_ENABLED=true (строка 41). В файле выпуска под /srv у web-biz переменной нет вовсе.",
+   "measured_at": "2026-10-16T09:05:00Z",
+   "defect": "MOD-46",
+   "release_blocking": true,
+   "owner_action": "то же: объявление режима переносится в файл выпуска"
+  },
+  {
+   "path": "/home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml",
+   "why": "Второе переопределение того же проекта: монтирует каталоги редакционных накладок трёх арендаторов. Без него витрины поднимутся без опубликованных редакционных текстов и будут выглядеть исправными.",
+   "measured_at": "2026-10-16T09:05:00Z",
+   "defect": "MOD-46",
+   "release_blocking": false,
+   "owner_action": "перенести монтирования в файл выпуска"
+  },
+  {
+   "path": "/home/claude/wt-portable-site-cell-01/var/site-repos",
+   "why": "Рабочие копии витрин: здесь живут файлы выпуска обоих контуров yummyani7 (INDEXABLE, OPEN по решению владельца). Путь, записанный в метках их контейнеров, ведёт сюда через символическую ссылку из рабочей копии wt-nova-publish-memory-02; содержимое — здесь.",
+   "measured_at": "2026-10-16T08:40:00Z",
+   "defect": "MOD-47",
+   "release_blocking": true,
+   "owner_action": "ничего: путь устойчив. Запись нужна, чтобы каталог не снесли как «копии репозиториев»"
+  },
+  {
+   "path": "/home/claude/wt-seo-index-audit-20260930/docker-compose.yml",
+   "why": "Файл выпуска, которым подняты api, scheduler и worker движка SEO (seo-engine-api-1, -scheduler-1, -worker-1). Движок обслуживает сбор аналитики и очередь заданий; его исполнитель мёртв с 20 442 заданиями в очереди, и это отдельное решение владельца — но удаление копии унесёт и сам файл выпуска.",
+   "measured_at": "2026-10-16T09:30:00Z",
+   "release_blocking": false,
+   "zone": "SEO (линия wt-seo-index-audit-20260930)",
+   "owner_action": "решение о судьбе движка и его очереди — пункт 8 запроса владельцу; до него копию не удалять"
+  },
+  {
+   "path": "/home/claude/work-seo/seo-engine/docker-compose.yml",
+   "why": "Тот же проект seo-engine поднят ДВУМЯ разными файлами: postgres и redis — отсюда, api/scheduler/worker — из другой копии. То есть состояние движка собрано из двух рабочих копий, и удаление любой из них оставит проект без части описания.",
+   "measured_at": "2026-10-16T09:30:00Z",
+   "release_blocking": false,
+   "zone": "SEO",
+   "owner_action": "свести описание проекта в один файл на пути выпуска; пока — не удалять ни одну из двух копий"
+  }
+ ]
+}
