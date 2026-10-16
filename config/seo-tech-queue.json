@@ -4325,6 +4325,35 @@
       ],
       "status": "live_verified",
       "evidence": "16.10 20:20Z: инструмент дополнен таблицей ШАБЛОНЫ_LORDS02 (Т.склонение(заявлено, 'серии', 'серий', 'серий'), функция уже есть в lords02_taxonomy), проверка checks/plural_counts.py читает и src/lords02_view.py; на копии ячейки: база rc=1, правка rc=0, checks/compiles.py rc=0; тест tests/unit/test_wire_plural_counts.py 3 passed («из 201 серии», «из 44 серий», «из 11 серий»). | 16.10 20:37Z: опубликовано фоновым циклом, live_check пройден. 16.10 20:38Z: живая сверка — /title/giganty/ «из 201 серии», главная «из 201 серии», «из 119 серий»; выборка 40 карточек: 21 вхождение, неверных 0 (было 6) — var/seo-audit/plural-live-20261016-T182.json."
+    },
+    {
+      "direction": "anime",
+      "norm": "видимый текст карточки и страницы сезона грамматически верен: число серий/сезонов со склонением (SEO_KNOWLEDGE_PACK §4 — качество видимого содержимого; поручение владельца 16.10 — исправление технических текстов и ошибок индексируемых страниц)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-plural-counts.py --repo <worktree>` — он добавляет _число_мн/_серий/_сезонов (и _из_серий — родительный после «из») перед def всего_серий( в src/animedia-frontend.py, заменяет ровно шаблоны своих таблиц ШАБЛОНЫ/ШАБЛОНЫ_RE, доставляет checks/plural_counts.py и вносит её в checks/run.sh после строки records-plural; руками ничего не дописывать и тексты не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть в ячейке, и полный checks/run.sh.",
+      "check": "checks/plural_counts.py",
+      "verify_live": "карточки сериалов: «24 серии», «21 серия», «4 сезона», страница сезона «В сезоне N серий» с верной формой; title/description/canonical/robots без изменений",
+      "id": "T183",
+      "site": "animedia.space",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/title/silneyshiy-istoriya-yunsyao-li/",
+        "https://animedia.space/title/yamada-i-sem-vedm-ova/"
+      ],
+      "problem": "Живой замер 16.10 20:41Z на animedia.space (25 случайных тайтлов из карты): 16 из 30 форм числа серий неверны — «Сезон 1 · 34 серий» (/title/silneyshiy-istoriya-yunsyao-li/), «2 серий» (/title/yamada-i-sem-vedm-ova/), «4 серий», «42 серий». Шаблон Animedia (src/animedia-frontend.py) — те же f-строки, что у Lords, плюс «Доступно N серий»/«Вышло N серий» (факты и описание) и «Вышло X из N серий» (лента серий главной).",
+      "live_check": [
+        {
+          "url": "https://animedia.space/title/silneyshiy-istoriya-yunsyao-li/",
+          "status": 200,
+          "absent": [
+            "· 34 серий"
+          ],
+          "contains": [
+            "34 серии"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 20:41Z: инструмент automation/local/wire-plural-counts.py обобщён на src/animedia-frontend.py (+4 шаблона Animedia, _из_серий); на копии ячейки animedia-space: 11 замен, checks/plural_counts.py база rc=1, правка rc=0, синтаксис ok; повторный запуск ничего не меняет; tests/unit/test_wire_plural_counts.py 3 passed. animedia.icu: шаблонов нет (на копии проверка rc=0) — отдельно сверить живой сайт."
     }
   ]
 }
