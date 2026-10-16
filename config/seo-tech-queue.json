@@ -3677,6 +3677,23 @@
       ],
       "status": "queued",
       "evidence": "16.10 10:03Z: аудит сессии по заданию владельца (проверять фактическое содержимое, включая места вне списка замен). Ответственный: SEO-сессия (фоновый цикл)."
+    },
+    {
+      "id": "B033",
+      "site": "yummyani.site, yummyani.org, yummyani.biz, yummyani7.site, yummyani7.info",
+      "direction": "anime",
+      "repo": "верхний поток Next.js Yummy (src/lib/seo/sitemap-catalog.ts buildInventory)",
+      "urls": [
+        "https://yummyani.site/sitemap/episodes.xml",
+        "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5"
+      ],
+      "problem": "Замер 16.10 10:16Z: seasons.xml (50) и episodes.xml (486) на всех пяти Yummy одинаковы и заморожены — у всех адресов lastmod 2026-08-21 (запасная дата SEO_CONTENT_UPDATED_AT). Сезоны и серии попадают в карту только у первых 40 тайтлов обхода (DETAIL_LIMIT), а обход отсортирован по updated_at поставщика — это смена метаданных, не выход серии; у detail нет updated_at, отсюда запасная дата. «ДжоДжо: Гонка «Стальной шар»» — 133-й в обходе: ни сезона 7, ни одной его серии в карте нет, хотя S7 даёт 73 % поисковых входов yummyani.site (неделя 09–15.10). Серия 5 замечена наблюдателем 16.10 09:52:05Z, страница 200 index,follow на yummyani.site и yummyani7.site — в карте её нет. Наблюдатель за 7 суток: EPISODE_ADDED по 101 тайтлу.",
+      "norm": "SEO_KNOWLEDGE_PACK: карта сайта перечисляет индексируемые канонические страницы с достоверным lastmod",
+      "expected": "Патч var/yummy-patches/b033-sitemap-fresh-first.patch (sha256 fbf059a11e4eee7c…): деталь — сначала тайтлам с наблюдённой новой серией/сезоном/воспроизведением (свежие первыми), остальные — в порядке обхода; lastmod — поздняя из даты списка и времени наблюдения (у detail даты нет). Порог DETAIL_LIMIT не меняется. Тесты: новый sitemap-detail-order.test.ts 3/3, sitemap-inventory(-cache) 12/12; полный tests/unit 572 ok + те же 4 FAIL, что на базе (genre-canonical, portal-data, page-matrix ×2); tsc — те же 17 ошибок, что на базе, новых нет. patch --dry-run 0 на a520a24, 536082c, c23018d.",
+      "check": "после выпуска: episodes.xml содержит …/season/7/episode/5 ДжоДжо и lastmod не 2026-08-21 у свежих тайтлов; число адресов не меньше прежнего",
+      "status": "blocked",
+      "owner_action": "Владелец: согласовать выпуск. Предложение — тем же сценарием, канарейка .biz и .org (через 1–2 суток — сверка карты и обхода), затем yummyani.site и yummyani7.* (B033 заголовки не трогает, контроль B031 на yummyani.site не нарушается).",
+      "evidence": "16.10 10:16Z: замер сессии (публичные карты пяти Yummy; журнал наблюдателя /srv/sites/yummyani-staging/runtime/episode-state/events.jsonl — только чтение)."
     }
   ]
 }
