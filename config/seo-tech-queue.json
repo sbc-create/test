@@ -4323,8 +4323,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "16.10 20:20Z: инструмент дополнен таблицей ШАБЛОНЫ_LORDS02 (Т.склонение(заявлено, 'серии', 'серий', 'серий'), функция уже есть в lords02_taxonomy), проверка checks/plural_counts.py читает и src/lords02_view.py; на копии ячейки: база rc=1, правка rc=0, checks/compiles.py rc=0; тест tests/unit/test_wire_plural_counts.py 3 passed («из 201 серии», «из 44 серий», «из 11 серий»)."
+      "status": "live_verified",
+      "evidence": "16.10 20:20Z: инструмент дополнен таблицей ШАБЛОНЫ_LORDS02 (Т.склонение(заявлено, 'серии', 'серий', 'серий'), функция уже есть в lords02_taxonomy), проверка checks/plural_counts.py читает и src/lords02_view.py; на копии ячейки: база rc=1, правка rc=0, checks/compiles.py rc=0; тест tests/unit/test_wire_plural_counts.py 3 passed («из 201 серии», «из 44 серий», «из 11 серий»). | 16.10 20:37Z: опубликовано фоновым циклом, live_check пройден. 16.10 20:38Z: живая сверка — /title/giganty/ «из 201 серии», главная «из 201 серии», «из 119 серий»; выборка 40 карточек: 21 вхождение, неверных 0 (было 6) — var/seo-audit/plural-live-20261016-T182.json."
     }
   ]
 }
