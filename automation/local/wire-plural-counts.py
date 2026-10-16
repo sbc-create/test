@@ -14,13 +14,22 @@
 1. добавляет модульные функции `_число_мн`, `_серий(n)`, `_сезонов(n)` (если их нет);
 2. заменяет шаблоны из таблицы `ШАБЛОНЫ` на вызов этой функции.
 Тексты, числа и разметка не меняются — только форма слова при числе.
+3. доставляет проверку checks/plural_counts.py (automation/host/plural_counts_check.py)
+   и вносит её в checks/run.sh после строки records-plural (или public-wording).
 Отсутствующий шаблон — не ошибка (наборы у семейств разные); итог печатается.
 """
 from __future__ import annotations
 
 import argparse
 import pathlib
+import re
+import shutil
 import sys
+
+ПРОВЕРКА = pathlib.Path(__file__).resolve().parents[1] / "host" / "plural_counts_check.py"
+СТРОКА_ПРОГОНА = ('check "plural-counts"      bash -c \'python3 checks/plural_counts.py; rc=$?; '
+                  '[ "$rc" -eq 2 ] && exit 0; exit "$rc"\'')
+ЯКОРЯ_ПРОГОНА = ('check "records-plural"', 'check "public-wording"')
 
 ФАЙЛ = "src/lords-frontend.py"
 ЯКОРЬ = "\ndef всего_серий("
@@ -56,6 +65,13 @@ def _сезонов(n: int) -> str:
     ('В сезоне {серий} серий', 'В сезоне {_серий(серий)}'),
 )
 
+# Число и слово в РАЗНЫХ частях f-строки (перенос строки между ними): «Всего в
+# произведении {N} '\n f'серий · ». Отступ у ячеек разный — поэтому выражение.
+ШАБЛОНЫ_RE = (
+    (re.compile(r"""\{sum\(с\["eps"\] for с in сезоны\) or "\?"\} '(\s+)f'серий · """),
+     r"""{_серий(sum(с["eps"] for с in сезоны)) if sum(с["eps"] for с in сезоны) else "? серий"} '\1f'· """),
+)
+
 
 def самопроверка() -> None:
     ns: dict = {}
@@ -83,6 +99,9 @@ def править(корень: pathlib.Path, сухо: bool) -> int:
         n = текст.count(старое)
         текст = текст.replace(старое, новое)
         итог.append(f"{n}× {старое}")
+    for выр, замена in ШАБЛОНЫ_RE:
+        текст, n = выр.subn(замена, текст)
+        итог.append(f"{n}× «Всего в произведении N серий»")
     if текст == было:
         print(f"{корень}: шаблонов нет — " + "; ".join(итог))
         return 0
@@ -99,6 +118,31 @@ def править(корень: pathlib.Path, сухо: bool) -> int:
     return 0
 
 
+def внести_проверку(корень: pathlib.Path, сухо: bool) -> int:
+    проверки = корень / "checks"
+    if not проверки.is_dir():
+        print(f"{корень}: каталога checks/ нет — проверка не доставлена")
+        return 3
+    прогон = проверки / "run.sh"
+    т = прогон.read_text(encoding="utf-8") if прогон.is_file() else ""
+    if "checks/plural_counts.py" in т:
+        новый = т
+    else:
+        строки = т.split("\n")
+        где = next((i for я in ЯКОРЯ_ПРОГОНА for i, с in enumerate(строки) if с.startswith(я)), None)
+        if где is None:
+            print(f"{корень}: ОТКАЗ — в checks/run.sh нет строки {ЯКОРЯ_ПРОГОНА}")
+            return 3
+        строки.insert(где + 1, СТРОКА_ПРОГОНА)
+        новый = "\n".join(строки)
+    if not сухо:
+        shutil.copy2(ПРОВЕРКА, проверки / "plural_counts.py")
+        if новый != т:
+            прогон.write_text(новый, encoding="utf-8")
+    print(f"{корень}: проверка checks/plural_counts.py " + ("уже в прогоне" if новый == т else "внесена в checks/run.sh"))
+    return 0
+
+
 def главная(argv: list[str]) -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--repo", action="append", required=True)
@@ -107,7 +151,10 @@ def главная(argv: list[str]) -> int:
     самопроверка()
     код = 0
     for r in а.repo:
-        код = max(код, править(pathlib.Path(r).resolve(), а.dry_run))
+        к = pathlib.Path(r).resolve()
+        код = max(код, править(к, а.dry_run))
+        if код == 0:
+            код = max(код, внести_проверку(к, а.dry_run))
     return код
 
 

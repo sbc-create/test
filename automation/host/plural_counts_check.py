@@ -1,0 +1,64 @@
+#!/usr/bin/env python3
+"""Число серий и сезонов в видимом тексте склоняется (T180, 16.10).
+
+Доставляется в `checks/plural_counts.py` инструментом
+automation/local/wire-plural-counts.py.
+
+Живой замер 16.10 на lordfilm47.space: «Сезон 1 · 24 серий», «21 серий»,
+«4 серий» — шаблон подставлял число в f-строку с жёстким «серий»/«сезона».
+Проверка читает src/lords-frontend.py (синтаксическое дерево, без запуска) и
+ищет в f-строках подстановку, за которой сразу идёт « серий» или « сезона»:
+такая строка пишет одно слово при любом числе. Затем сверяет формы функции
+`_серий`/`_сезонов`, если она есть.
+
+Коды выхода: 0 — норма, 1 — дефект, 2 — не измерено (нет файла шаблона).
+"""
+import ast
+import pathlib
+import sys
+
+ФАЙЛ = pathlib.Path("src/lords-frontend.py")
+ЖЁСТКИЕ = (" серий", " сезона", " сезонов")
+
+
+def жёсткие_места(дерево: ast.AST) -> list[int]:
+    места = []
+    for узел in ast.walk(дерево):
+        if not isinstance(узел, ast.JoinedStr):
+            continue
+        части = узел.values
+        for a, b in zip(части, части[1:]):
+            if (isinstance(a, ast.FormattedValue) and isinstance(b, ast.Constant)
+                    and isinstance(b.value, str) and b.value.startswith(ЖЁСТКИЕ)):
+                места.append(узел.lineno)
+    return места
+
+
+def главная() -> int:
+    if not ФАЙЛ.is_file():
+        print(f"НЕ ИЗМЕРЕНО: нет {ФАЙЛ}")
+        return 2
+    текст = ФАЙЛ.read_text(encoding="utf-8")
+    дерево = ast.parse(текст)
+    места = жёсткие_места(дерево)
+    провалы = [f"{ФАЙЛ}:{n}: число в f-строке перед жёстким «серий/сезона»" for n in места]
+    функции = {у.name: у for у in дерево.body if isinstance(у, ast.FunctionDef)}
+    if "_серий" in функции:
+        ns: dict = {}
+        имена = [и for и in ("_число_мн", "_серий", "_сезонов") if и in функции]
+        exec(compile(ast.Module(body=[функции[и] for и in имена], type_ignores=[]), str(ФАЙЛ), "exec"), ns)
+        for n, w in {1: "1 серия", 3: "3 серии", 11: "11 серий", 21: "21 серия", 24: "24 серии", 98: "98 серий"}.items():
+            if ns["_серий"](n) != w:
+                провалы.append(f"_серий({n}) = «{ns['_серий'](n)}», ждали «{w}»")
+        if "_сезонов" in ns and ns["_сезонов"](4) != "4 сезона":
+            провалы.append(f"_сезонов(4) = «{ns['_сезонов'](4)}»")
+    for п in провалы:
+        print("FAIL", п)
+    if провалы:
+        return 1
+    print("OK: числа серий и сезонов склоняются")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(главная())
