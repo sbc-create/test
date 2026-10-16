@@ -4,3 +4,4 @@ ee466d067d1efe24c1750225d6929673c841ff5744f71d696877c65240909aac  var/yummy-patc
 f90d4bdb364572541a4e40572558f714c9c177b421514087b0f6f2c50b6dfd9b  var/yummy-patches/t081-shelf-canonical-href.054c617.patch
 07348660066ed28166d3c6abd3f4bca5f0aef784c46e6b3ea7710b3df87caff7  var/yummy-patches/b031-title-no-name-cut.patch
 a3ba590914b76bfbd2cb2a336db585fc023326e387400c8f5116eddc0f06c17c  var/yummy-patches/b033-sitemap-full-coverage.patch
+66ef1d7738d12068453666ce9b93f24e604ebdbfd0e670a75749921982f8d13d  var/yummy-patches/t179-public-wording-2.patch

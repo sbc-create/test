@@ -88,6 +88,7 @@ B016 = ["b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch"]
 WORDING = "yummy-public-wording.patch"  # тексты для посетителя (15.10)
 B031 = "b031-title-no-name-cut.patch"   # <title>: хвост → бренд, название не режется (16.10)
 B033 = "b033-sitemap-full-coverage.patch"  # карты сезонов/серий — весь каталог, свежие первыми (16.10)
+T179 = "t179-public-wording-2.patch"  # тексты для посетителя: без «web component/iframe», «служебного токена» и SEO-пояснения фильтров (16.10); в выпуск — отдельным коммитом после приёмки B033
 TAG_RE = re.compile(r"^yummyani/web:rel-[0-9a-f]{12}$")
 KEPT = re.compile(r"PUBLISHER|CDNVIDEOHUB|^SEO_INDEXING_ENABLED$|^TITLE_OVERLAYS|^SITE_PROFILE$|^REDIS_URL$|^DATABASE_URL$")
 PARTS = ("titles", "seasons", "episodes")
