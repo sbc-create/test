@@ -1,0 +1,96 @@
+Индекс карты объявляет дату перестройки, а не замороженную константу
+
+Измерено 2026-10-16 20:40 UTC на опубликованном, двумя сторонами независимо:
+
+| что | значение |
+| --- | --- |
+| `lastmod`, объявленный ИНДЕКСОМ каждой части (`yummyani7.site`, `yummyani7.info`, `yummyani.biz`) | `2026-08-21T00:00:00.000Z` |
+| свежайший `lastmod` ВНУТРИ частей | `2026-10-16T18:23:51.000Z` |
+
+Следствие названо линией SEO и подтверждено мною: 317 сезонов и 4 966 серий
+появились в карте `yummyani7` минутами ранее (первая сборка B033 в 20:29:32Z и
+20:35:45Z), а индекс сообщает обходчику, что части не менялись с 21 августа.
+То есть ровно те адреса, ради появления которых делался B033, объявлены
+двухмесячной датой, и по индексу обходчик решит, что перезапрашивать часть не
+нужно. «Карта наполнилась» подтверждено; «обходчик об этом узнает» — нет.
+
+Причина в коде (проверено, а не предположено):
+`sitemapIndexXml` берёт `sitemapLastModified()`, а та возвращает константу
+`SEO_CONTENT_UPDATED_AT = "2026-08-21T00:00:00.000Z"` (`src/lib/seo/copy.ts`).
+Внутри частей даты настоящие — их ставит `lastmodIso(entry.lastModified)`.
+
+**Прежняя заготовка 15.10 (`var/yummy-patches-local/b016-sitemap-index-lastmod.patch`)
+больше не применяется, и это проверено:** из 33 строк её контекста 17
+отсутствуют в текущем файле — B033 изменил подпись
+`sitemapIndexXml(env)` → `sitemapIndexXml(env, counts?)` и сам маршрут
+индекса. Поэтому заготовка переписана здесь, а не «применена как есть».
+
+Почему датой берётся ВРЕМЯ ПЕРЕСТРОЙКИ инвентаря, а не максимум по записям
+части: у индекса `lastmod` означает «когда менялся сам файл карты», а при
+перестройке меняются все части сразу. Время перестройки уже хранится
+(`BUILT_KEY`, одно короткое значение), и читать его дешевле, чем грузить весь
+инвентарь ради максимума. Константа остаётся запасным значением: если времени
+перестройки нет (холодный старт), поведение прежнее.
+
+--- a/src/lib/seo/sitemap-catalog.ts
++++ b/src/lib/seo/sitemap-catalog.ts
+@@
+ export async function loadSitemapPartCounts(): Promise<SitemapPartCounts | undefined> {
+@@
+ }
++
++/**
++ * Когда инвентарь последний раз перестраивался. Нужно индексу карты: его
++ * `lastmod` обходчик читает первым и по нему решает, перезапрашивать ли
++ * часть. Прежде индекс отдавал константу 2026-08-21 — измерено 16.10, когда
++ * свежие 4 966 серий были объявлены двухмесячной датой.
++ */
++export async function loadSitemapBuiltAt(): Promise<Date | null> {
++  const redis = await redisOrNull();
++  try {
++    const raw = redis ? await redis.get(BUILT_KEY) : null;
++    const at = raw ? Number(raw) : NaN;
++    return Number.isFinite(at) && at > 0 ? new Date(at) : null;
++  } catch {
++    return null;
++  }
++}
+
+--- a/src/lib/seo/sitemap.ts
++++ b/src/lib/seo/sitemap.ts
+@@
+-export function sitemapIndexXml(env: Env = getEnv(), counts?: SitemapPartCounts): string {
+-  const lastmod = sitemapLastModified().toISOString();
++export function sitemapIndexXml(
++  env: Env = getEnv(),
++  counts?: SitemapPartCounts,
++  builtAt?: Date | null,
++): string {
++  // Дата перестройки, если она известна; иначе прежняя константа.
++  const lastmod = (builtAt ?? sitemapLastModified()).toISOString();
+   const locs = sitemapIndexLocs(env, counts);
+
+--- a/src/app/sitemap.xml/route.ts
++++ b/src/app/sitemap.xml/route.ts
+@@
+-import { loadSitemapPartCounts } from "@/lib/seo/sitemap-catalog";
++import { loadSitemapBuiltAt, loadSitemapPartCounts } from "@/lib/seo/sitemap-catalog";
+@@
+   const counts = indexing ? await loadSitemapPartCounts() : undefined;
+-  return new Response(sitemapIndexXml(env, counts), {
++  const builtAt = indexing ? await loadSitemapBuiltAt() : null;
++  return new Response(sitemapIndexXml(env, counts, builtAt), {
+
+Проверка после применения (что именно запускать, а не «проверено»):
+
+1. `pnpm vitest run tests/unit/sitemap*.test.ts` — существующие случаи не
+   должны падать: без `builtAt` поведение прежнее;
+2. новый случай: при переданном `builtAt` индекс объявляет его, при `null` —
+   константу;
+3. на опубликованном после выпуска: `lastmod` в индексе не старше свежайшей
+   даты внутри частей, и после очередной часовой перестройки он сдвигается.
+   Мера — та же, которой дефект найден: сравнение даты индекса с максимумом
+   `<lastmod>` внутри каждой части.
+
+Чего правка НЕ делает: не меняет даты внутри частей, не трогает охват и не
+касается режима индексации.
