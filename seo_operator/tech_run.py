@@ -263,6 +263,42 @@ def _замок_свеж(замок: Path, now: dt.datetime) -> bool:
     return True
 
 
+#: Пауза всей очереди после прогона, в котором модель не ответила (лимит, недоступность):
+#: 15.10 21:23–21:41Z шесть задач сожгли по три попытки за 18 минут при лимите Claude.
+ПАУЗА_БЕЗ_МОДЕЛИ_С = 1800
+
+
+def модель_не_отвечала(run_id: str, state: Path = STATE) -> bool:
+    """Модель не работала: в её отчёте ноль времени API и ноль стоимости.
+
+    Такой прогон — не попытка задачи, а недоступность исполнителя: в счёт
+    MAX_ATTEMPTS он не идёт, и очередь ставится на паузу ПАУЗА_БЕЗ_МОДЕЛИ_С.
+    """
+    try:
+        д = json.loads((state / f"{run_id}.claude.json").read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return False
+    return not (д.get("duration_api_ms") or 0) and not (д.get("total_cost_usd") or 0)
+
+
+def _время_прогона(run_id: str) -> dt.datetime | None:
+    try:
+        return dt.datetime.strptime(run_id[:16], "%Y%m%dT%H%M%SZ").replace(tzinfo=dt.timezone.utc)
+    except ValueError:
+        return None
+
+
+def пауза_до(state: Path = STATE) -> dt.datetime | None:
+    """Конец паузы после последнего прогона без модели (или None)."""
+    последний = None
+    for р in _runs(state):
+        if (р.get("steps") or {}).get("has_commit") is False and модель_не_отвечала(р["run_id"], state):
+            т = _время_прогона(р["run_id"])
+            if т and (последний is None or т > последний):
+                последний = т
+    return последний + dt.timedelta(seconds=ПАУЗА_БЕЗ_МОДЕЛИ_С) if последний else None
+
+
 def task_state(state: Path = STATE, now: dt.datetime | None = None) -> dict[str, dict[str, Any]]:
     """Сводка по задачам из следов: последний вердикт, число неудач, живой захват.
 
@@ -283,7 +319,10 @@ def task_state(state: Path = STATE, now: dt.datetime | None = None) -> dict[str,
             з.pop("status", None)
             з["failures"] = 0
         elif вердикт not in НЕ_НЕУДАЧА:
-            з["failures"] += 1
+            if (р.get("steps") or {}).get("has_commit") is False and модель_не_отвечала(р["run_id"], state):
+                з["model_unavailable"] = з.get("model_unavailable", 0) + 1
+            else:
+                з["failures"] += 1
     for замок in sorted((state / "claims").glob("*.claim")) if (state / "claims").is_dir() else []:
         if _замок_свеж(замок, now):
             итог.setdefault(замок.stem, {"failures": 0})["open_claim"] = замок.read_text(encoding="utf-8").strip()
@@ -331,6 +370,9 @@ def candidates(задачи: list[dict], state: Path = STATE, now: dt.datetime |
     записаны выше, забирало бы весь ресурс.
     """
     now = now or _сейчас()
+    конец_паузы = пауза_до(state)
+    if конец_паузы and now < конец_паузы:
+        return []
     сводка = task_state(state, now)
     итог = []
     for з in задачи:

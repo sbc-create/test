@@ -421,3 +421,22 @@ def test_publisher_reads_live_commit_when_trigger_refuses_early(tmp_path, monkey
                                           tmp_path / "state", dry_run=True)
     assert итог["facts"]["live"] == живой and итог["facts"]["live_in_head"] is True
     assert итог["reason"] != "живой коммит не определён"
+
+
+def test_model_unavailable_is_not_an_attempt_and_pauses_queue(tmp_path):
+    """15.10 21:23–21:41Z: лимит Claude — модель не отвечала, и шесть задач сожгли все попытки."""
+    import datetime as dt
+    st = tmp_path / "st"
+    st.mkdir()
+    записи = []
+    for i, (rid, api_ms) in enumerate((("20261015T212300Z-1", 0), ("20261015T212400Z-2", 0), ("20261015T212500Z-3", 5000))):
+        (st / f"{rid}.claude.json").write_text(json.dumps({"duration_api_ms": api_ms, "total_cost_usd": 0.0 if not api_ms else 0.5}))
+        записи.append({"run_id": rid, "task_id": "T900", "verdict": "INCOMPLETE", "steps": {"has_commit": False}})
+    (st / "runs.jsonl").write_text("".join(json.dumps(з) + "\n" for з in записи))
+    с = tech_run.task_state(st)["T900"]
+    assert с["failures"] == 1 and с["model_unavailable"] == 2   # считается только прогон, где модель работала
+    задача = [{"id": "T900", "status": "queued", "site": "x.test", "repo": "var/site-repos/x"}]
+    внутри = dt.datetime(2026, 10, 15, 21, 40, tzinfo=dt.timezone.utc)
+    после = dt.datetime(2026, 10, 15, 22, 0, tzinfo=dt.timezone.utc)
+    assert tech_run.candidates(задача, st, внутри) == []            # пауза 30 мин после последнего прогона без модели
+    assert [з["id"] for з in tech_run.candidates(задача, st, после)] == ["T900"]
