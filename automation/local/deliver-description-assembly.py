@@ -79,12 +79,22 @@ def _ключ_витрины_для_сборки() -> str:
         значение = (_os.environ.get(имя) or "").strip()
         if значение:
             return значение
-    try:
-        конфиг = Path(__file__).resolve().parent.parent / "config" / "site.json"
-        данные = json.loads(конфиг.read_text(encoding="utf-8"))
-        return str(данные.get("domain") or данные.get("site_id") or "")
-    except Exception:
-        return ""
+    # Конфиг ищется вверх от файла рантайма: у части витрин это
+    # <проект>/config/site.json, у zonafilm.cc — config/runtime.json, и
+    # рантайм лежит на уровень глубже (template/<ревизия>/).
+    корень = Path(__file__).resolve().parent
+    for _ in range(3):
+        корень = корень.parent
+        for имя in ("site.json", "runtime.json"):
+            конфиг = корень / "config" / имя
+            try:
+                данные = json.loads(конфиг.read_text(encoding="utf-8"))
+            except Exception:
+                continue
+            значение = str(данные.get("domain") or данные.get("site_id") or "")
+            if значение:
+                return значение
+    return ""
 
 
 КЛЮЧ_ВИТРИНЫ_ДЛЯ_СБОРКИ = _ключ_витрины_для_сборки()
@@ -197,20 +207,51 @@ def проверить(рантайм: Path, ключ: str) -> list[str]:
     return беды
 
 
+def найти_рантайм(проект: Path) -> Path | None:
+    """Файл рантайма там, где он у этой витрины лежит.
+
+    Измерено 16.10: у шести витрин это `src/lords-frontend.py`, а у
+    zonafilm.cc — `template/<ревизия>/lords-frontend.py`. Раскладка разная,
+    устройство одно, и требовать одну раскладку значило бы объявить витрину
+    несовместимой там, где несовместимости нет.
+    """
+    прямой = проект / "src" / "lords-frontend.py"
+    if прямой.is_file():
+        return прямой
+    кандидаты = sorted((проект / "template").glob("*/lords-frontend.py"))
+    if len(кандидаты) == 1:
+        return кандидаты[0]
+    if len(кандидаты) > 1:
+        raise SystemExit(f"{проект}: файлов рантайма несколько "
+                         f"({[str(к) for к in кандидаты]}) — выбирать за "
+                         f"линию витрины я не буду")
+    return None
+
+
 def ключ_витрины(проект: Path) -> str:
-    конфиг = проект / "config" / "site.json"
-    if not конфиг.is_file():
-        return ""
-    д = json.loads(конфиг.read_text(encoding="utf-8"))
-    return str(д.get("domain") or д.get("site_id") or "")
+    """Домен или site_id витрины: из того конфига, который у неё есть.
+
+    У zonafilm.cc рантайм читает `config/runtime.json`, и объявления в
+    `config/site.json` ему недостаточно — там об этом сказано прямо.
+    """
+    for имя in ("site.json", "runtime.json"):
+        конфиг = проект / "config" / имя
+        if not конфиг.is_file():
+            continue
+        д = json.loads(конфиг.read_text(encoding="utf-8"))
+        значение = str(д.get("domain") or д.get("site_id") or "")
+        if значение:
+            return значение
+    return ""
 
 
 def доставить(проект: Path, пробный: bool) -> int:
-    рантайм = проект / "src" / "lords-frontend.py"
-    if not рантайм.is_file():
-        print(f"{проект}: рантайма lords-frontend.py нет — у витрины другой "
-              f"состав, доставка не применима")
+    рантайм = найти_рантайм(проект)
+    if рантайм is None:
+        print(f"{проект}: файла рантайма lords-frontend.py нет ни в src/, ни "
+              f"в template/*/ — у витрины другой состав, доставка не применима")
         return 1
+    print(f"   рантайм: {рантайм.relative_to(проект)}")
     ключ = ключ_витрины(проект)
     print(f"{проект} (ключ витрины: {ключ or 'НЕ ОПОЗНАНА'})")
     if not ключ:
@@ -230,7 +271,7 @@ def доставить(проект: Path, пробный: bool) -> int:
     копия = рантайм.with_suffix(".py.before-assembly")
     if not копия.exists():
         shutil.copy2(рантайм, копия)
-    цель_модуля = проект / "src" / МОДУЛЬ.name
+    цель_модуля = рантайм.parent / МОДУЛЬ.name
     shutil.copy2(МОДУЛЬ, цель_модуля)
     рантайм.write_text(текст, encoding="utf-8")
     беды = проверить(рантайм, ключ)
@@ -240,8 +281,7 @@ def доставить(проект: Path, пробный: bool) -> int:
         for б in беды:
             print(f"       {б}")
         return 1
-    закрепить(проект, {"lords-frontend.py": рантайм,
-                       МОДУЛЬ.name: цель_модуля})
+    закрепить(проект, {рантайм.name: рантайм, МОДУЛЬ.name: цель_модуля})
     print("   доставлено и проверено; замок обновлён")
     return 0
 
