@@ -3439,7 +3439,7 @@
       "expected": "решение владельца: порядок сокращения «шаблонный хвост → бренд», название не обрезается; канарейка — yummyani7.site/.info, .org, .biz; yummyani.site (страницы ДжоДжо S7 — 9,4 тыс. поисковых входов/неделю) — контроль до оценки через 7 дней",
       "status": "blocked",
       "owner_action": "решение по правилу title Yummy (конфликт правила репозитория и SEO_KNOWLEDGE_PACK §4 п.3); при «да» сессия готовит патч к трём живым базам с тестом и включает его в выпуск по сценарию B016 только для канареечных витрин",
-      "evidence": "15.10 ~15:35Z: var/seo-goal/landing-audit-20261015.json; код — src/seo-core/truncate.ts (joinTitle, lastWordBoundary), constants.ts DOCUMENT_TITLE_MAX = 70."
+      "evidence": "15.10 ~15:35Z: var/seo-goal/landing-audit-20261015.json; код — src/seo-core/truncate.ts (joinTitle, lastWordBoundary), constants.ts DOCUMENT_TITLE_MAX = 70. | 16.10 08:03Z: патч на «да» готов заранее — var/yummy-patches/b031-title-no-name-cut.patch (sha256 07348660066ed281…): joinTitle сокращает «шаблонный хвост → бренд», название не режется; тест репозитория заменён на правило B031 + новый тест на ДжоДжо S7. vitest tests/unit/seo-core.test.ts: на базе 8f159f3 2 FAIL, с патчем 37/37; полный tests/unit: 4 FAIL и на базе, и с патчем (genre-canonical, portal-data, page-matrix ×2 — до патча), новых нет. patch --dry-run чисто на 2118480, 8f159f3, 054c617, 054c617-t081. В сценарий выпуска НЕ включён — ждёт решения владельца. Вес: страница ДжоДжо S7E4 yummyani.site — 56 % поисковых входов сайта (неделя 09–15.10), <title> «…Гонка — 7 сезон» без «Стальной шар»."
     },
     {
       "id": "B032",
