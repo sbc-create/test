@@ -5,11 +5,15 @@
   yummy-b016-check.py compare <before.json> <after.json> [--changed web-site ...]
   yummy-b016-check.py sitemaps [--max-seconds 5] [домен ...]
   yummy-b016-check.py links [домен ...]               ссылки /anime/…--<uuid> на главной (T081)
+  yummy-b016-check.py titles [--save f | --against f] [домен ...]
+                                                      B031: <title> несёт полное название (H1), компьютер и
+                                                      телефон; canonical, robots и H1 — как до выпуска
 
 Значения издателя и прочих настроек не печатаются: сравниваются sha256.
 Коды выхода: 0 — норма, 1 — отклонение, 2 — проверка не смогла выполниться.
 """
 import hashlib
+import html
 import json
 import re
 import subprocess
@@ -145,6 +149,86 @@ def links(domains: list[str]) -> int:
     return rc
 
 
+# B031: страницы с длинным названием (замер 15–16.10: <title> обрезал название).
+TITLE_PAGES = [
+    "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+    "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7",
+    "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+    "/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
+]
+TAILS = (" — смотреть аниме-фильм онлайн", " — смотреть аниме онлайн", " смотреть онлайн")
+UA_MOBILE = {"User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 "
+                           "(KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1 yummy-b016-check"}
+
+
+def _page(url: str, headers: dict) -> dict:
+    t = time.time()
+    try:
+        with urllib.request.urlopen(urllib.request.Request(url, headers=headers), timeout=90) as r:
+            code, body = r.status, r.read().decode("utf-8", "replace")
+    except urllib.error.HTTPError as e:
+        code, body = e.code, ""
+    except Exception:  # noqa: BLE001
+        code, body = -1, ""
+    one = lambda rx: (re.findall(rx, body) or [""])[0]  # noqa: E731
+    h1 = re.sub(r"<[^>]+>", "", one(r"(?s)<h1[^>]*>(.*?)</h1>"))
+    return {"code": code, "t": round(time.time() - t, 2), "title": html.unescape(one(r"<title>([^<]*)</title>")).strip(),
+            "h1": " ".join(html.unescape(h1).split()), "canonical": one(r'<link rel="canonical" href="([^"]*)"'),
+            "robots": one(r'<meta name="robots" content="([^"]*)"')}
+
+
+def title_core(title: str) -> str:
+    core = title.rsplit(" | ", 1)[0] if title.endswith(" | YummyAnime") else title
+    for tail in TAILS:
+        if core.endswith(tail):
+            return core[: -len(tail)]
+    return core
+
+
+def name_kept(p: dict) -> bool:
+    """Правило B031: <title> несёт видимый H1 целиком (без названия эпизода после «: »)."""
+    core = title_core(p["title"])
+    return bool(core) and (p["h1"] == core or p["h1"].startswith(core + ": "))
+
+
+def titles(domains: list[str], save: str | None, against: str | None) -> int:
+    before = json.load(open(against, encoding="utf-8")) if against else {}
+    got: dict = {}
+    rc = 0
+    for d in domains:
+        for path in TITLE_PAGES:
+            url = f"https://{d}{path}"
+            pc, mob = _page(url, UA), _page(url, UA_MOBILE)
+            got[url] = {"desktop": pc, "mobile": mob}
+            if save:
+                ok = pc["code"] == 200
+                notes = [] if ok else [f"код {pc['code']}"]
+            else:
+                notes = []
+                for k, p in (("компьютер", pc), ("телефон", mob)):
+                    if p["code"] != 200:
+                        notes.append(f"{k}: код {p['code']}")
+                    elif not name_kept(p):
+                        notes.append(f"{k}: название обрезано «{p['title']}» при H1 «{p['h1']}»")
+                if mob["h1"] != pc["h1"] or mob["title"] != pc["title"]:
+                    notes.append("телефон и компьютер получают разные H1/<title>")
+                if pc["canonical"] != url:
+                    notes.append(f"canonical {pc['canonical']} ≠ адрес страницы")
+                was = (before.get(url) or {}).get("desktop")
+                if was:
+                    for k in ("canonical", "robots", "h1"):
+                        if was[k] != pc[k]:
+                            notes.append(f"{k} изменился: «{was[k]}» → «{pc[k]}»")
+                elif against:
+                    notes.append("нет снимка до выпуска")
+            print(d, path[7:57], pc["code"], f"«{pc['title']}»", "OK" if not notes else "ОТКЛОНЕНИЕ: " + "; ".join(notes))
+            rc = rc or (1 if notes else 0)
+    if save:
+        json.dump(got, open(save, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+        return 2 if rc else 0
+    return rc
+
+
 def main(argv: list[str]) -> int:
     if not argv:
         print(__doc__)
@@ -164,6 +248,17 @@ def main(argv: list[str]) -> int:
         return sitemaps(rest or list(CONTAINERS.values()), max_s)
     if cmd == "links":
         return links(rest or ["yummyani.site", "yummyani.org", "yummyani.biz"])
+    if cmd == "titles":
+        save = against = None
+        for flag in ("--save", "--against"):
+            if flag in rest:
+                i = rest.index(flag)
+                if flag == "--save":
+                    save = rest[i + 1]
+                else:
+                    against = rest[i + 1]
+                rest = rest[:i] + rest[i + 2:]
+        return titles(rest or list(CONTAINERS.values()), save, against)
     print(__doc__)
     return 2
 

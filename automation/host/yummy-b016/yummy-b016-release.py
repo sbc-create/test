@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
-"""B016/T081 Yummy: выпуск исправления поверх ЖИВЫХ баз трёх витрин и приёмка.
+"""Yummy: выпуск исправления поверх ЖИВЫХ баз витрин и приёмка (B016/T081 — 15.10; B031 — 16.10).
+
+Текущий выпуск — B031 (решение владельца 16.10): <title> не обрезает название произведения.
+Витрины выпуска — yummyani.biz и yummyani.org; yummyani.site — контроль (не выкладывается).
+yummyani7.site/.info работают на том же образе, что yummyani.biz (rel-a520a24afb20), но их
+compose ведёт Архитектор: после этого выпуска им передаётся тег нового образа biz.
 
 Запуск владельцем (пользователь с доступом к docker и владелец compose.vars — claude):
 
@@ -8,8 +13,10 @@
 Подкоманды:
     preflight            только проверки, ни одной мутации (код 0 — можно выпускать)
     build                preflight + сборка трёх образов; контейнеры не трогаются
-    run                  preflight → сборка → резервная копия БД → выкладка biz → org → site
-                         (каждая — с приёмкой и откатом ТОЛЬКО образа этой витрины при неуспехе)
+    run --no-accept      ВЫПУСК B031: preflight → сборка → резервная копия БД → выкладка biz → org
+                         (каждая — с приёмкой и откатом ТОЛЬКО образа этой витрины при неуспехе;
+                         приёмка витрины включает titles: полное название в <title> на компьютере и
+                         телефоне, canonical/robots/H1 как до выпуска)
                          → приёмка постоянного исправления (accept); --no-accept — без неё
     accept [--state D]   приёмка постоянного исправления: пауза прогрева, устаревший кеш и
                          холодный старт через публичный домен, полнота карт, T081
@@ -76,6 +83,7 @@ SLEEP = time.sleep
 
 B016 = ["b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch"]
 WORDING = "yummy-public-wording.patch"  # тексты для посетителя (15.10)
+B031 = "b031-title-no-name-cut.patch"   # <title>: хвост → бренд, название не режется (16.10)
 TAG_RE = re.compile(r"^yummyani/web:rel-[0-9a-f]{12}$")
 KEPT = re.compile(r"PUBLISHER|CDNVIDEOHUB|^SEO_INDEXING_ENABLED$|^TITLE_OVERLAYS|^SITE_PROFILE$|^REDIS_URL$|^DATABASE_URL$")
 PARTS = ("titles", "seasons", "episodes")
@@ -105,11 +113,13 @@ class Tenant:
 # (их живые базы теперь — коммиты того выпуска), site отклонён проверкой T081 и откачен:
 # у базы 054c617 карусель «Актуальное» строится отдельно (actualCards) — для неё свой
 # вариант T081. Тексты для посетителя — новым патчем на всех трёх.
+#
+# Выпуск B031 (16.10): базы — живые ревизии после выпуска 15.10 17:10Z (biz a520a24 =
+# 2118480 + WORDING, org 536082c = 8f159f3 + WORDING). yummyani.site (c23018d) — контроль
+# на 7 дней (страницы ДжоДжо S7 — 56 % его поисковых входов), в выпуск не входит.
 TENANTS = [
-    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "21184803b90f", (WORDING,)),
-    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "8f159f3f9de3", (WORDING,)),
-    Tenant("web-site", "WEB_SITE_IMAGE", "yummyani.site", "054c6170519d",
-           (*B016, WORDING, "t081-shelf-canonical-href.054c617.patch")),
+    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "a520a24afb20", (B031,)),
+    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "536082c25e7e", (B031,)),
 ]
 BY_SERVICE = {t.service: t for t in TENANTS}
 
@@ -365,6 +375,8 @@ def preflight(state: Path | None = None) -> dict:
         log("preflight: снимок до выпуска")
         if check("snapshot", str(state / "before.json"), code=3) != 0:
             raise Stop(3, "снимок до выпуска с отклонениями (издатель на странице не найден или контейнер недоступен)")
+        if check("titles", "--save", str(state / "titles-before.json"), *[t.domain for t in TENANTS], code=3) != 0:
+            raise Stop(3, "снимок страниц B031 до выпуска: страница не ответила 200")
     log("preflight: OK")
     return info
 
@@ -433,6 +445,8 @@ def accept_tenant(t: Tenant, new: dict, deployed: list[str], state: Path) -> Non
         raise Stop(5, "сравнение до/после: издатель, индексация, наложения, монтирования или образы соседей изменились")
     if check("links", t.domain, code=5) != 0:
         raise Stop(5, f"{t.domain}: на главной остались ссылки --uuid (T081)")
+    if check("titles", "--against", str(state / "titles-before.json"), t.domain, code=5) != 0:
+        raise Stop(5, f"{t.domain}: <title> обрезает название, либо canonical/robots/H1 изменились (B031)")
     # Прогретый кеш (таймер прогрева работает): сначала проход с пределом 90 с — на случай
     # истёкшего ключа, затем рабочий предел 5 с.
     if check("sitemaps", "--max-seconds", "90", t.domain, code=5) != 0 or check("sitemaps", "--max-seconds", "5", t.domain, code=5) != 0:

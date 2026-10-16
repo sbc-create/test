@@ -342,3 +342,28 @@ def test_accept_fails_honestly_and_resumes_warmup(world, monkeypatch, bad):
         world.mod.accept(state)
     assert e.value.code == 7
     assert not world.mod.WARM_PAUSE.exists()
+
+
+# ------------------------------------------------------------------ B031: полное название в <title>
+def test_b031_titles_checked_before_and_after_and_failure_rolls_back(world, monkeypatch):
+    monkeypatch.setenv("FAKE_CHECK_RC", json.dumps({"titles:yummyani.org": 1}))
+    assert world.mod.main(["run", "--no-accept"]) == 5
+    log = world.check_log.read_text().splitlines()
+    assert any(l.startswith("titles --save ") for l in log), "снимок страниц до выпуска не сделан"
+    assert any(l.startswith("titles --against ") and l.endswith(" yummyani.org") for l in log)
+    assert world.pins()["WEB_ORG_IMAGE"] == world.old["web-org"]          # откат только org
+    assert world.ups()[-2:] == ["web-org", "web-org"]
+
+
+def test_b031_rule_on_measured_titles():
+    spec = importlib.util.spec_from_file_location("yb_check", ROOT / "automation/host/yummy-b016/yummy-b016-check.py")
+    c = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(c)
+    h1 = "Невероятное приключение ДжоДжо: Гонка «Стальной шар» — 7 сезон, 4 серия: Эпизод 4"
+    cut = {"title": "Невероятное приключение ДжоДжо: Гонка — 7 сезон, 4 серия | YummyAnime", "h1": h1}
+    full = {"title": "Невероятное приключение ДжоДжо: Гонка «Стальной шар» — 7 сезон, 4 серия", "h1": h1}
+    assert not c.name_kept(cut) and c.name_kept(full)
+    witch = "Я ведьма, которую возлюбленный попросил создать любовное зелье"
+    assert not c.name_kept({"title": "Я ведьма, которую возлюбленный попросил создать любовное | YummyAnime", "h1": witch})
+    assert c.name_kept({"title": witch, "h1": witch})
+    assert c.name_kept({"title": "Пример — смотреть аниме онлайн | YummyAnime", "h1": "Пример"})
