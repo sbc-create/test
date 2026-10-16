@@ -3649,8 +3649,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "16.10 ~09:50Z: живой аудит сессии. Ответственный: SEO-сессия (фоновый цикл).",
+      "status": "live_verified",
+      "evidence": "16.10 ~09:50Z: живой аудит сессии. Ответственный: SEO-сессия (фоновый цикл). | служба выпуска 10:14Z → live_verified; живая сверка сессией 16.10 10:17Z: /, /top/, /random/ — og:site_name «AnimeGo» = JSON-LD WebSite.name; «Animedia» остался только в комментарии CSS (не виден).",
       "check": "checks/og_site_name.py"
     },
     {
@@ -3694,6 +3694,56 @@
       "status": "blocked",
       "owner_action": "Владелец: согласовать выпуск. Предложение — тем же сценарием, канарейка .biz и .org (через 1–2 суток — сверка карты и обхода), затем yummyani.site и yummyani7.* (B033 заголовки не трогает, контроль B031 на yummyani.site не нарушается).",
       "evidence": "16.10 10:16Z: замер сессии (публичные карты пяти Yummy; журнал наблюдателя /srv/sites/yummyani-staging/runtime/episode-state/events.jsonl — только чтение)."
+    },
+    {
+      "id": "T165",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/"
+      ],
+      "problem": "Живой замер 16.10 ~09:40Z на an1mego.site, animeg0.site, an1meg0.site: <meta property=\"og:site_name\" content=\"Animedia Space\"> и data-seo-profile=\"animedia-space\" на всех страницах, тогда как <title> и JSON-LD WebSite.name — «AnimeGo». Причина: ВидАнимеГо (src/animego-frontend.py ~10115) берёт домен через _аниме_домен(хост), а он для незнакомого хоста отдаёт запись animedia.space.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "В СОБСТВЕННОЙ области AnimeGo (класс ВидАнимеГо, ниже метки «AnimeGo — оформление по текстовой спецификации владельца») og:site_name берётся из того же имени сайта, что <title> и JSON-LD WebSite.name («AnimeGo»), а не из записи animedia.space. Унаследованные ВидАнимедиа/ВидОснова и АНИМЕДИА_ДОМЕНЫ не трогать (checks/boundaries.py должен пройти без принятия отпечатка). Новая проверка checks/og_site_name.py: на /, /top/, странице тайтла og:site_name совпадает с JSON-LD WebSite.name; на коде базы 1, на правке 0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py. Образец — правка T160 на an1mego.site (живая сверка пройдена 16.10).",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/",
+          "status": 200,
+          "absent": [
+            "content=\"Animedia Space\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 10:17Z: распространение T160 после живой сверки представителя an1mego.site. Ответственный: SEO-сессия (фоновый цикл).",
+      "check": "checks/og_site_name.py"
+    },
+    {
+      "id": "T166",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/"
+      ],
+      "problem": "Живой замер 16.10 ~09:40Z на an1mego.site, animeg0.site, an1meg0.site: <meta property=\"og:site_name\" content=\"Animedia Space\"> и data-seo-profile=\"animedia-space\" на всех страницах, тогда как <title> и JSON-LD WebSite.name — «AnimeGo». Причина: ВидАнимеГо (src/animego-frontend.py ~10115) берёт домен через _аниме_домен(хост), а он для незнакомого хоста отдаёт запись animedia.space.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "В СОБСТВЕННОЙ области AnimeGo (класс ВидАнимеГо, ниже метки «AnimeGo — оформление по текстовой спецификации владельца») og:site_name берётся из того же имени сайта, что <title> и JSON-LD WebSite.name («AnimeGo»), а не из записи animedia.space. Унаследованные ВидАнимедиа/ВидОснова и АНИМЕДИА_ДОМЕНЫ не трогать (checks/boundaries.py должен пройти без принятия отпечатка). Новая проверка checks/og_site_name.py: на /, /top/, странице тайтла og:site_name совпадает с JSON-LD WebSite.name; на коде базы 1, на правке 0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py. Образец — правка T160 на an1mego.site (живая сверка пройдена 16.10).",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/",
+          "status": 200,
+          "absent": [
+            "content=\"Animedia Space\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 10:17Z: распространение T160 после живой сверки представителя an1mego.site. Ответственный: SEO-сессия (фоновый цикл).",
+      "check": "checks/og_site_name.py"
     }
   ]
 }
