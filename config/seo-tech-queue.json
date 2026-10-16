@@ -3650,6 +3650,31 @@
       "status": "queued",
       "evidence": "16.10 ~09:50Z: живой аудит сессии. Ответственный: SEO-сессия (фоновый цикл).",
       "check": "checks/og_site_name.py"
+    },
+    {
+      "id": "T164",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/title/gangster-5/"
+      ],
+      "problem": "Аудит 16.10 (var/seo-audit/editorial-20261016.json): на странице тайтла без описания у 4 Lords — «Описание для этой записи источник пока не передал. Всё, что о ней известно, собрано в таблице ниже.»; у записи без сезонов — «Состав сезонов источник по этой записи пока не передал…». Пары добавлены в ЗАМЕНЫ_2 (16.10). Представитель семейства — lordserials22.info; остальные Lords — после живой сверки.",
+      "norm": "публичный текст отвечает посетителю, что он найдёт и как выбрать; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он же доставит обновлённую checks/public_wording.py и пропишет её в run.sh). Тексты замен — таблица ЗАМЕНЫ_2 инструмента, руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если они есть. Проверка: checks/public_wording.py — на коде базы 1, на правке 0.",
+      "check": "checks/public_wording.py",
+      "verify_live": "после выпуска: на главной, каталоге и подборках прежних формулировок нет, навигация на месте",
+      "live_check": [
+        {
+          "url": "https://lordserials22.info/title/gangster-5/",
+          "status": 200,
+          "absent": [
+            "источник пока"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "16.10 10:03Z: аудит сессии по заданию владельца (проверять фактическое содержимое, включая места вне списка замен). Ответственный: SEO-сессия (фоновый цикл)."
     }
   ]
 }
