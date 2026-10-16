@@ -4381,8 +4381,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "16.10 21:37Z: поставлено после живой проверки T183; на копии ячейки animedia-icu инструмент (с выбором файла по entrypoint, 9db8525): 11 замен, checks/plural_counts.py база rc=1, правка rc=0."
+      "status": "live_verified",
+      "evidence": "16.10 21:37Z: поставлено после живой проверки T183; на копии ячейки animedia-icu инструмент (с выбором файла по entrypoint, 9db8525): 11 замен, checks/plural_counts.py база rc=1, правка rc=0. | 21:58Z: опубликовано фоновым циклом (прогон 20261016T213822Z-2519260 VERIFIED), live_check пройден. 16.10 21:59Z: выборка 25 тайтлов — var/seo-audit/plural-live-20261016-T184.json."
     }
   ]
 }
