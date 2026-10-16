@@ -1,0 +1,81 @@
+Предел длины мета-описания применяется ко ВСЯКОМУ описанию, включая редакционное
+
+Повод измерен на опубликованном 2026-10-16: на yummyani.site после выпуска
+rel-9cbfac20fbe8 из выборки 40 страниц два описания длиннее предела — 279 знаков.
+Проверено отдельно, что это не кеш (запрос с параметром даёт то же) и не
+дефект сборщика: `titlePageDescription` сначала берёт редакционное перекрытие
+и обрезает его по 300 знакам, то есть предел 160 к редакционным текстам не
+применяется вовсе.
+
+Почему это техническое требование, а не правка редакционного материала: в
+выдаче описание обрезает поисковик, а не автор, и обрезка по границе фрагмента
+лучше обрыва на середине слова. САМ редакционный материал не меняется — он
+остаётся в хранилище как написан; меняется только то, сколько его уходит в
+`<meta name="description">`. Правило владения постоянными данными при этом
+соблюдено: материалы только читаются.
+
+Согласовано с линией SEO (её §7 правила сборки описаний получает ту же
+формулировку). Применяет линия приложения в своём дереве; эта копия — заготовка,
+в репозиторий приложения ничего не внесено.
+
+Проверено по коду до написания заготовки: `DESCRIPTION_MAX_LENGTH` из
+`@/seo-core` НЕ реэкспортируется (в `src/seo-core/index.ts` из
+`./descriptions` выходят только `buildFactualDescription`,
+`listingDescription` и тип), поэтому импорт идёт прямо из модуля — так же, как
+уже сделано в этом файле для `@/seo-core/paths`. Без этой проверки заготовка
+не собралась бы.
+
+--- a/src/lib/seo/title.ts
++++ b/src/lib/seo/title.ts
+@@
+ import { titlePath } from "@/seo-core/paths";
++import { DESCRIPTION_MAX_LENGTH } from "@/seo-core/descriptions";
+ import { overlayForSlug } from "@/modules/editorial/title-overlay";
+@@
++/**
++ * Обрезка по границе предложения или слова, а не по счётчику знаков.
++ *
++ * Предел один для всякого описания — собранного и редакционного: в выдаче
++ * режет поисковик. Прежде здесь стояло `.slice(0, 300)` только для
++ * редакционного перекрытия, и измерение показало 279 знаков на живых
++ * страницах.
++ */
++function withinMetaLimit(value: string): string {
++  const text = value.trim();
++  if (text.length <= DESCRIPTION_MAX_LENGTH) {
++    return text;
++  }
++  const head = text.slice(0, DESCRIPTION_MAX_LENGTH + 1);
++  const sentence = Math.max(
++    head.lastIndexOf(". "),
++    head.lastIndexOf("! "),
++    head.lastIndexOf("? "),
++  );
++  if (sentence >= 80) {
++    return head.slice(0, sentence + 1).trim();
++  }
++  const word = head.lastIndexOf(" ");
++  const cut = word >= 80 ? word : DESCRIPTION_MAX_LENGTH - 1;
++  // Знак обрыва считается в предел: иначе строка выходит за него ровно на
++  // один знак — эта ошибка у меня уже была, 210 строк по 161 знаку.
++  return `${text.slice(0, cut).trim()}…`;
++}
++
+ export function titlePageDescription(title: CatalogTitle): string {
+   const overlay = overlayForSlug(title.publicSlug ?? title.slug);
+   if (overlay?.shortDescription?.trim()) {
+-    return overlay.shortDescription.trim().slice(0, 300);
++    return withinMetaLimit(overlay.shortDescription);
+   }
+   if (overlay?.description?.trim()) {
+-    return overlay.description.trim().slice(0, 300);
++    return withinMetaLimit(overlay.description);
+   }
+   return buildFactualDescription({
+
+Проверка после применения (не «проверено», а что именно запускать):
+1. `pnpm vitest run tests/unit/descriptions.test.ts tests/unit/seo.test.ts`;
+2. новый случай в тестах: редакционное перекрытие длиной 279 знаков даёт
+   описание не длиннее 160 и не обрывается на середине слова;
+3. на опубликованном — выборка не менее 200 страниц: ни одного описания
+   длиннее 160 знаков, доля страниц с описанием не упала.
