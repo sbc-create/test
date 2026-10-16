@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-10-16T07:00:00Z",
+ "updated_at": "2026-10-16T08:35:00Z",
  "note": "Единый список недостатков SEO-модуля. Состояния: proposed → implemented → installed → verified. implemented — код и тесты в ветке; installed — работает в штатном запуске; verified — результат подтверждён на реальных данных штатного запуска. Зона: seo — правит SEO-модуль; shared — общий контракт (очередь, мост, доставка), только через Архитектора; owner — решение или действие владельца. Описание: docs/seo-operator/MODULE_DEFECTS.md.",
  "defects": [
   {
@@ -526,6 +526,36 @@
    "example": "Измерено 2026-10-15 21:05: /catalog/genre/mecha и /catalog/collection/net-takoy-nikogda отвечают 200 с телом «Жанр недоступен» / «Коллекция недоступна», хотя строка матрицы объявляет «200 for allowlisted slug; else 404», а код страницы вызывает notFound(). В теле есть и «Страница не найдена», и «404» — то есть notFound() сработал, но статус уже улетел: маршрут объявлен force-dynamic и ответ стримится. Для сравнения: /anime/<нет такого> даёт настоящий 404 (823 байта) — его закрывает ячейка витрины на краю, до приложения.",
    "fix": "Либо решать статус до начала стрима (как это делает модуль http-status для страниц тайтлов), либо закрывать неизвестные slug посадочных на краю ячейки, где уже работает 404 для тайтлов. Пока страницы noindex, вред ограничен; после MOD-43 мягкий 404 становится видимым поиску.",
    "verify_live": "/catalog/genre/mecha отвечает 404"
+  },
+  {
+   "id": "MOD-45",
+   "title": "Две копии реестра индексации Yummy расходятся, и предпусковая проверка читает отставшую",
+   "zone": "architect",
+   "priority": "P1",
+   "state": "proposed",
+   "example": "Измерено 2026-10-16 07:40. Копия /srv/sites/yummyani-staging/runtime/indexing-core-registry.json — её читают deploy/staging/indexability-preflight.sh:10 и verify.sh:52, и docs/INDEXING_TEMPLATE_SOURCES.md:97 называет её АВТОРИТЕТНОЙ — содержит три домена и говорит про yummyani.biz CLOSED, policy_revision 1, owner_authorization_id BOOTSTRAP-CLOSED. Копия /srv/lords/.frontend/indexing-core-registry.json содержит пять доменов и говорит про тот же biz OPEN, revision 6, id 52799b26-3ca6-42f1-912b-63ac2bcfa9cc, и знает yummyani7.site и yummyani7.info (OPEN, rev 2). Живой biz отдаёт «index, follow», а якорь согласия владельца на его открытие от 2026-10-05 с тем же id лежит в /var/lib/site-cells/owner-consent/yummyani.biz.json. Отстала именно та копия, на которую опирается предпусковая проверка трёх арендаторов, — на одиннадцать дней. Вторая линия (claude-02) по ней же заключила, что yummyani7 реестром не управляются вовсе.",
+   "fix": "Либо один источник на семейство, либо проверка обязана СЛИЧАТЬ копию с якорями согласия и падать на расхождении: сейчас расхождение молчит, а «нет записи» неотличимо от «домен закрыт». До решения состояние домена доказывается живым замером и якорем согласия, а не копией реестра.",
+   "verify_live": "обе копии дают одинаковые desired_state и owner_authorization_id по каждому домену семейства; предпусковая проверка падает, если они разошлись"
+  },
+  {
+   "id": "MOD-46",
+   "title": "Живое открытие yummyani.biz не записано ни в один файл выпуска: следующий штатный выпуск его закроет, а сторож одобрит",
+   "zone": "owner",
+   "priority": "P0",
+   "state": "proposed",
+   "example": "Нашла вторая линия (claude-02) 2026-10-16 при подготовке образов, подтверждено с двух сторон. Живой контейнер web-biz работает с SEO_INDEXING_ENABLED=true, и поэтому yummyani.biz отдаёт «index, follow» — это решение владельца от 2026-10-05 (якорь /var/lib/site-cells/owner-consent/yummyani.biz.json, id 52799b26-3ca6-42f1-912b-63ac2bcfa9cc; реестр /srv/lords/.frontend/indexing-core-registry.json — OPEN rev 6). Но в закоммиченном compose.staging.yaml переменная объявлена только у web-org и web-site, у web-biz её НЕТ, и в compose.vars её нет тоже: живое значение пришло разовым переопределением при выпуске. Любой штатный выпуск biz (deploy.sh, compose-mutate.sh) поднимет контейнер с выключенной индексацией и молча отменит решение владельца. Сторож не остановит: indexability-preflight читает отставшую копию реестра (MOD-45), печатает «biz core=CLOSED rendered=false» и выдаёт PASS — две стороны согласны между собой и обе не правы.",
+   "fix": "Два условия ДО любого выпуска biz, и оба — записи об индексационной политике домена, которые линия выпуска только читает: объявить SEO_INDEXING_ENABLED=\"true\" для web-biz в файле выпуска (чтобы состояние домена жило в файле, а не в чьей-то памяти) и привести копию /srv/sites/yummyani-staging/runtime/indexing-core-registry.json к OPEN rev 6 с id владельца. Пока этого нет, yummyani.biz исключён из выпусков и не годится в канарейку.",
+   "verify_live": "после штатного выпуска biz отдаёт «index, follow»; preflight печатает core=OPEN rendered=true и падает на расхождении"
+  },
+  {
+   "id": "MOD-47",
+   "title": "Файл выпуска двух индексируемых витрин записан путём через символическую ссылку во временной рабочей копии",
+   "zone": "architect",
+   "priority": "P2",
+   "state": "proposed",
+   "example": "Нашла вторая линия (claude-02) 2026-10-16, уточнено измерением. Метка com.docker.compose.project.config_files работающих контейнеров yummyani7-site-web-1 и yummyani7-info-web-1 указывает на /home/claude/wt-nova-publish-memory-02/var/site-repos/yummyani7-*/deploy/compose.yaml, то есть внутрь рабочей копии этой сессии. Содержимое при этом НЕ потеряется: var/site-repos — символическая ссылка на /home/claude/wt-portable-site-cell-01/var/site-repos, и оба пути ведут в один файл (inode 5175498, проверено stat). Хрупок именно записанный путь: если рабочую копию удалят или перенесут, ссылка исчезнет, и `docker compose` двух ОТКРЫТЫХ доменов не найдёт свой файл по записанному пути — узнать об этом можно будет только в момент перезапуска или выпуска.",
+   "fix": "Пересоздать оба проекта с устойчивого пути (/home/claude/wt-portable-site-cell-01/var/site-repos/...), и сделать это ВМЕСТЕ с уже запланированным выпуском посадочных на эти контуры: `docker compose -p <проект> -f <устойчивый путь> up -d` перезапишет метку, и отдельного простоя для этого не требуется. Отдельной операции над работающими витринами ради одной метки не делается.",
+   "verify_live": "метка config_files обоих контейнеров не содержит путь wt-nova-publish-memory-02"
   }
  ]
 }
