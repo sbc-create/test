@@ -4194,6 +4194,27 @@
       ],
       "status": "live_verified",
       "evidence": "16.10 16:54Z: живая сверка сессии (редакционная чистка Animedia). Ответственный: SEO-сессия (фоновый цикл). 16.10 17:35Z: выпущена фоновым циклом (T177 17:18Z, T178 17:33Z); живая проверка страниц live_check — 200, прежних формулировок нет; видно «историю просмотров сайт не ведёт», «…оценка Animedia на 22.09.2026, 11:40», «Обновлено: Сегодня, 06:15»."
+    },
+    {
+      "id": "T179",
+      "site": "yummyani.site, yummyani.org, yummyani.biz, yummyani7.site, yummyani7.info",
+      "direction": "editorial wording (поручение владельца: чистка технических формулировок на всех сайтах)",
+      "repo": "Yummy (общий код, src/app/*, src/site-profiles/profiles.ts; сверено по var/yummy-check/b033-8f159f3)",
+      "urls": [
+        "/pages/sources",
+        "/pages/info",
+        "/legal/privacy",
+        "/legal/terms",
+        "/support",
+        "/ (yummyani7.site, текст профиля)"
+      ],
+      "problem": "Живая сверка 16.10 18:54Z (var/seo-audit/wording-live-20261016-evening.json, 29–32 стр. на домен, все 200): посетителю показаны формулировки для разработчика — «официальный web component CDNVideoHub без iframe», «Служебный токен API на клиент не передаётся» (/pages/sources), «через официальный web component CDNVideoHub, без iframe» (/pages/info), «официальный web component CDNVideoHub» (/legal/terms), «Служебные токены CDNVideoHub в браузер не попадают» (/legal/privacy), «укажите выбранный источник» (/support), а в тексте профиля главной yummyani7.site — внутреннее SEO-пояснение «Фильтры … сужают выборку, но не создают отдельных страниц под каждую комбинацию» (profiles.ts:27). Прочие находки — названия тайтлов и новости («Пробуждение источника силы», «О служебной жизни Мацурики») — не правятся.",
+      "norm": "Публичный текст — для посетителя, без устройства сайта и SEO-механики; бренд и юридический смысл сохраняются.",
+      "expected": "pages/sources: «… Воспроизведение — официальный плеер CDNVideoHub прямо на странице. Ключи доступа к API на сайте не публикуются.»; pages/info: «… через официальный плеер CDNVideoHub.»; legal/terms: «через официальный плеер CDNVideoHub»; legal/privacy: «Ключи доступа CDNVideoHub на сайте не публикуются.»; support: «укажите выбранную озвучку или плеер»; profiles.ts (yummyani7.site): «Фильтры по жанру, году, формату и стране помогают быстро сузить список.»",
+      "check": "wording_live по пяти Yummy: на перечисленных страницах нет «web component», «iframe», «Служебн* токен*», «выбранный источник», «отдельных страниц под каждую комбинацию»; 200; publisher_id 10376/10371 на yummyani7 не изменены (сравнение по равенству).",
+      "status": "blocked",
+      "owner_action": "Выпуск Yummy — сборка образа Архитектором; сейчас сборка не помещается (2787d96: нужно 3,91 ГиБ при 2,54 свободных). Не накладывать на канарейку B033 и выпуск B031 на yummyani7: включить в ближайший штатный выпуск Yummy после приёмки B033, отдельным коммитом.",
+      "evidence": "16.10 18:54Z: var/seo-audit/wording-live-20261016-evening.json; строки кода: src/app/pages/sources/page.tsx:23-24, src/app/pages/info/page.tsx:26, src/app/legal/terms/page.tsx:22, src/app/legal/privacy/page.tsx:31, src/app/support/page.tsx:23, src/site-profiles/profiles.ts:27. /dev/player — 404 и Disallow, не правится."
     }
   ]
 }
