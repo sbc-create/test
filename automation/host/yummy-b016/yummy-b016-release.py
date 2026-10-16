@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
-"""Yummy: выпуск исправления поверх ЖИВЫХ баз витрин и приёмка (B016/T081 — 15.10; B031 — 16.10).
+"""Yummy: выпуск исправления поверх ЖИВЫХ баз витрин и приёмка (B016/T081 — 15.10; B031, B033 — 16.10).
 
-Текущий выпуск — B031 (решение владельца 16.10): <title> не обрезает название произведения.
+B031 (<title> не обрезает название) выпущен 16.10 11:20Z (var/yummy-b016/20261016T111432Z).
+Текущий выпуск — B033 (решение владельца 16.10): карты сезонов и серий охватывают весь
+каталог (детали тайтлов добираются частями и хранятся между перестройками), свежие серии —
+первыми и с датой наблюдения, файлы сверх 50 000 адресов делятся.
 Витрины выпуска — yummyani.biz и yummyani.org; yummyani.site — контроль (не выкладывается).
 yummyani7.site/.info работают на том же образе, что yummyani.biz (rel-a520a24afb20), но их
 compose ведёт Архитектор: после этого выпуска им передаётся тег нового образа biz.
@@ -13,7 +16,7 @@ compose ведёт Архитектор: после этого выпуска и
 Подкоманды:
     preflight            только проверки, ни одной мутации (код 0 — можно выпускать)
     build                preflight + сборка трёх образов; контейнеры не трогаются
-    run --no-accept      ВЫПУСК B031: preflight → сборка → резервная копия БД → выкладка biz → org
+    run --no-accept      ВЫПУСК B033: preflight → сборка → резервная копия БД → выкладка biz → org
                          (каждая — с приёмкой и откатом ТОЛЬКО образа этой витрины при неуспехе;
                          приёмка витрины включает titles: полное название в <title> на компьютере и
                          телефоне, canonical/robots/H1 как до выпуска)
@@ -84,6 +87,7 @@ SLEEP = time.sleep
 B016 = ["b016-sitemap-swr.v2.patch", "b016-sitemap-cap.patch"]
 WORDING = "yummy-public-wording.patch"  # тексты для посетителя (15.10)
 B031 = "b031-title-no-name-cut.patch"   # <title>: хвост → бренд, название не режется (16.10)
+B033 = "b033-sitemap-full-coverage.patch"  # карты сезонов/серий — весь каталог, свежие первыми (16.10)
 TAG_RE = re.compile(r"^yummyani/web:rel-[0-9a-f]{12}$")
 KEPT = re.compile(r"PUBLISHER|CDNVIDEOHUB|^SEO_INDEXING_ENABLED$|^TITLE_OVERLAYS|^SITE_PROFILE$|^REDIS_URL$|^DATABASE_URL$")
 PARTS = ("titles", "seasons", "episodes")
@@ -117,9 +121,13 @@ class Tenant:
 # Выпуск B031 (16.10): базы — живые ревизии после выпуска 15.10 17:10Z (biz a520a24 =
 # 2118480 + WORDING, org 536082c = 8f159f3 + WORDING). yummyani.site (c23018d) — контроль
 # на 7 дней (страницы ДжоДжо S7 — 56 % его поисковых входов), в выпуск не входит.
+#
+# Выпуск B033 (16.10): базы — живые ревизии после выпуска B031 11:20Z (biz 5e43317 =
+# a520a24 + B031, org d1a092d = 536082c + B031). yummyani.site — по-прежнему контроль B031
+# до 23.10; B033 на него и на yummyani7 — после проверки и наблюдения на biz/org.
 TENANTS = [
-    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "a520a24afb20", (B031,)),
-    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "536082c25e7e", (B031,)),
+    Tenant("web-biz", "WEB_BIZ_IMAGE", "yummyani.biz", "5e43317c5baf", (B033,)),
+    Tenant("web-org", "WEB_ORG_IMAGE", "yummyani.org", "d1a092df6e0c", (B033,)),
 ]
 BY_SERVICE = {t.service: t for t in TENANTS}
 

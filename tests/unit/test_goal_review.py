@@ -54,3 +54,13 @@ def test_headless_browser_visits_are_not_real_visits():
         {"dimensions": [{"name": "2026-10-14"}, {"id": "direct"}, {"name": "PC"}, {"name": "HeadlessChrome"}], "metrics": [20000, 99, 1.0, 2]}]})
     s = goal_review.review(e)["sites"][0]
     assert s["w2"]["automated"] == 20000 and s["w2"]["days_ge_goal"] == 0 and s["w2"]["avg_per_day"] == 1000
+
+
+def test_headless_visits_already_marked_robot_are_not_subtracted_twice():
+    visits = {f"2026-10-{d:02d}": 1000 for d in range(1, 15)}
+    e = _export(visits)
+    e["domains"][0]["measurements"].append({"key": "daily_traffic_profile", "measured": True, "value": [
+        {"dimensions": [{"name": "2026-10-14"}, {"id": "direct"}, {"name": "PC"}, {"name": "HeadlessChrome"}, {"id": "yes"}], "metrics": [50, 99, 1.0, 2]},
+        {"dimensions": [{"name": "2026-10-14"}, {"id": "direct"}, {"name": "PC"}, {"name": "HeadlessChrome"}, {"id": "no"}], "metrics": [300, 99, 1.0, 2]}]})
+    s = goal_review.review(e)["sites"][0]
+    assert s["w2"]["automated"] == 300

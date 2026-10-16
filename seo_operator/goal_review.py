@@ -54,7 +54,9 @@ def daily(domain_rec: dict) -> dict[str, dict]:
     # 13–15.10 — 13–21 тыс. «прямых» визитов в сутки, отказы 96–99 %, 2 с. Из реальных — вычитаются.
     for r in (_m(domain_rec, "daily_traffic_profile").get("value") or []):
         dims = r.get("dimensions") or []
-        if len(dims) >= 4 and "headless" in str(dims[3].get("name") or "").lower():
+        # Пятое измерение — isRobot: помеченные роботами уже исключены из daily_users.
+        robot = len(dims) >= 5 and dims[4].get("id") == "yes"
+        if len(dims) >= 4 and "headless" in str(dims[3].get("name") or "").lower() and not robot:
             e = out.setdefault(dims[0].get("name"), {})
             e["automated"] = e.get("automated", 0) + ((r.get("metrics") or [0])[0] or 0)
     for e in out.values():

@@ -348,7 +348,7 @@ EXTRA_METRIKA = (
         "daily_traffic_profile",
         "Визиты по дням, источнику, типу устройства и браузеру (с отказами, глубиной, временем)",
         "ym:s:visits, ym:s:bounceRate, ym:s:pageDepth, ym:s:avgVisitDurationSeconds × ym:s:date × "
-        "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser",
+        "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser × ym:s:isRobot",
     ),
 )
 
@@ -458,8 +458,11 @@ def _metrika_daily_and_search(
             date1=DAILY_WINDOW_FROM,
             date2=date2,
             metrics=["ym:s:visits", "ym:s:bounceRate", "ym:s:pageDepth", "ym:s:avgVisitDurationSeconds"],
-            dimensions=["ym:s:date", "ym:s:lastsignTrafficSource", "ym:s:deviceCategory", "ym:s:browser"],
-            limit=1000,
+            # isRobot (B032, 16.10): автоматический браузер, уже помеченный роботом, из
+            # «нероботов» второй раз не вычитается (до 13.10 так помечались почти все).
+            dimensions=["ym:s:date", "ym:s:lastsignTrafficSource", "ym:s:deviceCategory", "ym:s:browser",
+                        "ym:s:isRobot"],
+            limit=5000,
         )
         out.append(
             Measurement(
