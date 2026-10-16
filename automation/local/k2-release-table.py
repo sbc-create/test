@@ -31,6 +31,11 @@ import pathlib
 import subprocess
 import sys
 
+КОРЕНЬ_РЕПО = pathlib.Path(__file__).resolve().parents[2]
+if str(КОРЕНЬ_РЕПО) not in sys.path:
+    sys.path.insert(0, str(КОРЕНЬ_РЕПО))
+from factory.seo.robots_scope import закрывает_весь_обход  # noqa: E402
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 УЗЕЛ = "k2-zomro-01"
@@ -180,7 +185,11 @@ def напечатать(строки: list[dict]) -> None:
                  else f"{с['publisher']} ≠ {с['publisher_expected']}")
         рев, _, поз = с["catalog"].partition("/")
         каталог = (f"{поз}, rev {рев[:8]}" if поз else с["catalog"])
-        закрыт = "noindex" in с["x_robots"] and "Disallow: /" in с["robots_txt"]
+        # Строкой, а не подстрокой: `"Disallow: /" in текст` совпадает с
+        # `Disallow: /poster/`, и витрина с таким robots.txt считалась бы
+        # закрытой при открытой индексации.
+        закрыт = ("noindex" in с["x_robots"]
+                  and закрывает_весь_обход(с["robots_txt"]))
         индексация = "CLOSED ✓" if закрыт else f"? {с['x_robots']}"
         print(f"| {с['domain']} | {dns} | {с['https']} | {с['service']} "
               f"| {плеер} | {каталог} | {индексация} | {с['blocker']} |")

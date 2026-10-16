@@ -16,6 +16,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from factory.seo.model import Finding, Report
+from factory.seo.robots_scope import закрывает_весь_обход
 
 LINK_RE = re.compile(r'<a\s[^>]*href="([^"]+)"', re.I)
 CANONICAL_RE = re.compile(r'<link rel="canonical" href="([^"]+)"', re.I)
@@ -227,7 +228,8 @@ def crawl(base_url: str, build_dir: Path, *, auth: str = "", environment: str = 
             report.add(Finding("sitemap", "critical", "/sitemap.xml", "Staging публикует sitemap — staging-URL не должны попадать в индекс.", "HR-8"))
 
     robots = crawler.fetch("/robots.txt")
-    if environment != "production" and "Disallow: /" not in robots.body:
+    # Строкой, а не подстрокой: см. factory/seo/robots_scope.
+    if environment != "production" and not закрывает_весь_обход(robots.body):
         report.add(Finding("robots", "critical", "/robots.txt", "Staging robots.txt не запрещает обход."))
     if environment == "production" and "Sitemap:" not in robots.body:
         report.add(Finding("robots", "critical", "/robots.txt", "В production robots.txt нет ссылки на канонический sitemap."))

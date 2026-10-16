@@ -21,6 +21,7 @@ from factory.seo import crawl as crawl_mod
 from factory.seo import lint as lint_mod
 from factory.seo import render_check
 from factory.seo.model import Finding, Report
+from factory.seo.robots_scope import закрывает_весь_обход
 
 
 @dataclass
@@ -239,7 +240,9 @@ def acceptance_routes_multisite(base_url: str, package: dict, out_dir: Path) -> 
         # Вместо ослабления ожиданий проверяется то, что обязано быть верно сейчас,
         # а сама проверка помечается частичной: полной приёмкой она не является.
         status, _, robots_body = _get_host(base_url, "/robots.txt", host)
-        if status != 200 or "Disallow: /" not in robots_body:
+        # Строкой, а не подстрокой: `"Disallow: /" in текст` совпадает с
+        # `Disallow: /poster/`, и проверка проходила при ОТКРЫТОМ сайте.
+        if status != 200 or not закрывает_весь_обход(robots_body):
             report.add(Finding("acceptance-routes", "critical", "/robots.txt",
                                "Индексация сайта выключена, но robots.txt не закрывает сайт целиком.",
                                "ACC-3"))

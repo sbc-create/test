@@ -194,7 +194,13 @@ def main() -> int:
     if проверка(рантайм is not None, "рантайм витрины найден в src/"):
         т = рантайм.read_text(encoding="utf-8")
         проверка('if путь == "/robots.txt"' in т, "рантайм отдаёт /robots.txt сам")
-        проверка("Disallow: /" in т, "robots.txt закрывает обход целиком")
+        # По СТРОКЕ, а не по подстроке: `"Disallow: /" in текст` совпадает с
+        # `Disallow: /poster/`, и проверка проходила при открытом сайте.
+        # Канонический предикат — factory/seo/robots_scope.py; здесь он
+        # повторён выражением, потому что сценарий едет на узел и импортировать
+        # factory ему нечем.
+        проверка(bool(re.search(r"(?mi)^\s*Disallow:\s*/\s*$", т)),
+                 "robots.txt закрывает обход целиком")
         проверка(
             'name="robots" content="noindex, nofollow"' in т,
             "страницы несут meta robots noindex, nofollow",
