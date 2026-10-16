@@ -44,3 +44,13 @@ def test_unmeasured_site_is_reported_with_reason_not_zero():
     r = goal_review.review(_export({}, measured=False))
     assert r["sites"][0] == {"domain": "a.test", "measured": False, "reason": "HTTP 429"}
     assert "не измерено: HTTP 429" in goal_review.markdown(r)
+
+
+def test_headless_browser_visits_are_not_real_visits():
+    visits = {f"2026-10-{d:02d}": 1000 for d in range(1, 15)}
+    visits["2026-10-14"] = 21000
+    e = _export(visits)
+    e["domains"][0]["measurements"].append({"key": "daily_traffic_profile", "measured": True, "value": [
+        {"dimensions": [{"name": "2026-10-14"}, {"id": "direct"}, {"name": "PC"}, {"name": "HeadlessChrome"}], "metrics": [20000, 99, 1.0, 2]}]})
+    s = goal_review.review(e)["sites"][0]
+    assert s["w2"]["automated"] == 20000 and s["w2"]["days_ge_goal"] == 0 and s["w2"]["avg_per_day"] == 1000

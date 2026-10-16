@@ -3440,6 +3440,16 @@
       "status": "blocked",
       "owner_action": "решение по правилу title Yummy (конфликт правила репозитория и SEO_KNOWLEDGE_PACK §4 п.3); при «да» сессия готовит патч к трём живым базам с тестом и включает его в выпуск по сценарию B016 только для канареечных витрин",
       "evidence": "15.10 ~15:35Z: var/seo-goal/landing-audit-20261015.json; код — src/seo-core/truncate.ts (joinTitle, lastWordBoundary), constants.ts DOCUMENT_TITLE_MAX = 70."
+    },
+    {
+      "id": "B032",
+      "site": "yummyani.site",
+      "direction": "anime",
+      "problem": "Всплеск «прямых» визитов yummyani.site с 13.10 — автоматический браузер HeadlessChrome (профиль трафика Метрики, сбор 16.10 05:09Z): 13.10 — 13 354, 14.10 — 19 255, 15.10 — 21 070 визитов, отказы 96–99 %, время ~2 с; Метрика роботами их не помечает. На хосте claude-control-01 процессов и юнитов headless/chrome/playwright нет (замер 16.10 ~07:00Z) — источник внешний. Это не реальные посетители: цель 5 000 у yummyani.site не достигнута (реальных 2 682/сут за 09–15.10).",
+      "expected": "источник установлен (IP/подсеть, User-Agent, страницы входа) по журналам nginx с 13.10; решение — фильтр в Метрике (исключить HeadlessChrome) и/или ограничение на уровне сервера, если это нагрузка или парсинг",
+      "status": "blocked",
+      "owner_action": "Архитектор: журналы nginx yummyani.site с 2026-10-13 по User-Agent HeadlessChrome — адреса, страницы, частота; предложить фильтр Метрики и/или ограничение. SEO учитывает в разборе только реальные визиты (seo_operator/goal_review.py).",
+      "evidence": "16.10 ~07:05Z: var/analytics/cabinet-latest.json, daily_traffic_profile (новый показатель сборщика с cbba90c)."
     }
   ]
 }

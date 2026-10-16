@@ -50,6 +50,15 @@ def daily(domain_rec: dict) -> dict[str, dict]:
         k = "yandex" if eng == "yandex" else "google" if eng == "google" else "other_search"
         e = out.setdefault(dims[0].get("name"), {})
         e[k] = e.get(k, 0) + ((r.get("metrics") or [0, 0])[1] or 0)
+    # Автоматические браузеры (HeadlessChrome) Метрика роботами не помечает: yummyani.site
+    # 13–15.10 — 13–21 тыс. «прямых» визитов в сутки, отказы 96–99 %, 2 с. Из реальных — вычитаются.
+    for r in (_m(domain_rec, "daily_traffic_profile").get("value") or []):
+        dims = r.get("dimensions") or []
+        if len(dims) >= 4 and "headless" in str(dims[3].get("name") or "").lower():
+            e = out.setdefault(dims[0].get("name"), {})
+            e["automated"] = e.get("automated", 0) + ((r.get("metrics") or [0])[0] or 0)
+    for e in out.values():
+        e["real"] = max(e.get("visits", 0) - e.get("automated", 0), 0)
     return out
 
 
@@ -68,10 +77,11 @@ def review(export: dict) -> dict:
         row = {"domain": dm, "measured": True, "rows": sum(1 for x in days if x in d)}
         for w, ds in weeks.items():
             have = [x for x in ds if x in d]
-            vis = [d[x].get("visits", 0) for x in have]
+            vis = [d[x].get("real", d[x].get("visits", 0)) for x in have]
             row[w] = {
                 "days_with_row": len(have),
                 "visits": sum(vis), "avg_per_day": round(sum(vis) / 7, 1),
+                "automated": sum(d[x].get("automated", 0) for x in have),
                 "days_ge_goal": sum(1 for v in vis if v >= GOAL),
                 "yandex": sum(d[x].get("yandex", 0) for x in have),
                 "google": sum(d[x].get("google", 0) for x in have),
@@ -107,8 +117,9 @@ def markdown(r: dict) -> str:
          f"Выгрузка {r['collected_at']} (штатный сборщик). Неделя 1 — {w1[0]}…{w1[1]}, неделя 2 — {w2[0]}…{w2[1]}; "
          f"сутки по часовому поясу счётчика (Europe/Moscow). **Предварительно**: {', '.join(r['preliminary_days'])} (данные дорастают). "
          "Нет строки — не ноль. Позиции, показы и индекс здесь не измеряются (Вебмастер/Search Console — отдельно).", "",
-         "| Сайт | Визиты/сут н1 → н2 | Δ | Суток ≥ 5 000 (н2) | Органика Яндекс н1 → н2 | Органика Google н1 → н2 | Страниц с поиском (н2) | Доля топ-1 / топ-5 | Всплески | Разрыв до цели, визитов/сут |",
-         "|---|---|---|---|---|---|---|---|---|---|"]
+         "Визиты — **реальные**: без автоматических браузеров (HeadlessChrome по профилю трафика), их число — в отдельной колонке.", "",
+         "| Сайт | Визиты/сут н1 → н2 | Δ | Суток ≥ 5 000 (н2) | Органика Яндекс н1 → н2 | Органика Google н1 → н2 | Страниц с поиском (н2) | Доля топ-1 / топ-5 | Всплески | Автоматические визиты н2 | Разрыв до цели, визитов/сут |",
+         "|---|---|---|---|---|---|---|---|---|---|---|"]
     for s in sorted(r["sites"], key=lambda x: -(x.get("w2", {}).get("avg_per_day", -1))):
         if not s.get("measured"):
             L.append(f"| {s['domain']} | не измерено: {s['reason'][:60]} | | | | | | | | |")
@@ -119,7 +130,7 @@ def markdown(r: dict) -> str:
         share = f"{sp['top1_share']:.0%} / {sp['top5_share']:.0%}" if sp.get("top1_share") is not None else "—"
         L.append(f"| {s['domain']} | {a['avg_per_day']:.0f} → {b['avg_per_day']:.0f} | {pct(a['avg_per_day'], b['avg_per_day'])} | {b['days_ge_goal']} | "
                  f"{a['yandex']:.0f} → {b['yandex']:.0f} | {a['google']:.0f} → {b['google']:.0f} | {spages} | {share} | "
-                 f"{', '.join(x[5:] for x in a['spikes'] + b['spikes']) or '—'} | {s['gap_avg_w2']:.0f}"
+                 f"{', '.join(x[5:] for x in a['spikes'] + b['spikes']) or '—'} | {b.get('automated', 0):.0f} | {s['gap_avg_w2']:.0f}"
                  + (" — **цель не подтверждена**: в неделе всплески, их происхождение проверяется отдельно" if b["spikes"] and b["days_ge_goal"] else "") + " |")
     return "\n".join(L) + "\n"
 
