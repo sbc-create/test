@@ -4707,8 +4707,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "17.10 ~22:50Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой (после T191 4e8569d3). Это исправление ошибки, не гипотеза; канарейку /ongoing/ не затрагивает. animeg0.site и an1meg0.site — после проверки этой. Эффект: Метрика — поисковые входы и CTR (после возвращения Вебмастера, B023) на страницы тайтлов с меткой по Яндексу и Google раздельно, 7 дней до/после.",
+      "status": "live_verified",
+      "evidence": "17.10 ~22:50Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой (после T191 4e8569d3). Это исправление ошибки, не гипотеза; канарейку /ongoing/ не затрагивает. animeg0.site и an1meg0.site — после проверки этой. Эффект: Метрика — поисковые входы и CTR (после возвращения Вебмастера, B023) на страницы тайтлов с меткой по Яндексу и Google раздельно, 7 дней до/после. | 17.10 23:08:35Z опубликовано штатным циклом (прогон 20261017T225220Z-2307110 VERIFIED с первой попытки, голова 3b12204a, публикатор live_verified). Живая сверка сессией 23:13Z (var/seo-audit/t194-live-20261017.json): /title/monolog-maomao-2/ — description «…Жанры: комедия, детектив, исторический, дорама…», og:description, факты и JSON-LD genre без метки; /title/gurren-lagann-na-proryv/ — метки 0; раздел метки — noindex, follow (meta и X-Robots-Tag); обычный жанр «драма» и /ongoing/ — index, follow; ссылок на метку в /catalog/ 0; canonical без изменений.",
       "owner_action": null
     },
     {
@@ -4770,6 +4770,60 @@
       ],
       "status": "queued",
       "evidence": "17.10 ~22:50Z: живой замер сессии (deep-wording-20261017.json: 30 вхождений на 15 страницах тайтлов). animedia.space — следом после проверки этой. Эффект — Метрика, входы на /genres/ и страницы тайтлов, Яндекс и Google раздельно, 7 дней до/после.",
+      "owner_action": null
+    },
+    {
+      "id": "T197",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/title/monolog-maomao-2/",
+        "https://animeg0.site/catalog/?genre=%D0%B7%D0%B0%D0%BF%D0%B0%D0%B4%D0%BD%D1%8B%D0%B9%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82"
+      ],
+      "problem": "То же, что T194 (live_verified 17.10 23:08Z на an1mego.site): служебная метка «западный контент» на страницах тайтлов animeg0.site — в description/og, фактах, JSON-LD; раздел метки index (живой замер 17.10 ~22:50Z, deep-wording-20261017.json).",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "Перенести правку T194 — коммит 3b12204af38b930ffa7760fcd9b2e3f20b7aa50f ветки claude/seo-tech-t194-20261017t225220z-2307110 репозитория var/site-repos/an1mego-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/an1mego-site format-patch -1 3b12204af38b --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат). Код у трёх AnimeGo общий, отличия — конфигурация. src/animego-frontend.py: служебные метки — множество {«западный контент», «азиатский контент»} (уже есть в _СЛУЖЕБНЫЕ_ЖАНРЫ_КАРТЫ вместе с «аниме»; сравнение casefold после strip). (1) описание тайтла (модульная функция с «Жанры: » ~1260) — метки не включать в список жанров; (2) факты страницы тайтла (dt «Жанры») — метки не выводить и не ссылаться на них; (3) JSON-LD genre страницы тайтла — без меток; (4) раздел метки (/catalog/?genre=<метка> и её латинские коды west_content/zapadnyykontent/aziatskiykontent) — noindex, follow (по образцу модульных _выборка_без_страницы/_служебная_страница), страница отвечает как прежде; (5) метки не выводятся в фильтре жанров каталога и в списках жанров, если они там есть. ГРАНИЦЫ (checks/boundaries.py): классы ВидАнимедиа и ВидОснова и модули seo_layer/community/collection_contract/chronology — чужой код, НЕ менять ни строки; если JSON-LD или факты строятся в унаследованном классе — фильтровать в собственной области (класс ВидАнимеГо или модульные функции ниже метки AnimeGo), например переопределением метода в ВидАнимеГо с вызовом super() и фильтром данных. Перед коммитом python3 checks/boundaries.py — rc 0; длинные строки существующего кода не переносить (checks/pagination_links.py и подобные ищут подстроки). Проверка checks/service_genre_labels.py — витрина на урезанном стенде/копии снимка: на странице тайтла записи с меткой в жанрах — нет метки в <meta name=\"description\">, og:description, видимом тексте и JSON-LD genre; раздел метки — robots noindex; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh через обёртку rc 2→0. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "/title/monolog-maomao-2/ — description и og:description без «западный контент», в фактах и JSON-LD метки нет; раздел метки — noindex, follow; страницы 200, canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/title/monolog-maomao-2/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 23:13Z: распространение после живой проверки представителя T194. Эффект — как T194.",
+      "owner_action": null
+    },
+    {
+      "id": "T198",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/title/monolog-maomao-2/",
+        "https://an1meg0.site/catalog/?genre=%D0%B7%D0%B0%D0%BF%D0%B0%D0%B4%D0%BD%D1%8B%D0%B9%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82"
+      ],
+      "problem": "То же, что T194 (live_verified 17.10 23:08Z на an1mego.site): служебная метка «западный контент» на страницах тайтлов an1meg0.site — в description/og, фактах, JSON-LD; раздел метки index (живой замер 17.10 ~22:50Z, deep-wording-20261017.json).",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "Перенести правку T194 — коммит 3b12204af38b930ffa7760fcd9b2e3f20b7aa50f ветки claude/seo-tech-t194-20261017t225220z-2307110 репозитория var/site-repos/an1mego-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/an1mego-site format-patch -1 3b12204af38b --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат). Код у трёх AnimeGo общий, отличия — конфигурация. src/animego-frontend.py: служебные метки — множество {«западный контент», «азиатский контент»} (уже есть в _СЛУЖЕБНЫЕ_ЖАНРЫ_КАРТЫ вместе с «аниме»; сравнение casefold после strip). (1) описание тайтла (модульная функция с «Жанры: » ~1260) — метки не включать в список жанров; (2) факты страницы тайтла (dt «Жанры») — метки не выводить и не ссылаться на них; (3) JSON-LD genre страницы тайтла — без меток; (4) раздел метки (/catalog/?genre=<метка> и её латинские коды west_content/zapadnyykontent/aziatskiykontent) — noindex, follow (по образцу модульных _выборка_без_страницы/_служебная_страница), страница отвечает как прежде; (5) метки не выводятся в фильтре жанров каталога и в списках жанров, если они там есть. ГРАНИЦЫ (checks/boundaries.py): классы ВидАнимедиа и ВидОснова и модули seo_layer/community/collection_contract/chronology — чужой код, НЕ менять ни строки; если JSON-LD или факты строятся в унаследованном классе — фильтровать в собственной области (класс ВидАнимеГо или модульные функции ниже метки AnimeGo), например переопределением метода в ВидАнимеГо с вызовом super() и фильтром данных. Перед коммитом python3 checks/boundaries.py — rc 0; длинные строки существующего кода не переносить (checks/pagination_links.py и подобные ищут подстроки). Проверка checks/service_genre_labels.py — витрина на урезанном стенде/копии снимка: на странице тайтла записи с меткой в жанрах — нет метки в <meta name=\"description\">, og:description, видимом тексте и JSON-LD genre; раздел метки — robots noindex; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh через обёртку rc 2→0. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "/title/monolog-maomao-2/ — description и og:description без «западный контент», в фактах и JSON-LD метки нет; раздел метки — noindex, follow; страницы 200, canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/title/monolog-maomao-2/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 23:13Z: распространение после живой проверки представителя T194. Эффект — как T194.",
       "owner_action": null
     }
   ]
