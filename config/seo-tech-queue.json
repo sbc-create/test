@@ -4468,6 +4468,87 @@
       "status": "queued",
       "evidence": "17.10 ~18:30Z: живой замер сессии; шаблон закреплён — правка только слоем serve.py. Архитектор zonafilm-cc с 16.10 14:48Z не менял (живой = голова ветки выпуска e1c8504). Эффект: Метрика — входы и глубина на /movies/, /series/, /catalog/ zonafilm.cc по Яндексу и Google раздельно, 7 дней до/после даты публикации.",
       "owner_action": null
+    },
+    {
+      "id": "T187",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/catalog/",
+        "https://lordfilm47.space/movies/"
+      ],
+      "problem": "Живой замер 17.10 ~19:15Z: в фильтре каталога lordfilm47.space (select name=genre, /catalog/, /movies/, /series/) первой опцией после «Все» — служебная метка поставщика «западный контент» (value zapadnyykontent), выбор ведёт на раздел метки — noindex (T044), вне карты. Метка видна посетителю как жанр. Источник — src/lords-frontend.py ~4620: genre_opts из индекса genre_names без фильтра _ТЕХНИЧЕСКИЕ_ЖАНРЫ. На zonafilm.space то же исправлено T185 (live_verified 17.10 19:13Z).",
+      "norm": "видимый текст — редакционный, служебные метки поставщика не жанр и не цель внутренних переходов (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10 — технические надписи и перелинковка)",
+      "expected": "в src/lords-frontend.py при построении genre_opts (фильтр select name=\"genre\") исключить пары, чьё имя (strip, casefold) в _ТЕХНИЧЕСКИЕ_ЖАНРЫ, кроме выбранной сейчас (выбрано.get(\"genre\") == код). Прочие тексты, title/description/canonical/robots, вёрстку, постеры, CSS не менять (постеры и вёрстку правит Архитектор). Проверка checks/service_genre_labels.py — витрина на урезанном стенде/копии снимка (по образцу уже имеющихся стендовых проверок ячейки, напр. checks/mini_stand.py или checks/genre_links_canonical.py): на /catalog/ и /movies/ в <option> select[name=genre] нет «западный контент»/«азиатский контент»; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh — через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /catalog/ и /movies/ в фильтре жанров нет опции «западный контент»; страницы 200, title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/catalog/",
+          "status": 200,
+          "absent": [
+            ">западный контент</option>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~19:15Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой. Эффект — доля переходов из фильтра на noindex-раздел метки и входы на /catalog/ по Яндексу и Google раздельно (Метрика), 7 дней до/после.",
+      "owner_action": null
+    },
+    {
+      "id": "T188",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/catalog/",
+        "https://lordserial33.biz/movies/"
+      ],
+      "problem": "Живой замер 17.10 ~19:15Z: в фильтре каталога lordserial33.biz (select name=genre, /catalog/, /movies/, /series/) первой опцией после «Все» — служебная метка поставщика «западный контент» (value zapadnyykontent), выбор ведёт на раздел метки — noindex (T044), вне карты. Метка видна посетителю как жанр. Источник — src/lords-frontend.py ~4600: genre_opts из индекса genre_names без фильтра _ТЕХНИЧЕСКИЕ_ЖАНРЫ. На zonafilm.space то же исправлено T185 (live_verified 17.10 19:13Z).",
+      "norm": "видимый текст — редакционный, служебные метки поставщика не жанр и не цель внутренних переходов (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10 — технические надписи и перелинковка)",
+      "expected": "в src/lords-frontend.py при построении genre_opts (фильтр select name=\"genre\") исключить пары, чьё имя (strip, casefold) в _ТЕХНИЧЕСКИЕ_ЖАНРЫ, кроме выбранной сейчас (выбрано.get(\"genre\") == код). Прочие тексты, title/description/canonical/robots, вёрстку, постеры, CSS не менять (постеры и вёрстку правит Архитектор). Проверка checks/service_genre_labels.py — витрина на урезанном стенде/копии снимка (по образцу уже имеющихся стендовых проверок ячейки, напр. checks/mini_stand.py или checks/genre_links_canonical.py): на /catalog/ и /movies/ в <option> select[name=genre] нет «западный контент»/«азиатский контент»; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh — через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /catalog/ и /movies/ в фильтре жанров нет опции «западный контент»; страницы 200, title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/catalog/",
+          "status": 200,
+          "absent": [
+            ">западный контент</option>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~19:15Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой. Эффект — доля переходов из фильтра на noindex-раздел метки и входы на /catalog/ по Яндексу и Google раздельно (Метрика), 7 дней до/после.",
+      "owner_action": null
+    },
+    {
+      "id": "T189",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/catalog/",
+        "https://zonafilm12.site/movies/"
+      ],
+      "problem": "Живой замер 17.10 ~19:15Z: в фильтре жанров zonafilm12.site (select#zona-genre-facet на /catalog/, /movies/, /series/) первой опцией — служебная метка «западный контент» (ведёт на /catalog/?genre=zapadnyykontent — noindex, T044). Карточки здесь уже чистые. Источник — src/lords-frontend.py ~7534/7555: опции из индекса genre_names без фильтра _ТЕХНИЧЕСКИЕ_ЖАНРЫ. Та же правка на zonafilm.space — T185 (live_verified 17.10 19:13Z).",
+      "norm": "видимый текст — редакционный, служебные метки поставщика не жанр и не цель внутренних переходов (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10 — технические надписи и перелинковка)",
+      "expected": "в src/lords-frontend.py в построении опций фильтра жанров (select id=\"zona-genre-facet\", оба места ~7534 и ~7555) не выводить опции, чьё имя (strip, casefold) в _ТЕХНИЧЕСКИЕ_ЖАНРЫ, кроме выбранной (жанр_код == код) — как в zonafilm-space после T185 (ветка выпуска origin/claude/extract-zonafilm-space-seo-01, голова 3f55d707). Прочие тексты, title/description/canonical/robots, вёрстку, постеры, CSS не менять. Проверка checks/service_genre_labels.py — по образцу той же проверки zonafilm-space (`git -C var/site-repos/zonafilm-space show 3f55d707:checks/service_genre_labels.py`), на /, /movies/, /series/: в <span class=\"zt__m\"> и <option> select#zona-genre-facet нет меток; 0/1/2; в checks/run.sh через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /catalog/ /movies/ /series/ в фильтре жанров нет опции «западный контент»; страницы 200, title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/catalog/",
+          "status": 200,
+          "absent": [
+            ">западный контент</option>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~19:15Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой 57f228a. Эффект — как T187.",
+      "owner_action": null
     }
   ]
 }
