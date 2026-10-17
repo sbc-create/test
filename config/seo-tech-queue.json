@@ -4683,6 +4683,94 @@
       "status": "live_verified",
       "evidence": "17.10 22:15Z: распространение после живой проверки представителя T192; сухой прогон инструмента на zonafilm12-site — 1 замена. zonafilm.cc — формулировки нет (своя главная слоем serve.py). Эффект — как T192. | 17.10 22:45:56Z опубликовано штатным циклом (прогон 20261017T221605Z-2090406 VERIFIED, голова 601bb884, публикатор live_verified). Живая сверка сессией 22:48Z (var/seo-audit/t193-live-20261017.json): новая формулировка 1, «тематические выборки» 0; title, canonical, index, follow без изменений; регресса T189 нет (служебной опции в фильтре 0).",
       "owner_action": null
+    },
+    {
+      "id": "T194",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/title/monolog-maomao-2/",
+        "https://an1mego.site/catalog/?genre=%D0%B7%D0%B0%D0%BF%D0%B0%D0%B4%D0%BD%D1%8B%D0%B9%20%D0%BA%D0%BE%D0%BD%D1%82%D0%B5%D0%BD%D1%82"
+      ],
+      "problem": "Живой замер 17.10 ~22:50Z (var/seo-audit/deep-wording-20261017.json, 15 тайтлов на сайт): на страницах тайтлов AnimeGo с меткой поставщика она печатается жанром — в meta description и og:description («…Жанры: западный контент, комедия, детектив. Смотреть онлайн на AnimeGo.» — /title/monolog-maomao-2/), в фактах (dt «Жанры» — ссылкой на /catalog/?genre=западный контент) и в JSON-LD genre. Раздел метки /catalog/?genre=западный контент — 200, index, follow (в карте его нет — _СЛУЖЕБНЫЕ_ЖАНРЫ_КАРТЫ). Затронуто 1–2 из 15 тайтлов выборки на каждом из трёх AnimeGo (an1mego, animeg0, an1meg0).",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "src/animego-frontend.py: служебные метки — множество {«западный контент», «азиатский контент»} (уже есть в _СЛУЖЕБНЫЕ_ЖАНРЫ_КАРТЫ вместе с «аниме»; сравнение casefold после strip). (1) описание тайтла (модульная функция с «Жанры: » ~1260) — метки не включать в список жанров; (2) факты страницы тайтла (dt «Жанры») — метки не выводить и не ссылаться на них; (3) JSON-LD genre страницы тайтла — без меток; (4) раздел метки (/catalog/?genre=<метка> и её латинские коды west_content/zapadnyykontent/aziatskiykontent) — noindex, follow (по образцу модульных _выборка_без_страницы/_служебная_страница), страница отвечает как прежде; (5) метки не выводятся в фильтре жанров каталога и в списках жанров, если они там есть. ГРАНИЦЫ (checks/boundaries.py): классы ВидАнимедиа и ВидОснова и модули seo_layer/community/collection_contract/chronology — чужой код, НЕ менять ни строки; если JSON-LD или факты строятся в унаследованном классе — фильтровать в собственной области (класс ВидАнимеГо или модульные функции ниже метки AnimeGo), например переопределением метода в ВидАнимеГо с вызовом super() и фильтром данных. Перед коммитом python3 checks/boundaries.py — rc 0; длинные строки существующего кода не переносить (checks/pagination_links.py и подобные ищут подстроки). Проверка checks/service_genre_labels.py — витрина на урезанном стенде/копии снимка: на странице тайтла записи с меткой в жанрах — нет метки в <meta name=\"description\">, og:description, видимом тексте и JSON-LD genre; раздел метки — robots noindex; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh через обёртку rc 2→0. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "/title/monolog-maomao-2/ — description и og:description без «западный контент», в фактах и JSON-LD метки нет; раздел метки — noindex, follow; страницы 200, canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/title/monolog-maomao-2/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~22:50Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой (после T191 4e8569d3). Это исправление ошибки, не гипотеза; канарейку /ongoing/ не затрагивает. animeg0.site и an1meg0.site — после проверки этой. Эффект: Метрика — поисковые входы и CTR (после возвращения Вебмастера, B023) на страницы тайтлов с меткой по Яндексу и Google раздельно, 7 дней до/после.",
+      "owner_action": null
+    },
+    {
+      "id": "T195",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/title/etoy-zimoy-duet-veter/"
+      ],
+      "problem": "Живой замер 17.10 ~22:50Z (var/seo-audit/deep-wording-20261017.json): в строке жанров карточек («Смотрите также» на страницах тайтлов) zonafilm12.site печатается служебная метка «азиатский контент» — 23 вхождения на 15 страницах (напр. /title/etoy-zimoy-duet-veter/: «2013 · Южная Корея · дорама · азиатский контент»). src/lords-frontend.py ~6192: пропуск в карточке сравнивает только с «западный контент»/west_content/zapadnyy-kontent, «азиатский контент» (служебная с T077, есть в _ТЕХНИЧЕСКИЕ_ЖАНРЫ) не исключается.",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "src/lords-frontend.py в построении строки жанров карточки (комментарий «Region tags are not genres.») дополнительно пропускать жанр, если str(gs).strip().casefold() in _ТЕХНИЧЕСКИЕ_ЖАНРЫ (как в zonafilm-space после T185). Проверка checks/service_genre_labels.py уже есть (T189) — дополнить: на странице тайтла с похожими записями в <span class=\"zt__m\"> нет ни одной метки из _ТЕХНИЧЕСКИЕ_ЖАНРЫ; база 1 / правка 0 / не измерено 2. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на страницах тайтлов в карточках «Смотрите также» нет «азиатский контент»; страницы 200, title/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/title/etoy-zimoy-duet-veter/",
+          "status": 200,
+          "absent": [
+            "азиатский контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~22:50Z: живой замер сессии; zonafilm.space и zonafilm.cc в той же выборке чисты (фильтр по _ТЕХНИЧЕСКИЕ_ЖАНРЫ). Эффект — как T185.",
+      "owner_action": null
+    },
+    {
+      "id": "T196",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/moya-podruzhka-prizrak/",
+        "https://animedia.icu/genres/",
+        "https://animedia.icu/catalog/?genre=zapadnyykontent"
+      ],
+      "problem": "Живой замер 17.10 ~22:50Z: на animedia.icu служебная метка «западный контент» — пунктом списка жанров шапки/ящика на каждой странице («западный контент 322», src/animedia-frontend.py ~7270 — все жанры индекса без фильтра), ссылками в хабе /genres/ и фильтре /catalog/ (4 ссылки на каждом); раздел /catalog/?genre=zapadnyykontent — 200, index, follow. На animedia.space в шапке метка не видна только потому, что список ограничен 14 первыми жанрами, а ссылки в /genres/ и /catalog/ и index у раздела — те же.",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "src/animedia-frontend.py: множество служебных меток {«западный контент», «азиатский контент»} (casefold) и их кодов (west_content, zapadnyykontent, aziatskiykontent). (1) списки жанров шапки/ящика, хаб /genres/, фильтр жанров каталога и жанры страницы тайтла (видимые и ссылки) — без меток; (2) раздел метки /catalog/?genre=<код метки> — meta robots и X-Robots-Tag noindex, follow, страница отвечает как прежде; (3) description/og и JSON-LD genre страниц — без меток, если они там есть. Проверка checks/service_genre_labels.py — витрина на копии снимка (по образцу стендовых проверок ячейки): на /, /genres/, /catalog/ и странице тайтла с меткой — ни видимой метки, ни ссылки на её код; раздел метки — noindex; 0/1/2; в checks/run.sh через обёртку rc 2→0. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /, /genres/, /catalog/ и страницах тайтлов нет «западный контент» и ссылок genre=zapadnyykontent; /catalog/?genre=zapadnyykontent — noindex, follow; title/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/genres/",
+          "status": 200,
+          "absent": [
+            "genre=zapadnyykontent"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/catalog/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~22:50Z: живой замер сессии (deep-wording-20261017.json: 30 вхождений на 15 страницах тайтлов). animedia.space — следом после проверки этой. Эффект — Метрика, входы на /genres/ и страницы тайтлов, Яндекс и Google раздельно, 7 дней до/после.",
+      "owner_action": null
     }
   ]
 }
