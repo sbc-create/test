@@ -27,10 +27,54 @@
 написан вчера и таймера действительно не имеет. Путать их нельзя: у них разные
 каталоги и разные правила.
 
+## Поправка к первой редакции этого блока: таймер нельзя вешать на ветковое дерево
+
+Первая редакция указывала
+`ExecStart=/usr/bin/python3 /home/claude/wt-nova-publish-memory-02/automation/local/backup-retention.py`,
+то есть **постоянный системный таймер с `--apply` зависел бы от моего
+веткового рабочего дерева**. Это ошибка, и её нашла линия SEO; проверено:
+инструмент существует ровно в одном месте — `wt-nova-publish-memory-02`
+(14 181 Б, sha256
+`7d11d9330da3807dfac8060476c3efaea7eabca13fc9e8d045b020afa710f87d`), в
+чекауте служб `wt-portable-site-cell-01` его нет.
+
+Почему это хуже обычного несущего пути: задание **удаляющее**. Уберут ветковое
+дерево — таймер начнёт молча отказывать, и раздел заполнится снова, то есть
+случится ровно та авария, против которой таймер и ставится. А переключение
+ветки в том же дереве подменило бы исполняемый сценарий без чьего-либо
+решения.
+
+Поэтому инструмент сначала переносится туда, где живут службы и данные, и
+только потом на него указывает расписание. Выбран
+**`/srv/site-factory/repo`** — полный чекаут того же репозитория фабрики, вне
+рабочих деревьев агентов, принадлежит учётной записи `claude`, и именно в его
+`var/lords/publish-backups` публикатор пишет копии. Инструмент к месту запуска
+не привязан: зависимостей из репозитория у него нет (только стандартная
+библиотека), а каталоги копий и отчётов заданы абсолютными путями.
+
+Альтернатива — копия в `/usr/local/sbin` — названа и отклонена: она выпадает
+из-под контроля версий, и расхождение с репозиторием никто не заметит.
+
 ## Блок команд
 
-Сервер `claude-control-01`, от root. Таймер ставится один, служба работает от
+Сервер `claude-control-01`. Шаг 1 — от учётной записи `claude` (владелец
+чекаута), шаги 2–5 — от root. Таймер ставится один, служба работает от
 учётной записи `claude` (владелец файлов копий — она же).
+
+```bash
+# 1. Перенос инструмента в чекаут служб (от claude). Берётся из моей ветки,
+#    поэтому версия остаётся под контролем версий, а не копией «как есть».
+cd /srv/site-factory/repo
+git fetch origin claude/nova-publish-memory-02
+git checkout FETCH_HEAD -- automation/local/backup-retention.py
+
+# Проверка: тот самый файл, а не похожий. Ожидается
+# 7d11d9330da3807dfac8060476c3efaea7eabca13fc9e8d045b020afa710f87d
+sha256sum /srv/site-factory/repo/automation/local/backup-retention.py
+
+# Проверка: план на нынешнем состоянии. Ожидается «удалять нечего»
+python3 /srv/site-factory/repo/automation/local/backup-retention.py --keep-days 7
+```
 
 ```bash
 cat > /etc/systemd/system/publish-backups-retention.service <<'UNIT'
@@ -40,14 +84,14 @@ cat > /etc/systemd/system/publish-backups-retention.service <<'UNIT'
 # и ничего не удаляет.
 [Unit]
 Description=Удержание копий публикации: семь суток
-Documentation=file:///home/claude/wt-nova-publish-memory-02/docs/OWNER_DISK_P0_20261015.md
+Documentation=file:///srv/site-factory/repo/docs/OWNER_DISK_P0_20261015.md
 
 [Service]
 Type=oneshot
 User=claude
 Group=claude
-WorkingDirectory=/home/claude/wt-nova-publish-memory-02
-ExecStart=/usr/bin/python3 /home/claude/wt-nova-publish-memory-02/automation/local/backup-retention.py --keep-days 7 --apply
+WorkingDirectory=/srv/site-factory/repo
+ExecStart=/usr/bin/python3 /srv/site-factory/repo/automation/local/backup-retention.py --keep-days 7 --apply
 UNIT
 
 cat > /etc/systemd/system/publish-backups-retention.timer <<'UNIT'
