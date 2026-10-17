@@ -68,7 +68,7 @@
       "applicability": "an1mego.site: 1 новая посадочная (+ её страницы листания) из ~9 000 индексируемых; контроль — animeg0.site, an1meg0.site (тот же код, без раздела)",
       "scope_page_share": 0.001,
       "phase": "canary",
-      "evidence": "config/seo-tech-queue.json T190 (основание T085); живой замер 17.10 20:20Z: /ongoing/ — 404, /catalog/?ongoing=1 — 200 noindex, follow, 24 карточки на странице"
+      "evidence": "config/seo-tech-queue.json T190 (основание T085); живой замер 17.10 20:20Z: /ongoing/ — 404, /catalog/?ongoing=1 — 200 noindex, follow, 24 карточки на странице; выпущено 17.10 21:24Z (T191, голова 4e8569d3), живая сверка 21:28Z — var/seo-audit/t191-live-20261017.json; наблюдение: 7 дней — 24.10, 28 дней — 14.11"
     }
   ]
 }
