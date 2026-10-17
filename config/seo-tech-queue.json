@@ -4584,8 +4584,46 @@
           ]
         }
       ],
+      "status": "session",
+      "evidence": "17.10 20:20Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой b311379; Архитектор с 16.10 не менял. Канарейка: config/experiments.json exp-animego-ongoing-landing (phase canary, scope 0.001). Эффект: Метрика — поисковые входы на /ongoing/ по Яндексу и Google раздельно, 7 и 28 дней; контроль — animeg0.site, an1meg0.site. Распространение — только после вердикта keep. | 17.10 20:23Z попытка 20261017T202322Z-1380302 INCOMPLETE: своя проверка база 1 / ветка 0, но checks/run.sh — boundaries: ОТКАЗ (изменён класс ВидАнимедиа — атрибут и две ссылки). Остальное по заданию верно. expected дополнен границами. | 17.10 21:12Z: попытки исчерпаны (3 INCOMPLETE), заменена T191 (перенос коммита 2742f0cd с исправлением строки листалки).",
+      "owner_action": null
+    },
+    {
+      "id": "T191",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/ongoing/",
+        "https://an1mego.site/catalog/?ongoing=1",
+        "https://an1mego.site/"
+      ],
+      "problem": "Живой замер 17.10 20:20Z: пункт основной навигации AnimeGo «Онгоинг» и ссылки «Все незавершённые»/«Что сейчас выходит» ведут на /catalog/?ongoing=1 — 200, noindex, follow, title «Список аниме — AnimeGo», H1 «Список аниме»; /ongoing/ — 404. Раздела онгоингов для поисковика нет, хотя тема с поисковым спросом и у Animedia /schedule/ индексируется (T085).",
+      "norm": "раздел с самостоятельной ценностью — своя индексируемая страница с уникальными title/H1/описанием из видимого и canonical на себя (SEO_KNOWLEDGE_PACK §1, §3 REQ-SEO-FACETS); гипотеза — канарейка на одном сайте (exp-animego-ongoing-landing)",
+      "expected": "Перенести на текущую базу готовую правку третьей попытки T190 — коммит 2742f0cd876a ветки claude/seo-tech-t190-20261017t204547z-1529628 этого репозитория (`git cherry-pick 2742f0cd876a`; при конфликте — по смыслу); её собственная проверка checks/ongoing_landing.py и checks/boundaries.py на ней проходят. Единственное исправление: в src/animego-frontend.py в листалке ВидАнимеГо.список вернуть вызов в одну строку ровно как на базе — `view=(\"\" if режим == \"big\" else режим), page=н if н > 1 else \"\")` (checks/pagination_links.py ищет эту подстроку; попытка 3 перенесла page= на новую строку и получила rc=1). Больше ничего не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0. Исходное задание (для справки): src/animego-frontend.py, по образцу одиночного фасета года (/year/<гггг>/: маршрут, фасет = (адрес, заголовок) в список() ~10750, canonical, РАЗДЕЛЫ_КАРТЫ ~360): (1) маршрут /ongoing/ (и /ongoing/?page=N) отдаёт ту же выборку, что /catalog/?ongoing=1 (записи с _ongoing), canonical — https://<домен>/ongoing/ (страница N — по правилу листания года), index по режиму сайта; (2) title «Онгоинги аниме: смотреть онлайн — AnimeGo», H1 «Онгоинги аниме», meta description по образцу раздела жанра: «Онгоинги аниме на AnimeGo: N тайтлов, которые сейчас выходят, — с описанием, оценкой и числом серий.» где N — то же число, что видно на странице (склонение тайтл/тайтла/тайтлов); имя сайта — из той же переменной, что у раздела жанра, не литералом; (3) /catalog/?ongoing=1 без других ключей (кроме page) — 308 на /ongoing/ (с page — на /ongoing/?page=N); сочетания с другими фильтрами — как сейчас (noindex); (4) ссылки навигации, «Все незавершённые» и «Что сейчас выходит» (поиск по \"/catalog/?ongoing=1\") — на /ongoing/; (5) /ongoing/ — в РАЗДЕЛЫ_КАРТЫ (карта). Пустая выборка — 404 «записей нет», как у фасетов. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Проверка checks/ongoing_landing.py — витрина на урезанном стенде/копии снимка (по образцу стендовых проверок ячейки): /ongoing/ — 200, robots без noindex, canonical на себя, <title> и <h1> как выше, число в description = числу карточек выборки по счётчику страницы; /catalog/?ongoing=1 — 308 на /ongoing/; /ongoing/ есть в перечне разделов карты; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. ГРАНИЦЫ (checks/boundaries.py, отказ попытки 20261017T202322Z): класс ВидАнимедиа, класс ВидОснова и модули seo_layer/community/collection_contract/chronology — чужой код, НЕ менять ни строки. Атрибут АДРЕС_ОНГОИНГОВ = \"/ongoing/\" объявлять только в классе ВидАнимеГо; где он читается вне ВидАнимеГо — getattr(вид, \"АДРЕС_ОНГОИНГОВ\", \"\"). Ссылки «Все незавершённые» и «Что сейчас выходит» рисует унаследованный ВидАнимедиа — их не править в нём, а в собственном ВидАнимеГо.оболочка (~10103) заменить в теле href=\"/catalog/?ongoing=1\" на href=\"/ongoing/\" до сборки страницы. Перед коммитом: python3 checks/boundaries.py — rc 0.",
+      "check": "checks/ongoing_landing.py",
+      "verify_live": "/ongoing/ — 200, index, canonical на себя, title/H1/description как в expected, число в описании = видимому; /catalog/?ongoing=1 — 308 на /ongoing/; навигация ведёт на /ongoing/; /ongoing/ в sitemap после пересборки карты",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/ongoing/",
+          "status": 200,
+          "contains": [
+            "Онгоинги аниме"
+          ],
+          "absent": [
+            "<meta name=\"robots\" content=\"noindex"
+          ]
+        },
+        {
+          "url": "https://an1mego.site/",
+          "status": 200,
+          "contains": [
+            "href=\"/ongoing/\""
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "17.10 20:20Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой b311379; Архитектор с 16.10 не менял. Канарейка: config/experiments.json exp-animego-ongoing-landing (phase canary, scope 0.001). Эффект: Метрика — поисковые входы на /ongoing/ по Яндексу и Google раздельно, 7 и 28 дней; контроль — animeg0.site, an1meg0.site. Распространение — только после вердикта keep. | 17.10 20:23Z попытка 20261017T202322Z-1380302 INCOMPLETE: своя проверка база 1 / ветка 0, но checks/run.sh — boundaries: ОТКАЗ (изменён класс ВидАнимедиа — атрибут и две ссылки). Остальное по заданию верно. expected дополнен границами.",
+      "evidence": "17.10 21:12Z: замена T190 (три попытки INCOMPLETE: 1–2 — boundaries, тронут ВидАнимедиа; 3 — только checks/pagination_links.py: подстрока листалки разбита переносом). Разбор сессии на копии ветки 2742f0cd: все прочие 39 шагов run.sh rc 0, на базе b311379 — все 40 rc 0; checks/ongoing_landing.py: /ongoing/ — 200, index, canonical на себя, 282 тайтла в description, ?ongoing=1 — 308, меню и карта — /ongoing/. Канарейка exp-animego-ongoing-landing. 17.10 20:20Z: живой замер сессии; репозиторий чистый, голова ветки выпуска = живой b311379; Архитектор с 16.10 не менял. Канарейка: config/experiments.json exp-animego-ongoing-landing (phase canary, scope 0.001). Эффект: Метрика — поисковые входы на /ongoing/ по Яндексу и Google раздельно, 7 и 28 дней; контроль — animeg0.site, an1meg0.site. Распространение — только после вердикта keep. | 17.10 20:23Z попытка 20261017T202322Z-1380302 INCOMPLETE: своя проверка база 1 / ветка 0, но checks/run.sh — boundaries: ОТКАЗ (изменён класс ВидАнимедиа — атрибут и две ссылки). Остальное по заданию верно. expected дополнен границами.",
       "owner_action": null
     }
   ]
