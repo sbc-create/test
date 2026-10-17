@@ -1679,3 +1679,74 @@ def test_work_key_joins_transliteration_variants_across_families():
         regular.work_key("taynaya-bitva-za-prestol-silneyshego-printsa-duraleya")
     )
     assert regular.work_key("proschay-lara") != regular.work_key("nevesta-demona")
+
+
+def test_date_findings_catch_what_one_sided_check_missed():
+    """Карта Yummy 16.10: дат в будущем нет, свежая есть, а внутри 1973 год.
+
+    Проверка «самый свежий lastmod слишком стар» такое пропускает — это и был
+    пробел приёмки. Здесь проверяются три вывода о самих датах.
+    """
+    snap = {
+        "status": "MEASURED",
+        "urls": 123139,
+        "max_lastmod": "2026-10-16T18:23:51Z",
+        "min_lastmod": "1973-10-04T00:00:00Z",
+        "lastmod_count": 50000,
+        "top_date": "2026-09-25",
+        "top_date_share": 0.773,
+        "index_lastmod": {
+            "https://yummyani.biz/sitemap/episodes.xml": "2026-08-21T00:00:00Z",
+        },
+        "part_newest_lastmod": {
+            "https://yummyani.biz/sitemap/episodes.xml": "2026-10-16T18:23:51Z",
+        },
+        "slowest_url": "https://yummyani.biz/sitemap/episodes.xml",
+        "slowest_seconds": 1.1,
+    }
+    codes = [f["code"] for f in regular.sitemap_date_findings(snap, NOW)]
+    assert codes == [
+        "SITEMAP_LASTMOD_IMPLAUSIBLE",
+        "SITEMAP_LASTMOD_MASS",
+        "SITEMAP_INDEX_STALE",
+    ]
+
+
+def test_date_findings_silent_when_dates_are_sane():
+    """Исправленное состояние выводов не даёт — иначе проверка бесполезна."""
+    snap = {
+        "status": "MEASURED",
+        "urls": 8341,
+        "max_lastmod": "2026-10-07T18:23:51Z",
+        "min_lastmod": "2025-07-17T23:40:36Z",
+        "lastmod_count": 8341,
+        "top_date": "2026-09-25",
+        "top_date_share": 0.29,
+        "index_lastmod": {
+            "https://yummyani.biz/sitemap/titles.xml": "2026-10-07T18:30:00Z",
+        },
+        "part_newest_lastmod": {
+            "https://yummyani.biz/sitemap/titles.xml": "2026-10-07T18:23:51Z",
+        },
+        "slowest_url": "https://yummyani.biz/sitemap/titles.xml",
+        "slowest_seconds": 0.3,
+    }
+    assert regular.sitemap_date_findings(snap, NOW) == []
+
+
+def test_mass_date_is_not_reported_on_a_tiny_map():
+    """Одна дата у трёх адресов — не подстановка, а малая выборка."""
+    snap = {
+        "status": "MEASURED",
+        "urls": 3,
+        "max_lastmod": "2026-10-07T18:23:51Z",
+        "min_lastmod": "2026-10-07T18:23:51Z",
+        "lastmod_count": 3,
+        "top_date": "2026-10-07",
+        "top_date_share": 1.0,
+        "index_lastmod": {},
+        "part_newest_lastmod": {},
+        "slowest_url": "https://yummyani.biz/sitemap/static.xml",
+        "slowest_seconds": 0.1,
+    }
+    assert [f["code"] for f in regular.sitemap_date_findings(snap, NOW)] == []

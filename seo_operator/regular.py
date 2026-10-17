@@ -47,6 +47,7 @@
 from __future__ import annotations
 
 import argparse
+import collections
 import contextlib
 import datetime as dt
 import gzip
@@ -783,6 +784,21 @@ SITEMAP_LASTMOD = re.compile(rb"<lastmod>\s*([^<\s]+)\s*</lastmod>", re.IGNORECA
 #: sitemap предел выше, а сама долгая отдача — находка, а не сбой проверки.
 SITEMAP_TIMEOUT = 60.0
 SITEMAP_SLOW_SECONDS = 10.0
+#: Блок `<sitemap>` индекса целиком — нужен, чтобы связать часть с датой,
+#: которую ИНДЕКС ей объявляет. Общие `SITEMAP_LOC`/`SITEMAP_LASTMOD` по телу
+#: такой связи не дают: они вернут два независимых списка.
+SITEMAP_INDEX_ENTRY = re.compile(rb"<sitemap>(.*?)</sitemap>", re.S | re.I)
+#: Нижняя граница правдоподобия даты обновления. Измерено 2026-10-17 на карте
+#: Yummy: даты обновления записей у поставщика начинаются с 2025-07-17, а всё
+#: старше 2010 — расписание эфира (1973–2009, недельный шаг). Между этими
+#: группами значений нет, поэтому граница 2024 отделяет «дату обновления» от
+#: «даты эфира» и не объявляет дефектом законные даты 2025 года.
+SITEMAP_LASTMOD_FLOOR = "2024-01-01T00:00:00Z"
+#: Доля самой частой даты, выше которой это уже не совпадение, а подстановка
+#: одного значения. Здесь порог мягче, чем в приёмке выпуска (0,20): цикл
+#: ходит по всей сети и не должен шуметь на витринах, где каталог обновился
+#: одной партией.
+SITEMAP_MASS_DATE_SHARE = 0.5
 
 
 def sitemap_snapshot(
@@ -796,6 +812,18 @@ def sitemap_snapshot(
     body = index.body
     lastmods = [m.decode() for m in SITEMAP_LASTMOD.findall(body)]
     slowest = (start, index.elapsed)
+    # Дата, которую ИНДЕКС объявляет части, и даты ВНУТРИ части — разные
+    # утверждения, и расходиться они могут в любую сторону. Измерено 2026-10-16
+    # на пяти витринах Yummy: индекс объявлял всем частям 2026-08-21, тогда как
+    # внутри лежали даты того же дня. Поэтому собираются обе стороны.
+    объявлено: dict[str, str] = {}
+    внутри: dict[str, str] = {}
+    if b"<sitemapindex" in body[:2000]:
+        for блок in SITEMAP_INDEX_ENTRY.findall(body):
+            м = SITEMAP_LOC.search(блок)
+            д = SITEMAP_LASTMOD.search(блок)
+            if м and д:
+                объявлено[м.group(1).decode()] = д.group(1).decode()
     if b"<sitemapindex" in body[:2000]:
         children = [m.decode() for m in SITEMAP_LOC.findall(body)]
         urls = 0
@@ -810,18 +838,30 @@ def sitemap_snapshot(
             if part.elapsed > slowest[1]:
                 slowest = (child, part.elapsed)
             urls += len(SITEMAP_LOC.findall(part.body))
-            lastmods += [m.decode() for m in SITEMAP_LASTMOD.findall(part.body)]
+            свои = [m.decode() for m in SITEMAP_LASTMOD.findall(part.body)]
+            lastmods += свои
+            разобранные = sorted(d for d in (parse_iso(x) for x in свои) if d)
+            if разобранные:
+                внутри[child] = iso(разобранные[-1])
         truncated = len(children) > max_children
     else:
         urls = len(SITEMAP_LOC.findall(body))
         truncated = False
     dates = sorted(d for d in (parse_iso(x) for x in lastmods) if d)
+    по_дням = collections.Counter(d.date().isoformat() for d in dates)
+    частая, сколько = по_дням.most_common(1)[0] if по_дням else (None, 0)
     return {
         "status": "MEASURED",
         "urls": urls,
         "children_truncated": truncated,
         "max_lastmod": iso(dates[-1]) if dates else None,
+        "min_lastmod": iso(dates[0]) if dates else None,
         "lastmod_present": bool(dates),
+        "lastmod_count": len(dates),
+        "top_date": частая,
+        "top_date_share": round(сколько / len(dates), 3) if dates else 0.0,
+        "index_lastmod": объявлено,
+        "part_newest_lastmod": внутри,
         "slowest_url": slowest[0],
         "slowest_seconds": round(slowest[1], 2),
     }
@@ -850,6 +890,83 @@ def sitemap_findings(snap: dict, now: dt.datetime, *, max_age_days: int = 7) -> 
                 "detail": f"{snap['slowest_url']} отдан за {snap['slowest_seconds']} с",
             }
         )
+    out += sitemap_date_findings(snap, now)
+    return out
+
+
+def sitemap_date_findings(
+    snap: dict,
+    now: dt.datetime,
+    *,
+    floor: str = SITEMAP_LASTMOD_FLOOR,
+    max_share: float = SITEMAP_MASS_DATE_SHARE,
+) -> list[dict]:
+    """Выводы о САМИХ датах: граница снизу, подстановка одного значения, индекс.
+
+    Зачем отдельно от `sitemap_findings`: там проверялась одна сторона —
+    «самый свежий lastmod слишком стар». Этого мало, и это измерено
+    2026-10-16 на карте Yummy: даты в будущем отсутствовали, самая свежая была
+    сегодняшней, а внутри частей лежали 1973–2009 годы (расписание эфира) и
+    одна дата на 77 % адресов. Проверка одной стороны такое пропускает.
+
+    Три вывода:
+
+    * `SITEMAP_LASTMOD_IMPLAUSIBLE` — есть дата раньше границы
+      правдоподобия: это не дата обновления записи, а что-то другое
+      (у Yummy — дата выхода серии в эфир);
+    * `SITEMAP_LASTMOD_MASS` — одна дата стоит у слишком большой доли
+      адресов: признак подстановки одного значения вместо даты обновления;
+    * `SITEMAP_INDEX_STALE` — дата части в индексе РАНЬШЕ свежайшей даты
+      внутри этой части: обходчик по индексу решит, что часть не менялась, и
+      не перезапросит её. Сравнение идёт по частям, а не по карте в целом.
+    """
+    out: list[dict] = []
+    if snap.get("status") != "MEASURED":
+        return out
+    нижняя = parse_iso(floor)
+    самая_старая = parse_iso(snap.get("min_lastmod"))
+    if нижняя and самая_старая and самая_старая < нижняя:
+        out.append(
+            {
+                "code": "SITEMAP_LASTMOD_IMPLAUSIBLE",
+                "severity": "warning",
+                "detail": f"самая старая дата {snap['min_lastmod'][:10]} раньше "
+                f"границы {floor[:10]} — это не дата обновления записи",
+            }
+        )
+    доля = snap.get("top_date_share") or 0.0
+    if доля > max_share and (snap.get("lastmod_count") or 0) >= 50:
+        out.append(
+            {
+                "code": "SITEMAP_LASTMOD_MASS",
+                "severity": "warning",
+                "detail": f"дата {snap.get('top_date')} стоит у "
+                f"{round(100 * доля)} % адресов из {snap['lastmod_count']} — "
+                "подстановка одного значения",
+            }
+        )
+    for часть, объявлено in (snap.get("index_lastmod") or {}).items():
+        внутри = (snap.get("part_newest_lastmod") or {}).get(часть)
+        о, в = parse_iso(объявлено), parse_iso(внутри)
+        if о and в and о < в:
+            out.append(
+                {
+                    "code": "SITEMAP_INDEX_STALE",
+                    "severity": "warning",
+                    "detail": f"{часть}: индекс объявляет {объявлено[:19]}, а "
+                    f"внутри есть {внутри[:19]} — обходчик часть не "
+                    "перезапросит",
+                }
+            )
+        if о and о > now:
+            out.append(
+                {
+                    "code": "SITEMAP_INDEX_FUTURE",
+                    "severity": "warning",
+                    "detail": f"{часть}: индекс объявляет будущую дату "
+                    f"{объявлено[:19]}",
+                }
+            )
     return out
 
 
