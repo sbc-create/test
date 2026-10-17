@@ -4768,8 +4768,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "17.10 ~22:50Z: живой замер сессии (deep-wording-20261017.json: 30 вхождений на 15 страницах тайтлов). animedia.space — следом после проверки этой. Эффект — Метрика, входы на /genres/ и страницы тайтлов, Яндекс и Google раздельно, 7 дней до/после.",
+      "status": "live_verified",
+      "evidence": "17.10 ~22:50Z: живой замер сессии (deep-wording-20261017.json: 30 вхождений на 15 страницах тайтлов). animedia.space — следом после проверки этой. Эффект — Метрика, входы на /genres/ и страницы тайтлов, Яндекс и Google раздельно, 7 дней до/после. | 17.10 23:31:33Z опубликовано штатным циклом (прогон 20261017T230459Z-2384380 VERIFIED, голова 1a7b748b, публикатор live_verified). Живая сверка сессией 23:36Z (var/seo-audit/t196-live-20261017.json): /, /genres/, /catalog/, два тайтла, раздел «боевик» — видимой метки 0, ссылок на её коды 0, прочих жанров в ссылках 55/24; раздел метки — noindex, follow (meta и X-Robots-Tag); robots и canonical остальных страниц без изменений.",
       "owner_action": null
     },
     {
@@ -4824,6 +4824,40 @@
       ],
       "status": "queued",
       "evidence": "17.10 23:13Z: распространение после живой проверки представителя T194. Эффект — как T194.",
+      "owner_action": null
+    },
+    {
+      "id": "T199",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/genres/",
+        "https://animedia.space/catalog/?genre=zapadnyykontent"
+      ],
+      "problem": "То же, что T196 (live_verified 17.10 23:31Z на animedia.icu): на animedia.space служебная метка — ссылками в хабе /genres/ (2) и фильтре /catalog/ (2, видимых 4), раздел /catalog/?genre=zapadnyykontent — index, follow (живой замер 17.10 ~22:50Z).",
+      "norm": "служебные метки поставщика («западный контент», «азиатский контент») — не жанр: не в видимом тексте, сниппете и разметке, не цель внутренних ссылок, их раздел — noindex, follow, вне карты (правило T044/T077 Lords/Zona; SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10)",
+      "expected": "Перенести правку T196 — коммит 1a7b748bca541e3e85fd78dc9a89f104c260e5fa ветки claude/seo-tech-t196-20261017t230459z-2384380 репозитория var/site-repos/animedia-icu (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/animedia-icu format-patch -1 1a7b748bca54 --stdout`, git am/apply; файлы ячеек расходятся — при несовпадении контекста по смыслу, тот же результат). src/animedia-frontend.py: множество служебных меток {«западный контент», «азиатский контент»} (casefold) и их кодов (west_content, zapadnyykontent, aziatskiykontent). (1) списки жанров шапки/ящика, хаб /genres/, фильтр жанров каталога и жанры страницы тайтла (видимые и ссылки) — без меток; (2) раздел метки /catalog/?genre=<код метки> — meta robots и X-Robots-Tag noindex, follow, страница отвечает как прежде; (3) description/og и JSON-LD genre страниц — без меток, если они там есть. Проверка checks/service_genre_labels.py — витрина на копии снимка (по образцу стендовых проверок ячейки): на /, /genres/, /catalog/ и странице тайтла с меткой — ни видимой метки, ни ссылки на её код; раздел метки — noindex; 0/1/2; в checks/run.sh через обёртку rc 2→0. Вёрстку, постеры, CSS, прочие тексты не менять (постеры и вёрстку правит Архитектор). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh — rc 0.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /, /genres/, /catalog/ и страницах тайтлов нет «западный контент» и ссылок genre=zapadnyykontent; /catalog/?genre=zapadnyykontent — noindex, follow; title/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://animedia.space/genres/",
+          "status": 200,
+          "absent": [
+            "genre=zapadnyykontent"
+          ]
+        },
+        {
+          "url": "https://animedia.space/catalog/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 23:36Z: распространение после живой проверки представителя T196. Эффект — как T196.",
       "owner_action": null
     }
   ]
