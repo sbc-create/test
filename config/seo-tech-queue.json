@@ -4432,6 +4432,42 @@
       "status": "queued",
       "evidence": "17.10 ~18:30Z: живой замер сессии (var/seo-audit/wording-live-20261017-evening.json, west-content-visible-20261017.json). Происхождение — та же ошибка сравнения, что исправлена на zonafilm12.site; Архитектор zonafilm-space с 16.10 13:30Z не менял (origin = HEAD 862a33e). Эффект: Метрика — входы и глубина на /, /movies/, /series/, /catalog/ zonafilm.space по Яндексу и Google раздельно, 7 дней до/после даты публикации. Та же метка в фильтре жанров у lordfilm47.space, lordserial33.biz, 1lordserials1.online, zonafilm12.site, zonafilm.cc и в карточках zonafilm.cc (закреплённый шаблон + слой serve.py) — отдельными задачами после проверки этой.",
       "owner_action": null
+    },
+    {
+      "id": "T186",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/movies/",
+        "https://zonafilm.cc/series/",
+        "https://zonafilm.cc/catalog/",
+        "https://zonafilm.cc/new/"
+      ],
+      "problem": "Живой замер 17.10 ~18:30Z (var/seo-audit/west-content-visible-20261017.json): служебная метка «западный контент» (noindex, вне карты — T044) печатается жанром в строке жанров карточек: /movies/ 17 карточек, /series/ 15, /catalog/ 7, /new/ 3, и первой опцией фильтра жанров (select#zona-genre-facet). Причина в закреплённом шаблоне template/zona-02-0fb857b26f85/lords-frontend.py ~5788: сравнение нормализованной строки с ненормализованным списком (та же ошибка, что T185 на zonafilm.space).",
+      "norm": "видимый текст — редакционный, служебные метки поставщика не жанр (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10 — технические надписи)",
+      "expected": "закреплённый template/… НЕ править (pins.lock.json, checks/pinned_template_sha.py) — правка слоем в src/serve.py, функция применить(), по образцу уже существующей обёртки ВидЗона.плитка (п. 3): обернуть итоговую плитку так, чтобы внутри каждого <span class=\"zt__m\">…</span> из частей, разделённых « · », удалялись части, чьё значение (strip, casefold) входит в рантайм._ТЕХНИЧЕСКИЕ_ЖАНРЫ; пустой после этого span удалять целиком. Отдельно — опции <option> фильтра select#zona-genre-facet с текстом из _ТЕХНИЧЕСКИЕ_ЖАНРЫ не выводить, кроме выбранной (selected): найти место построения фильтра в слое (genre_canonical/serve.список) или постобработкой разметки страницы раздела в том же стиле. Добавить строку в внесено. Прочие тексты, title/description/canonical/robots, вёрстку, постеры, CSS не менять (постеры и вёрстку правит Архитектор). Проверка checks/service_genre_labels.py — витрина на КОПИИ снимка (по образцу checks/genre_links_canonical.py): на /, /movies/, /series/ в <span class=\"zt__m\"> и в <option> select#zona-genre-facet нет «западный контент»/«азиатский контент»; 0 норма, 1 дефект, 2 не измерено; в checks/run.sh после genre-links-canonical через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на /movies/ /series/ /catalog/ /new/ в карточках и в фильтре жанров нет «западный контент»; страницы 200, title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/movies/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/series/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~18:30Z: живой замер сессии; шаблон закреплён — правка только слоем serve.py. Архитектор zonafilm-cc с 16.10 14:48Z не менял (живой = голова ветки выпуска e1c8504). Эффект: Метрика — входы и глубина на /movies/, /series/, /catalog/ zonafilm.cc по Яндексу и Google раздельно, 7 дней до/после даты публикации.",
+      "owner_action": null
     }
   ]
 }
