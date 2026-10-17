@@ -26,6 +26,11 @@ Environment=YANDEX_OAUTH_TOKEN_FILE=/run/credentials/%n/yandex_oauth
 # bin/seo-operator тоже берёт интерпретатор из .venv; FACTORY_REQUIRE_VENV=1
 # запрещает молчаливый откат на системный python.
 Environment=FACTORY_REQUIRE_VENV=1
+
+# Гейт хоста. Сбор обращается к боевым счётчикам, поэтому запускаться он должен
+# только на claude-control-01: unit, скопированный на другую машину, обязан
+# остановиться ДО первого запроса, а не после. Код возврата 3 = BLOCKED_WRONG_HOST.
+ExecStartPre=/srv/site-factory/repo/bin/seo-operator host-verify
 ExecStart=/srv/site-factory/repo/bin/seo-operator analytics-collect --json
 
 NoNewPrivileges=yes

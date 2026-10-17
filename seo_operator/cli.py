@@ -159,6 +159,64 @@ def cmd_analytics_collect(args) -> int:
     return 0
 
 
+def cmd_host_verify(args) -> int:
+    """
+    Гейт BLOCKED_WRONG_HOST. Возвращает 3 при несовпадении, чтобы юниты
+    и скрипты останавливались до, а не после изменений.
+    """
+    from seo_operator import hostcheck
+
+    check = hostcheck.check(hostcheck.EXPECTED_HOST)
+    print(check.render())
+    return 0 if check.passed else 3
+
+
+def cmd_portfolio_reconcile(args) -> int:
+    """
+    Портфель из всех доступных реестров. Один файл истиной не считается:
+    config/portfolio.json может быть пуст, пока в analytics.json и
+    config/directions/*.json уже есть домены.
+    """
+    from seo_operator import inventory
+
+    inv, extra = inventory.build(
+        repo_root=REPO_ROOT,
+        host_available=args.assume_host,
+        host_unavailable_reason="сессия выполняется не на целевом хосте",
+    )
+    if args.json:
+        print(
+            json.dumps(
+                {
+                    "portfolio_sites_total": inv.total,
+                    "domains": {
+                        d: {f: r.render_field(f) for f in sorted(r.facts)}
+                        for d, r in sorted(inv.domains.items())
+                    },
+                    "inventory_drift": [
+                        {"kind": d.kind.value, "domain": d.domain,
+                         "detail": d.detail, "blocking": d.blocking}
+                        for d in inv.drift
+                    ],
+                    "targets": extra["targets"],
+                    "secret_hub": extra["secret_hub"],
+                },
+                ensure_ascii=False,
+                indent=2,
+            )
+        )
+    else:
+        print(f"PORTFOLIO_SITES_TOTAL={inv.total}")
+        print()
+        print(inventory.render_table(inv))
+        print()
+        print("INVENTORY_DRIFT:")
+        for d in inv.drift:
+            print(f"  - {'BLOCKING ' if d.blocking else ''}{d}")
+    # Блокирующий drift — это состояние, требующее решения, а не ошибка команды.
+    return 3 if any(d.blocking for d in inv.drift) else 0
+
+
 def main(argv=None) -> int:
     parser = argparse.ArgumentParser(prog="seo-operator", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)
@@ -187,6 +245,22 @@ def main(argv=None) -> int:
         p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
         p.add_argument("--out", help="записать отчёт в файл")
 
+    sub.add_parser(
+        "host-verify",
+        help="проверить, что сессия выполняется на целевом хосте",
+    )
+
+    p = sub.add_parser(
+        "portfolio-reconcile",
+        help="собрать портфель из всех реестров и показать INVENTORY_DRIFT",
+    )
+    p.add_argument("--json", action="store_true", help="машиночитаемый вывод")
+    p.add_argument(
+        "--assume-host",
+        action="store_true",
+        help="считать nginx/systemd/deployment/live доступными (только на целевом хосте)",
+    )
+
     p = sub.add_parser(
         "analytics-collect",
         help="read-only сбор показателей Метрики и Вебмастера",
@@ -198,6 +272,10 @@ def main(argv=None) -> int:
 
     args = parser.parse_args(argv)
 
+    if args.command == "host-verify":
+        return cmd_host_verify(args)
+    if args.command == "portfolio-reconcile":
+        return cmd_portfolio_reconcile(args)
     if args.command == "analytics-collect":
         return cmd_analytics_collect(args)
     if args.command == "probe":
