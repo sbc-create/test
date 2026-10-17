@@ -11,7 +11,13 @@
  "confirmed": [
   {
    "id": "R-01",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "страница произведения, внутренние ссылки, таксономия",
    "expected": "жанры на карточке — ссылки на работающие разделы жанров (задание владельца п.3, очередь B017)",
    "actual": "блок жанров есть, ссылок ноль на всех пяти витринах; страниц жанров нет вовсе: /genres/ отвечает 308 на /catalog, /genre/<slug> и /genres/<slug> — 404",
@@ -25,7 +31,9 @@
   },
   {
    "id": "R-02",
-   "sites": ["lordserials22.info"],
+   "sites": [
+    "lordserials22.info"
+   ],
    "component": "сообщество: оценка и комментарии",
    "expected": "если звёзды оценки показаны, посетитель может оценить: форма отправки присутствует",
    "actual": "маркер звёзд data-rating-stars в разметке ЕСТЬ, формы action=\"/community/vote\" и action=\"/community/comment\" НЕТ, при этом серверный маршрут жив (POST /community/vote → 303)",
@@ -39,7 +47,9 @@
   },
   {
    "id": "R-03",
-   "sites": ["lordfilm47.space"],
+   "sites": [
+    "lordfilm47.space"
+   ],
    "component": "сообщество: серверный маршрут",
    "expected": "та же функциональность, что у витрин того же семейства",
    "actual": "POST /community/vote → 501 (не реализовано), форм на странице нет",
@@ -53,7 +63,11 @@
   },
   {
    "id": "R-04",
-   "sites": ["zonafilm.space", "zonafilm.cc", "zonafilm12.site"],
+   "sites": [
+    "zonafilm.space",
+    "zonafilm.cc",
+    "zonafilm12.site"
+   ],
    "component": "сообщество: оценка и комментарии",
    "expected": "оценки посетителей и комментарии предусмотрены сетью (есть у восьми ячеек)",
    "actual": "POST /community/vote → 405: метод не поддержан, модуля сообщества нет; форм и звёзд на странице нет",
@@ -67,7 +81,13 @@
   },
   {
    "id": "R-05",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "личный кабинет: вход и регистрация",
    "expected": "регистрация, вход, выход, восстановление доступа, профиль и сохранение настроек",
    "actual": "страницы /login и /register отвечают 200, но это заглушки: кнопки объявлены type=\"button\" без обработчика, рядом честная пометка «Вход пока не выполняется: учётные записи не создаются» и «Отправка формы отключена»; /account, /profile, /favorites, /history, /logout, /password-reset — 404. Страницы закрыты от индексации (noindex, follow), то есть поиску не вредят",
@@ -81,7 +101,20 @@
   },
   {
    "id": "R-06",
-   "sites": ["animedia.icu", "animedia.space", "an1mego.site", "animeg0.site", "an1meg0.site", "lordfilm47.space", "lordserial33.biz", "1lordserials1.online", "lordserials22.info", "zonafilm.space", "zonafilm.cc", "zonafilm12.site"],
+   "sites": [
+    "animedia.icu",
+    "animedia.space",
+    "an1mego.site",
+    "animeg0.site",
+    "an1meg0.site",
+    "lordfilm47.space",
+    "lordserial33.biz",
+    "1lordserials1.online",
+    "lordserials22.info",
+    "zonafilm.space",
+    "zonafilm.cc",
+    "zonafilm12.site"
+   ],
    "component": "личный кабинет",
    "expected": "то же, что R-05",
    "actual": "адресов кабинета нет вовсе: /login, /register, /account, /profile, /favorites, /history, /logout, /password-reset — 308→404 на всех двенадцати",
@@ -95,7 +128,13 @@
   },
   {
    "id": "R-07",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "публичный текст",
    "expected": "публичный текст без внутренних слов фабрики",
    "actual": "слово «витрина» в публичном тексте: 3 вхождения на /new/ («Как только витрина получит новые события») и 3 на /collections/ («Редакционная витрина», «материалы витрины», «Разделы ведёт сама витрина»)",
@@ -109,7 +148,13 @@
   },
   {
    "id": "R-08",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "раздел расписания",
    "expected": "страница расписания показывает расписание",
    "actual": "/catalog/schedule — 200, видимого текста 707 знаков, ссылок на произведения ноль: страница состоит из навигации",
@@ -123,7 +168,13 @@
   },
   {
    "id": "R-09",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "раздел «Что смотреть прямо сейчас» (/new/)",
    "expected": "полки раздела наполнены либо раздел не публикуется",
    "actual": "три полки показывают «Сейчас в этом разделе пусто» на всех пяти витринах; карточек 0–3",
@@ -137,7 +188,17 @@
   },
   {
    "id": "R-10",
-   "sites": ["animedia.icu", "animedia.space", "an1mego.site", "animeg0.site", "an1meg0.site", "lordfilm47.space", "lordserial33.biz", "1lordserials1.online", "lordserials22.info"],
+   "sites": [
+    "animedia.icu",
+    "animedia.space",
+    "an1mego.site",
+    "animeg0.site",
+    "an1meg0.site",
+    "lordfilm47.space",
+    "lordserial33.biz",
+    "1lordserials1.online",
+    "lordserials22.info"
+   ],
    "component": "публичный /healthz",
    "expected": "служебный путь не раскрывает устройство машины",
    "actual": "9 витрин отдают 24–26 полей, из них 22–24 про устройство: artifact_sha256, assets_sha256, build_id, catalog_digest, catalog_path, catalog_revision и далее (значения в отчёт не выносятся)",
@@ -151,7 +212,13 @@
   },
   {
    "id": "R-11",
-   "sites": ["1lordserials1.online", "lordserial33.biz", "animedia.icu", "animedia.space", "an1mego.site"],
+   "sites": [
+    "1lordserials1.online",
+    "lordserial33.biz",
+    "animedia.icu",
+    "animedia.space",
+    "an1mego.site"
+   ],
    "component": "оценки посетителей",
    "expected": "выставление, ИЗМЕНЕНИЕ, сохранение и отображение оценок (задание владельца)",
    "actual": "оценка ставится один раз и не меняется по устройству модуля: «Первая сохранённая оценка окончательна»; повторная отправка счёт не меняет",
@@ -165,7 +232,9 @@
   },
   {
    "id": "R-12",
-   "sites": ["yummyani.site"],
+   "sites": [
+    "yummyani.site"
+   ],
    "component": "даты карты сайта",
    "expected": "после выпуска 17.10 индекс объявляет время изменения файла карты",
    "actual": "контроль остался на прежнем образе: 5 частей, у всех lastmod 2026-08-21T00:00:00.000Z; правка не применима, потому что в линии 9cbfac20fbe8 нет B033, на котором держится датирование по наблюдениям",
@@ -179,7 +248,12 @@
   },
   {
    "id": "R-13",
-   "sites": ["lordserials22.site", "lordserials22.space", "lordserial101.site", "lordfilm077.site"],
+   "sites": [
+    "lordserials22.site",
+    "lordserials22.space",
+    "lordserial101.site",
+    "lordfilm077.site"
+   ],
    "component": "DNS, публикация",
    "expected": "домен разрешается и витрина отвечает либо домен снят с учёта",
    "actual": "четыре домена не разрешаются (curl 6), витрины не отвечают; в реестре записи есть",
@@ -193,7 +267,16 @@
   },
   {
    "id": "R-14",
-   "sites": ["lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su", "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru", "lordserial.net.ru"],
+   "sites": [
+    "lordfilm.group",
+    "lordfilm.spb.ru",
+    "lordfilm.msk.ru",
+    "lordserial.su",
+    "lordserial.group",
+    "lordserial.spb.ru",
+    "lordserial.msk.ru",
+    "lordserial.net.ru"
+   ],
    "component": "запуск партии K2: DNS, TLS, индексация",
    "expected": "восемь витрин отвечают по своим именам со своими сертификатами",
    "actual": "A-запись у всех восьми — 45.131.182.225 (прежний узел) и у публичного резолвера, и у авторитетных NS; https отдаёт 421 с сертификатом CN=yummyani.site; http — 404; готовы принимать трафик 0 из 8",
@@ -207,7 +290,9 @@
   },
   {
    "id": "R-15",
-   "sites": ["инструмент сверки очереди"],
+   "sites": [
+    "инструмент сверки очереди"
+   ],
    "component": "automation/local/queue-vs-live.py",
    "expected": "сверка статуса задачи измеряет домен, где правка выпущена",
    "actual": "для B031 и B017 адрес ведёт на yummyani.site — согласованный КОНТРОЛЬ, где правка намеренно не выпущена; поэтому сверка показывает «ЖИВО» всегда и выглядит как регрессия",
@@ -221,7 +306,13 @@
   },
   {
    "id": "R-16",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "заголовок X-Robots-Tag и проверка staging",
    "expected": "проверка закрытости индексации измеряет закрытость, а не наличие заголовка",
    "actual": "публичный X-Robots-Tag у цепочки Yummy отсутствует (у ячеек — index, follow); factory/verify.py:80 объявляет critical при отсутствии noindex в этом заголовке на не-production, то есть для цепочки Yummy пройти не может",
@@ -232,12 +323,57 @@
    "dependencies": "нет (моя зона)",
    "effort": "малый",
    "acceptance": "на домене цепочки Yummy проверка закрытости проходит по мете и robots.txt без заголовка"
+  },
+  {
+   "id": "R-17",
+   "sites": [
+    "1lordserials1.online",
+    "animedia.icu",
+    "zonafilm.cc",
+    "yummyani.biz"
+   ],
+   "component": "кеширование ответов",
+   "expected": "повторная отдача страницы не требует повторной сборки на каждый запрос",
+   "actual": "все проверенные страницы отвечают `cache-control: no-store`, заголовка `age` нет: ни один ответ не кешируется ни у края, ни у посредника",
+   "evidence": "измерено 2026-10-17 на /catalog/ четырёх витрин: cache-control no-store у всех; время ответа 0,07–0,34 с при холодном и повторном запросе одинаково. Отдельно измерено 2026-10-16: внешний обходчик идёт по РАЗЛИЧНЫМ адресам ~13 запросов в секунду, процессор web-org доходил до 102 %",
+   "impact": "каждый запрос — полная сборка страницы; под обходом это и есть потолок ёмкости. Кеш страницы помогает лишь при повторных обращениях к одному адресу, поэтому no-store особенно дорог именно при обходе разных адресов",
+   "priority": "P2",
+   "fix": "разрешить короткое кеширование у края для страниц каталога и произведений (например s-maxage с перепроверкой), оставив no-store там, где ответ зависит от куки посетителя (оценка, комментарии)",
+   "dependencies": "зависит от R-11/R-05: страницы с личными данными кешировать нельзя, поэтому решение связано с составом персонализации",
+   "effort": "средний: разделить страницы на персонализированные и общие",
+   "acceptance": "на общих страницах появляется age > 0 при повторном запросе; время ответа на повторном запросе падает; страницы с оценкой посетителя по-прежнему no-store"
+  },
+  {
+   "id": "R-18",
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
+   "component": "поиск: пустой результат",
+   "expected": "запрос без совпадений даёт понятное сообщение",
+   "actual": "страница /search?q=<бессмыслица> отдаёт навигацию и фильтр без единого слова о том, что ничего не найдено; у ячеек такое сообщение есть",
+   "evidence": "измерено 2026-10-17: /search?q=зззыыыввв — в разметке нет ни «ничего не найдено», ни «не нашли», ни «нет результатов»; при этом результат ПОЛОЖИТЕЛЬНОГО запроса отдаётся сервером (q=наруто → 6 ссылок /anime/ в разметке), то есть пустое состояние тоже должно было бы отдаваться сервером. /api/search?q=зззыыыввв → {\"status\":\"ok\",\"items\":[]}",
+   "impact": "посетитель не понимает, сломался поиск или ничего не нашлось",
+   "priority": "P3",
+   "fix": "показывать сообщение о пустом результате с подсказкой (проверить раскладку, сократить запрос) — так же, как это сделано у ячеек",
+   "dependencies": "линия приложения",
+   "effort": "малый",
+   "acceptance": "на /search?q=<бессмыслица> в разметке есть сообщение о пустом результате; на положительном запросе результаты по-прежнему отдаются сервером"
   }
  ],
  "hypotheses": [
   {
    "id": "H-01",
-   "sites": ["yummyani.biz", "yummyani.org", "yummyani.site", "yummyani7.site", "yummyani7.info"],
+   "sites": [
+    "yummyani.biz",
+    "yummyani.org",
+    "yummyani.site",
+    "yummyani7.site",
+    "yummyani7.info"
+   ],
    "component": "комментарии Yummy",
    "statement": "модуль комментариев у Yummy объявлен, но не реализован",
    "evidence": "GET /api/comments → 400, POST /api/comments → 501; на странице произведения и на странице записи форм комментария и textarea нет; в коде есть src/modules/comments и src/app/api/comments",
@@ -246,7 +382,9 @@
   },
   {
    "id": "H-02",
-   "sites": ["yummyani.*"],
+   "sites": [
+    "yummyani.*"
+   ],
    "component": "расписание",
    "statement": "пустое расписание объясняется отсутствием данных у поставщика, а не ошибкой страницы",
    "evidence": "/catalog/schedule отдаёт только навигацию; при этом у части записей каталога есть поля даты эфира (измерено ранее: 2 324 адреса с датами эфира в карте)",
@@ -255,7 +393,9 @@
   },
   {
    "id": "H-03",
-   "sites": ["animedia.icu"],
+   "sites": [
+    "animedia.icu"
+   ],
    "component": "избранное",
    "statement": "на animedia.icu есть признак «избранное», но функции может не быть",
    "evidence": "первая проверка нашла слово «избранн» в разметке; адресов /favorites нет (404)",
@@ -266,7 +406,9 @@
  "proposals": [
   {
    "id": "P-01",
-   "sites": ["вся сеть"],
+   "sites": [
+    "вся сеть"
+   ],
    "component": "избранное, история просмотров, продолжение просмотра",
    "proposal": "функции не предусмотрены ни одной витриной и отсутствуют в коде; задание владельца упоминает их со словами «где эти функции предусмотрены», поэтому это предложение, а не дефект",
    "evidence": "измерено 2026-10-17: /favorites и /history — 404 на всех 17 витринах; в коде ячейки маршрутов нет (перечень маршрутов automation/host/lords-frontend.py), у Yummy модулей нет",
@@ -275,7 +417,9 @@
   },
   {
    "id": "P-02",
-   "sites": ["вся сеть"],
+   "sites": [
+    "вся сеть"
+   ],
    "component": "единый состав функций семейств",
    "proposal": "свести состав функций к одному перечню: сейчас оценки и комментарии есть у 5 витрин, у одной показаны звёзды без формы, у одной маршрут не реализован, у трёх модуля нет вовсе",
    "evidence": "таблица измерений R-02, R-03, R-04",
@@ -307,6 +451,44 @@
   {
    "item": "пустые состояния с понятным текстом",
    "evidence": "на /new/ Yummy сообщение «Сейчас в этом разделе пусто. Как только витрина получит новые события, они появятся здесь» — отказ не молчаливый (само слово «витрина» — отдельное замечание R-07)"
+  },
+  {
+   "item": "поиск на четырёх витринах",
+   "evidence": "измерено 2026-10-17 словами ИЗ СОБСТВЕННОГО каталога: animedia.icu «любовь» → 24 ссылки; zonafilm.cc «poslednee» → 28; 1lordserials1.online «eyhman» → 1; yummyani.biz /api/search: «Маленькое» → 3, «наруто» → 6, «атака» → 4, «аниме» → 8; страница /search?q=наруто отдаёт 6 ссылок сервером"
+  },
+  {
+   "item": "страница серии и переход на сезон (Yummy)",
+   "evidence": "адрес серии из карты yummyani.biz: код 200, плеер в разметке, ссылка на сезон присутствует"
+  },
+  {
+   "item": "мобильная вёрстка: признаки присутствуют",
+   "evidence": "meta viewport есть на всех четырёх проверенных витринах; правил @media в разметке ячеек 52–90 (у Yummy стили во внешнем файле, поэтому этим способом не измеряются)"
+  },
+  {
+   "item": "пустое состояние поиска у ячеек",
+   "evidence": "animedia.icu и zonafilm.cc на бессмысленном запросе: 0 ссылок и сообщение о пустом результате присутствует"
+  },
+  {
+   "item": "время ответа каталога",
+   "evidence": "0,07–0,34 с на четырёх витринах, повтор без изменений (кеша нет — см. R-17)"
   }
- ]
+ ],
+ "method_notes": [
+  {
+   "note": "разбор ответа curl делил заголовки и тело только по «\\r\\n\\r\\n»",
+   "consequence": "тело выходило пустым, и первая редакция проверки печатала «ссылок 0, viewport False» на страницах, где 146 ссылок и 52 правила @media",
+   "fixed": "делим по пустой строке с любым переводом строки; измерение переснято"
+  },
+  {
+   "note": "поиск проверялся словом не из каталога витрины",
+   "consequence": "«0 ссылок» у zonafilm.cc и yummyani.biz читалось как сломанный поиск; на словах из собственного каталога поиск отдаёт 28 и 3–8 результатов",
+   "fixed": "слово берётся из карты сайта или из заголовка h1 той же витрины"
+  },
+  {
+   "note": "у ячеек искались страницы серий как отдельная иерархия",
+   "consequence": "«0 ссылок на серии» выглядело дефектом навигации; на деле у этих семейств каждая запись поставщика — отдельное произведение (`/title/mr-x-and-i-season-1/`), иерархии сезонов нет по устройству",
+   "fixed": "пункт снят; иерархия сезонов и серий проверяется только у Yummy, где она есть"
+  }
+ ],
+ "updated_at": "2026-10-17T11:35:00Z"
 }
