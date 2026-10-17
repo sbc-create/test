@@ -77,8 +77,28 @@ def security_smoke(base_url: str, out_dir: Path, *, auth: str = "", environment:
             report.add(Finding("headers", "critical", "/", f"{header} = «{value}», ожидалось «{expected}»."))
     if headers.get("X-Powered-By"):
         report.add(Finding("headers", "major", "/", "X-Powered-By раскрывает стек."))
-    if environment != "production" and "noindex" not in headers.get("X-Robots-Tag", ""):
-        report.add(Finding("staging", "critical", "/", "Staging не отдаёт X-Robots-Tag: noindex."))
+    if environment != "production":
+        # Закрытость индексации измеряется по ТРЁМ путям, а не по одному
+        # заголовку. Повод измерен 2026-10-17: публичный `X-Robots-Tag` отдают
+        # ячейки (`animedia.icu`, `lordserials22.info`, `zonafilm.cc`,
+        # `1lordserials1.online` — `index, follow`) и НЕ отдаёт цепочка Yummy
+        # (`yummyani.biz`, `yummyani7.info` — заголовка нет вовсе: промежуточный
+        # слой собирает свой набор). Проверка «нет заголовка → critical»
+        # измеряла бы наличие заголовка, а не закрытость, и на такой цепочке не
+        # могла бы пройти никогда. Соседняя проверка маршрутов (ниже) устроена
+        # верно — заголовок ИЛИ мета, — и здесь сделано так же, плюс robots.txt.
+        закрыт_заголовком = "noindex" in headers.get("X-Robots-Tag", "")
+        мета = re.search(r'<meta[^>]+name=["\']robots["\'][^>]+content=["\']([^"\']+)',
+                         body or "", re.I)
+        закрыт_метой = bool(мета and "noindex" in мета.group(1).lower())
+        _, _, robots_txt = _get(base_url, "/robots.txt", auth)
+        закрыт_robots = bool(re.search(r"(?mi)^\s*Disallow:\s*/\s*$", robots_txt or ""))
+        if not (закрыт_заголовком or закрыт_метой or закрыт_robots):
+            report.add(Finding(
+                "staging", "critical", "/",
+                "Staging не закрыт от индексации ни одним из трёх способов: "
+                "X-Robots-Tag без noindex, meta robots без noindex, robots.txt "
+                "без «Disallow: /»."))
     if environment != "production":
         anon_status, anon_headers, _ = _get(base_url, "/", "")
         if anon_status != 401:
