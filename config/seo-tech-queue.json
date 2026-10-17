@@ -4651,8 +4651,37 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "17.10 ~21:30Z: пара добавлена в automation/local/wire-public-wording.py (ЗАМЕНЫ_2) и формулировка — в БЫВШИЕ automation/host/public_wording_check.py; сухой прогон на zonafilm-space — 1 замена. zonafilm12.site — после проверки этой; zonafilm.cc — слоем public_wording (шаблон закреплён). Эффект: Метрика — отказы и глубина главной по Яндексу и Google, 7 дней до/после. | 17.10 22:11:24Z опубликовано штатным циклом (прогон 20261017T213103Z-1813259 VERIFIED, голова 53043f19, публикатор live_verified). Живая сверка сессией 22:14Z (var/seo-audit/t192-live-20261017.json): на главной «В подборках собраны фильмы и сериалы на одну тему, а поиск…», «тематические выборки» 0; title, description, canonical без изменений; регресса T185 нет (служебная метка в карточках 0).",
+      "owner_action": null
+    },
+    {
+      "id": "T193",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/"
+      ],
+      "problem": "Та же формулировка, что T192 (live_verified 17.10 22:11Z на zonafilm.space): SEO-текст главной zonafilm12.site — «В подборках собраны тематические выборки, а поиск…» (живая сверка 17.10 22:15Z: 1 вхождение). src/lords-frontend.py ~7112.",
+      "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пара 17.10 «собраны тематические выборки, а » → «собраны фильмы и сериалы на одну тему, а »), руками тексты не сочинять и не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/public_wording.py",
+      "verify_live": "на главной в SEO-тексте «В подборках собраны фильмы и сериалы на одну тему, а поиск…»; «тематические выборки» нет; title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/",
+          "status": 200,
+          "absent": [
+            "тематические выборки"
+          ],
+          "contains": [
+            "фильмы и сериалы на одну тему"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "17.10 ~21:30Z: пара добавлена в automation/local/wire-public-wording.py (ЗАМЕНЫ_2) и формулировка — в БЫВШИЕ automation/host/public_wording_check.py; сухой прогон на zonafilm-space — 1 замена. zonafilm12.site — после проверки этой; zonafilm.cc — слоем public_wording (шаблон закреплён). Эффект: Метрика — отказы и глубина главной по Яндексу и Google, 7 дней до/после.",
+      "evidence": "17.10 22:15Z: распространение после живой проверки представителя T192; сухой прогон инструмента на zonafilm12-site — 1 замена. zonafilm.cc — формулировки нет (своя главная слоем serve.py). Эффект — как T192.",
       "owner_action": null
     }
   ]
