@@ -59,6 +59,16 @@
       "scope_page_share": 0.082,
       "phase": "canary",
       "evidence": "docs/seo-operator/DAY_20261014.md §8; checks/title_kind_year.py (база rc=1, правка rc=0)"
+    },
+    {
+      "experiment_id": "exp-animego-ongoing-landing",
+      "site_id": "animego-02",
+      "hypothesis": "Собственная индексируемая страница раздела «Онгоинги» (/ongoing/: свой title, H1, описание с видимым числом тайтлов, canonical на себя, в карте) вместо закрытой выборки /catalog/?ongoing=1 (noindex) даёт поисковые входы по запросам об онгоингах аниме; пункт основной навигации ведёт на индексируемую страницу",
+      "primary_metric": "поисковые входы на /ongoing/ an1mego.site по Яндексу и Google раздельно (Метрика, search_landing_pages) за 7 и 28 дней против нуля до выпуска и против /catalog/?ongoing=1 контролей animeg0.site и an1meg0.site; индексирование /ongoing/ — после возвращения Вебмастера (B023)",
+      "applicability": "an1mego.site: 1 новая посадочная (+ её страницы листания) из ~9 000 индексируемых; контроль — animeg0.site, an1meg0.site (тот же код, без раздела)",
+      "scope_page_share": 0.001,
+      "phase": "canary",
+      "evidence": "config/seo-tech-queue.json T190 (основание T085); живой замер 17.10 20:20Z: /ongoing/ — 404, /catalog/?ongoing=1 — 200 noindex, follow, 24 карточки на странице"
     }
   ]
 }
