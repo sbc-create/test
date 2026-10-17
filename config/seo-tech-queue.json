@@ -4395,6 +4395,43 @@
       ],
       "status": "live_verified",
       "evidence": "16.10 21:37Z: поставлено после живой проверки T183; на копии ячейки animedia-icu инструмент (с выбором файла по entrypoint, 9db8525): 11 замен, checks/plural_counts.py база rc=1, правка rc=0. | 21:58Z: опубликовано фоновым циклом (прогон 20261016T213822Z-2519260 VERIFIED), live_check пройден. 16.10 21:59Z: выборка 25 тайтлов — var/seo-audit/plural-live-20261016-T184.json."
+    },
+    {
+      "id": "T185",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/",
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/series/",
+        "https://zonafilm.space/catalog/",
+        "https://zonafilm.space/new/"
+      ],
+      "problem": "Живой замер 17.10 ~18:30Z (var/seo-audit/west-content-visible-20261017.json): служебная метка поставщика «западный контент» (раздел noindex, вне карты — T044/T032) печатается жанром в строке жанров карточек списков: / — 33 раза, /movies/ 29, /series/ 24, /new/ 12, /catalog/ 12 (напр. «Том и Черри · 2026 · США · западный контент · драма»). Причина — src/lords-frontend.py ~6285: `if нормализовать(gs) in {\"западный контент\", ...}` сравнивает нормализованную строку (без пробелов) с ненормализованным списком — не совпадает никогда. На zonafilm12.site то же место уже исправлено (сравнение с нормализовать(м)), там в карточках метки нет. Кроме того, в фильтре жанров разделов (select#zona-genre-facet, ~7597) метка — первой опцией.",
+      "norm": "видимый текст — редакционный, служебные метки поставщика не жанр (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS; поручение владельца 17.10 — технические надписи вместо редакционных текстов)",
+      "expected": "в src/lords-frontend.py: (1) в построении строки жанров карточки (комментарий «Region tags are not genres.») пропускать жанр, если `str(gs).strip().casefold() in _ТЕХНИЧЕСКИЕ_ЖАНРЫ` или `нормализовать(gs) in {нормализовать(м) for м in (\"западный контент\", \"west_content\", \"zapadnyy-kontent\")}` — как в zonafilm12-site (src/lords-frontend.py ~6191); (2) в фильтре жанров (select id=\"zona-genre-facet\") не выводить опции, чьё имя в _ТЕХНИЧЕСКИЕ_ЖАНРЫ (casefold), кроме случая, когда эта опция сейчас выбрана (жанр_код == код). Прочие тексты, title/description/canonical/robots, вёрстку, постеры и CSS не менять (постеры и вёрстку правит Архитектор). Проверка checks/service_genre_labels.py — по образцу checks/genre_links_canonical.py (витрина на КОПИИ снимка, свой порт): на /, /movies/, /series/ внутри <span class=\"zt__m\"> и в <option> select#zona-genre-facet нет ни одной метки из {«западный контент», «азиатский контент»}; коды 0 — норма, 1 — дефект, 2 — не измерено. В checks/run.sh — после genre-links-canonical через ту же обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/service_genre_labels.py",
+      "verify_live": "на / и /movies/ /series/ /catalog/ /new/ в строках жанров карточек нет «западный контент»; в фильтре жанров /movies/ нет опции «западный контент»; страницы 200, title/description/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/movies/",
+          "status": 200,
+          "absent": [
+            "западный контент"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "17.10 ~18:30Z: живой замер сессии (var/seo-audit/wording-live-20261017-evening.json, west-content-visible-20261017.json). Происхождение — та же ошибка сравнения, что исправлена на zonafilm12.site; Архитектор zonafilm-space с 16.10 13:30Z не менял (origin = HEAD 862a33e). Эффект: Метрика — входы и глубина на /, /movies/, /series/, /catalog/ zonafilm.space по Яндексу и Google раздельно, 7 дней до/после даты публикации. Та же метка в фильтре жанров у lordfilm47.space, lordserial33.biz, 1lordserials1.online, zonafilm12.site, zonafilm.cc и в карточках zonafilm.cc (закреплённый шаблон + слой serve.py) — отдельными задачами после проверки этой.",
+      "owner_action": null
     }
   ]
 }
