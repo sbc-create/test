@@ -9,7 +9,21 @@ hosts:
     ssh_key_secret_ref: file:/home/claude/.ssh/k2deploy-zomro-01
     known_hosts_entry_ref: inventory/known_hosts.d/k2-zomro-01
     strict_host_key_checking: yes
-    sudo_allowlist: []
+    # Фактический список измерен 2026-10-17 (`sudo -n -l` от k2deploy на
+    # узле). Пустой список здесь означал бы «sudo нет вовсе» — и из-за этого
+    # расхождения выпуск кода витрин считался невозможным, хотя перезапуск
+    # службы разрешён, а сам сценарий выпуска — нет.
+    sudo_allowlist:
+      - "/usr/sbin/nginx -t"
+      - "/usr/bin/systemctl reload nginx"
+      - "/usr/bin/systemctl restart nova-lordfilm-group.service"
+      - "/usr/bin/systemctl restart nova-lordfilm-msk-ru.service"
+      - "/usr/bin/systemctl restart nova-lordfilm-spb-ru.service"
+      - "/usr/bin/systemctl restart nova-lordserial-group.service"
+      - "/usr/bin/systemctl restart nova-lordserial-msk-ru.service"
+      - "/usr/bin/systemctl restart nova-lordserial-net-ru.service"
+      - "/usr/bin/systemctl restart nova-lordserial-spb-ru.service"
+      - "/usr/bin/systemctl restart nova-lordserial-su.service"
     environments: [staging]
 # hosts:
 #   - ref: stage-1
