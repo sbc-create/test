@@ -970,6 +970,70 @@ def sitemap_date_findings(
     return out
 
 
+#: Снимок поставщика, из которого издатель собирает комплекты витрин K2.
+K2_SNAPSHOT = Path(
+    "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json")
+#: Отчёты издателя: по ним видно, когда комплект собирался в последний раз.
+K2_REPORTS = REPO_ROOT / "var" / "k2-data" / "publish-reports"
+#: Сколько часов разрыва считается нормой. Доставка суточная, плюс запас на
+#: смещение и на то, что снимок поставщика обновляется ночью.
+K2_MAX_LAG_HOURS = 30
+
+
+def k2_catalog_findings(
+    now: dt.datetime,
+    *,
+    snapshot: Path = K2_SNAPSHOT,
+    reports: Path = K2_REPORTS,
+    max_lag_hours: int = K2_MAX_LAG_HOURS,
+) -> list[dict]:
+    """Отстала ли доставка каталога восьми витрин K2 от снимка поставщика.
+
+    Сравниваются два локальных факта: когда поставщик обновил снимок и когда
+    издатель в последний раз собирал из него комплекты. Разрыв больше суток с
+    запасом означает, что доставка не работает — ровно то состояние, в котором
+    каталог на витринах простоял с 15 по 17 октября 2026 года и никем не было
+    замечено.
+
+    Отсутствие снимка — НЕ находка: эта машина может не быть управляющей для
+    K2, и выдавать её молчание за дефект нельзя.
+    """
+    if not snapshot.is_file():
+        return []
+    снят = dt.datetime.fromtimestamp(snapshot.stat().st_mtime, dt.timezone.utc)
+    последний = None
+    for файл in sorted(reports.glob("pub-*.json")) if reports.is_dir() else []:
+        данные = _read_json(файл, {})
+        когда = parse_iso(данные.get("started_at"))
+        if когда and (последний is None or когда > последний):
+            последний = когда
+    if последний is None:
+        return [
+            {
+                "code": "K2_CATALOG_NEVER_DELIVERED",
+                "severity": "critical",
+                "detail": (
+                    f"снимок поставщика от {iso(снят)} есть, а отчётов "
+                    f"издателя в {reports} нет ни одного"
+                ),
+            }
+        ]
+    разрыв = (снят - последний).total_seconds() / 3600.0
+    if разрыв <= max_lag_hours:
+        return []
+    return [
+        {
+            "code": "K2_CATALOG_DELIVERY_STALE",
+            "severity": "critical" if разрыв > 2 * max_lag_hours else "warning",
+            "detail": (
+                f"снимок поставщика обновлён {iso(снят)}, последний прогон "
+                f"издателя {iso(последний)} — разрыв {разрыв:.0f} ч при "
+                f"пределе {max_lag_hours} ч; суточная доставка не работает"
+            ),
+        }
+    ]
+
+
 def stalled_updates(history: dict, today: str, *, days: int = 3) -> dict | None:
     """Обновления остановились: адресов не прибавилось и lastmod не сдвинулся.
 
@@ -3166,6 +3230,10 @@ def step_daily_report(ctx: Context) -> Any:
             stalled.append({"domain": domain, **found})
         for finding in sitemap_findings(snap, ctx.now):
             stalled.append({"domain": domain, **finding})
+    # Свежесть доставки каталога K2 — такой же суточный вывод, как и прочие:
+    # без него остановившаяся доставка выглядит как зелёный отчёт.
+    for finding in k2_catalog_findings(ctx.now):
+        stalled.append({"domain": "k2-zomro-01", **finding})
     visited_errors = [
         {
             "domain": v["domain"],

@@ -1,6 +1,17 @@
 #!/usr/bin/env bash
 # Выпуск ТОЛЬКО кода одной витрины на узле K2: новый выпуск из бандла и рестарт.
-# Выполняется от root на самом узле. Одна команда на витрину.
+# Одна команда на витрину.
+#
+# От кого выполняется. Либо от root, либо от учётной записи доставки
+# `k2deploy` — и второе не послабление, а измеренное положение дел
+# (2026-10-17): `k2deploy` состоит в группе КАЖДОЙ витрины, каталоги
+# `/srv/<учётка>` и `/srv/<учётка>/releases` имеют режим `drwxrwsr-x`, то есть
+# групповую запись и setgid, а перезапуск юнита витрины прямо перечислен в
+# `sudo -n -l`. Всё, чего доставке не хватает против root, — это `chown`:
+# файлы выпуска остаются за `k2deploy`, группа благодаря setgid — витрины, и
+# служба читает их по группе. Для витрины это даже строже: свой код она
+# изменить не может, а `ProtectSystem=strict` и так оставляет ей на запись
+# только `data`.
 #
 # Зачем отдельно от k2-launch-site.sh. Тот ЗАПУСКАЕТ витрину с нуля: заводит
 # маршрут nginx, кладёт данные каталога из комплекта доставки, ставит юнит.
@@ -56,7 +67,14 @@ health_interval=3
 log() { printf '==> %s\n' "$*"; }
 bad() { printf '[x] %s\n' "$*" >&2; }
 
-[ "$mode" = "--dry-run" ] || [ "$(id -u)" = 0 ] || { bad "нужен root"; exit 1; }
+am_root=0
+[ "$(id -u)" = 0 ] && am_root=1
+# Перезапуск юнита: от root напрямую, от доставки — через точную команду
+# списка sudo. Список проверяется ЗАРАНЕЕ: отказ посреди выпуска оставил бы
+# `current` переключённым, а службу — на прежнем коде.
+restart_unit() {
+  if [ "$am_root" = 1 ]; then systemctl restart "$1"; else sudo -n /usr/bin/systemctl restart "$1"; fi
+}
 [ -f "$manifest" ] || { bad "нет описи $manifest"; exit 2; }
 
 read -r account port unit domain <<EOF
@@ -104,25 +122,50 @@ if [ "$mode" = "--dry-run" ]; then
   exit 0
 fi
 
+# Предполётная проверка прав. Делается ДО первой записи: отказ посреди
+# выпуска оставил бы `current` переключённым, а службу — на прежнем коде.
+if [ "$am_root" != 1 ]; then
+  [ -w "$root" ] || { bad "нет записи в $root (нужна группа витрины и setgid)"; exit 1; }
+  [ -w "$root/releases" ] || { bad "нет записи в $root/releases"; exit 1; }
+  [ -r "$player_src" ] || { bad "config/player.json текущего выпуска не читается"; exit 1; }
+  sudo -n -l 2>/dev/null | grep -qF "/usr/bin/systemctl restart $unit" || {
+    bad "перезапуск $unit не разрешён в sudo: выпуск не начинаю"; exit 1; }
+  log "права доставки проверены: запись в выпуски есть, перезапуск $unit разрешён"
+fi
+
 release="$root/releases/$head_sha"
 if [ ! -d "$release" ]; then
   git clone --quiet "$bundle" "$release" || { bad "клон бандла не удался"; exit 1; }
-  chown -R "$account:$account" "$release"
+  if [ "$am_root" = 1 ]; then
+    chown -R "$account:$account" "$release"
+  else
+    # Владелец останется за доставкой, группа — за витриной (setgid на
+    # каталоге выпусков). Служба читает по группе, поэтому групповое чтение
+    # ставится явно, а не предполагается по umask.
+    chmod -R g+rX "$release"
+  fi
   log "выпуск $head_sha собран из бандла"
 else
   log "каталог выпуска $head_sha уже существует: беру как есть"
 fi
 
-install -m 0640 -o "$account" -g "$account" "$player_src" "$release/config/player.json"
+if [ "$am_root" = 1 ]; then
+  install -m 0640 -o "$account" -g "$account" "$player_src" "$release/config/player.json"
+else
+  # `install -o/-g` требует root. Содержимое не читается и не печатается ни в
+  # одном из двух путей; группа достаётся от setgid каталога выпуска.
+  cp "$player_src" "$release/config/player.json" || { bad "плеер не перенёсся"; exit 3; }
+  chmod 0640 "$release/config/player.json"
+fi
 log "плеер перенесён из прежнего выпуска (значение не читается)"
 
 printf '%s\n' "$old_release" > "$previous_file"
-chown "$account:$account" "$previous_file"
+[ "$am_root" = 1 ] && chown "$account:$account" "$previous_file"
 ln -sfn "$release" "$current_link"
-chown -h "$account:$account" "$current_link"
+[ "$am_root" = 1 ] && chown -h "$account:$account" "$current_link"
 log "current -> $release"
 
-systemctl restart "$unit"
+restart_unit "$unit"
 ready=0
 waited=0
 while [ "$waited" -lt "$health_timeout" ]; do
@@ -134,16 +177,19 @@ done
 if [ "$ready" = 0 ]; then
   bad "витрина не ответила на healthz за $health_timeout с: возвращаю прежний выпуск"
   ln -sfn "$old_release" "$current_link"
-  chown -h "$account:$account" "$current_link"
-  systemctl restart "$unit"
-  journalctl -u "$unit" -n 20 --no-pager | sed 's/^/log| /'
+  [ "$am_root" = 1 ] && chown -h "$account:$account" "$current_link"
+  restart_unit "$unit"
+  # Журнал службы доступен только root; при его отсутствии это
+  # так и печатается, а не подменяется пустым выводом.
+  journalctl -u "$unit" -n 20 --no-pager 2>/dev/null | sed 's/^/log| /' \
+    || log "журнал службы недоступен этой учётной записи"
   exit 1
 fi
 log "healthz отвечает через $waited с"
 
 # Признак новой версии ищется в журнале службы, а не в файлах: файл на диске
 # доказывает доставку, а строка журнала — что рантайм этот файл ИСПОЛНЯЕТ.
-sync_line="$(journalctl -u "$unit" --since "-5 min" --no-pager 2>/dev/null | grep -c "согласование доступности серий")"
+sync_line="$(journalctl -u "$unit" --since "-5 min" --no-pager 2>/dev/null | grep -c "согласование доступности серий" || true)"
 log "строк о согласовании доступности в журнале за 5 минут: ${sync_line:-0}"
 
 code=0
@@ -155,8 +201,8 @@ done
 if [ "$code" != 0 ]; then
   bad "главная или каталог ответили не 200: возвращаю прежний выпуск"
   ln -sfn "$old_release" "$current_link"
-  chown -h "$account:$account" "$current_link"
-  systemctl restart "$unit"
+  [ "$am_root" = 1 ] && chown -h "$account:$account" "$current_link"
+  restart_unit "$unit"
   exit 1
 fi
 

@@ -445,6 +445,56 @@ if СООБЩЕСТВО is not None and SITE_ID:
 }
 
 
+#: Коды жанров и стран по слугу — для подбора похожего. Считаются ОДИН раз на
+#: снимок: пересчёт на каждом запросе стоил 269 832 вызовов `транслит` и
+#: секунды процессорного времени, а снимок между запросами не меняется.
+_КОДЫ_СОСЕДЕЙ: dict = {}
+
+
+def коды_соседей(подробности) -> dict:
+    """{slug: (коды жанров, коды стран)} текущего снимка подробностей.
+
+    Ключ кеша — путь и время файла: доставка кладёт новый снимок на место
+    прежнего, и по одному лишь пути старые коды пережили бы обновление.
+    Хранится ровно один снимок: держать прежние незачем, а память на узле
+    общая на восемь витрин.
+
+    Строки кодов разделяются между записями (`sys.intern`): у 64 тысяч
+    записей жанров всего несколько десятков, и без этого один и тот же
+    «боевик» лежал бы в памяти тысячи раз.
+    """
+    записи = getattr(подробности, "записи", None) or {}
+    ключ = (getattr(подробности, "path", ""),
+            getattr(подробности, "mtime", 0.0), len(записи))
+    готовое = _КОДЫ_СОСЕДЕЙ.get(ключ)
+    if готовое is not None:
+        return готовое
+    пусто: frozenset = frozenset()
+    итог: dict = {}
+    кеш_кода: dict = {}
+
+    def код(значение: str) -> str:
+        готов = кеш_кода.get(значение)
+        if готов is None:
+            готов = sys.intern(нормализовать(транслит(значение)))
+            кеш_кода[значение] = готов
+        return готов
+
+    for slug, д in записи.items():
+        жанры = set(д.get("genre_codes") or ())
+        if not жанры and д.get("genres"):
+            жанры = {код(г) for г in д["genres"] if г}
+        жанры.discard("")
+        страны = {код(с) for с in (д.get("countries") or ()) if с}
+        страны.discard("")
+        if жанры or страны:
+            итог[slug] = (frozenset(жанры) if жанры else пусто,
+                          frozenset(страны) if страны else пусто)
+    _КОДЫ_СОСЕДЕЙ.clear()
+    _КОДЫ_СОСЕДЕЙ[ключ] = итог
+    return итог
+
+
 def разделы_снимка(данные, подробности):
     """Индекс разделов текущего поколения снимка. None — модуля нет."""
     if РАЗДЕЛЫ_МОД is None:
@@ -1757,6 +1807,13 @@ background:var(--t-alt,var(--t-soft))}
    картинки нет или она не загрузилась. */
 .zt__p img{position:relative;z-index:1;width:100%;height:100%;
 object-fit:cover;object-position:center top;display:block}
+/* Постер, который к 2:3 не сводится, показывается ЦЕЛИКОМ на фоне рамки:
+   обрезать у него шестую часть кадра — значит терять значимые части. Класс
+   ставит СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ по натуральным размерам. */
+.zt__p img[data-fit=contain]{object-fit:contain;background:var(--t-soft)}
+/* Заглушка уходит, когда картинка нарисована (пометку ставит СКРИПТ_ЗАГЛУШЕК).
+   Пока картинки нет — буква на месте: это и есть её работа. */
+.zt__p[data-poster-loaded] .zt__none{display:none}
 .zt__none{position:absolute;inset:0;display:grid;place-items:center;
 font-size:26px;font-weight:800;color:var(--t-mute)}
 .zt__b{display:block;padding:7px 8px 4px}
@@ -2094,6 +2151,9 @@ background:linear-gradient(160deg,#243028,@GREENDARK@);flex:0 0 auto}
 .c__img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;
 object-position:center top;transition:transform .25s}
 .c__img[data-fit=contain]{object-fit:contain;background:@GREENDARK@}
+.c__p[data-poster-loaded] .c__none,.c__p[data-poster-loaded] .c__ph{display:none}
+.hub__p[data-poster-loaded] .hub__ph{display:none}
+.hub__p img[data-fit=contain]{object-fit:contain;background:@SOFT@}
 .c__none{position:absolute;inset:0;display:grid;place-items:center;text-align:center;
 padding:10px;color:#a8b5a4;font-size:12px;font-weight:600;
 background:repeating-linear-gradient(135deg,#243028 0 9px,#1a221c 9px 18px)}
@@ -2292,13 +2352,25 @@ html[data-design="lords-series-feed-v2"] .ft{border-top-color:@ACCENT2@}
 html[data-design="lords-curated-v2"] .ft{border-top-color:@ACCENT2@}
 .hub{display:grid;gap:12px;grid-template-columns:1fr;margin:14px 0}
 @media(min-width:600px){.hub{grid-template-columns:repeat(2,1fr)}}
-@media(min-width:1000px){.hub{grid-template-columns:repeat(3,1fr)}}
-.hub__c{display:block;padding:14px;border:1px solid @LINE@;border-radius:6px;background:@CARD@;
+/* Четыре колонки, а не три: подборок ровно четыре, и при трёх колонках
+   четвёртая уезжала в отдельный ряд с пустотой во всю ширину справа —
+   измерено 2026-10-17 на lordfilm.group. */
+@media(min-width:1000px){.hub{grid-template-columns:repeat(4,1fr)}}
+.hub__c{display:flex;flex-direction:column;padding:14px;border:1px solid @LINE@;border-radius:6px;background:@CARD@;
 color:inherit;text-decoration:none;min-height:120px}
 .hub__c:hover{border-color:@ACC@}
 .hub__c b{display:block;font-size:15px;margin-bottom:6px;color:@INK@}
 .hub__c p{margin:0;font-size:12.5px;color:#5b6470;line-height:1.45}
-.hub__c span{display:block;margin-top:10px;font-size:12px;color:@ACCDK@;font-weight:700}
+/* ТОЛЬКО последняя строка карточки, а не каждый span внутри неё.
+   Прежний селектор `.hub__c span` (класс+элемент, вес 0,1,1) перебивал
+   `.hub__g{display:grid}` (вес 0,1,0), и сетка превью превращалась в столбец
+   блоков во всю ширину карточки: измерено 2026-10-17 на lordfilm.group —
+   вычисленный `display` у `.hub__g` был `block` при объявленных
+   `grid-template-columns: repeat(4, 1fr)`, первое превью занимало 401×602 px,
+   а карточка подборки вытягивалась на 2673 px. `margin-top:auto` прижимает
+   строку к низу, поэтому карточки ряда заканчиваются на одной линии. */
+.hub__c>span:last-child{display:block;margin-top:auto;padding-top:10px;
+font-size:12px;color:@ACCDK@;font-weight:700}
 /* Карточка подборки показывает, что внутри.
    Раньше это была текстовая плитка: заголовок, два предложения и «Открыть
    подборку →». По ней нельзя было понять состав, и все подборки выглядели
@@ -2306,7 +2378,10 @@ color:inherit;text-decoration:none;min-height:120px}
    на вопрос «что там» без наведения мыши и без перехода. */
 .hub__g{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:10px 0 0}
 .hub__i{min-width:0;display:block}
-.hub__p{display:block;position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:4px;
+/* Превью подборки — маленькое. Предел высоты оставлен страховкой: без
+   него любая будущая правка ширины снова растянула бы карточку по постеру. */
+.hub__p{display:block;position:relative;aspect-ratio:2/3;max-height:200px;
+overflow:hidden;border-radius:4px;
 background:@ALT@}
 .hub__p img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 /* Постера может не быть. Пустой <img> даёт значок битой картинки и прыжок
@@ -3989,19 +4064,69 @@ def заглушка_постера(запись: dict, класс_заглуш�
 СКРИПТ_ПОСТЕРОВ = (
     "document.addEventListener('error',function(e){var i=e.target;"
     "if(i&&i.tagName==='IMG'&&i.hasAttribute('data-poster'))i.hidden=true;},true);"
+    # Общий список обработчиков готовой картинки и обход уже готовых.
+    #
+    # Событие `load` ловит не все случаи: картинка, которая к моменту подписки
+    # уже `complete` (память браузера, повторный визит), события больше не
+    # даёт. Измерено 2026-10-17 на выпущенной lordfilm.group: у одной карточки
+    # на телефоне картинка нарисована, а ни пометки загрузки, ни `data-fit`
+    # на ней нет. Обход закрывает именно этот случай и ничего не делает
+    # дважды: обработчики идемпотентны.
+    "window.__lordsПостерХуки=window.__lordsПостерХуки||[];"
+    "window.__lordsОбход=function(){"
+    "var l=document.querySelectorAll('img[data-poster]');"
+    "for(var k=0;k<l.length;k++){var i=l[k];"
+    "if(!i.complete||!i.naturalWidth)continue;"
+    "var h=window.__lordsПостерХуки;"
+    "for(var j=0;j<h.length;j++){try{h[j](i)}catch(e){}}}};"
+    "document.addEventListener('load',function(e){var i=e.target;"
+    "if(!i||i.tagName!=='IMG'||!i.hasAttribute('data-poster'))return;"
+    "var h=window.__lordsПостерХуки;"
+    "for(var j=0;j<h.length;j++){try{h[j](i)}catch(e){}}},true);"
+    "document.addEventListener('DOMContentLoaded',window.__lordsОбход);"
+    "window.addEventListener('load',window.__lordsОбход);"
+    "setTimeout(window.__lordsОбход,400);setTimeout(window.__lordsОбход,1500);"
+    "var _t=0;window.addEventListener('scroll',function(){"
+    "clearTimeout(_t);_t=setTimeout(window.__lordsОбход,150)},{passive:true});"
+)
+
+#: Заглушка убирается, когда картинка ДЕЙСТВИТЕЛЬНО нарисована.
+#:
+#: Подъёма картинки слоем мало: пока постер грузится, под ним стоит буква, и
+#: при полупрозрачном или узком изображении она просвечивает по краям. Поэтому
+#: контейнер помечается по событию `load` и только при ненулевой натуральной
+#: ширине — «загрузилось» и «событие пришло» это разные вещи, у сломанного
+#: файла событие тоже бывает. Обратной пометки нет намеренно: если картинка
+#: не пришла, буква обязана остаться.
+СКРИПТ_ЗАГЛУШЕК = (
+    "window.__lordsПостерХуки=window.__lordsПостерХуки||[];"
+    "window.__lordsПостерХуки.push(function(i){"
+    "if(!i.naturalWidth)return;"
+    "var b=i.closest('.zt__p,.c__p,.hub__p,.tw__ps');"
+    "if(b)b.setAttribute('data-poster-loaded','1');});"
+    "if(window.__lordsОбход)window.__lordsОбход();"
 )
 
 #: Classify natural image aspect; keep portrait posters out of aggressive crops.
+#:
+#: Допуск вокруг 2:3, а не «любой портрет». Прежний порог `r>=1.25` объявлял
+#: портретом и 1080×1350 (r=1.25), и 387×500 (r=1.29) — слот 2:3 обрезал у них
+#: около шестой части кадра, и обрезались именно значимые части: верх и низ
+#: постера. Измерено 2026-10-17 на восьми витринах K2: из 185 уникальных
+#: постеров 12 отличаются от 2:3 больше чем на 15 %, один — вовсе не портрет.
+#: Теперь `cover` получает только то, что действительно близко к 2:3
+#: (1.40…1.62), остальное показывается ЦЕЛИКОМ (`contain`) на фоне рамки.
 СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ = (
-    "document.addEventListener('load',function(e){var i=e.target;"
-    "if(!i||i.tagName!=='IMG'||!i.hasAttribute('data-poster'))return;"
+    "window.__lordsПостерХуки=window.__lordsПостерХуки||[];"
+    "window.__lordsПостерХуки.push(function(i){"
     "var w=i.naturalWidth||0,h=i.naturalHeight||0;if(!w||!h)return;"
     "var r=h/w,k=w/h,cls='mixed';"
-    "if(r>=1.25)cls='portrait';else if(k>=1.25)cls='landscape';"
+    "if(r>=1.40&&r<=1.62)cls='portrait';else if(k>=1.25)cls='landscape';"
     "i.setAttribute('data-aspect-class',cls);"
-    "var box=i.closest('.c__p');if(box)box.setAttribute('data-aspect-class',cls);"
-    "if(cls==='mixed')i.setAttribute('data-fit','contain');"
-    "},true);"
+    "var box=i.closest('.c__p,.zt__p,.hub__p,.tw__ps');"
+    "if(box)box.setAttribute('data-aspect-class',cls);"
+    "if(cls!=='portrait')i.setAttribute('data-fit','contain');});"
+    "if(window.__lordsОбход)window.__lordsОбход();"
 )
 
 
@@ -4334,17 +4459,15 @@ class Вид:
         профиль = str(ПРОФИЛЬ or "")
 
         кандидаты: list[tuple[int, str, str, dict]] = []
+        # Коды соседей берутся из общего разбора снимка, а не считаются заново
+        # на каждом запросе: см. `коды_соседей`. Состав и порядок прежние.
+        коды = коды_соседей(self.п) if self.п else {}
+        пустые_коды: tuple = (frozenset(), frozenset())
         for сосед in self.д.items:
             slug = сосед.get("slug")
             if not slug or slug == текущий:
                 continue
-            д = self.п.get(slug) if self.п else {}
-            чужие_жанры = set(д.get("genre_codes") or [])
-            if not чужие_жанры and д.get("genres"):
-                чужие_жанры = {нормализовать(транслит(г)) for г in д["genres"] if г}
-                чужие_жанры.discard("")
-            чужие_страны = {нормализовать(транслит(с)) for с in (д.get("countries") or []) if с}
-            чужие_страны.discard("")
+            чужие_жанры, чужие_страны = коды.get(slug, пустые_коды)
             балл = 0
             причины = []
             overlap = свои_жанры & чужие_жанры
@@ -4994,6 +5117,7 @@ class ВидЛордс(Вид):
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ТЕМЫ}
 {_скрипт_звёзд()}
 {СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЗАГЛУШЕК}
 {СКРИПТ_ЛОРДС_ШАПКА}
 {СКРИПТ_ЛЕНТ}
 {СКРИПТ_КЛАССИФИКАТОР_ИЗОБРАЖЕНИЙ}</script></head>
@@ -5438,14 +5562,23 @@ class ВидЛордс(Вид):
             f"</section>")
 
     def _описание_подборки(self, текст: str) -> str:
-        """Strip Animedia wording that must never appear on Lords shelves."""
+        """Одно предложение о том, ЧТО внутри подборки.
+
+        Описание контракта объясняет ещё и чем подборка НЕ является («Это не
+        список поступлений: он в списке за 14 дней»). Для страницы подборки
+        это уместно, а в карточке превращается в служебное пояснение на три
+        строки — измерено 2026-10-17 на lordfilm.group. Поэтому в карточку
+        идёт первое предложение: принцип отбора в нём назван целиком, и ничего
+        не досочиняется.
+        """
         t = (текст or "").strip()
         if not t:
             return ""
         low = t.casefold()
         if "каталог аниме" in low or "новые аниме" in low or "серии аниме" in low:
             return "Свежие поступления в каталог по дате добавления."
-        return t
+        точка = t.find(". ")
+        return t[:точка + 1] if точка > 30 else t
 
     #: Сколько постеров показывает карточка подборки.
     ПОСТЕРОВ_В_ПОДБОРКЕ = 4
@@ -6046,7 +6179,8 @@ class ВидЗона(Вид):
     {_открытый_граф(og or {})}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     {_мета_версии()}
-    <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}</script></head>
+    <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЗАГЛУШЕК}</script></head>
     <body><a class="skip" href="#main">Перейти к содержимому</a>
     <div class="zs">
     <aside class="zrail">
@@ -6076,6 +6210,7 @@ class ВидЗона(Вид):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЗАГЛУШЕК}
 {СКРИПТ_ЛЕНТ}
 {СКРИПТ_ЛОРДС_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>
@@ -7265,6 +7400,7 @@ class ВидАнимедиа(ВидЗона):
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
 <style>{self.се["стиль"]()}</style><script>{СКРИПТ_ПОСТЕРОВ}
+{СКРИПТ_ЗАГЛУШЕК}
 {СКРИПТ_ЛЕНТ}
 {СКРИПТ_АНИМЕДИА_ШАПКА}</script></head>
 <body><a class="skip" href="#main">Перейти к содержимому</a>

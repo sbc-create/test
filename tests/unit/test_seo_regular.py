@@ -1750,3 +1750,67 @@ def test_mass_date_is_not_reported_on_a_tiny_map():
         "slowest_seconds": 0.1,
     }
     assert [f["code"] for f in regular.sitemap_date_findings(snap, NOW)] == []
+
+
+# --- свежесть доставки каталога K2 ------------------------------------------
+#
+# Повод измерен 2026-10-17: таймер суточной доставки не был включён, каталог на
+# восьми витринах простоял с 15.10 11:44 до 17.10 17:34, и суточный отчёт всё
+# это время был зелёным — ни одна проверка не сравнивала возраст доставленного
+# комплекта с возрастом снимка поставщика.
+
+def _k2_стенд(tmp_path, *, снимок_часов_назад=2.0, прогон_часов_назад=None):
+    """Снимок поставщика и каталог отчётов издателя с заданным возрастом."""
+    import json
+    import os
+
+    снимок = tmp_path / "lords-01.json"
+    снимок.write_text("{}", encoding="utf-8")
+    когда = NOW - dt.timedelta(hours=снимок_часов_назад)
+    os.utime(снимок, (когда.timestamp(), когда.timestamp()))
+    отчёты = tmp_path / "publish-reports"
+    отчёты.mkdir()
+    if прогон_часов_назад is not None:
+        прогон = NOW - dt.timedelta(hours=прогон_часов_назад)
+        (отчёты / "pub-test.json").write_text(
+            json.dumps({"run_id": "pub-test",
+                        "started_at": прогон.strftime("%Y-%m-%dT%H:%M:%SZ")}),
+            encoding="utf-8")
+    return снимок, отчёты
+
+
+def test_без_снимка_поставщика_находок_нет(tmp_path):
+    """Машина может не быть управляющей для K2: молчание — не дефект."""
+    _, отчёты = _k2_стенд(tmp_path, прогон_часов_назад=1)
+    assert regular.k2_catalog_findings(
+        NOW, snapshot=tmp_path / "нет.json", reports=отчёты) == []
+
+
+def test_свежая_доставка_находок_не_даёт(tmp_path):
+    снимок, отчёты = _k2_стенд(tmp_path, снимок_часов_назад=2,
+                               прогон_часов_назад=1)
+    assert regular.k2_catalog_findings(
+        NOW, snapshot=снимок, reports=отчёты) == []
+
+
+def test_остановившаяся_доставка_находится(tmp_path):
+    """Ровно тот случай: снимок свежий, а издатель не запускался двое суток."""
+    снимок, отчёты = _k2_стенд(tmp_path, снимок_часов_назад=1,
+                               прогон_часов_назад=50)
+    находки = regular.k2_catalog_findings(NOW, snapshot=снимок, reports=отчёты)
+    assert [ф["code"] for ф in находки] == ["K2_CATALOG_DELIVERY_STALE"]
+    assert находки[0]["severity"] == "warning"
+    assert "49 ч" in находки[0]["detail"]
+
+
+def test_долгая_остановка_критична(tmp_path):
+    снимок, отчёты = _k2_стенд(tmp_path, снимок_часов_назад=1,
+                               прогон_часов_назад=100)
+    находки = regular.k2_catalog_findings(NOW, snapshot=снимок, reports=отчёты)
+    assert находки[0]["severity"] == "critical"
+
+
+def test_ни_одного_прогона_издателя_критично(tmp_path):
+    снимок, отчёты = _k2_стенд(tmp_path, прогон_часов_назад=None)
+    находки = regular.k2_catalog_findings(NOW, snapshot=снимок, reports=отчёты)
+    assert [ф["code"] for ф in находки] == ["K2_CATALOG_NEVER_DELIVERED"]
