@@ -19,7 +19,14 @@ After=network-online.target
 Type=oneshot
 # `User=`/`Group=` здесь не указываются: пользовательский менеджер и так
 # работает от claude, а с ними юнит не запустится вовсе.
-WorkingDirectory=/home/claude/wt-nova-publish-memory-02
+# Постоянный каталог доставки, а не рабочая копия сессии: та временная.
+# Копия /srv/site-factory/repo для этого не годится — измерено
+# 2026-10-17, она принадлежит другой линии и стоит на её ветке
+# (claude/players-only-production-009), переключать её нельзя.
+# Набор раскладывает и сверяет automation/local/k2-install-delivery.py
+# (--provision / --verify): в каталоге лежит опись INSTALL.json с
+# коммитом источника и суммами файлов.
+WorkingDirectory=/srv/site-factory/k2-delivery
 ExecStart=/bin/bash automation/local/k2-deliver-catalog.sh lords-10 lords-11 lords-12 lords-13 lords-14 lords-15 lords-16 lords-17
 # Издатель держит в памяти снимок поставщика целиком: измерено 1,197 ГиБ пика
 # на восьми витринах. Предел выше измеренного, но ниже того, при котором на

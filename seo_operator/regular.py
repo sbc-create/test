@@ -1000,6 +1000,24 @@ def k2_catalog_findings(
     """
     if not snapshot.is_file():
         return []
+    находки: list[dict] = []
+    # Рабочий каталог доставки удаляется ТОЛЬКО после успешного прохода.
+    # Оставшийся — след прерванного или упавшего прогона, и это отдельное
+    # состояние: «доставка падает» лечится не тем же, чем «доставка не идёт».
+    рабочий = reports.parent / "deliver"
+    if рабочий.is_dir():
+        когда = dt.datetime.fromtimestamp(рабочий.stat().st_mtime,
+                                          dt.timezone.utc)
+        простой = (now - когда).total_seconds() / 3600.0
+        if простой > 1.0:
+            находки.append({
+                "code": "K2_CATALOG_DELIVERY_INCOMPLETE",
+                "severity": "critical",
+                "detail": (
+                    f"рабочий каталог доставки {рабочий} остался с "
+                    f"{iso(когда)} ({простой:.0f} ч назад): прогон оборвался "
+                    f"или упал, успешный проход его удаляет"),
+            })
     снят = dt.datetime.fromtimestamp(snapshot.stat().st_mtime, dt.timezone.utc)
     последний = None
     for файл in sorted(reports.glob("pub-*.json")) if reports.is_dir() else []:
@@ -1008,7 +1026,7 @@ def k2_catalog_findings(
         if когда and (последний is None or когда > последний):
             последний = когда
     if последний is None:
-        return [
+        return находки + [
             {
                 "code": "K2_CATALOG_NEVER_DELIVERED",
                 "severity": "critical",
@@ -1020,8 +1038,8 @@ def k2_catalog_findings(
         ]
     разрыв = (снят - последний).total_seconds() / 3600.0
     if разрыв <= max_lag_hours:
-        return []
-    return [
+        return находки
+    return находки + [
         {
             "code": "K2_CATALOG_DELIVERY_STALE",
             "severity": "critical" if разрыв > 2 * max_lag_hours else "warning",

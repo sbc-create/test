@@ -1814,3 +1814,31 @@ def test_ни_одного_прогона_издателя_критично(tmp_
     снимок, отчёты = _k2_стенд(tmp_path, прогон_часов_назад=None)
     находки = regular.k2_catalog_findings(NOW, snapshot=снимок, reports=отчёты)
     assert [ф["code"] for ф in находки] == ["K2_CATALOG_NEVER_DELIVERED"]
+
+
+def test_оборванная_доставка_отличается_от_невключённого_таймера(tmp_path):
+    """Рабочий каталог остаётся только после неудачи — это своё состояние.
+
+    «Доставка падает» и «доставка не запускается» лечатся по-разному, и
+    сваливать их в одну находку значит каждый раз разбираться заново.
+    """
+    import os
+
+    снимок, отчёты = _k2_стенд(tmp_path, снимок_часов_назад=2,
+                               прогон_часов_назад=1)
+    рабочий = отчёты.parent / "deliver"
+    рабочий.mkdir()
+    когда = NOW - dt.timedelta(hours=5)
+    os.utime(рабочий, (когда.timestamp(), когда.timestamp()))
+    находки = regular.k2_catalog_findings(NOW, snapshot=снимок, reports=отчёты)
+    assert [ф["code"] for ф in находки] == ["K2_CATALOG_DELIVERY_INCOMPLETE"]
+    assert находки[0]["severity"] == "critical"
+
+
+def test_свежий_рабочий_каталог_находкой_не_считается(tmp_path):
+    """Прогон мог идти прямо сейчас: час запаса на работу издателя."""
+    снимок, отчёты = _k2_стенд(tmp_path, снимок_часов_назад=2,
+                               прогон_часов_назад=1)
+    (отчёты.parent / "deliver").mkdir()
+    assert regular.k2_catalog_findings(
+        NOW, snapshot=снимок, reports=отчёты) == []

@@ -11,34 +11,25 @@
 
 ## Блок 1. Управляющий сервер: включить суточную доставку каталога
 
-**Зачем.** Приёмщик на узле K2 работает (`k2-catalog-apply.timer`, каждые 15
-минут). Вторая половина цепочки — суточная доставка с управляющего сервера —
-подготовлена 15.10, но НЕ включена: ссылки в `timers.target.wants` нет, таймер
-не запускался ни разу. Из-за этого каталог на восьми витринах простоял с
-15.10 11:44 до 17.10 17:34, пока доставку не выполнили вручную.
+**Состояние на 2026-10-17 20:05 UTC: всё, кроме одной команды, уже сделано.**
 
-**Почему это не может сделать сессия.** Профиль сессии не разрешает
-`systemctl` ни в каком виде; обходить ограничение профиля запрещено.
+Почему не «слить ветку в `/srv/site-factory/repo`»: измерено — эта копия
+принадлежит другой линии и стоит на её ветке
+(`claude/players-only-production-009`). Переключать её ветку значит мешать
+чужой работе. Поэтому доставка получила СВОЙ постоянный каталог.
 
-**Проверка хоста** (ожидаемые значения — те, что измерены 2026-10-17 18:50 UTC):
+Что уже сделано и чем подтверждено:
 
-```bash
-hostname                                     # управляющий сервер, не узел K2
-ls -l /var/lib/systemd/linger/claude         # есть: пользовательские юниты живут без сессии
-ls -1 ~/.config/systemd/user/k2-catalog-deliver.user.{service,timer}
-ls -1 ~/.config/systemd/user/timers.target.wants/   # ссылки k2-catalog-deliver тут НЕТ
-grep -n 'WorkingDirectory\|ExecStart' ~/.config/systemd/user/k2-catalog-deliver.user.service
-```
+| Шаг | Чем подтверждено |
+| --- | --- |
+| `/srv/site-factory/k2-delivery` разложен штатным инструментом (`k2-install-delivery.py --provision`) | опись `INSTALL.json`: коммит источника, 8 файлов с суммами sha256 |
+| `var/ansible/hosts.yml` сгенерирован из `inventory/ssh-hosts.yaml` | `render-ansible-inventory.py`, код 0 |
+| готовность каталога | `k2-install-delivery.py --root /srv/site-factory/k2-delivery --check-ssh` → **нехваток 0**, `ansible ping` ok |
+| цепочка работает ИЗ ЭТОГО каталога | полный прогон доставки 2026-10-17 19:56–20:00: издатель `pub-027f3a3f75b6`, 8 комплектов по 106 МиБ, суммы сверены на узле, отказов 0 |
+| `WorkingDirectory` юнита переставлен на этот каталог | `~/.config/systemd/user/k2-catalog-deliver.user.service`, строка 29 |
 
-`WorkingDirectory` обязан указывать на существующий каталог с ветки, где лежат
-`automation/local/k2-deliver-catalog.sh`, `make-k2-publisher.py`,
-`run-k2-publisher.py` и `var/ansible/hosts.yml`. Сейчас это
-`/home/claude/wt-nova-publish-memory-02`. **В `/srv/site-factory/repo` этих
-файлов нет** (проверено 17.10: ни сценариев доставки, ни `var/ansible/`), и
-`var/` в git не хранится — значит после слияния ветки туда придётся отдельно
-положить `var/ansible/hosts.yml`, иначе таймер включится и будет падать.
-
-**Команды:**
+**Осталось — одна команда владельца.** Профиль сессии не разрешает
+`systemctl` ни в каком виде, обходить его я не стала.
 
 ```bash
 systemctl --user daemon-reload
@@ -46,30 +37,39 @@ systemctl --user enable --now k2-catalog-deliver.user.timer
 systemctl --user list-timers k2-catalog-deliver.user.timer --no-pager
 ```
 
-**Ожидаемый результат:** в `list-timers` одна строка с
-`k2-catalog-deliver.user.timer` и ближайшим запуском в 05:20 UTC (плюс
-случайная задержка до 5 минут). Ссылка появляется в
+**Ожидаемый результат:** строка таймера с ближайшим запуском в 05:20 UTC
+(плюс случайная задержка до 5 минут) и ссылка в
 `~/.config/systemd/user/timers.target.wants/`.
 
-**Проверка через сутки** (её же делает и сторож, см. ниже):
+**Проверка результата — не наличие таймера, а установленный свежий каталог:**
 
 ```bash
-journalctl --user -u k2-catalog-deliver.user.service --since '-26h' --no-pager | tail -20
-ls -t /home/claude/wt-nova-publish-memory-02/var/k2-data/publish-reports | head -3
+cd /srv/site-factory/k2-delivery
+python3 automation/local/k2-freshness.py --root /srv/site-factory/k2-delivery
 ```
+
+Инструмент различает четыре состояния и печатает их по каждой витрине:
+`СВЕЖО`, `ДОСТАВЛЕНО, ЖДЁТ УСТАНОВКИ` (норма до 15 минут — столько ходит
+приёмщик узла), `УСТАРЕЛО`, `ОШИБКА ДОСТАВКИ`, а при нехватке любого из трёх
+фактов (снимок поставщика, отчёт издателя, связь с узлом) — `НЕТ ДАННЫХ`
+вместо вывода о свежести.
 
 **Откат:**
 
 ```bash
 systemctl --user disable --now k2-catalog-deliver.user.timer
-systemctl --user list-timers k2-catalog-deliver.user.timer --no-pager   # строки больше нет
 ```
 
-Откат безопасен: таймер только запускает доставку, доставка идёт во ВХОДЯЩИЙ
-каталог узла, а установку делает корневой приёмщик узла со своими проверками
-сумм.
+Откат безопасен: таймер только запускает доставку во входящий каталог узла,
+установку делает корневой приёмщик узла со своими проверками сумм.
 
----
+**Если каталог доставки понадобится обновить** (вышел новый код доставки):
+
+```bash
+cd <рабочая копия с нужной веткой>
+python3 automation/local/k2-install-delivery.py --provision /srv/site-factory/k2-delivery
+python3 automation/local/k2-install-delivery.py --verify /srv/site-factory/k2-delivery
+```
 
 ## Блок 2. Узел K2: чтение журналов (необязательно)
 
