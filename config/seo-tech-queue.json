@@ -101,7 +101,7 @@
       "status": "blocked",
       "owner_action": "root: команда §4 docs/verification/www-mirrors-20261012.md (коммит 6d20f68) — по одному домену; zonafilm12.site — после спада нагрузки.",
       "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)",
-      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа."
+      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа. | 18.10 11:46Z: живая сверка — www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc по-прежнему 200, index, follow, canonical на www. В цикл поставлен редирект на уровне приложения (T221, представитель an1meg0.site); nginx-правка остаётся за владельцем."
     },
     {
       "id": "B002",
@@ -5532,6 +5532,33 @@
       "status": "blocked",
       "owner_action": "Архитектор (код Yummy, src/app/*; сборка вместе с T179): (1) исключить метки aziatskiy-kontent/zapadnyy-kontent (и их имена) из списка жанров фильтра /catalog и из жанров на страницах тайтла/сезона; (2) /schedule/: заменить служебное объяснение на текст для посетителя и ссылку на /catalog/schedule; (3) /schedule/, /collections/ — noindex, follow вместо nofollow (если nofollow не осознанное решение — тогда записать его в DECISIONS). SEO не правит: зона сборки Yummy у Архитектора (поручение владельца).",
       "evidence": "18.10 11:43Z: обход 3×31 страниц (yummyani.site, yummyani7.site, yummyani.biz) и сверка пяти доменов; разделы меток — noindex, follow на всех пяти."
+    },
+    {
+      "id": "T221",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://www.an1meg0.site/",
+        "https://www.an1meg0.site/catalog/",
+        "https://www.an1meg0.site/title/monolog-maomao-2/"
+      ],
+      "problem": "Живая сверка 18.10 11:46Z: https://www.an1meg0.site/ и любые страницы под www — 200, index, follow, canonical на www-адрес (канонический адрес строится из заголовка Host): полный индексируемый дубль сайта (B001, открыт с 12.10; правка nginx — root, ждёт владельца). У animeg0.site, an1mego.site, lordfilm47.space и др. www уже отвечает 301/308 на основной домен.",
+      "norm": "единый канонический хост; дубли сайта не индексируются (SEO_KNOWLEDGE_PACK §1; B001 expected: www → 308 на корень, на www нет self-canonical)",
+      "expected": "src/animego-frontend.py, класс Обработчик (НЕ ВидОснова/ВидАнимедиа — checks/boundaries.py): в начале обработки GET и HEAD — если хост запроса (заголовок Host без порта, нижний регистр) равен \"www.\" + основной домен ячейки (ИНДЕКС_ДОМЕН — LORDS_INDEXING_SITE из config/site.json, кладёт run.py), ответить 308 с Location https://<основной домен><исходный путь с запросом> (через существующий помощник _переход, если подходит) и без тела. Если основной домен пуст или хост другой (localhost, 127.0.0.1, сам основной домен, чужие имена) — поведение прежнее. /healthz не трогать. Литералов class=\"…\" в тело ВидАнимеГо не добавлять. Новая проверка checks/www_redirect.py: поднять витрину на снимке (SITE_DATA_DIR) или проверить обработчик напрямую — запрос с Host www.<домен> на / и /catalog/?page=2 → 308 и точный Location; запрос с Host <домен> → 200; с Host localhost → 200; без снимка — «не измерено» (rc 2), ловить и SystemExit при импорте. На базе rc=1, на ветке rc=0; подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/www_redirect.py",
+      "verify_live": "https://www.an1meg0.site/ → 308 на https://an1meg0.site/; https://www.an1meg0.site/catalog/?page=2 → 308 на https://an1meg0.site/catalog/?page=2; https://an1meg0.site/ — 200, index, follow, canonical на себя",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://an1meg0.site/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 11:46Z: сверка www на 17 доменах: дубли 200 с self-canonical — an1meg0.site, zonafilm12.site, zonafilm.cc (и lordserials22.info — пауза до 21.10); yummyani7.site/.info — www 200, но canonical на основной домен. Представитель — an1meg0.site; Zona — переносом через src/serve.py после проверки. B001 (nginx) остаётся за владельцем — редирект приложения его не отменяет и с ним совместим. Эффект: Вебмастер — главное зеркало и исключение www-адресов (после B023); Метрика — визиты на www-хосте → 0."
     }
   ]
 }
