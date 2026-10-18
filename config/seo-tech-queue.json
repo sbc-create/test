@@ -5828,6 +5828,29 @@
       ],
       "status": "queued",
       "evidence": "18.10 15:20Z: замер сессии (YandexBot UA, GET/HEAD главной и значка 17 доменов); код — src/themes.py:154–158, шаблон ~8945. Эффект — состояние FAVICON_ERROR в Вебмастере (проверка после B023)."
+    },
+    {
+      "id": "T231",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+        "https://an1meg0.site/title/ya-perevoplotilsya-v-goblina-voprosy-est/"
+      ],
+      "problem": "Живой замер 18.10 15:29Z: на animeg0.site, animedia.icu, animedia.space страница тайтла из расписания показывает «Следующая серия: N серия — <дата> (МСК)» (T071, T136), а на an1meg0.site тех же тайтлов (есть в /schedule/ an1meg0.site, выход 18–19.10) — строки нет: T071 задумывалась «animedia.icu, затем animedia.space и AnimeGo» и выпущена 14.10 только на трёх витринах. Запросы Вебмастера 10.10 вида «<название> дата выхода серий» — позиции ~10–12 (var/seo-audit/query-table-20261018.json). an1meg0.site растёт из Google (0 → 27 за неделю).",
+      "norm": "Полезный раздел страницы — дата следующей серии из снимка расписания (источник тот же, что у /schedule/); нет события — нет строки (T071); серия уже доступна — строки нет (T136).",
+      "expected": "Перенос с animeg0.site без изменений смысла: метод ВидАнимеГо._следующая_серия (animeg0-site src/animego-frontend.py ~12169, коммиты 7d873e4 T071 и 928ad2e T136) и его вызов в тайтл() (~12261, класс «ag-next»), правило CSS .ag-next в src/animego_theme.py (одна строка, как ~469 у animeg0). Метод — в ВидАнимеГо (checks/boundaries.py; урок первой попытки T071). Проверки — перенести checks/next_episode_title.py и checks/next_episode_consistent.py с animeg0-site, подключить в checks/run.sh; на базе rc=1, на ветке rc=0; без рантайма — rc 2 (Exception и SystemExit). stamp_manifest/update_pins, полный run.sh. Страницы серий, JSON-LD (канарейка exp-animego-episode-jsonld на an1meg0.site) и вёрстку не трогать.",
+      "check": "checks/next_episode_title.py",
+      "verify_live": "тайтл с будущей серией в /schedule/ an1meg0.site — строка «Следующая серия: N серия — <дата> (МСК)»; тайтл без будущего события — без строки",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/schedule/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 15:29Z: замер сессии (animeg0/an1meg0/an1mego, 3 тайтла с выходом 18–19.10). an1mego.site — НЕ переносится до оценки T191 24.10 (канарейка на этом сайте). Эффект: входы на тайтлы из запросов «дата выхода» — оценка 01.11 (Метрика), позиции — после B023."
     }
   ]
 }
