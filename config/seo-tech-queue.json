@@ -5826,8 +5826,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 15:20Z: замер сессии (YandexBot UA, GET/HEAD главной и значка 17 доменов); код — src/themes.py:154–158, шаблон ~8945. Эффект — состояние FAVICON_ERROR в Вебмастере (проверка после B023)."
+      "status": "live_verified",
+      "evidence": "18.10 15:20Z: замер сессии (YandexBot UA, GET/HEAD главной и значка 17 доменов); код — src/themes.py:154–158, шаблон ~8945. Эффект — состояние FAVICON_ERROR в Вебмастере (проверка после B023). | 18.10 16:57Z: CI 39146966304, публикатор live_verified 16:55:10Z. Сверка сессии var/seo-audit/t230-live-20261018.json: /favicon.svg и /favicon.ico — fill=\"#4d9bff\", без var(); главная 200, переключатель темы и prefers-color-scheme на месте. Снятие FAVICON_ERROR в Вебмастере — проверить после B023."
     },
     {
       "id": "T231",
