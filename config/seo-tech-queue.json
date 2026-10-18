@@ -5717,7 +5717,7 @@
           ]
         }
       ],
-      "status": "queued",
+      "status": "live_verified",
       "evidence": "18.10 14:50Z: живой замер сессии; источник входов — artifacts/analytics/analytics-2026-10-18.json search_landing_pages. Эффект — не трафик, а правдивость карточки; оценка не требуется. | 18.10 15:18Z: живая сверка сессии (var/seo-audit/t227-live-20261018.json): /title/pozhiratel-zvezd/ — «Онгоинг», «Доступно серий» 26, «Вышло серий» 243, ссылок на серии 26; nekromant 27/27, ya-vstrechayus 2/2, chernyy-klever 195/195 — счёт совпадает со списком. Остаток — страница серии (T228)."
     },
     {
