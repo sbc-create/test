@@ -61,7 +61,7 @@ set -uo pipefail
 site="${1:?нужен site_id}"
 mode="${2:-full}"
 case "$mode" in
-  full|--dry-run|--verify) : ;;
+  full|--dry-run|--verify|--rollback) : ;;
   *) echo "[x] неизвестный режим $mode" >&2; exit 2 ;;
 esac
 
@@ -106,6 +106,74 @@ previous_file="$root/.previous-release"
 
 old_release="$(readlink -f "$current_link")"
 old_sha="$(basename "$old_release")"
+if [ "$mode" = "--rollback" ]; then
+  # Возврат на прежний выпуск. Делает ровно то, что сценарий раньше печатал
+  # текстом, — и проверяет результат, а не только переключает ссылку.
+  if [ ! -f "$previous_file" ]; then
+    bad "$site: нет $previous_file — откатывать некуда"
+    exit 2
+  fi
+  prev="$(cat "$previous_file")"
+  if [ -z "$prev" ] || [ ! -d "$prev" ]; then
+    bad "$site: прежний выпуск '$prev' не существует — откат невозможен"
+    exit 2
+  fi
+  if [ "$prev" = "$old_release" ]; then
+    log "$site: current уже указывает на $prev — откат не нужен"
+    exit 0
+  fi
+  log "$site: откат $old_sha -> $(basename "$prev")"
+  ln -sfn "$prev" "$current_link"
+  [ "$am_root" = 1 ] && chown -h "$account:$account" "$current_link"
+  restart_unit "$unit"
+  rb_ready=0
+  rb_waited=0
+  while [ "$rb_waited" -lt "$health_timeout" ]; do
+    if curl -fsS --max-time 5 "127.0.0.1:$port/healthz" >/dev/null 2>&1; then
+      rb_ready=1
+      break
+    fi
+    sleep "$health_interval"
+    rb_waited=$((rb_waited + health_interval))
+  done
+  if [ "$rb_ready" = 0 ]; then
+    bad "$site: после откатa витрина не ответила за $health_timeout с"
+    bad "возвращаю ссылку на $old_release"
+    ln -sfn "$old_release" "$current_link"
+    restart_unit "$unit"
+    exit 1
+  fi
+  rb_file="$(mktemp)"
+  curl -fsS --max-time 5 "127.0.0.1:$port/healthz" -o "$rb_file" 2>/dev/null || true
+  rb_problem="$(python3 - "$rb_file" "$prev" <<'PY'
+import json
+import pathlib
+import sys
+
+файл, выпуск = sys.argv[1:3]
+try:
+    д = json.loads(pathlib.Path(файл).read_text(encoding="utf-8"))
+except (OSError, ValueError) as пр:
+    print(f"ответ healthz не разобран: {пр}")
+    raise SystemExit(0)
+путь = str(д.get("runtime_path") or "")
+if not путь:
+    print("в ответе нет runtime_path: подтвердить откат нечем")
+elif not путь.startswith(выпуск.rstrip("/") + "/"):
+    print(f"на порту исполняется {путь}, а откатывали на {выпуск}")
+PY
+)"
+  rm -f "$rb_file"
+  if [ -n "$rb_problem" ]; then
+    bad "$site: откат не подтверждён: $rb_problem"
+    exit 1
+  fi
+  printf '%s\n' "$old_release" > "$previous_file"
+  log "$site: откат подтверждён, на порту $port исполняется $(basename "$prev")"
+  log "$site: вернуться вперёд — тем же режимом --rollback"
+  exit 0
+fi
+
 if [ "$mode" = "--verify" ]; then
   # Ни одной мутации: только чтение подробного ответа по петле и сверка с
   # тем каталогом, на который указывает `current`. Отказ закрытый —

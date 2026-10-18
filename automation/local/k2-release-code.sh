@@ -19,7 +19,7 @@
 # Запуск:
 #   k2-release-code.sh --dry-run <site_id> [site_id ...]
 #   k2-release-code.sh --release <site_id> [site_id ...]
-#   k2-release-code.sh --verify  <site_id> [site_id ...]
+#   k2-release-code.sh --verify   <site_id> [site_id ...]\n#   k2-release-code.sh --rollback <site_id> [site_id ...]
 #   k2-release-code.sh --deliver                 только доставить сценарий
 #
 # --verify ничего не меняет: спрашивает у витрины подробный healthz по
@@ -49,13 +49,31 @@ case "$mode" in
     deliver || { echo "[x] доставка не удалась" >&2; exit 1; }
     exit 0
     ;;
-  --dry-run|--release|--verify) : ;;
+  --dry-run|--release|--verify|--rollback) : ;;
   *) echo "[x] неизвестный режим $mode" >&2; exit 2 ;;
 esac
 
 sites="$*"
 [ -n "$sites" ] || { echo "нужен хотя бы один site_id" >&2; exit 2; }
 deliver || { echo "[x] доставка не удалась" >&2; exit 1; }
+
+# Откат идёт по одной витрине и ОСТАНАВЛИВАЕТСЯ на первой неудаче: если
+# витрина не вернулась, разбираться надо с ней, а не катить остальные.
+if [ "$mode" = "--rollback" ]; then
+  for site in $sites; do
+    echo "=== $site"
+    out="$(ansible -i "$inventory" "$host_ref" -m raw \
+          -a "bash $script_dst $site --rollback" 2>&1)"
+    printf '%s\n' "$out" | grep -vE "^\[WARNING\]|interpreter_discovery|^$" \
+      | sed 's/^/    /'
+    if ! printf '%s' "$out" | grep -qE "откат подтверждён|откат не нужен"; then
+      echo "[x] $site: откат не подтверждён — останавливаюсь"
+      exit 1
+    fi
+  done
+  echo "откат подтверждён на всех названных витринах"
+  exit 0
+fi
 
 # Обзор не останавливается на первой неудаче: вопрос «какие витрины исполняют
 # не тот выпуск» имеет смысл только целиком. Мутаций в этом режиме нет.
