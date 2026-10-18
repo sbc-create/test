@@ -62,6 +62,7 @@ sha256 закреплён в `pins.lock.json` витрины). Вторая ре
 знает `lords`. Поэтому проекция внешних оценок сообщества на витринах Lords не
 показывается — и не подделывается. Заявка — `docs/handoff/`.
 """
+
 from __future__ import annotations
 
 import datetime
@@ -91,8 +92,7 @@ from urllib.parse import quote, unquote
 СООБЩЕНИЯ = {
     "ok": ("ok", "Принято."),
     "csrf": ("err", "Форма устарела: обновите страницу и повторите."),
-    "unavailable": ("err", "Раздел сообщества сейчас недоступен: "
-                           "хранилище не отвечает."),
+    "unavailable": ("err", "Раздел сообщества сейчас недоступен: " "хранилище не отвечает."),
     "forbidden": ("err", "Это действие доступно только модератору."),
 }
 
@@ -244,8 +244,9 @@ def заголовок_куки(обработчик) -> str:
     новая = getattr(обработчик, "_новая_кука", "")
     if not новая or НАСТРОЙКА is None:
         return ""
-    return (f"{НАСТРОЙКА.кука_посетителя}={новая}; Path=/; Max-Age=31536000; "
-            "SameSite=Lax; HttpOnly")
+    return (
+        f"{НАСТРОЙКА.кука_посетителя}={новая}; Path=/; Max-Age=31536000; " "SameSite=Lax; HttpOnly"
+    )
 
 
 def ключ_посетителя(обработчик) -> str:
@@ -270,15 +271,26 @@ def запомнить_черновик(обработчик, имя: str, те�
     """
     if НАСТРОЙКА is None:
         return
-    полезное = json.dumps({"n": (имя or "")[:40], "t": (текст or "")[:2000]},
-                          ensure_ascii=False, separators=(",", ":"))
+    полезное = json.dumps(
+        {"n": (имя or "")[:40], "t": (текст or "")[:2000]},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
     упаковано = quote(полезное, safe="")
-    if len(упаковано) > 3500:          # заголовок ответа не резиновый
-        упаковано = quote(json.dumps({"n": (имя or "")[:40], "t": (текст or "")[:900]},
-                                     ensure_ascii=False, separators=(",", ":")), safe="")
-    добавить_куку(обработчик,
-                  f"{НАСТРОЙКА.кука_черновика}={упаковано}; Path=/; "
-                  f"Max-Age={ЖИЗНЬ_ЧЕРНОВИКА}; SameSite=Lax")
+    if len(упаковано) > 3500:  # заголовок ответа не резиновый
+        упаковано = quote(
+            json.dumps(
+                {"n": (имя or "")[:40], "t": (текст or "")[:900]},
+                ensure_ascii=False,
+                separators=(",", ":"),
+            ),
+            safe="",
+        )
+    добавить_куку(
+        обработчик,
+        f"{НАСТРОЙКА.кука_черновика}={упаковано}; Path=/; "
+        f"Max-Age={ЖИЗНЬ_ЧЕРНОВИКА}; SameSite=Lax",
+    )
 
 
 def взять_черновик(обработчик) -> dict:
@@ -288,16 +300,14 @@ def взять_черновик(обработчик) -> dict:
     сырое = _кука(обработчик, НАСТРОЙКА.кука_черновика)
     if not сырое:
         return {}
-    добавить_куку(обработчик,
-                  f"{НАСТРОЙКА.кука_черновика}=; Path=/; Max-Age=0; SameSite=Lax")
+    добавить_куку(обработчик, f"{НАСТРОЙКА.кука_черновика}=; Path=/; Max-Age=0; SameSite=Lax")
     try:
         данные = json.loads(unquote(сырое))
     except ValueError:
         return {}
     if not isinstance(данные, dict):
         return {}
-    return {"имя": str(данные.get("n") or "")[:40],
-            "текст": str(данные.get("t") or "")[:2000]}
+    return {"имя": str(данные.get("n") or "")[:40], "текст": str(данные.get("t") or "")[:2000]}
 
 
 def csrf(обработчик) -> str:
@@ -310,8 +320,7 @@ def csrf(обработчик) -> str:
     кука = getattr(обработчик, "_куки_посетителя", "") or ""
     if not кука or НАСТРОЙКА is None:
         return ""
-    return hashlib.sha256(
-        (НАСТРОЙКА.соль_csrf + кука).encode("utf-8")).hexdigest()[:32]
+    return hashlib.sha256((НАСТРОЙКА.соль_csrf + кука).encode("utf-8")).hexdigest()[:32]
 
 
 def _совпало(свой: str, чужой: str) -> bool:
@@ -328,8 +337,7 @@ def _совпало(свой: str, чужой: str) -> bool:
     """
     if not свой or not чужой:
         return False
-    return secrets.compare_digest(str(свой).encode("utf-8"),
-                                  str(чужой).encode("utf-8"))
+    return secrets.compare_digest(str(свой).encode("utf-8"), str(чужой).encode("utf-8"))
 
 
 def csrf_совпал(обработчик, присланный: str) -> bool:
@@ -392,41 +400,50 @@ def обработать_post(обработчик, путь: str, поля: dic
             значение = int(поля.get("value") or 0)
             if значение <= 0:
                 raise ValueError("оценка не выбрана")
-            х.добавить_голос(subject, значение, ключ, slug=slug,
-                             внешние=внешние_для_базы(деталь))
+            х.добавить_голос(subject, значение, ключ, slug=slug, внешние=внешние_для_базы(деталь))
         elif путь == "/community/comment":
             х.добавить_комментарий(
-                subject, поля.get("name") or "", поля.get("text") or "", ключ,
-                ответ_на=str(поля.get("reply_to") or "").strip(), slug=slug)
+                subject,
+                поля.get("name") or "",
+                поля.get("text") or "",
+                ключ,
+                ответ_на=str(поля.get("reply_to") or "").strip(),
+                slug=slug,
+            )
         elif путь == "/community/comment/edit":
             х.изменить_комментарий(
-                subject, str(поля.get("id") or ""), поля.get("text") or "", ключ,
-                модератор=я_модератор, slug=slug)
+                subject,
+                str(поля.get("id") or ""),
+                поля.get("text") or "",
+                ключ,
+                модератор=я_модератор,
+                slug=slug,
+            )
         elif путь == "/community/comment/delete":
-            х.удалить_комментарий(subject, str(поля.get("id") or ""), ключ,
-                                  модератор=я_модератор, slug=slug)
+            х.удалить_комментарий(
+                subject, str(поля.get("id") or ""), ключ, модератор=я_модератор, slug=slug
+            )
         elif путь == "/community/comment/decide":
             # Доступ к модерации проверяется сервером, а не наличием кнопки в
             # разметке: кнопку можно нарисовать себе самому.
             if not я_модератор:
                 return обработчик._перенаправить_сообщества(назад + "?community=forbidden")
-            х.решить_комментарий(subject, str(поля.get("id") or ""),
-                                 str(поля.get("decision") or ""), ключ, slug=slug)
+            х.решить_комментарий(
+                subject, str(поля.get("id") or ""), str(поля.get("decision") or ""), ключ, slug=slug
+            )
         else:
             return обработчик._отдать(b"", "text/plain; charset=utf-8", 404)
     except (ValueError, RuntimeError) as ош:
         # Текст, который посетитель только что набрал, не должен пропасть
         # вместе с отказом: перенаправление уносит страницу, а с ней и форму.
         if путь == "/community/comment":
-            запомнить_черновик(обработчик, поля.get("name") or "",
-                               поля.get("text") or "")
+            запомнить_черновик(обработчик, поля.get("name") or "", поля.get("text") or "")
         якорь = "#comments" if путь.startswith("/community/comment") else "#community"
         return обработчик._перенаправить_сообщества(
-            f"{назад}?community=error&from={_откуда(путь)}"
-            f"&why={quote(str(ош)[:120])}{якорь}")
+            f"{назад}?community=error&from={_откуда(путь)}" f"&why={quote(str(ош)[:120])}{якорь}"
+        )
     якорь = "#comments" if путь.startswith("/community/comment") else "#community"
-    return обработчик._перенаправить_сообщества(
-        f"{назад}?community=ok&from={_откуда(путь)}{якорь}")
+    return обработчик._перенаправить_сообщества(f"{назад}?community=ok&from={_откуда(путь)}{якорь}")
 
 
 # --- сторона витрины --------------------------------------------------------
@@ -474,7 +491,8 @@ def _выключено(причина: str) -> str:
         "<h2>Оценка зрителей</h2>"
         '<p class="cm__sub">Раздел сейчас не принимает записи: '
         f"{html.escape(причина[:160])}. Уже сохранённые оценки и сообщения не "
-        "затронуты.</p></section>")
+        "затронуты.</p></section>"
+    )
 
 
 #: Одна звезда на всю страницу: десять `<use>` ссылаются на один `<symbol>`.
@@ -486,7 +504,8 @@ def _выключено(причина: str) -> str:
     '<symbol id="cm-star" viewBox="0 0 24 24">'
     '<path fill="currentColor" d="M12 2.6l2.9 5.88 6.49.94-4.7 4.58 1.11 6.46'
     'L12 17.42 6.2 20.46l1.11-6.46-4.7-4.58 6.49-.94z"/>'
-    "</symbol></svg>")
+    "</symbol></svg>"
+)
 
 
 def _звёзды(значение: int, только_показ: bool) -> str:
@@ -502,8 +521,10 @@ def _звёзды(значение: int, только_показ: bool) -> str:
     """
     части = []
     for n in range(1, МОДУЛЬ.ОЦЕНКА_МАКС + 1):
-        значок = ('<svg class="rt__i" aria-hidden="true" focusable="false">'
-                  '<use href="#cm-star"></use></svg>')
+        значок = (
+            '<svg class="rt__i" aria-hidden="true" focusable="false">'
+            '<use href="#cm-star"></use></svg>'
+        )
         if только_показ:
             части.append(f'<span class="rt__s">{значок}</span>')
             continue
@@ -511,12 +532,12 @@ def _звёзды(значение: int, только_показ: bool) -> str:
         части.append(
             f'<label class="rt__s">'
             f'<input class="rt__r" type="radio" name="value" value="{n}" '
-            f'required{отмечено}>'
-            f'{значок}<span class="vh">{n} из 10</span></label>')
+            f"required{отмечено}>"
+            f'{значок}<span class="vh">{n} из 10</span></label>'
+        )
     состояние = f' data-value="{значение}"' if значение else ""
     вид = " rt__stars--static" if только_показ else ""
-    return (f'<div class="rt__stars{вид}"{состояние} data-rating-stars>'
-            + "".join(части) + "</div>")
+    return f'<div class="rt__stars{вид}"{состояние} data-rating-stars>' + "".join(части) + "</div>"
 
 
 def _оценка_зрителей(с) -> str:
@@ -527,8 +548,7 @@ def _оценка_зрителей(с) -> str:
     зрителей» значило бы называть чужое число своим.
     """
     if not с.голосов or с.средняя is None:
-        return ('<p class="rt__avg rt__avg--none" data-community-votes="0">'
-                "Пока нет оценок</p>")
+        return '<p class="rt__avg rt__avg--none" data-community-votes="0">' "Пока нет оценок</p>"
     среднее = f"{с.средняя:.1f}".replace(".", ",")
     голосов = int(с.голосов)
     слово = _склонение(голосов, "голос", "голоса", "голосов")
@@ -537,7 +557,8 @@ def _оценка_зрителей(с) -> str:
         f'data-community-votes="{голосов}">'
         f'<span class="rt__avgv">{html.escape(среднее)}</span>'
         f'<span class="rt__avgs">из 10</span>'
-        f'<span class="rt__avgn">{голосов}&nbsp;{слово}</span></p>')
+        f'<span class="rt__avgn">{голосов}&nbsp;{слово}</span></p>'
+    )
 
 
 def _форма_оценки(с, скрытые: str) -> str:
@@ -553,12 +574,13 @@ def _форма_оценки(с, скрытые: str) -> str:
         мой = int(с.мой_голос)
         return (
             f'<div class="rt" data-rating="done">'
-            f'{_оценка_зрителей(с)}'
-            f'{_звёзды(мой, True)}'
+            f"{_оценка_зрителей(с)}"
+            f"{_звёзды(мой, True)}"
             f'<p class="rt__done" data-my-vote="{мой}">Вы оценили: '
             f"<b>{мой}</b> из 10</p>"
             f'<p class="rt__hint">Оценка ставится один раз и не меняется.</p>'
-            "</div>")
+            "</div>"
+        )
     return (
         '<div class="rt" data-rating="form">'
         f"{_оценка_зрителей(с)}"
@@ -573,7 +595,8 @@ def _форма_оценки(с, скрытые: str) -> str:
         '<button class="cm__btn rt__go" type="submit">Оценить</button>'
         '<p class="rt__hint">Оценка ставится один раз и не меняется. '
         "Голос сохраняется только по кнопке.</p>"
-        "</form></div>")
+        "</form></div>"
+    )
 
 
 def _значок_статуса(статус: str, моё: bool) -> str:
@@ -586,8 +609,7 @@ def _значок_статуса(статус: str, моё: bool) -> str:
     """
     if статус == МОДУЛЬ.СТАТУС_ОЖИДАЕТ:
         if моё:
-            return ('<span class="cm__st cm__st--pending">'
-                    "На проверке — видно только вам</span>")
+            return '<span class="cm__st cm__st--pending">' "На проверке — видно только вам</span>"
         return '<span class="cm__st cm__st--pending">Ожидает проверки</span>'
     if статус == МОДУЛЬ.СТАТУС_ОТКЛОНЁН:
         return '<span class="cm__st cm__st--rejected">Отклонено</span>'
@@ -605,8 +627,10 @@ def _дата(создано: str) -> str:
         видимая = когда.strftime("%d.%m.%Y, %H:%M")
     except (ValueError, TypeError):
         pass
-    return (f'<time class="cm__dt" datetime="{html.escape(создано, quote=True)}">'
-            f"{html.escape(видимая)}</time>")
+    return (
+        f'<time class="cm__dt" datetime="{html.escape(создано, quote=True)}">'
+        f"{html.escape(видимая)}</time>"
+    )
 
 
 def _сообщение_ленты(к: dict, скрытые: str, я_модератор: bool) -> str:
@@ -625,7 +649,8 @@ def _сообщение_ленты(к: dict, скрытые: str, я_модер�
         действия = (
             f'<form method="post" action="/community/comment/delete" '
             f'class="cm__act">{общее}'
-            f'<button class="cm__btn cm__btn--q" type="submit">Удалить</button></form>')
+            f'<button class="cm__btn cm__btn--q" type="submit">Удалить</button></form>'
+        )
     решение = ""
     if я_модератор and статус != МОДУЛЬ.СТАТУС_ОДОБРЕН:
         общее = f'{скрытые}<input type="hidden" name="id" value="{ид}">'
@@ -635,7 +660,8 @@ def _сообщение_ленты(к: dict, скрытые: str, я_модер�
             f'<button class="cm__btn cm__btn--q" name="decision" '
             f'value="{МОДУЛЬ.СТАТУС_ОДОБРЕН}">Одобрить</button> '
             f'<button class="cm__btn cm__btn--q" name="decision" '
-            f'value="{МОДУЛЬ.СТАТУС_ОТКЛОНЁН}">Отклонить</button></form>')
+            f'value="{МОДУЛЬ.СТАТУС_ОТКЛОНЁН}">Отклонить</button></form>'
+        )
     ответ = ""
     if статус == МОДУЛЬ.СТАТУС_ОДОБРЕН and not str(к.get("parent_id") or ""):
         # Форма ответа свёрнута: развёрнутая под каждым сообщением превращает
@@ -651,11 +677,12 @@ def _сообщение_ленты(к: dict, скрытые: str, я_модер�
             f'rows="2" required maxlength="{МОДУЛЬ.ДЛИНА_КОММЕНТАРИЯ}"></textarea>'
             f'<div class="cmt__row">'
             f'<span class="cmt__field"><label class="cmt__lb2" for="rn-{ид}">'
-            f'Имя — необязательно</label>'
+            f"Имя — необязательно</label>"
             f'<input class="cmt__in" id="rn-{ид}" type="text" name="name" '
             f'maxlength="40" autocomplete="nickname"></span>'
             f'<button class="cm__btn cm__btn--q" type="submit">Ответить</button>'
-            f"</div></form></details>")
+            f"</div></form></details>"
+        )
     пометка = ' data-mine="1"' if моё else ""
     return (
         f'<li class="{" ".join(классы)}" data-comment-id="{ид}" '
@@ -664,9 +691,14 @@ def _сообщение_ленты(к: dict, скрытые: str, я_модер�
         f'{html.escape(str(к.get("name") or "Гость"))}</span>'
         f'{_дата(str(к.get("created_at") or ""))}{значок}</div>'
         f'<p class="cm__tx">{html.escape(str(к.get("text") or ""))}</p>'
-        + (f'<div class="cm__row cm__row--act">{действия}{решение}</div>'
-           if (действия or решение) else "")
-        + ответ + "</li>")
+        + (
+            f'<div class="cm__row cm__row--act">{действия}{решение}</div>'
+            if (действия or решение)
+            else ""
+        )
+        + ответ
+        + "</li>"
+    )
 
 
 def _форма_комментария(скрытые: str, черновик: dict) -> str:
@@ -696,7 +728,8 @@ def _форма_комментария(скрытые: str, черновик: di
         "</div>"
         '<p class="cmt__note">Сообщение появится в ленте после проверки '
         "модератором. Вам оно видно сразу.</p>"
-        "</form>")
+        "</form>"
+    )
 
 
 def блок(вид, запись: dict, деталь: dict) -> str:
@@ -726,7 +759,8 @@ def блок(вид, запись: dict, деталь: dict) -> str:
         f'<input type="hidden" name="subject" value="{html.escape(ключ, quote=True)}">'
         f'<input type="hidden" name="slug" value="{html.escape(slug, quote=True)}">'
         f'<input type="hidden" name="back" value="{html.escape(назад, quote=True)}">'
-        f'<input type="hidden" name="csrf" value="{html.escape(токен, quote=True)}">')
+        f'<input type="hidden" name="csrf" value="{html.escape(токен, quote=True)}">'
+    )
 
     зпр = getattr(вид, "запрос", None) or {}
     черновик = взять_черновик(обработчик)
@@ -734,11 +768,16 @@ def блок(вид, запись: dict, деталь: dict) -> str:
     очередь = ""
     if я_модератор and с.ожидающие:
         строки = "".join(_сообщение_ленты(к, скрытые, True) for к in с.ожидающие)
-        очередь = (f'<div class="cmt__mod"><h4 class="cmt__modh">На модерации '
-                   f'({с.всего_на_модерации})</h4>'
-                   f'<ul class="cm__l">{строки}</ul></div>')
-    лента_html = (f'<ul class="cm__l">{лента}</ul>' if лента else
-                  '<p class="cmt__empty">Сообщений пока нет. Ваше станет первым.</p>')
+        очередь = (
+            f'<div class="cmt__mod"><h4 class="cmt__modh">На модерации '
+            f"({с.всего_на_модерации})</h4>"
+            f'<ul class="cm__l">{строки}</ul></div>'
+        )
+    лента_html = (
+        f'<ul class="cm__l">{лента}</ul>'
+        if лента
+        else '<p class="cmt__empty">Сообщений пока нет. Ваше станет первым.</p>'
+    )
     видимых = len(с.комментарии)
     счётчик = f'<span class="cmt__n">{видимых}</span>' if видимых else ""
 
@@ -759,7 +798,8 @@ def блок(вид, запись: dict, деталь: dict) -> str:
         f"{_форма_комментария(скрытые, черновик)}"
         f"{лента_html}{очередь}"
         "</div>"
-        "</section>")
+        "</section>"
+    )
 
 
 def очередь_модерации(обработчик) -> tuple[bool, str]:
@@ -780,7 +820,8 @@ def очередь_модерации(обработчик) -> tuple[bool, str]:
         строки.append(
             f'<li class="cm__i"><a href="/title/{slug}/#comments">{тема_}</a>'
             f' — {сообщений} {_склонение(сообщений, "сообщение", "сообщения", "сообщений")}'
-            "</li>")
+            "</li>"
+        )
     if not строки:
         return True, '<p class="cmt__empty">Очередь пуста.</p>'
     return True, f'<ul class="cm__l">{"".join(строки)}</ul>'

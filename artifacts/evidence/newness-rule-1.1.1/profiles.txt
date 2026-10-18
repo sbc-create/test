@@ -1,0 +1,7 @@
+lords-general: всего 10, провалов 0
+lords-new: всего 10, провалов 0
+lords-curated: всего 10, провалов 0
+lords-anime: всего 10, провалов 0
+lords-dorama: всего 10, провалов 0
+lords-animation: всего 10, провалов 0
+lords-genre: всего 10, провалов 0

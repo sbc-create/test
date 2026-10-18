@@ -37,7 +37,9 @@ const HomePage = async () => {
   const now = new Date()
   const horizon = new Date(now.getTime() + 7 * 24 * 3600 * 1000)
   const [latest, posts, events, genres] = await Promise.all([
-    listTenantTitles(payload, site.tenant, { limit: 12 }),
+    // Блок «Обновления» на главной — это новинки, а не «недавно тронутое».
+    // Без freshOnly он сортировался по `-updatedAt` и показывал архив.
+    listTenantTitles(payload, site.tenant, { limit: 12, freshOnly: true, today: now }),
     listPosts(payload, site.tenant, { limit: 6 }),
     listReleaseEvents(payload, { from: now, to: horizon }),
     listGenres(payload),

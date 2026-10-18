@@ -15,6 +15,7 @@
 Ничего визуального слой не добавляет. Всё, что он вставляет, живёт в `<head>`
 либо отдаётся отдельным адресом.
 """
+
 from __future__ import annotations
 
 import html as _html
@@ -24,7 +25,8 @@ import pathlib
 import re
 import tempfile
 import xml.etree.ElementTree as ET
-from typing import Any, Iterable
+from collections.abc import Iterable
+from typing import Any
 
 # ---------------------------------------------------------------------------
 # Аналитика
@@ -73,10 +75,23 @@ def тег_метрики(counter: str) -> str:
 
 #: Параметры, которые не образуют отдельной канонической страницы. Сортировка
 #: и метки рекламных кампаний меняют вид списка, но не его содержание.
-НЕКАНОНИЧЕСКИЕ = frozenset({
-    "sort", "order", "view", "per_page", "q", "utm_source", "utm_medium",
-    "utm_campaign", "utm_term", "utm_content", "gclid", "yclid", "fbclid",
-})
+НЕКАНОНИЧЕСКИЕ = frozenset(
+    {
+        "sort",
+        "order",
+        "view",
+        "per_page",
+        "q",
+        "utm_source",
+        "utm_medium",
+        "utm_campaign",
+        "utm_term",
+        "utm_content",
+        "gclid",
+        "yclid",
+        "fbclid",
+    }
+)
 
 
 def канонический_путь(путь: str) -> str:
@@ -101,23 +116,33 @@ def тег_каноникал(хост: str, путь: str) -> str:
     """Абсолютный self-canonical. Только свой домен и только https."""
     if not хост:
         return ""
-    return (f'<link rel="canonical" href="'
-            f'{_html.escape("https://" + хост + канонический_путь(путь))}">')
+    return (
+        f'<link rel="canonical" href="'
+        f'{_html.escape("https://" + хост + канонический_путь(путь))}">'
+    )
 
 
 # ---------------------------------------------------------------------------
 # Структурированные данные
 # ---------------------------------------------------------------------------
 
+
 def _цепочка(хост: str, путь: str, titles: dict[str, str]) -> list[dict]:
     части = [ч for ч in канонический_путь(путь).split("?")[0].split("/") if ч]
-    шаги, накопленный = [{"@type": "ListItem", "position": 1, "name": "Главная",
-                          "item": f"https://{хост}/"}], ""
+    шаги, накопленный = (
+        [{"@type": "ListItem", "position": 1, "name": "Главная", "item": f"https://{хост}/"}],
+        "",
+    )
     for i, ч in enumerate(части, start=2):
         накопленный += f"/{ч}"
-        шаги.append({"@type": "ListItem", "position": i,
-                     "name": titles.get(ч, ч),
-                     "item": f"https://{хост}{накопленный}/"})
+        шаги.append(
+            {
+                "@type": "ListItem",
+                "position": i,
+                "name": titles.get(ч, ч),
+                "item": f"https://{хост}{накопленный}/",
+            }
+        )
     return шаги
 
 
@@ -127,10 +152,16 @@ def уже_есть_типы(тело: bytes) -> set[str]:
     return set(re.findall(r'"@type"\s*:\s*"([A-Za-z]+)"', текст))
 
 
-def схема(хост: str, путь: str, имя_сайта: str, *,
-          сущность: dict[str, Any] | None = None,
-          поиск: str = "", крошки: dict[str, str] | None = None,
-          кроме: set[str] | None = None) -> str:
+def схема(
+    хост: str,
+    путь: str,
+    имя_сайта: str,
+    *,
+    сущность: dict[str, Any] | None = None,
+    поиск: str = "",
+    крошки: dict[str, str] | None = None,
+    кроме: set[str] | None = None,
+) -> str:
     """JSON-LD только из того, что известно наверняка.
 
     Ни рейтингов, ни числа голосов, ни актёров, ни дат, которых нет в данных:
@@ -145,22 +176,24 @@ def схема(хост: str, путь: str, имя_сайта: str, *,
     занято = кроме or set()
     блоки: list[dict[str, Any]] = []
     сайт: dict[str, Any] = {
-        "@context": "https://schema.org", "@type": "WebSite",
-        "name": имя_сайта, "url": f"https://{хост}/",
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": имя_сайта,
+        "url": f"https://{хост}/",
     }
     if поиск:
         сайт["potentialAction"] = {
             "@type": "SearchAction",
-            "target": {"@type": "EntryPoint",
-                       "urlTemplate": f"https://{хост}{поиск}"},
+            "target": {"@type": "EntryPoint", "urlTemplate": f"https://{хост}{поиск}"},
             "query-input": "required name=search_term_string",
         }
     if "WebSite" not in занято:
         блоки.append(сайт)
     цепь = _цепочка(хост, путь, крошки or {})
     if len(цепь) > 1 and "BreadcrumbList" not in занято:
-        блоки.append({"@context": "https://schema.org",
-                      "@type": "BreadcrumbList", "itemListElement": цепь})
+        блоки.append(
+            {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": цепь}
+        )
     if сущность and not ({"Movie", "TVSeries", "CreativeWork"} & занято):
         блоки.append(_сущность(хост, сущность))
     if not блоки:
@@ -168,7 +201,9 @@ def схема(хост: str, путь: str, имя_сайта: str, *,
     return "".join(
         '<script type="application/ld+json">'
         + json.dumps(б, ensure_ascii=False, separators=(",", ":"))
-        + "</script>" for б in блоки)
+        + "</script>"
+        for б in блоки
+    )
 
 
 #: Вид каталога → тип schema.org. Мультфильм намеренно отображается в Movie:
@@ -179,8 +214,7 @@ def схема(хост: str, путь: str, имя_сайта: str, *,
 
 def _сущность(хост: str, з: dict[str, Any]) -> dict[str, Any]:
     вид = ТИПЫ.get(str(з.get("kind") or ""), "CreativeWork")
-    из: dict[str, Any] = {"@context": "https://schema.org", "@type": вид,
-                          "name": з.get("title")}
+    из: dict[str, Any] = {"@context": "https://schema.org", "@type": вид, "name": з.get("title")}
     if з.get("url"):
         из["url"] = f"https://{хост}{з['url']}"
     elif з.get("slug"):
@@ -198,11 +232,20 @@ def _сущность(хост: str, з: dict[str, Any]) -> dict[str, Any]:
 # Единая точка обогащения
 # ---------------------------------------------------------------------------
 
-def обогатить(тело: bytes, тип: str, *, хост: str = "", путь: str = "/",
-              counter: str = "", имя_сайта: str = "",
-              сущность: dict[str, Any] | None = None,
-              поиск: str = "", крошки: dict[str, str] | None = None,
-              код: int = 200) -> bytes:
+
+def обогатить(
+    тело: bytes,
+    тип: str,
+    *,
+    хост: str = "",
+    путь: str = "/",
+    counter: str = "",
+    имя_сайта: str = "",
+    сущность: dict[str, Any] | None = None,
+    поиск: str = "",
+    крошки: dict[str, str] | None = None,
+    код: int = 200,
+) -> bytes:
     """Дополнить HTML-ответ SEO-разметкой. Вызывается из отдачи ответа.
 
     На ответах, которые не 200, canonical и схема не ставятся: канонический
@@ -223,8 +266,9 @@ def обогатить(тело: bytes, тип: str, *, хост: str = "", пу
         # страницу вовсе без `WebSite` и хлебных крошек — то есть добавляла
         # ровно там, где и без того было, и молчала там, где не было.
         есть = уже_есть_типы(тело)
-        вставка += схема(хост, путь, имя_сайта, сущность=сущность,
-                         поиск=поиск, крошки=крошки, кроме=есть)
+        вставка += схема(
+            хост, путь, имя_сайта, сущность=сущность, поиск=поиск, крошки=крошки, кроме=есть
+        )
     if not вставка:
         return тело
     return тело.replace(b"</head>", вставка.encode("utf-8") + b"</head>", 1)
@@ -252,8 +296,9 @@ def _урл(родитель: ET.Element, адрес: str, lastmod: str = "") ->
         ET.SubElement(у, "lastmod").text = lastmod
 
 
-def построить_sitemap(хост: str, страницы: Iterable[dict[str, Any]],
-                      разделы: Iterable[str] = ()) -> list[tuple[str, bytes]]:
+def построить_sitemap(
+    хост: str, страницы: Iterable[dict[str, Any]], разделы: Iterable[str] = ()
+) -> list[tuple[str, bytes]]:
     """Вернуть список `(имя файла, содержимое)`: индекс и его части.
 
     Дубли убираются по адресу, чужие домены невозможны по построению: адрес
@@ -277,24 +322,25 @@ def построить_sitemap(хост: str, страницы: Iterable[dict[st
         адреса.append((а, str(с.get("lastmod") or "")))
 
     файлы: list[tuple[str, bytes]] = []
-    части = [адреса[i:i + ПРЕДЕЛ_URL] for i in range(0, len(адреса), ПРЕДЕЛ_URL)] or [[]]
+    части = [адреса[i : i + ПРЕДЕЛ_URL] for i in range(0, len(адреса), ПРЕДЕЛ_URL)] or [[]]
     for н, часть in enumerate(части, start=1):
         корень = ET.Element("urlset", xmlns=SM_NS)
         for а, lm in часть:
             _урл(корень, а, lm)
-        файлы.append((f"sitemap-{н}.xml",
-                      ET.tostring(корень, encoding="utf-8", xml_declaration=True)))
+        файлы.append(
+            (f"sitemap-{н}.xml", ET.tostring(корень, encoding="utf-8", xml_declaration=True))
+        )
     индекс = ET.Element("sitemapindex", xmlns=SM_NS)
     for имя, _ in файлы:
         s = ET.SubElement(индекс, "sitemap")
         ET.SubElement(s, "loc").text = f"https://{хост}/{имя}"
-    файлы.append(("sitemap.xml",
-                  ET.tostring(индекс, encoding="utf-8", xml_declaration=True)))
+    файлы.append(("sitemap.xml", ET.tostring(индекс, encoding="utf-8", xml_declaration=True)))
     return файлы
 
 
-def записать_атомарно(каталог: str | os.PathLike[str],
-                      файлы: list[tuple[str, bytes]]) -> dict[str, Any]:
+def записать_атомарно(
+    каталог: str | os.PathLike[str], файлы: list[tuple[str, bytes]]
+) -> dict[str, Any]:
     """Записать набор целиком или не записать ничего.
 
     Частично обновлённый sitemap хуже устаревшего: индекс уже ссылается на
@@ -309,15 +355,17 @@ def записать_атомарно(каталог: str | os.PathLike[str],
             with os.fdopen(fd, "wb") as f:
                 f.write(данные)
             временные.append(pathlib.Path(врем))
-        for (имя, _), врем in zip(файлы, временные):
+        for (имя, _), врем in zip(файлы, временные, strict=False):
             os.replace(врем, цель / имя)
     except BaseException:
         for в in временные:
             в.unlink(missing_ok=True)
         raise
-    return {"directory": str(цель), "files": [имя for имя, _ in файлы],
-            "urls": sum(данные.count(b"<loc>") for _, данные in файлы
-                        if not это_индекс(данные))}
+    return {
+        "directory": str(цель),
+        "files": [имя for имя, _ in файлы],
+        "urls": sum(данные.count(b"<loc>") for _, данные in файлы if not это_индекс(данные)),
+    }
 
 
 def это_индекс(данные: bytes) -> bool:
