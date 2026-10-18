@@ -4988,6 +4988,64 @@
       "status": "live_verified",
       "evidence": "18.10 01:22Z: распространение после живой проверки T201; сухой прогон — 3 замены. Эффект — как T201. | 18.10 01:41:59Z опубликовано штатным циклом (прогон 20261018T012322Z-3246809 VERIFIED, голова beea53a6, публикатор live_verified). Живая сверка сессией 01:46Z (var/seo-audit/t203-live-20261018.json): серия без видео — новая формулировка 1, подпись 2, старых 0, noindex, follow как прежде; тайтл — index, follow; подвал главной — 8 ссылок /genre/ (T049 цел).",
       "owner_action": null
+    },
+    {
+      "id": "T204",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/"
+      ],
+      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.space (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:47Z, https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
+      "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
+      "check": "checks/public_wording.py",
+      "verify_live": "на странице серии без видео — «Видео этой серии пока не опубликовано»; «Источник ещё не отдал» и «серия без дорожки» нет; robots страницы — noindex, follow как прежде",
+      "live_check": [
+        {
+          "url": "https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/",
+          "status": 200,
+          "absent": [
+            "Источник ещё не отдал"
+          ],
+          "contains": [
+            "Видео этой серии пока не опубликовано"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 ~01:47Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
+      "owner_action": null
+    },
+    {
+      "id": "T205",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/"
+      ],
+      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.icu (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:47Z, https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
+      "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
+      "check": "checks/public_wording.py",
+      "verify_live": "на странице серии без видео — «Видео этой серии пока не опубликовано»; «Источник ещё не отдал» и «серия без дорожки» нет; robots страницы — noindex, follow как прежде",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/",
+          "status": 200,
+          "absent": [
+            "Источник ещё не отдал"
+          ],
+          "contains": [
+            "Видео этой серии пока не опубликовано"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 ~01:47Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
+      "owner_action": null
     }
   ]
 }
