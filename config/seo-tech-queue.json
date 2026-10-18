@@ -5941,6 +5941,39 @@
       "status": "blocked",
       "owner_action": "Пауза до оценки T191 (exp-animego-ongoing-landing, an1mego.site) 24.10: не менять страницы сайта-канарейки. После 24.10 — status queued.",
       "evidence": "18.10 16:43Z: подготовлено сессией вслед за T231."
+    },
+    {
+      "id": "T235",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/title-01a10a02-600/",
+        "https://animedia.icu/title/title-01a10a06-284/"
+      ],
+      "problem": "Замер 18.10 17:04Z: в карте animedia.icu 12 тайтлов со слагом title-<hex>; их название в данных — только японскими знаками, и оно же стоит в <title> и H1: «六神合体ゴッドマーズ — смотреть онлайн — Animedia», при этом описание страницы русское, а латинское название есть в данных (original_name → JSON-LD alternateName «Rokushin gattai Godmars gekijô ban»). То же на animeg0/an1meg0/an1mego (16) и animedia.space (12). Русскоязычный посетитель title не прочтёт; поисковый запрос латиницей с ним не совпадёт.",
+      "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
+      "expected": "src/animedia-frontend.py: в <title> страницы тайтла (метод тайтл(), ~7506) и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh.",
+      "check": "checks/title_script_fallback.py",
+      "verify_live": "/title/title-01a10a02-600/ — <title> «六神合体ゴッドマーズ (Rokushin gattai Godmars gekijô ban) — смотреть онлайн — Animedia»; /title/nekromant-ya-katastrofa/ — title без изменений",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/title-01a10a02-600/",
+          "status": 200,
+          "contains": [
+            "(Rokushin gattai Godmars"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/title/nekromant-ya-katastrofa/",
+          "status": 200,
+          "contains": [
+            "<title>Некромант: Я катастрофа — смотреть онлайн — Animedia</title>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 17:04Z: замер сессии (карты 5 аниме-витрин, страницы title-01a11b5b-5f3 и title-01a10a02-600). Охват 12 из ~8 180 тайтлов (0,15 %), один сайт; трафика у этих страниц нет — правка ради читаемости title, эффект на трафик не оценивается. Остальные витрины — после выпуска здесь."
     }
   ]
 }
