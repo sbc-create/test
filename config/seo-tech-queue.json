@@ -6155,6 +6155,81 @@
       "status": "blocked",
       "owner_action": "Архитектор (код Yummy), после 23.10; пункт (2) — владелец.",
       "evidence": "18.10 19:33Z: замер сессии; var/editor-runs/runs.jsonl 20261009T193001Z — описание опубликовано на yummyani.org."
+    },
+    {
+      "id": "T242",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/chuzhaya-zhizn/"
+      ],
+      "problem": "18.10 19:35Z: как T240 на zonafilm12.site: «Страна Турция» в фактах — текст; /catalog/?country=ssha — 200, index, 28 тайтлов; обычных ссылок на разделы стран нет (фильтр — select). Google 15 входов за 11–17.10.",
+      "norm": "Важные индексируемые разделы достижимы обычными ссылками, анкор описывает цель (SEO_KNOWLEDGE_PACK §8 п.1, п.3); связи — только из переданных данных (§8 п.2).",
+      "expected": "Перенос T240 (тот же src/lords-frontend.py, функция факты()) — образец ветка T240 zonafilm12-site; проверка checks/country_fact_links.py оттуда; run.sh отдельной строкой; stamp/pins; полный run.sh.",
+      "check": "checks/country_fact_links.py",
+      "verify_live": "страна в фактах карточки — ссылкой на непустой раздел страны; раздел 200, index",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/title/chuzhaya-zhizn/",
+          "status": 200,
+          "contains": [
+            "country=turciya"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "Ждёт T240 (zonafilm12.site) live_verified и сверки сессией — затем status queued.",
+      "evidence": "18.10 19:35Z: замер сессии: раздел страны 200, index, follow, canonical на себя; в карточке страна текстом; фильтр страны — select без ссылок."
+    },
+    {
+      "id": "T243",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/dnevniki-vampira/"
+      ],
+      "problem": "18.10 19:35Z: zonafilm.cc (Google 240 входов за 11–17.10, 115 страниц с входами): «Страна США» в фактах — текст; /catalog/?country=ssha — 200, index, 28 тайтлов; ссылок на разделы стран нет. Шаблон закреплён (pins) — правка только слоем поверх, как src/canonical_requested.py и src/www_redirect.py.",
+      "norm": "Важные индексируемые разделы достижимы обычными ссылками, анкор описывает цель (SEO_KNOWLEDGE_PACK §8 п.1, п.3); связи — только из переданных данных (§8 п.2).",
+      "expected": "Новый слой src/country_links.py, подключённый в src/serve.py: после формирования страницы тайтла заменить значение факта «Страна» на ссылки на разделы стран — код раздела строить тем же способом, что фильтр каталога закреплённого шаблона (индекс country_names), и только для непустых разделов; иначе — текст без изменений. Закреплённый шаблон и src/themes.py не трогать. Проверка checks/country_fact_links.py (рантайм со слоями serve.py); база rc=1, ветка rc=0; без снимка rc 2; run.sh отдельной строкой; stamp/pins; полный run.sh.",
+      "check": "checks/country_fact_links.py",
+      "verify_live": "страна в фактах карточки — ссылкой на непустой раздел страны; раздел 200, index",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/title/dnevniki-vampira/",
+          "status": 200,
+          "contains": [
+            "country=ssha"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "Ждёт T240 (zonafilm12.site) live_verified и сверки сессией — затем status queued.",
+      "evidence": "18.10 19:35Z: замер сессии: раздел страны 200, index, follow, canonical на себя; в карточке страна текстом; фильтр страны — select без ссылок."
+    },
+    {
+      "id": "T244",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/catalog/?country=ssha"
+      ],
+      "problem": "18.10 19:35Z: lordfilm47.space — разделы стран индексируются (/catalog/?country=ssha — 200, index, 48 тайтлов), но обычных ссылок на них нет; факт «Страна» выводится текстом, когда страна есть в данных (src/lords-frontend.py ~3919; у части тайтлов стран в данных нет — тогда факта нет вовсе, это не правится). Трафика из Яндекса у сайта нет (B029) — задача навигации, эффект на поиск до индексации не ожидается.",
+      "norm": "Важные индексируемые разделы достижимы обычными ссылками, анкор описывает цель (SEO_KNOWLEDGE_PACK §8 п.1, п.3); связи — только из переданных данных (§8 п.2).",
+      "expected": "Перенос T240 в src/lords-frontend.py lordfilm47-space (функция фактов ~3919): страна — ссылкой на непустой раздел страны; иначе текст. Проверка checks/country_fact_links.py; run.sh отдельной строкой; stamp/pins; полный run.sh.",
+      "check": "checks/country_fact_links.py",
+      "verify_live": "страна в фактах карточки — ссылкой на непустой раздел страны; раздел 200, index",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/catalog/?country=ssha",
+          "status": 200
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "Ждёт T240 (zonafilm12.site) live_verified и сверки сессией — затем status queued.",
+      "evidence": "18.10 19:35Z: замер сессии: раздел страны 200, index, follow, canonical на себя; в карточке страна текстом; фильтр страны — select без ссылок."
     }
   ]
 }
