@@ -5916,8 +5916,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 16:05Z: замер сессии."
+      "status": "live_verified",
+      "evidence": "18.10 16:05Z: замер сессии. | 18.10 16:42Z: CI 39145105501, публикатор live_verified 16:39:28Z; сверка сессии var/seo-audit/t233-live-20261018.json."
     }
   ]
 }
