@@ -4955,8 +4955,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 ~01:20Z: живой замер сессии; zonafilm12.site и zonafilm.cc — то же (index, follow), после проверки этой. Эффект: доля страниц серий в индексе Яндекса/Google (Вебмастер — после B023), Метрика — входы на серии с видео по Яндексу и Google раздельно, 7 и 28 дней.",
+      "status": "live_verified",
+      "evidence": "18.10 ~01:20Z: живой замер сессии; zonafilm12.site и zonafilm.cc — то же (index, follow), после проверки этой. Эффект: доля страниц серий в индексе Яндекса/Google (Вебмастер — после B023), Метрика — входы на серии с видео по Яндексу и Google раздельно, 7 и 28 дней. | 18.10 02:21:21Z опубликовано штатным циклом (прогон 20261018T013345Z-3310480 VERIFIED с первой попытки, голова 47926314, публикатор live_verified). Живая сверка сессией 02:26Z (var/seo-audit/t202-live-20261018.json): серия без видео — noindex, follow (meta и X-Robots-Tag), «Видео этой серии пока не опубликовано», старого текста 0, canonical на себя; 30 серий с видео (10 сериалов из /series/) — index, follow; тайтл и главная — index, follow.",
       "owner_action": null
     },
     {
@@ -5045,6 +5045,76 @@
       ],
       "status": "queued",
       "evidence": "18.10 ~01:46Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
+      "owner_action": null
+    },
+    {
+      "id": "T206",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/title/club-friday-the-series-season-5/season-1/episode-1/",
+        "https://zonafilm12.site/title/club-friday-the-series-season-5/"
+      ],
+      "problem": "То же, что T202 (live_verified 18.10 02:21Z на zonafilm.space): серия без видео zonafilm12.site — 200, index, follow, «Источник ещё не отдал…» (живая сверка 18.10 01:22Z).",
+      "norm": "страница без основного содержимого (смотреть нечего) — noindex, follow, ссылки остаются (SEO_KNOWLEDGE_PACK §3, правило T055); видимый текст без внутренних слов (поручение владельца 17.10)",
+      "expected": "Перенести правку T202 — коммит 479263146fdbb9ab53abb799d4cf058af22db283 ветки claude/seo-tech-t202-20261018t013345z-3310480 репозитория var/site-repos/zonafilm-space (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space format-patch -1 479263146fdb --stdout`, git am/apply; при расхождении — по смыслу, тот же результат). (1) Перенести правило T055 из lordfilm47-space (тот же шаблон Lords-ядра): в src/lords-frontend.py обработчик _отдать(..., без_индекса=...) и вызовы для страницы сезона (без_индекса=not any(с[\"доступные\"] for с in список_серий(деталь) ...)) и серии (без_индекса=not серия_с_дорожкой(деталь, номер, серия)) — см. `git -C /home/claude/wt-portable-site-cell-01/var/site-repos/lordfilm47-space show HEAD:src/lords-frontend.py` ~6813–6842 и ~7263–7280; результат: meta robots и X-Robots-Tag «noindex, follow» на такой странице, ссылки и сама страница остаются; серии с видео — index как прежде. Проверку checks/unavailable_episode_noindex.py взять из lordfilm47-space (`git show HEAD:checks/unavailable_episode_noindex.py`) и при необходимости приспособить к стенду ячейки; в checks/run.sh. (2) Затем штатный инструмент `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (пары ЗАМЕНЫ_2 18.10 — «Видео этой серии пока не опубликовано»), руками тексты не менять. Вёрстку, постеры, CSS не трогать. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/unavailable_episode_noindex.py",
+      "verify_live": "серия без видео — noindex, follow (meta и X-Robots-Tag), текст «Видео этой серии пока не опубликовано»; серия с видео и страница тайтла — index, follow; canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/title/club-friday-the-series-season-5/season-1/episode-1/",
+          "status": 200,
+          "contains": [
+            "noindex"
+          ],
+          "absent": [
+            "Источник ещё не отдал"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/title/club-friday-the-series-season-5/",
+          "status": 200,
+          "absent": [
+            "<meta name=\"robots\" content=\"noindex"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 02:26Z: распространение после живой проверки представителя T202. Эффект — как T202.",
+      "owner_action": null
+    },
+    {
+      "id": "T207",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/club-friday-the-series-season-5/season-1/episode-1/"
+      ],
+      "problem": "То же, что T202 (live_verified 18.10 02:21Z на zonafilm.space): серия без видео zonafilm.cc (data-state=unavailable) — 200, index, follow, canonical на себя (живая сверка 18.10 01:22Z). Рантайм — закреплённый шаблон template/zona-02-0fb857b26f85/lords-frontend.py (pins.lock.json), правки — слоем src/serve.py и src/public_wording.py.",
+      "norm": "страница без основного содержимого (смотреть нечего) — noindex, follow, ссылки остаются (SEO_KNOWLEDGE_PACK §3, правило T055); видимый текст без внутренних слов (поручение владельца 17.10)",
+      "expected": "Закреплённый template/… НЕ править. Слоем src/serve.py (по образцу уже имеющихся обёрток Обработчик._отдать и индексирования, см. src/indexing.py и п. «_лишние_ключи_запроса» в применить()): ответ страницы серии, в разметке которой плеер в состоянии unavailable (<div … data-player data-state=\"unavailable\"> или тот же признак, что использует шаблон), и страницы сезона без единой доступной серии — meta robots и X-Robots-Tag «noindex, follow»; серии с видео, тайтлы и прочие страницы — без изменений. Признак брать из разметки/данных так же, как правило T055 в zonafilm-space после T202 (ветка выпуска origin/claude/extract-zonafilm-space-seo-01, голова 479263146fdb) — без второго правила, если в слое доступен список_серий/серия_с_дорожкой рантайма. Текст «Источник ещё не отдал её для просмотра.» → «Видео этой серии пока не опубликовано.» — парой в src/public_wording.py по образцу существующих пар этого файла (пары ЗАМЕНЫ_2 18.10 инструмента). Проверка checks/unavailable_episode_noindex.py — по образцу zonafilm-space после T202 (`git -C …/zonafilm-space show 479263146fdb:checks/unavailable_episode_noindex.py`), приспособить к стенду ячейки; в checks/run.sh. Вёрстку, постеры, CSS не менять. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/unavailable_episode_noindex.py",
+      "verify_live": "серия без видео — noindex, follow (meta и X-Robots-Tag), текст «Видео этой серии пока не опубликовано»; серия с видео и страница тайтла — index, follow; canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/title/club-friday-the-series-season-5/season-1/episode-1/",
+          "status": 200,
+          "contains": [
+            "noindex"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/title/club-friday-the-series-season-5/",
+          "status": 200,
+          "absent": [
+            "<meta name=\"robots\" content=\"noindex"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 02:26Z: распространение после живой проверки представителя T202; шаблон закреплён — правка слоем. Эффект — как T202.",
       "owner_action": null
     }
   ]
