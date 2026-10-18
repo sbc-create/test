@@ -5718,7 +5718,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "18.10 14:50Z: живой замер сессии; источник входов — artifacts/analytics/analytics-2026-10-18.json search_landing_pages. Эффект — не трафик, а правдивость карточки; оценка не требуется."
+      "evidence": "18.10 14:50Z: живой замер сессии; источник входов — artifacts/analytics/analytics-2026-10-18.json search_landing_pages. Эффект — не трафик, а правдивость карточки; оценка не требуется. | 18.10 15:18Z: живая сверка сессии (var/seo-audit/t227-live-20261018.json): /title/pozhiratel-zvezd/ — «Онгоинг», «Доступно серий» 26, «Вышло серий» 243, ссылок на серии 26; nekromant 27/27, ya-vstrechayus 2/2, chernyy-klever 195/195 — счёт совпадает со списком. Остаток — страница серии (T228)."
     },
     {
       "id": "B037",
@@ -5739,6 +5739,34 @@
       "status": "blocked",
       "owner_action": "Архитектор (код Yummy). Не раньше вердикта B031 23.10: на yummyani.site действует контроль B031 (title не трогать). Если B031 = keep и полный title раскатан — B036 поверх него; иначе — пересмотр.",
       "evidence": "18.10 14:54Z: var/seo-audit/query-table-20261018.json (строки yummyani.site), var/seo-audit/yummy-title-state-20261018.json. | 18.10 15:13Z: Архитектор принял как ГИПОТЕЗУ с условием — не раньше вердикта B031 23.10 (письмо сессии SEO)."
+    },
+    {
+      "id": "T228",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/pozhiratel-zvezd/season-1/episode-26/"
+      ],
+      "problem": "Живая сверка 18.10 15:18Z после T227 (var/seo-audit/t227-live-20261018.json): карточка тайтла исправлена (26), но страница серии /title/pozhiratel-zvezd/season-1/episode-26/ пишет в meta description «Доступно 243 серии» и в блоке «О произведении» «Доступно 243 серии · Вышло 243 серии», а в списке серий той же страницы доступны 26. Причина: src/animedia-frontend.py, страница серии (~7691): avail = sum(с.get(\"avail\")) — сырое число поставщика; то же значение уходит в counts (~7695) и мета_описание (~7741). Затронуты все 243 страницы серий тайтла (26 индексируемых).",
+      "norm": "Факт на странице совпадает с тем, что можно открыть (SEO_KNOWLEDGE_PACK §4 п.2, §7 п.3); то же правило, что T227 для карточки.",
+      "expected": "src/animedia-frontend.py, страница серии: avail = sum(int(с.get(\"доступно\") or 0) for с in сезоны) — сезоны уже результат список_серий(деталь); counts и мета_описание остаются на этой переменной. Ничего больше не менять. Расширить checks/card_avail_count.py (или новая checks/episode_avail_count.py): синтетическая деталь (сезон eps=243, avail=243, nums=1..26) — страница серии 26 содержит в meta description «Доступно 26 серий» и не содержит «Доступно 243»; деталь без nums (avail=5, eps=5) — «Доступно 5 серий». На базе rc=1, на ветке rc=0; без рантайма — «не измерено» rc 2 (ловить Exception и SystemExit). Подключить в checks/run.sh штатно, затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку не трогать.",
+      "check": "checks/episode_avail_count.py",
+      "verify_live": "/title/pozhiratel-zvezd/season-1/episode-26/ — description «Доступно 26 серий», нет «Доступно 243»",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/pozhiratel-zvezd/season-1/episode-26/",
+          "status": 200,
+          "contains": [
+            "Доступно 26 серий"
+          ],
+          "absent": [
+            "Доступно 243"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 15:18Z: живой замер сессии после выпуска T227."
     }
   ]
 }
