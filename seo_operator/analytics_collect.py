@@ -589,17 +589,89 @@ def _goal_reaches(provider, entry: dict, counter_id: int, date1: str, date2: str
     )
 
 
+#: Признак отказа по частоте запросов. Только такие отказы имеет смысл
+#: повторять вторым проходом: «счётчик не создан» и «сеть недоступна» за минуту
+#: не меняются, а повтор по ним — пустая трата квоты, которой и так не хватило.
+ПРИЗНАК_КВОТЫ = "HTTP 429"
+
+#: Пауза перед вторым проходом. Транспорт уже повторил запрос пять раз с
+#: задержкой до 30 с (`factory/analytics/transport.py`), то есть мгновенный
+#: повтор заведомо попадёт в тот же лимит. Числового значения квоты
+#: Management API в замороженной выжимке контракта НЕТ — это записанный пробел
+#: знания, а не забытая настройка, — поэтому пауза выбрана заведомо больше
+#: окна транспорта и названа здесь, а не угадывается на месте.
+ПАУЗА_ВТОРОГО_ПРОХОДА_С = 90.0
+
+
+def _под_квотой(собрано) -> list[str]:
+    """Домены, у которых хоть один показатель не измерен из-за 429."""
+    итог = []
+    for c in собрано:
+        if any(not м.measured and ПРИЗНАК_КВОТЫ in str(м.reason or "")
+               for м in c.measurements):
+            итог.append(c.domain)
+    return итог
+
+
+def _измерено(c) -> int:
+    return sum(1 for м in c.measurements if м.measured)
+
+
 def collect(
     *,
     date1: str = "7daysAgo",
     date2: str = "yesterday",
     provider: YandexAnalyticsProvider | None = None,
     artifacts_dir: Path | None = None,
+    retry_rate_limited: bool = True,
+    cooldown_s: float = ПАУЗА_ВТОРОГО_ПРОХОДА_С,
+    sleep=time.sleep,
 ) -> dict:
-    """Собирает показатели по всем доменам реестра и пишет артефакт."""
+    """Собирает показатели по всем доменам реестра и пишет артефакт.
+
+    Второй проход по доменам, упавшим на 429 (B034). Повод измеренный:
+    18.10 у zonafilm12.site и zonafilm.space 14 показателей из 462 не измерены
+    по частоте запросов, и из сравнения недели эти домены выпали целиком —
+    притом что остальные 306 показателей собрались. Один проход теряет домены
+    тем вероятнее, чем дальше они стоят в реестре.
+
+    Повторяются ТОЛЬКО отказы по квоте. Результат второго прохода принимается,
+    лишь если он измерил БОЛЬШЕ показателей: иначе остаётся первый, и отчёт
+    говорит, что попыток было две. Выдуманных данных ни в одном исходе не
+    появляется.
+    """
     provider = provider or YandexAnalyticsProvider(dry_run=True)
     entries = registry.load()["properties"]
     collections = [collect_domain(provider, entry, date1=date1, date2=date2) for entry in entries]
+
+    повтор = {"enabled": bool(retry_rate_limited), "cooldown_s": cooldown_s,
+              "domains": [], "results": {}}
+    под_квотой = _под_квотой(collections) if retry_rate_limited else []
+    if под_квотой:
+        повтор["domains"] = list(под_квотой)
+        sleep(cooldown_s)
+        по_домену = {e["domain"]: e for e in entries}
+        for н, c in enumerate(collections):
+            if c.domain not in под_квотой:
+                continue
+            было = _измерено(c)
+            try:
+                второй = collect_domain(provider, по_домену[c.domain],
+                                        date1=date1, date2=date2)
+            except FactoryError as сбой:
+                повтор["results"][c.domain] = {
+                    "before": было, "after": None, "helped": False,
+                    "note": f"второй проход не состоялся: {сбой}"}
+                continue
+            стало = _измерено(второй)
+            помогло = стало > было
+            if помогло:
+                collections[н] = второй
+            повтор["results"][c.domain] = {
+                "before": было, "after": стало, "helped": помогло,
+                "note": ("второй проход измерил больше — принят" if помогло
+                         else "второй проход не добавил показателей — "
+                              "оставлен первый; попыток две")}
 
     report = {
         "collected_at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
@@ -620,6 +692,11 @@ def collect(
             "Это не нули: причина названа у каждого."
         ),
     }
+    # Второй проход виден в отчёте всегда, даже когда он не понадобился:
+    # «повторов не было» и «повтор не помог» — разные состояния, и читателю
+    # отчёта это различие нужнее всего именно тогда, когда домен остался без
+    # данных.
+    report["rate_limit_retry"] = повтор
 
     if artifacts_dir is not None:
         artifacts_dir.mkdir(parents=True, exist_ok=True)
