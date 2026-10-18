@@ -44,6 +44,11 @@ MAPPING = {
     # поле без решения это чьё-то мнение, а восстанавливать по мнению нельзя.
     "editorial-protected-fields.json": "editorial-protected-fields.schema.json",
     "editor-run.json": "editor-run.schema.json",
+    # Несущие пути и итоги ревизии сети. Оба реестра висели без схемы,
+    # то есть не проверялись никем, — а отсутствие схемы здесь считается
+    # провалом намеренно (см. комментарий к DERIVED ниже).
+    "load-bearing-paths.json": "load-bearing-paths.schema.json",
+    "revision-findings-20261017.json": "revision-findings.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

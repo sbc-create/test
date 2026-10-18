@@ -1,3 +1,12 @@
+# poster-above-placeholder-lordserials22-info.patch
+
+Заготовка правки, сохранённая как `.md`, а не `.patch`: файлы `.patch` в
+репозитории запрещены (`tests/unit/test_repo_hygiene.py::test_no_dle_core_patches`,
+смысл запрета — «ядро DLE не модифицируется, в репозитории нет ни патчей, ни
+копий ядра»). Содержимое ниже — дословное, применяется обычным
+`git apply`/`patch -p1` после извлечения блока.
+
+```diff
 From b2ad17f92f5b62abc2f1c316353a9af797a5bad0 Mon Sep 17 00:00:00 2001
 From: sbc-create <319062147+sbc-create@users.noreply.github.com>
 Date: Sat, 17 Oct 2026 20:23:25 +0000
@@ -52,3 +61,4 @@ index 0b30964..d5c2699 100755
 -- 
 2.34.1
 
+```

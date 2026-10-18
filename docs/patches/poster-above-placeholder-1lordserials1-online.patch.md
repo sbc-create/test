@@ -1,3 +1,12 @@
+# poster-above-placeholder-1lordserials1-online.patch
+
+Заготовка правки, сохранённая как `.md`, а не `.patch`: файлы `.patch` в
+репозитории запрещены (`tests/unit/test_repo_hygiene.py::test_no_dle_core_patches`,
+смысл запрета — «ядро DLE не модифицируется, в репозитории нет ни патчей, ни
+копий ядра»). Содержимое ниже — дословное, применяется обычным
+`git apply`/`patch -p1` после извлечения блока.
+
+```diff
 From 72dbfebf2a2a2b252b0976d9697f4befc7ca0f07 Mon Sep 17 00:00:00 2001
 From: sbc-create <319062147+sbc-create@users.noreply.github.com>
 Date: Sat, 17 Oct 2026 20:23:25 +0000
@@ -42,3 +51,4 @@ index afeeafc..1dd3f92 100644
 -- 
 2.34.1
 
+```

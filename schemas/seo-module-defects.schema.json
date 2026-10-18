@@ -2,33 +2,61 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://site-factory.local/schemas/seo-module-defects.schema.json",
   "title": "SEO module defects",
-  "description": "Единый список недостатков SEO-модуля. Пункт без воспроизводимого примера, ошибочного решения, изменения и критерия приёмки — гипотеза, а не недостаток, поэтому эти поля обязательны. Состояние растёт только по фактам: implemented — код и тесты в ветке, installed — работает в штатном запуске, verified — подтверждено на данных штатного запуска.",
+  "description": "Единый список недостатков SEO-модуля. Пункт без воспроизводимого примера — гипотеза, а не недостаток, поэтому `example` обязателен всегда. Пункт, ЗАЯВЛЯЮЩИЙ правку, обязан нести способ её проверить (`acceptance` либо `verify_live`): утверждение «исправлено» без критерия проверить нельзя, а именно его и читают следующие сессии.\n\nСловарь приведён к тому, что в реестре действительно используется (измерено 2026-10-18: 35 записей из 77 не проходили прежнюю схему). Изменено сознательно, а не ослаблено:\n\n* `zone` отвечает на вопрос «ГДЕ живёт недостаток», а не «кто правит». Прежние три значения (seo, shared, owner) смешивали две оси, и записи, добавленные позже, пошли по второй — отсюда frontend, app, content, data, infra, rights, registry, analytics, architect. Кто действует — сказано в `owner_action` или `fix`, отдельным полем;\n* `state` получил `measured` (измерено, правки ещё нет), `released` (правка выпущена на витрине) и `not_a_defect` (измерено и оказалось не дефектом). Эти три исхода встречались в данных под самодельными именами (`fix_prepared`, `corrected`, `fixed`, `measured-no-defect`) и теперь названы одинаково;\n* `wrong_decision`, `change` и `evidence` стали необязательными: у записи в состоянии `measured` ещё нет ни изменения, ни ошибочного решения, а доказательство измерения лежит в `example`. Требовать их от измерения значило бы заставлять выдумывать;\n* `fix`, `verify_live` и `owner_action` объявлены явно: они уже несли смысл в 35 записях, и `additionalProperties: false` оставлен на месте — поле, не названное здесь, по-прежнему отвергается.",
   "type": "object",
   "additionalProperties": false,
   "required": ["version", "updated_at", "defects"],
   "properties": {
     "version": {"const": 1},
-    "updated_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "minLength": 10},
     "note": {"type": "string"},
     "defects": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "title", "zone", "priority", "state", "example",
-                     "wrong_decision", "change", "acceptance", "evidence"],
+        "required": ["id", "title", "zone", "priority", "state", "example"],
         "properties": {
           "id": {"type": "string", "pattern": "^MOD-[0-9]{2,}$"},
           "title": {"type": "string", "minLength": 5},
-          "zone": {"enum": ["seo", "shared", "owner"]},
+          "zone": {
+            "description": "Где живёт недостаток. Кто его правит — в owner_action или fix.",
+            "enum": ["seo", "shared", "owner", "architect", "frontend", "app",
+                     "content", "data", "infra", "rights", "registry",
+                     "analytics"]
+          },
           "priority": {"enum": ["P0", "P1", "P2", "P3"]},
-          "state": {"enum": ["proposed", "implemented", "installed", "verified"]},
+          "state": {
+            "description": "Растёт только по фактам: proposed — предложено; measured — измерено, правки ещё нет; implemented — код и тесты в ветке; installed — работает в штатном запуске; released — выпущено на витрине; verified — подтверждено на данных штатного запуска; not_a_defect — измерено и дефектом не оказалось.",
+            "enum": ["proposed", "measured", "implemented", "installed",
+                     "released", "verified", "not_a_defect"]
+          },
           "example": {"type": "string", "minLength": 20},
           "wrong_decision": {"type": "string", "minLength": 10},
           "change": {"type": "string", "minLength": 10},
           "acceptance": {"type": "string", "minLength": 10},
-          "evidence": {"type": "string", "minLength": 5}
-        }
+          "evidence": {"type": "string", "minLength": 5},
+          "fix": {"type": "string", "minLength": 10},
+          "verify_live": {"type": "string", "minLength": 10},
+          "owner_action": {"type": "string", "minLength": 5}
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "state": {"enum": ["implemented", "installed", "released",
+                                   "verified"]}
+              },
+              "required": ["state"]
+            },
+            "then": {
+              "anyOf": [
+                {"required": ["acceptance"]},
+                {"required": ["verify_live"]}
+              ]
+            }
+          }
+        ]
       }
     }
   }

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/load-bearing-paths.schema.json",
+  "title": "Load-bearing paths",
+  "description": "Пути, на которых держится работа сети: каждая запись называет путь, ПОЧЕМУ он несущий, когда это измерено и блокирует ли он выпуск.\n\nСхема появилась 2026-10-18 вместе со схемой для реестра ревизии: `scripts/validate_registries.py` считает провалом реестр, не сопоставленный ни одной схеме («файл, не сопоставленный ни одной схеме, не проверяется никем»), и два реестра в config/ висели непроверенными. Отсутствие схемы — не разрешение, а пробел.\n\nОбязательны ровно те поля, без которых запись бесполезна: `path`, `why`, `measured_at` (утверждение без даты измерения проверить нельзя), `release_blocking` (ответ «блокирует ли выпуск» обязан быть явным — умолчание читалось бы как «нет») и `owner_action` (что требуется от владельца, в том числе «ничего»).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "updated_at", "paths"],
+  "properties": {
+    "schema": {"type": "string", "pattern": "^load-bearing-paths/[0-9]+\\.[0-9]+$"},
+    "updated_at": {"type": "string", "minLength": 10},
+    "note": {"type": "string"},
+    "paths": {"type": "array", "items": {"$ref": "#/$defs/запись"}},
+    "label_dependencies": {"type": "array", "items": {"$ref": "#/$defs/запись"}}
+  },
+  "$defs": {
+    "запись": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "why", "measured_at", "release_blocking",
+                   "owner_action"],
+      "properties": {
+        "path": {"type": "string", "minLength": 3},
+        "why": {"type": "string", "minLength": 10},
+        "measured_at": {"type": "string", "minLength": 10},
+        "release_blocking": {"type": "boolean"},
+        "owner_action": {"type": "string", "minLength": 5},
+        "defect": {"type": "string", "minLength": 3},
+        "size_hint": {"type": "string", "minLength": 2},
+        "zone": {"type": "string", "minLength": 2}
+      }
+    }
+  }
+}
