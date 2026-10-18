@@ -5974,6 +5974,102 @@
       ],
       "status": "live_verified",
       "evidence": "18.10 17:04Z: замер сессии (карты 5 аниме-витрин, страницы title-01a11b5b-5f3 и title-01a10a02-600). Охват 12 из ~8 180 тайтлов (0,15 %), один сайт; трафика у этих страниц нет — правка ради читаемости title, эффект на трафик не оценивается. Остальные витрины — после выпуска здесь. | 18.10 17:31Z: CI 39148883220, публикатор live_verified 17:28:32Z; сверка сессии var/seo-audit/t235-live-20261018.json."
+    },
+    {
+      "id": "T236",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/title/title-01a10a02-600/"
+      ],
+      "problem": "18.10 17:31Z: перенос T235 (выпущено на animedia.icu 17:28Z, var/seo-audit/t235-live-20261018.json). На animedia.space тайтлы со слагом title-<hex> имеют название только японскими знаками в <title> и H1 (12–16 в карте), латинское original_name есть в данных (JSON-LD alternateName).",
+      "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
+      "expected": "src/animedia-frontend.py: в <title> страницы тайтла и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh. Образец — animedia-icu: функции читаемое_название и _есть_читаемая_буква, checks/title_script_fallback.py (ветка T235).",
+      "check": "checks/title_script_fallback.py",
+      "verify_live": "https://animedia.space/title/title-01a10a02-600/ — в <title> латинское название в скобках; https://animedia.space/title/nekromant-ya-katastrofa/ — title без изменений",
+      "live_check": [
+        {
+          "url": "https://animedia.space/title/title-01a10a02-600/",
+          "status": 200,
+          "contains": [
+            " ("
+          ]
+        },
+        {
+          "url": "https://animedia.space/title/nekromant-ya-katastrofa/",
+          "status": 200,
+          "contains": [
+            "<title>Некромант: Я катастрофа — смотреть онлайн — Animedia</title>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title."
+    },
+    {
+      "id": "T237",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/title/title-01a11b5b-5f3/"
+      ],
+      "problem": "18.10 17:31Z: перенос T235 (выпущено на animedia.icu 17:28Z, var/seo-audit/t235-live-20261018.json). На animeg0.site тайтлы со слагом title-<hex> имеют название только японскими знаками в <title> и H1 (12–16 в карте), латинское original_name есть в данных (JSON-LD alternateName).",
+      "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
+      "expected": "src/animego-frontend.py (метод в ВидАнимеГо или функция модуля — checks/boundaries.py): в <title> страницы тайтла и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh. Образец — animedia-icu: функции читаемое_название и _есть_читаемая_буква, checks/title_script_fallback.py (ветка T235).",
+      "check": "checks/title_script_fallback.py",
+      "verify_live": "https://animeg0.site/title/title-01a11b5b-5f3/ — в <title> латинское название в скобках; https://animeg0.site/title/vechnaya-volya-4/ — title без изменений",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/title/title-01a11b5b-5f3/",
+          "status": 200,
+          "contains": [
+            " ("
+          ]
+        },
+        {
+          "url": "https://animeg0.site/title/vechnaya-volya-4/",
+          "status": 200,
+          "contains": [
+            "<title>Вечная воля 4 — смотреть онлайн — AnimeGo</title>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title."
+    },
+    {
+      "id": "T238",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/title/title-01a11b5b-5f3/"
+      ],
+      "problem": "18.10 17:31Z: перенос T235 (выпущено на animedia.icu 17:28Z, var/seo-audit/t235-live-20261018.json). На an1meg0.site тайтлы со слагом title-<hex> имеют название только японскими знаками в <title> и H1 (12–16 в карте), латинское original_name есть в данных (JSON-LD alternateName).",
+      "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
+      "expected": "src/animego-frontend.py (метод в ВидАнимеГо или функция модуля — checks/boundaries.py): в <title> страницы тайтла и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh. Образец — animedia-icu: функции читаемое_название и _есть_читаемая_буква, checks/title_script_fallback.py (ветка T235).",
+      "check": "checks/title_script_fallback.py",
+      "verify_live": "https://an1meg0.site/title/title-01a11b5b-5f3/ — в <title> латинское название в скобках; https://an1meg0.site/title/vechnaya-volya-4/ — title без изменений",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/title/title-01a11b5b-5f3/",
+          "status": 200,
+          "contains": [
+            " ("
+          ]
+        },
+        {
+          "url": "https://an1meg0.site/title/vechnaya-volya-4/",
+          "status": 200,
+          "contains": [
+            "<title>Вечная воля 4 — смотреть онлайн — AnimeGo</title>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title."
     }
   ]
 }
