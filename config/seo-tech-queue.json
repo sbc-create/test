@@ -5460,8 +5460,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 10:10Z: см. T217. Эффект: индексация разделов меток (Вебмастер — после B023)."
+      "status": "live_verified",
+      "evidence": "18.10 10:10Z: см. T217. Эффект: индексация разделов меток (Вебмастер — после B023). | 18.10 11:19:40Z опубликовано штатным циклом (публикатор live_verified). Живая сверка сессией 18.10 11:22Z (var/seo-audit/t218-live-20261018.json): /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/, /series/, /catalog/, /movies/?genre=drama — index, follow; чипы и «Формат» — «Фильмы», «Сериалы»."
     },
     {
       "id": "T219",
