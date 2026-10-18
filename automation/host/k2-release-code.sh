@@ -37,7 +37,9 @@
 #      намеренно (fail-closed). Значение не читается и не печатается — файл
 #      копируется как есть;
 #   5. запоминает прежний выпуск в .previous-release и переключает `current`;
-#   6. перезапускает службу и ждёт healthz;
+#   6. перезапускает службу, ждёт healthz и ОПОЗНАЁТ витрину: подробный
+#      ответ по петле обязан называть каталог только что собранного
+#      выпуска, иначе прежний выпуск возвращается;
 #   7. при любой неудаче возвращает `current` на прежний выпуск, перезапускает
 #      службу и сообщает код выхода.
 #
@@ -55,7 +57,7 @@ set -uo pipefail
 site="${1:?нужен site_id}"
 mode="${2:-full}"
 case "$mode" in
-  full|--dry-run) : ;;
+  full|--dry-run|--verify) : ;;
   *) echo "[x] неизвестный режим $mode" >&2; exit 2 ;;
 esac
 
@@ -100,6 +102,38 @@ previous_file="$root/.previous-release"
 
 old_release="$(readlink -f "$current_link")"
 old_sha="$(basename "$old_release")"
+if [ "$mode" = "--verify" ]; then
+  # Ни одной мутации: только чтение подробного ответа по петле и сверка с
+  # тем каталогом, на который указывает `current`. Отказ закрытый —
+  # отсутствие поля означает «подтвердить нечем».
+  vf="$(mktemp)"
+  curl -fsS --max-time 5 "127.0.0.1:$port/healthz" -o "$vf" 2>/dev/null \
+    || log "$site: подробный ответ healthz не прочитан"
+  python3 - "$vf" "$old_release" "$site" <<'PY'
+import json
+import pathlib
+import sys
+
+файл, выпуск, витрина = sys.argv[1:4]
+try:
+    д = json.loads(pathlib.Path(файл).read_text(encoding="utf-8"))
+except (OSError, ValueError) as пр:
+    print(f"{витрина}: ответ healthz не разобран: {пр}")
+    raise SystemExit(1)
+путь = str(д.get("runtime_path") or "")
+выпуск_id = str(д.get("release_id") or "")
+совпал = bool(путь) and путь.startswith(выпуск.rstrip("/") + "/")
+знак = "исполняется" if совпал else "НЕ ТОТ ВЫПУСК"
+print(f"{витрина}: current -> {выпуск}")
+print(f"{витрина}: на порту  {путь or '(поля нет)'}  release_id {выпуск_id or '—'}")
+print(f"{витрина}: {знак}")
+raise SystemExit(0 if совпал else 1)
+PY
+  rc=$?
+  rm -f "$vf"
+  exit $rc
+fi
+
 head_sha="$(git ls-remote "$bundle" HEAD | cut -f1 | cut -c1-12)"
 [ -n "$head_sha" ] || { bad "голова бандла не читается"; exit 2; }
 log "выложено $old_sha, в бандле $head_sha"
@@ -186,6 +220,61 @@ if [ "$ready" = 0 ]; then
   exit 1
 fi
 log "healthz отвечает через $waited с"
+
+# Ответ на healthz доказывает, что КТО-ТО на порту жив, — но не что это ЭТА
+# витрина на ЭТОМ выпуске. Порт мог занять сосед, а служба — остаться на
+# прежнем коде после неудачного рестарта: оба случая выглядят как успех, и
+# сценарий объявил бы выпуск состоявшимся. Поэтому подробный ответ (его
+# отдаёт только внутренний вызов по петле) сверяется с тем, что сценарий
+# ТОЛЬКО ЧТО поставил.
+#
+# Измерено 2026-10-18 на живой витрине семейства: healthz по петле отдаёт
+# `runtime_path` = /srv/<учётка>/releases/<12 знаков>/src/lords-frontend.py
+# (путь после разрешения ссылок) и `release_id` = <12 знаков>-<site>. Оба
+# поля называют выпуск явно, и сверять их не с чем, кроме только что
+# собранного каталога.
+#
+# Отказ закрытый: отсутствие поля — это «подтвердить нечем», а не
+# «подтверждено». Если поле однажды пропадёт, сценарий вернёт прежний выпуск
+# и назовёт причину; лечится это добавлением поля в рантайм, а не снятием
+# проверки.
+health_file="$(mktemp)"
+if ! curl -fsS --max-time 5 "127.0.0.1:$port/healthz" -o "$health_file" 2>/dev/null; then
+  printf '%s\n' "подробный ответ healthz не прочитан" > "$health_file.why"
+fi
+identity="$(python3 - "$health_file" "$release" <<'PY'
+import json
+import pathlib
+import sys
+
+файл, выпуск = sys.argv[1:3]
+try:
+    д = json.loads(pathlib.Path(файл).read_text(encoding="utf-8"))
+except (OSError, ValueError) as пр:
+    print(f"ответ healthz не разобран: {пр}")
+    raise SystemExit(0)
+путь = str(д.get("runtime_path") or "")
+# Сверяется ПУТЬ, и только он. `release_id` для этого не годится: измерено
+# 2026-10-18 на восьми витринах узла — там у всех `worktree-unbuilt`, то есть
+# метка сборки, а не номер выпуска, и условие по ней отвергало бы каждую
+# исправную выкладку. Путь же называет выпуск прямо: у соседа на порту будет
+# чужая учётная запись, у службы на прежнем коде — прежний каталог.
+if not путь:
+    print("в ответе нет runtime_path: подтвердить выпуск нечем")
+elif not путь.startswith(выпуск.rstrip("/") + "/"):
+    print(f"на порту исполняется {путь}, а выложен {выпуск}")
+PY
+)"
+rm -f "$health_file" "$health_file.why"
+if [ -n "$identity" ]; then
+  bad "на порту $port не та витрина или не тот выпуск: $identity"
+  bad "возвращаю прежний выпуск"
+  ln -sfn "$old_release" "$current_link"
+  [ "$am_root" = 1 ] && chown -h "$account:$account" "$current_link"
+  restart_unit "$unit"
+  exit 1
+fi
+log "опознано: на порту $port исполняется выпуск $head_sha этой витрины"
 
 # Признак новой версии ищется в журнале службы, а не в файлах: файл на диске
 # доказывает доставку, а строка журнала — что рантайм этот файл ИСПОЛНЯЕТ.

@@ -19,7 +19,13 @@
 # Запуск:
 #   k2-release-code.sh --dry-run <site_id> [site_id ...]
 #   k2-release-code.sh --release <site_id> [site_id ...]
+#   k2-release-code.sh --verify  <site_id> [site_id ...]
 #   k2-release-code.sh --deliver                 только доставить сценарий
+#
+# --verify ничего не меняет: спрашивает у витрины подробный healthz по
+# петле и сверяет путь исполняемого файла с каталогом, на который
+# указывает `current`. Ответ «200 на порту» этого не доказывает: порт
+# мог занять сосед, а служба — остаться на прежнем коде.
 set -uo pipefail
 
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
@@ -43,13 +49,35 @@ case "$mode" in
     deliver || { echo "[x] доставка не удалась" >&2; exit 1; }
     exit 0
     ;;
-  --dry-run|--release) : ;;
+  --dry-run|--release|--verify) : ;;
   *) echo "[x] неизвестный режим $mode" >&2; exit 2 ;;
 esac
 
 sites="$*"
 [ -n "$sites" ] || { echo "нужен хотя бы один site_id" >&2; exit 2; }
 deliver || { echo "[x] доставка не удалась" >&2; exit 1; }
+
+# Обзор не останавливается на первой неудаче: вопрос «какие витрины исполняют
+# не тот выпуск» имеет смысл только целиком. Мутаций в этом режиме нет.
+if [ "$mode" = "--verify" ]; then
+  ok=0
+  bad=0
+  for site in $sites; do
+    out="$(ansible -i "$inventory" "$host_ref" -m raw \
+          -a "bash $script_dst $site --verify" 2>&1)"
+    printf '%s\n' "$out" | grep -vE "^\[WARNING\]|interpreter_discovery|^$" \
+      | grep -E "исполняется|НЕ ТОТ ВЫПУСК|не разобран|не прочитан|на порту" \
+      | sed 's/^/    /'
+    if printf '%s' "$out" | grep -q "исполняется"; then
+      ok=$((ok + 1))
+    else
+      bad=$((bad + 1))
+    fi
+  done
+  echo "исполняют выложенный выпуск: $ok; расходятся: $bad"
+  [ "$bad" = 0 ] || exit 1
+  exit 0
+fi
 
 # Настоящий выпуск идёт по одной витрине и ОСТАНАВЛИВАЕТСЯ на первой неудаче:
 # восемь одинаковых отказов подряд — это восемь раз один и тот же отказ, а
