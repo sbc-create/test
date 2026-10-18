@@ -48,7 +48,7 @@ def _стенд(monkeypatch, tmp_path: Path, выпуски: list, прогон�
         encoding="utf-8")
     monkeypatch.setattr(МОД, "ЖУРНАЛЫ", tmp_path)
     monkeypatch.setattr(МОД, "очередь",
-                        lambda ветка, путь: (задачи or [], беда))
+                        lambda ветка, путь: (задачи or [], беда, "стенд"))
 
 
 def _прогон(monkeypatch, tmp_path, выпуски, прогоны, задачи=None, беда="",
@@ -167,3 +167,35 @@ def test_причина_простоя_не_называется():
     тело = ПУТЬ.read_text(encoding="utf-8")
     assert "Причина простоя здесь НЕ называется" in тело
     assert "упал ли" in тело and "ждёт внешнего действия" in тело
+
+
+def test_очередь_читается_из_живого_файла_а_не_из_ветки(monkeypatch, tmp_path):
+    """Разница измерена 18.10 19:30Z и она меняет вывод.
+
+    В ветке `origin/claude/nova-publish-memory-01` было 188 задач и 11
+    `queued`, в живом файле — 277 задач и `queued` ровно одна. Линия SEO
+    коммитит локально и пушит позже, поэтому проверка по ветке отвечала на
+    вопрос о прошлом состоянии и показывала одиннадцать готовых задач там, где
+    их нет.
+    """
+    живой = tmp_path / "seo-tech-queue.json"
+    живой.write_text(json.dumps({"tasks": [{"id": "T1", "status": "queued"}]}),
+                     encoding="utf-8")
+    monkeypatch.setattr(МОД, "ОЧЕРЕДЬ_ЖИВАЯ", живой)
+    задачи, беда, откуда = МОД.очередь("origin/нет-такой-ветки",
+                                       "config/seo-tech-queue.json")
+    assert беда == "" and len(задачи) == 1
+    assert "живой файл" in откуда
+
+
+def test_без_живого_файла_источник_назван(monkeypatch, tmp_path):
+    """Запас из ветки допустим, но вывод обязан сказать, что он отстаёт."""
+    monkeypatch.setattr(МОД, "ОЧЕРЕДЬ_ЖИВАЯ", tmp_path / "нет.json")
+    monkeypatch.setattr(МОД.subprocess, "run",
+                        lambda *а, **к: type("Г", (), {
+                            "returncode": 0,
+                            "stdout": json.dumps({"tasks": []}),
+                            "stderr": ""})())
+    задачи, беда, откуда = МОД.очередь("origin/ветка", "config/q.json")
+    assert беда == "" and задачи == []
+    assert "состояние может отставать" in откуда
