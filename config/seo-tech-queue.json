@@ -4918,8 +4918,75 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "18.10 ~01:00Z: пары добавлены в automation/local/wire-public-wording.py (ЗАМЕНЫ_2) и «Источник ещё не отдал её» — в БЫВШИЕ automation/host/public_wording_check.py; сухой прогон: lordfilm47-space — 3 замены. AnimeGo — НЕ этим инструментом: на an1mego строки «серия без дорожки» и три прежние пары стоят в унаследованных классах ВидОснова/ВидАнимедиа (checks/boundaries.py запрещает) — нужна осознанная правка ядра. Распространение на lordserial33.biz, zonafilm.*, animedia.* — после проверки этой. Эффект: страницы noindex — поисковый эффект косвенный (поведение посетителя, пришедшего со страницы тайтла); Метрика — отказы на страницах серий, Яндекс и Google раздельно. | 18.10 01:17:29Z опубликовано штатным циклом (прогон 20261018T010309Z-3116477 VERIFIED, голова 26b2d579, публикатор live_verified). Живая сверка сессией 01:21Z (var/seo-audit/t201-live-20261018.json): страница серии без видео — «Видео этой серии пока не опубликовано» 1, «серия пока недоступна» 2, «Источник ещё не отдал» 0, «серия без дорожки» 0; robots noindex, follow (meta и X-Robots-Tag) — как прежде; тайтл и главная — index, follow, регресса T200 нет.",
+      "owner_action": null
+    },
+    {
+      "id": "T202",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/club-friday-the-series-season-5/season-1/episode-1/",
+        "https://zonafilm.space/title/club-friday-the-series-season-5/"
+      ],
+      "problem": "Живая проверка 18.10 ~01:20Z: на zonafilm.space страница серии без видео (data-state=unavailable, «Эта серия пока недоступна. Источник ещё не отдал её для просмотра.») — 200, index, follow, canonical на себя; ссылки на неё стоят в списке серий страницы тайтла (в карте серий Zona нет — 0 из 65 856 адресов, обходчик находит их по ссылкам). На Lords то же закрыто T055 (live_verified 13.10: «серия без дорожки и сезон без доступных серий — noindex, follow»), на Zona правило не перенесено. Плюс внутренние слова в тексте страницы.",
+      "norm": "страница без основного содержимого (смотреть нечего) — noindex, follow, ссылки остаются (SEO_KNOWLEDGE_PACK §3, правило T055); видимый текст без внутренних слов (поручение владельца 17.10)",
+      "expected": "(1) Перенести правило T055 из lordfilm47-space (тот же шаблон Lords-ядра): в src/lords-frontend.py обработчик _отдать(..., без_индекса=...) и вызовы для страницы сезона (без_индекса=not any(с[\"доступные\"] for с in список_серий(деталь) ...)) и серии (без_индекса=not серия_с_дорожкой(деталь, номер, серия)) — см. `git -C /home/claude/wt-portable-site-cell-01/var/site-repos/lordfilm47-space show HEAD:src/lords-frontend.py` ~6813–6842 и ~7263–7280; результат: meta robots и X-Robots-Tag «noindex, follow» на такой странице, ссылки и сама страница остаются; серии с видео — index как прежде. Проверку checks/unavailable_episode_noindex.py взять из lordfilm47-space (`git show HEAD:checks/unavailable_episode_noindex.py`) и при необходимости приспособить к стенду ячейки; в checks/run.sh. (2) Затем штатный инструмент `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (пары ЗАМЕНЫ_2 18.10 — «Видео этой серии пока не опубликовано»), руками тексты не менять. Вёрстку, постеры, CSS не трогать. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/unavailable_episode_noindex.py",
+      "verify_live": "серия без видео — noindex, follow (meta и X-Robots-Tag), текст «Видео этой серии пока не опубликовано»; серия с видео и страница тайтла — index, follow; canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/title/club-friday-the-series-season-5/season-1/episode-1/",
+          "status": 200,
+          "contains": [
+            "noindex"
+          ],
+          "absent": [
+            "Источник ещё не отдал"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/title/club-friday-the-series-season-5/",
+          "status": 200,
+          "absent": [
+            "<meta name=\"robots\" content=\"noindex"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "18.10 ~01:00Z: пары добавлены в automation/local/wire-public-wording.py (ЗАМЕНЫ_2) и «Источник ещё не отдал её» — в БЫВШИЕ automation/host/public_wording_check.py; сухой прогон: lordfilm47-space — 3 замены. AnimeGo — НЕ этим инструментом: на an1mego строки «серия без дорожки» и три прежние пары стоят в унаследованных классах ВидОснова/ВидАнимедиа (checks/boundaries.py запрещает) — нужна осознанная правка ядра. Распространение на lordserial33.biz, zonafilm.*, animedia.* — после проверки этой. Эффект: страницы noindex — поисковый эффект косвенный (поведение посетителя, пришедшего со страницы тайтла); Метрика — отказы на страницах серий, Яндекс и Google раздельно.",
+      "evidence": "18.10 ~01:20Z: живой замер сессии; zonafilm12.site и zonafilm.cc — то же (index, follow), после проверки этой. Эффект: доля страниц серий в индексе Яндекса/Google (Вебмастер — после B023), Метрика — входы на серии с видео по Яндексу и Google раздельно, 7 и 28 дней.",
+      "owner_action": null
+    },
+    {
+      "id": "T203",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/title/club-friday-the-series-season-5/season-1/episode-1/"
+      ],
+      "problem": "То же, что T201 (live_verified 18.10 01:17Z на lordfilm47.space): на странице серии без видео lordserial33.biz — «Источник ещё не отдал её для просмотра» и подпись «серия без дорожки» (живая сверка 18.10 01:22Z: по 1).",
+      "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
+      "check": "checks/public_wording.py",
+      "verify_live": "на странице серии без видео — «Видео этой серии пока не опубликовано»; «Источник ещё не отдал» и «серия без дорожки» нет; robots страницы — noindex, follow как прежде",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/title/club-friday-the-series-season-5/season-1/episode-1/",
+          "status": 200,
+          "absent": [
+            "Источник ещё не отдал",
+            "серия без дорожки"
+          ],
+          "contains": [
+            "Видео этой серии пока не опубликовано"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 01:22Z: распространение после живой проверки T201; сухой прогон — 3 замены. Эффект — как T201.",
       "owner_action": null
     }
   ]
