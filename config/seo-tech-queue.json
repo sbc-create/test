@@ -5402,6 +5402,66 @@
       ],
       "status": "queued",
       "evidence": "18.10 09:53Z: найдено при разборе попытки T211; затем перенос на an1meg0/an1mego вместе или отдельно. Эффект: косвенный (качество посадочных /movies/, /series/); Метрика — входы и отказы по Яндексу и Google раздельно."
+    },
+    {
+      "id": "T217",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/movies/",
+        "https://animedia.space/movies/?genre=zapadnyykontent",
+        "https://animedia.space/series/?genre=aziatskiykontent"
+      ],
+      "problem": "Живая проверка 18.10 10:10Z: (1) на /movies/ и /series/ animedia.space в чипе активного отбора видна внутренняя надпись «type:movie ×»/«type:tv ×» (src/animedia-frontend.py ~8383: chip(f\"type:{выбрано['type']}\", \"type\")); на animedia.icu то же место уже подписано словами («Фильмы ×») — словарь _имена в ВидАнимедиа._фильтры_каталога; (2) /movies/?genre=zapadnyykontent — 200, index, follow, canonical на себя: правило T199 (noindex, follow для раздела метки) действует только на /catalog и /new, а маршруты типа (/movies, /series) его не получают. Ссылок на раздел метки с хаба нет (T199), но адрес обходится и индексируется.",
+      "norm": "служебные метки поставщика — не жанр: их раздел noindex, follow, вне карты (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS п.1, п.5; правило T044/T077/T196); видимый текст без внутренних кодов (поручение владельца 17.10)",
+      "expected": "src/animedia-frontend.py, обработчик маршрутов: ветка `if обрезанный in self.МАРШРУТЫ_ТИПА:` (/movies, /series; ~11136 на space, соответствующая на icu) отдаёт список без признака без_индекса. Сделать как в ветке `/catalog`, `/new` (T196, ~11169): метка = any(служебная_метка(код=з) for к in (\"genre\", \"exclude\") for з in (зпр.get(к) or [])) и self._отдать(…, без_индекса=метка). Страница отвечает как прежде, canonical не трогать. Чип типа: подпись как на animedia.icu — словарь _имена = {\"movie\": \"Фильмы\", \"tv\": \"Сериалы\", \"ova\": \"OVA\", \"ona\": \"ONA\", \"special\": \"Спецвыпуски\"} и _имена.get(код, код.upper()) (дословно из var/site-repos/animedia-icu/src/animedia-frontend.py ~8659); новых слов не сочинять. Новая проверка checks/type_route_labels.py на снимке ячейки (SITE_DATA_DIR) или копии: /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — meta robots «noindex, follow»; /movies/ и /movies/?genre=<обычный жанр снимка> — «index, follow»; на /movies/ нет видимого «type:movie». На базе rc=1, на ветке rc=0; без снимка — «не измерено» (rc 2), в том числе когда рантайм не импортируется без манифеста хоста (ловить и SystemExit — урок T210/CI). Подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/type_route_labels.py",
+      "verify_live": "/movies/ — чип «Фильмы» (или чипа нет), «type:movie» в видимом тексте нет; /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/ и /movies/?genre=drama — index, follow",
+      "live_check": [
+        {
+          "url": "https://animedia.space/movies/",
+          "status": 200,
+          "absent": [
+            "type:movie <span"
+          ]
+        },
+        {
+          "url": "https://animedia.space/movies/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 10:10Z: обход хабов на видимые коды (сессия): animedia.space /movies/ — чип «type:movie», /series/ — «type:tv»; /movies/?genre=zapadnyykontent — index, follow. animedia.icu: чип уже «Фильмы», раздел метки на /movies/ — index, follow (T218). Эффект: индексация разделов меток (Вебмастер — после B023); Метрика — входы на /movies/, /series/ по Яндексу и Google раздельно."
+    },
+    {
+      "id": "T218",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/movies/?genre=zapadnyykontent",
+        "https://animedia.icu/series/?genre=aziatskiykontent"
+      ],
+      "problem": "Живая проверка 18.10 10:10Z: animedia.icu /movies/?genre=zapadnyykontent — 200, index, follow: правило T196 (noindex, follow для раздела служебной метки) действует только на /catalog и /new, маршруты типа (/movies, /series) его не получают. animedia.icu — растущий в Яндексе сайт (поиск 156→697 за неделю).",
+      "norm": "служебные метки поставщика — не жанр: их раздел noindex, follow, вне карты (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS п.1, п.5; правило T044/T077/T196); видимый текст без внутренних кодов (поручение владельца 17.10)",
+      "expected": "src/animedia-frontend.py, обработчик маршрутов: ветка `if обрезанный in self.МАРШРУТЫ_ТИПА:` (/movies, /series; ~11136 на space, соответствующая на icu) отдаёт список без признака без_индекса. Сделать как в ветке `/catalog`, `/new` (T196, ~11169): метка = any(служебная_метка(код=з) for к in (\"genre\", \"exclude\") for з in (зпр.get(к) or [])) и self._отдать(…, без_индекса=метка). Страница отвечает как прежде, canonical не трогать.  Новая проверка checks/type_route_labels.py на снимке ячейки (SITE_DATA_DIR) или копии: /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — meta robots «noindex, follow»; /movies/ и /movies/?genre=<обычный жанр снимка> — «index, follow». На базе rc=1, на ветке rc=0; без снимка — «не измерено» (rc 2), в том числе когда рантайм не импортируется без манифеста хоста (ловить и SystemExit — урок T210/CI). Подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/type_route_labels.py",
+      "verify_live": "/movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/ и /movies/?genre=drama — index, follow",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/movies/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 10:10Z: см. T217. Эффект: индексация разделов меток (Вебмастер — после B023)."
     }
   ]
 }
