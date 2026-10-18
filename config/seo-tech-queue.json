@@ -5767,6 +5767,31 @@
       ],
       "status": "queued",
       "evidence": "18.10 15:18Z: живой замер сессии после выпуска T227."
+    },
+    {
+      "id": "T229",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/title/pozhiratel-zvezd/"
+      ],
+      "problem": "18.10 15:18Z: тот же код, что исправлен на animedia.icu (T227, T228): src/animedia-frontend.py ~7364 (карточка тайтла) и ~7498 (страница серии) считают «Доступно серий» по сырому avail поставщика, а список серий и каталог — по доступные_номера() с наложением проверенных номеров. На animedia.space сейчас расхождения нет (у /title/pozhiratel-zvezd/ «Доступно серий 26», 26 ссылок) — снимок space совпадает с наложением; на icu тот же тайтл показывал 243 при 26. Снимок приезжает ночной доставкой целиком, поэтому расхождение может появиться в любой день: это дефект кода, подтверждённый на соседней витрине, а не на этой.",
+      "norm": "Одно число — один смысл: «Доступно» = номера с дорожкой, как в списке серий и каталоге (T227).",
+      "expected": "Как T227 + T228 на icu: в методе тайтл() и на странице серии avail = sum(int(с.get(\"доступно\") or 0) for с in сезоны); статус, «Вышло серий», counts и мета_описание — на этой же переменной. Проверка checks/card_avail_count.py по образцу icu (карточка и страница серии на синтетической детали eps=243, avail=243, nums=1..26 → 26; без nums avail=5 → 5); база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). checks/run.sh штатно, stamp_manifest/update_pins, полный run.sh. Вёрстку не трогать.",
+      "check": "checks/card_avail_count.py",
+      "verify_live": "/title/pozhiratel-zvezd/ — «Доступно серий» 26 (как и было); страница серии 26 — «Доступно 26 серий»",
+      "live_check": [
+        {
+          "url": "https://animedia.space/title/pozhiratel-zvezd/season-1/episode-26/",
+          "status": 200,
+          "contains": [
+            "Доступно 26 серий"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 15:18Z: код сверен сессией (grep avail в обоих репозиториях); живое состояние space — var/seo-audit/avail-fact-animedia-space-20261018.json и прямой замер /title/pozhiratel-zvezd/. Эффект — устойчивость факта, трафик не оценивается."
     }
   ]
 }
