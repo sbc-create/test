@@ -344,6 +344,12 @@ EXTRA_METRIKA = (
         "Поисковые визиты и пользователи по дням и поисковым системам",
         "ym:s:users, ym:s:visits × ym:s:date × lastsignTrafficSource × lastsignSearchEngineRoot",
     ),
+    (
+        "daily_traffic_profile",
+        "Визиты по дням, источнику, типу устройства и браузеру (с отказами, глубиной, временем)",
+        "ym:s:visits, ym:s:bounceRate, ym:s:pageDepth, ym:s:avgVisitDurationSeconds × ym:s:date × "
+        "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser × ym:s:isRobot",
+    ),
 )
 
 
@@ -443,6 +449,36 @@ def _metrika_daily_and_search(
     except FactoryError as exc:
         out.append(
             _unmeasured("daily_search", EXTRA_METRIKA[2][1], exc.reason, EXTRA_METRIKA[2][2])
+        )
+    # Происхождение непоисковых всплесков (yummyani.site 13–15.10: прямые заходы без
+    # роста поиска, отказы 67 %): по дням, источнику, устройству и браузеру. Только чтение.
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=DAILY_WINDOW_FROM,
+            date2=date2,
+            metrics=["ym:s:visits", "ym:s:bounceRate", "ym:s:pageDepth", "ym:s:avgVisitDurationSeconds"],
+            # isRobot (B032, 16.10): автоматический браузер, уже помеченный роботом, из
+            # «нероботов» второй раз не вычитается (до 13.10 так помечались почти все).
+            dimensions=["ym:s:date", "ym:s:lastsignTrafficSource", "ym:s:deviceCategory", "ym:s:browser",
+                        "ym:s:isRobot"],
+            limit=5000,
+        )
+        out.append(
+            Measurement(
+                key="daily_traffic_profile",
+                title=EXTRA_METRIKA[3][1],
+                measured=True,
+                value=report.get("data"),
+                source=EXTRA_METRIKA[3][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+                top_n=1000,
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured("daily_traffic_profile", EXTRA_METRIKA[3][1], exc.reason, EXTRA_METRIKA[3][2])
         )
     return out
 
@@ -589,6 +625,36 @@ def _goal_reaches(provider, entry: dict, counter_id: int, date1: str, date2: str
     )
 
 
+class _WebmasterBreaker:
+    """Первый сетевой отказ Вебмастера за прогон — последний запрос к нему.
+
+    2026-10-13: api.webmaster.yandex.net закрыт по сети хоста; каждый из 21×5
+    запросов проходил свою цепочку повторов, прогон с 05:03Z к 07:57Z не
+    кончился, и Метрика (уже снятая) не попадала ни в артефакт, ни в отчёт
+    10:00 МСК. Остальные запросы прогона получают ту же причину без сети —
+    показатель остаётся «не измерено» с причиной, а не нулём. Отказ HTTP
+    (токен, права, 404 хоста) предохранитель не трогает: он у каждого хоста свой.
+    """
+
+    def __init__(self, provider) -> None:
+        self._provider = provider
+        self._tripped: str | None = None
+
+    def __getattr__(self, name):
+        return getattr(self._provider, name)
+
+    def get_webmaster_report(self, *args, **kwargs):
+        if self._tripped:
+            raise FactoryError(self._tripped)
+        try:
+            return self._provider.get_webmaster_report(*args, **kwargs)
+        except FactoryError as exc:
+            if "сеть недоступна" in exc.reason:
+                at = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                self._tripped = f"{exc.reason} Сеть проверена в {at}; в этом прогоне не повторялось."
+            raise
+
+
 #: Признак отказа по частоте запросов. Только такие отказы имеет смысл
 #: повторять вторым проходом: «счётчик не создан» и «сеть недоступна» за минуту
 #: не меняются, а повтор по ним — пустая трата квоты, которой и так не хватило.
@@ -640,7 +706,7 @@ def collect(
     говорит, что попыток было две. Выдуманных данных ни в одном исходе не
     появляется.
     """
-    provider = provider or YandexAnalyticsProvider(dry_run=True)
+    provider = _WebmasterBreaker(provider or YandexAnalyticsProvider(dry_run=True))
     entries = registry.load()["properties"]
     collections = [collect_domain(provider, entry, date1=date1, date2=date2) for entry in entries]
 
