@@ -236,3 +236,86 @@ def test_json_вывод_разбирается(м, monkeypatch):
     данные = json.loads(буфер.getvalue())
     assert данные[0]["домен"] == "x.example"
     assert данные[0]["вложенные"][1]["код"] == "504"
+
+
+def _реестр_закрытого(tmp_path: Path, *, разрешено=False) -> Path:
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "lords-10", "domain": "x.example",
+         "indexing": {"desired_state": "CLOSED",
+                      "open_authorized": разрешено,
+                      "note": "решение владельца не получено"}},
+    ]}), encoding="utf-8")
+    return реестр
+
+
+def test_404_на_карту_у_закрытого_домена_не_замечание(м, monkeypatch, tmp_path):
+    """Закрытость — состояние ЗАПИСИ, как и отсутствие DNS.
+
+    Измерено 2026-10-18: восемь витрин K2 (`desired_state: CLOSED`,
+    `open_authorized: false`) давали восемь замечаний из восьми — весь красный
+    итог прогона состоял из ожидаемого. После этого читатель перестаёт
+    смотреть на инструмент, и настоящий отказ утонет.
+    """
+    _подменить(м, monkeypatch, {
+        "https://x.example/robots.txt": ("200", 0.1, ROBOTS),
+        "https://x.example/sitemap.xml": ("404", 0.1, ""),
+    })
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        код = м.главное(["--domain", "x.example", "--registry", str(_реестр_закрытого(tmp_path))])
+    вывод = буфер.getvalue()
+    assert код == 0
+    assert "404 на карту правильный ответ" in вывод
+    assert "доменов с замечаниями: 0" in вывод
+    assert "закрыты для индексации записью владельца: 1" in вывод
+
+
+def test_404_у_открытого_домена_остаётся_замечанием(м, monkeypatch, tmp_path):
+    """Отрицательный контроль: исключение не отменяет правило.
+
+    Запись, РАЗРЕШАЮЩАЯ открытие, закрытой не считается — иначе отставшая
+    запись начнёт прикрывать настоящий отказ (девять таких записей уже
+    измерены, `indexing-registry-vs-live.py`).
+    """
+    _подменить(м, monkeypatch, {
+        "https://x.example/robots.txt": ("200", 0.1, ROBOTS),
+        "https://x.example/sitemap.xml": ("404", 0.1, ""),
+    })
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        код = м.главное(["--domain", "x.example", "--registry",
+                         str(_реестр_закрытого(tmp_path, разрешено=True))])
+    assert код == 1
+    assert "/sitemap.xml → 404" in буфер.getvalue()
+
+
+def test_работающая_карта_у_закрытого_домена_это_замечание(м, monkeypatch,
+                                                           tmp_path):
+    """Обратная сторона исключения: закрытому домену карта не нужна вовсе."""
+    _подменить(м, monkeypatch, {
+        "https://x.example/robots.txt": ("200", 0.1, ROBOTS),
+        "https://x.example/sitemap.xml": ("200", 0.1, ИНДЕКС),
+        "https://x.example/sitemap/static.xml": ("200", 0.1, КАРТА),
+        "https://x.example/sitemap/titles.xml": ("200", 0.1, КАРТА),
+    })
+    буфер = io.StringIO()
+    with redirect_stdout(буфер):
+        код = м.главное(["--domain", "x.example", "--registry", str(_реестр_закрытого(tmp_path))])
+    assert код == 1
+    assert "карта отдаётся" in буфер.getvalue()
+
+
+def test_закрытость_читается_только_из_записи(м, tmp_path):
+    реестр = tmp_path / "site-cells.json"
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "a", "domain": "closed.example",
+         "indexing": {"desired_state": "closed", "open_authorized": False}},
+        {"site_id": "b", "domain": "open.example",
+         "indexing": {"desired_state": "OPEN", "open_authorized": True}},
+        {"site_id": "c", "domain": "allowed.example",
+         "indexing": {"desired_state": "CLOSED", "open_authorized": True}},
+        {"site_id": "d", "domain": "nofield.example"},
+    ]}), encoding="utf-8")
+    assert set(м.закрытые(реестр)) == {"closed.example"}
+    assert м.закрытые(tmp_path / "нет.json") == {}
