@@ -5559,6 +5559,58 @@
       ],
       "status": "queued",
       "evidence": "18.10 11:46Z: сверка www на 17 доменах: дубли 200 с self-canonical — an1meg0.site, zonafilm12.site, zonafilm.cc (и lordserials22.info — пауза до 21.10); yummyani7.site/.info — www 200, но canonical на основной домен. Представитель — an1meg0.site; Zona — переносом через src/serve.py после проверки. B001 (nginx) остаётся за владельцем — редирект приложения его не отменяет и с ним совместим. Эффект: Вебмастер — главное зеркало и исключение www-адресов (после B023); Метрика — визиты на www-хосте → 0."
+    },
+    {
+      "id": "T222",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://www.zonafilm12.site/",
+        "https://www.zonafilm12.site/catalog/"
+      ],
+      "problem": "Живая сверка 18.10 11:46Z: https://www.zonafilm12.site/ и страницы под www — 200, index, follow, canonical на www-адрес: полный индексируемый дубль сайта (B001, открыт с 12.10; nginx — root, ждёт владельца).",
+      "norm": "единый канонический хост; дубли сайта не индексируются (SEO_KNOWLEDGE_PACK §1; B001 expected: www → 308 на корень, на www нет self-canonical)",
+      "expected": "src/lords-frontend.py, класс Обработчик (do_GET ~9576 и do_HEAD ~9469): в начале — если хост запроса (Host без порта, нижний регистр) равен \"www.\" + ИНДЕКС_ДОМЕН (LORDS_INDEXING_SITE из config/site.json), ответить 308 на https://<ИНДЕКС_ДОМЕН><исходный путь с запросом> (помощник _переход ~9764) без тела; иначе поведение прежнее; /healthz не трогать. Классы видов (ВидЛордс/ВидЗона и пр.) не менять. Новая проверка checks/www_redirect.py: запрос с Host www.<домен> на / и /catalog/?page=2 → 308 и точный Location https://<домен>/…; Host <домен> → 200; Host localhost → 200; без снимка — «не измерено» (rc 2), ловить и SystemExit при импорте. На базе rc=1, на ветке rc=0; подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/www_redirect.py",
+      "verify_live": "https://www.zonafilm12.site/ → 308 на https://zonafilm12.site/; https://www.zonafilm12.site/catalog/?page=2 → 308 с сохранением запроса; https://zonafilm12.site/ — 200, index, follow, canonical на себя",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://zonafilm12.site/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 11:46Z: см. T221 (представитель an1meg0.site); семейство Lords-рантайма в src/ (у lordfilm47/lordserial33 www уводит nginx 308). Эффект: Вебмастер — главное зеркало (после B023); Метрика — визиты на www-хосте → 0."
+    },
+    {
+      "id": "T223",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://www.zonafilm.cc/",
+        "https://www.zonafilm.cc/catalog/"
+      ],
+      "problem": "Живая сверка 18.10 11:46Z: https://www.zonafilm.cc/ и страницы под www — 200, index, follow, canonical на www-адрес: полный индексируемый дубль сайта (B001, открыт с 12.10; nginx — root, ждёт владельца).",
+      "norm": "единый канонический хост; дубли сайта не индексируются (SEO_KNOWLEDGE_PACK §1; B001 expected: www → 308 на корень, на www нет self-canonical)",
+      "expected": "Рантайм закреплён (pins.lock.json, checks/pinned_template_sha.py) — template/<релиз>/lords-frontend.py НЕ менять. Правка — новым модулем поверх артефакта, тем же способом, что src/canonical_requested.py (обёртка Обработчик.do_GET и do_HEAD) и подключение его в src/serve.py: в обёртке — если хост запроса (Host без порта, нижний регистр) равен \"www.\" + основной домен (LORDS_INDEXING_SITE / домен из config/site.json — как его уже читает serve.py), ответить 308 на https://<домен><исходный путь с запросом> без тела и не звать исходный обработчик; иначе — исходный обработчик без изменений; /healthz не трогать. src/public_wording.py и прочие слои не трогать. Новая проверка checks/www_redirect.py: запрос с Host www.<домен> на / и /catalog/?page=2 → 308 и точный Location https://<домен>/…; Host <домен> → 200; Host localhost → 200; без снимка — «не измерено» (rc 2), ловить и SystemExit при импорте. На базе rc=1, на ветке rc=0; подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/www_redirect.py",
+      "verify_live": "https://www.zonafilm.cc/ → 308 на https://zonafilm.cc/; https://www.zonafilm.cc/catalog/?page=2 → 308 с сохранением запроса; https://zonafilm.cc/ — 200, index, follow, canonical на себя",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://zonafilm.cc/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 11:46Z: см. T221 (представитель an1meg0.site); закреплённый шаблон Zona (как T186/T207 — правка слоем через src/serve.py). Эффект: Вебмастер — главное зеркало (после B023); Метрика — визиты на www-хосте → 0."
     }
   ]
 }
