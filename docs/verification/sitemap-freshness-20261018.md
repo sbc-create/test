@@ -9,12 +9,12 @@
 ## Чем мерено
 
 ```bash
-python3 automation/local/sitemap-freshness-sweep.py                 # 12 витрин сети
+python3 automation/local/sitemap-freshness-sweep.py                 # 17 витрин сети
 python3 automation/local/sitemap-freshness-sweep.py yummyani.site \
     yummyani.org yummyani.biz yummyani7.site yummyani7.info         # семейство yummy
 ```
 
-Отставание меряется ОТНОСИТЕЛЬНО сети, а не относительно «сегодня»: общая
+Прогон на одном-двух доменах негоден и запрещён инструментом (код 2, «СРАВНИВАТЬ НЕ С ЧЕМ»): вывод сравнительный, и один домен всегда оказывается «самым молодым в сети». Отставание меряется ОТНОСИТЕЛЬНО сети, а не относительно «сегодня»: общая
 задержка доставки у всех витрин сразу — другая причина и другой владелец. Без
 этого условия получилось бы двенадцать находок вместо одной верной; на условие
 стоит отрицательный контроль (`tests/unit/test_sitemap_freshness_sweep.py`).
