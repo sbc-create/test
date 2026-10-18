@@ -1,0 +1,155 @@
+--- a/seo_operator/tech_publish.py
++++ b/seo_operator/tech_publish.py
+@@ -24,6 +24,7 @@
+ from __future__ import annotations
+ 
+ import datetime as dt
++import hashlib
+ import json
+ import os
+ import re
+@@ -38,7 +39,19 @@
+ 
+ REPO = tech_run.REPO
+ RESULTS = Path("/var/lib/site-cells/results")
+-ОПУБЛИКОВАНО = {"live_verified", "released"}
++#: Исходы, после которых задача больше не кандидат на выпуск.
++#:
++#: `artifact_identical` здесь не ради красоты: без него задача, у которой
++#: выпуск не нужен, возвращалась бы в кандидаты на каждом такте и давала бы ту
++#: же бесконечную запись «ожидание», от которой правило и избавляет (T175: 587
++#: записей, 356 из них подряд с одной причиной).
++ОПУБЛИКОВАНО = {"live_verified", "released", "artifact_identical"}
++
++#: Что входит в артефакт ячейки: исполняемый код витрины. Перечень тот же, по
++#: которому считается `artifact_sha256` рантайма (решение D207), поэтому
++#: сравнение идёт с тем же, что витрина объявляет о себе.
++ФАЙЛЫ_АРТЕФАКТА = ("run.py",)
++КАТАЛОГ_АРТЕФАКТА = "src/"
+ 
+ 
+ def _сейчас() -> dt.datetime:
+@@ -103,6 +116,63 @@
+     return _git(репо, "merge-base", "--is-ancestor", a, b).returncode == 0
+ 
+ 
++def файлы_артефакта(репо: Path, коммит: str) -> list[str]:
++    """Пути артефакта в дереве коммита. Пустой список — сравнивать нечем."""
++    г = _git(репо, "ls-tree", "-r", "--name-only", коммит)
++    if г.returncode != 0:
++        return []
++    пути = [п.strip() for п in (г.stdout or "").splitlines() if п.strip()]
++    итог = [п for п in пути
++            if п in ФАЙЛЫ_АРТЕФАКТА
++            or (п.startswith(КАТАЛОГ_АРТЕФАКТА) and п.endswith(".py"))]
++    return sorted(итог)
++
++
++def цифра_дерева(репо: Path, коммит: str) -> tuple[str, str]:
++    """(sha256 артефакта в этом коммите, причина пустоты).
++
++    Рамка та же, что у рантайма (D207): имя, NUL, байты, NUL, по
++    отсортированным именам. Побайтно — то есть содержимое файлов, а не список
++    изменённых путей: по списку путей «совпадает» можно получить и там, где
++    содержимое разное.
++    """
++    пути = файлы_артефакта(репо, коммит)
++    if not пути:
++        return "", f"в дереве {коммит[:12]} нет файлов артефакта"
++    сумма = hashlib.sha256()
++    for путь in пути:
++        г = subprocess.run(["git", "-C", str(репо), "show", f"{коммит}:{путь}"],
++                           capture_output=True, timeout=600)
++        if г.returncode != 0:
++            return "", f"файл {путь} не прочитан в {коммит[:12]}"
++        сумма.update(путь.encode("utf-8"))
++        сумма.update(b"\0")
++        сумма.update(г.stdout)
++        сумма.update(b"\0")
++    return сумма.hexdigest(), ""
++
++
++def сравнить_артефакты(репо: Path, head: str, live: str) -> dict:
++    """Факты для правила «выпуск не нужен».
++
++    Три исхода, и третий обязателен: если сравнить НЕ УДАЛОСЬ, правило не
++    применяется и остаётся прежнее ожидание. Тихого «совпадает» быть не
++    должно — иначе правило станет способом пропускать выпуски молча.
++    """
++    if not head or not live:
++        return {"artifact_same": None, "artifact_reason": "нет головы или живого коммита"}
++    ц_head, беда_head = цифра_дерева(репо, head)
++    ц_live, беда_live = цифра_дерева(репо, live)
++    if беда_head or беда_live:
++        return {"artifact_same": None, "artifact_head": ц_head or "",
++                "artifact_live": ц_live or "",
++                "artifact_reason": беда_head or беда_live}
++    return {"artifact_same": ц_head == ц_live, "artifact_head": ц_head,
++            "artifact_live": ц_live,
++            "artifact_reason": "" if ц_head == ц_live
++            else "артефакты различаются"}
++
++
+ def решение(сведения: dict) -> tuple[str, str]:
+     """Чистое решение по собранным сведениям → (действие, причина).
+ 
+@@ -115,9 +185,33 @@
+         return "wait", "живой коммит не определён"
+     if сведения.get("head_in_live"):
+         return "already_live", "голова задачи уже в живом выпуске (выпущена этим или чужим выпуском)"
+-    if ci and not ci.startswith(live[:12]) and not live.startswith(ci[:12]):
+-        return "wait", f"на ветке выпуска невыпущенный коммит {ci[:12]} (живой {live[:12]}) — выпуск унёс бы его"
+-    if remote and not remote.startswith(live[:12]) and not live.startswith(remote[:12]):
++    расхождение_ci = bool(ci) and not ci.startswith(live[:12]) and not live.startswith(ci[:12])
++    расхождение_remote = (bool(remote) and not remote.startswith(live[:12])
++                          and not live.startswith(remote[:12]))
++    if расхождение_ci or расхождение_remote:
++        # Расхождение бывает двух родов, и смешивать их нельзя.
++        #
++        # Первый: на ветке выпуска лежит чужая правка КОДА — её выпуск унёс бы,
++        # и ожидание правильно. Второй: расхождение только в файлах, которых в
++        # артефакте нет вовсе (T175: голова ветки — чужой коммит, меняющий
++        # только TEMPLATE-CANDIDATES.md, CI его не собирает по
++        # paths-ignore '**/*.md'). Во втором случае ждать нечего: выпускать
++        # нечего, и ожидание повторяется вечно — 587 записей по одной задаче,
++        # 356 подряд с одной причиной.
++        #
++        # Различает их ПОБАЙТНОЕ сравнение артефактов, а не список путей. И
++        # только при трёх условиях сразу: задача проверена, клон чист (иначе
++        # живое могло быть собрано из незакоммиченного, и сравнение коммитов
++        # ничего не говорит) и сравнение удалось.
++        if (сведения.get("artifact_same") is True
++                and сведения.get("task_status") == "verified"
++                and not сведения.get("clone_dirty")):
++            return "artifact_identical", (
++                "артефакт ветки побайтно совпадает с живым "
++                f"({str(сведения.get('artifact_head'))[:12]}): выпуск не нужен, "
++                "расхождение — в файлах вне артефакта")
++        if расхождение_ci:
++            return "wait", f"на ветке выпуска невыпущенный коммит {ci[:12]} (живой {live[:12]}) — выпуск унёс бы его"
+         return "wait", f"голова ветки выпуска {remote[:12]} не равна живому {live[:12]} (идёт CI или чужой push)"
+     if сведения.get("clone_dirty"):
+         return "wait", "общий клон репозитория грязный — в нём работает другая сессия"
+@@ -257,12 +351,22 @@
+             "clone_dirty": bool(_git(репо, "status", "--porcelain").stdout.strip()),
+             "clone_on_live": bool(live_full) and _git(репо, "rev-parse", "HEAD").stdout.strip() == live_full,
+             "branch": ветка,
++            "task_status": str(з.get("status") or ""),
+         }
++        # Сравнение артефактов нужно только там, где иначе было бы ожидание:
++        # лишние вызовы git на каждом такте ни к чему.
++        сведения.update(сравнить_артефакты(репо, head, live_full or live))
+     действие, причина = решение(сведения)
+     база = {"task_id": з["id"], "head": head, "site_id": c["site_id"], "domain": c["domain"],
+             "decision": действие, "reason": причина}
+     if dry_run:
+         return {**база, "facts": {k: v for k, v in сведения.items() if k != "hold"}}
++    if действие == "artifact_identical":
++        # Обе цифры в записи: решение должно быть видно в журнале, а не только
++        # в причине. По ним же проверяется, что правило не сработало вслепую.
++        return _записать(state, {**база, "outcome": "artifact_identical",
++                                 "artifact_head": сведения.get("artifact_head"),
++                                 "artifact_live": сведения.get("artifact_live")})
+     if действие in ("wait", "hold"):
+         return _записать(state, {**база, "outcome": "waiting"})
+     if действие == "superseded":
