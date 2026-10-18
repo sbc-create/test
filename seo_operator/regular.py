@@ -974,10 +974,26 @@ def sitemap_date_findings(
 K2_SNAPSHOT = Path(
     "/srv/site-factory/repo/var/lords/lords/catalog-cache/lords-01.json")
 #: Отчёты издателя: по ним видно, когда комплект собирался в последний раз.
-K2_REPORTS = REPO_ROOT / "var" / "k2-data" / "publish-reports"
+#:
+#: Суточный таймер работает из ПОСТОЯННОГО каталога доставки и пишет отчёты
+#: туда, а не в рабочую копию сессии. Если смотреть только в рабочую копию,
+#: сторож объявит пропуск даже при исправно работающем таймере — поэтому
+#: берётся тот каталог, который существует, с приоритетом постоянного.
+K2_DELIVERY_ROOT = Path("/srv/site-factory/k2-delivery")
+K2_REPORTS = (
+    K2_DELIVERY_ROOT / "var" / "k2-data" / "publish-reports"
+    if (K2_DELIVERY_ROOT / "var" / "k2-data" / "publish-reports").is_dir()
+    else REPO_ROOT / "var" / "k2-data" / "publish-reports")
 #: Сколько часов разрыва считается нормой. Доставка суточная, плюс запас на
 #: смещение и на то, что снимок поставщика обновляется ночью.
 K2_MAX_LAG_HOURS = 30
+#: Назначенный срок суточной доставки (UTC) — из таймера
+#: `k2-catalog-deliver.user.timer`, `OnCalendar=*-*-* 05:20:00 UTC`.
+K2_SCHEDULE_HOUR = 5
+K2_SCHEDULE_MINUTE = 20
+#: Запас после срока: у таймера `RandomizedDelaySec=300`, а сам прогон длится
+#: около девяти минут. Два часа — заведомо больше и не даёт ложной тревоги.
+K2_SCHEDULE_GRACE_HOURS = 2
 
 
 def k2_catalog_findings(
@@ -1036,6 +1052,24 @@ def k2_catalog_findings(
                 ),
             }
         ]
+    # Пропущенный прогон — отдельное условие, независимое от разрыва.
+    # Разрыв меряет «насколько комплект отстал от поставщика», а это —
+    # «сегодняшний назначенный прогон вообще был?». Одно другое не заменяет:
+    # измерено 2026-10-18, когда снимок обновился в 03:36, прогона не было, а
+    # по разрыву (7.7 ч при допуске 30) всё выглядело свежим.
+    срок = now.replace(hour=K2_SCHEDULE_HOUR, minute=K2_SCHEDULE_MINUTE,
+                       second=0, microsecond=0)
+    if now >= срок + dt.timedelta(hours=K2_SCHEDULE_GRACE_HOURS) and \
+            последний < срок:
+        находки.append({
+            "code": "K2_CATALOG_RUN_MISSED",
+            "severity": "critical",
+            "detail": (
+                f"суточная доставка назначена на {срок:%H:%M} UTC, сейчас "
+                f"{now:%H:%M} UTC, а последний прогон издателя — "
+                f"{iso(последний)}: сегодняшний прогон не состоялся"),
+        })
+
     разрыв = (снят - последний).total_seconds() / 3600.0
     if разрыв <= max_lag_hours:
         return находки
