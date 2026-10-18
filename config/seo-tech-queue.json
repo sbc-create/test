@@ -101,7 +101,7 @@
       "status": "blocked",
       "owner_action": "root: команда §4 docs/verification/www-mirrors-20261012.md (коммит 6d20f68) — по одному домену; zonafilm12.site — после спада нагрузки.",
       "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)",
-      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа. | 18.10 11:46Z: живая сверка — www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc по-прежнему 200, index, follow, canonical на www. В цикл поставлен редирект на уровне приложения (T221, представитель an1meg0.site); nginx-правка остаётся за владельцем."
+      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа. | 18.10 11:46Z: живая сверка — www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc по-прежнему 200, index, follow, canonical на www. В цикл поставлен редирект на уровне приложения (T221, представитель an1meg0.site); nginx-правка остаётся за владельцем. | 18.10 12:35Z: www.yummyani7.site и www.yummyani7.info — 200, index, follow, canonical на основной домен (не self). Выбранный поисковиком адрес не проверен (Вебмастер недоступен, B023) — исключение дубля НЕ подтверждено. Нужен 308 www → основной домен (nginx владельца или код Yummy Архитектора); остальные Yummy (yummyani.site/.org/.biz) уже отвечают 308."
     },
     {
       "id": "B002",
