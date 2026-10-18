@@ -447,4 +447,5 @@ if [ "$code" != 0 ]; then
 fi
 
 log "$site: выпуск $head_sha принят, прежний $old_sha остаётся на диске для отката"
-log "откат вручную: ln -sfn $old_release $current_link && systemctl restart $unit"
+log "откат: bash automation/local/k2-release-code.sh --rollback $site"
+log "он же вручную, если обёртка недоступна: ln -sfn $old_release $current_link && systemctl restart $unit"
