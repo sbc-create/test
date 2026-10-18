@@ -5522,6 +5522,16 @@
       ],
       "status": "live_verified",
       "evidence": "18.10 10:47Z: распространение после живой проверки представителя T214. an1mego.site — канарейка T191: правка одинакова на трёх AnimeGo, /ongoing/ не затрагивает. | 18.10 11:28:31Z опубликовано штатным циклом (прогон 20261018T111233Z-1943950, голова 70b141ec, публикатор live_verified). Живая сверка сессией 18.10 11:29Z (var/seo-audit/t220-live-20261018.json): «Формат» — «Фильмы», «Сериалы»; разделы меток — noindex, follow; канарейка T191 /ongoing/ — 200, index, follow."
+    },
+    {
+      "id": "B035",
+      "site": "yummyani.site, yummyani7.site, yummyani7.info, yummyani.org, yummyani.biz",
+      "direction": "anime",
+      "problem": "Живая сверка 18.10 11:43Z (var/seo-audit/yummy-labels-schedule-20261018.json, var/seo-audit/sweep-yummy-20261018.json), одинаково на пяти Yummy: (1) в фильтре жанров /catalog видны служебные метки поставщика «Азиатский контент», «Западный контент» — ссылки /catalog?genre=aziatskiy-kontent, /catalog?genre=zapadnyy-kontent (разделы уже noindex, follow); на странице сезона yummyani7.site (/anime/piraty-chernoy-laguny-vtoroy-zalp/season/2) метка «Западный контент» в тексте; правило сети T044/T077/T185–T199: метка — не жанр, не в видимом тексте и не цель ссылок. (2) /schedule/ (noindex, nofollow) — посетителю: «Подтверждённых дат и номеров серий контур сейчас не отдаёт, поэтому дни недели не строятся: показывать сетку с выдуманными сериями нельзя. Календарь премьер витрины — /catalog/schedule ; он покажет даты…» — внутренние слова («контур», «витрины») и сырой путь вместо ссылки. (3) /collections/ и /schedule/ — noindex, NOFOLLOW: ссылки со страниц не проходятся (у прочих служебных страниц сети — noindex, follow). На yummyani.biz /collections/ — «Редакционная витрина: …».",
+      "expected": "метки не выводятся в фильтре и тексте страниц; /schedule/ — редакционный текст без внутренних слов и со ссылкой на /catalog/schedule; robots служебных страниц — noindex, follow",
+      "status": "blocked",
+      "owner_action": "Архитектор (код Yummy, src/app/*; сборка вместе с T179): (1) исключить метки aziatskiy-kontent/zapadnyy-kontent (и их имена) из списка жанров фильтра /catalog и из жанров на страницах тайтла/сезона; (2) /schedule/: заменить служебное объяснение на текст для посетителя и ссылку на /catalog/schedule; (3) /schedule/, /collections/ — noindex, follow вместо nofollow (если nofollow не осознанное решение — тогда записать его в DECISIONS). SEO не правит: зона сборки Yummy у Архитектора (поручение владельца).",
+      "evidence": "18.10 11:43Z: обход 3×31 страниц (yummyani.site, yummyani7.site, yummyani.biz) и сверка пяти доменов; разделы меток — noindex, follow на всех пяти."
     }
   ]
 }
