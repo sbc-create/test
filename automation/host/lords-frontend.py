@@ -420,6 +420,12 @@ def цифра_рантайма_выпуска(корень=None) -> str:
     return цифра
 
 
+#: Значение `robots` для страницы, которая не должна попадать в индекс
+#: независимо от режима сайта. `follow`, а не `nofollow`: по такой странице
+#: обходчик обязан пройти к соседним, у которых содержимое есть.
+НЕ_ИНДЕКСИРУЕМА = "noindex, follow"
+
+
 def мета_роботов() -> str:
     """Значение `<meta name="robots">` и `X-Robots-Tag` обычных страниц."""
     состояние, _ = режим_индексации()
@@ -5180,7 +5186,7 @@ class ВидЛордс(Вид):
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
                  описание: str = "", разметка: str = "", код: int = 200,
                  крошки: str = "", og: dict | None = None,
-                 поиск_q: str = "") -> str:
+                 поиск_q: str = "", индексируема: bool = True) -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in _се_значение(self.се, "нав"))
@@ -5194,7 +5200,7 @@ class ВидЛордс(Вид):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="{ДИЗАЙН_ID}" data-profile="{html.escape(ПРОФИЛЬ)}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="{мета_роботов()}">
+<meta name="robots" content="{мета_роботов() if индексируема else НЕ_ИНДЕКСИРУЕМА}">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
@@ -6209,6 +6215,11 @@ class ВидЛордс(Вид):
         разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
+            # Серия без дорожки отдаёт пустое состояние, и в индекс такая
+            # страница не идёт ни в каком режиме сайта: измерено 2026-10-18 —
+            # на одной витрине 45 198 объявленных, но недоступных серий из
+            # 602 566.
+            индексируема=серия_с_дорожкой(деталь, сезон, эпизод),
             описание=f"{заголовок}: смотреть онлайн на {self.имя}.",
             разметка=разметка, крошки=self.крошки(звенья),
             og=self.карточка_графа(
@@ -6240,7 +6251,8 @@ class ВидЗона(Вид):
 
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
                  описание: str = "", разметка: str = "", код: int = 200,
-                 сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
+                 сверху: str = "", крошки: str = "", og: dict | None = None,
+                 индексируема: bool = True) -> str:
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
             for u, t in _се_значение(self.се, "нав"))
@@ -6259,7 +6271,7 @@ class ВидЗона(Вид):
             return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-rail">
     <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{html.escape(титул)}</title>{описание_мета}{канон}
-    <meta name="robots" content="{мета_роботов()}">
+    <meta name="robots" content="{мета_роботов() if индексируема else НЕ_ИНДЕКСИРУЕМА}">
     {_открытый_граф(og or {})}
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     {_мета_версии()}
@@ -6289,7 +6301,7 @@ class ВидЗона(Вид):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="zona-top">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="{мета_роботов()}">
+<meta name="robots" content="{мета_роботов() if индексируема else НЕ_ИНДЕКСИРУЕМА}">
 {_открытый_граф(og or {})}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии()}
@@ -6965,6 +6977,11 @@ class ВидЗона(Вид):
         разметка = self.schema_эпизода(запись, деталь, сезон, эпизод, путь)
         return self.оболочка(
             тело, f"{заголовок} — {self.имя}", путь,
+            # Серия без дорожки отдаёт пустое состояние, и в индекс такая
+            # страница не идёт ни в каком режиме сайта: измерено 2026-10-18 —
+            # на одной витрине 45 198 объявленных, но недоступных серий из
+            # 602 566.
+            индексируема=серия_с_дорожкой(деталь, сезон, эпизод),
             описание=f"{заголовок}: смотреть онлайн на {self.имя}.",
             разметка=разметка, крошки=self.крошки(звенья),
             og=self.карточка_графа(
@@ -7459,7 +7476,8 @@ class ВидАнимедиа(ВидЗона):
     # --- каркас --------------------------------------------------------
     def оболочка(self, тело: str, титул: str, путь: str, *, актив: str = "",
                  описание: str = "", разметка: str = "", код: int = 200,
-                 сверху: str = "", крошки: str = "", og: dict | None = None) -> str:
+                 сверху: str = "", крошки: str = "", og: dict | None = None,
+                 индексируема: bool = True) -> str:
         домен = _аниме_домен(self.хост)
         нав = "".join(
             f'<a href="{закодировать_запрос(u)}"{ТЕКУЩАЯ_СТРАНИЦА if u == актив else ""}>{html.escape(t)}</a>'
@@ -7479,7 +7497,7 @@ class ВидАнимедиа(ВидЗона):
         return f"""<!doctype html><html lang="ru" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}" data-design="animedia-portal" data-seo-profile="{профиль_meta}">
 <head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)}</title>{описание_мета}{канон}
-<meta name="robots" content="{мета_роботов()}">
+<meta name="robots" content="{мета_роботов() if индексируема else НЕ_ИНДЕКСИРУЕМА}">
 {_открытый_граф(og_данные)}
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 {_мета_версии().replace(f'content="{ПРОФИЛЬ}"', f'content="{профиль_meta}"', 1)}
