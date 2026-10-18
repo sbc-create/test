@@ -4887,8 +4887,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 ~00:35Z: живая проверка ссылок сессии; прочие находки той проверки — намеренные (/search/, /lists/ noindex, /random/ 303, ?ongoing=1 на контролях канарейки), zonafilm12 /collections/ 504 — разовый (повтор 200 за 0.0 с, известная перегрузка B005). Эффект: Метрика — переходы из крошек и входы на /movies/, /series/ по Яндексу и Google раздельно, 7 дней до/после.",
+      "status": "live_verified",
+      "evidence": "18.10 ~00:35Z: живая проверка ссылок сессии; прочие находки той проверки — намеренные (/search/, /lists/ noindex, /random/ 303, ?ongoing=1 на контролях канарейки), zonafilm12 /collections/ 504 — разовый (повтор 200 за 0.0 с, известная перегрузка B005). Эффект: Метрика — переходы из крошек и входы на /movies/, /series/ по Яндексу и Google раздельно, 7 дней до/после. | 18.10 00:53:24Z опубликовано штатным циклом (прогон 20261018T003927Z-2969288 VERIFIED, голова 4ad9f54c, публикатор live_verified). Живая сверка сессией 00:57Z (var/seo-audit/t200-live-20261018.json): 12 страниц тайтлов — вторая крошка /movies/ или /series/, ссылок ?kind= в крошках 0, canonical на себя; BreadcrumbList item №2 — https://lordfilm47.space/movies/; цели /movies/ и /series/ — 200, index, follow, canonical на себя.",
       "owner_action": null
     }
   ]
