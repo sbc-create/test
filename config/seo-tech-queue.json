@@ -5918,6 +5918,29 @@
       ],
       "status": "live_verified",
       "evidence": "18.10 16:05Z: замер сессии. | 18.10 16:42Z: CI 39145105501, публикатор live_verified 16:39:28Z; сверка сессии var/seo-audit/t233-live-20261018.json."
+    },
+    {
+      "id": "T234",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/"
+      ],
+      "problem": "18.10 16:43Z: тот же пробел, что закрыт T231 на an1meg0.site: у тайтлов из /schedule/ an1mego.site нет строки «Следующая серия» (живой замер 18.10 ~15:30Z, 3 тайтла с выходом 18–19.10).",
+      "norm": "Полезный раздел страницы — дата следующей серии из снимка расписания (источник тот же, что у /schedule/); нет события — нет строки (T071); серия уже доступна — строки нет (T136).",
+      "expected": "Перенос с an1meg0.site (T231) или animeg0.site без изменений смысла: метод ВидАнимеГо._следующая_серия (animeg0-site src/animego-frontend.py ~12169, коммиты 7d873e4 T071 и 928ad2e T136) и его вызов в тайтл() (~12261, класс «ag-next»), правило CSS .ag-next в src/animego_theme.py (одна строка, как ~469 у animeg0). Метод — в ВидАнимеГо (checks/boundaries.py; урок первой попытки T071). Проверки — перенести checks/next_episode_title.py и checks/next_episode_consistent.py с animeg0-site, подключить в checks/run.sh; на базе rc=1, на ветке rc=0; без рантайма — rc 2 (Exception и SystemExit). stamp_manifest/update_pins, полный run.sh. Страницы серий, JSON-LD (канарейка exp-animego-episode-jsonld на an1mego.site) и вёрстку не трогать.",
+      "check": "checks/next_episode_title.py",
+      "verify_live": "тайтл с будущей серией в /schedule/ an1meg0.site — строка «Следующая серия: N серия — <дата> (МСК)»; тайтл без будущего события — без строки",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/schedule/",
+          "status": 200
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "Пауза до оценки T191 (exp-animego-ongoing-landing, an1mego.site) 24.10: не менять страницы сайта-канарейки. После 24.10 — status queued.",
+      "evidence": "18.10 16:43Z: подготовлено сессией вслед за T231."
     }
   ]
 }
