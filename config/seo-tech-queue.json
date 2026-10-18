@@ -4890,6 +4890,37 @@
       "status": "live_verified",
       "evidence": "18.10 ~00:35Z: живая проверка ссылок сессии; прочие находки той проверки — намеренные (/search/, /lists/ noindex, /random/ 303, ?ongoing=1 на контролях канарейки), zonafilm12 /collections/ 504 — разовый (повтор 200 за 0.0 с, известная перегрузка B005). Эффект: Метрика — переходы из крошек и входы на /movies/, /series/ по Яндексу и Google раздельно, 7 дней до/после. | 18.10 00:53:24Z опубликовано штатным циклом (прогон 20261018T003927Z-2969288 VERIFIED, голова 4ad9f54c, публикатор live_verified). Живая сверка сессией 00:57Z (var/seo-audit/t200-live-20261018.json): 12 страниц тайтлов — вторая крошка /movies/ или /series/, ссылок ?kind= в крошках 0, canonical на себя; BreadcrumbList item №2 — https://lordfilm47.space/movies/; цели /movies/ и /series/ — 200, index, follow, canonical на себя.",
       "owner_action": null
+    },
+    {
+      "id": "T201",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/title/club-friday-the-series-season-5/season-1/episode-1/",
+        "https://lordfilm47.space/title/club-friday-the-series-season-5/"
+      ],
+      "problem": "Живая проверка 18.10 ~00:58Z (var/seo-audit/links-episodes-20261018.json): на странице серии без видео (data-state=unavailable; noindex, follow — T055) посетитель читает «Эта серия пока недоступна. Источник ещё не отдал её для просмотра.» и подпись состояния плеера «серия без дорожки» — внутренние слова. Такие серии стоят ссылками в списке серий страницы тайтла (у Club Friday The Series Season 5 — все 33). Тот же текст в шаблоне Lords/Zona/Animedia (src/*-frontend.py: «Источник ещё не отдал…», JS unavailable:'серия без дорожки', словарь «unavailable»: «серия без дорожки»).",
+      "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
+      "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
+      "check": "checks/public_wording.py",
+      "verify_live": "на странице серии без видео — «Видео этой серии пока не опубликовано»; «Источник ещё не отдал» и «серия без дорожки» нет; robots страницы — noindex, follow как прежде",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/title/club-friday-the-series-season-5/season-1/episode-1/",
+          "status": 200,
+          "absent": [
+            "Источник ещё не отдал",
+            "серия без дорожки"
+          ],
+          "contains": [
+            "Видео этой серии пока не опубликовано"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 ~01:00Z: пары добавлены в automation/local/wire-public-wording.py (ЗАМЕНЫ_2) и «Источник ещё не отдал её» — в БЫВШИЕ automation/host/public_wording_check.py; сухой прогон: lordfilm47-space — 3 замены. AnimeGo — НЕ этим инструментом: на an1mego строки «серия без дорожки» и три прежние пары стоят в унаследованных классах ВидОснова/ВидАнимедиа (checks/boundaries.py запрещает) — нужна осознанная правка ядра. Распространение на lordserial33.biz, zonafilm.*, animedia.* — после проверки этой. Эффект: страницы noindex — поисковый эффект косвенный (поведение посетителя, пришедшего со страницы тайтла); Метрика — отказы на страницах серий, Яндекс и Google раздельно.",
+      "owner_action": null
     }
   ]
 }
