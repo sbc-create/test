@@ -5792,6 +5792,42 @@
       ],
       "status": "queued",
       "evidence": "18.10 15:18Z: код сверен сессией (grep avail в обоих репозиториях); живое состояние space — var/seo-audit/avail-fact-animedia-space-20261018.json и прямой замер /title/pozhiratel-zvezd/. Эффект — устойчивость факта, трафик не оценивается."
+    },
+    {
+      "id": "T230",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/favicon.svg",
+        "https://zonafilm.cc/favicon.ico"
+      ],
+      "problem": "Вебмастер 10.10 (artifacts/analytics/analytics-2026-10-10.json, technical_issues): у zonafilm.cc — FAVICON_ERROR (POSSIBLE_PROBLEM, с 08.10) и BIG_FAVICON_ABSENT; у прочих 16 доменов — не выше FAVICON_PROBLEM (RECOMMENDATION). Живой замер 18.10 15:20Z (var/seo-audit/main-favicon-yabot-20261018.json): /favicon.svg и /favicon.ico zonafilm.cc отдают SVG c <rect fill=\"var(--z-acc)\"> — CSS-переменная в отдельном файле значка не определена (заливка не задаётся); у zonafilm12.site и zonafilm.space тот же значок — fill=\"#4d9bff\", у остальных 9 витрин — конкретный цвет. Причина в коде: src/themes.py применить() переводит рантайм.ЗОНА_ТОКЕНЫ в var(--z-*) на месте, а обработчик значка закреплённого шаблона (template/zona-02-0fb857b26f85/lords-frontend.py ~8945) берёт цвет из СЕМЕЙСТВА_1_1[\"zona\"][\"токены\"][\"acc\"] — тот же словарь.",
+      "norm": "Значок сайта — валидный самостоятельный файл (показывается в выдаче рядом со сниппетом); технический дефект, отмеченный Вебмастером, устраняется в источнике данных, а не ослаблением проверки.",
+      "expected": "НЕ трогать src/themes.py (оформление тем, не зона SEO) и закреплённый шаблон. Новый слой src/favicon_color.py по образцу src/www_redirect.py (T223): установить(рантайм) запоминает конкретный акцент тёмной палитры ДО перевода в переменные — поставить вызов в src/serve.py раньше themes.применить, либо брать из src/themes.py сохранённую копию, если она есть; если значение начинается с «var(» — правка не ставится и строка перечня говорит «НЕ поставлено». Обёртка Обработчик.do_GET и do_HEAD: путь (без запроса) /favicon.svg или /favicon.ico — ответ тем же SVG, что рисует шаблон (rect rx=6, буква-метка семейства белым), но fill = конкретный цвет (#4d9bff по ЗОНА_ТОКЕНЫ шаблона), Content-Type image/svg+xml, Cache-Control как у шаблона; прочие пути — прежний обработчик. Заголовки читать безопасно (getattr(self, \"headers\", None) — урок T221). Новая проверка checks/favicon_color.py: рантайм со слоями serve.py, do_GET на /favicon.svg и /favicon.ico — тело без «var(», fill первого rect — «#» и 6 hex; на базе rc=1, на ветке rc=0; без рантайма/манифеста — «не измерено» rc 2 (Exception и SystemExit). checks/run.sh штатно, stamp_manifest/update_pins, полный run.sh. Главная, вёрстка, CSS — без изменений.",
+      "check": "checks/favicon_color.py",
+      "verify_live": "/favicon.svg и /favicon.ico — SVG без «var(», fill=\"#4d9bff\"; главная 200, переключатель темы на месте",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/favicon.svg",
+          "status": 200,
+          "contains": [
+            "fill=\"#4d9bff\""
+          ],
+          "absent": [
+            "var(--z-acc)"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/favicon.ico",
+          "status": 200,
+          "absent": [
+            "var(--z-acc)"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 15:20Z: замер сессии (YandexBot UA, GET/HEAD главной и значка 17 доменов); код — src/themes.py:154–158, шаблон ~8945. Эффект — состояние FAVICON_ERROR в Вебмастере (проверка после B023)."
     }
   ]
 }
