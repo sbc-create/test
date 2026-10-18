@@ -6265,6 +6265,31 @@
       "status": "blocked",
       "owner_action": "ВЛАДЕЛЕЦ: `sudo systemctl restart site-factory-mcp`, затем `python3 /home/claude/wt-portable-site-cell-01/automation/local/editorial-fix-installed.py` — ИТОГ «подтверждена». Основание: правка c8eb270 (снятие доставки без подмены авторства, решение Архитектора 18.10) перенесена в дерево службы (7f37574, 567 тестов), но служба запущена 12.10 17:42:04 — до правки (проверка 18.10 ~20:40Z: «НЕ подтверждена»). После — SEO снимает паузу с zonafilm.space, первая публикация, editorial-overlay-before-after --compare код 0 и «подменено авторство: 0»; далее по одной витрине; lordserials22.info — не раньше 21.10.",
       "evidence": "18.10 20:30Z: var/editor-runs/gate.jsonl, seo_operator/editor_run.py:447 и PAUSED_PUBLISH (~890). | 18.10 20:31Z: история PAUSED_PUBLISH: a734bb2 (11.10 пауза) → f11caae (12.10 снята с zonafilm.space) → 23d1eb2 (12.10 снова пауза до решения Архитектора)."
+    },
+    {
+      "id": "T246",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/country/ssha/"
+      ],
+      "problem": "18.10 21:34Z: T244 выпущена с условием «раздел страны непустой»; T242/T243 — с условием «больше одной записи» (согласовано с Архитектором, F7.5). Для единообразия и по тому же доводу — доводка lordfilm47.space.",
+      "norm": "Ссылка ведёт на страницу с самостоятельной ценностью (SEO_KNOWLEDGE_PACK §3 п.5; FACTS F7.5).",
+      "expected": "src/lords-frontend.py lordfilm47-space, факты (~3919) (правка T244): ссылку на раздел страны ставить, только если в разделе БОЛЬШЕ ОДНОЙ записи; иначе текст. Расширить checks/country_fact_links.py: страна с одной записью в индексе — без ссылки. База (текущий код с T240) rc=1, ветка rc=0; без снимка rc 2. run.sh — не трогать, если проверка уже подключена; иначе отдельной строкой; stamp/pins если есть; полный run.sh.",
+      "check": "checks/country_fact_links.py",
+      "verify_live": "тайтл раздела США — ссылка на /country/ssha/ сохраняется",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/title/pochti-doma/",
+          "status": 200,
+          "contains": [
+            "/country/ssha/"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 21:34Z: подготовлено сессией."
     }
   ]
 }
