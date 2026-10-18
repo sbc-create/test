@@ -7,13 +7,15 @@
 """
 import json
 import sys
-from datetime import date, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 КУДА = Path(sys.argv[1]); КУДА.mkdir(parents=True, exist_ok=True)
 SITE = sys.argv[2] if len(sys.argv) > 2 else "lords-90"
 ПОКОЛЕНИЕ = sys.argv[3] if len(sys.argv) > 3 else "mix-1"
-СЕГОДНЯ = date.today()
+# UTC — как и правило новинок. Местная дата совпадает с ней только
+# пока машина живёт в UTC.
+СЕГОДНЯ = datetime.now(timezone.utc).date()
 
 записи, детали = [], {}
 

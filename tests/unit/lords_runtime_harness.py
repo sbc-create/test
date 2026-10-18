@@ -15,7 +15,8 @@ from __future__ import annotations
 import importlib.util
 import json
 import sys
-from datetime import date as _date
+from datetime import datetime as _datetime
+from datetime import timezone as _timezone
 from pathlib import Path
 from typing import Any
 
@@ -54,8 +55,13 @@ def манифест(**переопределения: Any) -> dict:
 #: требует, чтобы год выхода подтверждал свежесть, и полки главной выходили
 #: пустыми не из-за кода, а из-за фикстуры. Год в коде не зашит ещё и потому,
 #: что зашитый перестаёт быть правдой 1 января.
-СВЕЖИЙ_ГОД = _date.today().year
-СВЕЖАЯ_ДАТА = _date.today().isoformat()
+#: Дата берётся по UTC, как и само правило новинок
+#: (`collection_contract._сегодня` → `datetime.now(timezone.utc)`). Местная
+#: `date.today()` совпадает с ней только пока машина живёт в UTC: при другом
+#: поясе фикстура и правило расходились бы на сутки около полуночи, и проверки
+#: стали бы мигать по часам, а не по коду.
+СВЕЖИЙ_ГОД = _datetime.now(_timezone.utc).date().year
+СВЕЖАЯ_ДАТА = _datetime.now(_timezone.utc).date().isoformat()
 #: Заведомый архив — для проверок, которые его и проверяют.
 АРХИВНЫЙ_ГОД = 1960
 

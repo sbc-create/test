@@ -27,8 +27,9 @@
 from __future__ import annotations
 
 import sys
-from datetime import date as _date
+from datetime import datetime as _datetime
 from datetime import timedelta as _timedelta
+from datetime import timezone as _timezone
 
 import lords_runtime_harness as h
 import pytest
@@ -51,7 +52,9 @@ def _каталог(n: int = 600) -> tuple[list[dict], dict[str, dict]]:
     """
     записи: list[dict] = []
     детали: dict[str, dict] = {}
-    сегодня = _date.today()
+    # UTC — как и правило новинок; местная дата совпадает с ней
+    # только пока машина в UTC.
+    сегодня = _datetime.now(_timezone.utc).date()
     for i in range(n):
         slug = f"t{i:03d}"
         # Даты загрузки разложены на три месяца НАЗАД ОТ СЕГОДНЯ: часть

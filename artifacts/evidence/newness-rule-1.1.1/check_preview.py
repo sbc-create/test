@@ -5,7 +5,7 @@ import sys
 import urllib.error  # noqa: F401 — нужен для except ниже
 import urllib.parse
 import urllib.request
-from datetime import date
+from datetime import datetime, timezone
 
 БАЗА = sys.argv[1] if len(sys.argv) > 1 else "http://127.0.0.1:9190"
 #: Второй аргумент «пусто» означает каталог БЕЗ новинок (только архив). Тогда
@@ -13,7 +13,9 @@ from datetime import date
 #: компенсировать архивом запрещено, и проверка обязана это различать, иначе
 #: она подталкивает ровно к тому дефекту, который ищет.
 НОВИНОК_НЕТ = len(sys.argv) > 2 and sys.argv[2] == "пусто"
-СЕГОДНЯ = date.today()
+# UTC — как и правило новинок. Местная дата совпадает с ней только
+# пока машина живёт в UTC.
+СЕГОДНЯ = datetime.now(timezone.utc).date()
 ГРАНИЦА_ГОД = (СЕГОДНЯ.replace(year=СЕГОДНЯ.year - 1)).year
 итог = []
 
