@@ -6036,8 +6036,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title."
+      "status": "session",
+      "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title. | 18.10 18:32Z: попытки исчерпаны (3 × INCOMPLETE): 1–2 — no_class_collision (метод сезона скопирован в тело ВидАнимеГо с class=…); 3 — правка верна (title_script_fallback PASS, no_class_collision PASS на полном прогоне сессии), но в checks/run.sh склеена строка: step \"серия без дорожки — noindex\"python3 … → episode_unavailable_noindex.py «Permission denied». Заменена T239."
     },
     {
       "id": "T238",
@@ -6049,7 +6049,7 @@
       ],
       "problem": "18.10 17:31Z: перенос T235 (выпущено на animedia.icu 17:28Z, var/seo-audit/t235-live-20261018.json). На an1meg0.site тайтлы со слагом title-<hex> имеют название только японскими знаками в <title> и H1 (12–16 в карте), латинское original_name есть в данных (JSON-LD alternateName).",
       "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
-      "expected": "src/animego-frontend.py (метод в ВидАнимеГо или функция модуля — checks/boundaries.py): в <title> страницы тайтла и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh. Образец — animedia-icu: функции читаемое_название и _есть_читаемая_буква, checks/title_script_fallback.py (ветка T235). ВАЖНО (урок T211 и попытки 1 T237): checks/no_class_collision.py сканирует литералы class=\"…\" в теле ВидАнимеГо — новые функции (читаемое_название, _есть_читаемая_буква) держать на уровне модуля и не добавлять в тело класса ни одного литерала class=\"…\"; вызов в title — без новой разметки.",
+      "expected": "src/animego-frontend.py (метод в ВидАнимеГо или функция модуля — checks/boundaries.py): в <title> страницы тайтла и страниц сезона/серии — если в имени нет ни одной кириллической или латинской буквы, а original_name непустой и отличается от имени, то в title после имени добавить « (original_name)». H1, слаг, карточки каталога и описание не менять. Обычные тайтлы (кириллица/латиница в имени) — без изменений. Проверка checks/title_script_fallback.py: синтетическая запись «六神合体ゴッドマーズ» + original_name «Rokushin gattai Godmars» → title содержит «(Rokushin gattai Godmars)»; запись «Некромант» + original_name → title без скобок; база rc=1, ветка rc=0; без рантайма — rc 2 (Exception и SystemExit). run.sh штатно, stamp_manifest/update_pins, полный run.sh. Образец — animedia-icu: функции читаемое_название и _есть_читаемая_буква, checks/title_script_fallback.py (ветка T235). ВАЖНО (урок T211 и попытки 1 T237): checks/no_class_collision.py сканирует литералы class=\"…\" в теле ВидАнимеГо — новые функции (читаемое_название, _есть_читаемая_буква) держать на уровне модуля и не добавлять в тело класса ни одного литерала class=\"…\"; вызов в title — без новой разметки. ВАЖНО (урок T237): в checks/run.sh новую строку step вставлять отдельной строкой и не трогать соседние; после правки — bash -n checks/run.sh и полный checks/run.sh.",
       "check": "checks/title_script_fallback.py",
       "verify_live": "https://an1meg0.site/title/title-01a11b5b-5f3/ — в <title> латинское название в скобках; https://an1meg0.site/title/vechnaya-volya-4/ — title без изменений",
       "live_check": [
@@ -6070,6 +6070,38 @@
       ],
       "status": "queued",
       "evidence": "18.10 17:31Z: подготовлено сессией вслед за T235; трафика у этих страниц нет — правка ради читаемости title."
+    },
+    {
+      "id": "T239",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/title/title-01a11b5b-5f3/"
+      ],
+      "problem": "18.10 17:31Z: перенос T235 (выпущено на animedia.icu 17:28Z, var/seo-audit/t235-live-20261018.json). На animeg0.site тайтлы со слагом title-<hex> имеют название только японскими знаками в <title> и H1 (12–16 в карте), латинское original_name есть в данных (JSON-LD alternateName). Замена T237 (18.10 18:32Z).",
+      "norm": "Один понятный H1 и уникальный title из переданных полей (SEO_KNOWLEDGE_PACK §4 п.1); ничего не выдумывается — только original_name из данных.",
+      "expected": "Взять коммит 0390b01 ветки claude/seo-tech-t237-20261018t181427z-3956223 (git cherry-pick — правка title, checks/title_script_fallback.py, штамп и замок) и исправить ОДНУ строку checks/run.sh: между «step \"серия без дорожки — noindex\"» и «python3 \"$ROOT/checks/episode_unavailable_noindex.py\"» вернуть пробел (сейчас склеено, проверка запускается как файл без прав — Permission denied). Больше ничего не менять. Затем tools/stamp_manifest.py и tools/update_pins.py при необходимости и полный checks/run.sh (у сессии на ветке T237 с SITE_DATA_DIR=/srv/animeg0-site/data он падал только на этой строке).",
+      "check": "checks/title_script_fallback.py",
+      "verify_live": "https://animeg0.site/title/title-01a11b5b-5f3/ — в <title> латинское название в скобках; https://animeg0.site/title/vechnaya-volya-4/ — title без изменений",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/title/title-01a11b5b-5f3/",
+          "status": 200,
+          "contains": [
+            "<title>天使なんかじゃない (Tenshi Nanka Ja Nai)"
+          ]
+        },
+        {
+          "url": "https://animeg0.site/title/vechnaya-volya-4/",
+          "status": 200,
+          "contains": [
+            "<title>Вечная воля 4 — смотреть онлайн — AnimeGo</title>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 18:32Z: замена T237; полный прогон сессии на ветке T237 — var/... scratchpad t237-runsh.txt: единственный отказ — склеенная строка run.sh."
     }
   ]
 }
