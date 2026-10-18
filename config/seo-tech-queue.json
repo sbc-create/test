@@ -4859,6 +4859,37 @@
       "status": "live_verified",
       "evidence": "17.10 23:36Z: распространение после живой проверки представителя T196. Эффект — как T196. | 18.10 00:09:25Z опубликовано штатным циклом (прогон 20261017T233801Z-2593257 VERIFIED, голова 4b290a10, публикатор live_verified). Живая сверка сессией 00:13Z (var/seo-audit/t199-live-20261018.json): /, /genres/, /catalog/, «боевик» — видимой метки 0, ссылок на её коды 0; раздел метки — noindex, follow (meta и X-Robots-Tag); canonical и robots прочих без изменений. Дифф — только фильтр меток (описание, факты, JSON-LD, навигация жанров), вёрстка не тронута.",
       "owner_action": null
+    },
+    {
+      "id": "T200",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/title/iskusstvo-voyny-2-predatelstvo/",
+        "https://lordfilm47.space/movies/",
+        "https://lordfilm47.space/series/"
+      ],
+      "problem": "Живая проверка ссылок 18.10 ~00:35Z (var/seo-audit/links-titles-20261018.json, 8 тайтлов × 80 ссылок): хлебные крошки каждой страницы тайтла lordfilm47.space ведут на /catalog/?kind=Фильм или /catalog/?kind=Сериал — 200, index, но canonical на /catalog/ (страница с другим составом); BreadcrumbList строится из видимых крошек. Свои разделы /movies/ и /series/ есть (200, index, canonical на себя). У lordserial33.biz и zonafilm.space крошки уже ведут на /series/. src/lords-frontend.py ~4868 (раздел_вида).",
+      "norm": "внутренние ссылки и крошки — сразу на канонический адрес раздела (SEO_KNOWLEDGE_PACK §1 п.5, REQ-SEO-BREADCRUMBS; поручение владельца 17.10 — перелинковка и ошибки посадочных)",
+      "expected": "src/lords-frontend.py, метод тайтл(): раздел_вида — (\"/series/\", \"Сериалы\") для сериала и (\"/movies/\", \"Фильмы\") для фильма, если эти маршруты витрины отвечают своей страницей (проверить по коду маршрутов; на живом — 200, index, self-canonical); подписи не менять. BreadcrumbList следует видимым крошкам (checks/visible_breadcrumbs.py — не ослаблять). Прочие ссылки ?kind= (фильтры каталога) не трогать. Вёрстку, постеры, CSS не менять. Проверка checks/title_breadcrumb_section.py — витрина на урезанном стенде (по образцу стендовых проверок ячейки): на странице тайтла-фильма вторая крошка ведёт на /movies/, тайтла-сериала — на /series/, и эти адреса на стенде отвечают 200 без noindex с canonical на себя; 0/1/2; в checks/run.sh через обёртку rc 2→0. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/title_breadcrumb_section.py",
+      "verify_live": "на страницах тайтлов вторая крошка — /movies/ (фильм) или /series/ (сериал), BreadcrumbList item совпадает; ссылок /catalog/?kind= в крошках нет; title/canonical без изменений",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/title/iskusstvo-voyny-2-predatelstvo/",
+          "status": 200,
+          "contains": [
+            "href=\"/movies/\">Фильмы</a> »"
+          ],
+          "absent": [
+            "crumbs\" aria-label=\"Хлебные крошки\"><a href=\"/\">Lordfilm</a> » <a href=\"/catalog/?kind="
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 ~00:35Z: живая проверка ссылок сессии; прочие находки той проверки — намеренные (/search/, /lists/ noindex, /random/ 303, ?ongoing=1 на контролях канарейки), zonafilm12 /collections/ 504 — разовый (повтор 200 за 0.0 с, известная перегрузка B005). Эффект: Метрика — переходы из крошек и входы на /movies/, /series/ по Яндексу и Google раздельно, 7 дней до/после.",
+      "owner_action": null
     }
   ]
 }
