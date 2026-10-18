@@ -66,7 +66,7 @@ if [ "$mode" = "--verify" ]; then
     out="$(ansible -i "$inventory" "$host_ref" -m raw \
           -a "bash $script_dst $site --verify" 2>&1)"
     printf '%s\n' "$out" | grep -vE "^\[WARNING\]|interpreter_discovery|^$" \
-      | grep -E "исполняется|НЕ ТОТ ВЫПУСК|не разобран|не прочитан|на порту" \
+      | grep -E "исполняется|НЕ ТОТ ВЫПУСК|не разобран|не прочитан|на порту|ШТАМП|штамп" \
       | sed 's/^/    /'
     if printf '%s' "$out" | grep -q "исполняется"; then
       ok=$((ok + 1))

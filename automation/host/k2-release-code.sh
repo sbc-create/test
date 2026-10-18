@@ -31,7 +31,11 @@
 #   1. опознаёт витрину по описи комплекта (учётка, порт, юнит, домен);
 #   2. берёт голову доставленного бандла; если `current` уже на ней — выходит
 #      с кодом 0 и ничего не делает (повторный запуск безопасен);
-#   3. клонирует бандл в releases/<12 знаков>, права — витрине;
+#   3. собирает артефакт сборщиком ВИТРИНЫ и распаковывает его в
+#      releases/<12 знаков>, права — витрине. Из рабочего дерева выпуск
+#      не кладётся: штамп происхождения ставит сборка, и без него
+#      build_id остаётся заглушкой `worktree-unbuilt`, а
+#      runtime_digest_match в /healthz не может быть верным;
 #   4. переносит в новый выпуск `config/player.json` ИЗ ТЕКУЩЕГО выпуска.
 #      Файл несёт publisher_id, в git его нет, и без него служба не стартует
 #      намеренно (fail-closed). Значение не читается и не печатается — файл
@@ -109,12 +113,13 @@ if [ "$mode" = "--verify" ]; then
   vf="$(mktemp)"
   curl -fsS --max-time 5 "127.0.0.1:$port/healthz" -o "$vf" 2>/dev/null \
     || log "$site: подробный ответ healthz не прочитан"
-  python3 - "$vf" "$old_release" "$site" <<'PY'
+  python3 - "$vf" "$old_release" "$site" "$old_release/config/template-manifest.json" <<'PY'
 import json
 import pathlib
 import sys
 
 файл, выпуск, витрина = sys.argv[1:4]
+манифест_путь = sys.argv[4]
 try:
     д = json.loads(pathlib.Path(файл).read_text(encoding="utf-8"))
 except (OSError, ValueError) as пр:
@@ -127,6 +132,25 @@ except (OSError, ValueError) as пр:
 print(f"{витрина}: current -> {выпуск}")
 print(f"{витрина}: на порту  {путь or '(поля нет)'}  release_id {выпуск_id or '—'}")
 print(f"{витрина}: {знак}")
+
+# Штамп происхождения ВЫЛОЖЕННОГО выпуска. Отдельный вопрос от «тот ли
+# выпуск»: каталог может быть правильным, а код в нём — непрослеживаемым.
+try:
+    м = json.loads(pathlib.Path(манифест_путь).read_text(encoding="utf-8"))
+except (OSError, ValueError) as пр:
+    print(f"{витрина}: манифест выпуска не читается ({пр}) — штамп НЕ ИЗМЕРЕН")
+    raise SystemExit(0 if совпал else 1)
+build_id = str(м.get("build_id") or "")
+пусто = [к for к in ("artifact_sha256", "code_file_sha256", "source_commit",
+                     "built_at")
+         if not str(м.get(к) or "").strip()]
+if build_id == "worktree-unbuilt":
+    print(f"{витрина}: ШТАМПА НЕТ — build_id заглушка worktree-unbuilt, "
+          f"происхождение кода не подтверждено")
+elif пусто:
+    print(f"{витрина}: ШТАМП НЕПОЛНЫЙ — пусты поля: {', '.join(пусто)}")
+else:
+    print(f"{витрина}: штамп на месте, build_id {build_id}")
 raise SystemExit(0 if совпал else 1)
 PY
   rc=$?
@@ -169,7 +193,36 @@ fi
 
 release="$root/releases/$head_sha"
 if [ ! -d "$release" ]; then
-  git clone --quiet "$bundle" "$release" || { bad "клон бандла не удался"; exit 1; }
+  # Выпуск собирается, а не копируется. Прежний порядок клонировал бандл прямо
+  # в каталог выпуска, и штамп манифеста не ставился никогда: измерено
+  # 2026-10-18 — у всех восьми витрин узла `build_id` = `worktree-unbuilt`, а
+  # `artifact_sha256`, `code_file_sha256`, `source_commit` и `built_at` пусты.
+  # То есть происхождение выложенного кода ничем не подтверждалось, и
+  # `runtime_digest_match` в /healthz не мог быть верным — сравнивать было
+  # нечего с чем.
+  #
+  # Штамп ставит сборщик ВИТРИНЫ (`tools/build_release.py`) и ставит его
+  # внутрь артефакта. Поэтому порядок такой: клон -> сборка -> РАСПАКОВКА
+  # артефакта в каталог выпуска. Логика штампа здесь не повторяется: копия
+  # разошлась бы со сборщиком, а это ровно тот случай, когда проверка зеленеет,
+  # а витрина называет чужие цифры.
+  work="$(mktemp -d)"
+  git clone --quiet "$bundle" "$work/repo" || { bad "клон бандла не удался"; exit 1; }
+  if [ ! -f "$work/repo/tools/build_release.py" ]; then
+    bad "в бандле нет tools/build_release.py: выпуск без штампа происхождения не делаю"
+    exit 1
+  fi
+  ( cd "$work/repo" && python3 tools/build_release.py --output dist ) \
+    | sed 's/^/    сборка| /' \
+    || { bad "сборка артефакта не удалась"; exit 1; }
+  art="$(ls -1 "$work/repo/dist"/*.tar.gz 2>/dev/null | head -1)"
+  [ -n "$art" ] || { bad "сборка не оставила артефакта"; exit 1; }
+  mkdir -p "$release" || { bad "каталог выпуска не создаётся"; exit 1; }
+  tar -xzf "$art" -C "$release" || { bad "артефакт не распаковался"; exit 1; }
+  cp "$work/repo/dist/release-manifest.json" "$release/release-manifest.json" \
+    || { bad "опись выпуска не перенеслась"; exit 1; }
+  # Удаляется ровно созданный mktemp-каталог и только он.
+  case "$work" in /tmp/*) rm -rf "$work" ;; esac
   if [ "$am_root" = 1 ]; then
     chown -R "$account:$account" "$release"
   else
@@ -178,7 +231,31 @@ if [ ! -d "$release" ]; then
     # ставится явно, а не предполагается по umask.
     chmod -R g+rX "$release"
   fi
-  log "выпуск $head_sha собран из бандла"
+  stamp_problem="$(python3 - "$release/config/template-manifest.json" <<'PY'
+import json
+import pathlib
+import sys
+
+try:
+    д = json.loads(pathlib.Path(sys.argv[1]).read_text(encoding="utf-8"))
+except (OSError, ValueError) as пр:
+    print(f"манифест выпуска не читается: {пр}")
+    raise SystemExit(0)
+плохо = [к for к in ("build_id", "artifact_sha256", "code_file_sha256",
+                     "source_commit", "built_at")
+         if not str(д.get(к) or "").strip()]
+if str(д.get("build_id") or "") == "worktree-unbuilt":
+    print("build_id остался заглушкой worktree-unbuilt")
+elif плохо:
+    print("в манифесте выпуска пусты поля: " + ", ".join(плохо))
+PY
+)"
+  if [ -n "$stamp_problem" ]; then
+    bad "штамп происхождения не проставлен: $stamp_problem"
+    bad "выпуск не переключаю — непрослеживаемый код на витрину не кладу"
+    exit 1
+  fi
+  log "выпуск $head_sha собран из артефакта, штамп происхождения на месте"
 else
   log "каталог выпуска $head_sha уже существует: беру как есть"
 fi
