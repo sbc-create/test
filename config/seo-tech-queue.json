@@ -5400,8 +5400,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 09:53Z: найдено при разборе попытки T211; затем перенос на an1meg0/an1mego вместе или отдельно. Эффект: косвенный (качество посадочных /movies/, /series/); Метрика — входы и отказы по Яндексу и Google раздельно."
+      "status": "live_verified",
+      "evidence": "18.10 09:53Z: найдено при разборе попытки T211; затем перенос на an1meg0/an1mego вместе или отдельно. Эффект: косвенный (качество посадочных /movies/, /series/); Метрика — входы и отказы по Яндексу и Google раздельно. | 18.10 10:43:38Z опубликовано штатным циклом (прогон 20261018T102521Z-1703309 VERIFIED, коммит bac4c7b, голова 6361420d, публикатор live_verified). Живая сверка сессией 18.10 10:47Z (var/seo-audit/t214-live-20261018.json): /movies/, /series/ и разделы меток — «Формат»: «Фильмы», «Сериалы»; видимого «type:…» 0; robots как после T211 (обычные — index, follow; метки — noindex, follow). Далее перенос на an1meg0.site и an1mego.site (T219, T220)."
     },
     {
       "id": "T217",
@@ -5462,6 +5462,66 @@
       ],
       "status": "queued",
       "evidence": "18.10 10:10Z: см. T217. Эффект: индексация разделов меток (Вебмастер — после B023)."
+    },
+    {
+      "id": "T219",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/movies/",
+        "https://an1meg0.site/series/"
+      ],
+      "problem": "То же, что T214 (live_verified 18.10 10:43Z на animeg0.site): на an1meg0.site в списке «Формат» /movies/ и /series/ подписи — коды «MOVIE», «TV» (живая сверка 18.10 10:47Z, var/seo-audit/t215-live-20261018.json).",
+      "norm": "видимый текст без внутренних кодов (поручение владельца 17.10; SEO_KNOWLEDGE_PACK §4); подписи — существующие в коде сети (ИМЕНА_ФОРМАТОВ Animedia), новых слов не сочинять",
+      "expected": "Перенести правку T214 — коммит bac4c7b репозитория var/site-repos/animeg0-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/animeg0-site format-patch -1 bac4c7b --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат; код у трёх AnimeGo общий). ГРАНИЦЫ: ВидАнимедиа, ВидОснова, seo_layer/community/collection_contract/chronology — не менять; литералов class=\"…\" в теле ВидАнимеГо не добавлять; python3 checks/boundaries.py — rc 0. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/format_labels.py",
+      "verify_live": "/movies/ и /series/ — в списке «Формат» «Фильмы», «Сериалы»; «MOVIE»/«TV» подписями нет; регресса T211 нет",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/movies/",
+          "status": 200,
+          "absent": [
+            ">MOVIE <small>",
+            ">TV <small>"
+          ],
+          "contains": [
+            ">Фильмы <small>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 10:47Z: распространение после живой проверки представителя T214."
+    },
+    {
+      "id": "T220",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/movies/",
+        "https://an1mego.site/series/"
+      ],
+      "problem": "То же, что T214 (live_verified 18.10 10:43Z на animeg0.site): на an1mego.site в списке «Формат» /movies/ и /series/ подписи — коды «MOVIE», «TV» (живая сверка 18.10 10:47Z, var/seo-audit/t216-live-20261018.json).",
+      "norm": "видимый текст без внутренних кодов (поручение владельца 17.10; SEO_KNOWLEDGE_PACK §4); подписи — существующие в коде сети (ИМЕНА_ФОРМАТОВ Animedia), новых слов не сочинять",
+      "expected": "Перенести правку T214 — коммит bac4c7b репозитория var/site-repos/animeg0-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/animeg0-site format-patch -1 bac4c7b --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат; код у трёх AnimeGo общий). ГРАНИЦЫ: ВидАнимедиа, ВидОснова, seo_layer/community/collection_contract/chronology — не менять; литералов class=\"…\" в теле ВидАнимеГо не добавлять; python3 checks/boundaries.py — rc 0. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/format_labels.py",
+      "verify_live": "/movies/ и /series/ — в списке «Формат» «Фильмы», «Сериалы»; «MOVIE»/«TV» подписями нет; регресса T211 нет",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/movies/",
+          "status": 200,
+          "absent": [
+            ">MOVIE <small>",
+            ">TV <small>"
+          ],
+          "contains": [
+            ">Фильмы <small>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 10:47Z: распространение после живой проверки представителя T214. an1mego.site — канарейка T191: правка одинакова на трёх AnimeGo, /ongoing/ не затрагивает."
     }
   ]
 }
