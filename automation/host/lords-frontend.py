@@ -7976,6 +7976,20 @@ class Обработчик(BaseHTTPRequestHandler):
                 свод["catalog_revision"]
                 and свод["details_catalog_revision"]
                 and свод["catalog_revision"] != свод["details_catalog_revision"])
+            # Наружу — версия шаблона, та, про которую маршрут и назван.
+            #
+            # Подробность нужна фабрике и выпуску, и они ходят по петле
+            # (`factory/cell/content.py`, `ПУТЬ_ОПРОСА`). Публике же здесь
+            # доставались пути в файловой системе, суммы файлов, номера
+            # коммитов и ревизии каталога — то же самое, что закрыто в
+            # `/healthz` (R-10). Закрыть один служебный путь и оставить рядом
+            # второй — это закрыть дверь при открытом окне; измерено
+            # 2026-10-18 на всех 25 живых витринах сети.
+            if not вызов_изнутри(self.headers):
+                свод = {
+                    "template": ШАБЛОН_СЕМЕЙСТВА,
+                    "design_version": МАНИФЕСТ.get("design_version", ""),
+                }
             return self._отдать(json.dumps(свод, ensure_ascii=False).encode("utf-8"),
                                 "application/json; charset=utf-8")
         if путь == "/healthz":
