@@ -6178,9 +6178,9 @@
           ]
         }
       ],
-      "status": "queued",
+      "status": "live_verified",
       "owner_action": null,
-      "evidence": "18.10 19:35Z: замер сессии: раздел страны 200, index, follow, canonical на себя; в карточке страна текстом; фильтр страны — select без ссылок. | 18.10 20:18Z: T240 live_verified — разблокировано."
+      "evidence": "18.10 19:35Z: замер сессии: раздел страны 200, index, follow, canonical на себя; в карточке страна текстом; фильтр страны — select без ссылок. | 18.10 20:18Z: T240 live_verified — разблокировано. | 18.10 21:11Z: публикатор live_verified 21:07:17Z; сверка var/seo-audit/t242-live-20261018.json."
     },
     {
       "id": "T243",
