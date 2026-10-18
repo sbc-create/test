@@ -5434,8 +5434,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 10:10Z: обход хабов на видимые коды (сессия): animedia.space /movies/ — чип «type:movie», /series/ — «type:tv»; /movies/?genre=zapadnyykontent — index, follow. animedia.icu: чип уже «Фильмы», раздел метки на /movies/ — index, follow (T218). Эффект: индексация разделов меток (Вебмастер — после B023); Метрика — входы на /movies/, /series/ по Яндексу и Google раздельно."
+      "status": "live_verified",
+      "evidence": "18.10 10:10Z: обход хабов на видимые коды (сессия): animedia.space /movies/ — чип «type:movie», /series/ — «type:tv»; /movies/?genre=zapadnyykontent — index, follow. animedia.icu: чип уже «Фильмы», раздел метки на /movies/ — index, follow (T218). Эффект: индексация разделов меток (Вебмастер — после B023); Метрика — входы на /movies/, /series/ по Яндексу и Google раздельно. | 18.10 11:08:21Z опубликовано штатным циклом (публикатор live_verified). Живая сверка сессией 18.10 11:12Z (var/seo-audit/t217-live-20261018.json): /movies/ — чип «Фильмы», /series/ — «Сериалы», видимого «type:…» 0, index, follow; /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/?genre=drama — index, follow; /catalog/ без регресса."
     },
     {
       "id": "T218",
