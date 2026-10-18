@@ -4997,7 +4997,7 @@
       "urls": [
         "https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/"
       ],
-      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.space (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:47Z, https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
+      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.space (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:46Z, https://animedia.space/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
       "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
       "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
       "check": "checks/public_wording.py",
@@ -5015,7 +5015,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "18.10 ~01:47Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
+      "evidence": "18.10 ~01:46Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
       "owner_action": null
     },
     {
@@ -5026,7 +5026,7 @@
       "urls": [
         "https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/"
       ],
-      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.icu (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:47Z, https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
+      "problem": "То же, что T201 (live_verified 18.10 01:17Z): страница серии без видео animedia.icu (noindex, follow) — «Источник ещё не отдал её для просмотра» (живая сверка 18.10 ~01:46Z, https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-3/).",
       "norm": "видимый текст — редакционный, без внутренних слов (поручение владельца 17.10 — технические надписи вместо редакционных текстов; SEO_KNOWLEDGE_PACK §4)",
       "expected": "в рабочей копии выполнить штатный инструмент фабрики `python3 /home/claude/wt-portable-site-cell-01/automation/local/wire-public-wording.py --repo <worktree>` (без --no-check: он доставит обновлённую checks/public_wording.py). Тексты замен — таблица ЗАМЕНЫ_2 инструмента (пары 18.10: «<p>Источник ещё не отдал её для просмотра. » → «<p>Видео этой серии пока не опубликовано. », unavailable:'серия без дорожки' → 'серия пока недоступна', \"unavailable\": \"серия без дорожки\" → \"серия пока недоступна\"); руками тексты не сочинять и не менять. «Эта серия пока недоступна» остаётся (на неё опираются проверки). Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, плеер (кроме подписи), CSS не трогать.",
       "check": "checks/public_wording.py",
@@ -5044,7 +5044,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "18.10 ~01:47Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
+      "evidence": "18.10 ~01:46Z: распространение после живой проверки T201 и T203; сухой прогон — 2 замены. Эффект — как T201.",
       "owner_action": null
     }
   ]
