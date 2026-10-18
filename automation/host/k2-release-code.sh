@@ -140,6 +140,12 @@ try:
 except (OSError, ValueError) as пр:
     print(f"{витрина}: манифест выпуска не читается ({пр}) — штамп НЕ ИЗМЕРЕН")
     raise SystemExit(0 if совпал else 1)
+# Сходится ли цифра исполняемого кода с цифрой артефакта. Поле обещает
+# именно это, и до правки оно всегда отвечало False: сравнивалась сумма
+# ОДНОГО файла с цифрой всего рантайма.
+сошлось = д.get("runtime_digest_match")
+print(f"{витрина}: цифра кода сходится с артефактом: "
+      + {True: "да", False: "НЕТ", None: "поля нет"}.get(сошлось, str(сошлось)))
 build_id = str(м.get("build_id") or "")
 пусто = [к for к in ("artifact_sha256", "code_file_sha256", "source_commit",
                      "built_at")
