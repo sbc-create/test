@@ -88,6 +88,19 @@ python3 automation/local/healthz-exposure.py --path /healthz \
 python3 automation/local/sitemap-lastmod-check.py --domain lordfilm.group
 #    ждём: либо адреса без lastmod, либо даты изменения; «массовая
 #    подстановка» — отказ приёмки
+
+# 4. В карте обязаны быть ФАСЕТЫ: около ста жанров плюс страны и годы. Они
+#    получили свой заголовок и canonical на себя 2026-10-18, и карта их
+#    перечисляет — но проверить это можно только после открытия, потому что
+#    при закрытом режиме сборщик отвечает «карта не нужна».
+curl -sS https://lordfilm.group/sitemap.xml            # индекс появился
+curl -sS https://lordfilm.group/sitemap-1.xml \
+  | grep -c '/genre/'                                  # ждём десятки
+curl -sS https://lordfilm.group/sitemap-1.xml \
+  | grep -c '/country/'                                # ждём единицы-десятки
+#    И ни одного адреса серии: их состав — отдельное решение владельца
+#    (MOD-79), и по умолчанию карта их не перечисляет.
+curl -sS https://lordfilm.group/sitemap-1.xml | grep -c '/episode-'   # ждём 0
 ```
 
 ## Запас по одновременности — измерен 2026-10-18
