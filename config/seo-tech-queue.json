@@ -5302,6 +5302,106 @@
       ],
       "status": "queued",
       "evidence": "18.10 07:56Z: живой обход хабов (var/seo-audit/sweep-other-20261018-a.json/-b.json) и сверка /types/ на обеих Animedia; сухой прогон инструмента — 2 замены. AnimeGo: та же строка в унаследованном ВидАнимедиа, но /types/ отвечает 308 — посетителю не видна, правка не нужна (и запрещена checks/boundaries.py). Эффект: косвенный; Метрика — входы и отказы /types/ по Яндексу и Google раздельно, 7 дней до/после."
+    },
+    {
+      "id": "T215",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://an1meg0.site/movies/",
+        "https://an1meg0.site/series/",
+        "https://an1meg0.site/movies/?genre=zapadnyykontent"
+      ],
+      "problem": "То же, что T211 (live_verified 18.10 09:49Z на animeg0.site): на an1meg0.site хабы /movies/ и /series/ показывают чип «type:movie ×»/«type:tv ×» и служебные метки в панели жанров; /movies/?genre=zapadnyykontent, /series/?genre=aziatskiykontent — index, follow (сверка сессией 18.10 07:50Z — одинаково на трёх AnimeGo).",
+      "norm": "служебные метки поставщика — не жанр: не в видимом тексте и не цель ссылок, их раздел noindex, follow, вне карты (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS п.1, п.5; правило T044/T077/T197); видимый текст без внутренних кодов (поручение владельца 17.10)",
+      "expected": "Перенести правку T211 — коммит 4d7f206 репозитория var/site-repos/animeg0-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/animeg0-site format-patch -1 4d7f206 --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат; код у трёх AnimeGo общий, отличия — конфигурация). Состав: модульная _раздел_служебной_метки покрывает /movies/ и /series/; ВидАнимеГо._фильтры_каталога — панель без меток, чип типа раздела не выводится; шаблон чипа — модульная константа (checks/no_class_collision.py ищет литералы class=\"…\" в теле ВидАнимеГо); новая checks/section_facet_labels.py с подключением в checks/run.sh. ГРАНИЦЫ: ВидАнимедиа, ВидОснова, seo_layer/community/collection_contract/chronology — не менять; python3 checks/boundaries.py — rc 0. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/section_facet_labels.py",
+      "verify_live": "/movies/ и /series/ — нет «type:movie»/«type:tv» и ссылок на метки; /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/?genre=drama — index, follow; /catalog/ без регресса T197",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/movies/",
+          "status": 200,
+          "absent": [
+            "type:movie <span",
+            "genre=zapadnyykontent"
+          ]
+        },
+        {
+          "url": "https://an1meg0.site/movies/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 09:53Z: распространение после живой проверки представителя T211. Эффект — как T211."
+    },
+    {
+      "id": "T216",
+      "site": "an1mego.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1mego-site",
+      "urls": [
+        "https://an1mego.site/movies/",
+        "https://an1mego.site/series/",
+        "https://an1mego.site/movies/?genre=zapadnyykontent"
+      ],
+      "problem": "То же, что T211 (live_verified 18.10 09:49Z на animeg0.site): на an1mego.site хабы /movies/ и /series/ показывают чип «type:movie ×»/«type:tv ×» и служебные метки в панели жанров; /movies/?genre=zapadnyykontent, /series/?genre=aziatskiykontent — index, follow (сверка сессией 18.10 07:50Z — одинаково на трёх AnimeGo).",
+      "norm": "служебные метки поставщика — не жанр: не в видимом тексте и не цель ссылок, их раздел noindex, follow, вне карты (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS п.1, п.5; правило T044/T077/T197); видимый текст без внутренних кодов (поручение владельца 17.10)",
+      "expected": "Перенести правку T211 — коммит 4d7f206 репозитория var/site-repos/animeg0-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/animeg0-site format-patch -1 4d7f206 --stdout` и git am/apply в рабочей копии; при расхождении контекста — по смыслу, тот же результат; код у трёх AnimeGo общий, отличия — конфигурация). Состав: модульная _раздел_служебной_метки покрывает /movies/ и /series/; ВидАнимеГо._фильтры_каталога — панель без меток, чип типа раздела не выводится; шаблон чипа — модульная константа (checks/no_class_collision.py ищет литералы class=\"…\" в теле ВидАнимеГо); новая checks/section_facet_labels.py с подключением в checks/run.sh. ГРАНИЦЫ: ВидАнимедиа, ВидОснова, seo_layer/community/collection_contract/chronology — не менять; python3 checks/boundaries.py — rc 0. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/section_facet_labels.py",
+      "verify_live": "/movies/ и /series/ — нет «type:movie»/«type:tv» и ссылок на метки; /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/?genre=drama — index, follow; /catalog/ без регресса T197",
+      "live_check": [
+        {
+          "url": "https://an1mego.site/movies/",
+          "status": 200,
+          "absent": [
+            "type:movie <span",
+            "genre=zapadnyykontent"
+          ]
+        },
+        {
+          "url": "https://an1mego.site/movies/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 09:53Z: распространение после живой проверки представителя T211. an1mego.site — площадка канарейки T191 (/ongoing/): правка одинакова на трёх AnimeGo и затрагивает /movies/, /series/, а не /ongoing/ — сравнение канарейки с контролями не искажается. Эффект — как T211."
+    },
+    {
+      "id": "T214",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/movies/",
+        "https://animeg0.site/series/"
+      ],
+      "problem": "Живая проверка 18.10 09:33Z: на /movies/ и /series/ трёх AnimeGo в списке отбора «Формат» подписи — коды снимка «MOVIE», «TV» (ВидАнимедиа._фильтры_каталога: type_pairs = (tcode, tcode.upper(), …) — старая редакция общего кода). В Animedia то же место уже исправлено (коммит b147d3a репозитория animedia-icu: ИМЕНА_ФОРМАТОВ = {\"movie\": \"Фильмы\", \"tv\": \"Сериалы\", \"ova\": \"OVA\", \"ona\": \"ONA\", \"special\": \"Спецвыпуски\"}; живой animedia.icu /catalog/ — «Фильмы», «Сериалы»).",
+      "norm": "видимый текст без внутренних кодов (поручение владельца 17.10; SEO_KNOWLEDGE_PACK §4); подписи — существующие в коде сети (ИМЕНА_ФОРМАТОВ Animedia), новых слов не сочинять",
+      "expected": "src/animego-frontend.py: модульная константа ИМЕНА_ФОРМАТОВ — дословно словарь из var/site-repos/animedia-icu/src/animedia-frontend.py (~8715). В переопределении ВидАнимеГо._фильтры_каталога (T211) подписи пунктов списка «Формат» (ссылки ?type=<код>) и чипа явно выбранного типа — ИМЕНА_ФОРМАТОВ.get(код, как было). Ссылки, порядок и числа не менять. ГРАНИЦЫ: ВидАнимедиа, ВидОснова и модули seo_layer/community/collection_contract/chronology не менять; литералы class=\"…\" в тело ВидАнимеГо не добавлять (checks/no_class_collision.py) — шаблоны модульными константами; python3 checks/boundaries.py — rc 0. Расширить checks/section_facet_labels.py (или новая checks/format_labels.py): на /movies/ и /series/ в списке «Формат» нет «MOVIE»/«TV» как подписи, есть «Фильмы»/«Сериалы»; на базе rc=1, на ветке rc=0; подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/format_labels.py",
+      "verify_live": "/movies/ и /series/ — в списке «Формат» «Фильмы», «Сериалы»; «MOVIE»/«TV» подписями нет; регресса T211 нет",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/movies/",
+          "status": 200,
+          "absent": [
+            ">MOVIE <small>",
+            ">TV <small>"
+          ],
+          "contains": [
+            ">Фильмы <small>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 09:53Z: найдено при разборе попытки T211; затем перенос на an1meg0/an1mego вместе или отдельно. Эффект: косвенный (качество посадочных /movies/, /series/); Метрика — входы и отказы по Яндексу и Google раздельно."
     }
   ]
 }
