@@ -5557,8 +5557,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 11:46Z: сверка www на 17 доменах: дубли 200 с self-canonical — an1meg0.site, zonafilm12.site, zonafilm.cc (и lordserials22.info — пауза до 21.10); yummyani7.site/.info — www 200, но canonical на основной домен. Представитель — an1meg0.site; Zona — переносом через src/serve.py после проверки. B001 (nginx) остаётся за владельцем — редирект приложения его не отменяет и с ним совместим. Эффект: Вебмастер — главное зеркало и исключение www-адресов (после B023); Метрика — визиты на www-хосте → 0."
+      "status": "session",
+      "evidence": "18.10 11:46Z: сверка www на 17 доменах: дубли 200 с self-canonical — an1meg0.site, zonafilm12.site, zonafilm.cc (и lordserials22.info — пауза до 21.10); yummyani7.site/.info — www 200, но canonical на основной домен. Представитель — an1meg0.site; Zona — переносом через src/serve.py после проверки. B001 (nginx) остаётся за владельцем — редирект приложения его не отменяет и с ним совместим. Эффект: Вебмастер — главное зеркало и исключение www-адресов (после B023); Метрика — визиты на www-хосте → 0. | 18.10 12:35Z: три прогона (20261018T114706Z-2099031 INCOMPLETE, 20261018T115702Z-2149284 INTERRUPTED, 20261018T120313Z-2184955 INCOMPLETE) — попытки исчерпаны. Разбор сессией (полный checks/run.sh в рабочей копии ветки): checks/www_redirect.py PASS; отказал checks/genre_landing.py — он вызывает Обработчик.do_GET на заглушке SimpleNamespace без атрибута headers, а новая строка читает self.headers.get(\"Host\") напрямую → AttributeError. Замена — T224 (перенос d802ba9 с безопасным чтением заголовков)."
     },
     {
       "id": "T222",
@@ -5611,6 +5611,33 @@
       ],
       "status": "queued",
       "evidence": "18.10 11:46Z: см. T221 (представитель an1meg0.site); закреплённый шаблон Zona (как T186/T207 — правка слоем через src/serve.py). Эффект: Вебмастер — главное зеркало (после B023); Метрика — визиты на www-хосте → 0."
+    },
+    {
+      "id": "T224",
+      "site": "an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/an1meg0-site",
+      "urls": [
+        "https://www.an1meg0.site/",
+        "https://www.an1meg0.site/catalog/",
+        "https://www.an1meg0.site/title/monolog-maomao-2/"
+      ],
+      "problem": "Живая сверка 18.10 11:46Z: https://www.an1meg0.site/ и любые страницы под www — 200, index, follow, canonical на www-адрес (канонический адрес строится из заголовка Host): полный индексируемый дубль сайта (B001, открыт с 12.10; правка nginx — root, ждёт владельца). У animeg0.site, an1mego.site, lordfilm47.space и др. www уже отвечает 301/308 на основной домен.",
+      "norm": "единый канонический хост; дубли сайта не индексируются (SEO_KNOWLEDGE_PACK §1; B001 expected: www → 308 на корень, на www нет self-canonical)",
+      "expected": "Перенести коммит d802ba9 ветки claude/seo-tech-t221-20261018t120313z-2184955 репозитория var/site-repos/an1meg0-site (`git -C /home/claude/wt-portable-site-cell-01/var/site-repos/an1meg0-site format-patch -1 d802ba9 --stdout` и git am в рабочей копии) — правка Обработчик.do_GET (www → 308) и checks/www_redirect.py с подключением в checks/run.sh. ОДНА поправка к переносу: хост читать безопасно для вызывающих без заголовков — `заголовки = getattr(self, \"headers\", None)` и `хост = ((заголовки.get(\"Host\") if заголовки is not None else \"\") or \"\").split(\":\")[0].strip().lower()`: checks/genre_landing.py вызывает do_GET на заглушке без headers (причина INCOMPLETE T221). Больше ничего не менять. ГРАНИЦЫ: ВидОснова/ВидАнимедиа и модули seo_layer/community/collection_contract/chronology — не менять; python3 checks/boundaries.py — rc 0. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh (в т.ч. checks/genre_landing.py — PASS).",
+      "check": "checks/www_redirect.py",
+      "verify_live": "https://www.an1meg0.site/ → 308 на https://an1meg0.site/; https://www.an1meg0.site/catalog/?page=2 → 308 на https://an1meg0.site/catalog/?page=2; https://an1meg0.site/ — 200, index, follow, canonical на себя",
+      "live_check": [
+        {
+          "url": "https://an1meg0.site/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://an1meg0.site/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 12:35Z: замена T221 (попытки исчерпаны; причина — AttributeError в checks/genre_landing.py на заглушке без headers). Эффект — как T221."
     }
   ]
 }
