@@ -1,9 +1,9 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-10-15.1
-frozen_at: '2026-10-15T08:19:57Z'
+freeze_version: 2026-10-18.1
+frozen_at: '2026-10-18T19:56:31Z'
 file_count: 13
-aggregate_sha256: 9c9b4540e1130c2038a46f8bda507641b3f92ec8e3b2752897b9e9db1c7c21ee
+aggregate_sha256: 0de70f444ec004d442b8b6b7c6cdc6e5bcfd723ae9c9a71c4042632a902e282e
 files:
 - path: knowledge/DECISIONS.md
   sha256: 52eeb6e83feaaf1b5ac8ffc3bfa126e8da92a6cffe51700d26bb7c4fc572e1a9
@@ -12,26 +12,26 @@ files:
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042
 - path: knowledge/FACTS.md
-  sha256: 7cd00425ad9a722cabea049db517553b57dbc37fc2494482314128cdf1a3da61
-  bytes: 11533
+  sha256: 96820670fa198f1556dd0231d46400a69850f0adc5071d82f327a358a3b38954
+  bytes: 16245
 - path: knowledge/INFRASTRUCTURE_INVENTORY.yaml
   sha256: da2fbee80fc73624818f157b554f6a5b3e6c97161aba11d05063f364de866ded
   bytes: 6811
 - path: knowledge/SEO_INDEXABILITY_MATRIX.yaml
-  sha256: 6355fe8ebf5316f99e133f56c5c7fce799e261369f92c882b0efc837439bc4d5
-  bytes: 18231
+  sha256: d76bb3123a000141293f88373a734d81c3d90a84d338be362ce31a6e25fc4116
+  bytes: 19865
 - path: knowledge/SEO_KNOWLEDGE_PACK.md
   sha256: c9483795c075751d69afa143dc55c23ed125899c02ee40658b20ac3d07d852ff
   bytes: 13254
 - path: knowledge/SOURCE_REGISTRY.yaml
-  sha256: 365db74f7328d843c4773739bd6c912aa5c20bd71e8aa9e6db5ae74c2ed74a8b
-  bytes: 30526
+  sha256: 6c61bb790184cf295a493ad448d367656ad5cf8bd0eed1313d6f1d56363fd4e4
+  bytes: 38880
 - path: knowledge/THIRD_PARTY_REVIEW.md
   sha256: c450b41ba251e3ad2fc1c4b0929302f3577f5bac7a8ae3ff64a1e2cb836cc049
   bytes: 3089
 - path: knowledge/UNKNOWNS.md
-  sha256: d2d044f139ee3a1cdb837179bfc7b800d847d75b995a34e7321d323e4bd97a3f
-  bytes: 8588
+  sha256: 8b50abe7136eda8501aef492d0a036a14825737a26f00835af2c8804c42f260b
+  bytes: 8906
 - path: knowledge/VK_CONTENT_AND_ADS_CONTRACT.md
   sha256: 36ddb0d5d4fc4f12401b5b30a201c45faca259f80101da373b77ce2c722757a4
   bytes: 6382

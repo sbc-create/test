@@ -9,7 +9,8 @@
 |-----|--------------|---------------|
 | DLE 20.0 online-документация | writable paths, cron, структура шаблонов, plugin/VFS, требования к PHP/БД, процедура обновления | `blueprints/dle20/profiles/paths.yaml` → реальная установка DLE (`BLOCKED_INPUT`) |
 | Лицензионное соглашение DLE | точная формулировка ограничения по доменам | сейчас используется утверждение пользователя (F5.2); гейт уже реализован |
-| Google Search Central, Яндекс Вебмастер, web.dev, W3C WCAG 2.2, Playwright docs | сверка SEO/a11y-правил с первоисточником | ничего не блокирует технически: правила реализованы по мастер-промпту и помечены `verified_against_official_docs: false` |
+| Google Search Central, web.dev, W3C WCAG 2.2, Playwright docs | сверка SEO/a11y-правил с первоисточником | хостов нет в `inventory/network-allowlist.yaml`; правила помечены `verified_against_official_docs: false` |
+| Яндекс Вебмастер и Метрика — **пробел закрыт 2026-10-18** | сверка обхода, дублей, качества, title и description | источники `SRC-YANDEX-WEBMASTER`, `SRC-YANDEX-METRICA-HELP` переведены в `approved`, факты — F7 в `FACTS.md`. Остальные разделы пакета по-прежнему не сверены |
 
 Разблокируется одним из двух способов: (а) добавить хосты в egress allowlist сессии,
 (б) передать официальные экспорты/копии страниц в `knowledge/imported/`.

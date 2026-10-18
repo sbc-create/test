@@ -126,19 +126,132 @@ sources:
     url: https://dle-news.com/release/94-datalife-engine-v200-final-release.html
     status: unavailable_blocked
     evidence: "CONNECT dle-news.com:443 → 403"
+  - id: SRC-YANDEX-METRICA-HELP
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/metrica/ru/general/link-webmaster.md
+    status: approved
+    retrieved_at: "2026-10-18T20:02:00Z"
+    purpose: "сторона Метрики в привязке счётчика к сайту Вебмастера"
+    verified_against_official_docs: true
+    files:
+      - path: https://yandex.ru/support/metrica/ru/general/link-webmaster.md
+        sha256: d24f1217dfb5d2a57891a7df441879425937dc0c5eb72b01754a65d9795c420b
+        bytes: 18129
+    conclusions:
+      - >-
+        Шаги привязки: 1) сайт добавлен в Вебмастер и права подтверждены;
+        2) в Метрике «Настройка → Счётчик → Привязать к Вебмастеру»;
+        3) в Вебмастере «Настройки → Привязка к Яндекс Метрике → Подтвердить».
+        Статус виден с обеих сторон. API для отправки запроса в документации не
+        назван — автоматизировать нельзя.
   - id: SRC-GOOGLE-SEARCH-CENTRAL
     kind: official_documentation
     owner: Google
     url: https://developers.google.com/search/docs
     status: unavailable_blocked
+    evidence: >-
+      Хоста developers.google.com нет в inventory/network-allowlist.yaml,
+      поэтому запрос отклоняется сторожем до выхода в сеть. Расширять
+      список по инициативе агента запрещено: нужно задание владельца.
+      Проверено 2026-10-18 вместе со снятием записи по Яндексу.
     evidence: "CONNECT developers.google.com:443 → 403; WebFetch → EGRESS_BLOCKED"
     required_for: "canonical, pagination, faceted navigation, spam policies, video structured data, sitemaps"
   - id: SRC-YANDEX-WEBMASTER
     kind: official_documentation
     owner: Яндекс
     url: https://yandex.ru/support/webmaster/
-    status: unavailable_blocked
-    evidence: "CONNECT yandex.ru:443 → 403"
+    status: approved
+    retrieved_at: "2026-10-18T19:50:00Z"
+    version_seen: "Diplodoc Platform v5.63.3, llms.txt revision r21678050"
+    purpose: >-
+      Сверка правил SEO_KNOWLEDGE_PACK с первоисточником: обход и индексация,
+      дубли, признаки качества сайта, title и description, малоценные страницы,
+      разметка Movie, Clean-param, обход по счётчику Метрики.
+    evidence: >-
+      Прежняя запись «CONNECT yandex.ru:443 → 403» опровергнута измерением
+      2026-10-18: html-версия раздела отвечает 200 (194 КБ, приложение на JS),
+      markdown-версии страниц отдаются кодом 200 целиком, перечень страниц —
+      llms.txt. Хост разрешён в inventory/network-allowlist.yaml
+      (yandex-dev-docs-ru, методы GET), то есть запрет был не в сети и не в
+      политике, а в устаревшей записи этого реестра.
+    verified_against_official_docs: true
+    files:
+      # Снял Архитектор 2026-10-18 19:50–20:05Z.
+      - path: https://yandex.ru/support/webmaster/ru/index.md
+        sha256: b6d76bec1c59cd403121e586559357a1c7646e50abd3f3f6f56e2844b64ce4f5
+        bytes: 5697
+      - path: https://yandex.ru/support/webmaster/ru/llms.txt
+        sha256: 5ab11cba5a63ac7e80212d7079c881bbc72fe963b47095aaa5476e8b5b96512b
+        bytes: 32893
+      - path: https://yandex.ru/support/webmaster/ru/yandex-indexing/about-doubles.md
+        sha256: 3deef166c378062fd3c0ca176cbb52cbf38a7dd817f376811fed336f0780b436
+        bytes: 7735
+      - path: https://yandex.ru/support/webmaster/ru/yandex-indexing/webmaster-advice.md
+        sha256: 822ecce0286b7ca7d1e27d849541a526345b8fb4cd8d6ac53bd75a9e5cf06e45
+        bytes: 15828
+      - path: https://yandex.ru/support/webmaster/ru/indexing-options/link-metrica.md
+        sha256: 2a5e335580f6c95f3a7c7b47a1a798c19bcc3f10d3e50878f19ff1f467dba835
+        bytes: 16693
+      # Снял SEO-оператор 2026-10-18 19:48–19:49Z
+      # (var/seo-audit/yandex-docs-registry-20261018.json).
+      - path: https://yandex.ru/support/webmaster/ru/search-results/favicon.md
+        sha256: cf9eb3307430f7e61eb3666cdd2b8db622257693eeaa7c0242e655eafee312a5
+        bytes: 16375
+      - path: https://yandex.ru/support/webmaster/ru/search-results/title.md
+        sha256: ca2d50cbf81a2fc18c2852ca68f1a3d7559056427f10ffd912e69b675feec07f
+        bytes: 7808
+      - path: https://yandex.ru/support/webmaster/ru/indexing-options/description.md
+        sha256: b9d67dc4140d2ba332d5a16f40b286a6885615d75f61a7122eab259f896d5af3
+        bytes: 7224
+      - path: https://yandex.ru/support/webmaster/ru/indexing-options/title-description-doubles.md
+        sha256: 45ed4215b6b7d32e9025aae32da45caa68b80557d65d92b1a530e9e67b5f3f5a
+        bytes: 4505
+      - path: https://yandex.ru/support/webmaster/ru/site-indexing/low-demand.md
+        sha256: 947dffc0fa9aa5b234021c21ad1bf40867d496bb6c420f5608bbe6961bbf03c4
+        bytes: 14617
+      - path: https://yandex.ru/support/webmaster/ru/supported-schemas/movie-description.md
+        sha256: 496a2ce9d96b863da0616cff0158c27fa5757e12c4b4c055f7b5321ce3cb9638
+        bytes: 11156
+      - path: https://yandex.ru/support/webmaster/ru/robot-workings/double.md
+        sha256: 1695e799e57bf58b5ef4ddfd1d20006ac1f326e8c2576518d55ab6540198bd12
+        bytes: 21043
+      - path: https://yandex.ru/support/webmaster/ru/robot-workings/clean-param.md
+        sha256: 721073478527af9e1991088211b62c4742d55f4a178b0ffd5a10eaff41b0c7a9
+        bytes: 10999
+    cross_checked:
+      - >-
+        webmaster-advice.md и link-metrica.md сняты двумя линиями независимо;
+        sha256 совпали побайтно (822ecce0…, 2a5e3355…). Совпадение проверяет,
+        что обе линии читают один и тот же документ, а не свою копию.
+    conclusions:
+      - >-
+        Обход по счётчику Метрики — отдельный источник обхода: сайту,
+        подтверждённому в Вебмастере, привязывается счётчик, и включается обход
+        по его данным. Запрос отправляется с любой стороны, подтверждает
+        противоположная. Для зеркала счётчик привязывается к ГЛАВНОМУ адресу.
+        Sitemap назван дополнением, а не заменой.
+      - >-
+        Дубль определён как страницы с почти или полностью одинаковым текстом
+        НА ОДНОМ САЙТЕ по разным адресам. Вред назван прямо: обход тратится на
+        дубли, новые страницы индексируются медленнее, дубли конкурируют, робот
+        может исключить целевую страницу. Межсайтовое совпадение каталога этим
+        определением не покрывается.
+      - >-
+        Среди примеров сайтов, к которым алгоритмы могут применить ограничения,
+        названы: копирование и переписывание чужого содержимого, автоматически
+        сгенерированное бесполезное содержимое, каталоги-агрегаторы без
+        собственных текстов и описаний, малоинформативные страницы результатов
+        поиска и отбора. Про последние сказано отдельно: их часто много, они
+        увеличивают нагрузку и снижают скорость обхода полезных страниц.
+      - >-
+        Бренд в title рекомендован «в конце или начале через разделитель»
+        (search-results/title.md, снято линией SEO) — довод к оценке B031, где
+        у длинных названий бренд вытесняется.
+      - >-
+        Шаблонные описания «вероятнее всего не будут показываться»
+        (indexing-options/description.md, снято линией SEO) — основание задачи
+        B038.
   - id: SRC-WEBDEV-CWV
     kind: official_documentation
     owner: Google / web.dev
