@@ -177,6 +177,152 @@ def test_путь_по_данным_берётся_из_описи_а_не_уг�
     assert МОД.путь_по_данным("нет-такой") == ""
 
 
+def _реестр(tmp_path: Path, ячейки: list) -> None:
+    """Подменяет корень модуля, чтобы запись читалась из своего реестра."""
+    (tmp_path / "config").mkdir(exist_ok=True)
+    (tmp_path / "config" / "site-cells.json").write_text(
+        json.dumps({"cells": ячейки}), encoding="utf-8")
+
+
+def _юнит(tmp_path: Path, имя: str, тело: str, *, включён: bool) -> None:
+    (tmp_path / "units").mkdir(exist_ok=True)
+    (tmp_path / "units" / имя).write_text(тело, encoding="utf-8")
+    (tmp_path / "wants").mkdir(exist_ok=True)
+    if включён:
+        (tmp_path / "wants" / имя).write_text("", encoding="utf-8")
+
+
+def test_объявленный_путь_расходится_с_юнитом(tmp_path, monkeypatch):
+    """Доставка берёт путь ИЗ РЕЕСТРА, поэтому расхождение молчаливо фатально.
+
+    Так уже было: zona-02, измерено 2026-10-08 — издатель клал снимок в
+    `/srv/lords/.frontend/...`, витрина читала `/srv/zonafilm-cc/data`,
+    разница 6791 произведение, отчёт доставки при этом был успешным.
+    """
+    _реестр(tmp_path, [{"site_id": "zona-02", "runtime": {
+        "unit": "nova-zonafilm-cc.service",
+        "data_dir": "/srv/lords/.frontend/sites/zona-02/data"}}])
+    _юнит(tmp_path, "nova-zonafilm-cc.service",
+          "ExecStart=/usr/bin/python3 run.py --port 9123 "
+          "--data-dir /srv/zonafilm-cc/data\n", включён=True)
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    monkeypatch.setattr(МОД, "КАТАЛОГИ_ЮНИТОВ", (tmp_path / "units",))
+    monkeypatch.setattr(МОД, "ВКЛЮЧЁННЫЕ", tmp_path / "wants")
+    итог = МОД.сверка_объявления("zona-02")
+    assert итог.startswith("РАСХОЖДЕНИЕ ОБЪЯВЛЕНИЯ")
+    assert "/srv/lords/.frontend/sites/zona-02/data" in итог
+    assert "/srv/zonafilm-cc/data" in итог
+
+
+def test_совпавшее_объявление_не_поднимает_тревогу(tmp_path, monkeypatch):
+    """Отрицательный контроль: исправная ячейка не попадает в находки."""
+    _реестр(tmp_path, [{"site_id": "zona-02", "runtime": {
+        "unit": "nova-zonafilm-cc.service",
+        "data_dir": "/srv/zonafilm-cc/data/"}}])
+    _юнит(tmp_path, "nova-zonafilm-cc.service",
+          "ExecStart=run.py --data-dir /srv/zonafilm-cc/data\n", включён=True)
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    monkeypatch.setattr(МОД, "КАТАЛОГИ_ЮНИТОВ", (tmp_path / "units",))
+    monkeypatch.setattr(МОД, "ВКЛЮЧЁННЫЕ", tmp_path / "wants")
+    assert МОД.сверка_объявления("zona-02") == "совпадает"
+
+
+def test_выключенный_юнит_называется_отдельно(tmp_path, monkeypatch):
+    """«Включён» — это ссылка в multi-user.target.wants, и только она.
+
+    Прежний юнит ячейки может остаться на диске с правильным путём; если он
+    не включён, его ExecStart ничего не говорит о живой витрине.
+    """
+    _реестр(tmp_path, [{"site_id": "zona-02", "runtime": {
+        "unit": "nova-zona-02.service", "data_dir": "/srv/zonafilm-cc/data"}}])
+    _юнит(tmp_path, "nova-zona-02.service",
+          "ExecStart=run.py --data-dir /srv/zonafilm-cc/data\n", включён=False)
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    monkeypatch.setattr(МОД, "КАТАЛОГИ_ЮНИТОВ", (tmp_path / "units",))
+    monkeypatch.setattr(МОД, "ВКЛЮЧЁННЫЕ", tmp_path / "wants")
+    assert "НЕ включён" in МОД.сверка_объявления("zona-02")
+
+
+def test_нечитаемый_юнит_не_выдаётся_за_совпадение(tmp_path, monkeypatch):
+    _реестр(tmp_path, [
+        {"site_id": "нет-юнита", "runtime": {"data_dir": "/srv/x/data"}},
+        {"site_id": "нет-файла", "runtime": {
+            "unit": "нет-такого.service", "data_dir": "/srv/x/data"}},
+        {"site_id": "без-ключа", "runtime": {
+            "unit": "пустой.service", "data_dir": "/srv/x/data"}}])
+    _юнит(tmp_path, "пустой.service", "ExecStart=run.py --port 9999\n",
+          включён=True)
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    monkeypatch.setattr(МОД, "КАТАЛОГИ_ЮНИТОВ", (tmp_path / "units",))
+    monkeypatch.setattr(МОД, "ВКЛЮЧЁННЫЕ", tmp_path / "wants")
+    assert МОД.сверка_объявления("нет-юнита") == "юнит не назван в реестре"
+    assert "не прочитан" in МОД.сверка_объявления("нет-файла")
+    assert МОД.сверка_объявления("без-ключа") == "юнит не передаёт --data-dir"
+
+
+def test_витрина_с_верховым_приложением_называется(tmp_path, monkeypatch):
+    """Возраст снимка у такой ячейки НЕ говорит о свежести содержимого.
+
+    Измерено 2026-10-18: у yummy-site снимок каталога от 2026-09-10 — 38
+    суток, а публичная главная отдаёт материалы с датой 2026-10-18. Содержимое
+    приходит от верхового приложения (`LORDS_LEGACY_UPSTREAM`), а снимок
+    остаётся проверкой «есть чем стартовать». Без этой графы инструмент
+    подсказал бы вывод «содержимое устарело на 38 суток», и он был бы ложным.
+    """
+    корень = tmp_path / "srv" / "yummyani-site"
+    (корень / "current" / "config").mkdir(parents=True)
+    (корень / "current" / "config" / "site.json").write_text(json.dumps({
+        "environment": {"LORDS_LEGACY_UPSTREAM": "127.0.0.1:3101"}}),
+        encoding="utf-8")
+    _реестр(tmp_path, [{"site_id": "yummy-site", "runtime": {
+        "app_dir": str(корень / "app")}}])
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    assert МОД.содержимое_с_верха("yummy-site") == "127.0.0.1:3101"
+
+
+def test_витрина_без_верхового_приложения_не_оговаривается(tmp_path, monkeypatch):
+    корень = tmp_path / "srv" / "zonafilm-space"
+    (корень / "current" / "config").mkdir(parents=True)
+    (корень / "current" / "config" / "site.json").write_text(json.dumps({
+        "environment": {"LORDS_CATALOG": "<data>/zona-01-catalog.json"}}),
+        encoding="utf-8")
+    _реестр(tmp_path, [{"site_id": "zona-01", "runtime": {
+        "app_dir": str(корень / "app")}}])
+    monkeypatch.setattr(МОД, "__file__", str(tmp_path / "a" / "b" / "c.py"))
+    assert МОД.содержимое_с_верха("zona-01") == ""
+    assert МОД.содержимое_с_верха("нет-записи") == ""
+
+
+def test_неизмеримая_ячейка_с_верхом_говорит_об_этом(tmp_path, monkeypatch):
+    """Пробел наблюдаемости остаётся пробелом, но риск за ним — другой."""
+    monkeypatch.setattr(МОД, "порт_ячейки", lambda имя: "9999")
+    monkeypatch.setattr(МОД, "ответ_healthz", lambda порт, таймаут: {"ok": True})
+    monkeypatch.setattr(МОД, "заголовки_ответа", lambda порт, таймаут: {})
+    monkeypatch.setattr(МОД, "сверка_объявления", lambda имя: "совпадает")
+    monkeypatch.setattr(МОД, "содержимое_с_верха", lambda имя: "127.0.0.1:3101")
+    итог = МОД.проверить("yummy-site", 1)
+    assert "НЕ ИЗМЕРЕНО" in итог["вывод"]
+    assert "источником содержимого не является" in итог["вывод"]
+    assert итог["верх"] == "127.0.0.1:3101"
+
+
+def test_процесс_старше_файла_не_объявляется_доказательством():
+    """Поправка измерением, а не осторожностью.
+
+    Доставка перезаписывает файл каждые сутки даже при неизменном содержимом:
+    конвейер пишет `skipped: «вход не изменился»` при совпавшем digest
+    (измерено 2026-10-18 на animedia-01/02, вход не менялся с 2026-09-07).
+    Значит mtime новый, а ревизия — та же, что процесс загрузил при старте, и
+    «процесс старше файла» перечитывания не доказывает.
+    """
+    тело = ПУТЬ.read_text(encoding="utf-8")
+    assert "вход не изменился" in тело, (
+        "основание поправки обязано быть названо рядом с ней")
+    for ложь in ("перечитывание РАБОТАЕТ", "перечитывание работает, "):
+        assert ложь not in тело, f"инструмент не вправе утверждать «{ложь}»"
+    assert "Для доказательства нужна ревизия, менявшаяся" in тело
+
+
 def test_заголовки_разбираются_без_учёта_регистра(monkeypatch):
     """`curl -D -` печатает их как отдал сервер; имена нечувствительны."""
     class Готово:
