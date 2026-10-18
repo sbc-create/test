@@ -5232,7 +5232,7 @@
           "url": "https://animeg0.site/movies/",
           "status": 200,
           "absent": [
-            "type:movie",
+            "type:movie <span",
             "genre=zapadnyykontent"
           ]
         },
@@ -5244,8 +5244,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 07:51Z: сверка трёх AnimeGo (animeg0, an1meg0, an1mego) — одинаково на всех. Порядок: представитель animeg0.site (контроль канарейки T191; правка одинаковая на трёх доменах, затрагивает /movies/ и /series/, а не /ongoing/ — сравнение канарейки не искажает), затем an1meg0.site и an1mego.site переносом коммита. Эффект: индексация разделов меток (Вебмастер — после B023), Метрика — входы на /movies/ и /series/ по Яндексу и Google раздельно, 7 дней до/после. | 18.10 09:21Z: попытка 1 INCOMPLETE — run.sh упал на no_class_collision (литерал class=\"afilt__chip\" в регулярном выражении внутри ВидАнимеГо); правка по смыслу верна (раздел метки /movies|series/?genre=<метка> → noindex, панель без меток, чип типа раздела не выводится). В expected добавлено: шаблон — модульной константой."
+      "status": "live_verified",
+      "evidence": "18.10 07:51Z: сверка трёх AnimeGo (animeg0, an1meg0, an1mego) — одинаково на всех. Порядок: представитель animeg0.site (контроль канарейки T191; правка одинаковая на трёх доменах, затрагивает /movies/ и /series/, а не /ongoing/ — сравнение канарейки не искажает), затем an1meg0.site и an1mego.site переносом коммита. Эффект: индексация разделов меток (Вебмастер — после B023), Метрика — входы на /movies/ и /series/ по Яндексу и Google раздельно, 7 дней до/после. | 18.10 09:21Z: попытка 1 INCOMPLETE — run.sh упал на no_class_collision (литерал class=\"afilt__chip\" в регулярном выражении внутри ВидАнимеГо); правка по смыслу верна (раздел метки /movies|series/?genre=<метка> → noindex, панель без меток, чип типа раздела не выводится). В expected добавлено: шаблон — модульной константой. | 18.10 09:49:29Z опубликовано штатным циклом (попытка 3, прогон 20261018T092955Z-1438030 VERIFIED, коммит 4d7f206, голова 5caffe61); публикатор: live_check_failed «на /movies/ есть «type:movie»» — ложное срабатывание МОЕЙ формулировки live_check (absent по всему HTML): единственное вхождение — атрибут data-catalog-facet=\"type:movie\", посетителю не виден. live_check сужен до видимого чипа («type:movie <span»). Живая сверка сессией 18.10 09:52Z (var/seo-audit/t211-live-20261018.json): /movies/, /series/, /catalog/ — видимого «type:…» 0, меток в панели 0, чипов нет, index, follow; /movies/?genre=zapadnyykontent, /series/?genre=aziatskiykontent, /catalog/?genre=… — noindex, follow; /movies/?genre=drama — index, follow; тайтл без регресса T197. Остаток: на самой странице метки (noindex, внутренних ссылок на неё нет) чип выбранного отбора «западный контент» — не исправлялся, вес малый. Далее: перенос на an1meg0.site и an1mego.site (T215, T216), затем подписи списка «Формат» MOVIE/TV (T214)."
     },
     {
       "id": "T212",
