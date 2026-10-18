@@ -43,11 +43,19 @@ from pathlib import Path
 
 #: Домены сети с открытой индексацией. Перечень не расширяется по инициативе
 #: инструмента: домен, которого здесь нет, называется в аргументах.
+#:
+#: Семейство yummy внесено 2026-10-18 ПОСЛЕ замера, а не по аналогии: его карты
+#: собирает собственный рантайм, и шаг сборки у него мог быть другим. Замер:
+#: yummyani.org, yummyani.biz, yummyani7.site и yummyani7.info дают самый
+#: свежий `lastmod` сегодняшним, то есть шаг суточный, как у остальных; пятая
+#: витрина (yummyani.site) отстала на трое суток — это запись MOD-76, и именно
+#: такую находку перечень обязан показывать.
 СЕТЬ = (
     "lordfilm47.space", "lordserial33.biz", "1lordserials1.online",
     "lordserials22.info", "zonafilm.space", "zonafilm.cc", "zonafilm12.site",
     "animedia.icu", "animedia.space", "an1mego.site", "animeg0.site",
-    "an1meg0.site",
+    "an1meg0.site", "yummyani.site", "yummyani.org", "yummyani.biz",
+    "yummyani7.site", "yummyani7.info",
 )
 
 #: Сколько суток отставания считается находкой. Одни сутки — обычный шаг
