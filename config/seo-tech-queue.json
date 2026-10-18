@@ -6100,8 +6100,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 18:32Z: замена T237; полный прогон сессии на ветке T237 — var/... scratchpad t237-runsh.txt: единственный отказ — склеенная строка run.sh."
+      "status": "live_verified",
+      "evidence": "18.10 18:32Z: замена T237; полный прогон сессии на ветке T237 — var/... scratchpad t237-runsh.txt: единственный отказ — склеенная строка run.sh. | 18.10 18:57Z: публикатор live_verified 18:54:30Z; сверка var/seo-audit/t239-live-20261018.json."
     }
   ]
 }
