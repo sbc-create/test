@@ -5210,6 +5210,42 @@
       ],
       "status": "queued",
       "evidence": "18.10 07:49Z: живой хаб согласован; дефект — в подзаголовке страницы подборки (код, строка ~5119) и запасных текстах. Эффект: косвенный."
+    },
+    {
+      "id": "T211",
+      "site": "animeg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/movies/",
+        "https://animeg0.site/series/",
+        "https://animeg0.site/movies/?genre=zapadnyykontent",
+        "https://animeg0.site/series/?genre=aziatskiykontent"
+      ],
+      "problem": "Живая проверка 18.10 07:55Z (var/seo-audit/sweep-other-20261018-b.json и сверка тремя доменами): на хабах /movies/ и /series/ трёх AnimeGo (1) в чипе активного отбора видна внутренняя надпись «type:movie ×» / «type:tv ×» (ВидАнимедиа._фильтры_каталога: chip(f\"type:{выбрано['type']}\", …)); (2) в панели жанров раздела стоят служебные метки поставщика: «западный контент 579», «без «западный контент»», «азиатский контент» (ссылки /movies/?genre=zapadnyykontent&type=movie и т.п.); (3) разделы /movies/?genre=zapadnyykontent, /series/?genre=zapadnyykontent, /series/?genre=aziatskiykontent — 200, index, follow, canonical на себя: индексируемая посадочная служебной метки. T197 закрыл только /catalog/ (модульная _раздел_служебной_метки проверяет первый сегмент «catalog») и панель жанров /catalog/.",
+      "norm": "служебные метки поставщика — не жанр: не в видимом тексте и не цель ссылок, их раздел noindex, follow, вне карты (SEO_KNOWLEDGE_PACK §3 REQ-SEO-FACETS п.1, п.5; правило T044/T077/T197); видимый текст без внутренних кодов (поручение владельца 17.10)",
+      "expected": "src/animego-frontend.py. (1) Модульная _раздел_служебной_метки: кроме /catalog/… считать разделом метки и /movies/, /series/ (и прочие разделы каталога, которые принимают ?genre=, если есть) с genre=<метка> — noindex, follow; страница отвечает как прежде, canonical не трогать. (2) Панель жанров разделов /movies/ и /series/ (её строит ВидАнимедиа._фильтры_каталога, ~8143 и ~8171: списки жанров и «без «…»») — метки (_служебная_метка) не выводить; (3) чип выбранного типа: внутренний код «type:movie»/«type:tv» не показывать — если тип задан самим разделом (/movies/ — movie, /series/ — tv), чип типа не выводить; если тип выбран явно (/catalog/?type=…), подпись — та же, что у этого типа в списке выбора той же панели (новых слов не сочинять). ГРАНИЦЫ (checks/boundaries.py): классы ВидАнимедиа и ВидОснова и модули seo_layer/community/collection_contract/chronology — НЕ менять ни строки; правка — в модульных функциях и переопределением _фильтры_каталога в ВидАнимеГо (вызов super() с отфильтрованными данными/выбором либо постобработка результата), как сделано в T197 для панели /catalog/. Длинные строки существующего кода не переносить (checks/pagination_links.py ищет подстроки). Перед коммитом python3 checks/boundaries.py — rc 0. Новая проверка checks/section_facet_labels.py на стенде/копии снимка: /movies/ и /series/ — нет «type:movie», «type:tv», нет ссылок ?genre=zapadnyykontent / aziatskiykontent / exclude=<метка>; /movies/?genre=zapadnyykontent — meta robots «noindex, follow»; /movies/?genre=drama (или любой обычный жанр снимка) — «index, follow»; на базе rc=1, на ветке rc=0; подключить в checks/run.sh штатно. Затем tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Вёрстку, постеры, CSS не трогать.",
+      "check": "checks/section_facet_labels.py",
+      "verify_live": "/movies/ и /series/ — нет «type:movie»/«type:tv» и ссылок на метки; /movies/?genre=zapadnyykontent и /series/?genre=aziatskiykontent — noindex, follow; /movies/?genre=drama — index, follow; /catalog/ без регресса T197",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/movies/",
+          "status": 200,
+          "absent": [
+            "type:movie",
+            "genre=zapadnyykontent"
+          ]
+        },
+        {
+          "url": "https://animeg0.site/movies/?genre=zapadnyykontent",
+          "status": 200,
+          "contains": [
+            "noindex, follow"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 07:57Z: сверка трёх AnimeGo (animeg0, an1meg0, an1mego) — одинаково на всех. Порядок: представитель animeg0.site (контроль канарейки T191; правка одинаковая на трёх доменах, затрагивает /movies/ и /series/, а не /ongoing/ — сравнение канарейки не искажает), затем an1meg0.site и an1mego.site переносом коммита. Эффект: индексация разделов меток (Вебмастер — после B023), Метрика — входы на /movies/ и /series/ по Яндексу и Google раздельно, 7 дней до/после."
     }
   ]
 }
