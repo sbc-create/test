@@ -5851,6 +5851,40 @@
       ],
       "status": "queued",
       "evidence": "18.10 15:29Z: замер сессии (animeg0/an1meg0/an1mego, 3 тайтла с выходом 18–19.10). an1mego.site — НЕ переносится до оценки T191 24.10 (канарейка на этом сайте). Эффект: входы на тайтлы из запросов «дата выхода» — оценка 01.11 (Метрика), позиции — после B023."
+    },
+    {
+      "id": "T232",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/chernyy-klever/",
+        "https://animedia.icu/title/beybleyd-vzryv-dinamitnaya-bitva/",
+        "https://animedia.icu/title/chernyy-klever/season-2/episode-3/"
+      ],
+      "problem": "Живой замер 18.10 15:42Z после T227/T228 (var/seo-audit/avail-fact-animedia-icu-after-20261018.json, 35 входных тайтлов с фактом): у 3 карточка пишет «Доступно серий» больше, чем «Вышло серий» — beybleyd-vzryv-dinamitnaya-bitva 491 / 476, chernyy-klever 195 / 194, lirichnaya-volshebnica-nanoha-vivid 64 / 63; то же на страницах серий («Доступно 195 серий · Вышло 194 серии»). Это известный случай данных (комментарий в список_серий: поставщик отдаёт больше серий, чем заявлено в eps), но посетителю он показан как противоречие.",
+      "norm": "Видимые факты не противоречат друг другу (SEO_KNOWLEDGE_PACK §4 п.2); новых чисел не вводить.",
+      "expected": "src/animedia-frontend.py, карточка тайтла (~7583) и страница серии (counts ~7697): строку «Вышло серий» / «Вышло N серий» выводить только при total > avail (было total != avail в карточке и total > 0 на странице серии). Когда доступно не меньше заявленного, остаётся одна строка «Доступно …». Статус («Вышел», если avail >= total) не менять. Проверка — расширить checks/card_avail_count.py и checks/episode_avail_count.py: деталь eps=194, nums=1..195 → нет «Вышло», «Доступно 195»; eps=243, nums=1..26 → «Вышло 243» есть. База rc=1, ветка rc=0; без рантайма rc 2. run.sh штатно, stamp_manifest/update_pins, полный run.sh.",
+      "check": "checks/card_avail_count.py",
+      "verify_live": "/title/chernyy-klever/ — нет «Вышло серий 194»; /title/pozhiratel-zvezd/ — «Вышло серий 243» на месте",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/chernyy-klever/",
+          "status": 200,
+          "absent": [
+            "<dt>Вышло серий</dt><dd>194</dd>"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/title/pozhiratel-zvezd/",
+          "status": 200,
+          "contains": [
+            "<dt>Вышло серий</dt><dd>243</dd>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "18.10 15:42Z: замер сессии; эффект — правдивость фактов, трафик не оценивается."
     }
   ]
 }
