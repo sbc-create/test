@@ -101,7 +101,7 @@
       "status": "blocked",
       "owner_action": "root: команда §4 docs/verification/www-mirrors-20261012.md (коммит 6d20f68) — по одному домену; zonafilm12.site — после спада нагрузки.",
       "verify_live": "python3 automation/local/http-redirect-audit.py (Архитектор)",
-      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа. | 18.10 11:46Z: живая сверка — www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc по-прежнему 200, index, follow, canonical на www. В цикл поставлен редирект на уровне приложения (T221, представитель an1meg0.site); nginx-правка остаётся за владельцем. | 18.10 12:35Z: www.yummyani7.site и www.yummyani7.info — 200, index, follow, canonical на основной домен (не self). Выбранный поисковиком адрес не проверен (Вебмастер недоступен, B023) — исключение дубля НЕ подтверждено. Нужен 308 www → основной домен (nginx владельца или код Yummy Архитектора); остальные Yummy (yummyani.site/.org/.biz) уже отвечают 308."
+      "evidence": " 13.10: http отдаёт 200 без перехода на 10 доменах (yummyani7.site/.info, animedia ×2, an1meg0, lordserials22.info, zonafilm ×3), у части так же www; Архитектор берёт общей задачей после P0 бэкапа. | 18.10 11:46Z: живая сверка — www.an1meg0.site, www.lordserials22.info, www.zonafilm12.site, www.zonafilm.cc по-прежнему 200, index, follow, canonical на www. В цикл поставлен редирект на уровне приложения (T221, представитель an1meg0.site); nginx-правка остаётся за владельцем. | 18.10 12:35Z: www.yummyani7.site и www.yummyani7.info — 200, index, follow, canonical на основной домен (не self). Выбранный поисковиком адрес не проверен (Вебмастер недоступен, B023) — исключение дубля НЕ подтверждено. Нужен 308 www → основной домен (nginx владельца или код Yummy Архитектора); остальные Yummy (yummyani.site/.org/.biz) уже отвечают 308. | 18.10 13:00Z: zonafilm12.site — закрыт приложением (T222 live_verified: www → 308)."
     },
     {
       "id": "B002",
@@ -5583,8 +5583,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "18.10 11:46Z: см. T221 (представитель an1meg0.site); семейство Lords-рантайма в src/ (у lordfilm47/lordserial33 www уводит nginx 308). Эффект: Вебмастер — главное зеркало (после B023); Метрика — визиты на www-хосте → 0."
+      "status": "live_verified",
+      "evidence": "18.10 11:46Z: см. T221 (представитель an1meg0.site); семейство Lords-рантайма в src/ (у lordfilm47/lordserial33 www уводит nginx 308). Эффект: Вебмастер — главное зеркало (после B023); Метрика — визиты на www-хосте → 0. | 18.10 12:57:13Z опубликовано штатным циклом (голова 37cfe51b, публикатор live_verified). Живая сверка сессией 18.10 13:00Z (var/seo-audit/t222-live-20261018.json): https://www.zonafilm12.site/, /catalog/?page=2, /movies/?genre=drama&page=3 — один переход 308 на https://zonafilm12.site/… с тем же путём и запросом, циклов нет; основной адрес — 200, index, follow, canonical на себя; /healthz на www — 200 без перехода (как задано; закрыт в robots.txt)."
     },
     {
       "id": "T223",
