@@ -6392,8 +6392,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0."
+      "status": "live_verified",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0. | 19.10 08:39:28Z публикатор live_verified (animedia-02-code-80b24f23a514)."
     },
     {
       "id": "T251",
@@ -6475,9 +6475,9 @@
           "status": 301
         }
       ],
-      "status": "released",
+      "status": "live_verified",
       "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239. | 19.10 06:32–06:51Z исполнитель: VERIFIED (20261019T063234Z-3005030, полный run.sh зелёный; 39 пар кодов по данным каталога). 06:52–06:53Z выпуск: CI release 39211957565 success, установка релиза fd35fb1785e4 — да, прогрев кандидата nova-lordfilm47-space-candidate.service: «процесс не работает» через 67,5 с → откат, живой 1215011e2d52 отвечает 200 (/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json). Далее публикатор ждёт: «на ветке выпуска невыпущенный коммит fd35fb1785e4». См. B040. | 19.10 08:14:30Z повтор активации сессией (`python3 -m factory cell trigger --site lords-01 --confirm-activation`; MemAvailable до 4 184 МиБ, минимум во время прогрева 1 774 МиБ, прогрев 27,1 с) → activated, live_verified, build fd35fb1785e4. НО живая сверка 08:16Z: /genre/comedy/ — 200, 3 932 записи (301 нет), /genre/komediya/ — 14 300; в карте английские коды остались. Правка в продакшене не срабатывает → T266.",
-      "owner_action": "выпущена, но без эффекта — исправление T266"
+      "owner_action": "эффект достигнут правкой T266 (19.10 08:59Z)"
     },
     {
       "id": "T254",
@@ -6859,8 +6859,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "var/seo-audit/t253-live-20261019.json (08:16Z); распределение имён по кодам — замер сессии по снимку деталей 04:02Z."
+      "status": "live_verified",
+      "evidence": "var/seo-audit/t253-live-20261019.json (08:16Z); распределение имён по кодам — замер сессии по снимку деталей 04:02Z. | 19.10 08:25–08:46Z исполнитель VERIFIED, активация 08:46Z (lords-01-code-479698c0480b). Живая проверка публикатора 08:46–08:57Z — live_check_failed («/genre/comedy/: 200, ждали 301») — сразу после активации; сверка сессии 08:59Z: /genre/comedy|action|horror|criminal|detective/ → 301 на русские коды (page сохраняется), /genre/komediya/ 18 232 записи (было 14 300), /genre/boevik/ 11 932 (было 8 628), ссылки карточки — русские коды, в карте английских нет; регресс T244 — чист (var/seo-audit/t266-live-20261019.json). Функция пар на живом снимке — 55 пар. Причина расхождения с публикатором — вероятно прогрев индекса после активации (не измерено)."
     }
   ]
 }
