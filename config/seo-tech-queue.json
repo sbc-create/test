@@ -6929,8 +6929,48 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 15:42Z: T267 live_verified — условие снято, в очередь. | 19.10 17:06Z публикатор live_verified; сверка сессии 17:09Z — `regress-live-20261019-T269.json` 8/8 (жанры), НО разделы видов без крошек — доводка T275."
+    },
+    {
+      "id": "T275",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/movies/",
+        "https://zonafilm12.site/series/"
+      ],
+      "problem": "19.10 17:09Z сверка сессии после выпуска T269 (публикатор live_verified 17:06Z, его live_check — только ?genre=drama): на zonafilm12.site BreadcrumbList и видимые крошки есть на канонических разделах жанров (drama, comedy, action, triller, uzhasy, fantastika, melodrama) и на /new/, но НЕТ на разделах видов /movies/, /series/, /animation/, /doramas/ (200, index), хотя expected T269 их включал. На живом /movies/ видна плашка активного фильтра «Фильмы ×» («Фильтры 1»): вид приходит как явный фильтр, и условие `разд in имена and not явные` (src/lords-frontend.py, раздел «Крошки раздела жанра и раздела вида») ложно. checks/section_breadcrumbs.py вызывает вид.список('/movies', {}) без фильтра вида — поэтому проходит, расходясь с живым маршрутом.",
+      "norm": "Как T269: видимые крошки «<имя сайта> / Каталог / <раздел>» и BreadcrumbList из них на индексируемых разделах видов (SEO_KNOWLEDGE_PACK §4 п.4). Проверка обязана воспроизводить живой маршрут, а не упрощённый вызов: иначе зелёная проверка не говорит о сайте ничего.",
+      "expected": "src/lords-frontend.py: на /movies/, /series/, /animation/, /doramas/ (без прочих условий) крошки и BreadcrumbList появляются и когда вид пришёл из маршрута как фильтр (вид, совпадающий с разделом, не считается «явным» условием); /catalog/?kind=…, разделы стран и выборки с годом/жанром — без изменений. checks/section_breadcrumbs.py — запрос через тот же путь, что живой адрес «/movies/» (как при обработке HTTP), база rc=1, ветка rc=0; полный run.sh.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на /movies/ есть BreadcrumbList и видимые крошки «Zona Cinema / Каталог / Фильмы»",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/movies/",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/series/",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/catalog/?genre=drama",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 15:42Z: T267 live_verified — условие снято, в очередь."
+      "evidence": "19.10 17:09Z сверка сессии после выпуска T269 (публикатор live_verified 17:06Z, его live_check — только ?genre=drama): на zonafilm12.site BreadcrumbList и видимые крошки есть на канонических разделах жанров (drama, comedy, action, triller, uzhasy, fantastika, melodrama) и на /new/, но НЕТ на разделах видов /movies/, /series/, /animation/, /doramas/ (200, index), хотя expected T269 их включал. На живом /movies/ видна плашка активного фильтра «Фильмы ×» («Фильтры 1»): вид приходит как явный фильтр, и условие `разд in имена and not явные` (src/lords-frontend.py, раздел «Крошки раздела жанра и раздела вида») ложно. checks/section_breadcrumbs.py вызывает вид.список('/movies', {}) без фильтра вида — поэтому проходит, расходясь с живым маршрутом."
     },
     {
       "id": "T270",
@@ -6955,7 +6995,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T269",
+      "owner_action": "ждёт live_verified T275 (доводка T269 на разделах видов) — переносить один раз полную правку, а не дважды",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     },
     {
@@ -6981,7 +7021,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T269",
+      "owner_action": "ждёт live_verified T275 (доводка T269 на разделах видов) — переносить один раз полную правку, а не дважды",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     },
     {
