@@ -7085,8 +7085,9 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 замер wt-nova-publish-memory-02 (MOD-97, коммит d4eb2f9): на главной zonafilm12.site полка «Новинки» — 5 из 16 карточек без источника (velikoe-ograblenie-v-pendzhabe, dom-dlya-papy, tom-i-cherri, fotograf-4, kak-ryba-v-vode: playable false, sources []). Сверка SEO-сессии 18:50Z: в первых 16 карточках после заголовка «Новинки» (срез может захватывать соседний блок) — 11 с playable false и пустым sources; карточка velikoe-ograblenie-v-pendzhabe — 200, index, на странице «недоступно». Причина (по коду коллеги): src/lords-frontend.py, _герои_кандидаты → «взять» (~6505) не проверяет доступность, хотя docstring обещает «работающий источник»; образец — src/home.py zonafilm.cc (играбельно(з) в отборе)."
+      "status": "blocked",
+      "evidence": "19.10 замер wt-nova-publish-memory-02 (MOD-97, коммит d4eb2f9): на главной zonafilm12.site полка «Новинки» — 5 из 16 карточек без источника (velikoe-ograblenie-v-pendzhabe, dom-dlya-papy, tom-i-cherri, fotograf-4, kak-ryba-v-vode: playable false, sources []). Сверка SEO-сессии 18:50Z: в первых 16 карточках после заголовка «Новинки» (срез может захватывать соседний блок) — 11 с playable false и пустым sources; карточка velikoe-ograblenie-v-pendzhabe — 200, index, на странице «недоступно». Причина (по коду коллеги): src/lords-frontend.py, _герои_кандидаты → «взять» (~6505) не проверяет доступность, хотя docstring обещает «работающий источник»; образец — src/home.py zonafilm.cc (играбельно(з) в отборе). | 19.10 ~19:02Z ОТОЗВАНО до уточнения: wt-nova-02 проверил плеером (player-page-probe.py) tom-i-cherri, dom-dlya-papy, fotograf-4, kak-ryba-v-vode, slepye-zony s1e1, horoshie-kosti s1e1 — показ начинается у всех. Поля playable/sources в zona-03-details.json не описывают фактическую доступность; фильтр по ним выбросил бы рабочие тайтлы. Моя сверка 18:50Z тоже шла по полям данных — её «11 из 16» описывает данные, а не витрину. Нужен источник правды доступности ячейки zona-03.",
+      "owner_action": "ждёт уточнения: живые страницы воспроизводятся при playable false / sources [] — признак отбора неверен"
     },
     {
       "id": "T278",
@@ -7120,7 +7121,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T277 и T280 (тот же репозиторий zonafilm12-site — после T280)"
+      "owner_action": "ждёт live_verified T277 (тот же репозиторий zonafilm12-site; T280 отозвана)"
     },
     {
       "id": "T279",
