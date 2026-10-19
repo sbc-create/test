@@ -6695,6 +6695,58 @@
       ],
       "status": "queued",
       "evidence": "lords-02-details.json: countries ['Таиланд'], genres ['драма','дорама'], external_ids {mal 34088605, mdl 778242}, type tv, year 2025; checks/lords02_taxonomy.py на базе — «новых рассогласований: 1»."
+    },
+    {
+      "id": "T262",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/sitemap.xml"
+      ],
+      "problem": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках).",
+      "norm": "В карте — все индексируемые канонические страницы, которые сайт сам считает самостоятельными (справка Яндекса: sitemap — способ сообщить роботу о страницах; SEO_KNOWLEDGE_PACK — карта согласована с canonical/robots).",
+      "expected": "Карта: индексируемые страницы жанров /catalog/?genre=<код> (ровно те, что отдают index и canonical на себя; пустые и noindex — нет). Проверка checks/sitemap_genre_pages.py (база rc=1, ветка rc=0). После — перенос на animedia.space.",
+      "check": "checks/sitemap_genre_pages.py",
+      "verify_live": "в карте есть /catalog/?genre=anime",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/sitemap-1.xml",
+          "status": 200,
+          "contains": [
+            "genre=anime"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "после оценки выпусков animedia.icu 25.10 (baseline-20261025-eval.json: группы страниц, в т.ч. «прочие») — чтобы карта не смешалась с оценкой; затем в queued",
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках)."
+    },
+    {
+      "id": "T263",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/sitemap.xml"
+      ],
+      "problem": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках).",
+      "norm": "В карте — все индексируемые канонические страницы, которые сайт сам считает самостоятельными (справка Яндекса: sitemap — способ сообщить роботу о страницах; SEO_KNOWLEDGE_PACK — карта согласована с canonical/robots).",
+      "expected": "Карта: разделы стран /catalog/?country=<код> с БОЛЬШЕ ОДНОЙ записью (то же условие, что у ссылок T245) и canonical на себя. Проверка checks/sitemap_country_pages.py (база rc=1, ветка rc=0). Перенос — zonafilm.space, zonafilm.cc (слоем), lordfilm47.space (/country/<код>/).",
+      "check": "checks/sitemap_country_pages.py",
+      "verify_live": "в карте есть /catalog/?country=turciya",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/sitemap-1.xml",
+          "status": 200,
+          "contains": [
+            "country=turciya"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "после оценки T240–T245 (ссылки на разделы стран) 01.11 — иначе эффект ссылок и карты не разделить; затем в queued",
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках)."
     }
   ]
 }
