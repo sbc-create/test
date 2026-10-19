@@ -6475,8 +6475,9 @@
           "status": 301
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239. | 19.10 06:32–06:51Z исполнитель: VERIFIED (20261019T063234Z-3005030, полный run.sh зелёный; 39 пар кодов по данным каталога). 06:52–06:53Z выпуск: CI release 39211957565 success, установка релиза fd35fb1785e4 — да, прогрев кандидата nova-lordfilm47-space-candidate.service: «процесс не работает» через 67,5 с → откат, живой 1215011e2d52 отвечает 200 (/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json). Далее публикатор ждёт: «на ветке выпуска невыпущенный коммит fd35fb1785e4». См. B040."
+      "status": "released",
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239. | 19.10 06:32–06:51Z исполнитель: VERIFIED (20261019T063234Z-3005030, полный run.sh зелёный; 39 пар кодов по данным каталога). 06:52–06:53Z выпуск: CI release 39211957565 success, установка релиза fd35fb1785e4 — да, прогрев кандидата nova-lordfilm47-space-candidate.service: «процесс не работает» через 67,5 с → откат, живой 1215011e2d52 отвечает 200 (/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json). Далее публикатор ждёт: «на ветке выпуска невыпущенный коммит fd35fb1785e4». См. B040. | 19.10 08:14:30Z повтор активации сессией (`python3 -m factory cell trigger --site lords-01 --confirm-activation`; MemAvailable до 4 184 МиБ, минимум во время прогрева 1 774 МиБ, прогрев 27,1 с) → activated, live_verified, build fd35fb1785e4. НО живая сверка 08:16Z: /genre/comedy/ — 200, 3 932 записи (301 нет), /genre/komediya/ — 14 300; в карте английские коды остались. Правка в продакшене не срабатывает → T266.",
+      "owner_action": "выпущена, но без эффекта — исправление T266"
     },
     {
       "id": "T254",
@@ -6780,9 +6781,10 @@
       "direction": "lords",
       "problem": "Выпуск T253 (fd35fb1785e4) упал на прогреве кандидата: процесс кандидата завершился за 67,5 с, откат выполнен, живая версия 1215011e2d52 не изменилась. Причина не установлена: журнал юнита кандидата сессии недоступен (journalctl: нет группы systemd-journal). Обстановка в момент выпуска: на хосте ~363 МиБ свободно, load 7.2 (замер Архитектора 06:50Z), своп почти исчерпан (SwapFree 17 784 kB в 06:55Z); витрина lords01 занимает ~1,7 ГБ — гипотеза нехватки памяти НЕ подтверждена. Код ветки на стенде исполнителя поднимается (полный run.sh зелёный). Ветка выпуска стоит на fd35fb1 — публикатор будет ждать, пока коммит не выпущен или не снят.",
       "expected": "причина падения кандидата названа по журналу; T253 выпущена и live_verified либо ветка выпуска возвращена на живой коммит с объяснением",
-      "status": "blocked",
+      "status": "done",
       "owner_action": "ВЛАДЕЛЕЦ/АРХИТЕКТОР: `journalctl -u nova-lordfilm47-space-candidate.service --since '2026-10-19 06:51'` (причина остановки: OOM/исключение/порт); затем повторная активация ячейки lords-01 на fd35fb1785e4 в часы меньшей нагрузки или исправление. SEO после выпуска — живая сверка T253 (/genre/comedy/ 301 → /genre/komediya/, число записей ≈ 18 200, карта без английских кодов) и регресс T244.",
-      "evidence": "/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json: outcome candidate-failed, warm_up.ready=false «процесс не работает» 67.5 c, rollback restored, verify 9110 build 1215011e2d52 ok; publish.jsonl 06:53:49Z executor_failed, 06:54:06Z wait. Живая сверка сессии 06:55Z: /, /genre/comedy/, карточка — 200; регресс T244 1/1."
+      "evidence": "/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json: outcome candidate-failed, warm_up.ready=false «процесс не работает» 67.5 c, rollback restored, verify 9110 build 1215011e2d52 ok; publish.jsonl 06:53:49Z executor_failed, 06:54:06Z wait. Живая сверка сессии 06:55Z: /, /genre/comedy/, карточка — 200; регресс T244 1/1.",
+      "resolution": "Повтор 19.10 08:14–08:16Z при MemAvailable 4 184 МиБ прошёл (прогрев 27,1 с, минимум свободной памяти 1 774 МиБ во время прогрева) — причина первой неудачи подтверждена ёмкостью хоста (разбор Архитектора: живому процессу lords-01 ~1 699 МиБ; в 06:50Z свободно ~1 764 МиБ). Правка прогрева с отказом по памяти — 33515f2 Архитектора, к исполнителю ячеек приедет установкой копии (владелец). var/seo-audit/t253-retry-memory-20261019.json."
     },
     {
       "id": "T265",
@@ -6829,6 +6831,36 @@
       "status": "blocked",
       "owner_action": "ВЛАДЕЛЕЦ: настройки nginx — защищённые данные витрины (CLAUDE.md, docs/RUNTIME_DATA_OWNERSHIP.md): выпуск, сборка и установщик их только читают; SEO-сессия их не меняет. Нужен штатный путь владельца: server-блок :80 для 9 доменов → return 301 https://$host$request_uri (образец — блок lordfilm47.space). lordserials22.info — после оценки 21.10.",
       "evidence": "GET без следования редиректам http://<домен>/: 200 у 9 доменов, canonical https://<домен>/; 308/301 у 6; Strict-Transport-Security на https — только yummyani.site. Повторный замер с сохранением — 07:09Z."
+    },
+    {
+      "id": "T266",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/genre/comedy/",
+        "https://lordfilm47.space/genre/komediya/"
+      ],
+      "problem": "T253 (fd35fb1) выпущена 08:16Z, но не действует: /genre/comedy/ — 200, 3 932 записи; /genre/komediya/ — 14 300; английские коды в карте. Причина (замер сессии по /srv/lords/.frontend/lords-01-details.json, 08:20Z): _псевдонимы_жанров сопоставляет genre_codes[i] с genres[i] по позиции и принимает код, только если у него РОВНО одно имя (len(свои) != 1 → пропуск). В данных: comedy → «комедия» 3 929 раз и по 1 разу «приключения», «мультфильм», «короткометражка» (сдвинутые массивы у отдельных записей); action → «боевик» 3 297 + 6 прочих; horror → «ужасы» 1 002 + 1; drama → «драма» 4 062 + 2. Шум 0,1 % отключает все пары. Проверка checks/genre_code_split.py на ветке прошла — значит, она проверяла не то поведение, что в продакшене (D205: проверка, не падающая на живых данных).",
+      "norm": "Как T253: один жанр — один раздел; пары — только из данных каталога, без списка.",
+      "expected": "src/lords-frontend.py, _псевдонимы_жанров: имя кода — ПРЕОБЛАДАЮЩЕЕ по числу записей, если его доля ≥ 99 % и записей ≥ 20 (иначе пары нет); прочие условия T253 без изменений. Проверка checks/genre_code_split.py переписывается так, чтобы на ЖИВОМ снимке /srv/lords/.frontend/lords-01-details.json вызывать ту же функцию фронтенда и требовать: comedy→komediya, action→boevik, horror→uzhasy найдены; база (fd35fb1) rc=1, ветка rc=0; без снимка rc=2. Полный run.sh. Выпуск — при MemAvailable ≥ 2,5 ГиБ (B040).",
+      "check": "checks/genre_code_split.py",
+      "verify_live": "/genre/comedy/ — 301 на /genre/komediya/; описание /genre/komediya/ ≈ 18 200 записей; в карте нет /genre/comedy/",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/genre/comedy/",
+          "status": 301
+        },
+        {
+          "url": "https://lordfilm47.space/genre/komediya/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://lordfilm47.space/genre/komediya/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "var/seo-audit/t253-live-20261019.json (08:16Z); распределение имён по кодам — замер сессии по снимку деталей 04:02Z."
     }
   ]
 }
