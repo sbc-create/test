@@ -78,13 +78,6 @@
       "applicability": "yummyani7.site: опыт — dazhe-u-studsoveta-est-kosyaki, lyubov-nedelima-mezhdu-bliznetsami; контроль — pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya, nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka-ya-prinyala-pari-ot (текста нет до вердикта); без пары — bezzhalostnaya-ledi-niya-liston-… (без претензии на измерение)",
       "scope_page_share": 0.001,
       "phase": "canary",
-      "observation": {
-        "days_elapsed": 0,
-        "impressions": null,
-        "primary_metric_delta": null
-      },
-      "verdict": null,
-      "verdict_reason": "наблюдение не начато",
       "evidence": "docs/seo-operator/EXP_EDITOR_DEMAND_ORDER.md (назначение пар, критерии до выпуска); передача Архитектора ARCHITECT_TO_SEO-003 (24fe786); оценка не раньше 02.11"
     }
   ]
