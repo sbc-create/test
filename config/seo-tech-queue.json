@@ -6912,6 +6912,109 @@
       "status": "blocked",
       "owner_action": "ждёт live_verified T267",
       "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
+    },
+    {
+      "id": "T269",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/catalog/?genre=drama"
+      ],
+      "problem": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
+      "norm": "Видимые хлебные крошки отражают реальную иерархию «главная → каталог/раздел → страница», BreadcrumbList строится только из них (SEO_KNOWLEDGE_PACK §4 п.4; так уже сделано на карточках и в Lords).",
+      "expected": "src/lords-frontend.py: видимые крошки на индексируемых разделах жанров (/catalog/?genre=…) и видов (/movies/, /series/, /animation/, /doramas/, /new/): «<имя сайта> / Каталог / <имя раздела из данных>», тот же компонент, что на карточке; BreadcrumbList — из них. Разделы стран (?country=) НЕ трогать до оценки 01.11. Проверка checks/section_breadcrumbs.py (база rc=1, ветка rc=0); полный run.sh.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на разделе жанра — видимые крошки «Главная / Каталог / <жанр>» и BreadcrumbList",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/catalog/?genre=drama",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+    },
+    {
+      "id": "T270",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/?genre=drama"
+      ],
+      "problem": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
+      "norm": "Видимые хлебные крошки отражают реальную иерархию «главная → каталог/раздел → страница», BreadcrumbList строится только из них (SEO_KNOWLEDGE_PACK §4 п.4; так уже сделано на карточках и в Lords).",
+      "expected": "Перенос T269 после её live_verified.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на разделе жанра — видимые крошки «Главная / Каталог / <жанр>» и BreadcrumbList",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/catalog/?genre=drama",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт live_verified T269",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+    },
+    {
+      "id": "T271",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/catalog/?genre=comedy"
+      ],
+      "problem": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
+      "norm": "Видимые хлебные крошки отражают реальную иерархию «главная → каталог/раздел → страница», BreadcrumbList строится только из них (SEO_KNOWLEDGE_PACK §4 п.4; так уже сделано на карточках и в Lords).",
+      "expected": "Перенос T269 слоем в src/serve.py (шаблон закреплён) после её live_verified; регресс T230/T223/T243/T247.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на разделе жанра — видимые крошки «Главная / Каталог / <жанр>» и BreadcrumbList",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/catalog/?genre=comedy",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт live_verified T269",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+    },
+    {
+      "id": "T272",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/catalog/?genre=komediya"
+      ],
+      "problem": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
+      "norm": "Видимые хлебные крошки отражают реальную иерархию «главная → каталог/раздел → страница», BreadcrumbList строится только из них (SEO_KNOWLEDGE_PACK §4 п.4; так уже сделано на карточках и в Lords).",
+      "expected": "src/animedia-frontend.py: те же крошки на разделах жанров/видов после оценки выпусков 25.10.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на разделе жанра — видимые крошки «Главная / Каталог / <жанр>» и BreadcrumbList",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/catalog/?genre=komediya",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "после оценки выпусков animedia.icu 25.10",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     }
   ]
 }
