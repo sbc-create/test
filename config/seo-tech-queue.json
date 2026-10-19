@@ -7008,8 +7008,9 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале."
+      "status": "blocked",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале.",
+      "owner_action": "ждёт live_verified T262 (тот же репозиторий animedia-icu — иначе SUPERSEDED)"
     }
   ]
 }
