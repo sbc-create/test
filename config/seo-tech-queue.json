@@ -6510,8 +6510,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: списки разных фильтров не совпадают (pair_cmp.json)."
+      "status": "live_verified",
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: списки разных фильтров не совпадают (pair_cmp.json). | 19.10: дважды SUPERSEDED (ветки готовились до выпуска T248 и T257 в том же репозитории), третья подготовка 11:13Z VERIFIED, публикатор live_verified 12:00:27Z (zona-03-code-b387fa6d8d5c); сверка сессии 12:07Z: 10 выборок — 10 разных title/H1 («Новинки: фильмы», «Каталог: сериалы», «Подборка «Анимация»» …); регресс T240/T245/T248/T257 чист (var/seo-audit/t254-live-20261019.json)."
     },
     {
       "id": "T255",
@@ -6536,8 +6536,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T254",
+      "status": "queued",
       "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
     },
     {
@@ -6564,7 +6563,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T254",
+      "owner_action": "ждёт live_verified T259 (тот же репозиторий zonafilm-cc — иначе SUPERSEDED); T254 выпущена 12:00Z",
       "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
     },
     {
@@ -6882,9 +6881,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик.",
-      "owner_action": "ждёт live_verified T254 и T257 (тот же репозиторий zonafilm12-site): ветка, подготовленная до выпуска соседней задачи, получает SUPERSEDED — 19.10 T254 уже дважды готовилась от устаревшей базы. После выпуска обеих — снова queued (SEO)."
+      "status": "queued",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
     },
     {
       "id": "T268",
@@ -6936,7 +6934,7 @@
       ],
       "status": "blocked",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
-      "owner_action": "ждёт live_verified T254 и T257 (тот же репозиторий zonafilm12-site): ветка, подготовленная до выпуска соседней задачи, получает SUPERSEDED — 19.10 T254 уже дважды готовилась от устаревшей базы. После выпуска обеих — снова queued (SEO)."
+      "owner_action": "ждёт live_verified T267 (тот же репозиторий zonafilm12-site — иначе SUPERSEDED)"
     },
     {
       "id": "T270",
