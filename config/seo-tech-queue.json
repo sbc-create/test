@@ -6861,6 +6861,57 @@
       ],
       "status": "live_verified",
       "evidence": "var/seo-audit/t253-live-20261019.json (08:16Z); распределение имён по кодам — замер сессии по снимку деталей 04:02Z. | 19.10 08:25–08:46Z исполнитель VERIFIED, активация 08:46Z (lords-01-code-479698c0480b). Живая проверка публикатора 08:46–08:57Z — live_check_failed («/genre/comedy/: 200, ждали 301») — сразу после активации; сверка сессии 08:59Z: /genre/comedy|action|horror|criminal|detective/ → 301 на русские коды (page сохраняется), /genre/komediya/ 18 232 записи (было 14 300), /genre/boevik/ 11 932 (было 8 628), ссылки карточки — русские коды, в карте английских нет; регресс T244 — чист (var/seo-audit/t266-live-20261019.json). Функция пар на живом снимке — 55 пар. Причина расхождения с публикатором — вероятно прогрев индекса после активации (не измерено)."
+    },
+    {
+      "id": "T267",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/catalog/?genre=komediya"
+      ],
+      "problem": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик.",
+      "norm": "Один жанр — один индексируемый адрес (справка Яндекса robot-workings/double.md); поведение — как уже работает на zonafilm.cc.",
+      "expected": "src/lords-frontend.py: значение genre, которое сайт принимает как синоним кода (русская транслитерация имени жанра при наличии основного кода), — canonical на /catalog/?genre=<основной код> с сохранением прочих параметров и page, как на zonafilm.cc (см. слой src/serve.py zonafilm-cc — образец поведения). Title/H1 не трогать (T254 — отдельно). Проверка checks/genre_alias_canonical.py (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
+      "check": "checks/genre_alias_canonical.py",
+      "verify_live": "?genre=komediya → canonical ?genre=comedy",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/catalog/?genre=komediya",
+          "status": 200,
+          "contains": [
+            "genre=comedy\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
+    },
+    {
+      "id": "T268",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/catalog/?genre=komediya"
+      ],
+      "problem": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик.",
+      "norm": "Один жанр — один индексируемый адрес (справка Яндекса robot-workings/double.md); поведение — как уже работает на zonafilm.cc.",
+      "expected": "Перенос T267 после её live_verified.",
+      "check": "checks/genre_alias_canonical.py",
+      "verify_live": "как T267",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/catalog/?genre=komediya",
+          "status": 200,
+          "contains": [
+            "genre=comedy\""
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт live_verified T267",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
     }
   ]
 }
