@@ -7192,7 +7192,7 @@
         }
       ],
       "status": "live_verified",
-      "evidence": "19.10 20:17Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром). | 19.10 21:46Z публикатор live_verified; сверка сессии 21:48Z: BreadcrumbList на /movies/, /series/, /animation/, /doramas/, ?genre=drama, /new/ — 6/6, страна без изменений; регресс space 10/10."
+      "evidence": "19.10 20:17Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром). | 19.10 21:46Z публикатор live_verified; сверка сессии 21:47Z: BreadcrumbList на /movies/, /series/, /animation/, /doramas/, ?genre=drama, /new/ — 6/6, страна без изменений; регресс space 10/10."
     },
     {
       "id": "T271",
