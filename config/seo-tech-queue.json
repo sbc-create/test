@@ -6969,8 +6969,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 17:09Z сверка сессии после выпуска T269 (публикатор live_verified 17:06Z, его live_check — только ?genre=drama): на zonafilm12.site BreadcrumbList и видимые крошки есть на канонических разделах жанров (drama, comedy, action, triller, uzhasy, fantastika, melodrama) и на /new/, но НЕТ на разделах видов /movies/, /series/, /animation/, /doramas/ (200, index), хотя expected T269 их включал. На живом /movies/ видна плашка активного фильтра «Фильмы ×» («Фильтры 1»): вид приходит как явный фильтр, и условие `разд in имена and not явные` (src/lords-frontend.py, раздел «Крошки раздела жанра и раздела вида») ложно. checks/section_breadcrumbs.py вызывает вид.список('/movies', {}) без фильтра вида — поэтому проходит, расходясь с живым маршрутом."
+      "status": "live_verified",
+      "evidence": "19.10 17:09Z сверка сессии после выпуска T269 (публикатор live_verified 17:06Z, его live_check — только ?genre=drama): на zonafilm12.site BreadcrumbList и видимые крошки есть на канонических разделах жанров (drama, comedy, action, triller, uzhasy, fantastika, melodrama) и на /new/, но НЕТ на разделах видов /movies/, /series/, /animation/, /doramas/ (200, index), хотя expected T269 их включал. На живом /movies/ видна плашка активного фильтра «Фильмы ×» («Фильтры 1»): вид приходит как явный фильтр, и условие `разд in имена and not явные` (src/lords-frontend.py, раздел «Крошки раздела жанра и раздела вида») ложно. checks/section_breadcrumbs.py вызывает вид.список('/movies', {}) без фильтра вида — поэтому проходит, расходясь с живым маршрутом. | 19.10 17:56Z публикатор live_verified; сверка сессии 18:33Z: BreadcrumbList на /movies/, /series/, /animation/, /doramas/, ?genre=drama, /new/ — 6/6; регресс — regress-live-20261019-T275-T276.json."
     },
     {
       "id": "T270",
@@ -6995,7 +6995,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T275 (доводка T269) и T277 (тот же репозиторий zonafilm-space — после T277)",
+      "owner_action": "ждёт live_verified T277 (тот же репозиторий zonafilm-space; T275 выпущена)",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     },
     {
@@ -7020,8 +7020,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 замер wt-nova-publish-memory-02 (передача docs/handoff/ZONA_HOMEPAGE_ORDER_001.md, коммит 14aae5a, ветка claude/nova-publish-memory-02): src/home.py:339 сортирует слайдер и полки «Новые фильмы»/«Новые сериалы» ключом published_at (дата появления записи в каталоге). Сверка SEO-сессии 17:29Z на живой https://zonafilm.cc/: первые 24 карточки — медиана года 1978 (zona-02-details.json), 23 из 24 старше десяти лет, полка «Новые фильмы» открывается «Вражьи тропы» 1935, «Лунный камень» 1935. Расчёт коллеги на данных до выпуска с ключом (год произведения, published_at): медиана 2026, старше десяти лет 0, отбор не меняется (под слайдер подходят 45 360 из 66 865).",
+      "status": "live_verified",
+      "evidence": "19.10 замер wt-nova-publish-memory-02 (передача docs/handoff/ZONA_HOMEPAGE_ORDER_001.md, коммит 14aae5a, ветка claude/nova-publish-memory-02): src/home.py:339 сортирует слайдер и полки «Новые фильмы»/«Новые сериалы» ключом published_at (дата появления записи в каталоге). Сверка SEO-сессии 17:29Z на живой https://zonafilm.cc/: первые 24 карточки — медиана года 1978 (zona-02-details.json), 23 из 24 старше десяти лет, полка «Новые фильмы» открывается «Вражьи тропы» 1935, «Лунный камень» 1935. Расчёт коллеги на данных до выпуска с ключом (год произведения, published_at): медиана 2026, старше десяти лет 0, отбор не меняется (под слайдер подходят 45 360 из 66 865). | 19.10 18:20Z публикатор live_verified; сверка сессии 18:33Z: медиана года первых 24 карточек 2026 (было 1978), старше 10 лет 0 (было 23), «Вражьи тропы» нет; размеры полок 24/12/12/9 и снимки «после» — wt-nova-publish-memory-02.",
       "note": "после выпуска — живая сверка составом и снимки «после» на стороне wt-nova-publish-memory-02 (homepage-cards-audit.py, page-screenshots.py); T271 (перенос крошек) — после T276 и T275"
     },
     {
@@ -7090,7 +7090,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T277 и T275 (тот же репозиторий zonafilm12-site — после T275)"
+      "owner_action": "ждёт live_verified T277 (T275 выпущена; репозиторий zonafilm12-site свободен)"
     },
     {
       "id": "T279",
@@ -7124,7 +7124,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T277 и T276 (тот же репозиторий zonafilm-cc — после T276; T271 — после T279)"
+      "owner_action": "ждёт live_verified T277 (T276 выпущена; репозиторий zonafilm-cc свободен)"
     },
     {
       "id": "T271",
@@ -7149,7 +7149,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T275, T276 и T279 (тот же репозиторий zonafilm-cc — последней в цепочке T276 → T279 → T271)",
+      "owner_action": "ждёт live_verified T279 (тот же репозиторий zonafilm-cc — после T279)",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     },
     {
