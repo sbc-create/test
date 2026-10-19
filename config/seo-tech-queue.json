@@ -6477,7 +6477,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239."
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239. | 19.10 06:32–06:51Z исполнитель: VERIFIED (20261019T063234Z-3005030, полный run.sh зелёный; 39 пар кодов по данным каталога). 06:52–06:53Z выпуск: CI release 39211957565 success, установка релиза fd35fb1785e4 — да, прогрев кандидата nova-lordfilm47-space-candidate.service: «процесс не работает» через 67,5 с → откат, живой 1215011e2d52 отвечает 200 (/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json). Далее публикатор ждёт: «на ветке выпуска невыпущенный коммит fd35fb1785e4». См. B040."
     },
     {
       "id": "T254",
@@ -6774,6 +6774,16 @@
       "status": "blocked",
       "owner_action": "ждёт оценок, которые правка исказила бы: Zona — оценка ссылок стран T240–T245 01.11 (метрика «доля входов вне главного тайтла» сдвинется от ссылок годов); Animedia — оценка выпусков 25.10; Lords — контроль exp-lords-title-kind-year (год — переменная опыта), до вердикта; AnimeGo — опыты (см. T260). Первая витрина — zonafilm12.site после 01.11.",
       "evidence": "19.10 06:49Z: page_audit страниц годов (200, index, canonical на себя, число записей в description); разбор фактов карточек 4 платформ — год без ссылки."
+    },
+    {
+      "id": "B040",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "problem": "Выпуск T253 (fd35fb1785e4) упал на прогреве кандидата: процесс кандидата завершился за 67,5 с, откат выполнен, живая версия 1215011e2d52 не изменилась. Причина не установлена: журнал юнита кандидата сессии недоступен (journalctl: нет группы systemd-journal). Обстановка в момент выпуска: на хосте ~363 МиБ свободно, load 7.2 (замер Архитектора 06:50Z), своп почти исчерпан (SwapFree 17 784 kB в 06:55Z); витрина lords01 занимает ~1,7 ГБ — гипотеза нехватки памяти НЕ подтверждена. Код ветки на стенде исполнителя поднимается (полный run.sh зелёный). Ветка выпуска стоит на fd35fb1 — публикатор будет ждать, пока коммит не выпущен или не снят.",
+      "expected": "причина падения кандидата названа по журналу; T253 выпущена и live_verified либо ветка выпуска возвращена на живой коммит с объяснением",
+      "status": "blocked",
+      "owner_action": "ВЛАДЕЛЕЦ/АРХИТЕКТОР: `journalctl -u nova-lordfilm47-space-candidate.service --since '2026-10-19 06:51'` (причина остановки: OOM/исключение/порт); затем повторная активация ячейки lords-01 на fd35fb1785e4 в часы меньшей нагрузки или исправление. SEO после выпуска — живая сверка T253 (/genre/comedy/ 301 → /genre/komediya/, число записей ≈ 18 200, карта без английских кодов) и регресс T244.",
+      "evidence": "/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json: outcome candidate-failed, warm_up.ready=false «процесс не работает» 67.5 c, rollback restored, verify 9110 build 1215011e2d52 ok; publish.jsonl 06:53:49Z executor_failed, 06:54:06Z wait. Живая сверка сессии 06:55Z: /, /genre/comedy/, карточка — 200; регресс T244 1/1."
     }
   ]
 }
