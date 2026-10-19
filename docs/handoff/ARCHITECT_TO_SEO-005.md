@@ -49,3 +49,54 @@ assert not (s / "wt" / "C1").exists()
 каталога нельзя — фикстура строит пути от своего места, и из `/tmp` падают 20
 посторонних тестов. Прогон за вами; изменение адресное, и оба адреса я
 подтвердил живыми данными.
+
+## Патч целиком (файлов `.patch` в репозитории нет)
+
+`tests/unit/test_repo_hygiene.py::test_no_dle_core_patches` запрещает любой
+отслеживаемый файл `.patch` — так патч ядра DLE не может спрятаться среди
+прочих. Правило старше этой передачи, поэтому дифф лежит здесь же, а
+применяемая копия достаётся из документа:
+
+```bash
+python3 - <<'PY' > /tmp/test_seo_tech_run-worktree-path.patch
+import pathlib, re
+т = pathlib.Path("docs/handoff/ARCHITECT_TO_SEO-005.md").read_text(encoding="utf-8")
+print(re.search(r"```diff\n(.*?)```", т, re.S).group(1), end="")
+PY
+git apply --check /tmp/test_seo_tech_run-worktree-path.patch && git apply /tmp/test_seo_tech_run-worktree-path.patch
+```
+
+```diff
+--- a/tests/unit/test_seo_tech_run.py
++++ b/tests/unit/test_seo_tech_run.py
+@@ -147,10 +147,15 @@
+     s = среда["state"]
+     tech_run.claim(среда["задача"], "B1", state=s)
+     tech_run.prune_worktrees(state=s)  # живой захват не трогается
+-    assert (s / "wt" / "B1").exists()
++    # Адрес копии спрашивается у кода, а не повторяется строкой: каталог
++    # переехал 15.10 из `state/wt` в `каталог_копий(state)`, чтобы глубина
++    # пути совпадала с `var/site-repos/<репо>`. Повторённая строка пережила
++    # переезд и проверяла пустоту вместо копии.
++    копия = tech_run.каталог_копий(s) / "B1"
++    assert копия.exists()
+     позже = dt.datetime.now(dt.timezone.utc) + dt.timedelta(seconds=tech_run.STALE_S + 60)
+     убрано = tech_run.prune_worktrees(state=s, now=позже)
+-    assert "B1" in убрано and not (s / "wt" / "B1").exists()
++    assert "B1" in убрано and not копия.exists()
+     assert not (s / "claims" / "T900.claim").exists()
+     assert tech_run.claim(среда["задача"], "B2", state=s)["run_id"] == "B2"
+ 
+@@ -160,7 +165,10 @@
+     tech_run.claim(среда["задача"], "C1", state=s)
+     tech_run.record({"run_id": "C1", "task_id": "T900", "verdict": "INCOMPLETE"}, {}, state=s)
+     assert "C1" in tech_run.prune_worktrees(state=s)
+-    assert not (s / "wt" / "C1").exists()
++    # Тот же адрес, что у claim: по прежнему `state/wt` копии не бывает вовсе,
++    # и утверждение выполнялось ВСЕГДА — проверка, которая не может
++    # провалиться, ничего не стоит (решение D205).
++    assert not (tech_run.каталог_копий(s) / "C1").exists()
+ 
+ 
+ def test_broken_check_is_unusable_not_discriminating(среда):
+```
