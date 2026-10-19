@@ -32,6 +32,7 @@
 
 from __future__ import annotations
 
+import calendar
 import html
 import json
 import re
@@ -47,6 +48,11 @@ USER_AGENT = "site-factory-editor/1 (editorial fact check)"
 SHIKIMORI = "https://shikimori.io"
 AI_AGENTS = ("ClaudeBot", "anthropic-ai", "Claude-Web")
 LOG = Path(__file__).resolve().parents[2] / "var" / "editor-runs" / "sources.jsonl"
+КЭШ_404 = Path(__file__).resolve().parents[2] / "var" / "editor-runs" / "source-404-cache.json"
+# Окно названо числом: из 961 повтора отказного адреса (журнал 09–19.10) 890
+# пришлись на первые сутки. Сутки снимают их и задерживают находку ВНОВЬ
+# созданной статьи не больше чем на день.
+ОКНО_КЭША_Ч = 24
 _last = [0.0]
 
 
@@ -204,14 +210,67 @@ def _text(fragment: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(t)).strip()
 
 
+def _кэш_прочитать() -> dict:
+    """Запомненные отказы. Битый или отсутствующий файл — это пустой кэш.
+
+    Падать из-за кэша нельзя: он ускоряет работу, а не разрешает её. Любая
+    неожиданность здесь означает «спросить источник заново», а не «отказать».
+    """
+    try:
+        д = json.loads(КЭШ_404.read_text(encoding="utf-8"))
+        return д if isinstance(д, dict) else {}
+    except (OSError, json.JSONDecodeError, ValueError):
+        return {}
+
+
+def _свежий(метка: str) -> bool:
+    try:
+        когда = time.strptime(str(метка), "%Y-%m-%dT%H:%M:%SZ")
+    except (ValueError, TypeError):
+        return False
+    # `calendar.timegm`, а не `mktime`: метка в UTC, и переводить её через
+    # местную зону значило бы сдвигать окно на смещение хоста.
+    return (time.time() - calendar.timegm(когда)) < ОКНО_КЭША_Ч * 3600
+
+
+def кэш_отказа(url: str) -> str:
+    """Метка свежего отказа по адресу или пустая строка."""
+    метка = _кэш_прочитать().get(url, "")
+    return метка if метка and _свежий(метка) else ""
+
+
+def запомнить_отказ(url: str) -> None:
+    """Записывает отказ и выбрасывает просроченные записи.
+
+    Без чистки файл растёт без предела: за десять суток журнал видел 956
+    разных отказных адресов.
+    """
+    д = {а: м for а, м in _кэш_прочитать().items() if _свежий(м)}
+    д[url] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    КЭШ_404.parent.mkdir(parents=True, exist_ok=True)
+    врем = КЭШ_404.with_suffix(".json.tmp")
+    врем.write_text(json.dumps(д, ensure_ascii=False), encoding="utf-8")
+    врем.replace(КЭШ_404)
+
+
 def _allowed_get(url: str, source_id: str, **в_журнал) -> tuple[int | None, str, str]:
     allowed, why = _robots_allows(url)
     поля = {к: v for к, v in в_журнал.items() if v not in ("", None)}
     if not allowed:
         _log(source=source_id, url=url, robots=why, **поля)
         return None, "", why
+    # Один фильм живёт на шести витринах Lords/Zona, и каждая спрашивала до
+    # десяти вариантов адреса заново: 41.6 % обращений к Википедии были
+    # повторами уже отказавшего адреса. Попытка остаётся в журнале с пометкой
+    # `cached`, иначе экономию нельзя было бы проверить, а линию — измерить.
+    когда = кэш_отказа(url)
+    if когда:
+        _log(source=source_id, url=url, status=404, cached=True, since=когда, **поля)
+        return 404, "", why
     status, raw = _get(url)
     _log(source=source_id, url=url, status=status, **поля)
+    if status == 404:
+        запомнить_отказ(url)
     return status, raw.decode("utf-8", "replace"), why
 
 
