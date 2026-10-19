@@ -17,7 +17,7 @@ def test_short_id_is_padded_to_seven_digits():
 
 def test_identity_found_for_unpadded_catalog_id(monkeypatch):
     page = '<a href="https://www.imdb.com/title/tt0491603/">IMDb</a> wikidata.org/wiki/Q130615'
-    monkeypatch.setattr(sf, "_wiki_article", lambda lang, title: (200, page, "https://ru.wikipedia.org/wiki/X"))
+    monkeypatch.setattr(sf, "_wiki_article", lambda lang, title, **_: (200, page, "https://ru.wikipedia.org/wiki/X"))
     monkeypatch.setattr(sf, "_log", lambda **kw: None)
     out = sf.film("491603", "H2O", "H2O: Just Add Water", "2006", "tv")
     assert out["ok"] is True
@@ -26,7 +26,7 @@ def test_identity_found_for_unpadded_catalog_id(monkeypatch):
 
 def test_longer_id_with_same_prefix_is_not_a_match(monkeypatch):
     page = '<a href="https://www.imdb.com/title/tt12101660/">IMDb</a>'
-    monkeypatch.setattr(sf, "_wiki_article", lambda lang, title: (200, page, "https://ru.wikipedia.org/wiki/X"))
+    monkeypatch.setattr(sf, "_wiki_article", lambda lang, title, **_: (200, page, "https://ru.wikipedia.org/wiki/X"))
     monkeypatch.setattr(sf, "_log", lambda **kw: None)
     out = sf.film("1210166", "X", "X", "2011", "movie")
     assert out["ok"] is False

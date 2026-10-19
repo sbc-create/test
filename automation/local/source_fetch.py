@@ -204,19 +204,26 @@ def _text(fragment: str) -> str:
     return re.sub(r"\s+", " ", html.unescape(t)).strip()
 
 
-def _allowed_get(url: str, source_id: str) -> tuple[int | None, str, str]:
+def _allowed_get(url: str, source_id: str, **в_журнал) -> tuple[int | None, str, str]:
     allowed, why = _robots_allows(url)
+    поля = {к: v for к, v in в_журнал.items() if v not in ("", None)}
     if not allowed:
-        _log(source=source_id, url=url, robots=why)
+        _log(source=source_id, url=url, robots=why, **поля)
         return None, "", why
     status, raw = _get(url)
-    _log(source=source_id, url=url, status=status)
+    _log(source=source_id, url=url, status=status, **поля)
     return status, raw.decode("utf-8", "replace"), why
 
 
-def _wiki_article(lang: str, title: str) -> tuple[int | None, str, str]:
+def _wiki_article(lang: str, title: str, imdb: str = "") -> tuple[int | None, str, str]:
+    """Одна статья Википедии. `imdb` идёт только в журнал.
+
+    Журнал обращений хранил адрес и код, но не ID, под который статья искалась,
+    — поэтому по нему нельзя было ответить, читались ли статьи без
+    идентификатора вовсе. Теперь можно: поле `imdb` в записи.
+    """
     url = f"https://{lang}.wikipedia.org/wiki/" + quote(title.replace(" ", "_"), safe="():,_")
-    status, text, why = _allowed_get(url, "src-wikipedia")
+    status, text, why = _allowed_get(url, "src-wikipedia", imdb=imdb)
     return status, text, url
 
 
@@ -248,9 +255,70 @@ def imdb_digits(imdb: str) -> str:
     return digits.zfill(7) if digits.isdigit() else digits
 
 
+#: Служебные слова английских названий. Википедия пишет их СТРОЧНОЙ везде,
+#: кроме начала названия и начала сегмента после знака.
+СЛУЖЕБНЫЕ_EN = frozenset({
+    "a", "an", "the", "of", "to", "in", "and", "on", "at", "for", "from",
+    "with", "by", "as", "or", "but", "nor", "into", "over",
+})
+#: Знаки, после которых слово снова считается началом сегмента: «Hey Arnold!
+#: The Movie» — здесь «The» с большой буквы и в Википедии.
+КОНЦЫ_СЕГМЕНТА = (":", "-", "\u2013", "\u2014", "!", "?", ".", "\u2026", ";")
+
+
+def регистр_служебных(название: str) -> str:
+    """Название со служебными словами в нижнем регистре, кроме начал сегментов.
+
+    Повод (линия SEO, 19.10): варианты статьи строятся из названия каталога
+    буквально, а Википедия различает регистр всех букв, кроме первой. Каталог
+    1lordserials1.online даёт «007: Road to A Million» — такой статьи нет
+    (404), а «007: Road to a Million» открывается и несёт нужный IMDb ID
+    (проверено обоими адресами 19.10 06:30Z). Измерено по каталогу
+    animedia-01: служебное слово с большой буквы в середине сегмента — у 209
+    названий из 8655.
+
+    Приведение только ДОБАВЛЯЕТ вариант, а не заменяет прежний: личность всё
+    равно подтверждается IMDb ID в статье, поэтому лишний вариант в худшем
+    случае стоит одного запроса, а подменить произведение не может.
+    """
+    слова = название.split()
+    итог = []
+    for i, слово in enumerate(слова):
+        начало = i == 0 or слова[i - 1].endswith(КОНЦЫ_СЕГМЕНТА)
+        ядро = слово.strip("()[],.")
+        if not начало and ядро.lower() in СЛУЖЕБНЫЕ_EN:
+            итог.append(слово.replace(ядро, ядро.lower(), 1))
+        else:
+            итог.append(слово)
+    return " ".join(итог)
+
+
 def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
-    """Статья о фильме/сериале с подтверждённой идентичностью по IMDb ID."""
+    """Статья о фильме/сериале с подтверждённой идентичностью по IMDb ID.
+
+    Без ID статья НЕ читается вовсе. Причина не в экономии запросов, а в
+    подмене личности: сверка идёт поиском «tt<цифры>» в тексте статьи, и при
+    пустом ID выражение вырождается в поиск «tt», не продолженного цифрой.
+    Такая подстрока есть почти в любой статье («Attack», «better», «Mitte»), и
+    ответ был бы «идентичность подтверждена» для ЛЮБОЙ страницы, которая
+    открылась. Факты чужого произведения попали бы в текст как проверенные.
+
+    Измерено 2026-10-19: в каталоге animedia-01 идентификатор IMDb есть у 2427
+    тайтлов из 8655, то есть у 72 % его нет. Отказ до запроса заодно убирает до
+    семи обращений к Википедии на такой тайтл: за ночь 18–19.10 из 683
+    обращений 522 вернули 404.
+    """
     imdb = imdb_digits(imdb)
+    if not imdb.isdigit():
+        return {
+            "ok": False,
+            "reason": (
+                f"идентичность подтвердить нечем: IMDb ID пуст или не числовой ({imdb!r}). "
+                "Статья не читалась: при пустом ID сверка «tt<цифры>» выродилась бы в поиск "
+                "подстроки «tt» и приняла бы любую открывшуюся статью"
+            ),
+            "tried": [],
+        }
     ru_suffix = (
         ["", " (телесериал)", " (сериал)", f" (телесериал, {year})"]
         if kind == "tv"
@@ -262,11 +330,19 @@ def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
         else ["", " (film)", f" ({year} film)"]
     )
     tried = []
-    for lang, base, suffixes in (("ru", name, ru_suffix), ("en", original, en_suffix)):
+    # Английская база пробуется дважды: как в каталоге и с приведённым
+    # регистром служебных слов. Порядок важен — литеральный вариант первый,
+    # чтобы прежнее поведение не изменилось ни на одном тайтле.
+    базы_en = [original]
+    приведённое = регистр_служебных(original) if original else ""
+    if приведённое and приведённое != original:
+        базы_en.append(приведённое)
+    перебор = [("ru", name, ru_suffix)] + [("en", б, en_suffix) for б in базы_en]
+    for lang, base, suffixes in перебор:
         if not base:
             continue
         for suf in suffixes:
-            status, page, where = _wiki_article(lang, base + suf)
+            status, page, where = _wiki_article(lang, base + suf, imdb=f"tt{imdb}")
             tried.append({"url": where, "status": status})
             if status != 200:
                 continue
