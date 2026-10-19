@@ -6341,8 +6341,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true; zonafilm.space — 0.0."
+      "status": "live_verified",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true; zonafilm.space — 0.0. | 19.10 09:27:30Z публикатор live_verified (zona-03-code-3ad33ce21502); живая сверка сессии 09:28Z: ?mode=added → /new/, &page=2 → /new/?page=2, /movies/?mode=added → /movies/, ?kind=movie — на себя; регресс T240/T245 чист (var/seo-audit/t248-live-20261019.json)."
     },
     {
       "id": "T249",
