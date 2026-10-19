@@ -6367,8 +6367,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true."
+      "status": "live_verified",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true. | 19.10 06:56–07:19Z: VERIFIED (20261019T065618Z-3123146), публикатор live_verified 07:19:41Z (animedia-01-code-55c7b719a5df); живая сверка сессии 07:23Z: ?kind=Аниме и &page=2 → canonical ?genre=anime(&page=2), ?kind=Фильм и ?genre=komediya — на себя (var/seo-audit/t249-live-20261019.json); регресс T227/T228/T232/T235 — 0 отказов."
     },
     {
       "id": "T250",
@@ -6392,8 +6392,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T249",
+      "status": "queued",
       "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0."
     },
     {
