@@ -7094,7 +7094,7 @@
       "direction": "zona",
       "problem": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит.",
       "norm": "Видимый текст и description — для посетителя: без кодов полей, служебных значений и названий механизмов (SEO_KNOWLEDGE_PACK §4 п.2; как T257–T259).",
-      "evidence": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит.",
+      "evidence": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит. | 19.10 20:41Z публикатор live_verified; сверка сессии 20:43Z: «canonical genre=» и «playable» на подборках нет; регресс zonafilm12 10/10.",
       "check": "checks/no_internal_field_names.py",
       "repo": "var/site-repos/zonafilm12-site",
       "urls": [
@@ -7119,7 +7119,7 @@
           ]
         }
       ],
-      "status": "queued"
+      "status": "live_verified"
     },
     {
       "id": "T279",
