@@ -6995,7 +6995,7 @@
         }
       ],
       "status": "live_verified",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 20:11Z публикатор live_verified; сверка сессии 20:18Z: крошки на ?genre=drama и /new/ есть, на /movies/ и /series/ — НЕТ (перенесена только T269; в expected не было сказано про доводку T275 — недосмотр сессии) → T281; регресс space 7/7."
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 20:11Z публикатор live_verified; сверка сессии 20:17Z: крошки на ?genre=drama и /new/ есть, на /movies/ и /series/ — НЕТ (перенесена только T269; в expected не было сказано про доводку T275 — недосмотр сессии) → T281; регресс space 7/7."
     },
     {
       "id": "T276",
@@ -7163,7 +7163,7 @@
         "https://zonafilm.space/movies/",
         "https://zonafilm.space/series/"
       ],
-      "problem": "19.10 20:18Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром).",
+      "problem": "19.10 20:17Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром).",
       "norm": "Как T269/T275: видимые крошки и BreadcrumbList на индексируемых разделах видов.",
       "expected": "Перенос T275 (src/lords-frontend.py: вид, совпадающий с разделом, не считается явным фильтром; checks/section_breadcrumbs.py идёт живым маршрутом) на zonafilm.space; разделы стран — без изменений.",
       "check": "checks/section_breadcrumbs.py",
@@ -7192,7 +7192,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 20:18Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром)."
+      "evidence": "19.10 20:17Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром)."
     },
     {
       "id": "T271",
