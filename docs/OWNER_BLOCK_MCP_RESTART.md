@@ -76,6 +76,19 @@ tr '\\0' ' ' < /proc/$(systemctl show -p MainPID --value site-factory-mcp)/cmdli
 
 ## Приёмка, которую сделаю я
 
+Одной командой (её же можете запустить сами — она только читает):
+
+```bash
+cd /home/claude/wt-nova-publish-memory-02
+python3 automation/local/after-mcp-restart.py
+```
+
+Она проверяет три вещи подряд: процесс новее правки; в командной строке
+появился `--read-only`; снимок подмен авторства по сети ДО первой публикации.
+Сейчас она честно печатает «перезапуска ещё не было» и код выхода 1.
+
+Подробные команды, если нужно по отдельности:
+
 ```bash
 cd /home/claude/wt-nova-publish-memory-02
 python3 automation/local/service-code-freshness.py --unit site-factory-mcp.service
