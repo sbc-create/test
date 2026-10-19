@@ -6642,6 +6642,33 @@
       "status": "blocked",
       "owner_action": "ждёт live_verified T257",
       "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+    },
+    {
+      "id": "T260",
+      "site": "animeg0.site, an1mego.site, an1meg0.site",
+      "direction": "anime",
+      "repo": "var/site-repos/animeg0-site",
+      "urls": [
+        "https://animeg0.site/title/blich-tysyacheletnyaya-krovavaya-voyna/",
+        "https://an1mego.site/title/pozhiratel-zvezd/"
+      ],
+      "problem": "19.10 ~06:10Z замер сессии (var/seo-audit/animego-related-links-20261019.json): на 15 карточках трёх AnimeGo (по 5 тайтлов) ссылок на ДРУГИЕ тайтлы — 0; нет даже связи частей франшизы («Блич: Тысячелетняя кровавая война» ↔ «…Бедствие 2»). Для сравнения: Zona — 12, Lords — 6–12, Animedia — 24 (блоки «Похожее аниме»/«Рекомендуем»). Причина в коде: ВидАнимеГо.тайтл (src/animego-frontend.py:12246) собирает тело из верха, кадров, просмотра и комментариев; унаследованный ВидАнимедиа.похожие() (8108) не вызывается.",
+      "norm": "Страница тайтла связана с близкими страницами обычными ссылками, анкор — название (SEO_KNOWLEDGE_PACK §8 п.1, п.3); связи только из данных каталога (§8 п.2), отбор — существующий детерминированный похожие().",
+      "expected": "ВидАнимеГо.тайтл: после блока просмотра — раздел h2 «Похожее аниме» из self.похожие(запись, деталь) плитками AnimeGo; без новых литералов class=\"…\" в теле ВидАнимеГо (checks/no_class_collision.py); пусто — блока нет. Проверка checks/animego_related_links.py (база rc=1, ветка rc=0). КАНАРЕЙКА: сначала одна витрина, затем перенос по вердикту.",
+      "check": "checks/animego_related_links.py",
+      "verify_live": "на карточке ≥1 ссылка /title/<другой>/ в разделе «Похожее аниме»",
+      "live_check": [
+        {
+          "url": "https://animeg0.site/title/pozhiratel-zvezd/",
+          "status": 200,
+          "contains": [
+            "Похожее аниме"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт опытов AnimeGo: все три витрины — канарейка или контроль (exp-animego-ongoing-landing: an1mego, оценка 24.10/14.11; exp-animego-sitemap-fresh-episodes: animeg0; exp-animego-episode-jsonld: an1meg0). Блок ссылок на одной витрине сместил бы сравнение. Решение SEO после 24.10: канарейка на витрине, чей опыт закончен, или одновременно на всех трёх с записью опыта и согласием Архитектора.",
+      "evidence": "19.10 ~06:10Z: GET 15 карточек, счёт ссылок /title/<другой>/; grep src/animego-frontend.py: def похожие 4209/8108, блок «Смотрите также» 5322 у ВидОснова, у ВидАнимеГо.тайтл не вызывается."
     }
   ]
 }
