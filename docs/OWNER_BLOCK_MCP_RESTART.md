@@ -5,6 +5,18 @@
 **2026-10-18 20:39Z**. Пока служба не перезапущена, публикации описаний на семи
 витринах Lords/Zona остаются на паузе.
 
+**Измерено 19.10 05:40Z, а не предположено.** Дефект виден в живых данных
+витрин: `automation/local/overlay-provenance-diff.py` (код выхода 1) нашёл
+**11 записей на 5 витринах**, где публикация одного текста переклеймила
+авторство соседей и переписала причину на чужой тайтл — `zonafilm.space` 3,
+`lordfilm47.space` 3, `lordserial33.biz` 2, `zonafilm12.site` 2,
+`lordserials22.info` 1. На 10 витринах другого адаптера подмен 0, в том числе
+при публикациях сегодня в 04:25–04:28Z, то есть проверка умеет говорить «нет».
+Подробности и отрицательные контроли —
+[`docs/verification/overlay-provenance-20261019.md`](verification/overlay-provenance-20261019.md).
+Каждая новая публикация на Lords/Zona до перезапуска добавляет такие записи;
+поэтому пауза держится, а не потому, что процесс стар.
+
 **Почему не делаю сам.** `systemctl` не входит в профиль сессии
 (`UNATTENDED_SAFE`), а в `inventory/ssh-hosts.yaml: sudo_allowlist` разрешены
 только `nginx -t`, `systemctl reload nginx` и перезапуск восьми витрин
@@ -51,11 +63,14 @@ tr '\\0' ' ' < /proc/$(systemctl show -p MainPID --value site-factory-mcp)/cmdli
 ```bash
 cd /home/claude/wt-nova-publish-memory-02
 python3 automation/local/service-code-freshness.py --unit site-factory-mcp.service
+python3 automation/local/overlay-provenance-diff.py --domain zonafilm.space
 cd /home/claude/wt-portable-site-cell-01
 python3 automation/local/editorial-fix-installed.py
 ```
 
-Ожидается: первая — «код не новее запуска»; вторая — «правка подтверждена».
+Ожидается: первая — «код не новее запуска»; вторая — счёт подмен ДО публикации
+(сейчас 3 исторические: они останутся, пока служба не перепишет файл, и нулём
+считается отсутствие НОВЫХ после публикации); третья — «правка подтверждена».
 Возраст процесса и дата файлов — диагностика; подтверждением считается вторая
 проверка плюс публикация ниже.
 
@@ -64,8 +79,10 @@ python3 automation/local/editorial-fix-installed.py
 1. линия SEO снимает техническую паузу с **zonafilm.space** (одна витрина, не
    все семь);
 2. одна разрешённая публикация описания;
-3. `editorial-overlay-before-after --compare` обязан дать код 0 и
-   «подменено авторство: 0»; я проверяю опубликованный текст на живой странице;
+3. `editorial-overlay-before-after.py --compare` обязан дать код 0 и
+   «подменено авторство: 0», а `overlay-provenance-diff.py --domain
+   zonafilm.space` — не показать НИ ОДНОЙ новой подмены сверх трёх
+   исторических; я проверяю опубликованный текст на живой странице;
 4. при ненуле публикации останавливаются и вывод присылается мне: значит есть
    третий путь записи состава, которого я не нашёл;
 5. остальные витрины — по одной, с той же сверкой. **lordserials22.info — не
