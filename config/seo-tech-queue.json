@@ -6419,8 +6419,9 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92."
+      "status": "blocked",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92.",
+      "owner_action": "ждёт T261: полный checks/run.sh lordserial33.biz падает на lords02-taxonomy и на БАЗЕ beea53a (новая запись каталога preemnik), а не из-за правки T251 — попытка 20261019T054235Z-2747516: все шаги вердикта, кроме run_all_passes, пройдены (check fails on base / passes on branch). После live_verified T261 — вернуть в queued; ветка claude/seo-tech-t251-20261019t054235z-2747516 (7e29f32) годится как есть."
     },
     {
       "id": "T252",
@@ -6669,6 +6670,31 @@
       "status": "blocked",
       "owner_action": "ждёт опытов AnimeGo: все три витрины — канарейка или контроль (exp-animego-ongoing-landing: an1mego, оценка 24.10/14.11; exp-animego-sitemap-fresh-episodes: animeg0; exp-animego-episode-jsonld: an1meg0). Блок ссылок на одной витрине сместил бы сравнение. Решение SEO после 24.10: канарейка на витрине, чей опыт закончен, или одновременно на всех трёх с записью опыта и согласием Архитектора.",
       "evidence": "19.10 ~06:10Z: GET 15 карточек, счёт ссылок /title/<другой>/; grep src/animego-frontend.py: def похожие 4209/8108, блок «Смотрите также» 5322 у ВидОснова, у ВидАнимеГо.тайтл не вызывается."
+    },
+    {
+      "id": "T261",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/title/preemnik/"
+      ],
+      "problem": "19.10 06:27Z: полный checks/run.sh lordserial33.biz падает на lords02-taxonomy и на текущей базе beea53a (проверено сессией: python3 checks/lords02_taxonomy.py на базе): «новое рассогласование: у записи есть идентификатор аниме-базы, но жанра аниме нет, и случай не разобран в config/classification-overrides.json: preemnik (id 01a149a4-a8e9-7bd5-91f7-1b3bbe8f734d, жанры ['дорама','драма'])». Запись пришла в каталог 17.10 11:34Z. Последствие: любой выпуск lordserial33.biz получает INCOMPLETE (T251 — первая жертва).",
+      "norm": "Разбор рассогласования — запись в cross_signal_reviewed по образцу «Мой бывший» и «Стук сердца» (поля снимка, внешние сайты не открываются); правило «есть mal — значит аниме» в файле сознательно отсутствует.",
+      "expected": "config/classification-overrides.json → cross_signal_reviewed: {id: 01a149a4-a8e9-7bd5-91f7-1b3bbe8f734d, slug: preemnik, verdict: «оставить в дорамах», reason: «Преемник» / ทายาทหมายเลข 1, Таиланд 2025, сериал; снимок помечает «дорама»; есть mydramalist 778242; поле mal 34088605 вне диапазона идентификаторов аниме-базы — ошибочная привязка поставщика (provider mali), аниме-признака в жанрах нет; reviewed_at: 2026-10-19; basis: только поля lords-02-details.json}. Проверка — сама checks/lords02_taxonomy.py (база rc=1, ветка rc=0); полный run.sh. Код не меняется.",
+      "check": "checks/lords02_taxonomy.py",
+      "verify_live": "/title/preemnik/ — в разделе дорам, как и было; выпуск проходит полный run.sh",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/title/preemnik/",
+          "status": 200,
+          "contains": [
+            "Преемник"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "lords-02-details.json: countries ['Таиланд'], genres ['драма','дорама'], external_ids {mal 34088605, mdl 778242}, type tv, year 2025; checks/lords02_taxonomy.py на базе — «новых рассогласований: 1»."
     }
   ]
 }
