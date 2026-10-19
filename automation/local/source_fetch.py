@@ -235,9 +235,22 @@ def _section(page: str, names: tuple[str, ...]) -> str:
     return ""
 
 
+def imdb_digits(imdb: str) -> str:
+    """Цифры IMDb ID в каноническом виде: не короче семи знаков.
+
+    Каталог хранит ID числом без ведущих нулей («491603»), а статьи и IMDb
+    пишут «tt0491603». Без дополнения сверка идентичности проваливалась для
+    каждого тайтла с ID меньше миллиона — проверено 2026-10-19 на
+    «H2O: Просто добавь воды» и «Правилах совместной жизни»: статья найдена,
+    ID в ней есть, а ответ «статьи с IMDb tt491603 среди вариантов нет».
+    """
+    digits = str(imdb).strip().removeprefix("tt")
+    return digits.zfill(7) if digits.isdigit() else digits
+
+
 def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
     """Статья о фильме/сериале с подтверждённой идентичностью по IMDb ID."""
-    imdb = imdb.removeprefix("tt")
+    imdb = imdb_digits(imdb)
     ru_suffix = (
         ["", " (телесериал)", " (сериал)", f" (телесериал, {year})"]
         if kind == "tv"
@@ -257,7 +270,7 @@ def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
             tried.append({"url": where, "status": status})
             if status != 200:
                 continue
-            if f"tt{imdb}" not in page and f"/title/tt{imdb}" not in page:
+            if not re.search(rf"tt{imdb}(?!\d)", page):
                 continue
             qid = re.search(r"wikidata\.org/wiki/(?:Special:EntityPage/)?(Q\d+)", page)
             lead = re.search(
