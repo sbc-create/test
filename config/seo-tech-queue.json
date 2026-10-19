@@ -6994,8 +6994,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+      "status": "live_verified",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 20:11Z публикатор live_verified; сверка сессии 20:18Z: крошки на ?genre=drama и /new/ есть, на /movies/ и /series/ — НЕТ (перенесена только T269; в expected не было сказано про доводку T275 — недосмотр сессии) → T281; регресс space 7/7."
     },
     {
       "id": "T276",
@@ -7155,6 +7155,46 @@
       "status": "queued"
     },
     {
+      "id": "T281",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/series/"
+      ],
+      "problem": "19.10 20:18Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром).",
+      "norm": "Как T269/T275: видимые крошки и BreadcrumbList на индексируемых разделах видов.",
+      "expected": "Перенос T275 (src/lords-frontend.py: вид, совпадающий с разделом, не считается явным фильтром; checks/section_breadcrumbs.py идёт живым маршрутом) на zonafilm.space; разделы стран — без изменений.",
+      "check": "checks/section_breadcrumbs.py",
+      "verify_live": "на /movies/ и /series/ zonafilm.space есть BreadcrumbList",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/movies/",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/series/",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/catalog/?genre=drama",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 20:18Z сверка сессии после выпуска T270 (перенос T269 на zonafilm.space): BreadcrumbList на /catalog/?genre=drama и /new/ — есть, на /movies/ и /series/ — нет; на zonafilm12.site то же было исправлено T275 (вид из маршрута не считается явным фильтром)."
+    },
+    {
       "id": "T271",
       "site": "zonafilm.cc",
       "direction": "zona",
@@ -7164,12 +7204,19 @@
       ],
       "problem": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
       "norm": "Видимые хлебные крошки отражают реальную иерархию «главная → каталог/раздел → страница», BreadcrumbList строится только из них (SEO_KNOWLEDGE_PACK §4 п.4; так уже сделано на карточках и в Lords).",
-      "expected": "Перенос T269 слоем в src/serve.py (шаблон закреплён) после её live_verified; регресс T230/T223/T243/T247.",
+      "expected": "Перенос T269 И её доводки T275 (разделы видов /movies/, /series/, /animation/, /doramas/ — вид из маршрута не считается явным фильтром) слоем в src/serve.py (шаблон закреплён) после их live_verified; разделы стран не трогать; регресс T230/T223/T243/T247/T276.",
       "check": "checks/section_breadcrumbs.py",
       "verify_live": "на разделе жанра — видимые крошки «Главная / Каталог / <жанр>» и BreadcrumbList",
       "live_check": [
         {
           "url": "https://zonafilm.cc/catalog/?genre=comedy",
+          "status": 200,
+          "contains": [
+            "BreadcrumbList"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/movies/",
           "status": 200,
           "contains": [
             "BreadcrumbList"
