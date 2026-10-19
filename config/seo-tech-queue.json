@@ -6714,9 +6714,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "после оценки выпусков animedia.icu 25.10 (baseline-20261025-eval.json: группы страниц, в т.ч. «прочие») — чтобы карта не смешалась с оценкой; затем в queued",
-      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках)."
+      "status": "queued",
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале."
     },
     {
       "id": "T263",
@@ -7009,9 +7008,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "после оценки выпусков animedia.icu 25.10",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+      "status": "queued",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале."
     }
   ]
 }
