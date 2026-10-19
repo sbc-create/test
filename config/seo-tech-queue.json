@@ -6562,8 +6562,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T259 (тот же репозиторий zonafilm-cc — иначе SUPERSEDED); T254 выпущена 12:00Z",
+      "status": "queued",
       "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
     },
     {
@@ -6638,8 +6637,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+      "status": "live_verified",
+      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые. | 19.10 12:20:23Z публикатор live_verified (zona-02-code-81bc621144b3); сверка сессии 12:28Z — служебных имён нет (var/seo-audit/t259-live-20261019.json); регресс T223/T230/T243/T247 чист."
     },
     {
       "id": "T260",
