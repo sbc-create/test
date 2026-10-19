@@ -6994,8 +6994,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T277 (тот же репозиторий zonafilm-space; T275 выпущена)",
+      "status": "queued",
       "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
     },
     {
@@ -7030,7 +7029,7 @@
       "direction": "zona",
       "problem": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит.",
       "norm": "Видимый текст и description — для посетителя: без кодов полей, служебных значений и названий механизмов (SEO_KNOWLEDGE_PACK §4 п.2; как T257–T259).",
-      "evidence": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит.",
+      "evidence": "19.10 17:47Z сверка сессии (сигнал wt-nova-publish-memory-02, MOD-95): на zonafilm.space, zonafilm12.site, zonafilm.cc видимое описание подборок содержит внутренние коды: /collection/genre_comedy/ — «Комедии из каталога (canonical genre=comedy / комедия / komediya).», /collection/video_available/ — «Записи с подтверждённой playable-дорожкой.». Тот же класс, что T257–T259 (служебный текст подборки recently_added, исправлен 19.10); checks/no_internal_field_names.py эти две строки не ловит. | 19.10 18:51Z публикатор live_verified; сверка сессии 19:15Z: «Комедии из каталога.», «Записи, у которых есть видео.» — служебных кодов нет; регресс space 5/5 (regress-live-20261019-T277.json).",
       "check": "checks/no_internal_field_names.py",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
@@ -7056,7 +7055,7 @@
           ]
         }
       ],
-      "status": "queued"
+      "status": "live_verified"
     },
     {
       "id": "T280",
@@ -7120,8 +7119,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T277 (тот же репозиторий zonafilm12-site; T280 отозвана)"
+      "status": "queued"
     },
     {
       "id": "T279",
@@ -7154,8 +7152,7 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T277 (T276 выпущена; репозиторий zonafilm-cc свободен)"
+      "status": "queued"
     },
     {
       "id": "T271",
