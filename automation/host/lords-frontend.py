@@ -1356,7 +1356,8 @@ def карточка(з: dict) -> str:
             f'<div class="c__m">{мета}</div></div></a>')
 
 
-def оболочка(тело: str, титул: str, д: Данные, актив: str = "") -> str:
+def оболочка(тело: str, титул: str, д: Данные, актив: str = "", *,
+             индексируема: bool = True) -> str:
     нав = _П["nav"]
     ТЕК = ' aria-current="page"'
     пункты = "".join(
@@ -1365,7 +1366,7 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
     return f"""<!doctype html><html lang="ru" data-theme="dark" data-template-version="{ВЕРСИЯ}" data-template-family="{СЕМЕЙСТВО}" data-build-id="{СБОРКА}"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{html.escape(титул)} — {html.escape(ИМЯ_ВИТРИНЫ)}</title>
-<meta name="robots" content="{мета_роботов()}">
+<meta name="robots" content="{мета_роботов() if индексируема else НЕ_ИНДЕКСИРУЕМА}">
 <meta name="site-factory-template-revision" content="{МАНИФЕСТ["source_commit"]}">
 <meta name="site-factory-design-version" content="{ВЕРСИЯ}">
 <meta name="site-factory-template-family" content="{СЕМЕЙСТВО}">
@@ -6524,7 +6525,12 @@ class ВидЛордс(Вид):
                 f"<p>Адрес <code>{html.escape(путь[:120])}</code> не соответствует ни одной "
                 "записи каталога. Возможно, ссылка устарела или в ней опечатка.</p>"
                 '<a href="/catalog/">Открыть каталог</a></div>')
-        return self.оболочка(тело, f"Страница не найдена — {self.имя}", "", код=404)
+        # Матрица индексируемости, тип not_found: noindex,follow. Без этого
+        # довода страница ошибки наследует ОБЩУЮ директиву витрины, и на
+        # открытом домене 404 приглашает в индекс (измерено 19.10 на
+        # zonafilm.cc и zonafilm.space: robots index, follow).
+        return self.оболочка(тело, f"Страница не найдена — {self.имя}", "", код=404,
+                             индексируема=False)
 
 
 # ----------------------------- Zona -----------------------------------
@@ -7286,7 +7292,9 @@ class ВидЗона(Вид):
                 f"<p>Адрес <code>{html.escape(путь[:120])}</code> не соответствует ни одной "
                 "записи каталога. Проверьте ссылку или начните с каталога.</p>"
                 '<a href="/catalog/">Открыть каталог</a></div>')
-        return self.оболочка(тело, f"Страница не найдена — {self.имя}", "", код=404)
+        # Та же причина, что у семейства Lords: тип not_found закрыт матрицей.
+        return self.оболочка(тело, f"Страница не найдена — {self.имя}", "", код=404,
+                             индексируема=False)
 
 
 def _скрипты_плеера(код: str) -> str:
@@ -8995,7 +9003,7 @@ class Обработчик(BaseHTTPRequestHandler):
                 цель = цель / "index.html"
         except OSError:
             тело = оболочка('<div class="empty">Страница недоступна.</div>', "503",
-                            self.данные).encode("utf-8")
+                            self.данные, индексируема=False).encode("utf-8")
             return self._отдать(тело, код=503)
         # Сравнение ведётся по разрешённым путям с обеих сторон: СТАРЫЙ_КОРЕНЬ
         # приходит через ссылку current, и без resolve() он никогда не окажется
@@ -9008,7 +9016,7 @@ class Обработчик(BaseHTTPRequestHandler):
             внутри, это_файл = False, False
         if not это_файл or not внутри:
             тело = оболочка('<div class="empty">Страница не найдена.</div>', "404",
-                            self.данные).encode("utf-8")
+                            self.данные, индексируема=False).encode("utf-8")
             return self._отдать(тело, код=404)
         данные = цель.read_bytes()
         if цель.suffix == ".html":
