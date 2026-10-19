@@ -6904,8 +6904,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик. | 19.10 15:42Z: T267 live_verified — условие снято, в очередь."
+      "status": "live_verified",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик. | 19.10 15:42Z: T267 live_verified — условие снято, в очередь. | 19.10 16:41Z публикатор live_verified; сверка сессии 16:56Z — `regress-live-20261019-T268.json` 4/4 (T268 + регресс T242, T255, T258)."
     },
     {
       "id": "T269",
