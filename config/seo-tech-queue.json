@@ -6315,8 +6315,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true."
+      "status": "live_verified",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true. | 19.10 07:41:16Z публикатор live_verified (zona-02-code-5a9add8082c9); живая сверка сессии 07:42Z: ?mode=added → /new/, &page=2 → /new/?page=2, ?kind=movie&mode=added → /new/?kind=movie; регресс T223/T230/T243 — 0 отказов (var/seo-audit/t247-live-20261019.json)."
     },
     {
       "id": "T248",
