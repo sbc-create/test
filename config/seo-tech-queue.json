@@ -6810,6 +6810,16 @@
       ],
       "status": "queued",
       "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92."
+    },
+    {
+      "id": "B041",
+      "site": "yummyani7.site, yummyani7.info",
+      "direction": "yummy",
+      "problem": "19.10 07:08Z замер сессии: https://www.yummyani7.site/ и https://www.yummyani7.info/ (и http://www.) отвечают 200 полной страницей, robots index, follow, canonical на адрес без www. Дубль смягчён canonical, но не закрыт: на остальных 12 развиваемых доменах www — 301/308 на основной адрес или не существует (zonafilm12, zonafilm.cc, an1meg0 закрыты T222–T224 18.10; lordserials22.info — T225 после 21.10). yummyani.site — 308 (правильно).",
+      "expected": "www.yummyani7.site и www.yummyani7.info — 301/308 на основной адрес с сохранением пути, как у yummyani.site",
+      "status": "blocked",
+      "owner_action": "АРХИТЕКТОР (Yummy — его зона; приложение/прокси Yummy): редирект www как у yummyani.site. Учесть, что yummyani7.* — опытная группа B031 и канарейка exp-editor-demand-order (yummyani7.site): редирект не меняет страницы, но выпуск лучше после оценки B031 23.10.",
+      "evidence": "GET без следования редиректам 19.10 07:08Z: www.yummyani7.site https/http → 200, canonical https://yummyani7.site; www.yummyani7.info → 200, canonical https://yummyani7.info; www.yummyani.site → 308."
     }
   ]
 }
