@@ -6809,8 +6809,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92."
+      "status": "live_verified",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92. | 19.10 08:17:45Z публикатор live_verified (lords-02-code-1a95500d3935); живая сверка сессии 08:33Z: /genre/anime/ и ?page=2 → canonical /anime/(?page=2); /genre/drama/ — на себя; /genre/anime/ в карте нет; регресс T261 — чист (var/seo-audit/t265-live-20261019.json)."
     },
     {
       "id": "B041",
