@@ -6457,7 +6457,7 @@
         "https://lordfilm47.space/genre/komediya/",
         "https://lordfilm47.space/genre/comedy/"
       ],
-      "problem": "19.10 05:45Z обход сессии (crawl19/lordfilm47.space.json) + сравнение: справочник жанров расщеплён на русский и английский код. /genre/komediya/ — 14 300 записей, /genre/comedy/ — 3 932, первые страницы НЕ пересекаются (jaccard 0.0); так же boevik 8 628 / action 3 304, uzhasy 5 484 / horror 1 003, kriminal/criminal, detektiv/detective. У пар одинаковые title «Комедия: смотреть онлайн — Lordfilm» и H1, обе 200, index, canonical на себя, обе в ссылках сайта. Сумма 14 300 + 3 932 ≈ 18 239 — столько же в /genre/komediya/ на lordserial33.biz, 1lordserials1.online, lordserials22.info, где английских разделов нет (404). Итог: каждый раздел жанра неполон, а пара конкурирует одинаковыми заголовками.",
+      "problem": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z) обход сессии (crawl19/lordfilm47.space.json) + сравнение: справочник жанров расщеплён на русский и английский код. /genre/komediya/ — 14 300 записей, /genre/comedy/ — 3 932, первые страницы НЕ пересекаются (jaccard 0.0); так же boevik 8 628 / action 3 304, uzhasy 5 484 / horror 1 003, kriminal/criminal, detektiv/detective. У пар одинаковые title «Комедия: смотреть онлайн — Lordfilm» и H1, обе 200, index, canonical на себя, обе в ссылках сайта. Сумма 14 300 + 3 932 ≈ 18 239 — столько же в /genre/komediya/ на lordserial33.biz, 1lordserials1.online, lordserials22.info, где английских разделов нет (404). Итог: каждый раздел жанра неполон, а пара конкурирует одинаковыми заголовками.",
       "norm": "Одна тема — один индексируемый адрес; раздел содержит всё, что ему принадлежит (справка Яндекса robot-workings/double.md и indexing-options/title-description-doubles.md; FACTS F7.5). Связи — только из переданных данных каталога (SEO_KNOWLEDGE_PACK §8 п.2): слияние кодов по совпадению названия жанра, не по догадке.",
       "expected": "src (шаблон lordfilm47.space): нормализация кода жанра — английский код, у которого русское имя совпадает с русским кодом (comedy→komediya, action→boevik, horror→uzhasy, criminal→kriminal, detective→detektiv и все прочие такие пары, найденные по данным каталога, а не по списку из задачи), сводится к русскому слагу: раздел /genre/<рус>/ включает тайтлы обоих кодов, /genre/<англ>/ — 301 на /genre/<рус>/ (page сохраняется), ссылки жанров в карточках и навигации — на русский слаг, в карте — только русский. Разные по имени жанры не сливать. lordfilm47.space — контроль lords-05: тайтлы и серии меняются только адресом ссылки жанра; отметить это в коммите. Проверка checks/genre_code_split.py: в индексе нет двух жанровых разделов с одинаковым именем (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
       "check": "checks/genre_code_split.py",
@@ -6476,7 +6476,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 05:45Z: pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239."
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, сравнение 05:43Z): pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239."
     },
     {
       "id": "T254",
@@ -6488,7 +6488,7 @@
         "https://zonafilm12.site/catalog/?kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
         "https://zonafilm12.site/collection/genre_animation/"
       ],
-      "problem": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: title «Новинки — Zona Cinema» у /new/, /new/?kind=movie, ?kind=series, ?kind=animation, ?kind=dorama (списки разные: совпадение /new/ и ?kind=movie на zonafilm.space 0.17); «Каталог — Zona Cinema» у /catalog/ и /catalog/?kind=Фильм|Сериал|Мультфильм; /collection/genre_animation/ и /animation/ — одинаковые title «Анимация — Zona Cinema» и H1 «Анимация» при НЕпересекающихся списках (0.0).",
+      "problem": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: title «Новинки — Zona Cinema» у /new/, /new/?kind=movie, ?kind=series, ?kind=animation, ?kind=dorama (списки разные: совпадение /new/ и ?kind=movie на zonafilm.space 0.17); «Каталог — Zona Cinema» у /catalog/ и /catalog/?kind=Фильм|Сериал|Мультфильм; /collection/genre_animation/ и /animation/ — одинаковые title «Анимация — Zona Cinema» и H1 «Анимация» при НЕпересекающихся списках (0.0).",
       "norm": "Разные страницы — разные title/H1/description, описывающие именно эту выборку (справка Яндекса indexing-options/title-description-doubles.md: «разнообразить автоматически формируемые заголовки»; search-results/title.md). Текст — только из данных фильтра (вид, жанр, название подборки), без выдуманных слов (CLOSED_WORLD).",
       "expected": "src/lords-frontend.py: у индексируемых выборок с фильтром вида title, H1 и description включают вид из данных фильтра (например «Новинки: фильмы — Zona Cinema», «Каталог: сериалы — Zona Cinema»; число записей в description — как сейчас, по выборке); у подборок /collection/<id>/ title и H1 отличаются от раздела с тем же жанром — через слово «Подборка» и название подборки из её данных. Страницы без фильтра — без изменений. Проверка checks/listing_titles_unique.py: на стенде набор индексируемых адресов (/new/ ± kind, /catalog/ ± kind, /animation/ и /collection/genre_animation/) даёт попарно разные title (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh. Каноникалы и robots не менять (T248 — отдельно).",
       "check": "checks/listing_titles_unique.py",
@@ -6510,7 +6510,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: списки разных фильтров не совпадают (pair_cmp.json)."
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: списки разных фильтров не совпадают (pair_cmp.json)."
     },
     {
       "id": "T255",
@@ -6521,7 +6521,7 @@
         "https://zonafilm.space/new/?kind=movie",
         "https://zonafilm.space/collection/genre_animation/"
       ],
-      "problem": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: те же одинаковые title, что в T254 («Премьеры — Zona Cinema» ×5, «Каталог — Zona Cinema» ×4, «Анимация» у раздела и подборки).",
+      "problem": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: те же одинаковые title, что в T254 («Премьеры — Zona Cinema» ×5, «Каталог — Zona Cinema» ×4, «Анимация» у раздела и подборки).",
       "norm": "Разные страницы — разные title/H1/description, описывающие именно эту выборку (справка Яндекса indexing-options/title-description-doubles.md: «разнообразить автоматически формируемые заголовки»; search-results/title.md). Текст — только из данных фильтра (вид, жанр, название подборки), без выдуманных слов (CLOSED_WORLD).",
       "expected": "Перенос T254 после её live_verified (тот же src/lords-frontend.py, та же проверка).",
       "check": "checks/listing_titles_unique.py",
@@ -6537,7 +6537,7 @@
       ],
       "status": "blocked",
       "owner_action": "ждёт live_verified T254",
-      "evidence": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
     },
     {
       "id": "T256",
@@ -6548,7 +6548,7 @@
         "https://zonafilm.cc/catalog/?genre=detective&kind=%D0%A4%D0%B8%D0%BB%D1%8C%D0%BC",
         "https://zonafilm.cc/collection/genre_animation/"
       ],
-      "problem": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: страницы «жанр + вид» (canonical на нормализованный адрес с kind и genre, index) несут тот же title, что страница жанра: «Детектив — Zona» у /catalog/?genre=detective и ?kind=Фильм&genre=detective; так же «Ужасы», «Фантастика», «Исторический», «Комедия», «Криминал»; подборка /collection/genre_animation/ = «Анимация — Zona», как раздел /animation/.",
+      "problem": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: страницы «жанр + вид» (canonical на нормализованный адрес с kind и genre, index) несут тот же title, что страница жанра: «Детектив — Zona» у /catalog/?genre=detective и ?kind=Фильм&genre=detective; так же «Ужасы», «Фантастика», «Исторический», «Комедия», «Криминал»; подборка /collection/genre_animation/ = «Анимация — Zona», как раздел /animation/.",
       "norm": "Разные страницы — разные title/H1/description, описывающие именно эту выборку (справка Яндекса indexing-options/title-description-doubles.md: «разнообразить автоматически формируемые заголовки»; search-results/title.md). Текст — только из данных фильтра (вид, жанр, название подборки), без выдуманных слов (CLOSED_WORLD).",
       "expected": "Шаблон закреплён — слоем в src/serve.py (как T243), после live_verified T254: вид в title/H1/description выборок «жанр + вид» и «Подборка» у подборок. Проверка — та же по смыслу (checks/listing_titles_unique.py), регресс T230/T223/T243/T247.",
       "check": "checks/listing_titles_unique.py",
@@ -6564,7 +6564,7 @@
       ],
       "status": "blocked",
       "owner_action": "ждёт live_verified T254",
-      "evidence": "19.10 05:55Z обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
     }
   ]
 }
