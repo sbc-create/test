@@ -6447,6 +6447,36 @@
       "status": "blocked",
       "owner_action": "пауза lordserials22.info до 21.10; затем после live_verified T251",
       "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): "
+    },
+    {
+      "id": "T253",
+      "site": "lordfilm47.space",
+      "direction": "lords",
+      "repo": "var/site-repos/lordfilm47-space",
+      "urls": [
+        "https://lordfilm47.space/genre/komediya/",
+        "https://lordfilm47.space/genre/comedy/"
+      ],
+      "problem": "19.10 05:45Z обход сессии (crawl19/lordfilm47.space.json) + сравнение: справочник жанров расщеплён на русский и английский код. /genre/komediya/ — 14 300 записей, /genre/comedy/ — 3 932, первые страницы НЕ пересекаются (jaccard 0.0); так же boevik 8 628 / action 3 304, uzhasy 5 484 / horror 1 003, kriminal/criminal, detektiv/detective. У пар одинаковые title «Комедия: смотреть онлайн — Lordfilm» и H1, обе 200, index, canonical на себя, обе в ссылках сайта. Сумма 14 300 + 3 932 ≈ 18 239 — столько же в /genre/komediya/ на lordserial33.biz, 1lordserials1.online, lordserials22.info, где английских разделов нет (404). Итог: каждый раздел жанра неполон, а пара конкурирует одинаковыми заголовками.",
+      "norm": "Одна тема — один индексируемый адрес; раздел содержит всё, что ему принадлежит (справка Яндекса robot-workings/double.md и indexing-options/title-description-doubles.md; FACTS F7.5). Связи — только из переданных данных каталога (SEO_KNOWLEDGE_PACK §8 п.2): слияние кодов по совпадению названия жанра, не по догадке.",
+      "expected": "src (шаблон lordfilm47.space): нормализация кода жанра — английский код, у которого русское имя совпадает с русским кодом (comedy→komediya, action→boevik, horror→uzhasy, criminal→kriminal, detective→detektiv и все прочие такие пары, найденные по данным каталога, а не по списку из задачи), сводится к русскому слагу: раздел /genre/<рус>/ включает тайтлы обоих кодов, /genre/<англ>/ — 301 на /genre/<рус>/ (page сохраняется), ссылки жанров в карточках и навигации — на русский слаг, в карте — только русский. Разные по имени жанры не сливать. lordfilm47.space — контроль lords-05: тайтлы и серии меняются только адресом ссылки жанра; отметить это в коммите. Проверка checks/genre_code_split.py: в индексе нет двух жанровых разделов с одинаковым именем (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
+      "check": "checks/genre_code_split.py",
+      "verify_live": "/genre/comedy/ — 301 на /genre/komediya/; в описании /genre/komediya/ число записей ≈ 18 200 (сумма); у пары больше нет одинаковых title",
+      "live_check": [
+        {
+          "url": "https://lordfilm47.space/genre/komediya/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://lordfilm47.space/genre/komediya/\""
+          ]
+        },
+        {
+          "url": "https://lordfilm47.space/genre/comedy/",
+          "status": 301
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:45Z: pair_cmp.py — komediya/comedy, boevik/action, uzhasy/horror jaccard 0.0; описания разделов с числами записей; lordserial33.biz /genre/comedy/ 404, /genre/komediya/ 18 239."
     }
   ]
 }
