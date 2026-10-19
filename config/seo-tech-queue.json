@@ -7059,6 +7059,36 @@
       "status": "queued"
     },
     {
+      "id": "T280",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/"
+      ],
+      "problem": "19.10 замер wt-nova-publish-memory-02 (MOD-97, коммит d4eb2f9): на главной zonafilm12.site полка «Новинки» — 5 из 16 карточек без источника (velikoe-ograblenie-v-pendzhabe, dom-dlya-papy, tom-i-cherri, fotograf-4, kak-ryba-v-vode: playable false, sources []). Сверка SEO-сессии 18:51Z: в первых 16 карточках после заголовка «Новинки» (срез может захватывать соседний блок) — 11 с playable false и пустым sources; карточка velikoe-ograblenie-v-pendzhabe — 200, index, на странице «недоступно». Причина (по коду коллеги): src/lords-frontend.py, _герои_кандидаты → «взять» (~6505) не проверяет доступность, хотя docstring обещает «работающий источник»; образец — src/home.py zonafilm.cc (играбельно(з) в отборе).",
+      "norm": "Главная ведёт на страницы, где можно смотреть: карточка без источника на первом экране — обещание, которое страница не выполняет (Яндекс, качество сайта; docstring самого отбора).",
+      "expected": "src/lords-frontend.py: в отборе героев/«Новинок» главной — только записи с playable и непустым sources (как играбельно(з) в src/home.py zonafilm.cc); порядок и прочие условия не меняются. Полка вправе сократиться, если играбельных новинок меньше; провал — полка исчезла или снова есть карточка с пустым sources. Проверка checks/home_playable_cards.py на копии снимка: база rc=1, ветка rc=0; полный run.sh.",
+      "check": "checks/home_playable_cards.py",
+      "verify_live": "среди первых 24 карточек главной zonafilm12.site нет записей с playable false / пустым sources (homepage-cards-audit.py --domain zonafilm12.site — wt-nova-02); полка «Новинки» не пуста",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/",
+          "status": 200,
+          "contains": [
+            "Новинки"
+          ],
+          "absent": [
+            "/title/velikoe-ograblenie-v-pendzhabe/",
+            "/title/dom-dlya-papy/",
+            "/title/fotograf-4/"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 замер wt-nova-publish-memory-02 (MOD-97, коммит d4eb2f9): на главной zonafilm12.site полка «Новинки» — 5 из 16 карточек без источника (velikoe-ograblenie-v-pendzhabe, dom-dlya-papy, tom-i-cherri, fotograf-4, kak-ryba-v-vode: playable false, sources []). Сверка SEO-сессии 18:51Z: в первых 16 карточках после заголовка «Новинки» (срез может захватывать соседний блок) — 11 с playable false и пустым sources; карточка velikoe-ograblenie-v-pendzhabe — 200, index, на странице «недоступно». Причина (по коду коллеги): src/lords-frontend.py, _герои_кандидаты → «взять» (~6505) не проверяет доступность, хотя docstring обещает «работающий источник»; образец — src/home.py zonafilm.cc (играбельно(з) в отборе)."
+    },
+    {
       "id": "T278",
       "site": "zonafilm12.site",
       "direction": "zona",
@@ -7090,7 +7120,7 @@
         }
       ],
       "status": "blocked",
-      "owner_action": "ждёт live_verified T277 (T275 выпущена; репозиторий zonafilm12-site свободен)"
+      "owner_action": "ждёт live_verified T277 и T280 (тот же репозиторий zonafilm12-site — после T280)"
     },
     {
       "id": "T279",
