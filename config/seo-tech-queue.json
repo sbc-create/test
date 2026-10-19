@@ -6419,9 +6419,9 @@
           ]
         }
       ],
-      "status": "blocked",
+      "status": "session",
       "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92.",
-      "owner_action": "ждёт T261: полный checks/run.sh lordserial33.biz падает на lords02-taxonomy и на БАЗЕ beea53a (новая запись каталога preemnik), а не из-за правки T251 — попытка 20261019T054235Z-2747516: все шаги вердикта, кроме run_all_passes, пройдены (check fails on base / passes on branch). После live_verified T261 — вернуть в queued; ветка claude/seo-tech-t251-20261019t054235z-2747516 (7e29f32) годится как есть."
+      "owner_action": "заменена T265 (19.10 07:07Z)"
     },
     {
       "id": "T252",
@@ -6693,8 +6693,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "lords-02-details.json: countries ['Таиланд'], genres ['драма','дорама'], external_ids {mal 34088605, mdl 778242}, type tv, year 2025; checks/lords02_taxonomy.py на базе — «новых рассогласований: 1»."
+      "status": "live_verified",
+      "evidence": "lords-02-details.json: countries ['Таиланд'], genres ['драма','дорама'], external_ids {mal 34088605, mdl 778242}, type tv, year 2025; checks/lords02_taxonomy.py на базе — «новых рассогласований: 1». | 19.10 07:06:00Z публикатор live_verified (lords-02-code-cff811d2beee); живая сверка сессии 07:06Z — var/seo-audit/t261-live-20261019.json."
     },
     {
       "id": "T262",
@@ -6784,6 +6784,32 @@
       "status": "blocked",
       "owner_action": "ВЛАДЕЛЕЦ/АРХИТЕКТОР: `journalctl -u nova-lordfilm47-space-candidate.service --since '2026-10-19 06:51'` (причина остановки: OOM/исключение/порт); затем повторная активация ячейки lords-01 на fd35fb1785e4 в часы меньшей нагрузки или исправление. SEO после выпуска — живая сверка T253 (/genre/comedy/ 301 → /genre/komediya/, число записей ≈ 18 200, карта без английских кодов) и регресс T244.",
       "evidence": "/var/lib/site-cells/results/lords-01-code-fd35fb1785e4.json: outcome candidate-failed, warm_up.ready=false «процесс не работает» 67.5 c, rollback restored, verify 9110 build 1215011e2d52 ok; publish.jsonl 06:53:49Z executor_failed, 06:54:06Z wait. Живая сверка сессии 06:55Z: /, /genre/comedy/, карточка — 200; регресс T244 1/1."
+    },
+    {
+      "id": "T265",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/genre/anime/",
+        "https://lordserial33.biz/anime/"
+      ],
+      "problem": "Замена T251 (2 из 3 попыток сгорели на lords02-taxonomy базы, не на правке; T261 устранила причину и выпущена 07:06Z). 19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): /genre/anime/ и /anime/ — почти один список (совпадение 0.92 на первой странице; 8241 и 8245 записей), одинаковые title «Аниме: смотреть онлайн — Lordserial» и H1; обе index, canonical на себя.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "Перенести готовую правку T251 — коммит 7e29f32 ветки claude/seo-tech-t251-20261019t054235z-2747516 (`git cherry-pick 7e29f32`; конфликт — по смыслу) на текущую базу с T261. Её проверка checks/genre_section_duplicate_canonical.py (база rc=1, ветка rc=0) и удаление /genre/anime/ из карты — как в T251; полный run.sh.",
+      "check": "checks/genre_section_duplicate_canonical.py",
+      "verify_live": "/genre/anime/ — canonical https://lordserial33.biz/anime/",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/genre/anime/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://lordserial33.biz/anime/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92."
     }
   ]
 }
