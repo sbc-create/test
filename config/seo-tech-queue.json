@@ -6562,8 +6562,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя: "
+      "status": "live_verified",
+      "evidence": "19.10 05:39Z (обход 05:35–05:39Z, разбор 05:46Z) обход сессии (crawl19/<домен>.json), страницы 200, index, canonical на себя:  | 19.10 публикатор: live_verified (T256 13:30Z, T267 14:36Z); сверка сессии 15:41Z — var/seo-audit/regress-live-20261019-T256-T267.json, 10/10, регресс витрин Zona чист."
     },
     {
       "id": "T257",
@@ -6715,7 +6715,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале."
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале. | 19.10 13:42Z публикатор: push f8327f9, CI run 39262418279 failure — updater_conformity: SystemExit рантайма без манифеста шаблона не ловится `except Exception` в _страницы_жанров; ветка выпуска f8327f9 ≠ живой 55c7b71 — все задачи animedia-icu ждут. Правка (except (Exception, SystemExit)) передана Архитектору 15:40Z: общий клон — его."
     },
     {
       "id": "T263",
@@ -6879,8 +6879,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
+      "status": "live_verified",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик. | 19.10 публикатор: live_verified (T256 13:30Z, T267 14:36Z); сверка сессии 15:41Z — var/seo-audit/regress-live-20261019-T256-T267.json, 10/10, регресс витрин Zona чист."
     },
     {
       "id": "T268",
@@ -6904,9 +6904,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "ждёт live_verified T267",
-      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
+      "status": "queued",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик. | 19.10 15:42Z: T267 live_verified — условие снято, в очередь."
     },
     {
       "id": "T269",
@@ -6930,9 +6929,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
-      "owner_action": "ждёт live_verified T267 (тот же репозиторий zonafilm12-site — иначе SUPERSEDED)"
+      "status": "queued",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList). | 19.10 15:42Z: T267 live_verified — условие снято, в очередь."
     },
     {
       "id": "T270",
