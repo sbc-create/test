@@ -6574,7 +6574,7 @@
       "urls": [
         "https://zonafilm12.site/collection/recently_added/"
       ],
-      "problem": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
+      "problem": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
       "norm": "Description и видимый текст — для читателя: без служебных идентификаторов (справка Яндекса indexing-options/description.md — описание должно описывать содержимое страницы); CLOSED_WORLD — новый текст только из существующего смысла строки.",
       "expected": "src/collection_contract.py:558: из описания подборки recently_added убрать «(по catalog_added_at / published_at)» — остаётся «Поступления в каталог за последние 90 дней.»; смысл тот же, слов не добавлять. Проверка checks/no_internal_field_names.py: в описаниях всех подборок контракта нет идентификаторов вида snake_case (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
       "check": "checks/no_internal_field_names.py",
@@ -6589,7 +6589,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
     },
     {
       "id": "T258",
@@ -6599,7 +6599,7 @@
       "urls": [
         "https://zonafilm.space/collection/recently_added/"
       ],
-      "problem": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
+      "problem": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
       "norm": "Description и видимый текст — для читателя: без служебных идентификаторов (справка Яндекса indexing-options/description.md — описание должно описывать содержимое страницы); CLOSED_WORLD — новый текст только из существующего смысла строки.",
       "expected": "Перенос T257 после её live_verified (тот же src/collection_contract.py:558, та же проверка).",
       "check": "checks/no_internal_field_names.py",
@@ -6615,7 +6615,7 @@
       ],
       "status": "blocked",
       "owner_action": "ждёт live_verified T257",
-      "evidence": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
     },
     {
       "id": "T259",
@@ -6625,7 +6625,7 @@
       "urls": [
         "https://zonafilm.cc/collection/recently_added/"
       ],
-      "problem": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
+      "problem": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые.",
       "norm": "Description и видимый текст — для читателя: без служебных идентификаторов (справка Яндекса indexing-options/description.md — описание должно описывать содержимое страницы); CLOSED_WORLD — новый текст только из существующего смысла строки.",
       "expected": "Строка в закреплённом шаблоне template/zona-02-*/collection_contract.py:558 — шаблон не правится; слоем в src/serve.py (как T243) подменить описание подборки recently_added. После live_verified T257. Регресс T230/T223/T243.",
       "check": "checks/no_internal_field_names.py",
@@ -6641,7 +6641,7 @@
       ],
       "status": "blocked",
       "owner_action": "ждёт live_verified T257",
-      "evidence": "19.10 06:14Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
     }
   ]
 }
