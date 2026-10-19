@@ -2770,7 +2770,7 @@ def editor_candidates(
     # получал бы пересказ уже написанного текста по тому же источнику —
     # синонимайз, который владелец запретил 2026-10-09 (за ночь 08→09.10 таких
     # пар icu/space было 9). Другому домену — другая тема или другой формат.
-    taken = {work_key(x) for _, x in published} | {work_key(x) for x in blocked or ()}
+    taken = WorkSet({work_key(x) for _, x in published} | {work_key(x) for x in blocked or ()})
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
         if (domain, slug) in published or work_key(slug) in taken:
             continue
@@ -2915,6 +2915,38 @@ def editor_candidates(
     return out
 
 
+class WorkSet(set):
+    """Множество ключей произведений, где длинные ключи сравниваются с учётом обрезки слага.
+
+    Семейства обрезают длинный слаг на разной длине: у Yummy
+    `izgnannyy-chiter-…-vtoroy-zhiznyu-ya-mogu`, у Animedia `…-ya-mogu-nakl` (замер
+    19.10, расписание animedia.icu). `work_key` их не сводил, и правило «одно
+    описание произведения на сеть» для длинных названий не срабатывало. Ключ длиной
+    от `ДЛИННЫЙ` знаков считается тем же произведением, если один ключ — начало
+    другого. Продолжение из одного номера («-2») — следующий сезон, а не обрезка:
+    такие ключи не сводятся.
+    """
+
+    ДЛИННЫЙ = 70
+
+    def __contains__(self, key: object) -> bool:
+        if set.__contains__(self, key):
+            return True
+        if not isinstance(key, str):
+            return False
+        k = key.rstrip("-")
+        if len(k) < self.ДЛИННЫЙ:
+            return False
+        for x in self:
+            x2 = str(x).rstrip("-")
+            if len(x2) < self.ДЛИННЫЙ:
+                continue
+            short, long_ = (k, x2) if len(k) <= len(x2) else (x2, k)
+            if long_.startswith(short) and not re.fullmatch(r"-?\d+", long_[len(short):]):
+                return True
+        return False
+
+
 def work_key(slug: str) -> str:
     """Ключ произведения по слагу без различий транслитерации между семействами.
 
@@ -2966,7 +2998,7 @@ def yummy_demand_candidates(
                 return None
             return str((f.get("facts") or {}).get("description") or "")
 
-    taken = {work_key(slug) for _, slug in published} | {work_key(x) for x in blocked or ()}
+    taken = WorkSet({work_key(slug) for _, slug in published} | {work_key(x) for x in blocked or ()})
     held = {u.rstrip("/").lower() for u in (held_urls or ())}
     out: list[dict] = []
     for entry in _read_json(snapshot, {}).get("domains") or []:
