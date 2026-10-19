@@ -1009,7 +1009,7 @@
     {
       "id": "MOD-94",
       "title": "Браузерные ворота пилота отказывают: стенд исчезает между обходом и браузером",
-      "zone": "factory",
+      "zone": "infra",
       "priority": "P2",
       "state": "measured",
       "example": "Измерено 2026-10-19 между 15:36 и 17:10Z. `bash tests/run-all.sh` заканчивается `exit=1` (pass=18 fail=4): deploy-pilot код 2 (BLOCKED_SEO seo-render), а за ним seo-crawl, browser-audit и e2e-playwright — потому что стенда уже нет.\nВнутри задания ворота распределяются так: backup-restore, seo-lint и seo-crawl проходят (обход берёт 45 адресов из 45, то есть страницы отдаются), а seo-render, security-smoke, acceptance-routes и performance-budget отказывают. Отказывают ровно БРАУЗЕРНЫЕ ворота.\nСообщение браузера: `page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/praktikum/serial-fikstura/season-1/episode-1/`. Журнал стенда (var/targets/local-disposable/pilot-local/shared/logs/php-server.log) при этом показывает успешные 200 на /assets/* в 17:10:21 — то есть сервер был жив и умер в ту же секунду.\nПовторяемость: 15:31Z прогон прошёл целиком (все восемь ворот PASS), 15:50Z, 17:06Z и 17:09Z — отказ. То есть ворота мерцают, и зелёный прогон 08:xx не был случайностью: стенд иногда доживает до браузера.\nГИПОТЕЗА ОПРОВЕРГНУТА ОПЫТОМ: «однопоточный php -S отвергает параллельные соединения браузера». Поднял стенд теми же аргументами и послал 24 параллельных запроса: с одним рабочим процессом отказов 0, с четырьмя (PHP_CLI_SERVER_WORKERS=4) — 4 таймаута. Значит дело не в числе рабочих процессов, и PHP_CLI_SERVER_WORKERS ставить нельзя: стало бы хуже.",
