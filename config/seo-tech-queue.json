@@ -6747,6 +6747,33 @@
       "status": "blocked",
       "owner_action": "после оценки T240–T245 (ссылки на разделы стран) 01.11 — иначе эффект ссылок и карты не разделить; затем в queued",
       "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках)."
+    },
+    {
+      "id": "T264",
+      "site": "zonafilm12.site (первая), затем Zona/Animedia/Lords/AnimeGo",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/title/chuzhaya-zhizn/",
+        "https://zonafilm12.site/catalog/?year=2026"
+      ],
+      "problem": "19.10 06:50Z замер сессии: в фактах карточки год — текстом на всех платформах (zonafilm12 «Год 2026», lordfilm47 «Год 2004», AnimeGo, Animedia), хотя страницы годов индексируемые, canonical на себя и непустые: zonafilm12 /catalog/?year=2026 — 2 794 записи; lordfilm47 /year/2004/ — 1 226 (в карте 68 страниц годов); lordserial33 /year/2012/ — 1 583; animedia /catalog/?year=2020 — 343; animeg0 /year/2020/ — 358. Обычных ссылок с карточек на них нет.",
+      "norm": "Как T240: важные индексируемые разделы достижимы обычными ссылками, анкор описывает цель (SEO_KNOWLEDGE_PACK §8 п.1, п.3); ссылка только на раздел с >1 записью (FACTS F7.5).",
+      "expected": "src/lords-frontend.py, факты(): год — ссылкой на индексируемую страницу года (тот адрес, который сайт сам считает каноническим), только если в ней больше одной записи; иначе текст. Проверка checks/year_fact_links.py (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
+      "check": "checks/year_fact_links.py",
+      "verify_live": "год в фактах карточки — ссылкой на страницу года",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/title/chuzhaya-zhizn/",
+          "status": 200,
+          "contains": [
+            "year=2026"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт оценок, которые правка исказила бы: Zona — оценка ссылок стран T240–T245 01.11 (метрика «доля входов вне главного тайтла» сдвинется от ссылок годов); Animedia — оценка выпусков 25.10; Lords — контроль exp-lords-title-kind-year (год — переменная опыта), до вердикта; AnimeGo — опыты (см. T260). Первая витрина — zonafilm12.site после 01.11.",
+      "evidence": "19.10 06:50Z: page_audit страниц годов (200, index, canonical на себя, число записей в description); разбор фактов карточек 4 платформ — год без ссылки."
     }
   ]
 }
