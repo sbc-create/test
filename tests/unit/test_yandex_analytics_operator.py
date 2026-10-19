@@ -81,6 +81,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "daily_search",
         # 2026-10-10: паспорт счётчика (часовой пояс) и неполные текущие сутки
         "counter_passport", "today_users", "today_search",
+        # 2026-10-15: профиль трафика по дням (источник × устройство × браузер) — всплески
+        "daily_traffic_profile",
     }
 
 
@@ -342,3 +344,79 @@ def test_заголовок_ленты_событий_не_называет_её
     заголовки = {к: т for к, т, _ in сбор.WEBMASTER_RESOURCES}
     assert "Исключённые страницы и причины" not in заголовки.values()
     assert "События страниц в поиске" in заголовки["excluded_pages"]
+
+
+class _NetDownWebmaster(StubProvider):
+    def __init__(self, reason):
+        super().__init__()
+        self.reason = reason
+        self.webmaster_calls = 0
+
+    def get_webmaster_report(self, host_id, resource, params=None):
+        self.webmaster_calls += 1
+        raise BlockedAnalyticsAccess(self.reason)
+
+
+@pytest.mark.parametrize("reason, network", [
+    ("webmaster: сеть недоступна (URLError). Повторы исчерпаны — фабрика не продолжает с выдуманными данными.", True),
+    ("webmaster: HTTP 403", False),
+])
+def test_webmaster_network_outage_is_tried_once_per_run(monkeypatch, reason, network):
+    """2026-10-13: сеть к Вебмастеру закрыта — прогон не ждёт 21×5 цепочек повторов."""
+    second = dict(LIVE_ENTRY, domain="yummyani.org", webmaster={"host_id": "https:yummyani.org:443"})
+    monkeypatch.setattr(analytics_collect.registry, "load",
+                        lambda: {"properties": [LIVE_ENTRY, second]})
+    provider = _NetDownWebmaster(reason)
+    report = analytics_collect.collect(provider=provider)
+
+    per_domain = len(analytics_collect.WEBMASTER_RESOURCES) + 1
+    assert provider.webmaster_calls == (1 if network else 2 * per_domain)
+    for domain in report["domains"]:
+        by_key = {m["key"]: m for m in domain["measurements"]}
+        assert by_key["visits"]["measured"] is True  # Метрика не страдает
+        for key in ("pages_in_search", "popular_queries"):
+            assert by_key[key]["measured"] is False
+            assert by_key[key]["value"] == analytics_collect.NOT_MEASURED
+            assert reason.split(".")[0] in by_key[key]["reason"]
+
+
+def test_breaker_trips_on_the_text_transport_actually_raises(monkeypatch):
+    """Предохранитель узнаёт отказ по тексту причины; текст — тот, что поднимает
+    сам транспорт при сетевом сбое, а не записанный в тест по памяти. Если
+    формулировку в transport.py перепишут, тест упадёт, а не прогон станет
+    снова трёхчасовым без ошибки."""
+    import urllib.error
+
+    from factory import audit
+    from factory.analytics.credentials import OAuthToken
+    from factory.analytics.transport import RateLimiter, YandexApiClient
+    from factory.retry import RetryPolicy
+
+    monkeypatch.setattr(audit, "record", lambda **kw: None)
+
+    def нет_сети(request, timeout):
+        raise urllib.error.URLError("timed out")
+
+    client = YandexApiClient(
+        "https://api.webmaster.yandex.net", OAuthToken("x" * 40, "тест"), service="webmaster",
+        opener=нет_сети, rate_limiter=RateLimiter(min_interval=0),
+        retry_policy=RetryPolicy(max_attempts=2, base_delay=0.01, max_delay=0.02),
+        sleep=lambda _s: None)
+
+    class Провайдер(StubProvider):
+        calls = 0
+
+        def get_webmaster_report(self, host_id, resource, params=None):
+            Провайдер.calls += 1
+            client.request("GET", f"/v4/user/1/hosts/{host_id}/{resource}")
+
+    from factory.errors import FactoryError
+
+    breaker = analytics_collect._WebmasterBreaker(Провайдер())
+    with pytest.raises(BlockedAnalyticsAccess) as first:
+        breaker.get_webmaster_report("h", "summary")
+    for _ in range(2):
+        with pytest.raises(FactoryError) as later:
+            breaker.get_webmaster_report("h", "summary")
+    assert Провайдер.calls == 1, "после сетевого отказа транспорта сеть больше не трогается"
+    assert first.value.reason.split(".")[0] in later.value.reason  # причина та же, не ноль
