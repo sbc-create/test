@@ -44,7 +44,11 @@ import sys
     # до нажатия запросов к vkuser.net ноль, после нажатия — восемь. Классических
     # «.m3u8» в этом пути нет вовсе, поэтому без этих хостов проверка отвечала
     # бы «показ не начался» даже на работающем плеере.
-    r"|vkuser\.net|okcdn\.ru/videos?/|getVideo", re.I)
+    # Узлы доставки видео VK/OK: `*.vkuser.net` и `vd<N>.okcdn.ru`. Проверено
+    # 19.10 на двух тайтлах: до нажатия запросов к ним ноль, после нажатия
+    # 6–8. Хосты `iv.okcdn.ru` и `api.mycdn.me` сюда НЕ входят — они
+    # отвечают и до нажатия (предпросмотр), и по ним показ не отличить.
+    r"|vkuser\.net|vd\d+\.okcdn\.ru|getVideo", re.I)
 #: Что похоже на поток, но им не является.
 НЕ_ПОТОК = re.compile(r"poster\.|/poster/|\.webp|\.jpe?g|\.png|\.avif|\.svg|\.ico", re.I)
 РЕКЛАМА = re.compile(r"doubleclick|googlesyndication|adfox|yandex\.ru/ads|advert", re.I)
