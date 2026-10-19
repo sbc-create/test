@@ -6291,6 +6291,162 @@
       ],
       "status": "done",
       "evidence": "18.10 21:34Z: подготовлено сессией. | 18.10 21:55Z: не требуется — условие «>1 записи» уже в коде T244 (база 1215011, src/lords-frontend.py:3918–3931; T244 взята в 20:19Z после дополнения условия в 20:13Z); исполнитель: проверка на базе rc=0, коммита нет. Ошибка постановки сессии."
+    },
+    {
+      "id": "T247",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/new/?mode=added",
+        "https://zonafilm.cc/new/"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): /new/?mode=added и /new/ — один и тот же список (совпадение тайтлов 1.0, тот же порядок, 28/28), одинаковые title «Добавлено на сайт — Zona», H1 и description «53572 записи»; обе 200, index, follow, canonical каждая на себя. Ссылка на ?mode=added есть на страницах сайта (обход её нашёл).",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "Шаблон закреплён (template/zona-02-*): правка только слоем в src/serve.py, как T243. Если mode совпадает с режимом раздела по умолчанию (для /new/ на zonafilm.cc это added) — canonical на адрес без mode (/new/ с сохранением page, если оно есть), robots не менять. Иные значения mode — без изменений. Проверка: checks/listing_default_mode_canonical.py (база rc=1: canonical /new/?mode=added на себя; ветка rc=0). run.sh отдельной строкой; полный run.sh; регресс T230/T223/T243.",
+      "check": "checks/listing_default_mode_canonical.py",
+      "verify_live": "/new/?mode=added — canonical https://zonafilm.cc/new/; /new/ — canonical на себя",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/new/?mode=added",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://zonafilm.cc/new/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true."
+    },
+    {
+      "id": "T248",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/new/?mode=added",
+        "https://zonafilm12.site/new/"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): /new/?mode=added и /new/ — один список (1.0, тот же порядок), одинаковые title «Новинки — Zona Cinema», H1, description «2794 записи»; обе index, canonical на себя. На zonafilm.space /new/?mode=added — ДРУГОЙ список («Добавлено на сайт», совпадение 0.0) — там не дубль, не трогать.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "src/lords-frontend.py: если mode совпадает с режимом раздела по умолчанию — canonical на адрес без mode (page сохраняется); прочие значения — без изменений. Проверка checks/listing_default_mode_canonical.py (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh. Перенос на zonafilm.space — НЕ нужен (режим по умолчанию там другой; проверка должна это различать).",
+      "check": "checks/listing_default_mode_canonical.py",
+      "verify_live": "/new/?mode=added — canonical https://zonafilm12.site/new/",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/new/?mode=added",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://zonafilm12.site/new/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true; zonafilm.space — 0.0."
+    },
+    {
+      "id": "T249",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/catalog/?kind=%D0%90%D0%BD%D0%B8%D0%BC%D0%B5",
+        "https://animedia.icu/catalog/?genre=anime"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): /catalog/?kind=Аниме и /catalog/?genre=anime — один список (1.0, тот же порядок, 48/48), одинаковые title «Аниме — Animedia», H1 и description «8202 записи»; обе 200, index, canonical на себя.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "src/animedia-frontend.py: выборка kind=Аниме без других фильтров — canonical на /catalog/?genre=anime (page сохраняется); прочие kind и комбинации — без изменений. Канарейки T075/T191/animego-* не касается (каталог, не серии/карта/онгоинги). Проверка checks/kind_genre_duplicate_canonical.py (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
+      "check": "checks/kind_genre_duplicate_canonical.py",
+      "verify_live": "/catalog/?kind=Аниме — canonical на /catalog/?genre=anime",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/catalog/?kind=%D0%90%D0%BD%D0%B8%D0%BC%D0%B5",
+          "status": 200,
+          "contains": [
+            "genre=anime\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0, same_order true."
+    },
+    {
+      "id": "T250",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/catalog/?kind=%D0%90%D0%BD%D0%B8%D0%BC%D0%B5"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): то же, что T249: /catalog/?kind=Аниме ≡ /catalog/?genre=anime (1.0), обе index, canonical на себя.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "Перенос T249 после её live_verified (тот же src/animedia-frontend.py, та же проверка).",
+      "check": "checks/kind_genre_duplicate_canonical.py",
+      "verify_live": "как T249",
+      "live_check": [
+        {
+          "url": "https://animedia.space/catalog/?kind=%D0%90%D0%BD%D0%B8%D0%BC%D0%B5",
+          "status": 200,
+          "contains": [
+            "genre=anime\""
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "ждёт live_verified T249",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 1.0."
+    },
+    {
+      "id": "T251",
+      "site": "lordserial33.biz",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserial33-biz",
+      "urls": [
+        "https://lordserial33.biz/genre/anime/",
+        "https://lordserial33.biz/anime/"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): /genre/anime/ и /anime/ — почти один список (совпадение 0.92 на первой странице; 8241 и 8245 записей), одинаковые title «Аниме: смотреть онлайн — Lordserial» и H1; обе index, canonical на себя.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "src: страница жанра «аниме» — canonical на раздел /anime/ (page сохраняется); прочие жанры — без изменений. lordserial33.biz — контроль lords-05 (карта серий, title kind/year): правка касается ОДНОЙ страницы раздела, тайтлы и серии не меняются — условие контроля не нарушается. Проверка checks/genre_section_duplicate_canonical.py (база rc=1, ветка rc=0); run.sh отдельной строкой; полный run.sh.",
+      "check": "checks/genre_section_duplicate_canonical.py",
+      "verify_live": "/genre/anime/ — canonical https://lordserial33.biz/anime/",
+      "live_check": [
+        {
+          "url": "https://lordserial33.biz/genre/anime/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://lordserial33.biz/anime/\""
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): jaccard 0.92."
+    },
+    {
+      "id": "T252",
+      "site": "lordserials22.info",
+      "direction": "lords",
+      "repo": "var/site-repos/lordserials22-info",
+      "urls": [
+        "https://lordserials22.info/genre/anime/"
+      ],
+      "problem": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): тот же дубль, что T251: /genre/anime/ и /anime/ с одинаковым title «Аниме: смотреть онлайн — Lordserials Animation», обе index, canonical на себя.",
+      "norm": "Одна страница — один адрес: полный дубль указывает canonical на основную (справка Яндекса robot-workings/double.md, SHA в var/seo-audit/yandex-docs-registry-20261018.json; SEO_KNOWLEDGE_PACK — дубли конкурируют, FACTS F7.5). Одинаковые title/description у разных страниц — indexing-options/title-description-doubles.md.",
+      "expected": "Перенос T251. lordserials22.info на паузе до оценки 21.10 и несёт канарейки lords-05 — не раньше вердикта 21.10 и только если он не запрещает правки разделов.",
+      "check": "checks/genre_section_duplicate_canonical.py",
+      "verify_live": "как T251",
+      "live_check": [
+        {
+          "url": "https://lordserials22.info/genre/anime/",
+          "status": 200,
+          "contains": [
+            "rel=\"canonical\" href=\"https://lordserials22.info/anime/\""
+          ]
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "пауза lordserials22.info до 21.10; затем после live_verified T251",
+      "evidence": "19.10 05:40Z обход сессии 300 страниц на домен (scratchpad crawl19/*.json) и попарное сравнение первых страниц выдачи (pair_cmp.json): "
     }
   ]
 }
