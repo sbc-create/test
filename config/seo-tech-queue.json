@@ -6884,8 +6884,9 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик."
+      "status": "blocked",
+      "evidence": "19.10 09:01Z замер сессии: zonafilm12.site /catalog/?genre=komediya — 18 239 записей, как ?genre=comedy; ?genre=boevik — 11 938, как ?genre=action; у алиасов title «Каталог — Zona Cinema» (у основного кода — «Комедия», «Боевик»), canonical на себя, index. zonafilm.space — то же (18 236 / 11 937). На zonafilm.cc алиас уже склеен: ?genre=komediya → canonical ?genre=comedy, ?genre=boevik → ?genre=action. Обычных ссылок на алиасы на сайтах нет (обход 19.10), поэтому польза — порядок индекса, а не трафик.",
+      "owner_action": "ждёт live_verified T254 и T257 (тот же репозиторий zonafilm12-site): ветка, подготовленная до выпуска соседней задачи, получает SUPERSEDED — 19.10 T254 уже дважды готовилась от устаревшей базы. После выпуска обеих — снова queued (SEO)."
     },
     {
       "id": "T268",
@@ -6935,8 +6936,9 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList)."
+      "status": "blocked",
+      "evidence": "19.10 09:34Z замер сессии: видимых хлебных крошек и BreadcrumbList нет на страницах разделов zonafilm12.site (/catalog/?genre=drama, /catalog/?country=turciya, /movies/), zonafilm.cc (/catalog/?genre=comedy), animedia.icu (/catalog/?genre=komediya); на карточках тех же витрин крошки есть («Zona Cinema / Сериалы / Чужая жизнь»), на разделах Lords — есть («Главная » Каталог » Драма» + BreadcrumbList).",
+      "owner_action": "ждёт live_verified T254 и T257 (тот же репозиторий zonafilm12-site): ветка, подготовленная до выпуска соседней задачи, получает SUPERSEDED — 19.10 T254 уже дважды готовилась от устаревшей базы. После выпуска обеих — снова queued (SEO)."
     },
     {
       "id": "T270",
