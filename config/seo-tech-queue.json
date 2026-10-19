@@ -6614,8 +6614,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые."
+      "status": "live_verified",
+      "evidence": "19.10 06:05Z замер сессии (var/seo-audit/zona-collection-tech-text-20261019.json): из 12 подборок каждой Zona-витрины у /collection/recently_added/ (200, index, follow) meta description и видимый текст: «Поступления в каталог за последние 90 дней (по catalog_added_at / published_at).» — служебные имена полей БД показаны читателю и поисковику; остальные 11 подборок чистые. | 19.10 11:27:20Z публикатор live_verified (zona-01-code-a69e4fc555b3); сверка сессии 11:28Z — служебных имён нет (var/seo-audit/t258-live-20261019.json); регресс T242 чист."
     },
     {
       "id": "T259",
