@@ -5124,9 +5124,10 @@
       "direction": "network",
       "problem": "Штатная выгрузка Метрики (analytics-cabinet) 16.10, 17.10 и 18.10 получает HTTP 429 «Повторы исчерпаны» по двум последним доменам очереди — zonafilm.space и zonafilm12.site (позиции 17–18 из 21); 14.10 и 15.10 таких отказов не было. Совпадает с добавлением показателя daily_traffic_profile (cbba90c, 16.10, лимит 5000 строк) — запросов на домен стало больше. Повтор транспорта: 5 попыток, 1–16 с (RETRY_POLICY), тело ответа 429 в выгрузку не попадает — вид квоты (секундная/суточная) не установлен. Последствие: у zonafilm12.site за 15–17.10 нет поисковых визитов по системам и входных страниц — недельное сравнение Яндекс/Google по нему неполное.",
       "expected": "все 19 счётчиков измерены в одной выгрузке; при 429 в выгрузке видна причина (вид квоты, Retry-After)",
-      "status": "blocked",
+      "status": "done",
       "owner_action": "Архитектор (сборщик factory/analytics, выпуск на хост): (1) писать в reason отредактированное тело 429 и заголовок Retry-After; (2) при 429 по квоте — растянуть темп/повтор (DEFAULT_MIN_INTERVAL, RETRY_POLICY) или дособрать недостающие домены отдельным проходом позже, а не помечать их неизмеренными; (3) приёмка — выгрузка, где zonafilm.space и zonafilm12.site measured по daily_search и search_landing_pages.",
-      "evidence": "18.10 07:45Z: artifacts/analytics/analytics-2026-10-1{4..8}.json — 429 у zonafilm.space/zonafilm12.site только 16–18.10; var/analytics/cabinet-latest.json (05:10Z) — у zonafilm12.site 13 показателей Метрики «HTTP 429», daily_traffic_profile измерен. Разбор недели: var/seo-audit/week-20261011-17-vs-04-10.json."
+      "evidence": "18.10 07:45Z: artifacts/analytics/analytics-2026-10-1{4..8}.json — 429 у zonafilm.space/zonafilm12.site только 16–18.10; var/analytics/cabinet-latest.json (05:10Z) — у zonafilm12.site 13 показателей Метрики «HTTP 429», daily_traffic_profile измерен. Разбор недели: var/seo-audit/week-20261011-17-vs-04-10.json.",
+      "resolution": "2026-10-19T05:11:55Z выгрузка analytics-cabinet (artifacts/analytics/analytics-2026-10-19.json): 'HTTP 429' — 0 вхождений; daily_search measured=true на zonafilm.space и zonafilm12.site; rate_limit_retry: второй проход после 90 с — zonafilm.space 15→16, zonafilm12.site 7→17 измеренных показателей (fd903dc). Не измерены только показатели Вебмастера (URLError, B023) — это не 429."
     },
     {
       "id": "T208",
