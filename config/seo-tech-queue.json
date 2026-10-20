@@ -7351,8 +7351,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "20.10 замер wt-nova-publish-memory-02 (docs/handoff/ZONA03_CARD_RATINGS_001.md, коммит de787a0 ветки claude/nova-publish-memory-02) и сверка SEO-сессии 05:30Z на живой https://zonafilm12.site/ (голоса — zona-03-details.json ratings_by_source.imdb.votes): у 10 из первых 15 карточек оценка IMDb держится на числе голосов меньше 100 (slepye-zony 9.4 при 5, taynaya-zhizn-kazino-vegasa 8.6 при 7, seyf 8.3 при 9, kak-ryba-v-vode 8.9 при 9), число голосов на карточке не показано, хотя страница произведения его выводит."
+      "status": "live_verified",
+      "evidence": "20.10 замер wt-nova-publish-memory-02 (docs/handoff/ZONA03_CARD_RATINGS_001.md, коммит de787a0 ветки claude/nova-publish-memory-02) и сверка SEO-сессии 05:30Z на живой https://zonafilm12.site/ (голоса — zona-03-details.json ratings_by_source.imdb.votes): у 10 из первых 15 карточек оценка IMDb держится на числе голосов меньше 100 (slepye-zony 9.4 при 5, taynaya-zhizn-kazino-vegasa 8.6 при 7, seyf 8.3 при 9, kak-ryba-v-vode 8.9 при 9), число голосов на карточке не показано, хотя страница произведения его выводит. | 20.10 06:19Z публикатор: executor_failed — кандидат не поднялся за 82 с (процесс не работает), откат исправен, сайт на 3588f60b0ea1; MemAvailable 2.1 ГиБ < 2.5 ГиБ (B040). 06:41Z при 3.2 ГиБ сессия повторила штатно `python3 -m factory cell trigger --site zona-03 --confirm-activation` (как T253) → activated, live_verified. Сверка 06:43Z: «IMDb 9.4 из 10, 5 голосов» видимо у slepye-zony, «9 голосов» у seyf; у velikoe-ograblenie-v-pendzhabe (1 740) и tom-i-cherri (7 482) видимая подпись прежняя, число — в подсказке; регресс zonafilm12 13/13."
     },
     {
       "id": "T284",
