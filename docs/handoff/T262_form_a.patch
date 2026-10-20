@@ -1,4 +1,4 @@
---- a/b/automation/animedia-data-update.py	2026-10-20 13:00:34.664119388 +0000
+--- a/automation/animedia-data-update.py	2026-10-20 13:00:34.664119388 +0000
 +++ b/automation/animedia-data-update.py	2026-10-20 13:00:34.684120120 +0000
 @@ -1441,6 +1441,17 @@
          подробности = рт.Подробности(str(данные / f"{САЙТ}-details.json"))
