@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 from dataclasses import dataclass, field
 from functools import cached_property
@@ -311,9 +312,21 @@ def iso_duration(m: int | None) -> str | None:
     return "PT" + (f"{h}H" if h else "") + (f"{mm}M" if mm else "")
 
 
+def config_file() -> Path:
+    """config/site.yaml или файл конфигурации домена из SITE_CONFIG — только имя вида site.<имя>.yaml в config/:
+    путь извне каталога config не принимается."""
+    name = os.environ.get("SITE_CONFIG", "site.yaml")
+    if not re.fullmatch(r"site(\.[a-z0-9-]+)?\.yaml", name):
+        raise ValueError(f"SITE_CONFIG: недопустимое имя {name!r}")
+    p = ROOT / "config" / name
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return p
+
+
 class Site:
     def __init__(self, snapshot_path: Path | None = None, config_path: Path | None = None):
-        self.cfg = yaml.safe_load((config_path or ROOT / "config" / "site.yaml").read_text())
+        self.cfg = yaml.safe_load((config_path or config_file()).read_text())
         snap = json.loads((snapshot_path or ROOT / "data" / "content-snapshot.json").read_text())
         if snap["site_id"] != self.cfg["site_id"]:
             raise PermissionError("снимок принадлежит другому сайту")
