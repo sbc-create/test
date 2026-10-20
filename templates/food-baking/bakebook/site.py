@@ -73,6 +73,58 @@ def qty(q, unit) -> str:
     return f"{s} {UNITS.get(unit or '', '')}".strip()
 
 
+MONTHS = (
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+)
+
+# Сезонная выпечка: продукты сезона по месяцам. Блок на главной — только из рецептов, где эти продукты есть.
+SEASONS = {
+    (9, 10, 11): ("Осенняя выпечка", ("tykva", "yabloki", "sliva")),
+    (12, 1, 2): ("Зимняя выпечка", ("prazdnik", "orehi")),
+    (6, 7, 8): ("Летняя выпечка", ("vishnya", "vinograd")),
+}
+
+IMAGE_KINDS = ("photo", "illustration")
+IMAGE_REQUIRED = ("file", "width", "height", "widths", "kind", "alt", "source", "license")
+
+
+def ru_date(iso: str | None) -> str:
+    """2026-10-12 → «12 октября 2026»."""
+    if not iso:
+        return ""
+    y, m, d = iso[:10].split("-")
+    return f"{int(d)} {MONTHS[int(m) - 1]} {y}"
+
+
+def load_images(by_slug: dict, path: Path | None = None) -> dict:
+    """data/media/images.json: изображение блюда только с происхождением и правами; иначе — ошибка, а не пропуск."""
+    p = path or ROOT / "data" / "media" / "images.json"
+    if not p.exists():
+        return {}
+    out = {}
+    for slug, e in json.loads(p.read_text()).get("items", {}).items():
+        missing = [k for k in IMAGE_REQUIRED if not e.get(k)]
+        if missing or e["kind"] not in IMAGE_KINDS or slug not in by_slug:
+            raise ValueError(f"images.json: {slug}: нет {missing} или неверный kind/slug")
+        for w in e["widths"]:
+            if not (ROOT / "static" / "media" / f"{e['file']}-{w}.webp").is_file():
+                raise FileNotFoundError(f"static/media/{e['file']}-{w}.webp")
+        by_slug[slug].image = e
+        out[slug] = e
+    return out
+
+
 def minutes(m) -> str:
     if not m:
         return ""
@@ -105,6 +157,7 @@ class Recipe:
         ):
             setattr(self, k, raw[k])
         self.url = f"/recept/{self.slug}/"
+        self.image: dict | None = None
         self.times = raw["times"]
         self.ingredients = [
             {"name": i["name"], "amount": qty(i["quantity"], i["unit"]), "weighed": i["unit"] in ("g", "kg", "ml", "l")}
@@ -118,6 +171,16 @@ class Recipe:
     @property
     def dough_label(self) -> str | None:
         return DOUGH_LABELS[self.dough][0] if self.dough else None
+
+    @property
+    def lede(self) -> str:
+        """Первая фраза вступления — для карточки."""
+        m = re.match(r"(.+?[.!?])(\s|$)", self.intro.strip())
+        return (m.group(1) if m else self.intro.strip())[:180]
+
+    @property
+    def group_url(self) -> str:
+        return f"/recepty/{self.group}/"
 
     @property
     def temps(self) -> list[int]:
@@ -202,6 +265,7 @@ class Site:
             raise PermissionError("контент принадлежит другому сайту")
         self.recipes = [Recipe(x) for x in data["items"]]
         self.by_slug = {r.slug: r for r in self.recipes}
+        self.images = load_images(self.by_slug)
 
     @property
     def origin(self) -> str:
@@ -228,6 +292,24 @@ class Site:
             if r.dough:
                 out.setdefault(r.dough, []).append(r)
         return {k: v for k, v in out.items() if len(v) >= 2}
+
+    def groups(self) -> dict[str, list[Recipe]]:
+        """Разделы (кексы, хлеб…): только наполненные, в порядке GROUPS."""
+        return {k: v for k in GROUPS if (v := [r for r in self.recipes if r.group == k])}
+
+    @staticmethod
+    def group_indexable(items: list) -> bool:
+        return len(items) >= 2
+
+    def season(self, month: int) -> tuple[str, list[tuple[str, str]], list[Recipe]] | None:
+        """Сезонный блок: (заголовок, [(тег, подпись)], рецепты) — если по продуктам сезона есть ≥3 рецептов."""
+        for months, (title, tags) in SEASONS.items():
+            if month in months:
+                items = [r for r in self.recipes if set(r.tags) & set(tags)]
+                if len(items) >= 3:
+                    live = self.tags()
+                    return title, [(t, TAGS[t]) for t in tags if any(t in r.tags for r in items) and t in live], items
+        return None
 
     def pitfalls_for(self, dough: str) -> list[tuple[Recipe, dict]]:
         return [(r, p) for r in self.doughs().get(dough, []) for p in r.pitfalls]

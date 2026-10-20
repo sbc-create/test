@@ -11,6 +11,7 @@ import json
 import os
 import re
 import socketserver
+import time
 import urllib.parse
 from base64 import b64decode
 from dataclasses import dataclass, field
@@ -19,7 +20,7 @@ from pathlib import Path
 import jinja2
 
 from .drafts import DOUGH_LABELS, HISTORY
-from .site import GROUPS, TAGS, Recipe, Site
+from .site import GROUPS, TAGS, Recipe, Site, ru_date
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = ROOT / "static"
@@ -117,6 +118,22 @@ def items_ld(site: Site, recipes: list[Recipe]) -> dict:
     }
 
 
+def website_ld(site: Site) -> dict:
+    """WebSite с поиском: поиск на сайте действительно есть (/poisk/?q=)."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": site.cfg["name"],
+        "url": site.abs("/"),
+        "inLanguage": "ru",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {"@type": "EntryPoint", "urlTemplate": site.abs("/poisk/") + "?q={search_term_string}"},
+            "query-input": "required name=search_term_string",
+        },
+    }
+
+
 def iso(m) -> str | None:
     if not m:
         return None
@@ -139,8 +156,12 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
             for n, s in enumerate(r.steps)
         ],
         "datePublished": r.published_at,
+        "dateModified": r.updated_at,
+        "inLanguage": "ru",
         "keywords": ", ".join(TAGS.get(t, t) for t in r.tags),
     }
+    if r.image:  # только изображение с установленными правами (data/media/images.json)
+        ld["image"] = [site.abs(f"/static/media/{r.image['file']}-{w}.webp") for w in r.image["widths"]]
     for k, v in (
         ("prepTime", r.times["prep_minutes"]),
         ("cookTime", r.times["cook_minutes"]),
@@ -172,7 +193,10 @@ class App:
             TAGS=TAGS,
             GROUPS=GROUPS,
             asset=lambda rel: f"/static/{rel}?v={self.hashes.get(rel, '0')}",
+            plural=plural,
+            year=time.strftime("%Y"),
         )
+        self.env.filters["ru_date"] = ru_date
 
     def render(self, tpl: str, meta: Meta, **ctx) -> str:
         return self.env.get_template(tpl).render(meta=meta, **ctx)
@@ -214,28 +238,80 @@ class App:
             meta.crumbs = [("Главная", "/"), ("Пеку несколько", path)]
             return (400 if error else 200), self.render("batch.html", meta, bs=bs, picked=want, error=error), {}
         if path == "/":
+            groups = s.groups()
+            season = s.season(time.localtime().tm_mon)
+            shown = {r.slug for r in season[2][:4]} if season else set()
+            tea = [r for r in s.tags().get("k-chayu", []) if r.slug not in shown][:4]  # без повтора сезонных
+            tea = tea if len(tea) >= 2 else []
+            fresh = sorted(s.recipes, key=lambda r: (r.published_at, r.updated_at), reverse=True)[:8]
             meta = Meta(
-                f"{s.cfg['name']} — книга рецептов выпечки",
-                "Рецепты выпечки и десертов по видам теста: "
-                "духовка, форма и время из источника, разборы ошибок по шагам.",
+                f"{s.cfg['name']} — рецепты домашней выпечки",
+                with_examples(
+                    f"{len(s.recipes)} {plural(len(s.recipes), 'рецепт', 'рецепта', 'рецептов')} домашней выпечки "
+                    "с температурой духовки, временем и формой",
+                    [v.lower() for k, v in GROUPS.items() if k in groups],
+                ),
                 s.abs("/"),
                 True,
                 kind="home",
+                ld=[website_ld(s), items_ld(s, fresh)],
             )
-            return 200, self.render("home.html", meta, latest=s.recipes[:6]), {}
+            return (
+                200,
+                self.render("home.html", meta, groups=groups, tea=tea, season=season, fresh=fresh),
+                {},
+            )
+        if path == "/duhovka/":
+            crumbs = [("Главная", "/"), ("По температуре", path)]
+            meta = Meta(
+                "Выпечка по температуре духовки",
+                "Разогрели духовку — смотрите, что печётся при этой температуре: "
+                + ", ".join(f"{t} °C" if t else "без духовки" for t, _ in s.by_temp())
+                + ".",
+                s.abs(path),
+                True,
+                crumbs,
+                [crumbs_ld(s, crumbs)],
+                kind="temps",
+            )
+            return 200, self.render("temps.html", meta), {}
+        m = re.fullmatch(r"/recepty/([a-z]+)/", path)
+        if m and m.group(1) in s.groups():
+            key = m.group(1)
+            items = s.groups()[key]
+            label = GROUPS[key]
+            meta = self.listing(
+                f"{label}: рецепты",
+                with_examples(
+                    f"{label} — {len(items)} {plural(len(items), 'рецепт', 'рецепта', 'рецептов')}",
+                    [r.title for r in items],
+                ),
+                path,
+                [("Главная", "/"), ("Рецепты", "/recepty/"), (label, path)],
+                items,
+                kind="group",
+                index=s.group_indexable(items),
+            )
+            return 200, self.render("listing.html", meta, heading=label, items=items), {}
         m = re.fullmatch(r"/recepty/(?:page/(\d+)/)?", path)
         if m:
             n = int(m.group(1) or 1)
             flt = {"dough": g("testo"), "oven": g("duhovka")}
             sort = g("sort") if g("sort") in ("temp", "vremya", "nazvanie") else ""
-            filtered = any(flt.values()) or bool(sort)
+            table = g("vid") == "tablica"
+            filtered = any(flt.values()) or bool(sort) or table
             items = s.sorted_by(s.filter(**flt) if any(flt.values()) else s.recipes, sort)
             chunk, pages = s.page(items, n)
-            if n > pages or (m.group(1) and n == 1):
+            if n > pages or (m.group(1) and n == 1) or (filtered and n > 1):
                 return self.not_found()
+            if filtered:  # подбор и таблица сравнения — весь результат на одной странице, без пагинации
+                chunk, pages = items, 1
             meta = self.listing(
                 "Все рецепты выпечки",
-                "Оглавление: кексы, хлеб, пироги, печенье, заварные пирожные и " "десерты без духовки.",
+                with_examples(
+                    f"Все {len(s.recipes)} {plural(len(s.recipes), 'рецепт', 'рецепта', 'рецептов')} выпечки",
+                    [v.lower() for k, v in GROUPS.items() if k in s.groups()],
+                ),
                 "/recepty/",
                 [("Главная", "/"), ("Рецепты", "/recepty/")],
                 chunk,
@@ -255,6 +331,7 @@ class App:
                     flt=flt,
                     sort=sort,
                     filtered=filtered,
+                    table=table,
                     total=len(items),
                 ),
                 {},
@@ -335,10 +412,22 @@ class App:
                 f"Поиск: {qq}" if qq else "Поиск выпечки", "Поиск по названию и продуктам.", None, False, kind="search"
             )
             return 200, self.render("search.html", meta, q=qq, items=s.search(qq) if qq else []), {}
+        if path == "/konfidencialnost/":
+            meta = Meta(
+                "Конфиденциальность",
+                "Какие данные записывает сайт «Тесто и десерты»: журнал веб-сервера, хранилище браузера; "
+                "без cookies, счётчиков и рекламы.",
+                s.abs(path),
+                True,
+                [("Главная", "/"), ("Конфиденциальность", path)],
+                kind="info",
+            )
+            return 200, self.render("privacy.html", meta), {}
         if path == "/o-proekte/":
             meta = Meta(
                 "О проекте",
-                "Как устроена книга рецептов «Тесто и десерты».",
+                "«Тесто и десерты» — рецепты домашней выпечки: откуда состав, температура и время, "
+                "что умеет сайт и чего на нём нет.",
                 s.abs(path),
                 True,
                 [("Главная", "/"), ("О проекте", path)],
@@ -349,7 +438,10 @@ class App:
             body = (
                 "User-agent: *\nDisallow: /\n"
                 if not s.indexable
-                else f"User-agent: *\nDisallow: /poisk/\nDisallow: /redaktor/\nSitemap: {s.abs('/sitemap.xml')}\n"
+                else (
+                    "User-agent: *\nDisallow: /poisk/\nDisallow: /redaktor/\nDisallow: /*?\n\n"
+                    f"Sitemap: {s.abs('/sitemap.xml')}\n"
+                )
             )
             return 200, body, {"Content-Type": "text/plain; charset=utf-8"}
         if path == "/sitemap.xml":
@@ -368,8 +460,13 @@ class App:
             ("/", s.recipes[0].updated_at if s.recipes else None),
             ("/recepty/", None),
             ("/pechem/", None),
+            ("/duhovka/", None),
             ("/testo/", None),
             ("/o-proekte/", None),
+            ("/konfidencialnost/", None),
+        ]
+        urls += [
+            (f"/recepty/{k}/", max(r.updated_at for r in v)) for k, v in s.groups().items() if s.group_indexable(v)
         ]
         _, pages = s.page(s.recipes, 1)
         urls += [(f"/recepty/page/{n}/", None) for n in range(2, pages + 1)]

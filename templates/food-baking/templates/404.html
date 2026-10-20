@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block main %}
 <p class="kicker">Страница 404</p>
-<h1>Такой страницы в книге нет</h1>
-<p class="lead">Возможно, адрес набран с ошибкой. Откройте <a href="/recepty/">оглавление</a> или поищите рецепт.</p>
+<h1>Такой страницы нет</h1>
+<p class="lead">Возможно, адрес набран с ошибкой. Откройте <a href="/recepty/">все рецепты</a> или поищите рецепт.</p>
 <form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q404">Название или продукт</label><input id="q404" name="q" type="search"><button type="submit">Найти</button></form>
 {% endblock %}

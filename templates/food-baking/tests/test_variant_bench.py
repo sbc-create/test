@@ -41,8 +41,10 @@ def test_home_groups_by_first_temperature(app):
     assert sum(len(v) for _, v in groups) == len(app.site.recipes)
     for t, items in groups:
         assert all((r.temps[0] if r.temps else None) == t for r in items)
-    _, html, _ = get(app, "/")
+    _, html, _ = get(app, "/duhovka/")  # страница «По температуре»; на главной — переходы к ней
     assert html.count('class="temp"') == len(groups)
+    _, home, _ = get(app, "/")
+    assert home.count('href="/duhovka/#t-') == len(groups)
 
 
 def test_bakers_percentage_from_grams_only(app):
@@ -58,9 +60,17 @@ def test_bakers_percentage_from_grams_only(app):
 
 
 def test_catalog_compare_table_and_sort(app):
-    _, html, _ = get(app, "/recepty/")
-    assert '<table class="cmp">' in html and canon(html) == app.site.abs("/recepty/")
-    _, html, _ = get(app, "/recepty/", {"sort": ["temp"]})
+    _, html, _ = get(app, "/recepty/")  # каталог — карточки; таблица сравнения — вид ?vid=tablica без своего canonical
+    assert (
+        'class="bgrid"' in html and canon(html) == app.site.abs("/recepty/") and 'href="/recepty/?vid=tablica"' in html
+    )
+    _, html, _ = get(app, "/recepty/", {"vid": ["tablica"]})
+    assert (
+        '<table class="cmp">' in html
+        and canon(html) is None
+        and html.count('<tr><th scope="row">') == len(app.site.recipes)
+    )
+    _, html, _ = get(app, "/recepty/", {"sort": ["temp"], "vid": ["tablica"]})
     assert canon(html) is None and 'content="noindex' in html
     first = re.search(r'<tr><th scope="row"><a href="([^"]+)"', html).group(1)
     assert first == app.site.by_temp()[0][1][0].url

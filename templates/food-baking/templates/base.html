@@ -29,11 +29,11 @@
 <a class="skip" href="#text">К тексту</a>
 <header class="spine">
   <div class="spine__in">
-    <a class="title" href="/"><span class="title__small">книга рецептов</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
+    <a class="title" href="/"><span class="title__small">домашняя выпечка</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
   </div>
-  <nav class="toc-nav" aria-label="Разделы книги">
-    <a href="/#po-temperature">По температуре</a><a href="/recepty/">Таблица рецептов</a><a href="/pechem/" data-b-link>Пеку несколько</a><a href="/testo/">Виды теста</a>{% for k in site.doughs() %}<a href="/testo/{{ k }}/">{{ DOUGH[k][0] }}</a>{% endfor %}<a href="/o-proekte/">О книге</a>
+  <nav class="toc-nav" aria-label="Разделы">
+    <a href="/recepty/">Все рецепты</a>{% for k, items in site.groups().items() %}<a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a>{% endfor %}<a href="/duhovka/">По температуре</a><a href="/testo/">Виды теста</a><a href="/pechem/" data-b-link>Пеку несколько</a>
   </nav>
 </header>
 {% if meta.crumbs|length > 1 %}
@@ -43,9 +43,25 @@
 {% block main %}{% endblock %}
 </main>
 <footer class="colophon">
-  <p><b>Тесто и десерты</b> · рабочее название, закрытая предварительная версия</p>
-  <p>Состав, количества, температура и время — из рецептов-источников, ссылка на каждой странице. Текст написан с помощью ИИ и ещё не проверен редакцией; блюда редакция не пекла.</p>
-  <nav aria-label="О сайте"><a href="/o-proekte/">О книге</a> <a href="/testo/">Виды теста</a> <a href="/recepty/">Все рецепты</a></nav>
+  <div class="colophon__grid">
+    <div class="colophon__about">
+      <p class="colophon__brand">Тесто <em>&amp;</em> десерты</p>
+      <p>Рецепты домашней выпечки: температура духовки, время, форма и вес продуктов — на одном листе.</p>
+    </div>
+    <nav aria-label="Разделы">
+      <h2 class="colophon__h">Рецепты</h2>
+      <ul>{% for k, items in site.groups().items() %}<li><a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a></li>{% endfor %}</ul>
+    </nav>
+    <nav aria-label="Как выбрать">
+      <h2 class="colophon__h">Подобрать</h2>
+      <ul><li><a href="/duhovka/">По температуре</a></li><li><a href="/testo/">Виды теста</a></li><li><a href="/pechem/">Пеку несколько</a></li><li><a href="/recepty/">Все рецепты</a></li></ul>
+    </nav>
+    <nav aria-label="О сайте">
+      <h2 class="colophon__h">О сайте</h2>
+      <ul><li><a href="/o-proekte/">О проекте</a></li><li><a href="/konfidencialnost/">Конфиденциальность</a></li></ul>
+    </nav>
+  </div>
+  <p class="colophon__legal">© {{ year }} «Тесто и десерты». Рецепты составлены по открытым источникам — ссылка на источник есть на странице каждого рецепта.</p>
 </footer>
 </body>
 </html>

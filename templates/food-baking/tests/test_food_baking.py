@@ -161,7 +161,7 @@ def test_filters_search_not_indexed_and_404s(app):
     _, html, _ = get(app, "/recepty/", {"testo": ["zavarnoe"]})
     assert canon(html) is None
     _, html, _ = get(app, "/poisk/", {"q": ["слива"]})
-    assert canon(html) is None and "toc__row" in html
+    assert canon(html) is None and 'class="bcard' in html
     for p in ("/recept/net/", "/testo/drozhzhevoe/", "/teg/limon/", "/oshibki/net/", "/recepty/page/1/"):
         assert get(app, p)[0] == 404, p
 

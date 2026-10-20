@@ -1,14 +1,19 @@
 {% extends "base.html" %}
+{% from "_parts.html" import grid %}
 {% block main %}
-<h1>{{ 'Подбор выпечки' if filtered else 'Таблица рецептов' }}</h1>
-<p class="lead">{{ total }} {{ 'рецепт' if total % 10 == 1 and total % 100 != 11 else ('рецепта' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else 'рецептов') }}{% if filtered %} по выбранным условиям{% endif %}. Сравнивайте температуру, время в духовке и массу муки.</p>
+<h1>{{ 'Подбор выпечки' if filtered else 'Все рецепты выпечки' }}</h1>
+<p class="lead">{{ total }} {{ 'рецепт' if total % 10 == 1 and total % 100 != 11 else ('рецепта' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else 'рецептов') }}{% if filtered %} по выбранным условиям{% endif %}.</p>
 <form class="filters" method="get" action="/recepty/" data-autosubmit>
   <label>Вид теста <select name="testo"><option value="">любой</option>{% for k in site.doughs() %}<option value="{{ k }}"{% if flt.dough == k %} selected{% endif %}>{{ DOUGH[k][0] }}</option>{% endfor %}</select></label>
   <label>Духовка <select name="duhovka"><option value="">неважно</option><option value="da"{% if flt.oven == 'da' %} selected{% endif %}>нужна</option><option value="net"{% if flt.oven == 'net' %} selected{% endif %}>без духовки</option></select></label>
   <label>Порядок <select name="sort">{% for k, l in [('', 'сначала новые'), ('temp', 'горячее сначала'), ('vremya', 'быстрее сначала'), ('nazvanie', 'по названию')] %}<option value="{{ k }}"{% if sort == k %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+  <label>Вид <select name="vid"><option value="">карточки</option><option value="tablica"{% if table %} selected{% endif %}>таблица сравнения</option></select></label>
   <button type="submit">Показать</button>{% if filtered %} <a class="reset" href="/recepty/">Сбросить</a>{% endif %}
 </form>
-{% if items %}
+{% if items and not table %}
+{{ grid(items, 'h2') }}
+<p class="more"><a href="/recepty/?vid=tablica">Сравнить в таблице: температура, время и мука</a></p>
+{% elif items %}
 <div class="tablewrap"><table class="cmp">
 <thead><tr><th scope="col">Рецепт</th><th scope="col">Тесто</th><th scope="col" class="num">°C</th><th scope="col">В духовке</th><th scope="col" class="num">Мука, г</th><th scope="col">Всего</th></tr></thead>
 <tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a></th><td data-label="Тесто">{{ r.dough_label or '—' }}</td><td class="num" data-label="°C">{{ r.temps|join('→') if r.temps else '—' }}</td><td data-label="В духовке">{{ r.bake_label or '—' }}</td><td class="num" data-label="Мука, г">{{ r.flour_g|int if r.flour_g else '—' }}</td><td data-label="Всего">{{ r.total or '—' }}</td></tr>{% endfor %}</tbody>

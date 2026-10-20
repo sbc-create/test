@@ -1,22 +1,46 @@
 {% extends "base.html" %}
+{% from "_parts.html" import grid %}
 {% block main %}
 <section class="bench-hero">
-  <h1>Что печём сегодня?</h1>
-  <p class="lead">Рецепты собраны по температуре духовки: разогрели на 180 °C — смотрите всё, что печётся при ней. Температура, время и форма — из рецепта-источника.</p>
+  <h1>Домашняя выпечка <em>и&nbsp;десерты</em></h1>
+  <p class="lead">Кексы, хлеб, пироги и печенье: температура духовки, время, форма и вес продуктов — сразу на странице рецепта.</p>
+  <form class="find find--hero" action="/poisk/" method="get" role="search"><label class="sr" for="q-home">Найти рецепт выпечки</label><input id="q-home" name="q" type="search" placeholder="Например, кекс или слива"><button type="submit">Найти</button></form>
 </section>
-<section aria-labelledby="po-temperature" class="temps">
-  <h2 id="po-temperature">По температуре духовки</h2>
-  <nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %} <small>{{ items|length }}</small></a>{% endfor %}</nav>
-  {% for t, items in site.by_temp() %}
-  <section class="temp" id="t-{{ t or 'net' }}" aria-labelledby="h-t-{{ t or 'net' }}">
-    <h3 id="h-t-{{ t or 'net' }}" class="temp__h">{% if t %}<b>{{ t }}</b> °C{% else %}Без духовки{% endif %}</h3>
-    <ul class="rows">{% for r in items %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{{ r.bake_label or (r.total if r.total else '') }}</span></li>{% endfor %}</ul>
-  </section>
-  {% endfor %}
+
+<section class="block" aria-labelledby="h-groups">
+  <div class="block__head"><h2 id="h-groups">Разделы</h2><a href="/recepty/">Все {{ site.recipes|length }} {{ plural(site.recipes|length, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
+  <ul class="gtiles">{% for k, items in groups.items() %}<li><a class="gtile gtile--{{ k }}" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ items|length }}</span></a></li>{% endfor %}</ul>
 </section>
-<p class="more"><a href="/pechem/">Пеку несколько: общий список продуктов и духовка по температурам</a></p>
-<section aria-labelledby="h-dough"><h2 id="h-dough">Виды теста</h2>
-<ul class="chips">{% for k, items in site.doughs().items() %}<li><a href="/testo/{{ k }}/">{{ DOUGH[k][0] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul></section>
-<section aria-labelledby="h-tags"><h2 id="h-tags">По продукту и поводу</h2>
-<ul class="chips chips--light">{% for k, items in site.tags().items() %}<li><a href="/teg/{{ k }}/">{{ TAGS[k] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul></section>
+
+{% if season %}
+<section class="block" aria-labelledby="h-season">
+  <div class="block__head"><h2 id="h-season">{{ season[0] }}</h2>{% if season[1] %}<span class="block__links">{% for k, l in season[1] %}<a href="/teg/{{ k }}/">{{ l }}</a>{% endfor %}</span>{% endif %}</div>
+  {{ grid(season[2][:4]) }}
+</section>
+{% endif %}
+
+<section class="oven-band" aria-labelledby="h-oven">
+  <div>
+    <h2 id="h-oven">Духовка уже греется?</h2>
+    <p>Выберите температуру — покажем всё, что печётся при ней.</p>
+  </div>
+  <nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="/duhovka/#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %} <small>{{ items|length }}</small></a>{% endfor %}</nav>
+</section>
+
+{% if tea %}
+<section class="block" aria-labelledby="h-tea">
+  <div class="block__head"><h2 id="h-tea">Что испечь к чаю</h2><a href="/teg/k-chayu/">Вся подборка</a></div>
+  {{ grid(tea) }}
+</section>
+{% endif %}
+
+<section class="block" aria-labelledby="h-fresh">
+  <div class="block__head"><h2 id="h-fresh">Новые рецепты</h2><a href="/recepty/">Весь каталог</a></div>
+  <div class="grid--home-fresh">{{ grid(fresh) }}</div>
+</section>
+
+<section class="block" aria-labelledby="h-dough">
+  <div class="block__head"><h2 id="h-dough">Виды теста</h2><a href="/testo/">Подробнее</a></div>
+  <ul class="chips">{% for k, items in site.doughs().items() %}<li><a href="/testo/{{ k }}/">{{ DOUGH[k][0] }} <small>{{ items|length }}</small></a></li>{% endfor %}</ul>
+</section>
 {% endblock %}

@@ -1,11 +1,14 @@
 {% extends "base.html" %}
+{% from "_parts.html" import picture %}
 {% block main %}
 <article class="sheet-b" data-recipe="{{ r.slug }}">
   <header>
     <p class="kicker">{{ r.group_label }}{% if r.dough_label %} · {% if r.dough in site.doughs() %}<a href="/testo/{{ r.dough }}/">{{ r.dough_label|lower }}</a>{% else %}{{ r.dough_label|lower }}{% endif %}{% endif %}</p>
     <h1>{{ r.title }}</h1>
     <p class="lead">{{ r.intro }}</p>
+    <nav class="jump" aria-label="Перейти к разделу рецепта"><a href="#ingredienty">Продукты</a><a href="#prigotovlenie">Ход работы</a></nav>
   </header>
+  {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 860px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
   <section class="strip" aria-labelledby="oven-h">
     <h2 id="oven-h" class="sr">Духовка и форма</h2>
     <dl>
@@ -13,17 +16,19 @@
       <div><dt>В духовке</dt><dd>{% if r.timers %}{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг {{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}{% else %}не указано{% endif %}</dd></div>
       <div><dt>Форма</dt><dd>{{ r.form or 'не указана' }}</dd></div>
       <div><dt>Всего</dt><dd>{{ r.total or '—' }}</dd></div>
+      <div><dt>Выход</dt><dd>{{ r.servings }} {{ plural(r.servings, 'порция', 'порции', 'порций') }}</dd></div>
+      <div><dt>Продукты</dt><dd>{{ r.ingredients|length }}</dd></div>
     </dl>
   </section>
-  <section aria-labelledby="ing-h">
+  <section id="ingredienty" aria-labelledby="ing-h">
     <h2 id="ing-h">Отвесить</h2>
     <div class="tablewrap"><table class="weigh-t">
       <thead><tr><th scope="col">Продукт</th><th scope="col" class="num">Количество</th>{% if r.flour_g %}<th scope="col" class="num">% от муки</th>{% endif %}</tr></thead>
       <tbody>{% for i in r.bench %}<tr><th scope="row"><label><input type="checkbox" data-weigh="{{ loop.index }}"> {{ i.name }}</label></th><td class="num">{{ i.amount }}</td>{% if r.flour_g %}<td class="num">{{ i.pct ~ ' %' if i.pct is not none else '—' }}</td>{% endif %}</tr>{% endfor %}</tbody>
     </table></div>
-    <p class="note">{% if r.flour_g %}Пекарский процент — масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %), считается только по граммам источника; штуки и ложки без процента. {% endif %}Рецепт не масштабируется: для другой формы нет проверенного пересчёта.</p>
+    <p class="note">{% if r.flour_g %}Пекарский процент — масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %), считается только по граммам источника; штуки и ложки без процента. {% endif %}Количества даны для формы из рецепта.</p>
   </section>
-  <section aria-labelledby="method-h">
+  <section id="prigotovlenie" aria-labelledby="method-h">
     <h2 id="method-h">Ход работы</h2>
     <p class="progress" data-progress aria-live="polite"></p>
     <ol class="method-b" data-steps="{{ r.slug }}">
@@ -39,8 +44,8 @@
   </section>
   {% set links = site.tag_links(r) %}{% if links %}<ul class="chips chips--light" aria-label="Темы">{% for h, l in links %}<li><a href="{{ h }}">{{ l }}</a></li>{% endfor %}</ul>{% endif %}
   <footer class="provenance">
-    <p>Состав, количества, температура и время — из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener">{{ r.source.url.split('/')[2] }}</a>. Текст шагов написан заново с помощью ИИ.</p>
-    <p>Редакция ещё не проверила текст и не пекла это блюдо. Фото нет. Опубликовано {{ r.published_at }}, версия {{ r.version }}.</p>
+    <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.
+      Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at != r.published_at %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</p>
   </footer>
 </article>
 {% endblock %}

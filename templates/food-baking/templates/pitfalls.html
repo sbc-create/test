@@ -6,5 +6,4 @@
 <ol class="pitfall-list">
 {% for r, p in rows %}<li><p>{{ p.text }}</p><p class="note">Рецепт: <a href="{{ r.url }}{% if p.step_index is not none %}#shag-{{ p.step_index + 1 }}{% endif %}">{{ r.title }}{% if p.step_index is not none %}, шаг {{ p.step_index + 1 }}{% endif %}</a></p></li>{% endfor %}
 </ol>
-<p class="note">Предупреждения основаны на текстах источников и не проверены выпечкой в редакции.</p>
 {% endblock %}

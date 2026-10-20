@@ -1,10 +1,30 @@
+{% macro picture(r, sizes, eager=false) -%}
+{% set im = r.image %}
+<picture class="pic">
+  <source type="image/webp" srcset="{% for w in im.widths %}/static/media/{{ im.file }}-{{ w }}.webp {{ w }}w{% if not loop.last %}, {% endif %}{% endfor %}" sizes="{{ sizes }}">
+  <img src="/static/media/{{ im.file }}-{{ im.widths[0] }}.webp" alt="{{ im.alt }}" width="{{ im.width }}" height="{{ im.height }}"{% if eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+</picture>
+{%- endmacro %}
+
+{% macro card(r, heading='h3') -%}
+<article class="bcard bcard--{{ r.group }}{% if r.image %} bcard--pic{% endif %}">
+  {% if r.image %}<a class="bcard__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 270px, (min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw') }}</a>{% endif %}
+  <div class="bcard__body">
+    <p class="bcard__top"><span class="bcard__group">{{ r.group_label }}</span><span class="bcard__oven">{% if r.temps %}{{ r.temps[0] }}&nbsp;°C{% else %}без духовки{% endif %}</span></p>
+    <{{ heading }} class="bcard__title"><a class="bcard__link" href="{{ r.url }}">{{ r.title }}</a></{{ heading }}>
+    <p class="bcard__lede">{{ r.lede }}</p>
+    <p class="bcard__meta">
+      {% if r.total %}<span class="bcard__time"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="sr">Всего: </span>{{ r.total }}</span>{% endif %}
+      <span>{{ r.ingredients|length }} {{ plural(r.ingredients|length, 'продукт', 'продукта', 'продуктов') }}</span>
+    </p>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro grid(items, heading='h3') -%}
+<div class="bgrid">{% for r in items %}{{ card(r, heading) }}{% endfor %}</div>
+{%- endmacro %}
+
 {% macro toc(items, heading='h3') -%}
-<ol class="toc">
-{% for r in items %}
-  <li class="toc__row">
-    <a class="toc__link" href="{{ r.url }}"><{{ heading }} class="toc__title">{{ r.title }}</{{ heading }}><span class="toc__dots" aria-hidden="true"></span><span class="toc__meta">{% if r.temps %}{{ r.temps[0] }} °C{% else %}без духовки{% endif %}{% if r.total %} · {{ r.total }}{% endif %}</span></a>
-    <p class="toc__sub">{{ r.group_label }}{% if r.dough_label %} · {{ r.dough_label|lower }}{% endif %} · {{ r.ingredients|length }} продуктов</p>
-  </li>
-{% endfor %}
-</ol>
+{{ grid(items, heading) }}
 {%- endmacro %}
