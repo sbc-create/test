@@ -1,0 +1,164 @@
+
+=== yummyani.site
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /anime/)
+   page=349 (объявлена последней): код 200, карточек 0, meta: index, follow
+   page=99999: код 404, карточек 0, meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://yummyani.site/catalog?page=1
+      (page=1 не переадресован, но canonical ведёт на https://yummyani.site/catalog — дубль снят каноническим адресом, не переходом)
+   page=мусор: код 404, карточек 0, meta: noindex, follow
+  /movies/
+   раздела нет: https://yummyani.site/movies/ отвечает код 404 — листалка НЕ ИЗМЕРЕНА
+
+=== yummyani.biz
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /anime/)
+   page=349 (объявлена последней): код 200, карточек 0, meta: index, follow
+   page=99999: код 404, карточек 0, meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://yummyani.biz/catalog?page=1
+      (page=1 не переадресован, но canonical ведёт на https://yummyani.biz/catalog — дубль снят каноническим адресом, не переходом)
+   page=мусор: код 404, карточек 0, meta: noindex, follow
+  /movies/
+   раздела нет: https://yummyani.biz/movies/ отвечает код 404 — листалка НЕ ИЗМЕРЕНА
+
+=== yummyani.org
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /anime/)
+   page=349 (объявлена последней): код 200, карточек 0, meta: index, follow
+   page=99999: код 404, карточек 0, meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://yummyani.org/catalog?page=1
+      (page=1 не переадресован, но canonical ведёт на https://yummyani.org/catalog — дубль снят каноническим адресом, не переходом)
+   page=мусор: код 404, карточек 0, meta: noindex, follow
+  /movies/
+   раздела нет: https://yummyani.org/movies/ отвечает код 404 — листалка НЕ ИЗМЕРЕНА
+
+=== yummyani7.site
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /anime/)
+   page=349 (объявлена последней): код 200, карточек 0, meta: index, follow
+   page=99999: код 404, карточек 0, meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://yummyani7.site/catalog?page=1
+      (page=1 не переадресован, но canonical ведёт на https://yummyani7.site/catalog — дубль снят каноническим адресом, не переходом)
+   page=мусор: код 404, карточек 0, meta: noindex, follow
+  /movies/
+   раздела нет: https://yummyani7.site/movies/ отвечает код 404 — листалка НЕ ИЗМЕРЕНА
+
+=== yummyani7.info
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /anime/)
+   page=349 (объявлена последней): код 200, карточек 0, meta: index, follow
+   page=99999: код 404, карточек 0, meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://yummyani7.info/catalog?page=1
+      (page=1 не переадресован, но canonical ведёт на https://yummyani7.info/catalog — дубль снят каноническим адресом, не переходом)
+   page=мусор: код 404, карточек 0, meta: noindex, follow
+  /movies/
+   раздела нет: https://yummyani7.info/movies/ отвечает код 404 — листалка НЕ ИЗМЕРЕНА
+
+=== animedia.icu
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 48 (форма /title/)
+   page=172 (объявлена последней): код 200, карточек 28, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://animedia.icu/catalog/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 58 (форма /title/)
+   page=50 (объявлена последней): код 200, карточек 21, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://animedia.icu/movies/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+
+=== animeg0.site
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 24 (форма /title/)
+   page=362 (объявлена последней): код 200, карточек 10, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://animeg0.site/catalog/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 58 (форма /title/)
+   page=55 (объявлена последней): код 200, карточек 55, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://animeg0.site/movies/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+
+=== zonafilm.space
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 28 (форма /title/)
+   page=2418 (объявлена последней): код 200, карточек 5, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: index, follow; meta: index, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://zonafilm.space/catalog/
+   page=мусор: код 400, карточек 0, X-Robots-Tag: index, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 28 (форма /title/)
+   page=1277 (объявлена последней): код 200, карточек 18, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: index, follow; meta: index, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://zonafilm.space/movies/
+   page=мусор: код 400, карточек 0, X-Robots-Tag: index, follow
+
+=== zonafilm12.site
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 28 (форма /title/)
+   page=2418 (объявлена последней): код 200, карточек 5, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: index, follow; meta: index, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://zonafilm12.site/catalog/
+   page=мусор: код 400, карточек 0, X-Robots-Tag: index, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 28 (форма /title/)
+   page=1277 (объявлена последней): код 200, карточек 19, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: index, follow; meta: index, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://zonafilm12.site/movies/
+   page=мусор: код 400, карточек 0, X-Robots-Tag: index, follow
+
+=== lordfilm47.space
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 48 (форма /title/)
+   page=1411 (объявлена последней): код 200, карточек 1, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://lordfilm47.space/catalog/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 48 (форма /title/)
+   page=879 (объявлена последней): код 200, карточек 33, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://lordfilm47.space/movies/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+
+=== lordserials22.info
+  /catalog/
+   раздел есть: код 200, карточек на первой странице 48 (форма /title/)
+   page=1411 (объявлена последней): код 200, карточек 1, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://lordserials22.info/catalog/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+  /movies/
+   раздел есть: код 200, карточек на первой странице 48 (форма /title/)
+   page=747 (объявлена последней): код 200, карточек 38, X-Robots-Tag: index, follow; meta: index, follow
+   page=99999: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+      canonical: —
+   page=1:    код 200, итоговый адрес https://lordserials22.info/movies/
+   page=мусор: код 404, карточек 0, X-Robots-Tag: noindex, follow; meta: noindex, follow
+
+============================================================
+замечаний: 5
+  • yummyani.site/catalog/?page=349: витрина САМА объявляет эту страницу последней, а она отдаёт 200 и НОЛЬ карточек. Обходчик тратит бюджет на объявленную пустоту и она индексируется
+  • yummyani.biz/catalog/?page=349: витрина САМА объявляет эту страницу последней, а она отдаёт 200 и НОЛЬ карточек. Обходчик тратит бюджет на объявленную пустоту и она индексируется
+  • yummyani.org/catalog/?page=349: витрина САМА объявляет эту страницу последней, а она отдаёт 200 и НОЛЬ карточек. Обходчик тратит бюджет на объявленную пустоту и она индексируется
+  • yummyani7.site/catalog/?page=349: витрина САМА объявляет эту страницу последней, а она отдаёт 200 и НОЛЬ карточек. Обходчик тратит бюджет на объявленную пустоту и она индексируется
+  • yummyani7.info/catalog/?page=349: витрина САМА объявляет эту страницу последней, а она отдаёт 200 и НОЛЬ карточек. Обходчик тратит бюджет на объявленную пустоту и она индексируется
