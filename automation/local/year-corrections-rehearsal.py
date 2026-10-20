@@ -33,7 +33,7 @@ from pathlib import Path
 СНИМОК_ПОСТАВЩИКА = ИЗДАТЕЛЬ / "var/lords/lords/catalog-cache/lords-01.json"
 КЭШ_ПОДРОБНОСТЕЙ = ИЗДАТЕЛЬ / "var/lords/detail-cache"
 ПОПРАВКИ = КОРЕНЬ / "config/anime-year-corrections.json"
-ПАТЧ = КОРЕНЬ / "docs/handoff/year-corrections-nova-publish.patch"
+ПАТЧ = КОРЕНЬ / "var/patches/year-corrections-nova-publish.patch"
 МОДУЛЬ_ПОПРАВОК = КОРЕНЬ / "factory/lords/year_corrections.py"
 
 #: Записи, год которых сверка 20.10 подтвердила ВЕРНЫМ. Они обязаны остаться

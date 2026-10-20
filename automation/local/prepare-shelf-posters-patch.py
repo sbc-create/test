@@ -48,7 +48,7 @@ from pathlib import Path
 УСТАНОВЛЕНО = Path("/srv/zonafilm-space/current/src/collection_contract.py")
 #: Пути, которые выглядят установленными, но витриной не обслуживаются.
 ЛОВУШКИ = ("/app/", "/app.prev/", "/candidate/")
-ПАТЧ = КОРЕНЬ / "docs" / "handoff" / "shelf-posters-collection-contract.patch"
+ПАТЧ = КОРЕНЬ / "var" / "patches" / "shelf-posters-collection-contract.patch"
 
 ФУНКЦИЯ = '''
 

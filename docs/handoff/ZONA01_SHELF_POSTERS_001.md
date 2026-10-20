@@ -52,7 +52,7 @@
 python3 automation/local/prepare-shelf-posters-patch.py --verify
 ```
 
-Патч: `docs/handoff/shelf-posters-collection-contract.patch` (54 строки).
+Патч: `var/patches/shelf-posters-collection-contract.patch (собирается командой ниже)` (54 строки).
 Прогон 20.10 (`artifacts/evidence/shelf-posters-patch-20261020.txt`):
 
 * патч прикладывается к РАБОТАЮЩЕМУ
@@ -316,3 +316,11 @@ python3 automation/local/homepage-cards-audit.py --domain zonafilm.space
   `zonafilm.space` 7, `zonafilm12.site` 5, `lordserial33.biz` 14. Расхождение с
   моими 6 и 11 — подвижный состав полок, каждая заглушка проверена линией SEO
   вручную и подлинна.
+
+> **ПОЧЕМУ ПАТЧ НЕ ЛЕЖИТ В РЕПОЗИТОРИИ, А СОБИРАЕТСЯ КОМАНДОЙ.** Проверка
+> гигиены (`tests/unit/test_repo_hygiene.py::test_no_dle_core_patches`)
+> запрещает любые `.patch` в дереве, и она права: закоммиченный патч ПРОТИВ
+> живого файла устаревает молча — именно это со мной и случилось, когда патч
+> оказался собран против необслуживаемого дерева. Сборщик вместо этого читает
+> работающий файл заново, отказывается при неоднозначном якоре и печатает
+> выпуск, против которого собран. Ослаблять проверку ради удобства я не стал.

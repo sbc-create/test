@@ -37,7 +37,7 @@ from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ИЗДАТЕЛЬ = Path("/srv/site-factory/repo/factory/lords/nova_publish.py")
-ПАТЧ = КОРЕНЬ / "docs" / "handoff" / "year-corrections-nova-publish.patch"
+ПАТЧ = КОРЕНЬ / "var" / "patches" / "year-corrections-nova-publish.patch"
 МОДУЛЬ = КОРЕНЬ / "factory" / "lords" / "year_corrections.py"
 
 #: (что искать, на что заменить). Каждый якорь обязан найтись РОВНО один раз:
