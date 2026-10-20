@@ -111,3 +111,22 @@ def test_unknown_unit_and_taken_slug_are_deferred(isolated, tmp_path):
     isolated.ensure_content(content_id="other", slug="gorohovyj-sup-s-kopchenostyami", dedupe_key="other")
     res = set_import.run(write(tmp_path / "c", rec()), st=isolated)
     assert res["n_deferred"] == 1 and "занят" in res["deferred"][0]["reason"]
+
+
+def test_chicken_liver_is_everyday_dish_tagged_chicken_only_by_meat():
+    r = rec("b020", "Куриная печень с луком")
+    r["base"]["ingredients"] = [
+        {"name": "Куриная печень", "quantity": 500, "unit": "г"},
+        {"name": "Репчатый лук", "quantity": 2, "unit": "шт"},
+        {"name": "Соль", "quantity": None, "unit": "по вкусу"},
+    ]
+    p = set_import.to_payload(r)
+    assert p["draft"]["category"] == "vtorye-blyuda" and "kurica" in p["draft"]["tags"]
+    eggs = rec("b021", "Оладьи на кефире")
+    eggs["base"]["ingredients"] = [
+        {"name": "Куриные яйца", "quantity": 2, "unit": "шт"},
+        {"name": "Кефир", "quantity": 500, "unit": "мл"},
+        {"name": "Соль", "quantity": None, "unit": "по вкусу"},
+    ]
+    tags = set_import.to_payload(eggs)["draft"]["tags"]
+    assert "kurica" not in tags and "yajca" in tags

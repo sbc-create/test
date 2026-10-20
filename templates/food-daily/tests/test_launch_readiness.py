@@ -188,3 +188,13 @@ def test_images_require_rights(tmp_path):
     with pytest.raises(ValueError):
         views.load_images(site.by_slug, bad)
     assert views.load_images(site.by_slug) == {}  # сейчас изображений с правами нет — и ни одной подмены
+
+
+def test_chicken_search_is_meat_not_eggs(app):
+    """«курица» — мясо курицы; «куриное яйцо» — яйца (основа «кури» не должна склеивать их)."""
+    hits = app.site.search("курица")
+    assert hits and all("kurica" in r.tags for r in hits), [r.title for r in hits]
+    assert {r.slug for r in hits} == {r.slug for r in app.site.tag("kurica")}
+    eggs = {r.slug for r in app.site.search("куриное яйцо")}
+    assert eggs == {r.slug for r in app.site.search("яйцо")} and len(eggs) > len(hits) - 1
+    assert views.norm("Куриные яйца, куриный желток, куриная грудка") == "яйца желток куриная грудка"

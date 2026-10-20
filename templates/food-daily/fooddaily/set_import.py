@@ -32,6 +32,7 @@ from . import editorial
 from .pipeline import DB_PATH, VAR, open_store
 from .quality import publish_blockers
 from .store import Store, VersionConflict
+from .views import norm
 
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMA = json.loads((ROOT / "schemas" / "recipe-draft.schema.json").read_text())["properties"]["draft"]
@@ -90,7 +91,7 @@ TAG_STEMS = {
     "yajca": "яйц",
     "tykva": "тыкв",
     "pshyono": "пшен",
-    "kurica": "кур",
+    "kurica": r"\bкур(?:иц|ин|ятин)",
     "syr": "сыр",
     "farsh": "фарш",
     "chechevica": "чечевиц",
@@ -107,7 +108,8 @@ METHOD_STEMS = {"na-skovorode": "сковород", "v-duhovke": "духовк",
 TR = dict(
     zip(
         "абвгдеёжзийклмнопрстуфхцчшщыэюя",
-        "a b v g d e e zh z i j k l m n o p r s t u f h c ch sh shch y e yu ya".split(), strict=False,
+        "a b v g d e e zh z i j k l m n o p r s t u f h c ch sh shch y e yu ya".split(),
+        strict=False,
     )
 )
 TR.update({"ъ": "", "ь": ""})
@@ -194,7 +196,7 @@ def to_payload(rec: dict) -> dict:
 
 
 def norm_text(s: str) -> str:
-    return s.lower().replace("ё", "е")
+    return norm(s)  # «куриное яйцо» → «яйцо»: яйца не делают блюдо «с курицей»
 
 
 def backup(st: Store) -> Path:
