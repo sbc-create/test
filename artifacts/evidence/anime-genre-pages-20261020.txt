@@ -1,0 +1,31 @@
+animedia.icu     частей  1 адресов   8234 из них жанровых   1 | ссылок на жанры со хаба  56
+                  примеры: ['https://animedia.icu/genres/']
+animedia.space   частей  1 адресов   8233 из них жанровых   1 | ссылок на жанры со хаба  56
+                  примеры: ['https://animedia.space/genres/']
+animeg0.site     частей  1 адресов   9129 из них жанровых  55 | ссылок на жанры со хаба   0
+                  примеры: ['https://animeg0.site/catalog/?genre=Ai', 'https://animeg0.site/catalog/?genre=%D0%9C%D0%BE%D0%BB%D0%BE%D0%B4%D1%91%D0%B6%D0%BD%D0%BE%D0%B5']
+an1meg0.site     частей  1 адресов   8774 из них жанровых  55 | ссылок на жанры со хаба   0
+                  примеры: ['https://an1meg0.site/catalog/?genre=Ai', 'https://an1meg0.site/catalog/?genre=%D0%9C%D0%BE%D0%BB%D0%BE%D0%B4%D1%91%D0%B6%D0%BD%D0%BE%D0%B5']
+an1mego.site     частей  1 адресов   8775 из них жанровых  55 | ссылок на жанры со хаба   0
+                  примеры: ['https://an1mego.site/catalog/?genre=Ai', 'https://an1mego.site/catalog/?genre=%D0%9C%D0%BE%D0%BB%D0%BE%D0%B4%D1%91%D0%B6%D0%BD%D0%BE%D0%B5']
+animeg0.site   /genres/  код 308  ссылок на жанры   0
+animeg0.site   /         код 200  ссылок на жанры  12
+                 пример: /catalog/?genre=%D0%B1%D0%BE%D0%B5%D0%B2%D0%B8%D0%BA
+an1meg0.site   /genres/  код 308  ссылок на жанры   0
+an1meg0.site   /         код 200  ссылок на жанры  12
+                 пример: /catalog/?genre=%D0%B1%D0%BE%D0%B5%D0%B2%D0%B8%D0%BA
+an1mego.site   /genres/  код 308  ссылок на жанры   0
+an1mego.site   /         код 200  ссылок на жанры  12
+                 пример: /catalog/?genre=%D0%B1%D0%BE%D0%B5%D0%B2%D0%B8%D0%BA
+animedia.icu   /genres/  код 200  ссылок на жанры  57
+                 пример: /catalog/?genre=ai
+animedia.icu   /         код 200  ссылок на жанры  80
+                 пример: /?genre=ai#catalog
+genre=anime      код 200  robots 'index, follow'                canonical https://animedia.icu/catalog/?genre=anime
+              h1: 'Аниме'
+genre=boevik     код 200  robots 'index, follow'                canonical https://animedia.icu/catalog/?genre=boevik
+              h1: 'Боевик аниме'
+genre=demony     код 200  robots 'index, follow'                canonical https://animedia.icu/catalog/?genre=demony
+              h1: 'Демоны аниме'
+genre=komediya   код 200  robots 'index, follow'                canonical https://animedia.icu/catalog/?genre=komediya
+              h1: 'Комедия аниме'
