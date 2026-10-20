@@ -75,7 +75,7 @@ def главная(аргв: list[str] | None = None) -> int:
     домены = [д for д in домены if not д.endswith(".localhost")
               and not д.endswith(".localhost.test")]
     with ThreadPoolExecutor(max_workers=6) as пул:
-        ответы = dict(zip(домены, пул.map(живой, домены)))
+        ответы = dict(zip(домены, пул.map(живой, домены), strict=True))
 
     строки = []
     for д in домены:

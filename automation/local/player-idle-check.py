@@ -133,7 +133,7 @@ def главная(argv: list[str]) -> int:
     отказ = [з for з in линия
              if з.get("state_visible") or str(з.get("state")) in ОТКАЗНЫЕ]
     пересоздания = sum(
-        1 for а, б2 in zip(линия, линия[1:])
+        1 for а, б2 in zip(линия, линия[1:], strict=False)
         if а.get("state") in ("ready", "playing", "ok")
         and б2.get("state") == "resolving")
     print(f"пересозданий плеера (ready -> resolving): {пересоздания}")

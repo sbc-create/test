@@ -70,7 +70,7 @@ def главная() -> int:
               and not з["domain"].endswith(".localhost.test")]
     домены = [з["domain"] for з in ячейки]
     with ThreadPoolExecutor(max_workers=6) as пул:
-        живые = dict(zip(домены, пул.map(живой, домены)))
+        живые = dict(zip(домены, пул.map(живой, домены), strict=True))
 
     расхождений = 0
     устаревших = 0
