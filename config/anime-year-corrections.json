@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-10-20",
+  "note": "Записи пишет проход automation/local/catalog-year-source-audit.py по ИЗМЕРЕННЫМ расхождениям (--write-corrections); вручную год здесь не появляется. Применяет их сборка каталога (factory/lords/year_corrections.py), ключ — постоянный id записи поставщика, а не слаг. Поправка не применяется, если поставщик сменил значение после замера: он мог исправиться сам, возможно на третье значение.",
+  "why": "Год приезжает из ответа поставщика и у продолжений несёт дату ПЕРВОЙ части франшизы: у rukovodstvo-soten-demonov-4 поставщик даёт 2020 (premiere_date 2020-04-25), источник — aired_on 2024-02-23. Витрина печатает этот год сама (заголовок «аниме-сериал 2020 года» и ссылка на /catalog/?year=2020), а редакционные ворота ТРЕБУЮТ назвать снимковый год в тексте — то есть неверный год заставляет автора написать ложный факт. Снимок витрины приезжает доставкой целиком и правку в себе не удержит, а ответ поставщика нам не принадлежит.",
+  "corrections": [
+    {
+      "id": "01915137-08cf-70dc-a6da-8112a299c879",
+      "slug_at_measure": "skazaniya-o-demonah-i-bogah-8",
+      "source_id": "58744",
+      "source_url": "https://shikimori.io/animes/58744",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2024-04-30",
+      "year_provider": 2017,
+      "year_source": 2024
+    },
+    {
+      "id": "01915137-3fd5-7232-80f6-a9acbad98005",
+      "slug_at_measure": "strana-desyati-tysyach-chudes-5",
+      "source_id": "49305",
+      "source_url": "https://shikimori.io/animes/49305",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2021-06-26",
+      "year_provider": 2018,
+      "year_source": 2021
+    },
+    {
+      "id": "0191514f-ec9f-7187-a624-af66cf51755d",
+      "slug_at_measure": "raskolotaya-bitvoy-sineva-nebes-5",
+      "source_id": "51039",
+      "source_url": "https://shikimori.io/animes/51039",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2022-07-31",
+      "year_provider": 2017,
+      "year_source": 2022
+    },
+    {
+      "id": "01915277-6852-7289-9497-30d35a54f60b",
+      "slug_at_measure": "mozhet-ya-vstrechu-tebya-v-podzemele-4",
+      "source_id": "47164",
+      "source_url": "https://shikimori.io/animes/47164",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2022-07-23",
+      "year_provider": 2015,
+      "year_source": 2022
+    },
+    {
+      "id": "01918cd7-61fd-75e3-8410-67fe2f763a0d",
+      "slug_at_measure": "rukovodstvo-soten-demonov-4",
+      "source_id": "57995",
+      "source_url": "https://shikimori.io/animes/57995",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2024-02-23",
+      "year_provider": 2020,
+      "year_source": 2024
+    },
+    {
+      "id": "01919eab-eb69-776b-bf20-8b3d815ef62d",
+      "slug_at_measure": "yami-shibai-yaponskie-rasskazy-o-privideniyah-13",
+      "source_id": "59010",
+      "source_url": "https://shikimori.io/animes/59010",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2024-07-15",
+      "year_provider": 2013,
+      "year_source": 2024
+    },
+    {
+      "id": "019206f5-4b99-7bc4-9988-803dfe95ecaa",
+      "slug_at_measure": "vpechatleniya-ot-gor-i-vod",
+      "source_id": "13755",
+      "source_url": "https://shikimori.io/animes/13755",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "1988-01-01",
+      "year_provider": 2004,
+      "year_source": 1988
+    },
+    {
+      "id": "01921527-9321-796d-9184-08e32ce3c7f8",
+      "slug_at_measure": "legenda-o-kristanii",
+      "source_id": "515",
+      "source_url": "https://shikimori.io/animes/515",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "1995-07-29",
+      "year_provider": 1996,
+      "year_source": 1995,
+      "type_provider": "tv",
+      "type_source": "movie"
+    },
+    {
+      "id": "01921ba4-e441-7e02-9dac-efcb07e94bee",
+      "slug_at_measure": "drakoniy-zhemchug-kay-2014",
+      "source_id": "22777",
+      "source_url": "https://shikimori.io/animes/22777",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2014-04-06",
+      "year_provider": 2009,
+      "year_source": 2014
+    },
+    {
+      "id": "0192641b-5b54-7f13-9bcf-b5cebce04ebb",
+      "slug_at_measure": "kulak-severnoy-zvezdy-rao",
+      "source_id": "2174",
+      "source_url": "https://shikimori.io/animes/2174",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2007-04-28",
+      "type_provider": "tv",
+      "type_source": "movie"
+    },
+    {
+      "id": "01927c93-4590-7db3-8190-3806adea0899",
+      "slug_at_measure": "utrachennoe-nebesami-tv-2",
+      "source_id": "8407",
+      "source_url": "https://shikimori.io/animes/8407",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2010-10-02",
+      "year_provider": 2009,
+      "year_source": 2010
+    },
+    {
+      "id": "019288d2-f0c0-7391-9faa-222ef79da76e",
+      "slug_at_measure": "zabyt-proshloe-5",
+      "source_id": "1071",
+      "source_url": "https://shikimori.io/animes/1071",
+      "measured_at": "2026-10-20T13:39:06Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2006-03-29",
+      "year_provider": 1909,
+      "year_source": 2006
+    },
+    {
+      "id": "0192979d-14f6-7b5e-badb-c2a84e9d0c1f",
+      "slug_at_measure": "restoran-mnogih-zakazov",
+      "source_id": "4095",
+      "source_url": "https://shikimori.io/animes/4095",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "1991-01-01",
+      "year_provider": 1993,
+      "year_source": 1991
+    },
+    {
+      "id": "019be0da-430c-7052-a0c5-cfe43df50d64",
+      "slug_at_measure": "legenda-o-geroe-kondore-ii",
+      "source_id": "960",
+      "source_url": "https://shikimori.io/animes/960",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "2004-11-13",
+      "year_provider": 2005,
+      "year_source": 2004
+    },
+    {
+      "id": "01a12aca-bd23-75fa-bbed-b5bd0eb257c5",
+      "slug_at_measure": "daykon-iv",
+      "source_id": "2724",
+      "source_url": "https://shikimori.io/animes/2724",
+      "measured_at": "2026-10-20T13:39:10Z",
+      "matching": "external_id_from_record+title_verified",
+      "aired_on": "1981-08-22",
+      "year_provider": 1983,
+      "year_source": 1981
+    }
+  ]
+}

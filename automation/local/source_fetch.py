@@ -86,6 +86,43 @@ def _get(url: str, timeout: int = 20) -> tuple[int | None, bytes]:
         return None, b""
 
 
+def shikimori_card(anime_id: int) -> dict:
+    """ОДИН запрос: карточка без официальных ссылок.
+
+    Зачем отдельно от `shikimori`. Полное чтение делает ДВА обращения к
+    источнику (карточка и `external_links`), и при сверке сотен записей это
+    удваивает нагрузку на него впустую: год, вид и названия лежат в карточке.
+    Сверка года (`automation/local/catalog-year-source-audit.py`) зовёт именно
+    эту функцию. Путь остаётся штатным: тот же хост, тот же User-Agent, та же
+    запись в `var/editor-runs/sources.jsonl`.
+    """
+    status, raw = _get(f"{SHIKIMORI}/api/animes/{anime_id}")
+    _log(source="src-shikimori", url=f"{SHIKIMORI}/api/animes/{anime_id}", status=status)
+    if status != 200:
+        return {"ok": False, "status": status}
+    d = json.loads(raw)
+    desc = re.sub(r"\[[^\]]+\]", "", d.get("description") or "").strip()
+    return {
+        "ok": True,
+        "source_id": "src-shikimori",
+        "url": f"{SHIKIMORI}/animes/{anime_id}",
+        "russian": d.get("russian"),
+        "name": d.get("name"),
+        "kind": d.get("kind"),
+        "status": d.get("status"),
+        "episodes": d.get("episodes"),
+        "episodes_aired": d.get("episodes_aired"),
+        "aired_on": d.get("aired_on"),
+        "released_on": d.get("released_on"),
+        "description": desc or None,
+        "english": d.get("english"),
+        "japanese": d.get("japanese"),
+        "synonyms": d.get("synonyms"),
+        "license_name_ru": d.get("license_name_ru"),
+        "studios": [x.get("name") for x in d.get("studios") or []],
+    }
+
+
 def shikimori(anime_id: int) -> dict:
     status, raw = _get(f"{SHIKIMORI}/api/animes/{anime_id}")
     _log(source="src-shikimori", url=f"{SHIKIMORI}/api/animes/{anime_id}", status=status)

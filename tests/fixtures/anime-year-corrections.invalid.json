@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "corrections": [
+    {
+      "id": "01918cd7-61fd-75e3-8410-67fe2f763a0d",
+      "slug_at_measure": "rukovodstvo-soten-demonov-4",
+      "year_source": 2024
+    },
+    {
+      "id": "0191514f-0000-7000-8000-000000000001",
+      "source_url": "https://shikimori.io/animes/40000",
+      "measured_at": "2026-10-20T13:41:00Z",
+      "matching": "external_id_from_record+title_verified",
+      "type_source": "ona"
+    }
+  ]
+}
