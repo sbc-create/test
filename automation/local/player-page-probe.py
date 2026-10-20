@@ -29,6 +29,7 @@ from __future__ import annotations
 import argparse
 import glob
 import json
+import pathlib
 import re
 import sys
 
@@ -160,7 +161,9 @@ def main(аргв: list[str] | None = None) -> int:
 
     адреса = list(дов.url)
     if дов.file:
-        адреса += [с.strip() for с in open(дов.file, encoding="utf-8")
+        адреса += [с.strip() for с
+                   in pathlib.Path(дов.file).read_text(
+                       encoding="utf-8").splitlines()
                    if с.strip() and not с.startswith("#")]
     if not адреса:
         print("НЕ ИЗМЕРЕНО: адреса не переданы")

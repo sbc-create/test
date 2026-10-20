@@ -84,7 +84,11 @@ def main() -> int:
     for ф in Path(а.data).glob(f"{а.site}-*.json"):
         shutil.copy(ф, данные / ф.name)
 
-    журнал = open(врем / "runtime.log", "w", encoding="utf-8")
+    # Ручка живёт дольше любого блока намеренно: её получает Popen и
+    # пишет в неё всё время работы витрины. Контекстный менеджер
+    # закрыл бы журнал сразу после запуска, и в нём не осталось бы
+    # ничего, кроме первых строк.
+    журнал = open(врем / "runtime.log", "w", encoding="utf-8")  # noqa: SIM115
     проц = subprocess.Popen(
         [sys.executable, str(проект / "src" / конфиг["entrypoint"]),
          "--port", str(а.port)],
