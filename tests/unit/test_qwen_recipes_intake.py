@@ -172,3 +172,15 @@ def test_unknown_layout_is_blocked_input_not_guessed(tmp_path):
     (tmp_path / "x" / "recipes.json").write_text(json.dumps([{"name": "что-то"}]))
     res = intake.plan(intake.read_set(tmp_path / "x"), EXISTING)
     assert res["status"] == "BLOCKED_INPUT" and res["inspect"]["json_files"] == 1
+
+
+def test_liver_is_not_baking():
+    """«печень» (субпродукт) ≠ «печенье»: куриная печень — повседневное блюдо bestreciept.site."""
+    liver = base(
+        "b050", "Куриная печень с луком", ["Обжарьте печень с луком 10 минут."], [("Печень", 500)]
+    )
+    v = variant(liver, "V1")
+    assert intake.route(liver, v) == "bestreciept.site"
+    for title in ("Овсяное печенье", "Печенья с изюмом", "Ассорти печений"):
+        b = base("b051", title, ["Смешайте тесто."], [("Мука", 200)])
+        assert intake.route(b, variant(b, "V1")) == "myfood.mobi", title
