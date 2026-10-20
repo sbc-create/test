@@ -163,4 +163,5 @@ def test_устаревший_отзыв_помечается_а_не_выдаё
 
 
 def test_перечень_вердиктов_объявлен():
-    assert ED.ВЕРДИКТЫ == {"accepted", "accepted_with_notes", "rejected"}
+    assert set(ED.ВЕРДИКТЫ) == {"accepted", "accepted_with_notes",
+                                "rejected"}
