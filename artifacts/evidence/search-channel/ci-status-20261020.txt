@@ -1,0 +1,19 @@
+репозиторий              голова         состояние    итог      прогон
+1lordserials1-online     d1627b4b7eaa   completed    success   38801077228
+an1meg0-site             51d0e9b3536e   completed    success   39155373970
+an1mego-site             70b141ecd6b8   completed    success   39123253200
+animedia-icu             55c7b719a5df   completed    success   39213961397
+animedia-space           80b24f23a514   completed    success   39222881462
+animeg0-site             7185a60a6585   completed    success   39156139415
+lordfilm077-site         d3239fb2d30e   completed    success   38326485593
+lordfilm47-space         479698c0480b   completed    success   39224346776
+lordserial101-site       b481c70201ad   completed    success   38326496153
+lordserial33-biz         1a95500d3935   completed    success   39221144003
+lordserials22-info       2d8237f8fea7   completed    success   38898282936
+lordserials22-site       bd6bbf8f294f   completed    success   38326510639
+lordserials22-space      d2b8fc59cbcf   completed    success   38326513113
+zonafilm-cc              0860d0ac552a   прогона на голове нет 
+zonafilm-space           a79b543a0f56   completed    success   39382812467
+zonafilm12-site          fae37223a556   completed    success   39378585970
+
+репозиториев 16, зелёных прогонов на голове 15
