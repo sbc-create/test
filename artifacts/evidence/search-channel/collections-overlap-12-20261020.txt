@@ -1,0 +1,46 @@
+zonafilm12.site: подборок в разделе /collections/ 12
+   recently_added             «Подборка «Недавно добавленные»  » карточек  60 страниц   259 robots index, follow
+   recently_added_movies      «Подборка «Недавно добавленные   » карточек  60 страниц   188 robots index, follow
+   new_movie_releases         «Подборка «Премьеры фильмов»     » карточек  60 страниц    25 robots index, follow
+   new_series_releases        «Подборка «Новые сериалы»        » карточек  60 страниц    22 robots index, follow
+   new_episodes               «Подборка «Недавно добавленные   » карточек  60 страниц    38 robots index, follow
+   top_rated                  «Подборка «Высокие оценки»       » карточек  60 страниц   969 robots index, follow
+   current_season             «Подборка «Этого года»           » карточек  60 страниц    47 robots index, follow
+   video_available            «Подборка «С видео»              » карточек  60 страниц  1109 robots index, follow
+   genre_comedy               «Подборка «Комедии»              » карточек  60 страниц   307 robots index, follow
+   genre_drama                «Подборка «Драмы»                » карточек  60 страниц   456 robots index, follow
+   genre_thriller             «Подборка «Триллеры»             » карточек  60 страниц   199 robots index, follow
+   genre_animation            «Подборка «Анимация»             » карточек  60 страниц   102 robots index, follow
+
+пересечения первых страниц (доля общего от меньшего набора):
+   top_rated                ↔ video_available          общих  50 из  60   83.3 %  ПОЧТИ ОДНО И ТО ЖЕ
+   recently_added           ↔ recently_added_movies    общих  48 из  60   80.0 %  ПОЧТИ ОДНО И ТО ЖЕ
+   current_season           ↔ new_movie_releases       общих  42 из  60   70.0 %  ПОЧТИ ОДНО И ТО ЖЕ
+   genre_drama              ↔ recently_added_movies    общих  31 из  60   51.7 %
+   genre_drama              ↔ recently_added           общих  27 из  60   45.0 %
+   current_season           ↔ new_series_releases      общих  18 из  60   30.0 %
+   genre_comedy             ↔ recently_added           общих  14 из  60   23.3 %
+   current_season           ↔ new_episodes             общих  13 из  60   21.7 %
+   genre_comedy             ↔ new_episodes             общих  13 из  60   21.7 %
+   new_episodes             ↔ new_series_releases      общих  13 из  60   21.7 %
+   current_season           ↔ genre_thriller           общих  10 из  60   16.7 %
+   genre_comedy             ↔ recently_added_movies    общих   9 из  60   15.0 %
+   genre_thriller           ↔ new_movie_releases       общих   9 из  60   15.0 %
+   genre_animation          ↔ genre_comedy             общих   7 из  60   11.7 %
+   new_episodes             ↔ recently_added           общих   7 из  60   11.7 %
+   current_season           ↔ genre_comedy             общих   6 из  60   10.0 %
+   genre_animation          ↔ recently_added           общих   5 из  60    8.3 %
+   genre_comedy             ↔ genre_thriller           общих   4 из  60    6.7 %
+   genre_comedy             ↔ new_series_releases      общих   4 из  60    6.7 %
+   genre_comedy             ↔ genre_drama              общих   3 из  60    5.0 %
+   genre_drama              ↔ genre_thriller           общих   3 из  60    5.0 %
+   genre_thriller           ↔ recently_added           общих   3 из  60    5.0 %
+   genre_thriller           ↔ recently_added_movies    общих   3 из  60    5.0 %
+   genre_animation          ↔ genre_drama              общих   2 из  60    3.3 %
+   genre_comedy             ↔ new_movie_releases       общих   2 из  60    3.3 %
+   genre_thriller           ↔ new_episodes             общих   1 из  60    1.7 %
+   genre_thriller           ↔ new_series_releases      общих   1 из  60    1.7 %
+   new_series_releases      ↔ top_rated                общих   1 из  60    1.7 %
+   new_series_releases      ↔ video_available          общих   1 из  60    1.7 %
+
+пар с пересечением 70 % и выше: 3
