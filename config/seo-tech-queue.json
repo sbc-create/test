@@ -7435,8 +7435,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space."
+      "status": "live_verified",
+      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space. | 20.10 12:03Z живая проверка SEO: /collection/video_available/ и ?page=3 → 301 /catalog/ (без ?page); без слэша → 308 на слэш → 301; /collections/ 200, «11 подборок», ссылок 11, video_available нет; на главной и во всех частях sitemap.xml video_available 0; /catalog/, top_rated, recently_added — 200, index, follow, canonical на себя (отрицательный контроль). queue-vs-live.py --only T286 (wt-nova-02) — ЗАКРЫТО. zonafilm12.site и zonafilm.cc не тронуты (12 подборок, video_available в разделе) — перенос после канарейки."
     },
     {
       "id": "T287",
@@ -7457,9 +7457,8 @@
           "status": 200
         }
       ],
-      "status": "blocked",
-      "owner_action": "после live_verified T286 (тот же репозиторий zonafilm-space — иначе SUPERSEDED)",
-      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space."
+      "status": "queued",
+      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space. | 20.10 12:03Z: T286 live_verified — блокировка снята. База «до»: общих с recently_added_movies на стр. 1 — 48 из 60 (80.0 %, queue-vs-live.py)."
     }
   ]
 }
