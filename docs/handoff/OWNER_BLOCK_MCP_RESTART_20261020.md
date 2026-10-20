@@ -19,7 +19,18 @@
 
 ## Действия (на claude-control-01)
 
+**Устанавливаемая версия:**
+- рабочая копия `/home/claude/wt-portable-site-cell-01`, ветка `claude/nova-publish-memory-01`;
+- последняя правка кода `factory/` — коммит `4ff8f356218145c1b691ec12792a3f1e605f1be2` (19.10 16:32Z, замок публикации). Более поздние коммиты ветки меняют только документы и очередь;
+- `factory/qwen/editorial.py` sha256 `651c45b97b511ddfd981439a8cea6df0fb2c5242869680bdbf697d5527a7acd3`;
+- `factory/qwen/mcp.py` sha256 `af602c772c5cb41986ab6f404e49843f22ee06616965e7eaf40ae335aa5cfcf2`.
+
 ```bash
+# 0. Версия: код, который возьмёт служба (ожидание — 4ff8f35…, factory без незакоммиченных правок, хэши как выше)
+git -C /home/claude/wt-portable-site-cell-01 log -1 --format='%H %cI' -- factory/
+git -C /home/claude/wt-portable-site-cell-01 status --short -- factory/      # ожидание: пусто
+sha256sum /home/claude/wt-portable-site-cell-01/factory/qwen/editorial.py /home/claude/wt-portable-site-cell-01/factory/qwen/mcp.py
+
 # 1. До: что перезапускаем и что ничего не идёт
 systemctl show -p MainPID,ActiveState,ExecMainStartTimestamp site-factory-mcp
 systemctl cat site-factory-mcp | grep -n 'ExecStart'          # ожидание: последняя ExecStart — без --read-only
