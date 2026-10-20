@@ -23,6 +23,7 @@ case "${1:-help}" in
   restart) bash "$HERE/bin/food-baking" stop; bash "$HERE/bin/food-baking" start ;;
   status) if alive; then echo "работает, pid $(cat "$PIDFILE")"; health; else echo "не запущен"; exit 3; fi ;;
   kit) shift; exec python3 -m bakebook.kit "$@" ;;   # комплект переноса: build --out <каталог> | verify-db
+  set-import) shift; exec python3 -m bakebook.set_import "$@" ;;  # партия набора Qwen из приёмника: --dry-run | --limit N
   test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" --basetemp "$REPO/var/food-baking/pytest" "$HERE/tests" "$@" ;;
   *) echo "команды: import drafts audit build editor-init start stop restart status test" ;;
 esac

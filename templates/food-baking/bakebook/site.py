@@ -23,6 +23,7 @@ GROUPS = {
     "tort": "Торты",
     "bulochki": "Булочки",
     "sloyki": "Слойки",
+    "deserty": "Десерты",
 }
 TAGS = {
     "limon": "Лимон",
