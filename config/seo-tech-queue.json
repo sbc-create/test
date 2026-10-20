@@ -7407,6 +7407,59 @@
       "status": "blocked",
       "evidence": "20.10 сигнал wt-nova-publish-memory-02 (MOD-99, коммит 155e422) и сверка SEO-сессии: после T284 ведущая полка «Сейчас на Zona» на https://zonafilm.space/ содержит карточку /title/facing-grizzlies/ с буквой-заглушкой вместо изображения (span.zt__none «F»). В данных zona-01 у записи poster=None (catalog) и poster_url=None (details). При этом src/lords-frontend.py, _герои_кандидаты → взять(з), прямо пропускает записи без постера («Запись без постера дала бы пустой слайд») — значит, путь отбора, перенесённый T284 (release_novelty), это правило обходит. Масштаб: 1 карточка из 16 на zonafilm.space; zonafilm12.site и zonafilm.cc — 0. | 20.10 07:50Z ПОПРАВКА СЕССИИ: замер разметки главной показал, что /title/facing-grizzlies/ стоит в полке «Высокие оценки недели» (IMDb 8.4, 2022), а не в «Сейчас на Zona» (в её сегменте 0 вхождений). Эту полку T284 не трогала; правило «без постера не брать» в коде относится к слайдеру/героям (_герои_кандидаты), для обычных полок буква-заглушка zt__none — штатное оформление. Дефекта выпуска T284 нет; запись без постера и русского названия — вопрос данных zona-01 (MOD-99), не задача исполнителю.",
       "owner_action": "снята сессией 07:50Z: предпосылка неверна — карточка не в ведущей полке"
+    },
+    {
+      "id": "T286",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/collection/video_available/",
+        "https://zonafilm.space/collections/"
+      ],
+      "problem": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space. /collection/video_available/ («С видео», 66 525 = 98 % каталога, 1 109 страниц) отбирает по полю playable, которое на Zona не описывает доступность (MOD-97: ≈94 % ошибок по играющим, 1 подтверждённый неиграющий) — обещание подборки ложно; пересечение с top_rated по страницам 1/2/5/10 — 50/43/23/13 из 60.",
+      "norm": "Индексируемая страница не обещает того, чего не проверяет; подтверждённый дубль без своей задачи объединяется с сохранением переходов (Яндекс: дубли; SEO_KNOWLEDGE_PACK §3).",
+      "expected": "src/collection_contract.py и маршрутизация zonafilm.space: /collection/video_available/ и все её страницы (?page=N) — 301 на /catalog/ БЕЗ переноса ?page (порядок каталога другой); подборка убрана из раздела /collections/ и из блока главной; описание раздела «12 подборок» → «11», перечень ссылок совпадает с числом; остальные 11 подборок — без изменений (отрицательный контроль). Проверка: 301 и Location; раздел — 11 ссылок и «11 подборок»; collections-overlap.py zonafilm.space --from-index — код 0 по этой паре.",
+      "check": "checks/collections_video_available_removed.py",
+      "verify_live": "/collection/video_available/ и ?page=5 → 301 на /catalog/; /collections/ — «11 подборок», ссылки на video_available нет",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/collections/",
+          "status": 200,
+          "absent": [
+            "/collection/video_available/"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/collection/top_rated/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space."
+    },
+    {
+      "id": "T287",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/collection/recently_added/"
+      ],
+      "problem": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space. recently_added_movies (11 250) — подмножество recently_added (15 501); первые страницы совпадают 48/34/15/0 из 60 по стр. 1/2/5/10: на первом экране общей подборки — почти та же выдача, что у отдельной индексируемой подборки фильмов.",
+      "norm": "Разные зрительские задачи (всё новое / только фильмы / только сериалы — new_episodes) — разные выдачи; дубль первого экрана лечится порядком, без смены адресов и 301 (решение Архитектора, вариант б).",
+      "expected": "src/collection_contract.py zonafilm.space: порядок recently_added — чередование видов (фильм/сериал) по published_at внутри каждого вида; отбор (90 дней) и адреса не меняются; recently_added_movies, new_episodes и прочие — без изменений. Проверка на копии снимка: пересечение первых страниц recently_added и recently_added_movies ≤ 30 % на страницах 1–2 (было 80 %/57 %); база rc=1, ветка rc=0.",
+      "check": "checks/collections_recent_interleave.py",
+      "verify_live": "пересечение /collection/recently_added/ и /collection/recently_added_movies/ на стр. 1 ≤ 18 из 60",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/collection/recently_added/",
+          "status": 200
+        }
+      ],
+      "status": "blocked",
+      "owner_action": "после live_verified T286 (тот же репозиторий zonafilm-space — иначе SUPERSEDED)",
+      "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space."
     }
   ]
 }
