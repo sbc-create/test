@@ -1,0 +1,119 @@
+
+===== семейство animedia
+
+--- animedia.icu ↔ animedia.space
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 114 из 218 (52 %)
+  слова главной:  66 % общих
+    /title/ao-asi-2/season-2/episode-3/            title = h1 =
+    /title/bezzhalostnaya-ledi-niya-liston-mini-an title = h1 =
+    /title/blestyaschaya-komanda-3/                title = h1 =
+
+===== семейство animego
+
+--- animeg0.site ↔ an1meg0.site
+  title        СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo — аниме онлайн»
+  description  СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo: расписание эфира, обновления серий и каталог аниме с оценками.»
+  h1           СОВПАДАЕТ ДОСЛОВНО
+               «Аниме осеннего сезона»
+  адреса главной: общих 85 из 127 (67 %)
+  слова главной:  71 % общих
+    /title/ao-asi-2/                               title = h1 =
+    /title/beybleyd-x/                             title = h1 =
+    /title/bezzhalostnaya-ledi-niya-liston-edinstv title = h1 =
+
+--- animeg0.site ↔ an1mego.site
+  title        СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo — аниме онлайн»
+  description  СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo: расписание эфира, обновления серий и каталог аниме с оценками.»
+  h1           СОВПАДАЕТ ДОСЛОВНО
+               «Аниме осеннего сезона»
+  адреса главной: общих 85 из 127 (67 %)
+  слова главной:  71 % общих
+    /title/ao-asi-2/                               title = h1 =
+    /title/beybleyd-x/                             title = h1 =
+    /title/bezzhalostnaya-ledi-niya-liston-edinstv title = h1 =
+
+--- an1meg0.site ↔ an1mego.site
+  title        СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo — аниме онлайн»
+  description  СОВПАДАЕТ ДОСЛОВНО
+               «AnimeGo: расписание эфира, обновления серий и каталог аниме с оценками.»
+  h1           СОВПАДАЕТ ДОСЛОВНО
+               «Аниме осеннего сезона»
+  адреса главной: общих 102 из 102 (100 %)
+  слова главной:  99 % общих
+    /title/ao-asi-2/                               title = h1 =
+    /title/beybleyd-x/                             title = h1 =
+    /title/bezzhalostnaya-ledi-niya-liston-edinstv title = h1 =
+
+===== семейство zona
+
+--- zonafilm.cc ↔ zonafilm.space
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 5 из 146 (3 %)
+  слова главной:  11 % общих
+    /title/andegraundnye-filmy-uzhasov/            title ≠ h1 =
+    /title/desyat-tysyach-prichin-dlya-mesti/      title ≠ h1 =
+    /title/moya-doch-propala/                      title ≠ h1 =
+
+--- zonafilm.cc ↔ zonafilm12.site
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 8 из 143 (6 %)
+  слова главной:  13 % общих
+    /title/andegraundnye-filmy-uzhasov/            title ≠ h1 =
+    /title/desyat-tysyach-prichin-dlya-mesti/      title ≠ h1 =
+    /title/moya-doch-propala/                      title ≠ h1 =
+
+--- zonafilm.space ↔ zonafilm12.site
+  title        СОВПАДАЕТ ДОСЛОВНО
+               «Zona Cinema — кинопортал»
+  description  СОВПАДАЕТ ДОСЛОВНО
+               «Zona Cinema: фильмы, сериалы и анимация — высокие оценки недели, недавние поступления и ка»
+  h1           различается
+  адреса главной: общих 33 из 95 (35 %)
+  слова главной:  57 % общих
+    /title/aghori/                                 title = h1 =
+    /title/andegraundnye-filmy-uzhasov/            title = h1 =
+    /title/desyat-tysyach-prichin-dlya-mesti/      title = h1 =
+
+===== семейство yummy
+
+--- yummyani.site ↔ yummyani.org
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 62 из 72 (86 %)
+  слова главной:  60 % общих
+    /anime/ao-asi-2                                title = h1 =
+    /anime/avatar-korolya-2017                     title = h1 =
+    /anime/bezzhalostnaya-ledi-niya-liston-mini-an title = h1 =
+
+--- yummyani.site ↔ yummyani.biz
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 63 из 73 (86 %)
+  слова главной:  72 % общих
+    /anime/ao-asi-2                                title = h1 =
+    /anime/avatar-korolya-2017                     title = h1 =
+    /anime/bezzhalostnaya-ledi-niya-liston-mini-an title = h1 =
+
+--- yummyani.org ↔ yummyani.biz
+  title        различается
+  description  различается
+  h1           различается
+  адреса главной: общих 60 из 66 (91 %)
+  слова главной:  62 % общих
+    /anime/ao-asi-2                                title = h1 =
+    /anime/avatar-korolya-2017                     title = h1 =
+    /anime/bezzhalostnaya-ledi-niya-liston-mini-an title = h1 =
