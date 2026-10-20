@@ -1,0 +1,70 @@
+черновиков без публикации на своём домене: 34
+
+домен             слаг                             занят на              ворота
+1lordserials1.online chrezvychayno-angliyskiy-skandal   — свободно                     verified/0  подготовлен 2026-10-19T06:06:19Z  ключ chrezvychayno-anglysky-skand
+                  источники: ['https://ru.wikipedia.org/wiki/Чрезвычайно_английский_скандал', 'snapshot:/srv/lords/.frontend/lords-03-details.json']
+animedia.icu      rukovodstvo-soten-demonov-4        — свободно                     prepared/1  подготовлен 2026-10-15T02:27:38Z  ключ rukovodstvo-soten-demonov-4
+                  источники: ['https://shikimori.io/animes/57995', 'https://shikimori.io/mangas/172546']
+animedia.space    reyting-korolya-sunduk-s-sokrovi   — свободно                     prepared/1  подготовлен 2026-10-16T20:51:00Z  ключ reyting-korolya-sunduk-s-sok
+                  источники: ['https://shikimori.io/animes/52657', 'https://osama-ranking-treasurechest.com']
+animeg0.site      rukovodstvo-soten-demonov-4        — свободно                     prepared/1  подготовлен 2026-10-13T23:54:12Z  ключ rukovodstvo-soten-demonov-4
+                  источники: ['https://shikimori.io/animes/57995', 'https://animeg0.site/title/rukovodstvo-soten-demonov-4/']
+lordfilm47.space  csi-mesto-prestupleniya-nyu-york   — свободно                     verified/0  подготовлен 2026-10-19T05:50:34Z  ключ csi-mesto-prestuplenya-nyu-e
+                  источники: ['https://en.wikipedia.org/wiki/CSI:_NY', 'snapshot:/srv/lords/.frontend/lords-01-details.json']
+lordfilm47.space  oh-uzh-eti-detki                   — свободно                     verified/0  подготовлен 2026-10-19T05:51:05Z  ключ oh-uzh-eti-detki
+                  источники: ['https://en.wikipedia.org/wiki/Rugrats_(2021_TV_series)', 'snapshot:/srv/lords/.frontend/lords-01-details.json']
+lordfilm47.space  igra-smerti-4                      — свободно                     verified/0  подготовлен 2026-10-19T05:51:38Z  ключ igra-smerti-4
+                  источники: ['https://en.wikipedia.org/wiki/Death%27s_Game', 'snapshot:/srv/lords/.frontend/lords-01-details.json']
+lordfilm47.space  shaman-king-2021                   — свободно                     verified/0  подготовлен 2026-10-19T16:08:09Z  ключ shaman-king-2021
+                  источники: ['https://shikimori.io/animes/42205']
+lordserial33.biz  1-11                               — свободно                     verified/0  подготовлен 2026-10-01T18:54:59Z  ключ 1-11
+lordserial33.biz  pravila-sovmestnoy-zhizni          — свободно                     verified/0  подготовлен 2026-10-19T05:41:16Z  ключ pravila-sovmestnoy-zhizni
+                  источники: ['https://ru.wikipedia.org/wiki/Правила_совместной_жизни', 'snapshot:/srv/lords/.frontend/lords-02-details.json']
+lordserial33.biz  volshebnyy-domik-gabbi-v-kino      — свободно                     verified/0  подготовлен 2026-10-19T05:50:50Z  ключ volshebny-domik-gabbi-v-kino
+                  источники: ['https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино', 'snapshot:/srv/lords/.frontend/lords-02-details.json']
+lordserial33.biz  holodnaya-reka                     — свободно                     verified/0  подготовлен 2026-10-19T06:09:17Z  ключ holodnaya-reka
+                  источники: ['https://en.wikipedia.org/wiki/So_Cold_the_River', 'snapshot:/srv/lords/.frontend/lords-02-details.json']
+yummyani.biz      iz-odnoy-komnaty-2                 — свободно                     prepared/2  подготовлен 2026-10-20T07:49:10Z  ключ iz-odnoy-komnaty-2
+                  источники: ['https://shikimori.io/animes/36431', 'http://oneroom-anime.com', 'https://yummyani.biz/anime/iz-odnoy-komnaty-2']
+zonafilm.space    chelovek-muravey-i-osa             — свободно                     verified/0  подготовлен 2026-10-19T05:47:00Z  ключ chelovek-muravey-i-osa
+                  источники: ['https://ru.wikipedia.org/wiki/Человек-муравей_и_Оса', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm.space    puteshestvie-k-centru-zemli        — свободно                     verified/0  подготовлен 2026-10-19T05:47:39Z  ключ puteshestvie-k-centru-zemli
+                  источники: ['https://ru.wikipedia.org/wiki/Путешествие_к_центру_Земли_(фильм,_2008)', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm.space    frankenshteyn-sozdal-zhenschinu    — свободно                     verified/0  подготовлен 2026-10-19T06:09:58Z  ключ frankenshteyn-sozdal-zhensch
+                  источники: ['https://ru.wikipedia.org/wiki/Франкенштейн_создал_женщину', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm.space    zhenschina-kotoraya-mechtala-o-m   — свободно                     verified/0  подготовлен 2026-10-19T06:10:47Z  ключ zhenschina-kotoraya-mechtala
+                  источники: ['https://en.wikipedia.org/wiki/Kvinden_der_dr%C3%B8mte_om_en_mand', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm.space    poschadi-menya-velikiy-gospodin-   — свободно                     verified/0  подготовлен 2026-10-19T07:22:27Z  ключ poschadi-menya-veliky-gospod
+                  источники: ['https://shikimori.io/animes/51898', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm.space    legenda-ob-aange-posledniy-mag-v   — свободно                     verified/0  подготовлен 2026-10-19T07:23:04Z  ключ legenda-ob-aange-posledny-ma
+                  источники: ['https://ru.wikipedia.org/wiki/Легенда_об_Аанге:_Последний_маг_воздуха', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
+zonafilm12.site   moya-skrytaya-pravda               — свободно                     verified/0  подготовлен 2026-10-19T05:36:54Z  ключ moya-skrytaya-pravda
+                  источники: ['https://en.wikipedia.org/wiki/Mi_verdad_oculta', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   baffi-istrebitelnica-vampirov      — свободно                     verified/0  подготовлен 2026-10-19T05:48:14Z  ключ baffi-istrebitelnica-vampiro
+                  источники: ['https://ru.wikipedia.org/wiki/Баффи_—_истребительница_вампиров_(телесериал)', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   monti-payton-i-svyaschennyy-graa   — свободно                     verified/0  подготовлен 2026-10-19T05:48:54Z  ключ monti-payton-i-svyaschenny-g
+                  источники: ['https://ru.wikipedia.org/wiki/Монти_Пайтон_и_Священный_Грааль', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   otryad-samoubiyc-2016              — свободно                     verified/0  подготовлен 2026-10-19T05:49:34Z  ключ otryad-samoubyc-2016
+                  источники: ['https://en.wikipedia.org/wiki/Suicide_Squad_(2016_film)', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   22-protiv-zemli-2021               — свободно                     verified/0  подготовлен 2026-10-19T05:50:12Z  ключ 22-protiv-zemli-2021
+                  источники: ['https://en.wikipedia.org/wiki/22_vs._Earth', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   pod-pricelom-2                     — свободно                     verified/0  подготовлен 2026-10-19T06:07:29Z  ключ pod-pricelom-2
+                  источники: ['https://en.wikipedia.org/wiki/Athadu', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   piraty-karibskogo-morya-mertvecy   — свободно                     verified/0  подготовлен 2026-10-19T06:08:04Z  ключ piraty-karibskogo-morya-mert
+                  источники: ['https://ru.wikipedia.org/wiki/Пираты_Карибского_моря:_Мертвецы_не_рассказывают_сказки', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   11-14                              — свободно                     verified/0  подготовлен 2026-10-19T06:08:40Z  ключ 11-14
+                  источники: ['https://ru.wikipedia.org/wiki/11:14', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   akademiya-vedm                     — свободно                     verified/0  подготовлен 2026-10-19T06:57:19Z  ключ akademya-vedm
+                  источники: ['https://en.wikipedia.org/wiki/Coven_Academy', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   sobachi-zvezdy                     — свободно                     verified/0  подготовлен 2026-10-19T06:59:51Z  ключ sobachi-zvezdy
+                  источники: ['https://ru.wikipedia.org/wiki/Собачьи_звёзды_(фильм)', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   tayny-niro-vulfa                   — свободно                     verified/0  подготовлен 2026-10-19T07:00:33Z  ключ tayny-niro-vulfa
+                  источники: ['https://ru.wikipedia.org/wiki/Тайны_Ниро_Вульфа', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   bratan-munna-2                     — свободно                     verified/0  подготовлен 2026-10-19T07:01:19Z  ключ bratan-munna-2
+                  источники: ['https://ru.wikipedia.org/wiki/Братан_Мунна_2', 'snapshot:/srv/lords/.frontend/zona-03-details.json']
+zonafilm12.site   chuzhaya-zhizn                     — свободно                     verified/0  подготовлен 2026-10-19T17:01:12Z  ключ chuzhaya-zhizn
+                  источники: ['/srv/lords/.frontend/zona-03-details.json']
+an1mego.site      povelitel-demonov-2099             animeg0.site                   prepared/1  подготовлен 2026-10-18T14:10:31Z  ключ povelitel-demonov-2099
+                  источники: ['https://shikimori.io/animes/54853', 'https://an1mego.site/title/povelitel-demonov-2099']
+zonafilm.space    chernyy-klever-2                   animedia.icu, yummyani.site    verified/0  подготовлен 2026-10-19T07:21:51Z  ключ cherny-klever-2
+                  источники: ['https://shikimori.io/animes/61967', 'snapshot:/srv/lords/.frontend/zona-01-details.json']
