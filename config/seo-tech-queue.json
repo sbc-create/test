@@ -7460,6 +7460,36 @@
       "status": "blocked",
       "evidence": "20.10 разбор SEO-сессии docs/seo-operator/COLLECTIONS_PAIRS_20261020.md (9d9324d) и решение Архитектора docs/handoff/ARCHITECT_TO_SEO-006.md (ветка claude/nova-publish-memory-02, 73855ed); разрешение пользователя 20.10 исправить три пары подборок совместно с Архитектором; канарейка — zonafilm.space. | 20.10 12:03Z: T286 live_verified — блокировка снята. База «до»: общих с recently_added_movies на стр. 1 — 48 из 60 (80.0 %, queue-vs-live.py). | 20.10 ≈13:00Z живая сверка SEO (zonafilm.space, стр. 1 по 60 карточек): recently_added ∩ recently_added_movies 48, ∩ new_episodes 7, ни в той ни в другой 5; из первых 20 общей подборки 18 в фильмовой, 0 в сериальной. Окна у всех трёх подборок 90 дней — и в описаниях на живом сайте, и в collection_contract.py (zona) репозитория на 69f79d8. «14 против 30 дней» из сообщения wt-nova-02 не подтверждается. Вывод wt-nova-02 о правдивом совпадении подтверждается: свежее пополнение — в основном фильмы.",
       "owner_action": "ОТОЗВАНА 20.10 до выпуска: премиса не подтвердилась. Совпадение первых страниц правдиво — его даёт состав пополнения каталога, а не правило отбора. Чередование видов поставило бы вперёд более старые сериалы в ущерб порядку «новое сначала»; польза не измерена. Обе подборки остаются: у них разные зрительские задачи. Автоматически подборки не закрываются (указание владельца 20.10)."
+    },
+    {
+      "id": "T288",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/",
+        "https://zonafilm.space/collection/top_rated/"
+      ],
+      "problem": "20.10: на главной zonafilm.space 7 из 64 карточек — заглушка без постера, в том числе в полке «Высокие оценки недели» (top_rated, сортировка по оценке); замер SEO var/seo-audit/home-posters-before-20261020.json, Архитектор (MOD-116, 48b27be) — тоже 7. Причина — пустой poster_url в ответе поставщика (MOD-116). Постеры этим НЕ восстанавливаются: восстановление учитывается отдельно (указание владельца 20.10).",
+      "norm": "Полка главной, отсортированная по оценке, не показывает карточки-заглушки, если в отборе есть равноценные записи с постером; порядок полок новизны не меняется.",
+      "expected": "Применить РОВНО патч docs/handoff/T288_shelf_posters.patch из рабочей копии фабрики (/home/claude/wt-portable-site-cell-01; sha256 051dc2d0ef4e60a10f3f775bf5fdbe234e4ed518ed5151c053285befbca50c86; источник — Архитектор, ветка claude/nova-publish-memory-02, e68187a) к src/collection_contract.py головы 69f79d8 (sha256 файла до правки 5c54b22abb09…; git apply --check проходит — проверено SEO-сессией). Больше ничего не менять: окна recent_days 90, заголовки и состав подборок, вёрстку, CSS. Проверка checks/shelf_posters_rating_only.py: (1) полка с sort field rating — записи с постером впереди, длина полки не меньше предела, порядок внутри групп сохранён; (2) полка recently_added (published_at) — список побуквенно тот же, что без правки, даже если у головной записи нет постера; (3) полная страница подборки top_rated содержит запись без постера. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/shelf_posters_rating_only.py",
+      "verify_live": "главная zonafilm.space: в полке «Высокие оценки недели» 24 карточки, у всех <img>; карточки без <img> на главной остаются только в полках новизны; /collection/top_rated/ по-прежнему содержит /title/facing-grizzlies/ (до правки — стр. 18); полки новизны — тот же порядок по дате",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/",
+          "status": 200
+        },
+        {
+          "url": "https://zonafilm.space/collection/top_rated/?page=18",
+          "status": 200,
+          "contains": [
+            "/title/facing-grizzlies/"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "20.10 ≈14:00Z SEO: патч Архитектора сверен с головой ветки выпуска origin/claude/extract-zonafilm-space-seo-01 = 69f79d8502a9 (живой выпуск). src/collection_contract.py: sha256 5c54b22abb09… совпадает с работающим файлом (по Архитектору — releases/69f79d8502a9); git apply --check — OK. Репетиция Архитектора: top_rated — заглушек 1→0 при 12→12 карточках, девять прочих доступных полок побуквенно те же. База «до» SEO: без <img> на главной 7 из 64. Отрицательные контроли: 24 карточки в полке; facing-grizzlies на /collection/top_rated/; zonafilm12.site, zonafilm.cc и чистые витрины не трогаются (перенос — после приёмки канарейки)."
     }
   ]
 }
