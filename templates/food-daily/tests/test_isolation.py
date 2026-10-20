@@ -35,7 +35,8 @@ def test_no_references_to_other_templates(path):
 
 
 def test_python_imports_stay_inside_template():
-    allowed_top = {"fooddaily", "jinja2", "yaml", "jsonschema", "playwright"}
+    # PIL — только офлайн-инструмент fooddaily.media (уменьшение фото с правами); сервер его не импортирует
+    allowed_top = {"fooddaily", "jinja2", "yaml", "jsonschema", "playwright", "PIL"}
     std = {
         "argparse",
         "base64",

@@ -2,25 +2,34 @@
 <span class="illo illo--{{ category }} illo--{{ size }}"><img src="{{ asset('img/' ~ category ~ '.svg') }}" alt="" width="160" height="120" loading="lazy" decoding="async"></span>
 {%- endmacro %}
 
-{% macro card(r, heading='h3') -%}
-<article class="card card--{{ r.category }}" data-slug="{{ r.slug }}">
-  <a class="card__link" href="{{ r.url }}">
-    <span class="card__cat">{{ r.category_label }}</span>
-    <{{ heading }} class="card__title">{{ r.title }}</{{ heading }}>
-    <span class="card__lede">{{ r.lede }}</span>
-  </a>
-  {% if r.key_ingredients %}<p class="card__ing"><span class="sr">Главные продукты: </span>{{ r.key_ingredients | join(' · ') }}</p>{% endif %}
-  <p class="card__meta">
-    {% if r.time_label %}<span>{{ r.time_label }}</span>{% endif %}
-    {% if r.servings %}<span>{{ r.servings }} порц.</span>{% endif %}
-    <span>{{ r.ingredients | length }} продукт{{ 'а' if r.ingredients|length % 10 in [2,3,4] and r.ingredients|length % 100 not in [12,13,14] else ('' if r.ingredients|length % 10 == 1 and r.ingredients|length % 100 != 11 else 'ов') }}</span>
-  </p>
+{% macro picture(r, sizes, eager=false) -%}
+{% set im = r.image %}
+<picture class="pic">
+  <source type="image/webp" srcset="{% for w in im.widths %}/static/media/{{ im.file }}-{{ w }}.webp {{ w }}w{% if not loop.last %}, {% endif %}{% endfor %}" sizes="{{ sizes }}">
+  <img src="/static/media/{{ im.file }}-{{ im.widths[0] }}.webp" alt="{{ im.alt }}" width="{{ im.width }}" height="{{ im.height }}"{% if eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+</picture>
+{%- endmacro %}
+
+{% macro card(r, heading='h3', eager=false) -%}
+<article class="card card--{{ r.category }}{% if r.image %} card--pic{% endif %}" data-slug="{{ r.slug }}">
+  {% if r.image %}<a class="card__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 290px, (min-width: 900px) 33vw, (min-width: 560px) 50vw, 100vw', eager) }}</a>{% endif %}
+  <div class="card__body">
+    <p class="card__top"><span class="card__cat">{{ r.category_label }}</span></p>
+    <{{ heading }} class="card__title"><a class="card__link" href="{{ r.url }}">{{ r.title }}</a></{{ heading }}>
+    <p class="card__lede">{{ r.lede }}</p>
+    {% if r.key_ingredients %}<p class="card__ing"><span class="sr">Главные продукты: </span>{% for n in r.key_ingredients %}{{ n if loop.first else n[:1].lower() ~ n[1:] }}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
+    <p class="card__meta">
+      {% if r.time_label %}<span class="card__time"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg><span class="sr">Время: </span>{{ r.time_label }}</span>{% endif %}
+      {% if r.servings %}<span>{{ r.servings }} {{ plural(r.servings, 'порция', 'порции', 'порций') }}</span>{% endif %}
+      <span>{{ r.ingredients | length }} {{ plural(r.ingredients|length, 'продукт', 'продукта', 'продуктов') }}</span>
+    </p>
+  </div>
   <button class="fav" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><span class="sr">В избранное: {{ r.title }}</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></button>
 </article>
 {%- endmacro %}
 
-{% macro grid(items, heading='h3') -%}
-<div class="grid">{% for r in items %}{{ card(r, heading) }}{% endfor %}</div>
+{% macro grid(items, heading='h3', eager=0) -%}
+<div class="grid">{% for r in items %}{{ card(r, heading, loop.index <= eager) }}{% endfor %}</div>
 {%- endmacro %}
 
 {% macro pager(base, page, pages, query='') -%}

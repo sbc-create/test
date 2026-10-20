@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_parts.html" import grid, illo %}
+{% from "_parts.html" import grid, picture %}
 {% block main %}
 <article class="recipe" data-recipe="{{ r.slug }}" data-servings="{{ r.servings }}">
   <header class="recipe__head">
@@ -7,10 +7,12 @@
     <h1 class="recipe__title">{{ r.title }}</h1>
     <p class="recipe__intro">{{ r.d.intro }}</p>
     <dl class="facts">
-      {% if r.total_minutes %}<div><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>(подготовка {{ r.prep_minutes }} мин)</small>{% endif %}</dd></div>{% endif %}
+      {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
       <div><dt>Порции</dt><dd>{{ r.servings }}</dd></div>
-      <div><dt>Шагов</dt><dd>{{ r.d.steps|length }}</dd></div>
+      <div><dt>Продукты</dt><dd>{{ r.ingredients|length }}</dd></div>
+      <div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>
     </dl>
+    <nav class="jump" aria-label="Перейти к разделу рецепта"><a href="#ingredienty">Ингредиенты</a><a href="#prigotovlenie">Приготовление</a></nav>
     {% set links = site.tag_links(r) %}
     {% if links %}
     <ul class="tags" aria-label="Темы рецепта">
@@ -23,9 +25,10 @@
       <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
     </div>
   </header>
+  {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 860px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
 
   <div class="recipe__body">
-    <section class="ingredients" aria-labelledby="ing-h">
+    <section class="ingredients" id="ingredienty" aria-labelledby="ing-h">
       <div class="ingredients__head">
         <h2 id="ing-h">Ингредиенты</h2>
         <div class="servings" data-servings-control hidden>
@@ -47,7 +50,7 @@
       <button class="btn btn--ghost" type="button" data-add-list hidden>Добавить в список покупок</button>
     </section>
 
-    <section class="steps" aria-labelledby="steps-h">
+    <section class="steps" id="prigotovlenie" aria-labelledby="steps-h">
       <h2 id="steps-h">Как готовить</h2>
       <ol class="step-list">
         {% for s in r.d.steps %}
@@ -62,24 +65,21 @@
       <aside class="tips" aria-labelledby="tips-h">
         <h2 id="tips-h">Подсказки</h2>
         <ul>{% for t in r.tips %}<li>{{ t.text }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if t.source_steps|length == 1 else 'шаги' }} {% for i in t.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
-        <p class="note">Подсказки пересказывают указания источника; редакция их не проверяла.</p>
       </aside>
       {% endif %}
       {% if r.substitutions %}
       <aside class="subs" aria-labelledby="subs-h">
         <h2 id="subs-h">Чем можно заменить</h2>
         <ul>{% for name, s in r.substitutions %}<li><b>{{ name }}</b> → {{ s.to }}. {{ s.note }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if s.source_steps|length == 1 else 'шаги' }} {% for i in s.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
-        <p class="note">Здесь только замены, которые называет сам источник; на практике редакция их не проверяла.</p>
+        <p class="note">Замены, которые предлагает рецепт-источник.</p>
       </aside>
       {% endif %}
     </section>
   </div>
 
   <footer class="provenance">
-    <h2 class="sr">Происхождение рецепта</h2>
-    <p>Состав, количества и время взяты из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>. Текст шагов и подсказок написан заново с помощью ИИ.</p>
-    <p>{% if r.raw.review_status == 'editor_approved' %}Текст проверен редактором.{% else %}Редактор ещё не проверил этот текст.{% endif %}{{ ' ' }}{% if r.raw.cooking_status == 'cooked_by_editor' %}Рецепт приготовлен редакцией.{% else %}Редакция этот рецепт не готовила.{% endif %}</p>
-    <p class="provenance__dates">Опубликовано {{ r.published_at[:10] }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at[:10] }}{% endif %}.</p>
+    <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.
+      <span class="provenance__dates">Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</span></p>
   </footer>
 
   {% if r.related %}

@@ -18,6 +18,6 @@
     {% endif %}
   </section>
   {% endfor %}
-  <p class="disclosure">Текст подготовлен с помощью ИИ на основе рецептов сайта и ещё не проверен редакцией. Опубликовано {{ a.published }}.</p>
+  <p class="article__dates">Опубликовано {{ a.published|ru_date }}{% if a.updated != a.published %}, обновлено {{ a.updated|ru_date }}{% endif %}.</p>
 </article>
 {% endblock %}

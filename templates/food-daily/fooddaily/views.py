@@ -227,6 +227,11 @@ class Recipe:
         return self.raw["source"]
 
     @property
+    def image(self) -> dict | None:
+        """Изображение блюда — только запись из data/media/images.json с правами и происхождением; иначе None."""
+        return self.raw.get("_image")
+
+    @property
     def has_video(self):
         return any(m["kind"] == "video" for m in self.raw["media"])
 
@@ -305,11 +310,65 @@ def minutes(m: int | None) -> str:
     return f"{h} ч" if h else f"{mm} мин"
 
 
+MONTHS = (
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+)
+
+
+def ru_date(iso: str | None) -> str:
+    """2026-10-11 → «11 октября 2026»."""
+    if not iso:
+        return ""
+    y, m, d = iso[:10].split("-")
+    return f"{int(d)} {MONTHS[int(m) - 1]} {y}"
+
+
+# Сезонный блок главной: подборка, у которой по месяцу есть сезон. Показывается, только если подборка существует
+# (в ней ≥3 рецептов) — без выдуманных «сезонных» блюд.
+SEASONAL = {9: "osen-s-tykvoj", 10: "osen-s-tykvoj", 11: "osen-s-tykvoj"}
+
+
 def iso_duration(m: int | None) -> str | None:
     if not m:
         return None
     h, mm = divmod(int(m), 60)
     return "PT" + (f"{h}H" if h else "") + (f"{mm}M" if mm else "")
+
+
+IMAGE_KINDS = ("photo", "illustration")
+IMAGE_REQUIRED = ("file", "width", "height", "widths", "kind", "alt", "source", "license")
+
+
+def load_images(by_slug: dict, path: Path | None = None) -> dict:
+    """data/media/images.json: slug → {file, width, height, widths, kind, alt, source, license, author?}.
+    Запись без прав (source, license) или для неизвестного рецепта — ошибка, а не тихий пропуск:
+    изображение без установленного происхождения на сайт не попадает."""
+    p = path or ROOT / "data" / "media" / "images.json"
+    if not p.exists():
+        return {}
+    data = json.loads(p.read_text())
+    out = {}
+    for slug, e in data.get("items", {}).items():
+        missing = [k for k in IMAGE_REQUIRED if not e.get(k)]
+        if missing or e["kind"] not in IMAGE_KINDS or slug not in by_slug:
+            raise ValueError(f"images.json: {slug}: нет {missing} или неверный kind/slug")
+        for w in e["widths"]:
+            if not (ROOT / "static" / "media" / f"{e['file']}-{w}.webp").is_file():
+                raise FileNotFoundError(f"static/media/{e['file']}-{w}.webp")
+        by_slug[slug].raw["_image"] = e
+        out[slug] = e
+    return out
 
 
 def config_file() -> Path:
@@ -337,6 +396,7 @@ class Site:
             reverse=True,
         )
         self.by_slug = {r.slug: r for r in self.recipes}
+        self.images = load_images(self.by_slug)
         self.articles = {}
         for ap in sorted((ROOT / "data" / "articles").glob("*.json")):
             a = json.loads(ap.read_text())

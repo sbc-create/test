@@ -24,7 +24,7 @@ from pathlib import Path
 import jinja2
 
 from . import seo
-from .views import CATEGORIES, TAGS, TIME_BUCKETS, Site
+from .views import CATEGORIES, SEASONAL, TAGS, TIME_BUCKETS, Site, ru_date
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = ROOT / "static"
@@ -35,6 +35,10 @@ EDITOR_SECRET = Path(
         str(Path.home() / ".config" / "food-daily-c-preview" / "editor.json"),
     )
 )
+
+
+# Служебные страницы, которые больше не нужны: контактов с достоверными данными нет — адрес ведёт на «О проекте».
+PAGE_REDIRECTS = {"/kontakty/": "/o-proekte/"}
 
 
 def asset_hashes() -> dict[str, str]:
@@ -63,7 +67,9 @@ class App:
             TIME_BUCKETS=TIME_BUCKETS,
             asset=self.asset,
             year=time.strftime("%Y"),
+            plural=seo.plural,
         )
+        self.env.filters["ru_date"] = ru_date
         self.csrf_key = secrets.token_bytes(32)
         red = ROOT / "data" / "redirects.json"
         self.redirects = json.loads(red.read_text()) if red.exists() else {}
@@ -81,17 +87,41 @@ class App:
             return 301, "", {"Location": self.redirects[path]}
         q1 = lambda k: (query.get(k) or [""])[0].strip()  # noqa: E731
         if path == "/":
+            cols = s.collections()
+            quick = (
+                sorted(cols["bystro-do-30-minut"][2], key=lambda r: (r.total_minutes, r.title))[:4]
+                if ("bystro-do-30-minut" in cols)
+                else []
+            )
+            season_key = SEASONAL.get(time.localtime().tm_mon)
+            season = (season_key, *cols[season_key]) if season_key in cols else None
+            fresh = s.recipes[:8]
+            sections = [(k, CATEGORIES[k][0], len(s.category(k))) for k in CATEGORIES if s.category(k)]
+            chips = sorted(s.product_options(), key=lambda kv: -len(s.tag(kv[0])))[:6]
             meta = seo.Meta(
                 title=s.cfg["name"] + " — простые рецепты на каждый день",
-                description="Завтраки, супы, вторые блюда, гарниры и салаты на каждый день: поиск по продуктам "
-                "и времени, пересчёт порций, список покупок.",
+                description=seo.with_examples(
+                    f"{len(s.recipes)} {seo.plural(len(s.recipes), 'рецепт', 'рецепта', 'рецептов')} на каждый день "
+                    "с точными количествами и пересчётом порций",
+                    [label.lower() for _, label, _ in sections],
+                ),
                 canonical=s.abs("/"),
                 index=True,
                 page_type="home",
+                jsonld=[seo.website_ld(s), seo.itemlist_ld(s, [r.url for r in fresh])],
             )
             return (
                 200,
-                self.render("home.html", meta, recipes=s.recipes[:6], collections=s.collections()),
+                self.render(
+                    "home.html",
+                    meta,
+                    quick=quick,
+                    season=season,
+                    fresh=fresh,
+                    sections=sections,
+                    chips=chips,
+                    total=len(s.recipes),
+                ),
                 {},
             )
         if path == "/na-kompaniyu/":
@@ -338,19 +368,30 @@ class App:
                 self.render("tool.html", meta, fav=fav, catalog=json.dumps(catalog, ensure_ascii=False)),
                 {},
             )
-        if path in ("/o-proekte/", "/kontakty/"):
-            about = path == "/o-proekte/"
+        if path == "/o-proekte/":
             meta = seo.Meta(
-                title="О проекте" if about else "Контакты",
-                description="Как готовятся материалы сайта «Будни на кухне»."
-                if about
-                else "Как связаться с редакцией сайта «Будни на кухне».",
+                title="О проекте",
+                description="«Будни на кухне» — простые домашние рецепты: откуда берутся состав и количества, "
+                "что умеет сайт и чего на нём нет.",
                 canonical=s.abs(path),
                 index=True,
-                breadcrumbs=[("Главная", "/")],
+                breadcrumbs=[("Главная", "/"), ("О проекте", path)],
                 page_type="info",
             )
-            return 200, self.render("about.html" if about else "contacts.html", meta), {}
+            return 200, self.render("about.html", meta), {}
+        if path == "/konfidencialnost/":
+            meta = seo.Meta(
+                title="Конфиденциальность",
+                description="Какие данные записывает сайт «Будни на кухне»: журнал веб-сервера, хранилище браузера; "
+                "без cookies, счётчиков и рекламы.",
+                canonical=s.abs(path),
+                index=True,
+                breadcrumbs=[("Главная", "/"), ("Конфиденциальность", path)],
+                page_type="info",
+            )
+            return 200, self.render("privacy.html", meta), {}
+        if path in PAGE_REDIRECTS:
+            return 301, "", {"Location": PAGE_REDIRECTS[path]}
         if path == "/robots.txt":
             return 200, self.robots(), {"Content-Type": "text/plain; charset=utf-8"}
         if path == "/sitemap.xml":
@@ -496,7 +537,7 @@ class App:
             ("/iz-holodilnika/", None),
             ("/podborki/", None),
             ("/o-proekte/", None),
-            ("/kontakty/", None),
+            ("/konfidencialnost/", None),
         ]
         for key in CATEGORIES:
             items = s.category(key)

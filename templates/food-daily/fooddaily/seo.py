@@ -11,7 +11,7 @@ from __future__ import annotations
 import json
 from dataclasses import dataclass, field
 
-from .views import Recipe, Site, iso_duration
+from .views import TAGS, Recipe, Site, iso_duration
 
 
 @dataclass
@@ -88,7 +88,9 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
             for n, s in enumerate(r.d["steps"])
         ],
         "datePublished": (r.published_at or "")[:10] or None,
-        "keywords": ", ".join(t for t in r.tags) or None,
+        "dateModified": (r.updated_at or "")[:10] or None,
+        "inLanguage": "ru",
+        "keywords": ", ".join(TAGS[t][0].lower() for t in r.tags if t in TAGS) or None,
     }
     for k, v in (
         ("prepTime", r.prep_minutes),
@@ -97,6 +99,8 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
     ):
         if v:
             ld[k] = iso_duration(v)
+    if r.image:  # только изображение с установленными правами (data/media/images.json)
+        ld["image"] = [site.abs(f"/static/media/{r.image['file']}-{w}.webp") for w in r.image["widths"]]
     return {k: v for k, v in ld.items() if v is not None}
 
 
@@ -116,6 +120,22 @@ def recipe_meta(site: Site, r: Recipe) -> Meta:
         jsonld=[recipe_ld(site, r), breadcrumb_ld(site, crumbs)],
         page_type="recipe",
     )
+
+
+def website_ld(site: Site) -> dict:
+    """WebSite с поиском: поиск на сайте действительно есть (/poisk/?q=)."""
+    return {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": site.cfg["name"],
+        "url": site.abs("/"),
+        "inLanguage": "ru",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": {"@type": "EntryPoint", "urlTemplate": site.abs("/poisk/") + "?q={search_term_string}"},
+            "query-input": "required name=search_term_string",
+        },
+    }
 
 
 def itemlist_ld(site: Site, urls: list[str]) -> dict:

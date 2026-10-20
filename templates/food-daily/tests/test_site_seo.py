@@ -196,7 +196,9 @@ def test_no_fake_video_or_ratings(app, site):
 def test_cards_always_have_titles(app):
     _, html, _ = get(app, "/recepty/")
     cards = re.findall(r'<article class="card card--[a-z-]+".*?</article>', html, re.S)
-    assert cards and all(re.search(r'class="card__title">[^<]{3,}<', c) for c in cards)
+    assert cards and all(
+        re.search(r'class="card__title"><a class="card__link" href="[^"]+">[^<]{3,}</a>', c) for c in cards
+    )
 
 
 def test_source_attribution_shows_domain(app, site):
@@ -237,7 +239,7 @@ def test_itemlist_matches_visible_cards(app):
         _, html, _ = get(app, p)
         il = next(x for x in jsonld(html) if x["@type"] == "ItemList")
         urls = [e["url"].replace(app.site.origin, "") for e in il["itemListElement"]]
-        cards = re.findall(r'<article class="card[^"]*"[^>]*>\s*<a class="card__link" href="([^"]+)"', html)
+        cards = re.findall(r'<article class="card[^"]*".*?<a class="card__link" href="([^"]+)"', html, re.S)
         assert urls == cards, p
 
 
