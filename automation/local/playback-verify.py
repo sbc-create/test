@@ -191,14 +191,22 @@ def проверить(адрес: str, *, секунд: int = 60, шаг: int =
             except Exception:  # noqa: BLE001
                 нажали = False
             конец = time.time() + секунд
+            сбоев = 0
             while time.time() < конец:
                 time.sleep(шаг)
                 try:
                     снимки.append(цель.evaluate(ПОИСК_МЕДИА))
                 except Exception as сбой:  # noqa: BLE001
+                    # Один неудачный замер проверку не хоронит: кадр плеера
+                    # переоткрывается сам (измерено 20.10 на `gyulizar-2` —
+                    # первый прогон отдал «не измерено», второй «основное
+                    # видео идёт»). «Не измерено» остаётся, только если не
+                    # удался НИ ОДИН замер.
+                    сбоев += 1
                     отказ = f"{type(сбой).__name__}: {str(сбой)[:60]}"
-                    снимки = None  # type: ignore[assignment]
-                    break
+                    continue
+            if not снимки:
+                снимки = None  # type: ignore[assignment]
         finally:
             браузер.close()
 
