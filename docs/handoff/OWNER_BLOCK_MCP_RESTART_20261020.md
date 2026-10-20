@@ -54,3 +54,11 @@ curl -s http://127.0.0.1:9000/healthz
 1. Процесс новее правки: время старта службы > mtime `factory/qwen/editorial.py` в рабочей копии.
 2. Первая публикация на одной витрине Lords/Zona (zonafilm.space — первой, по решению 19.10) → `overlay-provenance-diff.py --domain zonafilm.space`: ни одной новой подмены сверх 3 исторических.
 3. Только после этого из `seo_operator/editor_run.py: PAUSED_PUBLISH` снимаются записи с причиной «MCP editorial.py затирает поля editorial-overrides.json» — по одной витрине, с той же проверкой после первой публикации на каждой. Другие паузы (lordserials22.info до 21.10, заморозки) не трогаются.
+
+## После приёмки: второй перезапуск (MOD-102)
+
+Согласовано с wt-nova-02 20.10. Правку `b72229c` (ветка `claude/nova-publish-memory-02`) переносим cherry-pick'ом только после приёмки первого перезапуска на zonafilm.space: она меняет `подготовить` в `factory/qwen/editorial.py` — черновик, у которого в `sources` есть shikimori-id, а `aired_on` расходится с годом снимка, получает отказ `BLOCKED_INPUT`. Перенос проверяется так:
+- `tests/unit/test_editorial_year_source.py` — 13 проверок;
+- `tests/unit -k "editorial or qwen or overlay"`.
+
+После переноса — второй перезапуск по тому же блоку (шаги 1–3).
