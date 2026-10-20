@@ -350,7 +350,42 @@ EXTRA_METRIKA = (
         "ym:s:visits, ym:s:bounceRate, ym:s:pageDepth, ym:s:avgVisitDurationSeconds × ym:s:date × "
         "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser × ym:s:isRobot",
     ),
+    # Входы по странице И поисковой системе. Без этой разбивки нельзя сказать,
+    # в КАКОМ канале просел конкретный адрес: `search_landing_pages` знает
+    # страницу, `daily_search` — поисковик, и ни один не знает обоих. Измерено
+    # 2026-10-20: у lordserials22.info Google дал +603 визита за неделю, а
+    # Яндекс потерял 23, и при этом /title/akademiya-vedm/ упал с 56 до 10
+    # входов — в каком из каналов, сказать было нечем.
+    (
+        "search_landing_by_engine",
+        "Поисковые входы по странице и поисковой системе",
+        "ym:s:visits × lastsignTrafficSource × lastsignSearchEngineRoot × startURLPath",
+    ),
 )
+
+#: Заголовок и источник показателя по ключу. Обращение по НОМЕРУ в кортеже —
+#: ловушка: вставка нового показателя в середину молча переставляла подписи
+#: уже собираемым (поймано при добавлении `search_landing_by_engine`).
+ЭКСТРА_ПО_КЛЮЧУ = {ключ: (заголовок, источник)
+                   for ключ, заголовок, источник in EXTRA_METRIKA}
+
+
+#: Сколько строк просить у разбивки «страница × поисковик». Та же страница
+#: приходит отдельной строкой на каждый поисковик, поэтому строк кратно больше,
+#: чем у разбивки только по странице (там 200). Измерено 2026-10-20: у
+#: lordserials22.info 121 страница входа и пять поисковиков в данных, то есть
+#: предел 200 обрезал бы хвост уже на одном домене.
+ВХОДОВ_ПО_ПОИСКОВИКУ = 1000
+
+
+def _мета(ключ: str) -> tuple[str, str]:
+    return ЭКСТРА_ПО_КЛЮЧУ[ключ]
+
+
+def _подпись(ключ: str, причина: str) -> tuple[str, str, str]:
+    """Аргументы `_unmeasured` после ключа: заголовок, причина, источник."""
+    заголовок, источник = _мета(ключ)
+    return заголовок, причина, источник
 
 
 def _metrika_daily_and_search(
@@ -375,16 +410,16 @@ def _metrika_daily_and_search(
         out.append(
             Measurement(
                 key="daily_users",
-                title=EXTRA_METRIKA[0][1],
+                title=_мета("daily_users")[0],
                 measured=True,
                 value=report.get("data"),
-                source=EXTRA_METRIKA[0][2],
+                source=_мета("daily_users")[1],
                 sampled=report.get("sampled"),
                 sample_share=report.get("sample_share"),
             )
         )
     except FactoryError as exc:
-        out.append(_unmeasured("daily_users", EXTRA_METRIKA[0][1], exc.reason, EXTRA_METRIKA[0][2]))
+        out.append(_unmeasured("daily_users", *_подпись("daily_users", exc.reason)))
     try:
         report = provider.get_metrica_report(
             counter_id,
@@ -402,10 +437,10 @@ def _metrika_daily_and_search(
         out.append(
             Measurement(
                 key="search_landing_pages",
-                title=EXTRA_METRIKA[1][1],
+                title=_мета("search_landing_pages")[0],
                 measured=True,
                 value=rows,
-                source=EXTRA_METRIKA[1][2],
+                source=_мета("search_landing_pages")[1],
                 sampled=report.get("sampled"),
                 sample_share=report.get("sample_share"),
                 top_n=200,
@@ -414,7 +449,7 @@ def _metrika_daily_and_search(
     except FactoryError as exc:
         out.append(
             _unmeasured(
-                "search_landing_pages", EXTRA_METRIKA[1][1], exc.reason, EXTRA_METRIKA[1][2]
+                "search_landing_pages", *_подпись("search_landing_pages", exc.reason)
             )
         )
     try:
@@ -438,17 +473,17 @@ def _metrika_daily_and_search(
         out.append(
             Measurement(
                 key="daily_search",
-                title=EXTRA_METRIKA[2][1],
+                title=_мета("daily_search")[0],
                 measured=True,
                 value=rows,
-                source=EXTRA_METRIKA[2][2],
+                source=_мета("daily_search")[1],
                 sampled=report.get("sampled"),
                 sample_share=report.get("sample_share"),
             )
         )
     except FactoryError as exc:
         out.append(
-            _unmeasured("daily_search", EXTRA_METRIKA[2][1], exc.reason, EXTRA_METRIKA[2][2])
+            _unmeasured("daily_search", *_подпись("daily_search", exc.reason))
         )
     # Происхождение непоисковых всплесков (yummyani.site 13–15.10: прямые заходы без
     # роста поиска, отказы 67 %): по дням, источнику, устройству и браузеру. Только чтение.
@@ -467,10 +502,10 @@ def _metrika_daily_and_search(
         out.append(
             Measurement(
                 key="daily_traffic_profile",
-                title=EXTRA_METRIKA[3][1],
+                title=_мета("daily_traffic_profile")[0],
                 measured=True,
                 value=report.get("data"),
-                source=EXTRA_METRIKA[3][2],
+                source=_мета("daily_traffic_profile")[1],
                 sampled=report.get("sampled"),
                 sample_share=report.get("sample_share"),
                 top_n=1000,
@@ -478,7 +513,46 @@ def _metrika_daily_and_search(
         )
     except FactoryError as exc:
         out.append(
-            _unmeasured("daily_traffic_profile", EXTRA_METRIKA[3][1], exc.reason, EXTRA_METRIKA[3][2])
+            _unmeasured("daily_traffic_profile", *_подпись("daily_traffic_profile", exc.reason))
+        )
+    # Входы по странице И поисковой системе. Отдельный запрос, а не третье
+    # измерение к `search_landing_pages`: добавлять измерение в тот отчёт
+    # нельзя, его строки читают другие инструменты по номеру поля, и форма
+    # сменилась бы молча.
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=date1,
+            date2=date2,
+            metrics=["ym:s:visits"],
+            dimensions=[
+                "ym:s:lastsignTrafficSource",
+                "ym:s:lastsignSearchEngineRoot",
+                "ym:s:startURLPath",
+            ],
+            limit=ВХОДОВ_ПО_ПОИСКОВИКУ,
+        )
+        rows = [
+            r
+            for r in report.get("data") or []
+            if ((r.get("dimensions") or [{}])[0].get("id") == "organic")
+        ]
+        out.append(
+            Measurement(
+                key="search_landing_by_engine",
+                title=_мета("search_landing_by_engine")[0],
+                measured=True,
+                value=rows,
+                source=_мета("search_landing_by_engine")[1],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+                top_n=ВХОДОВ_ПО_ПОИСКОВИКУ,
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured("search_landing_by_engine",
+                        *_подпись("search_landing_by_engine", exc.reason))
         )
     return out
 

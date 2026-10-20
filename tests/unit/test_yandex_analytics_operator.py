@@ -83,6 +83,11 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "counter_passport", "today_users", "today_search",
         # 2026-10-15: профиль трафика по дням (источник × устройство × браузер) — всплески
         "daily_traffic_profile",
+        # 2026-10-20: входы по странице И поисковой системе. Без этой разбивки
+        # нельзя сказать, в каком канале просел конкретный адрес:
+        # `search_landing_pages` знает страницу, `daily_search` — поисковик, и
+        # ни один не знает обоих.
+        "search_landing_by_engine",
     }
 
 
