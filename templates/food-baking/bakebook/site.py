@@ -58,9 +58,13 @@ UNITS = {
 }
 
 
+# «Куриное яйцо» — яйца, а не мясо курицы: прилагательное убирается, иначе «курица» находит всю выпечку на яйцах.
+EGG = re.compile(r"\bкурин(?:ое|ые|ый|ых|ого|ом|ым|ыми|ой|ая|ую)\s+(?=(?:яйц|яиц|желт|белк|бело))")
+
+
 def norm(s: str) -> str:
-    s = s.lower().replace("ё", "е")
-    return re.sub(r"\s+", " ", re.sub(r"[^\w\s-]+", " ", s)).strip()
+    s = EGG.sub("", re.sub(r"[^\w\s-]+", " ", s.lower().replace("ё", "е")))
+    return re.sub(r"\s+", " ", s).strip()
 
 
 def qty(q, unit) -> str:

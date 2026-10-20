@@ -179,3 +179,8 @@ def test_images_require_rights(tmp_path):
     with pytest.raises(ValueError):
         site_mod.load_images(s.by_slug, bad)
     assert site_mod.load_images(s.by_slug) == {}
+
+
+def test_chicken_search_does_not_match_eggs(app):
+    assert app.site.search("курица") == []  # в книге выпечки нет блюд с мясом курицы — яйца не совпадение
+    assert site_mod.norm("Куриные яйца и куриный желток") == "яйца и желток"

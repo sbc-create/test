@@ -240,7 +240,7 @@ h1 em, h2 em { color: var(--wine-2); font-style: normal; }
 .block__links { display: flex; gap: 14px; }
 .gtiles { list-style: none; padding: 0; margin: 0; display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 @media (min-width: 640px) { .gtiles { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-@media (min-width: 1000px) { .gtiles { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .gtiles { grid-template-columns: repeat(6, minmax(0, 1fr)); } }
 .gtile { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 64px; padding: 10px 14px; border-radius: 6px; background: var(--wine); color: #fff; text-decoration: none; font-weight: 700; }
 .gtile:hover { background: var(--wine-2); color: #fff; }
 .gtile__label { min-width: 0; overflow-wrap: anywhere; }
@@ -279,3 +279,11 @@ h1, h2 { overflow-wrap: break-word; hyphens: auto; }
 .colophon nav a:hover { text-decoration: underline; color: var(--wine-2); }
 .colophon__legal { margin: 24px 0 0; padding-top: 14px; border-top: 1px solid var(--rule); font-size: .85rem; }
 @media (max-width: 899px) { .k-home .spine .find { display: none; } }
+
+/* плитки разделов: одна высота в ряду и между рядами, перенос длинных названий («Заварные пирожные») */
+.gtiles li { display: flex; }
+.gtile { flex: 1; min-height: 72px; line-height: 1.25; }
+.gtile__label { hyphens: manual; overflow-wrap: normal; word-break: normal; }
+@media (max-width: 479px) {
+  .gtile { flex-direction: column; align-items: flex-start; justify-content: space-between; gap: 6px; min-height: 92px; padding: 10px 12px; }
+}

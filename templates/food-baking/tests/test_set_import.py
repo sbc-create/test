@@ -124,3 +124,11 @@ def test_taken_slug_and_unknown_group_deferred(iso):
     assert res["n_deferred"] == 1 and "занят" in res["deferred"][0]["reason"]
     res = set_import.run(write(iso / "c", rec("b014", "Овсяная гранола")))
     assert "раздел" in res["deferred"][0]["reason"]
+
+
+def test_liver_is_not_cookies():
+    """«Куриная печень» не становится разделом «Печенье» — в книгу выпечки она не попадает."""
+    with pytest.raises(ValueError, match="раздел"):
+        set_import.to_files(rec("b020", "Куриная печень с луком"))
+    for title, group in (("Овсяное печенье", "pechene"), ("Ассорти печений", "pechene")):
+        assert set_import.to_files(rec("b021", title))[1]["group_hint"] == group
