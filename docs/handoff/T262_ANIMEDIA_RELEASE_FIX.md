@@ -63,7 +63,7 @@ git push origin HEAD:claude/extract-animedia-icu-seo-01                 # fast-f
 
 ## Проверка правки до применения (SEO-сессия, 20.10 ≈13:05Z)
 
-Проверка шла без записи в клон: дерево `f8327f9` выгружено `git archive` в черновой каталог сессии, форма (а) применена там. Готовый патч — `docs/handoff/T262_form_a.patch`, sha256 `aa2f30bfea254aceb5aeb7dadce4ee9fe3a766ca035d40df49155979f1e41c20`, применяется `git apply`.
+Проверка шла без записи в клон: дерево `f8327f9` выгружено `git archive` в черновой каталог сессии, форма (а) применена там. Готовый патч — `var/patches/T262_form_a.patch`, sha256 `aa2f30bfea254aceb5aeb7dadce4ee9fe3a766ca035d40df49155979f1e41c20`, применяется `git apply`.
 
 | прогон `checks/updater_conformity.py` | код | вывод |
 |---|---|---|
@@ -72,4 +72,4 @@ git push origin HEAD:claude/extract-animedia-icu-seo-01                 # fast-f
 | БЕЗ правки, режим CI — воспроизводит сбой T262 | 1 | обработчик упал до записи `animedia-01-update-state.json` |
 | с правкой, манифест есть, но пустой (`{}`) — отрицательный контроль | 1 | отказ не проглочен, шаг падает |
 
-Владельцу остаётся одно действие: применить патч и сделать fast-forward push. Команды — в разделе выше; `git apply docs/handoff/T262_form_a.patch` (из рабочей копии фабрики) заменяет шаг «применить diff».
+Владельцу остаётся одно действие: применить патч и сделать fast-forward push. Команды — в разделе выше; `git apply var/patches/T262_form_a.patch` (из рабочей копии фабрики) заменяет шаг «применить diff».
