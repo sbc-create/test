@@ -90,7 +90,7 @@ def ближайшая_функция(строки: list[str], номер: int) 
     return " -> ".join(f"{вид} {имя}@{стр}" for стр, вид, имя in путь)
 
 
-def классы(файлы) -> dict[str, tuple[pathlib.Path, int, list[str], str]]:
+def классы(файлы) -> dict[str, tuple[Path, int, list[str], str]]:
     """Все классы выпуска: имя -> (файл, строка, базы, исходник файла).
 
     Базы нужны, чтобы различить ПЕРЕОПРЕДЕЛЕНИЕ и одноимённый метод соседнего
@@ -99,7 +99,7 @@ def классы(файлы) -> dict[str, tuple[pathlib.Path, int, list[str], st
     баз инструмент пометил живую строку пятью «мёртвыми» — ошибка обратного
     знака, хуже отсутствия предупреждения.
     """
-    итог: dict[str, tuple[pathlib.Path, int, list[str], str]] = {}
+    итог: dict[str, tuple[Path, int, list[str], str]] = {}
     for ф in файлы:
         исходник = ф.read_text(encoding="utf-8", errors="replace")
         for n, с in enumerate(исходник.splitlines(), 1):
@@ -133,7 +133,7 @@ def наследники(карта: dict, предок: str) -> list[str]:
     return итог
 
 
-def переопределения(файлы, свой: pathlib.Path, метод: str,
+def переопределения(файлы, свой: Path, метод: str,
                     свой_класс: str) -> list[str]:
     """Где метод переопределён У НАСЛЕДНИКА и вызывается ли там `super()`.
 
