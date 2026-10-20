@@ -1,0 +1,56 @@
+окно «после»: собрано 2026-10-20T05:11:38Z, период {'date1': '7daysAgo', 'date2': 'yesterday'}
+окно «до»:    собрано 2026-10-10T11:09:05Z, период {'date1': '7daysAgo', 'date2': 'yesterday'}
+
+домен                     Я было Я стало  Я изм  G было G стало  G изм   чем растёт
+-----------------------------------------------------------------------------------
+1lordserials1.online           0       0     +0       0       0     +0   мало данных
+an1meg0.site                   0       0     +0       0      34    +34   Google
+an1mego.site                   0       0     +0       0       7     +7   мало данных
+animedia.icu                  80     746   +666       0      61    +61   Яндекс
+animedia.space                 0       0     +0       2       1     -1   мало данных
+animeg0.site                  30       2    -28       0      30    +30   Google, Яндекс падает
+lordfilm47.space               0       0     +0       1      22    +21   Google
+lordserial33.biz               6       6     +0       1       0     -1   мало данных
+lordserials22.info           188     165    -23      61     664   +603   Google, Яндекс падает
+lordserials22.site             0       0     +0       0       0     +0   мало данных
+lordserials22.space            0       0     +0       0       0     +0   мало данных
+yummyani.biz                   0       0     +0       4      54    +50   Google
+yummyani.org                   0       3     +3     173     131    -42   Яндекс, Google падает
+yummyani.site              16002   11543  -4459      11       4     -7   не растёт
+yummyani7.info               149     728   +579       5      16    +11   Яндекс
+yummyani7.site               793    3045  +2252       0      16    +16   Яндекс
+zonafilm.cc                    0       0     +0       0     328   +328   Google
+zonafilm.space                 0       0     +0       0      31    +31   Google
+zonafilm12.site               10     228   +218      11      63    +52   Яндекс
+lordserial101.site      НЕ ИЗМЕРЕНО — счётчик Метрики не создан
+lordfilm077.site        НЕ ИЗМЕРЕНО — счётчик Метрики не создан
+
+поисковые ПОСЕТИТЕЛИ по суткам (Я — Яндекс, G — Google)
+домен                 иск   06   07   08   09   10   11   12   13   14   15   16   17   18   19
+an1meg0.site          G      0    0    0    0    0    0    3    7    4    4    2    3    3    8
+an1mego.site          G      0    0    0    0    0    0    1    1    0    1    0    1    0    4
+animedia.icu          Я     12    6    5   45   57   89   93   59   75   75  114   68   74  124
+animedia.icu          G      0    0    0    0    0    0    0    0    6    8   16   19    4    5
+animedia.space        G      0    0    0    0    0    0    0    0    0    0    0    0    1    0
+animeg0.site          Я      0    0   20    8    1    0    1    1    1    0    0    0    0    0
+animeg0.site          G      0    0    0    0    2    1    1    2    2    4    5    3    3    8
+lordfilm47.space      G      0    0    0    1    2    0    2    1    0    1    0    5    3    6
+lordserial33.biz      Я      0    1    3    2    2    1    4    2    3    0    0    1    0    0
+lordserial33.biz      G      0    0    0    1    0    0    0    0    0    0    0    0    0    0
+lordserials22.info    Я     14    9   20  111   50   28   27   21   26   21   16    5    9    6
+lordserials22.info    G      0    0    2   45   72   60   52   62   54   59   56   78   95   98
+yummyani.biz          G      0    0    1    3    5    3    2    4    5   11    4   15    6    7
+yummyani.org          Я      0    0    0    0    0    0    0    0    0    0    0    1    2    0
+yummyani.org          G     28   21   21   22   20   31   22   24   37   27   10    3    4    2
+yummyani.site         Я   1002 1034  990 4651 3113 1642 1064  796  775  715 2582 2339 1686 1277
+yummyani.site         G      0    0    2    5    0    0    0    1    1    0    1    1    0    0
+yummyani7.info        Я     19   34   40   37   34   87   81   64  101   94   82  111   97   89
+yummyani7.info        G      0    0    0    5    1    2    1    0    0    1    0    3    7    4
+yummyani7.site        Я     27  178  276  213  260  315  317  239  255  175  446  379  509  489
+yummyani7.site        G      0    0    0    0    1    2    1    4    1    0    2    1    1    3
+zonafilm.cc           G      0    0    0    0    1    3   15   16   27   33   40   40   46   38
+zonafilm.space        G      0    0    0    0    0    0    0    0    4    1    5    5    8    8
+zonafilm12.site       Я      3    2    1    4   12   55   43   35   35   27   28   15   13    7
+zonafilm12.site       G      0    0    5    6    8   11   10    8   11    6    6    5   10    8
+lordserial101.site    НЕ ИЗМЕРЕНО — счётчик Метрики не создан
+lordfilm077.site      НЕ ИЗМЕРЕНО — счётчик Метрики не создан
