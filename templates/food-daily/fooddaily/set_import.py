@@ -190,7 +190,8 @@ def to_payload(rec: dict) -> dict:
     source = {
         "url": src["url"],
         "host": re.sub(r"^www\.", "", src["url"].split("/")[2]),
-        "fetched_at": src.get("fetched_at") or rec.get("received_at") or time.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        # дата получения — только из набора; не «сейчас»: иначе повтор импорта не узнаёт тот же текст
+        "fetched_at": src.get("fetched_at") or rec.get("received_at"),
     }
     return {"draft": draft, "facts": facts, "source": source}
 
