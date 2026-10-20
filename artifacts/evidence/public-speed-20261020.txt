@@ -1,0 +1,30 @@
+пороги: TTFB 1.5 с, вес 3.0 МБ; повторов на адрес 4
+ код  TTFB-1  TTFB-мед   всего     МБ  адрес
+ 200    1.12      0.32    1.56   0.25  https://yummyani.site/
+ 200    0.29      0.31    1.09   0.17  https://yummyani7.site/
+ 200    0.27      0.31    1.00   0.17  https://yummyani7.info/
+ 200    0.37      0.28    1.57   0.25  https://yummyani.org/
+ 200    0.38      1.32    2.91   0.26  https://yummyani.biz/
+ 200    5.11      0.08    0.08   0.13  https://lordserials22.info/
+ 200    0.08      0.10    0.10   0.16  https://1lordserials1.online/
+ 200    0.08      0.09    0.09   0.08  https://lordfilm47.space/
+ 200    0.15      0.17    0.17   0.11  https://lordserial33.biz/
+ 200    0.70      0.07    0.07   0.13  https://zonafilm12.site/
+ 200    0.91      0.08    0.08   0.14  https://zonafilm.space/
+ 200    0.13      0.16    0.16   0.13  https://zonafilm.cc/
+ 200    1.18      0.71    0.71   0.34  https://animedia.icu/
+ 200    0.30      0.34    0.34   0.27  https://animedia.space/
+ 200    0.19      0.17    0.17   0.21  https://animeg0.site/
+ 200    0.17      0.17    0.17   0.12  https://an1meg0.site/
+ 200    0.17      0.16    0.16   0.16  https://an1mego.site/
+ 200    0.09      0.08    0.08   0.12  https://lordfilm.group/
+ 200    0.13      0.13    0.13   0.12  https://lordfilm.spb.ru/
+ 200    0.14      0.14    0.14   0.12  https://lordfilm.msk.ru/
+ 200    0.09      0.09    0.09   0.12  https://lordserial.su/
+ 200    0.08      0.13    0.13   0.12  https://lordserial.group/
+ 200    0.14      0.10    0.10   0.12  https://lordserial.spb.ru/
+ 200    0.14      0.10    0.10   0.12  https://lordserial.msk.ru/
+ 200    0.31      0.29    0.29   0.12  https://lordserial.net.ru/
+
+страниц 25: измерено 25, превышений 0
+Core Web Vitals здесь НЕ измеряются: для них нужен ключ CrUX/PageSpeed или браузер у настоящих посетителей (B027).
