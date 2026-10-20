@@ -65,3 +65,25 @@ sudo bash templates/food-baking/deploy/myfood-apply.sh --kit /home/claude/wt-tem
 Используется подготовленный проверенный контент веток. Набор Qwen для рецептов (в том числе «500 вариантов подачи»)
 на сервере не найден: в `var/food-daily/qwen/outbox` — 24 экспортированных задания без ответов, `qwen-nightly-drafts`
 пуст, остальные каталоги Qwen — SEO, комментарии и индексация других направлений. Выкладка идёт без него.
+
+## Результат после шага владельца (20.10.2026, внешняя проверка по доменам)
+
+Владелец выполнил оба сценария без ошибок. Проверка снаружи через публичный DNS и настоящий HTTPS
+(scratchpad `external_check.py`, `deep_check.py`, `final_check.py`; все exit 0):
+
+| что | bestreciept.site | myfood.mobi |
+| --- | --- | --- |
+| развёрнутый релиз | `releases/eaa82c9de344`, служба active/enabled | `releases/d29c41a68d36`, служба active/enabled |
+| сертификат | Let's Encrypt, SAN домен + www, 89 дней | Let's Encrypt, SAN домен + www, 89 дней |
+| `http://`, `http://www.`, `https://www.` | 301 → `https://bestreciept.site/` | 301 → `https://myfood.mobi/` |
+| правильный сайт | variant `party-list`, «Будни на кухне», чужого названия нет | variant `oven-bench`, «Тесто и десерты», чужого названия нет |
+| все адреса sitemap | 53 (22 рецепта): 200, canonical = адрес, `X-Robots-Tag: noindex`, нет `127.0.0.1` | 26 (13 рецептов): то же |
+| поиск | «творог» — 3 рецепта | «печенье» — 4 рецепта |
+| robots.txt | `Disallow: /` | `Disallow: /` |
+| закрытые пути | `/redaktor`, `/.git/config`, `/var/`, `/config/…`, `/secrets/…`, `/.env` — 404 | то же |
+| ресурсы | 3 из 3 — 200 | 3 из 3 — 200 |
+| мобильно 390 px (Chromium): главная, каталог, рецепт, поиск | 200, без горизонтальной прокрутки, без ошибок консоли и сбоев запросов | то же |
+| продление | `certbot.timer` enabled | то же |
+
+Соседние сайты из `sites-enabled` (an1mego.site, animeg0.site, yummyani.biz/.org/.site) по HTTPS — 200.
+Ошибок, требующих исправления, не найдено.
