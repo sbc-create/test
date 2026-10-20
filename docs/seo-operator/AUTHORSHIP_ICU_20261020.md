@@ -1,0 +1,21 @@
+# Авторство 187 описаний animedia.icu (19.10 23:07Z – 20.10 06:42Z) — для аудита Qwen → Claude → публикация
+
+Источник перечня — `history.jsonl` хранилища animedia.icu (op=publish в окне). Автор определяется по доказательству текста, а не по метке службы: метка `seo/claude-session/...` в журнале и provenance — подпись запуска, не доказательство.
+
+## Итог
+
+| Автор | Число | Основание |
+|---|---|---|
+| Claude (эта SEO-сессия) | 187 | опубликованный текст побайтно совпадает с текстом в рабочих файлах сессии (scratchpad `q7_texts.json` и партии, созданные в ходе сессии); в журнале по этим слагам нет черновиков других авторов (0 записей prepare не от сессии) |
+| Qwen | 0 | ни одного черновика Qwen/редактора по этим слагам в журнале до публикации; тексты совпадают с файлами сессии |
+| Авторство не установлено | 0 | — |
+
+Вне перечня: в том же окне фоновый редактор (`editor/claude-auto/run-20261020T060503Z`) опубликовал 1 описание — `blistatelnyy-prikan` (06:20:14Z); его автора эта сессия не определяет.
+
+## Проверка
+
+- Факты — Shikimori (`shikimori.io/animes/<id>`, ID из каталога), источник указан в provenance `sources` у каждой записи; год, студия, серии — из источника, год сверен с годом каталога.
+- Перед публикацией — `editorial.проверить_материал` (запрещённые обороты, название, год).
+- После публикации — живая сверка каждого URL: 200, текст виден, meta description из текста, canonical на себя, без noindex. Прошли 166 из 187; без файла сверки: sudba-noch-shvatki-prikosnovenie-nebes, moguchaya-berdi, aoy-ashito, melochi-zhizni-tv, kod-gias-lelush-voskresshiy, istorii-ran-chast-3-holodnaya-krov, spriggan, kak-smotret-feyerverk, likoris-rikoyl, danganronpa, sindzyuku-gorod-ad, blich-vosstanie-almaznoy-pyli, inadzuma-11, shevale-d-eon, banditos, makross-plyus, van-pis-baron-omacuri-i-sekretnyy-ostrov, volnyy-stil, nepravilnyy-sposob-ispolzovaniya-iscelyayuschey-magii, grimgal-pepla-i-illyuziy.
+
+Построчный перечень (slug, URL, время публикации, метка запуска, provenance, источник, отпечаток текста, файл исходника, файл и результат сверки): `var/seo-audit/authorship-icu-20261020.json` (локальный артефакт; по запросу передам).
