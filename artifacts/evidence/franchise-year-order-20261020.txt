@@ -3,8 +3,10 @@
 франшиз измеримо (две части и больше с годом): 657
 франшиз с падением года: 98
 падений: 100
+рядов отвергнуто неплотностью номеров: 2
 строгих кандидатов: 14
 из них год франшизы на сезоне: 6
+из них цифра слага подтверждена названием: 7
 
 ПРОСТОЕ УБЫВАНИЕ ГОДОМ НЕ ОШИБКА САМО ПО СЕБЕ. Измерено 20.10: среди падений лежат
    `berserk` 2016 → `berserk-2` 1997 и `brodyaga-kensin-2` 2023 → `-3` 1996 — это РЕМЕЙКИ и разные
@@ -12,15 +14,15 @@
    число падений кандидатом на правку НЕ является.
 
 строгие кандидаты (частей ≥ 3, выпадает ровно одна):
-  dostuchatsya-do-tebya-4: год 2009, ожидается не раньше 2024
+  dostuchatsya-do-tebya-4: год 2009, ожидается не раньше 2024  [цифра слага названием НЕ подтверждена]
      ряд: dostuchatsya-do-tebya-2:2011, dostuchatsya-do-tebya-3:2024, dostuchatsya-do-tebya-4:2009
-  gintama-9: год 2006, ожидается не раньше 2018
+  gintama-9: год 2006, ожидается не раньше 2018  [цифра слага названием НЕ подтверждена]
      ряд: gintama-2:2011, gintama-3:2012, gintama-4:2015, gintama-5:2017, gintama-6:2017, gintama-7:2018, gintama-8:2018, gintama-9:2006
   mozhet-ya-vstrechu-tebya-v-podzemele-4: год 2015, ожидается 2020…2024  ← это год ПЕРВОЙ части франшизы
      ряд: mozhet-ya-vstrechu-tebya-v-podzemele:2015, mozhet-ya-vstrechu-tebya-v-podzemele-2:2019, mozhet-ya-vstrechu-tebya-v-podzemele-3:2020, mozhet-ya-vstrechu-tebya-v-podzemele-4:2015, mozhet-ya-vstrechu-tebya-v-podzemele-5:2024
   ocharovatelnaya-boginya-edy-2: год 2021, ожидается не позже 2018
      ряд: ocharovatelnaya-boginya-edy-2:2021, ocharovatelnaya-boginya-edy-3:2018, ocharovatelnaya-boginya-edy-4:2018
-  puteshestvie-na-zapad-2: год 2018, ожидается не позже 1960
+  puteshestvie-na-zapad-2: год 2018, ожидается не позже 1960  [цифра слага названием НЕ подтверждена]
      ряд: puteshestvie-na-zapad-2:2018, puteshestvie-na-zapad-4:1960, puteshestvie-na-zapad-5:2000
   raskolotaya-bitvoy-sineva-nebes-5: год 2017, ожидается не раньше 2021  ← это год ПЕРВОЙ части франшизы
      ряд: raskolotaya-bitvoy-sineva-nebes:2017, raskolotaya-bitvoy-sineva-nebes-2:2018, raskolotaya-bitvoy-sineva-nebes-3:2019, raskolotaya-bitvoy-sineva-nebes-4:2021, raskolotaya-bitvoy-sineva-nebes-5:2017
@@ -28,13 +30,19 @@
      ряд: rukovodstvo-soten-demonov:2020, rukovodstvo-soten-demonov-2:2021, rukovodstvo-soten-demonov-3:2022, rukovodstvo-soten-demonov-4:2020, rukovodstvo-soten-demonov-5:2025
   skazaniya-o-demonah-i-bogah-8: год 2017, ожидается 2023…2025  ← это год ПЕРВОЙ части франшизы
      ряд: skazaniya-o-demonah-i-bogah:2017, skazaniya-o-demonah-i-bogah-2:2018, skazaniya-o-demonah-i-bogah-3:2018, skazaniya-o-demonah-i-bogah-4:2020, skazaniya-o-demonah-i-bogah-5:2021, skazaniya-o-demonah-i-bogah-6:2022, skazaniya-o-demonah-i-bogah-7:2023, skazaniya-o-demonah-i-bogah-8:2017, skazaniya-o-demonah-i-bogah-9:2025, skazaniya-o-demonah-i-bogah-10:2026
-  strana-desyati-tysyach-chudes-5: год 2018, ожидается не раньше 2020  ← это год ПЕРВОЙ части франшизы
+  strana-desyati-tysyach-chudes-5: год 2018, ожидается не раньше 2020  ← это год ПЕРВОЙ части франшизы  [цифра слага названием НЕ подтверждена]
      ряд: strana-desyati-tysyach-chudes:2018, strana-desyati-tysyach-chudes-2:2019, strana-desyati-tysyach-chudes-3:2019, strana-desyati-tysyach-chudes-4:2020, strana-desyati-tysyach-chudes-5:2018
-  ublyudok-sokrushitel-tmy-3: год 1992, ожидается не раньше 2023
+  ublyudok-sokrushitel-tmy-3: год 1992, ожидается не раньше 2023  [цифра слага названием НЕ подтверждена]
      ряд: ublyudok-sokrushitel-tmy:2022, ublyudok-sokrushitel-tmy-2:2023, ublyudok-sokrushitel-tmy-3:1992
   … и ещё 4
 
 что этот перечень НЕ означает:
    — что каждая строка — ошибка. Это КАНДИДАТЫ: признак внутренний, и подтвердить его может только сверка с источником;
    — всю долю ошибок каталога: франшиза, где ВСЕ части несут один неверный год, этим признаком не видна. Это НИЖНЯЯ ГРАНИЦА;
-   — сверить кандидатов с источником сейчас нечем: в записях снимка нет `shikimori_id` (там `provider: mali`), а выдумывать поиск запрещено (D199). Это та же нехватка, что названа в приёмке MOD-102.
+   — какая из частей неверна: это решает только сверка с источником. Она ВОЗМОЖНА — id лежит в `external_ids.mal` у 8 080 записей из 8 674 — и делается проходом `automation/local/catalog-year-source-audit.py`.
+
+ЦИФРА СЛАГА — НЕ ВСЕГДА НОМЕР ЧАСТИ, и это решает половину дела. Измерено 20.10: из
+   1 653 слагов с цифрой на конце у 491 цифра не подтверждается названием — это
+   номер ДУБЛИКАТА имени (`iz-odnoy-komnaty-2` оказался третьим сезоном, рядом лежит
+   `iz-odnoy-komnaty-2-2`). Сверка 14 кандидатов с источником 20.10 дала: там, где
+   цифра подтверждена названием, неверны 6 из 7, где не подтверждена — 1 из 7.

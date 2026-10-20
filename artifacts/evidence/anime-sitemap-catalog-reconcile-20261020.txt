@@ -1,0 +1,11 @@
+домен: animedia.icu
+адресов в карте: 8234
+страниц произведений в карте: 8226
+записей в каталоге: 8674
+нет в карте: 448
+проверено страниц из разницы: 448
+из них noindex (отсутствие правильно): 448
+прочих адресов в карте: 8 — https://animedia.icu/, https://animedia.icu/catalog/, https://animedia.icu/collections/, https://animedia.icu/genres/, https://animedia.icu/new/, https://animedia.icu/schedule/, https://animedia.icu/top/, https://animedia.icu/types/
+лишних адресов в карте: 0
+ПРОБЕЛ КАРТЫ (страница index, а адреса в карте нет): 0
+отрицательный контроль: из 8 записей, которые в карте ЕСТЬ, index у 8
