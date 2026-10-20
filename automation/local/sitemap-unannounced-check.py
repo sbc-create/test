@@ -40,9 +40,23 @@ def добыть(адрес, таймаут=40):
 print(f"карта yummyani.site: код {код}")
 свои = set(re.findall(r"<loc>https://yummyani\.site(/anime/[^<]+)</loc>",
                       карта_сайт))
-код2, карта_биз = добыть("https://yummyani.biz/sitemap/episodes.xml", 120)
-print(f"карта yummyani.biz:  код {код2}")
-чужие = re.findall(r"<loc>https://yummyani\.biz(/anime/[^<]+)</loc>", карта_биз)
+# ВСЕ части серий соседа, а не первая. Ровно 50 000 в части — это МАКСИМУМ
+# протокола sitemaps.org, то есть признак обрыва, а не конца набора: читая
+# только `episodes.xml`, я 20.10 занизил разрыв в 2.5 раза (48 576 против
+# 121 877). Части берутся из ИНДЕКСА соседа, а не угадываются по имени.
+код_и, индекс_биз = добыть("https://yummyani.biz/sitemap.xml", 60)
+части_биз = [а for а in re.findall(r"<loc>(https://yummyani\.biz/sitemap/[^<]+)</loc>",
+                                   индекс_биз) if "/episodes" in а]
+print(f"индекс yummyani.biz: код {код_и}, частей с сериями {len(части_биз)}")
+чужие: list[str] = []
+for адрес in части_биз:
+    код2, тело = добыть(адрес, 150)
+    найдено = re.findall(r"<loc>https://yummyani\.biz(/anime/[^<]+)</loc>", тело)
+    print(f"   {адрес.rsplit('/', 1)[-1]}: код {код2}, адресов {len(найдено)}")
+    if len(найдено) == 50_000:
+        print("      ровно 50 000 — предел протокола, продолжение обязано быть"
+              " в индексе")
+    чужие += найдено
 print(f"адресов в карте .site {len(свои)}, в карте .biz {len(чужие)}")
 
 нет_в_карте = [п for п in чужие if п not in свои]

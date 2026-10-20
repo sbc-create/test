@@ -1,0 +1,26 @@
+карта yummyani.site: код 200
+индекс yummyani.biz: код 200, частей с сериями 3
+   episodes.xml: код 200, адресов 50000
+      ровно 50 000 — предел протокола, продолжение обязано быть в индексе
+   episodes-2.xml: код 200, адресов 50000
+      ровно 50 000 — предел протокола, продолжение обязано быть в индексе
+   episodes-3.xml: код 200, адресов 23310
+адресов в карте .site 1433, в карте .biz 123310
+есть у соседа и НЕТ в карте .site: 121877
+
+проверяю 12 случайных адресов (seed 20261020) на yummyani.site:
+   200 с плеером    код  200 h1 да   /anime/kosmicheskiy-linkor-yamato-2202-voiny-lyubvi/season/1/episode/1
+   200 с плеером    код  200 h1 да   /anime/bespodobnyy-boevoy-duh/season/1/episode/279
+   200 с плеером    код  200 h1 да   /anime/istorii-ohotnikov-za-monstrami/season/1/episode/15
+   200 с плеером    код  200 h1 да   /anime/vozlyublennyy-angel-anzhelika-kogda-probuzhdaetsya-serdtse/seas
+   200 с плеером    код  200 h1 да   /anime/dragonboll-zet-tv/season/2/episode/256
+   200 с плеером    код  200 h1 да   /anime/blich/season/1/episode/14
+   200 с плеером    код  200 h1 да   /anime/oderzhimye-smertyu/season/1/episode/7
+   200 с плеером    код  200 h1 да   /anime/mir-po-prezhnemu-krasiv/season/1/episode/8
+   200 с плеером    код  200 h1 да   /anime/velikiy-pravitel-2023/season/1/episode/22
+   200 с плеером    код  200 h1 да   /anime/stalnaya-trevoga-fumoffu/season/2/episode/8
+   200 с плеером    код  200 h1 да   /anime/nenasytnyy-berserk-mini-anime/season/1/episode/2
+   200 с плеером    код  200 h1 да   /anime/pokemon-sovremennoe-pokolenie/season/25/episode/33
+
+итог: {'200 с плеером': 12, '200 без плеера': 0, '404': 0, 'иное': 0}
+ВЫВОД: страницы существуют и НЕ объявлены в карте домена
