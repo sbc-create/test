@@ -208,3 +208,35 @@ def _подменить(monkeypatch, плейлисты: dict):
             return 404, ""
         return 200, РАЗМЕТКА.replace("01a1-уник", f"01a1-{слаг}")
     monkeypatch.setattr(ИНСТР, "_получить", получить)
+
+# --- пустая группа сравнения --------------------------------------------------
+#
+# Отрицательный контроль на ошибку, измеренную 20.10 на zonafilm.cc: без
+# неиграющих карточек каждое поле читается как «поля нет» на пустой стороне и
+# попадает в «кандидаты». Инструмент напечатал пять кандидатов из рекламных
+# полей и вернул 3 — уверенный ответ из отсутствия данных.
+
+def test_без_неиграющих_карточек_кандидатов_не_печатает(monkeypatch, capsys):
+    _подменить(monkeypatch, {"a": ФИЛЬМ, "b": СЕРИАЛ})
+    код = ИНСТР.main(["--plays", "https://zonafilm12.site/title/a/",
+                      "--plays", "https://zonafilm12.site/title/b/"])
+    assert код == 2
+    вывод = capsys.readouterr().out
+    assert "сравнивать не с чем" in вывод
+    assert "КАНДИДАТЫ" not in вывод
+
+
+def test_без_играющих_карточек_тоже_не_измерено(monkeypatch, capsys):
+    _подменить(monkeypatch, {"c": ФИЛЬМ})
+    код = ИНСТР.main(["--fails", "https://zonafilm12.site/title/c/"])
+    assert код == 2
+    assert "прочитанных играющих карточек ноль" in capsys.readouterr().out
+
+
+def test_непрочитанная_страница_не_считается_группой(monkeypatch, capsys):
+    """Страница в группе есть, но не прочитана — это тоже пустая сторона."""
+    _подменить(monkeypatch, {"a": ФИЛЬМ})
+    код = ИНСТР.main(["--plays", "https://zonafilm12.site/title/a/",
+                      "--fails", "https://zonafilm12.site/title/нет-такой/"])
+    assert код == 2
+    assert "сравнивать не с чем" in capsys.readouterr().out
