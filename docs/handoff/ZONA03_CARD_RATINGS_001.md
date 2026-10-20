@@ -148,6 +148,10 @@ python3 automation/local/homepage-cards-audit.py --domain zonafilm12.site \
 
 Подписей с числом голосов в атрибуте `title` — 38 из 67.
 
+Выпуск опознаётся по сборке: `build-id` витрины стал `fae37223a556-zona-03`
+(до выпуска `3588f60b0ea1-zona-03`). Главная отвечает 200, canonical равен
+`https://zonafilm12.site/`.
+
 Снимки «после» (бинарей в репозитории нет, сверка по хешу):
 `t283-after-desktop.png` 3 632 134 байта `86c9cf82322ff92d…`,
 `t283-after-phone.png` 1 399 039 `95851ec614555130…`,
