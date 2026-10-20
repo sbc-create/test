@@ -159,7 +159,7 @@ def to_files(rec: dict) -> tuple[str, dict, dict]:
         "record_id": rid,
         "group_hint": group,
         "step_count": len(b["steps"]),
-        "fetched_at": b["source"].get("fetched_at") or time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "fetched_at": b["source"].get("fetched_at"),  # только из набора; не «сейчас» — повтор должен совпадать
     }
     facts["content_hash"] = sha({k: facts[k] for k in ("title", "servings", "ingredients", "oven")})
     text = (b["title"] + " " + " ".join(i["name"] for i in b["ingredients"])).lower().replace("ё", "е")
