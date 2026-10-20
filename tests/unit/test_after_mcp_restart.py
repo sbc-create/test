@@ -101,18 +101,76 @@ def _proc(tmp_path: pathlib.Path, pid: str, аргументы: list[str]) -> pa
     return tmp_path
 
 
-def test_read_only_найден_в_строке(tmp_path):
-    корень = _proc(tmp_path, "4100",
-                   ["/usr/bin/python3", "-m", "factory.qwen.mcp", "--read-only"])
-    и = ИНСТР.командная_строка(корень=корень)
-    assert и["измерено"] is True and и["read_only"] is True and и["pid"] == "4100"
+def _юнит(tmp_path: pathlib.Path, базовая: str,
+          дополнения: dict[str, str] | None = None):
+    """Описание юнита и каталог дополнений, как в /etc/systemd/system."""
+    ю = tmp_path / "site-factory-mcp.service"
+    ю.write_text(f"[Service]\nUser=claude\nExecStart={базовая}\n",
+                 encoding="utf-8")
+    д = tmp_path / "site-factory-mcp.service.d"
+    д.mkdir(exist_ok=True)
+    for имя, тело in (дополнения or {}).items():
+        (д / имя).write_text(тело, encoding="utf-8")
+    return ю, д
 
 
-def test_процесс_без_read_only_виден_как_нарушение(tmp_path):
-    """12.10 живой процесс шёл без флага, хотя юнит его объявляет."""
-    корень = _proc(tmp_path, "4100", ["/usr/bin/python3", "-m", "factory.qwen.mcp"])
-    и = ИНСТР.командная_строка(корень=корень)
-    assert и["измерено"] is True and и["read_only"] is False
+ЗАПУСК = "/usr/bin/python3 -m factory.qwen.mcp --http 127.0.0.1:9000"
+
+
+def test_строка_совпала_с_действующим_описанием(tmp_path):
+    """Дополнение снимает --read-only намеренно, и это НЕ нарушение.
+
+    Измерено 20.10: базовый юнит несёт --read-only, а
+    `10-write-mode.conf` очищает ExecStart и задаёт запуск без флага, потому
+    что в режиме только чтения мост не может публиковать. Прежняя проверка
+    искала флаг и назвала бы правильный перезапуск провалом.
+    """
+    ю, д = _юнит(tmp_path, ЗАПУСК + " --read-only",
+                 {"10-write-mode.conf": f"[Service]\nExecStart=\nExecStart={ЗАПУСК}\n"})
+    корень = _proc(tmp_path / "proc", "4100", ЗАПУСК.split())
+    и = ИНСТР.командная_строка(корень=корень, юнит=ю, дополнения=д)
+    assert и["измерено"] is True and и["pid"] == "4100"
+    assert и["совпала"] is True
+    assert и["откуда"] == "10-write-mode.conf"
+
+
+def test_строка_не_совпала_это_нарушение(tmp_path):
+    """Отрицательный контроль: несоответствие описанию по-прежнему ловится."""
+    ю, д = _юнит(tmp_path, ЗАПУСК, {})
+    корень = _proc(tmp_path / "proc", "4100",
+                   ЗАПУСК.split() + ["--читать-только-мусор"])
+    и = ИНСТР.командная_строка(корень=корень, юнит=ю, дополнения=д)
+    assert и["совпала"] is False
+    assert и["ожидаемая"] == ЗАПУСК
+
+
+def test_пустой_execstart_очищает_прежние(tmp_path):
+    """Пустое значение — это очистка, как в systemd, а не ещё одна команда."""
+    ю, д = _юнит(tmp_path, ЗАПУСК + " --read-only",
+                 {"10-write-mode.conf": f"[Service]\nExecStart=\nExecStart={ЗАПУСК}\n"})
+    о = ИНСТР.действующий_execstart(юнит=ю, дополнения=д)
+    assert о["команда"] == ЗАПУСК
+    assert "--read-only" not in о["команда"]
+
+
+def test_дополнения_применяются_по_порядку_имён(tmp_path):
+    поздняя = ЗАПУСК + " --позже"
+    ю, д = _юнит(tmp_path, ЗАПУСК + " --read-only", {
+        "10-write-mode.conf": f"[Service]\nExecStart=\nExecStart={ЗАПУСК}\n",
+        "20-later.conf": f"[Service]\nExecStart=\nExecStart={поздняя}\n",
+    })
+    о = ИНСТР.действующий_execstart(юнит=ю, дополнения=д)
+    assert о["команда"] == поздняя and о["откуда"] == "20-later.conf"
+
+
+def test_без_описания_юнита_соответствие_не_проверено(tmp_path):
+    """Нечитаемое описание — «не проверено», а не «совпало»."""
+    корень = _proc(tmp_path / "proc", "4100", ЗАПУСК.split())
+    и = ИНСТР.командная_строка(корень=корень,
+                               юнит=tmp_path / "нет-такого.service",
+                               дополнения=tmp_path / "нет-такого.d")
+    assert и["описание_прочитано"] is False
+    assert и["совпала"] is False
 
 
 def test_чужие_процессы_не_путаются(tmp_path):
@@ -145,12 +203,14 @@ def test_авторство_без_сводки_не_измерено():
 
 # --- вердикт ------------------------------------------------------------------
 
-def _пункты(*, свежесть=True, устарел=False, строка=True, read_only=True,
+def _пункты(*, свежесть=True, устарел=False, строка=True, совпала=True,
             авторство=True) -> tuple[dict, dict, dict]:
     с = ({"измерено": True, "код_устарел": устарел, "отставание_ч": None,
           "вывод": []} if свежесть else
          {"измерено": False, "почему": "не измерено", "вывод": []})
-    к = ({"измерено": True, "pid": "4100", "read_only": read_only, "строка": "x"}
+    к = ({"измерено": True, "pid": "4100", "совпала": совпала,
+          "описание_прочитано": True, "строка": "x", "ожидаемая": "x",
+          "откуда": "10-write-mode.conf"}
          if строка else {"измерено": False, "почему": "процесс моста не найден"})
     а = ({"измерено": True, "домены": (17, 33), "подмен": 11, "код": 1, "хвост": []}
          if авторство else {"измерено": False, "код": 2, "хвост": []})
@@ -173,9 +233,10 @@ def test_остановленная_служба_перезапуском_не_�
     assert да is False and any("не измерено" in с for с in почему)
 
 
-def test_процесс_без_read_only_не_принимается():
-    да, почему = ИНСТР.вердикт(*_пункты(read_only=False))
-    assert да is False and any("read-only" in с for с in почему)
+def test_несовпадение_строки_не_принимается():
+    да, почему = ИНСТР.вердикт(*_пункты(совпала=False))
+    assert да is False
+    assert any("не совпала с действующим описанием" in с for с in почему)
 
 
 def test_ненайденный_процесс_не_принимается():
