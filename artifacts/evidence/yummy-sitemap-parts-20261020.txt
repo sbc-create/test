@@ -1,0 +1,43 @@
+
+=== yummyani.site: частей 5, адресов 18376
+   static.xml              20
+   titles.xml            8369
+   seasons.xml             36
+   episodes.xml          1599
+   images.xml            8352
+
+=== yummyani7.site: частей 7, адресов 146280
+   static.xml              20
+   titles.xml            8369
+   seasons.xml           6128
+   episodes.xml         50000
+   episodes-2.xml       50000
+   episodes-3.xml       23401
+   images.xml            8362
+
+=== yummyani7.info: частей 7, адресов 146109
+   static.xml              20
+   titles.xml            8366
+   seasons.xml           6125
+   episodes.xml         50000
+   episodes-2.xml       50000
+   episodes-3.xml       23239
+   images.xml            8359
+
+=== yummyani.org: частей 7, адресов 146189
+   static.xml              23
+   titles.xml            8366
+   seasons.xml           6125
+   episodes.xml         50000
+   episodes-2.xml       50000
+   episodes-3.xml       23326
+   images.xml            8349
+
+=== yummyani.biz: частей 7, адресов 146197
+   static.xml              20
+   titles.xml            8366
+   seasons.xml           6125
+   episodes.xml         50000
+   episodes-2.xml       50000
+   episodes-3.xml       23327
+   images.xml            8359
