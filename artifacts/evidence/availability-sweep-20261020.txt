@@ -1,0 +1,162 @@
+=== yummyani.site (45.131.182.225)
+    главная  HTTP 200 | карточек 69 | сборка — | robots index, follow
+    карточка HTTP 200 | h1 'Киберпанк: Бегущие по краю 2' | canonical свой True | постер False | слаг из карта
+    плеер    скрипт True | publisher-id '10252'
+    серия    https://yummyani.site/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1 HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== yummyani7.site (45.131.182.225)
+    главная  HTTP 200 | карточек 47 | сборка — | robots index, follow
+    карточка HTTP 200 | h1 'Киберпанк: Бегущие по краю 2' | canonical свой True | постер False | слаг из карта
+    плеер    скрипт True | publisher-id '10376'
+    серия    https://yummyani7.site/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1 HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== yummyani7.info (45.131.182.225)
+    главная  HTTP 200 | карточек 47 | сборка — | robots index, follow
+    карточка HTTP 200 | h1 'Волшебные сёстры Лулутто Лилли. Часть 2' | canonical свой True | постер False | слаг из карта
+    плеер    скрипт True | publisher-id '10371'
+    серия    https://yummyani7.info/anime/volshebnye-sestry-lulutto-lilli-chast-2/season/1/episode/1 HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== yummyani.org (45.131.182.225)
+    главная  HTTP 200 | карточек 61 | сборка — | robots index, follow
+    карточка HTTP 200 | h1 'Киберпанк: Бегущие по краю 2' | canonical свой True | постер False | слаг из карта
+    плеер    скрипт True | publisher-id '10377'
+    серия    https://yummyani.org/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1 HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== yummyani.biz (45.131.182.225)
+    главная  HTTP 200 | карточек 62 | сборка — | robots index, follow
+    карточка HTTP 200 | h1 'Киберпанк: Бегущие по краю 2' | canonical свой True | постер False | слаг из карта
+    плеер    скрипт True | publisher-id '10375'
+    серия    https://yummyani.biz/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1 HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordserials22.info (45.131.182.225)
+    главная  HTTP 200 | карточек 94 | сборка 2d8237f8fea7-lords-05 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10368'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== 1lordserials1.online (45.131.182.225)
+    главная  HTTP 200 | карточек 146 | сборка d1627b4b7eaa-lords-03 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10238'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== lordfilm47.space (45.131.182.225)
+    главная  HTTP 200 | карточек 60 | сборка 479698c0480b-lords-01 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10373'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== lordserial33.biz (45.131.182.225)
+    главная  HTTP 200 | карточек 62 | сборка 1a95500d3935-lords-02 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10378'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== zonafilm12.site (45.131.182.225)
+    главная  HTTP 200 | карточек 64 | сборка fae37223a556-zona-03 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10372'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== zonafilm.space (45.131.182.225)
+    главная  HTTP 200 | карточек 64 | сборка 69f79d8502a9-zona-01 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10331'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== zonafilm.cc (45.131.182.225)
+    главная  HTTP 200 | карточек 87 | сборка 0860d0ac552a-zona-02 | robots index, follow
+    карточка HTTP 200 | h1 'Жестокий мир' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10374'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== animedia.icu (45.131.182.225)
+    главная  HTTP 200 | карточек 187 | сборка 55c7b719a5df-animedia-01 | robots index, follow
+    карточка HTTP 200 | h1 '009-1' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10332'
+    серия    https://animedia.icu/title/009-1/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== animedia.space (45.131.182.225)
+    главная  HTTP 200 | карточек 145 | сборка 80b24f23a514-animedia-space | robots index, follow
+    карточка HTTP 200 | h1 '009-1' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10333'
+    серия    https://animedia.space/title/009-1/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== animeg0.site (45.131.182.225)
+    главная  HTTP 200 | карточек 110 | сборка 7185a60a6585-animego-03 | robots index, follow
+    карточка HTTP 200 | h1 'Звёздные войны: Последние джедаи' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10252'
+    серия    https://animeg0.site/title/zvezdnye-voyny-poslednie-dzhedai-2/season-2/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== an1meg0.site (45.131.182.225)
+    главная  HTTP 200 | карточек 102 | сборка 51d0e9b3536e-animego-04 | robots index, follow
+    карточка HTTP 200 | h1 'Звёздные войны: Последние джедаи' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10252'
+    серия    https://an1meg0.site/title/zvezdnye-voyny-poslednie-dzhedai-2/season-2/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== an1mego.site (45.131.182.225)
+    главная  HTTP 200 | карточек 102 | сборка 70b141ecd6b8-animego-02 | robots index, follow
+    карточка HTTP 200 | h1 'Звёздные войны: Последние джедаи' | canonical свой True | постер True | слаг из карта
+    плеер    скрипт True | publisher-id '10252'
+    серия    https://an1mego.site/title/zvezdnye-voyny-poslednie-dzhedai-2/season-2/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordfilm.group (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка 9d516ae97730-lords-10 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Графиня де Монсоро' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== lordfilm.spb.ru (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка a1e296bbce04-lords-11 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Графиня де Монсоро' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== lordfilm.msk.ru (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка 1bab080b6b06-lords-12 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Графиня де Монсоро' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    — HTTP — | плеер —
+    ВЫВОД: исправно
+=== lordserial.su (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка 9f4391a40ac5-lords-13 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Это все еда' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    https://lordserial.su/title/eto-vse-eda/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordserial.group (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка 2e9e3c7876bc-lords-14 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Это все еда' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    https://lordserial.group/title/eto-vse-eda/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordserial.spb.ru (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка cdbe4edec611-lords-15 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Это все еда' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    https://lordserial.spb.ru/title/eto-vse-eda/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordserial.msk.ru (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка 8660085a88cc-lords-16 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Это все еда' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    https://lordserial.msk.ru/title/eto-vse-eda/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+=== lordserial.net.ru (145.63.129.86, цель k2-zomro-01)
+    витрина на другой нашей цели (k2-zomro-01): проверки идут по HTTPS, местные пути этого узла не читаются
+    главная  HTTP 200 | карточек 84 | сборка dff8e5f5b912-lords-17 | robots noindex, nofollow
+    карточка HTTP 200 | h1 'Это все еда' | canonical свой True | постер True | слаг из главная
+    плеер    скрипт True | publisher-id '10454'
+    серия    https://lordserial.net.ru/title/eto-vse-eda/season-1/episode-1/ HTTP 200 | плеер True
+    ВЫВОД: исправно
+
+домен проверено 25; с замечаниями 0; не наших или без DNS 0
+
+[exited with code 0]
