@@ -136,7 +136,23 @@ YandexBot отвечает 200 с `Allow: /`, карта объявлена и �
 * **Приёмка пилотов одной командой**: `queue-vs-live.py --only T283,T284`.
 * Закрыты две красные проверки схем, висевшие с 18.10.
 
-Полный прогон `tests/unit` — **8 501 passed, 129 skipped, 16 xfailed, код 0**.
+**Проверено, с кодами возврата:**
+
+| стадия | результат |
+| --- | --- |
+| `pytest tests/unit` | **8 501 passed, 129 skipped, 16 xfailed, код 0** |
+| `scripts/validate_schemas.py` | 24 схемы компилируются, код 0 |
+| `scripts/validate_registries.py` | все реестры `config/` сопоставлены схемам, код 0 |
+| `pytest tests/operator` (guardrails, hookguard) | 105 passed, код 0 |
+| `pytest tests/test_schemas.py tests/test_traceability.py` | 161 passed, код 0 |
+| `factory knowledge verify` | freeze 2026-10-20.1, целостность OK |
+| `ruff check` по моим новым файлам | All checks passed |
+
+Чего я **не** проверял и зелёным не называю: стадия `Lint (ruff)` в
+`scripts/verify.sh` падает на всём репозитории (347 замечаний) — это состояние
+было до меня, и в моих файлах замечаний нет; полный `scripts/verify.sh` я
+прервал по своему таймауту на стадии pytest, то есть его итогового кода у меня
+НЕТ, и объявлять прогон успешным по частям я не стану.
 
 ## 6. Чего не измерено, прямо
 
