@@ -10,13 +10,47 @@
 ## Причина
 `_страницы_жанров()` в `automation/animedia-data-update.py` загружает `src/animedia-frontend.py`; без манифеста шаблона (на раннере его нет) модуль делает `raise SystemExit` (строки 83/88/96). `SystemExit` не наследует `Exception`, поэтому `except Exception as ош:` его не ловит — обработчик завершается до записи файла состояния. На хосте проходит (манифест есть).
 
-## Правка (одна строка, fast-forward поверх f8327f9)
-```
-automation/animedia-data-update.py, функция _страницы_жанров:
+## Правка — форма (а), согласована с Архитектором 20.10 (ARCHITECT_TO_SEO-006)
+
+Первоначальная форма `except (Exception, SystemExit)` **отклонена**: у SystemExit модуля витрины три причины — нет манифеста
+(строка 83, на раннере CI ожидаемо), манифест неполон (88) и манифест чужого семейства (96, fail-closed по замыслу); общий
+перехват проглотил бы две настоящие поломки и дал зелёный шаг без жанров. Форма (а) ловит только ожидаемый случай:
+
+```diff
+--- a/automation/animedia-data-update.py   (f8327f9, функция _страницы_жанров)
++++ b/automation/animedia-data-update.py
 -    except Exception as ош:  # noqa: BLE001 — шаг карты не падает из-за жанров
-+    except (Exception, SystemExit) as ош:  # noqa: BLE001 — шаг карты не падает из-за жанров
++    except SystemExit as ош:
++        # Модуль витрины отказывает при импорте. Без файла манифеста (раннер CI) это
++        # ожидаемо — карта пишется без жанров. Манифест есть, а модуль упал (неполон,
++        # чужое семейство) — неисправность, которую нельзя глушить.
++        манифест = Path(os.environ.get("ANIMEDIA_TEMPLATE_MANIFEST")
++                        or os.environ.get("LORDS_TEMPLATE_MANIFEST")
++                        or Path(os.environ.get("ANIMEDIA_RUNTIME_ROOT", "/srv/lords/.frontend"))
++                        / "template-manifest-animedia-01.json")
++        if манифест.exists():
++            raise
++        return [], f"указатель жанров рантайма не построен: манифеста шаблона нет ({ош})"
++    except Exception as ош:  # noqa: BLE001 — шаг карты не падает из-за жанров
+         return [], f"указатель жанров рантайма не построен: {type(ош).__name__}: {ош}"
 ```
-Без манифеста карта пишется без жанров с причиной в отчёте шага; на хосте поведение не меняется (+55 страниц жанров).
+
+Путь манифеста вычисляется так же, как в самом `src/animedia-frontend.py` (`_окр("ANIMEDIA_TEMPLATE_MANIFEST",
+"LORDS_TEMPLATE_MANIFEST", _КОРЕНЬ_РАНТАЙМА / "template-manifest-animedia-01.json")`); `os` и `Path` в обработчике уже
+импортированы. Следующий шаг (по желанию Архитектора, форма б) — не импортировать рантайм вовсе, как `_слаги_перенаправлений()`.
+
+**Кто применяет:** ни SEO-сессия (профиль запрещает git в репозиториях ячеек), ни сессия wt-nova-02 (изоляция worktree)
+сделать коммит в `var/site-repos/animedia-icu` не могут — **нужен владелец** (или сессия с правом записи в этот клон):
+
+```bash
+cd /home/claude/wt-portable-site-cell-01/var/site-repos/animedia-icu
+git fetch origin claude/extract-animedia-icu-seo-01 && git switch -c fix-t262 f8327f9
+# применить diff выше к automation/animedia-data-update.py
+python3 checks/updater_conformity.py                                   # на хосте: проходит
+ANIMEDIA_TEMPLATE_MANIFEST=/nonexistent python3 checks/updater_conformity.py   # как на раннере: проходит
+git commit -am "T262: SystemExit рантайма — только при отсутствии манифеста; неполный/чужой манифест не глушится"
+git push origin HEAD:claude/extract-animedia-icu-seo-01                 # fast-forward поверх f8327f9
+```
 
 ## Проверка после push
 1. CI на новой голове — success (`checks/updater_conformity.py` проходит без манифеста).
