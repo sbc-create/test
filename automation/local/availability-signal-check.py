@@ -148,14 +148,14 @@ def поля(узел, префикс: str = "") -> dict:
             итог.update(поля(v, f"{префикс}.{к}" if префикс else str(к)))
     elif isinstance(узел, list):
         итог[префикс or "."] = f"список[{len(узел)}]"
-        for н, э in enumerate(узел[:1]):
+        for э in узел[:1]:
             итог.update(поля(э, f"{префикс}[]"))
     else:
         if узел is None:
             итог[префикс] = "пусто"
         elif isinstance(узел, bool):
             итог[префикс] = f"логическое={узел}"
-        elif isinstance(узел, (int, float)):
+        elif isinstance(узел, int | float):
             итог[префикс] = "число"
         else:
             текст = str(узел)

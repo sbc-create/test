@@ -20,8 +20,8 @@ from __future__ import annotations
 
 import pytest
 
-from seo_operator import analytics_collect
 from factory.errors import FactoryError
+from seo_operator import analytics_collect
 
 КЛЮЧ = "search_landing_by_engine"
 

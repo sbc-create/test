@@ -26,7 +26,6 @@ from __future__ import annotations
 import argparse
 import re
 import subprocess
-import sys
 from concurrent.futures import ThreadPoolExecutor
 
 #: Задача → (адрес, как измерить). Признак описан функцией от текста страницы:
