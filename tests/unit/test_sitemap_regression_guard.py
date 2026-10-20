@@ -73,6 +73,37 @@ def test_имя_части_из_адреса():
     assert ИНСТР.имя_части("https://x/sitemap/titles.xml") == "titles"
 
 
+def test_вторая_форма_адреса_части_тоже_разбирается():
+    """Измерено: Lords, Zona и Animedia отдают `/sitemap-1.xml`, не `/sitemap/`.
+
+    Прежняя версия знала только форму Yummy, возвращала для второй ВЕСЬ адрес,
+    затем собирала из него `https://домен/sitemap/<весь адрес>.xml` и получала
+    404. Итог — ложный провал «часть не ответила» на витрине, у которой карта
+    исправна и отдаёт 8 233 адреса.
+    """
+    assert ИНСТР.имя_части("https://x/sitemap-1.xml") == "sitemap-1"
+    assert ИНСТР.имя_части("https://x/sitemap-12.xml") == "sitemap-12"
+
+
+def test_адрес_части_берётся_из_индекса_а_не_собирается():
+    """Главный признак правки: запрашивается РОВНО то, что в индексе."""
+    запрошено = []
+
+    def достать(url, **к):
+        запрошено.append(url)
+        if url.endswith("/sitemap.xml"):
+            return ("<sitemapindex><sitemap><loc>"
+                    f"https://{Д}/sitemap-1.xml</loc></sitemap></sitemapindex>")
+        return _urlset(["/title/a/"])
+
+    снимок = ИНСТР.снять(Д, загрузчик=достать)
+    assert снимок["ok"] is True
+    assert f"https://{Д}/sitemap-1.xml" in запрошено
+    assert not any("/sitemap/sitemap" in у for у in запрошено), запрошено
+    assert снимок["parts"]["sitemap-1"]["ok"] is True
+    assert снимок["parts"]["sitemap-1"]["url"] == f"https://{Д}/sitemap-1.xml"
+
+
 def test_следующая_часть_нумеруется():
     assert ИНСТР.следующая("episodes") == "episodes-2"
     assert ИНСТР.следующая("episodes-2") == "episodes-3"

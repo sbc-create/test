@@ -1,0 +1,27 @@
+[Unit]
+Description=Регулярная сверка полноты и свежести карт сети (только чтение)
+Documentation=file:///home/claude/wt-nova-publish-memory-02/automation/local/sitemap-reconcile.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-nova-publish-memory-02
+# Проход только ЧИТАЕТ публичные страницы и карты. Ничего не публикует, не
+# перезапускает и не трогает постоянные данные витрин.
+#
+# Повод для расписания назван измерением: MOD-103 (в карте yummyani.site 1 424
+# адреса серий вместо порядка 123 000) и MOD-108 (15 объявленных пустых страниц
+# каталога, открытых для индексации) простояли на витринах по несколько суток и
+# нашлись разбором по заданию, а не мониторингом.
+#
+# Код возврата 2 означает «есть неизмеренное», и это НЕ успех: systemd пометит
+# запуск неуспешным, и так и задумано — ноль даётся только когда всё измерено и
+# чисто.
+ExecStart=/usr/bin/python3 automation/local/sitemap-reconcile.py --all-indexable
+TimeoutStartSec=5400
+
+[Install]
+WantedBy=multi-user.target
