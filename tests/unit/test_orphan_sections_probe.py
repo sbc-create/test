@@ -105,8 +105,15 @@ def test_домен_ключом_не_считается(monkeypatch, capsys):
 # --- сиротство ----------------------------------------------------------------
 
 def test_живой_раздел_без_ссылки_это_сирота(monkeypatch):
+    """Уточнено 20.10: сиротой делает НЕ отсутствие ссылки само по себе.
+
+    Нужно ещё, чтобы `canonical` раздела указывал на него самого. Без этого
+    условия проход объявлял сиротами канонизированные псевдонимы и давал 25
+    находок из 25 домéнов, из которых настоящими были пять.
+    """
     monkeypatch.setattr(ИНСТР, "код",
                         lambda url: "200" if "/schedule" in url else "404")
+    monkeypatch.setattr(ИНСТР, "канонический_свой", lambda д, п: True)
     monkeypatch.setattr(
         subprocess, "run",
         lambda ч, **к: type("И", (), {"stdout": _главная(["/catalog/"])})())
@@ -143,6 +150,64 @@ def test_отсутствующий_раздел_сиротой_не_счита�
         lambda ч, **к: type("И", (), {"stdout": _главная(["/catalog/"])})())
     итог = ИНСТР.по_домену("x.site")
     assert итог["осиротевшие"] == [] and итог["живые"] == []
+
+
+def test_канонизированный_псевдоним_сиротой_не_считается(monkeypatch):
+    """Главный признак, и он снял 20 ложных находок из 25.
+
+    На Lords и Zona `/schedule/` — тот же `/new/`: тот же h1, тот же состав
+    карточек, и `canonical` у обоих ведёт на `/new/`. У Yummy `/new`,
+    `/collections` и `/schedule` канонизированы на `/catalog`. Ссылка на такой
+    адрес вела бы обходчика на дубль, поэтому её отсутствие — правильное
+    устройство, а не дефект.
+    """
+    monkeypatch.setattr(ИНСТР, "код",
+                        lambda url: "200" if "/schedule" in url else "404")
+    monkeypatch.setattr(ИНСТР, "канонический_свой", lambda д, п: False)
+    monkeypatch.setattr(
+        subprocess, "run",
+        lambda ч, **к: type("И", (), {"stdout": _главная(["/catalog/"])})())
+    итог = ИНСТР.по_домену("x.site")
+    assert итог["осиротевшие"] == [], итог
+    assert итог["псевдонимы"] and "канонизирован" in итог["псевдонимы"][0][1]
+
+
+def test_самостоятельный_раздел_сиротой_считается(monkeypatch):
+    """Положительный контроль: у animedia /movies/ canonical на себя."""
+    monkeypatch.setattr(ИНСТР, "код",
+                        lambda url: "200" if "/movies" in url else "404")
+    monkeypatch.setattr(ИНСТР, "канонический_свой", lambda д, п: True)
+    monkeypatch.setattr(
+        subprocess, "run",
+        lambda ч, **к: type("И", (), {"stdout": _главная(["/catalog/"])})())
+    итог = ИНСТР.по_домену("x.site")
+    assert итог["осиротевшие"] == ["/movies/"], итог
+
+
+def test_без_canonical_судить_не_о_чем(monkeypatch):
+    """Третий исход: канонического адреса нет — не сирота и не псевдоним."""
+    monkeypatch.setattr(ИНСТР, "код",
+                        lambda url: "200" if "/movies" in url else "404")
+    monkeypatch.setattr(ИНСТР, "канонический_свой", lambda д, п: None)
+    monkeypatch.setattr(
+        subprocess, "run",
+        lambda ч, **к: type("И", (), {"stdout": _главная(["/catalog/"])})())
+    итог = ИНСТР.по_домену("x.site")
+    assert итог["осиротевшие"] == []
+    assert "canonical не объявлен" in итог["псевдонимы"][0][1]
+
+
+def test_канонический_свой_разбирает_оба_случая(monkeypatch):
+    def run(части, **к):
+        url = части[-1]
+        тело = ('<link rel="canonical" href="https://x.site/new/"/>'
+                if "/schedule" in url
+                else '<link rel="canonical" href="https://x.site/movies/"/>')
+        return type("И", (), {"stdout": тело})()
+
+    monkeypatch.setattr(subprocess, "run", run)
+    assert ИНСТР.канонический_свой("x.site", "/schedule/") is False
+    assert ИНСТР.канонический_свой("x.site", "/movies/") is True
 
 
 def test_ноль_ссылок_на_главной_это_не_сиротство(monkeypatch):
