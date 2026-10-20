@@ -87,3 +87,43 @@ sudo bash templates/food-baking/deploy/myfood-apply.sh --kit /home/claude/wt-tem
 
 Соседние сайты из `sites-enabled` (an1mego.site, animeg0.site, yummyani.biz/.org/.site) по HTTPS — 200.
 Ошибок, требующих исправления, не найдено.
+
+## Раунд 2 (20.10.2026): оформление, служебные тексты, приём набора Qwen, подготовка к индексации
+
+### Код
+
+| сайт | ветка, коммит | что изменено |
+| --- | --- | --- |
+| bestreciept.site | `claude/template-food-daily-c` `8161ada`, `7fe849b` | сетка карточек 1/2/3/4 (560/900/1200 px), новая главная (поиск, разделы с числом рецептов, «на скорую руку», «на компанию», новые рецепты, сезонный блок по подборке ≥3), рецепт: быстрые факты и переходы к ингредиентам и приготовлению; футер; «Конфиденциальность»; `/kontakty/` → 301 на `/o-proekte/`; убраны «ИИ», «редактор не проверил», «редакция не готовила»; WebSite+SearchAction, ItemList; `fooddaily.set_import`; `fooddaily.media` |
+| myfood.mobi | `claude/template-food-baking-b` `a74fa9a`, `5e38ec6` | карточки 1/2/3/4 вместо оглавления и таблицы (таблица — вид `?vid=tablica` без canonical), разделы `/recepty/<раздел>/`, `/duhovka/` «по температуре», главная (поиск, разделы, осенняя выпечка, «духовка греется», «к чаю», новые), рецепт: выход, продукты, переходы; футер; «Конфиденциальность»; убраны «рабочее название», «предварительная версия», «с помощью ИИ», «не пекла», «Фото нет», «версия N»; `bakebook.set_import`; `bakebook.media` |
+| оба | `claude/template-food-daily` `50e23cb` | `tools/qwen_recipes_intake.py` (приёмник набора), `automation/host/recipe-domains-apply.sh` (одна команда владельца) |
+
+### Проверки до выкладки
+
+| что | команда | результат |
+| --- | --- | --- |
+| тесты food-daily C | `bash bin/food-daily test` | 167 passed, exit 0 |
+| тесты food-baking B | `bash bin/food-baking test` | 55 passed, exit 0 |
+| приёмник набора | `pytest tests/unit/test_qwen_recipes_intake.py tests/unit/test_repo_hygiene.py` | 14 passed, exit 0 |
+| линтер | `ruff check` (оба шаблона, приёмник) | без замечаний |
+| служебные тексты | `test_launch_readiness.py::test_no_technical_text_in_public_html` — все URL карты, поиск, 404 | 0 совпадений |
+| переключение индексации | `test_indexing_switch_is_consistent[False/True]` — robots.txt, meta robots, X-Robots-Tag, canonical по всем URL карты через HTTP | согласовано в обоих состояниях |
+| внутренние ссылки | scratchpad `crawl.py` | bestreciept 70 адресов, myfood 42 — все 200 |
+| вёрстка | scratchpad `shoot.py`, Chromium 1440/1024/768/390/320 | без горизонтальной прокрутки и ошибок консоли |
+| репетиция комплектов | scratchpad `rehearse.py` (порты 9241/9242) | обе главные 200, canonical на домене, noindex; карта 53 и 33 адреса; ресурсы 0 ошибок |
+| сценарий обновления | `bash automation/host/recipe-domains-apply.sh --dry-run` | exit 0, индексация закрыта в обоих |
+
+### Изображения
+
+Фотографий блюд с установленными правами и средств генерации изображений нет: 0 из 22 и 0 из 13 рецептов
+с изображением. Одну картинку на много блюд не ставим. Подготовлено: `data/media/images.json` (вид photo/illustration,
+источник, лицензия, alt — без них сайт не запускается), `python3 -m fooddaily.media add` / `python3 -m bakebook.media add`
+делают WebP 400/800/1200 в пропорции 4:3; карточка и рецепт выводят `<picture>` с srcset, размерами и lazy loading,
+Recipe JSON-LD получает `image` только при такой записи.
+
+### Набор Qwen QWEN-NIGHT-RECIPES-100X5-001
+
+На сервере не найден (по имени и содержимому в /home, /srv, /var/lib, /opt, /tmp, /mnt, /media, /data; каталога
+/home/user нет). Каталог приёма: `/home/claude/wt-template-food-daily/var/qwen-intake/` (вне git, 0700) —
+положить `QWEN-NIGHT-RECIPES-100X5-001.tar.gz` (или каталог). Дальше: `tools/qwen_recipes_intake.py plan`, пробная
+партия `set-import --limit 3`, затем вся партия, снимок, новые комплекты и та же команда владельца.
