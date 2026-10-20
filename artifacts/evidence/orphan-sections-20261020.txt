@@ -1,0 +1,32 @@
+✗ 1lordserials1.online   разделов живых  8, ссылок с главной 198, без входящей ссылки: /schedule/
+✗ an1meg0.site           разделов живых  8, ссылок с главной 110, без входящей ссылки: /new/, /collections/, /movies/, /series/, /animation/, /schedule/
+✗ an1mego.site           разделов живых  8, ссылок с главной 111, без входящей ссылки: /new/, /collections/, /movies/, /series/, /animation/, /schedule/
+✗ animedia.icu           разделов живых  8, ссылок с главной 204, без входящей ссылки: /movies/, /series/, /animation/
+✗ animedia.space         разделов живых  8, ссылок с главной 161, без входящей ссылки: /movies/, /series/, /animation/
+✗ animeg0.site           разделов живых  8, ссылок с главной 118, без входящей ссылки: /new/, /collections/, /movies/, /series/, /animation/, /schedule/
+✗ lordfilm.group         разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordfilm.msk.ru        разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordfilm.spb.ru        разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordfilm47.space       разделов живых  8, ссылок с главной  91, без входящей ссылки: /schedule/
+✗ lordserial.group       разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordserial.msk.ru      разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordserial.net.ru      разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordserial.spb.ru      разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordserial.su          разделов живых 10, ссылок с главной 116, без входящей ссылки: /schedule/
+✗ lordserial33.biz       разделов живых 10, ссылок с главной  92, без входящей ссылки: /schedule/
+✗ lordserials22.info     разделов живых 10, ссылок с главной 126, без входящей ссылки: /schedule/
+✗ yummyani.biz           разделов живых  4, ссылок с главной 199, без входящей ссылки: /new/, /collections/, /schedule/
+      /search/ отвечает 308
+✗ yummyani.org           разделов живых  4, ссылок с главной 197, без входящей ссылки: /new/, /collections/, /schedule/
+      /search/ отвечает 308
+✗ yummyani.site          разделов живых  4, ссылок с главной 215, без входящей ссылки: /new/, /collections/, /schedule/
+      /search/ отвечает 308
+✗ yummyani7.info         разделов живых  4, ссылок с главной 167, без входящей ссылки: /new/, /collections/, /schedule/
+      /search/ отвечает 308
+✗ yummyani7.site         разделов живых  4, ссылок с главной 165, без входящей ссылки: /new/, /collections/, /schedule/
+      /search/ отвечает 308
+✗ zonafilm.cc            разделов живых  8, ссылок с главной  96, без входящей ссылки: /schedule/
+✗ zonafilm.space         разделов живых  8, ссылок с главной  80, без входящей ссылки: /schedule/
+✗ zonafilm12.site        разделов живых  8, ссылок с главной  81, без входящей ссылки: /schedule/
+
+доменов с разделами без входящих ссылок: 25 из 25
