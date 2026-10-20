@@ -1,0 +1,15 @@
+
+=== analytics-2026-10-19.json (собрано 2026-10-19T05:11:55Z)
+    измерено 320 из 462
+    повторный проход: включён True, пауза 90.0 с, домены ['zonafilm.space', 'zonafilm12.site']
+      zonafilm.space: было 15 → 16, помогло True
+      zonafilm12.site: было 7 → 17, помогло True
+    zonafilm12.site    измерено 17/22, daily_search измерен
+    zonafilm.space     измерено 16/22, daily_search измерен
+
+=== analytics-2026-10-20.json (собрано 2026-10-20T05:11:38Z)
+    измерено 320 из 462
+    повторный проход: включён True, пауза 90.0 с, домены ['zonafilm.space']
+      zonafilm.space: было 15 → 16, помогло True
+    zonafilm12.site    измерено 17/22, daily_search измерен
+    zonafilm.space     измерено 16/22, daily_search измерен

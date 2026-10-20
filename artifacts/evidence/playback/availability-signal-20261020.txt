@@ -1,0 +1,16 @@
+карточек: играют 10, не играют 1; страниц прочитано 11
+   https://zonafilm12.site/title/kak-ryba-v-vode/                   состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/fotograf-4/                        состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/dom-dlya-papy/                     состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/velikoe-ograblenie-v-pendzhabe/    состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/vual/                              состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/pazl/                              состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/voditel/                           состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/tayny-matriarha/                   состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+   https://zonafilm12.site/title/12-metrov-bez-golovy/              состояние resolving    агрегатор kp   плейлист 200 дорожек 1
+   https://zonafilm12.site/title/1521/                              состояние resolving    агрегатор kp   плейлист 200 дорожек 1
+   https://zonafilm12.site/title/tom-i-cherri/                      состояние resolving    агрегатор cvh  плейлист 200 дорожек 1
+
+сравнено полей: 35
+ПРИЗНАКА НЕТ среди собранных полей: ни одно поле разметки или плейлиста не делит карточки по границе «играет / не играет».
+Значит доступность предсказывается только зондом показа.
