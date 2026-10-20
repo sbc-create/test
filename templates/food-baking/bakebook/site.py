@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 import re
 from pathlib import Path
 
@@ -181,9 +182,21 @@ class Recipe:
         )
 
 
+def config_file() -> Path:
+    """config/site.yaml или файл конфигурации домена из SITE_CONFIG — только имя вида site.<имя>.yaml в config/:
+    путь извне каталога config не принимается."""
+    name = os.environ.get("SITE_CONFIG", "site.yaml")
+    if not re.fullmatch(r"site(\.[a-z0-9-]+)?\.yaml", name):
+        raise ValueError(f"SITE_CONFIG: недопустимое имя {name!r}")
+    p = ROOT / "config" / name
+    if not p.is_file():
+        raise FileNotFoundError(p)
+    return p
+
+
 class Site:
     def __init__(self, content: Path | None = None, config: Path | None = None):
-        self.cfg = yaml.safe_load((config or ROOT / "config" / "site.yaml").read_text())
+        self.cfg = yaml.safe_load((config or config_file()).read_text())
         data = json.loads((content or ROOT / "data" / "content.json").read_text())
         if data["site_id"] != self.cfg["site_id"]:
             raise PermissionError("контент принадлежит другому сайту")
