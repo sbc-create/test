@@ -20,6 +20,7 @@ case "${1:-help}" in
   topics)    shift; exec python3 -m fooddaily.report topics "$@" ;;
   import)    shift; exec python3 -m fooddaily.pipeline "$@" ;;     # plan | run | reextract | retopic | status | purge-expired
   qwen)      shift; exec python3 -m fooddaily.qwen "$@" ;;         # export | import | status
+  set-import) shift; exec python3 -m fooddaily.set_import "$@" ;;  # партия набора Qwen из приёмника: --dry-run | --limit N
   editorial) shift; exec python3 -m fooddaily.editorial "$@" ;;    # publish-preview | rollback | review | diff | snapshot
   video)     shift; exec python3 -m fooddaily.video "$@" ;;
   build)     shift; exec python3 -m fooddaily.build "$@" ;;

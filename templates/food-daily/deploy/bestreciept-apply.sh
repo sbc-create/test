@@ -10,7 +10,8 @@
 #   2. системный пользователь bestreciept-site, данные /srv/bestreciept-site/var и секреты /srv/bestreciept-site/secrets — вне релиза;
 #   3. первичная инициализация данных — один раз (редакционная база с версиями из комплекта, если она есть);
 #   4. служба recipe-bestreciept-site.service на 127.0.0.1:9211 с SITE_CONFIG=site.bestreciept.yaml (адреса на домене, индексация закрыта);
-#   5. nginx: HTTP → HTTPS, www → bestreciept.site, X-Robots-Tag noindex, /redaktor/ снаружи закрыт;
+#   5. nginx: HTTP → HTTPS, www → bestreciept.site, /redaktor/ снаружи закрыт; X-Robots-Tag noindex — пока в конфигурации
+#      релиза production_authorized не true (тот же флаг, что у robots.txt, meta robots и sitemap приложения);
 #   6. сертификат Let's Encrypt (webroot /var/www/certbot); продление — certbot.timer и хук reload-nginx.sh.
 # Соседние сайты не затрагиваются: каждая правка nginx проходит nginx -t, при отказе наш файл убирается.
 set -Eeuo pipefail
@@ -184,7 +185,14 @@ server {
     location / { return 301 https://${DOMAIN}\$request_uri; }
 }
 "
-tls_conf="# ${DOMAIN}: HTTPS. Индексация закрыта до решения владельца (заголовок дублирует метатег рантайма).
+# Индексация: один флаг production_authorized в конфигурации релиза. Пока он не true — nginx дублирует
+# noindex приложения; после открытия заголовок не ставится, чтобы не противоречить robots.txt и sitemap.
+if tar -xzOf "${kit}/code.tar.gz" "templates/${TPL}/config/${CFG}" | grep -Eq '^production_authorized:[[:space:]]*true\b'; then
+  robots_hdr=""; log "индексация: открыта (production_authorized: true)"
+else
+  robots_hdr='    add_header X-Robots-Tag "noindex, nofollow" always;'; log "индексация: закрыта (production_authorized не true)"
+fi
+tls_conf="# ${DOMAIN}: HTTPS. Индексация — по production_authorized в конфигурации релиза.
 server {
     listen 443 ssl http2;
     listen [::]:443 ssl http2;
@@ -195,7 +203,7 @@ server {
     ssl_protocols TLSv1.2 TLSv1.3;
     ssl_session_timeout 1d;
     ssl_session_tickets off;
-    add_header X-Robots-Tag \"noindex, nofollow\" always;
+${robots_hdr}
     add_header X-Content-Type-Options \"nosniff\" always;
     # редактор доступен только с самого сервера (туннель на 127.0.0.1:${PORT}), снаружи — 404
     location ^~ /redaktor { return 404; }
@@ -217,7 +225,7 @@ server {
     ssl_certificate     /etc/letsencrypt/live/${DOMAIN}/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/${DOMAIN}/privkey.pem;
     ssl_protocols TLSv1.2 TLSv1.3;
-    add_header X-Robots-Tag \"noindex, nofollow\" always;
+${robots_hdr}
     return 301 https://${DOMAIN}\$request_uri;
 }
 "
