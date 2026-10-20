@@ -1,0 +1,22 @@
+zonafilm12.site: подборок на главной 8
+   recently_added             «Подборка «Недавно добавленные»  » карточек  60 страниц   259 robots index, follow
+   recently_added_movies      «Подборка «Недавно добавленные   » карточек  60 страниц   188 robots index, follow
+   new_movie_releases         «Подборка «Премьеры фильмов»     » карточек  60 страниц    25 robots index, follow
+   new_series_releases        «Подборка «Новые сериалы»        » карточек  60 страниц    22 robots index, follow
+   new_episodes               «Подборка «Недавно добавленные   » карточек  60 страниц    38 robots index, follow
+   top_rated                  «Подборка «Высокие оценки»       » карточек  60 страниц   969 robots index, follow
+   current_season             «Подборка «Этого года»           » карточек  60 страниц    47 robots index, follow
+   video_available            «Подборка «С видео»              » карточек  60 страниц  1109 robots index, follow
+
+пересечения первых страниц (доля общего от меньшего набора):
+   current_season           ↔ new_episodes             общих  13 из  60   21.7 %
+   current_season           ↔ new_movie_releases       общих  42 из  60   70.0 %  ПОЧТИ ОДНО И ТО ЖЕ
+   current_season           ↔ new_series_releases      общих  18 из  60   30.0 %
+   new_episodes             ↔ new_series_releases      общих  13 из  60   21.7 %
+   new_episodes             ↔ recently_added           общих   7 из  60   11.7 %
+   new_series_releases      ↔ top_rated                общих   1 из  60    1.7 %
+   new_series_releases      ↔ video_available          общих   1 из  60    1.7 %
+   recently_added           ↔ recently_added_movies    общих  48 из  60   80.0 %  ПОЧТИ ОДНО И ТО ЖЕ
+   top_rated                ↔ video_available          общих  50 из  60   83.3 %  ПОЧТИ ОДНО И ТО ЖЕ
+
+пар с пересечением 70 % и выше: 3
