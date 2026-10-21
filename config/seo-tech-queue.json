@@ -7660,6 +7660,32 @@
       ],
       "status": "queued",
       "evidence": "21.10 13:02Z SEO: тот же шаблон чтения (склейка всех *.py, первое совпадение) — в checks/sitemap_wired.py zonafilm.space, zonafilm.cc, lordfilm47.space, 1lordserials1.online, an1mego/an1meg0/animeg0. Канарейка — zonafilm12.site, где сбой случился. Перенос после проверки выпущенной версии; контрольные сайты T075 (lordfilm47.space, 1lordserials1.online) и канарейку T191 (an1mego) до вердиктов не трогаю, хотя правка только в проверках."
+    },
+    {
+      "id": "T297",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/sitemap.xml"
+      ],
+      "problem": "MOD-111 ред. 1 (T292, 5dab6af) ставит частям дату = максимум дат внутри. Части — срезы по 45 000 из списка, отсортированного по дате по убыванию; новая карточка сверху, добавление старой страницы и удаление адреса меняют байты sitemap-2.xml, а её lastmod остаётся 2025-06-18 (занижение; модель SEO 21.10, docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md).",
+      "norm": "lastmod части в индексе — момент последнего изменения байтов этой части; без изменений — прежняя дата; время сборки не подставляется; новые адреса не сдвигают границы существующих частей.",
+      "expected": "Применить патч Архитектора MOD-111 ред. 2 (aebf94e, prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify: 23 проверки, 0 провалов): `git apply /home/claude/wt-portable-site-cell-01/var/patches/T297_zonafilm_space_sitemap_lastmod_r2.patch` (sha256 64db9a17a7b0d7e1d453d5dcb85076cbe8ef5d69dd6807b035c694218751de35; --check на 5dab6af зелёный). Патч меняет только src/seo_layer.py. Других правок не вносить. Проверка задачи checks/sitemap_part_stable.py — без стенда и сети: импортирует src/seo_layer.py по пути (importlib), ставит ПРЕДЕЛ_URL=4, во временном каталоге пишет карту из 7 страниц с датами по убыванию через обновление карты так, как это делает сборщик (построить_sitemap + записать_атомарно; если патч добавил функцию, читающую прежний набор из каталога, — тем же путём, что и сборщик), затем добавляет одну страницу со свежей датой в начало списка и пересобирает в тот же каталог. Требует: изменился РОВНО один файл части; lastmod в индексе сдвинулся только у этой части; две сборки подряд без изменения данных дают побайтно равный sitemap.xml. Иначе FAIL и код 1 без необработанного исключения. На коде базы меняются все части → код 1; на ветке → 0 (D203). Добавить в checks/run.sh. Затем полный checks/run.sh.",
+      "check": "checks/sitemap_part_stable.py",
+      "verify_live": "https://zonafilm.space/sitemap.xml — 200; после выпуска части и их адреса те же (первая запись побайтно равна прежней), даты частей не равны времени выпуска; затем при изменении каталога дата сдвигается только у изменившейся части (sha256 частей снимает SEO при каждом замере)",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/sitemap.xml",
+          "status": 200
+        },
+        {
+          "url": "https://zonafilm.space/sitemap-2.xml",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "21.10 13:21Z SEO: ред. 2 передана Архитектору ≈13:01Z, патч и репетиция получены (aebf94e; сообщение wt-nova-publish-memory-02-ce). Независимая репетиция SEO на копии /srv/zonafilm-space/current/src/seo_layer.py (sha256 e522cf59… = HEAD 5dab6af): 0 провалов, различающий контроль — у установленного сборщика свежая карточка меняет 4 файла, у исправленного 1. Канарейка — zonafilm.space (две части с разными датами). Перенос на zonafilm12.site и zonafilm.cc (слой T293/T294) — только после приёмки на сайте."
     }
   ]
 }
