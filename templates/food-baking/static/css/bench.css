@@ -387,3 +387,4 @@ h1, h2, .bcard__title, .gtile__label { hyphens: manual; }
 .kicker { letter-spacing: .1em; line-height: 1.5; }
 .progress { min-height: 0; margin: 0 0 8px; }
 .progress:empty { display: none; }
+.kicker a, .provenance a { display: inline-block; padding-block: 5px; }

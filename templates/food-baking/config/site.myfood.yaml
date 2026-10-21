@@ -14,7 +14,7 @@ origin:
 server:
   bind: 127.0.0.1
   port: 9212
-per_page: 12
+per_page: 24  # делится на 2, 3 и 4 колонки — ряды каталога полные
 storage:
   private_sources: var/food-baking/private
   build: var/food-baking/build
