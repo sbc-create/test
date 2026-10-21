@@ -64,6 +64,14 @@ from pathlib import Path
     "zonafilm12.site": ("/srv/zonafilm12-site/data", "zona-03"),
     "animedia.icu": ("/srv/animedia-icu/data", "animedia-01"),
     "animedia.space": ("/srv/animedia-space/data", "animedia-02"),
+    # Добавлены 21.10 после проверки, что сверка по ним ВОЗМОЖНА: каталог на
+    # диске собран в то же поколение, что и у соседей (8 691 запись,
+    # builtAt 2026-10-21T03:15:26Z), а состав карты совпадает с ним ТОЧНО —
+    # 8 691 = 8 691, ни одного отсутствующего, ни одного лишнего. До этого они
+    # печатались в регулярной сверке как «не измерено».
+    "an1mego.site": ("/srv/an1mego-site/data", "animego-02"),
+    "animeg0.site": ("/srv/animeg0-site/data", "animego-03"),
+    "an1meg0.site": ("/srv/an1meg0-site/data", "animego-04"),
 }
 
 #: Отставание файла карты от снимка, с которого стоит смотреть состав.
@@ -253,7 +261,11 @@ def главное(аргв: list[str] | None = None) -> int:
         print(f"НЕ ИЗМЕРЕНО: нет в перечне витрин: {', '.join(нет)}")
         return 2
     if not домены:
-        return 0 if исключённые else 2
+        # ИСКЛЮЧЁННАЯ ВИТРИНА — НЕ «ок». Код 2 означает «не измерено», и
+        # регулярная сверка печатает именно это. Код 0 здесь был ошибкой: в
+        # прогоне 21.10 07:00Z пять витрин Yummy получили «ок» в столбце, где
+        # проход их даже не сравнивал.
+        return 2
     итоги = [разобрать(д, проб=а.probe) for д in домены]
     if а.json:
         print(json.dumps(итоги, ensure_ascii=False, indent=1))
