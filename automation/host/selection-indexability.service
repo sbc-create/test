@@ -1,0 +1,30 @@
+[Unit]
+Description=Регулярная проверка индексируемости выборок каталога (только чтение)
+Documentation=file:///home/claude/wt-nova-publish-memory-02/automation/local/catalog-selection-indexability.py
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-nova-publish-memory-02
+# Проход только ЧИТАЕТ публичные страницы. Ничего не публикует, не
+# перезапускает и не трогает постоянные данные витрин.
+#
+# Повод для расписания назван измерением, как и у сверки карт: MOD-120 —
+# `/movies/` и `/catalog/?type=movie` на двух витринах Animedia объявляют
+# одинаковые 2 365 записей, обе страницы `index, follow`, и каждая канонизирует
+# СЕБЯ. Нашлось это разбором по заданию 21.10, а не мониторингом, и до того
+# стояло на витринах неизвестно сколько: когда перечень условий `noindex`
+# разошёлся с соседями по сети, никто не узнал.
+#
+# Значения фасетов берутся с САМОЙ витрины, а размер выборки — из её же
+# объявления («Найдено N») или из номера последней страницы листалки. Там, где
+# ни того, ни другого нет, проход печатает НЕ ИЗМЕРЕНО и не выдаёт это за
+# чистую витрину.
+ExecStart=/usr/bin/python3 automation/local/catalog-selection-indexability.py --all
+TimeoutStartSec=1800
+
+[Install]
+WantedBy=multi-user.target

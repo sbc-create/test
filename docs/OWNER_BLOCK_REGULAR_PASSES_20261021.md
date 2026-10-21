@@ -1,0 +1,96 @@
+[//]: # (Блок владельца: поставить таймеры двух регулярных проходов. Оба только читают публичные страницы.)
+
+# Блок владельца — два регулярных прохода без расписания
+
+Проходы написаны и работают по требованию; расписания у них нет, потому что
+`systemctl` вне профиля моей сессии. Пока расписания нет, **дефект живёт между
+запусками** — это измерено, а не предположено.
+
+| проход | что меряет | повод расписания — измеренный |
+| --- | --- | --- |
+| `sitemap-reconcile` | полнота и свежесть карт сети, 7 проверок на 17 витрин | MOD-103 (в карте `yummyani.site` 1 644 адреса серий вместо порядка 123 000) и MOD-108 (15 объявленных пустых страниц каталога, открытых для индексации) простояли по несколько суток и нашлись разбором по заданию |
+| `selection-indexability` | индексируемость выборок каталога | MOD-120 (21.10): `/movies/` и `/catalog/?type=movie` на двух витринах Animedia объявляют одинаковые **2 365** записей, обе `index, follow`, и каждая канонизирует СЕБЯ; `?genre=anime` и `?kind=Аниме` объявляют те же **8 228**, что весь каталог. Перечень условий `noindex` у animedia разошёлся с соседями по сети, и никто об этом не узнал |
+
+## Что эти проходы делают и чего не делают
+
+Оба **только читают публичные страницы и карты**. Ничего не публикуют, не
+перезапускают служб, не трогают постоянные данные витрин
+(`docs/RUNTIME_DATA_OWNERSHIP.md`), не пишут за пределы `var/`.
+
+Оба работают от учётной записи `claude`, без `sudo` и без доступа к секретам:
+цифры посещений им не нужны, они меряют то, что витрина отдаёт публично.
+
+## Команды
+
+```bash
+# ---------- 1. ПРОВЕРКА ДО: проходы работают по требованию ----------
+cd /home/claude/wt-nova-publish-memory-02
+python3 automation/local/sitemap-reconcile.py --all-indexable | tail -5
+# ожидание: таблица на 17 витрин и строка «провалов N, неизмеренных M».
+# Код 0 даётся ТОЛЬКО когда всё измерено и чисто; на 21.10 это код 1.
+
+python3 automation/local/catalog-selection-indexability.py --all | tail -5
+# ожидание: по две формы ПАРА-ДУБЛЬ на animedia.space и animedia.icu,
+# ноль у контрольных витрин, строка различающего контроля. Код 1.
+
+# ---------- 2. УСТАНОВКА (единственный шаг, который что-то меняет) ----------
+sudo cp /home/claude/wt-nova-publish-memory-02/automation/host/sitemap-reconcile.service \
+        /home/claude/wt-nova-publish-memory-02/automation/host/sitemap-reconcile.timer \
+        /home/claude/wt-nova-publish-memory-02/automation/host/selection-indexability.service \
+        /home/claude/wt-nova-publish-memory-02/automation/host/selection-indexability.timer \
+        /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemd-analyze verify /etc/systemd/system/sitemap-reconcile.service \
+                            /etc/systemd/system/selection-indexability.service
+# ЭТОТ ШАГ ОБЯЗАТЕЛЕН, и вот почему: синтаксис unit-файлов из моей сессии НЕ
+# проверен — `systemd-analyze` вне профиля. Проверено другое: строка ExecStart
+# запускает существующий скрипт, скрипт принимает названный в unit-е флаг,
+# рабочий каталог существует, специферов новее systemd 249 в файлах нет
+# (tests/unit/test_regular_pass_units.py, 11 проверок).
+
+sudo systemctl enable --now sitemap-reconcile.timer selection-indexability.timer
+
+# ---------- 3. ПРОВЕРКА ПОСЛЕ ----------
+systemctl list-timers 'sitemap-reconcile*' 'selection-indexability*'
+# ожидание: две строки с ближайшим запуском 05:15 и 05:45 UTC
+
+# разовый прогон сейчас, не дожидаясь расписания:
+sudo systemctl start sitemap-reconcile.service
+journalctl -u sitemap-reconcile.service -n 40 --no-pager
+sudo systemctl start selection-indexability.service
+journalctl -u selection-indexability.service -n 40 --no-pager
+```
+
+## Как читать результат, и почему «неуспешно» — это нормально
+
+У обоих проходов **код 0 даётся только когда всё измерено и чисто**. Код 1 —
+есть находки, код 2 — есть неизмеренное. systemd пометит такой запуск
+неуспешным, и так задумано: зелёный таймер при живых дефектах был бы хуже
+отсутствия таймера.
+
+Поэтому «`systemctl status` красный» сам по себе не значит, что проход сломан;
+значит — что он что-то нашёл. Что именно, стоит в выводе `journalctl`.
+
+## Расписание
+
+| проход | время UTC | почему так |
+| --- | --- | --- |
+| `sitemap-reconcile` | 05:15 | через час с лишним после обновления контентного контура (04:00) и ночной пересборки снимков каталога (измерено: `catalog_built_at` 03:16Z). Раньше них сверять нечего |
+| `selection-indexability` | 05:45 | через полчаса после первого: оба опрашивают одни витрины, и одновременный запуск их замедлит. Тест `test_расписания_проходов_не_совпадают` это условие держит |
+
+У обоих `Persistent=true`: пропущенный из-за выключенного узла запуск
+догоняется. Без него «мониторинг» снова стал бы «по случаю» — ровно то, против
+чего эти проходы написаны.
+
+## Откат
+
+```bash
+sudo systemctl disable --now sitemap-reconcile.timer selection-indexability.timer
+sudo rm -f /etc/systemd/system/sitemap-reconcile.{service,timer} \
+           /etc/systemd/system/selection-indexability.{service,timer}
+sudo systemctl daemon-reload
+```
+
+Откат возвращает прежнее состояние: проходы остаются доступны по требованию,
+расписания нет. Цена отката названа честно — дефект снова будет жить между
+запусками.
