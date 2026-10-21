@@ -11,10 +11,22 @@
 
 ## Что собрано
 
-| образ | кому | что внутри |
-| --- | --- | --- |
-| `yummyani/web:d3d4-944c932e76ff` | `.biz`, `.org`, `7.site`, `7.info` | D3 + D4 |
-| `yummyani/web:d1d3d4-9cbfac20fbe8` | `yummyani.site` | D1 + D3 + D4 |
+| образ | кому | база | что внутри |
+| --- | --- | --- | --- |
+| `yummyani/web:d3d4-944c932e76ff` | `.biz`, `7.site`, `7.info` | `rel-944c932e76ff` — их собственная | D3 + D4 |
+| `yummyani/web:d3d4-095aecc7ca27` | `.org` | `rel-095aecc7ca27` — **её собственная** | D3 + D4 |
+| `yummyani/web:d1d3d4-9cbfac20fbe8` | `yummyani.site` | `rel-9cbfac20fbe8` — её собственная | D1 + D3 + D4 |
+
+**Образ для `.org` собран отдельно по замечанию линии ячейки, и замечание было
+верным.** `.org` работает не на `rel-944c932e76ff`, а на `rel-095aecc7ca27`
+(`docker ps` 19:54Z). Единый образ на четыре витрины сменил бы `.org` базу, и
+приёмка смешала бы D3/D4 со сменой базы. Теперь у каждой витрины база своя, и
+меняются только правки.
+
+Поведение заголовков (B031) у каждой базы проверено хешем файла обрезки:
+`.site` — `61755fd0f9ec7e2c` (обрезка, контроль), `.org` — `fb328a12fed0fd55`,
+то же, что у `rel-944c932e76ff` (без обрезки, подопытные). Ни один образ этот
+файл не менял.
 
 Оба собраны **ОТ работающих образов**, а не из ветки: ревизий `944c932e76ff` и
 `9cbfac20fbe8` в локальных копиях исходников нет вовсе
@@ -104,9 +116,10 @@ cp compose.yaml compose.yaml.before-d3d4
 sed -i 's|image: yummyani/web:rel-944c932e76ff|image: yummyani/web:d3d4-944c932e76ff|' compose.yaml
 docker compose -p yummyani7-site up -d --no-deps web
 
-# .biz и .org живут в проекте yummyani-staging одним набором файлов:
+# .biz и .org живут в проекте yummyani-staging одним набором файлов, но образы
+# у них РАЗНЫЕ: у каждой своя база.
 WEB_BIZ_IMAGE=yummyani/web:d3d4-944c932e76ff \
-WEB_ORG_IMAGE=yummyani/web:d3d4-944c932e76ff \
+WEB_ORG_IMAGE=yummyani/web:d3d4-095aecc7ca27 \
 docker compose \
   -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml \
   -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml \
@@ -146,11 +159,16 @@ cd /home/claude/wt-nova-publish-memory-02/var/site-repos/yummyani7-info/deploy
 cp compose.yaml.before-d3d4 compose.yaml
 docker compose -p yummyani7-info up -d --no-deps web
 
-# для проекта yummyani-staging — прежние теги:
+# для проекта yummyani-staging — прежние теги. Список файлов полный: откат,
+# записанный с многоточием, неисполним, и это замечание линии ячейки.
 WEB_SITE_IMAGE=yummyani/web:rel-9cbfac20fbe8 \
 WEB_BIZ_IMAGE=yummyani/web:rel-944c932e76ff \
 WEB_ORG_IMAGE=yummyani/web:rel-095aecc7ca27 \
-docker compose -f … -p yummyani-staging up -d --no-deps web-site web-biz web-org
+docker compose \
+  -f /home/claude/wt-yummy-mail-biz/compose.staging.yaml \
+  -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-biz-indexing.override.yaml \
+  -f /home/claude/wt-portable-site-cell-01/automation/host/yummy-overlays.override.yaml \
+  -p yummyani-staging up -d --no-deps web-site web-biz web-org
 ```
 
 Прежние образы на узле есть — они работают прямо сейчас, поэтому откат сборки не
@@ -164,3 +182,43 @@ docker compose -f … -p yummyani-staging up -d --no-deps web-site web-biz web-o
 экземпляра наблюдателя нет. Пока журнала нет, D3 на этих двух витринах
 бесполезен: очередь свежих работ будет пуста по-прежнему. Решение — отдельным
 пунктом в итоговом списке.
+
+## Сколько ждать полной карты `.site`, и что мерить по пути
+
+Замечание линии ячейки: 800 работ за сборку при 8 378 работах — это около
+одиннадцати сборок, и приёмка не должна ждать полного покрытия сразу. Числа,
+которые для этого нужны, взяты из кода образа, а не из ожиданий:
+
+| величина | значение | откуда |
+| --- | --- | --- |
+| работ в очереди за сборку | **не больше 800** | `DETAIL_MAX_PER_BUILD` |
+| бюджет времени фоновой сборки | **150 с** | `DETAIL_BUDGET_MS` |
+| бюджет холодной сборки (запрос ждёт) | **10 с** | `DETAIL_BUDGET_COLD_MS` |
+| одновременных выборок подробностей | **3** | `DETAIL_CONCURRENCY` |
+| когда карта считается несвежей | **через 3 600 с** | `FRESH_TTL_SEC` |
+| сколько живёт запись подробностей | **30 суток** | `DETAIL_TTL_SEC` |
+
+Отсюда честная оценка: пересборка затевается не чаще раза в час и берёт не
+больше 800 работ, НО фактическое число ограничено бюджетом 150 с при трёх
+одновременных выборках. Поэтому **полное покрытие — порядка суток, а не одной
+сборки**, и точное число надо не предсказывать, а читать: образ пишет его сам
+строкой журнала `sitemap inventory detail` с полями `due`, `fetched`, `covered`,
+`titles`. Приёмка по этому полю и мерится: `covered` растёт от сборки к сборке.
+
+**Прежние адреса не теряются, и вот почему это следует из кода, а не из
+надежды.** Очередь `planDetailFetch` ставит вперёд работы, у которых записи нет
+вовсе (`never`), в порядке обхода каталога; обход идёт тем же
+`sort: updated_at_desc`, которым сейчас набираются те самые 34–36 работ с
+сериями. То есть они попадают в ПЕРВУЮ же сборку, а не в одиннадцатую. Плюс
+`titles.xml` собирается из всех 8 378 работ независимо от хранилища
+подробностей — его состав от этой правки не зависит вовсе.
+
+Что мерить сразу после пересоздания `.site`, по порядку:
+
+1. `titles.xml` — 8 378 адресов, не меньше (это признак, что правка не задела
+   перечень работ);
+2. сезоны и серии — больше, чем 36 и 1 679, уже на первой сборке; ни один
+   прежний адрес не исчез (сверка множеств, а не чисел);
+3. строка журнала `sitemap inventory detail` — `covered` растёт;
+4. через сутки — `covered` близко к `titles`, и тогда же проверяется полнота по
+   собственным страницам домена.
