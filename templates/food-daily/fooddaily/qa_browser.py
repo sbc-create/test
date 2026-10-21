@@ -265,8 +265,9 @@ def run(shots_dir: Path | None) -> dict:
         page.goto(BASE + "/")
         page.keyboard.press("Tab")
         S["first_tab_skip_link"] = page.evaluate("document.activeElement.className") == "skip"
-        # вариант C: на компанию
+        # вариант C: на компанию — форма на своей странице (на главной — переход к ней)
         page.evaluate("localStorage.clear(); 0")
+        page.goto(BASE + "/na-kompaniyu/")
         url0 = page.url
         page.click(".pform .btn")
         S["party_empty_submit_blocked"] = page.url == url0
@@ -285,6 +286,8 @@ def run(shots_dir: Path | None) -> dict:
         page.goto(BASE + "/recepty/")
         S["party_header_link_keeps_choice"] = "gosti=8" in (page.locator("[data-p-link]").get_attribute("href") or "")
         page.goto(BASE + "/")
+        # главная: кнопка «Собрать список» ведёт к последнему выбору, форма открывается с ним
+        page.click(".promo [data-p-link]")
         S["party_home_remembers_choice"] = (
             page.locator(".ppick input:checked").count() == 2 and page.locator("#gosti").input_value() == "8"
         )
