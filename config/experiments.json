@@ -38,7 +38,7 @@
       "applicability": "lordserials22.info: до 500 адресов /title/<slug>/season-N/episode-M/ — последняя серия с дорожкой у тайтлов watchlist службы согласования; контроль — lordfilm47.space, 1lordserials1.online, lordserial33.biz",
       "scope_page_share": 0.008,
       "phase": "canary",
-      "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023",
+      "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023; 21.10: у контрольного 1lordserials1.online карта застыла на поколении 20.10 06:19Z — 67 681 тайтл против 68 451 в каталоге, 770 индексируемых страниц вне карты (MOD-81, wt-nova-02; подтверждено SEO). Исправление (перезапуск или выпуск) меняет карту контроля; время записывается сюда и учитывается в оценке 28.10",
       "observation": {
         "days_elapsed": 7
       },
