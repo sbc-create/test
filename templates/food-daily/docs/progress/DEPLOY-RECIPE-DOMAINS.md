@@ -221,9 +221,11 @@ bestreciept.site — 22 опубликованных блюда, myfood.mobi —
 | axe по остальным страницам bestreciept | `var/recipe-look/axe_check.py` (10 страниц × 390/1440) | 0 нарушений |
 | axe myfood | `var/recipe-look/axe_check.py` (14 страниц × 390/1440) | было `landmark-unique` (две навигации «Разделы») на каждой странице → подписи «Основное меню» / «Рецепты по разделам» (`92da48c`) → 0 нарушений |
 | комплекты | `kit build` → `var/kits/recipe-domains-5/` | `food-daily-b3f9c95`, `food-baking-92da48c`; репетиция exit 0; `recipe-domains-apply.sh --dry-run` exit 0, индексация закрыта |
+| 404 myfood (22.10) | `python3 -m pytest -q tests` (food-baking) | на 404 были только голое поле поиска и ссылка — добавлены подсказка и плитки разделов (`486cf08`), тест `test_404_offers_search_and_existing_sections`; 61 passed; axe 0 (390/1440); 360 px без прокрутки |
+| комплект 6 (22.10) | `python3 -m bakebook.kit build --out var/kits/recipe-domains-6` | `food-daily-b3f9c95`, `food-baking-486cf08`; репетиция exit 0 (noindex, `Disallow: /`, 404, шрифты `font/woff2`); `recipe-domains-apply.sh --dry-run` exit 0 |
 
 Обновление: `sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh`
-(`var/kits/recipe-domains-current` → `recipe-domains-5`). Скриншоты «до»/«после»: `var/recipe-look/{before,after-local}/`.
+(`var/kits/recipe-domains-current` → `recipe-domains-6`). Скриншоты «до»/«после»: `var/recipe-look/{before,after-local}/`.
 
 ### Готовность к открытию индексации (21.10.2026, индексация НЕ открыта)
 
