@@ -38,7 +38,12 @@
       "applicability": "lordserials22.info: до 500 адресов /title/<slug>/season-N/episode-M/ — последняя серия с дорожкой у тайтлов watchlist службы согласования; контроль — lordfilm47.space, 1lordserials1.online, lordserial33.biz",
       "scope_page_share": 0.008,
       "phase": "canary",
-      "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023"
+      "evidence": "docs/seo-operator/NIGHT_20261014.md §13; checks/sitemap_ongoing_episodes.py; измерение заблокировано до B022/B023",
+      "observation": {
+        "days_elapsed": 7
+      },
+      "verdict": "continue",
+      "verdict_reason": "21.10, 7 суток (политика: минимум 14 суток и 1 000 показов; события Вебмастера и показы не измеряются — B023). Поисковые входы на 500 серий выборки (снимок 18.10) — 0 и 0 (07–13.10 и 14–20.10) при 107 → 133 входах на прочие серии: отсутствие наблюдений, не доказательство вреда. Карта и охват не меняются, расширения на Lords/Zona/Animedia нет. Файл: var/seo-audit/t075-eval-20261021.json."
     },
     {
       "experiment_id": "exp-animego-episode-jsonld",
@@ -58,7 +63,12 @@
       "applicability": "lordserials22.info: 5 283 из 64 508 тайтлов (выборка по слагу, без одноимённых); контроль — прочие тайтлы lords-05 и lords-01..03",
       "scope_page_share": 0.082,
       "phase": "canary",
-      "evidence": "docs/seo-operator/DAY_20261014.md §8; checks/title_kind_year.py (база rc=1, правка rc=0)"
+      "evidence": "docs/seo-operator/DAY_20261014.md §8; checks/title_kind_year.py (база rc=1, правка rc=0)",
+      "observation": {
+        "days_elapsed": 7
+      },
+      "verdict": "continue",
+      "verdict_reason": "21.10, 7 суток (политика: минимум 14 суток и 1 000 показов; показы не измеряются — B023, в observation не записаны, а не 0). Метрика: доля выборки в поисковых входах на тайтлы lordserials22.info — 1,1 % (5 из 594, 07–13.10) → 1,2 % (6 из 658, 14–20.10); контроль 464 → 481. Ожидаемая по построению доля ~10 %: выборка статистически бессильна на входах Метрики — вывода нет ни в одну сторону. Условия, выборка и контроль (100-atletov-italiya и др.) не меняются; расширения нет. Файл: var/seo-audit/t087-eval-20261021.json."
     },
     {
       "experiment_id": "exp-animego-ongoing-landing",
