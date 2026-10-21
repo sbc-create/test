@@ -1,6 +1,6 @@
 # Приёмка MOD-102: год и вид в каталоге animedia (проверяет SEO-сессия)
 
-Поправки — `config/anime-year-corrections.json` (ветка `claude/nova-publish-memory-02`, коммит 659cf2d): 15 записей, из них 14 по году и 1 по виду. Патч издателя — `docs/handoff/year-corrections-nova-publish.patch` в той же ветке, правит `/srv/site-factory/repo/factory/lords/nova_publish.py`. Выпускает его **владелец**: линии с правом записи в это дерево у сессий нет.
+Поправки — `config/anime-year-corrections.json` (ветка `claude/nova-publish-memory-02`, коммит 659cf2d): 15 записей: 14 с поправкой года и 2 с поправкой вида (`legenda-o-kristanii` — и год, и вид; `kulak-severnoy-zvezdy-rao` — только вид); ранее ошибочно «1 по виду». Патч издателя — `docs/handoff/year-corrections-nova-publish.patch` в той же ветке, правит `/srv/site-factory/repo/factory/lords/nova_publish.py`. Выпускает его **владелец**: линии с правом записи в это дерево у сессий нет.
 
 ## Независимая сверка до выпуска (20.10 ≈13:45Z)
 
@@ -21,3 +21,9 @@
 2. У `kulak-severnoy-zvezdy-rao` вид соответствует фильму в словаре витрины.
 3. Отрицательный контроль: шесть записей, названных в репетиции Архитектора, не изменились; число записей каталога не уменьшилось.
 4. Отчёт раздельно: подготовлено → установлено → проверено на сайте.
+
+
+## 21.10: статус выпуска и годный признак на странице
+
+- **Статус.** Патч проверен Архитектором 21.10: `--verify` и репетиция завершились с кодом 0, sha256 `e3f78f12…d085`. В `/srv/site-factory/repo` патч не применён, применить может только владелец. Команды — `docs/handoff/YEAR_CORRECTIONS_RELEASE_COMMANDS.md` (wt-nova-02, 4fc250e).
+- **Признак на странице.** Искать `year=N` по всему телу нельзя: меню каждой страницы содержит фасет `/catalog/?year=2015…2026`. Замер 21.10 на `rukovodstvo-soten-demonov-4`: в теле есть `year=2024`, а у записи год 2020. Год берётся только из блока фактов `<dt>Год</dt><dd><a href="/catalog/?year=N">` и из `datePublished` в JSON-LD, вид — из `<dt>Тип</dt>`. Так снята и база «до». Архитектору отправлено исправление его `year-corrections-verify-live.py`.
