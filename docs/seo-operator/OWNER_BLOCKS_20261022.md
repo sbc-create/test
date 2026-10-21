@@ -203,3 +203,89 @@ systemctl is-active editor-run.timer
 **Второй перезапуск — только при фактической смене кода.** MOD-102 (b72229c, ветка `claude/nova-publish-memory-02`) меняет `подготовить` в `factory/qwen/editorial.py`: +91 строка, плюс `tests/unit/test_editorial_year_source.py`. Сессия переносит её cherry-pick'ом только после приёмки п. 4 и прогоняет `tests/unit -k "editorial or qwen or overlay"`. Затем называет новый sha256 `editorial.py`.
 
 Второй перезапуск выполняется тем же блоком: шаги 0–5 с новым коммитом и новыми суммами. Если sha256 не изменился, второй перезапуск не нужен.
+
+---
+
+## 3. D2 (MOD-121): наблюдатель серий для yummyani7.info и yummyani7.site
+
+Вариант (а), рекомендованный wt-nova-publish-memory-02-ce. Решение между (а) и (б) — за владельцем; этот блок — для (а).
+
+**Почему нужен владелец.** Единственный писатель журнала — `yummy-episode-watcher.service`, и он пишет только в `/srv/sites/yummyani-staging/runtime/episode-state`. Контейнеры 7.* монтируют свои каталоги `/srv/sites/yummyani7-{info,site}/runtime/episode-state`; они пусты с 28.09. Установка unit-файлов в `/etc/systemd` требует sudo.
+
+**Что сделает экземпляр** (`scripts/episode-watcher.mjs`, прочитано 21.10 ≈23:05Z):
+- Скрипт зависит только от `YUMMY_EPISODE_STATE_DIR`, четырёх бюджетов и общего токена поставщика (`/srv/sites/yummyani-staging/runtime/cdnvideohub/api-token`, по умолчанию).
+- Первый прогон строит базовый снимок по всему каталогу (около 8 700 запросов) и **событий не выпускает**, так что лавины в журнале не будет.
+- Дальше на каждый прогон — активный пул плюс отрезок кругового обхода. Бюджеты ниже — вдвое меньше штатных, а период вдвое длиннее, чтобы суммарная нагрузка на поставщика выросла умеренно.
+
+```bash
+set -euo pipefail
+# 0. До: каталоги пусты, штатный наблюдатель пишет только в staging
+ls -la /srv/sites/yummyani7-info/runtime/episode-state /srv/sites/yummyani7-site/runtime/episode-state
+systemctl cat yummy-episode-watcher.service | grep -E 'ExecStart|EPISODE_STATE_DIR'
+test ! -e /etc/systemd/system/yummy-episode-watcher@.service
+
+# 1. Шаблонные unit-ы
+sudo tee /etc/systemd/system/yummy-episode-watcher@.service >/dev/null <<'EOF'
+[Unit]
+Description=YummyAnime: наблюдатель за выходом серий, свой журнал контура %i (MOD-121)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/srv/sites/yummyani-staging/repo
+Environment=YUMMY_EPISODE_STATE_DIR=/srv/sites/%i/runtime/episode-state
+Environment=WATCHER_ACTIVE_BUDGET=200
+Environment=WATCHER_SWEEP_BUDGET=800
+Environment=WATCHER_CONCURRENCY=3
+Environment=WATCHER_PACE_MS=180
+ExecStart=/usr/bin/node /srv/sites/yummyani-staging/repo/scripts/episode-watcher.mjs
+User=root
+Nice=10
+IOSchedulingClass=idle
+TimeoutStartSec=1200
+EOF
+sudo tee /etc/systemd/system/yummy-episode-watcher@.timer >/dev/null <<'EOF'
+[Unit]
+Description=YummyAnime: наблюдатель серий контура %i каждые 10 минут (MOD-121)
+
+[Timer]
+OnBootSec=4min
+OnUnitActiveSec=10min
+AccuracySec=30s
+Persistent=true
+
+[Install]
+WantedBy=timers.target
+EOF
+sudo systemctl daemon-reload
+
+# 2. Первый (базовый) прогон вручную, по одному контуру; ждать завершения
+sudo systemctl start yummy-episode-watcher@yummyani7-info.service
+systemctl show -p Result,ExecMainStatus yummy-episode-watcher@yummyani7-info.service   # Result=success, ExecMainStatus=0
+journalctl -u yummy-episode-watcher@yummyani7-info.service -n 5 --no-pager            # «…(базовый)»
+ls -la /srv/sites/yummyani7-info/runtime/episode-state                                # появился watcher.json
+sudo systemctl enable --now yummy-episode-watcher@yummyani7-info.timer
+
+sudo systemctl start yummy-episode-watcher@yummyani7-site.service
+systemctl show -p Result,ExecMainStatus yummy-episode-watcher@yummyani7-site.service
+ls -la /srv/sites/yummyani7-site/runtime/episode-state
+sudo systemctl enable --now yummy-episode-watcher@yummyani7-site.timer
+systemctl list-timers 'yummy-episode-watcher*' --no-pager
+```
+
+**Откат.**
+
+```bash
+sudo systemctl disable --now yummy-episode-watcher@yummyani7-info.timer yummy-episode-watcher@yummyani7-site.timer
+sudo rm /etc/systemd/system/yummy-episode-watcher@.service /etc/systemd/system/yummy-episode-watcher@.timer
+sudo systemctl daemon-reload
+```
+
+Файлы журнала в каталогах 7.* откат не удаляет: это состояние контура, и решение о нём — за владельцем. Без новых событий витрина ведёт себя как до установки.
+
+**Приёмка (делает сессия wt-portable-site-cell-01-dc).**
+1. `watcher.json` в обоих каталогах обновляется каждые 10 минут.
+2. Первое событие `EPISODE_ADDED` появляется в `events.jsonl` 7.* в пределах суток после выхода новой серии; сверка — с журналом staging по той же серии.
+3. После этого части с сериями в индексе карты 7.* меняют lastmod.
+4. Исходные 126 и 131 пропуска сокращаются (`yummy_recheck.py` против `baseline-1457Z`). Суточный срок для новых серий меряется отдельно. Полностью D3 закрывается образом `d3d4-944c932e76ff`.
