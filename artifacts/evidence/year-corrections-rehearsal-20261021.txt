@@ -1,0 +1,42 @@
+ПОПРАВКИ (установленный издатель + точечный патч, реальные данные):
+  ок      skazaniya-o-demonah-i-bogah-8                    год 2017 → 2024 (ожидался 2024), в каталоге 2024, вид tv → tv
+          источник года: https://shikimori.io/animes/58744 (2026-10-20T13:39:06Z)
+  ок      strana-desyati-tysyach-chudes-5                  год 2018 → 2021 (ожидался 2021), в каталоге 2021, вид tv → tv
+          источник года: https://shikimori.io/animes/49305 (2026-10-20T13:39:06Z)
+  ок      raskolotaya-bitvoy-sineva-nebes-5                год 2017 → 2022 (ожидался 2022), в каталоге 2022, вид tv → tv
+          источник года: https://shikimori.io/animes/51039 (2026-10-20T13:39:06Z)
+  ок      mozhet-ya-vstrechu-tebya-v-podzemele-4           год 2015 → 2022 (ожидался 2022), в каталоге 2022, вид tv → tv
+          источник года: https://shikimori.io/animes/47164 (2026-10-20T13:39:06Z)
+  ок      rukovodstvo-soten-demonov-4                      год 2020 → 2024 (ожидался 2024), в каталоге 2024, вид tv → tv
+          источник года: https://shikimori.io/animes/57995 (2026-10-20T13:39:06Z)
+  ок      yami-shibai-yaponskie-rasskazy-o-privideniyah-13 год 2013 → 2024 (ожидался 2024), в каталоге 2024, вид tv → tv
+          источник года: https://shikimori.io/animes/59010 (2026-10-20T13:39:06Z)
+  ок      vpechatleniya-ot-gor-i-vod                       год 2004 → 1988 (ожидался 1988), в каталоге 1988, вид movie → movie
+          источник года: https://shikimori.io/animes/13755 (2026-10-20T13:39:10Z)
+  ок      legenda-o-kristanii                              год 1996 → 1995 (ожидался 1995), в каталоге 1995, вид tv → movie
+          источник года: https://shikimori.io/animes/515 (2026-10-20T13:39:10Z)
+  ок      drakoniy-zhemchug-kay-2014                       год 2009 → 2014 (ожидался 2014), в каталоге 2014, вид tv → tv
+          источник года: https://shikimori.io/animes/22777 (2026-10-20T13:39:10Z)
+  ок      kulak-severnoy-zvezdy-rao                        год 2007 → 2007 (ожидался 2007), в каталоге 2007, вид tv → movie
+          источник года: https://shikimori.io/animes/2174 (2026-10-20T13:39:10Z)
+  ок      utrachennoe-nebesami-tv-2                        год 2009 → 2010 (ожидался 2010), в каталоге 2010, вид tv → tv
+          источник года: https://shikimori.io/animes/8407 (2026-10-20T13:39:10Z)
+  ок      zabyt-proshloe-5                                 год 1909 → 2006 (ожидался 2006), в каталоге 2006, вид movie → movie
+          источник года: https://shikimori.io/animes/1071 (2026-10-20T13:39:06Z)
+  ок      restoran-mnogih-zakazov                          год 1993 → 1991 (ожидался 1991), в каталоге 1991, вид movie → movie
+          источник года: https://shikimori.io/animes/4095 (2026-10-20T13:39:10Z)
+  ок      legenda-o-geroe-kondore-ii                       год 2005 → 2004 (ожидался 2004), в каталоге 2004, вид tv → tv
+          источник года: https://shikimori.io/animes/960 (2026-10-20T13:39:10Z)
+  ок      daykon-iv                                        год 1983 → 1981 (ожидался 1981), в каталоге 1981, вид tv → tv
+          источник года: https://shikimori.io/animes/2724 (2026-10-20T13:39:10Z)
+
+ОТРИЦАТЕЛЬНЫЙ КОНТРОЛЬ — записи, год которых сверка подтвердила:
+  не тронута           povelitel-demonov-2099                           год 2024 (в снимке 2024)
+  не тронута           shaman-king-2021                                 год 2021 (в снимке 2021)
+  не тронута           poschadi-menya-velikiy-gospodin-2                год 2023 (в снимке 2023)
+  не тронута           iz-odnoy-komnaty-2                               год 2020 (в снимке 2020)
+  не тронута           gintama-9                                        год 2006 (в снимке 2006)
+  не тронута           dostuchatsya-do-tebya-4                          год 2009 (в снимке 2009)
+
+статистика издателя: {'year_corrected': 14, 'type_corrected': 2, 'year_correction_stale': 0}
+провалов: 0
