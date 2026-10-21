@@ -336,7 +336,10 @@ class App:
         if path == "/podborki/":
             meta = seo.Meta(
                 title="Подборки рецептов",
-                description="Подборки рецептов по времени, продуктам и сезону.",
+                description=seo.with_examples(
+                    "Подборки рецептов по времени, продуктам и сезону",
+                    [v[0].lower().replace(":", " —") for v in s.collections().values()],
+                ),
                 canonical=s.abs(path),
                 index=True,
                 breadcrumbs=[("Главная", "/"), ("Подборки", path)],
