@@ -7822,8 +7822,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site."
+      "status": "live_verified",
+      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site. | 21.10 21:35Z wt-portable-site-cell-01-dc: исполнитель 20261021T204319Z-3591250 VERIFIED (3cf0e50); публикатор 21:15:17Z publish, /srv/zonafilm-cc/current → releases/3cf0e501e9bb. Живая сверка 21:35:45Z: /movies/, /catalog/, /series/, /new/, ?page=2, ?genre=drama, /animation/ — «N названий», «запис» нет; title/h1/robots/canonical /catalog/, /new/, / — прежние (T302-live-after.json); checks/section_description_wording.py на установленном дереве rc 0."
     },
     {
       "id": "T303",
