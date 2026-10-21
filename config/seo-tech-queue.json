@@ -7633,7 +7633,7 @@
         }
       ],
       "status": "live_verified",
-      "evidence": "21.10 09:1xZ: канарейки T291 (animedia.space) и T292 (zonafilm.space) приняты на сайте; перенос на остальные витрины Zona. | 21.10 12:58Z SEO: публикатор 11:56:19Z publish 2f9d2bc (zona-02). Живой https://zonafilm.cc/sitemap.xml: sitemap-1.xml lastmod 2026-10-21 (45 000 адресов, максимум внутри 2026-10-21), sitemap-2.xml 2025-06-18 (23 557, максимум внутри 2025-06-18); дата сборки не подставлена. Оценка по MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md, a3ea9e2): части — срезы списка, отсортированного по дате по убыванию, поэтому новая карточка, добавление старой и удаление URL меняют sitemap-2, а её lastmod остаётся прежним (занижение). Будущих дат и дат сборки нет — отката не нужно; правка вперёд передана Архитектору 21.10 13:05Z (SendMessage wt-nova-publish-memory-02-ce)."
+      "evidence": "21.10 09:1xZ: канарейки T291 (animedia.space) и T292 (zonafilm.space) приняты на сайте; перенос на остальные витрины Zona. | 21.10 12:58Z SEO: публикатор 11:56:19Z publish 2f9d2bc (zona-02). Живой https://zonafilm.cc/sitemap.xml: sitemap-1.xml lastmod 2026-10-21 (45 000 адресов, максимум внутри 2026-10-21), sitemap-2.xml 2025-06-18 (23 557, максимум внутри 2025-06-18); дата сборки не подставлена. Оценка по MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md, a3ea9e2): части — срезы списка, отсортированного по дате по убыванию, поэтому новая карточка, добавление старой и удаление URL меняют sitemap-2, а её lastmod остаётся прежним (занижение). Будущих дат и дат сборки нет — отката не нужно; правка вперёд передана Архитектору 21.10 ≈13:01Z (SendMessage wt-nova-publish-memory-02-ce)."
     },
     {
       "id": "T296",
@@ -7659,7 +7659,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "21.10 13:08Z SEO: тот же шаблон чтения (склейка всех *.py, первое совпадение) — в checks/sitemap_wired.py zonafilm.space, zonafilm.cc, lordfilm47.space, 1lordserials1.online, an1mego/an1meg0/animeg0. Канарейка — zonafilm12.site, где сбой случился. Перенос после проверки выпущенной версии; контрольные сайты T075 (lordfilm47.space, 1lordserials1.online) и канарейку T191 (an1mego) до вердиктов не трогаю, хотя правка только в проверках."
+      "evidence": "21.10 13:02Z SEO: тот же шаблон чтения (склейка всех *.py, первое совпадение) — в checks/sitemap_wired.py zonafilm.space, zonafilm.cc, lordfilm47.space, 1lordserials1.online, an1mego/an1meg0/animeg0. Канарейка — zonafilm12.site, где сбой случился. Перенос после проверки выпущенной версии; контрольные сайты T075 (lordfilm47.space, 1lordserials1.online) и канарейку T191 (an1mego) до вердиктов не трогаю, хотя правка только в проверках."
     }
   ]
 }
