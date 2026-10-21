@@ -34,7 +34,7 @@
     <a class="title" href="/"><span class="title__small">домашняя выпечка</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
   </div>
-  <nav class="toc-nav" aria-label="Разделы">
+  <nav class="toc-nav" aria-label="Основное меню">
     <a href="/recepty/">Все рецепты</a>{% for k, items in site.groups().items() %}<a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a>{% endfor %}<a href="/duhovka/">По температуре</a><a href="/testo/">Виды теста</a><a href="/pechem/" data-b-link>Пеку несколько</a>
   </nav>
 </header>
@@ -50,7 +50,7 @@
       <p class="colophon__brand">Тесто <em>&amp;</em> десерты</p>
       <p>Рецепты домашней выпечки: температура духовки, время, форма и вес продуктов — на одном листе.</p>
     </div>
-    <nav aria-label="Разделы">
+    <nav aria-label="Рецепты по разделам">
       <h2 class="colophon__h">Рецепты</h2>
       <ul>{% for k, items in site.groups().items() %}<li><a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a></li>{% endfor %}</ul>
     </nav>
