@@ -41,6 +41,9 @@ from pathlib import Path
 ВИТРИНЫ = {
     "animedia.icu": "/srv/animedia-icu/data/animedia-01-details.json",
     "animedia.space": "/srv/animedia-space/data/animedia-02-details.json",
+    "1lordserials1.online": "/srv/site-1lordserials1-online/data/lords-03-details.json",
+    "zonafilm.space": "/srv/zonafilm-space/data/zona-01-details.json",
+    "lordserial33.biz": "/srv/lordserial33-biz/data/lords-02-details.json",
 }
 
 
