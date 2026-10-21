@@ -1,0 +1,243 @@
+{
+  "записей": 9,
+  "отказов": 0,
+  "dry_run": true,
+  "итоги": [
+    {
+      "site_id": "animego-04",
+      "домен": "an1meg0.site",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://an1meg0.site/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-04T19:35:57Z, идентификатор b259a296-2fa4-4451-802e-94d37ea1a09c",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:02Z: https://an1meg0.site/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-04T19:35:57Z, идентификатор b259a296-2fa4-4451-802e-94d37ea1a09c.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/an1meg0.site.json",
+          "open_authorization_id": "b259a296-2fa4-4451-802e-94d37ea1a09c",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:57Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/an1meg0.site.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "animego-02",
+      "домен": "an1mego.site",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://an1mego.site/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-05T13:41:38Z, идентификатор 3f340bb0-f436-467d-a4d4-94f898665752",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:02Z: https://an1mego.site/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-05T13:41:38Z, идентификатор 3f340bb0-f436-467d-a4d4-94f898665752.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/an1mego.site.json",
+          "open_authorization_id": "3f340bb0-f436-467d-a4d4-94f898665752",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/an1mego.site.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "animedia-01",
+      "домен": "animedia.icu",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://animedia.icu/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-04T19:35:59Z, идентификатор 357885f2-4fdf-40ee-8be4-be06c16a5ab8",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:03Z: https://animedia.icu/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-04T19:35:59Z, идентификатор 357885f2-4fdf-40ee-8be4-be06c16a5ab8.",
+          "authority": null,
+          "open_authorized": true,
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.icu.json; флаг в реестре без него разрешением не считается",
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.icu.json",
+          "open_authorization_id": "357885f2-4fdf-40ee-8be4-be06c16a5ab8"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "animedia-02",
+      "домен": "animedia.space",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://animedia.space/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-04T19:35:59Z, идентификатор e89c03de-05c0-49d0-9882-9b3ba34525a0",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:03Z: https://animedia.space/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-04T19:35:59Z, идентификатор e89c03de-05c0-49d0-9882-9b3ba34525a0.",
+          "authority": null,
+          "open_authorized": true,
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.space.json; флаг в реестре без него разрешением не считается",
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.space.json",
+          "open_authorization_id": "e89c03de-05c0-49d0-9882-9b3ba34525a0"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "animego-03",
+      "домен": "animeg0.site",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://animeg0.site/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-05T13:41:38Z, идентификатор 9ac3246f-8473-4e5a-ae5c-3787816dbef3",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:03Z: https://animeg0.site/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-05T13:41:38Z, идентификатор 9ac3246f-8473-4e5a-ae5c-3787816dbef3.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/animeg0.site.json",
+          "open_authorization_id": "9ac3246f-8473-4e5a-ae5c-3787816dbef3",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animeg0.site.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "lords-05",
+      "домен": "lordserials22.info",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://lordserials22.info/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-04T08:32:42Z, идентификатор 7eb319e0-2a7d-4647-a432-9dfa6d47326a",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:03Z: https://lordserials22.info/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-04T08:32:42Z, идентификатор 7eb319e0-2a7d-4647-a432-9dfa6d47326a.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordserials22.info.json",
+          "open_authorization_id": "7eb319e0-2a7d-4647-a432-9dfa6d47326a",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-04T08:32:42Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/lordserials22.info.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "yummy-08",
+      "домен": "yummyani7.info",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "",
+        "адрес": "https://yummyani7.info/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-05T04:58:31Z, идентификатор c8a5ba0a-5884-404a-9e97-ad09c7a81837",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:09Z: https://yummyani7.info/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-05T04:58:31Z, идентификатор c8a5ba0a-5884-404a-9e97-ad09c7a81837.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani7.info.json",
+          "open_authorization_id": "c8a5ba0a-5884-404a-9e97-ad09c7a81837",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:31Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani7.info.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "yummy-07",
+      "домен": "yummyani7.site",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "",
+        "адрес": "https://yummyani7.site/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-05T04:58:31Z, идентификатор 6f18e2e8-9ff2-476b-8327-9325d3dd6664",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:10Z: https://yummyani7.site/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-05T04:58:31Z, идентификатор 6f18e2e8-9ff2-476b-8327-9325d3dd6664.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani7.site.json",
+          "open_authorization_id": "6f18e2e8-9ff2-476b-8327-9325d3dd6664",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:31Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani7.site.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    },
+    {
+      "site_id": "zona-03",
+      "домен": "zonafilm12.site",
+      "было": {
+        "desired_state": "CLOSED"
+      },
+      "замер": {
+        "код": 200,
+        "meta": "index, follow",
+        "x_robots_tag": "index, follow",
+        "адрес": "https://zonafilm12.site/"
+      },
+      "согласие": "подтверждено владельцем: claude, 2026-10-04T19:35:58Z, идентификатор 9ce4686d-48b8-4160-8991-b4b1e1e221b7",
+      "предложение": {
+        "indexing": {
+          "desired_state": "OPEN",
+          "reason": "Открыто и проверено живым замером 2026-10-21T06:32:10Z: https://zonafilm12.site/ отдаёт robots 'index, follow'. Запись приведена к действительному режиму (прежде стояло CLOSED при открытых страницах — MOD-55). Разрешение владельца: подтверждено владельцем: claude, 2026-10-04T19:35:58Z, идентификатор 9ce4686d-48b8-4160-8991-b4b1e1e221b7.",
+          "open_authorized": true,
+          "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm12.site.json",
+          "open_authorization_id": "9ce4686d-48b8-4160-8991-b4b1e1e221b7",
+          "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:58Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm12.site.json; флаг в реестре без него разрешением не считается"
+        }
+      },
+      "применено": false,
+      "почему_не_применено": "registry.update не пускает блок `indexing` в точечное обновление (проверено вызовом: RegistryError «эти поля паспорта не обновляются точечно»). Единственный писатель блока — newsite.py при создании ячейки. Открыть точечный путь для `indexing` — решение архитектурной линии."
+    }
+  ]
+}

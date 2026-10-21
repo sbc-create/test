@@ -561,6 +561,34 @@ def cmd_record_live(args) -> int:
     return 2 if отказов else 0
 
 
+def cmd_record_indexing(args) -> int:
+    """Привести объявленный режим индексации к ДЕЙСТВИТЕЛЬНОМУ (MOD-55).
+
+    Открывает ЗАПИСЬ, а не витрину: страницы уже отдают `index, follow` по
+    решению владельца, которое лежит якорем согласия. Отказывается, если живая
+    витрина отдаёт `noindex` — тогда объявленный CLOSED верен.
+    """
+    сайты = [с for с in (args.site or "").split(",") if с]
+    if not сайты:
+        _print({"status": "rejected", "reason": "нужен --site (можно через запятую)"})
+        return 2
+    путь = Path(args.registry) if args.registry else None
+    итоги, отказов = [], 0
+    for сайт in сайты:
+        try:
+            итоги.append(live_record.записать_индексацию(
+                сайт, путь=путь, применять=not args.dry_run))
+        except live_record.ЗаписьОтклонена as ош:
+            отказов += 1
+            итоги.append({"site_id": сайт, "status": "rejected", "reason": str(ош)})
+        except registry.UnknownCell as ош:
+            отказов += 1
+            итоги.append({"site_id": сайт, "status": "unknown-cell", "reason": str(ош)})
+    _print({"записей": len(итоги), "отказов": отказов,
+            "dry_run": bool(args.dry_run), "итоги": итоги})
+    return 2 if отказов else 0
+
+
 ACTIONS = {
     "newsite": cmd_newsite,
     "relocate-data": cmd_relocate_data,
@@ -571,6 +599,7 @@ ACTIONS = {
     "repo": cmd_repo,
     "release": cmd_release,
     "record-live": cmd_record_live,
+    "record-indexing": cmd_record_indexing,
     "install": cmd_install,
     "verify": cmd_verify,
     "export": cmd_export,
