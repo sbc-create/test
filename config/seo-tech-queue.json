@@ -7788,8 +7788,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200. | 21.10 до 19:50Z: та же формулировка на animedia.icu /catalog/ («Весь каталог на Animedia: 8228 записей каталога…»; главный поисковый вход, 177 визитов 14–20.10) — перенос туда только после выпуска T262 (ветка выпуска animedia.icu занята f8327f9). Упавшие входы animedia.icu /title/poschadi-menya-velikiy-gospodin/ (27→1) и /schedule/ (7→2): 200, index, canonical на себя, title/description по содержанию — технической зацепки на странице нет."
+      "status": "live_verified",
+      "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200. | 21.10 до 19:50Z: та же формулировка на animedia.icu /catalog/ («Весь каталог на Animedia: 8228 записей каталога…»; главный поисковый вход, 177 визитов 14–20.10) — перенос туда только после выпуска T262 (ветка выпуска animedia.icu занята f8327f9). Упавшие входы animedia.icu /title/poschadi-menya-velikiy-gospodin/ (27→1) и /schedule/ (7→2): 200, index, canonical на себя, title/description по содержанию — технической зацепки на странице нет. | 21.10 20:26Z wt-portable-site-cell-01-dc: исполнитель 20261021T194604Z-3311150 VERIFIED (d12c6a5; независимо: проверка на базе 376c33a rc 1, на d12c6a5 rc 0); выпуск — /srv/zonafilm12-site/current → releases/d12c6a5a98a0 (замечен 20:26:06Z). Живая сверка 20:26:30Z, 9 страниц: /movies/ «36373 названия», /catalog/ «68451 название», /series/ «8820 названий», /movies/?page=2, /catalog/?genre=drama, /new/, /animation/, /doramas/ — «запис» нет нигде, числа прежние, склонение верно; title, h1, robots, canonical на /movies/, /catalog/, /series/, / — как до выпуска (var/seo-audit/landing-links-20261021/T301-live-after.json). checks/section_description_wording.py на установленном дереве — rc 0. Эффект на входы не заявляется: сравнение недель 14–20.10 и 28.10–03.11 по /catalog/ и /movies/ (search_landing_pages, только при присутствии в топ-200 обеих недель)."
     },
     {
       "id": "T302",
@@ -7822,10 +7822,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies.",
-      "owner_action": "Нет действия владельца: удержание до live_verified T301 на zonafilm12.site. Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified T301 на zonafilm12.site"
+      "status": "queued",
+      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site."
     },
     {
       "id": "T303",
@@ -7887,10 +7885,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "21.10 до 20:18Z wt-portable-site-cell-01-dc: перенос канарейки T301; ветка выпуска animedia.space свободна (живой aea4d394d112), опытов на домене нет. animedia.icu — тот же текст, но только после выпуска T262. Вне этой задачи, отмечено отдельно: /catalog/?kind=tv и ?kind=movie на animedia.icu и animedia.space отдают 200, index, canonical на себя с внутренней меткой («tv — Animedia», h1 «tv», «tv на Animedia.»); ссылок с сайта на них нет (сайт ссылается на ?type=tv), в карте их нет — приоритет низкий, нужна отдельная задача после T262.",
-      "owner_action": "Нет действия владельца: удержание до live_verified T301 (zonafilm12.site). Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified T301 на zonafilm12.site"
+      "status": "queued",
+      "evidence": "21.10 до 20:18Z wt-portable-site-cell-01-dc: перенос канарейки T301; ветка выпуска animedia.space свободна (живой aea4d394d112), опытов на домене нет. animedia.icu — тот же текст, но только после выпуска T262. Вне этой задачи, отмечено отдельно: /catalog/?kind=tv и ?kind=movie на animedia.icu и animedia.space отдают 200, index, canonical на себя с внутренней меткой («tv — Animedia», h1 «tv», «tv на Animedia.»); ссылок с сайта на них нет (сайт ссылается на ?type=tv), в карте их нет — приоритет низкий, нужна отдельная задача после T262. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site."
     }
   ]
 }
