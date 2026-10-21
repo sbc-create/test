@@ -7756,6 +7756,40 @@
       ],
       "status": "released",
       "evidence": "21.10 15:38Z wt-portable-site-cell-01-dc: замена T297 (две неудачи, 133512Z и 140808Z — обе из-за заглушки РАЗДЕЛЫ_КАРТЫ = () в новой проверке, валившей старую sitemap_wired; патч Архитектора и проверка задачи верны: база rc 1, ветка rc 0). Патч тот же: var/patches/T297_zonafilm_space_sitemap_lastmod_r2.patch sha256 64db9a17…de35 (aebf94e). T299 VERIFIED 15:38Z (3058228), ждёт выпуска. | 21.10 15:52Z: T299 выпущена и подтверждена — блок снят. src/seo_layer.py между 5dab6af и 3058228 не менялся, патч ложится. Снимок карты до выпуска: var/seo-audit/zonafilm-space-sitemap-before-T300.json (sha256 частей). | 21.10 16:37Z wt-portable-site-cell-01-dc: VERIFIED 20261021T155222Z-2214179 (93983ec); src/seo_layer.py побайтно = 3058228 + патч 64db9a17…; заглушка в проверке через setattr. Публикатор 16:36:37Z publish → releases/93983ec692e0. Признак 1 (16:37:03Z): sitemap.xml, sitemap-1.xml, sitemap-2.xml побайтно равны снимку до выпуска (7567493216cd / 480ceeeb413b / cb0a048468fd), даты частей 2026-10-21 и 2025-06-18, не время выпуска. Признак 2 (дата сдвигается ровно у изменившейся части; новые карточки — в хвост последней части) — после следующей доставки каталога; до него live_verified не ставлю. Снимки: var/seo-audit/zonafilm-space-sitemap-{before,after}-T300*.json."
+    },
+    {
+      "id": "T301",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/movies/",
+        "https://zonafilm12.site/catalog/",
+        "https://zonafilm12.site/series/"
+      ],
+      "problem": "Живой замер 21.10, завершён до 19:45:43Z (var/seo-audit/landing-links-20261021/zonafilm12.site.json): meta description разделов объясняет устройство данных — «Фильмы на Zona Cinema: 36373 записи каталога — смотреть онлайн.», «Каталог на Zona Cinema: 68451 запись каталога…», «Сериалы…: 8820 записей каталога…», то же на страницах пагинации и жанров. Источник — src/lords-frontend.py ≈7786-7790 (описание_раздела, T036). Эти страницы — поисковые входы с измеренным падением: /catalog/ 23 → 14, /movies/ 7 → 4 за 7–13.10 → 14–20.10 (search_landing_pages, топ-200 обеих недель, var/seo-audit/search-landing-loss-corrected-20261021.json); падение не приписывается описанию — это наблюдение, правка по норме.",
+      "norm": "Публичный текст отвечает посетителю, что он найдёт; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10; ряд T161–T173).",
+      "expected": "В src/lords-frontend.py в построении описание_раздела заменить существительное «запись/записи/записей каталога» на «название/названия/названий» (склонение по тому же правилу, число и остальной текст без изменений): «Фильмы на Zona Cinema: 36373 названия — смотреть онлайн.». Ветка без числа не меняется. Больше ничего не менять. Проверка задачи checks/section_description_wording.py — без стенда и сети: (1) статически: ast/текст src/lords-frontend.py, среди СТРОКОВЫХ ЛИТЕРАЛОВ (ast.Constant str, включая части f-строк) присваиваний переменной слово и описание_раздела нет «запис» и есть «названи» (комментарии не в счёт: в них «записей» остаётся законно); (2) динамически: извлечь из этого блока выражение выбора слова (ast), вычислить его для 1, 2, 5, 11, 21, 36373 → название, названия, названий, названий, название, названия. Нарушение — FAIL и код 1 без необработанного исключения. Падает на коде базы, проходит на ветке (D203). Добавить в checks/run.sh. Затем полный checks/run.sh.",
+      "check": "checks/section_description_wording.py",
+      "verify_live": "после выпуска: на /movies/, /catalog/, /series/, /movies/?page=2 и /catalog/?genre=drama в meta description нет «запис», есть «названи» и прежнее число; title, h1, canonical, robots прежние",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/movies/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        },
+        {
+          "url": "https://zonafilm12.site/catalog/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200."
     }
   ]
 }
