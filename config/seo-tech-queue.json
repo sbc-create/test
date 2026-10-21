@@ -7885,8 +7885,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 до 20:18Z wt-portable-site-cell-01-dc: перенос канарейки T301; ветка выпуска animedia.space свободна (живой aea4d394d112), опытов на домене нет. animedia.icu — тот же текст, но только после выпуска T262. Вне этой задачи, отмечено отдельно: /catalog/?kind=tv и ?kind=movie на animedia.icu и animedia.space отдают 200, index, canonical на себя с внутренней меткой («tv — Animedia», h1 «tv», «tv на Animedia.»); ссылок с сайта на них нет (сайт ссылается на ?type=tv), в карте их нет — приоритет низкий, нужна отдельная задача после T262. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site."
+      "status": "live_verified",
+      "evidence": "21.10 до 20:18Z wt-portable-site-cell-01-dc: перенос канарейки T301; ветка выпуска animedia.space свободна (живой aea4d394d112), опытов на домене нет. animedia.icu — тот же текст, но только после выпуска T262. Вне этой задачи, отмечено отдельно: /catalog/?kind=tv и ?kind=movie на animedia.icu и animedia.space отдают 200, index, canonical на себя с внутренней меткой («tv — Animedia», h1 «tv», «tv на Animedia.»); ссылок с сайта на них нет (сайт ссылается на ?type=tv), в карте их нет — приоритет низкий, нужна отдельная задача после T262. | 21.10 20:27Z: удержание снято — T301 live_verified на zonafilm12.site. | 21.10 21:00Z wt-portable-site-cell-01-dc: исполнитель 20261021T202715Z-3507272 VERIFIED (29c51e8), выпуск — /srv/animedia-space/current → releases/29c51e8c4cfe (замечен 21:00:18Z). Живая сверка 21:00:47Z: /catalog/ «8228 названий», ?type=tv «5863 названия», ?type=movie «2365 названий», ?genre=anime, ?page=2, ?year=2024 «399 названий» — «запис» нет; title/robots/canonical /catalog/ и ?type=tv прежние (var/seo-audit/landing-links-20261021/T304-live-after.json); checks/section_description_wording.py на установленном дереве rc 0. Вне задачи: описание главной «…популярные записи…» и текст страницы 404 «…ни одной записи каталога» (src/animedia-frontend.py:5979, noindex)."
     },
     {
       "id": "T305",
@@ -7913,10 +7913,8 @@
           "status": 200
         }
       ],
-      "status": "blocked",
-      "owner_action": "Нет действия владельца: удержание до live_verified T304 (тот же репозиторий animedia-space). Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified T304",
-      "evidence": "21.10 до 20:28Z wt-portable-site-cell-01-dc: ссылок с сайта на ?kind=<латиница> нет (сайт ссылается на ?type=tv/movie), в карте kind= нет — вход в индекс только по внешним ссылкам; приоритет ниже T304. Перенос на animedia.icu — после T262 (ветка выпуска занята f8327f9). Опытов на animedia.* нет."
+      "status": "queued",
+      "evidence": "21.10 до 20:28Z wt-portable-site-cell-01-dc: ссылок с сайта на ?kind=<латиница> нет (сайт ссылается на ?type=tv/movie), в карте kind= нет — вход в индекс только по внешним ссылкам; приоритет ниже T304. Перенос на animedia.icu — после T262 (ветка выпуска занята f8327f9). Опытов на animedia.* нет. | 21.10 21:01Z: удержание снято — T304 live_verified (тот же репозиторий)."
     }
   ]
 }
