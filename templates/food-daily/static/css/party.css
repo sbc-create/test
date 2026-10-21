@@ -439,3 +439,8 @@ h1, h2 { hyphens: manual; }
   .recipe__actions .btn, .recipe__actions .fav--wide { padding: 0 14px; font-size: .95rem; }
   .ingredients { padding: 16px 14px 18px; }
 }
+/* первый экран: колонки сжимаются до ширины экрана (360 px без горизонтальной прокрутки) */
+.hero-row { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 1000px) { .hero-row { grid-template-columns: minmax(0, 1.25fr) minmax(320px, .9fr); } }
+.hero-row > * { min-width: 0; }
+.recipe__kicker a { display: inline-block; padding-block: 5px; }

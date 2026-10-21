@@ -32,7 +32,7 @@ storage:
   editor_secret: var/food-daily-c/secrets/editor.json
 
 pagination:
-  per_page: 9
+  per_page: 24  # делится на 2, 3 и 4 колонки — ряды каталога полные
 
 seo:
   tag_page_min_items: 2            # тег-страница существует при ≥2 материалах
