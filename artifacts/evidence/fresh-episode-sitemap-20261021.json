@@ -1,0 +1,228 @@
+{
+  "домен": "yummyani.biz",
+  "часов": 36,
+  "работ": 24,
+  "адресов_серий_в_карте": 123645,
+  "итоги": {
+    "НЕ НАЗВАНА": 7,
+    "НАЗВАНА": 17
+  },
+  "подробно": [
+    {
+      "работа": "Окутывая небеса",
+      "слаг": "okutyvaya-nebesa",
+      "сезон": 1,
+      "серия": 186,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T13:50:34.732Z",
+      "адрес": "https://yummyani.biz/anime/okutyvaya-nebesa/season/1/episode/186"
+    },
+    {
+      "работа": "Повелитель бесстрашного духа",
+      "слаг": "povelitel-besstrashnogo-duha",
+      "сезон": 1,
+      "серия": 702,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T13:56:42.987Z",
+      "адрес": "https://yummyani.biz/anime/povelitel-besstrashnogo-duha/season/1/episode/702"
+    },
+    {
+      "работа": "Вечная воля 4",
+      "слаг": "vechnaya-volya-4",
+      "сезон": 4,
+      "серия": 16,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-20T15:20:40.236Z",
+      "адрес": "https://yummyani.biz/anime/vechnaya-volya-4/season/4/episode/16"
+    },
+    {
+      "работа": "Безжалостная леди Ния Листон: Единственная в своём роде история воительницы-богоубийцы, перевоплотившейся в болезненную аристократку",
+      "слаг": "bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnitsy",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-20T15:35:42.151Z",
+      "адрес": "https://yummyani.biz/anime/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnitsy/season/1/episode/3"
+    },
+    {
+      "работа": "Пожиратель звёзд 4",
+      "слаг": "pozhiratel-zvezd-4",
+      "сезон": 4,
+      "серия": 161,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T15:35:42.330Z",
+      "адрес": "https://yummyani.biz/anime/pozhiratel-zvezd-4/season/4/episode/161"
+    },
+    {
+      "работа": "Дух битвы [Перезапуск]: Небеса изолированного мира",
+      "слаг": "duh-bitvy-perezapusk-nebesa-izolirovannogo-mira",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T16:56:13.226Z",
+      "адрес": "https://yummyani.biz/anime/duh-bitvy-perezapusk-nebesa-izolirovannogo-mira/season/1/episode/3"
+    },
+    {
+      "работа": "Фантазии Речных заводей",
+      "слаг": "fantazii-rechnyh-zavodey",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T16:56:14.083Z",
+      "адрес": "https://yummyani.biz/anime/fantazii-rechnyh-zavodey/season/1/episode/3"
+    },
+    {
+      "работа": "Полицейский-экстрасенс Тёдзё!",
+      "слаг": "politseyskiy-ekstrasens-tedze",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-20T17:35:53.555Z",
+      "адрес": "https://yummyani.biz/anime/politseyskiy-ekstrasens-tedze/season/1/episode/3"
+    },
+    {
+      "работа": "Красная река",
+      "слаг": "krasnaya-reka",
+      "сезон": 1,
+      "серия": 16,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-20T18:00:53.159Z",
+      "адрес": "https://yummyani.biz/anime/krasnaya-reka/season/1/episode/16"
+    },
+    {
+      "работа": "Тёмная машина",
+      "слаг": "temnaya-mashina",
+      "сезон": 1,
+      "серия": 2,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-20T19:26:39.917Z",
+      "адрес": "https://yummyani.biz/anime/temnaya-mashina/season/1/episode/2"
+    },
+    {
+      "работа": "Не слишком ли ты сладкая, Бог соли Сато?",
+      "слаг": "ne-slishkom-li-ty-sladkaya-bog-soli-sato",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-20T21:26:07.897Z",
+      "адрес": "https://yummyani.biz/anime/ne-slishkom-li-ty-sladkaya-bog-soli-sato/season/1/episode/3"
+    },
+    {
+      "работа": "Проект воспитания девочек-волшебниц: Перезагрузка",
+      "слаг": "proekt-vospitaniya-devochek-volshebnits-perezagruzka",
+      "сезон": 2,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T02:57:40.572Z",
+      "адрес": "https://yummyani.biz/anime/proekt-vospitaniya-devochek-volshebnits-perezagruzka/season/2/episode/3"
+    },
+    {
+      "работа": "Сюнмао Ли",
+      "слаг": "syunmao-li",
+      "сезон": 1,
+      "серия": 15,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T06:16:51.942Z",
+      "адрес": "https://yummyani.biz/anime/syunmao-li/season/1/episode/15"
+    },
+    {
+      "работа": "Стражи гробниц",
+      "слаг": "strazhi-grobnits",
+      "сезон": 1,
+      "серия": 9,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T08:52:38.949Z",
+      "адрес": "https://yummyani.biz/anime/strazhi-grobnits/season/1/episode/9"
+    },
+    {
+      "работа": "Городская дьяволица: Мини-аниме",
+      "слаг": "gorodskaya-dyavolitsa-mini-anime",
+      "сезон": 1,
+      "серия": 36,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T16:12:45.299Z",
+      "адрес": "https://yummyani.biz/anime/gorodskaya-dyavolitsa-mini-anime/season/1/episode/36"
+    },
+    {
+      "работа": "Странники духовного мира",
+      "слаг": "stranniki-duhovnogo-mira",
+      "сезон": 1,
+      "серия": 9,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T15:32:38.329Z",
+      "адрес": "https://yummyani.biz/anime/stranniki-duhovnogo-mira/season/1/episode/9"
+    },
+    {
+      "работа": "Сильнейшая ведьма в мире стартовала",
+      "слаг": "silneyshaya-vedma-v-mire-startovala",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T15:57:42.568Z",
+      "адрес": "https://yummyani.biz/anime/silneyshaya-vedma-v-mire-startovala/season/1/episode/3"
+    },
+    {
+      "работа": "Детектив уже мёртв 2",
+      "слаг": "detektiv-uzhe-mertv-2",
+      "сезон": 2,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T16:08:21.234Z",
+      "адрес": "https://yummyani.biz/anime/detektiv-uzhe-mertv-2/season/2/episode/3"
+    },
+    {
+      "работа": "Рыцари магии (2026)",
+      "слаг": "rytsari-magii-2026",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T16:17:45.263Z",
+      "адрес": "https://yummyani.biz/anime/rytsari-magii-2026/season/1/episode/3"
+    },
+    {
+      "работа": "Новый принц тенниса: Юношеский чемпионат мира — Финальный матч по отбору участников",
+      "слаг": "novyy-prints-tennisa-yunosheskiy-chempionat-mira-finalnyy-match-po-otboru",
+      "сезон": 1,
+      "серия": 4,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T16:58:27.377Z",
+      "адрес": "https://yummyani.biz/anime/novyy-prints-tennisa-yunosheskiy-chempionat-mira-finalnyy-match-po-otboru/season/1/episode/4"
+    },
+    {
+      "работа": "Король зверей и воинственный бог — Дендивайн",
+      "слаг": "korol-zverey-i-voinstvennyy-bog-dendivayn",
+      "сезон": 1,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T17:32:53.383Z",
+      "адрес": "https://yummyani.biz/anime/korol-zverey-i-voinstvennyy-bog-dendivayn/season/1/episode/3"
+    },
+    {
+      "работа": "Магия вернувшегося должна быть особенной 2",
+      "слаг": "magiya-vernuvshegosya-dolzhna-byt-osobennoy-2",
+      "сезон": 2,
+      "серия": 3,
+      "исход": "НЕ НАЗВАНА",
+      "наблюдение": "2026-10-21T17:42:53.586Z",
+      "адрес": "https://yummyani.biz/anime/magiya-vernuvshegosya-dolzhna-byt-osobennoy-2/season/2/episode/3"
+    },
+    {
+      "работа": "О моём перерождении в меч 2",
+      "слаг": "o-moem-pererozhdenii-v-mech-2",
+      "сезон": 2,
+      "серия": 4,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T17:48:38.141Z",
+      "адрес": "https://yummyani.biz/anime/o-moem-pererozhdenii-v-mech-2/season/2/episode/4"
+    },
+    {
+      "работа": "Сасаки и Пи 2",
+      "слаг": "sasaki-i-pi-2",
+      "сезон": 2,
+      "серия": 3,
+      "исход": "НАЗВАНА",
+      "наблюдение": "2026-10-21T18:23:20.746Z",
+      "адрес": "https://yummyani.biz/anime/sasaki-i-pi-2/season/2/episode/3"
+    }
+  ]
+}

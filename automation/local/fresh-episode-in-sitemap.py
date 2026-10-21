@@ -1,0 +1,218 @@
+#!/usr/bin/env python3
+"""Попадает ли НОВАЯ серия в карту: события журнала против адресов карты.
+
+Только чтение журнала наблюдений витрины и её публичной карты. Ничего не
+пишет, журнал не трогает (`docs/RUNTIME_DATA_OWNERSHIP.md`).
+
+ЗАЧЕМ. Приёмка правки свежести (D3, MOD-122) требует ответа на вопрос, который
+не виден ни в коде, ни в числе адресов карты: серия ВЫШЛА и наблюдение её
+назвало — через сколько она оказалась названа поисковику. Этот проход и есть
+та мера, и он же показывает дефект до правки.
+
+ИЗМЕРЕНО ЭТИМ ПРОХОДОМ 21.10 (22:5xZ) на `yummyani.biz`: из 24 работ с новой
+серией за 36 часов **7 в карту не попали**, страницы у всех семи отвечают 200,
+пять из них ждали больше суток. Витрина при этом несёт ПОЛНОЕ покрытие
+подробностей (`covered 8378` при `titles 8378`), то есть дело не в обходе.
+
+СЛАГ ОПОЗНАЁТСЯ ТОЛЬКО ТОЧНЫМ СОВПАДЕНИЕМ ИМЕНИ, и это не придирка. Первая
+редакция проверки брала первый результат поиска по имени и дала «17 из 17
+названы», то есть ноль дефектов: у франшизы первым идёт слаг ПЕРВОГО сезона, у
+которого серии в карте есть. Та же ошибка в тот же час нашлась в чужой таблице
+запросов (шесть строк «джоджо 7 сезон» сопоставлены с «Золотым ветром»).
+
+Исходы раздельные:
+
+* ``НАЗВАНА``        — адрес новой серии есть в карте;
+* ``НЕ НАЗВАНА``     — страница отвечает 200, адреса в карте нет: дефект;
+* ``СТРАНИЦЫ НЕТ``   — страница не 200; это не пробел карты, а другой вопрос;
+* ``СЛАГ НЕ ОПОЗНАН``— точного совпадения имени не нашлось; в счёт дефектов не
+  идёт, печатается отдельно.
+
+    python3 automation/local/fresh-episode-in-sitemap.py --domain yummyani.biz
+    python3 automation/local/fresh-episode-in-sitemap.py --hours 24 --json
+
+Коды: 0 — все наблюдённые серии названы; 1 — есть ненайденные; 2 — не измерено.
+"""
+from __future__ import annotations
+
+import argparse
+import datetime
+import json
+import pathlib
+import re
+import subprocess
+import sys
+import tempfile
+import urllib.parse
+
+ЖУРНАЛ_ПО_УМОЛЧАНИЮ = pathlib.Path(
+    "/srv/sites/yummyani-staging/runtime/episode-state/events.jsonl")
+
+#: Виды событий, которые означают «появилась новая серия».
+ВИД_НОВОЙ_СЕРИИ = ("EPISODE_ADDED",)
+
+НАЗВАНА = "НАЗВАНА"
+НЕ_НАЗВАНА = "НЕ НАЗВАНА"
+СТРАНИЦЫ_НЕТ = "СТРАНИЦЫ НЕТ"
+СЛАГ_НЕ_ОПОЗНАН = "СЛАГ НЕ ОПОЗНАН"
+
+
+def последние_по_работе(строки: list[str], *, не_раньше: str) -> list[dict]:
+    """По каждой работе — САМОЕ позднее событие о новой серии.
+
+    Чистая функция: журнал передаётся строками. Самое позднее нужно потому,
+    что номер серии в нём наибольший, а промежуточные уже не вопрос.
+    """
+    по_имени: dict[str, dict] = {}
+    for строка in строки:
+        try:
+            з = json.loads(строка)
+        except (ValueError, TypeError):
+            continue
+        if з.get("kind") not in ВИД_НОВОЙ_СЕРИИ:
+            continue
+        когда = з.get("observedAt") or ""
+        if когда < не_раньше:
+            continue
+        имя = (з.get("name") or "").strip()
+        if not имя or not isinstance(з.get("to"), int):
+            continue
+        прежнее = по_имени.get(имя)
+        if not прежнее or когда > (прежнее.get("observedAt") or ""):
+            по_имени[имя] = з
+    return list(по_имени.values())
+
+
+def выбрать_слаг(имя: str, кандидаты: list[tuple[str, str]]) -> str:
+    """Слаг по ТОЧНОМУ совпадению имени с заголовком страницы работы.
+
+    `кандидаты` — пары (слаг, заголовок). Ни первый результат, ни ближайший по
+    похожести не годятся: у франшизы имена различаются одной цифрой.
+    """
+    for слаг, заголовок in кандидаты:
+        if заголовок.strip() == имя.strip():
+            return слаг
+    return ""
+
+
+def исход(в_карте: bool, код_страницы: int) -> str:
+    if в_карте:
+        return НАЗВАНА
+    return НЕ_НАЗВАНА if код_страницы == 200 else СТРАНИЦЫ_НЕТ
+
+
+def _достать(url: str, таймаут: int = 120) -> str:
+    with tempfile.NamedTemporaryFile(suffix=".txt") as б:
+        subprocess.run(["curl", "-sSL", "--max-time", str(таймаут),
+                        "-o", б.name, url], capture_output=True)
+        return open(б.name, encoding="utf-8", errors="replace").read()
+
+
+def _код(url: str) -> int:
+    г = subprocess.run(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
+                        "--max-time", "35", url], capture_output=True, text=True)
+    try:
+        return int((г.stdout or "0").strip()[:3])
+    except ValueError:
+        return 0
+
+
+def _заголовок(тело: str) -> str:
+    м = re.search(r"<h1[^>]*>(.*?)</h1>", тело, re.S)
+    return re.sub(r"<[^>]+>", "", м.group(1)).strip() if м else ""
+
+
+def адреса_серий(домен: str) -> set[str]:
+    индекс = _достать(f"https://{домен}/sitemap.xml")
+    части = [ч for ч in re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", индекс)
+             if "episode" in ч]
+    адреса: set[str] = set()
+    for ч in части:
+        адреса.update(а.rstrip("/") for а in
+                      re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", _достать(ч)))
+    return адреса
+
+
+def проверить(домен: str, журнал: pathlib.Path, *, часов: int = 36,
+              предел: int = 40) -> dict:
+    if not журнал.is_file():
+        return {"ошибка": f"журнал не прочитан: {журнал}"}
+    не_раньше = (datetime.datetime.now(datetime.timezone.utc)
+                 - datetime.timedelta(hours=часов)).isoformat()
+    строки = журнал.read_text(encoding="utf-8",
+                              errors="replace").splitlines()
+    работы = последние_по_работе(строки, не_раньше=не_раньше)[:предел]
+    if not работы:
+        return {"ошибка": f"за {часов} ч событий о новых сериях нет"}
+    карта = адреса_серий(домен)
+    if not карта:
+        return {"ошибка": "карта серий не прочитана"}
+
+    итоги: dict[str, int] = {}
+    подробно: list[dict] = []
+    for з in работы:
+        имя, серия = з["name"], з["to"]
+        поиск = _достать(f"https://{домен}/search?q="
+                         + urllib.parse.quote(имя[:26]), 40)
+        слаги = list(dict.fromkeys(
+            re.findall(r'href="/anime/([^"/#?]+)"', поиск)))[:5]
+        кандидаты = [(с, _заголовок(_достать(f"https://{домен}/anime/{с}", 35)))
+                     for с in слаги]
+        слаг = выбрать_слаг(имя, кандидаты)
+        if not слаг:
+            итоги[СЛАГ_НЕ_ОПОЗНАН] = итоги.get(СЛАГ_НЕ_ОПОЗНАН, 0) + 1
+            подробно.append({"работа": имя, "исход": СЛАГ_НЕ_ОПОЗНАН,
+                             "кандидаты": слаги})
+            continue
+        свои = [а for а in карта if f"/anime/{слаг}/season/" in а]
+        сезоны = sorted({int(m.group(1)) for а in свои
+                         if (m := re.search(r"/season/(\d+)/", а))})
+        сезон = сезоны[-1] if сезоны else 1
+        адрес = f"https://{домен}/anime/{слаг}/season/{сезон}/episode/{серия}"
+        в_карте = адрес in карта
+        и = исход(в_карте, 200 if в_карте else _код(адрес))
+        итоги[и] = итоги.get(и, 0) + 1
+        подробно.append({"работа": имя, "слаг": слаг, "сезон": сезон,
+                         "серия": серия, "исход": и,
+                         "наблюдение": з.get("observedAt"), "адрес": адрес})
+    return {"домен": домен, "часов": часов, "работ": len(работы),
+            "адресов_серий_в_карте": len(карта), "итоги": итоги,
+            "подробно": подробно}
+
+
+def main(аргв: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--domain", default="yummyani.biz")
+    р.add_argument("--journal", default=str(ЖУРНАЛ_ПО_УМОЛЧАНИЮ))
+    р.add_argument("--hours", type=int, default=36)
+    р.add_argument("--limit", type=int, default=40)
+    р.add_argument("--json", action="store_true")
+    а = р.parse_args(аргв)
+
+    итог = проверить(а.domain, pathlib.Path(а.journal), часов=а.hours,
+                     предел=а.limit)
+    if а.json:
+        print(json.dumps(итог, ensure_ascii=False, indent=2))
+    elif итог.get("ошибка"):
+        print(f"НЕ ИЗМЕРЕНО: {итог['ошибка']}")
+    else:
+        print(f"{итог['домен']}: работ с новой серией за {итог['часов']} ч —"
+              f" {итог['работ']}; адресов серий в карте"
+              f" {итог['адресов_серий_в_карте']}")
+        for к, v in sorted(итог["итоги"].items(), key=lambda п: -п[1]):
+            print(f"   {к:18} {v}")
+        for с in итог["подробно"]:
+            if с["исход"] != НАЗВАНА:
+                print(f"   {с['исход']}: {с.get('слаг') or с['работа'][:40]}"
+                      f" s{с.get('сезон', '?')}e{с.get('серия', '?')}"
+                      f" (наблюдение {с.get('наблюдение')})")
+
+    if итог.get("ошибка"):
+        return 2
+    return 1 if итог["итоги"].get(НЕ_НАЗВАНА) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
