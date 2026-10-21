@@ -7550,7 +7550,7 @@
       "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
       "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
       "check": "checks/sitemap_index_lastmod.py",
-      "verify_live": "https://zonafilm.space/sitemap.xml: у каждой части lastmod = максимуму внутри части (у sitemap-2.xml ожидается дата из июня 2025, НЕ сегодняшняя); число адресов в частях то же; zonafilm12.site и zonafilm.cc не тронуты",
+      "verify_live": "https://zonafilm.space/sitemap.xml: sitemap-1.xml → lastmod = максимуму внутри (на 21.10 2026-10-21), sitemap-2.xml → максимуму внутри (на 21.10 2025-06-18, ИЮНЬ 2025). Если у обеих частей сегодняшняя дата — подставлено время сборки: ОТКАТ, не досмотр. Адресов в частях то же: 45000 и 23558; zonafilm12.site и zonafilm.cc не тронуты; у Yummy 7 дат на 7 частей (положительный контроль).",
       "live_check": [
         {
           "url": "https://zonafilm.space/sitemap.xml",
@@ -7561,7 +7561,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "21.10 08:24Z: канарейка T291 на animedia.space принята; перенос на zonafilm.space — Zona-канарейка. animedia.icu — после восстановления канала выпуска (T262)."
+      "evidence": "21.10 08:24Z: канарейка T291 на animedia.space принята; перенос на zonafilm.space — Zona-канарейка. animedia.icu — после восстановления канала выпуска (T262). | 21.10 SEO: zonafilm.space различает дату содержимого и время сборки (две части с разными максимумами) — признак отката записан до выпуска (по предупреждению wt-nova-02, 6927667)."
     }
   ]
 }
