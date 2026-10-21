@@ -7485,7 +7485,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "21.10 06:40Z SEO: runs.jsonl T289 ×3 — run_all_passes false только из-за page-regressions 404; check_fails_on_base и check_passes_on_branch — true. Повторить прогон у SEO-сессии нельзя: config/player.json витрины закрыт по правам (Permission denied), а в клоне publisher_id 10252 против объявленного 10333."
+      "evidence": "21.10 06:33Z SEO: runs.jsonl T289 ×3 — run_all_passes false только из-за page-regressions 404; check_fails_on_base и check_passes_on_branch — true. Повторить прогон у SEO-сессии нельзя: config/player.json витрины закрыт по правам (Permission denied), а в клоне publisher_id 10252 против объявленного 10333."
     },
     {
       "id": "T289",
