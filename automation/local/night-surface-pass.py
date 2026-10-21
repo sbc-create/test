@@ -46,6 +46,11 @@ import sys
                 ["1lordserials1.online", "--pages", "20", "--json"], 900),
     "css": ("inline-css-weight.py", ["--json"], 300),
     "descriptions": ("description-gap-measure.py", ["--json"], 300),
+    # Мера новой серии против карты появилась 21.10 и сразу нашла 7 работ из
+    # 24 на `yummyani.biz`. Предел выше остальных: она читает три части карты
+    # по 50 000 адресов и открывает страницы работ по одной.
+    "episodes": ("fresh-episode-in-sitemap.py",
+                 ["--domain", "yummyani.biz", "--hours", "36", "--json"], 1200),
 }
 
 ЧИСТО, ДЕФЕКТ, НЕ_ИЗМЕРЕНО, СБОЙ = "чисто", "найден дефект", "НЕ ИЗМЕРЕНО", "СБОЙ"
