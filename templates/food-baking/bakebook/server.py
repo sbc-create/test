@@ -243,7 +243,15 @@ class App:
             shown = {r.slug for r in season[2][:4]} if season else set()
             tea = [r for r in s.tags().get("k-chayu", []) if r.slug not in shown][:4]  # без повтора сезонных
             tea = tea if len(tea) >= 2 else []
-            fresh = sorted(s.recipes, key=lambda r: (r.published_at, r.updated_at), reverse=True)[:8]
+            shown |= {r.slug for r in tea}
+            # «Новые» — без карточек, уже показанных выше; полными рядами по 4, если рецептов больше четырёх
+            fresh = [
+                r
+                for r in sorted(s.recipes, key=lambda r: (r.published_at, r.updated_at), reverse=True)
+                if r.slug not in shown
+            ][:8]
+            if len(fresh) > 4:
+                fresh = fresh[: len(fresh) // 4 * 4]
             meta = Meta(
                 f"{s.cfg['name']} — рецепты домашней выпечки",
                 with_examples(
@@ -547,6 +555,9 @@ def make_handler(app: App):
                     ".css": "text/css; charset=utf-8",
                     ".js": "text/javascript; charset=utf-8",
                     ".svg": "image/svg+xml",
+                    ".webp": "image/webp",
+                    ".woff2": "font/woff2",
+                    ".txt": "text/plain; charset=utf-8",
                 }.get(p.suffix, "application/octet-stream")
                 return self.send(
                     200, p.read_bytes(), {"Content-Type": ct, "Cache-Control": "public, max-age=31536000, immutable"}

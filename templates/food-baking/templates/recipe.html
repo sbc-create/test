@@ -24,7 +24,7 @@
     <h2 id="ing-h">Отвесить</h2>
     <div class="tablewrap"><table class="weigh-t">
       <thead><tr><th scope="col">Продукт</th><th scope="col" class="num">Количество</th>{% if r.flour_g %}<th scope="col" class="num">% от муки</th>{% endif %}</tr></thead>
-      <tbody>{% for i in r.bench %}<tr><th scope="row"><label><input type="checkbox" data-weigh="{{ loop.index }}"> {{ i.name }}</label></th><td class="num">{{ i.amount }}</td>{% if r.flour_g %}<td class="num">{{ i.pct ~ ' %' if i.pct is not none else '—' }}</td>{% endif %}</tr>{% endfor %}</tbody>
+      <tbody>{% for i in r.bench %}<tr><th scope="row"><label><input type="checkbox" data-weigh="{{ loop.index }}"> {{ i.name }}</label></th><td class="num">{{ i.amount }}</td>{% if r.flour_g %}<td class="num pct{% if i.pct is none %} pct--none{% endif %}" data-label="от муки:">{{ i.pct ~ ' %' if i.pct is not none else '—' }}</td>{% endif %}</tr>{% endfor %}</tbody>
     </table></div>
     <p class="note">{% if r.flour_g %}Пекарский процент — масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %), считается только по граммам источника; штуки и ложки без процента. {% endif %}Количества даны для формы из рецепта.</p>
   </section>

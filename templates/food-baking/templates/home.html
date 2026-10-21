@@ -4,7 +4,7 @@
 <section class="bench-hero">
   <h1>Домашняя выпечка <em>и&nbsp;десерты</em></h1>
   <p class="lead">Кексы, хлеб, пироги и печенье: температура духовки, время, форма и вес продуктов — сразу на странице рецепта.</p>
-  <form class="find find--hero" action="/poisk/" method="get" role="search"><label class="sr" for="q-home">Найти рецепт выпечки</label><input id="q-home" name="q" type="search" placeholder="Например, кекс или слива"><button type="submit">Найти</button></form>
+  <form class="find find--hero" action="/poisk/" method="get" role="search"><label class="sr" for="q-home">Найти рецепт выпечки</label><input id="q-home" name="q" type="search" placeholder="Кекс, пирог, слива…"><button type="submit">Найти</button></form>
 </section>
 
 <section class="block" aria-labelledby="h-groups">
@@ -34,10 +34,12 @@
 </section>
 {% endif %}
 
+{% if fresh %}
 <section class="block" aria-labelledby="h-fresh">
   <div class="block__head"><h2 id="h-fresh">Новые рецепты</h2><a href="/recepty/">Весь каталог</a></div>
   <div class="grid--home-fresh">{{ grid(fresh) }}</div>
 </section>
+{% endif %}
 
 <section class="block" aria-labelledby="h-dough">
   <div class="block__head"><h2 id="h-dough">Виды теста</h2><a href="/testo/">Подробнее</a></div>

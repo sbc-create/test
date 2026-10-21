@@ -3,5 +3,5 @@
 {% block main %}
 <h1>Поиск выпечки</h1>
 <form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q">Название или продукт</label><input id="q" name="q" type="search" value="{{ q }}" placeholder="Слива, заварное"><button type="submit">Найти</button></form>
-{% if q %}{% if items %}<p class="lead">Найдено: {{ items|length }}</p>{{ toc(items, 'h2') }}{% else %}<div class="empty"><h2>По запросу «{{ q }}» ничего нет</h2><p>Попробуйте один продукт или откройте <a href="/recepty/">все рецепты</a>.</p></div>{% endif %}{% endif %}
+{% if q %}{% if items %}<p class="lead">Найдено: {{ items|length }}</p>{{ toc(items, 'h2') }}{% else %}<div class="empty"><h2>По запросу «{{ q }}» ничего нет</h2><p>Попробуйте один продукт или откройте <a href="/recepty/">все рецепты</a>.</p></div>{% endif %}{% else %}<h2>Или выберите раздел</h2><ul class="gtiles">{% for k, its in site.groups().items() %}<li><a class="gtile" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ its|length }}</span></a></li>{% endfor %}</ul>{% endif %}
 {% endblock %}

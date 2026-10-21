@@ -67,6 +67,39 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+# Поиск по словам: слово запроса совпадает с НАЧАЛОМ слова рецепта, расхождение допустимо только окончанием
+# («кексы» ~ «кекс», «сливой» ~ «слива»); части слова в середине не совпадают.
+ENDINGS = sorted(
+    (
+        "ами ями ого его ому ему ыми ими ой ей ий ый ая яя ое ее ые ие ую юю "
+        "ах ях ов ев ом ем ам ям а я о е у ю ы и ь"
+    ).split(),
+    key=len,
+    reverse=True,
+)
+STOP = frozenset("с со и в во на из по без для к от а".split())
+# «печень» (субпродукт) и «печенье» (выпечка) различаются только окончанием — разводим явно
+LIVER = re.compile(r"^печен(ь|и|ью|ями|ям|ях)$|^печенк")
+COOKIE = re.compile(r"^печень[еяю]|^печений")
+
+
+def stem(w: str) -> str:
+    for e in ENDINGS:
+        if w.endswith(e) and len(w) - len(e) >= 3:
+            return w[: -len(e)]
+    return w
+
+
+def word_matches(w: str, tokens: frozenset[str]) -> bool:
+    st = stem(w)
+    for t in tokens:
+        if t == w or (t.startswith(st) and (t[len(st) :] in ENDINGS or t == st)):
+            if (LIVER.match(w) and COOKIE.match(t)) or (COOKIE.match(w) and LIVER.match(t)):
+                continue
+            return True
+    return False
+
+
 def qty(q, unit) -> str:
     if unit == "to_taste":
         return "по вкусу"
@@ -331,13 +364,16 @@ class Site:
         return [(f"/teg/{t}/", TAGS[t]) for t in r.tags if t in live]
 
     def search(self, q: str) -> list[Recipe]:
-        words = norm(q).split()
-        # без морфологии: для слов длиннее 5 букв сравнивается основа без окончания («заварной» ~ «заварного»)
-        return [
-            r
-            for r in self.recipes
-            if words and all(w in r.search_text or (len(w) > 5 and w[:-2] in r.search_text) for w in words)
-        ]
+        words = [w for w in norm(q).split() if w not in STOP] or norm(q).split()
+        if not words:
+            return []
+        hits = []
+        for r in self.recipes:
+            tokens = frozenset(t for t in re.split(r"[\s-]+", r.search_text) if t)
+            if all(word_matches(w, tokens) for w in words):
+                title = frozenset(t for t in re.split(r"[\s-]+", norm(r.title)) if t)
+                hits.append((0 if all(word_matches(w, title) for w in words) else 1, r))
+        return [r for _, r in sorted(hits, key=lambda x: (x[0], x[1].title))]
 
     def by_temp(self) -> list[tuple[int | None, list[Recipe]]]:
         """Рецепты по главной (первой по убыванию) температуре духовки; без духовки — в конце (None)."""

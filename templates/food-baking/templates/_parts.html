@@ -22,7 +22,7 @@
 {%- endmacro %}
 
 {% macro grid(items, heading='h3') -%}
-<div class="bgrid">{% for r in items %}{{ card(r, heading) }}{% endfor %}</div>
+<div class="bgrid bgrid--n{{ items|length }}">{% for r in items %}{{ card(r, heading) }}{% endfor %}</div>
 {%- endmacro %}
 
 {% macro toc(items, heading='h3') -%}

@@ -53,7 +53,7 @@ def test_bakers_percentage_from_grams_only(app):
     assert r.flour_g == 200 and rows["Зерновая мука"] == 100 and rows["Сливочное масло"] == 50 and rows["Сахар"] == 35
     assert rows["Куриное яйцо"] is None and rows["Яблоки"] is None  # штуки — без процента
     _, html, _ = get(app, r.url)
-    assert "% от муки" in html and '<td class="num">50 %</td>' in html
+    assert "% от муки" in html and '<td class="num pct" data-label="от муки:">50 %</td>' in html
     for x in app.site.recipes:
         if not x.flour_g:
             assert "% от муки" not in get(app, x.url)[1], x.slug
@@ -62,7 +62,7 @@ def test_bakers_percentage_from_grams_only(app):
 def test_catalog_compare_table_and_sort(app):
     _, html, _ = get(app, "/recepty/")  # каталог — карточки; таблица сравнения — вид ?vid=tablica без своего canonical
     assert (
-        'class="bgrid"' in html and canon(html) == app.site.abs("/recepty/") and 'href="/recepty/?vid=tablica"' in html
+        'class="bgrid ' in html and canon(html) == app.site.abs("/recepty/") and 'href="/recepty/?vid=tablica"' in html
     )
     _, html, _ = get(app, "/recepty/", {"vid": ["tablica"]})
     assert (

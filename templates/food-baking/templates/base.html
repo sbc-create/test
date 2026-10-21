@@ -18,8 +18,10 @@
 <meta property="og:type" content="{{ 'article' if meta.kind == 'recipe' else 'website' }}">
 {% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
 {% endif %}
-<meta name="theme-color" content="#1e2328">
+<meta name="theme-color" content="#4a2a1c">
 <link rel="icon" href="{{ asset('img/whisk.svg') }}" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/nunito-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/playfair-display-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset('css/bench.css') }}">
 {% for ld in meta.ld_json() %}<script type="application/ld+json">{{ ld | safe }}</script>
 {% endfor %}

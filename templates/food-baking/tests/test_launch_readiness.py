@@ -184,3 +184,26 @@ def test_images_require_rights(tmp_path):
 def test_chicken_search_does_not_match_eggs(app):
     assert app.site.search("курица") == []  # в книге выпечки нет блюд с мясом курицы — яйца не совпадение
     assert site_mod.norm("Куриные яйца и куриный желток") == "яйца и желток"
+
+
+def test_home_shows_each_recipe_once_and_links_resolve(app):
+    """Сезонная подборка, «К чаю» и «Новые» не повторяют одну карточку; каждая ссылка главной открывается."""
+    _, html, _ = app.route("/", {})
+    main = html[html.index("<main") : html.index('<footer class="colophon">')]
+    cards = re.findall(r'class="bcard__link" href="([^"]+)"', main)
+    assert len(cards) >= 8 and len(cards) == len(set(cards)), cards
+    for href in set(re.findall(r'href="(/[^"#?]*)"', main)):
+        if not href.startswith("/static/"):
+            assert app.route(href, {})[0] == 200, href
+
+
+def test_search_matches_word_forms_not_word_middles(app):
+    s = app.site
+    titles = lambda q: sorted(r.title for r in s.search(q))  # noqa: E731
+    assert titles("кекс") == titles("кексы") == titles("КЕКС") and titles("кекс")
+    assert titles("слива") == titles("сливами") and titles("слива")
+    assert titles("заварное") == titles("заварного") and titles("заварное")
+    assert s.search("печень") == [] and titles("печенье") == titles("печенья") and titles("печенье")
+    assert s.search("") == [] and s.search("  ") == []
+    code, html, _ = app.route("/poisk/", {"q": ["нетакогоблюда"]})
+    assert code == 200
