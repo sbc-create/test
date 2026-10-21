@@ -7460,6 +7460,31 @@
       "status": "blocked",
       "evidence": "20.10 ≈14:00Z SEO: патч Архитектора сверен с головой ветки выпуска origin/claude/extract-zonafilm-space-seo-01 = 69f79d8502a9 (живой выпуск). src/collection_contract.py: sha256 5c54b22abb09… совпадает с работающим файлом (по Архитектору — releases/69f79d8502a9); git apply --check — OK. Репетиция Архитектора: top_rated — заглушек 1→0 при 12→12 карточках, девять прочих доступных полок побуквенно те же. База «до» SEO: без <img> на главной 7 из 64. Отрицательные контроли: 24 карточки в полке; facing-grizzlies на /collection/top_rated/; zonafilm12.site, zonafilm.cc и чистые витрины не трогаются (перенос — после приёмки канарейки). | 21.10 05:23Z SEO: без выпуска (current → 69f79d8) на главной 6 заглушек, ВСЕ 6 в полке «Высокие оценки недели» (facing-grizzlies, shrimad-bhagwat-mahapuran, friends-conditions-apply, tumharey-husn-kay-naam, aghori, thora-sa-haq); вчера 7. Признак приёмки переведён на абсолютный ноль в полке по оценке (поправка wt-nova-02 21.10); база снимается перед выпуском и подтверждает только, что заглушки были. | 21.10 05:30Z SEO: прогоны исполнителя 20.10 — INCOMPLETE ×3 (коммита нет, ветки не отправлены), разбор блокера var/seo-tech/live-20261020T142504Z/BLOCKED_T288.md; на zonafilm.space установлен прежний выпуск 69f79d8 (голова ветки выпуска не менялась). Внешний замер владельца 21.10 08:25 МСК: те же 6 карточек без изображения в полке.",
       "owner_action": "Исполнитель (3 прогона 20.10 14:13–14:29Z, последний 20261020T142504Z-3753932) — BLOCKED: патч меняет collection_contract.разрешить, а полка главной «Высокие оценки недели» собирается из недельного снимка zona-01-popular-weekly.json через _из_weekly_полки (src/lords-frontend.py:7049) — на снимке ячейки до/после патча те же 6 заглушек из 24. Репетиция патча (wt-nova-02) проверяла не ту поверхность. По указанию владельца 21.10 перестановка карточек восстановлением изображений не считается: 6 карточек переданы в задачу восстановления постеров (MOD-116). Новая правка полки — только после решения Архитектора и с отдельным учётом."
+    },
+    {
+      "id": "T289",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "21.10 (MOD-111, wt-nova-02, живой замер): в индексе https://animedia.space/sitemap.xml у части sitemap-1.xml (8 235 адресов) нет <lastmod>, хотя внутри части есть даты (свежайшая 2026-10-21T06:02:21+03:00). То же на animedia.icu и zonafilm.space. Передача: docs/handoff/SITEMAP_LASTMOD_RELEASE_001.md (ветка claude/nova-publish-memory-02, 9a9bd48).",
+      "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
+      "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/sitemap_index_lastmod.py",
+      "verify_live": "https://animedia.space/sitemap.xml: у sitemap-1.xml есть lastmod, равный свежайшему lastmod внутри части. Число адресов в частях то же (8 235 на 21.10). animedia.icu, zonafilm.space и Yummy не тронуты (отрицательный контроль).",
+      "live_check": [
+        {
+          "url": "https://animedia.space/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<lastmod>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки."
     }
   ]
 }
