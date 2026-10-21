@@ -1,0 +1,247 @@
+{
+  "записей": 8,
+  "отказов": 0,
+  "dry_run": false,
+  "итоги": [
+    {
+      "site_id": "lords-10",
+      "домен": "lordfilm.group",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordfilm.group",
+        "код": 200,
+        "build_id": "9d516ae97730-lords-10",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordfilm.group/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "9d516ae97730-lords-10",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:18Z",
+          "evidence": "https://lordfilm.group/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-11",
+      "домен": "lordfilm.spb.ru",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordfilm.spb.ru",
+        "код": 200,
+        "build_id": "a1e296bbce04-lords-11",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordfilm.spb.ru/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "a1e296bbce04-lords-11",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:18Z",
+          "evidence": "https://lordfilm.spb.ru/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-12",
+      "домен": "lordfilm.msk.ru",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordfilm.msk.ru",
+        "код": 200,
+        "build_id": "1bab080b6b06-lords-12",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordfilm.msk.ru/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "1bab080b6b06-lords-12",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:19Z",
+          "evidence": "https://lordfilm.msk.ru/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-13",
+      "домен": "lordserial.su",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordserial.su",
+        "код": 200,
+        "build_id": "9f4391a40ac5-lords-13",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordserial.su/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "9f4391a40ac5-lords-13",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:19Z",
+          "evidence": "https://lordserial.su/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-14",
+      "домен": "lordserial.group",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordserial.group",
+        "код": 200,
+        "build_id": "2e9e3c7876bc-lords-14",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordserial.group/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "2e9e3c7876bc-lords-14",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:19Z",
+          "evidence": "https://lordserial.group/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-15",
+      "домен": "lordserial.spb.ru",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordserial.spb.ru",
+        "код": 200,
+        "build_id": "cdbe4edec611-lords-15",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordserial.spb.ru/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "cdbe4edec611-lords-15",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:19Z",
+          "evidence": "https://lordserial.spb.ru/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-16",
+      "домен": "lordserial.msk.ru",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordserial.msk.ru",
+        "код": 200,
+        "build_id": "8660085a88cc-lords-16",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordserial.msk.ru/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "8660085a88cc-lords-16",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:19Z",
+          "evidence": "https://lordserial.msk.ru/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    },
+    {
+      "site_id": "lords-17",
+      "домен": "lordserial.net.ru",
+      "было": {
+        "status": "planned",
+        "deployed": {}
+      },
+      "замер": {
+        "домен": "lordserial.net.ru",
+        "код": 200,
+        "build_id": "dff8e5f5b912-lords-17",
+        "robots": "noindex, nofollow",
+        "адрес": "https://lordserial.net.ru/"
+      },
+      "изменения": {
+        "status": "live",
+        "deployed": {
+          "release_digest": null,
+          "source_commit": null,
+          "artifact": null,
+          "built_at": null,
+          "build_id": "dff8e5f5b912-lords-17",
+          "source": "live-probe",
+          "probed_at": "2026-10-21T06:15:20Z",
+          "evidence": "https://lordserial.net.ru/",
+          "robots_seen": "noindex, nofollow"
+        }
+      },
+      "применено": true
+    }
+  ]
+}

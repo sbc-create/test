@@ -13,7 +13,7 @@ import json
 import sys
 from pathlib import Path
 
-from factory.cell import onboarding, registry, siterepo, sync, templates, transfer
+from factory.cell import onboarding, registry, siterepo, sync, templates, transfer, live_record
 from factory.cell import release as release_mod
 from factory.paths import PATHS
 
@@ -526,6 +526,41 @@ def cmd_relocate_data(args) -> int:
     return 0 if итог.get("status") in ("relocated", "nothing-to-do", "dry-run") else 2
 
 
+def cmd_record_live(args) -> int:
+    """Записать выпуск витрины, выложенной НЕ на этом узле, по живому замеру.
+
+    Повод — MOD-107: восемь витрин партии K2 выложены на цель `k2-zomro-01`,
+    выпуск прошёл мимо `factory cell release`, и у всех восьми `status` остался
+    `planned` при живом build-id у каждой. Запись о выпуске отсутствовала.
+
+    `release_digest` остаётся `null`: артефакта у нас нет, и придумывать
+    отпечаток нельзя. Источник сведений называется прямо — `live-probe`, с
+    адресом замера и его временем.
+    """
+    сайты = [с for с in (args.site or "").split(",") if с]
+    if not сайты:
+        _print({"status": "rejected", "reason": "нужен --site (можно через запятую)"})
+        return 2
+    путь = Path(args.registry) if args.registry else None
+    итоги = []
+    отказов = 0
+    for сайт in сайты:
+        try:
+            итоги.append(live_record.записать(
+                сайт, путь=путь, применять=not args.dry_run))
+        except live_record.ЗаписьОтклонена as ош:
+            отказов += 1
+            итоги.append({"site_id": сайт, "status": "rejected",
+                          "reason": str(ош)})
+        except registry.UnknownCell as ош:
+            отказов += 1
+            итоги.append({"site_id": сайт, "status": "unknown-cell",
+                          "reason": str(ош)})
+    _print({"записей": len(итоги), "отказов": отказов,
+            "dry_run": bool(args.dry_run), "итоги": итоги})
+    return 2 if отказов else 0
+
+
 ACTIONS = {
     "newsite": cmd_newsite,
     "relocate-data": cmd_relocate_data,
@@ -535,6 +570,7 @@ ACTIONS = {
     "reserve": cmd_reserve,
     "repo": cmd_repo,
     "release": cmd_release,
+    "record-live": cmd_record_live,
     "install": cmd_install,
     "verify": cmd_verify,
     "export": cmd_export,

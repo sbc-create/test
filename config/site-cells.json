@@ -1036,7 +1036,7 @@
       "aliases": [
         "www.lordfilm.group"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-10",
@@ -1060,9 +1060,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "9d516ae97730-lords-10",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:18Z",
+        "evidence": "https://lordfilm.group/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:56.779651+00:00",
+      "last_update": "2026-10-21T06:15:18.571800+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1122,7 +1132,7 @@
       "aliases": [
         "www.lordfilm.spb.ru"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-11",
@@ -1146,9 +1156,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "a1e296bbce04-lords-11",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:18Z",
+        "evidence": "https://lordfilm.spb.ru/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:56.850950+00:00",
+      "last_update": "2026-10-21T06:15:18.702901+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1208,7 +1228,7 @@
       "aliases": [
         "www.lordfilm.msk.ru"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-12",
@@ -1232,9 +1252,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "1bab080b6b06-lords-12",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:19Z",
+        "evidence": "https://lordfilm.msk.ru/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:56.879310+00:00",
+      "last_update": "2026-10-21T06:15:19.125299+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1294,7 +1324,7 @@
       "aliases": [
         "www.lordserial.su"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-13",
@@ -1318,9 +1348,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "9f4391a40ac5-lords-13",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:19Z",
+        "evidence": "https://lordserial.su/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:56.933305+00:00",
+      "last_update": "2026-10-21T06:15:19.264262+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1380,7 +1420,7 @@
       "aliases": [
         "www.lordserial.group"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-14",
@@ -1404,9 +1444,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "2e9e3c7876bc-lords-14",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:19Z",
+        "evidence": "https://lordserial.group/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:57.139515+00:00",
+      "last_update": "2026-10-21T06:15:19.546211+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1466,7 +1516,7 @@
       "aliases": [
         "www.lordserial.spb.ru"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-15",
@@ -1490,9 +1540,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "cdbe4edec611-lords-15",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:19Z",
+        "evidence": "https://lordserial.spb.ru/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:57.216511+00:00",
+      "last_update": "2026-10-21T06:15:19.859125+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1552,7 +1612,7 @@
       "aliases": [
         "www.lordserial.msk.ru"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-16",
@@ -1576,9 +1636,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "8660085a88cc-lords-16",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:19Z",
+        "evidence": "https://lordserial.msk.ru/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:57.277729+00:00",
+      "last_update": "2026-10-21T06:15:19.987097+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -1638,7 +1708,7 @@
       "aliases": [
         "www.lordserial.net.ru"
       ],
-      "status": "planned",
+      "status": "live",
       "repo": {
         "kind": "remote",
         "path": "var/new-sites/lords-17",
@@ -1662,9 +1732,19 @@
         "database": null,
         "media": null
       },
-      "deployed": {},
+      "deployed": {
+        "release_digest": null,
+        "source_commit": null,
+        "artifact": null,
+        "built_at": null,
+        "build_id": "dff8e5f5b912-lords-17",
+        "source": "live-probe",
+        "probed_at": "2026-10-21T06:15:20Z",
+        "evidence": "https://lordserial.net.ru/",
+        "robots_seen": "noindex, nofollow"
+      },
       "content_revision": null,
-      "last_update": "2026-10-13T14:07:57.348954+00:00",
+      "last_update": "2026-10-21T06:15:20.121913+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
