@@ -20,5 +20,12 @@
     <p>Проверьте написание или поищите по одному продукту. Можно посмотреть <a href="/recepty/">все рецепты</a> или <a href="/podborki/">подборки</a>.</p>
   </div>
   {% endif %}
+{% else %}
+<h2>Или выберите раздел</h2>
+<ul class="sections-grid">
+  {% for key, (label, _) in CATEGORIES.items() if site.category(key) %}
+  <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ site.category(key)|length }}</span></a></li>
+  {% endfor %}
+</ul>
 {% endif %}
 {% endblock %}
