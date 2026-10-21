@@ -216,3 +216,11 @@ def test_recipe_page_shows_related_existing_recipes(app):
         rel = re.findall(r'class="bcard__link" href="([^"]+)"', html)
         assert rel == [x.url for x in app.site.related(r)] and r.url not in rel and set(rel) <= urls, r.slug
     assert any(app.site.related(r) for r in app.site.recipes)
+
+
+def test_404_offers_search_and_existing_sections(app):
+    st, html, _ = app.route("/net-takoj-stranicy/", {})
+    assert st == 404 and 'placeholder="' in html
+    links = re.findall(r'class="gtile" href="([^"]+)"', html)
+    assert len(links) == len(app.site.groups()) > 0
+    assert all(app.route(u, {})[0] == 200 for u in links)

@@ -3,5 +3,7 @@
 <p class="kicker">Страница 404</p>
 <h1>Такой страницы нет</h1>
 <p class="lead">Возможно, адрес набран с ошибкой. Откройте <a href="/recepty/">все рецепты</a> или поищите рецепт.</p>
-<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q404">Название или продукт</label><input id="q404" name="q" type="search"><button type="submit">Найти</button></form>
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q404">Название или продукт</label><input id="q404" name="q" type="search" placeholder="Кекс, пирог, слива…"><button type="submit">Найти</button></form>
+<h2>Разделы</h2>
+<ul class="gtiles">{% for k, its in site.groups().items() %}<li><a class="gtile" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ its|length }}</span></a></li>{% endfor %}</ul>
 {% endblock %}
