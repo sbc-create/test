@@ -224,3 +224,24 @@ bestreciept.site — 22 опубликованных блюда, myfood.mobi —
 
 Обновление: `sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh`
 (`var/kits/recipe-domains-current` → `recipe-domains-5`). Скриншоты «до»/«после»: `var/recipe-look/{before,after-local}/`.
+
+### Готовность к открытию индексации (21.10.2026, индексация НЕ открыта)
+
+Один флаг `production_authorized` в `config/site.bestreciept.yaml` / `config/site.myfood.yaml` согласованно меняет:
+robots.txt (`Disallow: /` → Allow + Sitemap + запрет служебных и `/*?`), meta robots, X-Robots-Tag приложения и
+nginx, карту сайта. Оба состояния проверяются тестом `test_indexing_switch_is_consistent` на живом HTTP-сервере —
+2 passed на каждом сайте (exit 0).
+
+| условие | bestreciept.site | myfood.mobi |
+| --- | --- | --- |
+| уникальные title/description, один H1, canonical на домене | да (59 страниц) | да (37 страниц) |
+| хлебные крошки + BreadcrumbList | да | да |
+| Recipe JSON-LD = видимое, без рейтингов/отзывов/авторов | 22/22 | 13/13 |
+| битые внутренние ссылки | 0 | 0 |
+| карта без служебных страниц | 51 адрес | 32 адреса |
+| axe-core 4.13.0 | 0 нарушений | 0 нарушений |
+| изображения блюд | 0/22 — не блокирует индексацию, блокирует «аппетитную» выдачу | 0/13 |
+
+Чего не хватает (решения и данные владельца): решение открыть индексацию; сведения об операторе сайта и контакт
+для «О проекте» и «Конфиденциальности» (сейчас контактов нет — не выдуманы); изображения с правами или подключённый
+генератор; архив Qwen для расширения каталога.
