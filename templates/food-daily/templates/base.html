@@ -22,6 +22,8 @@
 {% endif %}
 <meta name="theme-color" content="#f7efe3">
 <link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/lora-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ asset('css/party.css') }}">
 {% for ld in meta.jsonld_html() %}
 <script type="application/ld+json">{{ ld | safe }}</script>

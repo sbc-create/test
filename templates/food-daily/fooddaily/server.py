@@ -93,9 +93,24 @@ class App:
                 if ("bystro-do-30-minut" in cols)
                 else []
             )
+            # каждая карточка на главной — один раз: подборки ниже не повторяют те, что уже показаны выше
+            shown = {r.slug for r in quick}
+
+            def take(items, n):
+                out = [r for r in items if r.slug not in shown][:n]
+                shown.update(r.slug for r in out)
+                return out
+
+            breakfast = take(sorted(s.category("zavtraki"), key=lambda r: (r.total_minutes, r.title)), 4)
+            if len(breakfast) < 2:
+                shown.difference_update(r.slug for r in breakfast)
+                breakfast = []
             season_key = SEASONAL.get(time.localtime().tm_mon)
-            season = (season_key, *cols[season_key]) if season_key in cols else None
-            fresh = s.recipes[:8]
+            season = None
+            if season_key in cols:
+                picked = take(cols[season_key][2], 4)
+                season = (season_key, cols[season_key][0], cols[season_key][1], picked) if len(picked) >= 2 else None
+            fresh = take(s.recipes, 8)
             sections = [(k, CATEGORIES[k][0], len(s.category(k))) for k in CATEGORIES if s.category(k)]
             chips = sorted(s.product_options(), key=lambda kv: -len(s.tag(kv[0])))[:6]
             meta = seo.Meta(
@@ -116,6 +131,7 @@ class App:
                     "home.html",
                     meta,
                     quick=quick,
+                    breakfast=breakfast,
                     season=season,
                     fresh=fresh,
                     sections=sections,

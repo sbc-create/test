@@ -138,6 +138,17 @@ def test_home_answers_what_and_how_to_find(app):
     assert {x["@type"] for x in ld} == {"WebSite", "ItemList"}
 
 
+def test_home_shows_each_recipe_once_and_links_resolve(app):
+    """Подборки главной не повторяют одну карточку в соседних секциях; каждая ссылка главной открывается."""
+    _, html, _ = app.route("/", {})
+    main = html[html.index("<main") : html.index('<footer class="foot">')]
+    slugs = re.findall(r'<article class="card[^"]*" data-slug="([^"]+)"', main)
+    assert len(slugs) >= 8 and len(slugs) == len(set(slugs)), slugs
+    for href in set(re.findall(r'href="(/[^"#?]*)"', main)):
+        if not href.startswith("/static/"):
+            assert app.route(href, {})[0] == 200, href
+
+
 def test_footer_links_are_real_pages(app):
     _, html, _ = app.route("/", {})
     foot = html[html.index('<footer class="foot">') :]
@@ -198,3 +209,18 @@ def test_chicken_search_is_meat_not_eggs(app):
     eggs = {r.slug for r in app.site.search("куриное яйцо")}
     assert eggs == {r.slug for r in app.site.search("яйцо")} and len(eggs) > len(hits) - 1
     assert views.norm("Куриные яйца, куриный желток, куриная грудка") == "яйца желток куриная грудка"
+
+
+def test_search_matches_word_forms_not_word_middles(app):
+    """Поиск: регистр и окончания не важны; часть слова в середине — не совпадение; пустой запрос — пусто."""
+    s = app.site
+    titles = lambda q: sorted(r.title for r in s.search(q))  # noqa: E731
+    assert titles("сырник") == titles("сырники") == titles("СЫРНИКИ") and titles("сырник")
+    assert titles("тыква") == titles("тыквой") and titles("тыква")
+    assert not any("сырными" in r.search_text and "сырник" not in r.search_text for r in s.search("сырники"))
+    # «пече» внутри «купечески» и «запеченная» — не «печень»; печёнки среди рецептов нет
+    assert s.search("печень") == []
+    assert s.search("") == [] and s.search("   ") == []
+    assert titles("суп с курицей") == titles("суп курицей")
+    code, html, _ = app.route("/poisk/", {"q": ["нетакогоблюда"]})
+    assert code == 200 and "ничего нет" in html

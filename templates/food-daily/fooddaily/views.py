@@ -129,6 +129,41 @@ def norm(s: str) -> str:
     return re.sub(r"\s+", " ", s).strip()
 
 
+# Поиск по словам: слово запроса совпадает с НАЧАЛОМ слова рецепта, расхождение допустимо только окончанием
+# («тыквой» ~ «тыква», «сырники» ~ «сырник»); части слова в середине («пече» в «купечески») не совпадают.
+ENDINGS = sorted(
+    (
+        "ами ями ого его ому ему ыми ими ой ей ий ый ая яя ое ее ые ие ую юю "
+        "ах ях ов ев ом ем ам ям а я о е у ю ы и ь"
+    ).split(),
+    key=len,
+    reverse=True,
+)
+# «печень» (субпродукт) и «печенье» (выпечка) различаются только окончанием — разводим явно
+LIVER = re.compile(r"^печен(ь|и|ью|ями|ям|ях)$|^печенк")
+COOKIE = re.compile(r"^печень[еяю]|^печений")
+
+
+STOP = frozenset("с со и в во на из по без для к от а".split())
+
+
+def stem(w: str) -> str:
+    for e in ENDINGS:
+        if w.endswith(e) and len(w) - len(e) >= 3:
+            return w[: -len(e)]
+    return w
+
+
+def word_matches(w: str, tokens: frozenset[str]) -> bool:
+    st = stem(w)
+    for t in tokens:
+        if t == w or (t.startswith(st) and (t[len(st) :] in ENDINGS or t == st)):
+            if (LIVER.match(w) and COOKIE.match(t)) or (COOKIE.match(w) and LIVER.match(t)):
+                continue
+            return True
+    return False
+
+
 def fmt_qty(q: float | None) -> str:
     if q is None:
         return ""
@@ -303,6 +338,14 @@ class Recipe:
         return norm(f"{self.title} {names} {' '.join(TAGS.get(t, (t,))[0] for t in self.tags)}")
 
     @cached_property
+    def search_tokens(self) -> frozenset[str]:
+        return frozenset(t for t in re.split(r"[\s-]+", self.search_text) if t)
+
+    @cached_property
+    def title_tokens(self) -> frozenset[str]:
+        return frozenset(t for t in re.split(r"[\s-]+", norm(self.title)) if t)
+
+    @cached_property
     def ingredient_text(self) -> str:
         return norm(" ".join(i.name for i, _ in self.ingredients))
 
@@ -466,13 +509,13 @@ class Site:
         return out
 
     def search(self, q: str) -> list[Recipe]:
-        words = norm(q).split()
+        words = [w for w in norm(q).split() if w not in STOP] or norm(q).split()
         if not words:
             return []
         hits = []
         for r in self.recipes:
-            if all(w in r.search_text or (len(w) > 4 and w[:-2] in r.search_text) for w in words):
-                in_title = all(w in norm(r.title) for w in words)
+            if all(word_matches(w, r.search_tokens) for w in words):
+                in_title = all(word_matches(w, r.title_tokens) for w in words)
                 hits.append((0 if in_title else 1, r))
         return [r for _, r in sorted(hits, key=lambda x: (x[0], x[1].title))]
 

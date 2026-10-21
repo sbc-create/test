@@ -1,12 +1,13 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid %}
 {% block main %}
+<div class="hero-row">
 <section class="hero">
   <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый день</em></h1>
   <p class="hero__lead">Завтраки, супы, вторые блюда и салаты из обычных продуктов — с точными количествами и пересчётом порций.</p>
   <form class="search search--hero" action="/poisk/" method="get" role="search">
     <label for="q" class="sr">Найти рецепт по блюду или продукту</label>
-    <input id="q" name="q" type="search" placeholder="Например, сырники или тыква" autocomplete="off">
+    <input id="q" name="q" type="search" placeholder="Блюдо или продукт" autocomplete="off">
     <button type="submit">Найти</button>
   </form>
   {% if chips %}
@@ -14,19 +15,27 @@
   {% endif %}
 </section>
 
-<section class="block" aria-labelledby="sec-h">
-  <div class="block__head"><h2 id="sec-h">Разделы</h2><a href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
+<section class="shelf" aria-labelledby="sec-h">
+  <div class="shelf__head"><h2 id="sec-h">Разделы</h2><a href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
   <ul class="sections-grid">
     {% for key, label, n in sections %}
-    <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="48" height="48"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
+    <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
     {% endfor %}
   </ul>
 </section>
+</div>
 
 {% if quick %}
 <section class="block" aria-labelledby="quick-h">
-  <div class="block__head"><h2 id="quick-h">Что приготовить на скорую руку</h2><a href="/podborki/bystro-do-30-minut/">Все быстрые</a></div>
+  <div class="block__head"><h2 id="quick-h">Быстро: до 30 минут</h2><a href="/podborki/bystro-do-30-minut/">Все быстрые</a></div>
   {{ grid(quick, 'h3') }}
+</section>
+{% endif %}
+
+{% if breakfast %}
+<section class="block" aria-labelledby="bf-h">
+  <div class="block__head"><h2 id="bf-h">На завтрак</h2><a href="/recepty/zavtraki/">Все завтраки</a></div>
+  {{ grid(breakfast, 'h3') }}
 </section>
 {% endif %}
 
@@ -41,12 +50,14 @@
 {% if season %}
 <section class="block" aria-labelledby="season-h">
   <div class="block__head"><h2 id="season-h">{{ season[1] }}</h2><a href="/podborki/{{ season[0] }}/">Вся подборка</a></div>
-  {{ grid(season[3][:4], 'h3') }}
+  {{ grid(season[3], 'h3') }}
 </section>
 {% endif %}
 
+{% if fresh %}
 <section class="block" aria-labelledby="fresh-h">
   <div class="block__head"><h2 id="fresh-h">Новые рецепты</h2><a href="/recepty/">Весь каталог</a></div>
   <div class="grid--home-fresh">{{ grid(fresh, 'h3') }}</div>
 </section>
+{% endif %}
 {% endblock %}
