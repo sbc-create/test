@@ -7562,6 +7562,56 @@
       ],
       "status": "live_verified",
       "evidence": "21.10 08:24Z: канарейка T291 на animedia.space принята; перенос на zonafilm.space — Zona-канарейка. animedia.icu — после восстановления канала выпуска (T262). | 21.10 SEO: zonafilm.space различает дату содержимого и время сборки (две части с разными максимумами) — признак отката записан до выпуска (по предупреждению wt-nova-02, 6927667). | 21.10 09:11Z живая сверка SEO: в индексе sitemap-1.xml → 2026-10-21 (= максимуму внутри, 45 000 адресов), sitemap-2.xml → 2025-06-18 (= максимуму внутри, 23 558 адресов) — время сборки НЕ подставлено; zonafilm12.site, zonafilm.cc, animedia.icu — lastmod в индексе нет (не тронуты); yummyani.biz — 7 дат на 7 частей. Выпуск 2026-10-21T09:11:37Z (активация current → 5dab6af69315; запись публикатора 09:12:27Z)."
+    },
+    {
+      "id": "T293",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/sitemap.xml"
+      ],
+      "problem": "Перенос T292 (zonafilm.space, live_verified 21.10 09:11Z) на zonafilm12.site: в индексе https://zonafilm12.site/sitemap.xml у частей нет <lastmod> (замер SEO 21.10 09:11Z), хотя внутри частей даты есть.",
+      "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
+      "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Особенность цели: файл src/seo_layer.py. Патч собирать под установленный файл этой витрины, не копировать с zonafilm.space.",
+      "check": "checks/sitemap_index_lastmod.py",
+      "verify_live": "https://zonafilm12.site/sitemap.xml: у каждой части lastmod = максимуму внутри части; если у всех частей сегодняшняя дата при старых датах внутри — подставлено время сборки, ОТКАТ; число адресов в частях то же",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<lastmod>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "21.10 09:1xZ: канарейки T291 (animedia.space) и T292 (zonafilm.space) приняты на сайте; перенос на остальные витрины Zona."
+    },
+    {
+      "id": "T294",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/sitemap.xml"
+      ],
+      "problem": "Перенос T292 (zonafilm.space, live_verified 21.10 09:11Z) на zonafilm.cc: в индексе https://zonafilm.cc/sitemap.xml у частей нет <lastmod> (замер SEO 21.10 09:11Z), хотя внутри частей даты есть.",
+      "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
+      "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh. Особенность цели: у zonafilm.cc seo_layer.py лежит в закреплённом шаблоне (current/template/zona-02-…/seo_layer.py) — закреплённый template/ НЕ править; правку делать слоем, как прежние правки этой витрины (src/serve.py и т.п.), либо, если у витрины нет пути без правки шаблона, — остановиться с BLOCKED и причиной. Патч собирать под установленный файл этой витрины, не копировать с zonafilm.space.",
+      "check": "checks/sitemap_index_lastmod.py",
+      "verify_live": "https://zonafilm.cc/sitemap.xml: у каждой части lastmod = максимуму внутри части; если у всех частей сегодняшняя дата при старых датах внутри — подставлено время сборки, ОТКАТ; число адресов в частях то же",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<lastmod>"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "21.10 09:1xZ: канарейки T291 (animedia.space) и T292 (zonafilm.space) приняты на сайте; перенос на остальные витрины Zona."
     }
   ]
 }
