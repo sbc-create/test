@@ -7509,8 +7509,34 @@
           ]
         }
       ],
+      "status": "blocked",
+      "evidence": "21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки. | 21.10: T290 VERIFIED (065622Z) — причина красного run.sh устранена; T289 снова queued, база — голова ветки после T290.",
+      "owner_action": "заменена T291 (3 неудачи из-за T290; счёт попыток исполнителя не сбрасывается)"
+    },
+    {
+      "id": "T291",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "21.10 (MOD-111, wt-nova-02, живой замер): в индексе https://animedia.space/sitemap.xml у части sitemap-1.xml (8 235 адресов) нет <lastmod>, хотя внутри части есть даты (свежайшая 2026-10-21T06:02:21+03:00). То же на animedia.icu и zonafilm.space. Передача: docs/handoff/SITEMAP_LASTMOD_RELEASE_001.md (ветка claude/nova-publish-memory-02, 9a9bd48).",
+      "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
+      "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/sitemap_index_lastmod.py",
+      "verify_live": "https://animedia.space/sitemap.xml: у sitemap-1.xml есть lastmod, равный свежайшему lastmod внутри части. Число адресов в частях то же (8 235 на 21.10). animedia.icu, zonafilm.space и Yummy не тронуты (отрицательный контроль).",
+      "live_check": [
+        {
+          "url": "https://animedia.space/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<lastmod>"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки. | 21.10: T290 VERIFIED (065622Z) — причина красного run.sh устранена; T289 снова queued, база — голова ветки после T290."
+      "evidence": "21.10 07:44Z: повтор T289 под новым номером. T289 исчерпала 3 попытки (MAX_ATTEMPTS) из-за чужого красного run.sh (page-regressions 404), правка при этом каждый раз проходила свою проверку: падала на базе и проходила на ветке. Причину устранила T290, выпущена 07:30:34Z (c6e64b6). Прежние ветки T289 — образец: 1c5408b, ccc9ba9. 21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки. | 21.10: T290 VERIFIED (065622Z) — причина красного run.sh устранена; T289 снова queued, база — голова ветки после T290."
     }
   ]
 }
