@@ -1,0 +1,173 @@
+"""Выборки каталога: какие витрина объявляет своими страницами.
+
+Главный риск этой проверки — объявить дефектом правило. Поэтому проверяются
+обе стороны: пара «раздел и выборка с одинаковым набором» обязана находиться,
+а закрытая выборка, пустая выборка и одиночный жанр/год/страна — НЕ обязаны.
+
+Отдельно закреплены две мои же ошибки по пути:
+* значения фасетов берутся с витрины, а не придумываются (придуманное значение
+  даёт пустую страницу, и её `noindex` читается как правило);
+* различающий контроль узкий — он про форму «раздел против `?type=`», а не про
+  витрину целиком; находка по другой форме выводов о признаке не даёт.
+"""
+from __future__ import annotations
+
+import importlib.util
+import pathlib
+
+import pytest
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+_с = importlib.util.spec_from_file_location(
+    "catalog_selection_indexability",
+    КОРЕНЬ / "automation/local/catalog-selection-indexability.py")
+ИНС = importlib.util.module_from_spec(_с)
+_с.loader.exec_module(ИНС)
+
+
+def страница(карточек=3, robots="index, follow", canonical="", h1="Каталог",
+             фасеты=(), первая=0):
+    части = [f'<meta name="robots" content="{robots}">']
+    if canonical:
+        части.append(f'<link rel="canonical" href="{canonical}">')
+    части.append(f"<h1>{h1}</h1>")
+    for н in range(первая, первая + карточек):
+        части.append(f'<a href="/title/s{н}/">T{н}</a>')
+    for ф in фасеты:
+        части.append(f'<a href="/catalog/?{ф}">фасет</a>')
+    return "<html>" + "".join(части) + "</html>"
+
+
+@pytest.fixture()
+def сеть(monkeypatch):
+    таблица: dict[str, str] = {}
+
+    def достать(адрес, таймаут=40):
+        return таблица.get(адрес, "")
+
+    monkeypatch.setattr(ИНС, "достать", достать)
+    return таблица
+
+
+def _база(сеть, фасеты=("genre=anime",), карточек=3):
+    сеть["https://x.test/catalog/"] = страница(
+        карточек=карточек, canonical="https://x.test/catalog/", фасеты=фасеты)
+
+
+def test_пара_раздел_и_выборка_с_одним_набором_это_находка(сеть):
+    _база(сеть, фасеты=())
+    сеть["https://x.test/movies/"] = страница(
+        карточек=2, canonical="https://x.test/movies/", h1="Фильмы", первая=10)
+    сеть["https://x.test/catalog/?type=movie"] = страница(
+        карточек=2, canonical="https://x.test/catalog/?type=movie",
+        h1="Каталог: фильмы", первая=10)
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["раздел /movies/ против ?type=movie"] == "ПАРА-ДУБЛЬ"
+    assert "каждый канонизирует себя" in итог["находки"][0]
+
+
+def test_закрытая_выборка_парой_не_считается(сеть):
+    """Так устроены соседи по сети: раздел индексируется, выборка закрыта."""
+    _база(сеть, фасеты=())
+    сеть["https://x.test/movies/"] = страница(
+        карточек=2, canonical="https://x.test/movies/", первая=10)
+    сеть["https://x.test/catalog/?type=movie"] = страница(
+        карточек=2, robots="noindex, follow",
+        canonical="https://x.test/catalog/?type=movie", первая=10)
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["раздел /movies/ против ?type=movie"] == "ок"
+    assert итог["находки"] == []
+
+
+def test_разные_наборы_парой_не_считаются(сеть):
+    """Раздел и выборка могут быть разными страницами — это не дубль."""
+    _база(сеть, фасеты=())
+    сеть["https://x.test/movies/"] = страница(
+        карточек=2, canonical="https://x.test/movies/", первая=10)
+    сеть["https://x.test/catalog/?type=movie"] = страница(
+        карточек=2, canonical="https://x.test/catalog/?type=movie", первая=50)
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["раздел /movies/ против ?type=movie"] == "ок"
+
+
+def test_пустая_выборка_это_не_измерено(сеть):
+    """Значения может не быть на витрине: тогда ответ — свойство значения."""
+    _база(сеть, фасеты=())
+    сеть["https://x.test/movies/"] = страница(
+        карточек=2, canonical="https://x.test/movies/", первая=10)
+    сеть["https://x.test/catalog/?type=movie"] = страница(
+        карточек=0, canonical="https://x.test/catalog/?type=movie")
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["раздел /movies/ против ?type=movie"] == "не измерено"
+    assert итог["находки"] == []
+
+
+def test_фасет_с_набором_каталога_это_дубль_каталога(сеть):
+    """Так ведёт себя `?genre=anime` там, где жанр стоит у всех записей."""
+    _база(сеть, фасеты=("genre=anime",), карточек=3)
+    сеть["https://x.test/catalog/?genre=anime"] = страница(
+        карточек=3, canonical="https://x.test/catalog/?genre=anime",
+        h1="Каталог")
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["одиночный genre"] == "ДУБЛЬ КАТАЛОГА"
+    assert any("дубль каталога" in н for н in итог["находки"])
+
+
+def test_одиночный_жанр_со_своим_набором_допустим(сеть):
+    """Правило сети: одиночный жанр, год и страна могут быть своей страницей."""
+    _база(сеть, фасеты=("genre=drama",), карточек=3)
+    сеть["https://x.test/catalog/?genre=drama"] = страница(
+        карточек=2, canonical="https://x.test/catalog/?genre=drama",
+        h1="Драма", первая=30)
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["одиночный genre"].startswith("своя страница")
+    assert итог["находки"] == []
+
+
+def test_прочая_выборка_индексируется_это_находка(сеть):
+    _база(сеть, фасеты=("eps=12",), карточек=3)
+    сеть["https://x.test/catalog/?eps=12"] = страница(
+        карточек=2, canonical="https://x.test/catalog/?eps=12", h1="12 серий",
+        первая=30)
+    итог = ИНС.проверить("x.test")
+    формы = {ф["форма"]: ф["итог"] for ф in итог["формы"]}
+    assert формы["одиночный eps"] == "выборка индексируется"
+
+
+def test_значения_фасетов_берутся_с_витрины():
+    """Придуманное значение дало бы пустую страницу и ложное «закрыт»."""
+    тело = страница(фасеты=("genre=drama", "year=2024", "genre=drama&year=2024",
+                            "page=2"))
+    найдено = ИНС.фасеты_витрины(тело)
+    assert найдено["genre"] == "genre=drama"
+    assert найдено["year"] == "year=2024"
+    # Сочетание одиночным фасетом не считается.
+    assert all("&" not in з for з in найдено.values())
+
+
+def test_канон_на_себя_сравнивает_и_запрос():
+    assert ИНС.канон_на_себя(
+        {"canonical": "https://x.test/catalog/?type=movie"},
+        "/catalog/?type=movie") is True
+    assert ИНС.канон_на_себя(
+        {"canonical": "https://x.test/catalog/"}, "/catalog/?type=movie") is False
+    assert ИНС.канон_на_себя({"canonical": ""}, "/catalog/") is False
+
+
+def test_непрочитанный_каталог_не_читается_как_успех(сеть):
+    итог = ИНС.проверить("x.test")
+    assert итог["измерено"] is False
+    assert "НЕ ИЗМЕРЕНО" in итог["находки"][0]
+
+
+def test_контроль_узкий_и_это_сказано_в_тексте():
+    """Находка по другой форме не должна объявлять признак негодным."""
+    текст = pathlib.Path(ИНС.__file__).read_text(encoding="utf-8")
+    assert "только форма «раздел против ?type=»" in текст
+    assert "НЕ часть контроля" in текст
