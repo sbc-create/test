@@ -213,5 +213,14 @@ bestreciept.site — 22 опубликованных блюда, myfood.mobi —
 на сервере не перезаписывается («уже есть — не трогаю»); `--rollback` возвращает предыдущий релиз вместе с его
 содержимым.
 
+Доступность (дополнение той же ночи):
+
+| проверка | команда | результат |
+| --- | --- | --- |
+| браузерная приёмка bestreciept | `QA_BASE=http://127.0.0.1:9231 python3 -m fooddaily.qa_browser` | exit 0; сценарии все true, axe 4.13.0 — 0 нарушений на 38 просмотрах, контраст — 0, ошибок консоли 0, CLS ≤ 0,0012. Сценарий «на компанию» искал форму на главной (ушла во 2-м раунде) и падал по таймауту — исправлен; кнопка «Собрать список» на главной ведёт к последнему выбору (`b3f9c95`) |
+| axe по остальным страницам bestreciept | `var/recipe-look/axe_check.py` (10 страниц × 390/1440) | 0 нарушений |
+| axe myfood | `var/recipe-look/axe_check.py` (14 страниц × 390/1440) | было `landmark-unique` (две навигации «Разделы») на каждой странице → подписи «Основное меню» / «Рецепты по разделам» (`92da48c`) → 0 нарушений |
+| комплекты | `kit build` → `var/kits/recipe-domains-5/` | `food-daily-b3f9c95`, `food-baking-92da48c`; репетиция exit 0; `recipe-domains-apply.sh --dry-run` exit 0, индексация закрыта |
+
 Обновление: `sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh`
-(`var/kits/recipe-domains-current` → `recipe-domains-4`). Скриншоты «до»/«после»: `var/recipe-look/{before,after-local}/`.
+(`var/kits/recipe-domains-current` → `recipe-domains-5`). Скриншоты «до»/«после»: `var/recipe-look/{before,after-local}/`.
