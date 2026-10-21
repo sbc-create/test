@@ -95,7 +95,7 @@ SEO-сессия (wt-portable-site-cell-01-dc) проверяла код по д
 - Хвост каталога (org): последняя страница с карточками — 334; страницы 335–350 пустые с ответом 200 и `index` (`yummyani.org-accept.json` в `base-1925Z-oldcat/`).
 - Дублей и чужих хостов нет ни в одной карте.
 
-**D2: источник наблюдений и доставка событий (только чтение, 19:0xZ).**
+**D2: источник наблюдений и доставка событий (только чтение, между 19:03Z и 19:07Z по соседним отметкам date -u).**
 - Писатель журнала — `yummy-episode-watcher.service` (oneshot по таймеру), `YUMMY_EPISODE_STATE_DIR=/srv/sites/yummyani-staging/runtime/episode-state`. Журнал там живой: `events.jsonl` изменён в 18:24:12Z, последнее событие `EPISODE_ADDED` с `observedAt` 18:23:20Z.
 - org, biz и site монтируют именно этот каталог (`docker inspect`: `/srv/sites/yummyani-staging/runtime/episode-state -> /var/lib/yummy/episode-state`).
 - `yummyani7-info-web-1` и `yummyani7-site-web-1` монтируют свои `/srv/sites/yummyani7-{info,site}/runtime/episode-state`. Это задано в `deploy/compose.yaml:186-193` их репозиториев: «Снимок состояния эпизодов — СВОЙ». Оба каталога созданы 2026-09-28 15:07:55Z и с тех пор пусты.
