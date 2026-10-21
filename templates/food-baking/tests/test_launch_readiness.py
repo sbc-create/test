@@ -207,3 +207,12 @@ def test_search_matches_word_forms_not_word_middles(app):
     assert s.search("") == [] and s.search("  ") == []
     code, html, _ = app.route("/poisk/", {"q": ["нетакогоблюда"]})
     assert code == 200
+
+
+def test_recipe_page_shows_related_existing_recipes(app):
+    urls = {r.url for r in app.site.recipes}
+    for r in app.site.recipes:
+        _, html, _ = app.route(r.url, {})
+        rel = re.findall(r'class="bcard__link" href="([^"]+)"', html)
+        assert rel == [x.url for x in app.site.related(r)] and r.url not in rel and set(rel) <= urls, r.slug
+    assert any(app.site.related(r) for r in app.site.recipes)

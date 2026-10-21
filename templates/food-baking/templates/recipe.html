@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% from "_parts.html" import picture %}
+{% from "_parts.html" import picture, grid %}
 {% block main %}
 <article class="sheet-b" data-recipe="{{ r.slug }}">
   <header>
@@ -48,4 +48,10 @@
       Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at != r.published_at %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</p>
   </footer>
 </article>
+{% set rel = site.related(r) %}{% if rel %}
+<section class="block related" aria-labelledby="rel-h">
+  <div class="block__head"><h2 id="rel-h">Похожие рецепты</h2></div>
+  {{ grid(rel) }}
+</section>
+{% endif %}
 {% endblock %}

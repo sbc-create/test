@@ -331,6 +331,17 @@ class Site:
                 out.setdefault(r.dough, []).append(r)
         return {k: v for k, v in out.items() if len(v) >= 2}
 
+    def related(self, r: Recipe, n: int = 4) -> list[Recipe]:
+        """Похожие: тот же раздел, тот же вид теста, общие темы; без совпадений — не показываются."""
+
+        def score(o: Recipe) -> int:
+            return (2 if o.group == r.group else 0) + (1 if r.dough and o.dough == r.dough else 0) + len(
+                set(o.tags) & set(r.tags)
+            )
+
+        cands = sorted((o for o in self.recipes if o.slug != r.slug), key=lambda o: (-score(o), o.slug))
+        return [o for o in cands if score(o) > 0][:n]
+
     def groups(self) -> dict[str, list[Recipe]]:
         """Разделы (кексы, хлеб…): только наполненные, в порядке GROUPS."""
         return {k: v for k in GROUPS if (v := [r for r in self.recipes if r.group == k])}
