@@ -7484,8 +7484,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 06:33Z SEO: runs.jsonl T289 ×3 — run_all_passes false только из-за page-regressions 404; check_fails_on_base и check_passes_on_branch — true. Повторить прогон у SEO-сессии нельзя: config/player.json витрины закрыт по правам (Permission denied), а в клоне publisher_id 10252 против объявленного 10333. | 21.10 06:53Z SEO: прогон 063437 — PREPARED/INCOMPLETE: правка верна (база rc=1, ветка rc=0 на стенде), но исполнитель копирует проверку ветки на код базы (D203), а при правке самой проверки так она проходит и на базе. Задача переформулирована: различающая проверка выбора записи на синтетике + вынос выбора в функцию. | 21.10 прогон 20261021T065622Z-3981441 — VERIFIED: проверка падает на базе, проходит на ветке, полный run.sh зелёный."
+      "status": "live_verified",
+      "evidence": "21.10 06:33Z SEO: runs.jsonl T289 ×3 — run_all_passes false только из-за page-regressions 404; check_fails_on_base и check_passes_on_branch — true. Повторить прогон у SEO-сессии нельзя: config/player.json витрины закрыт по правам (Permission denied), а в клоне publisher_id 10252 против объявленного 10333. | 21.10 06:53Z SEO: прогон 063437 — PREPARED/INCOMPLETE: правка верна (база rc=1, ветка rc=0 на стенде), но исполнитель копирует проверку ветки на код базы (D203), а при правке самой проверки так она проходит и на базе. Задача переформулирована: различающая проверка выбора записи на синтетике + вынос выбора в функцию. | 21.10 прогон 20261021T065622Z-3981441 — VERIFIED: проверка падает на базе, проходит на ветке, полный run.sh зелёный. | 21.10 08:24Z: правка только в checks/, поведение сайта не менялось; выпущена 07:30:34Z, живой сайт отвечает как до неё (сверка T291)."
     },
     {
       "id": "T289",
@@ -7535,8 +7535,33 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "21.10 07:44Z: повтор T289 под новым номером. T289 исчерпала 3 попытки (MAX_ATTEMPTS) из-за чужого красного run.sh (page-regressions 404), правка при этом каждый раз проходила свою проверку: падала на базе и проходила на ветке. Причину устранила T290, выпущена 07:30:34Z (c6e64b6). Прежние ветки T289 — образец: 1c5408b, ccc9ba9. 21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки. | 21.10: T290 VERIFIED (065622Z) — причина красного run.sh устранена; T289 снова queued, база — голова ветки после T290. | 21.10 08:24Z живая сверка SEO: https://animedia.space/sitemap.xml — у sitemap-1.xml lastmod 2026-10-21T09:29:58+03:00 = максимуму внутри части; адресов в части 8 235, как до правки; отрицательный контроль — у animedia.icu и zonafilm.space в индексе lastmod по-прежнему нет. Выпуск — публикатор 08:14:28Z."
+    },
+    {
+      "id": "T292",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/sitemap.xml"
+      ],
+      "problem": "Перенос T291 (animedia.space, live_verified 21.10 08:24Z) на zonafilm.space: в индексе https://zonafilm.space/sitemap.xml у частей sitemap-1.xml и sitemap-2.xml нет <lastmod> (замер 21.10 08:24Z), хотя внутри частей даты есть.",
+      "norm": "У каждой части в индексе sitemap стоит lastmod, равный максимуму дат внутри этой части. Без дат внутри части lastmod не ставится. Дата сборки и общий максимум по набору не подставляются.",
+      "expected": "В рабочей копии собрать патч под СВОЙ файл: python3 /home/claude/wt-nova-publish-memory-02/automation/local/prepare-sitemap-lastmod-patch.py --source src/seo_layer.py --verify (только чтение чужой ветки; файл из неё не копировать — установленный seo_layer.py разошёлся с веткой wt-nova-02). Применить ровно собранный патч к src/seo_layer.py; страницы, тексты, title, canonical, robots и состав частей карты не менять. Проверка checks/sitemap_index_lastmod.py: (1) у каждой части индекса lastmod равен максимуму внутри части; (2) часть без дат — без lastmod; (3) части побайтно те же, что без правки; (4) сегодняшняя дата не подставлена. Коды 0/1/2; добавить в checks/run.sh. Затем штатные tools/stamp_manifest.py и tools/update_pins.py, если есть, и полный checks/run.sh.",
+      "check": "checks/sitemap_index_lastmod.py",
+      "verify_live": "https://zonafilm.space/sitemap.xml: у каждой части lastmod = максимуму внутри части (у sitemap-2.xml ожидается дата из июня 2025, НЕ сегодняшняя); число адресов в частях то же; zonafilm12.site и zonafilm.cc не тронуты",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<lastmod>"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "21.10 07:44Z: повтор T289 под новым номером. T289 исчерпала 3 попытки (MAX_ATTEMPTS) из-за чужого красного run.sh (page-regressions 404), правка при этом каждый раз проходила свою проверку: падала на базе и проходила на ветке. Причину устранила T290, выпущена 07:30:34Z (c6e64b6). Прежние ветки T289 — образец: 1c5408b, ccc9ba9. 21.10 06:0xZ: передача wt-nova-02 (MOD-111, 9a9bd48); канарейка — animedia.space. Правка меняет только подсказку в индексе, страницы не трогает — паузы опытов (T087/T075 lords-05, B031 Yummy, T191 an1mego) не задеты. Перенос на animedia.icu и zonafilm.space — после приёмки канарейки. | 21.10: T290 VERIFIED (065622Z) — причина красного run.sh устранена; T289 снова queued, база — голова ветки после T290."
+      "evidence": "21.10 08:24Z: канарейка T291 на animedia.space принята; перенос на zonafilm.space — Zona-канарейка. animedia.icu — после восстановления канала выпуска (T262)."
     }
   ]
 }
