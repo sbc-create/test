@@ -153,3 +153,32 @@ Chromium 1440/768/390 — сетка 4/2/1 колонки, без горизон
 
 Обновление: `sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh`
 (`var/kits/recipe-domains-current` → `recipe-domains-3`).
+
+## Раунд 4 (21.10.2026): где лежит архив Qwen и почему он не получен
+
+Заявлено Qwen: `/home/user/content/food-daily/authoring/QWEN-NIGHT-RECIPES-100X5-001.tar.gz`, ~110 КБ,
+SHA-256 `3e20d2359b6698779df24260225ebd3ef5748f0c81d63dfa41f4c78271a4b64e`. Ниже — только то, что
+проверено командами в этой сессии; заявленные Qwen величины не подтверждены, файл не получен.
+
+| проверка | команда / источник | результат |
+| --- | --- | --- |
+| путь на сервере сайтов (claude-control-01, 45.131.182.225) | `find / -xdev -name 'QWEN-NIGHT-RECIPES*' -o -path '*/content/food-daily/authoring*'` | exit 0, совпадений нет (кроме тестовых фикстур pytest); в `/home` только `claude` и `ubuntu` |
+| недавние архивы 90–130 КБ с 18.10 | `find / -xdev -newermt 2026-10-18 -name '*.tar.gz' -size +90k -size -130k` | только собственные комплекты `var/kits/recipe-domains-{2,3}` |
+| где работает Qwen | `docs/QWEN_MCP_BRIDGE.md` разд. 6, `docs/QWEN_CONNECTION_CHECKPOINT.md` (ветка интеграции Qwen) | отдельный хост `srv-qwen` (Open WebUI `83.237.185.70`), compose `/opt/qwen/compose.yaml`, контейнеры `qwen-open-webui`, `qwen-site-factory-mcp`; командный инструмент Qwen — контейнер Agent Workspace `6265eddb1580`. `/home/user` — путь внутри контейнера на srv-qwen (по документам; изнутри не проверено) |
+| канал srv-qwen → фабрика | там же, разд. 7 | ключ `sfbridge` с `restrict,port-forwarding,permitopen="127.0.0.1:9000",command="/bin/false"` — только проброс к мосту MCP, `scp`/`sftp` невозможны |
+| мост MCP | `curl http://127.0.0.1:9000/healthz`, `tools/list` | `ready: true`, 43 инструмента; инструмента приёма файлов или рецептов нет (аниме-витрины, очередь, индексация) |
+| канал фабрика → srv-qwen | `inventory/ssh-hosts.yaml` | `hosts: []`; произвольный ssh запрещён правилами |
+
+Отсутствует: экспорт файла с srv-qwen на сервер сайтов. Ни Qwen, ни эта сессия сделать его существующими
+доступами не могут — нужен администратор srv-qwen (см. «Команда администратору srv-qwen» ниже).
+Импорт не запускался.
+
+### Команда администратору srv-qwen
+
+    P=/home/user/content/food-daily/authoring/QWEN-NIGHT-RECIPES-100X5-001.tar.gz
+    for c in $(sudo docker ps -q); do sudo docker exec "$c" test -f "$P" 2>/dev/null && echo "$c"; done
+    sudo docker cp <ID_из_вывода>:"$P" . && sha256sum QWEN-NIGHT-RECIPES-100X5-001.tar.gz
+
+Затем файл кладётся на 45.131.182.225 в `/home/claude/wt-template-food-daily/var/qwen-intake/` тем
+доступом, которым владелец заходит на сервер сайтов. После этого сессия сама считает SHA-256, сверяет с
+заявленным, проверяет состав (100 баз × V1–V5) и только при полном совпадении запускает пробную партию.
