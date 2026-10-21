@@ -7789,7 +7789,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200."
+      "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200. | 21.10 до 19:50Z: та же формулировка на animedia.icu /catalog/ («Весь каталог на Animedia: 8228 записей каталога…»; главный поисковый вход, 177 визитов 14–20.10) — перенос туда только после выпуска T262 (ветка выпуска animedia.icu занята f8327f9). Упавшие входы animedia.icu /title/poschadi-menya-velikiy-gospodin/ (27→1) и /schedule/ (7→2): 200, index, canonical на себя, title/description по содержанию — технической зацепки на странице нет."
     }
   ]
 }
