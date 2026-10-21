@@ -7790,6 +7790,78 @@
       ],
       "status": "queued",
       "evidence": "21.10 19:45:43Z wt-portable-site-cell-01-dc: та же формулировка на zonafilm.space и zonafilm.cc (/catalog/, /new/ «Добавлено на сайт на Zona: 55150 записей каталога»). Канарейка — zonafilm12.site (измеренное падение входов на /catalog/ и /movies/); перенос на zonafilm.cc и zonafilm.space — после живой проверки выпущенной версии. zonafilm.space — после приёмки T300 (признак 2), чтобы новый выпуск не смешался с ней. Активных опытов на Zona нет (config/experiments.json). Битых переходов на входных страницах трёх Zona нет: 500 ссылок на домен, 0 не-200. | 21.10 до 19:50Z: та же формулировка на animedia.icu /catalog/ («Весь каталог на Animedia: 8228 записей каталога…»; главный поисковый вход, 177 визитов 14–20.10) — перенос туда только после выпуска T262 (ветка выпуска animedia.icu занята f8327f9). Упавшие входы animedia.icu /title/poschadi-menya-velikiy-gospodin/ (27→1) и /schedule/ (7→2): 200, index, canonical на себя, title/description по содержанию — технической зацепки на странице нет."
+    },
+    {
+      "id": "T302",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/movies/",
+        "https://zonafilm.cc/catalog/",
+        "https://zonafilm.cc/new/"
+      ],
+      "problem": "Перенос T301. Живой замер 21.10 до 19:55Z: на zonafilm.cc meta description разделов — «… N записей каталога — смотреть онлайн.» (/catalog/, /movies/, /new/ и т. д.; var/seo-audit/landing-links-20261021/). Шаблон тот же (описание_раздела в src/lords-frontend.py, T036).",
+      "norm": "Публичный текст отвечает посетителю, что он найдёт; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10; ряд T161–T173).",
+      "expected": "В src/lords-frontend.py в построении описание_раздела заменить существительное «запись/записи/записей каталога» на «название/названия/названий» (склонение по тому же правилу, число и остальной текст без изменений): «<Раздел> на <имя>: N названий — смотреть онлайн.». Ветка без числа не меняется. Больше ничего не менять. Проверка задачи checks/section_description_wording.py — без стенда и сети: (1) статически: ast/текст src/lords-frontend.py, среди СТРОКОВЫХ ЛИТЕРАЛОВ (ast.Constant str, включая части f-строк) присваиваний переменной слово и описание_раздела нет «запис» и есть «названи» (комментарии не в счёт: в них «записей» остаётся законно); (2) динамически: извлечь из этого блока выражение выбора слова (ast), вычислить его для 1, 2, 5, 11, 21, 36373 → название, названия, названий, названий, название, названия. Нарушение — FAIL и код 1 без необработанного исключения. Падает на коде базы, проходит на ветке (D203). Добавить в checks/run.sh. Затем полный checks/run.sh. Если в репозитории есть стендовая checks/section_description.py с шаблоном «запись|записи|записей каталога», перевести её на новое слово так же, как в d12c6a5 (zonafilm12.site).",
+      "check": "checks/section_description_wording.py",
+      "verify_live": "после выпуска: на /movies/, /catalog/, /new/, /movies/?page=2 у zonafilm.cc в meta description нет «запис», есть «названи» и прежнее число; title, h1, canonical, robots прежние",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/movies/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/catalog/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies.",
+      "owner_action": "Нет действия владельца: удержание до live_verified T301 на zonafilm12.site. Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "live_verified T301 на zonafilm12.site"
+    },
+    {
+      "id": "T303",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/catalog/",
+        "https://zonafilm.space/new/"
+      ],
+      "problem": "Перенос T301. Живой замер 21.10 до 19:55Z: на zonafilm.space meta description разделов — «… N записей каталога — смотреть онлайн.» (/catalog/, /movies/, /new/ и т. д.; var/seo-audit/landing-links-20261021/). Шаблон тот же (описание_раздела в src/lords-frontend.py, T036).",
+      "norm": "Публичный текст отвечает посетителю, что он найдёт; без объяснений устройства данных (SEO_KNOWLEDGE_PACK §4 п.2 — описание соответствует видимому содержанию; задание владельца 15.10; ряд T161–T173).",
+      "expected": "В src/lords-frontend.py в построении описание_раздела заменить существительное «запись/записи/записей каталога» на «название/названия/названий» (склонение по тому же правилу, число и остальной текст без изменений): «<Раздел> на <имя>: N названий — смотреть онлайн.». Ветка без числа не меняется. Больше ничего не менять. Проверка задачи checks/section_description_wording.py — без стенда и сети: (1) статически: ast/текст src/lords-frontend.py, среди СТРОКОВЫХ ЛИТЕРАЛОВ (ast.Constant str, включая части f-строк) присваиваний переменной слово и описание_раздела нет «запис» и есть «названи» (комментарии не в счёт: в них «записей» остаётся законно); (2) динамически: извлечь из этого блока выражение выбора слова (ast), вычислить его для 1, 2, 5, 11, 21, 36373 → название, названия, названий, названий, название, названия. Нарушение — FAIL и код 1 без необработанного исключения. Падает на коде базы, проходит на ветке (D203). Добавить в checks/run.sh. Затем полный checks/run.sh. Если в репозитории есть стендовая checks/section_description.py с шаблоном «запись|записи|записей каталога», перевести её на новое слово так же, как в d12c6a5 (zonafilm12.site).",
+      "check": "checks/section_description_wording.py",
+      "verify_live": "после выпуска: на /movies/, /catalog/, /new/, /movies/?page=2 у zonafilm.space в meta description нет «запис», есть «названи» и прежнее число; title, h1, canonical, robots прежние",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/movies/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/catalog/",
+          "status": 200,
+          "contains": [
+            "названи"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies.",
+      "owner_action": "Нет действия владельца: удержание до live_verified T301 и приёмка T300 (признак 2) на zonafilm.space. Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "live_verified T301 и приёмка T300 (признак 2) на zonafilm.space"
     }
   ]
 }
