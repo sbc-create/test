@@ -430,7 +430,7 @@ def test_daily_search_landing_pages_filters_organic_and_flags_truncation():
 
     class P(StubProvider):
         def get_metrica_report(self, counter_id, **kwargs):
-            if kwargs.get("dimensions") == ["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURLPath"]:
+            if kwargs.get("dimensions") == ["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURL"]:
                 seen.update(kwargs)
                 return {"data": [{"dimensions": [{"name": "2026-10-20"}, {"id": "yandex"}, {"name": "/t/a/"}],
                                   "metrics": [7]}],

@@ -359,7 +359,7 @@ EXTRA_METRIKA = (
     (
         "daily_search_landing_pages",
         "Поисковые входы по страницам по дням и поисковым системам",
-        "ym:s:visits × ym:s:date × lastsignSearchEngineRoot × startURLPath; фильтр lastsignTrafficSource=='organic'",
+        "ym:s:visits × ym:s:date × lastsignSearchEngineRoot × startURL (с параметрами); фильтр lastsignTrafficSource=='organic'",
     ),
 )
 #: Предел строк для входов по дням. Фильтр «только поиск» делает его ёмким: крупнейший
@@ -497,13 +497,15 @@ def _metrika_daily_and_search(
         )
     # Поисковые входы по страницам ПО ДНЯМ и системам (22.10, animedia.icu: недельная
     # разбивка не разложила скачок 20–21.10 по страницам). Фильтр — только поиск.
+    # startURL, а не startURLPath: у Zona каноничны фасеты /catalog/?country=…, ?genre=…,
+    # и без строки запроса их входы сливаются с /catalog/ (замер 22.10).
     try:
         report = provider.get_metrica_report(
             counter_id,
             date1=DAILY_WINDOW_FROM,
             date2=date2,
             metrics=["ym:s:visits"],
-            dimensions=["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURLPath"],
+            dimensions=["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURL"],
             limit=DAILY_LANDING_LIMIT,
             filters="ym:s:lastsignTrafficSource=='organic'",
         )
