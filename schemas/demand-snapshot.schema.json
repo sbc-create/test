@@ -47,6 +47,7 @@
      "search_engines_note",
      "search_landing_note",
      "search_landing_pages",
+     "search_pages_total",
      "search_visits",
      "search_visits_note",
      "site_id",
@@ -155,6 +156,11 @@
       "minimum": 0,
       "maximum": 100,
       "description": "Доля топ-5 страниц от ПОИСКОВЫХ входов, в процентах. `null` — поискового итога нет, и доля не считается: ноль здесь был бы выдумкой."
+     },
+     "search_pages_total": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Сколько страниц в разрезе ВСЕГО (до обрезки до верхних десяти). Без этого поля отчёт печатал длину сохранённого перечня и показывал 10 у всех домéнов — то есть свой предел вместо измеренной величины."
      }
     }
    }

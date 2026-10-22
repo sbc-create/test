@@ -128,13 +128,13 @@ def по_поисковикам(запись: dict) -> tuple[dict[str, int], str
     return итог, "search_engines"
 
 
-def страницы_поиска(запись: dict) -> tuple[list[dict], str]:
+def страницы_поиска(запись: dict) -> tuple[list[dict], str, int]:
     """Поисковые входы по страницам: (перечень, откуда/почему пусто)."""
     з = замер(запись, "search_landing_pages")
     if з is None:
-        return [], "разреза search_landing_pages в снимке нет"
+        return [], "разреза search_landing_pages в снимке нет", 0
     if not з.get("measured"):
-        return [], f"не измерено: {з.get('reason') or 'причина не названа'}"
+        return [], f"не измерено: {з.get('reason') or 'причина не названа'}", 0
     в = з.get("value")
     строки = в if isinstance(в, list) else (в or {}).get("data") or []
     итог = []
@@ -151,7 +151,13 @@ def страницы_поиска(запись: dict) -> tuple[list[dict], str]:
             continue
         итог.append({"page": str(путь), "visits": int(визиты or 0)})
     итог.sort(key=lambda з_: -з_["visits"])
-    return итог[:СТРАНИЦ], f"источник {з.get('source') or 'метрика'}"
+    # Возвращается и ПОЛНОЕ число страниц разреза: сохраняются только верхние
+    # СТРАНИЦ, и печатать длину сохранённого как «страниц с поиском» значит
+    # печатать свой предел вместо измеренной величины — так отчёт показывал
+    # 10 у всех домéнов подряд.
+    return (итог[:СТРАНИЦ], f"источник {з.get('source') or 'метрика'};"
+            f" страниц в разрезе {len(итог)}, сохранено"
+            f" {min(len(итог), СТРАНИЦ)}", len(итог))
 
 
 def разобрать(снимок: pathlib.Path) -> dict:
@@ -178,7 +184,7 @@ def разобрать(снимок: pathlib.Path) -> dict:
         домен = запись.get("domain")
         if домен not in акт:
             continue
-        страницы, откуда = страницы_поиска(запись)
+        страницы, откуда, всего_страниц = страницы_поиска(запись)
         поиск, откуда_поиск = поисковый_итог(запись)
         системы, откуда_систем = по_поисковикам(запись)
         верх5 = sum(с["visits"] for с in страницы[:5])
@@ -196,6 +202,7 @@ def разобрать(снимок: pathlib.Path) -> dict:
             "top5_share_of_search": (
                 round(100 * верх5 / поиск, 1) if поиск else None),
             "search_landing_pages": страницы,
+            "search_pages_total": всего_страниц,
             "search_landing_note": откуда,
             "queries": [],
             "queries_note": ("не измерено: popular_queries в снимке"
