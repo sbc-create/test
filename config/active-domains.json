@@ -48,49 +48,264 @@
   }
  },
  "domains": [
-  {"domain": "yummyani.site", "site_id": "yummy-site", "family": "yummy", "state": "active", "queue": "config/domain-queues/yummyani.site.json", "passport": "docs/passports/yummyani.site.md"},
-  {"domain": "yummyani.org", "site_id": "yummy-org", "family": "yummy", "state": "active", "queue": "config/domain-queues/yummyani.org.json", "passport": "docs/passports/yummyani.org.md"},
-  {"domain": "yummyani.biz", "site_id": "yummy-biz", "family": "yummy", "state": "active", "queue": "config/domain-queues/yummyani.biz.json", "passport": "docs/passports/yummyani.biz.md"},
-  {"domain": "yummyani7.site", "site_id": "yummy-07", "family": "yummy", "state": "active", "queue": "config/domain-queues/yummyani7.site.json", "passport": "docs/passports/yummyani7.site.md"},
-  {"domain": "yummyani7.info", "site_id": "yummy-08", "family": "yummy", "state": "active", "queue": "config/domain-queues/yummyani7.info.json", "passport": "docs/passports/yummyani7.info.md"},
-
-  {"domain": "animedia.icu", "site_id": "animedia-01", "family": "animedia", "state": "active", "queue": "config/domain-queues/animedia.icu.json", "passport": "docs/passports/animedia.icu.md"},
-  {"domain": "animedia.space", "site_id": "animedia-02", "family": "animedia", "state": "active", "queue": "config/domain-queues/animedia.space.json", "passport": "docs/passports/animedia.space.md"},
-
-  {"domain": "animeg0.site", "site_id": "animego-03", "family": "animego", "state": "active", "queue": "config/domain-queues/animeg0.site.json", "passport": "docs/passports/animeg0.site.md"},
-  {"domain": "an1meg0.site", "site_id": "animego-04", "family": "animego", "state": "active", "queue": "config/domain-queues/an1meg0.site.json", "passport": "docs/passports/an1meg0.site.md"},
-  {"domain": "an1mego.site", "site_id": "animego-02", "family": "animego", "state": "active", "queue": "config/domain-queues/an1mego.site.json", "passport": "docs/passports/an1mego.site.md"},
-
-  {"domain": "lordserials22.info", "site_id": "lords-05", "family": "lords", "state": "active", "queue": "config/domain-queues/lordserials22.info.json", "passport": "docs/passports/lordserials22.info.md"},
-  {"domain": "1lordserials1.online", "site_id": "lords-03", "family": "lords", "state": "active", "queue": "config/domain-queues/1lordserials1.online.json", "passport": "docs/passports/1lordserials1.online.md"},
-  {"domain": "lordfilm47.space", "site_id": "lords-01", "family": "lords", "state": "active", "queue": "config/domain-queues/lordfilm47.space.json", "passport": "docs/passports/lordfilm47.space.md"},
-  {"domain": "lordserial33.biz", "site_id": "lords-02", "family": "lords", "state": "active", "queue": "config/domain-queues/lordserial33.biz.json", "passport": "docs/passports/lordserial33.biz.md"},
-
-  {"domain": "zonafilm12.site", "site_id": "zona-03", "family": "zona", "state": "active", "queue": "config/domain-queues/zonafilm12.site.json", "passport": "docs/passports/zonafilm12.site.md"},
-  {"domain": "zonafilm.space", "site_id": "zona-01", "family": "zona", "state": "active", "queue": "config/domain-queues/zonafilm.space.json", "passport": "docs/passports/zonafilm.space.md"},
-  {"domain": "zonafilm.cc", "site_id": "zona-02", "family": "zona", "state": "active", "queue": "config/domain-queues/zonafilm.cc.json", "passport": "docs/passports/zonafilm.cc.md"},
-
-  {"domain": "lordfilm.group", "site_id": "lords-10", "family": "k2", "state": "active", "queue": "config/domain-queues/lordfilm.group.json", "passport": "docs/passports/lordfilm.group.md"},
-  {"domain": "lordfilm.spb.ru", "site_id": "lords-11", "family": "k2", "state": "active", "queue": "config/domain-queues/lordfilm.spb.ru.json", "passport": "docs/passports/lordfilm.spb.ru.md"},
-  {"domain": "lordfilm.msk.ru", "site_id": "lords-12", "family": "k2", "state": "active", "queue": "config/domain-queues/lordfilm.msk.ru.json", "passport": "docs/passports/lordfilm.msk.ru.md"},
-  {"domain": "lordserial.su", "site_id": "lords-13", "family": "k2", "state": "active", "queue": "config/domain-queues/lordserial.su.json", "passport": "docs/passports/lordserial.su.md"},
-  {"domain": "lordserial.group", "site_id": "lords-14", "family": "k2", "state": "active", "queue": "config/domain-queues/lordserial.group.json", "passport": "docs/passports/lordserial.group.md"},
-  {"domain": "lordserial.spb.ru", "site_id": "lords-15", "family": "k2", "state": "active", "queue": "config/domain-queues/lordserial.spb.ru.json", "passport": "docs/passports/lordserial.spb.ru.md"},
-  {"domain": "lordserial.msk.ru", "site_id": "lords-16", "family": "k2", "state": "active", "queue": "config/domain-queues/lordserial.msk.ru.json", "passport": "docs/passports/lordserial.msk.ru.md"},
-  {"domain": "lordserial.net.ru", "site_id": "lords-17", "family": "k2", "state": "active", "queue": "config/domain-queues/lordserial.net.ru.json", "passport": "docs/passports/lordserial.net.ru.md"}
+  {
+   "domain": "yummyani.site",
+   "site_id": "yummy-site",
+   "family": "yummy",
+   "state": "active",
+   "queue": "config/domain-queues/yummyani.site.json",
+   "passport": "docs/passports/yummyani.site.md"
+  },
+  {
+   "domain": "yummyani.org",
+   "site_id": "yummy-org",
+   "family": "yummy",
+   "state": "active",
+   "queue": "config/domain-queues/yummyani.org.json",
+   "passport": "docs/passports/yummyani.org.md"
+  },
+  {
+   "domain": "yummyani.biz",
+   "site_id": "yummy-biz",
+   "family": "yummy",
+   "state": "active",
+   "queue": "config/domain-queues/yummyani.biz.json",
+   "passport": "docs/passports/yummyani.biz.md"
+  },
+  {
+   "domain": "yummyani7.site",
+   "site_id": "yummy-07",
+   "family": "yummy",
+   "state": "active",
+   "queue": "config/domain-queues/yummyani7.site.json",
+   "passport": "docs/passports/yummyani7.site.md"
+  },
+  {
+   "domain": "yummyani7.info",
+   "site_id": "yummy-08",
+   "family": "yummy",
+   "state": "active",
+   "queue": "config/domain-queues/yummyani7.info.json",
+   "passport": "docs/passports/yummyani7.info.md"
+  },
+  {
+   "domain": "animedia.icu",
+   "site_id": "animedia-01",
+   "family": "animedia",
+   "state": "active",
+   "queue": "config/domain-queues/animedia.icu.json",
+   "passport": "docs/passports/animedia.icu.md"
+  },
+  {
+   "domain": "animedia.space",
+   "site_id": "animedia-02",
+   "family": "animedia",
+   "state": "active",
+   "queue": "config/domain-queues/animedia.space.json",
+   "passport": "docs/passports/animedia.space.md"
+  },
+  {
+   "domain": "animeg0.site",
+   "site_id": "animego-03",
+   "family": "animego",
+   "state": "active",
+   "queue": "config/domain-queues/animeg0.site.json",
+   "passport": "docs/passports/animeg0.site.md"
+  },
+  {
+   "domain": "an1meg0.site",
+   "site_id": "animego-04",
+   "family": "animego",
+   "state": "active",
+   "queue": "config/domain-queues/an1meg0.site.json",
+   "passport": "docs/passports/an1meg0.site.md"
+  },
+  {
+   "domain": "an1mego.site",
+   "site_id": "animego-02",
+   "family": "animego",
+   "state": "active",
+   "queue": "config/domain-queues/an1mego.site.json",
+   "passport": "docs/passports/an1mego.site.md"
+  },
+  {
+   "domain": "lordserials22.info",
+   "site_id": "lords-05",
+   "family": "lords",
+   "state": "active",
+   "queue": "config/domain-queues/lordserials22.info.json",
+   "passport": "docs/passports/lordserials22.info.md"
+  },
+  {
+   "domain": "1lordserials1.online",
+   "site_id": "lords-03",
+   "family": "lords",
+   "state": "active",
+   "queue": "config/domain-queues/1lordserials1.online.json",
+   "passport": "docs/passports/1lordserials1.online.md"
+  },
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "family": "lords",
+   "state": "active",
+   "queue": "config/domain-queues/lordfilm47.space.json",
+   "passport": "docs/passports/lordfilm47.space.md"
+  },
+  {
+   "domain": "lordserial33.biz",
+   "site_id": "lords-02",
+   "family": "lords",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial33.biz.json",
+   "passport": "docs/passports/lordserial33.biz.md"
+  },
+  {
+   "domain": "zonafilm12.site",
+   "site_id": "zona-03",
+   "family": "zona",
+   "state": "active",
+   "queue": "config/domain-queues/zonafilm12.site.json",
+   "passport": "docs/passports/zonafilm12.site.md"
+  },
+  {
+   "domain": "zonafilm.space",
+   "site_id": "zona-01",
+   "family": "zona",
+   "state": "active",
+   "queue": "config/domain-queues/zonafilm.space.json",
+   "passport": "docs/passports/zonafilm.space.md"
+  },
+  {
+   "domain": "zonafilm.cc",
+   "site_id": "zona-02",
+   "family": "zona",
+   "state": "active",
+   "queue": "config/domain-queues/zonafilm.cc.json",
+   "passport": "docs/passports/zonafilm.cc.md"
+  },
+  {
+   "domain": "lordfilm.group",
+   "site_id": "lords-10",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordfilm.group.json",
+   "passport": "docs/passports/lordfilm.group.md"
+  },
+  {
+   "domain": "lordfilm.spb.ru",
+   "site_id": "lords-11",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordfilm.spb.ru.json",
+   "passport": "docs/passports/lordfilm.spb.ru.md"
+  },
+  {
+   "domain": "lordfilm.msk.ru",
+   "site_id": "lords-12",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordfilm.msk.ru.json",
+   "passport": "docs/passports/lordfilm.msk.ru.md"
+  },
+  {
+   "domain": "lordserial.su",
+   "site_id": "lords-13",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial.su.json",
+   "passport": "docs/passports/lordserial.su.md"
+  },
+  {
+   "domain": "lordserial.group",
+   "site_id": "lords-14",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial.group.json",
+   "passport": "docs/passports/lordserial.group.md"
+  },
+  {
+   "domain": "lordserial.spb.ru",
+   "site_id": "lords-15",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial.spb.ru.json",
+   "passport": "docs/passports/lordserial.spb.ru.md"
+  },
+  {
+   "domain": "lordserial.msk.ru",
+   "site_id": "lords-16",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial.msk.ru.json",
+   "passport": "docs/passports/lordserial.msk.ru.md"
+  },
+  {
+   "domain": "lordserial.net.ru",
+   "site_id": "lords-17",
+   "family": "k2",
+   "state": "active",
+   "queue": "config/domain-queues/lordserial.net.ru.json",
+   "passport": "docs/passports/lordserial.net.ru.md"
+  }
  ],
  "awaiting_replacement": [
-  {"domain": "lordserials22.site", "site_id": "lords-06", "family": "lords", "state": "awaiting_replacement", "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"},
-  {"domain": "lordserials22.space", "site_id": "lords-07", "family": "lords", "state": "awaiting_replacement", "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"},
-  {"domain": "lordserial101.site", "site_id": "lords-08", "family": "lords", "state": "awaiting_replacement", "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"},
-  {"domain": "lordfilm077.site", "site_id": "lords-09", "family": "lords", "state": "awaiting_replacement", "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"}
+  {
+   "domain": "lordserials22.site",
+   "site_id": "lords-06",
+   "family": "lords",
+   "state": "awaiting_replacement",
+   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+  },
+  {
+   "domain": "lordserials22.space",
+   "site_id": "lords-07",
+   "family": "lords",
+   "state": "awaiting_replacement",
+   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+  },
+  {
+   "domain": "lordserial101.site",
+   "site_id": "lords-08",
+   "family": "lords",
+   "state": "awaiting_replacement",
+   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+  },
+  {
+   "domain": "lordfilm077.site",
+   "site_id": "lords-09",
+   "family": "lords",
+   "state": "awaiting_replacement",
+   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+  }
  ],
  "shared_components": {
   "note": "Общий код, издатель, аналитика и выпуск имеют ОДНОГО ответственного. Вторая копия реестра — доказанная причина выпадения домéнов из работы (см. docs/CYCLE_COVERAGE.md).",
-  "regular_cycle": {"owner": "wt-portable-site-cell-01", "units": "automation/host/seo-regular/", "state": "var/seo-regular/"},
-  "publisher": {"owner": "wt-portable-site-cell-01", "code": "automation/local/make-k2-publisher.py"},
-  "k2_delivery": {"owner": "wt-nova-publish-memory-02", "code": "automation/local/k2-deliver-catalog.sh", "installed": "/srv/site-factory/k2-delivery"},
-  "analytics": {"owner": "wt-portable-site-cell-01", "snapshots": "artifacts/analytics/"},
-  "templates": {"owner": "wt-portable-site-cell-01", "pool": "config/template-pool.json"}
+  "regular_cycle": {
+   "owner": "wt-portable-site-cell-01",
+   "units": "automation/host/seo-regular/",
+   "state": "var/seo-regular/"
+  },
+  "publisher": {
+   "owner": "wt-portable-site-cell-01",
+   "code": "automation/local/make-k2-publisher.py"
+  },
+  "k2_delivery": {
+   "owner": "wt-nova-publish-memory-02",
+   "code": "automation/local/k2-deliver-catalog.sh",
+   "installed": "/srv/site-factory/k2-delivery"
+  },
+  "analytics": {
+   "owner": "wt-portable-site-cell-01",
+   "snapshots": "artifacts/analytics/"
+  },
+  "templates": {
+   "owner": "wt-portable-site-cell-01",
+   "pool": "config/template-pool.json"
+  },
+  "experiments": {
+   "owner": "wt-portable-site-cell-01",
+   "note": "Реестр ДЕЙСТВУЮЩИХ опытов живёт в копии-владельце. В этой копии только демонстрационный прогон, и 22.10 это привело к двум задачам, нарушавшим правило канарейки. Перед созданием задачи из исследования — automation/local/running-experiments.py."
+  }
  }
 }
