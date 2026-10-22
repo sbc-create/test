@@ -7969,8 +7969,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 12:17Z: удержание снято — T262 live_verified. T308, T309 — по очереди после T307 (тот же репозиторий)."
+      "status": "live_verified",
+      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 12:17Z: удержание снято — T262 live_verified. T308, T309 — по очереди после T307 (тот же репозиторий). | 22.10 12:38Z: исполнитель 20261022T121809Z-3758915 VERIFIED (d4dabee); до выпуска изменённые проверки в условиях CI — rc 0; CI success; выпуск releases/d4dabee51bf6. Живая сверка 12:38:22Z: /catalog/ «8228 названий», ?genre=anime, ?type=tv «5863 названия», ?page=2, ?year=2024 «399 названий» — «запис» нет, robots index, follow; страниц жанров в карте 55 (T262 не задета); проверка на установленном дереве rc 0."
     },
     {
       "id": "T308",
@@ -7997,10 +7997,8 @@
           "status": 200
         }
       ],
-      "status": "blocked",
-      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен.",
-      "owner_action": "Нет действия владельца: по очереди после live_verified предыдущей задачи animedia.icu (T307 → T308 → T309). Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified предыдущей задачи animedia.icu"
+      "status": "queued",
+      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 12:38Z: удержание снято — T307 live_verified."
     },
     {
       "id": "T309",
