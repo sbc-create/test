@@ -22,6 +22,23 @@
                     "ingredients": [{"base_index", "display_name"}],
                     "steps": [{"text", "base_steps": [i, …], "readiness_cue"?}]}
 
+Фактический формат поставки 22.10.2026 (qwen-night/1) читается тем же инструментом — `normalize`
+переводит его в контракт выше, ничего не досочиняя:
+
+    manifest/manifest-*.json     {"run_id", "scope": {"total_themes", "total_variants"}, …}
+    recipes/base_recipes/*.json  {"base_recipe_id", "theme", "source_url"?,
+                                  "metadata": {"servings", "cook_time_minutes"},
+                                  "locked_ingredients": [{"original_name", "quantity",
+                                                          "unit", "notes"}],
+                                  "locked_steps": [{"instruction"}]}
+    variants/<base>-V<n>.json    {"variant_id", "base_recipe_id", "variant_type", "title",
+                                  "intro"?, "ingredients"?, "steps"?: ["текст", …], …}
+
+  * название страницы — название блюда из базы (заголовки вариантов — подписи подачи);
+  * количества и единицы — только из базы; список ингредиентов варианта не публикуется;
+  * шаг варианта сопоставляется с шагом базы по порядку, только при равном числе шагов;
+  * вариант без списка шагов строками (V2–V4 без steps) не публикуется: публиковать нечего.
+
 Правила (сверх структуры):
 * 100 базовых рецептов и 500 вариантов подтверждаются файлами, а не манифестом.
 * Вариант подачи — не самостоятельный рецепт: на блюдо публикуется один вариант,
@@ -32,12 +49,20 @@
 * Без источника фактов (source.url) рецепт не публикуется — BLOCKED_RIGHTS.
 * Блюдо, совпадающее с опубликованным на сайте, не создаёт дубль: уходит на сверку
   редактору (update_candidate).
+* Источник-заглушка (не http) — то же BLOCKED_RIGHTS; количество, которое сама база помечает как
+  неясное («вероятно», «уточнить»), — черновик.
+* Текст варианта — пересказ, а не текст источника: шаги, дословно повторяющие шаги базы,
+  не публикуются.
+* Шаг варианта не теряет время и температуру шага базы; продукт, который база называет в шагах,
+  называется и в шагах варианта; вступление — не короче 40 знаков, без «я», «проверенный»,
+  «полезный».
 * Повторный план даёт тот же результат (digest); вывод не содержит секретов.
 """
 
 from __future__ import annotations
 
 import argparse
+import difflib
 import hashlib
 import json
 import re
@@ -77,13 +102,26 @@ STOP = {"с", "и", "на", "из", "в", "по", "для", "без", "под", 
 
 
 # ---------------------------------------------------------------- чтение набора
+UNREADABLE = "_unreadable"  # ключ в результате read_set: файлы, которые не разобрались как JSON
+
+
+def _load(name: str, raw: bytes, out: dict) -> None:
+    try:
+        out[name] = json.loads(raw.decode("utf-8"))
+    except (UnicodeDecodeError, json.JSONDecodeError) as e:
+        out.setdefault(UNREADABLE, {})[name] = str(e)[:80]
+
+
 def read_set(src: Path) -> dict[str, dict]:
-    """{относительный путь: JSON} — из каталога или .tar.gz; только .json внутри набора."""
+    """{относительный путь: JSON} — из каталога или .tar.gz; только .json внутри набора.
+
+    Неразборчивые файлы не роняют приём, а перечисляются под ключом UNREADABLE: если среди них
+    окажется рецепт, счёт файлов не сойдётся и это будет видно в отчёте."""
     out: dict[str, dict] = {}
     if src.is_dir():
         for p in sorted(src.rglob("*.json")):
             if p.is_file() and not p.is_symlink():
-                out[str(p.relative_to(src))] = json.loads(p.read_text(encoding="utf-8"))
+                _load(str(p.relative_to(src)), p.read_bytes(), out)
         return out
     with tarfile.open(src) as t:
         for m in t.getmembers():
@@ -95,11 +133,99 @@ def read_set(src: Path) -> dict[str, dict]:
             ):
                 continue
             name = m.name.split("/", 1)[1] if m.name.startswith(SET_ID + "/") else m.name
-            out[name] = json.loads(t.extractfile(m).read().decode("utf-8"))
+            _load(name, t.extractfile(m).read(), out)
+    return out
+
+
+# ---------------------------------------------------------------- формат qwen-night/1
+def normalize(files: dict) -> dict:
+    """Поставка qwen-night/1 → контракт qwen-recipes-set/1; иной вход возвращается как есть."""
+    bases = {
+        n: d
+        for n, d in files.items()
+        if n.startswith("recipes/") and isinstance(d, dict) and "base_recipe_id" in d
+    }
+    if not bases or any(n.rsplit("/", 1)[-1].lower() == "manifest.json" for n in files):
+        return files
+    out: dict = {UNREADABLE: files.get(UNREADABLE, {})} if files.get(UNREADABLE) else {}
+    raw_man = next((d for n, d in files.items() if n.startswith("manifest/")), {}) or {}
+    variants = [
+        d
+        for n, d in files.items()
+        if n.startswith("variants/") and isinstance(d, dict) and "variant_id" in d
+    ]
+    items = []
+    for _, d in sorted(bases.items()):
+        bid = d["base_recipe_id"]
+        meta = d.get("metadata") or {}
+        url = d.get("source_url") or ""
+        b = {
+            "base_id": bid,
+            "title": d.get("theme"),
+            "servings": meta.get("servings"),
+            "cook_minutes": meta.get("cook_time_minutes"),
+            "ingredients": [
+                {
+                    "name": i.get("original_name"),
+                    "quantity": i.get("quantity"),
+                    "unit": i.get("unit"),
+                    "note": i.get("notes") or None,
+                }
+                for i in d.get("locked_ingredients") or []
+            ],
+            "steps": [s.get("instruction") for s in d.get("locked_steps") or []],
+            "source": {"url": url} if url.startswith("http") else {},
+            "source_raw": url,
+        }
+        out[f"base/{bid}.json"] = b
+        vs = []
+        for v in sorted(
+            (v for v in variants if v.get("base_recipe_id") == bid), key=lambda v: v["variant_id"]
+        ):
+            steps = v.get("steps")
+            texts = (
+                [re.sub(r"^\s*\d+[.)]\s*", "", x).strip() for x in steps]
+                if isinstance(steps, list) and steps and all(isinstance(x, str) for x in steps)
+                else None
+            )
+            same_len = texts is not None and len(texts) == len(b["steps"])
+            nv = {
+                "variant_id": v["variant_id"],
+                "base_id": bid,
+                "label": v.get("variant_type"),
+                "title": b["title"],
+                "intro": (v.get("intro") or "").strip(),
+                "ingredients": [
+                    {"base_index": k, "display_name": i["name"]}
+                    for k, i in enumerate(b["ingredients"])
+                ],
+                "steps": [
+                    {"text": t, "base_steps": [k] if same_len else []}
+                    for k, t in enumerate(texts or [])
+                ],
+            }
+            out[f"variants/{v['variant_id']}.json"] = nv
+            vs.append(
+                {
+                    "variant_id": v["variant_id"],
+                    "label": nv["label"],
+                    "file": f"variants/{v['variant_id']}.json",
+                }
+            )
+        items.append({"base_id": bid, "file": f"base/{bid}.json", "variants": vs})
+    out["manifest.json"] = {
+        "set_id": raw_man.get("run_id", SET_ID),
+        "format": "qwen-night/1",
+        "base_count": (raw_man.get("scope") or {}).get("total_themes"),
+        "variant_count": (raw_man.get("scope") or {}).get("total_variants"),
+        "items": items,
+    }
     return out
 
 
 def inspect(files: dict[str, dict]) -> dict:
+    bad = files.get(UNREADABLE, {})
+    files = {k: v for k, v in files.items() if k != UNREADABLE}
     shapes: dict[str, int] = {}
     for d in files.values():
         k = ",".join(sorted(d)) if isinstance(d, dict) else type(d).__name__
@@ -110,6 +236,7 @@ def inspect(files: dict[str, dict]) -> dict:
             labels[d["label"]] = labels.get(d["label"], 0) + 1
     return {
         "json_files": len(files),
+        "unreadable": bad,
         "manifest": next(
             (n for n in files if n.rsplit("/", 1)[-1].lower() in ("manifest.json",)), None
         ),
@@ -131,7 +258,37 @@ def title_key(s: str) -> frozenset:
 
 
 def similar(a: frozenset, b: frozenset) -> bool:
-    return bool(a and b) and len(a & b) / len(a | b) >= 0.75
+    """То же блюдо: по основам слов — почти одинаковые названия или короткое целиком входит
+    в длинное («Плов с курицей» ⊂ «Плов с курицей на сковороде»; «с творогом» = «из творога»)."""
+    a, b = frozenset(stem(w) for w in a), frozenset(stem(w) for w in b)
+    if not (a and b):
+        return False
+    return len(a & b) / len(a | b) >= 0.75 or (min(len(a), len(b)) >= 2 and (a <= b or b <= a))
+
+
+UNSURE = re.compile(r"вероятно|возможно|уточн|неясн|не указан", re.I)
+CLAIM = re.compile(
+    r"\bя\b|\bмо[йяеё]\b|делюсь|проверенн|полезн|диетич|идеальн|секрет|самы[хй] популярн", re.I
+)
+LOST_NUM = re.compile(r"(\d+(?:[.,]\d+)?(?:-\d+)?)\s*(?:°|градус|мин|час|ч\b|сек)", re.I)
+VERB = {  # продукт назван глаголом: «посолить» — соль, «поперчить» — перец
+    "сол": r"сол[ьиея]|посол|подсол",
+    "пер": r"перец|перц|поперч",
+}
+
+
+def stem(w: str) -> str:
+    return w[:4] if len(w) > 5 else w[:3]
+
+
+def mentions(text: str, name: str) -> bool:
+    words = [w for w in norm(name).split() if len(w) > 2]
+    if not words:
+        return True
+    head = stem(words[0])
+    if head in VERB:
+        return bool(re.search(VERB[head], text))
+    return any(stem(t) == stem(w) for t in text.split() for w in words)
 
 
 def check_base(b: dict) -> list[str]:
@@ -140,10 +297,17 @@ def check_base(b: dict) -> list[str]:
         if not b.get(k):
             errs.append(f"нет поля {k}")
     if not (b.get("source") or {}).get("url", "").startswith("http"):
-        errs.append("BLOCKED_RIGHTS: нет источника фактов (source.url)")
+        raw = b.get("source_raw") or ""
+        errs.append(
+            f"BLOCKED_RIGHTS: источник — заглушка {raw!r}"
+            if raw
+            else "BLOCKED_RIGHTS: нет источника фактов (source.url)"
+        )
     for i, ing in enumerate(b.get("ingredients") or []):
         if not ing.get("name"):
             errs.append(f"ингредиент {i}: нет названия")
+        elif UNSURE.search(ing.get("note") or ""):
+            errs.append(f"количество «{ing['name']}» не подтверждено: {ing['note']}")
     if not all(isinstance(s, str) and s.strip() for s in b.get("steps") or []):
         errs.append("шаги базы — непустые строки")
     return errs
@@ -151,11 +315,12 @@ def check_base(b: dict) -> list[str]:
 
 def check_variant(v: dict, b: dict) -> list[str]:
     errs = []
-    for k in ("variant_id", "base_id", "label", "title", "intro", "ingredients", "steps"):
+    for k in ("variant_id", "base_id", "label", "title", "ingredients", "steps"):
         if not v.get(k):
-            errs.append(f"нет поля {k}")
+            errs.append("нет текста шагов" if k == "steps" else f"нет поля {k}")
     if errs:
         return errs
+    v = {**v, "intro": v.get("intro") or ""}
     if v["base_id"] != b["base_id"]:
         errs.append("base_id не совпадает с базой")
     if v["label"] not in LABELS:
@@ -166,6 +331,10 @@ def check_variant(v: dict, b: dict) -> list[str]:
     ) != len(b["ingredients"]):
         errs.append("ингредиенты: каждый ингредиент базы ровно один раз, без новых продуктов")
     covered: list[int] = []
+    if not any(s.get("base_steps") for s in v["steps"]):
+        return errs + [
+            f"шагов {len(v['steps'])} при {len(b['steps'])} в базе — не сопоставить по порядку"
+        ]
     for n, s in enumerate(v["steps"]):
         refs = s.get("base_steps") or []
         if not refs or not all(isinstance(r, int) and 0 <= r < len(b["steps"]) for r in refs):
@@ -178,6 +347,41 @@ def check_variant(v: dict, b: dict) -> list[str]:
                 errs.append(f"шаг {n + 1}: число {num} не из шага базы")
     if covered != sorted(covered) or sorted(set(covered)) != list(range(len(b["steps"]))):
         errs.append("шаги не покрывают шаги базы по порядку")
+    for n, s in enumerate(v["steps"]):
+        refs = [
+            r for r in s.get("base_steps") or [] if isinstance(r, int) and 0 <= r < len(b["steps"])
+        ]
+        src = " ".join(b["steps"][r] for r in refs).replace(",", ".")
+        mine = (s.get("text", "") + " " + (s.get("readiness_cue") or "")).replace(",", ".")
+        for num in LOST_NUM.findall(src):
+            if num not in mine:
+                errs.append(f"шаг {n + 1}: потеряно {num} из шага базы")
+    base_text, var_text = (
+        norm(" ".join(b["steps"])),
+        norm(" ".join(s.get("text", "") for s in v["steps"])),
+    )
+    lost = [
+        i["name"]
+        for i in b["ingredients"]
+        if mentions(base_text, i["name"]) and not mentions(var_text, i["name"])
+    ]
+    if lost:
+        errs.append("в шагах не используются: " + ", ".join(lost))
+    same = sum(
+        1
+        for s in v["steps"]
+        for r in (s.get("base_steps") or [])[:1]
+        if isinstance(r, int)
+        and r < len(b["steps"])
+        and difflib.SequenceMatcher(None, norm(s.get("text", "")), norm(b["steps"][r])).ratio()
+        > 0.9
+    )
+    if v["steps"] and same * 2 > len(v["steps"]):
+        errs.append("шаги дословно повторяют текст источника")
+    if len(v["intro"].strip()) < 40:
+        errs.append("вступление короче 40 знаков")
+    elif m := CLAIM.search(v["intro"]):
+        errs.append(f"во вступлении недопустимое: {m.group(0)!r}")
     text = " ".join(
         [v["title"], v["intro"]]
         + [s.get("text", "") + " " + (s.get("readiness_cue") or "") for s in v["steps"]]
@@ -224,6 +428,11 @@ def digest(obj) -> str:
 
 # ---------------------------------------------------------------- план
 def plan(files: dict[str, dict], existing: dict | None = None) -> dict:
+    """Порядок отбора блюда: дубль (сайт, затем набор) → права → качество вариантов.
+
+    Каждое непринятое блюдо — в deferred с kind (rights | duplicate | quality | missing)
+    и причиной."""
+    files = normalize(files)
     man = next(
         (d for n, d in files.items() if n.rsplit("/", 1)[-1].lower() == "manifest.json"), None
     )
@@ -236,104 +445,128 @@ def plan(files: dict[str, dict], existing: dict | None = None) -> dict:
     existing = published_titles() if existing is None else existing
     by_id = {
         d.get("base_id"): d
-        for d in files.values()
-        if isinstance(d, dict) and "label" not in d and "base_id" in d
+        for n, d in files.items()
+        if n != UNREADABLE and isinstance(d, dict) and "label" not in d and "base_id" in d
     }
-    variants = [d for d in files.values() if isinstance(d, dict) and "label" in d]
+    variants = [
+        d for n, d in files.items() if n != UNREADABLE and isinstance(d, dict) and "label" in d
+    ]
     counts = {
         "manifest_base": man.get("base_count"),
         "manifest_variants": man.get("variant_count"),
         "files_base": len(by_id),
         "files_variants": len(variants),
     }
+    if files.get(UNREADABLE):
+        counts["unreadable_files"] = sorted(files[UNREADABLE])
     accepted: dict[str, list] = {s: [] for s in SITES}
     deferred, archive, seen_titles = [], [], []
+
+    def defer(kind, b, bid, reason, vs, why, **extra):
+        deferred.append(
+            {
+                "base_id": bid,
+                "title": (b or {}).get("title"),
+                "kind": kind,
+                "reason": reason,
+                **extra,
+            }
+        )
+        archive.extend(
+            {"variant_id": v.get("variant_id"), "base_id": bid, "why": why(v)} for v in vs
+        )
+
     for item in man["items"]:
         bid = item.get("base_id")
         b = by_id.get(bid)
         vs = [d for d in variants if d.get("base_id") == bid]
         if b is None:
-            deferred.append({"base_id": bid, "reason": "нет файла базового рецепта"})
-            continue
-        errs = check_base(b)
-        if errs:
-            deferred.append({"base_id": bid, "title": b.get("title"), "reason": "; ".join(errs)})
-            archive += [
-                {"variant_id": v.get("variant_id"), "base_id": bid, "why": "база не принята"}
-                for v in vs
-            ]
+            defer("missing", None, bid, "нет файла базового рецепта", vs, lambda v: "нет базы")
             continue
         if len(vs) != EXPECTED["per_base"]:
             counts.setdefault("bases_without_5_variants", []).append(bid)
-        checked = [(v, check_variant(v, b)) for v in vs]
-        good = sorted((v for v, e in checked if not e), key=score)
-        for v, e in checked:
-            if e:
-                archive.append(
-                    {"variant_id": v.get("variant_id"), "base_id": bid, "why": "; ".join(e)}
-                )
-        if not good:
-            deferred.append(
-                {
-                    "base_id": bid,
-                    "title": b["title"],
-                    "reason": "ни один вариант V1–V5 не прошёл проверки",
-                }
-            )
-            continue
-        pick, rest = good[0], good[1:]
-        archive += [
-            {"variant_id": v["variant_id"], "base_id": bid, "why": "вариант подачи того же блюда"}
-            for v in rest
-        ]
-        site = route(b, pick)
+        checked = {v["variant_id"]: check_variant(v, b) for v in vs}
+        errs = check_base(b)
+        site = route(b, {})
         key = title_key(b["title"])
+        match = next((slug for slug, k in existing.get(site, []) if similar(k, key)), None)
         dup_set = next((t for t, k in seen_titles if similar(k, key)), None)
-        if dup_set:
-            deferred.append(
-                {
-                    "base_id": bid,
-                    "title": b["title"],
-                    "reason": f"дубль блюда внутри набора: {dup_set}",
-                }
+        seen_titles.append((bid, key))
+        if match or dup_set:
+            reason = (
+                f"совпадает с опубликованным {site}/recept/{match}/ — сверка редактором, без дубля"
+                if match
+                else f"дубль блюда внутри набора: {dup_set}"
+            )
+            extra = {"site": site, "update_candidate": match} if match else {"site": site}
+            defer(
+                "duplicate",
+                b,
+                bid,
+                reason,
+                vs,
+                lambda v, c=checked: "; ".join(c[v["variant_id"]]) or "дубль блюда",
+                **extra,
             )
             continue
-        seen_titles.append((bid, key))
-        match = next((slug for slug, k in existing.get(site, []) if similar(k, key)), None)
+        if any(e.startswith("BLOCKED_RIGHTS") for e in errs):
+            defer("rights", b, bid, "; ".join(errs), vs, lambda v: "база не принята: права")
+            continue
+        if errs:
+            defer("quality", b, bid, "; ".join(errs), vs, lambda v: "база не принята")
+            continue
+        good = sorted((v for v in vs if not checked[v["variant_id"]]), key=score)
+        if not good:
+            near = sorted(
+                (v for v in vs if v.get("steps")),
+                key=lambda v: (len(checked[v["variant_id"]]), v["label"]),
+            )
+            detail = (
+                f"; ближе всех {near[0]['label']}: " + "; ".join(checked[near[0]["variant_id"]][:4])
+                if near
+                else ""
+            )
+            defer(
+                "quality",
+                b,
+                bid,
+                "ни один вариант V1–V5 не передаёт рецепт полностью" + detail,
+                vs,
+                lambda v, c=checked: "; ".join(c[v["variant_id"]]),
+                site=site,
+            )
+            continue
+        pick = good[0]
+        archive += [
+            {
+                "variant_id": v["variant_id"],
+                "base_id": bid,
+                "why": "; ".join(checked[v["variant_id"]]) or "вариант подачи того же блюда",
+            }
+            for v in vs
+            if v is not pick
+        ]
         rec = {
             "set_id": man.get("set_id", SET_ID),
             "base_id": bid,
             "variant_id": pick["variant_id"],
             "label": pick["label"],
-            "site": site,
+            "site": route(b, pick),
             "base": b,
             "variant": pick,
         }
         rec["digest"] = digest({"base": b, "variant": pick})
-        if match:
-            deferred.append(
-                {
-                    "base_id": bid,
-                    "title": b["title"],
-                    "site": site,
-                    "update_candidate": match,
-                    "reason": "совпадает с опубликованным — сверка редактором, без дубля",
-                }
-            )
-            archive.append(
-                {
-                    "variant_id": pick["variant_id"],
-                    "base_id": bid,
-                    "why": f"кандидат на обновление {match}",
-                }
-            )
-            continue
-        accepted[site].append(rec)
+        accepted[rec["site"]].append(rec)
+    kinds: dict[str, int] = {}
+    for d in deferred:
+        kinds[d["kind"]] = kinds.get(d["kind"], 0) + 1
     return {
         "status": "OK",
         "set_id": man.get("set_id", SET_ID),
+        "format": man.get("format", "qwen-recipes-set/1"),
         "counts": counts,
         "accepted": {s: len(v) for s, v in accepted.items()},
+        "deferred_by_kind": kinds,
         "deferred": deferred,
         "archived_variants": len(archive),
         "_accepted": accepted,

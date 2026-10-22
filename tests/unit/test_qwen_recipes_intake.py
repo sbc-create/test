@@ -32,7 +32,7 @@ def variant(b, label, *, cues=0, text_override=None, extra_ing=False):
         {
             "text": text_override
             if (text_override and i == 0)
-            else f"Сделайте шаг {i + 1} аккуратно.",
+            else f"Теперь по порядку: {b['steps'][i].rstrip('.').lower()}, не торопитесь.",
             "base_steps": [i],
             **({"readiness_cue": "Готово, когда масса однородная."} if i < cues else {}),
         }
@@ -46,7 +46,7 @@ def variant(b, label, *, cues=0, text_override=None, extra_ing=False):
         "base_id": b["base_id"],
         "label": label,
         "title": b["title"],
-        "intro": "Короткое вступление.",
+        "intro": "Домашнее блюдо из простых продуктов на обычной кухне.",
         "ingredients": ings,
         "steps": steps,
     }
@@ -184,3 +184,188 @@ def test_liver_is_not_baking():
     for title in ("Овсяное печенье", "Печенья с изюмом", "Ассорти печений"):
         b = base("b051", title, ["Смешайте тесто."], [("Мука", 200)])
         assert intake.route(b, variant(b, "V1")) == "myfood.mobi", title
+
+
+# ---------------------------------------------------------------- формат поставки 22.10.2026 (qwen-night/1)
+def night_base(n, theme, steps, ings, url="https://example.invalid/r"):
+    return {
+        "base_recipe_id": f"FD-NIGHT-{n:03d}",
+        "theme": theme,
+        **({"source_url": url} if url is not None else {}),
+        "metadata": {"servings": 4, "cook_time_minutes": 30},
+        "locked_ingredients": [
+            {"original_name": a, "quantity": q, "unit": u, "notes": note} for a, q, u, note in ings
+        ],
+        "locked_steps": [{"step_id": k + 1, "instruction": x} for k, x in enumerate(steps)],
+    }
+
+
+def night_set(tmp: Path, bases_variants) -> Path:
+    d = tmp / intake.SET_ID
+    for sub in ("manifest", "recipes/base_recipes", "variants", "reports"):
+        (d / sub).mkdir(parents=True, exist_ok=True)
+    (d / "manifest" / "manifest-food-daily-night-001.json").write_text(
+        json.dumps({"run_id": intake.SET_ID, "scope": {"total_themes": 3, "total_variants": 15}})
+    )
+    (d / "reports" / "checkpoint_003.json").write_text("")  # битый отчёт не роняет приём
+    for b, vs in bases_variants:
+        (d / "recipes/base_recipes" / f"recipe_{b['base_recipe_id']}.json").write_text(
+            json.dumps(b, ensure_ascii=False)
+        )
+        for label in intake.LABELS:
+            v = {
+                "variant_id": f"{b['base_recipe_id']}-{label}",
+                "base_recipe_id": b["base_recipe_id"],
+                "variant_type": label,
+                "title": b["theme"] + " — компактно",
+                **vs.get(label, {}),
+            }
+            (d / "variants" / f"{v['variant_id']}.json").write_text(
+                json.dumps(v, ensure_ascii=False)
+            )
+    return d
+
+
+INTRO = "Сытное домашнее блюдо на каждый день из простых продуктов."
+GOOD = (
+    night_base(
+        1,
+        "Капуста тушёная с морковью",
+        ["Капусту нашинковать, посолить.", "Морковь натереть, тушить с капустой 30 минут."],
+        [("Капуста", 500, "г", ""), ("Морковь", 1, "шт.", ""), ("Соль", 1, "ч.л.", "")],
+    ),
+    {
+        "V1": {  # полный пересказ — публикуется
+            "intro": INTRO,
+            "steps": [
+                "1. Тонко нарежьте капусту и слегка подсолите.",
+                "2. Морковь на тёрку, затем всё вместе тушите 30 минут под крышкой.",
+            ],
+        },
+        "V5": {  # потерян шаг и время — в архив
+            "intro": INTRO,
+            "steps": ["Нарезать и тушить."],
+        },
+        "V3": {"step_sequence": [{"stage": "Нарезка"}]},  # без шагов строками — публиковать нечего
+    },
+)
+
+
+def test_night_format_is_normalized_and_one_dish_one_page(tmp_path):
+    placeholder = night_base(
+        2,
+        "Салат из редиса",
+        ["Нарезать редис."],
+        [("Редис", 200, "г", "")],
+        url="_VERIFY_REAL_SOURCE",
+    )
+    copied = night_base(
+        3,
+        "Суп из чечевицы с тыквой",
+        ["Чечевицу варить 20 минут.", "Добавить тыкву."],
+        [("Чечевица", 200, "г", ""), ("Тыква", 300, "г", "")],
+    )
+    d = night_set(
+        tmp_path,
+        [
+            GOOD,
+            (placeholder, {"V1": {"intro": INTRO, "steps": ["Нарежьте редис кружками."]}}),
+            (
+                copied,
+                {"V1": {"intro": INTRO, "steps": ["Чечевицу варить 20 минут.", "Добавить тыкву."]}},
+            ),
+        ],
+    )
+    res = intake.plan(intake.read_set(d), {"bestreciept.site": [], "myfood.mobi": []})
+    assert res["status"] == "OK" and res["format"] == "qwen-night/1"
+    assert res["counts"]["files_base"] == 3 and res["counts"]["files_variants"] == 15
+    assert res["counts"]["unreadable_files"] == ["reports/checkpoint_003.json"]
+    acc = res["_accepted"]["bestreciept.site"]
+    assert [(r["base_id"], r["label"]) for r in acc] == [("FD-NIGHT-001", "V1")]
+    rec = acc[0]
+    # название — блюдо из базы, а не подпись подачи; количества — из базы
+    assert rec["variant"]["title"] == "Капуста тушёная с морковью"
+    assert [i["display_name"] for i in rec["variant"]["ingredients"]] == [
+        "Капуста",
+        "Морковь",
+        "Соль",
+    ]
+    assert [s["base_steps"] for s in rec["variant"]["steps"]] == [[0], [1]]
+    why = {x["variant_id"]: x["why"] for x in res["_archive"]}
+    assert (
+        "не сопоставить" in why["FD-NIGHT-001-V5"] and "нет текста шагов" in why["FD-NIGHT-001-V3"]
+    )
+    reasons = {x["base_id"]: (x["kind"], x["reason"]) for x in res["deferred"]}
+    assert (
+        reasons["FD-NIGHT-002"][0] == "rights"
+        and "_VERIFY_REAL_SOURCE" in reasons["FD-NIGHT-002"][1]
+    )
+    assert reasons["FD-NIGHT-003"][0] == "quality" and "дословно" in reasons["FD-NIGHT-003"][1]
+    # 15 вариантов учтены: 1 опубликован, 14 — в архиве
+    assert res["archived_variants"] + 1 == 15
+
+
+def test_variant_must_keep_numbers_ingredients_and_honest_intro():
+    assert intake.normalize({}) == {}  # пустой вход не ломает normalize
+    base_ = {
+        "base_id": "x",
+        "title": "Рис",
+        "servings": 2,
+        "steps": ["Рис варить 15 минут, посолить."],
+        "ingredients": [{"name": "Рис"}, {"name": "Соль"}],
+        "source": {"url": "https://e.invalid"},
+    }
+
+    def v(text, intro=INTRO):
+        return {
+            "variant_id": "x-V1",
+            "base_id": "x",
+            "label": "V1",
+            "title": "Рис",
+            "intro": intro,
+            "ingredients": [
+                {"base_index": 0, "display_name": "Рис"},
+                {"base_index": 1, "display_name": "Соль"},
+            ],
+            "steps": [{"text": text, "base_steps": [0]}],
+        }
+
+    assert (
+        intake.check_variant(v("Отварите рис до мягкости, подсолив воду, 15 минут."), base_) == []
+    )
+    assert any(
+        "потеряно 15" in e for e in intake.check_variant(v("Отварите рис, подсолив воду."), base_)
+    )
+    assert any(
+        "не используются: Соль" in e
+        for e in intake.check_variant(v("Отварите рис 15 минут."), base_)
+    )
+    bad = intake.check_variant(
+        v(
+            "Отварите рис до мягкости, подсолив воду, 15 минут.",
+            "Делюсь своим рецептом риса на каждый день.",
+        ),
+        base_,
+    )
+    assert any("недопустимое" in e for e in bad)
+
+
+def test_unsure_quantity_is_draft_and_duplicates_match_by_stem():
+    b = {
+        "base_id": "y",
+        "title": "Шуба",
+        "servings": 8,
+        "steps": ["Собрать."],
+        "source": {"url": "https://e.invalid"},
+        "ingredients": [
+            {"name": "Майонез", "quantity": 1, "unit": "шт.", "note": "вероятно, единица упаковки"}
+        ],
+    }
+    assert any("не подтверждено" in e for e in intake.check_base(b))
+    k = intake.title_key
+    assert intake.similar(k("Ленивые вареники с творогом"), k("Ленивые вареники из творога"))
+    assert intake.similar(k("Плов с курицей"), k("Плов с курицей на сковороде"))
+    assert not intake.similar(k("Оладьи из кабачков"), k("Пышные оладьи на кефире"))
+    assert not intake.similar(
+        k("Овсяное печенье"), k("Тыквенное печенье с шоколадными каплями и пряностями")
+    )
