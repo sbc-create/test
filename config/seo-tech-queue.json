@@ -8063,7 +8063,7 @@
       "direction": "anime",
       "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
       "check": "checks/sitemap_part_stable.py",
-      "status": "released",
+      "status": "live_verified",
       "id": "T312",
       "site": "animedia.space",
       "repo": "var/site-repos/animedia-space",
@@ -8079,7 +8079,7 @@
           "status": 200
         }
       ],
-      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc. | 22.10 05:41Z wt-portable-site-cell-01-dc: исполнитель 20261022T050308Z-1655432 VERIFIED (aafd9a6: патч + шаг_карты читает прежний набор; один патч без этого не действует — проверка задачи «только патч» = 1). Выпуск /srv/animedia-space/current → releases/aafd9a63ebe4 (замечен 05:34:19Z). Признак 1 выполнен 05:40:59Z: sitemap.xml и sitemap-1.xml побайтно = снимку до выпуска (var/seo-audit/animedia-space-T312-pre.json), lastmod 2026-10-21T21:26:29+03:00 — не время выпуска; checks/sitemap_part_stable.py на установленном дереве rc 0. Признак 2 — после следующей пересборки карты (t300_criterion2.py против var/seo-audit/animedia-space-T312-pre)."
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc. | 22.10 05:41Z wt-portable-site-cell-01-dc: исполнитель 20261022T050308Z-1655432 VERIFIED (aafd9a6: патч + шаг_карты читает прежний набор; один патч без этого не действует — проверка задачи «только патч» = 1). Выпуск /srv/animedia-space/current → releases/aafd9a63ebe4 (замечен 05:34:19Z). Признак 1 выполнен 05:40:59Z: sitemap.xml и sitemap-1.xml побайтно = снимку до выпуска (var/seo-audit/animedia-space-T312-pre.json), lastmod 2026-10-21T21:26:29+03:00 — не время выпуска; checks/sitemap_part_stable.py на установленном дереве rc 0. Признак 2 — после следующей пересборки карты (t300_criterion2.py против var/seo-audit/animedia-space-T312-pre). | 22.10 07:32Z: признак 2 выполнен — пересборка карты 07:24:13Z: байты единственной части изменились (состав тот же, 8 235 адресов, менялись даты внутри), lastmod 2026-10-21T21:26:29+03:00 → 2026-10-22T07:24:13Z (момент изменения); переездов и удалений 0 (var/seo-audit/animedia-space-T312-criterion2.json.txt). Оговорка: часть одна, поэтому «сдвигается только изменившаяся часть» здесь не различающее — различающая проверка была на zonafilm.space (T300)."
     },
     {
       "direction": "zona",
