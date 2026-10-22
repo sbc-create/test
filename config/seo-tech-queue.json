@@ -8036,6 +8036,78 @@
       "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен.",
       "owner_action": "Ожидает выпуска T262 владельцем (ветка выпуска animedia.icu занята f8327f9 — docs/seo-operator/OWNER_BLOCKS_20261022.md). Затем снимает wt-portable-site-cell-01-dc по одной задаче.",
       "dependencies": "выпуск T262 (live_verified)"
+    },
+    {
+      "direction": "zona",
+      "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
+      "check": "checks/sitemap_part_stable.py",
+      "status": "blocked",
+      "owner_action": "Нет действия владельца: удержано до следующей смены SEO (wt-portable-site-cell-01-dc), чтобы выпуск не остался без живой приёмки в конце ночи 22.10. Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "смена SEO после 05:00Z 22.10",
+      "id": "T310",
+      "site": "zonafilm12.site",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/sitemap.xml"
+      ],
+      "problem": "Перенос T300 (ред. 2 принята на zonafilm.space 22.10 04:16Z, признак 2). На zonafilm12.site стоит ред. 1: дата части = максимум дат внутри, изменённая часть может сохранить прежнюю дату, при добавлении сверху меняются все части. Установленный src/seo_layer.py (e522cf59184e) побайтно равен файлу zonafilm.space до T300 — поэтому патч совпадает с патчем T297/T300 байт в байт; это ожидаемо.",
+      "expected": "Применить патч Архитектора docs/patches/sitemap-lastmod-rev2-zonafilm12-site-20261022.patch (sha256 64db9a17a7b0d7e1…, ветка claude/nova-publish-memory-02, коммит 9e7dd5e/b436cc0) к src/seo_layer.py — проверено 22.10 04:2xZ: git apply --check на установленный файл rc 0. Проверка задачи checks/sitemap_part_stable.py — как в T300 на zonafilm.space (93983ec): заглушка перечня разделов через setattr, неизменная часть сохраняет байты и дату, новая работа дописывается в хвост, переездов нет. D203. Затем полный checks/run.sh.",
+      "verify_live": "после выпуска: части карты побайтно те же, что до выпуска, дата не время выпуска (признак 1); после следующей доставки каталога — automation/local/t300_criterion2.py против копии «до» (признак 2)",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/sitemap.xml",
+          "status": 200
+        }
+      ],
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt."
+    },
+    {
+      "direction": "anime",
+      "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
+      "check": "checks/sitemap_part_stable.py",
+      "status": "blocked",
+      "owner_action": "Нет действия владельца: удержано до следующей смены SEO (wt-portable-site-cell-01-dc), чтобы выпуск не остался без живой приёмки в конце ночи 22.10. Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "смена SEO после 05:00Z 22.10",
+      "id": "T312",
+      "site": "animedia.space",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "Перенос T300 (ред. 2 принята на zonafilm.space 22.10 04:16Z, признак 2). На animedia.space стоит ред. 1: дата части = максимум дат внутри, изменённая часть может сохранить прежнюю дату, при добавлении сверху меняются все части. Карту animedia.space пишет automation/animedia-space-update.py через модуль SEO-слоя (src/seo_layer.py). Дата части в индексе сейчас с полным временем (2026-10-21T21:26:29+03:00) — выглядит как время файла, но поведение ред. 1 (репетиция Архитектора: добавление сверху меняет все части).",
+      "expected": "Применить патч Архитектора docs/patches/sitemap-lastmod-rev2-animedia-space-20261022.patch (sha256 5207743cf65a5088…, ветка claude/nova-publish-memory-02, коммит 9e7dd5e/b436cc0) к src/seo_layer.py — проверено 22.10 04:2xZ: git apply --check на установленный файл rc 0. Проверка задачи checks/sitemap_part_stable.py — как в T300 на zonafilm.space (93983ec): заглушка перечня разделов через setattr, неизменная часть сохраняет байты и дату, новая работа дописывается в хвост, переездов нет. D203. Затем полный checks/run.sh.",
+      "verify_live": "после выпуска: части карты побайтно те же, что до выпуска, дата не время выпуска (признак 1); после следующей доставки каталога — automation/local/t300_criterion2.py против копии «до» (признак 2)",
+      "live_check": [
+        {
+          "url": "https://animedia.space/sitemap.xml",
+          "status": 200
+        }
+      ],
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt."
+    },
+    {
+      "direction": "zona",
+      "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
+      "check": "checks/sitemap_part_stable.py",
+      "status": "blocked",
+      "owner_action": "Нет действия владельца: нужен верный патч (wt-nova-publish-memory-02-ce), затем снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "патч ред. 2 к src/sitemap_index_lastmod.py",
+      "id": "T311",
+      "site": "zonafilm.cc",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/sitemap.xml"
+      ],
+      "problem": "Перенос T300 (ред. 2 принята на zonafilm.space 22.10 04:16Z, признак 2). На zonafilm.cc стоит ред. 1: дата части = максимум дат внутри, изменённая часть может сохранить прежнюю дату, при добавлении сверху меняются все части. ВНИМАНИЕ: у zonafilm.cc ред. 1 (T294, 2f9d2bc) встроена НЕ в template/zona-02-0fb857b26f85/seo_layer.py, а в src/sitemap_index_lastmod.py с обёрткой в src/serve.py. Патч Архитектора sitemap-lastmod-rev2-zonafilm-cc-20261022.patch адресован a/src/seo_layer.py (такого файла в репозитории нет) и по содержимому — закреплённому шаблону template/…/seo_layer.py (d6f300ae9215), а не тому коду, что считает даты частей.",
+      "expected": "Нужен патч ред. 2 к src/sitemap_index_lastmod.py (+ при необходимости src/serve.py) — закреплённый шаблон template/ не трогать. Патч готовит wt-nova-publish-memory-02-ce генератором против установленного /srv/zonafilm-cc/current/src/sitemap_index_lastmod.py с --verify; после этого задача получает точное ожидание. До того — не выпускать.",
+      "verify_live": "после выпуска: части карты побайтно те же, что до выпуска, дата не время выпуска (признак 1); после следующей доставки каталога — automation/local/t300_criterion2.py против копии «до» (признак 2)",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/sitemap.xml",
+          "status": 200
+        }
+      ],
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt."
     }
   ]
 }
