@@ -17,7 +17,7 @@
    "owner": "wt-nova-publish-memory-02",
    "defect": "MOD-111",
    "created": "2026-10-22T09:00:35Z",
-   "updated": "2026-10-22T09:15:15Z",
+   "updated": "2026-10-22T09:21:36Z",
    "published_url": "https://animedia.space/sitemap.xml",
    "installed_version": "releases/aafd9a63ebe4 (симлинк 22.10 05:34Z, T312)",
    "baseline_metric": "8 235 адресов, 8 228 работ (22.10 07:13:56Z)",
@@ -46,7 +46,7 @@
   "notes": "установленное совпадает с публичным ответом"
  },
  "last_cycle": {
-  "at": "2026-10-22T09:15:15Z",
+  "at": "2026-10-22T09:21:36Z",
   "did": "состояния задач приведены к измеренным: опубликовано 1, в работе 1, ждут 0",
   "next": "Q-animedia.space-002: снять спрос и конкурентов по домену"
  }
