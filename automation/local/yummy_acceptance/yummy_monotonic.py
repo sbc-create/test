@@ -40,4 +40,6 @@ work = lambda s: collections.Counter(u.split("/anime/")[1].split("/")[0] for u i
 print(f"{D} {PART}: было {len(a)}, стало {len(b)}, выпало {len(lost)}, добавилось {len(added)}")
 if lost:
     print("выпали по работам:", work(lost).most_common(10)); sys.exit(1)
+if not added:
+    print("БЕЗ ИЗМЕНЕНИЙ: интервал неразличающий — нужен промежуток, где пересобирался titles.xml (сдвиг головы обхода)"); sys.exit(0)
 print("надмножество: да"); sys.exit(0)
