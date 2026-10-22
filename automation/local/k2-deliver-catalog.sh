@@ -50,11 +50,18 @@ rm -rf "$work"; mkdir -p "$work"
 
 if [ -n "$from_staging" ]; then
   echo "==> беру готовый комплект из $from_staging"
+  # Недостающий файл у ОДНОЙ витрины не отменяет остальных: прежняя редакция
+  # выходила кодом 1 на первом же `[x] нет …`, то есть одна неполная папка
+  # лишала каталога все восемь. Витрины независимы, и неполная просто не
+  # доставляется — её имя попадёт в итог.
   for site in $sites; do
     for kind in catalog details; do
       src="$from_staging/$site-$kind.json"
-      [ -f "$src" ] || { echo "[x] нет $src"; exit 1; }
-      cp "$src" "$work/$site-$kind.json"
+      if [ -f "$src" ]; then
+        cp "$src" "$work/$site-$kind.json"
+      else
+        echo "[x] нет $src"
+      fi
     done
   done
 else
@@ -69,14 +76,33 @@ else
   [ "$rc" = 0 ] || { echo "издатель завершился кодом $rc — доставка не начиналась"; exit 1; }
 fi
 
+# Отказ на ОДНОЙ витрине не лишает каталога остальные, и это исправление
+# измеренного вреда. Прежняя редакция выходила кодом 1 на первой же неудаче:
+# 22.10 отказ пришёл на `lords-10`, и остальные СЕМЬ витрин не обрабатывались
+# вовсе, хотя комплекты для них были собраны и лежали рядом. Витрины
+# независимы — у каждой свой входящий каталог на узле и свои суммы, — поэтому
+# продолжать безопасно. Итоговый код по-прежнему ненулевой, если отказала
+# хотя бы одна: «частично доставлено» успехом не считается.
+failed=""
+delivered=""
+
 for site in $sites; do
   box="$work/$site"
   mkdir -p "$box"
+  missing=""
   for kind in catalog details; do
     f="$work/$site-$kind.json"
-    [ -f "$f" ] || { echo "[x] издатель не дал $f"; exit 1; }
-    mv "$f" "$box/"
+    if [ -f "$f" ]; then
+      mv "$f" "$box/"
+    else
+      echo "[x] $site: издатель не дал $f"
+      missing=1
+    fi
   done
+  if [ -n "$missing" ]; then
+    failed="$failed $site"
+    continue
+  fi
   ( cd "$box" && sha256sum ./*.json > SHA256SUMS )
   echo "==> $site: комплект $(du -sm "$box" | cut -f1) МиБ, файлов $(ls -1 "$box" | wc -l)"
 
@@ -94,17 +120,34 @@ for site in $sites; do
     # Журнал НЕ удаляется вместе с ящиком: он и есть то, зачем сюда придут.
     cp "$copy_log" "$work/../last-copy-failure.log" 2>/dev/null
     echo "   полный вывод: $copy_log (копия: $work/../last-copy-failure.log)"
-    exit 1
+    failed="$failed $site"
+    continue
   fi
 
   out="$(ansible -i "$inventory" "$host_ref" -m raw \
          -a "cd /home/k2deploy/stage/incoming/$site; sha256sum -c SHA256SUMS --quiet; echo rc=\$?" 2>&1)"
   printf '%s\n' "$out" | grep -E "rc=|FAILED" | sed 's/^/   /'
-  printf '%s\n' "$out" | grep -q "rc=0" || { echo "[x] суммы на узле не сошлись"; exit 1; }
+  if ! printf '%s\n' "$out" | grep -q "rc=0"; then
+    echo "[x] $site: суммы на узле не сошлись — ящик НЕ убран, он нужен разбору"
+    failed="$failed $site"
+    continue
+  fi
 
   rm -rf "$box"
+  delivered="$delivered $site"
   echo "   $site: доставлено и сверено; установку сделает таймер узла"
 done
+
+# Итог по витринам печатается ВСЕГДА: «доставка не удалась» без имён витрин
+# четыре суток не давала понять, отказала одна или все восемь.
+echo "==> итог: доставлено [${delivered# }], отказ [${failed# }]"
+
+if [ -n "$failed" ]; then
+  echo "рабочий каталог НЕ убран: в нём ящики и журналы отказавших витрин —"
+  echo "   $work"
+  df -Pm / | awk 'NR==2{print "свободно на управляющем узле: " $4 " МиБ"}'
+  exit 1
+fi
 
 rm -rf "$work"
 df -Pm / | awk 'NR==2{print "свободно на управляющем узле: " $4 " МиБ"}'
