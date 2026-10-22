@@ -8146,6 +8146,28 @@
       ],
       "status": "live_verified",
       "evidence": "22.10 07:21Z wt-portable-site-cell-01-dc: лог CI — notfound-wording FAIL «нет манифеста шаблона …», остальные проверки PASS; T313 VERIFIED локально (06:29–06:32Z), но на хосте манифест есть. Тот же класс ошибки, что у T262 (проверка зависит от файлов хоста). | 22.10 08:26Z wt-portable-site-cell-01-dc: публикатор (после правок 4e84a4c и f8e1dd3) перемотал ветку выпуска 94bbf6b → 216e4c1, CI success 08:17Z (run на 216e4c1), выпуск /srv/zonafilm12-site/current → releases/216e4c1d4f5a (замечен 08:25:42Z). Живая сверка 08:25:54Z: /title/net-takogo-xyz/ и /zzz-net/ — 404, «ни одной странице сайта», без «записи каталога», ссылка /catalog/ на месте; /, /movies/, /catalog/ — 200. checks/notfound_wording.py на установленном дереве rc 0, и с LORDS_TEMPLATE_MANIFEST=/nonexistent (условия CI) rc 0. Поправка к verify_live T313: meta robots на 404 — «index, follow», как и до выпуска; страницу исключает код 404, это не регрессия."
+    },
+    {
+      "id": "T315",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/net-takogo-xyz/"
+      ],
+      "problem": "Перенос T313+T314 (live_verified на zonafilm12.site 22.10 08:26Z). На zonafilm.space страница 404 говорит «…не соответствует ни одной записи каталога» — src/lords-frontend.py:6104–6106 и :8493–8495 (замер 22.10 06:29Z).",
+      "norm": "Публичный текст говорит посетителю, что произошло и что делать, без слов об устройстве данных (SEO_KNOWLEDGE_PACK §4 п.2; ряд T161–T173, T301–T306).",
+      "expected": "В двух строковых литералах src/lords-frontend.py заменить «ни одной записи каталога» на «ни одной странице сайта» (остальное без изменений). Проверка задачи checks/notfound_wording.py — как на zonafilm12.site после T314 (216e4c1): ДО импорта src/lords-frontend.py сама готовит окружение по образцу checks/meta_description.py (временные заглушки каталога/подробностей, LORDS_TEMPLATE_MANIFEST = <корень>/config/template-manifest.json безусловно), исполняет не_найдено каждого вида на заглушке self и требует: нет «записи каталога», есть «ни одной странице сайта», код 404, ссылка в каталог, адрес экранирован; перехват BaseException → код 2. Обязательно убедиться, что проверка проходит и при LORDS_TEMPLATE_MANIFEST=/nonexistent/x.json во внешнем окружении (условия CI) — именно это сорвало первый выпуск T313. D203. Добавить в checks/run.sh (2 = пропуск). Затем полный checks/run.sh.",
+      "check": "checks/notfound_wording.py",
+      "verify_live": "после выпуска: https://zonafilm.space/title/net-takogo-xyz/ — 404, «…ни одной странице сайта…», без «записи каталога», ссылка /catalog/; CI ветки выпуска success",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/title/net-takogo-xyz/",
+          "status": 404
+        }
+      ],
+      "status": "queued",
+      "evidence": "22.10 08:27Z wt-portable-site-cell-01-dc: канарейка T313+T314 принята на zonafilm12.site. zonafilm.cc — текст в закреплённом шаблоне template/zona-02-…, не в src: перенос туда — только с правкой шаблона (решение владельца, как T311)."
     }
   ]
 }
