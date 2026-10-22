@@ -8344,6 +8344,42 @@
       ],
       "status": "queued",
       "evidence": "22.10 14:55Z wt-portable-site-cell-01-dc: после контрольной точки 18:00 МСК — следующая задача по пользе; польза умеренная (дата вместо отсутствия), риск низкий (только чтение прежнего набора). | 22.10 15:16Z: удержание снято — T320 live_verified; снимок карты «до» — var/seo-audit/animedia-icu-T321-pre/."
+    },
+    {
+      "id": "T322",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/91-den-korotkaya-svecha/",
+        "https://zonafilm.cc/title/bezgranichnyy-fantomnyy-mir/"
+      ],
+      "problem": "Перенос T317 (live_verified на zonafilm12.site 13:46Z, затем T318 zonafilm.space, T319 animedia.icu). На zonafilm.cc те же артефакты поставщика (живой замер 22.10 12:59Z): «[91 Days]» и пустые «» в meta и видимом тексте. Отличие: чтения описания у cc — в закреплённом шаблоне template/zona-02-0fb857b26f85/lords-frontend.py (5 мест), который править нельзя (pins.lock.json). Поведение cc меняется слоем: src/serve.py подключает модули src/* поверх рантайма (образец — collection_descriptions.установить(рантайм), country_links и др.).",
+      "norm": "Текст страницы и описание без служебной разметки поставщика; закреплённый шаблон не меняется (только слой поверх рантайма, как T243, T294, T302).",
+      "expected": "Новый модуль src/description_artifacts.py с функцией чистое_описание (та же логика, что в T317: «[X]» → «X»; остались пустые «» — описание отсутствует) и установить(рантайм), которая подключается в src/serve.py рядом с прочими установками и делает так, чтобы все чтения description/short_description детали шаблоном получали очищенный текст — например, оборачивает загрузку/доступ к записям подробностей рантайма (а не отдельные места шаблона). Шаблон template/ не трогать; pins.lock.json пересчитать только для изменённых src-файлов. Проверка задачи checks/description_artifacts.py: (а) чистое_описание на образцах T317; (б) установить(рантайм) на синтетическом минимальном рантайме или через импорт модуля без витрины — запись с «[91 Days]» и запись с «» отдаются очищенными; (в) template/ не изменён (сверка sha с pins.lock.json). Работает в условиях CI (без манифеста шаблона на хосте), без трассировки в выводе; невозможность — код 2. D203. Добавить в checks/run.sh. Затем полный checks/run.sh.",
+      "check": "checks/description_artifacts.py",
+      "verify_live": "после выпуска: /title/91-den-korotkaya-svecha/ — «91 Days» без скобок в meta и тексте; /title/bezgranichnyy-fantomnyy-mir/ — пустых «» нет, meta из фактов; обычные описания прежние; index, canonical на себя",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/title/91-den-korotkaya-svecha/",
+          "status": 200,
+          "absent": [
+            "«[91 Days]»"
+          ],
+          "contains": [
+            "«91 Days»"
+          ]
+        },
+        {
+          "url": "https://zonafilm.cc/title/bezgranichnyy-fantomnyy-mir/",
+          "status": 200,
+          "absent": [
+            "аниме-сериала «»"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "22.10 15:17Z wt-portable-site-cell-01-dc: прежняя оговорка «у cc описание в закреплённом шаблоне — перенос невозможен» уточнена: слой src/serve.py поверх рантайма — штатный путь для cc (T243, T294, T302)."
     }
   ]
 }
