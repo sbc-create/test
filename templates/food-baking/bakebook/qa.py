@@ -107,7 +107,7 @@ def run(shots: Path | None) -> dict:
         S["temp_jump_anchor"] = pg.evaluate("location.hash") == "#t-180"
         with pg.expect_navigation():
             pg.locator("#t-180 .rows a").first.click()
-        S["temp_row_opens_recipe_at_180"] = pg.locator(".strip__t dd").inner_text().startswith("180")
+        S["temp_row_opens_recipe_at_180"] = pg.locator(".facts-b li", has_text="Духовка").locator("b").inner_text().startswith("180")
         # рабочий лист: таймер из источника, отметки сохраняются и сбрасываются
         pg.goto(BASE + "/recept/keks-s-kabachkom-i-ananasom/")
         pg.click(".timer")
@@ -128,13 +128,14 @@ def run(shots: Path | None) -> dict:
         pg.click("[data-steps-reset]")
         S["reset_clears_marks"] = not pg.locator("[data-weigh]").first.is_checked() and not steps.nth(0).is_checked()
         pg.goto(BASE + "/recept/yablochnoe-myagkoe-pechene/")
+        pg.click(".pct-box summary")  # процент — в раскрываемом блоке
         S["bakers_pct_butter_50"] = (
-            pg.locator(".pct-t tr", has_text="Сливочное масло").locator("td").first.inner_text(timeout=2000) == "50 %"
+            pg.locator(".pct-t tr", has_text="Сливочное масло").locator("td").first.inner_text() == "50 %"
         )
         pg.locator(".facts-b a", has_text="шаг").click()
         S["oven_strip_links_to_step"] = pg.evaluate("location.hash") == "#shag-5"
-        # таблица: фильтр и сортировка применяются сразу
-        pg.goto(BASE + "/recepty/")
+        # таблица (вид «таблица сравнения»; по умолчанию — карточки): фильтр и сортировка применяются сразу
+        pg.goto(BASE + "/recepty/?vid=tablica")
         with pg.expect_navigation():
             pg.select_option("select[name=sort]", "temp")
         S["sort_hot_first"] = (
@@ -149,9 +150,9 @@ def run(shots: Path | None) -> dict:
         pg.goto(BASE + "/recepty/?testo=zavarnoe&duhovka=net")
         S["filter_empty"] = pg.locator(".empty h2").count() == 1
         pg.goto(BASE + "/poisk/?q=" + "  ЗАВАРНОЙ  ")
-        S["search_case_spaces"] = pg.locator(".toc__row").count() > 0
+        S["search_case_spaces"] = pg.locator(".bcard").count() > 0
         pg.goto(BASE + "/poisk/?q=печенье")
-        S["search_pechene"] = pg.locator(".toc__row").count() > 0
+        S["search_pechene"] = pg.locator(".bcard").count() > 0
         # «Пеку несколько» (перенесено из C): пустой выбор, счётчик, группы духовки, список, память, 400
         pg.goto(BASE + "/pechem/")
         pg.evaluate("localStorage.clear(); 0")
