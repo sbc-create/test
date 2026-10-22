@@ -1,4 +1,4 @@
-[//]: # (Уровень 3 — паспорт домена yummyani7.info. Собран автоматически 2026-10-22T09:58:41Z из измеренного состояния. Правится вручную по мере исследования; пересборка не затирает раздел «Исследование спроса» — он помечен как ручной.)
+[//]: # (Уровень 3 — паспорт домена yummyani7.info. Собран автоматически 2026-10-22T10:06:41Z из измеренного состояния. Правится вручную по мере исследования; пересборка не затирает раздел «Исследование спроса» — он помечен как ручной.)
 
 # Паспорт домена: yummyani7.info
 
@@ -34,6 +34,34 @@
 | `Q-yummyani7.info-002` | MOD-121 | P1 | запись MOD-121 реестра недостатков |
 | `Q-yummyani7.info-003` | MOD-122 | P1 | запись MOD-122 реестра недостатков |
 | `Q-yummyani7.info-004` | MOD-34 | P1 | docs/verification/b016-release-20261015.md, раздел о yummyani7; automation/host/yummy7-b016-repin.sh (сухой прогон и два безопасных отказа с возвратом) |
+
+## Измеренный спрос
+
+Снимок `analytics-2026-10-22.json`, собран 2026-10-22T05:05:29Z. Окно: полные сутки, кончая днём перед сбором (7daysAgo…yesterday); соседние снимки перекрываются на шесть дней из семи, и их разность — сдвиг окна, а не изменение.
+
+| величина | значение за окно |
+| --- | --- |
+| визиты (СЫРЫЕ, до очистки от автоматики) | **886** |
+| посетители | 644 |
+
+**Почему «сырые».** У `yummyani.site` измерено загрязнение автоматикой: 53 472 визита HeadlessChrome были отнесены к людям. Пока сегмент не очищен, ни по одному домену нельзя называть эти визиты реальными — и тем более сравнивать с порогом 5000 в сутки.
+
+**Страницы, которые спрос УЖЕ приводит** (поисковые входы):
+
+| входов | страница |
+| --- | --- |
+| 184 | `/anime/dazhe-u-studsoveta-est-kosyaki` |
+| 144 | `/anime/poschadi-menya-velikiy-gospodin-3` |
+| 45 | `/anime/svadba-svetlyachkov/season/1/episode/1` |
+| 34 | `/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/3` |
+| 29 | `/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele` |
+| 28 | `/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya` |
+| 23 | `/anime/vrata-shteyna-nayti-nedostayuschee-zveno-delenie-na-nol` |
+| 16 | `/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/2` |
+| 16 | `/anime/tokiyskie-mstiteli-bitva-treh-nebozhiteley` |
+| 15 | `/anime/ya-perevoplotilsya-v-goblina-voprosy-est` |
+
+**Запросы:** не измерено: popular_queries в снимке отсутствует (нужен Вебмастер). Страница запросом не является, поэтому пара «запрос — страница» здесь только наполовину.
 
 ## Исследование спроса и конкурентов
 

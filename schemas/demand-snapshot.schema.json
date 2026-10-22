@@ -1,0 +1,54 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Спрос по доменам из снимка Метрики",
+ "description": "Производный разбор снимка Метрики: визиты, посетители и поисковые входы по страницам. Схема требует называть окно и его смысл, потому что соседние суточные снимки перекрываются на шесть дней из семи и их разность — сдвиг окна, а не изменение. Отдельно схема требует примечания у пустого перечня запросов: пустота здесь означает «не измерено», а не «запросов нет».",
+ "type": "object",
+ "required": ["schema_version", "snapshot", "collected_at", "window", "window_meaning", "domains"],
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {"const": 1},
+  "note": {"type": "string", "minLength": 10},
+  "snapshot": {"type": "string", "minLength": 5},
+  "collected_at": {"type": "string", "minLength": 10},
+  "window": {"type": "object"},
+  "window_meaning": {"type": "string", "minLength": 20},
+  "domains": {
+   "type": "array",
+   "items": {
+    "type": "object",
+    "required": ["domain", "site_id", "visits", "visitors", "search_landing_pages", "search_landing_note", "queries", "queries_note"],
+    "additionalProperties": false,
+    "properties": {
+     "domain": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"},
+     "site_id": {"type": "string"},
+     "counter_id": {"type": ["integer", "string", "null"]},
+     "visits": {"type": ["integer", "null"]},
+     "visitors": {"type": ["integer", "null"]},
+     "search_landing_pages": {
+      "type": "array",
+      "items": {
+       "type": "object",
+       "required": ["page", "visits"],
+       "additionalProperties": false,
+       "properties": {
+        "page": {
+         "type": "string",
+         "pattern": "^/",
+         "description": "Путь страницы. Образец, не начинающийся со слеша, означает, что в поле попало НЕ то измерение разреза: так в первой редакции разбора во всех строках оказалось название источника трафика."
+        },
+        "visits": {"type": "integer", "minimum": 0}
+       }
+      }
+     },
+     "search_landing_note": {"type": "string", "minLength": 5},
+     "queries": {"type": "array", "items": {"type": "object"}},
+     "queries_note": {
+      "type": "string",
+      "minLength": 10,
+      "description": "Почему перечень запросов пуст. Пустой перечень без причины неотличим от «запросов нет»."
+     }
+    }
+   }
+  }
+ }
+}

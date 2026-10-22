@@ -1,4 +1,4 @@
-[//]: # (Уровень 3 — паспорт домена yummyani7.site. Собран автоматически 2026-10-22T09:58:41Z из измеренного состояния. Правится вручную по мере исследования; пересборка не затирает раздел «Исследование спроса» — он помечен как ручной.)
+[//]: # (Уровень 3 — паспорт домена yummyani7.site. Собран автоматически 2026-10-22T10:06:41Z из измеренного состояния. Правится вручную по мере исследования; пересборка не затирает раздел «Исследование спроса» — он помечен как ручной.)
 
 # Паспорт домена: yummyani7.site
 
@@ -34,6 +34,34 @@
 | `Q-yummyani7.site-002` | MOD-121 | P1 | запись MOD-121 реестра недостатков |
 | `Q-yummyani7.site-003` | MOD-122 | P1 | запись MOD-122 реестра недостатков |
 | `Q-yummyani7.site-004` | MOD-34 | P1 | docs/verification/b016-release-20261015.md, раздел о yummyani7; automation/host/yummy7-b016-repin.sh (сухой прогон и два безопасных отказа с возвратом) |
+
+## Измеренный спрос
+
+Снимок `analytics-2026-10-22.json`, собран 2026-10-22T05:05:29Z. Окно: полные сутки, кончая днём перед сбором (7daysAgo…yesterday); соседние снимки перекрываются на шесть дней из семи, и их разность — сдвиг окна, а не изменение.
+
+| величина | значение за окно |
+| --- | --- |
+| визиты (СЫРЫЕ, до очистки от автоматики) | **3860** |
+| посетители | 2534 |
+
+**Почему «сырые».** У `yummyani.site` измерено загрязнение автоматикой: 53 472 визита HeadlessChrome были отнесены к людям. Пока сегмент не очищен, ни по одному домену нельзя называть эти визиты реальными — и тем более сравнивать с порогом 5000 в сутки.
+
+**Страницы, которые спрос УЖЕ приводит** (поисковые входы):
+
+| входов | страница |
+| --- | --- |
+| 921 | `/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya` |
+| 680 | `/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1` |
+| 298 | `/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7` |
+| 282 | `/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele` |
+| 223 | `/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/3` |
+| 118 | `/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1/episode/2` |
+| 111 | `/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/4` |
+| 110 | `/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo` |
+| 64 | `/anime/dazhe-u-studsoveta-est-kosyaki` |
+| 63 | `/anime/ya-vlyubilsya-v-tebya-kogda-ty-bezhala-v-lunnoy-nochi` |
+
+**Запросы:** не измерено: popular_queries в снимке отсутствует (нужен Вебмастер). Страница запросом не является, поэтому пара «запрос — страница» здесь только наполовину.
 
 ## Исследование спроса и конкурентов
 
