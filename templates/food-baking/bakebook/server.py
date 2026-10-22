@@ -241,18 +241,18 @@ class App:
         if path == "/":
             groups = s.groups()
             season = s.season(time.localtime().tm_mon)
-            shown = {r.slug for r in season[2][:4]} if season else set()
-            tea = [r for r in s.tags().get("k-chayu", []) if r.slug not in shown][:4]  # без повтора сезонных
+            shown = {r.slug for r in season[2][:3]} if season else set()
+            tea = [r for r in s.tags().get("k-chayu", []) if r.slug not in shown][:3]  # без повтора сезонных
             tea = tea if len(tea) >= 2 else []
             shown |= {r.slug for r in tea}
-            # «Новые» — без карточек, уже показанных выше; полными рядами по 4, если рецептов больше четырёх
+            # «Новые» — без карточек, уже показанных выше; полными рядами по 3 (сетка 3/2/1)
             fresh = [
                 r
                 for r in sorted(s.recipes, key=lambda r: (r.published_at, r.updated_at), reverse=True)
                 if r.slug not in shown
-            ][:8]
-            if len(fresh) > 4:
-                fresh = fresh[: len(fresh) // 4 * 4]
+            ][:6]
+            if len(fresh) > 3:
+                fresh = fresh[: len(fresh) // 3 * 3]
             meta = Meta(
                 f"{s.cfg['name']} — рецепты домашней выпечки",
                 with_examples(

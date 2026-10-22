@@ -351,7 +351,7 @@ class Site:
                 out.setdefault(r.dough, []).append(r)
         return {k: v for k, v in out.items() if len(v) >= 2}
 
-    def related(self, r: Recipe, n: int = 4) -> list[Recipe]:
+    def related(self, r: Recipe, n: int = 3) -> list[Recipe]:
         """Похожие: тот же раздел, тот же вид теста, общие темы; без совпадений — не показываются."""
 
         def score(o: Recipe) -> int:

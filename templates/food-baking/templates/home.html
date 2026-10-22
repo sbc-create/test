@@ -15,7 +15,7 @@
 {% if season %}
 <section class="block" aria-labelledby="h-season">
   <div class="block__head"><h2 id="h-season">{{ season[0] }}</h2>{% if season[1] %}<span class="block__links">{% for k, l in season[1] %}<a href="/teg/{{ k }}/">{{ l }}</a>{% endfor %}</span>{% endif %}</div>
-  {{ grid(season[2][:4]) }}
+  {{ grid(season[2][:3]) }}
 </section>
 {% endif %}
 
