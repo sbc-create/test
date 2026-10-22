@@ -139,5 +139,11 @@
   "at": "2026-10-22T09:21:36Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 4, ждут 1",
   "next": "Q-yummyani.site-002: Просмотр каталога на всех пяти витринах Yummy обрезан РОВНО на 8 000 записях, а "
+ },
+ "work": {
+  "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/yummyani-site",
+  "branch": "claude/extract-yummyani-site-perf-02",
+  "note": "своя копия и своя ветка",
+  "measured_at": "2026-10-22T09:56:56Z"
  }
 }

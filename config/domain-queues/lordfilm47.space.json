@@ -51,5 +51,11 @@
   "at": "2026-10-22T09:21:36Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 1, ждут 0",
   "next": "Q-lordfilm47.space-001: снять спрос и конкурентов по домену"
+ },
+ "work": {
+  "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordfilm47-space",
+  "branch": "claude/extract-lordfilm47-space-seo-01",
+  "note": "своя копия и своя ветка",
+  "measured_at": "2026-10-22T09:56:56Z"
  }
 }

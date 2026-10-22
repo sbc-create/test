@@ -63,5 +63,11 @@
   "at": "2026-10-22T09:21:36Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 2, ждут 1",
   "next": "Q-lordfilm.msk.ru-001: доставка каталога на узел K2 отказывает каждые сутки с 19.10 на первой витрине, "
+ },
+ "work": {
+  "repo": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-12",
+  "branch": "claude/extract-lordfilm-msk-ru",
+  "note": "своя копия и своя ветка",
+  "measured_at": "2026-10-22T09:56:56Z"
  }
 }

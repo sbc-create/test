@@ -54,5 +54,11 @@
   "at": "2026-10-22T09:21:36Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 1, ждут 0",
   "next": "Q-1lordserials1.online-001: Карта сайта 1lordserials1.online не обновлялась с 2026-10-15, пока каталог рос"
+ },
+ "work": {
+  "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/1lordserials1-online",
+  "branch": "claude/extract-1lordserials1-online-seo-01",
+  "note": "своя копия и своя ветка",
+  "measured_at": "2026-10-22T09:56:56Z"
  }
 }
