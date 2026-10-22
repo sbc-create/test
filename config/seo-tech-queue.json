@@ -7754,8 +7754,8 @@
           "status": 200
         }
       ],
-      "status": "released",
-      "evidence": "21.10 15:38Z wt-portable-site-cell-01-dc: замена T297 (две неудачи, 133512Z и 140808Z — обе из-за заглушки РАЗДЕЛЫ_КАРТЫ = () в новой проверке, валившей старую sitemap_wired; патч Архитектора и проверка задачи верны: база rc 1, ветка rc 0). Патч тот же: var/patches/T297_zonafilm_space_sitemap_lastmod_r2.patch sha256 64db9a17…de35 (aebf94e). T299 VERIFIED 15:38Z (3058228), ждёт выпуска. | 21.10 15:52Z: T299 выпущена и подтверждена — блок снят. src/seo_layer.py между 5dab6af и 3058228 не менялся, патч ложится. Снимок карты до выпуска: var/seo-audit/zonafilm-space-sitemap-before-T300.json (sha256 частей). | 21.10 16:37Z wt-portable-site-cell-01-dc: VERIFIED 20261021T155222Z-2214179 (93983ec); src/seo_layer.py побайтно = 3058228 + патч 64db9a17…; заглушка в проверке через setattr. Публикатор 16:36:37Z publish → releases/93983ec692e0. Признак 1 (16:37:03Z): sitemap.xml, sitemap-1.xml, sitemap-2.xml побайтно равны снимку до выпуска (7567493216cd / 480ceeeb413b / cb0a048468fd), даты частей 2026-10-21 и 2025-06-18, не время выпуска. Признак 2 (дата сдвигается ровно у изменившейся части; новые карточки — в хвост последней части) — после следующей доставки каталога; до него live_verified не ставлю. Снимки: var/seo-audit/zonafilm-space-sitemap-{before,after}-T300*.json."
+      "status": "live_verified",
+      "evidence": "21.10 15:38Z wt-portable-site-cell-01-dc: замена T297 (две неудачи, 133512Z и 140808Z — обе из-за заглушки РАЗДЕЛЫ_КАРТЫ = () в новой проверке, валившей старую sitemap_wired; патч Архитектора и проверка задачи верны: база rc 1, ветка rc 0). Патч тот же: var/patches/T297_zonafilm_space_sitemap_lastmod_r2.patch sha256 64db9a17…de35 (aebf94e). T299 VERIFIED 15:38Z (3058228), ждёт выпуска. | 21.10 15:52Z: T299 выпущена и подтверждена — блок снят. src/seo_layer.py между 5dab6af и 3058228 не менялся, патч ложится. Снимок карты до выпуска: var/seo-audit/zonafilm-space-sitemap-before-T300.json (sha256 частей). | 21.10 16:37Z wt-portable-site-cell-01-dc: VERIFIED 20261021T155222Z-2214179 (93983ec); src/seo_layer.py побайтно = 3058228 + патч 64db9a17…; заглушка в проверке через setattr. Публикатор 16:36:37Z publish → releases/93983ec692e0. Признак 1 (16:37:03Z): sitemap.xml, sitemap-1.xml, sitemap-2.xml побайтно равны снимку до выпуска (7567493216cd / 480ceeeb413b / cb0a048468fd), даты частей 2026-10-21 и 2025-06-18, не время выпуска. Признак 2 (дата сдвигается ровно у изменившейся части; новые карточки — в хвост последней части) — после следующей доставки каталога; до него live_verified не ставлю. Снимки: var/seo-audit/zonafilm-space-sitemap-{before,after}-T300*.json. | 22.10 04:17Z wt-portable-site-cell-01-dc: признак 2 выполнен. Доставка каталога 04:13:37Z (21,34 → 21,56 МБ), пересборка карты 04:16:37Z. automation/local/t300_criterion2.py против копии «до» (var/seo-audit/zonafilm-space-T300-pre, побайтно = снимку 16:37Z): sitemap-1.xml байты те же, дата в индексе та же (2026-10-21); sitemap-2.xml байты изменились, дата 2025-06-18 → 2026-10-22T04:16:37Z (момент изменения); новых адресов 720 — все в хвосте последней части; переехавших между частями 0, удалённых 0; прежние адреса не переставлены. Итог — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. Перенос ред. 2 на zonafilm12.site и zonafilm.cc — следующий шаг (патч по сайту генератором Архитектора с --verify)."
     },
     {
       "id": "T301",
@@ -7856,10 +7856,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies.",
-      "owner_action": "Нет действия владельца: удержание до live_verified T301 и приёмка T300 (признак 2) на zonafilm.space. Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified T301 и приёмка T300 (признак 2) на zonafilm.space"
+      "status": "queued",
+      "evidence": "21.10 до 19:56Z wt-portable-site-cell-01-dc: перенос канарейки T301 (zonafilm12.site); удержан blocked, потому что исполнитель не читает dependencies. | 22.10 04:17Z: удержание снято — T301 live_verified (20:26Z) и T300 признак 2 выполнен (04:16Z)."
     },
     {
       "id": "T304",
