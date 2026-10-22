@@ -34,6 +34,27 @@
    "owner": "wt-nova-publish-memory-02",
    "created": "2026-10-22T09:15:15Z",
    "updated": "2026-10-22T09:15:15Z"
+  },
+  {
+   "id": "Q-animedia.space-003",
+   "state": "исследовано",
+   "title": "нет поверхностей под статус работы, анонсы и расписание",
+   "urls": [
+    "https://animedia.icu/ongoing/",
+    "https://animedia.icu/anonsy/",
+    "https://animedia.icu/raspisanie/"
+   ],
+   "queries": [
+    "онгоинги аниме",
+    "анонсы аниме",
+    "расписание аниме"
+   ],
+   "problem": "три пласта спроса не обслужены: статус работы (онгоинги, завершённые), анонсы и расписание выхода",
+   "evidence": "измерено 22.10 на animedia.icu: /ongoing/, /anonsy/ и /raspisanie/ отвечают 404. У референса amd.online это три отдельных раздела (/ongoingi/, /zavershennye/, /anonsy/, /raspisanie.html). При этом /catalog/, /year/2026/, /top/ и /new/ у нас есть и открыты (200, 48–55 карточек, index/follow)",
+   "action": "проверить, есть ли в каталоге поле статуса работы и дата выхода серии. Делать только те страницы, под которые есть ДАННЫЕ; пустая страница спрос не обслуживает. Выпускать ограниченной группой с замером",
+   "owner": "wt-nova-publish-memory-02",
+   "created": "2026-10-22T09:32:29Z",
+   "updated": "2026-10-22T09:32:29Z"
   }
  ],
  "baseline": {
