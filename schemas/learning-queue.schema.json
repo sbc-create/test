@@ -1,0 +1,129 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Очередь самостоятельного изучения SEO",
+ "description": "Учебный блок без вопроса по НАШИМ сайтам — это чтение документации вообще, а не работа. Схема требует у каждого блока вопрос, привязку к доменам, причину «почему сейчас» и способ проверки вывода на конкретном случае. Отдельно схема запрещает самоприсвоение уровня: порог считается по трём практическим кейсам с отдельным ревью, поэтому оценки направлений не могут стоять без кейсов.",
+ "type": "object",
+ "required": ["schema_version", "owner_task", "block_limit_minutes", "priority_rule", "statuses", "items", "self_assessment"],
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {"const": 1},
+  "note": {"type": "string", "minLength": 10},
+  "owner_task": {"type": "string", "minLength": 10},
+  "block_limit_minutes": {
+   "type": "integer",
+   "minimum": 15,
+   "maximum": 60,
+   "description": "Предел одного блока. Без предела исследование вытесняет работу по сайтам."
+  },
+  "priority_rule": {"type": "string", "minLength": 20},
+  "sources_allowed": {"type": "array", "items": {"type": "string"}},
+  "statuses": {
+   "type": "array",
+   "minItems": 4,
+   "items": {"enum": ["гипотеза", "подтверждено источниками", "проверено на практике", "эффект измерен"]}
+  },
+  "directions": {"type": "object", "additionalProperties": {"type": "string"}},
+  "items": {"type": "array", "items": {"$ref": "#/definitions/block"}},
+  "self_assessment": {"$ref": "#/definitions/assessment"}
+ },
+ "definitions": {
+  "block": {
+   "type": "object",
+   "required": ["id", "state", "direction", "question", "why_now", "sites", "check_on", "expected_output"],
+   "additionalProperties": false,
+   "properties": {
+    "id": {"type": "string", "pattern": "^L-[0-9]{3}$"},
+    "state": {"enum": ["в очереди", "в работе", "вывод записан", "неопределённость записана", "снято"]},
+    "direction": {"type": "string", "minLength": 3},
+    "question": {
+     "type": "string",
+     "minLength": 20,
+     "pattern": "\\?$",
+     "description": "Блок начинается с ВОПРОСА. Утверждение вместо вопроса означает, что ответ уже назначен заранее."
+    },
+    "why_now": {
+     "type": "string",
+     "minLength": 20,
+     "description": "Чем этот вопрос вызван в НАШЕЙ работе. Без этого блок становится чтением вообще."
+    },
+    "sites": {
+     "type": "array",
+     "minItems": 1,
+     "items": {"type": "string"},
+     "description": "Домены, к которым вопрос относится. Пустой список означает, что проверять вывод будет негде."
+    },
+    "check_on": {"type": "string", "minLength": 10},
+    "expected_output": {"type": "string", "minLength": 10},
+    "sources": {"type": "array", "items": {"type": "string"}},
+    "conclusion": {"type": "string"},
+    "status": {"enum": ["гипотеза", "подтверждено источниками", "проверено на практике", "эффект измерен"]},
+    "recorded_in": {"type": "array", "items": {"type": "string"}},
+    "created": {"type": "string"},
+    "updated": {"type": "string"}
+   },
+   "allOf": [
+    {
+     "if": {"properties": {"state": {"const": "вывод записан"}}, "required": ["state"]},
+     "then": {
+      "required": ["conclusion", "status", "sources", "recorded_in"],
+      "description": "Законченный блок обязан нести вывод, его статус, источники и место записи в базе знаний."
+     }
+    }
+   ]
+  },
+  "assessment": {
+   "type": "object",
+   "required": ["threshold", "status", "cases", "directions"],
+   "additionalProperties": false,
+   "properties": {
+    "note": {"type": "string"},
+    "threshold": {"type": "string", "minLength": 10},
+    "status": {
+     "enum": ["готово к проверке", "подтверждено ревью"],
+     "description": "«Подтверждено ревью» ставится только когда есть три кейса из разных семейств и отдельное ревью. Согласие второго ИИ доказательством не является."
+    },
+    "cases": {
+     "type": "array",
+     "items": {
+      "type": "object",
+      "required": ["case", "family", "scores", "reviewed_by"],
+      "properties": {
+       "case": {"type": "string", "minLength": 5},
+       "family": {"type": "string", "minLength": 2},
+       "scores": {"type": "object"},
+       "reviewed_by": {"type": "string", "minLength": 3}
+      }
+     }
+    },
+    "directions": {
+     "type": "object",
+     "required": ["technical_diagnostics", "demand_and_content", "analytics", "prioritisation", "experiment_design", "evidence"],
+     "additionalProperties": false,
+     "properties": {
+      "technical_diagnostics": {"$ref": "#/definitions/score"},
+      "demand_and_content": {"$ref": "#/definitions/score"},
+      "analytics": {"$ref": "#/definitions/score"},
+      "prioritisation": {"$ref": "#/definitions/score"},
+      "experiment_design": {"$ref": "#/definitions/score"},
+      "evidence": {"$ref": "#/definitions/score"}
+     }
+    }
+   },
+   "allOf": [
+    {
+     "if": {"properties": {"status": {"const": "подтверждено ревью"}}, "required": ["status"]},
+     "then": {
+      "properties": {"cases": {"minItems": 3}},
+      "description": "Порог требует трёх кейсов из РАЗНЫХ семейств; без них статус остаётся «готово к проверке»."
+     }
+    }
+   ]
+  },
+  "score": {
+   "anyOf": [
+    {"type": "null", "description": "направление не оценивалось"},
+    {"type": "integer", "minimum": 0, "maximum": 2}
+   ]
+  }
+ }
+}
