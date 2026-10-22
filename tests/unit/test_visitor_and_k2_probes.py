@@ -143,3 +143,61 @@ def test_перечень_витрин_совпадает_с_заданием():
     assert len(K2.ВИТРИНЫ) == 8
     assert set(K2.ВИТРИНЫ.values()) == {f"lords-{н}" for н in range(10, 18)}
     assert "lordfilm.group" in K2.ВИТРИНЫ and "lordserial.net.ru" in K2.ВИТРИНЫ
+
+
+def test_подборки_стали_третьей_начальной_страницей(monkeypatch):
+    """Страницы подборок прежде не брались этим проходом вовсе.
+
+    Измерено 22.10: перечень `/collections/` ведёт на 11–12 страниц, каждая
+    отвечает 200 с `index, follow` и 60 произведениями, а главная ссылается
+    на перечень, но не на сами подборки. Проход шёл по `/` и `/catalog/`, то
+    есть эти страницы оставались непроверенными (MOD-132).
+    """
+    страницы = {
+        "https://x.test/": '<a href="/collections/">подборки</a>',
+        "https://x.test/catalog/": '<a href="/title/a/">а</a>',
+        "https://x.test/collections/":
+            '<a href="/collection/recently_added/">новые</a>'
+            '<a href="/collection/top_rated/">оценки</a>',
+    }
+    monkeypatch.setattr(ПОСЕТИТЕЛЬ, "достать",
+                        lambda адрес, таймаут=40: (200, страницы.get(адрес, "")))
+    monkeypatch.setattr(ПОСЕТИТЕЛЬ, "код", lambda адрес, таймаут=30: 200)
+    итог = ПОСЕТИТЕЛЬ.проверить("x.test", 25)
+    assert итог["начальные_страницы"] == {"/": 200, "/catalog/": 200,
+                                          "/collections/": 200}
+    assert "/collection/recently_added/" in [
+        б["адрес"] for б in итог["битых"]] or итог["битых"] == []
+    assert итог["ссылок_найдено"] >= 4
+
+
+def test_отсутствие_перечня_подборок_проходу_не_мешает(monkeypatch):
+    """У семейств без подборок `/collections/` отвечает 404 — это не дефект."""
+    def достать(адрес, таймаут=40):
+        if адрес.endswith("/collections/"):
+            return 404, ""
+        return 200, '<a href="/catalog/">каталог</a>'
+
+    monkeypatch.setattr(ПОСЕТИТЕЛЬ, "достать", достать)
+    monkeypatch.setattr(ПОСЕТИТЕЛЬ, "код", lambda адрес, таймаут=30: 200)
+    итог = ПОСЕТИТЕЛЬ.проверить("x.test", 10)
+    assert итог["измерено"] is True
+    assert итог["начальные_страницы"]["/collections/"] == 404
+    assert итог["замечания"] == []
+
+
+def test_битая_ссылка_с_подборки_попадает_в_замечания(monkeypatch):
+    страницы = {
+        "https://x.test/": "",
+        "https://x.test/catalog/": "",
+        "https://x.test/collections/":
+            '<a href="/collection/recently/">обрубок</a>',
+    }
+    monkeypatch.setattr(ПОСЕТИТЕЛЬ, "достать",
+                        lambda адрес, таймаут=40: (200, страницы.get(адрес, "")))
+    monkeypatch.setattr(
+        ПОСЕТИТЕЛЬ, "код",
+        lambda адрес, таймаут=30: 404 if "/collection/recently/" in адрес else 200)
+    итог = ПОСЕТИТЕЛЬ.проверить("x.test", 10)
+    assert [б["адрес"] for б in итог["битых"]] == ["/collection/recently/"]
+
