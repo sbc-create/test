@@ -10,6 +10,8 @@ data/media/images.json.
         --kind photo --alt "Сырники с ежевикой на тарелке" --source "съёмка владельца 2026-10" \\
         --license "собственность владельца сайта" [--author "…"]
     python3 -m fooddaily.media missing      # рецепты без изображения
+    python3 -m fooddaily.media jobs         # файл заданий data/media/image-jobs.json
+    python3 -m fooddaily.media intake --dir <каталог приёма> --tool "<генератор, версия>" --license "<основание>"
 """
 
 from __future__ import annotations
@@ -62,6 +64,90 @@ def add(a: argparse.Namespace) -> dict:
     return reg["items"][a.slug]
 
 
+def _recipe_bits(r) -> dict:
+    steps = r.d["steps"]
+    return {
+        "recipe_id": r.raw["content_id"],
+        "ingredients": [i.name for i, _ in r.ingredients],
+        "last_step": steps[-1]["text"] if steps else "",
+        "cue": next((x["readiness_cue"] for x in reversed(steps) if x.get("readiness_cue")), ""),
+        "group": r.category_label,
+    }
+
+
+JOBS = ROOT / "data" / "media" / "image-jobs.json"
+
+
+def job(site: Site, r) -> dict:
+    """Задание на изображение блюда — только из состава и шагов опубликованного рецепта, без домыслов."""
+    b = _recipe_bits(r)
+    cue = b["cue"].rstrip(".")
+    look = b["last_step"] + (f" Готовность: {cue[:1].lower()}{cue[1:]}." if cue else "")
+    main = ", ".join(n.lower() for n in b["ingredients"][:8])
+    prompt = (
+        f"Реалистичная фотография домашнего блюда «{r.title}» ({b['group'].lower()}). "
+        f"Блюдо готово и подано так, как сказано в последнем шаге рецепта: {look} "
+        f"Состав по рецепту: {main}. В кадре только то, что входит в рецепт, без посторонних продуктов и гарниров. "
+        "Естественный дневной свет, спокойный светлый фон, ракурс около 45°, кадр 4:3, блюдо по центру; "
+        "без текста, надписей, логотипов, рук и людей."
+    )
+    return {
+        "site": site.cfg["site_id"],
+        "recipe_id": b["recipe_id"],
+        "slug": r.slug,
+        "url": r.url,
+        "title": r.title,
+        "ingredients": b["ingredients"],
+        "look": look,
+        "prompt": prompt,
+        "file": f"{r.slug}.jpg",
+        "alt": f"{r.title}: готовое блюдо",
+        "kind": "illustration",
+    }
+
+
+def jobs() -> dict:
+    """Файл заданий для рецептов без изображения: data/media/image-jobs.json (перезаписывается целиком)."""
+    site = Site()
+    out = {
+        "site": site.cfg["site_id"],
+        "ratio": f"{RATIO[0]}:{RATIO[1]}",
+        "min_width": WIDTHS[-1],
+        "note": "Сгенерированное изображение публикуется как illustration (подпись «Иллюстрация»), не как фото.",
+        "jobs": [job(site, r) for r in site.recipes if not r.image],
+    }
+    JOBS.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n")
+    return {"jobs": len(out["jobs"]), "file": str(JOBS)}
+
+
+def intake(a: argparse.Namespace) -> dict:
+    """Приём готовых файлов по файлу заданий: <dir>/<file> → add(kind=illustration). Инструмент и основание
+    использования обязательны — без них BLOCKED_INPUT, значения по умолчанию не подставляются."""
+    for k in ("tool", "license"):
+        if not (getattr(a, k) or "").strip():
+            raise SystemExit(f"BLOCKED_INPUT: --{k} обязателен (чем создано и на каком основании используется)")
+    spec = json.loads(JOBS.read_text())
+    done, missing = [], []
+    for j in spec["jobs"]:
+        f = Path(a.dir) / j["file"]
+        if not f.is_file():
+            missing.append(j["file"])
+            continue
+        add(
+            argparse.Namespace(
+                slug=j["slug"],
+                file=f,
+                kind="illustration",
+                alt=j["alt"],
+                author=None,
+                source=f"сгенерировано: {a.tool.strip()}; задание {JOBS.name}, {j['recipe_id']}",
+                license=a.license.strip(),
+            )
+        )
+        done.append(j["slug"])
+    return {"added": done, "missing": missing}
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="food-daily media")
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -74,9 +160,18 @@ def main(argv=None) -> int:
     p.add_argument("--license", required=True)
     p.add_argument("--author")
     sub.add_parser("missing")
+    sub.add_parser("jobs")
+    p = sub.add_parser("intake")
+    p.add_argument("--dir", required=True, type=Path)
+    p.add_argument("--tool")
+    p.add_argument("--license")
     a = ap.parse_args(argv)
     if a.cmd == "add":
         print(json.dumps(add(a), ensure_ascii=False))
+    elif a.cmd == "jobs":
+        print(json.dumps(jobs(), ensure_ascii=False))
+    elif a.cmd == "intake":
+        print(json.dumps(intake(a), ensure_ascii=False))
     else:
         site = Site()
         miss = [r.slug for r in site.recipes if not r.image]
