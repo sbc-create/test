@@ -2,7 +2,7 @@
 
 import re
 
-from fooddaily.views import TAGS
+from fooddaily.views import BASIC, norm, product_of
 
 
 def get(app, path, q=None):
@@ -16,23 +16,41 @@ def canon(html):
 
 def test_fridge_ranks_by_matches_then_missing(site):
     rows = site.fridge(["kurica", "ris"])
-    assert rows and sorted(rows[0][1]) == ["kurica", "ris"]
-    got = [len(g) for _, g, _ in rows]
+    assert rows and rows[0]["keys"] == ["kurica", "ris"]
+    got = [len(m["keys"]) for m in rows]
     assert got == sorted(got, reverse=True)
-    for r, g, miss in rows:
-        prods = {t for t in r.tags if TAGS[t][1] == "product"}
-        assert set(g) | set(miss) == prods and set(g) <= {"kurica", "ris"}
+    for m in rows:
+        # каждая строка полного состава учтена ровно один раз: есть / понадобится / базовое
+        names = [i.name for i, _ in m["r"].ingredients]
+        assert sorted(m["got"] + m["need"] + m["basic"]) == sorted(names) and m["total"] == len(names)
+        assert all(product_of(n) in ("kurica", "ris") for n in m["got"])
     assert site.fridge([]) == []
+
+
+def test_fridge_compares_full_composition_not_tags(site):
+    """Творог, кефир и молоко дома не означают, что для найденного блюда есть всё: остальной состав — «понадобится»."""
+    rows = site.fridge(["tvorog", "kefir", "moloko"])
+    assert rows and all(m["need"] for m in rows)
+    bliny = next(m for m in rows if "кефир" in m["r"].title.lower() and "молок" in m["r"].title.lower())
+    assert {n.lower() for n in bliny["got"]} >= {"молоко", "кефир"} and bliny["need"]
+    # «куриное яйцо» — это яйца, не курица; «творожная масса» — не творог; соль и масло — базовое, не «есть»
+    assert product_of("Куриное яйцо") == "yajca" and product_of("Куриные бёдра") == "kurica"
+    assert product_of("Творожная масса (сладкий сырок)") is None and product_of("Рисовая мука") is None
+    assert all(not BASIC.search(norm(n)) or product_of(n) for m in rows for n in m["got"])
 
 
 def test_fridge_page_states(app):
     st, html, _ = get(app, "/iz-holodilnika/")
     assert st == 200 and canon(html) == app.site.abs("/iz-holodilnika/") and 'class="match"' not in html
     assert html.count('name="est"') == len(app.site.fridge_products())
+    assert html.count('class="pick__group"') >= 3 and "больше ничего не нужно" not in html
     st, html, _ = get(app, "/iz-holodilnika/", {"est": ["kurica"]})
     assert st == 200 and canon(html) is None and 'class="match"' in html and "noindex" in html
-    assert html.count('class="match__row"') == len(app.site.tag("kurica"))
-    assert 'value="kurica" checked' in html
+    assert html.count('class="match__row') == len(app.site.fridge(["kurica"]))
+    assert 'value="kurica" checked' in html and "Понадобится:" in html
+    st, html, _ = get(app, "/iz-holodilnika/", {"est": ["kurica", "ris"]})
+    assert 'class="pchip" href="/iz-holodilnika/?est=ris"' in html and 'href="/iz-holodilnika/?est=kurica"' in html
+    assert "Сбросить всё" in html
     st, html, _ = get(app, "/iz-holodilnika/", {"est": ["kvantovyj"]})
     assert st == 400 and 'role="alert"' in html and 'class="match"' not in html
 

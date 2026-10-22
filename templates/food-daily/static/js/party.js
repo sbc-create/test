@@ -207,8 +207,28 @@
     f.addEventListener("submit", function (e) {
       if (!count()) { e.preventDefault(); if (hint) hint.textContent = "Отметьте хотя бы один продукт"; boxes[0].focus(); }
     });
-    var clr = f.querySelector("[data-fridge-clear]");
-    if (clr) clr.addEventListener("click", function () { store.set(FRIDGE, []); });
+    var find = f.querySelector("[data-fridge-find]"), none = f.querySelector("[data-fridge-none]");
+    if (find) {
+      find.hidden = false;
+      find.querySelector("input").addEventListener("input", function () {
+        var q = this.value.trim().toLowerCase().replace(/ё/g, "е"), shown = 0;
+        f.querySelectorAll(".pick__group").forEach(function (g) {
+          var n = 0;
+          g.querySelectorAll(".pick__list li").forEach(function (li) {
+            var hit = !q || li.textContent.toLowerCase().replace(/ё/g, "е").indexOf(q) >= 0;
+            li.hidden = !hit; if (hit) n++;
+          });
+          g.hidden = !n; shown += n;
+        });
+        if (none) none.hidden = shown > 0;
+      });
+    }
+    document.querySelectorAll("[data-fridge-clear]").forEach(function (clr) {
+      clr.addEventListener("click", function () { store.set(FRIDGE, []); });
+    });
+    document.querySelectorAll(".pchip").forEach(function (a) {  // убрать один продукт — запомнить остальные
+      a.addEventListener("click", function () { store.set(FRIDGE, new URLSearchParams(a.search).getAll("est")); });
+    });
   });
 
   syncFav();

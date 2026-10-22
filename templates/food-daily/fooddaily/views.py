@@ -164,6 +164,57 @@ def word_matches(w: str, tokens: frozenset[str]) -> bool:
     return False
 
 
+# Подбор «что есть дома»: продукт сравнивается со ВСЕМ составом рецепта (по названию строки), а не с темами.
+# (ключ: название, группа, выражение по нормализованному названию строки состава)
+PANTRY_GROUPS = ("Молочное и яйца", "Мясо и рыба", "Крупы, мука, макароны", "Овощи, грибы, зелень")
+PRODUCTS = {
+    "tvorog": ("Творог", 0, r"\bтворог\b"),
+    "kefir": ("Кефир", 0, r"\bкефир"),
+    "moloko": ("Молоко", 0, r"^молоко\b"),
+    "smetana": ("Сметана", 0, r"\bсметан"),
+    "slivki": ("Сливки", 0, r"^сливки\b"),
+    "slivochnoe-maslo": ("Сливочное масло", 0, r"\bсливочное масло"),
+    "syr": ("Сыр", 0, r"\bсыр\b|\bсырки\b|брынз"),
+    "yajca": ("Яйца", 0, r"\bяйц|\bяиц|\bяичн|\bжелтк|\bжелток"),
+    "kurica": ("Курица", 1, r"\bкурин|\bкуриц"),
+    "svinina": ("Свинина", 1, r"\bсвинин"),
+    "farsh": ("Фарш", 1, r"\bфарш"),
+    "bekon": ("Бекон", 1, r"\bбекон"),
+    "ryba": ("Рыба", 1, r"\bрыб|\bминтай"),
+    "ris": ("Рис", 2, r"^рис$"),
+    "grechka": ("Гречка", 2, r"гречнев|гречк"),
+    "pshyono": ("Пшено", 2, r"^пшено\b"),
+    "chechevica": ("Чечевица", 2, r"чечевиц"),
+    "makarony": ("Макароны, лапша", 2, r"макарон|\bлапш"),
+    "muka": ("Пшеничная мука", 2, r"(?:пшеничн|блинн)\w* мук"),
+    "manka": ("Манная крупа", 2, r"\bманн"),
+    "kartofel": ("Картофель", 3, r"картоф"),
+    "luk": ("Лук репчатый", 3, r"^(?:репчатый |красный )?лук$"),
+    "morkov": ("Морковь", 3, r"^морковь$"),
+    "kapusta": ("Капуста", 3, r"белокочанн"),
+    "cvetnaya-kapusta": ("Цветная капуста", 3, r"цветная капуста"),
+    "pomidory": ("Помидоры", 3, r"помидор"),
+    "ogurcy": ("Огурцы", 3, r"\bогур"),
+    "sladkij-perec": ("Сладкий перец", 3, r"сладкий перец"),
+    "tykva": ("Тыква", 3, r"тыкв"),
+    "griby": ("Грибы", 3, r"гриб|шампиньон"),
+    "chesnok": ("Чеснок", 3, r"^чеснок"),
+    "zelen": ("Зелень", 3, r"зелень|укроп|петрушк|зеленый лук"),
+}
+PRODUCT_RX = {k: re.compile(v[2]) for k, v in PRODUCTS.items()}
+# Базовое: обычно есть дома, но в «понадобится» не смешивается и показывается отдельно — проверить самому
+BASIC = re.compile(
+    r"^(?:соль|вода|сахар|сода|крахмал|уксус|перец)$|\bсоль\b|растительное масло|подсолнечное масло|оливковое масло"
+    r"|молот|дробл|душист|\bзира\b|куркум|паприк|приправ|прованск|для подачи"
+)
+
+
+def product_of(name: str) -> str | None:
+    """Ключ продукта из списка подбора для строки состава (None — не из списка)."""
+    n = norm(name)
+    return next((k for k, rx in PRODUCT_RX.items() if rx.search(n)), None)
+
+
 def fmt_qty(q: float | None) -> str:
     if q is None:
         return ""
@@ -567,26 +618,43 @@ class Site:
     def product_options(self) -> list[tuple[str, str]]:
         return [(t, TAGS[t][0]) for t, items in self.tag_pages().items() if TAGS[t][1] == "product"]
 
-    def fridge_products(self) -> list[tuple[str, str, int]]:
-        """Все продукты-темы, которые есть хотя бы в одном рецепте: (ключ, название, число рецептов)."""
-        out = []
-        for key, (label, kind) in TAGS.items():
-            n = len(self.tag(key)) if kind == "product" else 0
-            if n:
-                out.append((key, label, n))
-        return out
+    def fridge_products(self) -> list[tuple[str, str, int, int]]:
+        """Продукты подбора, которые есть в составе хотя бы одного рецепта: (ключ, название, группа, число рецептов)."""
+        n = {k: 0 for k in PRODUCTS}
+        for r in self.recipes:
+            for k in {product_of(i.name) for i, _ in r.ingredients} - {None}:
+                n[k] += 1
+        return [(k, label, g, n[k]) for k, (label, g, _) in PRODUCTS.items() if n[k]]
 
-    def fridge(self, have: list[str]) -> list[tuple[Recipe, list[str], list[str]]]:
-        """Рецепты, где есть хотя бы один выбранный продукт: (рецепт, есть, не хватает) — по продуктам-темам рецепта.
-        Сначала больше совпадений, затем меньше недостающего, затем быстрее."""
+    def fridge(self, have: list[str]) -> list[dict]:
+        """Рецепты, в составе которых есть хотя бы один выбранный продукт. Сравнивается каждая строка состава:
+        есть (выбранные продукты), понадобится (остальное), базовое (соль, масло, специи — показывается отдельно).
+        Сначала больше совпавших продуктов, затем меньше недостающего, затем быстрее."""
         want = set(have)
         rows = []
         for r in self.recipes:
-            prods = [t for t in r.tags if TAGS.get(t, ("", ""))[1] == "product"]
-            got = [t for t in prods if t in want]
+            got, need, basic, keys = [], [], [], []
+            for i, _ in r.ingredients:
+                k = product_of(i.name)
+                if k in want:
+                    got.append(i.name)
+                    keys.append(k)
+                elif k is None and BASIC.search(norm(i.name)):
+                    basic.append(i.name)
+                else:
+                    need.append(i.name)
             if got:
-                rows.append((r, got, [t for t in prods if t not in want]))
-        rows.sort(key=lambda x: (-len(x[1]), len(x[2]), x[0].total_minutes or 10**6, x[0].title))
+                rows.append(
+                    {
+                        "r": r,
+                        "got": got,
+                        "need": need,
+                        "basic": basic,
+                        "keys": sorted(set(keys)),
+                        "total": len(r.ingredients),
+                    }
+                )
+        rows.sort(key=lambda x: (-len(x["keys"]), len(x["need"]), x["r"].total_minutes or 10**6, x["r"].title))
         return rows
 
     def party(self, slugs: list[str], guests: int) -> dict:

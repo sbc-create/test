@@ -24,7 +24,7 @@ from pathlib import Path
 import jinja2
 
 from . import seo
-from .views import CATEGORIES, SEASONAL, TAGS, TIME_BUCKETS, Site, ru_date
+from .views import CATEGORIES, PANTRY_GROUPS, PRODUCTS, SEASONAL, TAGS, TIME_BUCKETS, Site, ru_date
 
 ROOT = Path(__file__).resolve().parents[1]
 STATIC = ROOT / "static"
@@ -503,7 +503,7 @@ class App:
         с параметрами — noindex без canonical, неизвестные продукты — 400."""
         s = self.site
         options = s.fridge_products()
-        known = {k for k, _, _ in options}
+        known = {k for k, *_ in options}
         raw = [x.strip() for x in query.get("est", []) if x.strip()][:30]
         have = [k for k in dict.fromkeys(raw) if k in known]
         crumbs = [("Главная", "/"), ("Из холодильника", "/iz-holodilnika/")]
@@ -522,10 +522,11 @@ class App:
             if not have:
                 error = "Таких продуктов в рецептах нет. Отметьте продукты из списка."
             else:
-                meta.title = "Подбор: " + ", ".join(TAGS[k][0].lower() for k in have)
-        label = lambda keys: [TAGS[k][0].lower() for k in keys]  # noqa: E731
-        rows = [(r, label(got), label(miss)) for r, got, miss in s.fridge(have)] if have else []
-        body = self.render("fridge.html", meta, options=options, have=have, rows=rows, error=error)
+                meta.title = "Подбор: " + ", ".join(PRODUCTS[k][0].lower() for k in have)
+        rows = s.fridge(have) if have else []
+        groups = [(g, [o for o in options if o[2] == i]) for i, g in enumerate(PANTRY_GROUPS)]
+        picked = [(k, PRODUCTS[k][0], urllib.parse.urlencode([("est", x) for x in have if x != k])) for k in have]
+        body = self.render("fridge.html", meta, groups=groups, have=have, picked=picked, rows=rows, error=error)
         return (400 if error else 200), body, {}
 
     def not_found(self) -> tuple[int, str, dict]:
