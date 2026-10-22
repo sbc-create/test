@@ -8294,8 +8294,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site. | 22.10 14:07Z: удержание снято — T309 live_verified."
+      "status": "live_verified",
+      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site. | 22.10 14:07Z: удержание снято — T309 live_verified. | 22.10 14:54Z: исполнитель 20261022T142036Z-126619 VERIFIED (93348d2); в условиях CI rc 0; CI success; выпуск releases/93348d2ba3a6. Живая сверка 14:54:25Z: «91 Days» без скобок, пустых «» нет (meta из фактов); описание «Нии Листон» (32 % поиска домена) прежнее; жанров в карте 55; rc 0 на установленном дереве."
     },
     {
       "id": "T320",
@@ -8320,10 +8320,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "owner_action": "Нет действия владельца: по очереди после live_verified T319 (тот же репозиторий). Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "live_verified T319",
-      "evidence": "22.10 14:07Z wt-portable-site-cell-01-dc: найдено живой сверкой T309; ночью «Записи самого свежего года» ошибочно отнесено к данным — на самом деле литерал в коде animedia-icu."
+      "status": "queued",
+      "evidence": "22.10 14:07Z wt-portable-site-cell-01-dc: найдено живой сверкой T309; ночью «Записи самого свежего года» ошибочно отнесено к данным — на самом деле литерал в коде animedia-icu. | 22.10 14:54Z: удержание снято — T319 live_verified."
     }
   ]
 }
