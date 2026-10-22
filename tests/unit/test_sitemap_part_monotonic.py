@@ -96,3 +96,52 @@ def test_путь_снимка_зависит_от_адреса():
 def test_исходы_различимы():
     assert len({модуль.ПЕРВЫЙ, модуль.НАДМНОЖЕСТВО, модуль.ПОТЕРИ,
                 модуль.НЕ_ИЗМЕРЕНО}) == 4
+
+
+# --- объединение частей ----------------------------------------------------
+
+def test_части_отбираются_по_префиксу_имени_файла(monkeypatch):
+    """Части режутся по 50 000, и адрес переезжает между ними при росте.
+
+    Эту ошибку нашла соседняя линия на моей же мере: сравнение ОДНОЙ части
+    объявило переезд потерей («выпало 2, добавилось 2» у strana-chudes), а по
+    объединению частей потерь не было вовсе.
+    """
+    индекс = """<sitemapindex>
+      <sitemap><loc>https://d/sitemap/episodes.xml</loc></sitemap>
+      <sitemap><loc>https://d/sitemap/episodes-2.xml</loc></sitemap>
+      <sitemap><loc>https://d/sitemap/episodes-3.xml</loc></sitemap>
+      <sitemap><loc>https://d/sitemap/titles.xml</loc></sitemap>
+      <sitemap><loc>https://d/sitemap/seasons.xml</loc></sitemap>
+    </sitemapindex>"""
+
+    class Ответ:
+        def __init__(self, текст): self.текст = текст
+
+    def поддельный_запуск(аргв, **кв):
+        цель = аргв[аргв.index("-o") + 1] if "-o" in аргв else None
+        if цель:
+            pathlib.Path(цель).write_text(индекс, encoding="utf-8")
+        return Ответ("")
+
+    monkeypatch.setattr(модуль.subprocess, "run", поддельный_запуск)
+    части = модуль.части_индекса("https://d/sitemap.xml", "episodes")
+    assert части == ["https://d/sitemap/episodes.xml",
+                     "https://d/sitemap/episodes-2.xml",
+                     "https://d/sitemap/episodes-3.xml"]
+
+
+def test_префикс_не_захватывает_чужие_части(monkeypatch):
+    индекс = ("<sitemapindex><sitemap><loc>https://d/sitemap/titles.xml</loc>"
+              "</sitemap><sitemap><loc>https://d/sitemap/seasons.xml</loc>"
+              "</sitemap></sitemapindex>")
+
+    def поддельный_запуск(аргв, **кв):
+        цель = аргв[аргв.index("-o") + 1] if "-o" in аргв else None
+        if цель:
+            pathlib.Path(цель).write_text(индекс, encoding="utf-8")
+        return None
+
+    monkeypatch.setattr(модуль.subprocess, "run", поддельный_запуск)
+    assert модуль.части_индекса("https://d/sitemap.xml", "episodes") == []
+

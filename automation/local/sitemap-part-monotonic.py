@@ -20,9 +20,21 @@
 * ``ПОТЕРИ``          — адреса исчезли: именно это ловит проверка;
 * ``НЕ ИЗМЕРЕНО``     — часть не прочитана.
 
+ВАЖНО, И ЭТО НАШЛА СОСЕДНЯЯ ЛИНИЯ НА МОЕЙ ЖЕ МЕРЕ: части режутся по 50 000
+адресов, поэтому адрес переезжает из `episodes.xml` в `episodes-2.xml` при
+росте, и сравнение ОДНОЙ части объявляет такой переезд потерей. Её проверка на
+`yummyani.biz` по одной части дала «выпало 2, добавилось 2» (работа
+`strana-chudes`), а по объединению всех частей — надмножество без потерь
+(123 645 → 123 647). Поэтому там, где частей с одним префиксом больше одной,
+сравнивать нужно ОБЪЕДИНЕНИЕ: для этого есть `--index` и `--prefix`.
+
+    # одна часть (годится, когда она одна — например у yummyani.site)
     python3 automation/local/sitemap-part-monotonic.py \\
         --url https://yummyani.site/sitemap/episodes.xml
-    python3 automation/local/sitemap-part-monotonic.py --url … --json
+
+    # объединение всех частей с префиксом (biz, org, 7.* — там их три)
+    python3 automation/local/sitemap-part-monotonic.py \\
+        --index https://yummyani.biz/sitemap.xml --prefix episodes
 
 Коды: 0 — надмножество или первый снимок; 1 — потери; 2 — не измерено.
 """
@@ -82,14 +94,45 @@ def адреса_части(url: str, таймаут: int = 250) -> set[str]:
     return {а.strip() for а in re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", текст)}
 
 
+def части_индекса(индекс_url: str, префикс: str) -> list[str]:
+    """Адреса частей индекса, чьё имя файла начинается с префикса.
+
+    Нужна потому, что части режутся по 50 000 адресов: `episodes.xml`,
+    `episodes-2.xml`, `episodes-3.xml` — это ОДНА поверхность, разрезанная
+    пределом, и сравнивать их по отдельности нельзя.
+    """
+    with tempfile.NamedTemporaryFile(suffix=".xml") as б:
+        subprocess.run(["curl", "-sSL", "--max-time", "120",
+                        "-o", б.name, индекс_url], capture_output=True)
+        текст = open(б.name, encoding="utf-8", errors="replace").read()
+    все = [а.strip() for а in re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", текст)]
+    return [а for а in все
+            if а.rstrip("/").split("/")[-1].startswith(префикс)]
+
+
+def объединение(адреса_частей: list[str]) -> set[str]:
+    итог: set[str] = set()
+    for ч in адреса_частей:
+        итог |= адреса_части(ч)
+    return итог
+
+
 def путь_снимка(url: str) -> pathlib.Path:
     ключ = hashlib.sha256(url.encode()).hexdigest()[:16]
     имя = re.sub(r"[^a-zA-Z0-9._-]+", "-", url.split("://", 1)[-1])[:60]
     return СНИМКИ / f"{имя}-{ключ}.json"
 
 
-def проверить(url: str) -> dict:
-    текущие = адреса_части(url)
+def проверить(url: str, *, индекс: str = "", префикс: str = "") -> dict:
+    if индекс and префикс:
+        части = части_индекса(индекс, префикс)
+        if not части:
+            return {"url": f"{индекс}#{префикс}", "исход": НЕ_ИЗМЕРЕНО,
+                    "почему": f"в индексе нет частей с префиксом «{префикс}»"}
+        текущие = объединение(части)
+        url = f"{индекс}#{префикс}"
+    else:
+        текущие = адреса_части(url)
     if not текущие:
         return {"url": url, "исход": НЕ_ИЗМЕРЕНО,
                 "почему": "часть не прочитана или пуста"}
@@ -114,11 +157,20 @@ def main(аргв: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(
         description=__doc__,
         formatter_class=argparse.RawDescriptionHelpFormatter)
-    р.add_argument("--url", action="append", required=True)
+    р.add_argument("--url", action="append", default=[])
+    р.add_argument("--index", default="",
+                   help="адрес индекса карты; вместе с --prefix сравнивает"
+                        " ОБЪЕДИНЕНИЕ всех частей с этим префиксом")
+    р.add_argument("--prefix", default="",
+                   help="префикс имени части, например episodes")
     р.add_argument("--json", action="store_true")
     а = р.parse_args(аргв)
 
+    if not а.url and not (а.index and а.prefix):
+        р.error("нужен либо --url, либо пара --index и --prefix")
     итоги = [проверить(u) for u in а.url]
+    if а.index and а.prefix:
+        итоги.append(проверить("", индекс=а.index, префикс=а.prefix))
     if а.json:
         print(json.dumps({"частей": len(итоги), "части": итоги},
                          ensure_ascii=False, indent=2))
