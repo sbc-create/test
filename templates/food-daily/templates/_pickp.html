@@ -2,7 +2,7 @@
 <form class="pform" action="/na-kompaniyu/" method="get" data-p-form>
   <p class="pform__guests"><label for="gosti">Сколько гостей</label> <input id="gosti" name="gosti" type="number" inputmode="numeric" min="1" max="20" value="{{ guests }}" required></p>
   {% for key, (label, _) in CATEGORIES.items() %}{% set items = site.category(key) %}{% if items %}
-  <fieldset><legend>{{ label }}</legend><ul class="ppick">{% for r in items %}<li><label><input type="checkbox" name="r" value="{{ r.slug }}"{% if r.slug in picked %} checked{% endif %}><span><b>{{ r.title }}</b><small>рецепт на {{ r.servings }} порц.{% if r.time_label %} · {{ r.time_label }}{% endif %}</small></span></label></li>{% endfor %}</ul></fieldset>
+  <fieldset><legend>{{ label }}</legend><ul class="ppick">{% for r in items %}<li><label><input type="checkbox" name="r" value="{{ r.slug }}"{% if r.slug in picked %} checked{% endif %}><span><b>{{ r.title }}</b><small>{% if r.yield_n %}рецепт на {{ r.yield_n }} порц.{% else %}выход не указан{% endif %}{% if r.time_label %} · {{ r.time_label }}{% endif %}</small></span></label></li>{% endfor %}</ul></fieldset>
   {% endif %}{% endfor %}
   <p class="pform__go"><button type="submit" class="btn">Посчитать продукты</button> <span data-p-count aria-live="polite"></span></p>
 </form>

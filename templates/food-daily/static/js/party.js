@@ -71,11 +71,13 @@
   if (recipe) {
     var base = parseInt(recipe.getAttribute("data-servings"), 10) || 0;
     var ctrl = recipe.querySelector("[data-servings-control]");
+    // выход не указан — пересчёт кратный от рецепта: ×½ … ×4
+    var MULT = [0.5, 1, 1.5, 2, 3, 4], mi = 1;
     var cur = base;
     function rescale() {
-      factor = base ? cur / base : 1;
-      recipe.querySelector("[data-servings-out]").textContent = cur;
-      recipe.querySelector("[data-servings-word]").textContent = plural(cur, "порция", "порции", "порций");
+      factor = base ? cur / base : MULT[mi];
+      recipe.querySelector("[data-servings-out]").textContent = base ? cur : "×" + fmt(MULT[mi]);
+      recipe.querySelector("[data-servings-word]").textContent = base ? plural(cur, "порция", "порции", "порций") : "от рецепта";
       recipe.querySelectorAll(".ing").forEach(function (li) {
         if (li.getAttribute("data-scalable") !== "1") return;
         var q = parseFloat(li.getAttribute("data-qty")), qm = parseFloat(li.getAttribute("data-qmax"));
@@ -83,11 +85,13 @@
         li.querySelector(".ing__amount").textContent = (txt + " " + li.getAttribute("data-unit")).trim();
       });
     }
-    if (base && ctrl) {
+    if (ctrl) {
       ctrl.hidden = false;
       ctrl.addEventListener("click", function (e) {
         var b = e.target.closest("[data-step]"); if (!b) return;
-        cur = Math.min(40, Math.max(1, cur + parseInt(b.getAttribute("data-step"), 10)));
+        var d = parseInt(b.getAttribute("data-step"), 10);
+        if (base) cur = Math.min(40, Math.max(1, cur + d));
+        else mi = Math.min(MULT.length - 1, Math.max(0, mi + d));
         rescale();
       });
       rescale();

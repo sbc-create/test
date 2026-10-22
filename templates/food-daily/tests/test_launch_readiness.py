@@ -224,3 +224,18 @@ def test_search_matches_word_forms_not_word_middles(app):
     assert titles("суп с курицей") == titles("суп курицей")
     code, html, _ = app.route("/poisk/", {"q": ["нетакогоблюда"]})
     assert code == 200 and "ничего нет" in html
+
+
+def test_default_one_serving_is_not_shown_as_yield(app):
+    """«1 порция» у источника — не выход (суп из 500 г тыквы): ни на карточке, ни в разметке, пересчёт кратный."""
+    ones = [r for r in app.site.recipes if r.servings == 1]
+    assert ones and all(r.yield_n is None for r in ones)
+    for r in ones:
+        _, html, _ = app.route(r.url, {})
+        assert 'data-servings="0"' in html and "Выход в рецепте не указан" in html and '"recipeYield"' not in html
+        assert "<dt>Порции</dt>" not in html
+    _, html, _ = app.route("/recepty/", {})
+    assert "1 порция" not in html
+    p = app.site.party([ones[0].slug], 8)  # на компанию: количества как в рецепте, не ×8
+    src = {(i.name.lower(), i.unit): i.quantity for i, _ in ones[0].ingredients if i.quantity and i.unit != "to_taste"}
+    assert all(abs(src[(it["name"].lower(), it["unit"])] - it["q"]) < 1e-9 for it in p["items"])

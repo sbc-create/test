@@ -45,7 +45,7 @@
 {% if table %}
 <div class="tablewrap" tabindex="0" role="region" aria-label="Таблица рецептов"><table class="cat">
   <thead><tr><th scope="col">Рецепт</th><th scope="col">Раздел</th><th scope="col">Время</th><th scope="col">Порции</th></tr></thead>
-  <tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a><span class="cat__ing">{{ r.key_ingredients|join(' · ') }}</span></th><td data-label="Раздел">{{ r.category_label }}</td><td data-label="Время">{{ r.time_label or '—' }}</td><td data-label="Порции">{{ r.servings or '—' }}</td></tr>{% endfor %}</tbody>
+  <tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a><span class="cat__ing">{{ r.key_ingredients|join(' · ') }}</span></th><td data-label="Раздел">{{ r.category_label }}</td><td data-label="Время">{{ r.time_label or '—' }}</td><td data-label="Порции">{{ r.yield_n or '—' }}</td></tr>{% endfor %}</tbody>
 </table></div>
 {% else %}
 {{ grid(items, 'h2') }}

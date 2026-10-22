@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid, picture %}
 {% block main %}
-<article class="recipe" data-recipe="{{ r.slug }}" data-servings="{{ r.servings }}">
+<article class="recipe" data-recipe="{{ r.slug }}" data-servings="{{ r.yield_n or 0 }}">
   <header class="recipe__head">
     <p class="recipe__kicker"><a href="/recepty/{{ r.category }}/">{{ r.category_label }}</a></p>
     <h1 class="recipe__title">{{ r.title }}</h1>
     <p class="recipe__intro">{{ r.d.intro }}</p>
     <dl class="facts">
       {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
-      <div><dt>Порции</dt><dd>{{ r.servings }}</dd></div>
+      {% if r.yield_n %}<div><dt>Порции</dt><dd>{{ r.yield_n }}</dd></div>{% endif %}
       <div><dt>Продукты</dt><dd>{{ r.ingredients|length }}</dd></div>
       <div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>
     </dl>
@@ -32,11 +32,11 @@
       <div class="ingredients__head">
         <h2 id="ing-h">Ингредиенты</h2>
         <div class="servings" data-servings-control hidden>
-          <button type="button" data-step="-1" aria-label="Меньше порций">−</button>
-          <output aria-live="polite"><b data-servings-out>{{ r.servings }}</b> <span data-servings-word>порц.</span></output>
-          <button type="button" data-step="1" aria-label="Больше порций">+</button>
+          <button type="button" data-step="-1" aria-label="{{ 'Меньше порций' if r.yield_n else 'Меньше' }}">−</button>
+          <output aria-live="polite"><b data-servings-out>{{ r.yield_n or '×1' }}</b> <span data-servings-word>{{ 'порц.' if r.yield_n else 'от рецепта' }}</span></output>
+          <button type="button" data-step="1" aria-label="{{ 'Больше порций' if r.yield_n else 'Больше' }}">+</button>
         </div>
-        <p class="servings-static">На {{ r.servings }} порц.</p>
+        <p class="servings-static">{% if r.yield_n %}На {{ r.yield_n }} порц.{% else %}Выход в рецепте не указан{% endif %}</p>
       </div>
       <ul class="ing-list">
         {% for i, group in r.ingredients %}

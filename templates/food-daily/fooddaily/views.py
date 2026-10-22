@@ -295,6 +295,12 @@ class Recipe:
         return self.f["servings"]
 
     @property
+    def yield_n(self) -> int | None:
+        """Выход в порциях для показа и пересчёта. «1 порция» у источника — значение по умолчанию (суп из 500 г тыквы
+        и 4 картофелин, шаурма из двух лавашей): выход считается не указанным, пересчёт — кратный (×½, ×2)."""
+        return self.servings if self.servings and self.servings > 1 else None
+
+    @property
     def total_minutes(self):
         return self.f["total_minutes"]
 
@@ -664,7 +670,7 @@ class Site:
         rows: dict = {}
         loose: dict = {}
         for r in rs:
-            k = guests / r.servings if r.servings else None
+            k = guests / r.yield_n if r.yield_n else 1  # выход не указан — количества как в рецепте
             for i, _ in r.ingredients:
                 key = norm(i.name)
                 if i.unit == "to_taste" or i.quantity is None or k is None:

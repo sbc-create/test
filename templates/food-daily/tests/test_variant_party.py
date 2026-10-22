@@ -32,7 +32,7 @@ def test_scaling_follows_recipe_rules(site):
             r = site.by_slug[slug]
             for i, _ in r.ingredients:
                 if i.name.lower() == it["name"].lower() and i.unit == it["unit"] and i.quantity is not None:
-                    total += i.quantity * (guests / r.servings if i.scalable else 1)
+                    total += i.quantity * (guests / r.yield_n if i.scalable and r.yield_n else 1)
         assert abs(total - it["q"]) < 1e-6, it["name"]
 
 

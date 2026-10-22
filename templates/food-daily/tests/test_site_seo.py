@@ -76,7 +76,7 @@ def test_recipe_jsonld_matches_visible(app, site):
             assert (
                 step["text"].replace('"', "&#34;")[:40] in html.replace("&quot;", "&#34;") or step["text"][:40] in html
             )
-        assert ld["recipeYield"].startswith(str(r.servings))
+        assert ld["recipeYield"].startswith(str(r.yield_n)) if r.yield_n else "recipeYield" not in ld
         bc = next(x for x in jsonld(html) if x["@type"] == "BreadcrumbList")
         assert [i["name"] for i in bc["itemListElement"]][-1] == r.title
 

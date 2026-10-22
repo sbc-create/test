@@ -76,7 +76,7 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
         "description": r.d["intro"],
         "url": site.abs(r.url),
         "recipeCategory": r.category_label,
-        "recipeYield": f"{r.servings} порц." if r.servings else None,
+        "recipeYield": f"{r.yield_n} порц." if r.yield_n else None,
         "recipeIngredient": [i.jsonld for i, _ in r.ingredients],
         "recipeInstructions": [
             {
