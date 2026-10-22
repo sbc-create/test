@@ -78,7 +78,7 @@
       "applicability": "an1mego.site: 1 новая посадочная (+ её страницы листания) из ~9 000 индексируемых; контроль — animeg0.site, an1meg0.site (тот же код, без раздела)",
       "scope_page_share": 0.001,
       "phase": "canary",
-      "evidence": "config/seo-tech-queue.json T190 (основание T085); живой замер 17.10 20:20Z: /ongoing/ — 404, /catalog/?ongoing=1 — 200 noindex, follow, 24 карточки на странице; выпущено 17.10 21:24Z (T191, голова 4e8569d3), живая сверка 21:28Z — var/seo-audit/t191-live-20261017.json; наблюдение: 7 дней — 24.10, 28 дней — 14.11"
+      "evidence": "config/seo-tech-queue.json T190 (основание T085); живой замер 17.10 20:20Z: /ongoing/ — 404, /catalog/?ongoing=1 — 200 noindex, follow, 24 карточки на странице; выпущено 17.10 21:24Z (T191, голова 4e8569d3), живая сверка 21:28Z — var/seo-audit/t191-live-20261017.json; наблюдение: 7 дней — 24.10, 28 дней — 14.11 | 22.10 14:17Z: состояние перед оценкой 24.10 (независимое чтение wt-nova-publish-memory-02-ce): канарейка an1mego.site /ongoing/ — 200, index, follow, canonical на себя, 24 карточки; /catalog?ongoing=1 → canonical /ongoing/; контроли an1meg0.site и animeg0.site — /ongoing 404, /catalog?ongoing=1 noindex, canonical /catalog/. Прецедент сети: yummyani.site /catalog/ongoing — 213 поисковых входов за 15–21.10 (1,7 % поиска домена, Яндекс ~100 %); у AnimeGo поиск 13–35 визитов в неделю и Яндекс 0 % — прецедент даёт порядок, а не ожидаемое число; «нет эффекта» при таком масштабе — не опровержение. Оценивать по системам раздельно."
     },
     {
       "experiment_id": "exp-editor-demand-order",
