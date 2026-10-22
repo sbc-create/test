@@ -6686,7 +6686,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале. | 19.10 13:42Z публикатор: push f8327f9, CI run 39262418279 failure — updater_conformity: SystemExit рантайма без манифеста шаблона не ловится `except Exception` в _страницы_жанров; ветка выпуска f8327f9 ≠ живой 55c7b71 — все задачи animedia-icu ждут. Правка (except (Exception, SystemExit)) передана Архитектору 15:40Z: общий клон — его."
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале. | 19.10 13:42Z публикатор: push f8327f9, CI run 39262418279 failure — updater_conformity: SystemExit рантайма без манифеста шаблона не ловится `except Exception` в _страницы_жанров; ветка выпуска f8327f9 ≠ живой 55c7b71 — все задачи animedia-icu ждут. Правка (except (Exception, SystemExit)) передана Архитектору 15:40Z: общий клон — его. | 22.10 10:54Z: исправление CI ведётся задачей T316 поверх f8327f9 (без действия владельца)."
     },
     {
       "id": "T263",
@@ -8168,6 +8168,32 @@
       ],
       "status": "live_verified",
       "evidence": "22.10 08:26Z wt-portable-site-cell-01-dc: канарейка T313+T314 принята на zonafilm12.site. zonafilm.cc — текст в закреплённом шаблоне template/zona-02-…, не в src: перенос туда — только с правкой шаблона (решение владельца, как T311). | 22.10 09:11Z wt-portable-site-cell-01-dc: исполнитель 20261022T082736Z-2597164 VERIFIED (92785b2); до выпуска проверка в условиях CI (LORDS_TEMPLATE_MANIFEST=/nonexistent) rc 0; CI ветки выпуска success; выпуск releases/92785b2d0f26 (замечен 09:10:44Z). Живая сверка 09:10:55Z: 404 — «ни одной странице сайта», без «записи каталога», ссылка /catalog/; /, /movies/, /catalog/ — 200; индекс карты прежний (2026-10-21, 2026-10-22T04:16:37Z) — ред. 2 не задета; проверка на установленном дереве rc 0."
+    },
+    {
+      "id": "T316",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/sitemap-1.xml",
+        "https://animedia.icu/catalog/?genre=anime"
+      ],
+      "problem": "Выпуск T262 (f8327f9: страницы жанров в карте animedia.icu) упал в CI 19.10 (run 39262418279): checks/updater_conformity.py — FileNotFoundError …animedia-01-update-state.json, без манифеста шаблона (раннер CI) обработчик обновления падает. Ветка выпуска стоит на f8327f9 с проваленным CI с 19.10; живой — 55c7b719a5df. Общий клон перемотан на f8327f9 (ff-only, 22.10 10:54Z). Исправление — патч var/patches/T262_form_a.patch (sha256 aa2f30bfea254aceb5aeb7dadce4ee9fe3a766ca035d40df49155979f1e41c20), отрепетирован 21.10: база в условиях CI падает ровно этой проверкой, с патчем полный checks/run.sh rc 0.",
+      "norm": "Проверки и обработчик работают в условиях CI; карта содержит индексируемые страницы жанров (T262).",
+      "expected": "Применить var/patches/T262_form_a.patch к automation/animedia-data-update.py (git apply; меняется ровно этот файл), ничего больше не менять. Проверка задачи checks/updater_conformity_ci.py: запускает python3 checks/updater_conformity.py подпроцессом с окружением, где ANIMEDIA_TEMPLATE_MANIFEST=/nonexistent/template-manifest.json и ANIMEDIA_RUNTIME_ROOT=/nonexistent, а LORDS_TEMPLATE_MANIFEST удалён (как на раннере CI), и требует код 0; иной код — FAIL и код 1 без необработанного исключения. На базе f8327f9 падает, на ветке проходит (D203). Добавить в checks/run.sh. Затем полный checks/run.sh.",
+      "check": "checks/updater_conformity_ci.py",
+      "verify_live": "CI ветки выпуска success; после выпуска в https://animedia.icu/sitemap-1.xml есть адреса /catalog/?genre=… (в т.ч. genre=anime), каждая выборочная — 200, index, canonical на себя; главная и /catalog/ — 200",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/sitemap-1.xml",
+          "status": 200,
+          "contains": [
+            "genre=anime"
+          ]
+        }
+      ],
+      "status": "queued",
+      "evidence": "22.10 10:54Z wt-portable-site-cell-01-dc: блокер «нужен владелец» снят правкой публикатора 4e84a4c — исправление поверх нашей упавшей головы ветки выпуска выпускается перемоткой (проверено фактом на T313→T314, zonafilm12.site, 08:25Z). Блок владельца §1 OWNER_BLOCKS_20261022.md становится ненужным, если T316 пройдёт. После выпуска T262 получает already_live, затем T307–T309 снимаются с удержания."
     }
   ]
 }
