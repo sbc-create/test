@@ -17,7 +17,7 @@
    "owner": "wt-nova-publish-memory-02",
    "defect": "MOD-81",
    "created": "2026-10-22T09:00:35Z",
-   "updated": "2026-10-22T10:13:17Z",
+   "updated": "2026-10-22T10:58:33Z",
    "baseline_metric": "770 страниц вне карты",
    "expected_change": "770 страниц названы поисковику"
   },
@@ -57,7 +57,7 @@
    "verify_by": "через неделю после выпуска MOD-81",
    "owner": "wt-nova-publish-memory-02",
    "created": "2026-10-22T10:10:38Z",
-   "updated": "2026-10-22T10:13:17Z"
+   "updated": "2026-10-22T10:58:33Z"
   }
  ],
  "baseline": {
@@ -70,7 +70,7 @@
   "notes": "установленное совпадает с публичным ответом"
  },
  "last_cycle": {
-  "at": "2026-10-22T10:13:17Z",
+  "at": "2026-10-22T10:58:33Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 3, ждут 0",
   "next": "Q-1lordserials1.online-001: Карта сайта 1lordserials1.online не обновлялась с 2026-10-15, пока каталог рос"
  },
@@ -78,6 +78,6 @@
   "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/1lordserials1-online",
   "branch": "claude/extract-1lordserials1-online-seo-01",
   "note": "своя копия и своя ветка",
-  "measured_at": "2026-10-22T10:13:18Z"
+  "measured_at": "2026-10-22T10:58:34Z"
  }
 }

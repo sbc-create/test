@@ -70,14 +70,14 @@
   "notes": "установленное совпадает с публичным ответом"
  },
  "last_cycle": {
-  "at": "2026-10-22T10:13:17Z",
-  "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 3, ждут 0",
+  "at": "2026-10-22T10:58:34Z",
+  "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 2, ждут 1",
   "next": "Q-an1mego.site-001: an1meg0.site и an1mego.site отдают дословно одну и ту же ГЛАВНУЮ (title, h1, des"
  },
  "work": {
   "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/an1mego-site",
   "branch": "claude/extract-an1mego-seo-01",
   "note": "своя копия и своя ветка",
-  "measured_at": "2026-10-22T10:13:18Z"
+  "measured_at": "2026-10-22T10:58:34Z"
  }
 }

@@ -65,7 +65,7 @@
   "notes": "установленное совпадает с публичным ответом"
  },
  "last_cycle": {
-  "at": "2026-10-22T10:13:18Z",
+  "at": "2026-10-22T10:58:34Z",
   "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 3, ждут 0",
   "next": "Q-lordserials22.info-001: снять спрос и конкурентов по домену"
  },
@@ -73,6 +73,6 @@
   "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/lordserials22-info",
   "branch": "claude/extract-lordserials22-info-seo-01",
   "note": "своя копия и своя ветка",
-  "measured_at": "2026-10-22T10:13:18Z"
+  "measured_at": "2026-10-22T10:58:34Z"
  }
 }
