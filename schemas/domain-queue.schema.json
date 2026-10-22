@@ -1,0 +1,103 @@
+{
+ "$schema": "http://json-schema.org/draft-07/schema#",
+ "title": "Очередь работ одного домена",
+ "description": "Одна очередь на домен: так независимые задачи разных сайтов выполняются параллельно без борьбы за один файл, и ни один популярный сайт не занимает всю очередь. Схема требует от задачи ровно те поля, которые задание владельца называет обязательными, и различает работу от результата отдельным состоянием.",
+ "type": "object",
+ "required": ["schema_version", "domain", "site_id", "family", "executor", "stage", "tasks"],
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {"const": 1},
+  "domain": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"},
+  "site_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
+  "family": {"type": "string", "minLength": 2},
+  "executor": {
+   "type": "string",
+   "minLength": 3,
+   "description": "Рабочая копия или линия, которая ведёт этот домен. Без назначенного исполнителя домен выпадает из работы."
+  },
+  "stage": {
+   "type": "integer",
+   "minimum": 1,
+   "maximum": 3,
+   "description": "1 — снять подтверждённые препятствия; 2 — использовать существующий спрос; 3 — расширять охват. Исправному сайту искусственная задержка перед задачами роста не создаётся: этап выбирается по измерениям, а не по порядку."
+  },
+  "stage_reason": {"type": "string", "minLength": 10},
+  "baseline": {
+   "type": "object",
+   "description": "Исходное состояние, снятое измерением, с временем замера.",
+   "required": ["measured_at"],
+   "properties": {
+    "measured_at": {"type": "string", "minLength": 10},
+    "home_status": {"type": ["string", "integer"]},
+    "installed": {"type": "string"},
+    "public_build": {"type": "string"},
+    "branch": {"type": "string"},
+    "branch_ahead": {"type": "boolean"},
+    "notes": {"type": "string"}
+   }
+  },
+  "tasks": {"type": "array", "items": {"$ref": "#/definitions/task"}},
+  "last_cycle": {
+   "type": "object",
+   "required": ["at", "did"],
+   "properties": {
+    "at": {"type": "string", "minLength": 10},
+    "did": {"type": "string", "minLength": 3},
+    "next": {"type": "string"},
+    "waiting_for": {"type": "string"}
+   }
+  }
+ },
+ "definitions": {
+  "task": {
+   "type": "object",
+   "required": ["id", "state", "title", "problem", "evidence", "action", "owner"],
+   "additionalProperties": false,
+   "properties": {
+    "id": {"type": "string", "pattern": "^Q-[a-z0-9.-]+-[0-9]{3}$"},
+    "state": {
+     "enum": ["исследовано", "подготовлено", "проверено", "опубликовано",
+              "эффект измерен", "ожидание", "заблокировано", "снято"],
+     "description": "Работа и результат — разные состояния. Коммит, текст и зелёный тест не являются ни «опубликовано», ни «эффект измерен»."
+    },
+    "title": {"type": "string", "minLength": 5},
+    "urls": {"type": "array", "items": {"type": "string"}},
+    "queries": {"type": "array", "items": {"type": "string"}},
+    "problem": {"type": "string", "minLength": 10},
+    "evidence": {
+     "type": "string",
+     "minLength": 10,
+     "description": "Доказательство: число, адрес, файл или команда. Утверждение без доказательства задачей не является."
+    },
+    "action": {"type": "string", "minLength": 10},
+    "owner": {"type": "string", "minLength": 3},
+    "defect": {"type": "string", "pattern": "^MOD-[0-9]{2,}$"},
+    "baseline_metric": {"type": "string"},
+    "expected_change": {"type": "string"},
+    "verify_by": {"type": "string"},
+    "blocked_by": {
+     "type": "string",
+     "description": "Чем именно заблокировано. «Ждёт» без названного блокера неотличимо от забытой задачи."
+    },
+    "published_url": {"type": "string"},
+    "installed_version": {"type": "string"},
+    "created": {"type": "string"},
+    "updated": {"type": "string"}
+   },
+   "allOf": [
+    {
+     "if": {"properties": {"state": {"const": "заблокировано"}}, "required": ["state"]},
+     "then": {"required": ["blocked_by"]}
+    },
+    {
+     "if": {"properties": {"state": {"const": "опубликовано"}}, "required": ["state"]},
+     "then": {"required": ["published_url"]}
+    },
+    {
+     "if": {"properties": {"state": {"const": "эффект измерен"}}, "required": ["state"]},
+     "then": {"required": ["published_url", "baseline_metric"]}
+    }
+   ]
+  }
+ }
+}

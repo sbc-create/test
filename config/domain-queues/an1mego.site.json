@@ -1,0 +1,32 @@
+{
+ "schema_version": 1,
+ "domain": "an1mego.site",
+ "site_id": "animego-02",
+ "family": "animego",
+ "executor": "wt-nova-publish-memory-02",
+ "stage": 1,
+ "stage_reason": "открытые препятствия уровня P0/P1: MOD-114",
+ "tasks": [
+  {
+   "id": "Q-an1mego.site-001",
+   "state": "исследовано",
+   "title": "an1meg0.site и an1mego.site отдают дословно одну и ту же ГЛАВНУЮ (title, h1, description, 102 карточки из 102) при canonical у каждой на себя; title с",
+   "problem": "an1meg0.site и an1mego.site отдают дословно одну и ту же ГЛАВНУЮ (title, h1, description, 102 карточки из 102) при canonical у каждой на себя; title страниц произведения совпадает внутри семейства у 10 витрин из 12, и только zonafilm.cc его разводит",
+   "evidence": "запись MOD-114 реестра недостатков",
+   "action": "Выбор по существу за владельцем: развести содержимое, назначить зеркало через canonical или исключить одну витрину из продвижения. При ЛЮБОМ из трёх правка главной `an1mego.site` до вердикта T191 (24.10) запрещена: она смешается с действующим экспериментом. Раньше 24.10 можно работать только с `an1meg0.site` или `animeg0.site`, по одной витрине за раз.",
+   "owner": "wt-nova-publish-memory-02",
+   "defect": "MOD-114",
+   "created": "2026-10-22T09:00:35Z",
+   "updated": "2026-10-22T09:00:35Z"
+  }
+ ],
+ "baseline": {
+  "measured_at": "2026-10-22T08:56:48Z",
+  "home_status": "200",
+  "installed": "70b141ecd6b8",
+  "public_build": "70b141ecd6b8-animego-02",
+  "branch": "claude/extract-an1mego-seo-01",
+  "branch_ahead": false,
+  "notes": "установленное совпадает с публичным ответом"
+ }
+}

@@ -1,0 +1,32 @@
+{
+ "schema_version": 1,
+ "domain": "zonafilm.cc",
+ "site_id": "zona-02",
+ "family": "zona",
+ "executor": "wt-nova-publish-memory-02",
+ "stage": 1,
+ "stage_reason": "открытые препятствия уровня P0/P1: MOD-111",
+ "tasks": [
+  {
+   "id": "Q-zonafilm.cc-001",
+   "state": "исследовано",
+   "title": "lastmod в индексе карты отсутствует у 12 домéнов сети, а у yummyani.site стоит одна устаревшая константа: верной даты части нет у 13 из 17",
+   "problem": "lastmod в индексе карты отсутствует у 12 домéнов сети, а у yummyani.site стоит одна устаревшая константа: верной даты части нет у 13 из 17",
+   "evidence": "запись MOD-111 реестра недостатков",
+   "action": "У Yummy — вместе с выпуском MOD-103/104/106 (B037). У остальных двенадцати правка на стороне общего рантайма семейства, выпуск штатным путём.",
+   "owner": "wt-nova-publish-memory-02",
+   "defect": "MOD-111",
+   "created": "2026-10-22T09:00:35Z",
+   "updated": "2026-10-22T09:00:35Z"
+  }
+ ],
+ "baseline": {
+  "measured_at": "2026-10-22T08:56:48Z",
+  "home_status": "200",
+  "installed": "3cf0e501e9bb",
+  "public_build": "3cf0e501e9bb-zona-02",
+  "branch": "HEAD",
+  "branch_ahead": false,
+  "notes": "установленное совпадает с публичным ответом"
+ }
+}

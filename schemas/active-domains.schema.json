@@ -3,89 +3,186 @@
  "title": "Активные домены сети и их распределение",
  "description": "Единственный версионируемый список активных домéнов. Схема запрещает то, что уже приводило к выпадению домéнов из работы: домен без очереди, без паспорта, без семейства, а также домен, одновременно активный и ожидающий замены.",
  "type": "object",
- "required": ["schema_version", "owner_task", "families", "domains", "awaiting_replacement", "shared_components"],
+ "required": [
+  "schema_version",
+  "owner_task",
+  "families",
+  "domains",
+  "awaiting_replacement",
+  "shared_components"
+ ],
  "additionalProperties": false,
  "properties": {
-  "schema_version": {"const": 1},
-  "note": {"type": "string", "minLength": 10},
+  "schema_version": {
+   "const": 1
+  },
+  "note": {
+   "type": "string",
+   "minLength": 10
+  },
   "owner_task": {
    "type": "string",
    "minLength": 10,
    "description": "Откуда взят список. Без провенанса список становится мнением агента."
   },
-  "timezone": {"const": "Europe/Moscow"},
+  "timezone": {
+   "const": "Europe/Moscow"
+  },
   "families": {
    "type": "object",
    "minProperties": 1,
    "additionalProperties": {
     "type": "object",
-    "required": ["title", "cell_prefix", "owner_of_shared_code", "knowledge"],
+    "required": [
+     "title",
+     "cell_prefix",
+     "owner_of_shared_code",
+     "knowledge"
+    ],
     "additionalProperties": false,
     "properties": {
-     "title": {"type": "string", "minLength": 2},
-     "cell_prefix": {"type": "string", "minLength": 2},
-     "shared_template": {"type": "string"},
+     "title": {
+      "type": "string",
+      "minLength": 2
+     },
+     "cell_prefix": {
+      "type": "string",
+      "minLength": 2
+     },
+     "shared_template": {
+      "type": "string"
+     },
      "owner_of_shared_code": {
       "type": "string",
       "minLength": 3,
       "description": "Рабочая копия, которая ВЛАДЕЕТ общим кодом семейства. Без владельца общий дефект правится в случайной копии."
      },
-     "knowledge": {"type": "string", "pattern": "^docs/knowledge/family/.+\\.md$"}
+     "knowledge": {
+      "type": "string",
+      "pattern": "^docs/knowledge/family/.+\\.md$"
+     }
     }
    }
   },
   "domains": {
    "type": "array",
    "minItems": 1,
-   "items": {"$ref": "#/definitions/active"}
+   "items": {
+    "$ref": "#/definitions/active"
+   }
   },
   "awaiting_replacement": {
    "type": "array",
-   "items": {"$ref": "#/definitions/awaiting"}
+   "items": {
+    "$ref": "#/definitions/awaiting"
+   }
   },
   "shared_components": {
    "type": "object",
-   "required": ["regular_cycle", "publisher", "analytics", "templates"],
+   "required": [
+    "regular_cycle",
+    "publisher",
+    "analytics",
+    "templates"
+   ],
    "properties": {
-    "note": {"type": "string"},
-    "regular_cycle": {"$ref": "#/definitions/component"},
-    "publisher": {"$ref": "#/definitions/component"},
-    "k2_delivery": {"$ref": "#/definitions/component"},
-    "analytics": {"$ref": "#/definitions/component"},
-    "templates": {"$ref": "#/definitions/component"}
+    "note": {
+     "type": "string"
+    },
+    "regular_cycle": {
+     "$ref": "#/definitions/component"
+    },
+    "publisher": {
+     "$ref": "#/definitions/component"
+    },
+    "k2_delivery": {
+     "$ref": "#/definitions/component"
+    },
+    "analytics": {
+     "$ref": "#/definitions/component"
+    },
+    "templates": {
+     "$ref": "#/definitions/component"
+    }
    }
   }
  },
  "definitions": {
   "component": {
    "type": "object",
-   "required": ["owner"],
+   "required": [
+    "owner"
+   ],
    "properties": {
-    "owner": {"type": "string", "minLength": 3}
+    "owner": {
+     "type": "string",
+     "minLength": 3
+    }
    }
   },
   "active": {
    "type": "object",
-   "required": ["domain", "site_id", "family", "state", "queue", "passport"],
+   "required": [
+    "domain",
+    "site_id",
+    "family",
+    "state",
+    "queue",
+    "passport"
+   ],
    "additionalProperties": false,
    "properties": {
-    "domain": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"},
-    "site_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
-    "family": {"type": "string", "minLength": 2},
-    "state": {"const": "active"},
-    "queue": {"type": "string", "pattern": "^queue/domains/.+\\.json$"},
-    "passport": {"type": "string", "pattern": "^docs/passports/.+\\.md$"}
+    "domain": {
+     "type": "string",
+     "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"
+    },
+    "site_id": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]+$"
+    },
+    "family": {
+     "type": "string",
+     "minLength": 2
+    },
+    "state": {
+     "const": "active"
+    },
+    "queue": {
+     "type": "string",
+     "pattern": "^config/domain-queues/.+\\.json$"
+    },
+    "passport": {
+     "type": "string",
+     "pattern": "^docs/passports/.+\\.md$"
+    }
    }
   },
   "awaiting": {
    "type": "object",
-   "required": ["domain", "site_id", "family", "state", "reason"],
+   "required": [
+    "domain",
+    "site_id",
+    "family",
+    "state",
+    "reason"
+   ],
    "additionalProperties": false,
    "properties": {
-    "domain": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"},
-    "site_id": {"type": "string", "pattern": "^[a-z0-9-]+$"},
-    "family": {"type": "string", "minLength": 2},
-    "state": {"const": "awaiting_replacement"},
+    "domain": {
+     "type": "string",
+     "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]{2,}$"
+    },
+    "site_id": {
+     "type": "string",
+     "pattern": "^[a-z0-9-]+$"
+    },
+    "family": {
+     "type": "string",
+     "minLength": 2
+    },
+    "state": {
+     "const": "awaiting_replacement"
+    },
     "reason": {
      "type": "string",
      "minLength": 20,
