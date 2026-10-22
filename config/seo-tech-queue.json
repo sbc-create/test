@@ -8123,7 +8123,29 @@
         }
       ],
       "status": "queued",
-      "evidence": "22.10 06:29Z wt-portable-site-cell-01-dc: та же фраза на zonafilm.cc и zonafilm.space — перенос после live_verified канарейки. Страница 404 не индексируется; правка — качество текста для посетителя, эффект на трафик не заявляется. Проверки, закрепляющей старый текст, в репозитории нет (grep около 06:29Z)."
+      "evidence": "22.10 06:29Z wt-portable-site-cell-01-dc: та же фраза на zonafilm.cc и zonafilm.space — перенос после live_verified канарейки. Страница 404 не индексируется; правка — качество текста для посетителя, эффект на трафик не заявляется. Проверки, закрепляющей старый текст, в репозитории нет (grep около 06:29Z). | 22.10 07:21Z: CI выпуска упал (notfound-wording: нет манифеста шаблона на раннере) — исправление T314; T313 не live_verified."
+    },
+    {
+      "id": "T314",
+      "site": "zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm12.site/title/net-takogo-xyz/"
+      ],
+      "problem": "Выпуск T313 (94bbf6b) упал в CI (run 39737795102, 22.10 07:08:53Z): проверка notfound-wording — «нет манифеста шаблона /srv/lords/.frontend/template-manifest.json». checks/notfound_wording.py импортирует src/lords-frontend.py без подготовки окружения; без манифеста (раннер CI) модуль завершается SystemExit, а проверка ловит только Exception — выход 1 вместо работы. На хосте манифест есть, поэтому локальный вердикт прошёл. Ветка выпуска стоит на 94bbf6b с проваленным CI и держит следующие выпуски zonafilm12.site; общий клон перемотан на 94bbf6b (ff-only, 22.10 07:21Z), исправление ложится поверх.",
+      "norm": "Проверка работает в тех же условиях, что CI: окружение готовит сама из файлов репозитория, как соседние проверки (checks/meta_description.py:15–24).",
+      "expected": "В checks/notfound_wording.py до импорта src/lords-frontend.py подготовить окружение так же, как checks/meta_description.py:15–24: во временном каталоге заглушки каталога и подробностей, os.environ LORDS_TEMPLATE_MANIFEST = <корень>/config/template-manifest.json (безусловно, перекрывая внешнее значение), LORDS_CATALOG, LORDS_DETAILS, LORDS_LEGACY_ROOT — по образцу. Перехват ошибки импорта и вызова — BaseException (включая SystemExit) → «НЕ ИЗМЕРЕНО», код 2. Смысл проверки (нет «записи каталога», есть «ни одной странице сайта», код 404, ссылка в каталог, адрес экранирован) не менять; src/ не трогать. Проверка задачи checks/notfound_wording_ci.py: запускает python3 checks/notfound_wording.py подпроцессом с окружением, где LORDS_TEMPLATE_MANIFEST=/nonexistent/template-manifest.json (как на раннере CI без манифеста), и требует код 0 и строку PASS; иной код — FAIL и код 1. На базе 94bbf6b падает (импорт завершается SystemExit → код 1), на ветке проходит (D203). Добавить в checks/run.sh. Затем полный checks/run.sh.",
+      "check": "checks/notfound_wording_ci.py",
+      "verify_live": "CI ветки выпуска зелёный; после выпуска: https://zonafilm12.site/title/net-takogo-xyz/ — 404, noindex, «…ни одной странице сайта…» (это и есть приёмка T313)",
+      "live_check": [
+        {
+          "url": "https://zonafilm12.site/title/net-takogo-xyz/",
+          "status": 404
+        }
+      ],
+      "status": "queued",
+      "evidence": "22.10 07:21Z wt-portable-site-cell-01-dc: лог CI — notfound-wording FAIL «нет манифеста шаблона …», остальные проверки PASS; T313 VERIFIED локально (06:29–06:32Z), но на хосте манифест есть. Тот же класс ошибки, что у T262 (проверка зависит от файлов хоста)."
     }
   ]
 }
