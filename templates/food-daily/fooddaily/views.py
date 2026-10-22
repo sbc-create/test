@@ -542,7 +542,7 @@ class Site:
 
         cands = [o for o in self.recipes if o.slug != r.slug]
         cands.sort(key=lambda o: (-score(o), o.slug))
-        return [o for o in cands if score(o) > 0][:4]
+        return [o for o in cands if score(o) > 0][:3]  # один ряд сетки 3/2/1
 
     def category(self, key: str) -> list[Recipe]:
         return [r for r in self.recipes if r.category == key]

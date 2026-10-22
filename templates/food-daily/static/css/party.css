@@ -489,3 +489,40 @@ h1, h2 { hyphens: manual; }
 @media (min-width: 1000px) { .count-line__edit { display: none; } }
 .count-line__edit { margin-left: 8px; font-weight: 600; font-size: .92rem; display: inline-flex; min-height: 24px; align-items: center; }
 .fridge__out .pick__picked { border: 0; padding: 0; margin: 0 0 10px; }
+
+/* --- 22.10: спокойная сетка 3/2/1, компактные заголовки, карточки без лишних рамок ------------------- */
+:root {
+  --fs-h1: clamp(1.75rem, 1.45rem + 1.3vw, 2.5rem);
+  --fs-h2: clamp(1.3rem, 1.18rem + .5vw, 1.6rem);
+  --fs-h3: 1.14rem;
+  --gap-section: clamp(32px, 26px + 1.6vw, 48px);
+}
+.masthead__row { padding-top: 10px; padding-bottom: 6px; }
+.sections { padding-bottom: 10px; }
+.sections a { padding: 6px 13px; font-size: .92rem; }
+.hero-row { padding-top: 22px; gap: 24px; }
+@media (min-width: 1000px) { .hero-row { gap: 40px; } }
+.hero__title { font-size: clamp(1.9rem, 1.45rem + 1.9vw, 2.75rem); }
+.hero__lead { font-size: 1.04rem; margin-bottom: 16px; }
+.page-head { padding-top: 6px; }
+.recipe__title { font-size: var(--fs-h1); }
+.block__head { margin-bottom: 14px; padding-bottom: 8px; }
+.grid { gap: 18px; grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1200px) { .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.card { border: 1px solid var(--line); border-top: 1px solid var(--line); box-shadow: none; border-radius: 14px; }
+.card:hover { transform: none; box-shadow: 0 10px 24px -18px rgba(42, 31, 23, .45); border-color: #d6c2a6; }
+.card__body { padding: 16px 18px; }
+.card__top { margin-bottom: 4px; }
+.card__cat { display: inline-flex; align-items: center; gap: 7px; }
+.card__cat::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--cat, var(--saffron)); }
+.card__title { -webkit-line-clamp: 2; margin-bottom: 6px; }
+.card__lede { margin-bottom: 8px; }
+.card__ing { margin-bottom: 12px; }
+.card__meta { border-top: 0; padding-top: 0; }
+.card__media { border-bottom: 1px solid var(--line); }
+@media (max-width: 559px) { .grid--home-fresh .card:nth-child(n+5) { display: flex; } }
+.related .grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 600px) { .related .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .related .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }

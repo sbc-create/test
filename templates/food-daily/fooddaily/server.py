@@ -89,11 +89,11 @@ class App:
         if path == "/":
             cols = s.collections()
             quick = (
-                sorted(cols["bystro-do-30-minut"][2], key=lambda r: (r.total_minutes, r.title))[:4]
+                sorted(cols["bystro-do-30-minut"][2], key=lambda r: (r.total_minutes, r.title))[:6]
                 if ("bystro-do-30-minut" in cols)
                 else []
             )
-            # каждая карточка на главной — один раз: подборки ниже не повторяют те, что уже показаны выше
+            # ряды по 3 (сетка 3/2/1); каждая карточка на главной — один раз: подборки ниже не повторяют те, что уже показаны выше
             shown = {r.slug for r in quick}
 
             def take(items, n):
@@ -101,16 +101,16 @@ class App:
                 shown.update(r.slug for r in out)
                 return out
 
-            breakfast = take(sorted(s.category("zavtraki"), key=lambda r: (r.total_minutes, r.title)), 4)
+            breakfast = take(sorted(s.category("zavtraki"), key=lambda r: (r.total_minutes, r.title)), 3)
             if len(breakfast) < 2:
                 shown.difference_update(r.slug for r in breakfast)
                 breakfast = []
             season_key = SEASONAL.get(time.localtime().tm_mon)
             season = None
             if season_key in cols:
-                picked = take(cols[season_key][2], 4)
+                picked = take(cols[season_key][2], 3)
                 season = (season_key, cols[season_key][0], cols[season_key][1], picked) if len(picked) >= 2 else None
-            fresh = take(s.recipes, 8)
+            fresh = take(s.recipes, 6)
             sections = [(k, CATEGORIES[k][0], len(s.category(k))) for k in CATEGORIES if s.category(k)]
             chips = sorted(s.product_options(), key=lambda kv: -len(s.tag(kv[0])))[:6]
             meta = seo.Meta(
