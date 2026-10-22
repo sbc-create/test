@@ -1,0 +1,170 @@
+#!/usr/bin/env python3
+"""Живы ли карточки в перечне подборок витрины. Только чтение публичных страниц.
+
+Зачем отдельно от двух соседних проверок. `collections-overlap.py` отвечает,
+ЧЕМ подборки отличаются друг от друга; `card-links-audit.py` — куда можно уйти
+С карточки. Ни одна не отвечает на вопрос «а существуют ли работы, которые
+перечень подборок показывает»: карточка ведёт на 404, человек упирается в
+ошибку, и это видно только перебором.
+
+Измерено 22.10 этим способом на пяти витринах Yummy:
+
+  yummyani.site  41 карточка, 3 мёртвые;
+  yummyani.org   32 карточки, 3 мёртвые;
+  yummyani.biz   41 карточка, 3 мёртвые;
+  yummyani7.site 23 карточки, 0 мёртвых;
+  yummyani7.info 24 карточки, 0 мёртвых.
+
+Мёртвые у трёх витрин ОДНИ И ТЕ ЖЕ (`agent-vremeni-3`,
+`krovavyy-lager-akula-kloun`, `motor-siti`), и ни одной из них нет в карте
+сайта при живых контрольных карточках. Значит подборка держит работы, ушедшие
+из каталога, а пара `yummyani7.*` строит перечень из другого набора.
+
+ЧТО ОБЯЗАТЕЛЬНО ПЕЧАТАЕТСЯ ВМЕСТЕ С ЧИСЛОМ МЁРТВЫХ — число живых. «Ноль
+мёртвых» и «карточек не нашлось» неотличимы, если второе молчит, а решения у
+них противоположные. Поэтому исход «не измерено» здесь отдельный.
+
+Индексируемость перечня печатается рядом: у Yummy он `noindex, nofollow`, то
+есть вред посетительский, а не поисковый, и путать это нельзя.
+
+    python3 automation/local/collections-hub-cards.py yummyani.biz
+    python3 automation/local/collections-hub-cards.py --all
+    python3 automation/local/collections-hub-cards.py --all --json
+
+Коды: 0 — мёртвых нет ни на одной измеренной витрине; 1 — есть мёртвые;
+2 — ни одной витрины измерить не удалось (это предел измерения, не чистота).
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import subprocess
+import sys
+
+#: Витрины, у которых перечень подборок есть. Список не расширяется догадкой:
+#: домен добавляется, когда его перечень измерен.
+ВИТРИНЫ = ("yummyani.site", "yummyani.org", "yummyani.biz",
+           "yummyani7.site", "yummyani7.info")
+ПУТЬ_ПЕРЕЧНЯ = "/collections"
+АГЕНТ = "factory-collections-hub"
+#: Адрес карточки произведения у Yummy. Шаблон узкий намеренно: широкий
+#: подхватил бы ссылки навигации и раздул бы «число карточек».
+КАРТОЧКА = re.compile(r'href="(/anime/[a-z0-9-]+)"')
+
+
+def достать(url: str, таймаут: int = 35) -> tuple[str, str]:
+    """Код ответа и тело. Исключение не поднимается: витрина может молчать."""
+    try:
+        р = subprocess.run(
+            ["curl", "-sSL", "--max-time", str(таймаут),
+             "-w", "\n@@%{http_code}", "-H", f"User-Agent: {АГЕНТ}", url],
+            capture_output=True, text=True, timeout=таймаут + 20)
+    except subprocess.TimeoutExpired:
+        return "таймаут", ""
+    т = р.stdout
+    if "@@" not in т:
+        return "—", т
+    тело, код = т.rsplit("@@", 1)
+    return код.strip(), тело
+
+
+def код(url: str, таймаут: int = 25) -> str:
+    try:
+        р = subprocess.run(
+            ["curl", "-sSL", "-o", "/dev/null", "--max-time", str(таймаут),
+             "-w", "%{http_code}", "-H", f"User-Agent: {АГЕНТ}", url],
+            capture_output=True, text=True, timeout=таймаут + 15)
+    except subprocess.TimeoutExpired:
+        return "таймаут"
+    return р.stdout.strip() or "—"
+
+
+def карточки(тело: str) -> list[str]:
+    """Адреса карточек перечня. Чистая функция — её и проверяют."""
+    return sorted(set(КАРТОЧКА.findall(тело)))
+
+
+def роботс(тело: str) -> str:
+    м = re.search(r'<meta name="robots" content="([^"]*)"', тело)
+    return м.group(1) if м else "—"
+
+
+def исход(живых: int, мёртвых: int) -> str:
+    """Три исхода, и третий обязателен.
+
+    «Ноль мёртвых» при нуле карточек — это НЕ чистый перечень, а неудавшееся
+    измерение, и называть их одинаково нельзя.
+    """
+    if живых + мёртвых == 0:
+        return "НЕ ИЗМЕРЕНО"
+    return "мёртвые есть" if мёртвых else "мёртвых нет"
+
+
+def проверить(домен: str) -> dict:
+    к, тело = достать(f"https://{домен}{ПУТЬ_ПЕРЕЧНЯ}")
+    if к != "200":
+        return {"домен": домен, "исход": "НЕ ИЗМЕРЕНО",
+                "почему": f"перечень подборок отдал {к}",
+                "карточек": 0, "живых": 0, "мёртвых": 0, "мёртвые": [],
+                "robots": "—"}
+    адреса = карточки(тело)
+    живых = 0
+    мёртвые: list[dict] = []
+    for путь in адреса:
+        с = код(f"https://{домен}{путь}")
+        if с == "200":
+            живых += 1
+        else:
+            мёртвые.append({"адрес": путь, "код": с})
+    return {"домен": домен, "исход": исход(живых, len(мёртвые)),
+            "почему": "", "карточек": len(адреса), "живых": живых,
+            "мёртвых": len(мёртвые), "мёртвые": мёртвые,
+            "robots": роботс(тело)}
+
+
+def main(аргв: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("домены", nargs="*")
+    р.add_argument("--all", action="store_true")
+    р.add_argument("--json", action="store_true")
+    а = р.parse_args(аргв)
+
+    цели = list(а.домены) or (list(ВИТРИНЫ) if а.all else [])
+    if not цели:
+        print("назови витрину или --all", file=sys.stderr)
+        return 2
+
+    итоги = [проверить(д) for д in цели]
+    if а.json:
+        print(json.dumps(итоги, ensure_ascii=False, indent=1))
+    else:
+        for и in итоги:
+            if и["исход"] == "НЕ ИЗМЕРЕНО":
+                print(f"{и['домен']}: НЕ ИЗМЕРЕНО — {и['почему']}")
+                continue
+            print(f"{и['домен']}: карточек {и['карточек']},"
+                  f" живых {и['живых']}, МЁРТВЫХ {и['мёртвых']}"
+                  f" | robots перечня: {и['robots']}")
+            for м in и["мёртвые"][:8]:
+                print(f"      {м['адрес']} → {м['код']}")
+        измерено = [и for и in итоги if и["исход"] != "НЕ ИЗМЕРЕНО"]
+        print(f"\nвитрин измерено {len(измерено)} из {len(итоги)};"
+              f" с мёртвыми карточками"
+              f" {sum(1 for и in измерено if и['мёртвых'])}")
+        print("Число ЖИВЫХ печатается рядом не для полноты: «ноль мёртвых» и"
+              " «карточек не нашлось» иначе неотличимы.")
+        if измерено and all(и["robots"].startswith("noindex")
+                            for и in измерено):
+            print("Перечень закрыт от индексации у всех измеренных витрин —"
+                  " значит вред посетительский, а не поисковый.")
+
+    if not [и for и in итоги if и["исход"] != "НЕ ИЗМЕРЕНО"]:
+        return 2
+    return 1 if any(и["мёртвых"] for и in итоги) else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
