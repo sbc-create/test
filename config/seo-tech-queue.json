@@ -8122,10 +8122,8 @@
           "status": 404
         }
       ],
-      "status": "blocked",
-      "evidence": "22.10 06:29Z wt-portable-site-cell-01-dc: та же фраза на zonafilm.cc и zonafilm.space — перенос после live_verified канарейки. Страница 404 не индексируется; правка — качество текста для посетителя, эффект на трафик не заявляется. Проверки, закрепляющей старый текст, в репозитории нет (grep около 06:29Z). | 22.10 07:21Z: CI выпуска упал (notfound-wording: нет манифеста шаблона на раннере) — исправление T314; T313 не live_verified. | 22.10 08:15Z: переведена в blocked — как кандидат публикатора она занимала место (--limit 3) вечным ожиданием и заслоняла T314, которая её содержит.",
-      "owner_action": "Нет действия владельца: выпускается в составе T314 (94bbf6b — предок 216e4c1); после выпуска T314 приёмка T313 на сайте. Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "выпуск T314"
+      "status": "live_verified",
+      "evidence": "22.10 06:29Z wt-portable-site-cell-01-dc: та же фраза на zonafilm.cc и zonafilm.space — перенос после live_verified канарейки. Страница 404 не индексируется; правка — качество текста для посетителя, эффект на трафик не заявляется. Проверки, закрепляющей старый текст, в репозитории нет (grep около 06:29Z). | 22.10 07:21Z: CI выпуска упал (notfound-wording: нет манифеста шаблона на раннере) — исправление T314; T313 не live_verified. | 22.10 08:15Z: переведена в blocked — как кандидат публикатора она занимала место (--limit 3) вечным ожиданием и заслоняла T314, которая её содержит. | 22.10 08:26Z wt-portable-site-cell-01-dc: публикатор (после правок 4e84a4c и f8e1dd3) перемотал ветку выпуска 94bbf6b → 216e4c1, CI success 08:17Z (run на 216e4c1), выпуск /srv/zonafilm12-site/current → releases/216e4c1d4f5a (замечен 08:25:42Z). Живая сверка 08:25:54Z: /title/net-takogo-xyz/ и /zzz-net/ — 404, «ни одной странице сайта», без «записи каталога», ссылка /catalog/ на месте; /, /movies/, /catalog/ — 200. checks/notfound_wording.py на установленном дереве rc 0, и с LORDS_TEMPLATE_MANIFEST=/nonexistent (условия CI) rc 0. Поправка к verify_live T313: meta robots на 404 — «index, follow», как и до выпуска; страницу исключает код 404, это не регрессия."
     },
     {
       "id": "T314",
@@ -8146,8 +8144,8 @@
           "status": 404
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 07:21Z wt-portable-site-cell-01-dc: лог CI — notfound-wording FAIL «нет манифеста шаблона …», остальные проверки PASS; T313 VERIFIED локально (06:29–06:32Z), но на хосте манифест есть. Тот же класс ошибки, что у T262 (проверка зависит от файлов хоста)."
+      "status": "live_verified",
+      "evidence": "22.10 07:21Z wt-portable-site-cell-01-dc: лог CI — notfound-wording FAIL «нет манифеста шаблона …», остальные проверки PASS; T313 VERIFIED локально (06:29–06:32Z), но на хосте манифест есть. Тот же класс ошибки, что у T262 (проверка зависит от файлов хоста). | 22.10 08:26Z wt-portable-site-cell-01-dc: публикатор (после правок 4e84a4c и f8e1dd3) перемотал ветку выпуска 94bbf6b → 216e4c1, CI success 08:17Z (run на 216e4c1), выпуск /srv/zonafilm12-site/current → releases/216e4c1d4f5a (замечен 08:25:42Z). Живая сверка 08:25:54Z: /title/net-takogo-xyz/ и /zzz-net/ — 404, «ни одной странице сайта», без «записи каталога», ссылка /catalog/ на месте; /, /movies/, /catalog/ — 200. checks/notfound_wording.py на установленном дереве rc 0, и с LORDS_TEMPLATE_MANIFEST=/nonexistent (условия CI) rc 0. Поправка к verify_live T313: meta robots на 404 — «index, follow», как и до выпуска; страницу исключает код 404, это не регрессия."
     }
   ]
 }
