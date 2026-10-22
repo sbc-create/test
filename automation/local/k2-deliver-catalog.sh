@@ -80,9 +80,22 @@ for site in $sites; do
   ( cd "$box" && sha256sum ./*.json > SHA256SUMS )
   echo "==> $site: комплект $(du -sm "$box" | cut -f1) МиБ, файлов $(ls -1 "$box" | wc -l)"
 
-  ansible -i "$inventory" "$host_ref" -m copy \
+  # Вывод ansible СОХРАНЯЕТСЯ, а не выбрасывается. Измерено 22.10: прежняя
+  # редакция писала `>/dev/null`, и четыре суточных отказа подряд (19–22.10)
+  # не оставили ни одной строки о причине — в журнале юнита есть только «==>
+  # lords-10: комплект 111 МиБ» и «[x] доставка не удалась». Шаг, на котором
+  # стоит вся цепочка, был единственным, чей вывод уничтожался.
+  copy_log="$work/$site-copy.log"
+  if ! ansible -i "$inventory" "$host_ref" -m copy \
       -a "src=$box/ dest=/home/k2deploy/stage/incoming/$site/ mode=0644 directory_mode=0755" \
-      >/dev/null || { echo "[x] доставка не удалась"; exit 1; }
+      > "$copy_log" 2>&1; then
+    echo "[x] доставка не удалась; причина из ansible:"
+    tail -25 "$copy_log" | sed 's/^/   /'
+    # Журнал НЕ удаляется вместе с ящиком: он и есть то, зачем сюда придут.
+    cp "$copy_log" "$work/../last-copy-failure.log" 2>/dev/null
+    echo "   полный вывод: $copy_log (копия: $work/../last-copy-failure.log)"
+    exit 1
+  fi
 
   out="$(ansible -i "$inventory" "$host_ref" -m raw \
          -a "cd /home/k2deploy/stage/incoming/$site; sha256sum -c SHA256SUMS --quiet; echo rc=\$?" 2>&1)"
