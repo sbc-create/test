@@ -129,9 +129,9 @@ def run(shots: Path | None) -> dict:
         S["reset_clears_marks"] = not pg.locator("[data-weigh]").first.is_checked() and not steps.nth(0).is_checked()
         pg.goto(BASE + "/recept/yablochnoe-myagkoe-pechene/")
         S["bakers_pct_butter_50"] = (
-            pg.locator(".weigh-t tr", has_text="Сливочное масло").locator("td").nth(1).inner_text() == "50 %"
+            pg.locator(".pct-t tr", has_text="Сливочное масло").locator("td").first.inner_text(timeout=2000) == "50 %"
         )
-        pg.locator(".strip a", has_text="шаг 5").click()
+        pg.locator(".facts-b a", has_text="шаг").click()
         S["oven_strip_links_to_step"] = pg.evaluate("location.hash") == "#shag-5"
         # таблица: фильтр и сортировка применяются сразу
         pg.goto(BASE + "/recepty/")

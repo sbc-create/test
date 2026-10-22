@@ -151,7 +151,25 @@ def test_recipe_quick_answers_and_anchors(app):
     _, html, _ = app.route(r.url, {})
     assert 'href="#ingredienty"' in html and 'id="ingredienty"' in html
     assert 'href="#prigotovlenie"' in html and 'id="prigotovlenie"' in html
-    assert re.search(r"<dt>Выход</dt>", html) and re.search(r"<dt>Продукты</dt><dd>\d+</dd>", html)
+    assert re.search(r"Продукты \(\d+\)</a>", html) and 'class="jump__go" href="#prigotovlenie"' in html
+
+
+def test_recipe_shows_no_empty_fields_or_default_yield(app):
+    """Пустые поля не показываются («Форма — не указана»), «1 порция» у партии выпечки — не выход."""
+    for r in app.site.recipes:
+        _, html, _ = app.route(r.url, {})
+        main = html.split("<main", 1)[1].split("</main>", 1)[0]
+        assert "не указан" not in main, r.slug
+        lds = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html, re.S)]
+        ld = next(x for x in lds if x.get("@type") == "Recipe")
+        if r.servings <= 1:
+            assert "<span>Выход</span>" not in main and "recipeYield" not in ld, r.slug
+        else:
+            assert f"<b>{r.servings} " in main and ld["recipeYield"] == f"{r.servings} порц.", r.slug
+        if r.form:
+            assert not re.search(r"(ого|его|ую)$", r.form) and r.form[0].isupper(), r.form
+    assert app.site.by_slug["limonnyj-keks"].form == "Форма для английского кекса"
+    assert app.site.by_slug["pechene-s-finikami-i-slivami"].form == "Силиконовая форма"
 
 
 def test_images_require_rights(tmp_path):

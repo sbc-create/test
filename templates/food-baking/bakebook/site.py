@@ -233,8 +233,28 @@ class Recipe:
         f = self.oven["forms"]
         if not f:
             return None
-        # «Форму для кекса» / «формы диаметром 20 см» → именительный падеж для подписи
-        return re.sub(r"^[Фф]орм[уые]\b", "Форма", f[0]["text"]).replace("противень", "Противень", 1)
+        t = f[0]["text"].strip()
+        # обрыв на прилагательном («Форму для английского») — дополняем словом из шага источника, где форма названа
+        if re.search(r"(ого|его|ой|ей)$", t):
+            m = next(
+                (
+                    re.search(re.escape(t.lower()) + r"\s+([а-яё]+)", s["text"].lower())
+                    for s in self.steps
+                    if t.lower() in s["text"].lower()
+                ),
+                None,
+            )
+            t = f"{t} {m.group(1)}" if m else t
+        # «Форму для кекса», «силиконовую форму», «формы диаметром 20 см» → именительный падеж для подписи
+        t = re.sub(r"^([а-яё]+)ую форму\b", r"\1ая форма", t, flags=re.I)
+        t = re.sub(r"^[Фф]орм[уые]\b", "Форма", t)
+        return t[:1].upper() + t[1:]
+
+    @property
+    def yield_n(self) -> int | None:
+        """Выход в порциях. «1 порция» у целой партии выпечки — значение по умолчанию источника, а не выход:
+        не показывается (None)."""
+        return self.servings if self.servings and self.servings > 1 else None
 
     @property
     def timers(self) -> list[dict]:
@@ -335,8 +355,10 @@ class Site:
         """Похожие: тот же раздел, тот же вид теста, общие темы; без совпадений — не показываются."""
 
         def score(o: Recipe) -> int:
-            return (2 if o.group == r.group else 0) + (1 if r.dough and o.dough == r.dough else 0) + len(
-                set(o.tags) & set(r.tags)
+            return (
+                (2 if o.group == r.group else 0)
+                + (1 if r.dough and o.dough == r.dough else 0)
+                + len(set(o.tags) & set(r.tags))
             )
 
         cands = sorted((o for o in self.recipes if o.slug != r.slug), key=lambda o: (-score(o), o.slug))

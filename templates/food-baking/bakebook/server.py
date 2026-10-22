@@ -149,7 +149,6 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
         "description": r.intro,
         "url": site.abs(r.url),
         "recipeCategory": r.group_label,
-        "recipeYield": f"{r.servings} порц.",
         "recipeIngredient": [f"{i['name']}, {i['amount']}" for i in r.ingredients],
         "recipeInstructions": [
             {"@type": "HowToStep", "position": n + 1, "text": s["text"], "url": site.abs(r.url) + f"#shag-{n + 1}"}
@@ -169,6 +168,8 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
     ):
         if v:
             ld[k] = iso(v)
+    if r.yield_n:
+        ld["recipeYield"] = f"{r.yield_n} порц."
     return ld
 
 

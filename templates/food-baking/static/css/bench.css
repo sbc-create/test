@@ -400,3 +400,31 @@ h1, h2, .bcard__title, .gtile__label { hyphens: manual; }
 @media (max-width: 639px) { .colophon__grid { grid-template-columns: 1fr 1fr; gap: 22px 16px; } .colophon__about { grid-column: 1 / -1; } }
 .colophon { font-size: .95rem; }
 .colophon nav a { font-size: 1rem; }
+
+/* --- 22.10: страница рецепта — коротко о рецепте, переход к приготовлению, список продуктов ---------- */
+.facts-b { list-style: none; margin: 4px 0 14px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.facts-b li { display: flex; flex-direction: column; padding: 8px 14px; background: var(--butter); border-radius: var(--r-s); min-width: 104px; }
+.facts-b span { font-size: .75rem; letter-spacing: .06em; text-transform: uppercase; color: var(--ink); opacity: .78; }
+.facts-b b { font-size: 1.02rem; font-variant-numeric: tabular-nums; }
+.jump { margin: 0 0 20px; gap: 10px; }
+.jump a { min-height: 44px; padding: 0 18px; }
+.jump a.jump__go { background: var(--wine-2); border-color: var(--wine-2); color: #fff; }
+.jump a.jump__go::after { color: #fff; }
+.jump a.jump__go:hover { background: var(--wine); border-color: var(--wine); }
+.strip dl { grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); margin-bottom: 18px; }
+.weigh-l { list-style: none; margin: 0 0 10px; padding: 0; background: var(--page); border: 1px solid var(--rule); border-radius: var(--r); }
+.weigh-l li { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; padding: 10px 14px; border-bottom: 1px solid var(--rule); }
+.weigh-l li:last-child { border-bottom: 0; }
+.weigh-l label { display: inline-flex; gap: 10px; align-items: flex-start; cursor: pointer; min-width: 0; }
+.weigh-l input { width: 22px; height: 22px; margin: 2px 0 0; flex: none; accent-color: var(--wine-2); }
+.weigh-l__a { font-weight: 700; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.weigh-l li:has(input:checked) .weigh-l__n, .weigh-l li:has(input:checked) .weigh-l__a { color: var(--muted); text-decoration: line-through; }
+.pct-box { margin: 12px 0 0; border: 1px solid var(--rule); border-radius: var(--r); background: var(--page); }
+.pct-box summary { cursor: pointer; padding: 12px 14px; font-weight: 700; min-height: 44px; display: flex; align-items: center; }
+.pct-box > .note, .pct-box > table { margin: 0 14px 12px; }
+.pct-t { border-collapse: collapse; width: calc(100% - 28px); }
+.pct-t th, .pct-t td { text-align: left; padding: 6px 0; border-bottom: 1px solid var(--rule); font-weight: 400; }
+.pct-t thead th { font-size: .8rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+.pct-t .num { text-align: right; font-variant-numeric: tabular-nums; }
+.facts-b a { font-weight: 600; color: var(--wine); display: inline-flex; min-height: 24px; align-items: center; }
+.facts-b li { max-width: 100%; }

@@ -6,27 +6,26 @@
     <p class="kicker">{{ r.group_label }}{% if r.dough_label %} · {% if r.dough in site.doughs() %}<a href="/testo/{{ r.dough }}/">{{ r.dough_label|lower }}</a>{% else %}{{ r.dough_label|lower }}{% endif %}{% endif %}</p>
     <h1>{{ r.title }}</h1>
     <p class="lead">{{ r.intro }}</p>
-    <nav class="jump" aria-label="Перейти к разделу рецепта"><a href="#ingredienty">Продукты</a><a href="#prigotovlenie">Ход работы</a></nav>
+    <ul class="facts-b" aria-label="Коротко о рецепте">
+      {% if r.total %}<li><span>Всего</span><b>{{ r.total }}</b></li>{% endif %}
+      {% if r.temps %}<li><span>Духовка</span><b>{{ r.temps | join(' → ') }}&nbsp;°C</b></li>{% else %}<li><span>Духовка</span><b>не нужна</b></li>{% endif %}
+      {% if r.timers %}<li><span>Выпекать</span><b>{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг&nbsp;{{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}</b></li>{% elif r.bake_label %}<li><span>Выпекать</span><b>{{ r.bake_label }}</b></li>{% endif %}
+      {% if r.form %}<li><span>Форма</span><b>{{ r.form }}</b></li>{% endif %}
+      {% if r.yield_n %}<li><span>Выход</span><b>{{ r.yield_n }} {{ plural(r.yield_n, 'порция', 'порции', 'порций') }}</b></li>{% endif %}
+    </ul>
+    <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Продукты ({{ r.ingredients|length }})</a></nav>
   </header>
   {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 860px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
-  <section class="strip" aria-labelledby="oven-h">
-    <h2 id="oven-h" class="sr">Духовка и форма</h2>
-    <dl>
-      <div class="strip__t"><dt>Духовка</dt><dd>{% if r.temps %}{{ r.temps | join(' → ') }} °C{% else %}не нужна{% endif %}</dd></div>
-      <div><dt>В духовке</dt><dd>{% if r.timers %}{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг {{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}{% else %}не указано{% endif %}</dd></div>
-      <div><dt>Форма</dt><dd>{{ r.form or 'не указана' }}</dd></div>
-      <div><dt>Всего</dt><dd>{{ r.total or '—' }}</dd></div>
-      <div><dt>Выход</dt><dd>{{ r.servings }} {{ plural(r.servings, 'порция', 'порции', 'порций') }}</dd></div>
-      <div><dt>Продукты</dt><dd>{{ r.ingredients|length }}</dd></div>
-    </dl>
-  </section>
   <section id="ingredienty" aria-labelledby="ing-h">
-    <h2 id="ing-h">Отвесить</h2>
-    <div class="tablewrap"><table class="weigh-t">
-      <thead><tr><th scope="col">Продукт</th><th scope="col" class="num">Количество</th>{% if r.flour_g %}<th scope="col" class="num">% от муки</th>{% endif %}</tr></thead>
-      <tbody>{% for i in r.bench %}<tr><th scope="row"><label><input type="checkbox" data-weigh="{{ loop.index }}"> {{ i.name }}</label></th><td class="num">{{ i.amount }}</td>{% if r.flour_g %}<td class="num pct{% if i.pct is none %} pct--none{% endif %}" data-label="от муки:">{{ i.pct ~ ' %' if i.pct is not none else '—' }}</td>{% endif %}</tr>{% endfor %}</tbody>
-    </table></div>
-    <p class="note">{% if r.flour_g %}Пекарский процент — масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %), считается только по граммам источника; штуки и ложки без процента. {% endif %}Количества даны для формы из рецепта.</p>
+    <h2 id="ing-h">Продукты</h2>
+    <ul class="weigh-l">{% for i in r.bench %}<li><label><input type="checkbox" data-weigh="{{ loop.index }}"><span class="weigh-l__n">{{ i.name }}</span></label><span class="weigh-l__a">{{ i.amount }}</span></li>{% endfor %}</ul>
+    {% if r.form %}<p class="note">Количества — для формы из рецепта: {{ r.form|lower }}.</p>{% endif %}
+    {% if r.flour_g %}<details class="pct-box">
+      <summary>Пекарский процент — доля от массы муки</summary>
+      <p class="note">Масса продукта к массе муки ({{ r.flour_g|int }} г = 100 %). Считается только для продуктов в граммах; штуки и ложки без процента. Удобно сравнивать рецепты между собой.</p>
+      <table class="pct-t"><thead><tr><th scope="col">Продукт</th><th scope="col" class="num">% от муки</th></tr></thead>
+      <tbody>{% for i in r.bench if i.pct is not none %}<tr><th scope="row">{{ i.name }}</th><td class="num">{{ i.pct }} %</td></tr>{% endfor %}</tbody></table>
+    </details>{% endif %}
   </section>
   <section id="prigotovlenie" aria-labelledby="method-h">
     <h2 id="method-h">Ход работы</h2>
@@ -35,7 +34,7 @@
     {% for s in r.steps %}{% set si = loop.index0 %}{% set n = loop.index %}
       <li id="shag-{{ n }}"><label class="done" hidden><input type="checkbox" data-step-done="{{ n }}"><span class="sr">Шаг {{ n }} сделан</span></label>
         <div><p>{{ s.text }}</p>{% if s.cue %}<p class="cue">Готово, когда: {{ s.cue|lower }}</p>{% endif %}
-        {% for p in r.pitfalls if p.step_index == si %}<p class="pitfall"><b>Осторожно:</b> {{ p.text }}</p>{% endfor %}
+        {% for p in r.pitfalls if p.step_index == si %}<p class="pitfall"><b>Важно:</b> {{ p.text }}</p>{% endfor %}
         {% for t in r.timers if t.step == n %}<button type="button" class="timer" data-minutes="{{ t.minutes }}" hidden>Таймер {{ t.minutes }} мин</button>{% endfor %}</div>
       </li>
     {% endfor %}
