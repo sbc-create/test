@@ -221,6 +221,14 @@ def run(shots_dir: Path | None) -> dict:
             "ok": before == "190 г" and after == "380 г",
             "time_unchanged": page.locator(".facts").inner_text() == time_before,
         }
+        # 22.10: выход не указан («1 порция» источника) — кратный пересчёт ×1 → ×1½, без «порций»
+        page.goto(BASE + "/recept/tykvennyj-sup-pyure/")
+        page.click("[data-servings-control] [data-step='1']")
+        S["servings_unknown_yield_multiplier"] = (
+            page.locator("[data-servings-control] output").inner_text() == "×1½ от рецепта"
+            and page.locator(".ing").first.locator(".ing__amount").inner_text() == "750 г"
+        )
+        page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
         # список покупок
         page.click("[data-add-list]")
         page.goto(BASE + "/spisok-pokupok/")
@@ -314,6 +322,19 @@ def run(shots_dir: Path | None) -> dict:
         url_before = page.url
         page.click(".pick .btn")
         empty_blocked = page.url == url_before and "хотя бы один" in page.locator("[data-fridge-hint]").inner_text()
+        # 22.10: поиск по списку продуктов (по началу слова) и удаление одного выбранного продукта
+        page.goto(BASE + "/iz-holodilnika/")
+        page.fill("#pf", "кар")
+        S["fridge_filter_word_start"] = page.locator(".pick__list li:visible").all_inner_texts() == ["Картофель"]
+        page.fill("#pf", "ананас")
+        S["fridge_filter_none_message"] = page.locator("[data-fridge-none]").is_visible()
+        page.goto(BASE + "/iz-holodilnika/?est=tvorog&est=kefir&est=moloko")
+        S["fridge_full_composition_needs_more"] = (
+            page.locator(".match__row").count() > 0 and page.locator(".match__row--all").count() == 0
+        )
+        with page.expect_navigation():
+            page.locator(".pchip", has_text="Кефир").click()
+        S["fridge_chip_removes_one"] = page.url.endswith("?est=tvorog&est=moloko")
         resp = page.goto(BASE + "/iz-holodilnika/?est=kvantovyj")
         S["fridge_hint_counts_two"] = hint == "Отмечено: 2"
         S["fridge_first_has_both_plov"] = first == "Плов с курицей на сковороде"

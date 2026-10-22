@@ -219,7 +219,8 @@
         f.querySelectorAll(".pick__group").forEach(function (g) {
           var n = 0;
           g.querySelectorAll(".pick__list li").forEach(function (li) {
-            var hit = !q || li.textContent.toLowerCase().replace(/ё/g, "е").indexOf(q) >= 0;
+            var words = li.textContent.toLowerCase().replace(/ё/g, "е").split(/[\s,]+/);  // по началу слова
+            var hit = !q || words.some(function (w) { return w.indexOf(q) === 0; });
             li.hidden = !hit; if (hit) n++;
           });
           g.hidden = !n; shown += n;
