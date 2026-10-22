@@ -9,23 +9,22 @@
     <dl class="facts">
       {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
       {% if r.yield_n %}<div><dt>Порции</dt><dd>{{ r.yield_n }}</dd></div>{% endif %}
-      <div><dt>Продукты</dt><dd>{{ r.ingredients|length }}</dd></div>
       <div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>
     </dl>
-    <nav class="jump" aria-label="Перейти к разделу рецепта"><a href="#ingredienty">Ингредиенты</a><a href="#prigotovlenie">Приготовление</a></nav>
+    {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
+    <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Ингредиенты ({{ r.ingredients|length }})</a></nav>
+    <div class="recipe__actions">
+      <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
+      <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
+      <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
+    </div>
     {% set links = site.tag_links(r) %}
     {% if links %}
     <ul class="tags" aria-label="Темы рецепта">
       {% for href, label in links %}<li><a href="{{ href }}">{{ label }}</a></li>{% endfor %}
     </ul>
     {% endif %}
-    <div class="recipe__actions">
-      <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
-      <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
-      <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
-    </div>
   </header>
-  {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 860px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
 
   <div class="recipe__body">
     <section class="ingredients" id="ingredienty" aria-labelledby="ing-h">

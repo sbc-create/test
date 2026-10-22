@@ -164,7 +164,7 @@ def test_recipe_page_quick_answers_and_anchors(app):
     _, html, _ = app.route(r.url, {})
     assert 'href="#ingredienty"' in html and 'id="ingredienty"' in html
     assert 'href="#prigotovlenie"' in html and 'id="prigotovlenie"' in html
-    assert re.search(r"<dt>Продукты</dt><dd>\d+</dd>", html)
+    assert f"Ингредиенты ({len(r.ingredients)})</a>" in html and 'class="jump__go" href="#prigotovlenie"' in html
     ld = next(
         x
         for x in (json.loads(y) for y in re.findall(r'ld\+json">(.*?)</script>', html, re.S))

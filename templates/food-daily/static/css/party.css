@@ -526,3 +526,12 @@ h1, h2 { hyphens: manual; }
 .related .grid { grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 600px) { .related .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 @media (min-width: 1000px) { .related .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+/* 22.10: верх рецепта — заметный переход к приготовлению */
+.jump { margin: 4px 0 14px; gap: 10px; }
+.jump a { min-height: 44px; padding: 0 18px; }
+.jump a.jump__go { background: var(--tomato); border-color: var(--tomato); color: #fff; }
+.jump a.jump__go::after { color: #fff; }
+.jump a.jump__go:hover { background: var(--tomato-ink); border-color: var(--tomato-ink); }
+.recipe__head .recipe__pic { margin: 6px 0 16px; max-width: 760px; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3; background: var(--paper-2); }
+.recipe__head .recipe__pic img { width: 100%; height: 100%; object-fit: cover; }
+.recipe__head .tags { margin-top: 12px; }
