@@ -448,3 +448,14 @@ def test_model_unavailable_is_not_an_attempt_and_pauses_queue(tmp_path):
     после = dt.datetime(2026, 10, 15, 22, 0, tzinfo=dt.timezone.utc)
     assert tech_run.candidates(задача, st, внутри) == []            # пауза 30 мин после последнего прогона без модели
     assert [з["id"] for з in tech_run.candidates(задача, st, после)] == ["T900"]
+
+
+def test_publish_limit_counts_attempts_not_waits(tmp_path, monkeypatch):
+    """Ожидающие задачи не занимают места в пределе: готовая за ними всё равно выпускается."""
+    кандидаты = [{"task": {"id": f"T{i}"}, "head": str(i) * 40} for i in range(5)]
+    monkeypatch.setattr(tech_publish, "кандидаты", lambda state: кандидаты)
+    решения = {"T0": "wait", "T1": "wait", "T2": "wait", "T3": "publish", "T4": "publish"}
+    monkeypatch.setattr(tech_publish, "опубликовать_одну",
+                        lambda к, state, dry_run=False: {"task_id": к["task"]["id"], "decision": решения[к["task"]["id"]]})
+    итог = tech_publish.run(tmp_path, dry_run=True, limit=1)
+    assert [r["task_id"] for r in итог] == ["T0", "T1", "T2", "T3"]

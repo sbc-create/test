@@ -401,13 +401,23 @@ def run(state: Path | None = None, *, dry_run: bool = False, limit: int = 5) -> 
     state = state or tech_run.STATE
     state.mkdir(parents=True, exist_ok=True)
     итог = []
-    for к in кандидаты(state)[:limit]:
+    # Предел считает ПОПЫТКИ выпуска, а не ожидания: задачи, которые ждут неделями
+    # (T175, T262), иначе занимают все места, и готовая задача за ними не выпускается
+    # никогда (22.10: T175, T262, T313 занимали 3 из 3, T314 стояла за ними).
+    попыток = 0
+    for к in кандидаты(state):
+        if попыток >= limit:
+            break
         try:
-            итог.append(опубликовать_одну(к, state, dry_run=dry_run))
+            r = опубликовать_одну(к, state, dry_run=dry_run)
+            итог.append(r)
+            if r.get("decision") not in ("wait", "hold") and r.get("outcome") not in ("waiting", "waiting_skipped"):
+                попыток += 1
         except Exception as ош:  # noqa: BLE001 — одна задача не держит остальные
             итог.append(_записать(state, {"task_id": к["task"]["id"], "head": к["head"], "outcome": "error",
                                           "reason": f"{type(ош).__name__}: {str(ош)[:300]}"}) if not dry_run
                         else {"task_id": к["task"]["id"], "error": str(ош)[:300]})
+            попыток += 1
     return итог
 
 
