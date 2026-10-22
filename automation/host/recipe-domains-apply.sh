@@ -2,6 +2,10 @@
 # Обновление bestreciept.site и myfood.mobi одной командой владельца (root-шаг):
 #
 #   sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh [--dry-run]
+#   sudo bash /home/claude/wt-template-food-daily/automation/host/recipe-domains-apply.sh --rollback [--dry-run]
+#
+# --rollback возвращает на обоих доменах предыдущий релиз (каталог releases/<коммит> вместе с его контентом;
+# редакционная база вне релиза не трогается) и перезапускает службы с проверкой /healthz.
 #
 # Берёт комплекты из var/kits/recipe-domains-current/ (food-daily-<коммит>, food-baking-<коммит>), проверяет
 # контрольные суммы и выполняет сценарий выкладки ИЗ САМОГО комплекта (версия сценария = версия кода):
@@ -12,7 +16,12 @@ set -Eeuo pipefail
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 KITS="${HERE}/var/kits/recipe-domains-current"
 extra=()
-[ "${1:-}" = "--dry-run" ] && extra=(--dry-run)
+for a in "$@"; do
+  case "$a" in
+    --dry-run|--rollback) extra+=("$a") ;;
+    *) printf '[x] неизвестный аргумент: %s\n' "$a" >&2; exit 2 ;;
+  esac
+done
 die() { printf '[x] %s\n' "$*" >&2; exit 1; }
 [ -d "$KITS" ] || die "нет ${KITS}"
 for pair in "food-daily bestreciept" "food-baking myfood"; do
@@ -28,4 +37,4 @@ for pair in "food-daily bestreciept" "food-baking myfood"; do
   bash "$script" --kit "$kit" "${extra[@]}"
   rm -f "$script"
 done
-printf '==> готово: https://bestreciept.site/ и https://myfood.mobi/\n'
+printf '==> готово: https://bestreciept.site/ и https://myfood.mobi/%s\n' "$([[ " ${extra[*]} " == *" --rollback "* ]] && echo ' (откат)')"
