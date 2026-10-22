@@ -89,6 +89,15 @@
       "scope_page_share": 0.001,
       "phase": "canary",
       "evidence": "docs/seo-operator/EXP_EDITOR_DEMAND_ORDER.md (назначение пар, критерии до выпуска); передача Архитектора ARCHITECT_TO_SEO-003 (24fe786); оценка не раньше 02.11"
+    },
+    {
+      "experiment_id": "exp-country-links-cards",
+      "site_id": "zona-01",
+      "hypothesis": "Ссылка «Страна» в фактах карточки на непустой раздел страны (/catalog/?country=<код>) даёт разделам стран поисковые входы, которых без обычных ссылок не было",
+      "primary_metric": "поисковые входы на /catalog/?country=* (Метрика; с 23.10 — daily_search_landing_pages по дням) против окна до 18.10; показы — после Вебмастера (B023)",
+      "applicability": "выпущено 18.10 на четырёх сайтах сразу (журнал изменений, строки 65–66): zonafilm12.site — T240 20:15Z; zonafilm.space — T242, zonafilm.cc — T243 (слоем поверх закреплённого шаблона), lordfilm47.space — T244, 20:34–21:30Z. Контроля внутри семейства нет; сравнение — до/после. До оценки разделы стран (адреса, карта, тексты) на этих сайтах не менять.",
+      "phase": "observing",
+      "evidence": "22.10 11:49Z wt-portable-site-cell-01-dc: внесено в реестр задним числом — правка шла как SEO-доводка, а не как опыт, и поэтому не видна мерам опытов (сигнал wt-nova-publish-memory-02-ce о новом разделе стран на Zona). Первая оценка — 01.11, итоговая — 22.11 (журнал изменений). /catalog/?country=turciya на zonafilm.space и zonafilm12.site — 200, index, follow; в картах сайтов country= нет. lordfilm47.space — одновременно контроль exp-lords-sitemap-ongoing-episodes и exp-lords-title-kind-year; эта правка на нём уже внесена 18.10, её влияние на те опыты учитывается в их оценке."
     }
   ]
 }
