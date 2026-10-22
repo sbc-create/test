@@ -179,11 +179,16 @@ def решение(сведения: dict) -> tuple[str, str]:
         return "already_live", "голова задачи уже в живом выпуске (выпущена этим или чужим выпуском)"
     if ci and not ci.startswith(live[:12]) and not live.startswith(ci[:12]):
         return "wait", f"на ветке выпуска невыпущенный коммит {ci[:12]} (живой {live[:12]}) — выпуск унёс бы его"
-    if remote and not remote.startswith(live[:12]) and not live.startswith(remote[:12]):
+    # Голова ветки выпуска — наш же коммит с ПРОВАЛЕННЫМ CI (потомок живого), а голова
+    # задачи — его потомок с исправлением: перемотка законно уносит упавший коммит
+    # вместе с исправлением. Без этого любой провал CI клинит витрину до ручного push
+    # (T313 → T314 на zonafilm12.site, 22.10: «идёт CI» ждало бы вечно, force запрещён).
+    исправляет_упавшую = bool(сведения.get("remote_failed_ancestor")) and bool(remote) and remote != head
+    if remote and not remote.startswith(live[:12]) and not live.startswith(remote[:12]) and not исправляет_упавшую:
         return "wait", f"голова ветки выпуска {remote[:12]} не равна живому {live[:12]} (идёт CI или чужой push)"
     if сведения.get("clone_dirty"):
         return "wait", "общий клон репозитория грязный — в нём работает другая сессия"
-    if not сведения.get("clone_on_live"):
+    if not сведения.get("clone_on_live") and not (исправляет_упавшую and сведения.get("clone_on_remote")):
         return "wait", "общий клон не на живом коммите — в нём работает другая сессия"
     if not сведения.get("live_in_head"):
         return "superseded", f"ветка задачи не стоит на живом коммите {live[:12]} — нужна повторная подготовка"
@@ -312,12 +317,23 @@ def опубликовать_одну(к: dict, state: Path, *, dry_run: bool = 
         _git(репо, "fetch", "-q", "origin", ветка)
         remote = _git(репо, "rev-parse", "FETCH_HEAD").stdout.strip()
         live_full = _git(репо, "rev-parse", "--verify", "-q", f"{live}^{{commit}}").stdout.strip() if live else ""
+        клон = _git(репо, "rev-parse", "HEAD").stdout.strip()
+        # Упавшая голова ветки выпуска, которую голова задачи исправляет: потомок живого,
+        # СТРОГИЙ предок головы задачи (сама упавшая голова — не исправление), и её CI на
+        # ветке выпуска завершён провалом (не «идёт»).
+        упавшая = False
+        if (remote and live_full and remote != live_full and remote != head
+                and _предок(репо, live_full, remote) and _предок(репо, remote, head)):
+            gh = re.sub(r"\.git$", "", (_git(репо, "remote", "get-url", "origin").stdout.strip()).split("github.com/")[-1])
+            упавшая = _ci(gh, ветка, remote, 0) in ("failure", "cancelled", "timed_out", "startup_failure")
         сведения = {
             "live": live_full or live, "ci_commit": t.get("commit") or "", "remote_head": remote, "head": head,
             "head_in_live": bool(live_full) and _предок(репо, head, live_full),
             "live_in_head": bool(live_full) and _предок(репо, live_full, head),
             "clone_dirty": bool(_git(репо, "status", "--porcelain").stdout.strip()),
-            "clone_on_live": bool(live_full) and _git(репо, "rev-parse", "HEAD").stdout.strip() == live_full,
+            "clone_on_live": bool(live_full) and клон == live_full,
+            "clone_on_remote": bool(remote) and клон == remote,
+            "remote_failed_ancestor": упавшая,
             "branch": ветка,
         }
     действие, причина = решение(сведения)

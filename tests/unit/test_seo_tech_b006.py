@@ -154,6 +154,14 @@ def _сведения(**k):
     ({"clone_on_live": False}, "wait"),
     ({"live_in_head": False}, "superseded"),    # ветка не на живом коммите — повторная подготовка
     ({"live": ""}, "wait"),
+    # Голова ветки — наш коммит с проваленным CI, голова задачи его исправляет (T313 → T314).
+    ({"remote_head": "d" * 40, "remote_failed_ancestor": True}, "publish"),
+    ({"remote_head": "d" * 40, "remote_failed_ancestor": True, "clone_on_live": False, "clone_on_remote": True}, "publish"),
+    ({"remote_head": "d" * 40, "remote_failed_ancestor": True, "clone_on_live": False, "clone_on_remote": False}, "wait"),
+    ({"remote_head": "d" * 40, "remote_failed_ancestor": False, "clone_on_live": False, "clone_on_remote": True}, "wait"),
+    ({"remote_head": "d" * 40, "remote_failed_ancestor": True, "clone_dirty": True}, "wait"),
+    # Голова задачи — сама упавшая голова ветки: не исправление, выпускать нельзя (T262, T313).
+    ({"remote_head": "b" * 40, "remote_failed_ancestor": True}, "wait"),
 ])
 def test_publish_decision(поля, действие):
     assert tech_publish.решение(_сведения(**поля))[0] == действие
