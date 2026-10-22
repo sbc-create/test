@@ -535,3 +535,4 @@ h1, h2 { hyphens: manual; }
 .recipe__head .recipe__pic { margin: 6px 0 16px; max-width: 760px; border-radius: var(--radius); overflow: hidden; aspect-ratio: 4 / 3; background: var(--paper-2); }
 .recipe__head .recipe__pic img { width: 100%; height: 100%; object-fit: cover; }
 .recipe__head .tags { margin-top: 12px; }
+.pick__item input { width: 24px; height: 24px; }
