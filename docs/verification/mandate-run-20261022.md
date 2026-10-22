@@ -2,7 +2,7 @@
 
 # Сквозной прогон приёмки, 22 октября 2026
 
-Собрано 2026-10-22T10:00:11Z из рабочей копии `wt-nova-publish-memory-02`, ветка `claude/nova-publish-memory-02`.
+Собрано 2026-10-22T10:13:17Z из рабочей копии `wt-nova-publish-memory-02`, ветка `claude/nova-publish-memory-02`.
 
 Каждая команда запущена подряд, в один проход. **Код возврата — фактический**, вывод не редактировался. Ожидание указано рядом: код, отличный от нуля, здесь не всегда ошибка — у трёх команд он и есть способ сообщить находку.
 
@@ -36,23 +36,23 @@ $ python3 automation/local/cycle-coverage.py
 
 ```
 $ python3 automation/local/brief.py --list
-yummyani.site            yummy     этап 1 задач  8 
+yummyani.site            yummy     этап 1 задач  9 
 yummyani.org             yummy     этап 1 задач  7 
-yummyani.biz             yummy     этап 1 задач  8 
+yummyani.biz             yummy     этап 1 задач  9 
 yummyani7.site           yummy     этап 1 задач  7 
 yummyani7.info           yummy     этап 1 задач  7 
 animedia.icu             animedia  этап 2 задач  2 
-animedia.space           animedia  этап 2 задач  3 
-animeg0.site             animego   этап 2 задач  2 
-an1meg0.site             animego   этап 1 задач  2 
-an1mego.site             animego   этап 1 задач  2 
-lordserials22.info       lords     этап 2 задач  2 
-1lordserials1.online     lords     этап 1 задач  2 
-lordfilm47.space         lords     этап 2 задач  2 
+animedia.space           animedia  этап 2 задач  4 
+animeg0.site             animego   этап 2 задач  3 
+an1meg0.site             animego   этап 1 задач  3 
+an1mego.site             animego   этап 1 задач  3 
+lordserials22.info       lords     этап 2 задач  3 
+1lordserials1.online     lords     этап 1 задач  3 
+lordfilm47.space         lords     этап 2 задач  3 
 lordserial33.biz         lords     этап 2 задач  2 
 zonafilm12.site          zona      этап 2 задач  2 
-zonafilm.space           zona      этап 2 задач  2 
-zonafilm.cc              zona      этап 2 задач  3 
+zonafilm.space           zona      этап 2 задач  3 
+zonafilm.cc              zona      этап 2 задач  4 
 lordfilm.group           k2        этап 1 задач  3 
 lordfilm.spb.ru          k2        этап 1 задач  3 
 lordfilm.msk.ru          k2        этап 1 задач  3 
@@ -73,7 +73,7 @@ $ python3 automation/local/pick-work.py
 что делать: ЗАДАЧА ДОМЕНА
    {"домен": "1lordserials1.online", "задача": "Q-1lordserials1.online-001", "название": "Карта сайта 1lordserials1.online не обновлялась с 2026-10-15, пока каталог рос", "срочность": "P0", "состояние": "подготовлено"}
    почему: самая срочная доступная задача по порядку из правил сети, §6
-   домéнов 25, доступных задач 74, ждущих 9, учебных в очереди 5
+   домéнов 25, доступных задач 85, ждущих 9, учебных в очереди 4
 (код возврата: 0)
 ```
 
@@ -215,6 +215,7 @@ OK: config/analytics.json -> analytics-registry.schema.json
 OK: config/anime-year-corrections.json -> anime-year-corrections.schema.json
 OK: config/content-backlog.json -> content-backlog.schema.json
 OK: config/data-sources.json -> data-source-registry.schema.json
+OK: config/demand-snapshot.json -> demand-snapshot.schema.json
 OK: config/editor-coverage-blockers.json -> editor-coverage-blockers.schema.json
 OK: config/editor-run.json -> editor-run.schema.json
 OK: config/editorial-calendar.json -> editorial-calendar.schema.json
