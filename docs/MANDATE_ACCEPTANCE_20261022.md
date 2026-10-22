@@ -406,7 +406,8 @@ python3 -m pytest tests/unit/test_running_experiments.py -q → 12 passed
 
 | прогон | результат |
 | --- | --- |
-| `python3 -m pytest tests/unit -q` | **9 582 passed**, 133 skipped, 16 xfailed, **0 failed**, код 0, 967 с |
+| `python3 -m pytest tests/unit -q` | **9 630 passed**, 133 skipped, 16 xfailed, **0 failed**, код 0, 857 с (прогон 22.10, окончен 11:1xZ) |
+| тот же прогон сутками ранее | 9 582 passed при тех же 133 skipped и 16 xfailed — рост на 48 проверок, ни одна не удалена и не пропущена |
 | `python3 scripts/validate_registries.py` | код 0; `active-domains.json` и `learning-queue.json` сопоставлены своим схемам |
 | `python3 -m factory knowledge verify` | freeze `2026-10-22.1`, целостность OK |
 
