@@ -455,3 +455,5 @@ h1 { font-size: var(--fs-h1); }
 .bcard__media { border-bottom: 1px solid var(--rule); }
 @media (max-width: 559px) { .grid--home-fresh .bcard:nth-child(n+5) { display: flex; } }
 .k-home .spine .find { display: none; }
+.sheet-b header .recipe__pic { margin: 4px 0 16px; max-width: 760px; border-radius: var(--r); overflow: hidden; aspect-ratio: 4 / 3; background: var(--flour); }
+.sheet-b header .recipe__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }

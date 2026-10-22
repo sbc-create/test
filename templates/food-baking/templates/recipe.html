@@ -13,9 +13,9 @@
       {% if r.form %}<li><span>Форма</span><b>{{ r.form }}</b></li>{% endif %}
       {% if r.yield_n %}<li><span>Выход</span><b>{{ r.yield_n }} {{ plural(r.yield_n, 'порция', 'порции', 'порций') }}</b></li>{% endif %}
     </ul>
+    {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
     <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Продукты ({{ r.ingredients|length }})</a></nav>
   </header>
-  {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 860px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
   <section id="ingredienty" aria-labelledby="ing-h">
     <h2 id="ing-h">Продукты</h2>
     <ul class="weigh-l">{% for i in r.bench %}<li><label><input type="checkbox" data-weigh="{{ loop.index }}"><span class="weigh-l__n">{{ i.name }}</span></label><span class="weigh-l__a">{{ i.amount }}</span></li>{% endfor %}</ul>
