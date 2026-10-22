@@ -116,6 +116,11 @@ def по_поисковикам(запись: dict) -> tuple[dict[str, int], str
     if not з or not з.get("measured"):
         return {}, "search_engines не измерен"
     итог: dict[str, int] = {}
+    # Графа «прочие» получает ИМЕНА. Измерено 22.10: у zonafilm.cc она несёт
+    # 99 визитов из 715 — bing_search 73, duckduckgo 22, yahoo_search 4, то
+    # есть 13.8 % поискового трафика домена. Называть восьмую часть трафика
+    # «прочие» значит не знать, откуда она.
+    прочие_поимённо: dict[str, int] = {}
     for с in з.get("value") or []:
         изм = (с.get("dimensions") or [{}])[0]
         ид = str(изм.get("id") or "")
@@ -125,7 +130,10 @@ def по_поисковикам(запись: dict) -> tuple[dict[str, int], str
                  else "google" if ид.startswith("google")
                  else "прочие")
         итог[семья] = итог.get(семья, 0) + сколько
-    return итог, "search_engines"
+        if семья == "прочие":
+            прочие_поимённо[ид or "без идентификатора"] = (
+                прочие_поимённо.get(ид or "без идентификатора", 0) + сколько)
+    return итог, "search_engines", прочие_поимённо
 
 
 def страницы_поиска(запись: dict) -> tuple[list[dict], str, int]:
@@ -186,7 +194,7 @@ def разобрать(снимок: pathlib.Path) -> dict:
             continue
         страницы, откуда, всего_страниц = страницы_поиска(запись)
         поиск, откуда_поиск = поисковый_итог(запись)
-        системы, откуда_систем = по_поисковикам(запись)
+        системы, откуда_систем, прочие_имена = по_поисковикам(запись)
         верх5 = sum(с["visits"] for с in страницы[:5])
         итог["domains"].append({
             "domain": домен,
@@ -198,6 +206,9 @@ def разобрать(снимок: pathlib.Path) -> dict:
             "search_visits_note": откуда_поиск,
             "search_engines": системы,
             "search_engines_note": откуда_систем,
+            # Имена «прочих» систем. Пустой словарь означает, что прочих нет
+            # вовсе, а не что их не смотрели.
+            "search_engines_other": прочие_имена,
             "top5_search_entries": верх5,
             "top5_share_of_search": (
                 round(100 * верх5 / поиск, 1) if поиск else None),

@@ -22,6 +22,7 @@
     "google": 2
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 10605,
    "top5_share_of_search": 82.3,
    "search_landing_pages": [
@@ -67,10 +68,10 @@
     }
    ],
    "search_pages_total": 81,
+   "search_landing_covered": 89.4,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 81, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 89.4
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "yummyani7.site",
@@ -86,6 +87,9 @@
     "прочие": 11
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {
+    "bing_search": 11
+   },
    "top5_search_entries": 2404,
    "top5_share_of_search": 67.6,
    "search_landing_pages": [
@@ -131,10 +135,10 @@
     }
    ],
    "search_pages_total": 90,
+   "search_landing_covered": 80.7,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 90, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 80.7
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "animedia.icu",
@@ -150,6 +154,11 @@
     "прочие": 3
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {
+    "yahoo_search": 1,
+    "bing_search": 1,
+    "duckduckgo": 1
+   },
    "top5_search_entries": 1648,
    "top5_share_of_search": 66.9,
    "search_landing_pages": [
@@ -195,10 +204,10 @@
     }
    ],
    "search_pages_total": 129,
+   "search_landing_covered": 82.8,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 129, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 82.8
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "lordserials22.info",
@@ -213,6 +222,7 @@
     "yandex": 111
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 170,
    "top5_share_of_search": 18.3,
    "search_landing_pages": [
@@ -258,10 +268,10 @@
     }
    ],
    "search_pages_total": 144,
+   "search_landing_covered": 25.6,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 144, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 25.6
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "zonafilm.cc",
@@ -277,6 +287,11 @@
     "yandex": 18
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {
+    "bing_search": 73,
+    "duckduckgo": 22,
+    "yahoo_search": 4
+   },
    "top5_search_entries": 390,
    "top5_share_of_search": 54.5,
    "search_landing_pages": [
@@ -322,10 +337,10 @@
     }
    ],
    "search_pages_total": 129,
+   "search_landing_covered": 61.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 129, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 61.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "yummyani7.info",
@@ -340,6 +355,7 @@
     "google": 20
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 436,
    "top5_share_of_search": 59.9,
    "search_landing_pages": [
@@ -385,10 +401,10 @@
     }
    ],
    "search_pages_total": 74,
+   "search_landing_covered": 73.4,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 74, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 73.4
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "zonafilm12.site",
@@ -403,6 +419,7 @@
     "google": 58
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 144,
    "top5_share_of_search": 72.4,
    "search_landing_pages": [
@@ -448,10 +465,10 @@
     }
    ],
    "search_pages_total": 42,
+   "search_landing_covered": 79.9,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 42, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 79.9
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "yummyani.org",
@@ -467,6 +484,9 @@
     "прочие": 1
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {
+    "bing_search": 1
+   },
    "top5_search_entries": 43,
    "top5_share_of_search": 57.3,
    "search_landing_pages": [
@@ -512,10 +532,10 @@
     }
    ],
    "search_pages_total": 29,
+   "search_landing_covered": 70.7,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 29, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 70.7
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "yummyani.biz",
@@ -529,6 +549,7 @@
     "google": 48
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 26,
    "top5_share_of_search": 54.2,
    "search_landing_pages": [
@@ -574,10 +595,10 @@
     }
    ],
    "search_pages_total": 18,
+   "search_landing_covered": 79.2,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 18, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 79.2
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "animeg0.site",
@@ -591,6 +612,7 @@
     "google": 35
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 14,
    "top5_share_of_search": 40.0,
    "search_landing_pages": [
@@ -636,10 +658,10 @@
     }
    ],
    "search_pages_total": 24,
+   "search_landing_covered": 60.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 24, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 60.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "zonafilm.space",
@@ -653,6 +675,7 @@
     "google": 47
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 24,
    "top5_share_of_search": 51.1,
    "search_landing_pages": [
@@ -698,10 +721,10 @@
     }
    ],
    "search_pages_total": 26,
+   "search_landing_covered": 66.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 26, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 66.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "an1meg0.site",
@@ -715,6 +738,7 @@
     "google": 27
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 18,
    "top5_share_of_search": 66.7,
    "search_landing_pages": [
@@ -760,10 +784,10 @@
     }
    ],
    "search_pages_total": 14,
+   "search_landing_covered": 85.2,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 14, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 85.2
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "lordfilm47.space",
@@ -777,6 +801,7 @@
     "google": 36
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 16,
    "top5_share_of_search": 44.4,
    "search_landing_pages": [
@@ -822,10 +847,10 @@
     }
    ],
    "search_pages_total": 25,
+   "search_landing_covered": 58.3,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 25, сохранено 10",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 58.3
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "an1mego.site",
@@ -839,6 +864,7 @@
     "google": 13
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 11,
    "top5_share_of_search": 84.6,
    "search_landing_pages": [
@@ -872,10 +898,10 @@
     }
    ],
    "search_pages_total": 7,
+   "search_landing_covered": 100.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 7, сохранено 7",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 100.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "animedia.space",
@@ -889,6 +915,7 @@
     "google": 1
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 1,
    "top5_share_of_search": 100.0,
    "search_landing_pages": [
@@ -898,10 +925,10 @@
     }
    ],
    "search_pages_total": 1,
+   "search_landing_covered": 100.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 1, сохранено 1",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 100.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "1lordserials1.online",
@@ -913,14 +940,15 @@
    "search_visits_note": "traffic_sources: строки organic нет — поискового трафика нет",
    "search_engines": {},
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 0,
    "top5_share_of_search": null,
    "search_landing_pages": [],
    "search_pages_total": 0,
+   "search_landing_covered": null,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 0, сохранено 0",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": null
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
    "domain": "lordserial33.biz",
@@ -934,6 +962,7 @@
     "yandex": 5
    },
    "search_engines_note": "search_engines",
+   "search_engines_other": {},
    "top5_search_entries": 5,
    "top5_share_of_search": 100.0,
    "search_landing_pages": [
@@ -951,10 +980,10 @@
     }
    ],
    "search_pages_total": 3,
+   "search_landing_covered": 100.0,
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 3, сохранено 3",
    "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)",
-   "search_landing_covered": 100.0
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   }
  ]
 }
