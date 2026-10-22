@@ -8041,9 +8041,7 @@
       "direction": "zona",
       "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
       "check": "checks/sitemap_part_stable.py",
-      "status": "blocked",
-      "owner_action": "Нет действия владельца: удержано до следующей смены SEO (wt-portable-site-cell-01-dc), чтобы выпуск не остался без живой приёмки в конце ночи 22.10. Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "смена SEO после 05:00Z 22.10",
+      "status": "queued",
       "id": "T310",
       "site": "zonafilm12.site",
       "repo": "var/site-repos/zonafilm12-site",
@@ -8059,15 +8057,13 @@
           "status": 200
         }
       ],
-      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt."
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc."
     },
     {
       "direction": "anime",
       "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
       "check": "checks/sitemap_part_stable.py",
-      "status": "blocked",
-      "owner_action": "Нет действия владельца: удержано до следующей смены SEO (wt-portable-site-cell-01-dc), чтобы выпуск не остался без живой приёмки в конце ночи 22.10. Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "смена SEO после 05:00Z 22.10",
+      "status": "queued",
       "id": "T312",
       "site": "animedia.space",
       "repo": "var/site-repos/animedia-space",
@@ -8083,7 +8079,7 @@
           "status": 200
         }
       ],
-      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt."
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc."
     },
     {
       "direction": "zona",
