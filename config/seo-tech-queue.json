@@ -6685,8 +6685,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале. | 19.10 13:42Z публикатор: push f8327f9, CI run 39262418279 failure — updater_conformity: SystemExit рантайма без манифеста шаблона не ловится `except Exception` в _страницы_жанров; ветка выпуска f8327f9 ≠ живой 55c7b71 — все задачи animedia-icu ждут. Правка (except (Exception, SystemExit)) передана Архитектору 15:40Z: общий клон — его. | 22.10 10:54Z: исправление CI ведётся задачей T316 поверх f8327f9 (без действия владельца)."
+      "status": "live_verified",
+      "evidence": "19.10 06:47Z разбор карт сессией (все sitemap-*.xml): zonafilm12.site — 66 971 адрес: тайтлы 66 865, /catalog/?genre=* 98, разделы стран — 0; animedia.icu — 8 210: тайтлы 8 202 и 8 служебных разделов, страниц жанров /catalog/?genre=* — 0 (при этом /catalog/?genre=anime и др. — 200, index, canonical на себя, ссылки есть на всех карточках). | 19.10 13:0xZ пересмотр сессии: блокировка до 25.10 снята — оценка 25.10 (baseline-20261025-eval.json) меряет группы «тайтлы»/«серии» под выпуски T227–T235, а правка касается только страниц жанров (группа «прочие»); описания на карточках (19.10, 12 шт.) влияют на группы сильнее и уже учтены в журнале. | 19.10 13:42Z публикатор: push f8327f9, CI run 39262418279 failure — updater_conformity: SystemExit рантайма без манифеста шаблона не ловится `except Exception` в _страницы_жанров; ветка выпуска f8327f9 ≠ живой 55c7b71 — все задачи animedia-icu ждут. Правка (except (Exception, SystemExit)) передана Архитектору 15:40Z: общий клон — его. | 22.10 10:54Z: исправление CI ведётся задачей T316 поверх f8327f9 (без действия владельца). | 22.10 12:17Z wt-portable-site-cell-01-dc: выпуск releases/0a4edebfaac2 (11:34Z, CI success, исполнитель ячеек ok/live_verified); обработчик на новом коде 11:47–12:16Z переписал карту — страниц жанров 55, всего 8 291 адрес. Живая сверка 12:17:04Z: в sitemap-1.xml 55 адресов /catalog/?genre=… (в т.ч. genre=anime), дублей 0; все 55 — 200, index, canonical на себя, карточки есть (var/seo-audit/T316-live-after.json). updater_conformity в условиях CI на установленном дереве rc 0."
     },
     {
       "id": "T263",
@@ -7969,10 +7969,8 @@
           ]
         }
       ],
-      "status": "blocked",
-      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен.",
-      "owner_action": "Ожидает выпуска T262 владельцем (ветка выпуска animedia.icu занята f8327f9 — docs/seo-operator/OWNER_BLOCKS_20261022.md). Затем снимает wt-portable-site-cell-01-dc по одной задаче.",
-      "dependencies": "выпуск T262 (live_verified)"
+      "status": "queued",
+      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 12:17Z: удержание снято — T262 live_verified. T308, T309 — по очереди после T307 (тот же репозиторий)."
     },
     {
       "id": "T308",
@@ -8001,8 +7999,8 @@
       ],
       "status": "blocked",
       "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен.",
-      "owner_action": "Ожидает выпуска T262 владельцем (ветка выпуска animedia.icu занята f8327f9 — docs/seo-operator/OWNER_BLOCKS_20261022.md). Затем снимает wt-portable-site-cell-01-dc по одной задаче.",
-      "dependencies": "выпуск T262 (live_verified)"
+      "owner_action": "Нет действия владельца: по очереди после live_verified предыдущей задачи animedia.icu (T307 → T308 → T309). Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "live_verified предыдущей задачи animedia.icu"
     },
     {
       "id": "T309",
@@ -8034,8 +8032,8 @@
       ],
       "status": "blocked",
       "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен.",
-      "owner_action": "Ожидает выпуска T262 владельцем (ветка выпуска animedia.icu занята f8327f9 — docs/seo-operator/OWNER_BLOCKS_20261022.md). Затем снимает wt-portable-site-cell-01-dc по одной задаче.",
-      "dependencies": "выпуск T262 (live_verified)"
+      "owner_action": "Нет действия владельца: по очереди после live_verified предыдущей задачи animedia.icu (T307 → T308 → T309). Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "live_verified предыдущей задачи animedia.icu"
     },
     {
       "direction": "zona",
@@ -8192,8 +8190,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 10:54Z wt-portable-site-cell-01-dc: блокер «нужен владелец» снят правкой публикатора 4e84a4c — исправление поверх нашей упавшей головы ветки выпуска выпускается перемоткой (проверено фактом на T313→T314, zonafilm12.site, 08:25Z). Блок владельца §1 OWNER_BLOCKS_20261022.md становится ненужным, если T316 пройдёт. После выпуска T262 получает already_live, затем T307–T309 снимаются с удержания. | 22.10 11:04Z: прогон 20261022T105529Z-3331703 (b35dbc0) — INCOMPLETE: check_usable=false — на базе проверка перепечатала трассировку подпроцесса (FileNotFoundError … animedia-01-update-state.json), верификатор принял это за падение самой проверки; на ветке rc 0, полный run.sh проходит. Ожидание уточнено; повтор штатный (1 из 3)."
+      "status": "live_verified",
+      "evidence": "22.10 10:54Z wt-portable-site-cell-01-dc: блокер «нужен владелец» снят правкой публикатора 4e84a4c — исправление поверх нашей упавшей головы ветки выпуска выпускается перемоткой (проверено фактом на T313→T314, zonafilm12.site, 08:25Z). Блок владельца §1 OWNER_BLOCKS_20261022.md становится ненужным, если T316 пройдёт. После выпуска T262 получает already_live, затем T307–T309 снимаются с удержания. | 22.10 11:04Z: прогон 20261022T105529Z-3331703 (b35dbc0) — INCOMPLETE: check_usable=false — на базе проверка перепечатала трассировку подпроцесса (FileNotFoundError … animedia-01-update-state.json), верификатор принял это за падение самой проверки; на ветке rc 0, полный run.sh проходит. Ожидание уточнено; повтор штатный (1 из 3). | 22.10 12:17Z wt-portable-site-cell-01-dc: выпуск releases/0a4edebfaac2 (11:34Z, CI success, исполнитель ячеек ok/live_verified); обработчик на новом коде 11:47–12:16Z переписал карту — страниц жанров 55, всего 8 291 адрес. Живая сверка 12:17:04Z: в sitemap-1.xml 55 адресов /catalog/?genre=… (в т.ч. genre=anime), дублей 0; все 55 — 200, index, canonical на себя, карточки есть (var/seo-audit/T316-live-after.json). updater_conformity в условиях CI на установленном дереве rc 0."
     }
   ]
 }
