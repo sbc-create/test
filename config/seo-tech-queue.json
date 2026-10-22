@@ -8166,8 +8166,8 @@
           "status": 404
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 08:26Z wt-portable-site-cell-01-dc: канарейка T313+T314 принята на zonafilm12.site. zonafilm.cc — текст в закреплённом шаблоне template/zona-02-…, не в src: перенос туда — только с правкой шаблона (решение владельца, как T311)."
+      "status": "live_verified",
+      "evidence": "22.10 08:26Z wt-portable-site-cell-01-dc: канарейка T313+T314 принята на zonafilm12.site. zonafilm.cc — текст в закреплённом шаблоне template/zona-02-…, не в src: перенос туда — только с правкой шаблона (решение владельца, как T311). | 22.10 09:11Z wt-portable-site-cell-01-dc: исполнитель 20261022T082736Z-2597164 VERIFIED (92785b2); до выпуска проверка в условиях CI (LORDS_TEMPLATE_MANIFEST=/nonexistent) rc 0; CI ветки выпуска success; выпуск releases/92785b2d0f26 (замечен 09:10:44Z). Живая сверка 09:10:55Z: 404 — «ни одной странице сайта», без «записи каталога», ссылка /catalog/; /, /movies/, /catalog/ — 200; индекс карты прежний (2026-10-21, 2026-10-22T04:16:37Z) — ред. 2 не задета; проверка на установленном дереве rc 0."
     }
   ]
 }
