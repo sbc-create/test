@@ -8222,8 +8222,82 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "22.10 12:59Z wt-portable-site-cell-01-dc: живой замер на 4 сайтах (zonafilm.space, zonafilm12.site, zonafilm.cc, animedia.icu) — артефакты в meta и видимом тексте. Канарейка — zonafilm12.site; Zona в опытах описаний не участвует. Lords (lordfilm47.space, lordserials22.info) — контроль и канарейка опытов Lords, НЕ ТРОГАТЬ до их оценки (MOD-139 owner_action). Перенос на zonafilm.space и animedia.icu — после live_verified; zonafilm.cc — описание в закреплённом шаблоне, проверить отдельно. | 22.10 13:46Z: исполнитель 20261022T130001Z-3945216 VERIFIED (8791873); проверка в условиях CI rc 0; CI success; выпуск releases/879187390aa7. Живая сверка 13:46:04Z: /title/91-den-korotkaya-svecha/ — «91 Days» без скобок в meta и тексте; /title/bezgranichnyy-fantomnyy-mir/ — пустых «» нет, meta из фактов («Безграничный фантомный мир» (…) — сериал 2016 года…); 3 карточки с обычным описанием — прежние; обе страницы 200, index, canonical на себя; проверка на установленном дереве rc 0 (8 чтений описания через чистое_описание)."
+    },
+    {
+      "id": "T318",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/91-den-korotkaya-svecha/",
+        "https://zonafilm.space/title/bezgranichnyy-fantomnyy-mir/"
+      ],
+      "problem": "Перенос T317 (live_verified на zonafilm12.site 22.10 13:46Z) на zonafilm.space. Живой замер 12:59Z: те же артефакты («[91 Days]», «») в meta и видимом тексте. Номера строк в zonafilm-space другие — искать по тексту.",
+      "norm": "Текст страницы и описание соответствуют содержанию и не содержат служебной разметки поставщика (SEO_KNOWLEDGE_PACK §4 п.2); недостающее имя не придумывается.",
+      "expected": "Добавить в src/lords-frontend.py функцию уровня модуля чистое_описание(текст: str) -> str: (1) «[X]» → «X» (регулярное выражение по ёлочкам с квадратными скобками внутри; содержимое X не менять); (2) если после этого в тексте остаются пустые кавычки «» (с пробелами внутри или без) — вернуть \"\" (описание считается отсутствующим: дальше работает существующая ветка без описания — краткое_описание собирает фразу из фактов, видимый блок описания не выводится, как у карточек без описания); (3) иначе текст как есть. Пропустить через неё ВСЕ чтения description/short_description записи и детали в этом файле (места выше). Числа и порядок прочего не менять, данные не трогать. Проверка задачи checks/description_artifacts.py без стенда и сети и без импорта модуля витрины (ast): (а) извлечь функцию чистое_описание, исполнить на образцах: «Пересказ … «[91 Days]».» → «Пересказ … «91 Days».»; «… «», включённые …» → \"\"; «… « », …» → \"\"; обычный текст без артефактов — без изменений; «История отца Китаро.» — без изменений; (б) в src/lords-frontend.py каждое обращение .get(\"description\") и .get(\"short_description\") находится внутри вызова чистое_описание(...) (ast: родитель-вызов). Нарушение — FAIL, код 1, без трассировки в выводе; невозможность измерить — код 2 (обёртка 2 = пропуск). D203. Добавить в checks/run.sh. Затем полный checks/run.sh. Отрицательный контроль: число страниц с описанием не должно уменьшиться сверх записей с «»; короткие честные описания не трогаются. Проверка задачи должна проходить в условиях CI (без манифеста шаблона на хосте), без трассировки в выводе.",
+      "check": "checks/description_artifacts.py",
+      "verify_live": "после выпуска: /title/91-den-korotkaya-svecha/ — в видимом тексте и meta «91 Days» без квадратных скобок; /title/bezgranichnyy-fantomnyy-mir/ — нет ««»», meta — фраза из фактов («…» — … года. Жанры …); обе 200, index, canonical на себя; 3 случайные карточки с обычным описанием — описание прежнее",
+      "live_check": [
+        {
+          "url": "https://zonafilm.space/title/91-den-korotkaya-svecha/",
+          "status": 200,
+          "absent": [
+            "«[91 Days]»"
+          ],
+          "contains": [
+            "«91 Days»"
+          ]
+        },
+        {
+          "url": "https://zonafilm.space/title/bezgranichnyy-fantomnyy-mir/",
+          "status": 200,
+          "absent": [
+            "аниме-сериала «»"
+          ]
+        }
+      ],
       "status": "queued",
-      "evidence": "22.10 12:59Z wt-portable-site-cell-01-dc: живой замер на 4 сайтах (zonafilm.space, zonafilm12.site, zonafilm.cc, animedia.icu) — артефакты в meta и видимом тексте. Канарейка — zonafilm12.site; Zona в опытах описаний не участвует. Lords (lordfilm47.space, lordserials22.info) — контроль и канарейка опытов Lords, НЕ ТРОГАТЬ до их оценки (MOD-139 owner_action). Перенос на zonafilm.space и animedia.icu — после live_verified; zonafilm.cc — описание в закреплённом шаблоне, проверить отдельно."
+      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site."
+    },
+    {
+      "id": "T319",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/title/91-den-korotkaya-svecha/",
+        "https://animedia.icu/title/bezgranichnyy-fantomnyy-mir/"
+      ],
+      "problem": "Перенос T317 (live_verified на zonafilm12.site 22.10 13:46Z) на animedia.icu. Живой замер 12:59Z: те же артефакты («[91 Days]», «») в meta и видимом тексте. Номера строк в animedia-icu другие — искать по тексту.",
+      "norm": "Текст страницы и описание соответствуют содержанию и не содержат служебной разметки поставщика (SEO_KNOWLEDGE_PACK §4 п.2); недостающее имя не придумывается.",
+      "expected": "Добавить в src/animedia-frontend.py функцию уровня модуля чистое_описание(текст: str) -> str: (1) «[X]» → «X» (регулярное выражение по ёлочкам с квадратными скобками внутри; содержимое X не менять); (2) если после этого в тексте остаются пустые кавычки «» (с пробелами внутри или без) — вернуть \"\" (описание считается отсутствующим: дальше работает существующая ветка без описания — краткое_описание собирает фразу из фактов, видимый блок описания не выводится, как у карточек без описания); (3) иначе текст как есть. Пропустить через неё ВСЕ чтения description/short_description записи и детали в этом файле (места выше). Числа и порядок прочего не менять, данные не трогать. Проверка задачи checks/description_artifacts.py без стенда и сети и без импорта модуля витрины (ast): (а) извлечь функцию чистое_описание, исполнить на образцах: «Пересказ … «[91 Days]».» → «Пересказ … «91 Days».»; «… «», включённые …» → \"\"; «… « », …» → \"\"; обычный текст без артефактов — без изменений; «История отца Китаро.» — без изменений; (б) в src/animedia-frontend.py каждое обращение .get(\"description\") и .get(\"short_description\") находится внутри вызова чистое_описание(...) (ast: родитель-вызов). Нарушение — FAIL, код 1, без трассировки в выводе; невозможность измерить — код 2 (обёртка 2 = пропуск). D203. Добавить в checks/run.sh. Затем полный checks/run.sh. Отрицательный контроль: число страниц с описанием не должно уменьшиться сверх записей с «»; короткие честные описания не трогаются. Проверка задачи должна проходить в условиях CI (без манифеста шаблона на хосте), без трассировки в выводе.",
+      "check": "checks/description_artifacts.py",
+      "verify_live": "после выпуска: /title/91-den-korotkaya-svecha/ — в видимом тексте и meta «91 Days» без квадратных скобок; /title/bezgranichnyy-fantomnyy-mir/ — нет ««»», meta — фраза из фактов («…» — … года. Жанры …); обе 200, index, canonical на себя; 3 случайные карточки с обычным описанием — описание прежнее",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/title/91-den-korotkaya-svecha/",
+          "status": 200,
+          "absent": [
+            "«[91 Days]»"
+          ],
+          "contains": [
+            "«91 Days»"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/title/bezgranichnyy-fantomnyy-mir/",
+          "status": 200,
+          "absent": [
+            "аниме-сериала «»"
+          ]
+        }
+      ],
+      "status": "blocked",
+      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site.",
+      "owner_action": "Нет действия владельца: по очереди после live_verified T309 (тот же репозиторий animedia-icu). Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "Нет действия владельца: по очереди после live_verified T309 (тот же репозиторий animedia-icu). Снимает wt-portable-site-cell-01-dc."
     }
   ]
 }
