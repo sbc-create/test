@@ -8028,8 +8028,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 13:00Z: удержание снято — T308 live_verified. Уроки T306 (две неудачи на стендовых проверках) вписаны в ожидание заранее."
+      "status": "live_verified",
+      "evidence": "21.10 23:00Z wt-portable-site-cell-01-dc: тот же код у animedia.icu; живой замер этой ночи — тот же дефект на animedia.icu. Профиль в src — animedia-icu: тексты профиля править для него по смыслу тех же замен. | 22.10 13:00Z: удержание снято — T308 live_verified. Уроки T306 (две неудачи на стендовых проверках) вписаны в ожидание заранее. | 22.10 14:06Z: CI success, выпуск releases/e6adb233eb45 (замечен 14:04:27Z). Живая сверка 14:06:25Z: счётчики «N названий» на /, /collections/, /collection/recently_added/, /genres/, /types/; «slug» нет; жанров в карте 55; checks/public_wording_anime.py на установленном дереве rc 0. Вне объёма задачи остались два текста в коде animedia-icu (на animedia.space их не было или исправлены раньше): «Записи самого свежего года…» (src/collection_contract.py:447) и подпись «По контуру» (src/animedia-frontend.py:10088) — задача T320."
     },
     {
       "direction": "zona",
@@ -8294,10 +8294,36 @@
           ]
         }
       ],
+      "status": "queued",
+      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site. | 22.10 14:07Z: удержание снято — T309 live_verified."
+    },
+    {
+      "id": "T320",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/",
+        "https://animedia.icu/collections/"
+      ],
+      "problem": "Живая сверка 22.10 14:06Z после T309: на главной и /collections/ animedia.icu остались слова об устройстве данных — подзаголовок подборки «Этого года»: «Записи самого свежего года, представленного в каталоге.» (src/collection_contract.py:447) и подпись сортировки подборок «По контуру» (src/animedia-frontend.py:10088). На animedia.space сортировка уже «В порядке разделов» (checks/page_regressions.py:337 там требует отсутствия «По контуру»).",
+      "norm": "Публичный текст без слов об устройстве данных (SEO_KNOWLEDGE_PACK §4 п.2; ряд T301–T309).",
+      "expected": "Точные замены, больше ничего: (1) src/collection_contract.py — «Записи самого свежего года, представленного в каталоге.» → «Названия самого свежего года, представленного в каталоге.»; (2) src/animedia-frontend.py — подпись сортировки («contract», «По контуру») → («contract», «В порядке разделов»), как на animedia.space; ключ сортировки не менять. Проверка задачи checks/public_wording_icu_rest.py без стенда и сети (ast по строковым литералам обоих файлов): нет «Записи самого свежего года» и «По контуру», есть «Названия самого свежего года» и «В порядке разделов». Нарушение — FAIL, код 1, без трассировки; невозможность — код 2 (обёртка 2 = пропуск). Работает в условиях CI. Стендовые проверки, закрепляющие прежние слова, — найти grep'ом и перевести. D203. Затем полный checks/run.sh.",
+      "check": "checks/public_wording_icu_rest.py",
+      "verify_live": "после выпуска: на / и /collections/ animedia.icu нет «Записи» и «По контуру»; подборка «Этого года» и сортировка работают; жанров в карте 55",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/collections/",
+          "status": 200,
+          "absent": [
+            "По контуру"
+          ]
+        }
+      ],
       "status": "blocked",
-      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site.",
-      "owner_action": "Нет действия владельца: по очереди после live_verified T309 (тот же репозиторий animedia-icu). Снимает wt-portable-site-cell-01-dc.",
-      "dependencies": "Нет действия владельца: по очереди после live_verified T309 (тот же репозиторий animedia-icu). Снимает wt-portable-site-cell-01-dc."
+      "owner_action": "Нет действия владельца: по очереди после live_verified T319 (тот же репозиторий). Снимает wt-portable-site-cell-01-dc.",
+      "dependencies": "live_verified T319",
+      "evidence": "22.10 14:07Z wt-portable-site-cell-01-dc: найдено живой сверкой T309; ночью «Записи самого свежего года» ошибочно отнесено к данным — на самом деле литерал в коде animedia-icu."
     }
   ]
 }
