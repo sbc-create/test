@@ -15,6 +15,15 @@
    "counter_id": 111881037,
    "visits": 57111,
    "visitors": 50403,
+   "search_visits": 12885,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 12883,
+    "google": 2
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 10605,
+   "top5_share_of_search": 82.3,
    "search_landing_pages": [
     {
      "page": "/",
@@ -67,6 +76,16 @@
    "counter_id": 113109087,
    "visits": 3860,
    "visitors": 2534,
+   "search_visits": 3556,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 3531,
+    "google": 14,
+    "прочие": 11
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 2404,
+   "top5_share_of_search": 67.6,
    "search_landing_pages": [
     {
      "page": "/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
@@ -119,6 +138,16 @@
    "counter_id": 113288667,
    "visits": 2671,
    "visitors": 1953,
+   "search_visits": 2464,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 2393,
+    "google": 68,
+    "прочие": 3
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 1648,
+   "top5_share_of_search": 66.9,
    "search_landing_pages": [
     {
      "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
@@ -171,6 +200,15 @@
    "counter_id": 113109083,
    "visits": 1103,
    "visitors": 642,
+   "search_visits": 931,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 820,
+    "yandex": 111
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 170,
+   "top5_share_of_search": 18.3,
    "search_landing_pages": [
     {
      "page": "/title/100-atletov-italiya/",
@@ -223,6 +261,16 @@
    "counter_id": 113110481,
    "visits": 926,
    "visitors": 690,
+   "search_visits": 715,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 598,
+    "прочие": 99,
+    "yandex": 18
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 390,
+   "top5_share_of_search": 54.5,
    "search_landing_pages": [
     {
      "page": "/",
@@ -275,6 +323,15 @@
    "counter_id": 113109089,
    "visits": 886,
    "visitors": 644,
+   "search_visits": 728,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 708,
+    "google": 20
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 436,
+   "top5_share_of_search": 59.9,
    "search_landing_pages": [
     {
      "page": "/anime/dazhe-u-studsoveta-est-kosyaki",
@@ -327,6 +384,15 @@
    "counter_id": 113109081,
    "visits": 305,
    "visitors": 214,
+   "search_visits": 199,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 141,
+    "google": 58
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 144,
+   "top5_share_of_search": 72.4,
    "search_landing_pages": [
     {
      "page": "/title/chuzhaya-zhizn/",
@@ -379,6 +445,16 @@
    "counter_id": 111881038,
    "visits": 249,
    "visitors": 195,
+   "search_visits": 75,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 71,
+    "yandex": 3,
+    "прочие": 1
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 43,
+   "top5_share_of_search": 57.3,
    "search_landing_pages": [
     {
      "page": "/",
@@ -431,6 +507,14 @@
    "counter_id": 111881039,
    "visits": 153,
    "visitors": 142,
+   "search_visits": 48,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 48
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 26,
+   "top5_share_of_search": 54.2,
    "search_landing_pages": [
     {
      "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
@@ -483,6 +567,14 @@
    "counter_id": 113105753,
    "visits": 114,
    "visitors": 102,
+   "search_visits": 35,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 35
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 14,
+   "top5_share_of_search": 40.0,
    "search_landing_pages": [
     {
      "page": "/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
@@ -535,6 +627,14 @@
    "counter_id": 112582938,
    "visits": 82,
    "visitors": 76,
+   "search_visits": 47,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 47
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 24,
+   "top5_share_of_search": 51.1,
    "search_landing_pages": [
     {
      "page": "/title/doktor-iks/",
@@ -587,6 +687,14 @@
    "counter_id": 113121466,
    "visits": 62,
    "visitors": 48,
+   "search_visits": 27,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 27
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 18,
+   "top5_share_of_search": 66.7,
    "search_landing_pages": [
     {
      "page": "/title/voennaya-hronika-romelii/",
@@ -639,6 +747,14 @@
    "counter_id": 112010269,
    "visits": 54,
    "visitors": 37,
+   "search_visits": 36,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 36
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 16,
+   "top5_share_of_search": 44.4,
    "search_landing_pages": [
     {
      "page": "/title/igra-smerti-4/season-1/episode-2/",
@@ -691,6 +807,14 @@
    "counter_id": 113105751,
    "visits": 31,
    "visitors": 30,
+   "search_visits": 13,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 13
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 11,
+   "top5_share_of_search": 84.6,
    "search_landing_pages": [
     {
      "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
@@ -731,6 +855,14 @@
    "counter_id": 113288760,
    "visits": 31,
    "visitors": 10,
+   "search_visits": 1,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 1
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 1,
+   "top5_share_of_search": 100.0,
    "search_landing_pages": [
     {
      "page": "/title/dragonboll-zet-tv/season-2/episode-167/",
@@ -747,6 +879,12 @@
    "counter_id": 112010277,
    "visits": 28,
    "visitors": 28,
+   "search_visits": 0,
+   "search_visits_note": "traffic_sources: строки organic нет — поискового трафика нет",
+   "search_engines": {},
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 0,
+   "top5_share_of_search": null,
    "search_landing_pages": [],
    "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath",
    "queries": [],
@@ -758,6 +896,14 @@
    "counter_id": 112010274,
    "visits": 8,
    "visitors": 7,
+   "search_visits": 5,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 5
+   },
+   "search_engines_note": "search_engines",
+   "top5_search_entries": 5,
+   "top5_share_of_search": 100.0,
    "search_landing_pages": [
     {
      "page": "/title/pravila-sovmestnoy-zhizni/",

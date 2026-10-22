@@ -86,6 +86,48 @@ def _адрес_страницы(измерения: list[dict]) -> str | None:
     return None
 
 
+def поисковый_итог(запись: dict) -> tuple[int | None, str]:
+    """Поисковые визиты за окно и откуда взяты. Чистая функция от записи.
+
+    Берётся разрез `traffic_sources`, строка `organic`. Это ЕДИНСТВЕННЫЙ
+    верный знаменатель для доли топовых страниц: `visits` — все визиты, и
+    делить поисковые входы на них значит смешивать два разных множества.
+    """
+    з = замер(запись, "traffic_sources")
+    if not з or not з.get("measured"):
+        return None, "traffic_sources не измерен"
+    for с in з.get("value") or []:
+        изм = (с.get("dimensions") or [{}])[0]
+        if изм.get("id") == "organic":
+            м = с.get("metrics") or [None]
+            return (int(м[0]) if м[0] is not None else None,
+                    "traffic_sources: organic")
+    return 0, "traffic_sources: строки organic нет — поискового трафика нет"
+
+
+def по_поисковикам(запись: dict) -> tuple[dict[str, int], str]:
+    """Визиты раздельно по поисковым системам: Яндекс и Google отдельно.
+
+    Задание требует именно раздельно. Сложение «всех поисковиков» скрыло бы
+    то, что измерено: у части витрин Google даёт единицы визитов против
+    тысяч у Яндекса, и это разные задачи, а не одна.
+    """
+    з = замер(запись, "search_engines")
+    if not з or not з.get("measured"):
+        return {}, "search_engines не измерен"
+    итог: dict[str, int] = {}
+    for с in з.get("value") or []:
+        изм = (с.get("dimensions") or [{}])[0]
+        ид = str(изм.get("id") or "")
+        м = с.get("metrics") or [0]
+        сколько = int(м[0] or 0)
+        семья = ("yandex" if ид.startswith("yandex")
+                 else "google" if ид.startswith("google")
+                 else "прочие")
+        итог[семья] = итог.get(семья, 0) + сколько
+    return итог, "search_engines"
+
+
 def страницы_поиска(запись: dict) -> tuple[list[dict], str]:
     """Поисковые входы по страницам: (перечень, откуда/почему пусто)."""
     з = замер(запись, "search_landing_pages")
@@ -137,12 +179,22 @@ def разобрать(снимок: pathlib.Path) -> dict:
         if домен not in акт:
             continue
         страницы, откуда = страницы_поиска(запись)
+        поиск, откуда_поиск = поисковый_итог(запись)
+        системы, откуда_систем = по_поисковикам(запись)
+        верх5 = sum(с["visits"] for с in страницы[:5])
         итог["domains"].append({
             "domain": домен,
             "site_id": акт[домен],
             "counter_id": запись.get("counter_id"),
             "visits": число(запись, "visits"),
             "visitors": число(запись, "visitors"),
+            "search_visits": поиск,
+            "search_visits_note": откуда_поиск,
+            "search_engines": системы,
+            "search_engines_note": откуда_систем,
+            "top5_search_entries": верх5,
+            "top5_share_of_search": (
+                round(100 * верх5 / поиск, 1) if поиск else None),
             "search_landing_pages": страницы,
             "search_landing_note": откуда,
             "queries": [],
@@ -168,18 +220,25 @@ def main(аргв: list[str] | None = None) -> int:
     итог = разобрать(п)
     print(f"снимок {итог['snapshot']}, собран {итог['collected_at']},"
           f" окно {итог['window']}")
-    print(f"{'домен':24} {'визиты':>8} {'посетители':>11}"
-          f" {'страниц поиска':>15}")
+    print(f"{'домен':24} {'визиты':>7} {'поиск':>7} {'Яндекс':>7}"
+          f" {'Google':>7} {'топ-5':>7} {'доля':>6}")
     for з in итог["domains"]:
-        print(f"{з['domain']:24} {str(з['visits'] or '—'):>8}"
-              f" {str(з['visitors'] or '—'):>11}"
-              f" {len(з['search_landing_pages']):>15}")
+        c = з["search_engines"] or {}
+        доля = (f"{з['top5_share_of_search']}%"
+                if з["top5_share_of_search"] is not None else "—")
+        print(f"{з['domain']:24} {str(з['visits'] or '—'):>7}"
+              f" {str(з['search_visits'] if з['search_visits'] is not None else '—'):>7}"
+              f" {str(c.get('yandex', '—')):>7} {str(c.get('google', '—')):>7}"
+              f" {з['top5_search_entries']:>7} {доля:>6}")
     без = [з["domain"] for з in итог["domains"]
            if not з["search_landing_pages"]]
     print(f"\nдомéнов в снимке: {len(итог['domains'])};"
           f" без поисковых страниц: {len(без)}")
     if без:
         print(f"   {', '.join(без)}")
+    print("доля топ-5 считается от ПОИСКОВЫХ входов, а не от всех визитов:"
+          " делить поисковые входы на все визиты значит смешивать два разных"
+          " множества")
     print("запросы НЕ измерены ни по одному домену: popular_queries требует"
           " Вебмастера. Страница запросом не является.")
     if а.write:

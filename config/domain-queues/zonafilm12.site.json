@@ -17,7 +17,7 @@
    "owner": "wt-nova-publish-memory-02",
    "defect": "MOD-111",
    "created": "2026-10-22T09:00:35Z",
-   "updated": "2026-10-22T09:21:36Z",
+   "updated": "2026-10-22T10:00:12Z",
    "published_url": "https://zonafilm12.site/sitemap.xml",
    "installed_version": "releases/42cc1723dfc8 (симлинк 22.10 06:01Z, T310)",
    "baseline_metric": "69 277 адресов, 69 171 работа (22.10 07:14:00Z)",
@@ -46,7 +46,7 @@
   "notes": "установленное совпадает с публичным ответом"
  },
  "last_cycle": {
-  "at": "2026-10-22T09:21:36Z",
+  "at": "2026-10-22T10:00:12Z",
   "did": "состояния задач приведены к измеренным: опубликовано 1, в работе 1, ждут 0",
   "next": "Q-zonafilm12.site-002: снять спрос и конкурентов по домену"
  },
@@ -54,6 +54,6 @@
   "repo": "/home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm12-site",
   "branch": "claude/extract-zonafilm12-site-seo-01",
   "note": "своя копия и своя ветка",
-  "measured_at": "2026-10-22T09:56:56Z"
+  "measured_at": "2026-10-22T10:00:12Z"
  }
 }
