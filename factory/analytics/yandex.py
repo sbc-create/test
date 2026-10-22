@@ -764,8 +764,13 @@ class YandexAnalyticsProvider:
         metrics: list[str],
         dimensions: list[str] | None = None,
         limit: int = 100,
+        filters: str | None = None,
     ) -> dict:
-        """Табличный отчёт Метрики. Только чтение, только агрегаты."""
+        """Табличный отчёт Метрики. Только чтение, только агрегаты.
+
+        `filters` — выражение фильтра API отчётов (например
+        ``ym:s:lastsignTrafficSource=='organic'``); без него запрос прежний.
+        """
         params = {
             "ids": counter_id,
             "metrics": ",".join(metrics),
@@ -775,6 +780,8 @@ class YandexAnalyticsProvider:
         }
         if dimensions:
             params["dimensions"] = ",".join(dimensions)
+        if filters:
+            params["filters"] = filters
         response = self.metrika.get("/stat/v1/data", params=params)
         payload = response.payload or {}
         return {

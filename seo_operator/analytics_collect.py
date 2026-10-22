@@ -40,6 +40,9 @@ class Measurement:
     #: Сколько строк разбивки запрошено. Страница вне списка — «вне первых N»,
     #: а не ноль: без этого числа отсутствие строки читается как нулевой трафик.
     top_n: int | None = None
+    #: Сколько строк было у отчёта всего (`total_rows` API). Больше, чем строк в
+    #: `value`, — разбивка усечена пределом, и отсутствие строки не значит ноль.
+    total_rows: int | None = None
 
     def as_dict(self) -> dict:
         out = {
@@ -55,6 +58,9 @@ class Measurement:
                 out["sample_share"] = self.sample_share
             if self.top_n is not None:
                 out["top_n"] = self.top_n
+            if self.total_rows is not None:
+                out["total_rows"] = self.total_rows
+                out["truncated"] = isinstance(self.value, list) and self.total_rows > len(self.value)
         else:
             out["value"] = NOT_MEASURED
             out["reason"] = self.reason
@@ -350,7 +356,16 @@ EXTRA_METRIKA = (
         "ym:s:visits, ym:s:bounceRate, ym:s:pageDepth, ym:s:avgVisitDurationSeconds × ym:s:date × "
         "lastsignTrafficSource × ym:s:deviceCategory × ym:s:browser × ym:s:isRobot",
     ),
+    (
+        "daily_search_landing_pages",
+        "Поисковые входы по страницам по дням и поисковым системам",
+        "ym:s:visits × ym:s:date × lastsignSearchEngineRoot × startURLPath; фильтр lastsignTrafficSource=='organic'",
+    ),
 )
+#: Предел строк для входов по дням. Фильтр «только поиск» делает его ёмким: крупнейший
+#: домен (yummyani.site) — около 200 страниц × 14 суток × 2 системы. Усечение видно по
+#: `total_rows` / `truncated`, а не угадывается.
+DAILY_LANDING_LIMIT = 10000
 
 
 def _metrika_daily_and_search(
@@ -479,6 +494,37 @@ def _metrika_daily_and_search(
     except FactoryError as exc:
         out.append(
             _unmeasured("daily_traffic_profile", EXTRA_METRIKA[3][1], exc.reason, EXTRA_METRIKA[3][2])
+        )
+    # Поисковые входы по страницам ПО ДНЯМ и системам (22.10, animedia.icu: недельная
+    # разбивка не разложила скачок 20–21.10 по страницам). Фильтр — только поиск.
+    try:
+        report = provider.get_metrica_report(
+            counter_id,
+            date1=DAILY_WINDOW_FROM,
+            date2=date2,
+            metrics=["ym:s:visits"],
+            dimensions=["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURLPath"],
+            limit=DAILY_LANDING_LIMIT,
+            filters="ym:s:lastsignTrafficSource=='organic'",
+        )
+        rows = report.get("data") or []
+        total = report.get("total_rows")
+        out.append(
+            Measurement(
+                key="daily_search_landing_pages",
+                title=EXTRA_METRIKA[4][1],
+                measured=True,
+                value=rows,
+                source=EXTRA_METRIKA[4][2],
+                sampled=report.get("sampled"),
+                sample_share=report.get("sample_share"),
+                top_n=DAILY_LANDING_LIMIT,
+                total_rows=int(total) if isinstance(total, (int, float)) else None,
+            )
+        )
+    except FactoryError as exc:
+        out.append(
+            _unmeasured("daily_search_landing_pages", EXTRA_METRIKA[4][1], exc.reason, EXTRA_METRIKA[4][2])
         )
     return out
 

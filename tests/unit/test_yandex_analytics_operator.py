@@ -83,6 +83,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "counter_passport", "today_users", "today_search",
         # 2026-10-15: профиль трафика по дням (источник × устройство × браузер) — всплески
         "daily_traffic_profile",
+        # 2026-10-22: поисковые входы по страницам по дням и системам (скачки внутри недели)
+        "daily_search_landing_pages",
     }
 
 
@@ -420,3 +422,24 @@ def test_breaker_trips_on_the_text_transport_actually_raises(monkeypatch):
             breaker.get_webmaster_report("h", "summary")
     assert Провайдер.calls == 1, "после сетевого отказа транспорта сеть больше не трогается"
     assert first.value.reason.split(".")[0] in later.value.reason  # причина та же, не ноль
+
+
+def test_daily_search_landing_pages_filters_organic_and_flags_truncation():
+    """22.10: недельная разбивка не разложила скачок animedia.icu 20–21.10 по страницам."""
+    seen = {}
+
+    class P(StubProvider):
+        def get_metrica_report(self, counter_id, **kwargs):
+            if kwargs.get("dimensions") == ["ym:s:date", "ym:s:lastsignSearchEngineRoot", "ym:s:startURLPath"]:
+                seen.update(kwargs)
+                return {"data": [{"dimensions": [{"name": "2026-10-20"}, {"id": "yandex"}, {"name": "/t/a/"}],
+                                  "metrics": [7]}],
+                        "total_rows": 3, "sampled": False, "sample_share": 1.0}
+            return super().get_metrica_report(counter_id, **kwargs)
+
+    payload = analytics_collect.collect_domain(P(), LIVE_ENTRY, date1="a", date2="b").as_dict()
+    m = [m for m in payload["measurements"] if m["key"] == "daily_search_landing_pages"][0]
+    assert seen["filters"] == "ym:s:lastsignTrafficSource=='organic'"
+    assert seen["date1"] == analytics_collect.DAILY_WINDOW_FROM
+    assert m["value"][0]["metrics"] == [7]
+    assert m["total_rows"] == 3 and m["truncated"] is True
