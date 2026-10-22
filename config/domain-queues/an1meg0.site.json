@@ -28,5 +28,10 @@
   "branch": "claude/extract-an1meg0-seo-01",
   "branch_ahead": false,
   "notes": "установленное совпадает с публичным ответом"
+ },
+ "last_cycle": {
+  "at": "2026-10-22T09:15:15Z",
+  "did": "состояния задач приведены к измеренным: опубликовано 0, в работе 1, ждут 0",
+  "next": "Q-an1meg0.site-001: an1meg0.site и an1mego.site отдают дословно одну и ту же ГЛАВНУЮ (title, h1, des"
  }
 }

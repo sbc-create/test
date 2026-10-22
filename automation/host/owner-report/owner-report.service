@@ -1,0 +1,34 @@
+[Unit]
+# Отчёт владельцу в 10:00, 18:00 и 22:00 Europe/Moscow.
+#
+# Почему пользовательский юнит, а не системный: отчёт ничего не меняет на
+# сайтах — он читает состояние проекта и пишет файл в `docs/reports/`. Для
+# claude включён linger (`/var/lib/systemd/linger/claude`), поэтому
+# пользовательские юниты живут и после выхода из сессии — этим же способом
+# здесь уже работают `seo-regular-*.timer` и `k2-catalog-deliver.user.timer`.
+#
+# Слот выбирается САМ по времени (`--slot auto`): так один юнит обслуживает
+# три точки расписания, а пропущенное срабатывание не теряет период —
+# следующий запуск возьмёт период от предыдущего отчёта.
+#
+# Повторная отправка того же слота исключена в самом инструменте (ключ
+# `<дата>-<слот>` в `var/owner-reports/state.json`), поэтому `Persistent=true`
+# у таймера безопасен.
+Description=Отчёт владельцу по сети сайтов (10:00/18:00/22:00 МСК)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/claude/wt-nova-publish-memory-02
+ExecStart=/usr/bin/python3 automation/local/owner-report.py --slot auto
+# Доставка в Telegram требует токена, и он выдаётся ТОЛЬКО службе. Строку
+# ниже раскомментирует владелец, когда положит файл секрета: без неё отчёт
+# записывается, но не доставляется, и инструмент говорит это прямо.
+# LoadCredential=telegram_bot_token:/etc/site-factory/secrets/telegram_bot_token
+Nice=10
+IOSchedulingClass=best-effort
+IOSchedulingPriority=6
+TimeoutStartSec=600
+
+[Install]
+WantedBy=default.target
