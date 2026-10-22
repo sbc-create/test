@@ -8258,8 +8258,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site."
+      "status": "live_verified",
+      "evidence": "22.10 13:46Z wt-portable-site-cell-01-dc: канарейка T317 принята на zonafilm12.site. | 22.10 14:42Z: исполнитель 20261022T134707Z-4148682 VERIFIED (42ea8c6); в условиях CI rc 0; CI success; выпуск releases/42ea8c643ad1 (замечен 14:41:41Z). Живая сверка 14:41:53Z: «91 Days» без скобок, пустых «» нет (meta из фактов), обычные описания прежние; индекс карты прежний (ред. 2 не задета); проверка на установленном дереве rc 0."
     },
     {
       "id": "T319",
