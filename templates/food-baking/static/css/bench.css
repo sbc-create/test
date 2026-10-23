@@ -608,7 +608,7 @@ body { overflow-wrap: break-word; }
 .temp-jump__n { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; background: var(--butter); color: var(--wine); font: 700 .8rem/1 var(--sans); }
 .temp-jump a:hover .temp-jump__n { background: var(--page); }
 @media (max-width: 639px) {
-  .oven-strip .temp-jump { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
+  .oven-strip .temp-jump { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -15px; padding-right: 15px; }
   .oven-strip .temp-jump::-webkit-scrollbar { display: none; }
   .oven-strip .temp-jump a { flex: none; }
 }
@@ -698,3 +698,11 @@ body { overflow-wrap: break-word; }
 .doughs a { background: #fff; border: 1px solid var(--rule); border-top: 4px solid var(--butter-2); border-radius: 14px; }
 .doughs a:hover { box-shadow: 0 10px 24px -18px rgba(74, 42, 28, .5); }
 .doughs a:hover b { color: var(--wine-2); }
+/* текст ×2: шапка переносится, значки инструментов не выходят за край */
+.spine__in { flex-wrap: wrap; }
+.spine__tools { flex-wrap: wrap; }
+@media (max-width: 639px) { .title__big { white-space: normal; } }
+.gtiles li, .gtile { min-width: 0; }
+.gtile__label { overflow-wrap: break-word; }
+/* шаг: 17–18 px и строка до ~70 знаков */
+.method-b > li p { font-size: 1.08rem; max-width: 31em; }
