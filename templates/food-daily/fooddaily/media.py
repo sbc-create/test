@@ -169,7 +169,7 @@ def intake(a: argparse.Namespace) -> dict:
     only = getattr(a, "only", None)
     if only and only not in {j["slug"] for j in spec["jobs"]}:
         raise SystemExit(f"задания для {only} нет в {JOBS.name}")
-    known = {s: e for s, e in json.loads(REGISTRY.read_text())["items"].items()}
+    known = dict(json.loads(REGISTRY.read_text())["items"])
     done, missing, rejected = [], [], {}
     for j in spec["jobs"]:
         if only and j["slug"] != only:

@@ -108,7 +108,11 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
             "calories": f"{n['kcal']} ккал",
             **{
                 key: f"{n[k]:g} г"
-                for k, key in (("protein_g", "proteinContent"), ("fat_g", "fatContent"), ("carbs_g", "carbohydrateContent"))
+                for k, key in (
+                    ("protein_g", "proteinContent"),
+                    ("fat_g", "fatContent"),
+                    ("carbs_g", "carbohydrateContent"),
+                )
                 if isinstance(n.get(k), int | float)
             },
         }

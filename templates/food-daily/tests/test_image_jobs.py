@@ -104,6 +104,7 @@ def test_intake_rejects_small_and_repeated_images(tmp_path, monkeypatch):
     _pic(inc / f"{rs[2].slug}.jpg", 0b00110101, size=(900, 675))
     res = media.intake(argparse.Namespace(dir=inc, tool="g 1", license="l"))
     assert res["added"] == [rs[0].slug]
-    assert "то же изображение" in res["rejected"][f"{rs[1].slug}.jpg"] and rs[0].slug in res["rejected"][f"{rs[1].slug}.jpg"]
+    why = res["rejected"][f"{rs[1].slug}.jpg"]
+    assert "то же изображение" in why and rs[0].slug in why
     assert "мало пикселей" in res["rejected"][f"{rs[2].slug}.jpg"]
     assert set(json.loads(reg.read_text())["items"]) == {rs[0].slug}
