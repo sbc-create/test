@@ -1,0 +1,17 @@
+страница: https://lordserial.su/title/rodstvennye-dushi-5/season-1/episode-1/
+перехвачено обращений к счётчикам: 2
+   обрыв: https://mc.yandex.ru/metrika/tag.js
+   обрыв: https://mc.yandex.ru/watch/98587624
+
+неудачных запросов: 5
+   net::ERR_FAILED  https://mc.yandex.ru/metrika/tag.js
+   net::ERR_FAILED  https://mc.yandex.ru/watch/98587624
+   net::ERR_ABORTED  https://plapi.cdnvideohub.com/
+   net::ERR_BLOCKED_BY_CLIENT  chrome-extension://invalid/
+   net::ERR_BLOCKED_BY_CLIENT  chrome-extension://invalid/
+
+ошибок консоли: 4
+   error: Failed to load resource: net::ERR_FAILED
+   error: Failed to load resource: net::ERR_FAILED
+   error: Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+   error: Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
