@@ -8342,8 +8342,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "22.10 14:55Z wt-portable-site-cell-01-dc: после контрольной точки 18:00 МСК — следующая задача по пользе; польза умеренная (дата вместо отсутствия), риск низкий (только чтение прежнего набора). | 22.10 15:16Z: удержание снято — T320 live_verified; снимок карты «до» — var/seo-audit/animedia-icu-T321-pre/."
+      "status": "released",
+      "evidence": "22.10 14:55Z wt-portable-site-cell-01-dc: после контрольной точки 18:00 МСК — следующая задача по пользе; польза умеренная (дата вместо отсутствия), риск низкий (только чтение прежнего набора). | 22.10 15:16Z: удержание снято — T320 live_verified; снимок карты «до» — var/seo-audit/animedia-icu-T321-pre/. | 22.10 15:58:33Z выпуск releases/9a52f800ade1 (исполнитель VERIFIED). 23.10 05:35Z приёмка не проведена: с 05:27Z витрина animedia.icu перегружена (1023 потока, страницы 504, карта 404 и robots «Disallow: /» при исчерпании дескрипторов) — инцидент T323. Файлы карты на диске целы (sitemap.xml 223 Б, sitemap-1.xml 629 121 Б, 21:15:41Z); причина не в T321: потоки начали копиться 05:27Z, через 13,5 ч после выпуска."
     },
     {
       "id": "T322",
@@ -8378,8 +8378,50 @@
           ]
         }
       ],
+      "status": "live_verified",
+      "evidence": "22.10 15:17Z wt-portable-site-cell-01-dc: прежняя оговорка «у cc описание в закреплённом шаблоне — перенос невозможен» уточнена: слой src/serve.py поверх рантайма — штатный путь для cc (T243, T294, T302). | 22.10 21:29Z исполнитель VERIFIED после простоя исполнителя 15:27–21:29Z (отказ доступа к Claude Code, 12 прогонов INCOMPLETE без коммита); выпуск публикатором 22:06:25Z. Живая сверка 23.10 05:34Z: meta «Пересказ первых семи эпизодов аниме-сериала «91 Days».», пустых «» нет, обычные описания прежние; checks/description_artifacts.py rc 0 на установленном дереве, шаблон совпал с pins.lock.json."
+    },
+    {
+      "id": "T323",
+      "site": "animedia.icu",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-icu",
+      "urls": [
+        "https://animedia.icu/",
+        "https://animedia.icu/robots.txt",
+        "https://animedia.icu/sitemap.xml"
+      ],
+      "problem": "Инцидент 23.10 с 05:27Z: процесс витрины animedia.icu (src/animedia-frontend.py, ThreadingHTTPServer без предела) держит 1023 потока, RSS 2,7 ГБ, ~86% одного ядра; предел дескрипторов 1024. Новые потоки появляются по 80–100 в минуту и не завершаются (459 соединений порта 9121 в CLOSE_WAIT: nginx закрыл их по таймауту 30 с, обработчики ещё считают). Следствия измерены 05:38–05:41Z: / и /catalog/ — 504 через 30 с; /sitemap.xml и /sitemap-1.xml — 404 при целых файлах на диске (read_bytes падает OSError); /robots.txt чередует «Allow: /» и «Disallow: /» (режим индексации при сбое чтения файла состояния — CLOSED, это верное fail-closed поведение модуля, его не менять). Соседний animedia.space на том же шаблоне — 3 потока. Перезапуск того же или прежнего коммита через очередь ячейки невозможен (already-finished), операция rollback исполнителем не реализована: процесс перезапустит только выпуск нового коммита.",
+      "norm": "Перегрузка не должна превращаться в исчерпание дескрипторов и ложные сигналы роботам (robots Disallow, 404 карты). Временная недоступность — 503 с Retry-After, а не 504/404 (SEO_KNOWLEDGE_PACK: коды ответа; правила .claude/rules/seo.md).",
+      "expected": "Минимальная правка src/animedia-frontend.py: (1) предел одновременно обслуживаемых запросов — модульный threading.BoundedSemaphore(N), N из окружения ANIMEDIA_MAX_INFLIGHT (по умолчанию 24, разбор числа с откатом к 24 при негодном значении); в do_GET (do_HEAD идёт через него) и do_POST захват с таймаутом 2 с; не дождался — сразу ответ 503, заголовки Retry-After: 30, Cache-Control: no-store, тело короткое, без отрисовки страницы; освобождение в finally. (2) Вне предела (без захвата) отдаются только /robots.txt, /sitemap.xml, /sitemap-<N>.xml и /healthz — их ответы дешёвые и не должны получать 503 из-за страниц. (3) Таймаут сокета соединения: атрибут класса обработчика timeout = 60, чтобы простаивающие соединения не держали поток бесконечно. Логику режима индексации, robots_txt, карты, кэшей и снимка НЕ менять. Проверка задачи checks/overload_guard.py без стенда и сети (ast/текст src/animedia-frontend.py): есть BoundedSemaphore с пределом из ANIMEDIA_MAX_INFLIGHT; захват с timeout; ответ 503 с Retry-After; исключённые пути ровно robots/sitemap/healthz; освобождение в finally; у обработчика задан timeout. Плюс функциональная часть, если её можно выполнить без стенда: вынести решение «нужен ли захват для пути» в чистую функцию и проверить её на путях /, /catalog/, /robots.txt, /sitemap.xml, /sitemap-1.xml, /healthz, /sitemap.xml.bak. Нарушение — FAIL, код 1, БЕЗ трассировки (вывод с «Traceback (most recent call last)» делает проверку непригодной); невозможность — код 2. Работает в условиях CI (нет /srv/lords/.frontend, переменные ANIMEDIA_*/LORDS_* пусты или /nonexistent) — модуль витрины НЕ импортировать, только ast. D203: на базе FAIL, на ветке PASS. Затем полный checks/run.sh.",
+      "check": "checks/overload_guard.py",
+      "verify_live": "после выпуска (выпуск перезапускает процесс): / 200 быстрее 5 с; /robots.txt стабильно «Allow: /» и Sitemap (5 запросов подряд); /sitemap.xml 200; число потоков процесса витрины порта 9121 не больше предела + служебные; затем приёмка T321 по var/seo-audit/animedia-icu-T321-pre",
+      "live_check": [
+        {
+          "url": "https://animedia.icu/robots.txt",
+          "status": 200,
+          "contains": [
+            "Allow: /",
+            "Sitemap: https://animedia.icu/sitemap.xml"
+          ],
+          "absent": [
+            "Disallow: /\n"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<sitemapindex"
+          ]
+        },
+        {
+          "url": "https://animedia.icu/",
+          "status": 200
+        }
+      ],
       "status": "queued",
-      "evidence": "22.10 15:17Z wt-portable-site-cell-01-dc: прежняя оговорка «у cc описание в закреплённом шаблоне — перенос невозможен» уточнена: слой src/serve.py поверх рантайма — штатный путь для cc (T243, T294, T302)."
+      "evidence": "23.10 05:45Z wt-portable-site-cell-01-dc: найдено при приёмке T321. Замеры: /proc/629446 — Threads 1023, VmRSS 2 733 984 kB, Max open files 1024; потоки по минутам создания 05:27–05:41Z (1, 16, 28, 55 … 92), до того 3 потока с 15:58Z; /proc/net/tcp: порт 9121 CLOSE_WAIT 459; CPU 86% за 5 с; healthz 200 (pid 629446, старт 2026-10-22T15:58:18Z). Совпадение по времени (гипотеза, не причина): согласование серий записало подробности 05:23:23Z (animedia-01-episode-sync.json), details.json перезаписан 05:23 и 05:37Z — перечитывание снимка сбрасывает память страниц. Журналы nginx недоступны (B026)."
     }
   ]
 }
