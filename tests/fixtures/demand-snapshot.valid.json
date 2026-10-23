@@ -1,0 +1,77 @@
+{
+ "schema_version": 1,
+ "note": "Спрос по доменам из снимка Метрики. Поле `queries` пустое НЕ потому, что запросов нет, а потому что `popular_queries` в снимке не измерен: нужен доступ к Вебмастеру. Страница запросом не является.",
+ "snapshot": "cabinet-latest.json",
+ "collected_at": "2026-10-23T05:11:52Z",
+ "window": {
+  "date1": "7daysAgo",
+  "date2": "yesterday"
+ },
+ "window_meaning": "полные сутки, кончая днём перед сбором (7daysAgo…yesterday); соседние снимки перекрываются на шесть дней из семи, и их разность — сдвиг окна, а не изменение",
+ "domains": [
+  {
+   "domain": "fixture-one.test",
+   "site_id": "yummy-site",
+   "counter_id": 111881037,
+   "visits": 37028,
+   "visitors": 30162,
+   "search_visits": 13913,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "yandex": 13910,
+    "google": 3
+   },
+   "search_engines_note": "search_engines",
+   "search_engines_other": {},
+   "top5_search_entries": 11451,
+   "top5_share_of_search": 82.3,
+   "search_landing_pages": [
+    {
+     "page": "/",
+     "visits": 5291
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3",
+     "visits": 1894
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+     "visits": 1812
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5",
+     "visits": 1427
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/1",
+     "visits": 1027
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/2",
+     "visits": 426
+    },
+    {
+     "page": "/catalog/ongoing",
+     "visits": 221
+    },
+    {
+     "page": "/anime/kiberpank-beguschie-po-krayu-2",
+     "visits": 124
+    },
+    {
+     "page": "/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/2",
+     "visits": 107
+    },
+    {
+     "page": "/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1",
+     "visits": 99
+    }
+   ],
+   "search_pages_total": 82,
+   "search_landing_covered": 89.3,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 82, сохранено 10",
+   "queries": [],
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
+  }
+ ]
+}
