@@ -768,3 +768,19 @@ body { overflow-wrap: break-word; }
   .facts__time dt, .facts__time small { color: #444 !important; }
   .ingredients { border: 1px solid #999; }
 }
+/* поиск: уточнение по разделу — ссылки с отдельным счётчиком; выбранный раздел тёмный */
+.refine { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -8px 0 16px; }
+.refine__label { font-size: .92rem; color: var(--muted); }
+.refine a { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 6px 0 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); text-decoration: none; font-size: .95rem; }
+.refine a:hover { border-color: var(--tomato); }
+.refine a[aria-current] { background: var(--ink); border-color: var(--ink); color: var(--paper-2); }
+.refine__n { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; background: var(--paper); color: var(--tomato-ink); font-size: .8rem; font-weight: 700; }
+.refine a[aria-current] .refine__n { background: var(--paper-2); }
+@media (max-width: 639px) {
+  .refine { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
+  .refine::-webkit-scrollbar { display: none; }
+  .refine > * { flex: none; }
+  .page-head__lead--q { display: none; }
+}
+.refine a { position: relative; }
+@media (max-width: 399px) { .masthead__row { padding-left: 12px; padding-right: 10px; } }

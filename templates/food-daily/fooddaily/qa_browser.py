@@ -285,6 +285,31 @@ def run(shots_dir: Path | None) -> dict:
         S["search_yo"] = page.locator(".grid .card").count()
         page.goto(BASE + "/poisk/?q=тыква")
         S["search_by_ingredient_tykva"] = page.locator(".grid .card").count()
+        # поиск + раздел: число на чипе = число показанных карточек, все из выбранного раздела; «Назад» из рецепта
+        page.goto(BASE + "/poisk/?q=курица")
+        chip = page.locator(".refine a", has_text="Вторые блюда")
+        n_chip = int(chip.locator(".refine__n").inner_text())
+        chip.click()
+        page.wait_for_load_state()
+        cats = page.locator(".grid .card__cat").all_inner_texts()
+        S["search_refine_by_section"] = n_chip == len(cats) > 0 and all(c.strip() == "Вторые блюда" for c in cats)
+        url_results = page.url
+        page.locator(".grid .card__link").first.click()
+        page.wait_for_load_state()
+        page.go_back()
+        page.wait_for_load_state()
+        S["search_back_from_recipe_keeps_results"] = page.url == url_results and page.locator(".grid .card").count() == n_chip
+        page.goto(BASE + "/poisk/?q=курица&razdel=garniry")
+        S["search_empty_section_offers_all"] = page.locator(".empty a", has_text="во всех разделах").count() == 1
+        # шапка на 360 px — одной строкой: название и значки инструментов не переносятся
+        narrow = browser.new_context(viewport={"width": 360, "height": 740}, locale="ru-RU").new_page()
+        rows = set()
+        for path in ("/", "/poisk/?q=x", "/recepty/", "/recept/syrniki-s-ezhevikoj/"):
+            narrow.goto(BASE + path)
+            rows |= set(narrow.evaluate("[...document.querySelectorAll('.masthead__row > .brand, .masthead__row > .tools')]"
+                                        ".map(e => Math.round(e.getBoundingClientRect().top / 30))"))
+        S["header_one_row_360"] = len(rows) == 1
+        narrow.close()
         # клавиатура: первый Tab — ссылка «К содержимому»
         page.goto(BASE + "/")
         page.keyboard.press("Tab")

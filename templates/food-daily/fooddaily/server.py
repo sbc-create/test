@@ -406,7 +406,12 @@ class App:
             return 200, self.render("recipe.html", seo.recipe_meta(s, r), r=r), {}
         if path == "/poisk/":
             q = q1("q")[:120]
-            items = s.search(q) if q else []
+            found = s.search(q) if q else []
+            # уточнение по разделу: только разделы, где есть найденные блюда; счётчик = число показанных карточек
+            sections = [(k, CATEGORIES[k][0], sum(r.category == k for r in found)) for k in CATEGORIES]
+            sections = sorted((x for x in sections if x[2]), key=lambda x: -x[2])
+            razdel = q1("razdel") if q1("razdel") in CATEGORIES else ""
+            items = [r for r in found if r.category == razdel] if razdel else found
             meta = seo.Meta(
                 title=f"Поиск: {q}" if q else "Поиск рецептов",
                 description="Поиск по названиям и продуктам.",
@@ -414,7 +419,14 @@ class App:
                 index=False,
                 page_type="search",
             )
-            return 200, self.render("search.html", meta, q=q, items=items), {}
+            return (
+                200,
+                self.render(
+                    "search.html", meta, q=q, items=items, found=found, sections=sections, razdel=razdel,
+                    qs=urllib.parse.quote(q),
+                ),
+                {},
+            )
         if path in ("/izbrannoe/", "/spisok-pokupok/"):
             fav = path == "/izbrannoe/"
             meta = seo.Meta(

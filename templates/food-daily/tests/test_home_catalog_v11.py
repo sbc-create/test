@@ -94,3 +94,15 @@ def test_image_jobs_first_delivery_is_home_first_cards(app):
     top = spec["jobs"][:6]
     assert [j["slug"] for j in top] == first and [j["priority"] for j in top] == [1, 2, 3, 4, 5, 6]
     assert all(j["recipe_id"] and j["alt"] and j["kind"] == "illustration" for j in spec["jobs"])
+
+
+def test_search_refine_counts_match_cards(app):
+    _, html, _ = app.route("/poisk/", {"q": ["курица"]})
+    total = len(cards(html))
+    chips = re.findall(r'razdel=([a-z-]+)"[^>]*>[^<]+<span class="refine__n">(\d+)</span>', html)
+    assert chips and sum(int(n) for _, n in chips) == total
+    for key, n in chips:
+        _, part, _ = app.route("/poisk/", {"q": ["курица"], "razdel": [key]})
+        assert len(cards(part)) == int(n) and f'name="razdel" value="{key}"' in part
+    _, html, _ = app.route("/poisk/", {"q": ["курица"], "razdel": ["net-takogo"]})
+    assert len(cards(html)) == total  # неизвестный раздел — не условие
