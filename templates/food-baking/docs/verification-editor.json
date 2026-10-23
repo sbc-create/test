@@ -1,0 +1,35 @@
+{
+ "commit_head": "229f66b",
+ "method": "изолированная копия шаблона из коммита 229f66b на 127.0.0.1:8883; учётка создана штатным `python3 -m bakebook.editor_secret` с FOOD_BAKING_B_EDITOR_SECRET=<scratchpad>/secret/editor.json (0600, вне репозитория, удалена после проверки); рабочее превью и данные ветки не изменялись",
+ "robots_rule": "Disallow: /",
+ "actions": {
+  "no_auth_401_with_challenge": true,
+  "wrong_password_401": true,
+  "wrong_user_401": true,
+  "login_200": true,
+  "editor_noindex": true,
+  "robots_disallow_redaktor": true,
+  "sitemap_has_no_redaktor": true,
+  "list_rows_match_content": true,
+  "history_rows_match_file": true,
+  "post_not_accepted": true,
+  "read_only_no_forms": true,
+  "no_hscroll_editor_pages": true,
+  "axe_zero_editor_pages": true,
+  "no_console_errors": true
+ },
+ "publish_msg": null,
+ "post_status": 501,
+ "hscroll": {
+  "mobile:/redaktor/": false,
+  "desktop:/redaktor/": false
+ },
+ "axe": {
+  "mobile:/redaktor/": [],
+  "desktop:/redaktor/": []
+ },
+ "console": {
+  "mobile": [],
+  "desktop": []
+ }
+}

@@ -1,0 +1,33 @@
+{% macro picture(r, sizes, eager=false) -%}
+{% set im = r.image %}
+<picture class="pic">
+  <source type="image/webp" srcset="{% for w in im.widths %}/static/media/{{ im.file }}-{{ w }}.webp {{ w }}w{% if not loop.last %}, {% endif %}{% endfor %}" sizes="{{ sizes }}">
+  <img src="/static/media/{{ im.file }}-{{ im.widths[0] }}.webp" alt="{{ im.alt }}" width="{{ im.width }}" height="{{ im.height }}"{% if eager %} fetchpriority="high"{% else %} loading="lazy"{% endif %} decoding="async">
+</picture>
+{%- endmacro %}
+
+{% macro card(r, heading='h3', lead=false) -%}
+<article class="bcard bcard--{{ r.group }}{% if r.image or site.images %} bcard--pic{% endif %}">
+  {% if r.image %}<a class="bcard__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, ' ~ ('100vw' if lead else '36vw'), lead) }}</a>
+  {% elif site.images %}<span class="bcard__media bcard__media--none" aria-hidden="true"><img src="{{ asset('img/whisk.svg') }}" alt="" width="160" height="120" loading="lazy" decoding="async"></span>{% endif %}
+  <div class="bcard__body">
+    <p class="bcard__top"><span class="bcard__group">{{ r.group_label }}</span></p>
+    <{{ heading }} class="bcard__title"><a class="bcard__link" href="{{ r.url }}">{{ r.title }}</a></{{ heading }}>
+    {% set bt = r.oven['bake_times'] %}
+    <p class="bcard__bake"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="5" width="17" height="14" rx="2"/><path d="M3.5 9h17M7 7h.01M10 7h.01M8 13h8"/></svg>{% if r.temps %}<span class="sr">Духовка: </span><b class="bcard__oven">{{ r.temps|join('&nbsp;/ ')|safe }}&nbsp;°C</b>{% if bt|length == 1 and r.temps|length == 1 %}<span class="bcard__bt"><span class="sr">, выпекание </span>{{ r.bake_label }}</span>{% endif %}{% else %}<b class="bcard__oven">без духовки</b>{% endif %}</p>
+    <p class="bcard__meta">
+      {% if r.total %}<span class="bcard__time"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>всего {{ r.total }}</span>{% endif %}
+      {% if r.yield_n %}<span>{{ r.yield_n }} {{ plural(r.yield_n, 'порция', 'порции', 'порций') }}</span>{% endif %}
+      {% if r.nutrition %}<span>≈&nbsp;{{ r.nutrition.kcal }}&nbsp;ккал</span>{% endif %}
+    </p>
+  </div>
+</article>
+{%- endmacro %}
+
+{% macro grid(items, heading='h3', lead=false) -%}
+<div class="bgrid bgrid--n{{ items|length }}">{% for r in items %}{{ card(r, heading, lead and loop.first) }}{% endfor %}</div>
+{%- endmacro %}
+
+{% macro toc(items, heading='h3') -%}
+{{ grid(items, heading) }}
+{%- endmacro %}

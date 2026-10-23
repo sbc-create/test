@@ -1,0 +1,12 @@
+# Источники food-baking. Хост должен быть и здесь, и в inventory/network-allowlist.yaml.
+schema_version: 1
+sources:
+  - host: www.kingarthurbaking.com
+    role: ux_reference
+    note: "аудит интерфейса; тексты, фото и данные рецептов не сохраняются"
+  - host: sallysbakingaddiction.com
+    role: ux_reference
+    note: "аудит интерфейса; тексты, фото и данные рецептов не сохраняются"
+  - host: eda.rambler.ru
+    role: ux_reference_and_facts
+    note: "раздел «Выпечка и десерты»; факты рецептов (ингредиенты, количества, порции, время, порядок шагов) + собственный текст + ссылка"

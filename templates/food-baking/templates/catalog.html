@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<h1>{{ 'Подбор выпечки' if active else 'Все рецепты выпечки' }}</h1>
+<p class="lead">{{ total }} {{ 'рецепт' if total % 10 == 1 and total % 100 != 11 else ('рецепта' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else 'рецептов') }}{% if active %} по выбранным условиям{% endif %}.</p>
+<form class="filters" method="get" action="/recepty/" data-autosubmit>
+  <label><span class="filters__l">Вид теста</span> <select name="testo"><option value="">любое тесто</option>{% for k in site.doughs() %}<option value="{{ k }}"{% if flt.dough == k %} selected{% endif %}>{{ DOUGH[k][0] }}</option>{% endfor %}</select></label>
+  <label><span class="filters__l">Духовка</span> <select name="duhovka"><option value="">духовка: любая</option><option value="da"{% if flt.oven == 'da' %} selected{% endif %}>нужна</option><option value="net"{% if flt.oven == 'net' %} selected{% endif %}>без духовки</option></select></label>
+  <label><span class="filters__l">Порядок</span> <select name="sort">{% for k, l in [('', 'сначала новые'), ('temp', 'горячее сначала'), ('vremya', 'быстрее сначала'), ('nazvanie', 'по названию')] %}<option value="{{ k }}"{% if sort == k %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
+  <label><span class="filters__l">Вид</span> <select name="vid"><option value="">карточки</option><option value="tablica"{% if table %} selected{% endif %}>таблица сравнения</option></select></label>
+  <button type="submit">Показать</button>{% if filtered and not active %} <a class="reset" href="/recepty/">Обычный вид</a>{% endif %}
+</form>
+{% if active %}
+<div class="applied" aria-label="Выбранные условия">
+  <span class="applied__label">Выбрано:</span>
+  {% for label, href, _ in active %}<a class="applied__chip" href="{{ href }}" aria-label="Убрать условие «{{ label }}»">{{ label }}<span aria-hidden="true">×</span></a>{% endfor %}
+  <a class="applied__reset" href="/recepty/">Сбросить всё</a>
+</div>
+{% endif %}
+{% if items and not table %}
+{{ grid(items, 'h2') }}
+<p class="more"><a href="/recepty/?vid=tablica">Сравнить в таблице: температура, время и мука</a></p>
+{% elif items %}
+<div class="tablewrap"><table class="cmp">
+<thead><tr><th scope="col">Рецепт</th><th scope="col">Тесто</th><th scope="col" class="num">°C</th><th scope="col">В духовке</th><th scope="col" class="num">Мука, г</th><th scope="col">Всего</th></tr></thead>
+<tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a></th><td data-label="Тесто">{{ r.dough_label or '—' }}</td><td class="num" data-label="°C">{{ r.temps|join('→') if r.temps else '—' }}</td><td data-label="В духовке">{{ r.bake_label or '—' }}</td><td class="num" data-label="Мука, г">{{ r.flour_g|int if r.flour_g else '—' }}</td><td data-label="Всего">{{ r.total or '—' }}</td></tr>{% endfor %}</tbody>
+</table></div>
+<p class="note">«—» — источник значение не указывает. Мука — сумма всех видов муки в граммах из состава.</p>
+{% else %}<div class="empty"><h2>Таких рецептов нет</h2><p>Уберите одно из условий:</p>{% if active %}<ul class="empty__ways">{% for label, href, k in active %}{% if k %}<li><a href="{{ href }}">без условия «{{ label }}»</a> — {{ k }} {{ plural(k, 'рецепт', 'рецепта', 'рецептов') }}</li>{% endif %}{% endfor %}</ul>{% endif %}<p><a href="/recepty/">Все рецепты</a></p></div>{% endif %}
+{% if pages > 1 and not filtered %}<nav class="pager" aria-label="Страницы">{% for p in range(1, pages + 1) %}{% if p == n %}<span aria-current="page">{{ p }}</span>{% else %}<a href="{{ '/recepty/' if p == 1 else '/recepty/page/' ~ p ~ '/' }}">{{ p }}</a>{% endif %}{% endfor %}</nav>{% endif %}
+{% endblock %}

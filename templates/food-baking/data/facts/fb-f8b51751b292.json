@@ -1,0 +1,68 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/ruletiki-iz-sloenogo-testa-s-vetchinoy-i-syrom-192769",
+ "title": "Рулетики из слоеного теста с ветчиной и сыром",
+ "servings": 3,
+ "prep_minutes": null,
+ "cook_minutes": 30,
+ "total_minutes": 30,
+ "ingredients": [
+  {
+   "raw": "Дрожжевое слоеное тесто, 1 кусок",
+   "name": "Дрожжевое слоеное тесто, 1 кусок",
+   "quantity": null,
+   "unit": null
+  },
+  {
+   "raw": "Ветчина, 120 г",
+   "name": "Ветчина",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Голландский сыр, 150 г",
+   "name": "Голландский сыр",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 1 штука",
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Кунжут, 1 по вкусу",
+   "name": "Кунжут",
+   "quantity": 1.0,
+   "unit": "to_taste"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 8
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 20,
+    "max": 25,
+    "step": 8
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "b0eb08ffc08f46ba26821d86fed130b3810621bebb2ef01fcbb078a6e2254fff",
+ "record_id": "fb-f8b51751b292",
+ "group_hint": "tort",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:01:01Z"
+}

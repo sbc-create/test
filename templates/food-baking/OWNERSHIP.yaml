@@ -1,0 +1,22 @@
+template: food-baking
+variant_id: oven-bench   # вариант B; A — ветка claude/template-food-baking, порт 8848
+branch: claude/template-food-baking-b
+worktree: /home/claude/wt-template-food-baking-b
+base_commit: 8a5cb1e   # вариант A (claude/template-food-baking)
+owner_scope:
+  write: [templates/food-baking/**]
+  shared_files_touched:
+    - path: inventory/network-allowlist.yaml
+      why: "3 хоста по заданию NIGHT-CONTINUE-02 (2 референса из задания + eda.rambler.ru), только GET"
+    - path: tests/unit/test_permission_matrix.py
+      why: "тест точного состава allowlist: 3 хоста добавлены осознанно"
+runtime:
+  browser_storage_namespace: "fbb.* (отметки шагов и «отвешено»)"
+  process: "python3 -m bakebook.server (pid var/food-baking/run/preview.pid)"
+  bind: 127.0.0.1:8864
+  content: templates/food-baking/data/content.json   # файловый снимок, БД нет
+  private_sources: var/food-baking/private            # 0700, вне git
+  build: var/food-baking/build/<commit>
+  editor_secret: "file:~/.config/food-baking-b-preview/editor.json"
+  qa_dependencies: templates/food-baking/qa (axe-core 4.13.0, свой package-lock.json)
+shared_with_other_templates: []                        # код, CSS, JS, assets, сборка — только свои

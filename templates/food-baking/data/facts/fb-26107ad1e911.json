@@ -1,0 +1,86 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/limonnyy-keks-192715",
+ "title": "Лимонный кекс",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 90,
+ "total_minutes": 90,
+ "ingredients": [
+  {
+   "raw": "Сливочное масло, 150 г",
+   "name": "Сливочное масло",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Лимон, 3 штуки",
+   "name": "Лимон",
+   "quantity": 3.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сахарная пудра, 100 г",
+   "name": "Сахарная пудра",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сахар, 150 г",
+   "name": "Сахар",
+   "quantity": 150.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 4 штуки",
+   "name": "Куриное яйцо",
+   "quantity": 4.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Разрыхлитель, 5 г",
+   "name": "Разрыхлитель",
+   "quantity": 5.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Пшеничная мука, 180 г",
+   "name": "Пшеничная мука",
+   "quantity": 180.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 1
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 50,
+    "max": 55,
+    "step": 10
+   }
+  ],
+  "forms": [
+   {
+    "text": "Форму для английского",
+    "diameter_cm": null,
+    "step": 9
+   }
+  ],
+  "caution_steps": [
+   13
+  ]
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "25722d2acdf205fb30a09d6e1c2a8d9c0a97297e96e2ff56b49239b1de2797b0",
+ "record_id": "fb-26107ad1e911",
+ "group_hint": "keks",
+ "step_count": 19,
+ "fetched_at": "2026-10-12T06:00:40Z"
+}

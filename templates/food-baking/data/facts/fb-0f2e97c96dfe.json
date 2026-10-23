@@ -1,0 +1,72 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/kruassany-s-likerom-139689",
+ "title": "Круассаны с ликером",
+ "servings": 2,
+ "prep_minutes": null,
+ "cook_minutes": 40,
+ "total_minutes": 40,
+ "ingredients": [
+  {
+   "raw": "Ликер Baileys , 50 мл",
+   "name": "Ликер Baileys",
+   "quantity": 50.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Слоеное тесто, 300 г",
+   "name": "Слоеное тесто",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Яблоко, 200 г",
+   "name": "Яблоко",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сахар, 1 столовая ложка",
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Куриное яйцо, 1 штука",
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 3
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 20,
+    "max": null,
+    "step": 3
+   }
+  ],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 2
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "d7e22b6747bd07232ddb49c2a8257df66bbed43801f80f689cbd684b827e227a",
+ "record_id": "fb-0f2e97c96dfe",
+ "group_hint": "sloyki",
+ "step_count": 4,
+ "fetched_at": "2026-10-12T06:01:16Z"
+}

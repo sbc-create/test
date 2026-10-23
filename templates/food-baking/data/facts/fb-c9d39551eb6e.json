@@ -1,0 +1,129 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/tykvennoe-pechene-193082",
+ "title": "Тыквенное печенье",
+ "servings": 12,
+ "prep_minutes": null,
+ "cook_minutes": 90,
+ "total_minutes": 90,
+ "ingredients": [
+  {
+   "raw": "Пшеничная мука, 250 г",
+   "name": "Пшеничная мука",
+   "quantity": 250.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Разрыхлитель, 2 чайные ложки",
+   "name": "Разрыхлитель",
+   "quantity": 2.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сода, 0.75 чайных ложек",
+   "name": "Сода",
+   "quantity": 0.75,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Молотая корица, 1.5 чайных ложек",
+   "name": "Молотая корица",
+   "quantity": 1.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Молотый имбирь, 0.5 чайных ложек",
+   "name": "Молотый имбирь",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Мускатный орех, 0.5 чайных ложек",
+   "name": "Мускатный орех",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Молотая гвоздика, щепотка",
+   "name": "Молотая гвоздика",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "raw": "Соль, 0.5 чайных ложек",
+   "name": "Соль",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Коричневый сахар, 120 г",
+   "name": "Коричневый сахар",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сливочное масло, 120 г",
+   "name": "Сливочное масло",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 1 штука",
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Ванильный экстракт, 1 чайная ложка",
+   "name": "Ванильный экстракт",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Тыква, 300 г",
+   "name": "Тыква",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Шоколадные капли, 250 г",
+   "name": "Шоколадные капли",
+   "quantity": 250.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 200,
+    "step": 0
+   },
+   {
+    "value_c": 175,
+    "step": 3
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 30,
+    "max": 40,
+    "step": 1
+   },
+   {
+    "min": 10,
+    "max": 15,
+    "step": 9
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "c9e5efd6e408664756fdb7005b45ed29a4cb9b54d4c9ef895007b1e358f61caa",
+ "record_id": "fb-c9d39551eb6e",
+ "group_hint": "pechene",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:00:25Z"
+}

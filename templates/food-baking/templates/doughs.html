@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block main %}
+<h1>Виды теста</h1>
+<p class="lead">Вид теста определяется по составу рецепта: дрожжи, разрыхлитель или сода, заваривание муки на огне.</p>
+<ul class="doughs">{% for k, items in site.doughs().items() %}<li><a href="/testo/{{ k }}/"><b>{{ DOUGH[k][0] }}</b><span>{{ DOUGH[k][1] }}</span><i>{{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }} →</i></a></li>{% endfor %}</ul>
+{% endblock %}

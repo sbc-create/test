@@ -56,3 +56,24 @@ hosts:
     methods: [GET]
     token_secret_ref: hub:/var/lib/site-factory-secret-hub/store.sqlite3
     contract_ref: knowledge/cdnvideohub/PLAYER_CONTRACT.yaml
+
+  # --- food-baking: аудит референсов и факты рецептов (только чтение) ---------
+  # Внесены заданием владельца PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12):
+  # King Arthur и Sally's названы в задании как стартовые референсы выпечки;
+  # eda.rambler.ru — русский профильный референс из исходного аудита
+  # TEMPLATE-FOOD-DAILY-01. Только GET, 1 запрос на хост.
+  - ref: food-baking-kingarthur
+    host: www.kingarthurbaking.com
+    purpose: "food-baking: референс UX (только аудит)"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-baking-sallys
+    host: sallysbakingaddiction.com
+    purpose: "food-baking: референс UX (только аудит)"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)
+  - ref: food-baking-eda-rambler
+    host: eda.rambler.ru
+    purpose: "food-baking: русский референс и источник фактов рецептов выпечки"
+    methods: [GET]
+    provenance: PRACTICAL-NETWORK-NIGHT-CONTINUE-02 (2026-10-12)

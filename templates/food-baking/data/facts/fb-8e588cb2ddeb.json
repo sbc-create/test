@@ -1,0 +1,96 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/bezglyutenovoe-pechene-s-finikami-i-slivami-193027",
+ "title": "Безглютеновое печенье с финиками и сливами",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "raw": "Сливы, 200 г",
+   "name": "Сливы",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Финики, 100 г",
+   "name": "Финики",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Соевая мука, 1 стакан",
+   "name": "Соевая мука",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "raw": "Рисовая мука, 1 стакан",
+   "name": "Рисовая мука",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "raw": "Сода, 1 щепотка",
+   "name": "Сода",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "raw": "Кипяток, 1 чайная ложка",
+   "name": "Кипяток",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Корица, 1 по вкусу",
+   "name": "Корица",
+   "quantity": 1.0,
+   "unit": "to_taste"
+  },
+  {
+   "raw": "Имбирь, 1 по вкусу",
+   "name": "Имбирь",
+   "quantity": 1.0,
+   "unit": "to_taste"
+  },
+  {
+   "raw": "Бананы, 3 штуки",
+   "name": "Бананы",
+   "quantity": 3.0,
+   "unit": "pcs"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 11
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 40,
+    "max": null,
+    "step": 11
+   }
+  ],
+  "forms": [
+   {
+    "text": "силиконовую форму",
+    "diameter_cm": null,
+    "step": 10
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [],
+ "complete": true,
+ "content_hash": "d40c9215592065507b9ef98e4486955e10cf0a323a5b3e04f668ff102f3754f7",
+ "record_id": "fb-8e588cb2ddeb",
+ "group_hint": "pechene",
+ "step_count": 13,
+ "fetched_at": "2026-10-12T06:00:28Z"
+}

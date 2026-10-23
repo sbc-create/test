@@ -1,0 +1,23 @@
+# Конфигурация домена myfood.mobi (food-baking B «Тесто и десерты»). Выбирается при запуске:
+# SITE_CONFIG=site.myfood.yaml. Домен выбран владельцем 20.10.2026. Индексация закрыта до отдельного решения:
+# production_authorized: false даёт noindex, X-Robots-Tag и robots «Disallow: /», адреса и canonical — на домене.
+site_id: food-baking
+name: "Тесто и десерты"            # рабочее название, не проверено
+variant_id: oven-bench             # вариант B: от духовки, таблица сравнения, рабочий лист с пекарским процентом
+variant_version: "1"
+storage_namespace: "fbb"            # localStorage: fbb.* (у A хранилища нет)
+mode: production
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8864"
+  production: "https://myfood.mobi"
+server:
+  bind: 127.0.0.1
+  port: 9212
+per_page: 24  # делится на 2, 3 и 4 колонки — ряды каталога полные
+storage:
+  private_sources: var/food-baking/private
+  build: var/food-baking/build
+  editor_secret: "~/.config/food-baking-b-preview/editor.json"
+ads:
+  adapter: disabled

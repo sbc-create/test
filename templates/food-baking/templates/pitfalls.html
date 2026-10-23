@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block main %}
+<p class="kicker">Разбор ошибок</p>
+<h1>{{ DOUGH[key][0] }}: на чём ошибаются</h1>
+<p class="lead">Предупреждения взяты из шагов рецептов этого вида теста. Каждое ведёт к шагу, где оно стоит.</p>
+<ol class="pitfall-list">
+{% for r, p in rows %}<li><p>{{ p.text }}</p><p class="note">Рецепт: <a href="{{ r.url }}{% if p.step_index is not none %}#shag-{{ p.step_index + 1 }}{% endif %}">{{ r.title }}{% if p.step_index is not none %}, шаг {{ p.step_index + 1 }}{% endif %}</a></p></li>{% endfor %}
+</ol>
+{% endblock %}

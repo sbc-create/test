@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% set full_title = meta.title ~ (' · Тесто и десерты' if meta.kind != 'home' else '') %}
+<title>{{ full_title if full_title|length <= 70 else meta.title }}</title>
+<meta name="description" content="{{ meta.description }}">
+<meta name="robots" content="{{ meta.robots(site) }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
+{% endif %}{% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
+{% endif %}{% if meta.next %}<link rel="next" href="{{ meta.next }}">
+{% endif %}
+<meta property="og:title" content="{{ meta.title }}">
+<meta property="og:description" content="{{ meta.description }}">
+<meta property="og:type" content="{{ 'article' if meta.kind == 'recipe' else 'website' }}">
+{% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
+{% endif %}
+<meta name="theme-color" content="#4a2a1c">
+<link rel="icon" href="{{ asset('img/whisk.svg') }}" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/nunito-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/playfair-display-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ asset('css/bench.css') }}">
+{% for ld in meta.ld_json() %}<script type="application/ld+json">{{ ld | safe }}</script>
+{% endfor %}
+<script src="{{ asset('js/bench.js') }}" defer></script>
+</head>
+<body class="k-{{ meta.kind }}">
+<a class="skip" href="#text">К тексту</a>
+{% set here = (meta.canonical or '')|replace(site.origin, '') %}
+<header class="spine">
+  <div class="spine__in">
+    <a class="title" href="/"><span class="title__small">домашняя выпечка</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
+    <a class="spine__search" href="/poisk/" aria-label="Поиск выпечки"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></a>
+    <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
+    <nav class="spine__tools" aria-label="Инструменты пекаря">
+      <a href="/duhovka/"{% if here.startswith('/duhovka/') %} aria-current="page"{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0z"/><path d="M12 11v6"/></svg><span>По температуре</span></a>
+      <a href="/testo/"{% if here.startswith('/testo/') %} aria-current="page"{% endif %}><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c0-4 3.6-7 8-7s8 3 8 7c0 2.2-1.8 4-4 4H8c-2.2 0-4-1.8-4-4z"/><path d="M9 11.5c.8-.6 1.8-1 3-1s2.2.4 3 1"/></svg><span>Виды теста</span></a>
+      <a href="/pechem/"{% if here.startswith('/pechem/') %} aria-current="page"{% endif %} data-b-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Пеку несколько</span></a>
+    </nav>
+  </div>
+  <nav class="toc-nav" aria-label="Основное меню">
+    <a href="/recepty/"{% if here == '/recepty/' %} aria-current="page"{% endif %}>Все рецепты</a>{% for k, items in site.groups().items() %}<a href="/recepty/{{ k }}/"{% if here.startswith('/recepty/' ~ k ~ '/') %} aria-current="page"{% endif %}>{{ GROUPS[k] }}</a>{% endfor %}
+  </nav>
+</header>
+{% if meta.crumbs|length > 1 %}
+<nav class="crumbs" aria-label="Хлебные крошки"><ol>{% for n, p in meta.crumbs %}<li>{% if loop.last %}<span aria-current="page">{{ n }}</span>{% else %}<a href="{{ p }}">{{ n }}</a>{% endif %}</li>{% endfor %}</ol></nav>
+{% endif %}
+<main id="text" class="sheet">
+{% block main %}{% endblock %}
+</main>
+<footer class="colophon">
+  <div class="colophon__grid">
+    <div class="colophon__about">
+      <p class="colophon__brand">Тесто <em>&amp;</em> десерты</p>
+      <p>Рецепты домашней выпечки: температура духовки, время, форма и вес продуктов — на одном листе.</p>
+    </div>
+    <nav aria-label="Рецепты по разделам">
+      <h2 class="colophon__h">Рецепты</h2>
+      <ul>{% for k, items in site.groups().items() %}<li><a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a></li>{% endfor %}</ul>
+    </nav>
+    <nav aria-label="Как выбрать">
+      <h2 class="colophon__h">Подобрать</h2>
+      <ul><li><a href="/duhovka/">По температуре</a></li><li><a href="/testo/">Виды теста</a></li><li><a href="/pechem/">Пеку несколько</a></li><li><a href="/recepty/">Все рецепты</a></li></ul>
+    </nav>
+    <nav aria-label="О сайте">
+      <h2 class="colophon__h">О сайте</h2>
+      <ul><li><a href="/o-proekte/">О проекте</a></li><li><a href="/o-proekte/#istochniki">Источники и правила</a></li><li><a href="/konfidencialnost/">Конфиденциальность</a></li></ul>
+    </nav>
+  </div>
+  <p class="colophon__legal">© {{ year }} «Тесто и десерты». Рецепты составлены по открытым источникам — ссылка на источник есть на странице каждого рецепта.</p>
+</footer>
+</body>
+</html>

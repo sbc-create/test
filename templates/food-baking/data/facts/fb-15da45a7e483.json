@@ -1,0 +1,71 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/tort-bez-vypechki-s-vinogradom-192682",
+ "title": "Торт без выпечки с виноградом",
+ "servings": 10,
+ "prep_minutes": 1440,
+ "cook_minutes": 45,
+ "total_minutes": 1485,
+ "ingredients": [
+  {
+   "raw": "Сметана 20%-ная, 700 г",
+   "name": "Сметана 20%-ная",
+   "quantity": 700.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Крекеры, 300 г",
+   "name": "Крекеры",
+   "quantity": 300.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Шоколад, 200 г",
+   "name": "Шоколад",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Желатин, 25 г",
+   "name": "Желатин",
+   "quantity": 25.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Желе для торта Dr.Oetker, 1 штука",
+   "name": "Желе для торта Dr.Oetker",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сахар, 1 стакан",
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "cup"
+  },
+  {
+   "raw": "Ванильный сахар, щепотка",
+   "name": "Ванильный сахар",
+   "quantity": 1.0,
+   "unit": "pinch"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [],
+  "bake_times": [],
+  "forms": [],
+  "caution_steps": [
+   15
+  ]
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "температура духовки в источнике не названа"
+ ],
+ "complete": true,
+ "content_hash": "09b33ff51af0ca9b2d7775a2fc4dbabd3cfd886477033a1ea101ee94913f8e95",
+ "record_id": "fb-15da45a7e483",
+ "group_hint": "tort",
+ "step_count": 16,
+ "fetched_at": "2026-10-12T06:01:07Z"
+}
