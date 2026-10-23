@@ -1,0 +1,22 @@
+=== https://lordfilm.group
+   ДОБАВЛЕННЫЕ ПОСЛЕ 18.10 (днём отвечали 404):
+      200  /title/zhizn-snachala/
+      200  /title/neprikayannaya-serebryanaya-babochka-2-riskovyy-igrok/
+      200  /title/edinym-ognem-palimy/
+      200  /title/vnutrennyaya-bezopasnost/
+      200  /title/rodstvennye-dushi-5/
+      200  /title/vremya-synovey/
+   КОНТРОЛЬ (отвечали 200 и днём):
+      200  /title/ne-krichi-volki/
+      200  /title/kulak-yarosti-2/
+=== https://lordfilm.msk.ru
+   ДОБАВЛЕННЫЕ ПОСЛЕ 18.10 (днём отвечали 404):
+      200  /title/zhizn-snachala/
+      200  /title/neprikayannaya-serebryanaya-babochka-2-riskovyy-igrok/
+      200  /title/edinym-ognem-palimy/
+      200  /title/vnutrennyaya-bezopasnost/
+      200  /title/rodstvennye-dushi-5/
+      200  /title/vremya-synovey/
+   КОНТРОЛЬ (отвечали 200 и днём):
+      200  /title/ne-krichi-volki/
+      200  /title/kulak-yarosti-2/
