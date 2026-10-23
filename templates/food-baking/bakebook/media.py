@@ -81,11 +81,14 @@ def job(site: Site, r) -> dict:
     """Задание на изображение блюда — только из состава и шагов опубликованного рецепта, без домыслов."""
     b = _recipe_bits(r)
     cue = b["cue"].rstrip(".")
-    look = b["last_step"] + (f" Готовность: {cue[:1].lower()}{cue[1:]}." if cue else "")
+    given = r.raw.get("image_job") or {}  # подача, описанная в поставке рецепта, — точнее последнего шага
+    look = (given.get("look") or "").strip().rstrip(".") + "." if given.get("look") else (
+        b["last_step"] + (f" Готовность: {cue[:1].lower()}{cue[1:]}." if cue else "")
+    )
     main = ", ".join(n.lower() for n in b["ingredients"][:8])
     prompt = (
         f"Реалистичная фотография домашнего блюда «{r.title}» ({b['group'].lower()}). "
-        f"Блюдо готово и подано так, как сказано в последнем шаге рецепта: {look} "
+        f"Блюдо готово и подано так: {look} "
         f"Состав по рецепту: {main}. В кадре только то, что входит в рецепт, без посторонних продуктов и гарниров. "
         "Естественный дневной свет, спокойный светлый фон, ракурс около 45°, кадр 4:3, блюдо по центру; "
         "без текста, надписей, логотипов, рук и людей."
@@ -100,7 +103,7 @@ def job(site: Site, r) -> dict:
         "look": look,
         "prompt": prompt,
         "file": f"{r.slug}.jpg",
-        "alt": f"{r.title}: готовое блюдо",
+        "alt": (given.get("alt") or "").strip() or f"{r.title}: готовое блюдо",
         "kind": "illustration",
     }
 
@@ -165,7 +168,7 @@ def intake(a: argparse.Namespace) -> dict:
     only = getattr(a, "only", None)
     if only and only not in {j["slug"] for j in spec["jobs"]}:
         raise SystemExit(f"задания для {only} нет в {JOBS.name}")
-    known = {s: e for s, e in json.loads(REGISTRY.read_text())["items"].items()}
+    known = dict(json.loads(REGISTRY.read_text())["items"])
     done, missing, rejected = [], [], {}
     for j in spec["jobs"]:
         if only and j["slug"] != only:

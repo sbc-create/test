@@ -160,6 +160,9 @@ def to_files(rec: dict) -> tuple[str, dict, dict]:
         "group_hint": group,
         "step_count": len(b["steps"]),
         "fetched_at": b["source"].get("fetched_at"),  # только из набора; не «сейчас» — повтор должен совпадать
+        # примерная калорийность — только принятая приёмником (с методом и источником данных)
+        **({"nutrition": b["nutrition"]} if (b.get("nutrition") or {}).get("data_source") else {}),
+        **({"image_job": b["image_job"]} if b.get("image_job") else {}),
     }
     facts["content_hash"] = sha({k: facts[k] for k in ("title", "servings", "ingredients", "oven")})
     text = (b["title"] + " " + " ".join(i["name"] for i in b["ingredients"])).lower().replace("ё", "е")

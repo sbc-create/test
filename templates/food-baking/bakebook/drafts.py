@@ -204,6 +204,8 @@ def build(published_at: str) -> dict:
                     for p in d["pitfalls"]
                 ],
                 "source": {"url": f["source_url"], "fetched_at": f["fetched_at"], "parser": f["parser_version"]},
+                **({"nutrition": f["nutrition"]} if (f.get("nutrition") or {}).get("data_source") else {}),
+                **({"image_job": f["image_job"]} if f.get("image_job") else {}),
                 "review_status": "ai_draft",
                 "baked_by_editor": False,
                 "producer_mode": d["producer"]["mode"],

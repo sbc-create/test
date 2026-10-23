@@ -12,6 +12,7 @@
       {% if r.timers %}<li><span>Выпекать</span><b>{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг&nbsp;{{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}</b></li>{% elif r.bake_label %}<li><span>Выпекать</span><b>{{ r.bake_label }}</b></li>{% endif %}
       {% if r.form %}<li><span>Форма</span><b>{{ r.form }}</b></li>{% endif %}
       {% for c in r.rests %}<li><span>{{ c.label }}</span><b>{{ c.time }} <a href="#shag-{{ c.step }}">шаг&nbsp;{{ c.step }}</a></b></li>{% endfor %}
+      {% if r.nutrition %}<li><span>Калорийность</span><b>≈&nbsp;{{ r.nutrition.kcal }} ккал <small>на порцию, всего ≈&nbsp;{{ r.nutrition.kcal_total }}</small></b></li>{% endif %}
       {% if r.yield_n %}<li><span>Выход</span><b>{{ r.yield_n }} {{ plural(r.yield_n, 'порция', 'порции', 'порций') }}</b></li>{% endif %}
     </ul>
     {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
@@ -45,6 +46,7 @@
   {% set links = site.tag_links(r) %}{% if links %}<ul class="chips chips--light" aria-label="Темы">{% for h, l in links %}<li><a href="{{ h }}">{{ l }}</a></li>{% endfor %}</ul>{% endif %}
   <footer class="provenance">
     <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.
+      {% if r.nutrition %}Калорийность примерная: {{ r.nutrition.method|lower }}; данные — {{ r.nutrition.data_source }}.{% endif %}
       Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at != r.published_at %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</p>
   </footer>
 </article>

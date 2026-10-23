@@ -170,6 +170,22 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
             ld[k] = iso(v)
     if r.yield_n:
         ld["recipeYield"] = f"{r.yield_n} порц."
+    if r.nutrition:  # только принятый расчёт; на странице показан тот же «≈ N ккал на порцию»
+        n = r.nutrition
+        ld["nutrition"] = {
+            "@type": "NutritionInformation",
+            "servingSize": "1 порция",
+            "calories": f"{n['kcal']} ккал",
+            **{
+                key: f"{n[k]:g} г"
+                for k, key in (
+                    ("protein_g", "proteinContent"),
+                    ("fat_g", "fatContent"),
+                    ("carbs_g", "carbohydrateContent"),
+                )
+                if isinstance(n.get(k), int | float)
+            },
+        }
     return ld
 
 

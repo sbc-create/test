@@ -132,3 +132,48 @@ def test_liver_is_not_cookies():
         set_import.to_files(rec("b020", "Куриная печень с луком"))
     for title, group in (("Овсяное печенье", "pechene"), ("Ассорти печений", "pechene")):
         assert set_import.to_files(rec("b021", title))[1]["group_hint"] == group
+
+
+NUTRITION = {
+    "kcal_per_serving": 280,
+    "fat_g": 14,
+    "method": "Расчёт по составу: сумма по ингредиентам / число порций",
+    "data_source": "таблица состава продуктов (образец для теста)",
+    "approximate": True,
+}
+
+
+def test_nutrition_and_image_job_reach_page_markup_and_card_only_with_known_yield():
+    """qwen-dish/1: принятый расчёт калорийности и описание подачи — в фактах; страница и Recipe-разметка
+    показывают одно и то же; без выхода в порциях («1 порция» у партии) калорийность не показывается."""
+    from bakebook import media
+    from bakebook.server import App, recipe_ld
+
+    r0 = rec()
+    r0["base"]["nutrition"] = NUTRITION
+    r0["base"]["image_job"] = {"look": "Кекс на доске, один кусок отрезан", "alt": "Апельсиновый кекс на доске"}
+    _, facts, _ = set_import.to_files(r0)
+    assert facts["nutrition"] == NUTRITION and facts["image_job"]["alt"] == "Апельсиновый кекс на доске"
+    no_src = rec()
+    no_src["base"]["nutrition"] = {**NUTRITION, "data_source": ""}
+    assert "nutrition" not in set_import.to_files(no_src)[1]
+
+    app = App()
+    r = next(x for x in app.site.recipes if x.yield_n == 8)
+    r.raw["nutrition"], r.raw["image_job"] = NUTRITION, facts["image_job"]
+    assert r.nutrition["kcal"] == 280 and r.nutrition["kcal_total"] == 2240
+    html = app.route(r.url, {})[1]
+    assert "≈&nbsp;280 ккал <small>на порцию, всего ≈&nbsp;2240</small>" in html
+    assert "Калорийность примерная: расчёт по составу" in html
+    assert recipe_ld(app.site, r)["nutrition"] == {
+        "@type": "NutritionInformation",
+        "servingSize": "1 порция",
+        "calories": "280 ккал",
+        "fatContent": "14 г",
+    }
+    assert "≈&nbsp;280&nbsp;ккал" in app.route(r.group_url, {})[1]
+    j = media.job(app.site, r)
+    assert j["alt"] == "Апельсиновый кекс на доске" and "Кекс на доске, один кусок отрезан." in j["prompt"]
+    batch = next(x for x in app.site.recipes if not x.yield_n)
+    batch.raw["nutrition"] = NUTRITION
+    assert batch.nutrition is None and "ккал" not in app.route(batch.url, {})[1]
