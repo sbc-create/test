@@ -570,3 +570,7 @@ h1, h2 { hyphens: manual; }
   .jump, .recipe__actions { gap: 6px; }
   .jump a, .recipe__actions .btn, .recipe__actions .fav--wide { padding: 0 10px; font-size: .9rem; }
 }
+/* 23.10: пропорции 4:3 — у самой картинки, подпись «Иллюстрация» под ней не обрезается */
+.recipe__head .recipe__pic { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; }
+.recipe__head .recipe__pic .pic { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--radius); background: var(--paper-2); }
+.recipe__head .recipe__pic figcaption { margin-top: 6px; font-size: .85rem; color: var(--muted); }
