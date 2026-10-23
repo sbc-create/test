@@ -8462,8 +8462,8 @@
           "status": 200
         }
       ],
-      "status": "queued",
-      "evidence": "23.10 06:14Z wt-portable-site-cell-01-dc: после приёмки T323 на animedia.icu; в var/site-repos/animedia-space (aafd9a6) BoundedSemaphore нет. Польза — защита от повтора инцидента; трафика из Яндекса у animedia.space нет, поэтому эффекта на трафик не заявляется."
+      "status": "live_verified",
+      "evidence": "23.10 06:14Z wt-portable-site-cell-01-dc: после приёмки T323 на animedia.icu; в var/site-repos/animedia-space (aafd9a6) BoundedSemaphore нет. Польза — защита от повтора инцидента; трафика из Яндекса у animedia.space нет, поэтому эффекта на трафик не заявляется. | Исполнитель 20261023T061440Z-609499 VERIFIED (cb4aa1e: на базе FAIL, на ветке PASS, run_all PASS). Публикатор 06:45:26Z, executor live_verified, процесс с 06:45:17Z. Живая сверка 06:52:53Z: robots 5 из 5 открыт с Sitemap, карта 200, / 0,26 с, /catalog/ 0,21 с; 47 обложек параллельно в 32 потока — 46×200, 503 нет; одна 404 — та же картинка, что на animedia.icu (нет в общих данных)."
     }
   ]
 }
