@@ -784,3 +784,13 @@ body { overflow-wrap: break-word; }
 }
 .refine a { position: relative; }
 @media (max-width: 399px) { .masthead__row { padding-left: 12px; padding-right: 10px; } }
+/* две колонки (600–999 px): нечётная последняя карточка занимает ряд целиком — без пустого места справа */
+@media (min-width: 600px) and (max-width: 999px) {
+  .grid > .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .grid > .card--pic:last-child:nth-child(odd) { flex-direction: row; }
+  .grid > .card--pic:last-child:nth-child(odd) .card__media { flex: 0 0 calc(50% - 9px); border-bottom: 0; border-right: 1px solid var(--line); }
+  .grid > .card--pic:last-child:nth-child(odd) .card__media--none { display: none; }
+}
+/* рецепт на планшете (700–899 px): продукты и шаги рядом, количество рядом с названием */
+@media (min-width: 700px) and (max-width: 899px) { .recipe__body { grid-template-columns: minmax(250px, 290px) minmax(0, 1fr); align-items: start; } .ingredients { position: sticky; top: 16px; } }
+@media (min-width: 760px) and (max-width: 999px) { .recipe__bar .recipe__actions { padding-left: 0; border-left: 0; } }
