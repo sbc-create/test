@@ -739,3 +739,10 @@ body { overflow-wrap: break-word; }
 .colophon nav a { overflow-wrap: anywhere; }
 /* страница раздела: название раздела в каждой карточке не повторяется */
 .listing--group .bcard__group { display: none; }
+/* горизонтальные ленты на узком экране: затухание у правого края подсказывает прокрутку */
+@media (max-width: 799px) {
+  .toc-nav { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); padding-right: 28px; }
+}
+@media (max-width: 639px) {
+  .oven-strip .temp-jump, .refine { -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent); padding-right: 28px; }
+}
