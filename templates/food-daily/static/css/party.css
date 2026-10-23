@@ -813,3 +813,8 @@ body { overflow-wrap: break-word; }
 .chip--fridge:hover { background: var(--tomato-ink); color: #fff; }
 .chip--fridge svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
 @media (min-width: 1000px) { .hero .chips { flex-wrap: wrap; overflow: visible; row-gap: 6px; } }
+/* страница раздела: название раздела в каждой карточке не повторяется */
+.pt-category .grid .card__top { display: none; }
+/* футер: линия над строкой © — по ширине колонки контента */
+.foot__legal { max-width: calc(var(--wrap) - 32px); padding-left: 0 !important; padding-right: 0 !important; }
+@media (max-width: 1231px) { .foot__legal { margin-left: 16px !important; margin-right: 16px !important; } }
