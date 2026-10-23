@@ -723,3 +723,12 @@ body { overflow-wrap: break-word; }
   .refine > * { flex: none; }
 }
 .k-search .spine .find { display: none; }
+/* две колонки (600–999 px): нечётная последняя карточка занимает ряд целиком */
+@media (min-width: 600px) and (max-width: 999px) {
+  .bgrid > .bcard:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .bgrid > .bcard--pic:last-child:nth-child(odd) { flex-direction: row; }
+  .bgrid > .bcard--pic:last-child:nth-child(odd) .bcard__media { flex: 0 0 calc(50% - 9px); border-radius: 14px 0 0 14px; border-bottom: 0; border-right: 1px solid var(--rule); }
+  .bgrid > .bcard--pic:last-child:nth-child(odd) .bcard__media--none { display: none; }
+}
+/* футер на телефоне — две колонки, описание сайта на всю ширину (как на bestreciept) */
+@media (max-width: 639px) { .colophon__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; } .colophon__about { grid-column: 1 / -1; } }
