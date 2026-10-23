@@ -407,11 +407,13 @@ class Site:
         return {k: v for k, v in out.items() if len(v) >= 2}
 
     def related(self, r: Recipe, n: int = 3) -> list[Recipe]:
-        """Похожие: тот же раздел, тот же вид теста, общие темы; без совпадений — не показываются."""
+        """Похожие: тот же раздел, тот же вид теста, общие темы; торты, пирожные и десерты — одно семейство
+        (как полка «Торты и пирожные» на главной); без совпадений — не показываются."""
+        sweet = {"tort", "zavarnoe", "deserty"}
 
         def score(o: Recipe) -> int:
             return (
-                (2 if o.group == r.group else 0)
+                (2 if o.group == r.group else 1 if {o.group, r.group} <= sweet else 0)
                 + (1 if r.dough and o.dough == r.dough else 0)
                 + len(set(o.tags) & set(r.tags))
             )

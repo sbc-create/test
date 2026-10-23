@@ -146,3 +146,10 @@ def test_batch_oven_plan_keeps_multistage_honest(app):
     plan = re.sub(r"<[^>]+>", " ", re.search(r'<ol class="ovenline">(.*?)</ol>', html, re.S).group(1))
     assert "(220 → 200 °C)" in plan and "в несколько этапов" in plan
     assert not re.search(r"вишней\s*—\s*20 мин", plan)
+
+
+def test_every_recipe_has_related(app):
+    # торт без выпечки — единственный в разделе: похожие берутся из семейства «торты и пирожные»
+    assert all(app.site.related(r) for r in app.site.recipes)
+    rel = app.site.related(app.site.by_slug["tort-bez-vypechki-s-vinogradom"])
+    assert {x.group for x in rel} <= {"tort", "zavarnoe", "deserty"}
