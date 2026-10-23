@@ -1,0 +1,19 @@
+семейство  домен                  вид       постеров измерено  медиана Б страница ≈ КиБ
+animedia   animedia.icu           главная        216        6      53862          11362
+animedia   animedia.icu           каталог         57        6      13434            748
+animedia   animedia.icu           карточка        25        6      51990           1269
+animego    animeg0.site           главная        237        6      54352          12580
+animego    animeg0.site           каталог         24        6      15582            365
+animego    animeg0.site           карточка         1        1      56346             55
+k2         lordfilm.group         главная         97        6      26547           2515
+k2         lordfilm.group         каталог         48        6      25215           1182
+k2         lordfilm.group         карточка         7        6      58842            402
+lords      lordserials22.info     главная        100        6      45781           4471
+lords      lordserials22.info     каталог         45        6      24681           1085
+lords      lordserials22.info     карточка         7        6      31971            219
+yummy      yummyani.site          главная         95        6      78377           7271
+yummy      yummyani.site          каталог         23        6      44002            988
+yummy      yummyani.site          карточка         1        1     109762            107
+zona       zonafilm.cc            главная        118        6      39988           4608
+zona       zonafilm.cc            каталог         28        6      34193            935
+zona       zonafilm.cc            карточка        13        6      34105            433
