@@ -8545,7 +8545,7 @@
         }
       ],
       "status": "queued",
-      "evidence": "23.10 09:16Z wt-portable-site-cell-01-dc: по сводке T326 (09:05–09:14Z). Поисковые входы по параметрам за 14 дней (daily_search_landing_pages): у animedia.icu year 267, genre 49; ?exclude= — 0 на всех 19 доменах. Запрет обхода фасетов в robots сейчас не ставится: главный поток назвался браузером, послушание robots не доказано, а фасеты ?year=/?genre= приносят входы."
+      "evidence": "23.10 09:15Z wt-portable-site-cell-01-dc: по сводке T326 (09:05–09:14Z). Поисковые входы по параметрам за 14 дней (daily_search_landing_pages): у animedia.icu year 267, genre 49; ?exclude= — 0 на всех 19 доменах. Запрет обхода фасетов в robots сейчас не ставится: главный поток назвался браузером, послушание robots не доказано, а фасеты ?year=/?genre= приносят входы."
     }
   ]
 }
