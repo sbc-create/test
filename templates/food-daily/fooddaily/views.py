@@ -301,6 +301,16 @@ class Recipe:
         return self.servings if self.servings and self.servings > 1 else None
 
     @property
+    def nutrition(self) -> dict | None:
+        """Примерная калорийность — только принятый расчёт (ккал на порцию, метод, источник данных) и известное
+        число порций; иначе None: калорийность не показывается и не оценивается «на глаз»."""
+        n = self.f.get("nutrition") or {}
+        kcal = n.get("kcal_per_serving")
+        if not (isinstance(kcal, int | float) and kcal > 0 and n.get("data_source") and n.get("method") and self.servings):
+            return None
+        return {**n, "kcal": round(kcal), "kcal_total": round(kcal * self.servings)}
+
+    @property
     def total_minutes(self):
         return self.f["total_minutes"]
 

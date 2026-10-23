@@ -9,14 +9,14 @@
     <dl class="facts">
       {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
       {% if r.yield_n %}<div><dt>Порции</dt><dd>{{ r.yield_n }}</dd></div>{% endif %}
-      <div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>
+      {% if r.nutrition %}<div class="facts__kcal"><dt>Калорийность</dt><dd>≈&nbsp;{{ r.nutrition.kcal }} <small>ккал на порцию</small></dd></div>{% else %}<div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>{% endif %}
     </dl>
     {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
     <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Ингредиенты ({{ r.ingredients|length }})</a></nav>
     <div class="recipe__actions">
       <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
       <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
-      <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
+      <button class="btn btn--ghost btn--print" type="button" data-print hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg><span>Печать</span></button>
     </div>
     {% set links = site.tag_links(r) %}
     {% if links %}
@@ -45,7 +45,8 @@
         </li>
         {% endfor %}
       </ul>
-      <p class="note">При пересчёте меняются только количества продуктов. Время и температура остаются как в рецепте.</p>
+      {% if r.nutrition %}<p class="kcal-line">Всего в блюде ≈&nbsp;<b data-kcal-total="{{ r.nutrition.kcal_total }}">{{ r.nutrition.kcal_total }}</b>&nbsp;ккал, на порцию ≈&nbsp;{{ r.nutrition.kcal }}&nbsp;ккал</p>{% endif %}
+      <p class="note">При пересчёте меняются только количества продуктов{% if r.nutrition %} и калорийность всего блюда{% endif %}. Время и температура остаются как в рецепте.</p>
       <button class="btn btn--ghost" type="button" data-add-list hidden>Добавить в список покупок</button>
     </section>
 
@@ -78,6 +79,7 @@
 
   <footer class="provenance">
     <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.
+      {% if r.nutrition %}<span class="provenance__kcal">Калорийность примерная: {{ r.nutrition.method|lower }}; данные — {{ r.nutrition.data_source }}.</span>{% endif %}
       <span class="provenance__dates">Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</span></p>
   </footer>
 

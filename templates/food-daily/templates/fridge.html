@@ -6,9 +6,10 @@
 </header>
 <div class="fridge{% if have %} fridge--results{% endif %}">
 <form class="pick" id="vybor" action="/iz-holodilnika/" method="get" data-fridge-form>
+  <p class="pick__assume">Соль, сахар, перец, воду, соду, крахмал, уксус, растительное масло и специи отмечать не нужно: в найденных блюдах они идут отдельной строкой — проверьте, есть ли они дома.</p>
   <div class="pick__find" hidden data-fridge-find><label for="pf" class="sr">Найти продукт в списке</label><input id="pf" type="search" placeholder="Найти продукт" autocomplete="off"></div>
   {% for gname, opts in groups if opts %}
-  <fieldset class="pick__group"><legend>{{ gname }}</legend>
+  {% set ng = opts|selectattr(0, 'in', have)|list|length %}<fieldset class="pick__group"><legend>{{ gname }}<span class="pick__n" data-fridge-n{% if not ng %} hidden{% endif %}> · отмечено <b>{{ ng }}</b></span></legend>
   <ul class="pick__list">{% for key, label, g, n in opts %}<li><label class="pick__item"><input type="checkbox" name="est" value="{{ key }}"{% if key in have %} checked{% endif %}><span>{{ label }}</span></label></li>{% endfor %}</ul></fieldset>
   {% endfor %}
   <p class="pick__none" hidden data-fridge-none>Такого продукта в списке нет.</p>
@@ -26,7 +27,7 @@
 <ol class="match">{% for m in rows %}{% set r = m.r %}<li class="match__row{% if not m.need %} match__row--all{% endif %}">
   <p class="match__meta">{{ r.category_label }}{% if r.time_label %} · {{ r.time_label }}{% endif %}</p>
   <h2 class="match__t"><a href="{{ r.url }}">{{ r.title }}</a></h2>
-  <p class="match__score">{% if m.need %}Есть {{ m.got|length }} из {{ m.total }} {{ plural(m.total, 'продукта', 'продуктов', 'продуктов') }}{% else %}Всё основное есть{% endif %}</p>
+  <p class="match__score">{% if m.need %}Не хватает {{ m.need|length }} {{ plural(m.need|length, 'продукта', 'продуктов', 'продуктов') }} из {{ m.total }}{% else %}Всё основное есть{% endif %}</p>
   <p class="match__have"><b>Есть:</b> {{ m.got|join(', ')|lower }}</p>
   {% if m.need %}<p class="match__miss"><b>Понадобится:</b> {{ m.need|join(', ')|lower }}</p>{% endif %}
   {% if m.basic %}<p class="match__basic">Проверьте базовое: {{ m.basic|join(', ')|lower }}</p>{% endif %}

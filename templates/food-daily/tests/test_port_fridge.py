@@ -82,3 +82,16 @@ def test_catalog_pager_keeps_sort_and_view(app):
         return
     _, html, _ = get(app, "/recepty/", {"sort": ["vremya"], "vid": ["tablica"]})
     assert "sort=vremya" in html and "vid=tablica" in html.split("</table>")[1]
+
+
+def test_fridge_states_basics_counts_group_and_names_what_is_missing(app):
+    """Как у списков продуктов: заранее сказано, что считается базовым; в группе видно, сколько отмечено;
+    в карточке — сколько не хватает (базовое в это число не входит)."""
+    _, html, _ = get(app, "/iz-holodilnika/")
+    assert "отмечать не нужно" in html and all(w in html for w in ("Соль", "сахар", "перец", "растительное масло"))
+    _, html, _ = get(app, "/iz-holodilnika/", {"est": ["tvorog", "kefir", "moloko"]})
+    assert "отмечено <b>3</b>" in html  # все три — молочные
+    rows = app.site.fridge(["tvorog", "kefir", "moloko"])
+    bliny = next(m for m in rows if m["need"])
+    n = len(bliny["need"])
+    assert f"Не хватает {n} " in html and f"из {bliny['total']}" in html

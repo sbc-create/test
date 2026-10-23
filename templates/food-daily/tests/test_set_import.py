@@ -160,3 +160,56 @@ def test_wheat_flour_and_syrniki_do_not_tag_millet_or_cheese():
     assert "tvorog" in tags and "pshyono" not in tags and "syr" not in tags
     r = rec(title="Пшённая каша с сыром")
     assert {"pshyono", "syr"} <= set(set_import.to_payload(r)["draft"]["tags"])
+
+
+NUTRITION = {
+    "kcal_per_serving": 310,
+    "protein_g": 14,
+    "fat_g": 11.5,
+    "carbs_g": 38,
+    "method": "Расчёт по составу: сумма по ингредиентам / число порций",
+    "data_source": "таблица состава продуктов (образец для теста)",
+    "approximate": True,
+}
+
+
+def test_nutrition_and_image_job_survive_import_and_reach_page_markup_and_card(app):
+    """qwen-dish/1: принятый приёмником расчёт калорийности и описание подачи сохраняются в фактах,
+    страница и Recipe-разметка показывают одно и то же; пересчёт порций меняет «всего», не «на порцию»."""
+    from fooddaily import media, seo
+
+    r0 = rec()
+    r0["base"]["nutrition"] = NUTRITION
+    r0["base"]["image_job"] = {"look": "Густой суп в глубокой тарелке", "alt": "Гороховый суп в тарелке"}
+    facts = set_import.to_payload(r0)["facts"]
+    assert facts["nutrition"] == NUTRITION and facts["image_job"]["alt"] == "Гороховый суп в тарелке"
+    no_src = rec()
+    no_src["base"]["nutrition"] = {**NUTRITION, "data_source": ""}
+    assert "nutrition" not in set_import.to_payload(no_src)["facts"]  # без основания расчёта — не переносится
+
+    r = next(x for x in app.site.recipes if x.yield_n == 4)
+    saved = dict(r.raw["facts"])
+    try:
+        r.raw["facts"]["nutrition"] = NUTRITION
+        r.raw["facts"]["image_job"] = facts["image_job"]
+        assert r.nutrition["kcal"] == 310 and r.nutrition["kcal_total"] == 1240
+        html = app.route(r.url, {})[1]
+        assert "≈&nbsp;310 <small>ккал на порцию</small>" in html and 'data-kcal-total="1240"' in html
+        assert "Калорийность примерная: расчёт по составу" in html and "таблица состава продуктов" in html
+        ld = seo.recipe_ld(app.site, r)["nutrition"]
+        assert ld == {
+            "@type": "NutritionInformation",
+            "servingSize": "1 порция",
+            "calories": "310 ккал",
+            "proteinContent": "14 г",
+            "fatContent": "11.5 г",
+            "carbohydrateContent": "38 г",
+        }
+        cat = app.route(f"/recepty/{r.category}/", {})[1]
+        assert "≈&nbsp;310&nbsp;ккал" in cat
+        j = media.job(app.site, r)
+        assert j["alt"] == "Гороховый суп в тарелке" and "Густой суп в глубокой тарелке." in j["prompt"]
+        assert j["recipe_id"] == r.raw["content_id"]
+    finally:
+        r.raw["facts"] = saved
+    assert r.nutrition is None and "ккал" not in app.route(r.url, {})[1]

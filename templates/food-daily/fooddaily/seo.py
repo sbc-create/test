@@ -100,6 +100,18 @@ def recipe_ld(site: Site, r: Recipe) -> dict:
     ):
         if v:
             ld[k] = iso_duration(v)
+    if r.nutrition:  # только принятый расчёт; на странице показан тот же «≈ N ккал на порцию»
+        n = r.nutrition
+        ld["nutrition"] = {
+            "@type": "NutritionInformation",
+            "servingSize": "1 порция",
+            "calories": f"{n['kcal']} ккал",
+            **{
+                key: f"{n[k]:g} г"
+                for k, key in (("protein_g", "proteinContent"), ("fat_g", "fatContent"), ("carbs_g", "carbohydrateContent"))
+                if isinstance(n.get(k), int | float)
+            },
+        }
     if r.image:  # только изображение с установленными правами (data/media/images.json)
         ld["image"] = [site.abs(f"/static/media/{r.image['file']}-{w}.webp") for w in r.image["widths"]]
     return {k: v for k, v in ld.items() if v is not None}

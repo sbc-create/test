@@ -78,6 +78,9 @@
       factor = base ? cur / base : MULT[mi];
       recipe.querySelector("[data-servings-out]").textContent = base ? cur : "×" + fmt(MULT[mi]);
       recipe.querySelector("[data-servings-word]").textContent = base ? plural(cur, "порция", "порции", "порций") : "от рецепта";
+      recipe.querySelectorAll("[data-kcal-total]").forEach(function (b) {  // на порцию — то же, всего — по порциям
+        b.textContent = Math.round(parseFloat(b.getAttribute("data-kcal-total")) * factor);
+      });
       recipe.querySelectorAll(".ing").forEach(function (li) {
         if (li.getAttribute("data-scalable") !== "1") return;
         var q = parseFloat(li.getAttribute("data-qty")), qm = parseFloat(li.getAttribute("data-qmax"));
@@ -206,7 +209,13 @@
       boxes.forEach(function (b) { b.checked = saved.indexOf(b.value) >= 0; });
     }
     var count = function () { var n = 0; boxes.forEach(function (b) { if (b.checked) n++; }); return n; };
-    var upd = function () { var n = count(); if (hint) hint.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один продукт"; };
+    var upd = function () {
+      var n = count(); if (hint) hint.textContent = n ? "Отмечено: " + n : "Отметьте хотя бы один продукт";
+      f.querySelectorAll(".pick__group").forEach(function (g) {  // сколько отмечено в группе — как «0/40» у списков продуктов
+        var k = g.querySelectorAll("input[name=est]:checked").length, out = g.querySelector("[data-fridge-n]");
+        if (out) { out.hidden = !k; out.querySelector("b").textContent = k; }
+      });
+    };
     f.addEventListener("change", upd); upd();
     f.addEventListener("submit", function (e) {
       if (!count()) { e.preventDefault(); if (hint) hint.textContent = "Отметьте хотя бы один продукт"; boxes[0].focus(); }

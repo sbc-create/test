@@ -163,6 +163,10 @@ def to_payload(rec: dict) -> dict:
         "ingredients": ings,
         "method_hints": [],
         "topic_id": None,
+        # примерная калорийность — только принятая приёмником (с методом и источником данных)
+        **({"nutrition": b["nutrition"]} if (b.get("nutrition") or {}).get("data_source") else {}),
+        # как выглядит подача — для задания на изображение, привязанного к id материала
+        **({"image_job": b["image_job"]} if b.get("image_job") else {}),
     }
     cat = category_of(b["title"] + " " + (b.get("category") or ""))
     text = norm_text(" ".join([b["title"]] + [i["name"] for i in b["ingredients"]]))

@@ -543,3 +543,23 @@ h1, h2 { hyphens: manual; }
 .card__media--none .illo img { padding: 16% 28%; opacity: .9; }
 .card__title { margin-bottom: 8px; }
 .card__ing { margin-bottom: 14px; }
+/* 23.10: верх рецепта на телефоне — переходы одной строкой, действия одной строкой (печать — значком) */
+.btn--print svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linejoin: round; }
+.jump { flex-wrap: nowrap; }
+.jump a { flex: 0 1 auto; min-width: 0; white-space: nowrap; }
+@media (max-width: 559px) {
+  .jump a { flex: 1 1 0; justify-content: center; padding: 0 10px; font-size: .95rem; }
+  .recipe__actions { flex-wrap: nowrap; }
+  .recipe__actions .btn--print { padding: 0 12px; flex: none; }
+  .recipe__actions .btn--print span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .recipe__actions .fav--wide, .recipe__actions [data-cook-open] { flex: 1 1 auto; justify-content: center; min-width: 0; white-space: nowrap; }
+}
+/* 23.10: подбор — что считаем базовым, отмечено в группе */
+.pick__assume { margin: 0 0 12px; padding: 10px 12px; border-radius: var(--radius-s); background: var(--paper-2); color: var(--ink-2); font-size: .92rem; line-height: 1.45; }
+.pick__n { text-transform: none; letter-spacing: 0; font-weight: 600; color: var(--tomato-ink); }
+.match__score { color: var(--ink); }
+/* 23.10: примерная калорийность — только принятый расчёт */
+.kcal-line { margin: 4px 0 0; font-size: .95rem; color: var(--ink-2); }
+.kcal-line b { color: var(--ink); font-variant-numeric: tabular-nums; }
+.provenance__kcal { display: block; color: var(--ink-2); }
+.card__kcal { color: var(--muted); }
