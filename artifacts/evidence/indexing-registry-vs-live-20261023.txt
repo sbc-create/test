@@ -1,0 +1,33 @@
+домен                  запись    разрешение  заголовок              мета           вывод
+1lordserials1.online   —         есть        index, follow          index, follow  режим не объявлен в паспорте
+an1meg0.site           CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+an1mego.site           CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+animedia.icu           CLOSED    есть        —                      —              НЕ ИЗМЕРЕНО: код 503
+animedia.space         CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+animeg0.site           CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+lordfilm.group         CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordfilm.msk.ru        CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordfilm.spb.ru        CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordfilm077.site       CLOSED    нет         —                      —              НЕ ИЗМЕРЕНО: код —
+lordfilm47.space       —         есть        —                      —              НЕ ИЗМЕРЕНО: код —
+lordserial.group       CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordserial.msk.ru      CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordserial.net.ru      CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordserial.spb.ru      CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordserial.su          CLOSED    нет         noindex, nofollow, noi noindex, nofol совпадает
+lordserial101.site     CLOSED    нет         —                      —              НЕ ИЗМЕРЕНО: код —
+lordserial33.biz       —         есть        index, follow          index, follow  режим не объявлен в паспорте
+lordserials22.info     CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+lordserials22.site     CLOSED    нет         —                      —              НЕ ИЗМЕРЕНО: код —
+lordserials22.space    CLOSED    нет         —                      —              НЕ ИЗМЕРЕНО: код —
+yummyani.biz           —         есть        —                      index, follow  режим не объявлен в паспорте
+yummyani.org           —         нет         —                      index, follow  режим не объявлен в паспорте
+yummyani.site          —         нет         —                      index, follow  режим не объявлен в паспорте
+yummyani7.info         CLOSED    есть        —                      index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+yummyani7.site         CLOSED    есть        —                      index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+zonafilm.cc            —         есть        index, follow          index, follow  режим не объявлен в паспорте
+zonafilm.space         —         есть        index, follow          index, follow  режим не объявлен в паспорте
+zonafilm12.site        CLOSED    есть        index, follow          index, follow  ЗАПИСЬ УСТАРЕЛА: открыт по разрешению, паспорт не обновлён
+
+открыт без разрешения владельца: 0
+запись устарела (открыт по разрешению, паспорт не обновлён): 8
