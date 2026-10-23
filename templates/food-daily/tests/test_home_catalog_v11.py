@@ -73,3 +73,12 @@ def test_recipe_head_groups_facts_and_actions_in_one_panel(app, site):
 def test_text_card_keeps_favourite_out_of_title_line():
     css = Path("static/css/party.css").read_text(encoding="utf-8")
     assert ".card:not(.card--pic) .fav { top: auto; bottom:" in css
+
+
+def test_view_or_sort_alone_is_not_a_filter_condition(app):
+    # таблица или порядок — не условие подбора: заголовок «Все рецепты», без «по выбранным условиям»
+    _, html, _ = app.route("/recepty/", {"vid": ["tablica"], "sort": ["vremya"]})
+    assert "<h1>Все рецепты</h1>" in html and "по выбранным условиям" not in html
+    assert ">Обычный вид</a>" in html and 'class="applied"' not in html
+    _, html, _ = app.route("/recepty/", {"tip": ["supy"]})
+    assert "<h1>Подбор рецептов</h1>" in html and "по выбранным условиям" in html

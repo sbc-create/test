@@ -9,7 +9,7 @@
   <a class="collection collection--{{ loop.index % 4 }}" href="/podborki/{{ key }}/">
     <span class="collection__title">{{ title }}</span>
     <span class="collection__desc">{{ desc }}</span>
-    <span class="collection__count">{{ items|length }}</span>
+    <span class="collection__count">{{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }} →</span>
   </a>
   {% endfor %}
 </div>

@@ -2,8 +2,8 @@
 {% from "_parts.html" import grid, pager %}
 {% block main %}
 <header class="page-head">
-  <h1>{{ 'Подбор рецептов' if filtered else 'Все рецепты' }}</h1>
-  <p class="page-head__lead">{{ total }} рецепт{{ 'а' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else ('' if total % 10 == 1 and total % 100 != 11 else 'ов') }}{% if filtered %} по выбранным условиям{% endif %}.</p>
+  <h1>{{ 'Подбор рецептов' if active else 'Все рецепты' }}</h1>
+  <p class="page-head__lead">{{ total }} рецепт{{ 'а' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else ('' if total % 10 == 1 and total % 100 != 11 else 'ов') }}{% if active %} по выбранным условиям{% endif %}.</p>
 </header>
 <form class="filters" method="get" action="/recepty/" data-autosubmit>
   <fieldset>
@@ -38,7 +38,7 @@
       </select>
     </label>
     <button type="submit" class="btn">Показать</button>
-    {% if filtered and not active %}<a class="btn btn--ghost" href="/recepty/">Сбросить</a>{% endif %}
+    {% if filtered and not active %}<a class="btn btn--ghost" href="/recepty/">Обычный вид</a>{% endif %}
   </fieldset>
 </form>
 {% if active %}

@@ -58,8 +58,8 @@
     {% for key, (label, _) in CATEGORIES.items() if site.category(key) %}
     <a href="/recepty/{{ key }}/"{% if meta.canonical and ('/recepty/' ~ key ~ '/') in meta.canonical %} aria-current="page"{% endif %}><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="24" height="18">{{ label }}</a>
     {% endfor %}
-    <a href="/podborki/">Подборки</a>
-    <a href="/sovety/">Советы</a>
+    <a href="/podborki/"{% if meta.canonical and '/podborki/' in meta.canonical %} aria-current="page"{% endif %}>Подборки</a>
+    <a href="/sovety/"{% if meta.canonical and '/sovety/' in meta.canonical %} aria-current="page"{% endif %}>Советы</a>
   </nav>
 </header>
 {% if meta.breadcrumbs and meta.breadcrumbs|length > 1 %}

@@ -747,3 +747,15 @@ body { overflow-wrap: break-word; }
   .card--pic .card__media--none { display: none; }
   .card--pic:has(.card__media--none) .card__body { padding: 14px 16px; }
 }
+/* подборки и советы: спокойные карточки в общей системе — цвет только в тонкой полосе сверху */
+.collections { gap: 18px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
+.collection { min-height: 0; background: var(--card) !important; border: 1px solid var(--line); border-top: 4px solid var(--c, var(--saffron)); border-radius: 14px; padding: 16px 18px; }
+.collection--0 { --c: #d9a400; } .collection--1 { --c: #5f8a4a; } .collection--2 { --c: #b8432a; } .collection--3 { --c: #6b3a52; }
+.collection:hover { border-color: #d6c2a6; box-shadow: 0 10px 24px -18px rgba(42, 31, 23, .45); }
+.collection:hover .collection__title { color: var(--tomato-ink); }
+.collection__title { font-size: 1.2rem; }
+.collection__desc { font-size: .95rem; line-height: 1.5; }
+.collection__count { margin-top: 10px; font-size: .95rem; }
+/* «Что есть дома»: подпись раздела и времени — обычными буквами, рамка карточки как у остальных */
+.match__row { border-radius: 14px; border-top-width: 4px; }
+.match__meta { font-size: .86rem !important; letter-spacing: 0; text-transform: none; font-weight: 600; }
