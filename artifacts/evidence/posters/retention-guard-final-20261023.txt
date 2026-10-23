@@ -1,0 +1,11 @@
+исход: ПРЕВЫШЕНО
+   снимков 5817, объём 2.48 ГиБ (потолок хоста 2.0 ГиБ)
+   релизов со снимками больше 20: 4
+        147 снимков  /srv/site-factory/lords-tooling/releases/0b0722f3705c519444b82473d95f6b5734f0128e
+        147 снимков  /srv/site-factory/lords-tooling/releases/7982913cdc1a9ef5b39fad0bc396ddb3089b3c74
+         55 снимков  /srv/animeg0-site/releases/6361420d8839
+         55 снимков  /srv/animeg0-site/releases/7185a60a6585
+   рабочих копий со снимками старше 30 суток больше 100.0 МиБ: 2
+        284.4 МиБ  /home/claude/wt-lords-r2
+        152.3 МиБ  /home/claude/wt-animedia-comments-canary-01
+   что делать: разобрать ценность (`screenshot-value-census.py`), затем снять лишнее (`screenshot-retire.py` — он сначала сохраняет образец)
