@@ -30,8 +30,47 @@ import json
 from pathlib import Path
 
 ЦЕЛЬ = 5000
-ПО_УМОЛЧАНИЮ = Path("/home/claude/wt-portable-site-cell-01/var/analytics/"
-                    "slice-20261015-refresh.json")
+#: Каталог артефактов сбора. Имя артефакта по умолчанию НЕ зашито датой:
+#: до 23.10 здесь стоял `slice-20261015-refresh.json`, и прогон 23.10 честно
+#: печатал период 08–14.10 — то есть отвечал на вопрос восьмидневной
+#: давности. Числа были верны, а вопрос уже нет: разрыв до цели по ним
+#: выходил 5 343 визита в сутки по сети против 7 778 по свежим.
+КАТАЛОГ_АРТЕФАКТОВ = Path("/home/claude/wt-portable-site-cell-01/var/analytics")
+ПО_УМОЛЧАНИЮ = КАТАЛОГ_АРТЕФАКТОВ / "cabinet-latest.json"
+
+#: За сколько часов артефакт считается устаревшим для суждения о цели.
+#: Сбор идёт раз в сутки, поэтому двое суток — это уже пропущенный сбор.
+ПРЕДЕЛ_ВОЗРАСТА_Ч = 48
+
+
+def _возраст_часов(метка) -> float | None:
+    """Сколько часов артефакту. None — метку разобрать не удалось."""
+    import datetime
+    if not метка:
+        return None
+    try:
+        когда = datetime.datetime.fromisoformat(
+            str(метка).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+    if когда.tzinfo is None:
+        когда = когда.replace(tzinfo=datetime.timezone.utc)
+    сейчас = datetime.datetime.now(datetime.timezone.utc)
+    return (сейчас - когда).total_seconds() / 3600.0
+
+
+def _свежее_рядом(судимый: Path) -> str | None:
+    """Есть ли в каталоге артефакт сбора НОВЕЕ судимого. Только имя: подмены
+    не делается — артефакты разных видов отвечают на разные вопросы."""
+    try:
+        соседи = [п for п in судимый.parent.glob("*.json")
+                  if п != судимый and п.stat().st_mtime > судимый.stat().st_mtime]
+    except OSError:
+        return None
+    if not соседи:
+        return None
+    новейший = max(соседи, key=lambda п: п.stat().st_mtime)
+    return новейший.name
 
 
 def суточный_ряд(измерение: dict) -> tuple[dict[str, float], dict[str, float]]:
@@ -70,6 +109,17 @@ def главное(аргв=None) -> int:
     print(f"артефакт: {опции.artifact}")
     print(f"собран: {д.get('collected_at')}; период "
           f"{период.get('date1')} .. {период.get('date2')}")
+    возраст = _возраст_часов(д.get("collected_at"))
+    if возраст is None:
+        print("ВНИМАНИЕ: время сбора в артефакте не разобрано — судить о"
+              " свежести нельзя")
+    elif возраст > ПРЕДЕЛ_ВОЗРАСТА_Ч:
+        print(f"ВНИМАНИЕ: артефакту {возраст:.0f} ч при пределе"
+              f" {ПРЕДЕЛ_ВОЗРАСТА_Ч} ч. Числа ниже верны для своего периода,"
+              " но вопрос «где мы сейчас» по ним не решается.")
+        свежий = _свежее_рядом(опции.artifact)
+        if свежий:
+            print(f"   рядом есть новее: {свежий}")
     print(f"цель: {опции.goal} визитов в сутки на каждом домене\n")
 
     строки = []
