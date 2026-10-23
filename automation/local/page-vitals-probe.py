@@ -224,11 +224,22 @@ def main(аргв=None) -> int:
     р.add_argument("--domain", action="append", default=[], required=True)
     р.add_argument("--count", type=int, default=5,
                    help="сколько произведений и сколько серий на витрину")
+    р.add_argument("--path", action="append", default=[],
+                   help="мерить ИМЕННО эти пути на каждой витрине. Нужно для"
+                        " честного сравнения пары: выборка из своей карты у"
+                        " каждой витрины своя, и разница страниц выдаёт себя"
+                        " за разницу витрин")
     р.add_argument("--json", action="store_true")
     а = р.parse_args(аргв)
     всё: list[dict] = []
     for домен in а.domain:
-        произведения, серии = адреса(домен, а.count)
+        if а.path:
+            произведения = [f"https://{домен}{п_}" for п_ in а.path
+                            if not re.search(r"/(season|episode)[-/]", п_)]
+            серии = [f"https://{домен}{п_}" for п_ in а.path
+                     if re.search(r"/(season|episode)[-/]", п_)]
+        else:
+            произведения, серии = адреса(домен, а.count)
         if not произведения and not серии:
             print(f"{домен}: НЕ ИЗМЕРЕНО — адресов в карте не нашлось",
                   file=sys.stderr)
