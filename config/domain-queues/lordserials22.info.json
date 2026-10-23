@@ -100,7 +100,8 @@
    "verify_by": "`sitemap-demand-coverage.py --domain lordserials22.info` (адрес уходит из «НЕТ НИ В ОДНОЙ КАРТЕ») и `earning-pages-guard.py --domain lordserials22.info` (исход перестаёт называть беду на зарабатывающих)",
    "blocked_by": "выбор владельца каталога (404 может быть и правильным ответом, если работа убрана по правам) И запрет правок страницы тайтла до вердикта 28.10: витрина — канарейка опытов `exp-lords-sitemap-ongoing-episodes` и `exp-lords-title-kind-year`",
    "created": "2026-10-23T06:05:00Z",
-   "updated": "2026-10-23T06:46:00Z"
+   "updated": "2026-10-23T06:50:00Z",
+   "defect": "MOD-143"
   }
  ],
  "baseline": {
