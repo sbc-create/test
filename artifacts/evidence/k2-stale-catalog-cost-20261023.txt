@@ -1,0 +1,11 @@
+витрина    домен                     записей после 18.10  новые         контроль
+lords-10   lordfilm.group              69723        1746  404,404       200
+lords-11   lordfilm.spb.ru             69723        1746  404,404       200
+lords-12   lordfilm.msk.ru             69723        1746  404,404       200
+lords-13   lordserial.su               69723        1746  404,404       200
+lords-14   lordserial.group            69723        1746  404,404       200
+lords-15   lordserial.spb.ru           69723        1746  404,404       200
+lords-16   lordserial.msk.ru           69723        1746  404,404       200
+lords-17   lordserial.net.ru           69723        1746  404,404       200
+
+суммарно адресов, добавленных после установки нынешнего каталога: 13968 по восьми витринам
