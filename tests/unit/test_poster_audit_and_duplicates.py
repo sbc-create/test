@@ -146,14 +146,34 @@ def test_назначение_определяется_по_пути():
 
 # --- зависимость от PIL ----------------------------------------------------
 
-def test_без_pil_опыт_отказывает_понятно():
-    """Отказ обязан называть место установки, а не только ошибку импорта.
+def _без_pil(tmp_path) -> dict:
+    """Окружение, в котором Pillow заведомо нет, на любой машине.
+
+    Пустышка `PIL` в PYTHONPATH затеняет настоящую установку и бросает
+    `ImportError` — ровно то, что ловят инструменты. Привязка к тому, что
+    установлено на узле, здесь недопустима: 23.10 Pillow стоял только в
+    каталоге пользователя, владелец поставил системный python3-pil 9.0.1, и
+    проверка, зависящая от этого, упала бы при неизменном поведении
+    инструмента.
+    """
+    пустышка = tmp_path / "pil-shim"
+    (пустышка / "PIL").mkdir(parents=True)
+    (пустышка / "PIL" / "__init__.py").write_text(
+        'raise ImportError("PIL затенён проверкой: '
+        'так воспроизводится отсутствие библиотеки")\n',
+        encoding="utf-8")
+    среда = dict(os.environ)
+    среда["PYTHONPATH"] = str(пустышка)
+    return среда
+
+
+def test_без_pil_опыт_отказывает_понятно(tmp_path):
+    """Отказ обязан называть, ЧЬЕМУ интерпретатору библиотека недоступна.
 
     Повод измеренный, 23.10: соседняя линия выпустила уменьшение обложек и
-    получила ноль эффекта — Pillow стоит в каталоге ПОЛЬЗОВАТЕЛЯ, а системный
-    python3 службы его не видит. Та же зависимость у моих инструментов, и под
-    `python3 -s` опыт сжатия падал traceback-ом. Проверяется ПОВЕДЕНИЕ:
-    инструмент запускается интерпретатором без пользовательского каталога.
+    получила ноль эффекта — Pillow стоял в каталоге ПОЛЬЗОВАТЕЛЯ, а системный
+    python3 службы его не видел. Проверяется ПОВЕДЕНИЕ инструмента при
+    отсутствии библиотеки, а не состояние машины.
     """
     г = subprocess.run(
         [sys.executable, "-s",
@@ -161,20 +181,47 @@ def test_без_pil_опыт_отказывает_понятно():
          "--from-csv", str(КОРЕНЬ / "artifacts/evidence/posters"
                            / "poster-delivery-20261023.csv"),
          "--limit", "1"],
-        capture_output=True, text=True, timeout=180)
+        capture_output=True, text=True, timeout=180, env=_без_pil(tmp_path))
     assert "Traceback" not in г.stderr, г.stderr[-400:]
     assert "НЕ ИЗМЕРЕНО" in г.stdout, г.stdout
-    assert "каталоге пользователя" in г.stdout, г.stdout
+    assert "service-image-support-check.py" in г.stdout, (
+        "отказ не называет, чем проверять окружение службы: " + г.stdout[:300])
     assert г.returncode == 2, г.returncode
 
 
-def test_без_pil_опись_называет_причину_один_раз():
+def test_с_pil_опыт_не_отказывает(tmp_path):
+    """Обратный случай. Без него проверка выше проходила бы и на инструменте,
+    который отказывает ВСЕГДА — а это уже не отказ, а неработающий опыт."""
+    г = subprocess.run(
+        [sys.executable,
+         str(КОРЕНЬ / "automation/local/poster-recompress-trial.py"),
+         "--help"],
+        capture_output=True, text=True, timeout=180)
+    assert г.returncode == 0, г.stderr[-300:]
+    г2 = subprocess.run(
+        [sys.executable, "-c",
+         "from PIL import Image; print('PIL есть', Image.__name__)"],
+        capture_output=True, text=True, timeout=60)
+    if г2.returncode != 0:
+        import pytest
+        pytest.skip("на этой машине Pillow нет: обратный случай непроверяем")
+    г3 = subprocess.run(
+        [sys.executable,
+         str(КОРЕНЬ / "automation/local/poster-recompress-trial.py"),
+         "--from-csv", str(КОРЕНЬ / "artifacts/evidence/posters"
+                           / "poster-delivery-20261023.csv"),
+         "--limit", "1"],
+        capture_output=True, text=True, timeout=300)
+    assert "service-image-support-check.py" not in г3.stdout, (
+        "библиотека есть, а инструмент всё равно отказывает: " + г3.stdout[:300])
+
+
+def test_без_pil_опись_называет_причину_один_раз(tmp_path):
     """Одна громкая строка вместо шести одинаковых отказов в строках."""
     г = subprocess.run(
         [sys.executable, "-s",
          str(КОРЕНЬ / "automation/local/poster-delivery-audit.py"),
          "--domain", "example.invalid", "--per-page", "1"],
-        capture_output=True, text=True, timeout=180)
+        capture_output=True, text=True, timeout=180, env=_без_pil(tmp_path))
     assert "Traceback" not in г.stderr, г.stderr[-400:]
     assert "ВНИМАНИЕ: пиксели измерены НЕ БУДУТ" in г.stdout, г.stdout
-    assert "каталоге пользователя" in г.stdout, г.stdout
