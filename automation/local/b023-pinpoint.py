@@ -108,20 +108,26 @@ def главное() -> int:
     if not инв.is_file():
         print("   инвентаря ansible нет — НЕ ИЗМЕРЕНО")
         return 0
-    код = (
-        "import socket,time\n"
-        f"for a,p in (('{ip}',443),('{ip}',80),"
-        "('87.250.251.47',443)):\n"
-        "    s=socket.socket(); s.settimeout(6); t=time.monotonic()\n"
-        "    try:\n"
-        "        s.connect((a,p)); print(a,p,'установлено','%.2f'%(time.monotonic()-t))\n"
-        "    except Exception as e:\n"
-        "        print(a,p,'отказ',type(e).__name__,'%.2f'%(time.monotonic()-t))\n"
-        "    finally:\n"
-        "        s.close()\n")
+    # БЕЗ PYTHON НА УДАЛЁННОЙ СТОРОНЕ. Прежняя редакция отдавала
+    # многострочный python через ansible `raw` с `json.dumps`, а `raw` передаёт
+    # строку шеллу как есть — python получал буквальные «\n» и падал с
+    # SyntaxError. Шаг 4 из-за этого НЕ ВЫПОЛНЯЛСЯ НИ РАЗУ, хотя он
+    # единственный различает «подсеть недоступна с этого узла» от
+    # «недоступна вообще» (измерено 23.10).
+    #
+    # Проверка связи делается самим шеллом через `/dev/tcp`: три отдельные
+    # пробы, без переводов строк и без циклов, поэтому экранировать нечего.
+    пробы = ((ip, 443), (ip, 80), ("87.250.251.47", 443))
+    части = []
+    for адрес, порт in пробы:
+        части.append(
+            f"timeout 6 bash -c 'exec 3<>/dev/tcp/{адрес}/{порт}'"
+            f" && echo '{адрес} {порт} установлено'"
+            f" || echo '{адрес} {порт} отказ'")
+    команда = "; ".join(части)
     г = subprocess.run(
         ["ansible", "-i", str(инв), "k2-zomro-01", "-m", "raw",
-         "-a", f"python3 -c {json.dumps(код)}"],
+         "-a", команда],
         capture_output=True, text=True, timeout=180)
     for с in (г.stdout or "").splitlines():
         if с.strip() and not с.startswith("[WARNING]"):
