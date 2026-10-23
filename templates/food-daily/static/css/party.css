@@ -762,3 +762,9 @@ body { overflow-wrap: break-word; }
 /* текст ×2: строка шапки переносится, значки не выходят за край */
 .masthead__row { flex-wrap: wrap; }
 .tools { flex-wrap: wrap; }
+@media print {
+  .recipe__head .recipe__panel { border: 0; padding: 0; background: none; }
+  .facts__time { background: #fff !important; color: #000 !important; }
+  .facts__time dt, .facts__time small { color: #444 !important; }
+  .ingredients { border: 1px solid #999; }
+}
