@@ -74,3 +74,50 @@ def test_ansible_never_disables_host_key_checking():
     target = (PATHS.root / "factory" / "targets" / "ssh_ansible.py").read_text(encoding="utf-8")
     assert 'ANSIBLE_HOST_KEY_CHECKING"] = "True"' in target
     assert "StrictHostKeyChecking=yes" in target
+
+
+def test_pinned_host_key_files_are_present_and_tracked():
+    """Закрепление ключа хоста должно РАЗРЕШАТЬСЯ в файл, и файл — лежать в git.
+
+    Прежние проверки требовали только наличия ПОЛЯ `known_hosts_entry_ref` в
+    реестре. Поля достаточно, чтобы они прошли, и недостаточно, чтобы доставка
+    заработала: измерено 23.10, `inventory/ssh-hosts.yaml` ссылается на
+    `inventory/known_hosts.d/k2-zomro-01`, файл есть в рабочей копии сессии и
+    НЕ отслеживается git — поэтому в постоянной копии `/srv/site-factory/repo`
+    его нет, и готовность доставки каталога K2 показывает нехватку
+    «закрепление ключа хоста». Висячая ссылка не отличима от исправной, пока
+    её не разрешают, а при `strict_host_key_checking: yes` отсутствие файла
+    останавливает доставку целиком.
+
+    Проверяется три факта, а не один: файл существует, он не пуст и разбирается
+    как строка known_hosts (хост, тип ключа, ключ в base64), и он ОТСЛЕЖИВАЕТСЯ
+    git — без третьего условия проверка зеленеет на копии, где файл оставили
+    неотслеживаемым, то есть ровно в сегодняшнем состоянии.
+
+    Чего проверка НЕ делает: не судит, ПОДЛИННЫЙ ли ключ. Отпечаток
+    подтверждается владельцем вне сети, и эта проверка такого подтверждения не
+    заменяет — она гарантирует лишь, что ключ зафиксирован и не меняется молча.
+    """
+    import base64
+    import subprocess
+
+    hosts = inventory.load("ssh-hosts.yaml").get("hosts") or []
+    assert hosts, "ssh-hosts.yaml: ни одного хоста — проверять нечего"
+    tracked = subprocess.run(
+        ["git", "-C", str(PATHS.root), "ls-files", "-z", "inventory"],
+        capture_output=True, text=True, check=True).stdout.split("\0")
+    for host in hosts:
+        ref = host.get("known_hosts_entry_ref")
+        assert ref, f"{host.get('ref')}: нет known_hosts_entry_ref"
+        path = PATHS.root / ref
+        assert path.is_file(), f"{host['ref']}: закрепление {ref} не существует"
+        line = path.read_text(encoding="utf-8").strip()
+        assert line, f"{host['ref']}: закрепление {ref} пусто"
+        fields = line.split()
+        assert len(fields) >= 3, f"{host['ref']}: {ref} не похож на known_hosts"
+        assert fields[1].startswith(("ssh-", "ecdsa-")), (
+            f"{host['ref']}: {ref} — неизвестный тип ключа {fields[1]}")
+        base64.b64decode(fields[2], validate=True)
+        assert ref in tracked, (
+            f"{host['ref']}: {ref} НЕ отслеживается git — в свежей копии"
+            " репозитория закрепления не будет, и доставка остановится")
