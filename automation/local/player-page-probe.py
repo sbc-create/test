@@ -69,6 +69,19 @@ import sys
 БЕЗ_ПЛЕЕРА = re.compile(r"^https?://[^/]+/?$|/catalog|/collections?|/schedule|/top|/new")
 
 
+#: Счётчики не должны получать технические просмотры: браузер исполняет
+#: JavaScript страницы, а значит и счётчик Метрики. Требование владельца
+#: 23.10. Модуль один на все браузерные инструменты — counter_guard.py.
+def _запрет_счётчиков(цель):
+    import importlib.util
+    import pathlib as _pl
+    п = _pl.Path(__file__).resolve().parent / "counter_guard.py"
+    с = importlib.util.spec_from_file_location("counter_guard", п)
+    м = importlib.util.module_from_spec(с)
+    с.loader.exec_module(м)
+    return м.запретить_счётчики(цель)
+
+
 def не_требует_плеера(адрес: str) -> bool:
     return bool(БЕЗ_ПЛЕЕРА.search(адрес))
 
@@ -80,6 +93,7 @@ def проверить_страницу(bp, адрес: str, устройств�
     контекст = bp.new_context(**настройки, is_mobile=мобильный,
                               has_touch=мобильный, locale="ru-RU")
     страница = контекст.new_page()
+    _перехвачено = _запрет_счётчиков(контекст)
     поток, ошибки, неудачи, реклама = [], [], [], []
     страница.on("console", lambda с: ошибки.append(с.text[:160])
                 if с.type == "error" else None)

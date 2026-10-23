@@ -95,7 +95,20 @@ with sync_playwright() as p:
     к = б.new_context(ignore_https_errors=True, viewport={"width": 1280, "height": 800},
                       user_agent=("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                                   "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"))
+#: Счётчики не должны получать технические просмотры: браузер исполняет
+#: JavaScript страницы, а значит и счётчик Метрики. Требование владельца
+#: 23.10. Модуль один на все браузерные инструменты — counter_guard.py.
+def _запрет_счётчиков(цель):
+    import importlib.util
+    import pathlib as _pl
+    п = _pl.Path(__file__).resolve().parent / "counter_guard.py"
+    с = importlib.util.spec_from_file_location("counter_guard", п)
+    м = importlib.util.module_from_spec(с)
+    с.loader.exec_module(м)
+    return м.запретить_счётчики(цель)
+
     стр = к.new_page()
+    _перехвачено = _запрет_счётчиков(к)
     медиа = []
     стр.on("response", lambda о: медиа.append((о.status, о.url))
            if re.search(r"\.(m3u8|ts|mp4|m4s|mpd)(\?|$)", о.url) else None)

@@ -80,6 +80,20 @@ import sys
 ПОРОГ_ВЫХОДА_PX = 16
 
 
+
+#: Счётчики не должны получать технические просмотры: браузер исполняет
+#: JavaScript страницы, а значит и счётчик Метрики. Требование владельца
+#: 23.10. Модуль один на все браузерные инструменты — counter_guard.py.
+#: Здесь перехват ставится на СТРАНИЦУ: этот инструмент контекст не создаёт.
+def _запрет_счётчиков(цель):
+    import importlib.util
+    import pathlib as _pl
+    п = _pl.Path(__file__).resolve().parent / "counter_guard.py"
+    с = importlib.util.spec_from_file_location("counter_guard", п)
+    м = importlib.util.module_from_spec(с)
+    с.loader.exec_module(м)
+    return м.запретить_счётчики(цель)
+
 def исход(замер: dict) -> dict:
     """Исход по одному замеру. Чистая функция: браузер здесь не нужен.
 
@@ -244,6 +258,7 @@ def замерить(адрес: str, *, окно: tuple[int, int] = ОКНО_Т
             user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)"
                        " AppleWebKit/605.1.15 (KHTML, like Gecko)"
                        " Version/17.0 Mobile/15E148 Safari/604.1")
+        _перехвачено = _запрет_счётчиков(страница)
         try:
             try:
                 ответ = страница.goto(адрес, wait_until="load", timeout=45000)

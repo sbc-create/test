@@ -1,0 +1,18 @@
+горизонтальных файлов в вертикальном окне: 15
+
+файл                                             пиксели     байт      окно  форма  где
+01a155cc-6b7c-7b2b-a93c-9037c857ea98.webp      600x337      12434   190x285 ×2.67  animedia.icu/каталог
+01a155cc-6b7c-7b2b-a93c-9037c857ea98.webp      600x337      12434   190x285 ×2.67  animedia.space/каталог
+01a15568-95ff-7b2b-88c2-2bea9c11ddf2.webp      600x338      20208   190x285 ×2.66  animedia.icu/карточка
+01a1681c-19f4-7b2f-aefe-52d1c06536d1.webp      500x282      29002   184x260 ×2.51  yummyani.biz/главная
+01a14534-c168-7b27-a366-94e519f10afb.webp      600x338      29306   184x260 ×2.51  yummyani.biz/главная
+01a167d0-01b2-7b2f-b94c-7e82a466090b.webp     1280x720      51622   184x260 ×2.51  yummyani7.site/главная
+01a155cc-6b7c-7b2b-a93c-9037c857ea98.webp      600x337      12434   190x266 ×2.49  an1meg0.site/каталог
+01a155cc-6b7c-7b2b-a93c-9037c857ea98.webp      600x337      12434   190x266 ×2.49  an1mego.site/каталог
+01a155cc-6b7c-7b2b-a93c-9037c857ea98.webp      600x337      12434   190x266 ×2.49  animeg0.site/каталог
+01a1685e-9e9f-7b2f-80bc-722510bb2c58.webp     1280x720      51092   230x322 ×2.49  yummyani.biz/каталог
+01a16845-cb9e-7b2f-9ecf-5a34e123c8e9.webp      600x338      34000   230x322 ×2.49  yummyani.biz/каталог
+01a1681a-57e5-7b2f-bcb0-72f3568b281e.webp      600x337      34770   230x322 ×2.49  yummyani.biz/каталог
+01a155b0-a6bb-7b2b-9539-018a96da22e6.webp      600x458      20212   190x285 ×1.97  animedia.icu/каталог
+01a155b0-a6bb-7b2b-9539-018a96da22e6.webp      600x458      20212   190x285 ×1.97  animedia.space/каталог
+5000d39ce0434846e4200c3e9edcb35a.jpeg          225x169       9828   190x266 ×1.86  an1meg0.site/каталог
