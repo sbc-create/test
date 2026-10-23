@@ -261,14 +261,22 @@ class App:
             tea = [r for r in s.tags().get("k-chayu", []) if r.slug not in shown][:3]  # без повтора сезонных
             tea = tea if len(tea) >= 2 else []
             shown |= {r.slug for r in tea}
-            # «Новые» — без карточек, уже показанных выше; полными рядами по 3 (сетка 3/2/1)
-            fresh = [
+            # дальше — разделами: сначала торты и пирожные, затем остальная выпечка; без повторов выше
+            rest = [
                 r
                 for r in sorted(s.recipes, key=lambda r: (r.published_at, r.updated_at), reverse=True)
                 if r.slug not in shown
-            ][:6]
-            if len(fresh) > 3:
-                fresh = fresh[: len(fresh) // 3 * 3]
+            ]
+            shelves = []
+            sweet = [r for r in rest if r.group in ("tort", "zavarnoe", "deserty")][:3]
+            if len(sweet) >= 2:
+                shelves.append(("sweet", "Торты и пирожные", sweet))
+                rest = [r for r in rest if r not in sweet]
+            if len(rest) >= 2:
+                labels = [GROUPS[k] for k in GROUPS if any(r.group == k for r in rest[:3])]
+                title = labels[0] if len(labels) == 1 else ", ".join(labels[:-1]) + " и " + labels[-1].lower()
+                shelves.append(("more", title.capitalize(), rest[:3]))
+            fresh = [r for _, _, items in shelves for r in items]
             meta = Meta(
                 f"{s.cfg['name']} — рецепты домашней выпечки",
                 with_examples(
@@ -279,11 +287,11 @@ class App:
                 s.abs("/"),
                 True,
                 kind="home",
-                ld=[website_ld(s), items_ld(s, fresh)],
+                ld=[website_ld(s), items_ld(s, (season[2][:3] if season else []) + tea + fresh)],
             )
             return (
                 200,
-                self.render("home.html", meta, groups=groups, tea=tea, season=season, fresh=fresh),
+                self.render("home.html", meta, groups=groups, tea=tea, season=season, shelves=shelves),
                 {},
             )
         if path == "/duhovka/":
@@ -345,11 +353,27 @@ class App:
             )
             if filtered:
                 meta.index, meta.canonical, meta.prev, meta.next, meta.title = False, None, None, None, "Подбор выпечки"
+            # выбранные условия: подпись, адрес без этого условия и сколько рецептов найдётся без него
+            names = {
+                "dough": ("testo", "Тесто", {k: DOUGH_LABELS[k][0].lower() for k in s.doughs()}),
+                "oven": ("duhovka", "Духовка", {"da": "нужна", "net": "без духовки"}),
+            }
+            active = []
+            for key, (_, label, opts) in names.items():
+                if flt[key] in opts:
+                    rest = {k: v for k, v in flt.items() if k != key}
+                    qs = urllib.parse.urlencode(
+                        [(names[k][0], v) for k, v in rest.items() if v]
+                        + [(x, y) for x, y in (("sort", sort), ("vid", "tablica" if table else "")) if y]
+                    )
+                    n_without = len(s.filter(**rest)) if any(rest.values()) else len(s.recipes)
+                    active.append((f"{label}: {opts[flt[key]]}", "/recepty/" + ("?" + qs if qs else ""), n_without))
             return (
                 200,
                 self.render(
                     "catalog.html",
                     meta,
+                    active=active,
                     items=chunk,
                     n=n,
                     pages=pages,

@@ -485,3 +485,56 @@ h1 { font-size: var(--fs-h1); }
   .filters select { width: 100%; min-width: 0; }
   .filters > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
+
+/* ---- v11: главная — выпечка на первом экране, температура рядом с поиском ------------------- */
+.hero-pair { display: grid; gap: 24px; }
+.hero-pair .oven-band { margin: 0; }
+@media (min-width: 1000px) {
+  .hero-pair { grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr); gap: 40px; align-items: center; }
+  .hero-pair .oven-band { grid-template-columns: 1fr; }
+}
+@media (max-width: 999px) {  /* на телефоне и планшете — компактная лента температур под поиском */
+  .hero-pair { gap: 14px; }
+  .hero-pair .oven-band { padding: 12px 0 12px 14px; gap: 8px; }
+  .hero-pair .oven-band h2 { font-size: 1.1rem; margin: 0; }
+  .hero-pair .oven-band p { display: none; }
+  .hero-pair .temp-jump { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding-right: 14px; }
+  .hero-pair .temp-jump::-webkit-scrollbar { display: none; }
+  .hero-pair .temp-jump a { flex: none; min-height: 40px; }
+}
+.hero-pair .bench-hero { max-width: none; }
+@media (max-width: 639px) {
+  .bench-hero h1 { font-size: 1.95rem; line-height: 1.1; margin-bottom: .2em; }
+  .bench-hero .lead { font-size: 1rem; line-height: 1.45; margin: 0 0 12px; }
+  .block--first { margin-top: 24px; }
+}
+.block__links a { white-space: nowrap; }
+/* шапка на телефоне: название и значок поиска в одну строку, полное поле — на странице поиска */
+.spine__search { display: none; }
+@media (max-width: 639px) {
+  .spine__in { flex-wrap: nowrap; align-items: center; padding: 12px 16px 6px; gap: 10px; }
+  .spine .find { display: none; }
+  .spine__search { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; flex: none; border-radius: 999px; color: var(--page); background: rgba(255, 255, 255, .1); }
+  .spine__search:hover, .spine__search:focus-visible { background: var(--butter); color: var(--wine); }
+  .title__big { font-size: 1.6rem; }
+  .toc-nav { padding-bottom: 8px; }
+}
+/* рецепт на телефоне: название уже в заголовке — в крошках не повторяется; переходы — одной строкой */
+@media (max-width: 639px) {
+  .k-recipe .crumbs li:last-child { display: none; }
+  .k-recipe .crumbs li:nth-last-child(2)::after { content: none; }
+  .jump { flex-wrap: nowrap; gap: 8px; }
+  .jump a { padding: 0 12px; font-size: .95rem; flex: 0 1 auto; white-space: nowrap; }
+}
+/* выбранные условия каталога: каждое снимается отдельно */
+.applied { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 18px; }
+.applied__label { font-size: .92rem; color: var(--muted); }
+.applied__chip { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: 999px; background: var(--wine); color: #fff; text-decoration: none; font-size: .95rem; font-weight: 700; }
+.applied__chip span { font-size: 1.15rem; line-height: 1; font-weight: 400; }
+.applied__chip:hover, .applied__chip:focus-visible { background: var(--wine-2); color: #fff; }
+.applied__reset { font-size: .95rem; padding: 6px 4px; color: var(--wine-2); }
+.empty__ways { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 6px; }
+/* главная цифра выпечки — температура духовки: выделена цветом и размером */
+.facts-b .facts-b__oven { background: var(--wine); color: #fff; }
+.facts-b .facts-b__oven span { color: var(--butter); opacity: 1; }
+.facts-b .facts-b__oven b { font-size: 1.3rem; line-height: 1.2; }

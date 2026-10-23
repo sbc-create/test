@@ -8,7 +8,7 @@
     <p class="lead">{{ r.intro }}</p>
     <ul class="facts-b" aria-label="Коротко о рецепте">
       {% if r.total %}<li><span>Всего</span><b>{{ r.total }}</b></li>{% endif %}
-      {% if r.temps %}<li><span>Духовка</span><b>{{ r.temps | join(' → ') }}&nbsp;°C</b></li>{% else %}<li><span>Духовка</span><b>не нужна</b></li>{% endif %}
+      {% if r.temps %}<li class="facts-b__oven"><span>Духовка</span><b>{{ r.temps | join(' → ') }}&nbsp;°C</b></li>{% else %}<li><span>Духовка</span><b>не нужна</b></li>{% endif %}
       {% if r.timers %}<li><span>Выпекать</span><b>{% for t in r.timers %}{{ t.minutes }}{% if t.max %}–{{ t.max }}{% endif %} мин <a href="#shag-{{ t.step }}">шаг&nbsp;{{ t.step }}</a>{% if not loop.last %}; {% endif %}{% endfor %}</b></li>{% elif r.bake_label %}<li><span>Выпекать</span><b>{{ r.bake_label }}</b></li>{% endif %}
       {% if r.form %}<li><span>Форма</span><b>{{ r.form }}</b></li>{% endif %}
       {% for c in r.rests %}<li><span>{{ c.label }}</span><b>{{ c.time }} <a href="#shag-{{ c.step }}">шаг&nbsp;{{ c.step }}</a></b></li>{% endfor %}
