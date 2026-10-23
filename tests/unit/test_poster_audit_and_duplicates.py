@@ -142,3 +142,39 @@ def test_назначение_определяется_по_пути():
     assert ПЕРЕПИСЬ.назначение("/srv/s/releases/ab/a.webp") == "каталог релиза"
     assert ПЕРЕПИСЬ.назначение("/var/cache/nginx/x/a.webp") == "кеш"
     assert ПЕРЕПИСЬ.назначение("/home/claude/wt-abc/a.webp") == "рабочая копия сессии"
+
+
+# --- зависимость от PIL ----------------------------------------------------
+
+def test_без_pil_опыт_отказывает_понятно():
+    """Отказ обязан называть место установки, а не только ошибку импорта.
+
+    Повод измеренный, 23.10: соседняя линия выпустила уменьшение обложек и
+    получила ноль эффекта — Pillow стоит в каталоге ПОЛЬЗОВАТЕЛЯ, а системный
+    python3 службы его не видит. Та же зависимость у моих инструментов, и под
+    `python3 -s` опыт сжатия падал traceback-ом. Проверяется ПОВЕДЕНИЕ:
+    инструмент запускается интерпретатором без пользовательского каталога.
+    """
+    г = subprocess.run(
+        [sys.executable, "-s",
+         str(КОРЕНЬ / "automation/local/poster-recompress-trial.py"),
+         "--from-csv", str(КОРЕНЬ / "artifacts/evidence/posters"
+                           / "poster-delivery-20261023.csv"),
+         "--limit", "1"],
+        capture_output=True, text=True, timeout=180)
+    assert "Traceback" not in г.stderr, г.stderr[-400:]
+    assert "НЕ ИЗМЕРЕНО" in г.stdout, г.stdout
+    assert "каталоге пользователя" in г.stdout, г.stdout
+    assert г.returncode == 2, г.returncode
+
+
+def test_без_pil_опись_называет_причину_один_раз():
+    """Одна громкая строка вместо шести одинаковых отказов в строках."""
+    г = subprocess.run(
+        [sys.executable, "-s",
+         str(КОРЕНЬ / "automation/local/poster-delivery-audit.py"),
+         "--domain", "example.invalid", "--per-page", "1"],
+        capture_output=True, text=True, timeout=180)
+    assert "Traceback" not in г.stderr, г.stderr[-400:]
+    assert "ВНИМАНИЕ: пиксели измерены НЕ БУДУТ" in г.stdout, г.stdout
+    assert "каталоге пользователя" in г.stdout, г.stdout
