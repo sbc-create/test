@@ -7,6 +7,11 @@
 
     python3 tools/qwen_recipes_intake.py inspect <архив|каталог>   # файлы, ключи, количества
     python3 tools/qwen_recipes_intake.py plan <архив|каталог> [--out DIR]
+    python3 tools/qwen_recipes_intake.py check <архив|каталог>  # для Qwen: READY или что исправить
+
+С 23.10.2026 основной формат поставки — qwen-dish/1: одно блюдо — одна редакционная версия,
+источник, калорийность с основанием расчёта и задание на изображение (tools/qwen_contract/README.md,
+образец tools/qwen_contract/example/). Форматы ниже читаются для совместимости.
 
 Ожидаемая структура (контракт qwen-recipes-set/1). Если пришло другое, `inspect` показывает
 фактическую структуру, а `plan` останавливается с BLOCKED_INPUT — без догадок о полях:
@@ -103,6 +108,7 @@ STOP = {"с", "и", "на", "из", "в", "по", "для", "без", "под", 
 
 
 # ---------------------------------------------------------------- чтение набора
+EXAMPLE_HOSTS = {"example.org", "example.com", "example.net"}
 UNREADABLE = "_unreadable"  # ключ в результате read_set: файлы, которые не разобрались как JSON
 
 
@@ -151,7 +157,7 @@ def variant_steps(v: dict) -> tuple[list[str] | None, str]:
         return [_clean(x) for x in st], "steps"
     swe = v.get("steps_with_explanations")
     if isinstance(swe, list) and swe and all(isinstance(x, dict) for x in swe):
-        out = [_clean(x.get("explanation") or x.get("instruction") or "") for x in swe]
+        out = [step_text(x) for x in swe]
         if all(out):
             return out, "steps_with_explanations"
     seq = v.get("step_sequence")
@@ -164,6 +170,16 @@ def variant_steps(v: dict) -> tuple[list[str] | None, str]:
     if v.get("control_points"):
         return None, "control_points: только признаки готовности"
     return None, "нет шагов"
+
+
+def step_text(x: dict) -> str:
+    """Шаг из пары instruction/explanation: действие — instruction, пояснение идёт следом и не
+    заменяет его (раньше explanation вытесняло instruction, и действия терялись). Числа пояснения
+    проверяются вместе с шагом: время или температура не из базы — ошибка шага."""
+    ins, exp = _clean(x.get("instruction") or ""), _clean(x.get("explanation") or "")
+    if ins and exp and norm(exp) not in norm(ins):
+        return ins.rstrip(".") + ". " + exp[:1].upper() + exp[1:]
+    return ins or exp
 
 
 def variant_intro(v: dict) -> tuple[str, str]:
@@ -217,8 +233,99 @@ def align(texts: list[str], base_steps: list[str]) -> list[list[int]]:
     ]
 
 
+DISH = "qwen-dish/1"
+
+
+def normalize_dish(files: dict) -> dict:
+    """Поставка qwen-dish/1 (одно блюдо — одна редакционная версия) → контракт qwen-recipes-set/1.
+    Факты (состав, количества, время, источник, шаги источника) — в базу; текст редакции — в один
+    вариант с меткой ED. Калорийность и задание на изображение переносятся как есть
+    и проверяются в plan."""
+    man = next((d for n, d in files.items() if n.rsplit("/", 1)[-1] == "manifest.json"), {})
+    out: dict = {UNREADABLE: files.get(UNREADABLE, {})} if files.get(UNREADABLE) else {}
+    items = []
+    for it in man.get("items") or []:
+        d = files.get(it.get("file")) or {}
+        did = it.get("dish_id") or d.get("dish_id")
+        if not d:
+            items.append({"base_id": did, "file": f"base/{did}.json", "variants": []})
+            continue
+        ed = d.get("editorial") or {}
+        names = ed.get("display_names") or {}
+        b = {
+            "base_id": did,
+            "title": d.get("title"),
+            "category": d.get("category"),
+            "servings": d.get("servings"),
+            **{
+                k: d.get(k)
+                for k in ("prep_minutes", "cook_minutes", "total_minutes")
+                if d.get(k) is not None
+            },
+            "ingredients": [
+                {
+                    k: i.get(k)
+                    for k in ("name", "quantity", "quantity_max", "unit", "note")
+                    if k in i
+                }
+                for i in d.get("ingredients") or []
+            ],
+            "steps": list(d.get("source_steps") or []),
+            "source": d["source"]
+            if str((d.get("source") or {}).get("url", "")).startswith("http")
+            else {},
+            "source_raw": (d.get("source") or {}).get("url") or "",
+            **({"oven": d["oven"]} if d.get("oven") else {}),
+            **({"nutrition": d["nutrition"]} if d.get("nutrition") else {}),
+            **({"image_job": d["image_job"]} if d.get("image_job") else {}),
+            **({"site": d["site"]} if d.get("site") else {}),
+        }
+        v = {
+            "variant_id": f"{did}-{EDITOR}",
+            "base_id": did,
+            "label": EDITOR,
+            "title": b["title"],
+            "intro": str(ed.get("intro") or "").strip(),
+            "ingredients": [
+                {"base_index": k, "display_name": names.get(str(k), i.get("name"))}
+                for k, i in enumerate(b["ingredients"])
+            ],
+            "steps": [
+                {
+                    "text": step_text(x),
+                    "base_steps": x.get("base_steps") or [],
+                    **({"readiness_cue": x["readiness_cue"]} if x.get("readiness_cue") else {}),
+                }
+                for x in ed.get("steps") or []
+                if isinstance(x, dict)
+            ],
+            "format_fields": {"steps": "editorial.steps", "intro": "editorial.intro"},
+        }
+        out[f"base/{did}.json"] = b
+        out[f"variants/{v['variant_id']}.json"] = v
+        vs = [
+            {
+                "variant_id": v["variant_id"],
+                "label": EDITOR,
+                "file": f"variants/{v['variant_id']}.json",
+            }
+        ]
+        items.append({"base_id": did, "file": f"base/{did}.json", "variants": vs})
+    out["manifest.json"] = {
+        "set_id": man.get("set_id"),
+        "format": DISH,
+        "base_count": len(items),
+        "variant_count": len(items),
+        "items": items,
+    }
+    return out
+
+
 def normalize(files: dict) -> dict:
-    """Поставка qwen-night/1 → контракт qwen-recipes-set/1; иной вход возвращается как есть."""
+    """Поставка qwen-night/1 или qwen-dish/1 → контракт qwen-recipes-set/1; иной вход — как есть."""
+    man = next((d for n, d in files.items() if n.rsplit("/", 1)[-1] == "manifest.json"), None)
+    if isinstance(man, dict) and man.get("format") == DISH:
+        return normalize_dish(files)
     bases = {
         n: d
         for n, d in files.items()
@@ -409,6 +516,9 @@ def check_base(b: dict) -> list[str]:
             if raw
             else "BLOCKED_RIGHTS: нет источника фактов (source.url)"
         )
+    host = str((b.get("source") or {}).get("url", "")).split("/")[2:3]
+    if host and re.sub(r"^www\.", "", host[0]).split(":")[0] in EXAMPLE_HOSTS:
+        errs.append("BLOCKED_RIGHTS: источник-пример (example.org) — образец формата, не рецепт")
     for i, ing in enumerate(b.get("ingredients") or []):
         if not ing.get("name"):
             errs.append(f"ингредиент {i}: нет названия")
@@ -417,6 +527,38 @@ def check_base(b: dict) -> list[str]:
     if not all(isinstance(s, str) and s.strip() for s in b.get("steps") or []):
         errs.append("шаги базы — непустые строки")
     return errs
+
+
+def check_nutrition(n: dict, b: dict) -> tuple[dict | None, list[str]]:
+    """Калорийность публикуется только как примерный расчёт по составу с названным
+    источником данных.
+    Неполный расчёт не блокирует блюдо — он не переносится, а причина попадает в отчёт."""
+    why = []
+    kcal = n.get("kcal_per_serving")
+    if not isinstance(kcal, int | float) or isinstance(kcal, bool) or not 0 < kcal < 3000:
+        why.append("нет kcal_per_serving (число ккал на порцию)")
+    for k in ("method", "data_source"):
+        if not str(n.get(k) or "").strip():
+            why.append(f"нет {k}: чем и по каким данным посчитано")
+    if not b.get("servings"):
+        why.append("число порций неизвестно — на порцию не посчитать")
+    for k in ("protein_g", "fat_g", "carbs_g"):
+        if k in n and not (isinstance(n[k], int | float) and n[k] >= 0):
+            why.append(f"{k} — не число")
+    per = n.get("per_ingredient")
+    if per and not why:
+        idx = sorted(x.get("index") for x in per if isinstance(x, dict))
+        total = sum(float(x.get("kcal") or 0) for x in per if isinstance(x, dict))
+        if idx != list(range(len(b.get("ingredients") or []))):
+            why.append("per_ingredient: по строке на каждый ингредиент базы")
+        elif abs(total / b["servings"] - kcal) > max(5, kcal * 0.05):
+            why.append(
+                f"per_ingredient: сумма {round(total)} ккал / {b['servings']} порц. ≠ {kcal}"
+            )
+    if why:
+        return None, ["калорийность не перенесена: " + "; ".join(why)]
+    keep = ("kcal_per_serving", "protein_g", "fat_g", "carbs_g", "method", "data_source")
+    return {k: n[k] for k in keep if k in n} | {"approximate": True}, []
 
 
 def check_variant(v: dict, b: dict) -> list[str]:
@@ -639,21 +781,42 @@ def plan(
         if b is None:
             defer("missing", None, bid, "нет файла базового рецепта", vs, lambda v: "нет базы")
             continue
-        if len([v for v in vs if v["label"] != EDITOR]) != EXPECTED["per_base"]:
+        if (
+            man.get("format") != DISH
+            and len([v for v in vs if v["label"] != EDITOR]) != EXPECTED["per_base"]
+        ):
             counts.setdefault("bases_without_5_variants", []).append(bid)
         checked = {v["variant_id"]: check_variant(v, b) for v in vs}
         errs = check_base(b)
-        site = route(b, {})
+        site = b["site"] if b.get("site") in SITES else route(b, {})
         key = title_key(b["title"])
         mine = own_ids(man.get("set_id", SET_ID), bid)
-        match = next(
+        # одно блюдо — на одном сайте: совпадение ищется и на соседнем;
+        # другой текст — не повод для второй страницы
+        hit = next(
             (
-                x[0]
-                for x in existing.get(site, [])
+                (other, x[0])
+                for other in [site] + [o for o in SITES if o != site]
+                for x in existing.get(other, [])
                 if similar(x[1], key) and (x[2] if len(x) > 2 else None) not in mine
             ),
             None,
         )
+        match = hit[1] if hit else None
+        if hit and hit[0] != site:
+            match, site = None, hit[0]
+            defer(
+                "duplicate",
+                b,
+                bid,
+                f"блюдо уже есть на {hit[0]}/recept/{hit[1]}/ — на второй сайт не переносится",
+                vs,
+                lambda v: "блюдо есть на другом сайте",
+                site=hit[0],
+                update_candidate=hit[1],
+            )
+            seen_titles.append((bid, key))
+            continue
         dup_set = next((t for t, k in seen_titles if similar(k, key)), None)
         seen_titles.append((bid, key))
         if match or dup_set:
@@ -694,7 +857,12 @@ def plan(
                 "quality",
                 b,
                 bid,
-                "ни один вариант V1–V5 не передаёт рецепт полностью" + detail,
+                (
+                    "редакционная версия не передаёт рецепт полностью"
+                    if man.get("format") == DISH
+                    else "ни один вариант V1–V5 не передаёт рецепт полностью"
+                )
+                + detail,
                 vs,
                 lambda v, c=checked: "; ".join(c[v["variant_id"]]),
                 site=site,
@@ -710,14 +878,30 @@ def plan(
             for v in vs
             if v is not pick
         ]
+        warnings = []
+        if b.get("nutrition"):
+            kept, warnings = check_nutrition(b["nutrition"], b)
+            b = {
+                **{k: x for k, x in b.items() if k != "nutrition"},
+                **({"nutrition": kept} if kept else {}),
+            }
+        dest = b["site"] if b.get("site") in SITES else route(b, pick)
+        set_id = man.get("set_id", SET_ID)
         rec = {
-            "set_id": man.get("set_id", SET_ID),
+            "set_id": set_id,
             "base_id": bid,
             "variant_id": pick["variant_id"],
             "label": pick["label"],
-            "site": route(b, pick),
+            "site": dest,
+            # id материала на сайте: к нему привязываются задания на изображение и приём файлов
+            "recipe_id": next(
+                i
+                for i in sorted(own_ids(set_id, bid))
+                if i.startswith("fdq-" if dest == "bestreciept.site" else "fbq-")
+            ),
             "base": b,
             "variant": pick,
+            **({"warnings": warnings} if warnings else {}),
         }
         rec["digest"] = digest({"base": b, "variant": pick})
         accepted[rec["site"]].append(rec)
@@ -735,6 +919,29 @@ def plan(
         "archived_variants": len(archive),
         "_accepted": accepted,
         "_archive": archive,
+    }
+
+
+def check(files: dict[str, dict], existing: dict | None = None) -> dict:
+    """Проверка поставки для Qwen до отправки: те же правила, что у plan, без записи и без
+    редакционных версий этой стороны. По каждому блюду — ready или список исправлений."""
+    res = plan(files, existing=existing, editorial={})
+    if res["status"] != "OK":
+        return {"status": res["status"], "reason": res.get("reason")}
+    dishes = [
+        {"dish_id": r["base_id"], "status": "ready", "site": r["site"], "recipe_id": r["recipe_id"]}
+        | ({"warnings": r["warnings"]} if r.get("warnings") else {})
+        for recs in res["_accepted"].values()
+        for r in recs
+    ]
+    dishes += [
+        {"dish_id": d["base_id"], "status": d["kind"], "fix": d["reason"]} for d in res["deferred"]
+    ]
+    bad = [d for d in dishes if d["status"] != "ready"]
+    return {
+        "status": "READY" if dishes and not bad else "NEEDS_FIX",
+        "format": res["format"],
+        "dishes": sorted(dishes, key=lambda d: str(d["dish_id"])),
     }
 
 
@@ -757,7 +964,7 @@ def write(result: dict, out: Path) -> dict:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="qwen_recipes_intake")
-    ap.add_argument("cmd", choices=("inspect", "plan"))
+    ap.add_argument("cmd", choices=("inspect", "plan", "check"))
     ap.add_argument("src", type=Path)
     ap.add_argument("--out", type=Path, default=REPO / "var" / "qwen-recipes" / SET_ID)
     a = ap.parse_args(argv)
@@ -768,6 +975,10 @@ def main(argv=None) -> int:
     if a.cmd == "inspect":
         print(json.dumps(inspect(files), ensure_ascii=False, indent=1))
         return 0
+    if a.cmd == "check":
+        out = check(files)
+        print(json.dumps(out, ensure_ascii=False, indent=1))
+        return 0 if out["status"] == "READY" else 1
     res = plan(files)
     if res["status"] != "OK":
         print(json.dumps(res, ensure_ascii=False, indent=1))

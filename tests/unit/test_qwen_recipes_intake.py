@@ -371,12 +371,26 @@ def test_unsure_quantity_is_draft_and_duplicates_match_by_stem():
 
 # ---------------------------------------------------------------- реальные структуры поставки и редакция
 def test_real_variant_structures_are_read_and_outlines_are_not_instructions():
+    # действие — instruction, пояснение — следом; ни одно не вытесняет другое
     swe = {
         "steps_with_explanations": [
-            {"step": 1, "instruction": "Х", "explanation": "Нашинкуйте капусту."}
+            {
+                "step": 1,
+                "instruction": "Нашинкуйте капусту",
+                "explanation": "тонкая соломка быстрее станет мягкой.",
+            },
+            {"step": 2, "explanation": "Посолите и перемешайте."},
+            {"step": 3, "instruction": "Тушите под крышкой.", "explanation": "Тушите под крышкой."},
         ]
     }
-    assert intake.variant_steps(swe) == (["Нашинкуйте капусту."], "steps_with_explanations")
+    assert intake.variant_steps(swe) == (
+        [
+            "Нашинкуйте капусту. Тонкая соломка быстрее станет мягкой.",
+            "Посолите и перемешайте.",
+            "Тушите под крышкой.",
+        ],
+        "steps_with_explanations",
+    )
     seq = {"step_sequence": [{"stage": "Нарезка", "steps": ["Нашинковать капусту", "Посолить"]}]}
     assert intake.variant_steps(seq) == (["Нашинковать капусту; Посолить"], "step_sequence")
     only_stages = {"step_sequence": [{"stage": "Нарезка", "steps": []}]}
@@ -496,3 +510,129 @@ def test_verb_roots_accept_aspect_pairs_but_not_other_actions():
     assert intake.same_action("натереть", have("Натрите морковь"))
     assert intake.same_action("размять", have("Разомните картофель"))
     assert not intake.same_action("посолить", have("Нарежьте лук"))
+
+
+# ---------------------------------------------------------------- qwen-dish/1: одно блюдо — одна версия
+EXAMPLE = ROOT / "tools" / "qwen_contract" / "example"
+
+
+def _dish_set(**changes):
+    """Образец формата из tools/qwen_contract/example с подменой полей (источник-пример заменяется)."""
+    files = intake.read_set(EXAMPLE)
+    d = json.loads(json.dumps(files["dishes/EXAMPLE-001.json"]))
+    d["source"] = {"url": "https://recepty.test/grechka"}
+    for k, v in changes.items():
+        if v is None:
+            d.pop(k, None)
+        else:
+            d[k] = v
+    files["dishes/EXAMPLE-001.json"] = d
+    return files, d
+
+
+def test_dish_example_is_valid_except_its_example_source():
+    res = intake.check(intake.read_set(EXAMPLE), existing={})
+    assert res["status"] == "NEEDS_FIX" and [x["status"] for x in res["dishes"]] == ["rights"]
+    assert "источник-пример" in res["dishes"][0]["fix"]
+    files, _ = _dish_set()
+    res = intake.check(files, existing={})
+    assert res["status"] == "READY" and res["format"] == "qwen-dish/1"
+    assert res["dishes"][0]["recipe_id"].startswith("fdq-") and "warnings" not in res["dishes"][0]
+
+
+def test_dish_is_one_page_and_keeps_source_nutrition_and_explanation():
+    files, d = _dish_set()
+    res = intake.plan(files, existing={}, editorial={})
+    assert (
+        res["accepted"] == {"bestreciept.site": 1, "myfood.mobi": 0}
+        and res["archived_variants"] == 0
+    )
+    rec = res["_accepted"]["bestreciept.site"][0]
+    assert rec["label"] == "ED" and rec["base"]["source"]["url"] == "https://recepty.test/grechka"
+    n = rec["base"]["nutrition"]
+    assert n["kcal_per_serving"] == 230 and n["approximate"] is True and n["data_source"]
+    assert "per_ingredient" not in n  # на сайт — итог и основание расчёта, не черновая таблица
+    # instruction и explanation — оба в шаге, действие не потеряно
+    step2 = rec["variant"]["steps"][1]["text"]
+    assert step2.startswith("Залейте крупу водой, посолите") and "Крышку не поднимайте" in step2
+    assert (
+        rec["base"]["image_job"]["alt"]
+        and rec["recipe_id"] == sorted(intake.own_ids("EXAMPLE-QWEN-DISH-001", "EXAMPLE-001"))[1]
+    )
+
+
+def test_explanation_cannot_bring_numbers_that_are_not_in_the_source():
+    files, d = _dish_set()
+    d["editorial"]["steps"][1]["explanation"] = "Потом дайте постоять 10 минут."
+    res = intake.check(files, existing={})
+    fix = res["dishes"][0]["fix"]
+    assert res["status"] == "NEEDS_FIX" and "шаг 2: число 10 не из шага базы" in fix
+    assert fix.startswith("редакционная версия не передаёт рецепт полностью") and "V1–V5" not in fix
+
+
+def test_incomplete_nutrition_is_dropped_with_a_reason_not_invented():
+    files, d = _dish_set()
+    d["nutrition"] = {**d["nutrition"], "data_source": ""}
+    rec = intake.plan(files, existing={}, editorial={})["_accepted"]["bestreciept.site"][0]
+    assert "nutrition" not in rec["base"] and "data_source" in rec["warnings"][0]
+    files, d = _dish_set()
+    d["nutrition"]["per_ingredient"][0]["kcal"] = 900  # сумма не сходится с числом на порцию
+    rec = intake.plan(files, existing={}, editorial={})["_accepted"]["bestreciept.site"][0]
+    assert "nutrition" not in rec["base"] and "сумма" in rec["warnings"][0]
+    files, d = _dish_set(servings=None)
+    res = intake.check(files, existing={})
+    assert res["dishes"][0]["status"] == "quality" and "servings" in res["dishes"][0]["fix"]
+
+
+def test_same_dish_is_not_published_on_the_second_site():
+    files, d = _dish_set(site="myfood.mobi")
+    existing = {
+        "bestreciept.site": [
+            ("grechka-s-lukom-i-morkovyu", intake.title_key("Гречка с луком и морковью"), "fd-x")
+        ],
+        "myfood.mobi": [],
+    }
+    res = intake.plan(files, existing=existing, editorial={})
+    assert res["accepted"] == {"bestreciept.site": 0, "myfood.mobi": 0}
+    dup = res["deferred"][0]
+    assert dup["kind"] == "duplicate" and dup["site"] == "bestreciept.site"
+    assert (
+        dup["update_candidate"] == "grechka-s-lukom-i-morkovyu" and "второй сайт" in dup["reason"]
+    )
+
+
+def test_old_night_archive_format_still_reads(tmp_path):
+    """Совместимость: поставка qwen-night/1 по-прежнему переводится в контракт."""
+    files = {
+        "manifest/manifest-x.json": {
+            "run_id": "R",
+            "scope": {"total_themes": 1, "total_variants": 1},
+        },
+        "recipes/base_recipes/recipe_A.json": {
+            "base_recipe_id": "A",
+            "theme": "Каша",
+            "source_url": "https://recepty.test/a",
+            "metadata": {"servings": 2, "cook_time_minutes": 10},
+            "locked_ingredients": [
+                {"original_name": "Овсяные хлопья", "quantity": 100, "unit": "г"}
+            ],
+            "locked_steps": [{"instruction": "Сварить хлопья 10 минут."}],
+        },
+        "variants/A-V1.json": {
+            "variant_id": "A-V1",
+            "base_recipe_id": "A",
+            "variant_type": "V1",
+            "steps_with_explanations": [
+                {
+                    "instruction": "Варите хлопья 10 минут.",
+                    "explanation": "Помешивайте, чтобы не пригорели.",
+                }
+            ],
+        },
+    }
+    out = intake.normalize(files)
+    assert out["manifest.json"]["format"] == "qwen-night/1"
+    assert (
+        out["variants/A-V1.json"]["steps"][0]["text"]
+        == "Варите хлопья 10 минут. Помешивайте, чтобы не пригорели."
+    )
