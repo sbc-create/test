@@ -54,13 +54,19 @@
     var f = store.get(FAV, []), by = {}; catalog().forEach(function (r) { by[r.slug] = r; });
     grid.textContent = "";
     f.filter(function (s) { return by[s]; }).forEach(function (s) {
+      // та же карточка, что в каталоге: раздел, название-ссылка, время; избранное — в нижней строке
       var r = by[s], art = document.createElement("article"); art.className = "card";
-      var a = document.createElement("a"); a.className = "card__link"; a.href = r.url;
-      var h = document.createElement("h2"); h.className = "card__title"; h.textContent = r.title; a.appendChild(h);
-      var meta = document.createElement("p"); meta.className = "card__meta"; meta.textContent = r.category + (r.time ? " · " + r.time : "");
+      var body = document.createElement("div"); body.className = "card__body";
+      var top = document.createElement("p"); top.className = "card__top";
+      var cat = document.createElement("span"); cat.className = "card__cat"; cat.textContent = r.category; top.appendChild(cat);
+      var h = document.createElement("h2"); h.className = "card__title";
+      var a = document.createElement("a"); a.className = "card__link"; a.href = r.url; a.textContent = r.title; h.appendChild(a);
+      var meta = document.createElement("p"); meta.className = "card__meta";
+      if (r.time) { var t = document.createElement("span"); t.className = "card__time"; t.textContent = r.time; meta.appendChild(t); }
+      body.appendChild(top); body.appendChild(h); body.appendChild(meta);
       var b = document.createElement("button"); b.className = "fav"; b.type = "button"; b.setAttribute("data-fav", s); b.setAttribute("aria-pressed", "true");
       b.innerHTML = '<span class="sr">Убрать из избранного</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>';
-      art.appendChild(a); art.appendChild(meta); art.appendChild(b); grid.appendChild(art);
+      art.appendChild(body); art.appendChild(b); grid.appendChild(art);
     });
     empty.hidden = grid.children.length > 0;
   }
@@ -153,13 +159,20 @@
     var ul = document.querySelector("[data-list]"); if (!ul) return;
     var list = store.get(LIST, []);
     ul.textContent = "";
+    // группы по рецепту: заголовок группы, в строке — продукт слева, количество справа
+    var last = null;
     list.forEach(function (x, i) {
+      if (x.recipe !== last) {
+        last = x.recipe;
+        var head = document.createElement("li"); head.className = "shop__recipe"; head.textContent = x.recipe; ul.appendChild(head);
+      }
       var li = document.createElement("li"), lab = document.createElement("label"), cb = document.createElement("input"), sp = document.createElement("span");
       cb.type = "checkbox"; cb.checked = !!x.done;
       cb.addEventListener("change", function () { var l = store.get(LIST, []); if (l[i]) { l[i].done = cb.checked; store.set(LIST, l); counts(); } });
-      sp.textContent = x.name + (x.amount ? " — " + x.amount : "");
-      var small = document.createElement("small"); small.textContent = x.recipe;
-      lab.appendChild(cb); lab.appendChild(sp); li.appendChild(lab); li.appendChild(small); ul.appendChild(li);
+      sp.className = "shop__name"; sp.textContent = x.name;
+      lab.appendChild(cb); lab.appendChild(sp);
+      if (x.amount) { var am = document.createElement("b"); am.className = "shop__amount"; am.textContent = x.amount; lab.appendChild(am); }
+      li.appendChild(lab); ul.appendChild(li);
     });
     document.querySelector("[data-list-empty]").hidden = list.length > 0;
     document.querySelector("[data-list-actions]").hidden = list.length === 0;

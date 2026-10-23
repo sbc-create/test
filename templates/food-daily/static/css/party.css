@@ -794,3 +794,17 @@ body { overflow-wrap: break-word; }
 /* рецепт на планшете (700–899 px): продукты и шаги рядом, количество рядом с названием */
 @media (min-width: 700px) and (max-width: 899px) { .recipe__body { grid-template-columns: minmax(250px, 290px) minmax(0, 1fr); align-items: start; } .ingredients { position: sticky; top: 16px; } }
 @media (min-width: 760px) and (max-width: 999px) { .recipe__bar .recipe__actions { padding-left: 0; border-left: 0; } }
+/* список покупок: группы по рецепту, продукт слева, количество справа; на телефоне без горизонтальной прокрутки */
+.shop li { display: block; padding: 0; }
+.shop label { display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 8px 16px; }
+.shop input { flex: none; width: 22px; height: 22px; margin: 0; accent-color: var(--herb); }
+.shop__name { flex: 1; min-width: 0; }
+.shop__amount { flex: none; font-weight: 600; color: var(--tomato-ink); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.shop input:checked ~ .shop__name, .shop input:checked ~ .shop__amount { text-decoration: line-through; color: var(--muted); }
+.shop .shop__recipe { padding: 14px 16px 6px; border-bottom: 1px solid var(--line); font: 600 1.05rem/1.3 var(--display); color: var(--ink); }
+.shop .shop__recipe:not(:first-child) { margin-top: 6px; border-top: 1px solid var(--line); }
+/* счётчики в шапке не налезают на соседний значок и подпись */
+.count { left: auto; right: -2px; top: -2px; }
+.tool { padding-right: 12px; }
+@media (max-width: 1199px) { .tool { padding-right: 12px; } }
+@media (max-width: 399px) { .tool { padding-right: 6px; } }

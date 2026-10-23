@@ -233,10 +233,16 @@ def run(shots_dir: Path | None) -> dict:
         # список покупок
         page.click("[data-add-list]")
         page.goto(BASE + "/spisok-pokupok/")
-        S["shopping_list_items"] = page.locator("[data-list] li").count()
+        S["shopping_list_items"] = page.locator("[data-list] li:not(.shop__recipe)").count()
+        # группа по рецепту, продукт и количество в одной строке, без горизонтальной прокрутки на телефоне
+        S["shopping_list_grouped_no_hscroll"] = (
+            page.locator(".shop__recipe").count() == 1
+            and page.locator(".shop__amount").count() > 0
+            and not page.evaluate("document.documentElement.scrollWidth > innerWidth")
+        )
         page.locator("[data-list] li input").first.check()
         page.click("[data-list-clear-done]")
-        S["shopping_list_after_clear_done"] = page.locator("[data-list] li").count()
+        S["shopping_list_after_clear_done"] = page.locator("[data-list] li:not(.shop__recipe)").count()
         # избранное
         page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
         page.click(".recipe__actions [data-fav]")
