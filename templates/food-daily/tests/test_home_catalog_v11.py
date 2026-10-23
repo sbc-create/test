@@ -82,3 +82,15 @@ def test_view_or_sort_alone_is_not_a_filter_condition(app):
     assert ">Обычный вид</a>" in html and 'class="applied"' not in html
     _, html, _ = app.route("/recepty/", {"tip": ["supy"]})
     assert "<h1>Подбор рецептов</h1>" in html and "по выбранным условиям" in html
+
+
+def test_image_jobs_first_delivery_is_home_first_cards(app):
+    import json
+
+    spec = json.loads(Path("data/media/image-jobs.json").read_text(encoding="utf-8"))
+    _, html, _ = app.route("/", {})
+    first = list(dict.fromkeys(re.findall(r'class="card__link" href="/recept/([^/"]+)/"', html)))[:6]
+    assert spec["first_delivery"] == first
+    top = spec["jobs"][:6]
+    assert [j["slug"] for j in top] == first and [j["priority"] for j in top] == [1, 2, 3, 4, 5, 6]
+    assert all(j["recipe_id"] and j["alt"] and j["kind"] == "illustration" for j in spec["jobs"])
