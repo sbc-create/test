@@ -6,11 +6,13 @@
 @font-face { font-family: "Playfair Display"; font-style: normal; font-display: swap; font-weight: 400 900; src: url(../fonts/playfair-display-cyrillic-wght-normal.woff2) format("woff2-variations"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
 @font-face { font-family: "Playfair Display"; font-style: normal; font-display: swap; font-weight: 400 900; src: url(../fonts/playfair-display-latin-wght-normal.woff2) format("woff2-variations"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
 @font-face { font-family: "Playfair Display"; font-style: italic; font-display: swap; font-weight: 400 900; src: url(../fonts/playfair-display-cyrillic-wght-italic.woff2) format("woff2-variations"); unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116; }
+/* запасной шрифт с шириной Nunito: до загрузки текст переносится так же — без сдвига макета */
+@font-face { font-family: "Nunito Fallback"; src: local("Arial"), local("Liberation Sans"), local("Helvetica"); size-adjust: 101.6%; }
 /* тёплая гамма: сливки, шоколад, карамель */
 :root {
   --flour: #f6ede2; --page: #fffcf7; --rule: #eadbc8; --ink: #2f2019; --ink-2: #5b4538; --muted: #6f5848;
   --wine: #4a2a1c; --wine-2: #a8471a; --butter: #fbe0c3; --butter-2: #e2803a; --sage: #5e6a2c;
-  --serif: "Playfair Display", Georgia, serif; --sans: "Nunito", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --serif: "Playfair Display", Georgia, serif; --sans: "Nunito", "Nunito Fallback", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono: var(--sans);
   --r: 12px; --r-s: 8px;
   --gap-section: clamp(36px, 28px + 2vw, 56px);
@@ -538,3 +540,14 @@ h1 { font-size: var(--fs-h1); }
 .facts-b .facts-b__oven { background: var(--wine); color: #fff; }
 .facts-b .facts-b__oven span { color: var(--butter); opacity: 1; }
 .facts-b .facts-b__oven b { font-size: 1.3rem; line-height: 1.2; }
+/* типографика: подписи прописными — не мельче 12,8 px; строка шага — до ~68 знаков */
+.bcard__group, .kicker, .facts-b span, .colophon__h { font-size: .8rem; }
+.method-b > li p { max-width: 35em; }
+@media (max-width: 639px) { .kicker { letter-spacing: .04em; } }
+@media print {
+  .jump, .spine__search, .applied { display: none !important; }
+  .facts-b li, .facts-b .facts-b__oven { background: #fff !important; color: #000 !important; box-shadow: inset 0 0 0 1px #000; }
+  .facts-b .facts-b__oven span { color: #000 !important; }
+}
+/* футер — по той же колонке, что шапка и контент (1240 px с полями 16 px) */
+.colophon__grid, .colophon__legal { max-width: 1208px; }

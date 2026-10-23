@@ -144,11 +144,14 @@ def run(shots: Path | None) -> dict:
         with pg.expect_navigation():
             pg.select_option("select[name=testo]", "zavarnoe")
         S["filter_zavarnoe_rows"] = pg.locator(".cmp tbody tr").count() == 2
-        with pg.expect_navigation():
-            pg.click(".filters .reset")
+        with pg.expect_navigation():  # выбранные условия видны над результатом; «Сбросить всё» снимает их
+            pg.click(".applied__reset")
         S["filter_reset"] = pg.url.endswith("/recepty/")
         pg.goto(BASE + "/recepty/?testo=zavarnoe&duhovka=net")
         S["filter_empty"] = pg.locator(".empty h2").count() == 1
+        with pg.expect_navigation():  # снять одно условие — второе остаётся
+            pg.click(".applied__chip >> nth=0")
+        S["filter_chip_removes_one"] = pg.url.endswith("/recepty/?duhovka=net") and pg.locator(".applied__chip").count() == 1
         pg.goto(BASE + "/poisk/?q=" + "  ЗАВАРНОЙ  ")
         S["search_case_spaces"] = pg.locator(".bcard").count() > 0
         pg.goto(BASE + "/poisk/?q=печенье")

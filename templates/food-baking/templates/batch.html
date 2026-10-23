@@ -2,6 +2,7 @@
 {% from "_pickb.html" import pick %}
 {% block main %}
 <h1>Пеку несколько</h1>
+{% if not bs.recipes %}<p class="lead">Отметьте рецепты, которые собираетесь печь, — покажем их по температурам духовки и соберём общий список продуктов.</p>{% endif %}
 {% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
 {% if bs.recipes %}
 <p class="lead">{% for r in bs.recipes %}<a href="{{ r.url }}">{{ r.title }}</a>{% if not loop.last %}; {% endif %}{% endfor %}.</p>
