@@ -1,9 +1,19 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid %}
+{% macro sections_shelf(where) %}
+<section class="shelf shelf--{{ where }}" aria-labelledby="sec-h-{{ where }}">
+  <div class="shelf__head"><h2 id="sec-h-{{ where }}">Разделы</h2><a href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
+  <ul class="sections-grid">
+    {% for key, label, n in sections %}
+    <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
+    {% endfor %}
+  </ul>
+</section>
+{% endmacro %}
 {% block main %}
 <div class="hero-row">
 <section class="hero">
-  <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый день</em></h1>
+  <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый&nbsp;день</em></h1>
   <p class="hero__lead">Завтраки, супы, вторые блюда и салаты из обычных продуктов — с точными количествами и пересчётом порций.</p>
   <form class="search search--hero" action="/poisk/" method="get" role="search">
     <label for="q" class="sr">Найти рецепт по блюду или продукту</label>
@@ -14,31 +24,23 @@
   <p class="chips"><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}<a class="chip chip--time" href="/podborki/bystro-do-30-minut/">До 30 минут</a></p>
   {% endif %}
 </section>
-
-<section class="shelf" aria-labelledby="sec-h">
-  <div class="shelf__head"><h2 id="sec-h">Разделы</h2><a href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
-  <ul class="sections-grid">
-    {% for key, label, n in sections %}
-    <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
-    {% endfor %}
-  </ul>
-</section>
+{{ sections_shelf('side') }}
 </div>
 
 {% if quick %}
-<section class="block" aria-labelledby="quick-h">
+<section class="block block--first" aria-labelledby="quick-h">
   <div class="block__head"><h2 id="quick-h">Быстро: до 30 минут</h2><a href="/podborki/bystro-do-30-minut/">Все быстрые</a></div>
   {{ grid(quick, 'h3') }}
 </section>
 {% endif %}
+{{ sections_shelf('flow') }}
 
-{% if breakfast %}
-<section class="block" aria-labelledby="bf-h">
-  <div class="block__head"><h2 id="bf-h">На завтрак</h2><a href="/recepty/zavtraki/">Все завтраки</a></div>
-  {{ grid(breakfast, 'h3') }}
+{% for key, title, href, more, items in shelves %}
+<section class="block" aria-labelledby="{{ key }}-h">
+  <div class="block__head"><h2 id="{{ key }}-h">{{ title }}</h2><a href="{{ href }}">{{ more }}</a></div>
+  {{ grid(items, 'h3') }}
 </section>
-{% endif %}
-
+{% if loop.index == 1 %}
 <section class="promo" aria-labelledby="party-h">
   <div>
     <h2 id="party-h">Гости придут? <em>Посчитаем продукты.</em></h2>
@@ -46,18 +48,8 @@
   </div>
   <p class="promo__go"><a class="btn" href="/na-kompaniyu/" data-p-link>Собрать список</a><a class="btn btn--ghost" href="/iz-holodilnika/">Что есть дома</a></p>
 </section>
-
-{% if season %}
-<section class="block" aria-labelledby="season-h">
-  <div class="block__head"><h2 id="season-h">{{ season[1] }}</h2><a href="/podborki/{{ season[0] }}/">Вся подборка</a></div>
-  {{ grid(season[3], 'h3') }}
-</section>
 {% endif %}
+{% endfor %}
 
-{% if fresh %}
-<section class="block" aria-labelledby="fresh-h">
-  <div class="block__head"><h2 id="fresh-h">Новые рецепты</h2><a href="/recepty/">Весь каталог</a></div>
-  <div class="grid--home-fresh">{{ grid(fresh, 'h3') }}</div>
-</section>
-{% endif %}
+<p class="home-all"><a class="btn btn--ghost" href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></p>
 {% endblock %}

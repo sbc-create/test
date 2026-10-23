@@ -38,9 +38,16 @@
       </select>
     </label>
     <button type="submit" class="btn">Показать</button>
-    {% if filtered %}<a class="btn btn--ghost" href="/recepty/">Сбросить</a>{% endif %}
+    {% if filtered and not active %}<a class="btn btn--ghost" href="/recepty/">Сбросить</a>{% endif %}
   </fieldset>
 </form>
+{% if active %}
+<div class="applied" aria-label="Выбранные условия">
+  <span class="applied__label">Выбрано:</span>
+  {% for label, href, _ in active %}<a class="applied__chip" href="{{ href }}" aria-label="Убрать условие «{{ label }}»">{{ label }}<span aria-hidden="true">×</span></a>{% endfor %}
+  <a class="applied__reset" href="/recepty/">Сбросить всё</a>
+</div>
+{% endif %}
 {% if items %}
 {% if table %}
 <div class="tablewrap" tabindex="0" role="region" aria-label="Таблица рецептов"><table class="cat">
@@ -55,7 +62,8 @@
 {% else %}
 <div class="empty">
   <h2>Ничего не нашлось</h2>
-  <p>По этим условиям рецептов пока нет. Попробуйте убрать один из фильтров.</p>
+  <p>По этим условиям рецептов нет. Уберите одно из условий:</p>
+  {% if active %}<ul class="empty__ways">{% for label, href, n in active %}{% if n %}<li><a href="{{ href }}">без условия «{{ label }}»</a> — {{ n }} {{ plural(n, 'рецепт', 'рецепта', 'рецептов') }}</li>{% endif %}{% endfor %}</ul>{% endif %}
   <a class="btn" href="/recepty/">Сбросить фильтры</a>
 </div>
 {% endif %}

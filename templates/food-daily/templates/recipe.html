@@ -12,11 +12,13 @@
       {% if r.nutrition %}<div class="facts__kcal"><dt>Калорийность</dt><dd>≈&nbsp;{{ r.nutrition.kcal }} <small>ккал на порцию</small></dd></div>{% else %}<div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>{% endif %}
     </dl>
     {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
+    <div class="recipe__bar">
     <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Ингредиенты ({{ r.ingredients|length }})</a></nav>
     <div class="recipe__actions">
       <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
-      <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
+      <button class="btn btn--cook" type="button" data-cook-open hidden>Режим готовки</button>
       <button class="btn btn--ghost btn--print" type="button" data-print hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg><span>Печать</span></button>
+    </div>
     </div>
     {% set links = site.tag_links(r) %}
     {% if links %}

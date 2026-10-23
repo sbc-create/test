@@ -102,16 +102,47 @@ class App:
                 shown.update(r.slug for r in out)
                 return out
 
-            breakfast = take(sorted(s.category("zavtraki"), key=lambda r: (r.total_minutes, r.title)), 3)
-            if len(breakfast) < 2:
-                shown.difference_update(r.slug for r in breakfast)
-                breakfast = []
+            def shelf(items, n=3):  # подборка показывается, если после повторов осталось ≥2 блюд
+                got = take(sorted(items, key=lambda r: (r.total_minutes or 10**6, r.title)), n)
+                if len(got) < 2:
+                    shown.difference_update(r.slug for r in got)
+                    return []
+                return got
+
+            # порядок — по задачам: быстро, завтрак, суп, второе на обед и ужин, из немногих продуктов
+            shelves = [
+                ("bf", "На завтрак", "/recepty/zavtraki/", "Все завтраки", shelf(s.category("zavtraki"))),
+                ("soup", "Супы", "/recepty/supy/", "Все супы", shelf(s.category("supy"))),
+                (
+                    "main",
+                    "К обеду и ужину: вторые блюда",
+                    "/recepty/vtorye-blyuda/",
+                    "Все вторые блюда",
+                    shelf(s.category("vtorye-blyuda")),
+                ),
+            ]
             season_key = SEASONAL.get(time.localtime().tm_mon)
-            season = None
             if season_key in cols:
-                picked = take(cols[season_key][2], 3)
-                season = (season_key, cols[season_key][0], cols[season_key][1], picked) if len(picked) >= 2 else None
-            fresh = take(s.recipes, 6)
+                shelves.append(
+                    (
+                        "season",
+                        cols[season_key][0],
+                        f"/podborki/{season_key}/",
+                        "Вся подборка",
+                        shelf(cols[season_key][2]),
+                    )
+                )
+            if "do-shesti-produktov" in cols:
+                shelves.append(
+                    (
+                        "few",
+                        cols["do-shesti-produktov"][0],
+                        "/podborki/do-shesti-produktov/",
+                        "Вся подборка",
+                        shelf(cols["do-shesti-produktov"][2]),
+                    )
+                )
+            shelves = [x for x in shelves if x[4]]
             sections = [(k, CATEGORIES[k][0], len(s.category(k))) for k in CATEGORIES if s.category(k)]
             chips = sorted(s.product_options(), key=lambda kv: -len(s.tag(kv[0])))[:6]
             meta = seo.Meta(
@@ -124,7 +155,10 @@ class App:
                 canonical=s.abs("/"),
                 index=True,
                 page_type="home",
-                jsonld=[seo.website_ld(s), seo.itemlist_ld(s, [r.url for r in fresh])],
+                jsonld=[
+                    seo.website_ld(s),
+                    seo.itemlist_ld(s, [r.url for r in quick] + [r.url for x in shelves for r in x[4]]),
+                ],
             )
             return (
                 200,
@@ -132,9 +166,7 @@ class App:
                     "home.html",
                     meta,
                     quick=quick,
-                    breakfast=breakfast,
-                    season=season,
-                    fresh=fresh,
+                    shelves=shelves,
                     sections=sections,
                     chips=chips,
                     total=len(s.recipes),
@@ -172,11 +204,30 @@ class App:
             if filtered:  # неподготовленные сочетания фильтров не индексируются и не имеют своего canonical
                 meta.index, meta.canonical, meta.prev, meta.next = False, None, None, None
                 meta.title = "Подбор рецептов"
+            # выбранные условия: подпись, адрес без этого условия и сколько рецептов найдётся без него
+            names = {
+                "product": ("produkt", "Продукт", dict(s.product_options())),
+                "time": ("vremya", "Время", {k: v[0] for k, v in TIME_BUCKETS.items()}),
+                "category": ("tip", "Раздел", {k: v[0] for k, v in CATEGORIES.items()}),
+            }
+            active = []
+            for key, (_, label, opts) in names.items():
+                if filt[key] in opts:
+                    rest = {k: v for k, v in filt.items() if k != key}
+                    qs = urllib.parse.urlencode(
+                        [(names[k][0], v) for k, v in rest.items() if v]
+                        + [(x, y) for x, y in (("sort", sort), ("vid", "tablica" if table else "")) if y]
+                    )
+                    n_without = len(s.filter(**rest)) if any(rest.values()) else len(s.recipes)
+                    active.append(
+                        (f"{label}: {opts[filt[key]].lower()}", "/recepty/" + ("?" + qs if qs else ""), n_without)
+                    )
             return (
                 200,
                 self.render(
                     "catalog.html",
                     meta,
+                    active=active,
                     items=chunk,
                     page=n,
                     pages=pages,

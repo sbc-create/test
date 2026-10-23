@@ -582,3 +582,47 @@ h1, h2 { hyphens: manual; }
   .filters fieldset > :last-child:nth-child(odd) { grid-column: 1 / -1; }
 }
 @media (max-width: 559px) { .filters label { min-width: 0; } .filters select { width: 100%; min-width: 0; } }
+
+/* ---- v11: главная — блюда на первом экране телефона ------------------------------------------ */
+.shelf--flow { display: none; }
+@media (max-width: 999px) {
+  .shelf--side { display: none; }
+  .shelf--flow { display: block; margin-top: var(--gap-section); }
+}
+@media (max-width: 639px) {
+  .hero-row { padding-top: 16px; gap: 0; }
+  .hero__title { font-size: 1.85rem; margin-bottom: .15em; }
+  .hero__lead { font-size: 1rem; line-height: 1.45; margin-bottom: 12px; }
+  .search--hero input { padding: 8px 14px; }
+  .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 10px -16px 0; padding: 0 16px 2px; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chip { flex: none; }
+  .chips__label { flex: none; }
+  .block--first { margin-top: 22px; }
+  .block--first .block__head { margin-bottom: 12px; }
+}
+.home-all { margin: var(--gap-section) 0 0; text-align: center; }
+/* рецепт на телефоне: название уже в заголовке — в крошках не повторяется */
+@media (max-width: 639px) {
+  .pt-recipe .crumbs li:last-child { display: none; }
+  .pt-recipe .crumbs li:nth-last-child(2)::after { content: none; }
+}
+/* выбранные условия каталога: каждое снимается отдельно */
+.applied { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: -4px 0 18px; }
+.applied__label { font-size: .92rem; color: var(--muted); }
+.applied__chip { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 12px; border-radius: 999px; background: var(--ink); color: #fff; text-decoration: none; font-size: .95rem; }
+.applied__chip span { font-size: 1.15rem; line-height: 1; }
+.applied__chip:hover, .applied__chip:focus-visible { background: var(--tomato-ink); color: #fff; }
+.applied__reset { font-size: .95rem; padding: 6px 4px; }
+.empty__ways { list-style: none; padding: 0; margin: 0 0 18px; display: grid; gap: 6px; }
+/* рецепт на планшете и компьютере: переходы и действия — одной строкой; главное действие — «Режим готовки» */
+.btn--cook { background: var(--ink); }
+.btn--cook:hover { background: var(--tomato-ink); }
+@media (min-width: 760px) {
+  .recipe__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 20px; margin: 6px 0 16px; }
+  .recipe__bar .jump, .recipe__bar .recipe__actions { margin: 0; }
+  .recipe__bar .recipe__actions { padding-left: 20px; border-left: 1px solid var(--line); }
+}
+@media (min-width: 1000px) { .recipe__head { max-width: none; } .recipe__title { max-width: 860px; } }
+.recipe__actions .fav--wide { background: transparent; box-shadow: inset 0 0 0 1.5px var(--ink); color: var(--ink); }
+.recipe__actions .fav--wide[aria-pressed="true"] { background: var(--tomato-soft, #f6dfe3); box-shadow: inset 0 0 0 1.5px var(--tomato); }
