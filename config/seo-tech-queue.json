@@ -8422,6 +8422,48 @@
       ],
       "status": "live_verified",
       "evidence": "23.10 05:45Z wt-portable-site-cell-01-dc: найдено при приёмке T321. Замеры: /proc/629446 — Threads 1023, VmRSS 2 733 984 kB, Max open files 1024; потоки по минутам создания 05:27–05:41Z (1, 16, 28, 55 … 92), до того 3 потока с 15:58Z; /proc/net/tcp: порт 9121 CLOSE_WAIT 459; CPU 86% за 5 с; healthz 200 (pid 629446, старт 2026-10-22T15:58:18Z). Совпадение по времени (гипотеза, не причина): согласование серий записало подробности 05:23:23Z (animedia-01-episode-sync.json), details.json перезаписан 05:23 и 05:37Z — перечитывание снимка сбрасывает память страниц. Журналы nginx недоступны (B026). | 23.10 05:47:58Z служба перезапущена на том же выпуске (не мной), к 05:50Z 5 потоков, RSS 272 МБ, / 200 за 0,95 с. Задача остаётся: без предела перегрузка повторима; исполнитель взял её 05:46Z (20261023T054604Z-415380). | Исполнитель 20261023T054604Z-415380 VERIFIED (9808cef: на базе FAIL, на ветке PASS, run_all PASS). Публикатор 06:09:42Z — fast-forward, executor live_verified, releases/9808ceffb547; процесс pid 568622 с 06:09:20Z. Живая сверка 06:13:34Z: robots 5 из 5 — «Allow: /» и Sitemap, без «Disallow: /»; /sitemap.xml 200; / 200 за 0,57 с; /catalog/ 200 за 0,57 с; 47 обложек /catalog/ параллельно в 32 потока — 46×200, ни одного 503; одна 404 (/poster/animes/8958/5000d39c….jpeg) повторяется и последовательно — нет картинки в данных, к пределу не относится; потоков процесса 3."
+    },
+    {
+      "id": "T324",
+      "site": "animedia.space",
+      "direction": "anime",
+      "repo": "var/site-repos/animedia-space",
+      "urls": [
+        "https://animedia.space/",
+        "https://animedia.space/robots.txt",
+        "https://animedia.space/sitemap.xml"
+      ],
+      "problem": "Перенос T323 (animedia.icu, live_verified 23.10 06:13Z): в src/animedia-frontend.py animedia.space тот же ThreadingHTTPServer без предела одновременных запросов (BoundedSemaphore нет; do_GET :10898, do_POST :10791, do_HEAD :10788). На animedia.icu это дало инцидент 23.10 05:27–05:48Z: 1023 потока при пределе дескрипторов 1024, страницы 504, карта 404, robots «Disallow: /» по fail-closed режима. На animedia.space перегрузки не наблюдалось (3 потока 05:41Z); правка — защита того же кода.",
+      "norm": "Перегрузка не должна превращаться в исчерпание дескрипторов и ложные сигналы роботам (robots Disallow, 404 карты). Временная недоступность — 503 с Retry-After, а не 504/404 (SEO_KNOWLEDGE_PACK: коды ответа; правила .claude/rules/seo.md).",
+      "expected": "Перенести правку коммита 9808cef репозитория animedia-icu (src/animedia-frontend.py: _предел_из_окружения, ПРЕДЕЛ_ЗАПРОСОВ из ANIMEDIA_MAX_INFLIGHT по умолчанию 24, _СЛОТЫ_ЗАПРОСОВ BoundedSemaphore, _нужен_слот, _под_пределом с захватом timeout 2 с и освобождением в finally, _отказ_перегрузки 503 + Retry-After: 30 + Cache-Control: no-store; do_GET/do_POST через _под_пределом, тело в _обслужить_GET/_обслужить_POST; timeout = 60 у обработчика) и checks/overload_guard.py с регистрацией в checks/run.sh (код 2 — пропуск). Источник правки читать из var/site-repos/animedia-icu (git show 9808cef), адаптировать к номерам строк animedia.space, больше ничего не менять. Пересчитать pins.lock.json штатным инструментом. Проверка без импорта модуля, работает в условиях CI; нарушение — FAIL код 1 без трассировки, невозможность — 2. D203: на базе FAIL, на ветке PASS. Затем полный checks/run.sh.",
+      "check": "checks/overload_guard.py",
+      "verify_live": "после выпуска: robots 5 раз подряд «Allow: /» и Sitemap; /sitemap.xml 200; / 200; обложки страницы /catalog/ параллельно — без 503; потоков процесса витрины — единицы",
+      "live_check": [
+        {
+          "url": "https://animedia.space/robots.txt",
+          "status": 200,
+          "contains": [
+            "Allow: /",
+            "Sitemap: https://animedia.space/sitemap.xml"
+          ],
+          "absent": [
+            "Disallow: /\n"
+          ]
+        },
+        {
+          "url": "https://animedia.space/sitemap.xml",
+          "status": 200,
+          "contains": [
+            "<sitemapindex"
+          ]
+        },
+        {
+          "url": "https://animedia.space/",
+          "status": 200
+        }
+      ],
+      "status": "queued",
+      "evidence": "23.10 06:14Z wt-portable-site-cell-01-dc: после приёмки T323 на animedia.icu; в var/site-repos/animedia-space (aafd9a6) BoundedSemaphore нет. Польза — защита от повтора инцидента; трафика из Яндекса у animedia.space нет, поэтому эффекта на трафик не заявляется."
     }
   ]
 }
