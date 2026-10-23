@@ -1,23 +1,22 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid %}
-{% macro oven(where) %}
-<section class="oven-band oven-band--{{ where }}" aria-labelledby="h-oven-{{ where }}">
-  <div>
-    <h2 id="h-oven-{{ where }}">Духовка уже греется?</h2>
-    <p>Выберите температуру — покажем всё, что печётся при ней.</p>
+{% macro oven() %}
+<section class="oven-strip" aria-labelledby="h-oven">
+  <div class="oven-strip__text">
+    <h2 id="h-oven">Духовка уже греется?</h2>
+    <p>Выберите температуру — покажем, что печётся при ней.</p>
   </div>
-  <nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="/duhovka/#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %} <small>{{ items|length }}</small></a>{% endfor %}</nav>
+  <nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="/duhovka/#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %}<span class="temp-jump__n" aria-hidden="true">{{ items|length }}</span><span class="sr"> — {{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }}</span></a>{% endfor %}</nav>
 </section>
 {% endmacro %}
 {% block main %}
-<div class="hero-pair">
 <section class="bench-hero">
-  <h1>Домашняя выпечка <em>и&nbsp;десерты</em></h1>
-  <p class="lead">Кексы, хлеб, пироги и печенье: температура духовки, время, форма и вес продуктов — сразу на странице рецепта.</p>
+  <div class="bench-hero__text">
+    <h1>Домашняя выпечка <em>и&nbsp;десерты</em></h1>
+    <p class="lead">Кексы, хлеб, пироги и печенье: температура духовки, время, форма и вес продуктов — сразу на странице рецепта.</p>
+  </div>
   <form class="find find--hero" action="/poisk/" method="get" role="search"><label class="sr" for="q-home">Найти рецепт выпечки</label><input id="q-home" name="q" type="search" placeholder="Кекс, пирог, слива…"><button type="submit">Найти</button></form>
 </section>
-{{ oven('side') }}
-</div>
 
 {% if season %}
 <section class="block block--first" aria-labelledby="h-season">
@@ -30,6 +29,8 @@
   <div class="block__head"><h2 id="h-groups">Разделы</h2><a href="/recepty/">Все {{ site.recipes|length }} {{ plural(site.recipes|length, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
   <ul class="gtiles">{% for k, items in groups.items() %}<li><a class="gtile gtile--{{ k }}" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ items|length }}</span></a></li>{% endfor %}</ul>
 </section>
+
+{{ oven() }}
 
 {% if tea %}
 <section class="block" aria-labelledby="h-tea">

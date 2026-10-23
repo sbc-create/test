@@ -556,3 +556,112 @@ body { overflow-wrap: break-word; }
 .colophon__grid { grid-template-columns: minmax(0, 1fr); }
 @media (min-width: 640px) { .colophon__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 1000px) { .colophon__grid { grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); } }
+
+/* ---- v12: выпечка — главный акцент; температура — инструмент; меню короче ------------------------------- */
+/* шапка: разделы — в меню, инструменты пекаря — значками справа (подписи — на широком экране) */
+.spine__in { flex-wrap: nowrap; align-items: center; }
+.spine .find { margin-left: auto; }
+.spine__tools { display: flex; gap: 2px; flex: none; }
+.spine__tools a { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; min-width: 44px; justify-content: center; padding: 0 10px; border-radius: 999px; color: var(--butter); text-decoration: none; font-size: .92rem; font-weight: 600; white-space: nowrap; }
+.spine__tools a:hover, .spine__tools a:focus-visible { background: rgba(251, 224, 195, .14); color: #fff; }
+.spine__tools svg { width: 22px; height: 22px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+@media (max-width: 1199px) { .spine__tools span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } .spine__tools a { padding: 0; } }
+@media (max-width: 639px) { .spine__search { margin-left: auto; } .spine__tools { gap: 0; } .spine__in { gap: 4px; } }
+.toc-nav a { font-size: .95rem; font-weight: 600; }
+
+/* первый экран: заголовок скромнее, поиск рядом; сразу за ним — сезонная выпечка */
+.bench-hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px 48px; max-width: none; padding-top: 6px; }
+@media (min-width: 1200px) { .bench-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 560px); align-items: end; padding-top: 14px; } }
+.bench-hero h1 { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.5rem); line-height: 1.1; margin: 0 0 .25em; }
+.bench-hero .lead { font-size: 1.02rem; line-height: 1.5; margin: 0; max-width: 34em; }
+.bench-hero .find--hero { margin: 0; max-width: 640px; }
+@media (max-width: 639px) {
+  .bench-hero h1 { font-size: 1.7rem; }
+  .bench-hero .lead { font-size: .97rem; line-height: 1.45; }
+  .block--first { margin-top: 22px; }
+}
+
+/* карточка: раздел, название, духовка и выпекание одной строкой, общее время */
+.bcard__top { min-height: 0; margin-bottom: 4px; }
+.bcard__group { font: 600 .86rem/1.3 var(--sans); letter-spacing: 0; text-transform: none; color: var(--sage); }
+.bcard__title { margin-bottom: 10px; }
+.bcard__bake { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0 0 10px; font-size: .92rem; color: var(--ink-2); }
+.bcard__bake svg { width: 18px; height: 18px; flex: none; fill: none; stroke: var(--wine-2); stroke-width: 1.8; stroke-linecap: round; }
+.bcard__bake .bcard__oven { padding: 2px 10px; border-radius: 999px; background: var(--butter); color: var(--wine); font: 800 .9rem/1.3 var(--sans); }
+.bcard__bt::before { content: "·"; margin-right: 8px; color: var(--muted); }
+.bcard__meta { padding-top: 0; }
+.bcard__time { font-weight: 600; }
+
+/* разделы: светлые плитки с отдельным счётчиком рецептов */
+.gtile { background: var(--page); color: var(--ink); box-shadow: inset 0 0 0 1px var(--rule); font-weight: 700; }
+.gtile:hover { background: var(--butter); color: var(--wine); }
+.gtile__n { background: var(--butter); color: var(--wine); }
+.gtile:hover .gtile__n { background: var(--page); }
+
+/* «Духовка уже греется?» — узкая полоса-инструмент ниже первой подборки; число рецептов — отдельный значок */
+.oven-strip { margin-top: var(--gap-section); display: grid; gap: 10px 24px; padding: 14px 16px; border-radius: var(--r); background: var(--flour); border: 1px solid var(--rule); }
+@media (min-width: 900px) { .oven-strip { grid-template-columns: auto minmax(0, 1fr); align-items: center; padding: 14px 20px; } }
+.oven-strip h2 { font-size: 1.15rem; margin: 0; }
+.oven-strip p { margin: 2px 0 0; font-size: .92rem; color: var(--ink-2); }
+.oven-strip .temp-jump { margin: 0; gap: 8px; }
+.oven-strip .temp-jump a { min-height: 40px; gap: 8px; padding: 0 6px 0 14px; font-size: .95rem; }
+.temp-jump__n { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; background: var(--butter); color: var(--wine); font: 700 .8rem/1 var(--sans); }
+.temp-jump a:hover .temp-jump__n { background: var(--page); }
+@media (max-width: 639px) {
+  .oven-strip .temp-jump { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
+  .oven-strip .temp-jump::-webkit-scrollbar { display: none; }
+  .oven-strip .temp-jump a { flex: none; }
+}
+.temp-jump a { position: relative; }  /* скрытая подпись числа рецептов не выходит за край страницы */
+@media (max-width: 639px) {
+  .title__big { font-size: 1.4rem; white-space: nowrap; }
+  .title__small { font-size: .62rem; letter-spacing: .18em; }
+}
+@media (max-width: 479px) {
+  .gtile { flex-direction: row; align-items: center; min-height: 56px; padding: 8px 12px; }
+  .gtile__label { font-size: .98rem; }
+}
+@media (max-width: 399px) {
+  .spine__in { padding-left: 12px; padding-right: 8px; gap: 0; }
+  .title__big { font-size: 1.25rem; }
+  .spine__search, .spine__tools a { width: 40px; height: 40px; min-width: 40px; min-height: 40px; }
+}
+/* фильтры каталога — в общей системе: скруглённые поля, тонкая рамка; на телефоне подписи внутри значений */
+.filters { border-radius: var(--r); background: var(--flour); padding: 14px; gap: 10px 12px; }
+.filters label { color: var(--ink-2); }
+.filters select { border: 1.5px solid var(--rule); border-radius: 10px; padding: 8px 10px; background: #fff; }
+.filters select:hover { border-color: var(--wine-2); }
+.filters button { border: 0; border-radius: 999px; padding: 0 20px; font-weight: 700; background: var(--wine-2); }
+.filters button:hover { background: var(--wine); }
+@media (max-width: 559px) {
+  .filters { padding: 10px; gap: 8px; }
+  .filters .filters__l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .filters > :last-child:nth-child(odd) { grid-column: auto; }
+  .filters select { font-size: .92rem; padding: 8px 6px 8px 8px; }
+}
+
+/* v12: рецепт — сводка (духовка крупно, выпекание, время, выход, форма) и переходы; на компьютере — справа */
+.facts-b { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; max-width: 520px; }
+.facts-b li { min-width: 0; padding: 8px 12px; }
+.facts-b .facts-b__oven { order: -2; }
+.facts-b .facts-b__bake { order: -1; }
+.facts-b .facts-b__wide { grid-column: 1 / -1; }
+.facts-b .facts-b__oven--none { background: var(--butter); color: var(--ink); }
+.facts-b .facts-b__oven--none span { color: var(--ink); opacity: .78; }
+.facts-b .facts-b__oven--none b { font-size: 1.02rem; }
+.recipe-panel .jump { margin: 14px 0 6px; }
+@media (min-width: 1000px) {
+  .sheet-b > header { display: grid; grid-template-columns: minmax(0, 1fr) 380px; column-gap: 56px; align-items: start; }
+  .sheet-b > header > * { grid-column: 1; }
+  .sheet-b > header > .recipe-panel { grid-column: 2; grid-row: 1 / span 5; margin-top: 6px; padding: 18px; background: #fff; border: 1px solid var(--rule); border-radius: var(--r); }
+  .recipe-panel .facts-b { max-width: none; margin: 0; }
+  .recipe-panel .jump { display: grid; gap: 8px; margin: 14px 0 0; }
+  .recipe-panel .jump a { justify-content: center; }
+  .sheet-b > header .lead { max-width: 36em; }
+}
+/* шаги: без рамок вокруг каждого — номер и разделительная линия */
+.method-b { gap: 0; }
+.method-b > li { background: none; border: 0; border-bottom: 1px solid var(--rule); border-radius: 0; padding: 14px 0; }
+.method-b > li:last-child { border-bottom: 0; }
+.method-b > li p { font-size: 1.04rem; }
+.facts-b { grid-auto-flow: row dense; }

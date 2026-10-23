@@ -26,9 +26,18 @@ def test_home_order_and_no_repeats(app):
     _, html, _ = app.route("/", {})
     links = cards(html)
     assert links and len(links) == len(set(links))
-    # поиск и температуры — в первом блоке; первая подборка выпечки — сразу за ним, разделы — после неё
-    assert html.index('class="hero-pair"') < html.index('id="h-oven-side"') < html.index('class="block block--first"')
-    assert html.index('class="block block--first"') < html.index('id="h-groups"')
+    # 24.10: сначала выпечка — поиск, сезонная подборка, разделы; подбор по духовке — полосой после них,
+    # а быстрый доступ к нему — значок «По температуре» в шапке
+    marks = ('class="find find--hero"', 'class="block block--first"', 'id="h-groups"', 'id="h-oven"')
+    order = [html.index(x) for x in marks]
+    assert order == sorted(order)
+    head = html[html.index('<header class="spine"'): html.index("</header>")]
+    assert 'href="/duhovka/"' in head and 'href="/pechem/"' in head
+    menu = head[head.index('class="toc-nav"'):]
+    assert 'href="/duhovka/"' not in menu  # меню — только разделы выпечки
+    # число рецептов при температуре — отдельный значок, для скринридера — словами
+    badge = r'180 °C<span class="temp-jump__n" aria-hidden="true">\d+</span><span class="sr"> — \d+ рецепт'
+    assert re.search(badge, html)
     assert html.count('href="/duhovka/#t-') == len(app.site.by_temp())  # блок температур один
     heads = re.findall(r'<h2 id="h-[a-z]+">([^<]+)</h2>', html)
     assert "Новые рецепты" not in heads
@@ -62,3 +71,25 @@ def test_catalog_shows_applied_conditions_and_ways_out(app):
         k, v = h.unescape(href).split("?")[1].split("=")
         assert len(cards(app.route("/recepty/", {k: [v]})[1])) == int(n)
     assert "applied__chip" not in app.route("/recepty/", {})[1]
+
+
+def test_card_shows_oven_and_bake_time_only_from_recipe(app):
+    _, html, _ = app.route("/recepty/", {})
+    shown = [r for r in app.site.recipes if f'href="{r.url}"' in html]
+    assert len(shown) >= 10
+    for r in shown:
+        card = html[html.index(f'href="{r.url}"'):]
+        bake = card[card.index('class="bcard__bake"'): card.index("</p>", card.index('class="bcard__bake"'))]
+        if r.temps:
+            assert f"{r.temps[0]}" in bake
+        else:
+            assert "без духовки" in bake
+        # время выпекания — только когда в рецепте один этап выпекания; несколько этапов не сводятся в одно число
+        assert ("bcard__bt" in bake) == (bool(r.temps) and len(r.oven["bake_times"]) == 1)
+
+
+def test_recipe_panel_holds_facts_and_jump(app):
+    r = app.site.recipes[0]
+    _, html, _ = app.route(r.url, {})
+    panel = html[html.index('class="recipe-panel"'): html.index('class="sheet-b__body"')]
+    assert 'class="facts-b"' in panel and 'href="#prigotovlenie"' in panel and "facts-b__oven" in panel

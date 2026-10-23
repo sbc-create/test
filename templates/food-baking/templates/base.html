@@ -34,9 +34,14 @@
     <a class="title" href="/"><span class="title__small">домашняя выпечка</span><span class="title__big">Тесто <em>&amp;</em> десерты</span></a>
     <a class="spine__search" href="/poisk/" aria-label="Поиск выпечки"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></a>
     <form class="find" action="/poisk/" method="get" role="search" aria-label="Поиск по книге"><label class="sr" for="find-q">Найти выпечку</label><input id="find-q" name="q" type="search" placeholder="Кекс, слива…"><button type="submit">Найти</button></form>
+    <nav class="spine__tools" aria-label="Инструменты пекаря">
+      <a href="/duhovka/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14.5V5a2 2 0 0 1 4 0v9.5a4 4 0 1 1-4 0z"/><path d="M12 11v6"/></svg><span>По температуре</span></a>
+      <a href="/testo/"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 14c0-4 3.6-7 8-7s8 3 8 7c0 2.2-1.8 4-4 4H8c-2.2 0-4-1.8-4-4z"/><path d="M9 11.5c.8-.6 1.8-1 3-1s2.2.4 3 1"/></svg><span>Виды теста</span></a>
+      <a href="/pechem/" data-b-link><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Пеку несколько</span></a>
+    </nav>
   </div>
   <nav class="toc-nav" aria-label="Основное меню">
-    <a href="/recepty/">Все рецепты</a>{% for k, items in site.groups().items() %}<a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a>{% endfor %}<a href="/duhovka/">По температуре</a><a href="/testo/">Виды теста</a><a href="/pechem/" data-b-link>Пеку несколько</a>
+    <a href="/recepty/">Все рецепты</a>{% for k, items in site.groups().items() %}<a href="/recepty/{{ k }}/">{{ GROUPS[k] }}</a>{% endfor %}
   </nav>
 </header>
 {% if meta.crumbs|length > 1 %}
