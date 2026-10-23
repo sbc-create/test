@@ -563,3 +563,10 @@ h1, h2 { hyphens: manual; }
 .kcal-line b { color: var(--ink); font-variant-numeric: tabular-nums; }
 .provenance__kcal { display: block; color: var(--ink-2); }
 .card__kcal { color: var(--muted); }
+/* 360 px: переходы и действия переносятся, только если не помещаются; на узком экране — плотнее */
+.jump, .recipe__actions { flex-wrap: wrap; }
+@media (max-width: 559px) { .jump a { flex: 1 1 auto; } }
+@media (max-width: 399px) {
+  .jump, .recipe__actions { gap: 6px; }
+  .jump a, .recipe__actions .btn, .recipe__actions .fav--wide { padding: 0 10px; font-size: .9rem; }
+}
