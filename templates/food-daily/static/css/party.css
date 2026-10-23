@@ -727,3 +727,23 @@ body { overflow-wrap: break-word; }
   .recipe__panel .recipe__actions .btn { padding: 0 8px; font-size: .95rem; white-space: nowrap; min-width: 0; }
   .recipe__panel .recipe__actions .btn--print { width: 44px; padding: 0; }
 }
+/* карточка с изображением на телефоне: картинка 4:3 слева, текст справа — блюда не уходят далеко вниз */
+@media (max-width: 599px) {
+  .card--pic { flex-direction: row; align-items: stretch; }
+  .card--pic .card__media { flex: 0 0 36%; align-self: flex-start; aspect-ratio: 4 / 3; margin: 12px 0 12px 12px; border: 0; border-radius: 10px; overflow: hidden; }
+  .card--pic .card__body { min-width: 0; padding: 10px 12px 10px 12px; }
+  .card--pic .card__top { min-height: 0; }
+  .card--pic .card__title { font-size: 1.05rem; margin-bottom: 4px; }
+  .card--pic .card__ing { margin-bottom: 6px; }
+  .card--pic .fav { top: auto; bottom: 6px; right: 6px; width: 40px; height: 40px; box-shadow: none; background: transparent; }
+  .card--pic .card__meta { padding-right: 40px; min-height: 30px; }
+}
+/* частичное наполнение: у блюда без фото — нейтральная область с маленьким бледным значком раздела,
+   а не крупная иллюстрация на месте фото; на телефоне такая карточка — текстовая, без пустой области */
+.card__media--none .illo { display: grid; place-items: center; background: var(--paper-2); }
+.card__media--none .illo img { width: 56px; height: 42px; padding: 0; opacity: .45; filter: grayscale(.6); }
+@media (max-width: 599px) {
+  .card--pic:has(.card__media--none) { flex-direction: column; }
+  .card--pic .card__media--none { display: none; }
+  .card--pic:has(.card__media--none) .card__body { padding: 14px 16px; }
+}
