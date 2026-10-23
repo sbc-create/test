@@ -228,3 +228,20 @@ def test_content_has_no_source_step_text():
     assert data["site_id"] == "food-baking"
     for it in data["items"]:
         assert "_steps" not in it and "editor_notes" not in it
+
+
+def test_cooling_and_chilling_shown_only_when_action_and_time_are_stated_together(app):
+    """Остывание/холодильник — из шага источника: действие и время в одной части шага, время после действия."""
+    from bakebook.site import Site
+
+    s = Site()
+    assert s.by_slug["pirog-gryaz-missisipi"].rests == [
+        {"label": "Остывание", "time": "≈ 1 ч", "step": 5},
+        {"label": "В холодильнике", "time": "3–5 ч", "step": 9},
+    ]
+    # «ещё 15-20 минут до румяности и остудите» — время выпечки, не остывания
+    assert s.by_slug["tort-karpatka"].rests == []
+    # «оставьте в форме на 10-15 минут, затем … остудите» — время относится к форме, не к остыванию
+    assert s.by_slug["bananovyj-hleb"].rests == []
+    html = get(app, "/recept/pirog-gryaz-missisipi/")[1]
+    assert "В холодильнике" in html and "3–5 ч" in html and 'href="#shag-9"' in html

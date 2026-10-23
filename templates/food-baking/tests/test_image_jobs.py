@@ -49,7 +49,61 @@ def test_intake_adds_generated_file_as_illustration(tmp_path, monkeypatch):
     inc.mkdir()
     Image.new("RGB", (1600, 1000), (180, 120, 60)).save(inc / f"{r.slug}.jpg")
     res = media.intake(argparse.Namespace(dir=inc, tool="генератор X 1.0", license="лицензия генератора"))
-    assert res == {"added": [r.slug], "missing": []}
+    assert res == {"added": [r.slug], "missing": [], "rejected": {}}
     e = json.loads(reg.read_text())["items"][r.slug]
     assert e["kind"] == "illustration" and e["source"].startswith("сгенерировано: генератор X 1.0")
     assert (e["width"], e["height"]) == (1200, 900) and (tmp_path / "out" / f"{r.slug}-400.webp").is_file()
+
+
+def _setup(tmp_path, monkeypatch, n=3):
+    site = Site()
+    rs = [x for x in site.recipes if not x.image][:n]
+    jobs = tmp_path / "jobs.json"
+    jobs.write_text(json.dumps({"jobs": [media.job(site, r) for r in rs]}, ensure_ascii=False))
+    reg = tmp_path / "images.json"
+    reg.write_text('{"items": {}}')
+    monkeypatch.setattr(media, "JOBS", jobs)
+    monkeypatch.setattr(media, "REGISTRY", reg)
+    monkeypatch.setattr(media, "OUT", tmp_path / "out")
+    inc = tmp_path / "in"
+    inc.mkdir()
+    return rs, reg, inc
+
+
+def _pic(path, seed, size=(1600, 1200)):
+    """Разные «снимки»: свой рисунок полос у каждого seed, чтобы усреднённый хеш различался."""
+    from PIL import Image, ImageDraw
+
+    im = Image.new("RGB", size, (200, 170, 120))
+    d = ImageDraw.Draw(im)
+    for k in range(8):
+        if (seed >> k) & 1:
+            d.rectangle((k * size[0] // 8, 0, (k + 1) * size[0] // 8, size[1]), fill=(60, 40, 20))
+    im.save(path)
+
+
+def test_intake_pilot_runs_one_image_through_the_whole_chain(tmp_path, monkeypatch):
+    rs, reg, inc = _setup(tmp_path, monkeypatch)
+    for n, r in enumerate(rs):
+        _pic(inc / f"{r.slug}.jpg", 0b10110010 + n * 7)
+    res = media.intake(argparse.Namespace(dir=inc, tool="g 1", license="l", only=rs[1].slug))
+    assert res["added"] == [rs[1].slug] and set(json.loads(reg.read_text())["items"]) == {rs[1].slug}
+    e = json.loads(reg.read_text())["items"][rs[1].slug]
+    assert e["recipe_id"] == rs[1].raw["record_id"] and len(e["sha256"]) == 64 and len(e["ahash"]) == 64
+    with pytest.raises(SystemExit, match="задания"):
+        media.intake(argparse.Namespace(dir=inc, tool="g 1", license="l", only="net-takogo-recepta"))
+
+
+def test_intake_rejects_small_and_repeated_images(tmp_path, monkeypatch):
+    from PIL import Image
+
+    rs, reg, inc = _setup(tmp_path, monkeypatch)
+    _pic(inc / f"{rs[0].slug}.jpg", 0b11001010)
+    # та же картинка у второго блюда, только уменьшенная и пересохранённая — не своё изображение
+    Image.open(inc / f"{rs[0].slug}.jpg").resize((1400, 1050)).save(inc / f"{rs[1].slug}.jpg", quality=70)
+    _pic(inc / f"{rs[2].slug}.jpg", 0b00110101, size=(900, 675))
+    res = media.intake(argparse.Namespace(dir=inc, tool="g 1", license="l"))
+    assert res["added"] == [rs[0].slug]
+    assert "то же изображение" in res["rejected"][f"{rs[1].slug}.jpg"] and rs[0].slug in res["rejected"][f"{rs[1].slug}.jpg"]
+    assert "мало пикселей" in res["rejected"][f"{rs[2].slug}.jpg"]
+    assert set(json.loads(reg.read_text())["items"]) == {rs[0].slug}

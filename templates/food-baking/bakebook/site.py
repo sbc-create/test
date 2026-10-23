@@ -267,6 +267,36 @@ class Recipe:
         return out
 
     @property
+    def rests(self) -> list[dict]:
+        """Остывание и охлаждение — только когда действие и время названы в одной части шага
+        («остудите пирог на решётке примерно час», «уберите в холодильник на 3–5 часов»).
+        Время без действия или действие без времени не показывается: не домысливаем."""
+        out = []
+        for k, st in enumerate(self.steps):
+            for part in re.split(r"[.;]|,\s*(?:а\s+)?(?:затем|потом|после этого)\s", st["text"]):
+                cold = re.search(r"холодильник|морозильн", part, re.I)
+                act = cold or re.search(r"остуд|остыв|охлад", part, re.I)
+                if not act:
+                    continue
+                part = part[act.start():]  # время — после действия: «… 15 минут до румяности и остудите» — это выпечка
+                m = re.search(
+                    r"(?:(?:примерно|около)\s+)?(\d+(?:[,.]\d+)?(?:\s*[–-]\s*\d+)?)\s*(минут[ауы]?|мин|час(?:а|ов)?|ч)\b",
+                    part,
+                    re.I,
+                )
+                if m:
+                    unit = "мин" if m.group(2).lower().startswith("мин") else "ч"
+                    when = f"{m.group(1).replace('-', '–').replace(' ', '')} {unit}"
+                elif re.search(r"(?:примерно|около|на)\s+час\b", part, re.I):
+                    when = "1 ч"
+                else:
+                    continue
+                approx = bool(re.search(r"примерно|около", part, re.I))
+                out.append({"label": "В холодильнике" if cold else "Остывание", "time": ("≈ " if approx else "") + when,
+                            "step": k + 1})
+        return out
+
+    @property
     def flour_g(self) -> float | None:
         """Масса муки в граммах по составу источника (все виды муки в г/кг); None — если муки в граммах нет."""
         g = sum(

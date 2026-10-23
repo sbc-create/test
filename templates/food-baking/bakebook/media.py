@@ -119,18 +119,64 @@ def jobs() -> dict:
     return {"jobs": len(out["jobs"]), "file": str(JOBS)}
 
 
+def fingerprint(path) -> dict:
+    """Отпечаток файла: sha256 и усреднённый хеш 8×8 по кадру 4:3 — ловит одну и ту же картинку у разных блюд,
+    даже пересохранённую или уменьшенную."""
+    import hashlib
+
+    from PIL import Image, ImageOps
+
+    im = ImageOps.exif_transpose(Image.open(path)).convert("L")
+    small = im.resize((8, 8), Image.LANCZOS)
+    px = list(small.tobytes())
+    mean = sum(px) / len(px)
+    return {
+        "sha256": hashlib.sha256(Path(path).read_bytes()).hexdigest(),
+        "ahash": "".join("1" if v >= mean else "0" for v in px),
+        "size": im.size,
+    }
+
+
+def _near(a: str, b: str, limit: int = 4) -> bool:
+    return sum(x != y for x, y in zip(a, b, strict=True)) <= limit
+
+
+def check_file(path, known: dict) -> tuple[dict, str | None]:
+    """Проверка до публикации: размер кадра 4:3 не меньше min_width и не та же картинка, что у другого блюда."""
+    fp = fingerprint(path)
+    w, h = fp["size"]
+    crop_w = w if w * RATIO[1] <= h * RATIO[0] else h * RATIO[0] // RATIO[1]
+    if crop_w < WIDTHS[-1]:
+        return fp, f"мало пикселей: кадр 4:3 шириной {crop_w}, нужно не меньше {WIDTHS[-1]}"
+    for slug, other in known.items():
+        if other.get("sha256") == fp["sha256"] or (other.get("ahash") and _near(other["ahash"], fp["ahash"])):
+            return fp, f"то же изображение, что у «{slug}»: у каждого блюда своё"
+    return fp, None
+
+
 def intake(a: argparse.Namespace) -> dict:
     """Приём готовых файлов по файлу заданий: <dir>/<file> → add(kind=illustration). Инструмент и основание
-    использования обязательны — без них BLOCKED_INPUT, значения по умолчанию не подставляются."""
+    использования обязательны — без них BLOCKED_INPUT, значения по умолчанию не подставляются.
+    --only <slug> — пробный прогон одного изображения через всю цепочку перед остальными."""
     for k in ("tool", "license"):
         if not (getattr(a, k) or "").strip():
             raise SystemExit(f"BLOCKED_INPUT: --{k} обязателен (чем создано и на каком основании используется)")
     spec = json.loads(JOBS.read_text())
-    done, missing = [], []
+    only = getattr(a, "only", None)
+    if only and only not in {j["slug"] for j in spec["jobs"]}:
+        raise SystemExit(f"задания для {only} нет в {JOBS.name}")
+    known = {s: e for s, e in json.loads(REGISTRY.read_text())["items"].items()}
+    done, missing, rejected = [], [], {}
     for j in spec["jobs"]:
+        if only and j["slug"] != only:
+            continue
         f = Path(a.dir) / j["file"]
         if not f.is_file():
             missing.append(j["file"])
+            continue
+        fp, why = check_file(f, {s: e for s, e in known.items() if s != j["slug"]})
+        if why:
+            rejected[j["file"]] = why
             continue
         add(
             argparse.Namespace(
@@ -143,8 +189,12 @@ def intake(a: argparse.Namespace) -> dict:
                 license=a.license.strip(),
             )
         )
+        reg = json.loads(REGISTRY.read_text())
+        reg["items"][j["slug"]].update(sha256=fp["sha256"], ahash=fp["ahash"], recipe_id=j["recipe_id"])
+        REGISTRY.write_text(json.dumps(reg, ensure_ascii=False, indent=2) + "\n")
+        known[j["slug"]] = reg["items"][j["slug"]]
         done.append(j["slug"])
-    return {"added": done, "missing": missing}
+    return {"added": done, "missing": missing, "rejected": rejected}
 
 
 def main(argv=None) -> int:
@@ -164,6 +214,7 @@ def main(argv=None) -> int:
     p.add_argument("--dir", required=True, type=Path)
     p.add_argument("--tool")
     p.add_argument("--license")
+    p.add_argument("--only", help="slug: пробный прогон одного изображения")
     a = ap.parse_args(argv)
     if a.cmd == "add":
         print(json.dumps(add(a), ensure_ascii=False))
