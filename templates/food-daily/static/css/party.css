@@ -654,3 +654,7 @@ h1, h2 { hyphens: manual; }
 .cook button:disabled { opacity: .35; cursor: default; }
 .cook button:focus-visible { outline: 3px solid var(--saffron, #e3a43a); outline-offset: 2px; }
 @media print { .jump, .recipe__bar { display: none !important; } }
+/* крупный текст (масштаб ×2): длинные слова переносятся, колонки не распирают страницу */
+body { overflow-wrap: break-word; }
+.block__head, .shelf__head { flex-wrap: wrap; }
+.block__head a, .shelf__head a { white-space: normal; }
