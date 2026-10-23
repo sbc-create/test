@@ -3,7 +3,7 @@
 {% block main %}
 <h1>Выпечка по температуре духовки</h1>
 <p class="lead">Разогрели духовку — смотрите всё, что печётся при этой температуре. Температура, время и форма — из рецепта-источника.</p>
-<nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %} <small>{{ items|length }}</small></a>{% endfor %}</nav>
+<nav class="temp-jump" aria-label="Температуры">{% for t, items in site.by_temp() %}<a href="#t-{{ t or 'net' }}">{% if t %}{{ t }} °C{% else %}Без духовки{% endif %}<span class="temp-jump__n" aria-hidden="true">{{ items|length }}</span><span class="sr"> — {{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }}</span></a>{% endfor %}</nav>
 {% for t, items in site.by_temp() %}
 <section class="temp" id="t-{{ t or 'net' }}" aria-labelledby="h-t-{{ t or 'net' }}">
   <h2 id="h-t-{{ t or 'net' }}" class="temp__h">{% if t %}<b>{{ t }}</b> °C{% else %}Без духовки{% endif %}</h2>

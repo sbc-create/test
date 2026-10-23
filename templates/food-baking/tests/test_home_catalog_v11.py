@@ -94,3 +94,15 @@ def test_recipe_panel_holds_facts_and_jump(app):
     _, html, _ = app.route(r.url, {})
     panel = html[html.index('class="recipe-panel"'): html.index('class="sheet-b__body"')]
     assert 'class="facts-b"' in panel and 'href="#prigotovlenie"' in panel and "facts-b__oven" in panel
+
+
+def test_view_alone_is_not_a_filter_condition(app):
+    _, html, _ = app.route("/recepty/", {"vid": ["tablica"]})
+    assert "<h1>Все рецепты выпечки</h1>" in html and "по выбранным условиям" not in html and ">Обычный вид</a>" in html
+    _, html, _ = app.route("/recepty/", {"duhovka": ["net"]})
+    assert "<h1>Подбор выпечки</h1>" in html and "по выбранным условиям" in html
+
+
+def test_doughs_page_counts_in_words(app):
+    _, html, _ = app.route("/testo/", {})
+    assert re.search(r"<i>\d+ рецепт(а|ов)? →</i>", html)

@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid %}
 {% block main %}
-<h1>{{ 'Подбор выпечки' if filtered else 'Все рецепты выпечки' }}</h1>
-<p class="lead">{{ total }} {{ 'рецепт' if total % 10 == 1 and total % 100 != 11 else ('рецепта' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else 'рецептов') }}{% if filtered %} по выбранным условиям{% endif %}.</p>
+<h1>{{ 'Подбор выпечки' if active else 'Все рецепты выпечки' }}</h1>
+<p class="lead">{{ total }} {{ 'рецепт' if total % 10 == 1 and total % 100 != 11 else ('рецепта' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else 'рецептов') }}{% if active %} по выбранным условиям{% endif %}.</p>
 <form class="filters" method="get" action="/recepty/" data-autosubmit>
   <label><span class="filters__l">Вид теста</span> <select name="testo"><option value="">любое тесто</option>{% for k in site.doughs() %}<option value="{{ k }}"{% if flt.dough == k %} selected{% endif %}>{{ DOUGH[k][0] }}</option>{% endfor %}</select></label>
   <label><span class="filters__l">Духовка</span> <select name="duhovka"><option value="">духовка: любая</option><option value="da"{% if flt.oven == 'da' %} selected{% endif %}>нужна</option><option value="net"{% if flt.oven == 'net' %} selected{% endif %}>без духовки</option></select></label>
   <label><span class="filters__l">Порядок</span> <select name="sort">{% for k, l in [('', 'сначала новые'), ('temp', 'горячее сначала'), ('vremya', 'быстрее сначала'), ('nazvanie', 'по названию')] %}<option value="{{ k }}"{% if sort == k %} selected{% endif %}>{{ l }}</option>{% endfor %}</select></label>
   <label><span class="filters__l">Вид</span> <select name="vid"><option value="">карточки</option><option value="tablica"{% if table %} selected{% endif %}>таблица сравнения</option></select></label>
-  <button type="submit">Показать</button>{% if filtered and not active %} <a class="reset" href="/recepty/">Сбросить</a>{% endif %}
+  <button type="submit">Показать</button>{% if filtered and not active %} <a class="reset" href="/recepty/">Обычный вид</a>{% endif %}
 </form>
 {% if active %}
 <div class="applied" aria-label="Выбранные условия">

@@ -688,3 +688,13 @@ body { overflow-wrap: break-word; }
   .bcard--pic:has(.bcard__media--none) .bcard__body { padding: 14px 16px; }
   .bcard--pic:has(.bcard__media--none) .bcard__bt { display: inline; }
 }
+/* «По температуре»: чипы со значком-счётчиком, как на главной; блоки температур — тонкая полоса */
+.temp-jump a { gap: 8px; padding: 0 6px 0 14px; }
+.temp { border-left-width: 4px; border-radius: var(--r); }
+.find--page button { background: var(--wine-2); color: #fff; }
+.find--page button:hover { background: var(--wine); }
+.toc-nav a[aria-current], .spine__tools a[aria-current] { background: var(--butter); color: var(--wine); }
+/* виды теста: карточки в общей системе, число рецептов — словами */
+.doughs a { background: #fff; border: 1px solid var(--rule); border-top: 4px solid var(--butter-2); border-radius: 14px; }
+.doughs a:hover { box-shadow: 0 10px 24px -18px rgba(74, 42, 28, .5); }
+.doughs a:hover b { color: var(--wine-2); }
