@@ -735,3 +735,5 @@ body { overflow-wrap: break-word; }
 /* «Пеку несколько»: общий список продуктов — удобной ширины, количество рядом с названием */
 .blist, .ovenline { max-width: 760px; }
 .ovenline i { font-style: normal; color: var(--muted); }
+.colophon__grid > *, .colophon nav li { min-width: 0; }
+.colophon nav a { overflow-wrap: anywhere; }
