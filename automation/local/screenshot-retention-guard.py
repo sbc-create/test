@@ -36,6 +36,7 @@ import argparse
 import collections
 import json
 import os
+import pathlib
 import sys
 import time
 
@@ -80,6 +81,9 @@ def обойти(корни: list[str]) -> list[tuple[int, float, str]]:
 def главное(аргв: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--root", action="append", default=[])
+    р.add_argument("--list", dest="перечень", default="",
+                   help="готовая опись «размер<TAB>путь» вместо обхода:"
+                        " один обход на три проверки")
     р.add_argument("--per-release", type=int, default=20)
     р.add_argument("--per-worktree-mib", type=float, default=100.0)
     р.add_argument("--days", type=int, default=30)
@@ -87,13 +91,32 @@ def главное(аргв: list[str] | None = None) -> int:
     р.add_argument("--json", action="store_true")
     а = р.parse_args(аргв)
 
-    корни = а.root or ["/srv", "/home/claude"]
-    существуют = [к for к in корни if os.path.isdir(к)]
-    if not существуют:
-        print(f"НЕ ИЗМЕРЕНО: ни один корень не найден: {корни}")
-        return 2
-
-    файлы = обойти(существуют)
+    if а.перечень:
+        существуют = [а.перечень]
+        файлы = []
+        try:
+            строки = pathlib.Path(а.перечень).read_text(
+                encoding="utf-8", errors="replace").splitlines()
+        except OSError as сбой:
+            print(f"НЕ ИЗМЕРЕНО: опись не прочитана: {сбой}")
+            return 2
+        for с in строки:
+            if "\t" not in с:
+                continue
+            размер, путь = с.split("\t", 1)
+            if not снимок(путь):
+                continue
+            try:
+                файлы.append((int(размер), os.path.getmtime(путь), путь))
+            except (ValueError, OSError):
+                continue
+    else:
+        корни = а.root or ["/srv", "/home/claude"]
+        существуют = [к for к in корни if os.path.isdir(к)]
+        if not существуют:
+            print(f"НЕ ИЗМЕРЕНО: ни один корень не найден: {корни}")
+            return 2
+        файлы = обойти(существуют)
     if not файлы:
         итог = {"исход": "ИСПРАВНО", "почему": "снимков не найдено",
                 "корни": существуют, "файлов": 0}
