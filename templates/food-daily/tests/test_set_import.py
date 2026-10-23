@@ -130,3 +130,33 @@ def test_chicken_liver_is_everyday_dish_tagged_chicken_only_by_meat():
     ]
     tags = set_import.to_payload(eggs)["draft"]["tags"]
     assert "kurica" not in tags and "yajca" in tags
+
+
+def test_slice_can_and_head_units_from_the_delivery_are_known():
+    """Поставка 22.10: «2 ломтика» хлеба, «1 банки» горошка, «1 кочан» капусты — единицы, которые сайт
+    уже показывает (ломт., банка, гол.); раньше такие блюда откладывались как «неизвестная единица»."""
+    r = rec()
+    r["base"]["ingredients"] += [
+        {"name": "Хлеб белый", "quantity": 2, "unit": "ломтика"},
+        {"name": "Горошек консервированный", "quantity": 1, "unit": "банки"},
+        {"name": "Капуста белокочанная", "quantity": 1, "unit": "кочан"},
+    ]
+    r["variant"]["ingredients"] = [
+        {"base_index": i, "display_name": x["name"]} for i, x in enumerate(r["base"]["ingredients"])
+    ]
+    units = [i["unit"] for i in set_import.to_payload(r)["facts"]["ingredients"][-3:]]
+    assert units == ["slice", "can", "head"]
+
+
+def test_wheat_flour_and_syrniki_do_not_tag_millet_or_cheese():
+    """«Мука пшеничная» не делает блюдо «с пшеном», «сырники» — «с сыром» (блины и сырники поставки 22.10)."""
+    r = rec(title="Сырники из творога на сковороде")
+    r["base"]["ingredients"] = [
+        {"name": "Творог", "quantity": 500, "unit": "г"},
+        {"name": "Мука пшеничная", "quantity": 3, "unit": "ст.л."},
+        {"name": "Соль", "quantity": None, "unit": "по вкусу"},
+    ]
+    tags = set_import.to_payload(r)["draft"]["tags"]
+    assert "tvorog" in tags and "pshyono" not in tags and "syr" not in tags
+    r = rec(title="Пшённая каша с сыром")
+    assert {"pshyono", "syr"} <= set(set_import.to_payload(r)["draft"]["tags"])

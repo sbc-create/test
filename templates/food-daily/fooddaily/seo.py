@@ -9,6 +9,7 @@ video (готовых роликов нет).
 from __future__ import annotations
 
 import json
+import re
 from dataclasses import dataclass, field
 
 from .views import TAGS, Recipe, Site, iso_duration
@@ -171,6 +172,18 @@ def article_meta(site: Site, a: dict) -> Meta:
     )
 
 
+def fit_description(text: str, limit: int) -> str:
+    """Описание не длиннее limit: целыми предложениями, если хоть одно помещается, иначе по слову с «…»."""
+    if len(text) <= limit:
+        return text
+    out = ""
+    for sent in re.split(r"(?<=[.!?])\s+", text):
+        if len((out + " " + sent).strip()) > limit:
+            break
+        out = (out + " " + sent).strip()
+    return out or text[: limit - 1].rsplit(" ", 1)[0].rstrip(",;:—") + "…"
+
+
 def listing_meta(
     site: Site,
     *,
@@ -190,7 +203,8 @@ def listing_meta(
     own = page_path(page)
     if page > 1:
         title = f"{title} — страница {page}"
-        description = f"{description} Страница {page} из {pages}."
+        tail = f" Страница {page} из {pages}."
+        description = fit_description(description, 160 - len(tail)) + tail
     ld = [breadcrumb_ld(site, crumbs)] if len(crumbs) > 1 else []
     if items:
         ld.append(itemlist_ld(site, [r.url for r in items]))
