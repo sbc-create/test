@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block main %}
+<header class="page-head">
+  <h1>Советы для кухни</h1>
+  <p class="page-head__lead">Короткие разборы, собранные из рецептов сайта.</p>
+</header>
+<div class="collections collections--page">
+  {% for a in articles %}
+  <a class="collection collection--{{ loop.index % 4 }}" href="/sovety/{{ a.slug }}/">
+    <span class="collection__title">{{ a.title }}</span>
+    <span class="collection__desc">{{ a.description }}</span>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

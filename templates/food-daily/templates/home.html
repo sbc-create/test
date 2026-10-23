@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, illo %}
+{% block main %}
+<section class="hero">
+  <h1 class="hero__title">Что приготовить <em>сегодня?</em></h1>
+  <p class="hero__lead">Простые завтраки, обеды и ужины. Ищите по названию или по тому, что есть в холодильнике, — порции пересчитаются сами.</p>
+  <form class="search" action="/poisk/" method="get" role="search">
+    <label for="q" class="sr">Блюдо или продукты</label>
+    <input id="q" name="q" type="search" placeholder="Творог, гречка" autocomplete="off" enterkeyhint="search">
+    <button type="submit">Найти</button>
+  </form>
+  {% set products = site.product_options() %}
+  {% if products %}
+  <p class="chips" aria-label="Популярные продукты">
+    <span class="chips__label">Есть дома:</span>
+    {% for key, label in products[:8] %}<a class="chip" href="/produkty/{{ key }}/">{{ label }}</a>{% endfor %}
+  </p>
+  {% endif %}
+  <p class="chips" aria-label="По времени">
+    <span class="chips__label">Время:</span>
+    {% for key, (label, _, _) in TIME_BUCKETS.items() %}<a class="chip chip--time" href="/recepty/?vremya={{ key }}">{{ label }}</a>{% endfor %}
+  </p>
+</section>
+
+<section class="block" aria-labelledby="new-h">
+  <div class="block__head"><h2 id="new-h">Новые рецепты</h2><a href="/recepty/">Все рецепты →</a></div>
+  {{ grid(recipes) }}
+</section>
+
+{% if collections %}
+<section class="block" aria-labelledby="col-h">
+  <div class="block__head"><h2 id="col-h">Подборки</h2><a href="/podborki/">Все подборки →</a></div>
+  <div class="collections">
+    {% for key, (title, desc, items) in collections.items() %}
+    <a class="collection collection--{{ loop.index % 4 }}" href="/podborki/{{ key }}/">
+      <span class="collection__title">{{ title }}</span>
+      <span class="collection__desc">{{ desc }}</span>
+      <span class="collection__count">{{ items|length }} рецепт{{ 'а' if items|length % 10 in [2,3,4] and items|length % 100 not in [12,13,14] else ('' if items|length % 10 == 1 and items|length % 100 != 11 else 'ов') }}</span>
+    </a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+{% if site.articles %}
+<section class="block" aria-labelledby="tips-h">
+  <div class="block__head"><h2 id="tips-h">Советы</h2><a href="/sovety/">Все советы →</a></div>
+  <div class="collections">
+    {% for a in site.articles.values() %}
+    <a class="collection collection--{{ (loop.index + 1) % 4 }}" href="/sovety/{{ a.slug }}/"><span class="collection__title">{{ a.title }}</span><span class="collection__desc">{{ a.description }}</span></a>
+    {% endfor %}
+  </div>
+</section>
+{% endif %}
+
+<section class="block" aria-labelledby="sec-h">
+  <div class="block__head"><h2 id="sec-h">Разделы</h2></div>
+  <ul class="sections-grid">
+    {% for key, (label, desc) in CATEGORIES.items() %}{% set n = site.category(key)|length %}{% if n %}
+    <li><a href="/recepty/{{ key }}/">{{ illo(key, 'tile') }}<span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
+    {% endif %}{% endfor %}
+  </ul>
+</section>
+{% endblock %}

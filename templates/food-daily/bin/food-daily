@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+# Единая точка запуска food-daily. Все пути — от расположения этого файла.
+# Управляет ТОЛЬКО своим preview: pid-файл в var/food-daily/run, порт из config/site.yaml.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO="$(cd "$HERE/../.." && pwd)"
+RUN="$REPO/var/food-daily/run"
+LOG="$REPO/var/food-daily/logs"
+mkdir -p "$RUN" "$LOG"
+cd "$HERE"
+PIDFILE="$RUN/preview.pid"
+
+alive() { [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null && grep -q "fooddaily.server" "/proc/$(cat "$PIDFILE")/cmdline" 2>/dev/null; }
+
+case "${1:-help}" in
+  inventory) shift; exec python3 -m fooddaily.inventory "$@" ;;   # карты сайтов, checkpoint в var/food-daily/crawl
+  catalog)   shift; exec python3 -m fooddaily.catalog "$@" ;;     # обход каталога без sitemap, checkpoint
+  counts)    shift; exec python3 -m fooddaily.report counts "$@" ;;
+  verify-sample) shift; exec python3 -m fooddaily.report verify-sample "$@" ;;
+  topics)    shift; exec python3 -m fooddaily.report topics "$@" ;;
+  import)    shift; exec python3 -m fooddaily.pipeline "$@" ;;     # plan | run | reextract | retopic | status | purge-expired
+  qwen)      shift; exec python3 -m fooddaily.qwen "$@" ;;         # export | import | status
+  editorial) shift; exec python3 -m fooddaily.editorial "$@" ;;    # publish-preview | rollback | review | diff | snapshot
+  video)     shift; exec python3 -m fooddaily.video "$@" ;;
+  build)     shift; exec python3 -m fooddaily.build "$@" ;;
+  editor-init) shift; exec python3 -m fooddaily.editor_secret "$@" ;;
+  start)
+    if alive; then echo "preview уже работает, pid $(cat "$PIDFILE")"; exit 0; fi
+    nohup python3 -m fooddaily.server >>"$LOG/preview.log" 2>&1 &
+    echo $! >"$PIDFILE"
+    for _ in $(seq 1 50); do
+      if python3 -c "import urllib.request,sys;urllib.request.urlopen('http://127.0.0.1:8847/healthz',timeout=1)" 2>/dev/null; then
+        echo "preview: http://127.0.0.1:8847/ (pid $(cat "$PIDFILE"))"; exit 0; fi
+      python3 -c "import time;time.sleep(0.2)"
+    done
+    echo "preview не ответил на /healthz, журнал: $LOG/preview.log" >&2; exit 1 ;;
+  stop)
+    if alive; then kill "$(cat "$PIDFILE")"; rm -f "$PIDFILE"; echo "preview остановлен"; else rm -f "$PIDFILE"; echo "preview не запущен"; fi ;;
+  restart) bash "$HERE/bin/food-daily" stop; bash "$HERE/bin/food-daily" start ;;
+  status)
+    if alive; then echo "работает, pid $(cat "$PIDFILE")"; python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8847/healthz',timeout=3).read().decode())"; else echo "не запущен"; exit 3; fi ;;
+  test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" \
+          --basetemp "$REPO/var/food-daily/pytest" "$HERE/tests" "$@" ;;
+  *) sed -n '2,4p' "$0"; echo "команды: inventory catalog counts verify-sample topics import qwen editorial video build editor-init start stop restart status test" ;;
+esac

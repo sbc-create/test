@@ -1,0 +1,20 @@
+content fd-2154b0ca14e2 current 1
+new version 2
+conflict: fd-2154b0ca14e2: база 1, текущая 2
+{'items': 22, 'path': 'data/content-snapshot.json'}
+diff v1→v2:
+--- v1
++++ v2
+@@ -3,7 +3,7 @@
+  "slug": "pyshnye-oladi-na-kefire",
+  "seo_title": "Пышные оладьи на кефире с содой: пошаговый рецепт",
+  "seo_description": "Оладьи на кефире с содой: тесто отдыхает перед жаркой, жарка на хорошо прогретом масле, проверка готовности по первому оладью.",
+- "intro": "Классические оладьи на тёплом кефире. Главное в рецепте — дать тесту постоять и жарить на сильно прогретой сковороде: тогда оладьи поднимаются и остаются пышными внутри.",
++ "intro": "Классические оладьи на тёплом кефире. Главное в рецепте — дать тесту постоять и жарить на сильно прогретой сковороде: тогда оладьи поднимаются и остаются пышными внутри. (демонстрационная правка цикла версий)",
+  "ingredients": [
+   {
+    "fact_index": 0,
+rollback -> version 3
+v3 intro == v1 intro: True
+{'items': 22, 'path': 'data/content-snapshot.json'}
+audit: [('version_added', 1), ('job_imported', 1), ('publish_status', None), ('media_registered', None), ('media_registered', None), ('dispatch_refused', None), ('version_added', 2), ('version_conflict', 2), ('version_added', 3)]

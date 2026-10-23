@@ -1,0 +1,33 @@
+200 / | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/  14156
+200 /recepty/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/recepty/  13777
+200 /recepty/page/2/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/recepty/page/2/  13841
+404 /recepty/page/1/ | noindex, nofollow | noindex, nofollow | -  6549
+404 /recepty/page/9/ | noindex, nofollow | noindex, nofollow | -  6549
+200 /recepty/supy/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/recepty/supy/  7750
+200 /recepty/?produkt=kurica&vremya=do-60 | noindex, nofollow | noindex, nofollow | -  10020
+200 /recepty/?produkt=kurica&tip=salaty&vremya=do-20 | noindex, nofollow | noindex, nofollow | -  6519
+200 /produkty/tvorog/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/produkty/tvorog/  6778
+200 /produkty/kurica/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/produkty/kurica/  8626
+200 /sposob/na-skovorode/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/sposob/na-skovorode/  10348
+404 /produkty/zzz/ | noindex, nofollow | noindex, nofollow | -  6549
+200 /podborki/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/podborki/  4886
+200 /podborki/bystro-do-30-minut/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/podborki/bystro-do-30-minut/  11349
+200 /recept/syrniki-s-ezhevikoj/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/recept/syrniki-s-ezhevikoj/  21140
+200 /poisk/?q=Творог | noindex, nofollow | noindex, nofollow | -  6410
+200 /poisk/?q=тыквА | noindex, nofollow | noindex, nofollow | -  5550
+200 /poisk/?q=  КОТЛЕТЫ   | noindex, nofollow | noindex, nofollow | -  4730
+200 /poisk/?q=зелёный | noindex, nofollow | noindex, nofollow | -  5656
+200 /poisk/?q=zzz | noindex, nofollow | noindex, nofollow | -  4048
+200 /izbrannoe/ | noindex, nofollow | noindex, nofollow | -  8420
+200 /spisok-pokupok/ | noindex, nofollow | noindex, nofollow | -  8624
+200 /o-proekte/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/o-proekte/  5114
+200 /kontakty/ | noindex, nofollow | noindex, nofollow | http://127.0.0.1:8847/kontakty/  3897
+200 /robots.txt | noindex, nofollow | - | -  73
+200 /sitemap.xml | noindex, nofollow | - | -  4197
+200 /healthz | noindex, nofollow | - | -  95
+404 /nope/ | noindex, nofollow | noindex, nofollow | -  6549
+404 /recept/net-takogo/ | noindex, nofollow | noindex, nofollow | -  6549
+301 /recepty | noindex, nofollow | - | - /recepty/ 0
+401 /redaktor/ | noindex, nofollow | - | -  46
+404 /recept/tomatnyj-sup-s-zapechennym-percem/ | noindex, nofollow | noindex, nofollow | -  6549
+404 /static/../config/site.yaml | noindex, nofollow | noindex, nofollow | -  6549

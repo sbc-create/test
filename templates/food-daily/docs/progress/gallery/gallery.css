@@ -1,0 +1,57 @@
+:root { --bg: #f6f5f2; --card: #fff; --ink: #1d1d1b; --mute: #5c5a55; --line: #dedbd4;
+  --ok: #1d6b35; --bad: #a3221b; --acc: #2b4f8c; --rec: #eef3e8; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --bg: #151513; --card: #1f1f1c; --ink: #ecebe6; --mute: #aaa79f;
+    --line: #3a3934; --ok: #7fd497; --bad: #ff8f86; --acc: #9dbbf2; --rec: #22301f; }
+}
+:root[data-theme="dark"] { --bg: #151513; --card: #1f1f1c; --ink: #ecebe6; --mute: #aaa79f;
+  --line: #3a3934; --ok: #7fd497; --bad: #ff8f86; --acc: #9dbbf2; --rec: #22301f; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.45 system-ui, sans-serif; }
+main { max-width: 1500px; margin: 0 auto; padding: 16px; }
+h1 { font-size: 1.6rem; margin: .2em 0; }
+.lead { color: var(--mute); max-width: 75ch; }
+a { color: var(--acc); }
+nav { display: flex; flex-wrap: wrap; gap: 6px 14px; margin: 12px 0 4px; }
+nav a { padding: 4px 0; }
+.site h2 { font-size: 1.25rem; margin: 28px 0 10px; border-bottom: 1px solid var(--line); padding-bottom: 6px; }
+.site h2 small { color: var(--mute); font-weight: 400; font-size: .8em; }
+.rec { overflow-wrap: anywhere; background: var(--rec); border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; margin: 0 0 12px; }
+.rec p { margin: .3em 0; }
+.rec ul { margin: .3em 0; padding-left: 1.2em; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 14px; }
+.v { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 12px; min-width: 0; }
+.v header { display: flex; align-items: center; gap: 8px; }
+.v h3 { margin: 0; font-size: 1.05rem; }
+.letter { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 50%;
+  background: var(--ink); color: var(--card); font-weight: 700; }
+.what { color: var(--mute); margin: 6px 0 10px; }
+.shots { display: grid; grid-template-columns: 1fr 26%; gap: 8px; align-items: start; }
+.shots img { width: 100%; height: auto; display: block; border: 1px solid var(--line); border-radius: 4px; }
+.links { list-style: none; padding: 0; margin: 10px 0; display: flex; gap: 16px; flex-wrap: wrap; }
+.links a { display: inline-block; padding: 4px 0; }
+.st { display: grid; grid-template-columns: auto 1fr; gap: 2px 12px; margin: 0; font-size: .92rem; }
+.st dt { color: var(--mute); }
+.st dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.ok { color: var(--ok); font-weight: 600; }
+.bad { color: var(--bad); font-weight: 600; }
+.branch { font-size: .85rem; color: var(--mute); overflow-wrap: anywhere; margin: 8px 0 0; }
+code { font-size: .9em; }
+.v--primary { border: 2px solid var(--ok); }
+.badge { margin-left: auto; font-size: .8rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--ok); color: var(--card); white-space: nowrap; }
+.badge--alt { background: transparent; color: var(--mute); border: 1px solid var(--line); }
+.tw { overflow-x: auto; max-width: 100%; }
+.prim { border-collapse: collapse; width: 100%; background: var(--card); font-size: .92rem; }
+.prim th, .prim td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prim thead th { color: var(--mute); font-weight: 600; }
+.prim tbody th small { display: block; color: var(--mute); font-weight: 400; }
+@media (max-width: 700px) {
+  .prim thead { display: none; } .prim tr { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+  .prim th, .prim td { border: 0; padding: 2px 0; } .prim tbody th { grid-column: 1 / -1; }
+}
+.left { overflow-wrap: anywhere; background: var(--card); border: 1px solid var(--line); border-left: 4px solid var(--bad); border-radius: 8px; padding: 8px 14px; margin: 0 0 12px; }
+.left ul { margin: .3em 0; padding-left: 1.1em; } .left li { margin: .25em 0; }
+.kind { display: inline-block; font-size: .78rem; font-weight: 700; padding: 0 6px; border-radius: 4px; border: 1px solid var(--line); color: var(--mute); white-space: nowrap; }
+.k-data { color: var(--acc); } .k-owner { color: var(--bad); } .k-unver { color: var(--bad); } .k-limit { color: var(--mute); }
+.k-done { color: var(--ok); } .k-part { color: var(--acc); }
+li.k-done s { color: var(--mute); }

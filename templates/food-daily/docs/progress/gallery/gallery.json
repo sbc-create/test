@@ -1,0 +1,1145 @@
+{
+ "probed_at": "2026-10-13T21:41:10Z",
+ "variants": [
+  {
+   "site": "food-daily",
+   "title": "Будни на кухне",
+   "letter": "A",
+   "variant": "classic-cards",
+   "what": "каталог карточек, рецепт с пересчётом порций, покупки, избранное, режим готовки",
+   "port": 8847,
+   "pr": 95,
+   "branch": "claude/template-food-daily",
+   "head": "a7a2e94",
+   "evidence": {
+    "commit": "e69bf15",
+    "at": "2026-10-13T08:18:50Z",
+    "pass": 26,
+    "fail": [],
+    "axe": 0,
+    "urls": 53,
+    "vp_issues": 0,
+    "lcp_max": 172,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-daily/docs/screenshots/e69bf15/",
+   "live": {
+    "status": 200,
+    "variant_id": "classic-cards",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-daily",
+   "title": "Будни на кухне",
+   "letter": "B",
+   "variant": "fridge-first",
+   "what": "«что есть дома» → подбор с недостающим, каталог-таблица, отметки шагов",
+   "port": 8863,
+   "pr": 111,
+   "branch": "claude/template-food-daily-b",
+   "head": "df7d289",
+   "evidence": {
+    "commit": "e85c2f0",
+    "at": "2026-10-13T08:12:00Z",
+    "pass": 31,
+    "fail": [],
+    "axe": 0,
+    "urls": 57,
+    "vp_issues": 0,
+    "lcp_max": 168,
+    "cls_max": 0.0018
+   },
+   "shots_dir": "templates/food-daily/docs/screenshots/e85c2f0/",
+   "live": {
+    "status": 200,
+    "variant_id": "fridge-first",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-daily",
+   "title": "Будни на кухне",
+   "letter": "C",
+   "variant": "party-list",
+   "what": "несколько блюд на 1–20 гостей → общий пересчитанный список",
+   "port": 8876,
+   "pr": 124,
+   "branch": "claude/template-food-daily-c",
+   "head": "4121565",
+   "evidence": {
+    "commit": "9514da0",
+    "at": "2026-10-13T15:12:01Z",
+    "pass": 53,
+    "fail": [],
+    "axe": 0,
+    "urls": 59,
+    "vp_issues": 0,
+    "lcp_max": 572,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-daily/docs/screenshots/9514da0/",
+   "live": {
+    "status": 200,
+    "variant_id": "party-list",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "food-baking",
+   "title": "Тесто и десерты",
+   "letter": "A",
+   "variant": "book-spread",
+   "what": "книга: оглавление, разворот рецепта, таймеры, виды теста, разборы ошибок",
+   "port": 8848,
+   "pr": 96,
+   "branch": "claude/template-food-baking",
+   "head": "56528e3",
+   "evidence": {
+    "commit": "21d30ce",
+    "at": "2026-10-13T08:17:52Z",
+    "pass": 21,
+    "fail": [],
+    "axe": 0,
+    "urls": 27,
+    "vp_issues": 0,
+    "lcp_max": 228,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-baking/docs/screenshots/21d30ce/",
+   "live": {
+    "status": 200,
+    "variant_id": "book-spread",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-baking",
+   "title": "Тесто и десерты",
+   "letter": "B",
+   "variant": "oven-bench",
+   "what": "по температуре духовки, таблица сравнения, пекарский процент из граммов",
+   "port": 8864,
+   "pr": 112,
+   "branch": "claude/template-food-baking-b",
+   "head": "3202315",
+   "evidence": {
+    "commit": "4356f03",
+    "at": "2026-10-13T14:26:40Z",
+    "pass": 44,
+    "fail": [],
+    "axe": 0,
+    "urls": 31,
+    "vp_issues": 0,
+    "lcp_max": 228,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-baking/docs/screenshots/4356f03/",
+   "live": {
+    "status": 200,
+    "variant_id": "oven-bench",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "food-baking",
+   "title": "Тесто и десерты",
+   "letter": "C",
+   "variant": "bake-batch",
+   "what": "пеку несколько: общий список продуктов и группы духовки",
+   "port": 8875,
+   "pr": 123,
+   "branch": "claude/template-food-baking-c",
+   "head": "8dea814",
+   "evidence": {
+    "commit": "9824976",
+    "at": "2026-10-13T08:10:58Z",
+    "pass": 32,
+    "fail": [],
+    "axe": 0,
+    "urls": 30,
+    "vp_issues": 0,
+    "lcp_max": 252,
+    "cls_max": 0.0055
+   },
+   "shots_dir": "templates/food-baking/docs/screenshots/9824976/",
+   "live": {
+    "status": 200,
+    "variant_id": "bake-batch",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-weekly",
+   "title": "Меню на неделю",
+   "letter": "A",
+   "variant": "week-grid",
+   "what": "готовые планы 7 × 3, замены без JS, список покупок",
+   "port": 8849,
+   "pr": 97,
+   "branch": "claude/template-food-weekly",
+   "head": "d6fe32f",
+   "evidence": {
+    "commit": "1c18349",
+    "at": "2026-10-13T00:39:13Z",
+    "pass": 20,
+    "fail": [],
+    "axe": 0,
+    "urls": 36,
+    "vp_issues": 0,
+    "lcp_max": 112,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-weekly/docs/screenshots/1c18349/",
+   "live": {
+    "status": 200,
+    "variant_id": "week-grid",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-weekly",
+   "title": "Меню на неделю",
+   "letter": "B",
+   "variant": "agenda-trips",
+   "what": "таблица планов, повестка по дням, две закупки",
+   "port": 8865,
+   "pr": 113,
+   "branch": "claude/template-food-weekly-b",
+   "head": "3641493",
+   "evidence": {
+    "commit": "96c0c98",
+    "at": "2026-10-12T23:12:56Z",
+    "pass": 26,
+    "fail": [],
+    "axe": 0,
+    "urls": 36,
+    "vp_issues": 0,
+    "lcp_max": 492,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-weekly/docs/screenshots/96c0c98/",
+   "live": {
+    "status": 200,
+    "variant_id": "agenda-trips",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-weekly",
+   "title": "Меню на неделю",
+   "letter": "C",
+   "variant": "own-week",
+   "what": "своя неделя из каталога (или план как основа) → покупки на 1–8 чел.",
+   "port": 8873,
+   "pr": 121,
+   "branch": "claude/template-food-weekly-c",
+   "head": "1d7cf83",
+   "evidence": {
+    "commit": "2526dfb",
+    "at": "2026-10-13T21:15:20Z",
+    "pass": 35,
+    "fail": [],
+    "axe": 0,
+    "urls": 39,
+    "vp_issues": 0,
+    "lcp_max": 216,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-weekly/docs/screenshots/2526dfb/",
+   "live": {
+    "status": 200,
+    "variant_id": "own-week",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "food-appliances",
+   "title": "Готовим в технике",
+   "letter": "A",
+   "variant": "device-panel",
+   "what": "прибор → рецепты, табло режим/°C/время со ссылками на шаги",
+   "port": 8850,
+   "pr": 98,
+   "branch": "claude/template-food-appliances",
+   "head": "9276082",
+   "evidence": {
+    "commit": "7575262",
+    "at": "2026-10-13T00:39:54Z",
+    "pass": 17,
+    "fail": [],
+    "axe": 0,
+    "urls": 27,
+    "vp_issues": 0,
+    "lcp_max": 164,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-appliances/docs/screenshots/7575262/",
+   "live": {
+    "status": 200,
+    "variant_id": "device-panel",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "food-appliances",
+   "title": "Готовим в технике",
+   "letter": "B",
+   "variant": "step-console",
+   "what": "таблица сравнения, настройки прибора в шагах, таймеры, отметки",
+   "port": 8866,
+   "pr": 114,
+   "branch": "claude/template-food-appliances-b",
+   "head": "e2ae237",
+   "evidence": {
+    "commit": "1973778",
+    "at": "2026-10-13T14:28:25Z",
+    "pass": 42,
+    "fail": [],
+    "axe": 0,
+    "urls": 30,
+    "vp_issues": 0,
+    "lcp_max": 432,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-appliances/docs/screenshots/1973778/",
+   "live": {
+    "status": 200,
+    "variant_id": "step-console",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "food-appliances",
+   "title": "Готовим в технике",
+   "letter": "C",
+   "variant": "device-queue",
+   "what": "очередь рецептов по прибору и температуре, сумма времени",
+   "port": 8874,
+   "pr": 122,
+   "branch": "claude/template-food-appliances-c",
+   "head": "97daedc",
+   "evidence": {
+    "commit": "bb5a44d",
+    "at": "2026-10-13T01:11:20Z",
+    "pass": 28,
+    "fail": [],
+    "axe": 0,
+    "urls": 30,
+    "vp_issues": 0,
+    "lcp_max": 168,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/food-appliances/docs/screenshots/bb5a44d/",
+   "live": {
+    "status": 200,
+    "variant_id": "device-queue",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "home-practical",
+   "title": "Удобный дом",
+   "letter": "A",
+   "variant": "rooms-cards",
+   "what": "комнаты → карточки инструкций, задачи с фильтрами, чек-лист, сохранённое",
+   "port": 8851,
+   "pr": 99,
+   "branch": "claude/template-home-practical",
+   "head": "19fb887",
+   "evidence": {
+    "commit": "06d708c",
+    "at": "2026-10-12T20:42:42Z",
+    "pass": 32,
+    "fail": [],
+    "axe": 0,
+    "urls": 41,
+    "vp_issues": 0,
+    "lcp_max": 172,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/home-practical/docs/screenshots/06d708c/",
+   "live": {
+    "status": 200,
+    "variant_id": "rooms-cards",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "home-practical",
+   "title": "Удобный дом",
+   "letter": "B",
+   "variant": "problem-checklists",
+   "what": "«что мешает» → шаги-чек-листы, компактный каталог",
+   "port": 8852,
+   "pr": 100,
+   "branch": "claude/template-home-practical-b",
+   "head": "8c93cd9",
+   "evidence": {
+    "commit": "819b934",
+    "at": "2026-10-12T20:56:54Z",
+    "pass": 34,
+    "fail": [],
+    "axe": 0,
+    "urls": 49,
+    "vp_issues": 0,
+    "lcp_max": 168,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/home-practical/docs/screenshots/819b934/",
+   "live": {
+    "status": 200,
+    "variant_id": "problem-checklists",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "home-practical",
+   "title": "Удобный дом",
+   "letter": "C",
+   "variant": "home-audit",
+   "what": "обход квартиры по 6 помещениям → личный план с «Что понадобится»",
+   "port": 8867,
+   "pr": 115,
+   "branch": "claude/template-home-practical-c",
+   "head": "e3ad4da",
+   "evidence": {
+    "commit": "6b316b8",
+    "at": "2026-10-13T14:29:19Z",
+    "pass": 49,
+    "fail": [],
+    "axe": 0,
+    "urls": 55,
+    "vp_issues": 0,
+    "lcp_max": 136,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/home-practical/docs/screenshots/6b316b8/",
+   "live": {
+    "status": 200,
+    "variant_id": "home-audit",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "garden-season",
+   "title": "Дача по сезону",
+   "letter": "A",
+   "variant": "month-calendar",
+   "what": "год по месяцам (18 работ), у каждого срока — регион источника",
+   "port": 8853,
+   "pr": 101,
+   "branch": "claude/template-garden-season",
+   "head": "7f6a0cd",
+   "evidence": {
+    "commit": "b4e32db",
+    "at": "2026-10-13T08:38:05Z",
+    "pass": 29,
+    "fail": [],
+    "axe": 0,
+    "urls": 61,
+    "vp_issues": 0,
+    "lcp_max": 140,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/garden-season/docs/screenshots/b4e32db/",
+   "live": {
+    "status": 200,
+    "variant_id": "month-calendar",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "garden-season",
+   "title": "Дача по сезону",
+   "letter": "B",
+   "variant": "region-timeline",
+   "what": "сначала регион, лента по нему",
+   "port": 8854,
+   "pr": 102,
+   "branch": "claude/template-garden-season-b",
+   "head": "b0efa33",
+   "evidence": {
+    "commit": "720bccc",
+    "at": "2026-10-13T08:39:11Z",
+    "pass": 29,
+    "fail": [],
+    "axe": 0,
+    "urls": 61,
+    "vp_issues": 0,
+    "lcp_max": 160,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/garden-season/docs/screenshots/720bccc/",
+   "live": {
+    "status": 200,
+    "variant_id": "region-timeline",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "garden-season",
+   "title": "Дача по сезону",
+   "letter": "C",
+   "variant": "my-plot",
+   "what": "регион + культуры → личный календарь без смешивания регионов",
+   "port": 8868,
+   "pr": 116,
+   "branch": "claude/template-garden-season-c",
+   "head": "97f7bd6",
+   "evidence": {
+    "commit": "2e58fb6",
+    "at": "2026-10-13T14:30:33Z",
+    "pass": 40,
+    "fail": [],
+    "axe": 0,
+    "urls": 64,
+    "vp_issues": 0,
+    "lcp_max": 188,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/garden-season/docs/screenshots/2e58fb6/",
+   "live": {
+    "status": 200,
+    "variant_id": "my-plot",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "plants-home",
+   "title": "Домашние растения",
+   "letter": "A",
+   "variant": "plant-catalog",
+   "what": "каталог 19 видов с фильтрами по условиям",
+   "port": 8855,
+   "pr": 103,
+   "branch": "claude/template-plants-home",
+   "head": "96947d5",
+   "evidence": {
+    "commit": "c32e8c2",
+    "at": "2026-10-13T00:43:53Z",
+    "pass": 24,
+    "fail": [],
+    "axe": 0,
+    "urls": 43,
+    "vp_issues": 0,
+    "lcp_max": 204,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/plants-home/docs/screenshots/c32e8c2/",
+   "live": {
+    "status": 200,
+    "variant_id": "plant-catalog",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "plants-home",
+   "title": "Домашние растения",
+   "letter": "B",
+   "variant": "pick-and-diagnose",
+   "what": "подбор по условиям, сравнение, «что случилось»",
+   "port": 8856,
+   "pr": 104,
+   "branch": "claude/template-plants-home-b",
+   "head": "69363ed",
+   "evidence": {
+    "commit": "e73b076",
+    "at": "2026-10-13T00:45:36Z",
+    "pass": 25,
+    "fail": [],
+    "axe": 0,
+    "urls": 45,
+    "vp_issues": 0,
+    "lcp_max": 260,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/plants-home/docs/screenshots/e73b076/",
+   "live": {
+    "status": 200,
+    "variant_id": "pick-and-diagnose",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "plants-home",
+   "title": "Домашние растения",
+   "letter": "C",
+   "variant": "my-collection",
+   "what": "мои растения → сводка ядовитости и света, этикетки ухода",
+   "port": 8869,
+   "pr": 117,
+   "branch": "claude/template-plants-home-c",
+   "head": "85a668a",
+   "evidence": {
+    "commit": "ebae2af",
+    "at": "2026-10-13T14:31:51Z",
+    "pass": 42,
+    "fail": [],
+    "axe": 0,
+    "urls": 48,
+    "vp_issues": 0,
+    "lcp_max": 440,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/plants-home/docs/screenshots/ebae2af/",
+   "live": {
+    "status": 200,
+    "variant_id": "my-collection",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "games-story",
+   "title": "Сюжет пройден",
+   "letter": "A",
+   "variant": "chapter-guides",
+   "what": "Celeste: главы, маршрут, коллекции, 2 проверенных видео (фасад)",
+   "port": 8857,
+   "pr": 105,
+   "branch": "claude/template-games-story",
+   "head": "f9aabaa",
+   "evidence": {
+    "commit": "ff3ed16",
+    "at": "2026-10-13T08:43:16Z",
+    "pass": 23,
+    "fail": [],
+    "axe": 0,
+    "urls": 19,
+    "vp_issues": 0,
+    "lcp_max": 188,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-story/docs/screenshots/ff3ed16/",
+   "live": {
+    "status": 200,
+    "variant_id": "chapter-guides",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-story",
+   "title": "Сюжет пройден",
+   "letter": "B",
+   "variant": "progress-tracker",
+   "what": "трекер собранного по главам",
+   "port": 8858,
+   "pr": 106,
+   "branch": "claude/template-games-story-b",
+   "head": "89d0ebe",
+   "evidence": {
+    "commit": "e0a9443",
+    "at": "2026-10-13T08:44:00Z",
+    "pass": 26,
+    "fail": [],
+    "axe": 0,
+    "urls": 22,
+    "vp_issues": 0,
+    "lcp_max": 112,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-story/docs/screenshots/e0a9443/",
+   "live": {
+    "status": 200,
+    "variant_id": "progress-tracker",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-story",
+   "title": "Сюжет пройден",
+   "letter": "C",
+   "variant": "atlas",
+   "what": "«Где я?» по чекпоинтам, персонажи по главам, механики",
+   "port": 8870,
+   "pr": 118,
+   "branch": "claude/template-games-story-c",
+   "head": "79d2753",
+   "evidence": {
+    "commit": "852774a",
+    "at": "2026-10-13T15:16:17Z",
+    "pass": 34,
+    "fail": [],
+    "axe": 0,
+    "urls": 29,
+    "vp_issues": 0,
+    "lcp_max": 216,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-story/docs/screenshots/852774a/",
+   "live": {
+    "status": 200,
+    "variant_id": "atlas",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "games-rpg",
+   "title": "Гайды RPG",
+   "letter": "A",
+   "variant": "codex-sections",
+   "what": "Baldur's Gate 3: 9 спутников, билды, квесты, механики, 8 предметов, Patch 8",
+   "port": 8859,
+   "pr": 107,
+   "branch": "claude/template-games-rpg",
+   "head": "c77f6dd",
+   "evidence": {
+    "commit": "62caae3",
+    "at": "2026-10-13T08:35:32Z",
+    "pass": 20,
+    "fail": [],
+    "axe": 0,
+    "urls": 36,
+    "vp_issues": 0,
+    "lcp_max": 128,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-rpg/docs/screenshots/62caae3/",
+   "live": {
+    "status": 200,
+    "variant_id": "codex-sections",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-rpg",
+   "title": "Гайды RPG",
+   "letter": "B",
+   "variant": "party-planner",
+   "what": "планировщик отряда, таблица персонажей, предметы",
+   "port": 8860,
+   "pr": 108,
+   "branch": "claude/template-games-rpg-b",
+   "head": "5b72280",
+   "evidence": {
+    "commit": "21d25cf",
+    "at": "2026-10-13T08:36:23Z",
+    "pass": 25,
+    "fail": [],
+    "axe": 0,
+    "urls": 38,
+    "vp_issues": 0,
+    "lcp_max": 160,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-rpg/docs/screenshots/21d25cf/",
+   "live": {
+    "status": 200,
+    "variant_id": "party-planner",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-rpg",
+   "title": "Гайды RPG",
+   "letter": "C",
+   "variant": "index-compare",
+   "what": "указатель А–Я, сравнение 8 предметов",
+   "port": 8871,
+   "pr": 119,
+   "branch": "claude/template-games-rpg-c",
+   "head": "d950fc7",
+   "evidence": {
+    "commit": "d54ced9",
+    "at": "2026-10-13T15:13:18Z",
+    "pass": 33,
+    "fail": [],
+    "axe": 0,
+    "urls": 42,
+    "vp_issues": 0,
+    "lcp_max": 164,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-rpg/docs/screenshots/d54ced9/",
+   "live": {
+    "status": 200,
+    "variant_id": "index-compare",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  },
+  {
+   "site": "games-survival",
+   "title": "База выживания",
+   "letter": "A",
+   "variant": "craft-tree",
+   "what": "Minecraft: рецепты по сетке (с инструментами), связи «из чего → во что», постройки",
+   "port": 8861,
+   "pr": 109,
+   "branch": "claude/template-games-survival",
+   "head": "7662f9f",
+   "evidence": {
+    "commit": "3582445",
+    "at": "2026-10-13T08:29:22Z",
+    "pass": 22,
+    "fail": [],
+    "axe": 0,
+    "urls": 37,
+    "vp_issues": 0,
+    "lcp_max": 140,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-survival/docs/screenshots/3582445/",
+   "live": {
+    "status": 200,
+    "variant_id": "craft-tree",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-survival",
+   "title": "База выживания",
+   "letter": "B",
+   "variant": "craft-planner",
+   "what": "планировщик крафта по слотам сетки, базовые ресурсы",
+   "port": 8862,
+   "pr": 110,
+   "branch": "claude/template-games-survival-b",
+   "head": "7c570c1",
+   "evidence": {
+    "commit": "1ecf26d",
+    "at": "2026-10-13T08:30:11Z",
+    "pass": 27,
+    "fail": [],
+    "axe": 0,
+    "urls": 41,
+    "vp_issues": 0,
+    "lcp_max": 156,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-survival/docs/screenshots/1ecf26d/",
+   "live": {
+    "status": 200,
+    "variant_id": "craft-planner",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": false
+  },
+  {
+   "site": "games-survival",
+   "title": "База выживания",
+   "letter": "C",
+   "variant": "inventory-first",
+   "what": "что сделать из того, что есть в инвентаре",
+   "port": 8872,
+   "pr": 120,
+   "branch": "claude/template-games-survival-c",
+   "head": "2debb36",
+   "evidence": {
+    "commit": "c3cc336",
+    "at": "2026-10-13T15:14:17Z",
+    "pass": 40,
+    "fail": [],
+    "axe": 0,
+    "urls": 41,
+    "vp_issues": 0,
+    "lcp_max": 160,
+    "cls_max": 0
+   },
+   "shots_dir": "templates/games-survival/docs/screenshots/c3cc336/",
+   "live": {
+    "status": 200,
+    "variant_id": "inventory-first",
+    "variant_version": "1",
+    "checks": {
+     "variant_id": true,
+     "noindex_meta": true,
+     "robots_disallow": true,
+     "sitemap_200": true,
+     "unknown_404": true
+    },
+    "ok": true,
+    "why": ""
+   },
+   "primary": true
+  }
+ ]
+}

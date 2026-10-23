@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, illo %}
+{% block main %}
+<article class="recipe" data-recipe="{{ r.slug }}" data-servings="{{ r.servings }}">
+  <header class="recipe__head">
+    <p class="recipe__kicker"><a href="/recepty/{{ r.category }}/">{{ r.category_label }}</a></p>
+    <h1 class="recipe__title">{{ r.title }}</h1>
+    <p class="recipe__intro">{{ r.d.intro }}</p>
+    <dl class="facts">
+      {% if r.total_minutes %}<div><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>(подготовка {{ r.prep_minutes }} мин)</small>{% endif %}</dd></div>{% endif %}
+      <div><dt>Порции</dt><dd>{{ r.servings }}</dd></div>
+      <div><dt>Шагов</dt><dd>{{ r.d.steps|length }}</dd></div>
+    </dl>
+    {% set links = site.tag_links(r) %}
+    {% if links %}
+    <ul class="tags" aria-label="Темы рецепта">
+      {% for href, label in links %}<li><a href="{{ href }}">{{ label }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
+    <div class="recipe__actions">
+      <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
+      <button class="btn" type="button" data-cook-open hidden>Режим готовки</button>
+      <button class="btn btn--ghost" type="button" data-print hidden>Печать</button>
+    </div>
+  </header>
+
+  <div class="recipe__body">
+    <section class="ingredients" aria-labelledby="ing-h">
+      <div class="ingredients__head">
+        <h2 id="ing-h">Ингредиенты</h2>
+        <div class="servings" data-servings-control hidden>
+          <button type="button" data-step="-1" aria-label="Меньше порций">−</button>
+          <output aria-live="polite"><b data-servings-out>{{ r.servings }}</b> <span data-servings-word>порц.</span></output>
+          <button type="button" data-step="1" aria-label="Больше порций">+</button>
+        </div>
+        <p class="servings-static">На {{ r.servings }} порц.</p>
+      </div>
+      <ul class="ing-list">
+        {% for i, group in r.ingredients %}
+        <li class="ing" data-qty="{{ i.quantity if i.quantity is not none else '' }}" data-qmax="{{ i.quantity_max if i.quantity_max is not none else '' }}" data-unit="{{ i.unit_label }}" data-scalable="{{ '1' if i.scalable else '0' }}" data-name="{{ i.name }}">
+          <label><input type="checkbox" class="ing__check"><span class="ing__name">{{ i.name }}</span></label>
+          <span class="ing__amount">{{ i.amount }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="note">При пересчёте меняются только количества продуктов. Время и температура остаются как в рецепте.</p>
+      <button class="btn btn--ghost" type="button" data-add-list hidden>Добавить в список покупок</button>
+    </section>
+
+    <section class="steps" aria-labelledby="steps-h">
+      <h2 id="steps-h">Как готовить</h2>
+      <ol class="step-list">
+        {% for s in r.d.steps %}
+        <li class="step" id="shag-{{ loop.index }}">
+          <p>{{ s.text }}</p>
+          {% if s.get('readiness_cue') %}<p class="cue"><b>Как понять, что готово:</b> {{ s.readiness_cue }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+
+      {% if r.d.tips %}
+      <aside class="tips" aria-labelledby="tips-h">
+        <h2 id="tips-h">Подсказки</h2>
+        <ul>{% for t in r.d.tips %}<li>{{ t.text }}</li>{% endfor %}</ul>
+        <p class="note">Подсказки ещё не проверены редакцией.</p>
+      </aside>
+      {% endif %}
+      {% if r.substitutions %}
+      <aside class="subs" aria-labelledby="subs-h">
+        <h2 id="subs-h">Чем можно заменить</h2>
+        <ul>{% for name, s in r.substitutions %}<li><b>{{ name }}</b> → {{ s.to }}. {{ s.note }}</li>{% endfor %}</ul>
+        <p class="note">Замены не проверены на практике: пропорции и время могут потребовать подбора.</p>
+      </aside>
+      {% endif %}
+    </section>
+  </div>
+
+  <footer class="provenance">
+    <h2 class="sr">Происхождение рецепта</h2>
+    <p>Состав, количества и время взяты из рецепта-источника: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>. Текст шагов и подсказок написан заново с помощью ИИ.</p>
+    <p>{% if r.raw.review_status == 'editor_approved' %}Текст проверен редактором.{% else %}Редактор ещё не проверил этот текст.{% endif %}{{ ' ' }}{% if r.raw.cooking_status == 'cooked_by_editor' %}Рецепт приготовлен редакцией.{% else %}Редакция этот рецепт не готовила.{% endif %}</p>
+    <p class="provenance__dates">Опубликовано {{ r.published_at[:10] }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at[:10] }}{% endif %}.</p>
+  </footer>
+
+  {% if r.related %}
+  <section class="block related" aria-labelledby="rel-h">
+    <h2 id="rel-h">Похожие рецепты</h2>
+    {{ grid(r.related) }}
+  </section>
+  {% endif %}
+
+  <div class="cook" data-cook hidden role="dialog" aria-modal="true" aria-labelledby="cook-title">
+    <div class="cook__bar"><p id="cook-title">{{ r.title }}</p><button type="button" data-cook-close>Закрыть</button></div>
+    <div class="cook__stage" aria-live="polite"><p class="cook__count" data-cook-count></p><p class="cook__text" data-cook-text></p><p class="cook__cue" data-cook-cue></p></div>
+    <div class="cook__nav"><button type="button" data-cook-prev>← Назад</button><button type="button" data-cook-next>Дальше →</button></div>
+  </div>
+</article>
+{% endblock %}
