@@ -117,3 +117,25 @@ def test_image_jobs_first_delivery_is_home_first_cards(app):
     first = list(dict.fromkeys(re.findall(r'class="bcard__link" href="/recept/([^/"]+)/"', html)))[:6]
     assert spec["first_delivery"] == first == [j["slug"] for j in spec["jobs"][:6]]
     assert all(j["recipe_id"] and j["alt"] and j["kind"] == "illustration" for j in spec["jobs"])
+
+
+def test_multistage_bake_step_is_not_reduced_to_one_number(app):
+    # «Пеките 20 минут, затем при 200 градусах ещё 15–20 минут»: извлечён один таймер на два этапа —
+    # сводка не пишет «Выпекать 20 мин», а отправляет к шагу
+    r = next(x for x in app.site.recipes if x.slug == "tort-karpatka")
+    assert r.bake_unclear_steps == {8}
+    _, html, _ = app.route(r.url, {})
+    bake = re.search(r'facts-b__bake"><span>Выпекать</span><b>(.*?)</b>', html).group(1)
+    assert bake.startswith("в несколько этапов") and "20 мин" not in bake
+    # «за 10–20 минут до конца», «1 часа 20 минут», «затем дно, — … 10 минут» — не этапы
+    assert not [x.slug for x in app.site.recipes if x.bake_unclear_steps and x.slug != "tort-karpatka"]
+
+
+def test_search_refine_counts_match_cards(app):
+    _, html, _ = app.route("/poisk/", {"q": ["шоколад"]})
+    total = len(cards(html))
+    chips = re.findall(r'razdel=([a-z]+)"[^>]*>[^<]+<span class="refine__n">(\d+)</span>', html)
+    assert chips and sum(int(n) for _, n in chips) == total
+    for key, n in chips:
+        _, part, _ = app.route("/poisk/", {"q": ["шоколад"], "razdel": [key]})
+        assert len(cards(part)) == int(n)

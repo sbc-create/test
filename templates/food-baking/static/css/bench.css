@@ -710,3 +710,16 @@ body { overflow-wrap: break-word; }
   .sheet-b > header > .recipe-panel { border: 0; padding: 0; background: none; }
   .pct-box, .chips--light, .related { display: none !important; }
 }
+/* поиск: уточнение по разделу — чипы со значком-счётчиком; выбранный — тёмный */
+.refine { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 14px; }
+.refine__label { font-size: .92rem; color: var(--muted); }
+.refine a { position: relative; display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 6px 0 14px; border: 1px solid var(--rule); border-radius: 999px; background: #fff; color: var(--ink); text-decoration: none; font-size: .95rem; font-weight: 600; }
+.refine a:hover { border-color: var(--wine-2); }
+.refine a[aria-current] { background: var(--wine); border-color: var(--wine); color: #fff; }
+.refine__n { display: inline-grid; place-items: center; min-width: 26px; height: 26px; padding: 0 6px; border-radius: 999px; background: var(--butter); color: var(--wine); font-size: .8rem; font-weight: 700; }
+@media (max-width: 639px) {
+  .refine { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-right: -16px; padding-right: 16px; }
+  .refine::-webkit-scrollbar { display: none; }
+  .refine > * { flex: none; }
+}
+.k-search .spine .find { display: none; }

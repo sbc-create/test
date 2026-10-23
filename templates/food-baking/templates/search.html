@@ -2,6 +2,16 @@
 {% from "_parts.html" import toc %}
 {% block main %}
 <h1>Поиск выпечки</h1>
-<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q">Название или продукт</label><input id="q" name="q" type="search" value="{{ q }}" placeholder="Слива, заварное"><button type="submit">Найти</button></form>
-{% if q %}{% if items %}<p class="lead">Найдено: {{ items|length }}</p>{{ toc(items, 'h2') }}{% else %}<div class="empty"><h2>По запросу «{{ q }}» ничего нет</h2><p>Попробуйте один продукт или откройте <a href="/recepty/">все рецепты</a>.</p></div>{% endif %}{% else %}<h2>Или выберите раздел</h2><ul class="gtiles">{% for k, its in site.groups().items() %}<li><a class="gtile" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ its|length }}</span></a></li>{% endfor %}</ul>{% endif %}
+<form class="find find--page" action="/poisk/" method="get" role="search" aria-label="Поиск на странице"><label class="sr" for="q">Название или продукт</label><input id="q" name="q" type="search" value="{{ q }}" placeholder="Слива, заварное">{% if razdel %}<input type="hidden" name="razdel" value="{{ razdel }}">{% endif %}<button type="submit">Найти</button></form>
+{% if q %}
+{% if found and sections|length > 1 %}
+<nav class="refine" aria-label="Уточнить по разделу">
+  <span class="refine__label">Раздел:</span>
+  <a href="/poisk/?q={{ qs }}"{% if not razdel %} aria-current="true"{% endif %}>Все <span class="refine__n">{{ found|length }}</span></a>
+  {% for k, label, n in sections %}<a href="/poisk/?q={{ qs }}&amp;razdel={{ k }}"{% if razdel == k %} aria-current="true"{% endif %}>{{ label }} <span class="refine__n">{{ n }}</span></a>{% endfor %}
+</nav>
+{% endif %}
+{% if items %}<p class="lead">Найдено: {{ items|length }}{% if razdel %} в разделе «{{ GROUPS[razdel] }}»{% endif %}</p>{{ toc(items, 'h2') }}
+{% elif found %}<div class="empty"><h2>В разделе «{{ GROUPS[razdel] }}» по запросу «{{ q }}» ничего нет</h2><p><a href="/poisk/?q={{ qs }}">Показать во всех разделах — {{ found|length }} {{ plural(found|length, 'рецепт', 'рецепта', 'рецептов') }}</a></p></div>
+{% else %}<div class="empty"><h2>По запросу «{{ q }}» ничего нет</h2><p>Попробуйте одно слово — продукт или вид выпечки, например «слива» или «кекс». Можно выбрать выпечку <a href="/duhovka/">по температуре духовки</a> или открыть <a href="/recepty/">все рецепты</a>.</p></div>{% endif %}{% else %}<h2>Или выберите раздел</h2><ul class="gtiles">{% for k, its in site.groups().items() %}<li><a class="gtile" href="/recepty/{{ k }}/"><span class="gtile__label">{{ GROUPS[k] }}</span><span class="gtile__n">{{ its|length }}</span></a></li>{% endfor %}</ul>{% endif %}
 {% endblock %}

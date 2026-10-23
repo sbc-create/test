@@ -157,6 +157,22 @@ def run(shots: Path | None) -> dict:
         S["search_case_spaces"] = pg.locator(".bcard").count() > 0
         pg.goto(BASE + "/poisk/?q=печенье")
         S["search_pechene"] = pg.locator(".bcard").count() > 0
+        # поиск + раздел: число на чипе = показанные карточки одного раздела; «Назад» из рецепта — к тем же результатам
+        pg.goto(BASE + "/poisk/?q=шоколад")
+        chip = pg.locator(".refine a", has_text="Пироги")
+        n_chip = int(chip.locator(".refine__n").inner_text())
+        with pg.expect_navigation():
+            chip.click()
+        groups = pg.locator(".bcard__group").all_inner_texts()
+        S["search_refine_by_section"] = n_chip == len(groups) > 0 and all(x.strip() == "Пироги" for x in groups)
+        url_results = pg.url
+        with pg.expect_navigation():
+            pg.locator(".bcard__link").first.click()
+        pg.go_back()
+        pg.wait_for_load_state()
+        S["search_back_from_recipe_keeps_results"] = pg.url == url_results and pg.locator(".bcard").count() == n_chip
+        pg.goto(BASE + "/poisk/?q=шоколад&razdel=hleb")
+        S["search_empty_section_offers_all"] = pg.locator(".empty a", has_text="во всех разделах").count() == 1
         # «Пеку несколько» (перенесено из C): пустой выбор, счётчик, группы духовки, список, память, 400
         pg.goto(BASE + "/pechem/")
         pg.evaluate("localStorage.clear(); 0")

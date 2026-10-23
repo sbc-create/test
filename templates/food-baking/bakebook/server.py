@@ -460,7 +460,22 @@ class App:
             meta = Meta(
                 f"Поиск: {qq}" if qq else "Поиск выпечки", "Поиск по названию и продуктам.", None, False, kind="search"
             )
-            return 200, self.render("search.html", meta, q=qq, items=s.search(qq) if qq else []), {}
+            found = s.search(qq) if qq else []
+            # уточнение по разделу: разделы с найденной выпечкой, больше — раньше; счётчик = показанные карточки
+            sections = sorted(
+                ((k, GROUPS[k], sum(r.group == k for r in found)) for k in GROUPS), key=lambda x: -x[2]
+            )
+            sections = [x for x in sections if x[2]]
+            razdel = g("razdel") if g("razdel") in GROUPS else ""
+            items = [r for r in found if r.group == razdel] if razdel else found
+            return (
+                200,
+                self.render(
+                    "search.html", meta, q=qq, items=items, found=found, sections=sections, razdel=razdel,
+                    qs=urllib.parse.quote(qq),
+                ),
+                {},
+            )
         if path == "/konfidencialnost/":
             meta = Meta(
                 "Конфиденциальность",
