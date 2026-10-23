@@ -2,6 +2,7 @@
 
 import html as h
 import re
+from pathlib import Path
 
 
 def cards(html):
@@ -70,5 +71,5 @@ def test_recipe_head_groups_facts_and_actions_in_one_panel(app, site):
 
 
 def test_text_card_keeps_favourite_out_of_title_line():
-    css = open("static/css/party.css", encoding="utf-8").read()
+    css = Path("static/css/party.css").read_text(encoding="utf-8")
     assert ".card:not(.card--pic) .fav { top: auto; bottom:" in css
