@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, pager %}
+{% block main %}
+<header class="page-head">
+  <h1>{{ 'Подбор рецептов' if active else 'Все рецепты' }}</h1>
+  <p class="page-head__lead">{{ total }} рецепт{{ 'а' if total % 10 in [2,3,4] and total % 100 not in [12,13,14] else ('' if total % 10 == 1 and total % 100 != 11 else 'ов') }}{% if active %} по выбранным условиям{% endif %}.</p>
+</header>
+<form class="filters" method="get" action="/recepty/" data-autosubmit>
+  <fieldset>
+    <legend class="sr">Фильтры</legend>
+    <label><span class="filters__l">Продукт</span>
+      <select name="produkt">
+        <option value="">любой продукт</option>
+        {% for key, label in products %}<option value="{{ key }}"{% if filt.product == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label><span class="filters__l">Время</span>
+      <select name="vremya">
+        <option value="">любое время</option>
+        {% for key, (label, _, _) in TIME_BUCKETS.items() %}<option value="{{ key }}"{% if filt.time == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label><span class="filters__l">Тип блюда</span>
+      <select name="tip">
+        <option value="">любой тип</option>
+        {% for key, (label, _) in CATEGORIES.items() %}<option value="{{ key }}"{% if filt.category == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label><span class="filters__l">Порядок</span>
+      <select name="sort">
+        {% for key, label in [('', 'сначала новые'), ('vremya', 'сначала быстрые'), ('nazvanie', 'по названию')] %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
+      </select>
+    </label>
+    <label><span class="filters__l">Вид</span>
+      <select name="vid">
+        <option value="">карточки</option>
+        <option value="tablica"{% if table %} selected{% endif %}>таблица</option>
+      </select>
+    </label>
+    <button type="submit" class="btn">Показать</button>
+    {% if filtered and not active %}<a class="btn btn--ghost" href="/recepty/">Обычный вид</a>{% endif %}
+  </fieldset>
+</form>
+{% if active %}
+<div class="applied" aria-label="Выбранные условия">
+  <span class="applied__label">Выбрано:</span>
+  {% for label, href, _ in active %}<a class="applied__chip" href="{{ href }}" aria-label="Убрать условие «{{ label }}»">{{ label }}<span aria-hidden="true">×</span></a>{% endfor %}
+  <a class="applied__reset" href="/recepty/">Сбросить всё</a>
+</div>
+{% endif %}
+{% if items %}
+{% if table %}
+<div class="tablewrap" tabindex="0" role="region" aria-label="Таблица рецептов"><table class="cat">
+  <thead><tr><th scope="col">Рецепт</th><th scope="col">Раздел</th><th scope="col">Время</th><th scope="col">Порции</th></tr></thead>
+  <tbody>{% for r in items %}<tr><th scope="row"><a href="{{ r.url }}">{{ r.title }}</a><span class="cat__ing">{{ r.key_ingredients|join(' · ') }}</span></th><td data-label="Раздел">{{ r.category_label }}</td><td data-label="Время">{{ r.time_label or '—' }}</td><td data-label="Порции">{{ r.yield_n or '—' }}</td></tr>{% endfor %}</tbody>
+</table></div>
+{% else %}
+{{ grid(items, 'h2') }}
+{% endif %}
+{% set qs = ('?' ~ ('produkt=' ~ filt.product ~ '&' if filt.product else '') ~ ('vremya=' ~ filt.time ~ '&' if filt.time else '') ~ ('tip=' ~ filt.category ~ '&' if filt.category else '') ~ ('sort=' ~ sort ~ '&' if sort else '') ~ ('vid=tablica' if table else '')).rstrip('&') if filtered else '' %}
+{{ pager(base, page, pages, qs) }}
+{% else %}
+<div class="empty">
+  <h2>Ничего не нашлось</h2>
+  <p>По этим условиям рецептов нет. Уберите одно из условий:</p>
+  {% if active %}<ul class="empty__ways">{% for label, href, n in active %}{% if n %}<li><a href="{{ href }}">без условия «{{ label }}»</a> — {{ n }} {{ plural(n, 'рецепт', 'рецепта', 'рецептов') }}</li>{% endif %}{% endfor %}</ul>{% endif %}
+  <a class="btn" href="/recepty/">Сбросить фильтры</a>
+</div>
+{% endif %}
+{% endblock %}

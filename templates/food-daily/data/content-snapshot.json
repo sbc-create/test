@@ -1,0 +1,7256 @@
+{
+ "site_id": "food-daily",
+ "schema_version": 1,
+ "generated_at": "2026-10-23T06:03:58Z",
+ "items": [
+  {
+   "content_id": "fdq-2f6b4598fd62",
+   "slug": "mintaj-v-duhovke",
+   "version": 1,
+   "published_at": "2026-10-23T05:57:18Z",
+   "updated_at": "2026-10-23T05:57:18Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Минтай в духовке",
+    "slug": "mintaj-v-duhovke",
+    "seo_title": "Минтай в духовке",
+    "seo_description": "Минтай под луком, морковью и смесью сметаны с тёртым сыром, запечённый в духовке при 180°C.",
+    "intro": "Минтай под луком, морковью и смесью сметаны с тёртым сыром, запечённый в духовке при 180°C.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Минтай"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сметана 20%"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сыр твёрдый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Лимон"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Перец чёрный молотый"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Промойте минтай, посолите, поперчите и полейте соком половины лимона.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Нарежьте лук и морковь и выложите их на рыбу.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Смешайте сметану с тёртым твёрдым сыром.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Смажьте рыбу сметанно-сырной смесью.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Запекайте минтай при 180°C 25-30 минут.",
+      "source_steps": [
+       4
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "syr",
+     "ryba"
+    ]
+   },
+   "facts": {
+    "title": "Минтай в духовке",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 35,
+    "ingredients": [
+     {
+      "raw": "Минтай, 500 г",
+      "name": "Минтай",
+      "quantity": 500,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сметана 20%, 200 г",
+      "name": "Сметана 20%",
+      "quantity": 200,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр твёрдый, 100 г",
+      "name": "Сыр твёрдый",
+      "quantity": 100,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 шт.",
+      "name": "Морковь",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лимон, 0.5 шт.",
+      "name": "Лимон",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.5 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://menunedeli.ru/recipe/recept-mintaya-v-duxovke/",
+    "host": "menunedeli.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-b294e727ea72",
+   "slug": "kotlety-iz-indejki-bez-yaic",
+   "version": 1,
+   "published_at": "2026-10-23T05:57:18Z",
+   "updated_at": "2026-10-23T05:57:18Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Котлеты из индейки без яиц",
+    "slug": "kotlety-iz-indejki-bez-yaic",
+    "seo_title": "Котлеты из индейки без яиц",
+    "seo_description": "Котлеты из фарша индейки с луком и размоченным в молоке белым хлебом, без яиц, обжаренные на растительном масле.",
+    "intro": "Котлеты из фарша индейки с луком и размоченным в молоке белым хлебом, без яиц, обжаренные на растительном масле.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Фарш из индейки"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Хлеб белый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Молоко (для хлеба)"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Перец чёрный молотый"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Масло растительное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Размочите ломтики белого хлеба в молоке.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Мелко нарежьте лук и смешайте его с фаршем из индейки и хлебом.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте соль и перец и перемешайте фарш до однородности.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Сформируйте котлеты и жарьте их на сковороде с растительным маслом по 4-5 минут с каждой стороны.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "moloko",
+     "farsh",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Котлеты из индейки без яиц",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Фарш из индейки, 500 г",
+      "name": "Фарш из индейки",
+      "quantity": 500,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Хлеб белый, 2 ломтика",
+      "name": "Хлеб белый",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "slice",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 50 мл",
+      "name": "Молоко",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.5 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 3 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://1000.menu/cooking/6926-kotletj-iz-indeiki",
+    "host": "1000.menu",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-2e991038b647",
+   "slug": "syrniki-iz-tvoroga-na-skovorode",
+   "version": 2,
+   "published_at": "2026-10-23T05:57:17Z",
+   "updated_at": "2026-10-23T06:03:23Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Сырники из творога на сковороде",
+    "slug": "syrniki-iz-tvoroga-na-skovorode",
+    "seo_title": "Сырники из творога на сковороде",
+    "seo_description": "Сырники из творога жирностью 5–9% с яйцом, сахаром и мукой, обжаренные на растительном масле до золотистой корочки.",
+    "intro": "Сырники из творога жирностью 5–9% с яйцом, сахаром и мукой, обжаренные на растительном масле до золотистой корочки.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Творог (жирность 5–9%)"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Яйцо"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Мука пшеничная"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Масло растительное (для сковороды)"
+     }
+    ],
+    "steps": [
+     {
+      "text": "В миске соедините творог, яйцо, сахар и соль и перемешайте.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Добавьте муку и вымесите из творожной массы мягкое тесто.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Сформируйте из теста шарики, обваляйте их в муке и сплющите каждый в лепёшку.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Разогрейте сковороду с растительным маслом и жарьте сырники по 3-4 минуты с каждой стороны, пока не появится золотистая корочка.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tvorog",
+     "yajca",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Сырники из творога на сковороде",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Творог, 500 г",
+      "name": "Творог",
+      "quantity": 500,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Яйцо, 1 шт.",
+      "name": "Яйцо",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 2 ст.л.",
+      "name": "Сахар",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мука пшеничная, 3 ст.л.",
+      "name": "Мука пшеничная",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 3 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://1000.menu/cooking/45008-syrniki-iz-tvoroga-recept-na-skovorode-klassicheskii-pyshnye",
+    "host": "1000.menu",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-4ca51c2d3c04",
+   "slug": "kartofelnoe-pyure",
+   "version": 1,
+   "published_at": "2026-10-23T05:57:17Z",
+   "updated_at": "2026-10-23T05:57:17Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Картофельное пюре",
+    "slug": "kartofelnoe-pyure",
+    "seo_title": "Картофельное пюре",
+    "seo_description": "Картофельное пюре из килограмма картофеля с тёплым молоком и сливочным маслом, взбитое до однородности.",
+    "intro": "Картофельное пюре из килограмма картофеля с тёплым молоком и сливочным маслом, взбитое до однородности.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Молоко (тёплое)"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Масло сливочное"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соль"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Очистите и нарежьте картофель, затем варите его в подсоленной воде до мягкости.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Слейте воду и разомните картофель в пюре.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте тёплое молоко и сливочное масло.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Взбейте пюре до однородности.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "moloko",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Картофельное пюре",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Картофель, 1 кг",
+      "name": "Картофель",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "kg",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 300 мл",
+      "name": "Молоко",
+      "quantity": 300,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 50 г",
+      "name": "Масло сливочное",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://1000.menu/cooking/8757-vkusnoje-kartofelnoe-pure",
+    "host": "1000.menu",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-b5f75b4669b7",
+   "slug": "kurinye-bedra-v-duhovke",
+   "version": 1,
+   "published_at": "2026-10-23T05:57:17Z",
+   "updated_at": "2026-10-23T05:57:17Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Куриные бёдра в духовке",
+    "slug": "kurinye-bedra-v-duhovke",
+    "seo_title": "Куриные бёдра в духовке",
+    "seo_description": "Куриные бёдра в маринаде из чеснока, мёда, соевого соуса и паприки, запечённые в духовке при 200°C.",
+    "intro": "Куриные бёдра в маринаде из чеснока, мёда, соевого соуса и паприки, запечённые в духовке при 200°C.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриные бёдра"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Мёд"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соевый соус"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Паприка"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Измельчите чеснок и смешайте его с мёдом, соевым соусом, паприкой и солью — это маринад.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Обмажьте куриные бёдра маринадом.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Выложите бёдра в форму и запекайте при 200°C 40-45 минут.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "В середине запекания переверните бёдра и запекайте до золотистой корочки.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "kurica"
+    ]
+   },
+   "facts": {
+    "title": "Куриные бёдра в духовке",
+    "servings": 3,
+    "servings_raw": "3",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 45,
+    "ingredients": [
+     {
+      "raw": "Куриные бёдра, 6 шт.",
+      "name": "Куриные бёдра",
+      "quantity": 6,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 3 зубчика",
+      "name": "Чеснок",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мёд, 2 ст.л.",
+      "name": "Мёд",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соевый соус, 3 ст.л.",
+      "name": "Соевый соус",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Паприка, 1 ч.л.",
+      "name": "Паприка",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurinye-bedra-v-duhovke-190627",
+    "host": "eda.rambler.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-d836fecb2e18",
+   "slug": "tonkie-bliny-na-moloke",
+   "version": 2,
+   "published_at": "2026-10-23T05:57:17Z",
+   "updated_at": "2026-10-23T06:03:23Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Тонкие блины на молоке",
+    "slug": "tonkie-bliny-na-moloke",
+    "seo_title": "Тонкие блины на молоке",
+    "seo_description": "Тонкие блины на молоке с яйцами и растительным маслом в тесте; готовые блины смазывают сливочным маслом и складывают стопкой.",
+    "intro": "Тонкие блины на молоке с яйцами и растительным маслом в тесте; готовые блины смазывают сливочным маслом и складывают стопкой.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Молоко (температура 20°C)"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Яйцо"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Мука пшеничная"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Масло растительное (в тесто)"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Масло сливочное (для готовых блинов)"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Взбейте яйца с сахаром и солью до пены.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Влейте половину молока, добавьте его к яйцам и перемешайте.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Всыпьте муку и перемешивайте, пока тесто не станет однородным, без комков.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте оставшееся молоко и растительное масло и снова перемешайте.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Нагрейте сковороду и смажьте её маслом, вылейте порцию теста и распределите его по дну.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Жарьте блин 1-2 минуты до румяности, переверните и жарьте ещё 30 секунд.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "Смажьте готовые блины сливочным маслом и сложите их стопкой.",
+      "source_steps": [
+       6
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "yajca",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Тонкие блины на молоке",
+    "servings": 8,
+    "servings_raw": "8",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 30,
+    "ingredients": [
+     {
+      "raw": "Молоко, 500 мл",
+      "name": "Молоко",
+      "quantity": 500,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Яйцо, 3 шт.",
+      "name": "Яйцо",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мука пшеничная, 200 г",
+      "name": "Мука пшеничная",
+      "quantity": 200,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 2 ст.л.",
+      "name": "Сахар",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 2 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 50 г",
+      "name": "Масло сливочное",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://menunedeli.ru/recipe/tonkie-bliny-na-moloke/",
+    "host": "menunedeli.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-f4982cdf3a0c",
+   "slug": "kurinoe-file-v-smetannom-souse",
+   "version": 1,
+   "published_at": "2026-10-23T05:57:17Z",
+   "updated_at": "2026-10-23T05:57:17Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Куриное филе в сметанном соусе",
+    "slug": "kurinoe-file-v-smetannom-souse",
+    "seo_title": "Куриное филе в сметанном соусе",
+    "seo_description": "Кусочки куриного филе, обжаренные на сливочном масле с луком и тушённые под крышкой в сметане 20%.",
+    "intro": "Кусочки куриного филе, обжаренные на сливочном масле с луком и тушённые под крышкой в сметане 20%.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриное филе"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сметана 20%"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Масло сливочное"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Перец чёрный молотый"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Нарежьте куриное филе порционными кусочками.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Обжарьте кусочки на сливочном масле до золотистой корочки.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте нарезанный лук и жарьте ещё 3 минуты.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Влейте сметану, посолите, поперчите, накройте крышкой и тушите 10 минут.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "kurica",
+     "tushenie"
+    ]
+   },
+   "facts": {
+    "title": "Куриное филе в сметанном соусе",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Куриное филе, 500 г",
+      "name": "Куриное филе",
+      "quantity": 500,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сметана 20%, 200 г",
+      "name": "Сметана 20%",
+      "quantity": 200,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 30 г",
+      "name": "Масло сливочное",
+      "quantity": 30,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.5 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/60735/kurinoe-file-v-smetannom-souse",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-08adebe0aee0",
+   "slug": "omlet-s-molokom-na-skovorode",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Омлет с молоком на сковороде",
+    "slug": "omlet-s-molokom-na-skovorode",
+    "seo_title": "Омлет с молоком на сковороде",
+    "seo_description": "Омлет из трёх яиц, взбитых с молоком, приготовленный на сливочном масле под крышкой на среднем огне.",
+    "intro": "Омлет из трёх яиц, взбитых с молоком, приготовленный на сливочном масле под крышкой на среднем огне.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Яйцо"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Масло сливочное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Взбейте яйца с молоком и солью.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Разогрейте сковороду со сливочным маслом.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Вылейте яичную смесь на сковороду и накройте крышкой.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Жарьте омлет на среднем огне 5-7 минут до готовности.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "yajca",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Омлет с молоком на сковороде",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 10,
+    "ingredients": [
+     {
+      "raw": "Яйцо, 3 шт.",
+      "name": "Яйцо",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 50 мл",
+      "name": "Молоко",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 20 г",
+      "name": "Масло сливочное",
+      "quantity": 20,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://1000.menu/cooking/14382-omlet-s-molokom-na-skovorode",
+    "host": "1000.menu",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-557b3366877b",
+   "slug": "risovaya-kasha-na-moloke",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Рисовая каша на молоке",
+    "slug": "risovaya-kasha-na-moloke",
+    "seo_title": "Рисовая каша на молоке",
+    "seo_description": "Рисовая каша на молоке: стакан риса на четыре стакана молока, с сахаром, солью и сливочным маслом, варится до загустения.",
+    "intro": "Рисовая каша на молоке: стакан риса на четыре стакана молока, с сахаром, солью и сливочным маслом, варится до загустения.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Рис"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Масло сливочное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Промывайте рис, пока вода не станет прозрачной.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Залейте рис молоком, добавьте сахар и соль и доведите до кипения.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Убавьте огонь и варите кашу 20-25 минут, пока она не загустеет.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте сливочное масло и перемешайте кашу.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "ris",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Рисовая каша на молоке",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 35,
+    "ingredients": [
+     {
+      "raw": "Рис, 1 стакан",
+      "name": "Рис",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 4 стакана",
+      "name": "Молоко",
+      "quantity": 4,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 2 ст.л.",
+      "name": "Сахар",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 50 г",
+      "name": "Масло сливочное",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/58065/risovaja-kasha-na-moloke",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-5cc9cdee06c9",
+   "slug": "salat-iz-svezhej-kapusty-i-morkovi",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Салат из свежей капусты и моркови",
+    "slug": "salat-iz-svezhej-kapusty-i-morkovi",
+    "seo_title": "Салат из свежей капусты и моркови",
+    "seo_description": "Салат из тонко нашинкованной белокочанной капусты, тёртой моркови и лука с заправкой из уксуса, сахара, соли и растительного масла.",
+    "intro": "Салат из тонко нашинкованной белокочанной капусты, тёртой моркови и лука с заправкой из уксуса, сахара, соли и растительного масла.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Капуста белокочанная"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Уксус 9%"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Масло растительное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Тонко нашинкуйте капусту.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Натрите морковь на тёрке.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Нарежьте лук полукольцами.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Смешайте капусту, морковь и лук, добавьте соль, сахар, уксус и растительное масло.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Хорошо перемешайте салат и дайте ему настояться 10 минут.",
+      "source_steps": [
+       4
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "salaty",
+    "meal": "dinner",
+    "tags": [
+     "kapusta"
+    ]
+   },
+   "facts": {
+    "title": "Салат из свежей капусты и моркови",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 15,
+    "ingredients": [
+     {
+      "raw": "Капуста белокочанная, 300 г",
+      "name": "Капуста белокочанная",
+      "quantity": 300,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 2 шт.",
+      "name": "Морковь",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Уксус 9%, 1 ст.л.",
+      "name": "Уксус 9%",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 1 ч.л.",
+      "name": "Сахар",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 2 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://menunedeli.ru/recipe/salat-iz-svezhej-kapusty-i-morkovi/",
+    "host": "menunedeli.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-62cb5610ebc5",
+   "slug": "pasta-s-gribami-v-slivochnom-souse",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Паста с грибами в сливочном соусе",
+    "slug": "pasta-s-gribami-v-slivochnom-souse",
+    "seo_title": "Паста с грибами в сливочном соусе",
+    "seo_description": "Паста с обжаренными на сливочном масле шампиньонами и луком в соусе из сливок 20% с тёртым твёрдым сыром.",
+    "intro": "Паста с обжаренными на сливочном масле шампиньонами и луком в соусе из сливок 20% с тёртым твёрдым сыром.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Паста"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Шампиньоны"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сливки 20%"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сыр твёрдый"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Масло сливочное"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Перец чёрный молотый"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Сварите пасту до готовности.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Нарежьте шампиньоны и лук, затем обжарьте их на сливочном масле.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте сливки, посолите, поперчите и варите соус 5 минут.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте в соус пасту и тёртый сыр, перемешайте.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "syr",
+     "griby",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Паста с грибами в сливочном соусе",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Паста, 300 г",
+      "name": "Паста",
+      "quantity": 300,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Шампиньоны, 300 г",
+      "name": "Шампиньоны",
+      "quantity": 300,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливки 20%, 200 мл",
+      "name": "Сливки 20%",
+      "quantity": 200,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр твёрдый, 50 г",
+      "name": "Сыр твёрдый",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 30 г",
+      "name": "Масло сливочное",
+      "quantity": 30,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.5 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/43214/pasta-s-gribami-i-slivochnym-sousom",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-925f44e116dd",
+   "slug": "makarony-s-syrom",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Макароны с сыром",
+    "slug": "makarony-s-syrom",
+    "seo_title": "Макароны с сыром",
+    "seo_description": "Макароны в соусе из молока, тёртого твёрдого сыра и сливочного масла, приправленные солью и молотым перцем.",
+    "intro": "Макароны в соусе из молока, тёртого твёрдого сыра и сливочного масла, приправленные солью и молотым перцем.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Макароны"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сыр твёрдый"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Масло сливочное"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Перец чёрный молотый"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Посолите воду и отварите в ней макароны до готовности.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Натрите твёрдый сыр на мелкой тёрке.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Смешайте молоко, тёртый сыр и сливочное масло.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте сырную смесь к макаронам, перемешайте, затем добавьте соль и молотый перец.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "moloko",
+     "syr",
+     "makarony"
+    ]
+   },
+   "facts": {
+    "title": "Макароны с сыром",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Макароны, 300 г",
+      "name": "Макароны",
+      "quantity": 300,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр твёрдый, 150 г",
+      "name": "Сыр твёрдый",
+      "quantity": 150,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 100 мл",
+      "name": "Молоко",
+      "quantity": 100,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 30 г",
+      "name": "Масло сливочное",
+      "quantity": 30,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.25 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.25,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/35458/makarony-s-syrom",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-b75468005f65",
+   "slug": "ovsyanaya-kasha-na-moloke",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Овсяная каша на молоке",
+    "slug": "ovsyanaya-kasha-na-moloke",
+    "seo_title": "Овсяная каша на молоке",
+    "seo_description": "Овсяная каша из хлопьев на молоке с водой, с сахаром, щепоткой соли и сливочным маслом, на две порции.",
+    "intro": "Овсяная каша из хлопьев на молоке с водой, с сахаром, щепоткой соли и сливочным маслом, на две порции.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Овсяные хлопья"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Масло сливочное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "В кастрюле смешайте молоко с водой, добавьте сахар и соль.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Доведите смесь до кипения.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте овсяные хлопья и варите кашу 5-7 минут.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте сливочное масло и перемешайте.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Овсяная каша на молоке",
+    "servings": 2,
+    "servings_raw": "2",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 15,
+    "ingredients": [
+     {
+      "raw": "Овсяные хлопья, 1 стакан",
+      "name": "Овсяные хлопья",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 2 стакана",
+      "name": "Молоко",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 0.5 стакана",
+      "name": "Вода",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 2 ст.л.",
+      "name": "Сахар",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 30 г",
+      "name": "Масло сливочное",
+      "quantity": 30,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://menunedeli.ru/recipe/ovsyanaya-kasha-na-moloke-na-zavtrak/",
+    "host": "menunedeli.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-f0fdec7dd44f",
+   "slug": "salat-iz-ogurcov-pomidorov-i-luka",
+   "version": 1,
+   "published_at": "2026-10-23T05:54:01Z",
+   "updated_at": "2026-10-23T05:54:01Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Салат из огурцов, помидоров и лука",
+    "slug": "salat-iz-ogurcov-pomidorov-i-luka",
+    "seo_title": "Салат из огурцов, помидоров и лука",
+    "seo_description": "Салат из свежих огурцов и помидоров с луком и зеленью, заправленный растительным маслом и солью.",
+    "intro": "Салат из свежих огурцов и помидоров с луком и зеленью, заправленный растительным маслом и солью.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Огурец свежий"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Помидор"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Масло растительное"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Зелень"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Нарежьте свежие огурцы и помидоры дольками.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Нарежьте лук полукольцами.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Мелко нарежьте зелень.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Смешайте огурцы и помидоры с луком и зеленью.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Заправьте салат растительным маслом и солью.",
+      "source_steps": [
+       4
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "salaty",
+    "meal": "dinner",
+    "tags": [
+     "pomidory"
+    ]
+   },
+   "facts": {
+    "title": "Салат из огурцов, помидоров и лука",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 10,
+    "ingredients": [
+     {
+      "raw": "Огурец свежий, 3 шт.",
+      "name": "Огурец свежий",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидор, 3 шт.",
+      "name": "Помидор",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 3 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Зелень, 1 пучок",
+      "name": "Зелень",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "bunch",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://menunedeli.ru/recipe/salat-iz-ogurcov-pomidorov-i-luka/",
+    "host": "menunedeli.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-1f810f69c0e9",
+   "slug": "kartoshka-po-derevenski",
+   "version": 1,
+   "published_at": "2026-10-23T05:53:40Z",
+   "updated_at": "2026-10-23T05:53:40Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Картошка по-деревенски",
+    "slug": "kartoshka-po-derevenski",
+    "seo_title": "Картошка по-деревенски",
+    "seo_description": "Картофель дольками в заправке из растительного масла, чеснока, паприки и перца, запечённый на противне в духовке при 200°C.",
+    "intro": "Картофель дольками в заправке из растительного масла, чеснока, паприки и перца, запечённый на противне в духовке при 200°C.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Масло растительное"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Паприка"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Перец чёрный молотый"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Вымойте картофель и нарежьте его дольками.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Измельчите чеснок и смешайте его с растительным маслом, паприкой, солью и молотым перцем.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Залейте картофель получившейся заправкой и перемешайте, чтобы она покрыла все дольки.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Выложите дольки на противень и запекайте при 200°C 30-35 минут.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": []
+   },
+   "facts": {
+    "title": "Картошка по-деревенски",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 35,
+    "ingredients": [
+     {
+      "raw": "Картофель, 6 шт.",
+      "name": "Картофель",
+      "quantity": 6,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 50 мл",
+      "name": "Масло растительное",
+      "quantity": 50,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 3 зубчика",
+      "name": "Чеснок",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Паприка, 1 ч.л.",
+      "name": "Паприка",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чёрный молотый, 0.5 ч.л.",
+      "name": "Перец чёрный молотый",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/63106/kartoshka-po-derevenski",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-8f8916ae8d97",
+   "slug": "rassypchatyj-ris-na-garnir",
+   "version": 1,
+   "published_at": "2026-10-23T05:53:40Z",
+   "updated_at": "2026-10-23T05:53:40Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Рассыпчатый рис на гарнир",
+    "slug": "rassypchatyj-ris-na-garnir",
+    "seo_title": "Рассыпчатый рис на гарнир",
+    "seo_description": "Гарнир из пропаренного или длиннозерного риса: крупа варится в двойном объёме воды под крышкой на слабом огне, а затем 5 минут доходит со сливочным маслом.",
+    "intro": "Гарнир из пропаренного или длиннозерного риса: крупа варится в двойном объёме воды под крышкой на слабом огне, а затем 5 минут доходит со сливочным маслом.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Рис (пропаренный или длиннозерный)"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Масло сливочное"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Тщательно промойте рис, меняя воду, пока она не станет прозрачной.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Залейте рис водой, добавьте соль и доведите до кипения.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Убавьте огонь до минимального, накройте крышкой и варите рис 15-18 минут.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте сливочное масло, перемешайте и дайте рису постоять 5 минут.",
+      "source_steps": [
+       3
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "ris",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Рассыпчатый рис на гарнир",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Рис, 1 стакан",
+      "name": "Рис",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 2 стакана",
+      "name": "Вода",
+      "quantity": 2,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 0.5 ч.л.",
+      "name": "Соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло сливочное, 20 г",
+      "name": "Масло сливочное",
+      "quantity": 20,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://1000.menu/cooking/44188-rassypchatyi-ris-na-garnir-v-kastrule",
+    "host": "1000.menu",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fdq-de29075a0714",
+   "slug": "ovoshchnoe-ragu",
+   "version": 1,
+   "published_at": "2026-10-23T05:53:40Z",
+   "updated_at": "2026-10-23T05:53:40Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "qwen_manual_export",
+   "draft": {
+    "title": "Овощное рагу",
+    "slug": "ovoshchnoe-ragu",
+    "seo_title": "Овощное рагу",
+    "seo_description": "Рагу из картофеля, баклажана, болгарского перца, помидора, моркови и лука: овощи обжаривают и тушат под крышкой, в конце добавляют зелень.",
+    "intro": "Рагу из картофеля, баклажана, болгарского перца, помидора, моркови и лука: овощи обжаривают и тушат под крышкой, в конце добавляют зелень.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Лук репчатый"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Баклажан"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Болгарский перец"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Помидор"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Масло растительное"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Зелень"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Нарежьте кубиками картофель, морковь, лук, баклажан, болгарский перец и помидор.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Обжарьте лук и морковь на растительном масле.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Добавьте к ним картофель, баклажан, перец и помидор.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Накройте крышкой и тушите овощи 20-25 минут до готовности.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Добавьте зелень, посолите и перемешайте рагу.",
+      "source_steps": [
+       4
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "pomidory",
+     "tushenie"
+    ]
+   },
+   "facts": {
+    "title": "Овощное рагу",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": null,
+    "total_minutes": 40,
+    "ingredients": [
+     {
+      "raw": "Картофель, 3 шт.",
+      "name": "Картофель",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 шт.",
+      "name": "Морковь",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук репчатый, 1 шт.",
+      "name": "Лук репчатый",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Баклажан, 1 шт.",
+      "name": "Баклажан",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Болгарский перец, 1 шт.",
+      "name": "Болгарский перец",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидор, 1 шт.",
+      "name": "Помидор",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Масло растительное, 3 ст.л.",
+      "name": "Масло растительное",
+      "quantity": 3,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 ч.л.",
+      "name": "Соль",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Зелень, 1 пучок",
+      "name": "Зелень",
+      "quantity": 1,
+      "quantity_max": null,
+      "unit": "bunch",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://www.gastronom.ru/recipe/8570/ovoshchnoe-ragu",
+    "host": "gastronom.ru",
+    "fetched_at": null
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-00d47e5b9672",
+   "slug": "bliny-na-moloke-i-kefire",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:11Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Блины на молоке и кефире",
+    "slug": "bliny-na-moloke-i-kefire",
+    "seo_title": "Блины на молоке и кефире из блинной муки",
+    "seo_description": "Тонкие блины на молоке и кефире с блинной мукой, сахаром и гашёной содой: замес венчиком, выпекание на прогретой блинной сковороде.",
+    "intro": "Блины на смеси молока и кефира: тесто замешивается венчиком за несколько минут, а кефир и сода с уксусом делают блины мягкими. Порция на четверых.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Кефир"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Блинная мука"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Сода"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Уксус"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Подсолнечное масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Разбейте яйцо в глубокую миску, всыпьте сахар и влейте молоко.",
+      "source_steps": [
+       0,
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Просейте муку в миску, всё время помешивая, затем добавьте соду, погашенную уксусом, и хорошо взбейте венчиком.",
+      "source_steps": [
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Влейте кефир, затем подсолнечное масло и перемешайте до гладкости.",
+      "source_steps": [
+       6,
+       7
+      ],
+      "readiness_cue": "Тесто однородное, без сгустков, стекает с венчика лентой."
+     },
+     {
+      "text": "Хорошо прогрейте блинную сковороду и смажьте её тонким слоем масла.",
+      "source_steps": [
+       8
+      ]
+     },
+     {
+      "text": "Наливайте тесто порциями и пеките каждый блин с обеих сторон до румяности.",
+      "source_steps": [
+       9,
+       10
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "kefir",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Блины на молоке и кефире",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Молоко, 200 мл",
+      "name": "Молоко",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кефир, 200 мл",
+      "name": "Кефир",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Блинная мука, 200 г",
+      "name": "Блинная мука",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 3 столовые ложки",
+      "name": "Сахар",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сода, 1 щепотка",
+      "name": "Сода",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pinch",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Уксус, 5 мл",
+      "name": "Уксус",
+      "quantity": 5.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Подсолнечное масло, 2 столовые ложки",
+      "name": "Подсолнечное масло",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": "bliny-na-moloke"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/vypechka-deserty/bliny-na-moloke-i-kefire-192089",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:34:01Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-0d2ec1ad68ea",
+   "slug": "kurinyj-sup-s-syrnymi-klyockami",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:13Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Куриный суп с сырными клёцками",
+    "slug": "kurinyj-sup-s-syrnymi-klyockami",
+    "seo_title": "Куриный суп с лапшой и сырными клёцками",
+    "seo_description": "Суп на бульоне из куриных ножек с картофелем, лапшой и зажаркой, в который за несколько минут до готовности добавляют клёцки из двух видов сыра.",
+    "intro": "Домашний куриный суп с лапшой, в котором главная деталь — клёцки из тёртого твёрдого и мягкого сыра с яйцом и мукой. Их опускают в суп в самом конце, чтобы они не разварились.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриные ножки"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Лапша"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Лук"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Твёрдый сыр"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Мягкий сыр"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Петрушка"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Томатная паста"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Чёрный молотый перец"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Сварите бульон из куриных ножек.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Мелко порежьте лук и подрумяньте его, затем добавьте натёртую на крупной тёрке морковь и жарьте, пока она не станет мягкой.",
+      "source_steps": [
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Нарежьте картофель тонкими ломтиками и опустите в бульон.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Для клёцек мелко натрите твёрдый сыр, смешайте его с мягким, добавьте порубленную петрушку, яйцо, муку и ложку томатной пасты и замесите густое сырное тесто.",
+      "source_steps": [
+       4,
+       5,
+       6,
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Переложите зажарку в бульон, добавьте лапшу, посолите и поперчите.",
+      "source_steps": [
+       9
+      ]
+     },
+     {
+      "text": "За 3–5 минут до готовности формируйте ложкой клёцки и опускайте их в суп.",
+      "source_steps": [
+       10,
+       11
+      ],
+      "readiness_cue": "Клёцки всплыли и стали упругими."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "kurica",
+     "syr",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Куриный суп с сырными клецками",
+    "servings": 5,
+    "servings_raw": "5",
+    "prep_minutes": null,
+    "cook_minutes": 50,
+    "total_minutes": 50,
+    "ingredients": [
+     {
+      "raw": "Куриные ножки, 2 штуки",
+      "name": "Куриные ножки",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лапша, по вкусу",
+      "name": "Лапша",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Картофель, 1 штука",
+      "name": "Картофель",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 1 штука",
+      "name": "Лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр, 100 г",
+      "name": "Сыр",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мягкий сыр, 30 г",
+      "name": "Мягкий сыр",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Петрушка, 1 веточка",
+      "name": "Петрушка",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "sprig",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Томатная паста , 1 чайная ложка",
+      "name": "Томатная паста",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 4 столовые ложки",
+      "name": "Пшеничная мука",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "kurinyj-sup"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/kurinyy-sup-s-syrnymi-kleckami-190912",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:34:11Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-1bf8a4fff455",
+   "slug": "pshennaya-kasha-s-tykvoj",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:15Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Пшённая каша с тыквой на молоке",
+    "slug": "pshennaya-kasha-s-tykvoj",
+    "seo_title": "Пшённая каша с тыквой на молоке на пару",
+    "seo_description": "Пшено с тыквой на молоке, приготовленное в посуде с поддоном для воды: тыква варится первой, затем пшено томится на минимальном огне.",
+    "intro": "Осенняя каша из пшена и тыквы на молоке. В исходном рецепте её готовят в посуде с поддоном для воды, на пару: так молоко не пригорает, а тыква успевает стать мягкой.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Тыква"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Пшено"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Налейте воду в поддон посуды и проварите тыкву 15-20 минут.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Пшено хорошо промойте и выложите к тыкве.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Влейте молоко, закройте крышку и поставьте на огонь. После закипания воды в поддоне уменьшите огонь до самого слабого и готовьте около 20 минут.",
+      "source_steps": [
+       4
+      ],
+      "readiness_cue": "Пшено разбухло и стало мягким, молоко почти впиталось."
+     },
+     {
+      "text": "Положите сливочное масло, посолите и перемешайте до однородности.",
+      "source_steps": [
+       5,
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Подавайте горячей; сахар удобно добавлять прямо в тарелку, по вкусу.",
+      "source_steps": [
+       8
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Сахар источник предлагает класть прямо в тарелку.",
+      "verified": false,
+      "source_steps": [
+       8
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tykva",
+     "pshyono",
+     "na-paru"
+    ]
+   },
+   "facts": {
+    "title": "Пшённая каша с тыквой",
+    "servings": 7,
+    "servings_raw": "7",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Тыква, 300 г",
+      "name": "Тыква",
+      "quantity": 300.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшено, 200 г",
+      "name": "Пшено",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 1 л",
+      "name": "Молоко",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "l",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, по вкусу",
+      "name": "Сахар",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Сливочное масло, 1 столовая ложка",
+      "name": "Сливочное масло",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 2 г",
+      "name": "Соль",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "boiling"
+    ],
+    "topic_id": "tykvennaya-kasha"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/pshyonnnaya-kasha-s-tykvoy-191391",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:44Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-2154b0ca14e2",
+   "slug": "pyshnye-oladi-na-kefire",
+   "version": 4,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:15Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Пышные оладьи на кефире",
+    "slug": "pyshnye-oladi-na-kefire",
+    "seo_title": "Пышные оладьи на кефире с содой: пошаговый рецепт",
+    "seo_description": "Оладьи на кефире с содой: тесто отдыхает перед жаркой, жарка на хорошо прогретом масле, проверка готовности по первому оладью.",
+    "intro": "Классические оладьи на тёплом кефире. Главное в рецепте — дать тесту постоять и жарить на сильно прогретой сковороде: тогда оладьи поднимаются и остаются пышными внутри.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Кефир 3,2%"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сода"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Растительное масло для жарки"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Перелейте кефир в миску и оставьте, пока он не согреется до комнатной температуры.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Посолите кефир (в исходнике — половина чайной ложки соли), всыпьте сахар, вбейте яйцо и тщательно перемешайте.",
+      "source_steps": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Отмерьте муку, смешайте её с содой и просейте в кефирную смесь.",
+      "source_steps": [
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Вымешайте тесто без комков и дайте ему отдохнуть не меньше 15 минут, а лучше 30 — без этой паузы пышности не будет.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Сильно разогрейте сковороду, налейте масло и прогрейте его: в холодное масло оладьи не кладут.",
+      "source_steps": [
+       7
+      ]
+     },
+     {
+      "text": "Зачерпывайте тесто ложкой с поверхности, не перемешивая его со дна, и выкладывайте на сковороду.",
+      "source_steps": [
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Переворачивайте, когда низ подрумянится, а верх схватится и перестанет быть жидким. После переворота оладьи заметно подрастут.",
+      "source_steps": [
+       10
+      ],
+      "readiness_cue": "Сверху появились пузырьки и плёнка, тесто не блестит."
+     },
+     {
+      "text": "Готовые оладьи выложите на полотенце, чтобы ушёл лишний жир. Первый разломите: если середина сырая, жарьте следующие под крышкой и чуть дольше.",
+      "source_steps": [
+       11,
+       12,
+       13
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Тесто набирайте не с глубины, а сверху. Первый оладушек разломите: если внутри не пропёкся, накройте сковороду крышкой и жарьте дольше.",
+      "verified": false,
+      "source_steps": [
+       8,
+       12
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "kefir",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Оладьи пышные на кефире",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": 30,
+    "cook_minutes": 30,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Кефир 3,2%-ный, 1 стакан",
+      "name": "Кефир 3,2%-ный",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 2 стакана",
+      "name": "Пшеничная мука",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сода, 0.5 чайных ложек",
+      "name": "Сода",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 1 столовая ложка",
+      "name": "Сахар",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, для жарки",
+      "name": "Растительное масло",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "для жарки"
+     }
+    ],
+    "method_hints": [
+     "frying"
+    ],
+    "topic_id": "oladi-na-kefire"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/oladi-pyshnye-na-kefire-193030",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:40Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-3aa08c363c0b",
+   "slug": "syrniki-s-ezhevikoj",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:17Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Сырники с ежевикой внутри",
+    "slug": "syrniki-s-ezhevikoj",
+    "seo_title": "Сырники с ежевикой внутри: рецепт на рисовой муке",
+    "seo_description": "Сырники из мягкого творога и творожной массы с ягодой ежевики в центре. Рисовая мука, один желток, жарка на сковороде до румяной корочки.",
+    "intro": "Творожные сырники на рисовой муке с сюрпризом: в каждом спрятана ягода ежевики. Тесто держится на одном желтке, поэтому сырники получаются плотными и аккуратными, а ягода внутри остаётся сочной.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Яичный желток"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Мягкий творог"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Творожная масса (сладкий сырок)"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Ежевика"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Рисовая мука"
+     }
+    ],
+    "steps": [
+     {
+      "text": "В миске соедините мягкий творог с творожной массой, затем добавьте желток и вымешайте до однородности.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Ягоды промойте и как следует обсушите бумажным или тканевым полотенцем — лишняя вода размочит тесто.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Всыпьте в творожную основу две ложки рисовой муки, перемешайте и разделите массу на одинаковые шарики.",
+      "source_steps": [
+       3
+      ],
+      "readiness_cue": "Масса держит форму и не липнет к влажным ладоням."
+     },
+     {
+      "text": "Каждый шарик сплющите в лепёшку, продавите в центре ямку, положите туда ягоду и соберите края кверху, чтобы получился закрытый колобок.",
+      "source_steps": [
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Для ровной формы положите заготовку на доску, накройте стаканом и несколько раз быстро прокатите стакан по кругу, затем слегка придавите сверху плоской стороной ножа.",
+      "source_steps": [
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Прогрейте сковороду, смажьте её тонким слоем масла и, когда масло нагреется, выложите сырники.",
+      "source_steps": [
+       9
+      ]
+     },
+     {
+      "text": "Обжаривайте с каждой стороны по нескольку минут, пока не появится золотистая корочка, затем переложите на бумажное полотенце и подавайте.",
+      "source_steps": [
+       10,
+       11
+      ],
+      "readiness_cue": "Обе стороны ровно-золотистые, сырник пружинит при лёгком нажатии."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tvorog",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Сырники с ежевикой",
+    "servings": 2,
+    "servings_raw": "2",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Яичный желток, 1 штука",
+      "name": "Яичный желток",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мягкий творог, 190 г",
+      "name": "Мягкий творог",
+      "quantity": 190.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Творожная масса, 90 г",
+      "name": "Творожная масса",
+      "quantity": 90.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Ежевика, 10 штук",
+      "name": "Ежевика",
+      "quantity": 10.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 1 чайная ложка",
+      "name": "Растительное масло",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Рисовая мука, 2 столовые ложки",
+      "name": "Рисовая мука",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying"
+    ],
+    "topic_id": "syrniki"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/syrniki-s-ezhevikoy-192783",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:34Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-4fe655a71fa2",
+   "slug": "plov-s-kuricej",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:14Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Плов с курицей на сковороде",
+    "slug": "plov-s-kuricej",
+    "seo_title": "Плов с куриными бёдрами, зирой и чесноком",
+    "seo_description": "Плов из куриных бёдер с луком, морковью соломкой, зирой и целой головкой чеснока: рис томится под крышкой, пока не впитает всю воду.",
+    "intro": "Плов на курице готовится быстрее классического: бёдра обжаривают, затем доводят овощи, рис укладывают сверху и не перемешивают до самого конца. Чеснок утапливают за десять минут до готовности.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриные бёдра"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Рис"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Приправа для плова"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Зира"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Чеснок (головка)"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Растительное масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Порежьте мясо небольшими кусками и обжарьте на сильном огне до румяной корочки с обеих сторон, потом убавьте огонь до среднего.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Посолите, добавьте приправу, мелко нарезанный лук и морковь соломкой. Перемешайте и тушите, пока овощи не станут мягкими.",
+      "source_steps": [
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Тщательно промойте рис, разровняйте его поверх мяса и посыпьте зирой.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Налейте горячую воду так, чтобы она стояла над рисом примерно на 1 см, накройте и уменьшите огонь до самого слабого.",
+      "source_steps": [
+       8
+      ]
+     },
+     {
+      "text": "С головки чеснока снимите верхнюю шелуху и разрежьте её поперёк. За 10 минут до готовности утопите половинки в рис и готовьте, пока не уйдёт вся жидкость.",
+      "source_steps": [
+       9,
+       10
+      ],
+      "readiness_cue": "На дне не слышно бульканья, рис мягкий и рассыпчатый."
+     },
+     {
+      "text": "Перед подачей перемешайте плов.",
+      "source_steps": [
+       11
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Воды должно быть столько, чтобы она покрывала рис примерно на 1 см; готовьте под крышкой на минимальном огне, пока жидкость полностью не впитается.",
+      "verified": false,
+      "source_steps": [
+       8,
+       10
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "kurica",
+     "ris"
+    ]
+   },
+   "facts": {
+    "title": "Плов с курицей",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 50,
+    "total_minutes": 50,
+    "ingredients": [
+     {
+      "raw": "Куриные бедра, 1 кг",
+      "name": "Куриные бедра",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "kg",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Рис, 1.5 стаканов",
+      "name": "Рис",
+      "quantity": 1.5,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 2 штуки",
+      "name": "Репчатый лук",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 2 штуки",
+      "name": "Морковь",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Приправа для плова, 1 чайная ложка",
+      "name": "Приправа для плова",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 чайная ложка",
+      "name": "Соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Зира, 0.5 чайных ложек",
+      "name": "Зира",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 1 штука",
+      "name": "Чеснок",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 30 мл",
+      "name": "Растительное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying"
+    ],
+    "topic_id": "plov-s-kuricej"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/plov-s-kuricey-190145",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:52:57Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-553b74d4001c",
+   "slug": "sup-s-frikadelkami",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:16Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Суп с фрикадельками и сладким перцем",
+    "slug": "sup-s-frikadelkami",
+    "seo_title": "Суп с фрикадельками, картофелем и сладким перцем",
+    "seo_description": "Фрикадельки из фарша с луком в кипящей воде, картофель, зажарка из лука, моркови и сладкого перца, укроп в конце — суп на четыре порции.",
+    "intro": "Простой суп на воде, где бульон дают сами фрикадельки. Сладкий перец в зажарке добавляет супу цвет и мягкую сладость, а укроп кладут за пару минут до конца.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Мясной фарш"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Лук"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Чёрный молотый перец"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сладкий перец"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Растительное масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Смешайте фарш с одной мелко порубленной (или прокрученной) луковицей, посолите и поперчите.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Скатайте фрикадельки и опустите их в кипящую воду.",
+      "source_steps": [
+       1
+      ]
+     },
+     {
+      "text": "Нарежьте картофель кубиками, добавьте в кастрюлю и посолите.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Оставшийся лук и морковь спассеруйте на растительном масле, добавьте кубики сладкого перца и жарьте до мягкости.",
+      "source_steps": [
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Переложите зажарку в суп и варите на слабом огне 7–10 минут.",
+      "source_steps": [
+       7
+      ],
+      "readiness_cue": "Картофель легко протыкается ножом."
+     },
+     {
+      "text": "Всыпьте мелко нарезанный укроп, дайте покипеть 2 минуты, выключите огонь и подавайте.",
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "farsh",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Суп с фрикадельками",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 40,
+    "total_minutes": 40,
+    "ingredients": [
+     {
+      "raw": "Фарш, 400 г",
+      "name": "Фарш",
+      "quantity": 400.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 2 штуки",
+      "name": "Лук",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Картофель, 500 г",
+      "name": "Картофель",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 1 пучок",
+      "name": "Укроп",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "bunch",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Вода, 2 л",
+      "name": "Вода",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "l",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сладкий перец, 300 г",
+      "name": "Сладкий перец",
+      "quantity": 300.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 20 мл",
+      "name": "Растительное масло",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "sup-s-frikadelkami"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/sup-s-frikadelkami-i-sladkim-percem-190674",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:52:43Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-7798c76d4624",
+   "slug": "grecheskij-salat",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:12Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Греческий салат с брынзой",
+    "slug": "grecheskij-salat",
+    "seo_title": "Греческий салат с брынзой и лимонной заправкой",
+    "seo_description": "Огурцы, помидор, жёлтый перец, красный лук, оливки и листья салата с брынзой и заправкой из оливкового масла, трав и лимонного сока.",
+    "intro": "Свежий салат из крупно нарезанных овощей с брынзой. Заправку готовят отдельно и сбрызгивают лимоном — так масло и травы равномерно покрывают овощи.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Жёлтый сладкий перец"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Помидор"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Огурцы"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Красный лук"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Оливки"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Брынза"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Каменная соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Прованские травы"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Лимон"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Дроблёный чёрный перец"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Листовой салат"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Вымойте овощи. Огурцы нарежьте крупным кубиком, перец очистите от семян и крупно порежьте, помидор — кубиком.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Листья салата промойте и крупно нарвите или нарежьте, красный лук тонко нашинкуйте, с оливок слейте рассол.",
+      "source_steps": [
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Смешайте оливковое масло с солью, перцем и травами и добавьте немного лимонного сока.",
+      "source_steps": [
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Порежьте брынзу кубиками среднего размера, сложите всё в глубокий салатник и перемешайте с заправкой.",
+      "source_steps": [
+       9,
+       10,
+       11
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "salaty",
+    "meal": "lunch",
+    "tags": [
+     "ovoshchi",
+     "bez-varki"
+    ]
+   },
+   "facts": {
+    "title": "Греческий салат",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": 15,
+    "total_minutes": 15,
+    "ingredients": [
+     {
+      "raw": "Желтый сладкий перец, 1 штука",
+      "name": "Желтый сладкий перец",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидоры, 1 штука",
+      "name": "Помидоры",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Огурцы, 3 штуки",
+      "name": "Огурцы",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 1 по вкусу",
+      "name": "Лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Оливки, 1 по вкусу",
+      "name": "Оливки",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Сербская брынза, 100 г",
+      "name": "Сербская брынза",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Каменная соль, 1 по вкусу",
+      "name": "Каменная соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Прованские травы, 1 щепотка",
+      "name": "Прованские травы",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pinch",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лимон, 1 по вкусу",
+      "name": "Лимон",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 3 столовые ложки",
+      "name": "Оливковое масло",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Дробленый черный перец, 1 по вкусу",
+      "name": "Дробленый черный перец",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Зеленый салат, 1 штука",
+      "name": "Зеленый салат",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": "grecheskij-salat"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/salaty/grecheskiy-salat-192199",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:38:46Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-7ae95ed0f7be",
+   "slug": "domashnyaya-shaurma",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:12Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Домашняя шаурма с курицей",
+    "slug": "domashnyaya-shaurma",
+    "seo_title": "Домашняя шаурма из куриного шашлыка в лаваше",
+    "seo_description": "Лаваш с соусом из кетчупа и майонеза, полосками куриного шашлыка, помидором, огурцом, капустой и морковью по-корейски, подсушенный на сковороде.",
+    "intro": "Шаурма из готового куриного шашлыка: начинка собирается слоями, а свёрнутый лаваш подсушивают на сухой сковороде, чтобы он стал хрустящим снаружи.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриный шашлык из грудки"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Морковь по-корейски"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Белокочанная капуста"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Помидор"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Огурец"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Кетчуп"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Майонез"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Круглый бездрожжевой лаваш"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Приготовьте куриный шашлык и порежьте его тонкими полосками.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Помойте и тонко нарежьте помидор и огурец. Капусту нашинкуйте, слегка помните руками и посолите.",
+      "source_steps": [
+       2,
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Смешайте кетчуп с майонезом, расстелите лаваш и смажьте его соусом.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Выложите курицу, сверху слоями — овощи и морковь по-корейски, плотно сверните лаваш.",
+      "source_steps": [
+       8,
+       9,
+       10
+      ]
+     },
+     {
+      "text": "Подсушите рулет на сковороде с обеих сторон и подавайте.",
+      "source_steps": [
+       11,
+       12
+      ],
+      "readiness_cue": "Лаваш стал сухим и золотистым."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zakuski",
+    "meal": "snack",
+    "tags": [
+     "kurica",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Домашняя шаурма",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Шашлык из куриной грудки, 200 г",
+      "name": "Шашлык из куриной грудки",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь по-корейски, 1 по вкусу",
+      "name": "Морковь по-корейски",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Капуста, 100 г",
+      "name": "Капуста",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидоры, 1 штука",
+      "name": "Помидоры",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Огурцы, 1 штука",
+      "name": "Огурцы",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кетчуп, 50 г",
+      "name": "Кетчуп",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Майонез, 1 по вкусу",
+      "name": "Майонез",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Лаваш круглый бездрожжевой, 2 штуки",
+      "name": "Лаваш круглый бездрожжевой",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": "shaurma"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/sendvichi/domashnyaya-shaurma-192794",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:18Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-a4c90f2456c4",
+   "slug": "makarony-po-flotski",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:14Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Макароны по-флотски с отварной свининой",
+    "slug": "makarony-po-flotski",
+    "seo_title": "Макароны по-флотски с отварной свининой и овощами",
+    "seo_description": "Отварная свинина, прокрученная или мелко нарезанная, обжаренная с луком, морковью, сладким перцем и тёртым помидором, и макароны со сливочным маслом.",
+    "intro": "Вариант макарон по-флотски с отварным мясом и овощной зажаркой: мясо варят заранее, затем обжаривают вместе с овощами и смешивают с макаронами и сливочным маслом.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Макароны"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Свинина"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Сладкий перец"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Помидоры"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Чёрный молотый перец"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Перец чили"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Сварите мясо в подсоленной воде до готовности, остудите и мелко нарежьте или прокрутите через мясорубку.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Налейте в сковороду растительное масло и выложите мелко нарезанный лук, кусочки сладкого перца и мелко натёртую морковь. Жарьте без крышки, иногда помешивая.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Отварите макароны в подсоленной кипящей воде с ложкой масла до готовности и откиньте на дуршлаг.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Натрите помидор, оставив кожицу, добавьте к овощам, посолите и поперчите.",
+      "source_steps": [
+       5,
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Положите мясо, слегка обжарьте вместе с овощами, затем добавьте макароны и сливочное масло, перемешайте и прогрейте. Подавайте горячими; острый перец — по желанию.",
+      "source_steps": [
+       8,
+       9,
+       10
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "makarony",
+     "svinina"
+    ]
+   },
+   "facts": {
+    "title": "Макароны по флотски",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Макароны, 250 г",
+      "name": "Макароны",
+      "quantity": 250.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Свинина, 300 г",
+      "name": "Свинина",
+      "quantity": 300.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 150 г",
+      "name": "Репчатый лук",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 150 г",
+      "name": "Морковь",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 50 мл",
+      "name": "Растительное масло",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 50 г",
+      "name": "Сливочное масло",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сладкий перец, 50 г",
+      "name": "Сладкий перец",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Помидоры, 150 г",
+      "name": "Помидоры",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Перец чили, по вкусу",
+      "name": "Перец чили",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "makarony-po-flotski"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/makarony-po-flotski-190027",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:38:18Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-b1ff827b4cfa",
+   "slug": "tvorozhnaya-zapekanka-na-zheltkah",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:19Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Творожная запеканка на желтках",
+    "slug": "tvorozhnaya-zapekanka-na-zheltkah",
+    "seo_title": "Творожная запеканка на желтках с манкой в духовке",
+    "seo_description": "Запеканка из творога, желтков и манки, набухшей в молоке, с крахмалом. Выпекается 40 минут при 180 градусах, подаётся остывшей.",
+    "intro": "Плотная и нежная запеканка, в которой работают только желтки: манка заранее набухает в молоке, крахмал помогает массе держать форму. После духовки запеканке нужно остыть — тогда она ровно режется.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Творог"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Яичные желтки"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Манная крупа"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Крахмал"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Сливочное масло для формы"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Сахарная пудра для подачи"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Свежие ягоды для подачи"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Залейте манку молоком и дайте ей постоять 15 минут, чтобы крупа набухла.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Выложите творог в глубокую миску и тщательно разомните вилкой; приготовьте желтки.",
+      "source_steps": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Соедините творог с набухшей манкой и желтками и взбейте венчиком до однородности. Добавьте крахмал, сахар и щепотку соли.",
+      "source_steps": [
+       4,
+       5
+      ],
+      "readiness_cue": "Масса гладкая, без творожных комочков."
+     },
+     {
+      "text": "Смажьте форму сливочным маслом, переложите массу и выпекайте 40 минут при 180 градусах.",
+      "source_steps": [
+       6
+      ],
+      "readiness_cue": "Верх подрумянен, центр не колышется при покачивании формы."
+     },
+     {
+      "text": "Оставьте запеканку остывать, затем украсьте ягодами и сахарной пудрой; можно добавить листики мяты.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ]
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tvorog",
+     "v-duhovke"
+    ]
+   },
+   "facts": {
+    "title": "Творожная запеканка на желтках",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 50,
+    "total_minutes": 50,
+    "ingredients": [
+     {
+      "raw": "Творог, 800 г",
+      "name": "Творог",
+      "quantity": 800.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Яичный желток, 8 штук",
+      "name": "Яичный желток",
+      "quantity": 8.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Манная крупа, 4 столовые ложки",
+      "name": "Манная крупа",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 150 мл",
+      "name": "Молоко",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 40 г",
+      "name": "Сахар",
+      "quantity": 40.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Крахмал, 1 столовая ложка",
+      "name": "Крахмал",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сладкосливочное масло, 10 г",
+      "name": "Сладкосливочное масло",
+      "quantity": 10.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахарная пудра, 1 по вкусу",
+      "name": "Сахарная пудра",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Свежие ягоды, 1 по вкусу",
+      "name": "Свежие ягоды",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "oven"
+    ],
+    "topic_id": "zapekanka-tvorozhnaya"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/tvorozhnaya-zapekanka-na-zheltkah-192758",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:06Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-bca48b116558",
+   "slug": "zapechennaya-cvetnaya-kapusta",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:21Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Запечённая цветная капуста с паприкой",
+    "slug": "zapechennaya-cvetnaya-kapusta",
+    "seo_title": "Цветная капуста в духовке с чесноком и паприкой",
+    "seo_description": "Соцветия цветной капусты с чесноком, паприкой, солью и перцем запекаются 45 минут при 180 градусах — простой овощной гарнир.",
+    "intro": "Овощной гарнир почти без участия: соцветия перемешивают с маслом, чесноком и паприкой и оставляют в духовке. Края подрумяниваются, а середина остаётся мягкой.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Цветная капуста"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Душистый перец"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Паприка"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Чеснок"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Подготовьте продукты и разберите кочан на соцветия.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Сбрызните соцветия оливковым маслом, добавьте рубленый чеснок, соль, перец и паприку и хорошо перемешайте.",
+      "source_steps": [
+       2,
+       3,
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Разложите капусту в форме и запекайте в духовке при 180 градусах 45 минут, затем подавайте.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ],
+      "readiness_cue": "Края соцветий подрумянились, ножка легко протыкается."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "kapusta",
+     "v-duhovke"
+    ]
+   },
+   "facts": {
+    "title": "Запеченная цветная капуста",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Цветная капуста, 1 головка",
+      "name": "Цветная капуста",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Черный душистый перец, по вкусу",
+      "name": "Черный душистый перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Паприка, по вкусу",
+      "name": "Паприка",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Чеснок, 2 зубчика",
+      "name": "Чеснок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "oven"
+    ],
+    "topic_id": "tsvetnaya-kapusta"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zakuski/zapechennaya-cvetnaya-kapusta-190809",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:53:00Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-bfb12300a18a",
+   "slug": "chechevichnyj-sup-s-ovoshchami",
+   "version": 3,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:11Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Чечевичный суп с овощами",
+    "slug": "chechevichnyj-sup-s-ovoshchami",
+    "seo_title": "Чечевичный суп с томатной пастой за 30 минут",
+    "seo_description": "Суп из чечевицы с картофелем, луком, морковью и томатной пастой на воде. Готовится около получаса, подаётся со сметаной и петрушкой.",
+    "intro": "Быстрый постный по составу суп: зажарка с томатной пастой, чечевица и картофель варятся вместе меньше двадцати минут. Сметану и петрушку добавляют при подаче.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Томатная паста"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Чечевица"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Петрушка"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Хлеб для подачи"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сметана для подачи"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Сушёный молотый чеснок"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Чёрный молотый перец"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Подготовьте продукты: лук нарежьте мелким кубиком, морковь натрите крупно.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Разогрейте масло в кастрюле и потушите в нём лук с морковью до мягкости.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Добавьте томатную пасту и прогрейте ещё 2–3 минуты, помешивая.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Влейте воду, всыпьте чечевицу и варите 5–7 минут.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "Нарежьте картофель мелкими кубиками, добавьте в суп и варите ещё 7–10 минут.",
+      "source_steps": [
+       6,
+       7
+      ],
+      "readiness_cue": "Чечевица и картофель мягкие."
+     },
+     {
+      "text": "Приправьте солью, перцем, сушёным чесноком и, по желанию, сахаром. Подавайте со сметаной и петрушкой.",
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Вид чечевицы в источнике не указан. По шагам источника её варят 5–7 минут, затем вместе с картофелем ещё 7–10 минут — до готовности картофеля и чечевицы.",
+      "verified": false,
+      "source_steps": [
+       5,
+       7
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "chechevica",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Чечевичный суп с овощами",
+    "servings": 3,
+    "servings_raw": "3",
+    "prep_minutes": null,
+    "cook_minutes": 30,
+    "total_minutes": 30,
+    "ingredients": [
+     {
+      "raw": "Репчатый лук, 100 г",
+      "name": "Репчатый лук",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 100 г",
+      "name": "Морковь",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Картофель, 200 г",
+      "name": "Картофель",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Томатная паста , 70 г",
+      "name": "Томатная паста",
+      "quantity": 70.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 800 мл",
+      "name": "Вода",
+      "quantity": 800.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чечевица, 100 г",
+      "name": "Чечевица",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Петрушка, 20 г",
+      "name": "Петрушка",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Хлеб, по вкусу",
+      "name": "Хлеб",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Сметана, по вкусу",
+      "name": "Сметана",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Растительное масло, 30 мл",
+      "name": "Растительное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молотый сушеный чеснок, по вкусу",
+      "name": "Молотый сушеный чеснок",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "chechevichnyj-sup"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/chechevichnyy-sup-s-ovoschami-188901",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:35:41Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-c2e2b979d50a",
+   "slug": "salat-s-kuricej-gribami-i-yajcom",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T14:59:15Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Салат с курицей, жареными грибами и яйцом",
+    "slug": "salat-s-kuricej-gribami-i-yajcom",
+    "seo_title": "Салат с курицей, шампиньонами, яйцом и айсбергом",
+    "seo_description": "Салат из айсберга, огурца, курицы, яиц и обжаренных шампиньонов с заправкой из майонеза и дижонской горчицы.",
+    "intro": "Сытный салат на обед: хрустящий айсберг и огурец, волокна готовой курицы, яйца и шампиньоны, обжаренные до испарения влаги. Заправка — майонез с горчицей.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриная грудка (запечённая или отварная)"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Шампиньоны"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Куриные яйца"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Огурец"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Салат айсберг"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Майонез"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Чёрная соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Зелёный лук"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Дижонская горчица"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Оливковое масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Нарежьте айсберг не слишком мелко, огурец очистите и порежьте мелко, сложите их в глубокую миску.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Готовую курицу разберите на волокна, посолите и добавьте в миску.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Сварите яйца вкрутую, мелко порубите, посолите и тоже отправьте в салат.",
+      "source_steps": [
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Грибы порежьте крупно и отправьте в горячее масло. Держите большой огонь 2-3 минуты — за это время выпарится выделившийся сок.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Посолите, перемешайте и продолжайте жарить на среднем огне 5-6 минут, затем остудите.",
+      "source_steps": [
+       7
+      ],
+      "readiness_cue": "Грибы подрумянились и уменьшились в объёме."
+     },
+     {
+      "text": "Добавьте грибы в салат, заправьте майонезом с горчицей, тщательно перемешайте и подавайте с зелёным луком.",
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Грибы по источнику сначала остужают и только потом кладут в салат.",
+      "verified": false,
+      "source_steps": [
+       7,
+       8
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "salaty",
+    "meal": "lunch",
+    "tags": [
+     "kurica",
+     "griby",
+     "yajca"
+    ]
+   },
+   "facts": {
+    "title": "Салат с курицей, грибами и яйцом",
+    "servings": 2,
+    "servings_raw": "2",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Куриная грудка, 80 г",
+      "name": "Куриная грудка",
+      "quantity": 80.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Шампиньоны, 80 г",
+      "name": "Шампиньоны",
+      "quantity": 80.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 2 штуки",
+      "name": "Куриное яйцо",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Огурцы, 1 штука",
+      "name": "Огурцы",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Салат айсберг, 140 г",
+      "name": "Салат айсберг",
+      "quantity": 140.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Майонез, 3 столовые ложки",
+      "name": "Майонез",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Черная соль, по вкусу",
+      "name": "Черная соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Зеленый лук, по вкусу",
+      "name": "Зеленый лук",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Дижонская горчица, 0.5 чайных ложек",
+      "name": "Дижонская горчица",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 1 столовая ложка",
+      "name": "Оливковое масло",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying",
+     "steaming"
+    ],
+    "topic_id": "salat-s-kuricej"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/salaty/salat-s-kuricey-gribami-i-yaycom-191596",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:00Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-c62b237c3214",
+   "slug": "kurica-v-smetanno-chesnochnom-souse",
+   "version": 3,
+   "published_at": "2026-10-11T22:00:09Z",
+   "updated_at": "2026-10-13T15:10:52Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Курица в сметанно-чесночном соусе в духовке",
+    "slug": "kurica-v-smetanno-chesnochnom-souse",
+    "seo_title": "Курица в сливочном соусе со сметаной и чесноком",
+    "seo_description": "Окорочка, обжаренные с чесноком, запекаются 40–50 минут при 180 градусах в соусе из сметаны, молока и прованских трав.",
+    "intro": "Куриные окорочка сначала подрумянивают на смеси двух масел с чесноком, затем запекают в соусе из сметаны и молока. Соус получается густым — его удобно подавать к гарниру.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Куриные окорочка"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сметана"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Прованские травы"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Чёрный молотый перец"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сливочное масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Разрежьте каждый окорочок на две части.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Разогрейте в сковороде оба масла и 1–2 минуты обжарьте в них 3 зубчика чеснока, нарезанные дольками.",
+      "source_steps": [
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Подрумяньте куски курицы, переворачивая один раз: на каждую сторону уйдёт 3–5 минут. Затем переложите их в форму для духовки.",
+      "source_steps": [
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Для соуса смешайте сметану с измельчённым чесноком, солью, перцем и травами, влейте молоко и размешайте.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Залейте курицу соусом и запекайте при 180 градусах 40–50 минут. Подавайте с гарниром.",
+      "source_steps": [
+       8,
+       9
+      ],
+      "readiness_cue": "При проколе у кости выделяется прозрачный сок."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "kurica",
+     "v-duhovke"
+    ]
+   },
+   "facts": {
+    "title": "Курица в сливочном соусе",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Куриные окорочка, 3 штуки",
+      "name": "Куриные окорочка",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сметана, 150 г",
+      "name": "Сметана",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 100 мл",
+      "name": "Молоко",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 6 зубчиков",
+      "name": "Чеснок",
+      "quantity": 6.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Прованские травы, 0.5 чайных ложек",
+      "name": "Прованские травы",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молотый черный перец, 0.5 чайных ложек",
+      "name": "Молотый черный перец",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 чайная ложка",
+      "name": "Соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 30 мл",
+      "name": "Растительное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 20 г",
+      "name": "Сливочное масло",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "oven"
+    ],
+    "topic_id": "kurica-v-slivochnom-souse"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kurica-v-slivochnom-souse-188847",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:25Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-0610c913e699",
+   "slug": "domashnie-kotlety",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:11Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Домашние котлеты с картофелем и хлебом",
+    "slug": "domashnie-kotlety",
+    "seo_title": "Домашние котлеты из фарша с хлебом и тёртым картофелем",
+    "seo_description": "Котлеты из свиного или смешанного фарша с размоченным в молоке хлебом, тёртым картофелем, жареным луком и чесноком. Жарка до румяной корочки.",
+    "intro": "Простые сочные котлеты на каждый день. Сочность дают хлеб, размоченный в молоке, и тёртый картофель без сока, а обжаренный лук — более глубокий вкус, чем сырой.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Фарш (свиной или свино-говяжий)"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Лук"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Белый хлеб"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Чёрный молотый перец"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Растительное масло"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Подготовьте продукты; фарш подойдёт свиной или смешанный со говядиной. Хлеб залейте молоком.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Натрите картофель на мелкой тёрке и отожмите сок. Лук порубите и подрумяньте на сковороде.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Добавьте к фаршу жареный лук, картофель и отжатый хлеб, посолите, поперчите, положите измельчённый чеснок.",
+      "source_steps": [
+       4,
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Хорошо вымешайте фарш, сформируйте котлеты и жарьте их на растительном масле до золотистой корочки. Подавайте с гарниром.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ],
+      "readiness_cue": "Сок при надрезе прозрачный, без розового оттенка."
+     }
+    ],
+    "tips": [],
+    "substitutions": [
+     {
+      "from_index": 0,
+      "to": "свиной или свино-говяжий фарш",
+      "note": "Оба варианта называет источник.",
+      "verified": false,
+      "source_steps": [
+       0
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "farsh",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Простые котлеты домашние",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 40,
+    "total_minutes": 40,
+    "ingredients": [
+     {
+      "raw": "Фарш, 500 г",
+      "name": "Фарш",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 1 штука",
+      "name": "Лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Хлеб, 2 куска",
+      "name": "Хлеб",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "piece",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 100 мл",
+      "name": "Молоко",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Картофель, 1 штука",
+      "name": "Картофель",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 2 зубчика",
+      "name": "Чеснок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Растительное масло, 30 мл",
+      "name": "Растительное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying"
+    ],
+    "topic_id": "kotlety-domashnie"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kotlety-domashnie-191216",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:35:44Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-1ac4020e5ad5",
+   "slug": "tefteli-v-tomatnom-souse",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:18Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Тефтели с рисом в томатном соусе",
+    "slug": "tefteli-v-tomatnom-souse",
+    "seo_title": "Тефтели с рисом в томатном соусе на сковороде",
+    "seo_description": "Тефтели из фарша с полуготовым рисом, луком и яйцом, обжаренные в муке и тушёные полчаса в соусе из томатной пасты.",
+    "intro": "Классические тефтели: рис заранее отваривают до полуготовности, обжаренные тефтели томят под крышкой в простом соусе из воды, томатной пасты и щепотки сахара.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Свино-говяжий фарш"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Рис"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Томатная паста"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Перец"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Зелень"
+     }
+    ],
+    "steps": [
+     {
+      "text": "К фаршу добавьте рис, отваренный до полуготовности, мелко нарезанный лук и сырое яйцо.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Посолите, поперчите и тщательно вымешайте массу.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Скатайте тефтели, обваляйте каждую в муке и обжарьте с двух сторон по 5 минут до румяности.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Разведите томатную пасту стаканом тёплой воды и добавьте половину чайной ложки сахара.",
+      "source_steps": [
+       7
+      ]
+     },
+     {
+      "text": "Залейте тефтели соусом, накройте и тушите на слабом огне 30 минут. При подаче можно посыпать зеленью.",
+      "source_steps": [
+       8,
+       9
+      ],
+      "readiness_cue": "Соус слегка загустел, тефтели плотные внутри."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "farsh",
+     "ris",
+     "tushenie"
+    ]
+   },
+   "facts": {
+    "title": "Тефтели домашние",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 50,
+    "total_minutes": 50,
+    "ingredients": [
+     {
+      "raw": "Фарш, 500 г",
+      "name": "Фарш",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Рис, 50 г",
+      "name": "Рис",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 штука",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 50 г",
+      "name": "Пшеничная мука",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 20 мл",
+      "name": "Растительное масло",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 1 стакан",
+      "name": "Вода",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Томатная паста , 2 столовые ложки",
+      "name": "Томатная паста",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 0.5 чайных ложек",
+      "name": "Сахар",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Черный душистый перец, по вкусу",
+      "name": "Черный душистый перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Зелень, по вкусу",
+      "name": "Зелень",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying",
+     "stewing"
+    ],
+    "topic_id": "tefteli"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/tefteli-domashnie-192437",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:35:54Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-334626e219a7",
+   "slug": "lenivye-vareniki",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:13Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Ленивые вареники из творога",
+    "slug": "lenivye-vareniki",
+    "seo_title": "Ленивые вареники из творога: классический рецепт",
+    "seo_description": "Ленивые вареники из творога с яйцом, сахаром и мукой: тесто колбаской, нарезка кубиками, варка партиями минуту после всплытия.",
+    "intro": "Ленивые вареники — быстрый завтрак из творога, яйца и пары ложек муки. Творог можно не протирать, а варить вареники нужно небольшими партиями, иначе они слипнутся.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Творог"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Куриное яйцо"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Выложите творог в миску — протирать его не нужно, даже зернистый. Вбейте яйцо, добавьте сахар и соль и перемешайте до гладкой массы.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Подсыпайте муку по ложке и каждый раз перемешивайте, пока тесто не загустеет и не начнёт собираться комом в центре миски.",
+      "source_steps": [
+       2
+      ],
+      "readiness_cue": "Тесто отходит от стенок и держит форму."
+     },
+     {
+      "text": "Подпылите стол мукой, возьмите часть теста, обваляйте и раскатайте жгут толщиной 2-3 см.",
+      "source_steps": [
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Нарежьте жгут на небольшие кусочки и слегка сожмите каждый пальцами с двух сторон.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Доведите до кипения подсоленную воду в небольшой кастрюле и опустите первую партию — не все сразу, чтобы им было свободно.",
+      "source_steps": [
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Помешайте, чтобы вареники не легли на дно. Когда всплывут, варите ещё около минуты, не дольше, и выньте шумовкой.",
+      "source_steps": [
+       9
+      ],
+      "readiness_cue": "Вареники всплыли и чуть увеличились в размере."
+     },
+     {
+      "text": "Тут же варите следующую партию так же. Подавайте сразу, горячими, со сметаной или сливочным маслом.",
+      "source_steps": [
+       10
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Варите вареники порциями: если бросить все сразу, им будет тесно и они слипнутся. После всплытия варите не дольше минуты — иначе могут развалиться.",
+      "verified": false,
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "substitutions": [
+     {
+      "from_index": 2,
+      "to": "сахарозаменитель",
+      "note": "Источник прямо допускает сахарозаменитель вместо сахара.",
+      "verified": false,
+      "source_steps": [
+       1
+      ]
+     }
+    ],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tvorog",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Ленивые вареники классические",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": 25,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Творог, 250 г",
+      "name": "Творог",
+      "quantity": 250.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 3 столовые ложки",
+      "name": "Пшеничная мука",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 2 столовые ложки",
+      "name": "Сахар",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "boiling"
+    ],
+    "topic_id": "lenivye-vareniki"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/lenivye-vareniki-klassicheskie-192870",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:42Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-3a0282bb1a67",
+   "slug": "tykvennyj-sup-pyure",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:20Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Тыквенный суп-пюре с плавленым сыром",
+    "slug": "tykvennyj-sup-pyure",
+    "seo_title": "Тыквенный суп-пюре с картофелем и плавленым сыром",
+    "seo_description": "Суп-пюре из тыквы, картофеля, моркови и лука с куркумой и плавлеными сырками. Подаётся с семечками, сливками и сухариками.",
+    "intro": "Яркий осенний суп-пюре: овощи сначала обжариваются в кастрюле, затем варятся с куркумой, а плавленые сырки делают текстуру сливочной. Сливки, семечки и сухарики добавляются уже в тарелке.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Тыква"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Плавленые сырки"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Смесь семечек"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Сливки 30%"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сухарики"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Куркума"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Подготовьте продукты: тыкву и картофель очистите и нарежьте кубиками, лук и морковь тоже очистите и порежьте.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     {
+      "text": "В кастрюле с растительным маслом обжарьте лук, затем добавьте морковь и продолжайте жарить.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Положите картофель и готовьте до полуготовности, затем добавьте тыкву, перемешайте и доведите её до полумягкого состояния.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Посолите, добавьте чеснок, перемешайте, влейте воду и всыпьте куркуму.",
+      "source_steps": [
+       10,
+       11,
+       12,
+       13,
+       14
+      ]
+     },
+     {
+      "text": "Нарежьте сырки кубиками, опустите в готовый суп и проварите несколько минут, пока они почти не растворятся.",
+      "source_steps": [
+       15,
+       16,
+       17
+      ]
+     },
+     {
+      "text": "Пробейте суп блендером до полной однородности. Разлейте по тарелкам и добавьте семечки, сливки и сухарики.",
+      "source_steps": [
+       18,
+       19,
+       20
+      ],
+      "readiness_cue": "В супе не осталось кусочков, он гладкий и густой."
+     }
+    ],
+    "tips": [
+     {
+      "text": "Семечки, сливки и сухарики по источнику добавляют в тарелку при подаче.",
+      "verified": false,
+      "source_steps": [
+       20
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "tykva",
+     "varka"
+    ]
+   },
+   "facts": {
+    "title": "Тыквенный суп-пюре",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Тыква, 500 г",
+      "name": "Тыква",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Картофель, 4 штуки",
+      "name": "Картофель",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 штука",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 100 мл",
+      "name": "Растительное масло",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Плавленый сырок, 2 штуки",
+      "name": "Плавленый сырок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Смесь семечек, 2 столовые ложки",
+      "name": "Смесь семечек",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливки 30%-ные, 100 мл",
+      "name": "Сливки 30%-ные",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сухарики, 100 г",
+      "name": "Сухарики",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 2 стакана",
+      "name": "Вода",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куркума, 1 чайная ложка",
+      "name": "Куркума",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "blender",
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "tykvennyj-sup-pyure"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/tykvennyy-sup-pyure-191131",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:47Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-4b788c4aa5fb",
+   "slug": "mintaj-v-slivkah",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:14Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Минтай в сливках на сковороде",
+    "slug": "mintaj-v-slivkah",
+    "seo_title": "Минтай на сковороде, тушённый в сливках с луком",
+    "seo_description": "Порционные куски минтая обжаривают на смеси масел с луком, заливают горячими сливками и томят под крышкой 20 минут. Подают с укропом.",
+    "intro": "Нежная рыба на ужин за сорок минут: минтай коротко обжаривают с луком, затем тушат в сливках на самом слабом огне. Укроп добавляют при подаче.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Минтай"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сливки"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Молотый душистый перец"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Разморозьте рыбу, удалите плавники и внутренности, нарежьте порциями, обсушите и натрите солью и перцем.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Лук порежьте полукольцами, укроп измельчите.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Разогрейте на сковороде растительное и сливочное масло и за несколько минут подрумяньте лук.",
+      "source_steps": [
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Положите рыбу и подержите на огне пару минут с каждой стороны.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Влейте горячие сливки, убавьте огонь до минимума, накройте и томите 20 минут. Подавайте, посыпав укропом.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ],
+      "readiness_cue": "Мякоть непрозрачная и легко отделяется от кости."
+     }
+    ],
+    "tips": [
+     {
+      "text": "Сливки по источнику вливают горячими.",
+      "verified": false,
+      "source_steps": [
+       7
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "ryba",
+     "na-skovorode",
+     "tushenie"
+    ]
+   },
+   "facts": {
+    "title": "Минтай на сковороде",
+    "servings": 2,
+    "servings_raw": "2",
+    "prep_minutes": null,
+    "cook_minutes": 40,
+    "total_minutes": 40,
+    "ingredients": [
+     {
+      "raw": "Минтай, 700 г",
+      "name": "Минтай",
+      "quantity": 700.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 штука",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 20 мл",
+      "name": "Растительное масло",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 30 г",
+      "name": "Сливочное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливки, 150 мл",
+      "name": "Сливки",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 1 пучок",
+      "name": "Укроп",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "bunch",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 по вкусу",
+      "name": "Соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     },
+     {
+      "raw": "Молотый душистый перец, 1 по вкусу",
+      "name": "Молотый душистый перец",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "steaming",
+     "stewing"
+    ],
+    "topic_id": "minataj"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/mintay-na-skovorode-192801",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:36:16Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-dc8abf6706fd",
+   "slug": "shakshuka-s-bekonom",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:16Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Шакшука-скрэмбл с беконом",
+    "slug": "shakshuka-s-bekonom",
+    "seo_title": "Шакшука с беконом и жареным яйцом на завтрак",
+    "seo_description": "Помидоры с луком на жире от бекона, взбитое яйцо в овощной основе и жареное яйцо сверху: сытный завтрак на одну порцию.",
+    "intro": "Нечто среднее между шакшукой и скрэмблом: томаты с луком томятся на жире от бекона, в них вмешивается взбитое яйцо, а сверху ложится второе — жареное. Порция на одного.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Бекон"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Помидор"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Очистите небольшую луковицу и нарежьте её мелко.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "На раскалённой сухой сковороде обжарьте ломтики бекона — переверните их почти сразу, через 10-20 секунд, как только низ потемнеет, — и переложите на тарелку.",
+      "source_steps": [
+       1,
+       2
+      ]
+     },
+     {
+      "text": "В оставшемся жире слегка подрумяньте лук, затем добавьте мелко нарезанный помидор.",
+      "source_steps": [
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Одно яйцо разбейте в глубокую тарелку, посолите и взбейте вилкой.",
+      "source_steps": [
+       5,
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Томите помидоры с луком, разминая крупные кусочки лопаткой, пока масса не станет похожа на густую кашицу и почти вся жидкость не уйдёт. Посолите. Если сока слишком много, можно добавить немного муки и перемешать.",
+      "source_steps": [
+       8,
+       9
+      ],
+      "readiness_cue": "На дне сковороды не остаётся жидкости."
+     },
+     {
+      "text": "Влейте взбитое яйцо и сразу вмешайте его в овощи, не переставая помешивать, пока смесь не загустеет.",
+      "source_steps": [
+       10
+      ]
+     },
+     {
+      "text": "Во второй сковороде пожарьте оставшееся яйцо. Выложите шакшуку на тарелку, сверху — жареное яйцо, рядом — бекон.",
+      "source_steps": [
+       11,
+       12
+      ]
+     }
+    ],
+    "tips": [
+     {
+      "text": "Если в помидорах с луком много влаги, источник советует добавить половину или целую ложку муки — она вберёт лишнее.",
+      "verified": false,
+      "source_steps": [
+       9
+      ]
+     }
+    ],
+    "substitutions": [],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "yajca",
+     "na-skovorode"
+    ]
+   },
+   "facts": {
+    "title": "Шакшука-яичница с беконом",
+    "servings": 1,
+    "servings_raw": "1",
+    "prep_minutes": null,
+    "cook_minutes": 12,
+    "total_minutes": 12,
+    "ingredients": [
+     {
+      "raw": "Бекон, 3 штуки",
+      "name": "Бекон",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 2 штуки",
+      "name": "Куриное яйцо",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидоры, 1 штука",
+      "name": "Помидоры",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, для жарки",
+      "name": "Растительное масло",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "для жарки"
+     },
+     {
+      "raw": "Репчатый лук, 1 головка",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "steaming"
+    ],
+    "topic_id": "shakshuka"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/shakshuka-yaichnica-s-bekonom-193021",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:21Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-e8ccd8bca77b",
+   "slug": "grechka-po-kupecheski",
+   "version": 2,
+   "published_at": "2026-10-11T22:00:08Z",
+   "updated_at": "2026-10-13T14:59:12Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "editorial_revision",
+   "draft": {
+    "title": "Гречка по-купечески с мясом и грибами",
+    "slug": "grechka-po-kupecheski",
+    "seo_title": "Гречка по-купечески с мясом и шампиньонами",
+    "seo_description": "Гречка, тушённая в одной сковороде с мясом, шампиньонами, луком, морковью и томатной пастой, с чесноком. Шесть порций.",
+    "intro": "Сытное блюдо в одной сковороде: сначала обжариваются овощи с грибами, затем мясо, после чего всё тушится вместе с томатной пастой, а гречка доходит прямо в соусе.",
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Гречневая крупа"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Мясо"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Шампиньоны"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Лук"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Чёрный молотый перец"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Приправы"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Томатная паста"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Вода"
+     }
+    ],
+    "steps": [
+     {
+      "text": "Нарежьте мясо небольшими кусочками, лук — мелким кубиком, шампиньоны — на четыре части, морковь натрите крупно.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "В горячей сковороде с маслом обжарьте лук, морковь и грибы 3-5 минут и снимите с огня.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "На той же сковороде доведите мясо до готовности, подливая воду, если оно начинает пригорать. Посолите, поперчите и добавьте приправы.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Верните к мясу овощи с грибами, добавьте томатную пасту, плесните воды и тушите 7-10 минут. Выдавите зубчик чеснока.",
+      "source_steps": [
+       7,
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Всыпьте тщательно промытую гречку, долейте воды до краёв сковороды и тушите, пока крупа не станет мягкой.",
+      "source_steps": [
+       10,
+       11,
+       12
+      ],
+      "readiness_cue": "Вода впиталась, крупинки целые и мягкие."
+     }
+    ],
+    "tips": [],
+    "substitutions": [],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "grechka",
+     "griby",
+     "tushenie"
+    ]
+   },
+   "facts": {
+    "title": "Гречка по-купечески",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Гречневая крупа, 1 стакан",
+      "name": "Гречневая крупа",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мясо, 400 г",
+      "name": "Мясо",
+      "quantity": 400.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Шампиньоны, 300 г",
+      "name": "Шампиньоны",
+      "quantity": 300.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 1 штука",
+      "name": "Лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Приправы, по вкусу",
+      "name": "Приправы",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Чеснок, 1 зубчик",
+      "name": "Чеснок",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Томатная паста , 1 столовая ложка",
+      "name": "Томатная паста",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 500 мл",
+      "name": "Вода",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "stewing"
+    ],
+    "topic_id": "grechka-po-kupecheski"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/grechka-po-kupecheski-191379",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:27Z"
+   },
+   "media": []
+  }
+ ]
+}

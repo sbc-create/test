@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{% set full_title = meta.title ~ (site.cfg.seo.title_suffix if meta.page_type != 'home' else '') %}
+<title>{{ full_title if full_title|length <= 70 else meta.title }}</title>
+<meta name="description" content="{{ meta.description }}">
+<meta name="robots" content="{{ meta.robots(site) }}">
+<meta name="site-factory-variant-id" content="{{ site.cfg.variant_id }}">
+<meta name="site-factory-variant-version" content="{{ site.cfg.variant_version }}">
+{% if meta.canonical %}<link rel="canonical" href="{{ meta.canonical }}">
+{% endif %}
+{% if meta.prev %}<link rel="prev" href="{{ meta.prev }}">
+{% endif %}
+{% if meta.next %}<link rel="next" href="{{ meta.next }}">
+{% endif %}
+<meta property="og:title" content="{{ meta.title }}">
+<meta property="og:description" content="{{ meta.description }}">
+<meta property="og:type" content="{{ 'article' if meta.page_type == 'recipe' else 'website' }}">
+{% if meta.canonical %}<meta property="og:url" content="{{ meta.canonical }}">
+{% endif %}
+<meta name="theme-color" content="#f7efe3">
+<link rel="icon" href="{{ asset('img/favicon.svg') }}" type="image/svg+xml">
+<link rel="preload" href="/static/fonts/golos-text-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/static/fonts/lora-cyrillic-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ asset('css/party.css') }}">
+{% for ld in meta.jsonld_html() %}
+<script type="application/ld+json">{{ ld | safe }}</script>
+{% endfor %}
+<script src="{{ asset('js/party.js') }}" defer></script>
+</head>
+<body data-ns="{{ site.cfg.storage_namespace }}" class="pt-{{ meta.page_type }}">
+<a class="skip" href="#main">К содержимому</a>
+<header class="masthead">
+  <div class="masthead__row wrap">
+    <a class="brand" href="/" aria-label="Будни на кухне — на главную">
+      <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="15" class="brand__plate"/><path d="M10 9v7a3 3 0 0 0 6 0V9M13 9v14M21 9c-2 2-2 6 0 8v6" class="brand__tools"/></svg>
+      <span class="brand__name">Будни <i>на&nbsp;кухне</i></span>
+    </a>
+    {% if meta.page_type not in ('home', 'search', '404') %}
+    <form class="search search--head" action="/poisk/" method="get" role="search">
+      <label for="qh" class="sr">Найти рецепт</label>
+      <input id="qh" name="q" type="search" placeholder="Блюдо или продукт" autocomplete="off">
+      <button type="submit" aria-label="Найти"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg></button>
+    </form>
+    {% endif %}
+    <nav class="tools" aria-label="Инструменты">
+      <a href="/na-kompaniyu/" class="tool" data-p-link><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="9" r="3"/><circle cx="16" cy="9" r="3"/><path d="M3 19c1-3 3-4 5-4s4 1 5 4M11 19c1-3 3-4 5-4s4 1 5 4"/></svg><span>На компанию</span></a>
+      <a href="/iz-holodilnika/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></svg><span>Что есть дома</span></a>
+      <a href="/poisk/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg><span>Поиск</span></a>
+      <a href="/izbrannoe/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span>Избранное</span><b class="count" data-fav-count hidden></b></a>
+      <a href="/spisok-pokupok/" class="tool"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h14M5 12h14M5 18h9"/></svg><span>Покупки</span><b class="count" data-list-count hidden></b></a>
+    </nav>
+  </div>
+  <nav class="sections wrap" aria-label="Разделы">
+    <a href="/recepty/"{% if meta.canonical and meta.canonical.endswith('/recepty/') %} aria-current="page"{% endif %}>Все</a>
+    {% for key, (label, _) in CATEGORIES.items() if site.category(key) %}
+    <a href="/recepty/{{ key }}/"{% if meta.canonical and ('/recepty/' ~ key ~ '/') in meta.canonical %} aria-current="page"{% endif %}><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="24" height="18">{{ label }}</a>
+    {% endfor %}
+    <a href="/podborki/"{% if meta.canonical and '/podborki/' in meta.canonical %} aria-current="page"{% endif %}>Подборки</a>
+    <a href="/sovety/"{% if meta.canonical and '/sovety/' in meta.canonical %} aria-current="page"{% endif %}>Советы</a>
+  </nav>
+</header>
+{% if meta.breadcrumbs and meta.breadcrumbs|length > 1 %}
+<nav class="crumbs wrap" aria-label="Хлебные крошки"><ol>
+  {% for name, path in meta.breadcrumbs %}
+  <li>{% if loop.last %}<span aria-current="page">{{ name }}</span>{% else %}<a href="{{ path }}">{{ name }}</a>{% endif %}</li>
+  {% endfor %}
+</ol></nav>
+{% endif %}
+<main id="main" class="wrap">
+{% block main %}{% endblock %}
+</main>
+<footer class="foot">
+  <div class="wrap foot__grid">
+    <div class="foot__about">
+      <p class="foot__brand">Будни на кухне</p>
+      <p>Простые домашние рецепты на каждый день: понятные шаги, точные количества и пересчёт порций.</p>
+    </div>
+    <nav aria-label="Рецепты по разделам">
+      <h2 class="foot__h">Рецепты</h2>
+      <ul>{% for key, (label, _) in CATEGORIES.items() if site.category(key) %}<li><a href="/recepty/{{ key }}/">{{ label }}</a></li>{% endfor %}</ul>
+    </nav>
+    <nav aria-label="Как найти блюдо">
+      <h2 class="foot__h">Подобрать</h2>
+      <ul><li><a href="/podborki/">Подборки</a></li><li><a href="/iz-holodilnika/">Что есть дома</a></li><li><a href="/na-kompaniyu/">На компанию</a></li><li><a href="/sovety/">Советы</a></li></ul>
+    </nav>
+    <nav aria-label="О сайте">
+      <h2 class="foot__h">О сайте</h2>
+      <ul><li><a href="/o-proekte/">О проекте</a></li><li><a href="/o-proekte/#istochniki">Источники и правила</a></li><li><a href="/konfidencialnost/">Конфиденциальность</a></li></ul>
+    </nav>
+  </div>
+  <p class="wrap foot__legal">© {{ year }} «Будни на кухне». Рецепты составлены по открытым источникам — ссылка на источник есть на странице каждого рецепта.</p>
+</footer>
+</body>
+</html>

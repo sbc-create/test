@@ -1,0 +1,13 @@
+# Настройки ruff только для шаблона food-daily: наследует корневой pyproject.toml.
+# Длина строки 120 — русские сообщения и SQL читаются хуже при переносе на 100;
+# E501 снят лишь там, где строки — это встроенный HTML/JS/SQL (перенос ломает разметку).
+extend = "../../pyproject.toml"
+line-length = 120
+
+[lint.per-file-ignores]
+"fooddaily/editor_web.py" = ["E501"]
+"fooddaily/qa_browser.py" = ["E501"]
+"fooddaily/ux_probe.py" = ["E501"]
+"fooddaily/store.py" = ["E501"]
+"fooddaily/build.py" = ["E501"]
+"qa/viewports.py" = ["E501"]

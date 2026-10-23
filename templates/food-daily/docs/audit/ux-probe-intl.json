@@ -1,0 +1,155 @@
+{
+ "at": "2026-10-11T22:26:35Z",
+ "mode": "js_off_same_host_css_only",
+ "hosts": {
+  "bbcgoodfood": {
+   "home": {
+    "url": "https://www.bbcgoodfood.com/recipes",
+    "status": 200,
+    "load_s": 0.42,
+    "html_kb": 617,
+    "ad_markers": 64,
+    "video_embeds": 0,
+    "jsonld_types": [
+     "BreadcrumbList",
+     "ImageObject",
+     "ListItem",
+     "Organization",
+     "WebPage"
+    ],
+    "doc_height": 10877,
+    "h1": null,
+    "y_ingredients": null,
+    "y_steps": null,
+    "links": 252,
+    "forms_search": 1,
+    "servings_controls": 0,
+    "nav_links": 153,
+    "breadcrumbs_visible": true
+   },
+   "recipe1": {
+    "url": "https://www.bbcgoodfood.com/recipes/sticky-sausage-traybake",
+    "status": 200,
+    "load_s": 0.33,
+    "html_kb": 530,
+    "ad_markers": 47,
+    "video_embeds": 0,
+    "jsonld_types": [
+     "AggregateRating",
+     "BreadcrumbList",
+     "HowToStep",
+     "ImageObject",
+     "ListItem",
+     "NutritionInformation",
+     "Organization",
+     "Person",
+     "Recipe",
+     "WebPage",
+     "WebPageElement"
+    ],
+    "doc_height": 6550,
+    "h1": "Sticky sausage traybake",
+    "y_ingredients": 1677,
+    "y_steps": 2309,
+    "links": 218,
+    "forms_search": 1,
+    "servings_controls": 0,
+    "nav_links": 154,
+    "breadcrumbs_visible": true
+   },
+   "recipe2": {
+    "url": "https://www.bbcgoodfood.com/recipes/sticky-soy-ginger-fried-rice",
+    "status": 200,
+    "load_s": 0.3,
+    "html_kb": 554,
+    "ad_markers": 47,
+    "video_embeds": 0,
+    "jsonld_types": [
+     "BreadcrumbList",
+     "HowToStep",
+     "ImageObject",
+     "ListItem",
+     "NutritionInformation",
+     "Organization",
+     "Person",
+     "Recipe",
+     "WebPage",
+     "WebPageElement"
+    ],
+    "doc_height": 6938,
+    "h1": "Sticky soy & ginger fried rice",
+    "y_ingredients": 1533,
+    "y_steps": 2471,
+    "links": 221,
+    "forms_search": 1,
+    "servings_controls": 0,
+    "nav_links": 154,
+    "breadcrumbs_visible": true
+   },
+   "recipe3": {
+    "url": "https://www.bbcgoodfood.com/recipes/crispy-beef-noodle-stir-fry",
+    "status": 200,
+    "load_s": 0.29,
+    "html_kb": 555,
+    "ad_markers": 47,
+    "video_embeds": 0,
+    "jsonld_types": [
+     "BreadcrumbList",
+     "HowToStep",
+     "ImageObject",
+     "ListItem",
+     "NutritionInformation",
+     "Organization",
+     "Person",
+     "Recipe",
+     "WebPage",
+     "WebPageElement"
+    ],
+    "doc_height": 7002,
+    "h1": "Crispy beef noodle stir-fry",
+    "y_ingredients": 1505,
+    "y_steps": 2447,
+    "links": 217,
+    "forms_search": 1,
+    "servings_controls": 0,
+    "nav_links": 154,
+    "breadcrumbs_visible": true
+   },
+   "_requests": {
+    "blocked": 97,
+    "loaded": 20
+   }
+  },
+  "seriouseats": {
+   "home": {
+    "url": "https://www.seriouseats.com/",
+    "status": 200,
+    "load_s": 0.82,
+    "html_kb": 508,
+    "ad_markers": 415,
+    "video_embeds": 0,
+    "jsonld_types": [
+     "ImageObject",
+     "Organization",
+     "PostalAddress",
+     "SearchAction",
+     "WebPage",
+     "Webpage"
+    ],
+    "doc_height": 9324,
+    "h1": null,
+    "y_ingredients": 8942,
+    "y_steps": null,
+    "links": 211,
+    "forms_search": 2,
+    "servings_controls": 0,
+    "nav_links": 146,
+    "breadcrumbs_visible": false
+   },
+   "_requests": {
+    "blocked": 45,
+    "loaded": 2
+   }
+  }
+ }
+}

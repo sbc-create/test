@@ -1,0 +1,6 @@
+{
+  "name": "food-daily-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона food-daily (axe-core); ставятся в templates/food-daily/qa/node_modules",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

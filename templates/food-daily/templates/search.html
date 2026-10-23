@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<header class="page-head">
+  <h1>Поиск рецептов</h1>
+  <p class="page-head__lead{% if q %} page-head__lead--q{% endif %}">По названию блюда и продуктам. «ё» и «е» не различаются.</p>
+</header>
+<form class="search search--page" action="/poisk/" method="get" role="search">
+  <label for="q" class="sr">Блюдо или продукты</label>
+  <input id="q" name="q" type="search" value="{{ q }}" placeholder="Тыква, сырники" autocomplete="off" autofocus>
+  {% if razdel %}<input type="hidden" name="razdel" value="{{ razdel }}">{% endif %}
+  <button type="submit">Найти</button>
+</form>
+{% if q %}
+  {% if found and sections|length > 1 %}
+  <nav class="refine" aria-label="Уточнить по разделу">
+    <span class="refine__label">Раздел:</span>
+    <a href="/poisk/?q={{ qs }}"{% if not razdel %} aria-current="true"{% endif %}>Все <span class="refine__n">{{ found|length }}</span></a>
+    {% for key, label, n in sections %}<a href="/poisk/?q={{ qs }}&amp;razdel={{ key }}"{% if razdel == key %} aria-current="true"{% endif %}>{{ label }} <span class="refine__n">{{ n }}</span></a>{% endfor %}
+  </nav>
+  {% endif %}
+  {% if items %}
+  <p class="result-count">Найдено: {{ items|length }}{% if razdel %} в разделе «{{ CATEGORIES[razdel][0] }}»{% endif %}</p>
+  {{ grid(items, 'h2') }}
+  {% elif found %}
+  <div class="empty">
+    <h2>В разделе «{{ CATEGORIES[razdel][0] }}» по запросу «{{ q }}» ничего нет</h2>
+    <p><a href="/poisk/?q={{ qs }}">Показать во всех разделах — {{ found|length }} {{ plural(found|length, 'рецепт', 'рецепта', 'рецептов') }}</a></p>
+  </div>
+  {% else %}
+  <div class="empty">
+    <h2>По запросу «{{ q }}» ничего нет</h2>
+    <p>Проверьте написание или поищите по одному продукту — например, «курица» или «творог». Можно выбрать по продуктам в разделе <a href="/iz-holodilnika/">«Что есть дома»</a>, посмотреть <a href="/recepty/">все рецепты</a> или <a href="/podborki/">подборки</a>.</p>
+  </div>
+  {% endif %}
+{% else %}
+<h2>Или выберите раздел</h2>
+<ul class="sections-grid">
+  {% for key, (label, _) in CATEGORIES.items() if site.category(key) %}
+  <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ site.category(key)|length }}</span></a></li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endblock %}

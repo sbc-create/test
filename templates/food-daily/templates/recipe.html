@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid, picture %}
+{% block main %}
+<article class="recipe" data-recipe="{{ r.slug }}" data-servings="{{ r.yield_n or 0 }}">
+  <header class="recipe__head">
+    <p class="recipe__kicker"><a href="/recepty/{{ r.category }}/">{{ r.category_label }}</a></p>
+    <h1 class="recipe__title">{{ r.title }}</h1>
+    <p class="recipe__intro">{{ r.d.intro }}</p>
+    <div class="recipe__panel">
+    <dl class="facts">
+      {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
+      {% if r.yield_n %}<div><dt>Порции</dt><dd>{{ r.yield_n }}</dd></div>{% endif %}
+      {% if r.nutrition %}<div class="facts__kcal"><dt>Калорийность</dt><dd>≈&nbsp;{{ r.nutrition.kcal }} <small>ккал на порцию</small></dd></div>{% else %}<div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>{% endif %}
+    </dl>
+    <div class="recipe__bar">
+    <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Ингредиенты ({{ r.ingredients|length }})</a></nav>
+    <div class="recipe__actions">
+      <button class="btn btn--ghost fav fav--wide" type="button" data-fav="{{ r.slug }}" aria-pressed="false" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg><span data-fav-label>В избранное</span></button>
+      <button class="btn btn--cook" type="button" data-cook-open hidden>Режим готовки</button>
+      <button class="btn btn--ghost btn--print" type="button" data-print hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg><span>Печать</span></button>
+    </div>
+    </div>
+    </div>
+    {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
+    {% set links = site.tag_links(r) %}
+    {% if links %}
+    <ul class="tags" aria-label="Темы рецепта">
+      {% for href, label in links %}<li><a href="{{ href }}">{{ label }}</a></li>{% endfor %}
+    </ul>
+    {% endif %}
+  </header>
+
+  <div class="recipe__body">
+    <section class="ingredients" id="ingredienty" aria-labelledby="ing-h">
+      <div class="ingredients__head">
+        <h2 id="ing-h">Ингредиенты</h2>
+        <div class="servings" data-servings-control hidden>
+          <button type="button" data-step="-1" aria-label="{{ 'Меньше порций' if r.yield_n else 'Меньше' }}">−</button>
+          <output aria-live="polite"><b data-servings-out>{{ r.yield_n or '×1' }}</b> <span data-servings-word>{{ 'порц.' if r.yield_n else 'от рецепта' }}</span></output>
+          <button type="button" data-step="1" aria-label="{{ 'Больше порций' if r.yield_n else 'Больше' }}">+</button>
+        </div>
+        <p class="servings-static">{% if r.yield_n %}На {{ r.yield_n }} порц.{% else %}Выход в рецепте не указан{% endif %}</p>
+      </div>
+      <ul class="ing-list">
+        {% for i, group in r.ingredients %}
+        <li class="ing" data-qty="{{ i.quantity if i.quantity is not none else '' }}" data-qmax="{{ i.quantity_max if i.quantity_max is not none else '' }}" data-unit="{{ i.unit_label }}" data-scalable="{{ '1' if i.scalable else '0' }}" data-name="{{ i.name }}">
+          <label><input type="checkbox" class="ing__check"><span class="ing__name">{{ i.name }}</span></label>
+          <span class="ing__amount">{{ i.amount }}</span>
+        </li>
+        {% endfor %}
+      </ul>
+      {% if r.nutrition %}<p class="kcal-line">Всего в блюде ≈&nbsp;<b data-kcal-total="{{ r.nutrition.kcal_total }}">{{ r.nutrition.kcal_total }}</b>&nbsp;ккал, на порцию ≈&nbsp;{{ r.nutrition.kcal }}&nbsp;ккал</p>{% endif %}
+      <p class="note">При пересчёте меняются только количества продуктов{% if r.nutrition %} и калорийность всего блюда{% endif %}. Время и температура остаются как в рецепте.</p>
+      <button class="btn btn--ghost" type="button" data-add-list hidden>Добавить в список покупок</button>
+    </section>
+
+    <section class="steps" id="prigotovlenie" aria-labelledby="steps-h">
+      <h2 id="steps-h">Как готовить</h2>
+      <ol class="step-list">
+        {% for s in r.d.steps %}
+        <li class="step" id="shag-{{ loop.index }}">
+          <p>{{ s.text }}</p>
+          {% if s.get('readiness_cue') %}<p class="cue"><b>Как понять, что готово:</b> {{ s.readiness_cue }}</p>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+
+      {% if r.tips %}
+      <aside class="tips" aria-labelledby="tips-h">
+        <h2 id="tips-h">Подсказки</h2>
+        <ul>{% for t in r.tips %}<li>{{ t.text }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if t.source_steps|length == 1 else 'шаги' }} {% for i in t.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
+      </aside>
+      {% endif %}
+      {% if r.substitutions %}
+      <aside class="subs" aria-labelledby="subs-h">
+        <h2 id="subs-h">Чем можно заменить</h2>
+        <ul>{% for name, s in r.substitutions %}<li><b>{{ name }}</b> → {{ s.to }}. {{ s.note }} <a class="src-step" href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">источник, {{ 'шаг' if s.source_steps|length == 1 else 'шаги' }} {% for i in s.source_steps %}{{ i + 1 }}{% if not loop.last %}, {% endif %}{% endfor %}</a></li>{% endfor %}</ul>
+        <p class="note">Замены, которые предлагает рецепт-источник.</p>
+      </aside>
+      {% endif %}
+    </section>
+  </div>
+
+  <footer class="provenance">
+    <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.
+      {% if r.nutrition %}<span class="provenance__kcal">Калорийность примерная: {{ r.nutrition.method|lower }}; данные — {{ r.nutrition.data_source }}.</span>{% endif %}
+      <span class="provenance__dates">Опубликовано {{ r.published_at|ru_date }}{% if r.updated_at[:10] != r.published_at[:10] %}, обновлено {{ r.updated_at|ru_date }}{% endif %}.</span></p>
+  </footer>
+
+  {% if r.related %}
+  <section class="block related" aria-labelledby="rel-h">
+    <h2 id="rel-h">Похожие рецепты</h2>
+    {{ grid(r.related) }}
+  </section>
+  {% endif %}
+
+  <div class="cook" data-cook hidden role="dialog" aria-modal="true" aria-labelledby="cook-title">
+    <div class="cook__bar"><p id="cook-title">{{ r.title }}</p><button type="button" data-cook-close>Закрыть</button></div>
+    <div class="cook__stage" aria-live="polite"><p class="cook__count" data-cook-count></p><p class="cook__text" data-cook-text></p><p class="cook__cue" data-cook-cue></p></div>
+    <div class="cook__nav"><button type="button" data-cook-prev>← Назад</button><button type="button" data-cook-next>Дальше →</button></div>
+  </div>
+</article>
+{% endblock %}

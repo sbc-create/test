@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block main %}
+<header class="page-head">
+  <h1>{{ heading }}</h1>
+  <p class="page-head__lead">Страница темы появляется, когда в ней хотя бы два рецепта.</p>
+</header>
+<ul class="tag-index">
+  {% for href, label, n, _ in rows %}<li><a href="{{ href }}"><span>{{ label }}</span><b>{{ n }}</b></a></li>{% endfor %}
+</ul>
+{% endblock %}
