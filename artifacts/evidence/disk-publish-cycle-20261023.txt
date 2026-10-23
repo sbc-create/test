@@ -1,0 +1,71 @@
+ЗАМЕР 23.10, только чтение. Почему диск заполняется снова и что из-за этого не выходит.
+
+диск: свободно 2.46 ГиБ из 203.3 (1.21 %)
+
+=== /srv/site-factory/repo/var/lords/daily-state/last-publish.json (изменён 2026-10-23 04:21:16Z)
+вместо отчёта в файле лежит traceback суточного прогона:
+
+Traceback (most recent call last):
+  File "/srv/site-factory/repo/automation/host/nova-catalog-publish.py", line 684, in <module>
+    sys.exit(main())
+  File "/srv/site-factory/repo/automation/host/nova-catalog-publish.py", line 653, in main
+    отчёт = выполнить(снимок_путь=a.snapshot, детали=a.detail_cache,
+  File "/srv/site-factory/repo/automation/host/nova-catalog-publish.py", line 397, in выполнить
+    return _выполнить(копии=копии, run_id=run_id, площадка=площадка, **остальное)
+  File "/srv/site-factory/repo/automation/host/nova-catalog-publish.py", line 595, in _выполнить
+    shutil.copy2(путь, копия)
+  File "/usr/lib/python3.10/shutil.py", line 434, in copy2
+    copyfile(src, dst, follow_symlinks=follow_symlinks)
+  File "/usr/lib/python3.10/shutil.py", line 267, in copyfile
+    _fastcopy_sendfile(fsrc, fdst)
+  File "/usr/lib/python3.10/shutil.py", line 156, in _fastcopy_sendfile
+    raise err from None
+  File "/usr/lib/python3.10/shutil.py", line 142, in _fastcopy_sendfile
+    sent = os.sendfile(outfd, infd, offset, blocksize)
+OSError: [Errno 28] No space left on device: '/srv/lords/.frontend/lords-06-details.json' -> '/srv/site-factory/repo/var/lords/publish-backups/lords-06-details.json.before.daily-20261023T033423Z'
+
+=== /srv/site-factory/repo/var/lords/publish-backups
+файлов 354, различных суточных прогонов 24, витрин 13, всего 15.71 ГиБ
+витрины: animedia-01, animedia-02, lords-01, lords-02, lords-03, lords-05, lords-06, lords-07, lords-08, lords-09, zona-01, zona-02, zona-03
+
+прогон (метка)                 файлов     ГиБ
+  sync-fleet                       4    0.21
+  rollout-zona-005                 2    0.06
+  rollout-animedia-02              1    0.00
+  rollout-004                      4    0.09
+  pub-e41a800ab3a3                 2    0.09
+  pub-e071f9279f83                 2    0.09
+  lordserial-fill                  2    0.03
+  idem-run2                        4    0.14
+  idem-run1                        4    0.14
+  daily-20261023T033423Z          14    0.52
+  daily-20261022T033207Z          26    1.24
+  daily-20261021T033026Z          26    1.23
+  daily-20261020T033143Z          26    1.22
+  daily-20261019T033213Z          26    1.21
+  daily-20261018T033326Z          26    1.20
+  daily-20261017T033459Z          26    1.19
+  daily-20261016T033001Z          26    1.18
+  daily-20261015T033211Z          26    1.18
+  daily-20261014T033257Z          26    1.17
+  daily-20261013T033428Z          26    1.16
+  daily-20261012T033307Z          26    1.15
+  daily-20261011T033124Z          26    1.15
+  canary-lords-005                 2    0.09
+  canary-animedia-01               1    0.00
+
+=== обрезанный файл — жертва ENOSPC этих же суток
+     2952164 Б  animedia-01-catalog.json.before.daily-20261023T033423Z
+    15081832 Б  animedia-01-details.json.before.daily-20261023T033423Z
+     2952164 Б  animedia-02-catalog.json.before.daily-20261023T033423Z
+    15081832 Б  animedia-02-details.json.before.daily-20261023T033423Z
+    21563047 Б  lords-01-catalog.json.before.daily-20261023T033423Z
+   127704494 Б  lords-01-details.json.before.daily-20261023T033423Z
+    21563047 Б  lords-02-catalog.json.before.daily-20261023T033423Z
+    93886697 Б  lords-02-details.json.before.daily-20261023T033423Z
+    21563047 Б  lords-03-catalog.json.before.daily-20261023T033423Z
+    93886697 Б  lords-03-details.json.before.daily-20261023T033423Z
+    21563047 Б  lords-05-catalog.json.before.daily-20261023T033423Z
+    93886697 Б  lords-05-details.json.before.daily-20261023T033423Z
+    21563047 Б  lords-06-catalog.json.before.daily-20261023T033423Z
+      122880 Б  lords-06-details.json.before.daily-20261023T033423Z
