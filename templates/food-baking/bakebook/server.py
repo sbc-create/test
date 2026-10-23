@@ -325,7 +325,7 @@ class App:
                 kind="group",
                 index=s.group_indexable(items),
             )
-            return 200, self.render("listing.html", meta, heading=label, items=items), {}
+            return 200, self.render("listing.html", meta, heading=label, items=items, kicker="Раздел"), {}
         m = re.fullmatch(r"/recepty/(?:page/(\d+)/)?", path)
         if m:
             n = int(m.group(1) or 1)
@@ -454,7 +454,7 @@ class App:
                 kind="tag",
                 index=len(items) >= 3,
             )
-            return 200, self.render("listing.html", meta, heading=TAGS[key], items=items), {}
+            return 200, self.render("listing.html", meta, heading=TAGS[key], items=items, kicker="Тема"), {}
         if path == "/poisk/":
             qq = g("q")[:120]
             meta = Meta(

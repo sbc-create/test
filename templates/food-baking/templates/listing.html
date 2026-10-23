@@ -1,8 +1,8 @@
 {% extends "base.html" %}
 {% from "_parts.html" import toc %}
 {% block main %}
-<p class="kicker">Тема</p>
+<p class="kicker">{{ kicker }}</p>
 <h1>{{ heading }}</h1>
-<p class="lead">{{ meta.description }}</p>
+<p class="lead">{{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }}. Температура духовки, время и форма — на странице каждого рецепта, подбор по температуре — <a href="/duhovka/">в разделе «По температуре»</a>.</p>
 {{ toc(items, 'h2') }}
 {% endblock %}
