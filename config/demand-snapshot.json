@@ -1,8 +1,8 @@
 {
  "schema_version": 1,
  "note": "Спрос по доменам из снимка Метрики. Поле `queries` пустое НЕ потому, что запросов нет, а потому что `popular_queries` в снимке не измерен: нужен доступ к Вебмастеру. Страница запросом не является.",
- "snapshot": "analytics-2026-10-22.json",
- "collected_at": "2026-10-22T05:05:29Z",
+ "snapshot": "cabinet-latest.json",
+ "collected_at": "2026-10-23T05:11:52Z",
  "window": {
   "date1": "7daysAgo",
   "date2": "yesterday"
@@ -13,63 +13,63 @@
    "domain": "yummyani.site",
    "site_id": "yummy-site",
    "counter_id": 111881037,
-   "visits": 57111,
-   "visitors": 50403,
-   "search_visits": 12885,
+   "visits": 37028,
+   "visitors": 30162,
+   "search_visits": 13913,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "yandex": 12883,
-    "google": 2
+    "yandex": 13910,
+    "google": 3
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 10605,
+   "top5_search_entries": 11451,
    "top5_share_of_search": 82.3,
    "search_landing_pages": [
     {
      "page": "/",
-     "visits": 4619
-    },
-    {
-     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
-     "visits": 2008
+     "visits": 5291
     },
     {
      "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3",
-     "visits": 1654
+     "visits": 1894
+    },
+    {
+     "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+     "visits": 1812
     },
     {
      "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5",
-     "visits": 1311
+     "visits": 1427
     },
     {
      "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/1",
-     "visits": 1013
+     "visits": 1027
     },
     {
      "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/2",
-     "visits": 424
+     "visits": 426
     },
     {
      "page": "/catalog/ongoing",
-     "visits": 213
-    },
-    {
-     "page": "/anime/ne-slishkom-li-ty-sladkaya-bog-soli-sato",
-     "visits": 107
-    },
-    {
-     "page": "/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/2",
-     "visits": 88
+     "visits": 221
     },
     {
      "page": "/anime/kiberpank-beguschie-po-krayu-2",
-     "visits": 84
+     "visits": 124
+    },
+    {
+     "page": "/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/2",
+     "visits": 107
+    },
+    {
+     "page": "/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/1",
+     "visits": 99
     }
    ],
-   "search_pages_total": 81,
-   "search_landing_covered": 89.4,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 81, сохранено 10",
+   "search_pages_total": 82,
+   "search_landing_covered": 89.3,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 82, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -77,66 +77,66 @@
    "domain": "yummyani7.site",
    "site_id": "yummy-07",
    "counter_id": 113109087,
-   "visits": 3860,
-   "visitors": 2534,
-   "search_visits": 3556,
+   "visits": 4026,
+   "visitors": 2639,
+   "search_visits": 3732,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "yandex": 3531,
-    "google": 14,
+    "yandex": 3706,
+    "google": 15,
     "прочие": 11
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {
     "bing_search": 11
    },
-   "top5_search_entries": 2404,
-   "top5_share_of_search": 67.6,
+   "top5_search_entries": 2482,
+   "top5_share_of_search": 66.5,
    "search_landing_pages": [
     {
      "page": "/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
-     "visits": 921
+     "visits": 947
     },
     {
      "page": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1",
-     "visits": 680
+     "visits": 742
     },
     {
      "page": "/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7",
-     "visits": 298
+     "visits": 297
     },
     {
      "page": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
-     "visits": 282
+     "visits": 270
     },
     {
      "page": "/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/3",
-     "visits": 223
-    },
-    {
-     "page": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1/episode/2",
-     "visits": 118
+     "visits": 226
     },
     {
      "page": "/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/4",
-     "visits": 111
+     "visits": 150
+    },
+    {
+     "page": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1/episode/2",
+     "visits": 112
     },
     {
      "page": "/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
-     "visits": 110
+     "visits": 101
     },
     {
      "page": "/anime/dazhe-u-studsoveta-est-kosyaki",
-     "visits": 64
+     "visits": 73
     },
     {
      "page": "/anime/ya-vlyubilsya-v-tebya-kogda-ty-bezhala-v-lunnoy-nochi",
-     "visits": 63
+     "visits": 59
     }
    ],
-   "search_pages_total": 90,
-   "search_landing_covered": 80.7,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 90, сохранено 10",
+   "search_pages_total": 92,
+   "search_landing_covered": 79.8,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 92, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -144,132 +144,68 @@
    "domain": "animedia.icu",
    "site_id": "animedia-01",
    "counter_id": 113288667,
-   "visits": 2671,
-   "visitors": 1953,
-   "search_visits": 2464,
+   "visits": 3116,
+   "visitors": 2152,
+   "search_visits": 2870,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "yandex": 2393,
-    "google": 68,
-    "прочие": 3
+    "yandex": 2804,
+    "google": 62,
+    "прочие": 4
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {
+    "bing_search": 2,
     "yahoo_search": 1,
-    "bing_search": 1,
     "duckduckgo": 1
    },
-   "top5_search_entries": 1648,
-   "top5_share_of_search": 66.9,
+   "top5_search_entries": 1916,
+   "top5_share_of_search": 66.8,
    "search_landing_pages": [
     {
      "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
-     "visits": 782
+     "visits": 844
     },
     {
      "page": "/title/ya-vstrechayus-s-temnym-prizyvatelem/",
-     "visits": 327
+     "visits": 434
     },
     {
      "page": "/catalog/",
-     "visits": 217
+     "visits": 263
     },
     {
      "page": "/title/nekromant-ya-katastrofa/",
-     "visits": 189
+     "visits": 217
     },
     {
      "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/",
-     "visits": 133
+     "visits": 158
     },
     {
      "page": "/title/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/",
-     "visits": 123
+     "visits": 158
     },
     {
      "page": "/title/poschadi-menya-velikiy-gospodin-3/season-3/episode-5/",
-     "visits": 112
+     "visits": 116
     },
     {
      "page": "/title/poschadi-menya-velikiy-gospodin-3/",
-     "visits": 76
+     "visits": 53
+    },
+    {
+     "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-2/",
+     "visits": 47
     },
     {
      "page": "/title/pozhiratel-zvezd/",
-     "visits": 55
-    },
-    {
-     "page": "/",
-     "visits": 27
+     "visits": 44
     }
    ],
-   "search_pages_total": 129,
-   "search_landing_covered": 82.8,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 129, сохранено 10",
-   "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
-  },
-  {
-   "domain": "lordserials22.info",
-   "site_id": "lords-05",
-   "counter_id": 113109083,
-   "visits": 1103,
-   "visitors": 642,
-   "search_visits": 931,
-   "search_visits_note": "traffic_sources: organic",
-   "search_engines": {
-    "google": 820,
-    "yandex": 111
-   },
-   "search_engines_note": "search_engines",
-   "search_engines_other": {},
-   "top5_search_entries": 170,
-   "top5_share_of_search": 18.3,
-   "search_landing_pages": [
-    {
-     "page": "/title/100-atletov-italiya/",
-     "visits": 62
-    },
-    {
-     "page": "/title/k-vostoku-ot-edema/",
-     "visits": 37
-    },
-    {
-     "page": "/title/master-omyur/",
-     "visits": 28
-    },
-    {
-     "page": "/title/bayki-i-ubiystvo/",
-     "visits": 25
-    },
-    {
-     "page": "/title/krov-i-pot/",
-     "visits": 18
-    },
-    {
-     "page": "/title/akademiya-minerva/",
-     "visits": 17
-    },
-    {
-     "page": "/title/syla-vozvraschenie-domoy-serial-2006-2008/",
-     "visits": 14
-    },
-    {
-     "page": "/title/100-atletov-meksika/",
-     "visits": 13
-    },
-    {
-     "page": "/title/100-atletov-italiya/season-1/episode-5/",
-     "visits": 12
-    },
-    {
-     "page": "/title/13-zhizney/",
-     "visits": 12
-    }
-   ],
-   "search_pages_total": 144,
-   "search_landing_covered": 25.6,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 144, сохранено 10",
+   "search_pages_total": 116,
+   "search_landing_covered": 81.3,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 116, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -277,68 +213,132 @@
    "domain": "zonafilm.cc",
    "site_id": "zona-02",
    "counter_id": 113110481,
-   "visits": 926,
-   "visitors": 690,
-   "search_visits": 715,
+   "visits": 1523,
+   "visitors": 1172,
+   "search_visits": 1236,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 598,
-    "прочие": 99,
-    "yandex": 18
+    "google": 910,
+    "yandex": 182,
+    "прочие": 144
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {
-    "bing_search": 73,
-    "duckduckgo": 22,
-    "yahoo_search": 4
+    "bing_search": 110,
+    "duckduckgo": 29,
+    "yahoo_search": 5
    },
-   "top5_search_entries": 390,
-   "top5_share_of_search": 54.5,
+   "top5_search_entries": 837,
+   "top5_share_of_search": 67.7,
    "search_landing_pages": [
     {
      "page": "/",
-     "visits": 303
+     "visits": 731
     },
     {
      "page": "/title/taynyy-dnevnik-veriti/",
-     "visits": 48
+     "visits": 54
     },
     {
-     "page": "/title/dnevniki-vampira/",
-     "visits": 15
-    },
-    {
-     "page": "/title/semeystvo-kardashyan/",
-     "visits": 12
-    },
-    {
-     "page": "/title/voennyy-povar-stanovitsya-legendoy/",
-     "visits": 12
-    },
-    {
-     "page": "/search/",
-     "visits": 11
+     "page": "/movies/",
+     "visits": 18
     },
     {
      "page": "/catalog/",
-     "visits": 10
+     "visits": 17
     },
     {
-     "page": "/title/chelovek-kotoryy-izmenil-vse-2011/",
-     "visits": 9
+     "page": "/title/dnevniki-vampira/",
+     "visits": 17
     },
     {
-     "page": "/title/ulichnyy-boec-bitva-rezhisserov/",
-     "visits": 9
+     "page": "/search/",
+     "visits": 16
     },
     {
      "page": "/title/mentalist/season-1/episode-3/",
-     "visits": 7
+     "visits": 10
+    },
+    {
+     "page": "/title/semeystvo-kardashyan/",
+     "visits": 10
+    },
+    {
+     "page": "/new/",
+     "visits": 8
+    },
+    {
+     "page": "/title/chelovek-kotoryy-izmenil-vse-2011/",
+     "visits": 8
     }
    ],
-   "search_pages_total": 129,
-   "search_landing_covered": 61.0,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 129, сохранено 10",
+   "search_pages_total": 109,
+   "search_landing_covered": 71.9,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 109, сохранено 10",
+   "queries": [],
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
+  },
+  {
+   "domain": "lordserials22.info",
+   "site_id": "lords-05",
+   "counter_id": 113109083,
+   "visits": 1168,
+   "visitors": 703,
+   "search_visits": 995,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 918,
+    "yandex": 77
+   },
+   "search_engines_note": "search_engines",
+   "search_engines_other": {},
+   "top5_search_entries": 170,
+   "top5_share_of_search": 17.1,
+   "search_landing_pages": [
+    {
+     "page": "/title/100-atletov-italiya/",
+     "visits": 71
+    },
+    {
+     "page": "/title/k-vostoku-ot-edema/",
+     "visits": 32
+    },
+    {
+     "page": "/title/bayki-i-ubiystvo/",
+     "visits": 26
+    },
+    {
+     "page": "/title/krov-i-pot/",
+     "visits": 21
+    },
+    {
+     "page": "/title/akademiya-minerva/",
+     "visits": 20
+    },
+    {
+     "page": "/title/master-omyur/",
+     "visits": 18
+    },
+    {
+     "page": "/title/polovina-materi/",
+     "visits": 17
+    },
+    {
+     "page": "/series/",
+     "visits": 15
+    },
+    {
+     "page": "/title/100-atletov-italiya/season-1/episode-1/",
+     "visits": 15
+    },
+    {
+     "page": "/title/100-atletov-italiya/season-1/episode-5/",
+     "visits": 14
+    }
+   ],
+   "search_pages_total": 143,
+   "search_landing_covered": 25.0,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 143, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -346,34 +346,34 @@
    "domain": "yummyani7.info",
    "site_id": "yummy-08",
    "counter_id": 113109089,
-   "visits": 886,
-   "visitors": 644,
-   "search_visits": 728,
+   "visits": 808,
+   "visitors": 560,
+   "search_visits": 669,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "yandex": 708,
+    "yandex": 649,
     "google": 20
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 436,
-   "top5_share_of_search": 59.9,
+   "top5_search_entries": 392,
+   "top5_share_of_search": 58.6,
    "search_landing_pages": [
     {
      "page": "/anime/dazhe-u-studsoveta-est-kosyaki",
-     "visits": 184
+     "visits": 164
     },
     {
      "page": "/anime/poschadi-menya-velikiy-gospodin-3",
-     "visits": 144
-    },
-    {
-     "page": "/anime/svadba-svetlyachkov/season/1/episode/1",
-     "visits": 45
+     "visits": 116
     },
     {
      "page": "/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/3",
-     "visits": 34
+     "visits": 44
+    },
+    {
+     "page": "/anime/svadba-svetlyachkov/season/1/episode/1",
+     "visits": 39
     },
     {
      "page": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
@@ -389,20 +389,20 @@
     },
     {
      "page": "/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/2",
-     "visits": 16
+     "visits": 15
     },
     {
      "page": "/anime/tokiyskie-mstiteli-bitva-treh-nebozhiteley",
-     "visits": 16
+     "visits": 15
     },
     {
-     "page": "/anime/ya-perevoplotilsya-v-goblina-voprosy-est",
-     "visits": 15
+     "page": "/",
+     "visits": 13
     }
    ],
-   "search_pages_total": 74,
-   "search_landing_covered": 73.4,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 74, сохранено 10",
+   "search_pages_total": 68,
+   "search_landing_covered": 72.6,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 68, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -410,63 +410,63 @@
    "domain": "zonafilm12.site",
    "site_id": "zona-03",
    "counter_id": 113109081,
-   "visits": 305,
-   "visitors": 214,
-   "search_visits": 199,
+   "visits": 280,
+   "visitors": 200,
+   "search_visits": 178,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "yandex": 141,
-    "google": 58
+    "yandex": 112,
+    "google": 66
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 144,
-   "top5_share_of_search": 72.4,
+   "top5_search_entries": 118,
+   "top5_share_of_search": 66.3,
    "search_landing_pages": [
     {
      "page": "/title/chuzhaya-zhizn/",
-     "visits": 113
+     "visits": 89
     },
     {
      "page": "/catalog/",
      "visits": 11
     },
     {
-     "page": "/title/chuzhaya-zhizn/season-1/episode-3/",
-     "visits": 7
-    },
-    {
-     "page": "/title/moya-skrytaya-pravda/",
-     "visits": 7
-    },
-    {
-     "page": "/title/chuzhaya-zhizn/season-1/episode-2/",
+     "page": "/movies/",
      "visits": 6
     },
     {
      "page": "/series/",
-     "visits": 4
+     "visits": 6
     },
     {
-     "page": "/movies/",
-     "visits": 3
+     "page": "/title/moya-skrytaya-pravda/",
+     "visits": 6
     },
     {
-     "page": "/search/",
-     "visits": 3
+     "page": "/title/chuzhaya-zhizn/season-1/episode-2/",
+     "visits": 5
+    },
+    {
+     "page": "/title/chuzhaya-zhizn/season-1/episode-3/",
+     "visits": 5
     },
     {
      "page": "/title/kak-zhit-na-zemle/",
-     "visits": 3
+     "visits": 5
     },
     {
-     "page": "/",
-     "visits": 2
+     "page": "/search/",
+     "visits": 4
+    },
+    {
+     "page": "/title/svadba-s-zolotoy-shpilkoy/",
+     "visits": 4
     }
    ],
-   "search_pages_total": 42,
-   "search_landing_covered": 79.9,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 42, сохранено 10",
+   "search_pages_total": 41,
+   "search_landing_covered": 79.2,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 41, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -474,12 +474,12 @@
    "domain": "yummyani.org",
    "site_id": "yummy-org",
    "counter_id": 111881038,
-   "visits": 249,
-   "visitors": 195,
-   "search_visits": 75,
+   "visits": 205,
+   "visitors": 160,
+   "search_visits": 46,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 71,
+    "google": 42,
     "yandex": 3,
     "прочие": 1
    },
@@ -487,28 +487,12 @@
    "search_engines_other": {
     "bing_search": 1
    },
-   "top5_search_entries": 43,
-   "top5_share_of_search": 57.3,
+   "top5_search_entries": 29,
+   "top5_share_of_search": 63.0,
    "search_landing_pages": [
     {
      "page": "/",
-     "visits": 22
-    },
-    {
-     "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
-     "visits": 13
-    },
-    {
-     "page": "/anime/nekromant-ya-katastrofa",
-     "visits": 3
-    },
-    {
-     "page": "/anime/rashititel-grobnits",
-     "visits": 3
-    },
-    {
-     "page": "/anime/detektiv-uzhe-mertv-2",
-     "visits": 2
+     "visits": 21
     },
     {
      "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah/season/1/episode/16",
@@ -519,21 +503,37 @@
      "visits": 2
     },
     {
-     "page": "/anime/moya-sudba-zlodeya",
+     "page": "/anime/moya-sudba-zlodeya/season/1/episode/15",
      "visits": 2
     },
     {
-     "page": "/anime/moya-sudba-zlodeya/season/1/episode/15",
+     "page": "/anime/nekromant-ya-katastrofa",
      "visits": 2
     },
     {
      "page": "/anime/nekromant-ya-katastrofa/season/1/episode/27",
      "visits": 2
+    },
+    {
+     "page": "/anime/dara-iz-reyvy",
+     "visits": 1
+    },
+    {
+     "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     "visits": 1
+    },
+    {
+     "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah/season/1/episode/15",
+     "visits": 1
+    },
+    {
+     "page": "/anime/ledyanaya-stena-2/season/2/episode/2",
+     "visits": 1
     }
    ],
-   "search_pages_total": 29,
-   "search_landing_covered": 70.7,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 29, сохранено 10",
+   "search_pages_total": 21,
+   "search_landing_covered": 76.1,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 21, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -541,25 +541,21 @@
    "domain": "yummyani.biz",
    "site_id": "yummy-biz",
    "counter_id": 111881039,
-   "visits": 153,
-   "visitors": 142,
-   "search_visits": 48,
+   "visits": 149,
+   "visitors": 136,
+   "search_visits": 37,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 48
+    "google": 37
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 26,
-   "top5_share_of_search": 54.2,
+   "top5_search_entries": 20,
+   "top5_share_of_search": 54.1,
    "search_landing_pages": [
     {
-     "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
-     "visits": 7
-    },
-    {
      "page": "/anime/chernyy-klever-2",
-     "visits": 6
+     "visits": 5
     },
     {
      "page": "/anime/poschadi-menya-velikiy-gospodin-3",
@@ -567,7 +563,7 @@
     },
     {
      "page": "/anime/voennaya-hronika-romelii",
-     "visits": 5
+     "visits": 4
     },
     {
      "page": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah/season/1/episode/15",
@@ -582,21 +578,25 @@
      "visits": 3
     },
     {
-     "page": "/",
-     "visits": 2
-    },
-    {
      "page": "/anime/horimiya-kusochek",
      "visits": 2
     },
     {
      "page": "/anime/kontinent-sily-i-duha/season/1/episode/191",
      "visits": 2
+    },
+    {
+     "page": "/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+     "visits": 2
+    },
+    {
+     "page": "/anime/silneyshaya-vedma-v-mire-startovala",
+     "visits": 2
     }
    ],
-   "search_pages_total": 18,
-   "search_landing_covered": 79.2,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 18, сохранено 10",
+   "search_pages_total": 16,
+   "search_landing_covered": 83.8,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 16, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -605,20 +605,20 @@
    "site_id": "animego-03",
    "counter_id": 113105753,
    "visits": 114,
-   "visitors": 102,
-   "search_visits": 35,
+   "visitors": 105,
+   "search_visits": 34,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 35
+    "google": 34
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 14,
-   "top5_share_of_search": 40.0,
+   "top5_search_entries": 16,
+   "top5_share_of_search": 47.1,
    "search_landing_pages": [
     {
      "page": "/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
-     "visits": 5
+     "visits": 6
     },
     {
      "page": "/",
@@ -626,7 +626,7 @@
     },
     {
      "page": "/catalog/",
-     "visits": 2
+     "visits": 3
     },
     {
      "page": "/title/dazhe-u-studsoveta-est-kosyaki/",
@@ -657,9 +657,9 @@
      "visits": 1
     }
    ],
-   "search_pages_total": 24,
-   "search_landing_covered": 60.0,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 24, сохранено 10",
+   "search_pages_total": 21,
+   "search_landing_covered": 67.6,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 21, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -667,25 +667,25 @@
    "domain": "zonafilm.space",
    "site_id": "zona-01",
    "counter_id": 112582938,
-   "visits": 82,
-   "visitors": 76,
-   "search_visits": 47,
+   "visits": 99,
+   "visitors": 89,
+   "search_visits": 58,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 47
+    "google": 58
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 24,
-   "top5_share_of_search": 51.1,
+   "top5_search_entries": 27,
+   "top5_share_of_search": 46.6,
    "search_landing_pages": [
+    {
+     "page": "/catalog/",
+     "visits": 9
+    },
     {
      "page": "/title/doktor-iks/",
      "visits": 8
-    },
-    {
-     "page": "/catalog/",
-     "visits": 6
     },
     {
      "page": "/",
@@ -708,21 +708,84 @@
      "visits": 2
     },
     {
-     "page": "/title/bez-zaschity/season-1/episode-35/",
+     "page": "/title/poschadi-menya-velikiy-gospodin-2/",
+     "visits": 2
+    },
+    {
+     "page": "/title/zhit-ne-mogu-bez-tebya/",
+     "visits": 2
+    },
+    {
+     "page": "/title/zindagi-mere-ghar-aana/season-1/episode-8/",
+     "visits": 2
+    }
+   ],
+   "search_pages_total": 31,
+   "search_landing_covered": 63.8,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 31, сохранено 10",
+   "queries": [],
+   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
+  },
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "counter_id": 112010269,
+   "visits": 64,
+   "visitors": 42,
+   "search_visits": 45,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 45
+   },
+   "search_engines_note": "search_engines",
+   "search_engines_other": {},
+   "top5_search_entries": 20,
+   "top5_share_of_search": 44.4,
+   "search_landing_pages": [
+    {
+     "page": "/title/igra-smerti-4/season-1/episode-2/",
+     "visits": 6
+    },
+    {
+     "page": "/title/csi-mesto-prestupleniya-nyu-york/season-1/episode-23/",
+     "visits": 5
+    },
+    {
+     "page": "/movies/",
+     "visits": 4
+    },
+    {
+     "page": "/title/schastlivogo-hellouina-skubi-du-2020/",
+     "visits": 3
+    },
+    {
+     "page": "/catalog/",
+     "visits": 2
+    },
+    {
+     "page": "/title/igra-smerti-4/season-1/episode-3/",
+     "visits": 2
+    },
+    {
+     "page": "/title/igra-smerti-4/season-1/episode-5/",
+     "visits": 2
+    },
+    {
+     "page": "/animation/",
      "visits": 1
     },
     {
-     "page": "/title/chelovek-muravey-i-osa/",
+     "page": "/genre/chernayakomediya/",
      "visits": 1
     },
     {
-     "page": "/title/chernyy-klever/season-1/episode-101/",
+     "page": "/title/chebol-protiv-detektiva-2/",
      "visits": 1
     }
    ],
-   "search_pages_total": 26,
-   "search_landing_covered": 66.0,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 26, сохранено 10",
+   "search_pages_total": 28,
+   "search_landing_covered": 60.0,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 28, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -730,25 +793,25 @@
    "domain": "an1meg0.site",
    "site_id": "animego-04",
    "counter_id": 113121466,
-   "visits": 62,
+   "visits": 61,
    "visitors": 48,
-   "search_visits": 27,
+   "search_visits": 25,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 27
+    "google": 25
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
    "top5_search_entries": 18,
-   "top5_share_of_search": 66.7,
+   "top5_share_of_search": 72.0,
    "search_landing_pages": [
     {
      "page": "/title/voennaya-hronika-romelii/",
-     "visits": 8
+     "visits": 9
     },
     {
      "page": "/title/silneyshaya-vedma-v-mire-startovala/season-1/episode-3/",
-     "visits": 4
+     "visits": 3
     },
     {
      "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/",
@@ -759,15 +822,15 @@
      "visits": 2
     },
     {
-     "page": "/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+     "page": "/title/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu-nakl/",
      "visits": 2
     },
     {
-     "page": "/catalog/",
+     "page": "/",
      "visits": 1
     },
     {
-     "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     "page": "/catalog/",
      "visits": 1
     },
     {
@@ -783,123 +846,36 @@
      "visits": 1
     }
    ],
-   "search_pages_total": 14,
-   "search_landing_covered": 85.2,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 14, сохранено 10",
+   "search_pages_total": 12,
+   "search_landing_covered": 92.0,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 12, сохранено 10",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
-   "domain": "lordfilm47.space",
-   "site_id": "lords-01",
-   "counter_id": 112010269,
-   "visits": 54,
-   "visitors": 37,
-   "search_visits": 36,
+   "domain": "1lordserials1.online",
+   "site_id": "lords-03",
+   "counter_id": 112010277,
+   "visits": 33,
+   "visitors": 27,
+   "search_visits": 1,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
-    "google": 36
+    "yandex": 1
    },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 16,
-   "top5_share_of_search": 44.4,
+   "top5_search_entries": 1,
+   "top5_share_of_search": 100.0,
    "search_landing_pages": [
     {
-     "page": "/title/igra-smerti-4/season-1/episode-2/",
-     "visits": 5
-    },
-    {
-     "page": "/movies/",
-     "visits": 4
-    },
-    {
-     "page": "/title/csi-mesto-prestupleniya-nyu-york/season-1/episode-23/",
-     "visits": 4
-    },
-    {
-     "page": "/title/schastlivogo-hellouina-skubi-du-2020/",
-     "visits": 2
-    },
-    {
-     "page": "/animation/",
-     "visits": 1
-    },
-    {
-     "page": "/catalog/",
-     "visits": 1
-    },
-    {
-     "page": "/genre/chernayakomediya/",
-     "visits": 1
-    },
-    {
-     "page": "/title/csi-mesto-prestupleniya-nyu-york/season-1/episode-3/",
-     "visits": 1
-    },
-    {
-     "page": "/title/csi-mesto-prestupleniya-nyu-york/season-2/episode-1/",
-     "visits": 1
-    },
-    {
-     "page": "/title/csi-mesto-prestupleniya-nyu-york/season-6/episode-23/",
+     "page": "/title/chrezvychayno-angliyskiy-skandal/",
      "visits": 1
     }
    ],
-   "search_pages_total": 25,
-   "search_landing_covered": 58.3,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 25, сохранено 10",
-   "queries": [],
-   "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
-  },
-  {
-   "domain": "an1mego.site",
-   "site_id": "animego-02",
-   "counter_id": 113105751,
-   "visits": 31,
-   "visitors": 30,
-   "search_visits": 13,
-   "search_visits_note": "traffic_sources: organic",
-   "search_engines": {
-    "google": 13
-   },
-   "search_engines_note": "search_engines",
-   "search_engines_other": {},
-   "top5_search_entries": 11,
-   "top5_share_of_search": 84.6,
-   "search_landing_pages": [
-    {
-     "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
-     "visits": 5
-    },
-    {
-     "page": "/title/absolyutnaya-vershina-boga-voyny/",
-     "visits": 2
-    },
-    {
-     "page": "/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
-     "visits": 2
-    },
-    {
-     "page": "/title/detektiv-uzhe-mertv-2/",
-     "visits": 1
-    },
-    {
-     "page": "/title/dragonboll-zet-tv/season-2/episode-29/",
-     "visits": 1
-    },
-    {
-     "page": "/title/prohozhdenie-parallelnogo-mira-vmeste-s-boginey-u-kotoroy-net-posledovateley-sla/",
-     "visits": 1
-    },
-    {
-     "page": "/title/voennaya-hronika-romelii/",
-     "visits": 1
-    }
-   ],
-   "search_pages_total": 7,
+   "search_pages_total": 1,
    "search_landing_covered": 100.0,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 7, сохранено 7",
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 1, сохранено 1",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -907,8 +883,8 @@
    "domain": "animedia.space",
    "site_id": "animedia-02",
    "counter_id": 113288760,
-   "visits": 31,
-   "visitors": 10,
+   "visits": 33,
+   "visitors": 15,
    "search_visits": 1,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
@@ -931,22 +907,53 @@
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
   {
-   "domain": "1lordserials1.online",
-   "site_id": "lords-03",
-   "counter_id": 112010277,
-   "visits": 28,
-   "visitors": 28,
-   "search_visits": 0,
-   "search_visits_note": "traffic_sources: строки organic нет — поискового трафика нет",
-   "search_engines": {},
+   "domain": "an1mego.site",
+   "site_id": "animego-02",
+   "counter_id": 113105751,
+   "visits": 32,
+   "visitors": 31,
+   "search_visits": 14,
+   "search_visits_note": "traffic_sources: organic",
+   "search_engines": {
+    "google": 14
+   },
    "search_engines_note": "search_engines",
    "search_engines_other": {},
-   "top5_search_entries": 0,
-   "top5_share_of_search": null,
-   "search_landing_pages": [],
-   "search_pages_total": 0,
-   "search_landing_covered": null,
-   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 0, сохранено 0",
+   "top5_search_entries": 12,
+   "top5_share_of_search": 85.7,
+   "search_landing_pages": [
+    {
+     "page": "/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     "visits": 5
+    },
+    {
+     "page": "/title/absolyutnaya-vershina-boga-voyny/",
+     "visits": 2
+    },
+    {
+     "page": "/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+     "visits": 2
+    },
+    {
+     "page": "/title/voennaya-hronika-romelii/",
+     "visits": 2
+    },
+    {
+     "page": "/title/dragonboll-zet-tv/season-2/episode-29/",
+     "visits": 1
+    },
+    {
+     "page": "/title/prohozhdenie-parallelnogo-mira-vmeste-s-boginey-u-kotoroy-net-posledovateley-sla/",
+     "visits": 1
+    },
+    {
+     "page": "/title/vpered-vpered-atom/season-1/episode-22/",
+     "visits": 1
+    }
+   ],
+   "search_pages_total": 7,
+   "search_landing_covered": 100.0,
+   "search_landing_note": "источник ym:s:visits × lastsignTrafficSource × startURLPath; страниц в разрезе 7, сохранено 7",
    "queries": [],
    "queries_note": "не измерено: popular_queries в снимке отсутствует (нужен Вебмастер)"
   },
@@ -954,8 +961,8 @@
    "domain": "lordserial33.biz",
    "site_id": "lords-02",
    "counter_id": 112010274,
-   "visits": 8,
-   "visitors": 7,
+   "visits": 14,
+   "visitors": 13,
    "search_visits": 5,
    "search_visits_note": "traffic_sources: organic",
    "search_engines": {
