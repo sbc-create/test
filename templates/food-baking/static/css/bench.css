@@ -478,3 +478,10 @@ h1 { font-size: var(--fs-h1); }
 .sheet-b header .recipe__pic { aspect-ratio: auto; overflow: visible; background: none; border-radius: 0; }
 .sheet-b header .recipe__pic .pic { display: block; aspect-ratio: 4 / 3; overflow: hidden; border-radius: var(--r); background: var(--flour); }
 .sheet-b header .recipe__pic figcaption { margin-top: 6px; font-size: .85rem; color: var(--muted); }
+/* 23.10: каталог на телефоне — фильтры по два в ряд, первые карточки видны на первом экране */
+@media (max-width: 559px) {
+  .filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 10px; }
+  .filters label { font-size: .82rem; min-width: 0; }
+  .filters select { width: 100%; min-width: 0; }
+  .filters > :last-child:nth-child(odd) { grid-column: 1 / -1; }
+}
