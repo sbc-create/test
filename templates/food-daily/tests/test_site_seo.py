@@ -244,10 +244,15 @@ def test_itemlist_matches_visible_cards(app):
 
 
 def test_no_category_illustration_posing_as_dish(app, site):
+    # значок раздела 24×18 рядом с его названием допустим; иллюстрация раздела на месте фото блюда — нет
     _, html, _ = get(app, site.recipes[0].url)
-    assert "img/zavtraki.svg" not in html and "recipe__illo" not in html
+    head = html[html.index('class="recipe__head"'): html.index('class="recipe__body"')]
+    assert "recipe__illo" not in html and "<img" not in head
     _, html, _ = get(app, "/recepty/")
-    assert "<img" not in re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
+    grid = re.search(r'<div class="grid">.*?</div>\s*<nav|<div class="grid">.*', html, re.S).group(0)
+    imgs = re.findall(r"<img[^>]*>", grid)
+    assert imgs and all('width="24" height="18"' in i and 'alt=""' in i for i in imgs)
+    assert len(imgs) == grid.count('class="card__cat"') and "card__media" not in grid
 
 
 def test_catalog_contract_v1(app, site):

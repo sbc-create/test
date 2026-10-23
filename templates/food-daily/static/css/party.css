@@ -658,3 +658,72 @@ h1, h2 { hyphens: manual; }
 body { overflow-wrap: break-word; }
 .block__head, .shelf__head { flex-wrap: wrap; }
 .block__head a, .shelf__head a { white-space: normal; }
+
+/* ---- v12: компактный первый экран; разделы — в меню с иконками; карточки без прописных подписей ---------- */
+.sections a { display: inline-flex; align-items: center; gap: 7px; }
+.sections img { width: 24px; height: 18px; flex: none; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px 48px; max-width: none; padding: 22px 0 0; }
+@media (min-width: 1200px) { .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 700px); align-items: end; padding-top: 32px; } }
+@media (min-width: 640px) and (max-width: 1199px) { .hero__find { max-width: 720px; } }
+.hero__title { font-size: clamp(1.7rem, 1.3rem + 1.6vw, 2.5rem); line-height: 1.1; margin: 0 0 .25em; }
+.hero__lead { font-size: 1.02rem; line-height: 1.5; margin: 0; max-width: 32em; }
+.hero__find .search { max-width: none; }
+.hero .chips { margin-top: 10px; }
+.card__cat { gap: 8px; font-size: .86rem; font-weight: 600; letter-spacing: 0; text-transform: none; color: var(--muted); }
+.card__cat::before { content: none; }
+.card__cat img { width: 24px; height: 18px; flex: none; }
+@media (max-width: 639px) {
+  .hero { padding-top: 16px; gap: 12px; }
+  .hero__title { font-size: 1.75rem; }
+  .hero__lead { font-size: .97rem; line-height: 1.45; }
+  .hero .chips { margin-top: 8px; }
+  .card__body { padding: 14px 16px; }
+  .card__top { min-height: 22px; margin-bottom: 2px; }
+  .card__title { margin-bottom: 6px; }
+  .card__ing { margin-bottom: 10px; }
+  .grid { gap: 12px; }
+}
+/* карточка без изображения: избранное — в нижней строке, длинное название не заходит под кнопку */
+.card__top { margin-right: 0; }
+.card:not(.card--pic) .fav { top: auto; bottom: 8px; right: 10px; width: 40px; height: 40px; box-shadow: none; background: transparent; }
+.card:not(.card--pic) .fav:hover { background: var(--paper); }
+.card:not(.card--pic) .card__meta { padding-right: 44px; min-height: 30px; }
+.card--pic .card__top { margin-right: 0; }
+/* каталог на телефоне: подписи полей — внутри значений, фильтры в три коротких ряда */
+@media (max-width: 559px) {
+  .filters .filters__l { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .filters fieldset { gap: 8px; padding: 10px; }
+  .filters fieldset > :last-child:nth-child(odd) { grid-column: auto; }
+  .filters .btn { min-height: 44px; justify-content: center; }
+  .page-head h1 { margin-bottom: .1em; }
+  .page-head__lead { margin-bottom: 10px; }
+}
+@media (max-width: 399px) {
+  .brand__name { white-space: nowrap; font-size: 1.05rem; }
+  .filters select { font-size: .9rem; padding: 8px 6px 8px 8px; }
+}
+/* v12: шапка рецепта — слева что получится, справа сводка: время, порции, переход к приготовлению */
+.recipe__panel { margin: 0 0 4px; }
+.step p { max-width: 38em; }
+@media (max-width: 639px) { .recipe__intro { font-size: 1.02rem; line-height: 1.55; } }
+@media (min-width: 1000px) {
+  .recipe__head { grid-template-columns: minmax(0, 1fr) 360px; column-gap: 56px; align-items: start; }
+  .recipe__head > * { grid-column: 1; }
+  .recipe__head .recipe__panel { grid-column: 2; grid-row: 1 / span 6; align-self: start; margin-top: 6px; padding: 18px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); }
+  .recipe__panel .facts { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: none; margin-bottom: 16px; }
+  .recipe__panel .recipe__bar { display: grid; gap: 10px; margin: 0; }
+  .recipe__panel .jump { display: grid; grid-template-columns: minmax(0, 1fr); gap: 8px; margin: 0; }
+  .recipe__panel .jump a { justify-content: center; }
+  .recipe__panel .recipe__actions { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 12px 0 0; border-left: 0; border-top: 1px solid var(--line); min-height: 0; }
+  .recipe__panel .recipe__actions .btn { flex: 1 1 auto; justify-content: center; padding: 0 14px; }
+  .recipe__panel .recipe__actions .btn--print { flex: none; }
+  .recipe__panel .recipe__actions .btn--print span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .recipe__head .recipe__title { max-width: none; }
+  .recipe__intro { max-width: 36em; }
+}
+@media (min-width: 1000px) {
+  .recipe__head { grid-template-columns: minmax(0, 1fr) 380px; }
+  .recipe__panel .recipe__actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) 44px; }
+  .recipe__panel .recipe__actions .btn { padding: 0 8px; font-size: .95rem; white-space: nowrap; min-width: 0; }
+  .recipe__panel .recipe__actions .btn--print { width: 44px; padding: 0; }
+}

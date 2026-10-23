@@ -8,30 +8,30 @@
 <form class="filters" method="get" action="/recepty/" data-autosubmit>
   <fieldset>
     <legend class="sr">Фильтры</legend>
-    <label>Продукт
+    <label><span class="filters__l">Продукт</span>
       <select name="produkt">
-        <option value="">любой</option>
+        <option value="">любой продукт</option>
         {% for key, label in products %}<option value="{{ key }}"{% if filt.product == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
-    <label>Время
+    <label><span class="filters__l">Время</span>
       <select name="vremya">
-        <option value="">любое</option>
+        <option value="">любое время</option>
         {% for key, (label, _, _) in TIME_BUCKETS.items() %}<option value="{{ key }}"{% if filt.time == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
-    <label>Тип блюда
+    <label><span class="filters__l">Тип блюда</span>
       <select name="tip">
-        <option value="">любой</option>
+        <option value="">любой тип</option>
         {% for key, (label, _) in CATEGORIES.items() %}<option value="{{ key }}"{% if filt.category == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
-    <label>Порядок
+    <label><span class="filters__l">Порядок</span>
       <select name="sort">
         {% for key, label in [('', 'сначала новые'), ('vremya', 'сначала быстрые'), ('nazvanie', 'по названию')] %}<option value="{{ key }}"{% if sort == key %} selected{% endif %}>{{ label }}</option>{% endfor %}
       </select>
     </label>
-    <label>Вид
+    <label><span class="filters__l">Вид</span>
       <select name="vid">
         <option value="">карточки</option>
         <option value="tablica"{% if table %} selected{% endif %}>таблица</option>

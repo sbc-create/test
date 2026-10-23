@@ -15,7 +15,7 @@
   {% if r.image %}<a class="card__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, 100vw', eager) }}</a>
   {% elif site.images %}<span class="card__media card__media--none" aria-hidden="true">{{ illo(r.category) }}</span>{% endif %}
   <div class="card__body">
-    <p class="card__top"><span class="card__cat">{{ r.category_label }}</span></p>
+    <p class="card__top"><span class="card__cat"><img src="{{ asset('img/' ~ r.category ~ '.svg') }}" alt="" width="24" height="18">{{ r.category_label }}</span></p>
     <{{ heading }} class="card__title"><a class="card__link" href="{{ r.url }}">{{ r.title }}</a></{{ heading }}>
     {% if r.key_ingredients %}<p class="card__ing"><span class="sr">Главные продукты: </span>{% for n in r.key_ingredients %}{{ n if loop.first else n[:1].lower() ~ n[1:] }}{% if not loop.last %}, {% endif %}{% endfor %}</p>{% endif %}
     <p class="card__meta">

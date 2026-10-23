@@ -1,31 +1,22 @@
 {% extends "base.html" %}
 {% from "_parts.html" import grid %}
-{% macro sections_shelf(where) %}
-<section class="shelf shelf--{{ where }}" aria-labelledby="sec-h-{{ where }}">
-  <div class="shelf__head"><h2 id="sec-h-{{ where }}">Разделы</h2><a href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></div>
-  <ul class="sections-grid">
-    {% for key, label, n in sections %}
-    <li><a class="tile tile--{{ key }}" href="/recepty/{{ key }}/"><img src="{{ asset('img/' ~ key ~ '.svg') }}" alt="" width="40" height="40"><span class="tile__label">{{ label }}</span><span class="tile__n">{{ n }}</span></a></li>
-    {% endfor %}
-  </ul>
-</section>
-{% endmacro %}
 {% block main %}
-<div class="hero-row">
 <section class="hero">
-  <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый&nbsp;день</em></h1>
-  <p class="hero__lead">Завтраки, супы, вторые блюда и салаты из обычных продуктов — с точными количествами и пересчётом порций.</p>
-  <form class="search search--hero" action="/poisk/" method="get" role="search">
-    <label for="q" class="sr">Найти рецепт по блюду или продукту</label>
-    <input id="q" name="q" type="search" placeholder="Блюдо или продукт" autocomplete="off">
-    <button type="submit">Найти</button>
-  </form>
-  {% if chips %}
-  <p class="chips"><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}<a class="chip chip--time" href="/podborki/bystro-do-30-minut/">До 30 минут</a></p>
-  {% endif %}
+  <div class="hero__text">
+    <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый&nbsp;день</em></h1>
+    <p class="hero__lead">Завтраки, супы, вторые блюда и салаты из обычных продуктов — с точными количествами и пересчётом порций.</p>
+  </div>
+  <div class="hero__find">
+    <form class="search search--hero" action="/poisk/" method="get" role="search">
+      <label for="q" class="sr">Найти рецепт по блюду или продукту</label>
+      <input id="q" name="q" type="search" placeholder="Блюдо или продукт" autocomplete="off">
+      <button type="submit">Найти</button>
+    </form>
+    {% if chips %}
+    <p class="chips"><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}<a class="chip chip--time" href="/podborki/bystro-do-30-minut/">До 30 минут</a></p>
+    {% endif %}
+  </div>
 </section>
-{{ sections_shelf('side') }}
-</div>
 
 {% if quick %}
 <section class="block block--first" aria-labelledby="quick-h">
@@ -33,7 +24,6 @@
   {{ grid(quick, 'h3') }}
 </section>
 {% endif %}
-{{ sections_shelf('flow') }}
 
 {% for key, title, href, more, items in shelves %}
 <section class="block" aria-labelledby="{{ key }}-h">

@@ -6,12 +6,12 @@
     <p class="recipe__kicker"><a href="/recepty/{{ r.category }}/">{{ r.category_label }}</a></p>
     <h1 class="recipe__title">{{ r.title }}</h1>
     <p class="recipe__intro">{{ r.d.intro }}</p>
+    <div class="recipe__panel">
     <dl class="facts">
       {% if r.total_minutes %}<div class="facts__time"><dt>Время</dt><dd>{{ r.time_label }}{% if r.prep_minutes and r.cook_minutes %} <small>подготовка {{ r.prep_minutes }} мин</small>{% endif %}</dd></div>{% endif %}
       {% if r.yield_n %}<div><dt>Порции</dt><dd>{{ r.yield_n }}</dd></div>{% endif %}
       {% if r.nutrition %}<div class="facts__kcal"><dt>Калорийность</dt><dd>≈&nbsp;{{ r.nutrition.kcal }} <small>ккал на порцию</small></dd></div>{% else %}<div><dt>Шаги</dt><dd>{{ r.d.steps|length }}</dd></div>{% endif %}
     </dl>
-    {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
     <div class="recipe__bar">
     <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Ингредиенты ({{ r.ingredients|length }})</a></nav>
     <div class="recipe__actions">
@@ -20,6 +20,8 @@
       <button class="btn btn--ghost btn--print" type="button" data-print hidden><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 9V4h10v5M7 17H5a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M7 14h10v6H7z"/></svg><span>Печать</span></button>
     </div>
     </div>
+    </div>
+    {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
     {% set links = site.tag_links(r) %}
     {% if links %}
     <ul class="tags" aria-label="Темы рецепта">

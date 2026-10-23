@@ -16,8 +16,11 @@ def test_home_shelves_follow_tasks_without_repeats(app):
     assert heads[:2] == ["Быстро: до 30 минут", "На завтрак"]
     assert "Супы" in heads and "К обеду и ужину: вторые блюда" in heads
     assert "Новые рецепты" not in heads
-    # первая подборка идёт сразу за поиском: «Разделы» на телефоне — после неё
-    assert html.index('id="quick-h"') < html.index('class="shelf shelf--flow"')
+    # первая подборка идёт сразу за поиском; разделы — в меню шапки, отдельного блока «Разделы» на главной нет
+    assert html.index('class="search search--hero"') < html.index('id="quick-h"')
+    assert "sections-grid" not in html and 'id="sec-h' not in html
+    nav = html[html.index('<nav class="sections'):]
+    assert all(f'href="/recepty/{k}/"' in nav[: nav.index("</nav>")] for k in ("zavtraki", "supy", "salaty"))
 
 
 def test_few_ingredients_collection_counts_listed_products(site):
@@ -55,3 +58,17 @@ def test_cook_mode_has_its_own_screen_styles():
     assert rule and "position: fixed" in rule.group(1) and "inset: 0" in rule.group(1)
     assert ".cook[hidden] { display: none; }" in css
     assert re.search(r"\.cook__nav \[data-cook-next\] \{[^}]+background", css)
+
+
+def test_recipe_head_groups_facts_and_actions_in_one_panel(app, site):
+    r = next(x for x in site.recipes if x.yield_n and x.total_minutes)
+    _, html, _ = app.route(r.url, {})
+    panel = html[html.index('class="recipe__panel"'): html.index('class="recipe__body"')]
+    for part in ('class="facts"', 'href="#prigotovlenie"', "data-cook-open", "data-fav=", "data-print"):
+        assert part in panel
+    assert html.index('class="recipe__title"') < html.index('class="recipe__panel"')
+
+
+def test_text_card_keeps_favourite_out_of_title_line():
+    css = open("static/css/party.css", encoding="utf-8").read()
+    assert ".card:not(.card--pic) .fav { top: auto; bottom:" in css
