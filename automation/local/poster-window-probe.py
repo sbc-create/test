@@ -57,11 +57,28 @@ import sys
 
 ЗАМЕР_JS = """() => {
   // Вес по Resource Timing: ровно то, что ушло по сети за эту картинку.
+  //
+  // ВАЖНО: у картинки с ЧУЖОГО хоста без заголовка `Timing-Allow-Origin`
+  // браузер отдаёт `encodedBodySize` равным нулю. Это «не измерено», а не
+  // «ничего не весит»: 23.10 на витринах Lords, где обложки лежат на
+  // poster.cdnvideohub.com, суммарный вес так и вышел 0,0 МиБ — и выглядел
+  // как лёгкая страница.
   const вес = new Map();
+  const свой = location.host;
   for (const з of performance.getEntriesByType('resource')) {
     if (з.initiatorType === 'img' || /\\.(webp|jpe?g|png|avif)/i.test(з.name)) {
-      вес.set(з.name, {сеть: з.encodedBodySize || 0,
-                       всего: з.transferSize || 0});
+      let хост = '';
+      try { хост = new URL(з.name).host; } catch (e) { хост = ''; }
+      const чужой = хост && хост !== свой;
+      const сеть = з.encodedBodySize || 0;
+      вес.set(з.name, {
+        сеть: (сеть === 0 && чужой) ? null : сеть,
+        всего: (з.transferSize || 0) || null,
+        почему: (сеть === 0 && чужой)
+          ? 'сторонний хост ' + хост + ' без Timing-Allow-Origin: вес по сети'
+            + ' браузером не измеряется'
+          : null,
+      });
     }
   }
   const итог = [];
@@ -79,7 +96,8 @@ import sys
     if (!адрес.includes('/poster/') && !адрес.includes('poster.cdnvideohub')) {
       continue;
     }
-    const в = вес.get(адрес) || {сеть: null, всего: null};
+    const в = вес.get(адрес) || {сеть: null, всего: null,
+                                 почему: 'записи в Resource Timing нет'};
     итог.push({
       класс: img.className || '',
       показ_ш: Math.round(r.width), показ_в: Math.round(r.height),
@@ -89,6 +107,7 @@ import sys
       dpr: window.devicePixelRatio,
       нужно_px: Math.round(r.width * window.devicePixelRatio),
       вес_байт: в.сеть, вес_с_заголовками: в.всего,
+      вес_почему: в.почему || null,
       // Полный srcset, без обрезки. Обрезка на 200 символах 23.10 съела
       // последнего кандидата (720w) у ВСЕХ обложек, и замер показал «0 из
       // 100 с кандидатом 720w» при живом кандидате: выбранный адрес
