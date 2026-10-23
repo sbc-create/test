@@ -40,9 +40,13 @@
 зафиксировано» относился к карточке без источника, а не к той, которую
 спрашивали.
 """
-import json, re, sys, time
+import json
+import re
+import sys
 from pathlib import Path
+
 from playwright.sync_api import sync_playwright
+
 КОРЕНЬ_ФАБРИКИ = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(КОРЕНЬ_ФАБРИКИ))
 
@@ -89,12 +93,6 @@ from factory.seo.render_check import chromium_path  # noqa: E402
   return видео.length;
 }
 """
-with sync_playwright() as p:
-    б = p.chromium.launch(executable_path=ХРОМ,
-                          args=["--autoplay-policy=no-user-gesture-required"])
-    к = б.new_context(ignore_https_errors=True, viewport={"width": 1280, "height": 800},
-                      user_agent=("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
-                                  "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"))
 #: Счётчики не должны получать технические просмотры: браузер исполняет
 #: JavaScript страницы, а значит и счётчик Метрики. Требование владельца
 #: 23.10. Модуль один на все браузерные инструменты — counter_guard.py.
@@ -107,6 +105,13 @@ def _запрет_счётчиков(цель):
     с.loader.exec_module(м)
     return м.запретить_счётчики(цель)
 
+
+with sync_playwright() as p:
+    б = p.chromium.launch(executable_path=ХРОМ,
+                          args=["--autoplay-policy=no-user-gesture-required"])
+    к = б.new_context(ignore_https_errors=True, viewport={"width": 1280, "height": 800},
+                      user_agent=("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                                  "(KHTML, like Gecko) Chrome/140.0 Safari/537.36"))
     стр = к.new_page()
     _перехвачено = _запрет_счётчиков(к)
     медиа = []
@@ -190,7 +195,8 @@ def _запрет_счётчиков(цель):
                 break
     if кадр is None:
         print("кадра плеера нет: ни при загрузке, ни после щелчка по оболочке")
-        б.close(); raise SystemExit(1)
+        б.close()
+        raise SystemExit(1)
     # Щелчок по центру кадра — как делает человек.
     try:
         рамка = стр.query_selector("iframe[src*=cdnvideohub]").bounding_box()
@@ -233,10 +239,32 @@ def _запрет_счётчиков(цель):
             сколько, состояние = -1, [{"ошибка": f"{type(e).__name__}: {str(e)[:80]}"}]
         замеры.append(состояние)
         if н in (0, 5, 10, 15):
-            print(f"  замер {н}: видео {сколько} | {json.dumps(состояние, ensure_ascii=False)[:220]}")
+            печать = json.dumps(состояние, ensure_ascii=False)[:220]
+            print(f"  замер {н}: видео {сколько} | {печать}")
     времена = [max([в.get("t") or 0 for в in с] or [0]) for с in замеры]
     print("currentTime:", [round(т, 2) for т in времена])
-    print("ВЫВОД: воспроизведение", "ИДЁТ" if max(времена) - min(времена) > 0.5 else "НЕ ЗАФИКСИРОВАНО")
     print("медиа-ответы:", len(медиа))
-    for с, u in медиа[:8]: print("   ", с, u[:110])
+    for с, u in медиа[:8]:
+        print("   ", с, u[:110])
+    # Был ли `<video>` хотя бы в одном замере. Без него список времён — это
+    # шестнадцать нулей, а не «стоит на нуле»: измерять было нечего, и
+    # говорить «не играет» не на чем.
+    видео_было = any(
+        isinstance(в, dict) and "ошибка" not in в for с in замеры for в in с)
+    сдвиг = (max(времена) - min(времена)) if времена else 0.0
     б.close()
+    # КОД ВЫХОДА НЕСЁТ ВЕРДИКТ. Иначе вызывающий скрипт не отличит
+    # подтверждённое воспроизведение от инструмента, который ничего не сделал:
+    # ровно так этот инструмент и молчал, пока тело замера лежало внутри
+    # неиспользуемого помощника (docs/RECURRING_FAILURES.md, класс 24).
+    if not видео_было:
+        print("ВЫВОД: НЕ ИЗМЕРЕНО — элемент <video> не появился ни в одном из"
+              f" {len(замеры)} замеров; кадр плеера есть, но проигрыватель его"
+              " не создал. Утверждать «не играет» не на чем.")
+    elif сдвиг > 0.5:
+        print(f"ВЫВОД: воспроизведение ИДЁТ (currentTime вырос на {сдвиг:.2f} с"
+              f" за {len(замеры)} замеров)")
+    else:
+        print(f"ВЫВОД: воспроизведение НЕ ИДЁТ — <video> есть, но currentTime"
+              f" сдвинулся лишь на {сдвиг:.2f} с при пороге 0,5")
+    raise SystemExit(0 if (видео_было and сдвиг > 0.5) else 1)
