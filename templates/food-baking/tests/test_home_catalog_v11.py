@@ -139,3 +139,10 @@ def test_search_refine_counts_match_cards(app):
     for key, n in chips:
         _, part, _ = app.route("/poisk/", {"q": ["шоколад"], "razdel": [key]})
         assert len(cards(part)) == int(n)
+
+
+def test_batch_oven_plan_keeps_multistage_honest(app):
+    _, html, _ = app.route("/pechem/", {"r": ["tort-karpatka", "limonnyj-keks"]})
+    plan = re.sub(r"<[^>]+>", " ", re.search(r'<ol class="ovenline">(.*?)</ol>', html, re.S).group(1))
+    assert "(220 → 200 °C)" in plan and "в несколько этапов" in plan
+    assert not re.search(r"вишней\s*—\s*20 мин", plan)

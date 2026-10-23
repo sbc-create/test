@@ -732,3 +732,6 @@ body { overflow-wrap: break-word; }
 }
 /* футер на телефоне — две колонки, описание сайта на всю ширину (как на bestreciept) */
 @media (max-width: 639px) { .colophon__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px 16px; } .colophon__about { grid-column: 1 / -1; } }
+/* «Пеку несколько»: общий список продуктов — удобной ширины, количество рядом с названием */
+.blist, .ovenline { max-width: 760px; }
+.ovenline i { font-style: normal; color: var(--muted); }
