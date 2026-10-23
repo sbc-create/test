@@ -12,7 +12,7 @@
 
 {% macro card(r, heading='h3', eager=false) -%}
 <article class="card card--{{ r.category }}{% if r.image or site.images %} card--pic{% endif %}" data-slug="{{ r.slug }}">
-  {% if r.image %}<a class="card__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, 100vw', eager) }}</a>
+  {% if r.image %}<a class="card__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, 36vw', eager) }}</a>
   {% elif site.images %}<span class="card__media card__media--none" aria-hidden="true">{{ illo(r.category) }}</span>{% endif %}
   <div class="card__body">
     <p class="card__top"><span class="card__cat"><img src="{{ asset('img/' ~ r.category ~ '.svg') }}" alt="" width="24" height="18">{{ r.category_label }}</span></p>

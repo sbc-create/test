@@ -108,3 +108,20 @@ def test_intake_rejects_small_and_repeated_images(tmp_path, monkeypatch):
     assert "то же изображение" in why and rs[0].slug in why
     assert "мало пикселей" in res["rejected"][f"{rs[2].slug}.jpg"]
     assert set(json.loads(reg.read_text())["items"]) == {rs[0].slug}
+
+
+def test_intake_makes_large_version_only_from_large_source(tmp_path, monkeypatch):
+    # 1600 px — для крупного кадра рецепта на экранах ×2, но только если исходник не меньше: маленький не растягиваем
+    from PIL import Image
+
+    rs, reg, inc = _setup(tmp_path, monkeypatch, n=2)
+    _pic(inc / f"{rs[0].slug}.jpg", 0b10100110, size=(1700, 1300))
+    _pic(inc / f"{rs[1].slug}.jpg", 0b01011001, size=(1300, 1000))
+    res = media.intake(argparse.Namespace(dir=inc, tool="g 1", license="l"))
+    assert set(res["added"]) == {rs[0].slug, rs[1].slug}
+    items = json.loads(reg.read_text())["items"]
+    assert items[rs[0].slug]["widths"] == [400, 800, 1200, 1600]
+    assert items[rs[1].slug]["widths"] == [400, 800, 1200]
+    for r in rs:
+        for w in items[r.slug]["widths"]:
+            assert Image.open(tmp_path / "out" / f"{r.slug}-{w}.webp").size == (w, w * 3 // 4)

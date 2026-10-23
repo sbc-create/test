@@ -22,7 +22,8 @@ from pathlib import Path
 
 from .views import IMAGE_KINDS, ROOT, Site
 
-WIDTHS = (400, 800, 1200)
+WIDTHS = (400, 800, 1200, 1600)  # 1600 — только из исходника не меньше 1600: крупный кадр рецепта на экранах ×2
+MIN_WIDTH = 1200  # меньше — не принимается
 REGISTRY = ROOT / "data" / "media" / "images.json"
 OUT = ROOT / "static" / "media"
 RATIO = (4, 3)
@@ -131,7 +132,7 @@ def jobs() -> dict:
     out = {
         "site": site.cfg["site_id"],
         "ratio": f"{RATIO[0]}:{RATIO[1]}",
-        "min_width": WIDTHS[-1],
+        "min_width": MIN_WIDTH,
         "note": "Сгенерированное изображение публикуется как illustration (подпись «Иллюстрация»), не как фото.",
         "jobs": [job(site, r) for r in site.recipes if not r.image],
     }
@@ -172,8 +173,8 @@ def check_file(path, known: dict) -> tuple[dict, str | None]:
     fp = fingerprint(path)
     w, h = fp["size"]
     crop_w = w if w * RATIO[1] <= h * RATIO[0] else h * RATIO[0] // RATIO[1]
-    if crop_w < WIDTHS[-1]:
-        return fp, f"мало пикселей: кадр 4:3 шириной {crop_w}, нужно не меньше {WIDTHS[-1]}"
+    if crop_w < MIN_WIDTH:
+        return fp, f"мало пикселей: кадр 4:3 шириной {crop_w}, нужно не меньше {MIN_WIDTH}"
     for slug, other in known.items():
         if other.get("sha256") == fp["sha256"] or (other.get("ahash") and _near(other["ahash"], fp["ahash"])):
             return fp, f"то же изображение, что у «{slug}»: у каждого блюда своё"
