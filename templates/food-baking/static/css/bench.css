@@ -489,7 +489,7 @@ h1 { font-size: var(--fs-h1); }
 }
 
 /* ---- v11: главная — выпечка на первом экране, температура рядом с поиском ------------------- */
-.hero-pair { display: grid; gap: 24px; }
+.hero-pair { display: grid; gap: 24px; grid-template-columns: minmax(0, 1fr); }
 .hero-pair .oven-band { margin: 0; }
 @media (min-width: 1000px) {
   .hero-pair { grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr); gap: 40px; align-items: center; }
@@ -525,7 +525,7 @@ h1 { font-size: var(--fs-h1); }
 @media (max-width: 639px) {
   .k-recipe .crumbs li:last-child { display: none; }
   .k-recipe .crumbs li:nth-last-child(2)::after { content: none; }
-  .jump { flex-wrap: nowrap; gap: 8px; }
+  .jump { gap: 8px; }
   .jump a { padding: 0 12px; font-size: .95rem; flex: 0 1 auto; white-space: nowrap; }
 }
 /* выбранные условия каталога: каждое снимается отдельно */
@@ -551,3 +551,8 @@ h1 { font-size: var(--fs-h1); }
 }
 /* футер — по той же колонке, что шапка и контент (1240 px с полями 16 px) */
 .colophon__grid, .colophon__legal { max-width: 1208px; }
+/* крупный текст (масштаб ×2): длинные слова переносятся, колонки не распирают страницу */
+body { overflow-wrap: break-word; }
+.colophon__grid { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 640px) { .colophon__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 1000px) { .colophon__grid { grid-template-columns: minmax(0, 1.6fr) repeat(3, minmax(0, 1fr)); } }
