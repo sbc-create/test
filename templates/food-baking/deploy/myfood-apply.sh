@@ -205,6 +205,13 @@ server {
     ssl_session_tickets off;
 ${robots_hdr}
     add_header X-Content-Type-Options \"nosniff\" always;
+    # сжатие ответов приложения (за proxy_pass глобальный gzip их не трогает): HTML, CSS, JS, SVG, JSON
+    gzip on;
+    gzip_proxied any;
+    gzip_vary on;
+    gzip_comp_level 5;
+    gzip_min_length 1024;
+    gzip_types text/css application/javascript text/javascript image/svg+xml application/json application/ld+json text/plain;
     # редактор доступен только с самого сервера (туннель на 127.0.0.1:${PORT}), снаружи — 404
     location ^~ /redaktor { return 404; }
     location / {
