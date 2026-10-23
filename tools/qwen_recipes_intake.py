@@ -77,6 +77,7 @@ INTAKE = (
 )  # каталог приёма (вне git): /home/claude/wt-template-food-daily/var/qwen-intake
 EXPECTED = {"base": 100, "variants": 500, "per_base": 5}
 LABELS = ("V1", "V2", "V3", "V4", "V5")
+EDITOR = "ED"  # редакционная версия (tools/qwen_editorial/<набор>.json)
 SITES = {  # публичный контент сайтов: только чтение, для поиска совпадений
     "bestreciept.site": REPO.parent
     / "wt-template-food-daily-c/templates/food-daily/data/content-snapshot.json",
@@ -138,6 +139,84 @@ def read_set(src: Path) -> dict[str, dict]:
 
 
 # ---------------------------------------------------------------- формат qwen-night/1
+def _clean(x) -> str:
+    return re.sub(r"^\s*\d+[.)]\s*", "", str(x)).strip()
+
+
+def variant_steps(v: dict) -> tuple[list[str] | None, str]:
+    """Текст шагов варианта и поле, откуда он взят. Названия этапов и контрольные признаки
+    (control_points) — не инструкция: из них шагов не получается."""
+    st = v.get("steps")
+    if isinstance(st, list) and st and all(isinstance(x, str) and x.strip() for x in st):
+        return [_clean(x) for x in st], "steps"
+    swe = v.get("steps_with_explanations")
+    if isinstance(swe, list) and swe and all(isinstance(x, dict) for x in swe):
+        out = [_clean(x.get("explanation") or x.get("instruction") or "") for x in swe]
+        if all(out):
+            return out, "steps_with_explanations"
+    seq = v.get("step_sequence")
+    if isinstance(seq, list) and seq and all(isinstance(x, dict) for x in seq):
+        out = ["; ".join(_clean(y) for y in x.get("steps") or [] if str(y).strip()) for x in seq]
+        out = [x for x in out if x]
+        if out:
+            return out, "step_sequence"
+        return None, "step_sequence: только названия этапов"
+    if v.get("control_points"):
+        return None, "control_points: только признаки готовности"
+    return None, "нет шагов"
+
+
+def variant_intro(v: dict) -> tuple[str, str]:
+    """Вступление: intro или detailed_intro — первое, что не короче 40 знаков и без
+    недопустимых формулировок; иначе самое длинное из имеющихся."""
+    got = [(str(v[k]).strip(), k) for k in ("intro", "detailed_intro") if v.get(k)]
+    ok = [x for x in got if len(x[0]) >= 40 and not CLAIM.search(x[0])]
+    if ok:
+        return ok[0]
+    return max(got, key=lambda x: len(x[0])) if got else ("", "нет")
+
+
+def _toks(s: str) -> set[str]:
+    return {stem(w) for w in norm(s).split() if len(w) > 2}
+
+
+def align(texts: list[str], base_steps: list[str]) -> list[list[int]]:
+    """Сопоставление шагов варианта с шагами базы по содержанию, по порядку: шаг варианта
+    покрывает подряд идущие шаги базы (объединение), соседние шаги варианта могут делить один
+    шаг базы (разделение). Шаг без общего содержания с базой получает пустую ссылку."""
+    k_n, n = len(texts), len(base_steps)
+    if not k_n or not n:
+        return [[] for _ in texts]
+    if k_n == n:
+        return [[i] for i in range(n)]
+    tt, bt = [_toks(t) for t in texts], [_toks(x) for x in base_steps]
+
+    def score(k, i, j):
+        u = set().union(*bt[i : j + 1])
+        return len(tt[k] & u) / max(1, len(tt[k])) - 0.05 * (j - i)
+
+    neg = float("-inf")
+    best: dict = {}  # (k, e) -> (сумма, путь): шаги 0..k разобраны, последний кончается на e
+    for e in range(n):
+        best[(0, e)] = (score(0, 0, e), [(0, e)])
+    for k in range(1, k_n):
+        for (pk, pe), (sc, path) in list(best.items()):
+            if pk != k - 1:
+                continue
+            for st in {pe, pe + 1}:
+                for e in range(st, n):
+                    cand = sc + score(k, st, e)
+                    if cand > best.get((k, e), (neg,))[0]:
+                        best[(k, e)] = (cand, path + [(st, e)])
+    sc_path = best.get((k_n - 1, n - 1))
+    if not sc_path:
+        return [[] for _ in texts]
+    return [
+        list(range(i, j + 1)) if tt[k] & set().union(*bt[i : j + 1]) else []
+        for k, (i, j) in enumerate(sc_path[1])
+    ]
+
+
 def normalize(files: dict) -> dict:
     """Поставка qwen-night/1 → контракт qwen-recipes-set/1; иной вход возвращается как есть."""
     bases = {
@@ -163,7 +242,7 @@ def normalize(files: dict) -> dict:
             "base_id": bid,
             "title": d.get("theme"),
             "servings": meta.get("servings"),
-            "cook_minutes": meta.get("cook_time_minutes"),
+            "total_minutes": meta.get("cook_time_minutes"),  # сайт показывает общее время
             "ingredients": [
                 {
                     "name": i.get("original_name"),
@@ -182,27 +261,23 @@ def normalize(files: dict) -> dict:
         for v in sorted(
             (v for v in variants if v.get("base_recipe_id") == bid), key=lambda v: v["variant_id"]
         ):
-            steps = v.get("steps")
-            texts = (
-                [re.sub(r"^\s*\d+[.)]\s*", "", x).strip() for x in steps]
-                if isinstance(steps, list) and steps and all(isinstance(x, str) for x in steps)
-                else None
-            )
-            same_len = texts is not None and len(texts) == len(b["steps"])
+            texts, steps_from = variant_steps(v)
+            intro, intro_from = variant_intro(v)
             nv = {
                 "variant_id": v["variant_id"],
                 "base_id": bid,
                 "label": v.get("variant_type"),
                 "title": b["title"],
-                "intro": (v.get("intro") or "").strip(),
+                "intro": intro,
                 "ingredients": [
                     {"base_index": k, "display_name": i["name"]}
                     for k, i in enumerate(b["ingredients"])
                 ],
                 "steps": [
-                    {"text": t, "base_steps": [k] if same_len else []}
-                    for k, t in enumerate(texts or [])
+                    {"text": t, "base_steps": refs}
+                    for t, refs in zip(texts or [], align(texts or [], b["steps"]), strict=True)
                 ],
+                "format_fields": {"steps": steps_from, "intro": intro_from},
             }
             out[f"variants/{v['variant_id']}.json"] = nv
             vs.append(
@@ -277,6 +352,37 @@ VERB = {  # продукт назван глаголом: «посолить» �
 }
 
 
+PREFIX = re.compile(
+    r"^(пере|разо|раз|рас|подо|под|при|про|ото|от|обо|об|по|за|на|вы|до|вз|вс|[сув](?=[бвгджзклмнпрстфхцчшщ]))"
+)
+
+
+ALTERNATION = (("мн", "мя"),)  # чередование основы: мну/мять («разомните» = «размять»)
+
+
+def root(w: str) -> str:
+    """Корень глагола для сравнения действий: без приставки, ж→з, две буквы — чтобы видовые пары
+    совпадали («взбивайте» = «взбить», «нарежьте» = «нарезать», «обжарьте» = «жарить»)."""
+    m = PREFIX.match(w)
+    if m and len(w) - len(m.group(0)) >= 4:
+        w = w[len(m.group(0)) :]
+    w = w.replace("ж", "з")
+    for a, b in ALTERNATION:
+        if w.startswith(a):
+            w = b + w[len(a) :]
+    return w[:2] + "|" + re.sub(r"[аеёиоуыэюяьъй]", "", w)[:2]
+
+
+def same_action(a: str, have: set[str]) -> bool:
+    """Действие сохранено: совпали две первые буквы корня или два первых согласных
+    («натрите» = «натереть»)."""
+    x, y = root(a).split("|")
+    return any(x == h.split("|")[0] or (len(y) == 2 and y == h.split("|")[1]) for h in have)
+
+
+VERBISH = re.compile(r"(ть|ться|те|тесь|ив|ав|ыв|ая|яя|ясь|ая)$")
+
+
 def stem(w: str) -> str:
     return w[:4] if len(w) > 5 else w[:3]
 
@@ -323,7 +429,7 @@ def check_variant(v: dict, b: dict) -> list[str]:
     v = {**v, "intro": v.get("intro") or ""}
     if v["base_id"] != b["base_id"]:
         errs.append("base_id не совпадает с базой")
-    if v["label"] not in LABELS:
+    if v["label"] not in LABELS + (EDITOR,):
         errs.append(f"метка {v['label']!r} не из V1–V5")
     idx = [i.get("base_index") for i in v["ingredients"]]
     if sorted(x for x in idx if isinstance(x, int)) != list(range(len(b["ingredients"]))) or len(
@@ -347,15 +453,19 @@ def check_variant(v: dict, b: dict) -> list[str]:
                 errs.append(f"шаг {n + 1}: число {num} не из шага базы")
     if covered != sorted(covered) or sorted(set(covered)) != list(range(len(b["steps"]))):
         errs.append("шаги не покрывают шаги базы по порядку")
-    for n, s in enumerate(v["steps"]):
-        refs = [
-            r for r in s.get("base_steps") or [] if isinstance(r, int) and 0 <= r < len(b["steps"])
-        ]
-        src = " ".join(b["steps"][r] for r in refs).replace(",", ".")
-        mine = (s.get("text", "") + " " + (s.get("readiness_cue") or "")).replace(",", ".")
-        for num in LOST_NUM.findall(src):
-            if num not in mine:
-                errs.append(f"шаг {n + 1}: потеряно {num} из шага базы")
+    for r, src in enumerate(b["steps"]):
+        mine = " ".join(
+            s.get("text", "") + " " + (s.get("readiness_cue") or "")
+            for s in v["steps"]
+            if r in (s.get("base_steps") or [])
+        )
+        for num in LOST_NUM.findall(src.replace(",", ".")):
+            if num not in mine.replace(",", "."):
+                errs.append(f"шаг базы {r + 1}: потеряно {num}")
+        verbs = [w for w in norm(src).split() if len(w) > 4 and re.search(r"(ть|ться|те|тесь)$", w)]
+        have = {root(w) for w in norm(mine).split() if VERBISH.search(w)}
+        if lost_v := [w for w in verbs if not same_action(w, have)]:
+            errs.append(f"шаг базы {r + 1}: потеряны действия {', '.join(lost_v)}")
     base_text, var_text = (
         norm(" ".join(b["steps"])),
         norm(" ".join(s.get("text", "") for s in v["steps"])),
@@ -392,9 +502,36 @@ def check_variant(v: dict, b: dict) -> list[str]:
 
 
 def score(v: dict) -> tuple:
-    """Публикуемый вариант: больше признаков готовности, подробнее шаги; затем меньшая метка."""
+    """Публикуемый вариант: редакционная версия, если прошла проверки; затем больше признаков
+    готовности, подробнее шаги; затем меньшая метка."""
     cues = sum(1 for s in v["steps"] if s.get("readiness_cue"))
-    return (-cues, -len(v["steps"]), v["label"])
+    return (v["label"] != EDITOR, -cues, -len(v["steps"]), v["label"])
+
+
+EDITORIAL_DIR = Path(__file__).resolve().parent / "qwen_editorial"
+
+
+def load_editorial(set_id: str) -> dict:
+    p = EDITORIAL_DIR / f"{set_id}.json"
+    return {x["base_id"]: x for x in json.loads(p.read_text())["items"]} if p.exists() else {}
+
+
+def editorial_variant(ed: dict, b: dict) -> dict:
+    """Редакционная версия текста → вариант контракта (метка ED); факты — только из базы."""
+    names = ed.get("display_names") or {}
+    return {
+        "variant_id": f"{b['base_id']}-{EDITOR}",
+        "base_id": b["base_id"],
+        "label": EDITOR,
+        "title": b["title"],
+        "intro": ed["intro"],
+        "ingredients": [
+            {"base_index": k, "display_name": names.get(str(k), i["name"])}
+            for k, i in enumerate(b["ingredients"])
+        ],
+        "steps": [{"text": x["text"], "base_steps": x["base_steps"]} for x in ed["steps"]],
+        "editorial": {"based_on": ed.get("based_on"), "batch": ed.get("batch")},
+    }
 
 
 def route(b: dict, v: dict) -> str:
@@ -409,15 +546,29 @@ def route(b: dict, v: dict) -> str:
     )
 
 
-def published_titles() -> dict[str, list[tuple[str, frozenset]]]:
+def published_titles() -> dict[str, list[tuple]]:
+    """(адрес, ключ названия, id материала) опубликованных рецептов каждого сайта."""
     out = {}
     for site, p in SITES.items():
         items = json.loads(p.read_text())["items"] if p.exists() else []
         out[site] = [
-            (x["slug"], title_key(x.get("title") or x.get("draft", {}).get("title", "")))
+            (
+                x["slug"],
+                title_key(x.get("title") or x.get("draft", {}).get("title", "")),
+                x.get("content_id") or x.get("record_id"),
+            )
             for x in items
         ]
     return out
+
+
+def own_ids(set_id: str, bid: str) -> set[str]:
+    """Id, под которыми адаптеры сайтов сохраняют блюдо набора (fooddaily.set_import — fdq-,
+    bakebook.set_import — fbq-): уже импортированное блюдо — не дубль самого себя."""
+    return {
+        "fdq-" + hashlib.sha256(f"qwen-set:{set_id}:{bid}".encode()).hexdigest()[:12],
+        "fbq-" + hashlib.sha256(f"{set_id}:{bid}".encode()).hexdigest()[:12],
+    }
 
 
 def digest(obj) -> str:
@@ -427,7 +578,9 @@ def digest(obj) -> str:
 
 
 # ---------------------------------------------------------------- план
-def plan(files: dict[str, dict], existing: dict | None = None) -> dict:
+def plan(
+    files: dict[str, dict], existing: dict | None = None, editorial: dict | None = None
+) -> dict:
     """Порядок отбора блюда: дубль (сайт, затем набор) → права → качество вариантов.
 
     Каждое непринятое блюдо — в deferred с kind (rights | duplicate | quality | missing)
@@ -443,6 +596,7 @@ def plan(files: dict[str, dict], existing: dict | None = None) -> dict:
             "inspect": inspect(files),
         }
     existing = published_titles() if existing is None else existing
+    editorial = load_editorial(man.get("set_id", SET_ID)) if editorial is None else editorial
     by_id = {
         d.get("base_id"): d
         for n, d in files.items()
@@ -480,16 +634,26 @@ def plan(files: dict[str, dict], existing: dict | None = None) -> dict:
         bid = item.get("base_id")
         b = by_id.get(bid)
         vs = [d for d in variants if d.get("base_id") == bid]
+        if b is not None and bid in editorial:
+            vs = vs + [editorial_variant(editorial[bid], b)]
         if b is None:
             defer("missing", None, bid, "нет файла базового рецепта", vs, lambda v: "нет базы")
             continue
-        if len(vs) != EXPECTED["per_base"]:
+        if len([v for v in vs if v["label"] != EDITOR]) != EXPECTED["per_base"]:
             counts.setdefault("bases_without_5_variants", []).append(bid)
         checked = {v["variant_id"]: check_variant(v, b) for v in vs}
         errs = check_base(b)
         site = route(b, {})
         key = title_key(b["title"])
-        match = next((slug for slug, k in existing.get(site, []) if similar(k, key)), None)
+        mine = own_ids(man.get("set_id", SET_ID), bid)
+        match = next(
+            (
+                x[0]
+                for x in existing.get(site, [])
+                if similar(x[1], key) and (x[2] if len(x) > 2 else None) not in mine
+            ),
+            None,
+        )
         dup_set = next((t for t, k in seen_titles if similar(k, key)), None)
         seen_titles.append((bid, key))
         if match or dup_set:

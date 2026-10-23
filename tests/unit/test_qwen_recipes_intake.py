@@ -120,7 +120,7 @@ EXISTING = {
 
 def test_plan_routes_picks_one_variant_and_defers_honestly(tmp_path):
     d = make_set(tmp_path)
-    res = intake.plan(intake.read_set(d), EXISTING)
+    res = intake.plan(intake.read_set(d), EXISTING, {})
     assert res["status"] == "OK"
     assert res["counts"] == {
         "manifest_base": 4,
@@ -154,8 +154,8 @@ def test_plan_is_deterministic_and_reads_tar(tmp_path):
     tgz = tmp_path / f"{intake.SET_ID}.tar.gz"
     with tarfile.open(tgz, "w:gz") as t:
         t.add(d, arcname=intake.SET_ID)
-    a = intake.plan(intake.read_set(d), EXISTING)
-    b = intake.plan(intake.read_set(tgz), EXISTING)
+    a = intake.plan(intake.read_set(d), EXISTING, {})
+    b = intake.plan(intake.read_set(tgz), EXISTING, {})
     assert [r["digest"] for r in a["_accepted"]["myfood.mobi"]] == [
         r["digest"] for r in b["_accepted"]["myfood.mobi"]
     ]
@@ -170,7 +170,7 @@ def test_plan_is_deterministic_and_reads_tar(tmp_path):
 def test_unknown_layout_is_blocked_input_not_guessed(tmp_path):
     (tmp_path / "x").mkdir()
     (tmp_path / "x" / "recipes.json").write_text(json.dumps([{"name": "что-то"}]))
-    res = intake.plan(intake.read_set(tmp_path / "x"), EXISTING)
+    res = intake.plan(intake.read_set(tmp_path / "x"), EXISTING, {})
     assert res["status"] == "BLOCKED_INPUT" and res["inspect"]["json_files"] == 1
 
 
@@ -238,8 +238,8 @@ GOOD = (
         "V1": {  # полный пересказ — публикуется
             "intro": INTRO,
             "steps": [
-                "1. Тонко нарежьте капусту и слегка подсолите.",
-                "2. Морковь на тёрку, затем всё вместе тушите 30 минут под крышкой.",
+                "1. Тонко нашинкуйте капусту и слегка подсолите.",
+                "2. Натрите морковь, затем всё вместе тушите 30 минут под крышкой.",
             ],
         },
         "V5": {  # потерян шаг и время — в архив
@@ -276,7 +276,7 @@ def test_night_format_is_normalized_and_one_dish_one_page(tmp_path):
             ),
         ],
     )
-    res = intake.plan(intake.read_set(d), {"bestreciept.site": [], "myfood.mobi": []})
+    res = intake.plan(intake.read_set(d), {"bestreciept.site": [], "myfood.mobi": []}, {})
     assert res["status"] == "OK" and res["format"] == "qwen-night/1"
     assert res["counts"]["files_base"] == 3 and res["counts"]["files_variants"] == 15
     assert res["counts"]["unreadable_files"] == ["reports/checkpoint_003.json"]
@@ -292,9 +292,7 @@ def test_night_format_is_normalized_and_one_dish_one_page(tmp_path):
     ]
     assert [s["base_steps"] for s in rec["variant"]["steps"]] == [[0], [1]]
     why = {x["variant_id"]: x["why"] for x in res["_archive"]}
-    assert (
-        "не сопоставить" in why["FD-NIGHT-001-V5"] and "нет текста шагов" in why["FD-NIGHT-001-V3"]
-    )
+    assert "потеряно 30" in why["FD-NIGHT-001-V5"] and "нет текста шагов" in why["FD-NIGHT-001-V3"]
     reasons = {x["base_id"]: (x["kind"], x["reason"]) for x in res["deferred"]}
     assert (
         reasons["FD-NIGHT-002"][0] == "rights"
@@ -369,3 +367,132 @@ def test_unsure_quantity_is_draft_and_duplicates_match_by_stem():
     assert not intake.similar(
         k("Овсяное печенье"), k("Тыквенное печенье с шоколадными каплями и пряностями")
     )
+
+
+# ---------------------------------------------------------------- реальные структуры поставки и редакция
+def test_real_variant_structures_are_read_and_outlines_are_not_instructions():
+    swe = {
+        "steps_with_explanations": [
+            {"step": 1, "instruction": "Х", "explanation": "Нашинкуйте капусту."}
+        ]
+    }
+    assert intake.variant_steps(swe) == (["Нашинкуйте капусту."], "steps_with_explanations")
+    seq = {"step_sequence": [{"stage": "Нарезка", "steps": ["Нашинковать капусту", "Посолить"]}]}
+    assert intake.variant_steps(seq) == (["Нашинковать капусту; Посолить"], "step_sequence")
+    only_stages = {"step_sequence": [{"stage": "Нарезка", "steps": []}]}
+    assert intake.variant_steps(only_stages)[0] is None
+    assert (
+        intake.variant_steps({"control_points": [{"step": 1, "control_signs": ["Мягкая"]}]})[0]
+        is None
+    )
+    long_intro = "Подробный рецепт тушёной капусты с морковью для будней."
+    assert intake.variant_intro({"intro": "Коротко.", "detailed_intro": long_intro}) == (
+        long_intro,
+        "detailed_intro",
+    )
+    assert (
+        intake.variant_intro({"detailed_intro": "В этом рецепте я расскажу, как тушить капусту."})[
+            1
+        ]
+        == "detailed_intro"
+    )
+
+
+def test_merged_and_split_steps_are_aligned_and_must_keep_everything():
+    base_steps = [
+        "Капусту нашинковать, посолить.",
+        "Морковь натереть.",
+        "Тушить с капустой 30 минут.",
+    ]
+    merged = ["Нашинкуйте и посолите капусту, натрите морковь.", "Тушите всё вместе 30 минут."]
+    assert intake.align(merged, base_steps) == [[0, 1], [2]]
+    split = [
+        "Нашинкуйте капусту.",
+        "Посолите капусту.",
+        "Натрите морковь.",
+        "Тушите с капустой 30 минут.",
+    ]
+    assert intake.align(split, base_steps) == [[0], [0], [1], [2]]
+    b = {
+        "base_id": "z",
+        "title": "Капуста",
+        "servings": 2,
+        "steps": base_steps,
+        "ingredients": [{"name": "Капуста"}, {"name": "Морковь"}, {"name": "Соль"}],
+        "source": {"url": "https://e.invalid"},
+    }
+
+    def v(texts):
+        return {
+            "variant_id": "z-V1",
+            "base_id": "z",
+            "label": "V1",
+            "title": "Капуста",
+            "intro": INTRO,
+            "ingredients": [
+                {"base_index": k, "display_name": i["name"]} for k, i in enumerate(b["ingredients"])
+            ],
+            "steps": [
+                {"text": t, "base_steps": r}
+                for t, r in zip(texts, intake.align(texts, base_steps), strict=True)
+            ],
+        }
+
+    assert intake.check_variant(v(merged), b) == []
+    assert intake.check_variant(v(split), b) == []
+    lost = intake.check_variant(
+        v(["Нашинкуйте капусту, натрите морковь.", "Тушите всё вместе."]), b
+    )
+    assert any("потеряно 30" in e for e in lost) and any("посолить" in e for e in lost)
+
+
+def test_editorial_version_goes_through_the_same_checks_and_is_preferred(tmp_path):
+    d = night_set(tmp_path, [GOOD])
+    ed = {
+        "FD-NIGHT-001": {
+            "base_id": "FD-NIGHT-001",
+            "intro": INTRO,
+            "display_names": {"0": "Капуста белокочанная"},
+            "steps": [
+                {"text": "Нашинкуйте капусту тонкой соломкой и посолите.", "base_steps": [0]},
+                {"text": "Натрите морковь и тушите её с капустой 30 минут.", "base_steps": [1]},
+            ],
+        }
+    }
+    res = intake.plan(intake.read_set(d), {"bestreciept.site": [], "myfood.mobi": []}, ed)
+    rec = res["_accepted"]["bestreciept.site"][0]
+    assert (
+        rec["label"] == "ED"
+        and rec["variant"]["ingredients"][0]["display_name"] == "Капуста белокочанная"
+    )
+    bad = {"FD-NIGHT-001": {**ed["FD-NIGHT-001"], "steps": ed["FD-NIGHT-001"]["steps"][:1]}}
+    res = intake.plan(intake.read_set(d), {"bestreciept.site": [], "myfood.mobi": []}, bad)
+    assert res["_accepted"]["bestreciept.site"][0]["label"] == "V1"  # неполная редакция не проходит
+    assert any(x["variant_id"] == "FD-NIGHT-001-ED" for x in res["_archive"])
+
+
+def test_already_imported_dish_is_not_a_duplicate_of_itself(tmp_path):
+    d = night_set(tmp_path, [GOOD])
+    own = sorted(intake.own_ids(intake.SET_ID, "FD-NIGHT-001"))[1]  # fdq- — так его сохранил сайт
+    key = intake.title_key("Капуста тушёная с морковью")
+    res = intake.plan(
+        intake.read_set(d), {"bestreciept.site": [("kapusta", key, own)], "myfood.mobi": []}, {}
+    )
+    assert [r["base_id"] for r in res["_accepted"]["bestreciept.site"]] == ["FD-NIGHT-001"]
+    res = intake.plan(
+        intake.read_set(d),
+        {"bestreciept.site": [("kapusta", key, "fd-other")], "myfood.mobi": []},
+        {},
+    )
+    assert res["deferred"][0]["kind"] == "duplicate"
+
+
+def test_verb_roots_accept_aspect_pairs_but_not_other_actions():
+    def have(text):
+        return {intake.root(w) for w in intake.norm(text).split() if intake.VERBISH.search(w)}
+
+    assert intake.same_action("взбить", have("Взбивайте яйца"))
+    assert intake.same_action("нарезать", have("Нарежьте лук"))
+    assert intake.same_action("натереть", have("Натрите морковь"))
+    assert intake.same_action("размять", have("Разомните картофель"))
+    assert not intake.same_action("посолить", have("Нарежьте лук"))
