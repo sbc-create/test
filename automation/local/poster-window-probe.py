@@ -86,6 +86,20 @@ import sys
       sizes: img.getAttribute('sizes') || '',
       loading: img.getAttribute('loading') || 'НЕТ',
       fetchpriority: img.getAttribute('fetchpriority') || 'НЕТ',
+      // Классы предков: по ним обложка относится к БЛОКУ показа (карусель,
+      // сетка подборки, шапка карточки). Без этого два места показа с одним
+      // классом картинки различить нельзя, а `sizes` у них разный.
+      предки: (() => {
+        const ц = [];
+        let у = img.parentElement;
+        while (у && ц.length < 6) {
+          if (у.className && typeof у.className === 'string') {
+            ц.push(у.className.trim().slice(0, 40));
+          }
+          у = у.parentElement;
+        }
+        return ц;
+      })(),
       адрес,
     });
   }
