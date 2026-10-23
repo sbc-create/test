@@ -1,24 +1,40 @@
 {
-  "version": 1,
-  "note": "Реестр экспериментов. Ведётся оператором автоматически; завершённые эксперименты питают learning playbook. На реальных данных экспериментов не проводилось - источников нет. Ниже записан один демонстрационный прогон на синтетическом тенанте.",
-  "experiments": [
-    {
-      "experiment_id": "exp-demo-canary",
-      "synthetic": true,
-      "site_id": "fixture-anime",
-      "hypothesis": "Сокращение переполненных title до 60 символов повысит CTR карточек",
-      "primary_metric": "ctr",
-      "applicability": "Карточки произведений с title > 60 символов на одном сайте",
-      "scope_page_share": 0.02,
-      "phase": "rolled_back",
-      "observation": {
-        "days_elapsed": 15,
-        "impressions": 5200,
-        "primary_metric_delta": -0.084
-      },
-      "verdict": "rollback",
-      "verdict_reason": "ухудшение -8.4% хуже порога -3%",
-      "evidence": "docs/seo-operator/demo-canary-rollback.md"
-    }
-  ]
+ "version": 1,
+ "note": "Реестр экспериментов. Ведётся оператором автоматически; завершённые эксперименты питают learning playbook. На реальных данных экспериментов не проводилось - источников нет. Ниже записан один демонстрационный прогон на синтетическом тенанте.",
+ "experiments": [
+  {
+   "experiment_id": "exp-demo-canary",
+   "synthetic": true,
+   "site_id": "fixture-anime",
+   "hypothesis": "Сокращение переполненных title до 60 символов повысит CTR карточек",
+   "primary_metric": "ctr",
+   "applicability": "Карточки произведений с title > 60 символов на одном сайте",
+   "scope_page_share": 0.02,
+   "phase": "rolled_back",
+   "observation": {
+    "days_elapsed": 15,
+    "impressions": 5200,
+    "primary_metric_delta": -0.084
+   },
+   "verdict": "rollback",
+   "verdict_reason": "ухудшение -8.4% хуже порога -3%",
+   "evidence": "docs/seo-operator/demo-canary-rollback.md"
+  },
+  {
+   "experiment_id": "exp-poster-priority-first-screen",
+   "site_id": "lords-10",
+   "hypothesis": "Обложка первой видимой карточки — кандидат LCP. Снятие с неё отсрочки и низкого приоритета ускоряет показ первого экрана, не увеличивая вес страницы",
+   "primary_metric": "lcp_field_p75",
+   "applicability": "Витрины семейства lords, где первый блок с обложками на главной — карусель: срочность доставалась первой сетке и не доходила до видимых плиток",
+   "phase": "canary",
+   "observation": {
+    "days_elapsed": 0,
+    "impressions": null,
+    "primary_metric_delta": null
+   },
+   "verdict": null,
+   "verdict_reason": "наблюдение начато 23.10 20:2xZ, выпуск 1bb71a4627c9. Лабораторная приёмка пройдена на двух окнах (первая видимая обложка eager+high, видимых с низким приоритетом 0, адреса картинок те же — вес не вырос, сценарии посетителя без замечаний). Полевых данных нет: по L-007 LCP решается ими, и до их появления вердикта «keep» быть не может. ЕДИНИЦА КАНАРЕЙКИ ЗДЕСЬ — ВИТРИНА, а не доля страниц: правка идёт в рантайме семейства и меняет атрибуты обложек на всех страницах одной витрины из двадцати пяти. Поэтому `scope_page_share` не указан — поставить туда 0,01 значило бы описать редакционный опыт, которым это не является. Порог «не шире одной витрины» соблюдён, откат назван: k2-release-code.sh --rollback lords-10.",
+   "evidence": "artifacts/evidence/posters/mod149-lords-10-after-phone-20261023.json и -desktop-20261023.json; config/seo-module-defects.json MOD-149"
+  }
+ ]
 }
