@@ -1,0 +1,41 @@
+витрин к замеру: 25, карточек на витрину: 5, предел ожидания: 20 с
+
+витрина                   источник  нет ист.  не разр.  не отдалась  примечание
+контроль lordserials22.info/title/mentalist: источник
+
+yummyani.site                    5         0         0            0  
+yummyani.org                     5         0         0            0  
+yummyani.biz                     5         0         0            0  
+yummyani7.site                   5         0         0            0  
+yummyani7.info                   5         0         0            0  
+animedia.icu                     5         0         0            0  
+animedia.space                   5         0         0            0  
+animeg0.site                     5         0         0            0  
+an1meg0.site                     5         0         0            0  
+an1mego.site                     5         0         0            0  
+lordserials22.info               1         4         0            0  /title/esche-odin/ — нет источника: Видео для этой серии не 
+                                                                     /title/lider-4/ — нет источника: Видео для этой серии не при
+                                                                     /title/plastikovyy-detoks/ — нет источника: Видео для этой с
+                                                                     /title/lednikovyy-apokalipsis/ — нет источника: Видео для эт
+1lordserials1.online             5         0         0            0  
+lordfilm47.space                 —         —         —            —  НЕ ИЗМЕРЕНО: curl: (6) Could not resolve host: lordfilm47.space
+lordserial33.biz                 5         0         0            0  
+zonafilm12.site                  5         0         0            0  
+zonafilm.space                   4         1         0            0  /title/lider-4/ — нет источника: Видео временно недоступно. 
+zonafilm.cc                      1         4         0            0  /title/esche-odin/ — нет источника: Видео временно недоступн
+                                                                     /title/lider-4/ — нет источника: Видео временно недоступно. 
+                                                                     /title/plastikovyy-detoks/ — нет источника: Видео временно н
+                                                                     /title/lednikovyy-apokalipsis/ — нет источника: Видео времен
+lordfilm.group                   5         0         0            0  
+lordfilm.spb.ru                  5         0         0            0  
+lordfilm.msk.ru                  5         0         0            0  
+lordserial.su                    5         0         0            0  
+lordserial.group                 5         0         0            0  
+lordserial.spb.ru                5         0         0            0  
+lordserial.msk.ru                5         0         0            0  
+lordserial.net.ru                5         0         0            0  
+
+измерено витрин 24 из 25; источник есть хотя бы на одной карточке у 24
+страниц проверено 120: без источника 9, не разрешилось 0
+ВЫВОД: у каждой измеренной витрины источник есть хотя бы на одной карточке выборки
+код выхода: 0

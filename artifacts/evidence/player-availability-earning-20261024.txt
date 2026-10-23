@@ -1,0 +1,30 @@
+витрин к замеру: 16, карточек на витрину: 5, предел ожидания: 20 с
+
+витрина                   источник  нет ист.  не разр.  не отдалась  примечание
+контроль lordserials22.info/title/mentalist: источник
+
+1lordserials1.online             1         0         0            0  
+an1meg0.site                     5         0         0            0  
+an1mego.site                     5         0         0            0  
+animedia.icu                     5         0         0            0  
+animeg0.site                     5         0         0            0  
+lordfilm47.space                 0         0         0            5  /title/schastlivogo-hellouina-skubi-du-2020/ — страница не о
+                                                                     /title/antisocialnaya-set-ot-memov-do-haosa/ — страница не о
+                                                                     /title/ya-v-poryadke-pravda/ — страница не отдалась: Error
+                                                                     /title/terapiya-kamino-naydi-svoy-put/ — страница не отдалас
+                                                                     /title/chebol-protiv-detektiva-2/ — страница не отдалась: Er
+lordserial33.biz                 5         0         0            0  
+lordserials22.info               5         0         0            0  
+yummyani.biz                     5         0         0            0  
+yummyani.org                     5         0         0            0  
+yummyani.site                    5         0         0            0  
+yummyani7.info                   5         0         0            0  
+yummyani7.site                   5         0         0            0  
+zonafilm.cc                      5         0         0            0  
+zonafilm.space                   5         0         0            0  
+zonafilm12.site                  5         0         0            0  
+
+измерено витрин 16 из 16; источник есть хотя бы на одной карточке у 15
+страниц проверено 76: без источника 0, не разрешилось 0
+ВЫВОД: у каждой измеренной витрины источник есть хотя бы на одной карточке выборки
+код выхода: 0
