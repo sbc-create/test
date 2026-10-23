@@ -759,3 +759,6 @@ body { overflow-wrap: break-word; }
 /* «Что есть дома»: подпись раздела и времени — обычными буквами, рамка карточки как у остальных */
 .match__row { border-radius: 14px; border-top-width: 4px; }
 .match__meta { font-size: .86rem !important; letter-spacing: 0; text-transform: none; font-weight: 600; }
+/* текст ×2: строка шапки переносится, значки не выходят за край */
+.masthead__row { flex-wrap: wrap; }
+.tools { flex-wrap: wrap; }
