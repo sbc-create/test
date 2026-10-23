@@ -13,6 +13,7 @@ import json
 import os
 import re
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -246,6 +247,11 @@ def run(shots_dir: Path | None) -> dict:
         page.goto(BASE + "/recept/syrniki-s-ezhevikoj/")
         page.click("[data-cook-open]")
         first = page.locator("[data-cook-count]").inner_text()
+        # слой режима готовки закрывает весь экран (а не встаёт текстом внизу страницы)
+        cover = page.evaluate(
+            "(() => { const r = document.querySelector('[data-cook]').getBoundingClientRect();"
+            " return r.top === 0 && r.left === 0 && r.width === innerWidth && r.height === innerHeight; })()"
+        )
         page.keyboard.press("ArrowRight")
         second = page.locator("[data-cook-count]").inner_text()
         page.keyboard.press("Escape")
@@ -253,15 +259,25 @@ def run(shots_dir: Path | None) -> dict:
             "first": first,
             "after_arrow": second,
             "closed_on_esc": page.locator("[data-cook]").is_hidden(),
+            "covers_screen": cover,
         }
         # фильтры: выбор применяется, сброс и пустой результат
         page.goto(BASE + "/recepty/")
         with page.expect_navigation():
             page.select_option("select[name=tip]", "supy")
         S["filter_supy_cards"] = page.locator(".grid .card").count()
-        S["filter_reset_link"] = page.locator("a.btn--ghost", has_text="Сбросить").count() == 1
+        # выбранное условие видно над результатом; «Сбросить всё» снимает всё
+        S["filter_reset_link"] = page.locator(".applied__reset", has_text="Сбросить всё").count() == 1
         page.goto(BASE + "/recepty/?produkt=tvorog&tip=supy")
         S["filter_empty_state"] = page.locator(".empty h2").inner_text() if page.locator(".empty h2").count() else None
+        with page.expect_navigation():  # снять одно условие — второе остаётся
+            page.click(".applied__chip >> nth=0")
+        S["filter_chip_removes_one"] = (
+            page.url.endswith("/recepty/?tip=supy") and page.locator(".applied__chip").count() == 1
+        )
+        with page.expect_navigation():
+            page.click(".applied__reset")
+        S["filter_reset_all"] = page.url.endswith("/recepty/") and page.locator(".applied__chip").count() == 0
         # поиск: ё/е, регистр, пробелы
         page.goto(BASE + "/poisk/?q=" + "  ТВОРОЖНАЯ   запеканка ")
         S["search_case_spaces"] = page.locator(".grid .card").count()
@@ -397,6 +413,12 @@ def main(argv=None) -> int:
     if a.out:
         Path(a.out).write_text(txt + "\n")
     print(txt)
+    # итог: провал любого сценария или нарушение axe — код 1 (а не только запись в выводе)
+    failed = [k for k, v in res["actions"].items() if v is False]
+    axe_bad = [k for k, v in res["axe"].items() if k != "version" and v]
+    if failed or axe_bad:
+        print("FAILED:", failed, "axe:", axe_bad, file=sys.stderr)
+        return 1
     return 0
 
 

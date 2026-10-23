@@ -44,3 +44,14 @@ def test_catalog_shows_applied_conditions_and_ways_out_of_empty_result(app):
         assert len(cards(again)) == int(n)
     _, plain, _ = app.route("/recepty/", {})
     assert "applied__chip" not in plain
+
+
+def test_cook_mode_has_its_own_screen_styles():
+    """Режим готовки — полноэкранный слой со своими стилями, а не текст внизу страницы."""
+    from pathlib import Path
+
+    css = (Path(__file__).resolve().parents[1] / "static" / "css" / "party.css").read_text()
+    rule = re.search(r"\n\.cook \{([^}]+)\}", css)
+    assert rule and "position: fixed" in rule.group(1) and "inset: 0" in rule.group(1)
+    assert ".cook[hidden] { display: none; }" in css
+    assert re.search(r"\.cook__nav \[data-cook-next\] \{[^}]+background", css)
