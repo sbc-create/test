@@ -13,7 +13,7 @@
       <button type="submit">Найти</button>
     </form>
     {% if chips %}
-    <p class="chips"><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}<a class="chip chip--time" href="/podborki/bystro-do-30-minut/">До 30 минут</a></p>
+    <p class="chips"><a class="chip chip--fridge" href="/iz-holodilnika/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></svg>Что есть дома</a><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}</p>
     {% endif %}
   </div>
 </section>

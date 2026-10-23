@@ -808,3 +808,8 @@ body { overflow-wrap: break-word; }
 .tool { padding-right: 12px; }
 @media (max-width: 1199px) { .tool { padding-right: 12px; } }
 @media (max-width: 399px) { .tool { padding-right: 6px; } }
+/* подбор по продуктам — первым в строке подсказок: заметная кнопка с подписью и на телефоне */
+.chip--fridge { gap: 6px; background: var(--ink); color: var(--paper-2); font-weight: 600; margin-right: 6px; }
+.chip--fridge:hover { background: var(--tomato-ink); color: #fff; }
+.chip--fridge svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; }
+@media (min-width: 1000px) { .hero .chips { flex-wrap: wrap; overflow: visible; row-gap: 6px; } }
