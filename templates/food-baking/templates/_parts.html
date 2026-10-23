@@ -6,9 +6,9 @@
 </picture>
 {%- endmacro %}
 
-{% macro card(r, heading='h3') -%}
+{% macro card(r, heading='h3', lead=false) -%}
 <article class="bcard bcard--{{ r.group }}{% if r.image or site.images %} bcard--pic{% endif %}">
-  {% if r.image %}<a class="bcard__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, 100vw') }}</a>
+  {% if r.image %}<a class="bcard__media" href="{{ r.url }}" tabindex="-1" aria-hidden="true">{{ picture(r, '(min-width: 1200px) 380px, (min-width: 1000px) 33vw, (min-width: 600px) 50vw, ' ~ ('100vw' if lead else '36vw'), lead) }}</a>
   {% elif site.images %}<span class="bcard__media bcard__media--none" aria-hidden="true"><img src="{{ asset('img/whisk.svg') }}" alt="" width="160" height="120" loading="lazy" decoding="async"></span>{% endif %}
   <div class="bcard__body">
     <p class="bcard__top"><span class="bcard__group">{{ r.group_label }}</span></p>
@@ -24,8 +24,8 @@
 </article>
 {%- endmacro %}
 
-{% macro grid(items, heading='h3') -%}
-<div class="bgrid bgrid--n{{ items|length }}">{% for r in items %}{{ card(r, heading) }}{% endfor %}</div>
+{% macro grid(items, heading='h3', lead=false) -%}
+<div class="bgrid bgrid--n{{ items|length }}">{% for r in items %}{{ card(r, heading, lead and loop.first) }}{% endfor %}</div>
 {%- endmacro %}
 
 {% macro toc(items, heading='h3') -%}
