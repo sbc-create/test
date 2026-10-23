@@ -8544,8 +8544,8 @@
           ]
         }
       ],
-      "status": "queued",
-      "evidence": "23.10 09:15Z wt-portable-site-cell-01-dc: по сводке T326 (09:05–09:14Z). Поисковые входы по параметрам за 14 дней (daily_search_landing_pages): у animedia.icu year 267, genre 49; ?exclude= — 0 на всех 19 доменах. Запрет обхода фасетов в robots сейчас не ставится: главный поток назвался браузером, послушание robots не доказано, а фасеты ?year=/?genre= приносят входы."
+      "status": "live_verified",
+      "evidence": "23.10 09:15Z wt-portable-site-cell-01-dc: по сводке T326 (09:05–09:14Z). Поисковые входы по параметрам за 14 дней (daily_search_landing_pages): у animedia.icu year 267, genre 49; ?exclude= — 0 на всех 19 доменах. Запрет обхода фасетов в robots сейчас не ставится: главный поток назвался браузером, послушание robots не доказано, а фасеты ?year=/?genre= приносят входы. | Исполнитель 20261023T091604Z-1699086 VERIFIED (5e21580). Публикатор 09:44:35Z, executor live_verified. Сверка по /__load 09:45–09:54Z (var/seo-audit/animedia-icu-load-T327-0954Z.json): 1 424 запроса, 503 — 20, все у other_bot (у browser, googlebot, yandex* — 0); каталог в среднем 626 мс (до — 6 690), главная 1 287 мс (до — 9 145); 4xx 13 (до — 132). Имена other_bot: crawler 821, amazonbot 146, reflectionbot 115. Обычный браузерный UA: / 1,73 с, /catalog/ 1,09 с, /catalog/?year=2026 1,59 с — все 200."
     }
   ]
 }
