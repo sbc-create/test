@@ -18,6 +18,7 @@
     {% if r.image %}<figure class="recipe__pic">{{ picture(r, '(min-width: 900px) 760px, 100vw', true) }}{% if r.image.kind == 'illustration' %}<figcaption>Иллюстрация</figcaption>{% endif %}</figure>{% endif %}
     <nav class="jump" aria-label="Перейти к разделу рецепта"><a class="jump__go" href="#prigotovlenie">К приготовлению</a><a href="#ingredienty">Продукты ({{ r.ingredients|length }})</a></nav>
   </header>
+  <div class="sheet-b__body">
   <section id="ingredienty" aria-labelledby="ing-h">
     <h2 id="ing-h">Продукты</h2>
     <ul class="weigh-l">{% for i in r.bench %}<li><label><input type="checkbox" data-weigh="{{ loop.index }}"><span class="weigh-l__n">{{ i.name }}</span></label><span class="weigh-l__a">{{ i.amount }}</span></li>{% endfor %}</ul>
@@ -43,6 +44,7 @@
     </ol>
     <p><button type="button" class="reset-btn" data-steps-reset hidden>Снять отметки</button></p>
   </section>
+  </div>
   {% set links = site.tag_links(r) %}{% if links %}<ul class="chips chips--light" aria-label="Темы">{% for h, l in links %}<li><a href="{{ h }}">{{ l }}</a></li>{% endfor %}</ul>{% endif %}
   <footer class="provenance">
     <p>Источник рецепта: <a href="{{ r.source.url }}" rel="nofollow noopener" target="_blank">{{ r.source.url.split('/')[2] }}</a>.

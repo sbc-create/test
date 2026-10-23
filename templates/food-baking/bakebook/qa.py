@@ -9,6 +9,7 @@ import argparse
 import json
 import os
 import subprocess
+import sys
 import time
 from pathlib import Path
 
@@ -208,6 +209,12 @@ def main(argv=None) -> int:
     if a.out:
         Path(a.out).write_text(txt + "\n")
     print(txt)
+    # итог: провал любого сценария или нарушение axe — код 1 (а не только запись в выводе)
+    failed = [k for k, v in res["actions"].items() if v is False]
+    axe_bad = [k for k, v in res.get("axe", {}).items() if k != "version" and v]
+    if failed or axe_bad:
+        print("FAILED:", failed, "axe:", axe_bad, file=sys.stderr)
+        return 1
     return 0
 
 
