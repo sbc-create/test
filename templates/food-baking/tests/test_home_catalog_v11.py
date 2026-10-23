@@ -85,7 +85,8 @@ def test_card_shows_oven_and_bake_time_only_from_recipe(app):
         else:
             assert "без духовки" in bake
         # время выпекания — только когда в рецепте один этап выпекания; несколько этапов не сводятся в одно число
-        assert ("bcard__bt" in bake) == (bool(r.temps) and len(r.oven["bake_times"]) == 1)
+        # и при одной температуре: «220 / 200 °C · 20 мин» не говорит, к какой температуре относится время
+        assert ("bcard__bt" in bake) == (len(r.temps) == 1 and len(r.oven["bake_times"]) == 1)
 
 
 def test_recipe_panel_holds_facts_and_jump(app):

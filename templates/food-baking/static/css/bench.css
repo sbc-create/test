@@ -665,3 +665,26 @@ body { overflow-wrap: break-word; }
 .method-b > li:last-child { border-bottom: 0; }
 .method-b > li p { font-size: 1.04rem; }
 .facts-b { grid-auto-flow: row dense; }
+/* карточка с изображением на телефоне: первая в первой подборке — крупно, остальные — картинка 4:3 слева */
+@media (max-width: 599px) {
+  .bcard--pic { flex-direction: row; align-items: stretch; }
+  .bcard--pic .bcard__media { flex: 0 0 36%; align-self: flex-start; aspect-ratio: 4 / 3; margin: 12px 0 12px 12px; border: 0; border-radius: 10px; }
+  .bcard--pic .bcard__body { min-width: 0; padding: 10px 12px; }
+  .bcard--pic .bcard__title { font-size: 1.05rem; margin-bottom: 6px; }
+  .bcard--pic .bcard__bake { margin-bottom: 4px; font-size: .88rem; }
+  .bcard--pic .bcard__bt { display: none; }
+  .block--first .bgrid > .bcard--pic:first-child { flex-direction: column; }
+  .block--first .bgrid > .bcard--pic:first-child .bcard__media { flex: none; margin: 0; border-radius: 14px 14px 0 0; border-bottom: 1px solid var(--rule); }
+  .block--first .bgrid > .bcard--pic:first-child .bcard__body { padding: 14px 16px; }
+  .block--first .bgrid > .bcard--pic:first-child .bcard__title { font-size: 1.2rem; }
+  .block--first .bgrid > .bcard--pic:first-child .bcard__bt { display: inline; }
+}
+/* частичное наполнение: без фото — нейтральная область с маленьким бледным значком; на телефоне — текстовая карточка */
+.bcard__media--none { background: var(--flour); }
+.bcard__media--none img { width: 52px; opacity: .4; filter: grayscale(.7); }
+@media (max-width: 599px) {
+  .bcard--pic:has(.bcard__media--none) { flex-direction: column; }
+  .bcard--pic .bcard__media--none { display: none; }
+  .bcard--pic:has(.bcard__media--none) .bcard__body { padding: 14px 16px; }
+  .bcard--pic:has(.bcard__media--none) .bcard__bt { display: inline; }
+}
