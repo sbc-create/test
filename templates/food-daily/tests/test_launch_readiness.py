@@ -154,8 +154,12 @@ def test_footer_links_are_real_pages(app):
     foot = html[html.index('<footer class="foot">') :]
     links = re.findall(r'href="(/[^"]*)"', foot)
     assert "/o-proekte/" in links and "/konfidencialnost/" in links and "/kontakty/" not in links
+    assert "/o-proekte/#istochniki" in links  # источники и правила публикации — из подвала
     for href in links:
-        assert app.route(href, {})[0] == 200, href
+        path, _, frag = href.partition("#")
+        st, page, _ = app.route(path, {})
+        assert st == 200, href
+        assert not frag or f'id="{frag}"' in page, href
     assert app.route("/kontakty/", {})[:3:2] == (301, {"Location": "/o-proekte/"})
 
 

@@ -536,3 +536,10 @@ h1, h2 { hyphens: manual; }
 .recipe__head .recipe__pic img { width: 100%; height: 100%; object-fit: cover; }
 .recipe__head .tags { margin-top: 12px; }
 .pick__item input { width: 24px; height: 24px; }
+
+/* --- 23.10: карточка — название, главные продукты, время и порции; ровная область изображения 4:3 ---------- */
+.card__media--none { display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+.card__media--none .illo { height: 100%; aspect-ratio: auto; }
+.card__media--none .illo img { padding: 16% 28%; opacity: .9; }
+.card__title { margin-bottom: 8px; }
+.card__ing { margin-bottom: 14px; }
