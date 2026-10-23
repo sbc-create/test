@@ -68,6 +68,13 @@ import sys
   for (const img of document.querySelectorAll('img')) {
     const r = img.getBoundingClientRect();
     if (r.width < 2 || r.height < 2) continue;
+    // ВАЖНО: `currentSrc` пуст, пока браузер не выбрал источник. У
+    // отложенной картинки, до которой прокрутка не дошла, выбора ещё НЕ
+    // БЫЛО, и `src` вместо него — это не выбор браузера, а разметка.
+    // 23.10 из-за подстановки `src` замер утверждал, что браузер взял
+    // 480-й вариант там, где он вообще ничего не брал (вес по сети у таких
+    // строк отсутствовал).
+    const выбрано = !!img.currentSrc;
     const адрес = img.currentSrc || img.src || '';
     if (!адрес.includes('/poster/') && !адрес.includes('poster.cdnvideohub')) {
       continue;
@@ -82,7 +89,11 @@ import sys
       dpr: window.devicePixelRatio,
       нужно_px: Math.round(r.width * window.devicePixelRatio),
       вес_байт: в.сеть, вес_с_заголовками: в.всего,
-      srcset: (img.getAttribute('srcset') || '').slice(0, 200),
+      // Полный srcset, без обрезки. Обрезка на 200 символах 23.10 съела
+      // последнего кандидата (720w) у ВСЕХ обложек, и замер показал «0 из
+      // 100 с кандидатом 720w» при живом кандидате: выбранный адрес
+      // ?w=720 в том же замере его опровергал.
+      srcset: img.getAttribute('srcset') || '',
       sizes: img.getAttribute('sizes') || '',
       loading: img.getAttribute('loading') || 'НЕТ',
       fetchpriority: img.getAttribute('fetchpriority') || 'НЕТ',
@@ -100,6 +111,7 @@ import sys
         }
         return ц;
       })(),
+      выбрано,
       адрес,
     });
   }
@@ -149,10 +161,18 @@ def замерить(домены, окна, страницы) -> list[dict]:
                             # Прокрутка до низа: отложенные обложки иначе не
                             # грузятся, и вес первого экрана не отличить от
                             # веса страницы.
-                            страница.evaluate(
-                                "window.scrollTo(0,"
-                                " document.body.scrollHeight)")
-                            страница.wait_for_timeout(1800)
+                            # Прокрутка ШАГАМИ: отложенные картинки
+                            # грузятся по приближении к окну, и один
+                            # прыжок в конец оставляет середину
+                            # невыбранной — именно такие строки 23.10
+                            # давали ложный «выбор» браузера.
+                            for доля in (0.25, 0.5, 0.75, 1.0):
+                                страница.evaluate(
+                                    "д => window.scrollTo(0,"
+                                    " document.body.scrollHeight * д)",
+                                    доля)
+                                страница.wait_for_timeout(900)
+                            страница.wait_for_timeout(1200)
                         except Exception as сбой:  # noqa: BLE001
                             строки.append({
                                 "окно": ключ, "домен": домен, "страница": вид,
