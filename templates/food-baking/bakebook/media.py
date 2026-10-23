@@ -85,10 +85,12 @@ def job(site: Site, r) -> dict:
     look = (given.get("look") or "").strip().rstrip(".") + "." if given.get("look") else (
         b["last_step"] + (f" Готовность: {cue[:1].lower()}{cue[1:]}." if cue else "")
     )
+    # подача из поставки описывает готовое блюдо; последний шаг рецепта — действие, и подписан как шаг
+    serve = f"Блюдо готово и подано так: {look}" if given.get("look") else f"Последний шаг рецепта: {look}"
     main = ", ".join(n.lower() for n in b["ingredients"][:8])
     prompt = (
         f"Реалистичная фотография домашнего блюда «{r.title}» ({b['group'].lower()}). "
-        f"Блюдо готово и подано так: {look} "
+        f"{serve} Показать готовое блюдо после этого шага. "
         f"Состав по рецепту: {main}. В кадре только то, что входит в рецепт, без посторонних продуктов и гарниров. "
         "Естественный дневной свет, спокойный светлый фон, ракурс около 45°, кадр 4:3, блюдо по центру; "
         "без текста, надписей, логотипов, рук и людей."
@@ -108,6 +110,20 @@ def job(site: Site, r) -> dict:
     }
 
 
+FIRST_DELIVERY = 6
+
+
+def home_first(n: int) -> list[str]:
+    """Первые n рецептов главной в порядке показа (по отрисованной главной: подборки зависят от сезона)."""
+    import re
+
+    from bakebook.server import App
+
+    _, html, _ = App().route("/", {})
+    slugs = re.findall(r'class="b?card__link" href="/recept/([^/"]+)/"', html)
+    return list(dict.fromkeys(slugs))[:n]
+
+
 def jobs() -> dict:
     """Файл заданий для рецептов без изображения: data/media/image-jobs.json (перезаписывается целиком)."""
     site = Site()
@@ -118,6 +134,12 @@ def jobs() -> dict:
         "note": "Сгенерированное изображение публикуется как illustration (подпись «Иллюстрация»), не как фото.",
         "jobs": [job(site, r) for r in site.recipes if not r.image],
     }
+    # первая поставка — блюда, которые посетитель видит первыми: первые карточки главной по порядку
+    first = home_first(FIRST_DELIVERY)
+    for j in out["jobs"]:
+        j["priority"] = first.index(j["slug"]) + 1 if j["slug"] in first else None
+    out["jobs"].sort(key=lambda j: (j["priority"] is None, j["priority"] or 0))
+    out["first_delivery"] = [j["slug"] for j in out["jobs"] if j["priority"]]
     JOBS.write_text(json.dumps(out, ensure_ascii=False, indent=2) + "\n")
     return {"jobs": len(out["jobs"]), "file": str(JOBS)}
 

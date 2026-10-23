@@ -106,3 +106,14 @@ def test_view_alone_is_not_a_filter_condition(app):
 def test_doughs_page_counts_in_words(app):
     _, html, _ = app.route("/testo/", {})
     assert re.search(r"<i>\d+ рецепт(а|ов)? →</i>", html)
+
+
+def test_image_jobs_first_delivery_is_home_first_cards(app):
+    import json
+    from pathlib import Path
+
+    spec = json.loads(Path("data/media/image-jobs.json").read_text(encoding="utf-8"))
+    _, html, _ = app.route("/", {})
+    first = list(dict.fromkeys(re.findall(r'class="bcard__link" href="/recept/([^/"]+)/"', html)))[:6]
+    assert spec["first_delivery"] == first == [j["slug"] for j in spec["jobs"][:6]]
+    assert all(j["recipe_id"] and j["alt"] and j["kind"] == "illustration" for j in spec["jobs"])
