@@ -706,3 +706,7 @@ body { overflow-wrap: break-word; }
 .gtile__label { overflow-wrap: break-word; }
 /* шаг: 17–18 px и строка до ~70 знаков */
 .method-b > li p { font-size: 1.08rem; max-width: 31em; }
+@media print {
+  .sheet-b > header > .recipe-panel { border: 0; padding: 0; background: none; }
+  .pct-box, .chips--light, .related { display: none !important; }
+}
