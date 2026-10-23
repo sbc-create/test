@@ -1,0 +1,54 @@
+1lordserials1.online   все в карте
+an1meg0.site           ВНЕ КАРТ 4 из 8, визитов 7
+                         /title/silneyshaya-vedma-v-mire-startovala/season-1/episode-3/
+                         /title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/
+                         /title/poschadi-menya-velikiy-gospodin-3/season-3/episode-4/
+                         /title/nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka-ya-prinyala-pari-ot-/season-1/episode-3/
+an1mego.site           ВНЕ КАРТ 2 из 7, визитов 2
+                         /title/vpered-vpered-atom/season-1/episode-22/
+                         /title/dragonboll-zet-tv/season-2/episode-29/
+animedia.icu           ВНЕ КАРТ 2 из 8, визитов 274
+                         /title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/
+                         /title/poschadi-menya-velikiy-gospodin-3/season-3/episode-5/
+animedia.space         ВНЕ КАРТ 1 из 1, визитов 1
+                         /title/dragonboll-zet-tv/season-2/episode-167/
+animeg0.site           ВНЕ КАРТ 1 из 8, визитов 2
+                         /title/vosstavshiy-protiv-neba-2/season-2/episode-8/
+lordfilm47.space       ВНЕ КАРТ 5 из 8, визитов 16
+                         /title/igra-smerti-4/season-1/episode-2/
+                         /title/csi-mesto-prestupleniya-nyu-york/season-1/episode-23/
+                         /title/igra-smerti-4/season-1/episode-5/
+                         /title/igra-smerti-4/season-1/episode-3/
+                         /title/za-granyu-vozmozhnogo-2/season-4/episode-23/
+lordserial33.biz       ВНЕ КАРТ 1 из 3, визитов 1
+                         /title/seyf/season-1/episode-2/
+lordserials22.info     ВНЕ КАРТ 2 из 8, визитов 35
+                         /title/akademiya-minerva/
+                         /title/100-atletov-italiya/season-1/episode-1/
+lordserials22.site     НЕ ИЗМЕРЕНО: индекс карты: curl код 6
+lordserials22.space    НЕ ИЗМЕРЕНО: индекс карты: curl код 6
+yummyani.biz           все в карте
+yummyani.org           все в карте
+yummyani.site          ВНЕ КАРТ 5 из 8, визитов 6586
+                         /anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3
+                         /anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4
+                         /anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5
+                         /anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/1
+                         /anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/2
+yummyani7.info         ВНЕ КАРТ 1 из 8, визитов 44
+                         /anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/3
+yummyani7.site         ВНЕ КАРТ 1 из 8, визитов 150
+                         /anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/4
+zonafilm.cc            ВНЕ КАРТ 2 из 8, визитов 26
+                         /search/
+                         /title/mentalist/season-1/episode-3/
+zonafilm.space         ВНЕ КАРТ 1 из 8, визитов 2
+                         /title/zindagi-mere-ghar-aana/season-1/episode-8/
+zonafilm12.site        ВНЕ КАРТ 2 из 8, визитов 10
+                         /title/chuzhaya-zhizn/season-1/episode-3/
+                         /title/chuzhaya-zhizn/season-1/episode-2/
+lordserial101.site     НЕ ИЗМЕРЕНО: индекс карты: curl код 6
+lordfilm077.site       НЕ ИЗМЕРЕНО: индекс карты: curl код 6
+
+домéнов измерено 17; с адресами вне карт 14; адресов вне карт 30; из них произведение 1, прочее 1, серия 28; визитов за ними 7156 из 13244 (54 %); НЕ ИЗМЕРЕНО 4: lordserials22.site, lordserials22.space, lordserial101.site, lordfilm077.site
+ДОЛЮ ЧИТАТЬ ТОЛЬКО С РАЗБИВКОЙ: «серия вне карты» у Animedia и AnimeGo — устройство карты (она из страниц произведений), у Lords — условие опыта T087, а у Yummy — известный недостаток обрезанной карты серий (MOD-103/106, выпуск стоит на паролях баз). Потерей без оговорок является только «произведение вне карты»
