@@ -7,7 +7,7 @@
 {% for t, items in site.by_temp() %}
 <section class="temp" id="t-{{ t or 'net' }}" aria-labelledby="h-t-{{ t or 'net' }}">
   <h2 id="h-t-{{ t or 'net' }}" class="temp__h">{% if t %}<b>{{ t }}</b> °C{% else %}Без духовки{% endif %}</h2>
-  <ul class="rows">{% for r in items %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{{ r.bake_label or (r.total if r.total else '') }}</span></li>{% endfor %}</ul>
+  <ul class="rows">{% for r in items %}<li><a href="{{ r.url }}">{{ r.title }}</a><span>{% if r.temps|length > 1 %}{{ r.temps|join(' → ') }} °C · {% endif %}{% if r.bake_unclear_steps %}в несколько этапов, шаг {{ r.bake_unclear_steps|min }}{% else %}{{ r.bake_label or (r.total if r.total else '') }}{% endif %}</span></li>{% endfor %}</ul>
 </section>
 {% endfor %}
 <p class="more"><a href="/pechem/">Пеку несколько: общий список продуктов и духовка по температурам</a></p>
