@@ -119,6 +119,37 @@ import sys
 }"""
 
 
+def ревизия(домен: str) -> dict:
+    """Какая ревизия витрины отвечает СЕЙЧАС, по её же healthz.
+
+    Без этого замеры двух задач, выпущенных подряд, смешиваются: строка «в
+    каталоге взят вариант 720» ничего не значит, если неизвестно, на какой
+    ревизии она снята. Требование соседней линии 23.10, и оно верное.
+    """
+    import json as _j
+    import urllib.request
+    try:
+        запрос = urllib.request.Request('https://' + домен + '/healthz',
+                                        headers={'User-Agent': АГЕНТ})
+        with urllib.request.urlopen(запрос, timeout=15) as ответ:
+            д = _j.loads(ответ.read().decode('utf-8', errors='replace'))
+    except Exception as сбой:  # noqa: BLE001
+        return {"ревизия": None,
+                "почему": f"{type(сбой).__name__}: {str(сбой)[:60]}"}
+    путь = str(д.get('runtime_path') or '')
+    из_пути = ''
+    части = путь.split('/releases/')
+    if len(части) > 1:
+        из_пути = части[1].split('/')[0]
+    return {
+        "ревизия": (д.get('updater', {}).get('storefront_release_commit')
+                    or из_пути or None),
+        "ревизия_из_пути": из_пути or None,
+        "процесс_поднят": д.get('process_start_time'),
+        "runtime_sha256": (д.get('runtime_sha256') or '')[:16],
+    }
+
+
 def _страж():
     п = pathlib.Path(__file__).resolve().parent / "counter_guard.py"
     с = importlib.util.spec_from_file_location("counter_guard", п)
@@ -139,6 +170,10 @@ def замерить(домены, окна, страницы) -> list[dict]:
         return []
     страж = _страж()
     строки: list[dict] = []
+    # Ревизия снимается ДО замеров и ещё раз ПОСЛЕ: если витрину выпустили
+    # посреди прогона, строки относятся к разным ревизиям, и об этом надо
+    # знать, а не усреднять.
+    ревизии_до = {д: ревизия(д) for д in домены}
     with sync_playwright() as p:
         браузер = p.chromium.launch(
             executable_path=str(кандидаты[-1]),
@@ -190,6 +225,19 @@ def замерить(домены, окна, страницы) -> list[dict]:
                 контекст.close()
         finally:
             браузер.close()
+    ревизии_после = {д: ревизия(д) for д in домены}
+    for домен in домены:
+        до, после = ревизии_до[домен], ревизии_после[домен]
+        строки.append({
+            "домен": домен, "страница": "служебное",
+            "ревизия_до": до.get("ревизия"),
+            "ревизия_после": после.get("ревизия"),
+            "ревизия_не_менялась": до.get("ревизия") == после.get("ревизия"),
+            "процесс_поднят": после.get("процесс_поднят"),
+        })
+    for с in строки:
+        if "адрес" in с:
+            с["ревизия"] = ревизии_до.get(с["домен"], {}).get("ревизия")
     return строки
 
 
