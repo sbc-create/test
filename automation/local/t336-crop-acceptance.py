@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""Приёмка T336: кадрирование обрезано ПО ЦЕНТРУ, высота не изменилась.
+
+ЗАЧЕМ СРАВНИВАТЬ СОДЕРЖИМОЕ, А НЕ ЧИСЛА. Правило T336 — «отношение больше
+0,94 обрезается по центру до 0,85 при неизменной высоте». Числа (ширина,
+высота, отношение) докажут, что обрезка СЛУЧИЛАСЬ, но не докажут, что она
+ЦЕНТРИРОВАННАЯ: обрезка от левого края даёт те же числа и другую картинку.
+Поэтому проверка делает то, что должен был сделать обработчик: берёт файл «до»,
+вырезает из него центр до новой ширины и сравнивает с тем, что отдаёт витрина.
+
+ЧТО СЧИТАЕТСЯ ГОДНЫМ по каждому постеру набора:
+
+* отношение после обрезки — 0,85 с допуском (``--tolerance``, по умолчанию
+  0,01): точное попадание невозможно из-за целых пикселей;
+* высота не изменилась ни на пиксель;
+* ожидаемый центр совпал с выданным: PSNR не ниже ``--psnr`` (по умолчанию
+  30 дБ). Ниже — обрезка не по центру либо кадр другой;
+* постеры с отношением ≤ 0,94 не изменились НИ НА БАЙТ (сравнение по SHA-256).
+
+Снимок «до» берётся из описи `t336-crop-baseline.py`, а файлы — из каталога,
+который она сохранила. Без снимка «до» приёмка невозможна и честно отказывает.
+
+    python3 automation/local/t336-crop-acceptance.py \\
+        --baseline var/t336-before/baseline.json
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import io
+import json
+import math
+import pathlib
+import subprocess
+import sys
+
+АГЕНТ = "factory-crop-acceptance"
+ЦЕЛЬ_ОТНОШЕНИЯ = 0.85
+ПОРОГ_ОБРЕЗКИ = 0.94
+
+
+def скачать(адрес: str) -> bytes | None:
+    р = subprocess.run(
+        ["curl", "-sSL", "--max-time", "30", "-A", АГЕНТ, адрес],
+        capture_output=True, timeout=60)
+    return р.stdout or None
+
+
+def psnr(а, б) -> float | None:
+    """PSNR двух картинок одинакового размера. None — размеры не совпали."""
+    from PIL import ImageChops, ImageStat
+    if а.size != б.size:
+        return None
+    а = а.convert("RGB")
+    б = б.convert("RGB")
+    разница = ImageChops.difference(а, б)
+    статистика = ImageStat.Stat(разница)
+    среднее = sum(з * з for з in статистика.rms) / len(статистика.rms)
+    if среднее <= 0:
+        return 99.0
+    return 20 * math.log10(255.0 / math.sqrt(среднее))
+
+
+def центр(картинка, ширина: int):
+    """Центральная полоса заданной ширины: то, что должен был вырезать
+    обработчик."""
+    левый = max(0, (картинка.width - ширина) // 2)
+    return картинка.crop((левый, 0, левый + ширина, картинка.height))
+
+
+def main(аргв=None) -> int:
+    р = argparse.ArgumentParser(
+        description=__doc__,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--baseline", required=True)
+    р.add_argument("--psnr", type=float, default=30.0)
+    р.add_argument("--tolerance", type=float, default=0.01)
+    а = р.parse_args(аргв)
+    путь = pathlib.Path(а.baseline)
+    if not путь.is_file():
+        print(f"НЕ ИЗМЕРЕНО: снимка «до» нет: {путь}", file=sys.stderr)
+        return 2
+    try:
+        from PIL import Image
+    except ImportError as сбой:
+        print(f"НЕ ИЗМЕРЕНО: PIL недоступен ({сбой}). Проверять окружением"
+              " службы: automation/local/service-image-support-check.py",
+              file=sys.stderr)
+        return 2
+    снимок = json.loads(путь.read_text("utf-8"))
+    годных = плохих = пропущено = 0
+    print(f"{'uuid':<10} {'вариант':<8} {'было':<11} {'стало':<11} {'отн':<6}"
+          f" {'PSNR':<7} исход")
+    for з in снимок:
+        if з.get("роль") != "канарейка" or з.get("исход"):
+            continue
+        файл_до = pathlib.Path(з.get("файл") or "")
+        if not файл_до.is_file():
+            print(f"{з['uuid'][:8]:<10} {з['вариант']:<8}"
+                  f" файла «до» нет — пропуск")
+            пропущено += 1
+            continue
+        байты_после = скачать(з["адрес"])
+        if not байты_после:
+            print(f"{з['uuid'][:8]:<10} {з['вариант']:<8} НЕ ПОЛУЧЕНО")
+            плохих += 1
+            continue
+        до = Image.open(файл_до)
+        после = Image.open(io.BytesIO(байты_после))
+        отн_до = з["отношение"]
+        отн_после = после.width / после.height if после.height else 0
+        если_обрезка = отн_до is not None and отн_до > ПОРОГ_ОБРЕЗКИ
+        не_менялось = (hashlib.sha256(байты_после).hexdigest()
+                       == з["sha256"])
+        оценка = None
+        if если_обрезка and not не_менялось:
+            оценка = psnr(центр(до, после.width), после)
+
+        if не_менялось and если_обрезка:
+            исход = (f"НЕ ГОДНО: отношение {отн_до:.3f} под обрезку, а файл"
+                     " не изменился")
+            плохо = True
+        elif не_менялось:
+            исход = "ГОДНО: байт в байт как было, и так и должно быть"
+            плохо = False
+        elif если_обрезка:
+            ошибки = []
+            if abs(отн_после - ЦЕЛЬ_ОТНОШЕНИЯ) > а.tolerance:
+                ошибки.append(f"отношение {отн_после:.3f} не 0,85")
+            if после.height != до.height:
+                ошибки.append(f"высота {до.height} → {после.height}")
+            if оценка is None:
+                ошибки.append("размеры ожидаемого центра не совпали")
+            elif оценка < а.psnr:
+                ошибки.append(f"PSNR {оценка:.1f} ниже {а.psnr}:"
+                              " обрезка не по центру")
+            плохо = bool(ошибки)
+            исход = ("НЕ ГОДНО: " + "; ".join(ошибки) if плохо
+                     else "ГОДНО: центр совпал, высота та же")
+        else:
+            исход = (f"НЕ ГОДНО: отношение {отн_до or 0:.3f} не под обрезку,"
+                     " а файл изменился")
+            плохо = True
+        if плохо:
+            плохих += 1
+        else:
+            годных += 1
+        print(f"{з['uuid'][:8]:<10} {з['вариант']:<8}"
+              f" {str(до.width) + 'x' + str(до.height):<11}"
+              f" {str(после.width) + 'x' + str(после.height):<11}"
+              f" {отн_после:<6.3f}"
+              f" {('—' if оценка is None else f'{оценка:.1f}'):<7} {исход}")
+    print()
+    print(f"годных {годных}, плохих {плохих}, пропущено {пропущено}")
+    print("ЗАВЕРШЕНО: приёмка T336 "
+          + ("ПРОЙДЕНА" if плохих == 0 and годных else "НЕ ПРОЙДЕНА"),
+          file=sys.stderr)
+    return 0 if плохих == 0 and годных else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())
