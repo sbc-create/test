@@ -1,8 +1,321 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-24T23:07:29Z",
+ "generated_at": "2026-10-24T23:21:38Z",
  "items": [
+  {
+   "content_id": "fd-88166bd84abe",
+   "slug": "kartofel-zolotoj-zhuk",
+   "version": 1,
+   "published_at": "2026-10-24T23:21:38Z",
+   "updated_at": "2026-10-24T23:21:37Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Картофель «Золотой жук» с розмарином",
+    "slug": "kartofel-zolotoj-zhuk",
+    "seo_title": "Картофель «Золотой жук» с розмарином в духовке",
+    "seo_description": "Молодой картофель надрезают пластинками, не прорезая до конца, смазывают маслом с розмарином и запекают при 220 градусах до хруста.",
+    "intro": "Эффектный гарнир на четверых из молодого картофеля: клубни нарезают тонкими пластинками, не доводя нож до конца, и в духовке они раскрываются веером с хрустящими краями.",
+    "steps": [
+     {
+      "text": "Разогрейте духовку до 220 градусов. Вымойте картофель под холодной водой и хорошо обсушите.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Кладите клубни на доску и делайте частые тонкие надрезы, не прорезая до конца.",
+      "source_steps": [
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Уложите картофель в форму или чугунную сковороду с чугунной ручкой, сбрызните маслом, промазав надрезы.",
+      "source_steps": [
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Посыпьте рубленым розмарином, посолите, поперчите и запекайте 40–45 минут.",
+      "source_steps": [
+       6,
+       7
+      ],
+      "readiness_cue": "Клубни золотистые, края пластинок хрустят."
+     }
+    ],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "v-duhovke"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Молодой картофель"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Свежий розмарин"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Картофель «Золотой жук»",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Молодой картофель, 800 г",
+      "name": "Молодой картофель",
+      "quantity": 800.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 2 столовые ложки",
+      "name": "Оливковое масло",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Свежий измельченный розмарин, 1 столовая ложка",
+      "name": "Свежий измельченный розмарин",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "oven"
+    ],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/-kartofel-zolotoy-zhuk--175758",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:23Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-a55305cff992",
+   "slug": "bananovye-pankejki",
+   "version": 1,
+   "published_at": "2026-10-24T23:21:38Z",
+   "updated_at": "2026-10-24T23:21:37Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Банановые панкейки",
+    "slug": "bananovye-pankejki",
+    "seo_title": "Банановые панкейки на молоке с разрыхлителем",
+    "seo_description": "Банан пюрируют блендером, взбивают с яйцом, сахаром и молоком, вмешивают муку с разрыхлителем и маслом и жарят панкейки с двух сторон.",
+    "intro": "Пышные панкейки к завтраку: спелый банан превращают в пюре и взбивают с яйцом, а мука с разрыхлителем делает тесто лёгким. Масло уже в тесте, поэтому сковороду смазывать не нужно.",
+    "steps": [
+     {
+      "text": "Очистите банан и измельчите блендером в пюре.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Соедините пюре с яйцом и взбейте венчиком, затем добавьте сахар и влейте молоко.",
+      "source_steps": [
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Просейте муку и тщательно размешайте венчиком, чтобы не осталось комков. Добавьте разрыхлитель, влейте масло и снова перемешайте.",
+      "source_steps": [
+       5,
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Выливайте тесто порциями на хорошо разогретую сковороду и жарьте с обеих сторон.",
+      "source_steps": [
+       8,
+       9
+      ],
+      "readiness_cue": "Поверхность в пузырьках, обе стороны золотистые."
+     }
+    ],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "moloko",
+     "na-skovorode"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Банан"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Разрыхлитель"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Растительное масло"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Банановые панкейки",
+    "servings": 5,
+    "servings_raw": "5",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Бананы, 1 штука",
+      "name": "Бананы",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 1 стакан",
+      "name": "Молоко",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 3 столовые ложки",
+      "name": "Сахар",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Разрыхлитель, 1 чайная ложка",
+      "name": "Разрыхлитель",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 1 стакан",
+      "name": "Пшеничная мука",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 2 столовые ложки",
+      "name": "Растительное масло",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "blender"
+    ],
+    "topic_id": null
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/vypechka-deserty/bananovye-pankeyki-191385",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:44Z"
+   },
+   "media": []
+  },
   {
    "content_id": "fd-0db94341d9c6",
    "slug": "golubcy-s-farshem-boloneze",
