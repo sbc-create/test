@@ -113,8 +113,8 @@
 | animeg0.site, an1meg0.site | редактор продолжает | цикл |
 | an1mego.site | после оценки T191 24.10 | цикл / владелец |
 | yummyani.site, yummyani7.*, yummyani.org, yummyani.biz | мост фактов для Yummy; затем исправление 1999-otdel и задания SOURCES_MISSING | линия Yummy / владелец |
-| zonafilm12.site | первый шаг снятия `PAUSED_PUBLISH`: одна публикация, затем `editorial-overlay-before-after --compare` | Архитектор (условие 23d1eb2) |
+| zonafilm12.site | **пауза снята 24.10 10:28Z (cb8271c)**; приёмка первой публикации: `--compare` = 0 и остаток «готово, не размещено» меньше 13 | Архитектор + эта сессия |
 | zonafilm.space, zonafilm.cc | после zonafilm12.site и окончания опытов (01.11 / 28.10) | Архитектор / владелец |
-| Lords ×4 | после оценки опытов 28.10; контроль lordfilm47.space недоступен по DNS | владелец |
+| Lords ×4 | не раньше оценки опытов 28.10: все четыре участвуют (канарейка lordserials22.info; контроль lordfilm47.space, 1lordserials1.online, lordserial33.biz — config/experiments.json). lordfilm47.space последним: ещё и нет DNS | владелец |
 
 Отдельная очередь по каждому домену (`config/domain-queues/*.json`) есть только в ветке Архитектора (§9 `OWNER_BLOCKS_20261022.md`). Сессия её не дублирует.
