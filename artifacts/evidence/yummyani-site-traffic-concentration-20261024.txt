@@ -1,0 +1,15 @@
+страниц серий с визитами: 367, визитов в них: 18005
+среднее 49.1, МЕДИАНА 1.0, максимум 9758
+
+произведений среди них: 161
+произведение                                          визитов   доля
+neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-sh    16817  93.4%
+kiberpank-beguschie-po-krayu-2                            316   1.8%
+chernyy-klever-2                                           95   0.5%
+izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imee       76   0.4%
+blich-tysyacheletnyaya-krovavaya-voyna-bedstvie            48   0.3%
+chernyy-klever                                             38   0.2%
+
+доля верхнего произведения: 93.4 %
+БЕЗ него: страниц 362, визитов 1188, среднее 3.3, медиана 1.0
+страницы произведений: 269, среднее 5.8, медиана 1.0
