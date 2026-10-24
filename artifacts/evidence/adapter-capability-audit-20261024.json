@@ -1,0 +1,342 @@
+[
+ {
+  "домен": "1lordserials1.online",
+  "ячейка": "lords-03",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/site-1lordserials1-online/current/src/editorial_overlay.py (подтверждено: site.json)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "an1meg0.site",
+  "ячейка": "animego-04",
+  "адаптер": "animego",
+  "маршрут": "наложение в дереве",
+  "доказательство": "/srv/an1meg0-site/current/src/seo_overlay.py",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "an1mego.site",
+  "ячейка": "animego-02",
+  "адаптер": "animego",
+  "маршрут": "наложение в дереве",
+  "доказательство": "/srv/an1mego-site/current/src/seo_overlay.py",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "animedia.icu",
+  "ячейка": "animedia-01",
+  "адаптер": "animedia",
+  "маршрут": "наложение в дереве",
+  "доказательство": "/srv/animedia-icu/current/src/seo_overlay.py",
+  "объявлено": [
+   "deliver",
+   "display",
+   "facts"
+  ],
+  "расхождение": ""
+ },
+ {
+  "домен": "animedia.space",
+  "ячейка": "animedia-02",
+  "адаптер": "animedia",
+  "маршрут": "наложение в дереве",
+  "доказательство": "/srv/animedia-space/current/src/seo_overlay.py",
+  "объявлено": [
+   "deliver",
+   "display",
+   "facts"
+  ],
+  "расхождение": ""
+ },
+ {
+  "домен": "animeg0.site",
+  "ячейка": "animego-03",
+  "адаптер": "animego",
+  "маршрут": "наложение в дереве",
+  "доказательство": "/srv/animeg0-site/current/src/seo_overlay.py",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "lordfilm.group",
+  "ячейка": "lords-10",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordfilm.msk.ru",
+  "ячейка": "lords-12",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordfilm.spb.ru",
+  "ячейка": "lords-11",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordfilm077.site",
+  "ячейка": "lords-09",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordfilm47.space",
+  "ячейка": "lords-01",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/lordfilm47-space/current/src/editorial_overlay.py (подтверждено: site.json, editorial_overlay.py)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "lordserial.group",
+  "ячейка": "lords-14",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial.msk.ru",
+  "ячейка": "lords-16",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial.net.ru",
+  "ячейка": "lords-17",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial.spb.ru",
+  "ячейка": "lords-15",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial.su",
+  "ячейка": "lords-13",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial101.site",
+  "ячейка": "lords-08",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserial33.biz",
+  "ячейка": "lords-02",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/lordserial33-biz/current/src/editorial_overlay.py (подтверждено: site.json, editorial_overlay.py)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "lordserials22.info",
+  "ячейка": "lords-05",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/lordserials22-info/current/src/editorial_overlay.py (подтверждено: site.json)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "lordserials22.site",
+  "ячейка": "lords-06",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "нет /srv/lordserials22-site/current",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "lordserials22.space",
+  "ячейка": "lords-07",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "нет /srv/lordserials22-space/current",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "pilot.localhost.test",
+  "ячейка": "pilot-local",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "site-a.localhost",
+  "ячейка": "site-a",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "site-b.localhost",
+  "ячейка": "site-b",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "site-c.localhost",
+  "ячейка": "site-c",
+  "адаптер": "",
+  "маршрут": "",
+  "доказательство": "витрины нет в /srv",
+  "объявлено": [],
+  "расхождение": ""
+ },
+ {
+  "домен": "yummyani.biz",
+  "ячейка": "yummy-biz",
+  "адаптер": "yummy",
+  "маршрут": "наложение в контейнере",
+  "доказательство": "yummyani-staging-web-biz-1: /srv/sites/yummyani-staging/runtime/overlays/yummyani.biz->/app/content/overlays + TITLE_OVERLAYS_LAST_GOOD_PATH",
+  "объявлено": [
+   "deliver",
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "yummyani.org",
+  "ячейка": "yummy-org",
+  "адаптер": "yummy",
+  "маршрут": "наложение в контейнере",
+  "доказательство": "yummyani-staging-web-org-1: /srv/sites/yummyani-staging/runtime/overlays/yummyani.org->/app/content/overlays + TITLE_OVERLAYS_LAST_GOOD_PATH",
+  "объявлено": [
+   "deliver",
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "yummyani.site",
+  "ячейка": "yummy-site",
+  "адаптер": "yummy",
+  "маршрут": "наложение в контейнере",
+  "доказательство": "yummyani-staging-web-site-1: /srv/sites/yummyani-staging/runtime/overlays/yummyani.site->/app/content/overlays + TITLE_OVERLAYS_LAST_GOOD_PATH",
+  "объявлено": [
+   "deliver",
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "yummyani7.info",
+  "ячейка": "yummy-08",
+  "адаптер": "yummy",
+  "маршрут": "наложение в контейнере",
+  "доказательство": "yummyani7-info-web-1: /srv/sites/yummyani-staging/runtime/overlays/yummyani7.info->/app/content/overlays + TITLE_OVERLAYS_LAST_GOOD_PATH",
+  "объявлено": [
+   "deliver",
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "yummyani7.site",
+  "ячейка": "yummy-07",
+  "адаптер": "yummy",
+  "маршрут": "наложение в контейнере",
+  "доказательство": "yummyani7-site-web-1: /srv/sites/yummyani-staging/runtime/overlays/yummyani7.site->/app/content/overlays + TITLE_OVERLAYS_LAST_GOOD_PATH",
+  "объявлено": [
+   "deliver",
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "zonafilm.cc",
+  "ячейка": "zona-02",
+  "адаптер": "zona-serve",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/zonafilm-cc/current/src/editorial_overlay.py (подтверждено: site.json)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "zonafilm.space",
+  "ячейка": "zona-01",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/zonafilm-space/current/src/editorial_overlay.py (подтверждено: site.json, editorial_overlay.py)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ },
+ {
+  "домен": "zonafilm12.site",
+  "ячейка": "zona-03",
+  "адаптер": "lords",
+  "маршрут": "накладка витрины",
+  "доказательство": "/srv/zonafilm12-site/current/src/editorial_overlay.py (подтверждено: site.json)",
+  "объявлено": [
+   "facts"
+  ],
+  "расхождение": "ПОКАЗЫВАЕТ, но display не объявлен"
+ }
+]
