@@ -117,6 +117,22 @@ def контейнеры() -> dict[str, dict]:
                 capture_output=True, text=True, timeout=60)
         except (OSError, subprocess.SubprocessError):
             continue
+        # ЖИВОСТЬ по `.State.Running`, а не по тому, что контейнер попал в
+        # `docker ps`. Измерено 24.10 (MOD-174): на этом узле `docker ps`
+        # показывает мёртвый контейнер как «Up 3 weeks (healthy)» — тот же id
+        # по `inspect` даёт Running=false и Pid=0. Монтирования мёртвого
+        # контейнера приняли бы за работающий маршрут показа.
+        try:
+            ж = subprocess.run(
+                ["docker", "inspect", "--format",
+                 "{{.State.Running}} {{.State.Pid}}", имя],
+                capture_output=True, text=True, timeout=60)
+        except (OSError, subprocess.SubprocessError):
+            continue
+        части = (ж.stdout or "").split()
+        живой = len(части) == 2 and части[0] == "true" and части[1] != "0"
+        if not живой:
+            continue
         пути = [с2 for с2 in (с.stdout or "").splitlines()
                 if с2.startswith("TITLE_OVERLAYS")]
         if пути:

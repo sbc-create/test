@@ -107,3 +107,63 @@ def test_дерево_витрины_ищется_и_с_приставкой_sit
     (tmp_path / "zonafilm12-site").mkdir()
     assert МОДУЛЬ.дерево("zonafilm12.site") == tmp_path / "zonafilm12-site"
     assert МОДУЛЬ.дерево("нет.такого") is None
+
+
+def test_живость_контейнера_не_по_строке_списка(monkeypatch):
+    """Мёртвый контейнер не считается маршрутом показа (MOD-174).
+
+    Измерено 24.10: на узле `docker ps` показывает мёртвый
+    `seo-engine-worker-1` как «Up 3 weeks (healthy)», тогда как `inspect` по
+    тому же id даёт Running=false и Pid=0. Если брать живость из списка,
+    монтирования мёртвого контейнера примешь за работающий маршрут.
+
+    Проверяется, что сборщик спрашивает именно `.State.Running`.
+    """
+    вызовы: list[list[str]] = []
+
+    class Ответ:
+        returncode = 0
+
+        def __init__(self, stdout: str) -> None:
+            self.stdout = stdout
+            self.stderr = ""
+
+    def подмена(аргв, **кв):
+        вызовы.append(list(аргв))
+        if аргв[:2] == ["docker", "ps"]:
+            return Ответ("мертвец\n")
+        if "{{.State.Running}} {{.State.Pid}}" in " ".join(аргв):
+            return Ответ("false 0\n")
+        if "{{range .Mounts}}" in " ".join(аргв):
+            return Ответ("/srv/sites/x/runtime/overlays/д.site->/app/content/overlays\n")
+        return Ответ("TITLE_OVERLAYS_PATH=/app/content/overlays/t.json\n")
+
+    monkeypatch.setattr(МОДУЛЬ.subprocess, "run", подмена)
+    assert МОДУЛЬ.контейнеры() == {}, "мёртвый контейнер попал в маршруты показа"
+    assert any("{{.State.Running}} {{.State.Pid}}" in " ".join(в)
+               for в in вызовы), "живость не спрашивалась у inspect"
+
+
+def test_живой_контейнер_учитывается(monkeypatch):
+    """Отрицательный контроль: проверка обязана уметь и признать живого."""
+    class Ответ:
+        returncode = 0
+
+        def __init__(self, stdout: str) -> None:
+            self.stdout = stdout
+            self.stderr = ""
+
+    def подмена(аргв, **кв):
+        строка = " ".join(аргв)
+        if аргв[:2] == ["docker", "ps"]:
+            return Ответ("живой\n")
+        if "{{.State.Running}} {{.State.Pid}}" in строка:
+            return Ответ("true 4242\n")
+        if "{{range .Mounts}}" in строка:
+            return Ответ("/srv/sites/x/runtime/overlays/д.site->/app/content/overlays\n")
+        return Ответ("TITLE_OVERLAYS_PATH=/app/content/overlays/t.json\n")
+
+    monkeypatch.setattr(МОДУЛЬ.subprocess, "run", подмена)
+    из = МОДУЛЬ.контейнеры()
+    assert "живой" in из, из
+    assert из["живой"]["переменные"]
