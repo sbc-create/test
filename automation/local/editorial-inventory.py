@@ -285,6 +285,74 @@ def окно(зп: list[dict], часов: int) -> int:
     return 0
 
 
+# --- размещение по авторитетному хранилищу витрины -------------------------
+
+НАЛОЖЕНИЯ = pathlib.Path("/srv/sites")
+
+
+def _items(д) -> list[dict]:
+    """`items` бывает и списком, и отображением слаг → запись."""
+    if isinstance(д, dict):
+        д = д.get("items")
+    if isinstance(д, dict):
+        д = list(д.values())
+    return [з for з in (д or []) if isinstance(з, dict)]
+
+
+def хранилища_витрин(корень: pathlib.Path = НАЛОЖЕНИЯ) -> list[pathlib.Path]:
+    return sorted(корень.glob("*/runtime/overlays/*"))
+
+
+def размещение(корень: pathlib.Path = НАЛОЖЕНИЯ) -> int:
+    """Готово и не размещено — по черновикам витрины, а не по реестру очереди.
+
+    Почему не по реестру: измерено 24.10, реестр очереди держит по нескольку
+    ревизий одного произведения и материалы других типов, поэтому его
+    расхождение с наложением складывается из вытеснённых ревизий, новостей и
+    текстов разделов. Отставание размещения он завышает — у yummyani.site дал
+    бы 33 при фактическом 0.
+    """
+    каталоги = хранилища_витрин(корень)
+    if not каталоги:
+        print(f"НЕ ИЗМЕРЕНО: хранилищ витрин нет по пути {корень}")
+        return 2
+    print(f"{'витрина':24} {'черновиков':>11} {'выверено':>9} {'размещено':>10}"
+          f" {'готово, не размещено':>21}  наложение")
+    всего = готово_нет = 0
+    без_файла: list[str] = []
+    for к in каталоги:
+        ч = к / "drafts.json"
+        н = к / "title-overlays.json"
+        if not ч.exists():
+            print(f"{к.name:24} НЕЧЕГО СЧИТАТЬ: нет drafts.json")
+            continue
+        черновики = _items(json.loads(ч.read_text(encoding="utf-8")))
+        есть_наложение = н.exists()
+        размещённые = (
+            {отпечаток(и.get("body") or "")
+             for и in _items(json.loads(н.read_text(encoding="utf-8")))}
+            if есть_наложение else set())
+        выверено = [з for з in черновики
+                    if з.get("state") == "verified" and not з.get("quality_problems")]
+        ждут = [з for з in выверено
+                if отпечаток(з.get("body") or "") not in размещённые]
+        готово_нет += len(ждут)
+        всего += len(черновики)
+        if not есть_наложение and ждут:
+            без_файла.append(f"{к.name} ({len(ждут)})")
+        print(f"{к.name:24} {len(черновики):11} {len(выверено):9}"
+              f" {len(размещённые):10} {len(ждут):21}"
+              f"  {'есть' if есть_наложение else 'НЕТ ФАЙЛА'}")
+    print()
+    print(f"витрин {len(каталоги)}, черновиков {всего};"
+          f" ГОТОВО И НЕ РАЗМЕЩЕНО {готово_нет}")
+    if без_файла:
+        print(f"  из них там, где файла наложений нет вовсе: "
+              f"{', '.join(без_файла)}")
+        print("  это отсутствие шага публикации, а не отсутствие текста")
+    return 0 if готово_нет == 0 else 1
+
+
 def контроль() -> int:
     """Положительный контроль: инструмент обязан уметь найти текст и не найти.
 
@@ -321,6 +389,7 @@ def главное(argv: list[str] | None = None) -> int:
     р.add_argument("--export", type=pathlib.Path)
     р.add_argument("--examples", type=int)
     р.add_argument("--obstacles", action="store_true")
+    р.add_argument("--placement", action="store_true")
     р.add_argument("--window-hours", type=int)
     р.add_argument("--control", action="store_true")
     р.add_argument("--registry", type=pathlib.Path, default=РЕЕСТР)
@@ -356,11 +425,14 @@ def главное(argv: list[str] | None = None) -> int:
     if а.obstacles:
         print("\n== препятствия ==")
         код |= препятствия(зп)
+    if а.placement:
+        print("\n== размещение по хранилищам витрин ==")
+        код |= размещение()
     if а.window_hours:
         print("\n== сутки против накопленного ==")
         код |= окно(зп, а.window_hours)
     if not any((а.summary, а.export, а.examples, а.obstacles,
-                а.window_hours, а.control)):
+                а.window_hours, а.control, а.placement)):
         р.print_help()
         return 2
     return код

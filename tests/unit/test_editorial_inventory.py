@@ -201,3 +201,94 @@ def test_разметка_и_скрипты_в_текст_страницы_не_
         "<html><script>var x='мусор скрипта';</script><body>видимое</body></html>")
     assert "видимое" in стр
     assert "мусор" not in стр
+
+
+# --- размещение по хранилищам витрин ---------------------------------------
+
+def _витрина(корень: pathlib.Path, домен: str, черновики: list[dict],
+             наложение: list[dict] | None) -> None:
+    к = корень / "семейство" / "runtime" / "overlays" / домен
+    к.mkdir(parents=True)
+    (к / "drafts.json").write_text(
+        json.dumps({"site": домен, "items": черновики}, ensure_ascii=False),
+        encoding="utf-8")
+    if наложение is not None:
+        (к / "title-overlays.json").write_text(
+            json.dumps({"site": домен, "items": наложение}, ensure_ascii=False),
+            encoding="utf-8")
+
+
+def test_отставание_размещения_считается_по_черновикам_витрины(capsys, tmp_path):
+    """Авторитетный знаменатель — `drafts.json`, а не реестр очереди.
+
+    Повод измеренный, 24.10: по реестру очереди у yummyani.site выходило 33
+    неразмещённых, по черновикам витрины — 0. Расхождение реестра с
+    наложением складывается из вытеснённых ревизий, новостей и текстов
+    разделов, то есть завышает отставание.
+    """
+    _витрина(tmp_path, "д1.site",
+             [{"slug": "a", "body": "первый", "state": "verified",
+               "quality_problems": []},
+              {"slug": "b", "body": "второй", "state": "verified",
+               "quality_problems": []}],
+             [{"slug": "a", "body": "первый"}])
+    код = ОПИСЬ.размещение(tmp_path)
+    из = capsys.readouterr().out
+    assert "ГОТОВО И НЕ РАЗМЕЩЕНО 1" in из, из
+    assert код == 1, "неразмещённое обязано отражаться кодом выхода"
+
+
+def test_полное_размещение_даёт_ноль_и_код_ноль(capsys, tmp_path):
+    """Отрицательный контроль: проверка обязана уметь не найти отставания."""
+    _витрина(tmp_path, "д2.site",
+             [{"slug": "a", "body": "текст", "state": "verified",
+               "quality_problems": []}],
+             [{"slug": "a", "body": "текст"}])
+    assert ОПИСЬ.размещение(tmp_path) == 0
+    assert "ГОТОВО И НЕ РАЗМЕЩЕНО 0" in capsys.readouterr().out
+
+
+def test_отсутствие_файла_наложений_названо_отдельно(capsys, tmp_path):
+    """«Нет файла» — отсутствие шага публикации, а не отсутствие текста.
+
+    Ровно это у шести витрин Lords и Zona: 48 выверенных черновиков без
+    `title-overlays.json` (MOD-165).
+    """
+    _витрина(tmp_path, "д3.site",
+             [{"slug": "a", "body": "готовый текст", "state": "verified",
+               "quality_problems": []}], None)
+    код = ОПИСЬ.размещение(tmp_path)
+    из = capsys.readouterr().out
+    assert "НЕТ ФАЙЛА" in из, из
+    assert "отсутствие шага публикации" in из, из
+    assert код == 1
+
+
+def test_черновик_с_замечаниями_готовым_не_считается(capsys, tmp_path):
+    _витрина(tmp_path, "д4.site",
+             [{"slug": "a", "body": "сырой", "state": "verified",
+               "quality_problems": ["год не сверен"]},
+              {"slug": "b", "body": "неготовый", "state": "prepared",
+               "quality_problems": []}], None)
+    assert ОПИСЬ.размещение(tmp_path) == 0
+    assert "ГОТОВО И НЕ РАЗМЕЩЕНО 0" in capsys.readouterr().out
+
+
+def test_items_отображением_читается_как_список(tmp_path):
+    """У части витрин `items` — отображение слаг → запись, а не список.
+
+    Первая редакция падала на таких витринах с AttributeError, то есть
+    замера по ним не было вовсе.
+    """
+    к = tmp_path / "f" / "runtime" / "overlays" / "д5.site"
+    к.mkdir(parents=True)
+    (к / "drafts.json").write_text(json.dumps(
+        {"site": "д5.site",
+         "items": {"a": {"slug": "a", "body": "т", "state": "verified",
+                         "quality_problems": []}}}), encoding="utf-8")
+    assert len(ОПИСЬ._items(json.loads((к / "drafts.json").read_text()))) == 1
+
+
+def test_нет_хранилищ_витрин_это_не_измерено(capsys, tmp_path):
+    assert ОПИСЬ.размещение(tmp_path / "пусто") == 2
+    assert "НЕ ИЗМЕРЕНО" in capsys.readouterr().out
