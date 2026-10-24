@@ -1,8 +1,3171 @@
 {
  "site_id": "food-daily",
  "schema_version": 1,
- "generated_at": "2026-10-24T22:58:24Z",
+ "generated_at": "2026-10-24T23:07:29Z",
  "items": [
+  {
+   "content_id": "fd-0db94341d9c6",
+   "slug": "golubcy-s-farshem-boloneze",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Голубцы из савойской капусты с болоньезе под бешамелем",
+    "slug": "golubcy-s-farshem-boloneze",
+    "seo_title": "Голубцы с болоньезе из савойской капусты под бешамелем",
+    "seo_description": "Начинку болоньезе с вином и соусом маринара заворачивают в бланшированные листья савойской капусты и запекают под бешамелем с моцареллой.",
+    "intro": "Голубцы на четверых по-итальянски: начинка — фарш, тушённый с вином и соусом маринара, листья — нежная савойская капуста, а сверху бешамель с моцареллой. Запекаются всего несколько минут.",
+    "steps": [
+     {
+      "text": "Мелко нарежьте лук, обжарьте на оливковом масле до прозрачности, добавьте чеснок из-под пресса и фарш и жарьте, пока фарш не изменит цвет.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Влейте вино и держите на огне, пока жидкость полностью не выпарится и дно не станет сухим; лишний жир можно слить.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Добавьте соус маринара, базилик, паприку, соль и перец и потушите 10–12 минут.",
+      "source_steps": [
+       3
+      ],
+      "readiness_cue": "Начинка густая, без лишней жидкости."
+     },
+     {
+      "text": "Снимите листья капусты, бланшируйте 30 секунд в подсоленном кипятке, остудите в ледяной воде и обсушите.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Отбейте или вырежьте жёсткие прожилки и заверните голубцы, кладя примерно по две ложки начинки на лист.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "Для бешамеля прогрейте муку со сливочным маслом на маленьком огне, постоянно мешая, до орехового запаха и карамельного цвета.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Понемногу вливайте горячее молоко, не переставая мешать, до консистенции жидкой сметаны; приправьте солью и мускатным орехом.",
+      "source_steps": [
+       7
+      ]
+     },
+     {
+      "text": "Уложите голубцы в форму в один слой, залейте бешамелем, посыпьте моцареллой и запекайте при 200 градусах примерно 10–15 минут.",
+      "source_steps": [
+       8
+      ],
+      "readiness_cue": "Сыр расплавился и подрумянился."
+     },
+     {
+      "text": "Перед подачей посыпьте тёртым пармезаном; в качестве гарнира подойдёт отварная паста орзо.",
+      "source_steps": [
+       9
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "farsh",
+     "kapusta",
+     "v-duhovke"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Савойская капуста"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Мясной фарш"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Соус маринара"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Красное сухое вино"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Молоко"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Мускатный орех"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Моцарелла для пиццы"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Сушёный базилик"
+     },
+     {
+      "fact_index": 13,
+      "display_name": "Паприка"
+     },
+     {
+      "fact_index": 14,
+      "display_name": "Пармезан"
+     },
+     {
+      "fact_index": 15,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 16,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Голубцы с фаршем болоньезе",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Савойская капуста, 1 штука",
+      "name": "Савойская капуста",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мясной фарш, 500 г",
+      "name": "Мясной фарш",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 головка",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 2 зубчика",
+      "name": "Чеснок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соус маринара, 400 мл",
+      "name": "Соус маринара",
+      "quantity": 400.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Красное сухое вино, 70 мл",
+      "name": "Красное сухое вино",
+      "quantity": 70.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 30 мл",
+      "name": "Оливковое масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 30 г",
+      "name": "Сливочное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 30 г",
+      "name": "Пшеничная мука",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молоко, 700 мл",
+      "name": "Молоко",
+      "quantity": 700.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мускатный орех, по вкусу",
+      "name": "Мускатный орех",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Сыр моцарелла для пиццы, 200 г",
+      "name": "Сыр моцарелла для пиццы",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сушеный базилик, 1 чайная ложка",
+      "name": "Сушеный базилик",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Паприка, 1 чайная ложка",
+      "name": "Паприка",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр пармезан, по вкусу",
+      "name": "Сыр пармезан",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying",
+     "oven",
+     "steaming",
+     "stewing"
+    ],
+    "topic_id": "golubcy"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/golubcy-boloneze-190704",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:48Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-1f2a7fc874ce",
+   "slug": "pasta-s-tykvennym-sousom-i-kuricej",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Паста с тыквенным соусом и курицей",
+    "slug": "pasta-s-tykvennym-sousom-i-kuricej",
+    "seo_title": "Паста с тыквенным соусом, курицей и кедровыми орехами",
+    "seo_description": "Запечённую с розмарином тыкву пюрируют со сливками, прогревают с пореем и чесноком и соединяют с пастой, курицей, пармезаном и кедровыми орехами.",
+    "intro": "Осенняя паста на четверых: тыкву запекают с розмарином и превращают в сливочный соус, курицу обжаривают отдельно и кладут сверху ломтиками. Пармезан и поджаренные кедровые орехи — для вкуса и хруста.",
+    "steps": [
+     {
+      "text": "Разогрейте духовку до 200 °С. Очищенную от семян тыкву нарежьте дольками, выложите на противень, сбрызните оливковым маслом, добавьте листья розмарина и запекайте 30–40 минут.",
+      "source_steps": [
+       0,
+       1
+      ],
+      "readiness_cue": "Тыква мягкая, легко протыкается."
+     },
+     {
+      "text": "Белую часть порея порежьте полукольцами, чеснок — мелкими кубиками.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Снимите с тыквы кожуру, переложите мякоть в блендер, влейте сливки и измельчите в гладкое пюре.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "На сковороде с 30 мл оливкового масла обжарьте посоленное и поперчённое филе по 2–3 минуты с каждой стороны, затем накройте и доведите на небольшом огне 7–10 минут. Переложите на тарелку под фольгу.",
+      "source_steps": [
+       4
+      ]
+     },
+     {
+      "text": "Варите пасту в подсоленном кипятке на пару минут меньше, чем указано на упаковке.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "На той же сковороде размягчите порей 3–4 минуты, добавьте чеснок на 30 секунд, влейте тыквенное пюре и пару половников воды от пасты и прогрейте 2–3 минуты.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Переложите пасту в соус, добавьте сливочное масло, посолите, поперчите, прогрейте 1–2 минуты и вмешайте тёртый пармезан.",
+      "source_steps": [
+       8,
+       9
+      ]
+     },
+     {
+      "text": "На сухой сковороде подрумяньте кедровые орехи. Курицу нарежьте ломтиками, разложите пасту по тарелкам, сверху — курица и орехи. Подавайте сразу, посыпав пармезаном.",
+      "source_steps": [
+       10,
+       11,
+       12
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "makarony",
+     "kurica",
+     "tykva"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Тыква"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сливки 33%"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Куриное филе"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Паста казаречче"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Лук-порей"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Пармезан"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Кедровые орехи"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Розмарин"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Паста с тыквенным соусом и курицей",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Тыква, 600 г",
+      "name": "Тыква",
+      "quantity": 600.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливки 33%-ные, 200 мл",
+      "name": "Сливки 33%-ные",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное филе, 400 г",
+      "name": "Куриное филе",
+      "quantity": 400.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Паста казаречче, 320 г",
+      "name": "Паста казаречче",
+      "quantity": 320.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук-порей, 1 штука",
+      "name": "Лук-порей",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 2 зубчика",
+      "name": "Чеснок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр пармезан, 50 г",
+      "name": "Сыр пармезан",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кедровые орехи, 40 г",
+      "name": "Кедровые орехи",
+      "quantity": 40.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 4 столовые ложки",
+      "name": "Оливковое масло",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 30 г",
+      "name": "Сливочное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Розмарин, 1 веточка",
+      "name": "Розмарин",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "sprig",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "blender",
+     "boiling",
+     "frying",
+     "oven",
+     "steaming"
+    ],
+    "topic_id": "pasta-s-kuricej"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/pasta-picca/pasta-s-tykvennym-sousom-i-kuricey-193081",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:16Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-35fda7c65dbc",
+   "slug": "uzbekskij-lagman-s-baraninoj",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Узбекский лагман с бараниной",
+    "slug": "uzbekskij-lagman-s-baraninoj",
+    "seo_title": "Узбекский лагман с бараниной и овощами в казане",
+    "seo_description": "Баранину обжаривают в казане с луком, морковью и сельдереем, добавляют томаты, перцы, картофель и специи, тушат и подают на лапше.",
+    "intro": "Большой казан лагмана на десять порций: баранина с рёбрами, лук, морковь, сельдерей, томаты без кожицы, два вида перца и картофель с зирой, кориандром и бадьяном. Густым соусом заливают отдельно сваренную лапшу.",
+    "steps": [
+     {
+      "text": "Нарежьте баранину крупными кубиками, рёбра разделите и обжарьте всё мясо в раскалённом масле в казане до румяной корочки.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Добавьте лук, нарезанный тонкой соломкой, и жарьте, помешивая, до прозрачности.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Порежьте соломкой морковь и сельдерей, отправьте в казан и жарьте ещё 3–5 минут. Посолите, поперчите, всыпьте специи и перемешайте.",
+      "source_steps": [
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Надрежьте помидоры крестом, опустите в кипяток на 30 секунд, затем в холодную воду, снимите кожицу и нарежьте кубиками. Сладкий и острый перцы порежьте соломкой.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Положите помидоры и перцы в казан и жарьте 2 минуты, затем добавьте картофель небольшими кубиками.",
+      "source_steps": [
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Залейте водой так, чтобы она покрывала всё, доведите до кипения, накройте и варите 30–40 минут.",
+      "source_steps": [
+       10
+      ],
+      "readiness_cue": "Картофель мягкий, мясо легко отходит от рёбер."
+     },
+     {
+      "text": "Вмешайте в соус рубленую зелень и чеснок из-под пресса, при необходимости досолите и поперчите.",
+      "source_steps": [
+       11
+      ]
+     },
+     {
+      "text": "Сварите лапшу по инструкции на упаковке, разложите по глубоким тарелкам, залейте соусом и сразу подавайте.",
+      "source_steps": [
+       12,
+       13
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "tushenie",
+     "makarony"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Бараний окорок"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Бараньи рёбра"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Сладкий перец"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Перец чили"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Помидоры"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Корень сельдерея"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Кинза"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Петрушка"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 13,
+      "display_name": "Лапша"
+     },
+     {
+      "fact_index": 14,
+      "display_name": "Бадьян"
+     },
+     {
+      "fact_index": 15,
+      "display_name": "Зира"
+     },
+     {
+      "fact_index": 16,
+      "display_name": "Семена кориандра"
+     },
+     {
+      "fact_index": 17,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 18,
+      "display_name": "Молотый чёрный перец"
+     },
+     {
+      "fact_index": 19,
+      "display_name": "Соль"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Узбекский лагман",
+    "servings": 10,
+    "servings_raw": "10",
+    "prep_minutes": null,
+    "cook_minutes": 180,
+    "total_minutes": 180,
+    "ingredients": [
+     {
+      "raw": "Бараний окорок, 600 г",
+      "name": "Бараний окорок",
+      "quantity": 600.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Бараньи ребра, 600 г",
+      "name": "Бараньи ребра",
+      "quantity": 600.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 2 штуки",
+      "name": "Морковь",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сладкий перец, 1 штука",
+      "name": "Сладкий перец",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чили, 1 штука",
+      "name": "Перец чили",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидоры, 500 г",
+      "name": "Помидоры",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Картофель, 500 г",
+      "name": "Картофель",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Корень сельдерея, 200 г",
+      "name": "Корень сельдерея",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 3 зубчика",
+      "name": "Чеснок",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кинза, 50 г",
+      "name": "Кинза",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Петрушка, 50 г",
+      "name": "Петрушка",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 50 г",
+      "name": "Укроп",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 50 мл",
+      "name": "Растительное масло",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лапша, 500 г",
+      "name": "Лапша",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Анис (бадьян), 1 штука",
+      "name": "Анис (бадьян)",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кумин (зира), 1 чайная ложка",
+      "name": "Кумин (зира)",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Семена кориандра, 1 чайная ложка",
+      "name": "Семена кориандра",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 2 головки",
+      "name": "Репчатый лук",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "lagman"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/uzbekskiy-lagman-140467",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:38:00Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-5f3752f84c02",
+   "slug": "syrniki-s-zapechennoj-tykvoj",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Сырники с запечённой тыквой",
+    "slug": "syrniki-s-zapechennoj-tykvoj",
+    "seo_title": "Сырники с запечённой в мёде тыквой",
+    "seo_description": "Кусочки тыквы запекают с мёдом 15–20 минут и вмешивают в творог с яйцом, сахаром и мукой; сырники обжаривают и посыпают сахарной пудрой.",
+    "intro": "Осенние сырники на четверых: в творожное тесто добавляют кусочки тыквы, запечённые с мёдом. Подают горячими, с сахарной пудрой и сметаной.",
+    "steps": [
+     {
+      "text": "Выложите творог в глубокую миску, вбейте яйцо, добавьте ванильный сахар, щепотку соли и сахар.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Нарежьте тыкву небольшими кусочками, сложите в форму, полейте мёдом и запекайте в горячей духовке 15–20 минут.",
+      "source_steps": [
+       4,
+       5
+      ],
+      "readiness_cue": "Тыква мягкая и слегка карамелизовалась."
+     },
+     {
+      "text": "Переложите тыкву в творожную массу, всыпьте муку и перемешайте до однородности.",
+      "source_steps": [
+       6,
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Слепите сырники и обжарьте на горячей сковороде с маслом с обеих сторон до готовности.",
+      "source_steps": [
+       9,
+       10
+      ],
+      "readiness_cue": "Корочка золотистая."
+     },
+     {
+      "text": "Перед подачей посыпьте сахарной пудрой и подавайте горячими со сметаной.",
+      "source_steps": [
+       11
+      ]
+     }
+    ],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "tvorog",
+     "tykva",
+     "na-skovorode"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Творог"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Куриное яйцо"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сахар"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Тыква"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Мёд"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Ванильный сахар"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Пшеничная мука"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сахарная пудра"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Сырники с запеченной тыквой",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 30,
+    "total_minutes": 30,
+    "ingredients": [
+     {
+      "raw": "Творог, 500 г",
+      "name": "Творог",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 1 штука",
+      "name": "Куриное яйцо",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сахар, 3 столовые ложки",
+      "name": "Сахар",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Тыква, 100 г",
+      "name": "Тыква",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Мед, 1 столовая ложка",
+      "name": "Мед",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Ванильный сахар, 8 г",
+      "name": "Ванильный сахар",
+      "quantity": 8.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 4 столовые ложки",
+      "name": "Пшеничная мука",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, щепотка",
+      "name": "Соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pinch",
+      "scalable": true,
+      "note": "количество «одна» следует из единицы без числа"
+     },
+     {
+      "raw": "Сахарная пудра, по вкусу",
+      "name": "Сахарная пудра",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "oven"
+    ],
+    "topic_id": "tykva-zapechennaya"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zavtraki/syrniki-s-zapechennoy-tykvoy-190830",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:36:55Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-730ecd8c18eb",
+   "slug": "zharenaya-kartoshka-s-salom",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Жареная картошка с салом",
+    "slug": "zharenaya-kartoshka-s-salom",
+    "seo_title": "Жареная картошка с салом на сковороде",
+    "seo_description": "Сало вытапливают до прозрачности, добавляют нарезанный картофель и жарят под крышкой на небольшом огне, посолив в конце.",
+    "intro": "Деревенская жареная картошка на троих: сало сначала вытапливают на сковороде до прозрачности, а потом в этом жиру под крышкой доходит картофель. Солят ближе к концу.",
+    "steps": [
+     {
+      "text": "Очистите картофель, нарежьте небольшими кусочками и промойте.",
+      "source_steps": [
+       0,
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Нарежьте сало. В сковороде разогрейте немного масла и выложите сало.",
+      "source_steps": [
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Когда кусочки станут прозрачными, переверните их.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Переложите картошку в сковороду, перемешайте и накройте. Через пару минут снова перемешайте и жарьте на небольшом огне около 10 минут.",
+      "source_steps": [
+       7
+      ]
+     },
+     {
+      "text": "Посолите, перемешайте и подержите под крышкой ещё 5–10 минут, ориентируясь на мягкость картофеля.",
+      "source_steps": [
+       8
+      ],
+      "readiness_cue": "Картофель мягкий, местами с корочкой."
+     }
+    ],
+    "category": "garniry",
+    "meal": "dinner",
+    "tags": [
+     "na-skovorode",
+     "svinina"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Картофель"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сало"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Соль"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Картошка, жаренная с салом",
+    "servings": 3,
+    "servings_raw": "3",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Картофель, 5 штук",
+      "name": "Картофель",
+      "quantity": 5.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сало, 50 г",
+      "name": "Сало",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, по вкусу",
+      "name": "Растительное масло",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "frying",
+     "steaming"
+    ],
+    "topic_id": "zharenaya-kartoshka"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/kartoshka-zharenaya-s-salom-192379",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:24Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-7ac75f6de15d",
+   "slug": "farshirovannye-percy-v-multivarke",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Фаршированные перцы в мультиварке",
+    "slug": "farshirovannye-percy-v-multivarke",
+    "seo_title": "Фаршированные перцы с мясом и рисом в мультиварке",
+    "seo_description": "Перцы с начинкой из фарша, риса басмати, лука и зелени тушат в соусе из сметаны и томатной пасты 45 минут, затем добавляют зелень с чесноком.",
+    "intro": "Фаршированные перцы на шесть порций без присмотра: начинка из мясного фарша с замоченным басмати и луком, пюрированным в блендере, а соус — сметана с томатной пастой. Тушатся в мультиварке, зелень и чеснок кладут в конце.",
+    "steps": [
+     {
+      "text": "Залейте рис холодной водой на 30 минут.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Удалите у перцев сердцевину с семенами. Мелко порубите укроп, петрушку и чеснок, лук пробейте блендером в пюре.",
+      "source_steps": [
+       2,
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Вмешайте в фарш яйца, отжатый от воды рис, луковое пюре и половину зелени с чесноком, посолите и поперчите.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "Плотно, до краёв, наполните перцы начинкой и уложите в чашу мультиварки.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Смешайте томатную пасту со сметаной и водой, залейте перцы, посолите, поперчите, добавьте лавровый лист и включите тушение на 45 минут.",
+      "source_steps": [
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Добавьте оставшиеся зелень и чеснок, немного зелени отложите, и тушите ещё 5 минут.",
+      "source_steps": [
+       10
+      ],
+      "readiness_cue": "Перцы мягкие, начинка плотная."
+     },
+     {
+      "text": "Подавайте со сметаной, посыпав зеленью.",
+      "source_steps": [
+       11
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "farsh",
+     "ris",
+     "tushenie"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Мясной фарш"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Сладкий перец"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Куриные яйца"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Сметана"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Томатная паста"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Лавровый лист"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Рис басмати"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Петрушка"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 13,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Фаршированные перцы в мультиварке",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Мясной фарш, 1.2 кг",
+      "name": "Мясной фарш",
+      "quantity": 1.2,
+      "quantity_max": null,
+      "unit": "kg",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 200 г",
+      "name": "Репчатый лук",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сладкий перец, 1.2 кг",
+      "name": "Сладкий перец",
+      "quantity": 1.2,
+      "quantity_max": null,
+      "unit": "kg",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриное яйцо, 2 штуки",
+      "name": "Куриное яйцо",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сметана, 200 г",
+      "name": "Сметана",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Томатная паста , 3 столовые ложки",
+      "name": "Томатная паста",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лавровый лист, 2 штуки",
+      "name": "Лавровый лист",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 1 л",
+      "name": "Вода",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "l",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Рис басмати, 100 г",
+      "name": "Рис басмати",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Петрушка, 50 г",
+      "name": "Петрушка",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 50 г",
+      "name": "Укроп",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 4 зубчика",
+      "name": "Чеснок",
+      "quantity": 4.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "blender",
+     "boiling",
+     "multicooker",
+     "stewing"
+    ],
+    "topic_id": "multivarka"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/farshirovannye-percy-v-multivarke-193210",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:36:23Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-7f346edcf24c",
+   "slug": "bulgur-so-svininoj-v-duhovke",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Булгур со свининой в духовке",
+    "slug": "bulgur-so-svininoj-v-duhovke",
+    "seo_title": "Булгур со свининой в духовке под фольгой",
+    "seo_description": "Свинину с паприкой и хмели-сунели, лук, морковь и сухой булгур слоями заливают кипятком и томят под фольгой при 200 градусах 1,5 часа.",
+    "intro": "Ужин на шесть порций в одной форме: свинина в паприке и хмели-сунели, слой лука и моркови, сверху сухой булгур под кипятком. Форма полтора часа стоит в духовке под фольгой, а потом ещё немного доходит закрытой.",
+    "steps": [
+     {
+      "text": "Нарежьте свинину кусками около 3 см и выложите в глубокую форму. Лук порежьте тонкими полукольцами.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Посолите мясо, добавьте паприку, хмели-сунели и ложку масла и хорошо перемешайте.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "Сверху разложите лук, затем крупно натёртую морковь, а последним слоем — сухой булгур.",
+      "source_steps": [
+       3,
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Влейте 2 стакана кипятка, чтобы он полностью покрыл крупу.",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Плотно закройте форму фольгой и запекайте при 200 градусах 1,5 часа, затем оставьте ещё на 15 минут, не открывая.",
+      "source_steps": [
+       7
+      ],
+      "readiness_cue": "Вода впиталась, крупа мягкая."
+     },
+     {
+      "text": "Перемешайте мясо с булгуром и подавайте.",
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "svinina",
+     "v-duhovke"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Свинина"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Булгур"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Кипяток"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Паприка"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Хмели-сунели"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Соль"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Булгур со свининой в духовке",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 90,
+    "total_minutes": 90,
+    "ingredients": [
+     {
+      "raw": "Свинина, 700 г",
+      "name": "Свинина",
+      "quantity": 700.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Булгур, 1 стакан",
+      "name": "Булгур",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лук, 1 штука",
+      "name": "Лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кипяток, 2 стакана",
+      "name": "Кипяток",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "cup",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 1 столовая ложка",
+      "name": "Растительное масло",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Паприка, 1 чайная ложка",
+      "name": "Паприка",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Хмели-сунели, 1 чайная ложка",
+      "name": "Хмели-сунели",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 1 чайная ложка",
+      "name": "Соль",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "oven"
+    ],
+    "topic_id": "bulgur"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/bulgur-so-svininoy-v-duhovke-192901",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:38:03Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-939295d60df8",
+   "slug": "tartaletki-s-krabovymi-palochkami",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Тарталетки с крабовыми палочками и плавленым сыром",
+    "slug": "tartaletki-s-krabovymi-palochkami",
+    "seo_title": "Тарталетки с крабовыми палочками, сыром и маслинами",
+    "seo_description": "Начинка из измельчённых крабовых палочек, тёртого плавленого сырка, маслин, укропа и чеснока с майонезом — в готовых тарталетках.",
+    "intro": "Праздничная закуска на четверых без варки: крабовые палочки, плавленый сырок, маслины, укроп и чеснок с ложкой майонеза. Начинку раскладывают по готовым тарталеткам.",
+    "steps": [
+     {
+      "text": "Измельчите крабовые палочки, натрите плавленый сыр крупно, мелко порубите маслины, укроп и чеснок.",
+      "source_steps": [
+       0,
+       1,
+       2,
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Сложите всё в глубокую миску, добавьте майонез, посолите, поперчите и хорошо перемешайте.",
+      "source_steps": [
+       5,
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Разложите начинку по тарталеткам, украсьте веточками укропа и подавайте к столу.",
+      "source_steps": [
+       8,
+       9
+      ]
+     }
+    ],
+    "category": "zakuski",
+    "meal": "snack",
+    "tags": [
+     "syr",
+     "bez-varki"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Крабовые палочки"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Плавленые сырки"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Маслины"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Смесь перцев"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Майонез"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Тарталетки"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Закуска из крабовых палочек",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 25,
+    "total_minutes": 25,
+    "ingredients": [
+     {
+      "raw": "Крабовые палочки, 200 г",
+      "name": "Крабовые палочки",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Плавленый сырок, 2 штуки",
+      "name": "Плавленый сырок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Маслины, 1 банка",
+      "name": "Маслины",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "can",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 1 пучок",
+      "name": "Укроп",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "bunch",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 1 зубчик",
+      "name": "Чеснок",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Смесь перцев, по вкусу",
+      "name": "Смесь перцев",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Майонез, 2 столовые ложки",
+      "name": "Майонез",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Тарталетки, 8 штук",
+      "name": "Тарталетки",
+      "quantity": 8.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [],
+    "topic_id": "krabovyj-salat"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/zakuski/salat-iz-krabovyh-palochek-v-tartaletkah-191018",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:38:09Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-a80b68598c11",
+   "slug": "rybnyj-sup-iz-konservov-s-pshenom",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Рыбный суп из горбуши в собственном соку с пшеном",
+    "slug": "rybnyj-sup-iz-konservov-s-pshenom",
+    "seo_title": "Суп из рыбных консервов с пшеном",
+    "seo_description": "Обжаренные лук и морковь, пшено и консервированная горбуша в собственном соку; в конце — укроп и немного лимонного сока.",
+    "intro": "Бюджетный суп на шесть порций из консервированной горбуши: пшено варится с обжаренными луком и морковью, рыбу добавляют вместе с соком, а укроп и лимон дают свежесть.",
+    "steps": [
+     {
+      "text": "Промойте пшено в нескольких водах, пока вода не станет прозрачной, и вскипятите воду в кастрюле.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Очистите и мелко нарежьте лук и морковь, обжарьте в небольшом количестве масла до мягкости и переложите в кипяток.",
+      "source_steps": [
+       2,
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Добавьте лавровый лист и перец горошком, всыпьте пшено, убавьте огонь и варите на слабом кипении.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Когда пшено почти сварится, положите консервы вместе с соком и бережно перемешайте.",
+      "source_steps": [
+       7
+      ],
+      "readiness_cue": "Крупа мягкая, но держит форму."
+     },
+     {
+      "text": "Посолите, поперчите, добавьте мелко нарезанный укроп и немного лимонного сока.",
+      "source_steps": [
+       8
+      ]
+     },
+     {
+      "text": "Дайте супу постоять под крышкой и подавайте с зеленью или долькой лимона.",
+      "source_steps": [
+       9
+      ]
+     }
+    ],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "ryba",
+     "varka"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Пшено"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Горбуша консервированная в собственном соку"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Лавровый лист"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Чёрный перец горошком"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Укроп"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Лимон"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Рыбный суп из консервов с пшеном",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 60,
+    "total_minutes": 60,
+    "ingredients": [
+     {
+      "raw": "Вода, 2 л",
+      "name": "Вода",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "l",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшено, 80 г",
+      "name": "Пшено",
+      "quantity": 80.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 головка",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Горбуша консервированная в собственном соку, 1 банка",
+      "name": "Горбуша консервированная в собственном соку",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "can",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лавровый лист, 1 штука",
+      "name": "Лавровый лист",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Черный перец горошком, 5 штук",
+      "name": "Черный перец горошком",
+      "quantity": 5.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Укроп, 20 г",
+      "name": "Укроп",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лимон, по вкусу",
+      "name": "Лимон",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Растительное масло, 30 мл",
+      "name": "Растительное масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "rybnyj-sup"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/rybnyy-sup-iz-konservov-s-pshenom-191279",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:38Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-af117c80b525",
+   "slug": "oladi-iz-kabachka-s-syrom",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Оладьи из кабачка с сыром",
+    "slug": "oladi-iz-kabachka-s-syrom",
+    "seo_title": "Оладьи из кабачка с сыром на сковороде",
+    "seo_description": "Тёртый кабачок слегка отжимают, смешивают с яйцами, сыром и мукой до густоты и жарят ложкой на среднем огне, затем доводят на слабом.",
+    "intro": "Кабачковые оладьи на двоих: тёртый кабачок, яйца и сыр, муки ровно столько, чтобы масса держалась на ложке. Подают со сметаной.",
+    "steps": [
+     {
+      "text": "Натрите кабачок на крупной тёрке и слегка, без усилия, отожмите лишний сок.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Вбейте яйца, хорошо перемешайте и посолите.",
+      "source_steps": [
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Крупно натрите сыр — его должно быть примерно втрое меньше, чем кабачка, — добавьте к массе и перемешайте.",
+      "source_steps": [
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Вводите муку по ложке, пока масса не станет густой и не перестанет стекать с ложки.",
+      "source_steps": [
+       5,
+       6
+      ]
+     },
+     {
+      "text": "Хорошо прогрейте сковороду, смажьте маслом и прогрейте ещё раз. Выкладывайте оладьи ложкой и жарьте на среднем огне.",
+      "source_steps": [
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Когда низ подрумянится, переверните, убавьте огонь и дожарьте.",
+      "source_steps": [
+       9
+      ],
+      "readiness_cue": "Обе стороны румяные, середина упругая."
+     },
+     {
+      "text": "Дайте оладьям полежать на бумажном полотенце и подавайте со сметаной.",
+      "source_steps": [
+       10
+      ]
+     }
+    ],
+    "category": "zavtraki",
+    "meal": "breakfast",
+    "tags": [
+     "syr",
+     "yajca",
+     "na-skovorode"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Кабачок"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Сыр"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Растительное масло для жарки"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Куриные яйца"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Пшеничная мука"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Оладьи из кабачка с сыром",
+    "servings": 2,
+    "servings_raw": "2",
+    "prep_minutes": null,
+    "cook_minutes": 20,
+    "total_minutes": 20,
+    "ingredients": [
+     {
+      "raw": "Кабачки, 1 штука",
+      "name": "Кабачки",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сыр, 50 г",
+      "name": "Сыр",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Растительное масло, для жарки",
+      "name": "Растительное масло",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "для жарки"
+     },
+     {
+      "raw": "Куриное яйцо, 2 штуки",
+      "name": "Куриное яйцо",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Пшеничная мука, 5 столовых ложек",
+      "name": "Пшеничная мука",
+      "quantity": 5.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "frying"
+    ],
+    "topic_id": "oladi-iz-kabachkov"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/oladi-iz-kabachka-s-syrom-193121",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:33Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-ca1b42b47ce3",
+   "slug": "hrustyashchaya-kurica-na-soli",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Хрустящая курица, запечённая на соли",
+    "slug": "hrustyashchaya-kurica-na-soli",
+    "seo_title": "Хрустящая курица на соли в духовке с тимьяном",
+    "seo_description": "Целую курицу кладут на подушку из соли с тимьяном, смазывают маслом и запекают 30 минут на гриле с вентилятором, затем ещё 10 — с нижним нагревом.",
+    "intro": "Простая курица на четверых с очень хрустящей кожей: тушку кладут на слой соли с веточками тимьяна и запекают сначала в режиме гриля, а потом с нижним нагревом. Соль из формы в блюдо не идёт.",
+    "steps": [
+     {
+      "text": "Промойте и обсушите курицу и дайте ей полежать при комнатной температуре около 15 минут.",
+      "source_steps": [
+       0
+      ]
+     },
+     {
+      "text": "Насыпьте соль в форму для запекания, сверху разложите несколько веточек тимьяна и положите на них курицу.",
+      "source_steps": [
+       1,
+       2,
+       3
+      ]
+     },
+     {
+      "text": "Смажьте тушку оливковым маслом и посолите чёрной солью.",
+      "source_steps": [
+       4,
+       5
+      ]
+     },
+     {
+      "text": "Поставьте в духовку, разогретую до 180 градусов, в режиме «гриль с вентилятором».",
+      "source_steps": [
+       6
+      ]
+     },
+     {
+      "text": "Через 30 минут переключите на нижний нагрев с вентилятором, а ещё через 10 минут достаньте курицу.",
+      "source_steps": [
+       7,
+       8
+      ],
+      "readiness_cue": "Кожа хрустящая, сок у кости прозрачный."
+     },
+     {
+      "text": "Переложите курицу на блюдо и подавайте.",
+      "source_steps": [
+       9
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "kurica",
+     "v-duhovke"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Курица"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Соль для подушки"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Свежий тимьян"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Чёрная соль"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Запеченная хрустящая курица",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": 15,
+    "cook_minutes": 40,
+    "total_minutes": 55,
+    "ingredients": [
+     {
+      "raw": "Курица, 800 г",
+      "name": "Курица",
+      "quantity": 800.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, 300 г",
+      "name": "Соль",
+      "quantity": 300.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 1 столовая ложка",
+      "name": "Оливковое масло",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tbsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Свежий тимьян, 3 веточки",
+      "name": "Свежий тимьян",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "sprig",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Черная соль, 0.5 чайных ложек",
+      "name": "Черная соль",
+      "quantity": 0.5,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     }
+    ],
+    "method_hints": [
+     "grill",
+     "oven"
+    ],
+    "topic_id": "kurica-zapechennaya"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/osnovnye-blyuda/zapechennaya-hrustyaschaya-kurica-191413",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:32:56Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-d1867ece321d",
+   "slug": "postnyj-grechnevyj-sup-s-tykvoj",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Постный гречневый суп с тыквой и зелёным соусом",
+    "slug": "postnyj-grechnevyj-sup-s-tykvoj",
+    "seo_title": "Постный суп с зелёной гречкой, тыквой и сельдереем",
+    "seo_description": "Суп из зелёной гречки с тыквой, корнем сельдерея, луком и морковью подают с острым соусом из кинзы, петрушки, чеснока и чили.",
+    "intro": "Постный суп на шесть порций: зелёная гречка, тыква и корень сельдерея варятся на обжаренных луке и моркови, а к столу подают яркий соус из кинзы, петрушки, чеснока, чили и лимонного сока.",
+    "steps": [
+     {
+      "text": "Порежьте лук и морковь мелкими кубиками, очищенные сельдерей и тыкву — кубиками по 1,5–2 см.",
+      "source_steps": [
+       0,
+       1,
+       2
+      ]
+     },
+     {
+      "text": "Обжарьте лук с морковью в растительном масле, помешивая, пока лук не станет прозрачным, затем добавьте сельдерей и жарьте ещё 3 минуты.",
+      "source_steps": [
+       3,
+       4
+      ]
+     },
+     {
+      "text": "Залейте водой, доведите до кипения и варите 5 минут.",
+      "source_steps": [
+       5
+      ]
+     },
+     {
+      "text": "Всыпьте гречку, положите тыкву, снова доведите до кипения и варите около 15 минут, затем посолите и поперчите.",
+      "source_steps": [
+       6
+      ],
+      "readiness_cue": "Гречка и тыква мягкие."
+     },
+     {
+      "text": "Для соуса крупно порежьте чили — с семенами будет острее — и пробейте блендером с кинзой, петрушкой, чесноком, лимонным соком и оливковым маслом. Посолите и поперчите.",
+      "source_steps": [
+       7,
+       8
+      ]
+     },
+     {
+      "text": "Разлейте суп по тарелкам и подавайте с зелёным соусом.",
+      "source_steps": [
+       9
+      ]
+     }
+    ],
+    "category": "supy",
+    "meal": "lunch",
+    "tags": [
+     "grechka",
+     "tykva",
+     "varka"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Зелёная гречка"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Морковь"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Корень сельдерея"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Тыква"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Вода"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Кинза"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Петрушка"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Зелёный перец чили"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Лимонный сок"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Растительное масло"
+     },
+     {
+      "fact_index": 13,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 14,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Постный гречневый суп",
+    "servings": 6,
+    "servings_raw": "6",
+    "prep_minutes": null,
+    "cook_minutes": 45,
+    "total_minutes": 45,
+    "ingredients": [
+     {
+      "raw": "Зеленая гречневая крупа, 100 г",
+      "name": "Зеленая гречневая крупа",
+      "quantity": 100.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 1 головка",
+      "name": "Репчатый лук",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "head",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Морковь, 1 штука",
+      "name": "Морковь",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Корень сельдерея, 250 г",
+      "name": "Корень сельдерея",
+      "quantity": 250.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Тыква, 250 г",
+      "name": "Тыква",
+      "quantity": 250.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Вода, 1.5 л",
+      "name": "Вода",
+      "quantity": 1.5,
+      "quantity_max": null,
+      "unit": "l",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кинза, 50 г",
+      "name": "Кинза",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Петрушка, 50 г",
+      "name": "Петрушка",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 2 зубчика",
+      "name": "Чеснок",
+      "quantity": 2.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Зеленый перец чили , 1 штука",
+      "name": "Зеленый перец чили",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "pcs",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лимонный сок, 15 мл",
+      "name": "Лимонный сок",
+      "quantity": 15.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 30 мл",
+      "name": "Оливковое масло",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Растительное масло, 20 мл",
+      "name": "Растительное масло",
+      "quantity": 20.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "blender",
+     "boiling",
+     "frying"
+    ],
+    "topic_id": "grechnevyj-sup"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/supy/postnyy-grechnevyy-sup-188586",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:37:43Z"
+   },
+   "media": []
+  },
+  {
+   "content_id": "fd-ebfeecf4f759",
+   "slug": "pasta-s-kabachkami-i-krevetkami",
+   "version": 1,
+   "published_at": "2026-10-24T23:07:29Z",
+   "updated_at": "2026-10-24T23:07:28Z",
+   "review_status": "ai_draft",
+   "cooking_status": "not_cooked",
+   "producer_mode": "manual_standin",
+   "draft": {
+    "title": "Паста с кабачками и креветками",
+    "slug": "pasta-s-kabachkami-i-krevetkami",
+    "seo_title": "Спагетти с кабачками, креветками и помидорами черри",
+    "seo_description": "Кабачки и креветки быстро обжаривают на масле с ароматом чеснока, соус доводят вином, бульоном и черри, а спагетти доваривают прямо в сковороде.",
+    "intro": "Быстрая паста на четверых: масло сначала прогревают с чесноком и стеблями базилика, потом за пару минут обжаривают кабачки и креветки. Спагетти доходят прямо в соусе из вина, бульона и помидоров черри.",
+    "steps": [
+     {
+      "text": "Порежьте кабачки небольшими брусками без семян, лук — мелко. Оборвите листья базилика, а зубчики чеснока придавите ножом.",
+      "source_steps": [
+       0,
+       1
+      ]
+     },
+     {
+      "text": "Опустите спагетти в щедро подсоленный кипяток и варите на 4 минуты меньше времени с упаковки.",
+      "source_steps": [
+       2
+      ]
+     },
+     {
+      "text": "В широкой сковороде прогрейте 50 мл оливкового масла с чесноком и стеблями базилика 2 минуты на среднем огне, затем чеснок и стебли выньте.",
+      "source_steps": [
+       3
+      ]
+     },
+     {
+      "text": "Обжарьте в этом масле лук и кабачки на сильном огне 1–2 минуты — они должны остаться упругими.",
+      "source_steps": [
+       4
+      ],
+      "readiness_cue": "Кабачки слегка золотистые и не мягкие."
+     },
+     {
+      "text": "Сделайте огонь максимальным, добавьте креветки на 1 минуту, влейте вино и дайте ему выкипеть наполовину за 1–2 минуты.",
+      "source_steps": [
+       5
+      ],
+      "readiness_cue": "Креветки порозовели."
+     },
+     {
+      "text": "Убавьте огонь до среднего, влейте горячий бульон, положите черри и томите 2 минуты.",
+      "source_steps": [
+       6,
+       7
+      ]
+     },
+     {
+      "text": "Переложите пасту в сковороду, добавьте два половника воды от варки и сливочное масло и перемешивайте около 1 минуты, пока паста не впитает соус.",
+      "source_steps": [
+       8,
+       9
+      ]
+     },
+     {
+      "text": "Снимите с огня, добавьте рваный базилик, лимонную цедру, щепотку чили и немного свежего оливкового масла. Подавайте сразу.",
+      "source_steps": [
+       10,
+       11
+      ]
+     }
+    ],
+    "category": "vtorye-blyuda",
+    "meal": "dinner",
+    "tags": [
+     "makarony",
+     "pomidory"
+    ],
+    "ingredients": [
+     {
+      "fact_index": 0,
+      "display_name": "Спагетти"
+     },
+     {
+      "fact_index": 1,
+      "display_name": "Креветки"
+     },
+     {
+      "fact_index": 2,
+      "display_name": "Кабачки"
+     },
+     {
+      "fact_index": 3,
+      "display_name": "Помидоры черри"
+     },
+     {
+      "fact_index": 4,
+      "display_name": "Чеснок"
+     },
+     {
+      "fact_index": 5,
+      "display_name": "Репчатый лук"
+     },
+     {
+      "fact_index": 6,
+      "display_name": "Белое сухое вино"
+     },
+     {
+      "fact_index": 7,
+      "display_name": "Куриный бульон"
+     },
+     {
+      "fact_index": 8,
+      "display_name": "Сливочное масло"
+     },
+     {
+      "fact_index": 9,
+      "display_name": "Оливковое масло"
+     },
+     {
+      "fact_index": 10,
+      "display_name": "Базилик"
+     },
+     {
+      "fact_index": 11,
+      "display_name": "Лимонная цедра"
+     },
+     {
+      "fact_index": 12,
+      "display_name": "Хлопья перца чили"
+     },
+     {
+      "fact_index": 13,
+      "display_name": "Соль"
+     },
+     {
+      "fact_index": 14,
+      "display_name": "Молотый чёрный перец"
+     }
+    ],
+    "tips": [],
+    "substitutions": []
+   },
+   "facts": {
+    "title": "Паста с кабачками и креветками",
+    "servings": 4,
+    "servings_raw": "4",
+    "prep_minutes": null,
+    "cook_minutes": 40,
+    "total_minutes": 40,
+    "ingredients": [
+     {
+      "raw": "Спагетти, 320 г",
+      "name": "Спагетти",
+      "quantity": 320.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Креветки, 400 г",
+      "name": "Креветки",
+      "quantity": 400.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Кабачки, 500 г",
+      "name": "Кабачки",
+      "quantity": 500.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Помидоры черри, 250 г",
+      "name": "Помидоры черри",
+      "quantity": 250.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Чеснок, 3 зубчика",
+      "name": "Чеснок",
+      "quantity": 3.0,
+      "quantity_max": null,
+      "unit": "clove",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Репчатый лук, 50 г",
+      "name": "Репчатый лук",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Белое сухое вино, 150 мл",
+      "name": "Белое сухое вино",
+      "quantity": 150.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Куриный бульон, 200 мл",
+      "name": "Куриный бульон",
+      "quantity": 200.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Сливочное масло, 40 г",
+      "name": "Сливочное масло",
+      "quantity": 40.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Оливковое масло, 50 мл",
+      "name": "Оливковое масло",
+      "quantity": 50.0,
+      "quantity_max": null,
+      "unit": "ml",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Базилик, 30 г",
+      "name": "Базилик",
+      "quantity": 30.0,
+      "quantity_max": null,
+      "unit": "g",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Лимонная цедра, 1 чайная ложка",
+      "name": "Лимонная цедра",
+      "quantity": 1.0,
+      "quantity_max": null,
+      "unit": "tsp",
+      "scalable": true,
+      "note": null
+     },
+     {
+      "raw": "Перец чили хлопьями, по вкусу",
+      "name": "Перец чили хлопьями",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Соль, по вкусу",
+      "name": "Соль",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     },
+     {
+      "raw": "Молотый черный перец, по вкусу",
+      "name": "Молотый черный перец",
+      "quantity": null,
+      "quantity_max": null,
+      "unit": "to_taste",
+      "scalable": false,
+      "note": "по вкусу"
+     }
+    ],
+    "method_hints": [
+     "boiling",
+     "frying",
+     "steaming"
+    ],
+    "topic_id": "pasta-s-krevetkami"
+   },
+   "source": {
+    "url": "https://eda.rambler.ru/recepty/pasta-picca/pasta-s-kabachkami-i-krevetkami-193014",
+    "host": "eda-rambler",
+    "fetched_at": "2026-10-11T21:33:14Z"
+   },
+   "media": []
+  },
   {
    "content_id": "fd-0410158c971c",
    "slug": "mannaya-kasha-na-moloke",
