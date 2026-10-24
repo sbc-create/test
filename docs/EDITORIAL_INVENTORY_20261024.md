@@ -137,6 +137,60 @@
 `ALREADY_LIVE`). То же у `7-semyan`. Статус `ALREADY_LIVE` — утверждение о
 странице, а не её измерение: у 43 записей с этим статусом текста нет вовсе.
 
+## 4а. Чем именно текст попадает на страницу — по семействам
+
+Вопрос владельца 24.10: читает ли работающий `yummyani.site` названный
+`title-overlays.json` из каталога `yummyani-staging`. **Читает**, и это
+доказано насквозь, а не по объявлению:
+
+1. фраза «Жанровая рамка источника» существует на диске ТОЛЬКО в
+   `/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/title-overlays.json`
+   (и его `last-good` копии) — проверено поиском по витрине и по живому
+   дереву фронтенда;
+2. она же дословно стоит в `meta description` живых страниц
+   `/anime/24-y-okrug-tokio/` и `/anime/009-1/`;
+3. живой контейнер `yummyani-staging-web-site-1` монтирует этот каталог:
+   `/srv/sites/yummyani-staging/runtime/overlays/yummyani.site ->
+   /app/content/overlays`, и несёт
+   `TITLE_OVERLAYS_PATH=/app/content/overlays/title-overlays.json`
+   (проверено `docker inspect`, выбраны только эти поля);
+4. читает его приложение витрины —
+   `/srv/sites/yummyani-staging/repo/src/modules/editorial/title-overlay.ts`,
+   `readFileSync(process.env.TITLE_OVERLAYS_PATH)` с запасом `last-good`.
+
+**Почему это не было видно сразу.** В `/srv/yummyani-site/current` и
+`/srv/lords/.frontend` слова «overlay» нет вовсе: витрины Yummy работают
+процессами `next-server` в контейнерах, и путь задаётся переменной
+окружения контейнера, а не кодом в дереве. Поиск читателя по дереву витрины
+давал ноль — и я ошибочно заключила, что маршрут не локальный. Маршрут
+локальный, просто через монтирование.
+
+**Попутная поправка к чужой ссылке.** Соседняя линия назвала источником живой
+конфигурации `build-b016/054c6170519d/compose.staging.yaml`. Проводка там
+описана верно, но контейнер поднят НЕ им: по метке
+`com.docker.compose.project.config_files` это
+`/home/claude/wt-yummy-mail-biz/compose.staging.yaml` плюс
+`yummy-biz-indexing.override.yaml` и `yummy-overlays.override.yaml` из
+`wt-portable-site-cell-01/automation/host/`. Оговорку она сделала сама:
+`docker inspect` ей недоступен. Конфигурация живой витрины записана путями
+через три разные рабочие копии — второй случай MOD-47.
+
+### Читатели по семействам, по факту а не по объявлению
+
+| семейство | чем показывает | читатель найден |
+| --- | --- | --- |
+| Yummy | наложение через монтирование в контейнер | `title-overlay.ts` + `TITLE_OVERLAYS_PATH` |
+| Animedia | наложение | `seo_overlay.py` в `current/src` двух витрин |
+| AnimeGo | наложение | `seo_overlay.py` в `current/src` трёх витрин |
+| Lords, Zona | накладка витрины `editorial-overrides.json` | `zona03_editorial.py`, `checks/editorial_wired.py` |
+
+При этом `registry.ВОЗМОЖНОСТИ_АДАПТЕРА` объявляет `display` только у
+`animedia`, а у `lords`, `animego` и `zona-serve` — даже `deliver` нет.
+Поэтому `доставка_описаний` отказывает в заданиях витринам, которые текст
+показывают: редакционная доля простаивает не из-за отсутствия работы.
+Отставание реестра — MOD-172, правка общего кода фабрики требует решения
+владельца.
+
 ## 5. Что сделано за сутки, отдельно от накопленного
 
 | за 24 ч (до 2026-10-24T09:37Z) | |
