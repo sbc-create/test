@@ -96,7 +96,10 @@ from factory.qwen import editorial, indexing, registry
            # запись. Чтение черновика и перечень переданных остаются
            # доступными всегда: отчёт о состоянии нужен и в read-only.
            "prepare_comment", "submit_comment", "review_comment",
-           "publish_comment", "unpublish_comment")
+           "publish_comment", "unpublish_comment",
+           # Рецензия материала ЗАПИСЫВАЕТ отзыв в черновик, поэтому пишущая:
+           # в режиме только чтения её быть не должно.
+           "review_material")
 
 #: Только чтение: пишущие инструменты не объявляются в `tools/list` и
 #: отказывают при вызове. Включается ключом `--read-only` или переменной
@@ -1804,6 +1807,70 @@ def инструмент_снятия_комментария(аргументы:
             "next_action": "снятие подтверждено чтением треда записи"}
 
 
+def инструмент_рецензии_материала(аргументы: dict) -> dict[str, Any]:
+    """Рецензия материала проверяющей стороной. Публикации здесь нет.
+
+    Инструмента для рецензии МАТЕРИАЛА не существовало до 24.10: у
+    комментариев цепочка была полной (`prepare_comment → submit_comment →
+    review_comment → publish_comment`), а у материалов — `prepare_material →
+    publish_material` без шага проверки. Поэтому у 29 размещённых за сутки
+    текстов запись о прочтении отсутствовала: писать её было нечем, кроме
+    прямого вызова модуля, а фоновый редактор ходит через мост (MOD-173).
+
+    `body_digest` обязателен и сверяется с черновиком внутри операции: отзыв
+    по памяти о прежней редакции записать нельзя.
+    """
+    from factory.qwen import editorial as ред
+
+    сайт = str(аргументы.get("site") or "").strip()
+    слаг = str(аргументы.get("slug") or "").strip()
+    решение = str(аргументы.get("verdict") or "").strip()
+    отп = str(аргументы.get("body_digest") or "").strip()
+    if not (сайт and слаг and решение and отп):
+        raise ОшибкаИнструмента(
+            "нужны параметры site, slug, verdict и body_digest"
+            " (отпечаток ПРОЧИТАННОГО текста)")
+    проверки = аргументы.get("checks")
+    if проверки is not None and not isinstance(проверки, dict):
+        raise ОшибкаИнструмента(
+            "checks должен быть объектом с полями: "
+            + ", ".join(ред.ПРОВЕРКИ_РЕЦЕНЗИИ))
+    заметки = аргументы.get("notes") or []
+    if isinstance(заметки, str):
+        заметки = [заметки]
+    try:
+        итог = ред.рецензировать(
+            сайт, слаг,
+            reviewer=str(аргументы.get("author") or ""),
+            verdict=решение, body_digest=отп,
+            notes=[str(н) for н in заметки],
+            checks=dict(проверки or {}))
+    except ред.ОперацияОтклонена as ош:
+        raise ОшибкаИнструмента(str(ош)) from ош
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, "review": итог}
+
+
+def инструмент_очереди_выданное(аргументы: dict) -> dict[str, Any]:
+    """Что СЕЙЧАС выдано: открытые аренды с заданием и сроком. ЧИТАЕТ.
+
+    Связь координатора с готовящей стороной держалась на том, что координатор
+    назовёт адрес карточки словами в задании: `editorial_queue_find` требует
+    адрес (то есть ответ нужно уже знать), `editorial_queue_status` отдаёт
+    сводные числа без перечня, а `editorial_queue_next` готовящей роли закрыт
+    решением владельца 09.10. Инструмент отвечает на «что мне поручено», не
+    создавая аренд и не меняя статусов, поэтому доступен и в режиме только
+    чтения, и роли `qwen`.
+    """
+    from factory.qwen import queue_bridge as мост
+
+    сайт = str(аргументы.get("site") or "").strip()
+    try:
+        итог = мост.выданные(сайт)
+    except мост.ОшибкаОчереди as ош:  # pragma: no cover - защитный путь
+        raise ОшибкаИнструмента(str(ош)) from ош
+    return {"version": ВЕРСИЯ_ОБОЛОЧКИ, **итог}
+
+
 ИНСТРУМЕНТЫ: dict[str, dict[str, Any]] = {
     "system_readiness": {
         "обработчик": инструмент_готовности,
@@ -2021,6 +2088,18 @@ def инструмент_снятия_комментария(аргументы:
             "required": ["task_id", "owner", "outcome"],
             "additionalProperties": False},
     },
+    "editorial_queue_assigned": {
+        "обработчик": инструмент_очереди_выданное,
+        "описание": ("Что сейчас выдано очередью: открытые аренды с заданием, "
+                     "владельцем и сроком. ЧИТАЕТ: аренды не создаёт, "
+                     "статусов не меняет. Отвечает готовящей стороне на "
+                     "вопрос «что мне поручено» — брать задание она не "
+                     "вправе. Просроченные аренды отделены от действующих."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string",
+                     "description": "домен витрины; без него — вся сеть"}},
+            "required": [], "additionalProperties": False},
+    },
     "editorial_queue_find": {
         "обработчик": инструмент_очереди_поиск,
         "описание": ("Есть ли задание очереди по адресу карточки. ЧИТАЕТ: "
@@ -2208,6 +2287,35 @@ def инструмент_снятия_комментария(аргументы:
         "схема": {"type": "object", "properties": {
             "site": {"type": "string", "description": "без него — по всей сети"}},
             "required": [], "additionalProperties": False},
+    },
+    "review_material": {
+        "обработчик": инструмент_рецензии_материала,
+        "описание": ("Рецензия материала перед публикацией: соответствие "
+                     "произведению, подтверждение фактов источниками, "
+                     "отсутствие посторонних вставок, качество текста. "
+                     "Операция ПРОВЕРЯЮЩЕЙ стороны: автор свою работу не "
+                     "одобряет. Без принятой рецензии publish_material "
+                     "отказывает."),
+        "схема": {"type": "object", "properties": {
+            "site": {"type": "string"}, "slug": {"type": "string"},
+            "verdict": {"type": "string",
+                        "enum": ["accepted", "accepted_with_notes", "rejected"]},
+            "body_digest": {"type": "string",
+                            "description": "отпечаток ПРОЧИТАННОГО текста;"
+                                           " сверяется с черновиком"},
+            "checks": {"type": "object", "properties": {
+                "соответствие_произведению": {"type": "boolean"},
+                "факты_подтверждены_источниками": {"type": "boolean"},
+                "посторонних_вставок_нет": {"type": "boolean"},
+                "качество_текста": {"type": "boolean"}},
+                "additionalProperties": False,
+                "description": "обязательны все четыре при допускающем вердикте"},
+            "notes": {"type": "array", "items": {"type": "string"},
+                      "description": "что именно сверено и по какому источнику"},
+            "author": {"type": "string",
+                       "description": "проверяющий; не может совпадать с автором"}},
+            "required": ["site", "slug", "verdict", "body_digest"],
+            "additionalProperties": False},
     },
     "review_comment": {
         "обработчик": инструмент_решения_по_черновику,
@@ -2435,6 +2543,7 @@ def место_исключения(ош: BaseException) -> str:
     "prepare_comment": "comment-prepare",
     "submit_comment": "comment-submit",
     "review_comment": "comment-review",
+    "review_material": "review-material",
     "publish_comment": "comment-publish",
     "unpublish_comment": "comment-unpublish",
 }

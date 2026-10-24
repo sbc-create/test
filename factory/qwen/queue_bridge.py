@@ -37,6 +37,8 @@ Qwen действительно располагает — инструмент�
 """
 from __future__ import annotations
 
+import datetime as dt
+
 import json
 
 from factory.qwen import actors
@@ -529,6 +531,86 @@ def завести(*, site: str, canonical_url: str, headline: str,
         "задание уже существовало и возвращено как есть: статус, текст и "
         "происхождение не изменены")
     return итог
+
+
+#: Журнал аренд очереди. Читается НАПРЯМУЮ: ответ на «что мне поручено» —
+#: чтение, и гонять его через подпроцесс оператора незачем.
+ФАЙЛ_АРЕНД = pathlib.Path("/var/lib/seo-content-operator/editorial_leases.json")
+РЕЕСТР_ЗАПИСЕЙ = pathlib.Path("/var/lib/seo-content-operator/registry.json")
+
+
+def _аренды() -> list[dict]:
+    try:
+        д = json.loads(ФАЙЛ_АРЕНД.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return []
+    зп = д.get("leases") or д
+    зп = list(зп.values()) if isinstance(зп, dict) else зп
+    return [з for з in (зп or []) if isinstance(з, dict)]
+
+
+def выданные(site: str = "", *, сейчас: str = "") -> dict[str, Any]:
+    """Что СЕЙЧАС выдано: открытые аренды с заданием и сроком.
+
+    ЗАЧЕМ. Готовящая сторона (роль `qwen`) не вправе брать задания —
+    `queue-next` ей закрыт решением владельца 2026-10-09, и это правильно.
+    Но узнать, что ей поручено, она не могла ничем: `editorial_queue_find`
+    требует адрес карточки (то есть ответ нужно уже знать), а
+    `editorial_queue_status` отдаёт сводные числа без перечня. Передача
+    задания от координатора к готовящему держалась на том, что координатор
+    назовёт адрес словами в задании, — а это не механизм.
+    Операция ЧИТАЮЩАЯ: аренд не создаёт, статусов не меняет, прав не
+    расширяет. Поэтому она доступна и готовящей стороне.
+
+    Просроченные аренды отделяются от действующих: измерено 24.10 — из 16
+    открытых записей 13 были просрочены, у 11 владелец пуст. Выдать
+    просроченную за поручение значило бы послать готовить то, что уже
+    отпущено.
+    """
+    сейчас = сейчас or dt.datetime.now(dt.timezone.utc).strftime(
+        "%Y-%m-%dT%H:%M:%SZ")
+    записи = {}
+    try:
+        for з in json.loads(
+                РЕЕСТР_ЗАПИСЕЙ.read_text(encoding="utf-8"))["items"]:
+            записи[(з.get("target_site"), з.get("title_id"))] = з
+    except (OSError, ValueError, KeyError):
+        записи = {}
+    действующие, просроченные = [], []
+    for а in _аренды():
+        if а.get("closed_at"):
+            continue
+        if site and а.get("site") != site:
+            continue
+        з = записи.get((а.get("site"), а.get("work_id"))) or {}
+        пров = з.get("provenance") or {}
+        строка = {
+            "task_id": а.get("task_id"),
+            "site": а.get("site"),
+            "work_id": а.get("work_id"),
+            "canonical_url": а.get("canonical_url") or з.get("canonical_url"),
+            "content_type": з.get("content_type"),
+            "headline": з.get("headline"),
+            "owner": а.get("owner") or "",
+            "acquired_at": а.get("acquired_at"),
+            "lease_expires_at": а.get("expires_at"),
+            "attempts": а.get("attempts"),
+            "brief": пров.get("brief") or {},
+            "registry_status": з.get("status"),
+        }
+        срок = str(а.get("expires_at") or "")
+        (действующие if срок and срок >= сейчас else просроченные).append(строка)
+    return {
+        "site": site or "(все)",
+        "at": сейчас,
+        "assigned": действующие,
+        "assigned_count": len(действующие),
+        "expired": просроченные,
+        "expired_count": len(просроченные),
+        "note": ("`assigned` — аренда ещё действует, работу можно готовить; "
+                 "`expired` — срок вышел, задание очередью уже отпущено, и "
+                 "готовить по нему нельзя: его может взять другой"),
+    }
 
 
 def состояние(*, site: str) -> dict[str, Any]:
