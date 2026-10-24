@@ -1,0 +1,1241 @@
+{
+ "collected_at": "2026-10-24T22:57Z",
+ "method": "имена собственные текста вне записи каталога → источники, записанные в черновике (source_fetch.py shikimori+credits / page); ручная сверка коротких имён по контексту и латинице",
+ "results": [
+  {
+   "domain": "animedia.icu",
+   "slug": "urasiman-policiya-buduschego",
+   "sources": [
+    "https://shikimori.io/animes/2933",
+    "https://shikimori.io/mangas/142297"
+   ],
+   "names": [
+    "Champion",
+    "Production",
+    "Shounen",
+    "Tatsunoko"
+   ],
+   "confirmed": [
+    "Champion",
+    "Production",
+    "Shounen",
+    "Tatsunoko"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "detektiv-konan-s-novym-godom",
+   "sources": [
+    "https://shikimori.io/animes/29437"
+   ],
+   "names": [
+    "Entertainment",
+    "Аояма",
+    "Когоро",
+    "Мори",
+    "Нового",
+    "Эдогава"
+   ],
+   "confirmed": [
+    "Entertainment",
+    "Аояма",
+    "Когоро",
+    "Мори",
+    "Нового",
+    "Эдогава"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "cepnye-hroniki-film-2",
+   "sources": [
+    "https://shikimori.io/animes/33729"
+   ],
+   "names": [
+    "Animation",
+    "Graphinica",
+    "Telecom",
+    "Югуто"
+   ],
+   "confirmed": [
+    "Animation",
+    "Graphinica",
+    "Telecom",
+    "Югуто"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "delo-vedet-yunyy-detektiv-kindaiti-delo-ob-ubiystve-chernoy-magiey",
+   "sources": [
+    "https://shikimori.io/animes/15819",
+    "https://shikimori.io/mangas/21307",
+    "https://animedia.icu/title/delo-vedet-yunyy-detektiv-kindaiti-delo-ob-ubiystve-chernoy-magiey/"
+   ],
+   "names": [
+    "Animation",
+    "Jiken-hen",
+    "Jikenbo",
+    "Magazine",
+    "Satsujin",
+    "Shounen",
+    "Toei",
+    "Ёдзабуро",
+    "Канари",
+    "Кибаяси",
+    "Миюки",
+    "Сина",
+    "Хадзимэ"
+   ],
+   "confirmed": [
+    "Animation",
+    "Jiken-hen",
+    "Jikenbo",
+    "Magazine",
+    "Satsujin",
+    "Shounen",
+    "Toei",
+    "Ёдзабуро",
+    "Канари",
+    "Кибаяси",
+    "Миюки",
+    "Сина",
+    "Хадзимэ"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "letopis-voyn-v-shkole-mure",
+   "sources": [
+    "https://shikimori.io/animes/1179"
+   ],
+   "names": [
+    "Madhouse",
+    "Muryou",
+    "Senki",
+    "Мураты",
+    "Муру",
+    "Сато",
+    "Тацуо",
+    "Токио",
+    "Хадзимэ"
+   ],
+   "confirmed": [
+    "Madhouse",
+    "Muryou",
+    "Senki",
+    "Мураты",
+    "Муру",
+    "Сато",
+    "Тацуо",
+    "Токио",
+    "Хадзимэ"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "tridcat-tysyach-li-do-chananya",
+   "sources": [
+    "https://shikimori.io/animes/54945"
+   ],
+   "names": [
+    "Animation",
+    "Chaser",
+    "Light",
+    "Studios",
+    "Аньши",
+    "Баем",
+    "Гао",
+    "Тан"
+   ],
+   "confirmed": [
+    "Animation",
+    "Chaser",
+    "Light",
+    "Studios",
+    "Баем",
+    "Гао",
+    "Тан"
+   ],
+   "not_found": [
+    "Аньши"
+   ],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "boevoy-petuh",
+   "sources": [
+    "https://shikimori.io/animes/59393",
+    "https://shikimori.io/mangas/132169"
+   ],
+   "names": [
+    "Fighter",
+    "Сакуратани"
+   ],
+   "confirmed": [
+    "Fighter",
+    "Сакуратани"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "moi-devushki-2",
+   "sources": [
+    "https://shikimori.io/animes/53040",
+    "https://shikimori.io/mangas/124940"
+   ],
+   "names": [
+    "Magazine",
+    "Shounen",
+    "Synergy",
+    "Weekly",
+    "Кирю",
+    "Минасэ",
+    "Мукаи",
+    "Нагисой",
+    "Наое",
+    "Наои",
+    "Рика",
+    "Саки",
+    "Сино",
+    "Хироюки",
+    "Хосидзаки"
+   ],
+   "confirmed": [
+    "Magazine",
+    "Shounen",
+    "Synergy",
+    "Weekly",
+    "Кирю",
+    "Минасэ",
+    "Мукаи",
+    "Нагисой",
+    "Наое",
+    "Наои",
+    "Рика",
+    "Саки",
+    "Сино",
+    "Хосидзаки",
+    "Хироюки (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "nindzya-voin-tobikage",
+   "sources": [
+    "https://shikimori.io/animes/3059"
+   ],
+   "names": [
+    "Pierrot",
+    "Studio",
+    "Ватанабэ",
+    "Джо",
+    "Забума",
+    "Мае",
+    "Марсе",
+    "Радорио"
+   ],
+   "confirmed": [
+    "Pierrot",
+    "Studio",
+    "Ватанабэ",
+    "Джо",
+    "Забума",
+    "Марсе",
+    "Радорио",
+    "Мае (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "detektiv-konan-protiv-kayto-kida",
+   "sources": [
+    "https://shikimori.io/animes/57441",
+    "https://www.conan-movie.jp/2024/tvspecial/index.html"
+   ],
+   "names": [
+    "Conan",
+    "Entertainment",
+    "Аоямы",
+    "Госё",
+    "Кидом",
+    "Куроба",
+    "Синъити"
+   ],
+   "confirmed": [
+    "Conan",
+    "Entertainment",
+    "Госё",
+    "Куроба",
+    "Аоямы (ручная сверка по контексту/латинице)",
+    "Кидом (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [
+    "Синъити"
+   ],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "princessy-idoly",
+   "sources": [
+    "https://shikimori.io/animes/8206"
+   ],
+   "names": [
+    "Chen",
+    "Chikku",
+    "Ciao",
+    "Entertainment",
+    "Lilpri",
+    "Белоснежки",
+    "Дая",
+    "Золушки",
+    "Кагуи",
+    "Лэйлу",
+    "Нацуки",
+    "Ринго",
+    "Рёку",
+    "Сасахару",
+    "Сказочную",
+    "Такаширо",
+    "Юкимори"
+   ],
+   "confirmed": [
+    "Chen",
+    "Chikku",
+    "Ciao",
+    "Entertainment",
+    "Lilpri",
+    "Белоснежки",
+    "Золушки",
+    "Нацуки",
+    "Ринго",
+    "Рёку",
+    "Сасахару",
+    "Сказочную",
+    "Такаширо",
+    "Юкимори",
+    "Дая (ручная сверка по контексту/латинице)",
+    "Кагуи (ручная сверка по контексту/латинице)",
+    "Лэйлу (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "portret-czyanhu-reki-i-ozera-5",
+   "sources": [
+    "https://shikimori.io/animes/50271"
+   ],
+   "names": [
+    "Rocen",
+    "Рао",
+    "Синъюню",
+    "Сыюаня",
+    "Цзяна"
+   ],
+   "confirmed": [
+    "Rocen",
+    "Рао",
+    "Синъюню",
+    "Сыюаня",
+    "Цзяна"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "dobro-pozhalovat-v-deshevyy-restoran-izgnannika",
+   "sources": [
+    "https://shikimori.io/animes/60523",
+    "https://tsuihosha-shokudo.com/"
+   ],
+   "names": [
+    "Ателье",
+    "Деннис",
+    "Кимикавы",
+    "Крыльях",
+    "Юки"
+   ],
+   "confirmed": [
+    "Ателье",
+    "Деннис",
+    "Кимикавы",
+    "Крыльях",
+    "Юки"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "nekromant-ya-katastrofa",
+   "sources": [],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "muzykalnaya-shkola-zvezd-3",
+   "sources": [
+    "https://shikimori.io/animes/36536",
+    "https://animedia.space/title/muzykalnaya-shkola-zvezd-3/"
+   ],
+   "names": [
+    "Аянаги",
+    "Као",
+    "Совет",
+    "Совета",
+    "Хираги",
+    "Хоситани",
+    "Цубасы",
+    "Юта"
+   ],
+   "confirmed": [
+    "Аянаги",
+    "Као",
+    "Совет",
+    "Совета",
+    "Хираги",
+    "Хоситани",
+    "Цубасы",
+    "Юта"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "puteshestvie-na-zapad-ova",
+   "sources": [
+    "https://shikimori.io/animes/3218",
+    "https://animedia.space/title/puteshestvie-na-zapad-ova/"
+   ],
+   "names": [
+    "Kids",
+    "Tokyo",
+    "Гюумао",
+    "Кадзуи",
+    "Минэкуры",
+    "Санзо"
+   ],
+   "confirmed": [
+    "Kids",
+    "Tokyo",
+    "Гюумао",
+    "Кадзуи",
+    "Минэкуры",
+    "Санзо"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "toriko-tur-dzhampa-2009",
+   "sources": [
+    "https://shikimori.io/animes/6941",
+    "https://animedia.space/title/toriko-tur-dzhampa-2009/"
+   ],
+   "names": [
+    "Shonen",
+    "Weekly",
+    "Мицутоси",
+    "Симабукуро"
+   ],
+   "confirmed": [
+    "Shonen",
+    "Weekly",
+    "Мицутоси",
+    "Симабукуро"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "proekt-super-ruki-2",
+   "sources": [
+    "https://shikimori.io/animes/1493",
+    "https://shikimori.io/mangas/1503"
+   ],
+   "names": [
+    "Entertainment",
+    "Shounen",
+    "Sunday",
+    "Кёити",
+    "Нанацуки",
+    "Такацуки"
+   ],
+   "confirmed": [
+    "Entertainment",
+    "Shounen",
+    "Sunday",
+    "Кёити",
+    "Нанацуки",
+    "Такацуки"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "zona-vosemdesyat-vosem",
+   "sources": [
+    "https://shikimori.io/animes/284",
+    "https://shikimori.io/mangas/3965"
+   ],
+   "names": [
+    "Big",
+    "Comic",
+    "Group",
+    "Shounen",
+    "Асран",
+    "Кадзама",
+    "Каору",
+    "Макото",
+    "Рёко",
+    "Сина",
+    "Синдзё",
+    "Синтани",
+    "Цугумо",
+    "Японию"
+   ],
+   "confirmed": [
+    "Big",
+    "Comic",
+    "Group",
+    "Shounen",
+    "Асран",
+    "Кадзама",
+    "Каору",
+    "Макото",
+    "Рёко",
+    "Сина",
+    "Синдзё",
+    "Синтани",
+    "Цугумо",
+    "Японию"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "tropicheskaya-pomada-horoshenkoe-lekarstvo-snezhnaya-princessa-i-chudo-kolco",
+   "sources": [
+    "https://shikimori.io/animes/49426"
+   ],
+   "names": [
+    "Animation",
+    "Toei",
+    "Манацу",
+    "Нацуми",
+    "Тодо",
+    "Шантию",
+    "Шэрон"
+   ],
+   "confirmed": [
+    "Animation",
+    "Toei",
+    "Манацу",
+    "Нацуми",
+    "Тодо",
+    "Шантию",
+    "Шэрон"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "dragon-kvest-geroicheskie-priklyucheniya-avelya",
+   "sources": [
+    "https://shikimori.io/animes/2819"
+   ],
+   "names": [
+    "Abel",
+    "Comet",
+    "Densetsu",
+    "Pierrot",
+    "Quest",
+    "Studio",
+    "Авель",
+    "Акира",
+    "Алиахан",
+    "Барамос",
+    "Великого",
+    "Дракона",
+    "Йога",
+    "Красный",
+    "Синий",
+    "Тиале",
+    "Тиалу",
+    "Торияма",
+    "Хории",
+    "Юдзи"
+   ],
+   "confirmed": [
+    "Abel",
+    "Comet",
+    "Densetsu",
+    "Pierrot",
+    "Quest",
+    "Studio",
+    "Авель",
+    "Акира",
+    "Алиахан",
+    "Барамос",
+    "Великого",
+    "Дракона",
+    "Красный",
+    "Синий",
+    "Тиалу",
+    "Торияма",
+    "Хории",
+    "Юдзи",
+    "Йога (ручная сверка по контексту/латинице)",
+    "Тиале (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "gayver-ii",
+   "sources": [
+    "https://shikimori.io/animes/1336",
+    "https://an1meg0.site/title/gayver-ii/"
+   ],
+   "names": [
+    "Ace",
+    "Communications",
+    "Guyver",
+    "Hero",
+    "Shounen",
+    "Soukou",
+    "Ёсики",
+    "Сэгава",
+    "Такаи",
+    "Тэцуро"
+   ],
+   "confirmed": [
+    "Ace",
+    "Communications",
+    "Guyver",
+    "Hero",
+    "Shounen",
+    "Soukou",
+    "Ёсики",
+    "Сэгава",
+    "Такаи",
+    "Тэцуро"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "slavnyy-pes-lessi",
+   "sources": [
+    "https://shikimori.io/animes/3425",
+    "https://an1meg0.site/title/slavnyy-pes-lessi/"
+   ],
+   "names": [
+    "Animation",
+    "Nippon",
+    "Джона",
+    "Керраклаф",
+    "Радлинг",
+    "Шотландию"
+   ],
+   "confirmed": [
+    "Animation",
+    "Nippon",
+    "Джона",
+    "Керраклаф",
+    "Радлинг",
+    "Шотландию"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "pesnya-rayancuri",
+   "sources": [
+    "https://shikimori.io/animes/9959"
+   ],
+   "names": [
+    "Mushi",
+    "Production",
+    "Второй"
+   ],
+   "confirmed": [
+    "Mushi",
+    "Production",
+    "Второй"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "kartochnye-boi-avangarda-svyataya-zet-delyuks",
+   "sources": [
+    "https://shikimori.io/animes/54144"
+   ],
+   "names": [
+    "Citrus",
+    "Gift-o",
+    "Jemi",
+    "Kinema",
+    "Studio",
+    "Акина",
+    "Ито",
+    "Мёдо"
+   ],
+   "confirmed": [
+    "Citrus",
+    "Gift-o",
+    "Jemi",
+    "Kinema",
+    "Studio",
+    "Акина",
+    "Ито",
+    "Мёдо"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "ommedzi",
+   "sources": [
+    "https://shikimori.io/animes/53151"
+   ],
+   "names": [
+    "Jack",
+    "Marvy",
+    "Абэ-но",
+    "Баку",
+    "Минамото-но",
+    "Сэймэй",
+    "Хиромаса",
+    "Юмэмакуры"
+   ],
+   "confirmed": [
+    "Jack",
+    "Marvy",
+    "Абэ-но",
+    "Баку",
+    "Минамото-но",
+    "Сэймэй",
+    "Хиромаса",
+    "Юмэмакуры"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "angel-po-sosedstvu-2",
+   "sources": [
+    "https://shikimori.io/animes/56876",
+    "https://shikimori.io/mangas/123649",
+    "https://otonarino-tenshisama.jp"
+   ],
+   "names": [
+    "Dame",
+    "Itsunomanika",
+    "Ken",
+    "Ningen",
+    "Project",
+    "Sareteita",
+    "Tenshi-sama",
+    "Махиру",
+    "Саэки-сан",
+    "Сина",
+    "Фудзимия"
+   ],
+   "confirmed": [
+    "Dame",
+    "Itsunomanika",
+    "Ken",
+    "Ningen",
+    "Project",
+    "Sareteita",
+    "Tenshi-sama",
+    "Махиру",
+    "Фудзимия",
+    "Саэки-сан (ручная сверка по контексту/латинице)",
+    "Сина (ручная сверка по контексту/латинице)"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "idolmaster-koncert-na-million",
+   "sources": [
+    "https://shikimori.io/animes/42385"
+   ],
+   "names": [
+    "Shirogumi",
+    "Ибуки",
+    "Касуга",
+    "Могами",
+    "Продакшн",
+    "Сидзука",
+    "Цубаса"
+   ],
+   "confirmed": [
+    "Shirogumi",
+    "Ибуки",
+    "Касуга",
+    "Могами",
+    "Продакшн",
+    "Сидзука",
+    "Цубаса"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "studiya-badzya",
+   "sources": [
+    "https://shikimori.io/animes/35965"
+   ],
+   "names": [
+    "Animation",
+    "Kyoto",
+    "Бадзей"
+   ],
+   "confirmed": [
+    "Animation",
+    "Kyoto",
+    "Бадзей"
+   ],
+   "not_found": [],
+   "recheck": "повтор с паузой 1,5 с; основа 5 букв или 4 для слов от 6"
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "mobilnyy-voin-gandam-gquuuuuux",
+   "sources": [
+    "https://shikimori.io/animes/60449",
+    "https://an1mego.site/title/mobilnyy-voin-gandam-gquuuuuux/"
+   ],
+   "names": [
+    "Khara",
+    "Sunrise",
+    "Ёсиюки",
+    "Азнабль",
+    "Аматэ",
+    "Войну",
+    "Земной",
+    "Зеон",
+    "Зеона",
+    "Ито",
+    "Княжеством",
+    "Сюдзи",
+    "Томино",
+    "Федерацией",
+    "Чар",
+    "Чара"
+   ],
+   "confirmed": [
+    "Khara",
+    "Sunrise",
+    "Ёсиюки",
+    "Азнабль",
+    "Аматэ",
+    "Войну",
+    "Земной",
+    "Зеон",
+    "Зеона",
+    "Ито",
+    "Княжеством",
+    "Сюдзи",
+    "Томино",
+    "Федерацией",
+    "Чар",
+    "Чара"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "deti-epohi-seva-suschee-nakazanie",
+   "sources": [
+    "https://shikimori.io/animes/17211",
+    "http://www.tatsunoko.co.jp/works/city-boy",
+    "https://an1mego.site/title/deti-epohi-seva-suschee-nakazanie/"
+   ],
+   "names": [
+    "Production",
+    "Tatsunoko",
+    "Адзуки",
+    "Токио",
+    "Хикарикин",
+    "Хоккайдо"
+   ],
+   "confirmed": [
+    "Production",
+    "Tatsunoko",
+    "Адзуки",
+    "Токио",
+    "Хикарикин",
+    "Хоккайдо"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animeg0.site",
+   "slug": "el-hazard-stranniki",
+   "sources": [
+    "https://shikimori.io/animes/116",
+    "https://animeg0.site/title/el-hazard-stranniki/"
+   ],
+   "names": [
+    "Венус",
+    "Дзиннай",
+    "Дзинная",
+    "Землю",
+    "Кацухико",
+    "Макото",
+    "Мидзухара",
+    "Нанами",
+    "Роштария",
+    "Руну",
+    "Фудзисава"
+   ],
+   "confirmed": [
+    "Венус",
+    "Дзиннай",
+    "Дзинная",
+    "Землю",
+    "Кацухико",
+    "Макото",
+    "Мидзухара",
+    "Нанами",
+    "Роштария",
+    "Руну",
+    "Фудзисава"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "puteshestvie-k-centru-zemli",
+   "sources": [
+    "https://zonafilm.space/title/puteshestvie-k-centru-zemli/",
+    "http://www.journeymovie.com/",
+    "https://www.wikidata.org/wiki/Q250770",
+    "https://ru.wikipedia.org/wiki/Путешествие_к_центру_Земли_(фильм,_2008)"
+   ],
+   "names": [
+    "Андерсон",
+    "Исландии",
+    "Тревор",
+    "Фрэйзер",
+    "Хатчерсон",
+    "Шоном"
+   ],
+   "confirmed": [
+    "Андерсон",
+    "Исландии",
+    "Тревор",
+    "Фрэйзер",
+    "Хатчерсон",
+    "Шоном"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "chelovek-muravey-i-osa",
+   "sources": [
+    "https://zonafilm.space/title/chelovek-muravey-i-osa/",
+    "https://ru.wikipedia.org/wiki/Человек-муравей_и_Оса"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "frankenshteyn-sozdal-zhenschinu",
+   "sources": [
+    "https://zonafilm.space/title/frankenshteyn-sozdal-zhenschinu/",
+    "https://ru.wikipedia.org/wiki/Франкенштейн_создал_женщину"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "poschadi-menya-velikiy-gospodin-2",
+   "sources": [
+    "https://shikimori.io/animes/51898",
+    "https://zonafilm.space/title/poschadi-menya-velikiy-gospodin-2/"
+   ],
+   "names": [
+    "Big",
+    "Culture",
+    "Firebird"
+   ],
+   "confirmed": [
+    "Big",
+    "Culture",
+    "Firebird"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "legenda-ob-aange-posledniy-mag-vozduha",
+   "sources": [
+    "https://zonafilm.space/title/legenda-ob-aange-posledniy-mag-vozduha/",
+    "https://ru.wikipedia.org/wiki/%D0%9B%D0%B5%D0%B3%D0%B5%D0%BD%D0%B4%D0%B0_%D0%BE%D0%B1_%D0%90%D0%B0%D0%BD%D0%B3%D0%B5:_%D0%9F%D0%BE%D1%81%D0%BB%D0%B5%D0%B4%D0%BD%D0%B8%D0%B9_%D0%BC%D0%B0%D0%B3_%D0%B2%D0%BE%D0%B7%D0%B4%D1%83%D1%85%D0%B0"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "zhenschina-kotoraya-mechtala-o-muzhchine",
+   "sources": [
+    "https://zonafilm.space/title/zhenschina-kotoraya-mechtala-o-muzhchine/",
+    "https://en.wikipedia.org/wiki/Kvinden_der_dr%C3%B8mte_om_en_mand"
+   ],
+   "names": [
+    "Данией"
+   ],
+   "confirmed": [
+    "Данией"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "akademiya-vedm",
+   "sources": [
+    "https://zonafilm12.site/title/akademiya-vedm/",
+    "snapshot:/srv/lords/.frontend/zona-03-details.json"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "pod-pricelom-2",
+   "sources": [
+    "https://zonafilm12.site/title/pod-pricelom-2/",
+    "snapshot:/srv/lords/.frontend/zona-03-details.json"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "sobachi-zvezdy",
+   "sources": [
+    "https://zonafilm12.site/title/sobachi-zvezdy/",
+    "snapshot:/srv/lords/.frontend/zona-03-details.json"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "moya-skrytaya-pravda",
+   "sources": [
+    "https://zonafilm12.site/title/moya-skrytaya-pravda/",
+    "https://www.lasestrellas.tv/telenovelas/mi-verdad-oculta",
+    "https://www.wikidata.org/wiki/Q135932916",
+    "https://en.wikipedia.org/wiki/Mi_verdad_oculta"
+   ],
+   "names": [
+    "Айтана",
+    "Андрес",
+    "Гонсалес",
+    "Давид",
+    "Паласиос",
+    "Сусана",
+    "Чокаро"
+   ],
+   "confirmed": [
+    "Айтана",
+    "Андрес",
+    "Гонсалес",
+    "Давид",
+    "Паласиос",
+    "Сусана",
+    "Чокаро"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "piraty-karibskogo-morya-mertvecy-ne-rasskazyvayut-skazki",
+   "sources": [
+    "https://zonafilm12.site/title/piraty-karibskogo-morya-mertvecy-ne-rasskazyvayut-skazki/",
+    "http://pirates.disney.com/pirates-of-the-caribbean-dead-men-tell-no-tales",
+    "https://www.wikidata.org/wiki/Q10350033"
+   ],
+   "names": [
+    "Бардем",
+    "Генри",
+    "Депп",
+    "Джеку",
+    "Джонни",
+    "Кариной",
+    "Королевского",
+    "Рённинг",
+    "Сандберг",
+    "Скоделарио",
+    "Смит",
+    "Туэйтс",
+    "Эспен"
+   ],
+   "confirmed": [
+    "Бардем",
+    "Генри",
+    "Депп",
+    "Джеку",
+    "Джонни",
+    "Кариной",
+    "Королевского",
+    "Рённинг",
+    "Сандберг",
+    "Скоделарио",
+    "Смит",
+    "Туэйтс",
+    "Эспен"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "baffi-istrebitelnica-vampirov",
+   "sources": [
+    "https://zonafilm12.site/title/baffi-istrebitelnica-vampirov/",
+    "https://ru.wikipedia.org/wiki/Баффи_—_истребительница_вампиров_(телесериал)"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "tayny-niro-vulfa",
+   "sources": [
+    "https://zonafilm12.site/title/tayny-niro-vulfa/"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "11-14",
+   "sources": [
+    "https://zonafilm12.site/title/11-14/"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "otryad-samoubiyc-2016",
+   "sources": [
+    "https://zonafilm12.site/title/otryad-samoubiyc-2016/",
+    "https://www.warnerbros.com/movies/suicide-squad/"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "bratan-munna-2",
+   "sources": [
+    "https://zonafilm12.site/title/bratan-munna-2/",
+    "https://ru.wikipedia.org/wiki/%D0%91%D1%80%D0%B0%D1%82%D0%B0%D0%BD_%D0%9C%D1%83%D0%BD%D0%BD%D0%B0_2",
+    "https://www.wikidata.org/wiki/Q980677"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "monti-payton-i-svyaschennyy-graal",
+   "sources": [
+    "https://zonafilm12.site/title/monti-payton-i-svyaschennyy-graal/",
+    "https://ru.wikipedia.org/wiki/%D0%9C%D0%BE%D0%BD%D1%82%D0%B8_%D0%9F%D0%B0%D0%B9%D1%82%D0%BE%D0%BD_%D0%B8_%D0%A1%D0%B2%D1%8F%D1%89%D0%B5%D0%BD%D0%BD%D1%8B%D0%B9_%D0%93%D1%80%D0%B0%D0%B0%D0%BB%D1%8C"
+   ],
+   "names": [
+    "Святым"
+   ],
+   "confirmed": [
+    "Святым"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "22-protiv-zemli-2021",
+   "sources": [
+    "https://zonafilm12.site/title/22-protiv-zemli-2021/",
+    "https://en.wikipedia.org/wiki/22_vs._Earth"
+   ],
+   "names": [],
+   "confirmed": [],
+   "not_found": []
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "odin-tanec",
+   "sources": [
+    "https://shikimori.io/animes/59623",
+    "https://zonafilm12.site/title/odin-tanec/"
+   ],
+   "names": [
+    "Coffee",
+    "Cyclone",
+    "Graphics",
+    "Madhouse",
+    "Ванда",
+    "Ванде",
+    "Кабоку",
+    "Котани",
+    "Хикари"
+   ],
+   "confirmed": [
+    "Coffee",
+    "Cyclone",
+    "Graphics",
+    "Madhouse",
+    "Ванда",
+    "Ванде",
+    "Кабоку",
+    "Котани",
+    "Хикари"
+   ],
+   "not_found": []
+  }
+ ]
+}

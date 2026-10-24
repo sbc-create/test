@@ -449,6 +449,8 @@ T330 выпущена 23.10 в 12:08:49Z: обложки шире 480 пиксе
 
 kletka-duha-2 — после оценки T191.
 
+Дополнено 24.10: ещё два опубликованных 24.10 текста с одной деталью без записанного источника — animedia.space/title/detektiv-konan-protiv-kayto-kida («Синъити») и animedia.icu/title/tridcat-tysyach-li-do-chananya («восстание Аньши»). Сверка — `artifacts/evidence/verify-today-20261024.json`.
+
 
 ## 11. Установка допуска «публикация только после рецензии» (MOD-173), 25.10 22:47Z
 
