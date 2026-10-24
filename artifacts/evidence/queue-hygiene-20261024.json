@@ -1,0 +1,26 @@
+{
+ "live_tasks": 1121,
+ "duplicate_addresses": 1,
+ "address_forms": {
+  "абсолютная": 1118,
+  "относительная": 3
+ },
+ "duplicates": [
+  {
+   "domain": "yummyani.org",
+   "path": "/anime/ledyanaya-stena-2",
+   "tasks": [
+    {
+     "content_id": "request-b74982172ba225a2",
+     "status": "READY_VERIFIED",
+     "canonical_url": "/anime/ledyanaya-stena-2"
+    },
+    {
+     "content_id": "request-fa190135f85d72c9",
+     "status": "BLOCKED_INSUFFICIENT_FACTS",
+     "canonical_url": "https://yummyani.org/anime/ledyanaya-stena-2"
+    }
+   ]
+  }
+ ]
+}
