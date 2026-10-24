@@ -62,4 +62,4 @@ def test_pass_is_idempotent_keeps_old_results_and_retries_bad_archive(tmp_path, 
     )
     assert bad["status"] == "failed" and bad["attempts"] == 2
     assert r.run(inbox, out, max_attempts=2, existing=NO_SITE)["processed"] == []
-    assert (tmp_path / "tools" / "qwen_contract" / "queue.json").is_file()
+    assert (out / "queue.json").is_file()

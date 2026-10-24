@@ -13,7 +13,7 @@
    не теряет сделанного, следующий проход продолжает с необработанного.
 3. Ошибка чтения архива — не падение прохода: попытка записывается, после `--max-attempts` неудач
    архив помечается `failed` и больше не берётся до появления нового файла.
-4. Очередь тем `tools/qwen_contract/queue.json` пересобирается: опубликованное уходит из неё.
+4. Очередь тем пересобирается в `var/qwen-recipes/queue.json` (снимок в git — tools/qwen_contract/).
 
 Импорт принятых блюд в базы сайтов и выпуск комплекта сюда не входят: это отдельные штатные шаги
 (`set-import` с резервной копией, `kit build`, выкладка владельцем) — проход только готовит их
@@ -152,9 +152,7 @@ def run(
         save()
         done.append(rec)
     q = topic_queue.build(existing=existing)
-    (REPO / "tools" / "qwen_contract" / "queue.json").write_text(
-        json.dumps(q, ensure_ascii=False, indent=1) + "\n"
-    )
+    (out_root / "queue.json").write_text(json.dumps(q, ensure_ascii=False, indent=1) + "\n")
     state["last_pass"] = {"at": now(), "processed": len(done), "queue": q["totals"]}
     save()
     return {

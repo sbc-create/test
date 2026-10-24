@@ -1,0 +1,23 @@
+[Unit]
+Description=bestreciept.site и myfood.mobi: приём новых поставок Qwen (qwen-dish/1) и пересборка очереди тем
+Documentation=file:///home/claude/wt-template-food-daily/tools/qwen_contract/README.md
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-template-food-daily
+# один проход: новые архивы из var/qwen-intake → var/qwen-recipes/<set_id>/, состояние runs.json,
+# очередь var/qwen-recipes/queue.json; импорт в базы сайтов и выкладка — отдельные штатные шаги
+ExecStart=/usr/bin/python3 tools/qwen_intake_run.py
+TimeoutStartSec=15min
+Nice=10
+Environment=PYTHONDONTWRITEBYTECODE=1
+
+# --- ограничения: пишет только в var/qwen-recipes, остальное — чтение, сети не нужно ---
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-template-food-daily/var/qwen-recipes
+PrivateNetwork=yes
