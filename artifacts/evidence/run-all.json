@@ -33,21 +33,21 @@
       "command": "for f in tools/*.js themes/*/assets/*.js tests/e2e/*.js tests/e2e-multisite/*.js playwright.config.js playwright.multisite.config.js; do node --check \"$f\" || exit 1; done",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "static-yaml",
       "command": "python3 tests/tools/check_yaml.py",
       "exit_code": "0",
       "status": "PASS",
-      "note": "2s"
+      "note": "10s"
     },
     {
       "check": "unit-tests",
       "command": "python3 -m pytest tests/unit tests/test_traceability.py -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "952s"
+      "note": "834s"
     },
     {
       "check": "validate-pilot",
@@ -61,7 +61,7 @@
       "command": "python3 -m factory plan --site pilot-local > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "1s"
+      "note": "0s"
     },
     {
       "check": "build-pilot",
@@ -75,7 +75,7 @@
       "command": "python3 -m pytest tests/integration -q -m 'not slow'",
       "exit_code": "0",
       "status": "PASS",
-      "note": "8s"
+      "note": "7s"
     },
     {
       "check": "cell-pilot",
@@ -89,7 +89,7 @@
       "command": "python3 -m pytest tests/integration -q -m slow",
       "exit_code": "0",
       "status": "PASS",
-      "note": "24s"
+      "note": "29s"
     },
     {
       "check": "seo-lint",
@@ -108,30 +108,30 @@
     {
       "check": "deploy-pilot",
       "command": "python3 -m factory deploy --site pilot-local > /dev/null",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "125s"
+      "exit_code": "2",
+      "status": "FAIL",
+      "note": "29s"
     },
     {
       "check": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local > /dev/null",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "1s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "0s"
     },
     {
       "check": "browser-audit",
       "command": "python3 tests/tools/check_browser_audit.py",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "0s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "1s"
     },
     {
       "check": "e2e-playwright",
       "command": "npx playwright test && test -s \"artifacts/qa/pilot-local/playwright-report.json\"",
-      "exit_code": "0",
-      "status": "PASS",
-      "note": "27s"
+      "exit_code": "1",
+      "status": "FAIL",
+      "note": "51s"
     },
     {
       "check": "cross-browser",
@@ -166,7 +166,7 @@
       "command": "python3 -m factory env-report > /dev/null",
       "exit_code": "0",
       "status": "PASS",
-      "note": "0s"
+      "note": "1s"
     },
     {
       "check": "screenshot-manifest",
@@ -176,7 +176,7 @@
       "note": "0s"
     }
   ],
-  "passed": 22,
-  "failed": 0,
+  "passed": 18,
+  "failed": 4,
   "skipped": 3
 }

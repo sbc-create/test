@@ -77,7 +77,18 @@
         "ssh_key_secret_ref": "file:/home/claude/.ssh/k2deploy-zomro-01",
         "known_hosts_entry_ref": "inventory/known_hosts.d/k2-zomro-01",
         "strict_host_key_checking": true,
-        "sudo_allowlist": [],
+        "sudo_allowlist": [
+          "/usr/sbin/nginx -t",
+          "/usr/bin/systemctl reload nginx",
+          "/usr/bin/systemctl restart nova-lordfilm-group.service",
+          "/usr/bin/systemctl restart nova-lordfilm-msk-ru.service",
+          "/usr/bin/systemctl restart nova-lordfilm-spb-ru.service",
+          "/usr/bin/systemctl restart nova-lordserial-group.service",
+          "/usr/bin/systemctl restart nova-lordserial-msk-ru.service",
+          "/usr/bin/systemctl restart nova-lordserial-net-ru.service",
+          "/usr/bin/systemctl restart nova-lordserial-spb-ru.service",
+          "/usr/bin/systemctl restart nova-lordserial-su.service"
+        ],
         "environments": [
           "staging"
         ]
@@ -91,5 +102,5 @@
     "available": true,
     "detail": "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome"
   },
-  "knowledge_freeze": "2026-10-15.1"
+  "knowledge_freeze": "2026-10-18.1"
 }
