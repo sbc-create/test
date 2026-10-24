@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% from "_pickp.html" import pick %}
+{% block main %}
+<h1>Готовим на компанию</h1>
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if p.recipes %}
+<p class="lead">{{ guests }} {{ 'гость' if guests % 10 == 1 and guests % 100 != 11 else ('гостя' if guests % 10 in [2,3,4] and guests % 100 not in [12,13,14] else 'гостей') }}, {{ p.recipes|length }} {{ 'блюдо' if p.recipes|length % 10 == 1 and p.recipes|length % 100 != 11 else ('блюда' if p.recipes|length % 10 in [2,3,4] and p.recipes|length % 100 not in [12,13,14] else 'блюд') }}: {% for r in p.recipes %}<a href="{{ r.url }}">{{ r.title }}</a> ({% if r.yield_n %}рецепт на {{ r.yield_n }}{% else %}выход не указан — количества как в рецепте{% endif %}){% if not loop.last %}; {% endif %}{% endfor %}.</p>
+<p class="actions"><button class="btn btn--ghost" type="button" data-print hidden>Печать</button></p>
+<ul class="plist" data-plist>{% for it in p['items'] %}<li><label><input type="checkbox" value="{{ it.name }}|{{ it.unit }}"> <span>{{ it.name }}</span></label> <b>{{ it.amount }}</b>{% if it.fixed %} <small class="fixed">не пересчитывается</small>{% endif %}<small class="pfor">{{ it.recipes|join(', ') }}</small></li>{% endfor %}</ul>
+{% if p.loose %}<p class="taste"><b>По вкусу и без количества:</b> {{ p.loose|map(attribute='name')|join(', ') }}</p>{% endif %}
+<p class="note">Каждый рецепт пересчитан со своих порций на число гостей — как пересчёт порций на странице рецепта; время и температура не меняются. Складываются только одинаковые названия в одной единице.</p>
+<h2 id="izmenit">Изменить выбор</h2>
+{% endif %}
+{{ pick(picked, guests) }}
+{% endblock %}

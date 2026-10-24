@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_parts.html" import grid %}
+{% block main %}
+<section class="hero">
+  <div class="hero__text">
+    <h1 class="hero__title">Простые рецепты <em>на&nbsp;каждый&nbsp;день</em></h1>
+    <p class="hero__lead">Завтраки, супы, вторые блюда и салаты из обычных продуктов — с точными количествами и пересчётом порций.</p>
+  </div>
+  <div class="hero__find">
+    <form class="search search--hero" action="/poisk/" method="get" role="search">
+      <label for="q" class="sr">Найти рецепт по блюду или продукту</label>
+      <input id="q" name="q" type="search" placeholder="Блюдо или продукт" autocomplete="off">
+      <button type="submit">Найти</button>
+    </form>
+    {% if chips %}
+    <p class="chips"><a class="chip chip--fridge" href="/iz-holodilnika/"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="3" width="12" height="18" rx="2"/><path d="M6 10h12M9 6v2M9 13v3"/></svg>Что есть дома</a><span class="chips__label">Часто ищут:</span>{% for key, label in chips %}<a class="chip" href="{{ site.tag_path(key) }}">{{ label }}</a>{% endfor %}</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if quick %}
+<section class="block block--first" aria-labelledby="quick-h">
+  <div class="block__head"><h2 id="quick-h">Быстро: до 30 минут</h2><a href="/podborki/bystro-do-30-minut/">Все быстрые</a></div>
+  {{ grid(quick, 'h3', 1) }}
+</section>
+{% endif %}
+
+{% for key, title, href, more, items in shelves %}
+<section class="block" aria-labelledby="{{ key }}-h">
+  <div class="block__head"><h2 id="{{ key }}-h">{{ title }}</h2><a href="{{ href }}">{{ more }}</a></div>
+  {{ grid(items, 'h3') }}
+</section>
+{% if loop.index == 1 %}
+<section class="promo" aria-labelledby="party-h">
+  <div>
+    <h2 id="party-h">Гости придут? <em>Посчитаем продукты.</em></h2>
+    <p>Отметьте несколько блюд и число гостей — получите один общий список покупок.</p>
+  </div>
+  <p class="promo__go"><a class="btn" href="/na-kompaniyu/" data-p-link>Собрать список</a><a class="btn btn--ghost" href="/iz-holodilnika/">Что есть дома</a></p>
+</section>
+{% endif %}
+{% endfor %}
+
+<p class="home-all"><a class="btn btn--ghost" href="/recepty/">Все {{ total }} {{ plural(total, 'рецепт', 'рецепта', 'рецептов') }}</a></p>
+{% endblock %}

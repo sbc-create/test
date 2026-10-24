@@ -1,0 +1,58 @@
+{
+ "commit_head": "ad0073b",
+ "method": "изолированная копия шаблона из коммита ad0073b на 127.0.0.1:8882; база — копия собственной базы C (после editorial clone-db и правок v2–v4); учётка создана штатным `python3 -m fooddaily.editor_secret` с FOOD_DAILY_C_EDITOR_SECRET=<scratchpad>/secret/editor.json (0600, вне репозитория, удалена после проверки); рабочее превью и база ветки не изменялись",
+ "robots_rule": "Disallow: /",
+ "actions": {
+  "no_auth_401_with_challenge": true,
+  "wrong_password_401": true,
+  "wrong_user_401": true,
+  "login_200": true,
+  "editor_noindex": true,
+  "robots_disallow_redaktor": true,
+  "sitemap_has_no_redaktor": true,
+  "list_rows_match_db": true,
+  "public_page_200_before": true,
+  "msg_param_escaped": true,
+  "post_without_csrf_403": true,
+  "post_without_auth_401": true,
+  "public_page_200_after_refused_posts": true,
+  "list_link_opens_item": true,
+  "unpublish_msg": true,
+  "unpublish_status_hidden": true,
+  "public_page_404_after_unpublish": true,
+  "snapshot_only_target_removed": true,
+  "republish_restores_public_page": true,
+  "rollback_creates_new_version": true,
+  "diff_shown": true,
+  "review_recorded": true,
+  "audit_log_has_editor_actions": true,
+  "no_hscroll_editor_pages": true,
+  "axe_zero_editor_pages": true,
+  "no_console_errors": true
+ },
+ "publish_msg": "опубликовано в preview",
+ "post_status": null,
+ "hscroll": {
+  "mobile:/redaktor/": false,
+  "mobile:/redaktor/fd-4b788c4aa5fb/?a=1&b=2": false,
+  "desktop:/redaktor/": false,
+  "desktop:/redaktor/fd-4b788c4aa5fb/?a=1&b=2": false
+ },
+ "axe": {
+  "mobile:/redaktor/": [],
+  "mobile:/redaktor/fd-4b788c4aa5fb/?a=1&b=2": [],
+  "desktop:/redaktor/": [],
+  "desktop:/redaktor/fd-4b788c4aa5fb/?a=1&b=2": []
+ },
+ "console": {
+  "mobile": [],
+  "desktop": []
+ },
+ "versions_check": {
+  "item_200": true,
+  "shows_three_versions": true,
+  "diff_200": true,
+  "diff_has_old_and_new_tip": true,
+  "notes_visible_to_editor": true
+ }
+}

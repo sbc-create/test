@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block main %}
+<header class="page-head">
+  <h1>Подборки</h1>
+  <p class="page-head__lead">Рецепты, собранные по времени, продуктам и сезону.</p>
+</header>
+<div class="collections collections--page">
+  {% for key, (title, desc, items) in collections.items() %}
+  <a class="collection collection--{{ loop.index % 4 }}" href="/podborki/{{ key }}/">
+    <span class="collection__title">{{ title }}</span>
+    <span class="collection__desc">{{ desc }}</span>
+    <span class="collection__count">{{ items|length }} {{ plural(items|length, 'рецепт', 'рецепта', 'рецептов') }} →</span>
+  </a>
+  {% endfor %}
+</div>
+{% endblock %}

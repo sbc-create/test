@@ -1,0 +1,45 @@
+# Конфигурация домена bestreciept.site (food-daily C). Выбирается при запуске: SITE_CONFIG=site.bestreciept.yaml.
+# Домен выбран владельцем 20.10.2026. Индексация закрыта до отдельного решения: production_authorized: false
+# даёт noindex, X-Robots-Tag и robots «Disallow: /», а адреса и canonical — уже на домене.
+site_id: food-daily
+name: "Будни на кухне"            # рабочее название; торговое обозначение не проверено
+variant_id: party-list   # вариант C: несколько рецептов на компанию → общий пересчитанный список
+variant_version: "1"
+storage_namespace: "fdc"            # localStorage: fdc.* (A — fd.*, B — fdb.*)
+lang: ru
+
+# Режим — отдельный проверяемый переключатель. preview: noindex везде,
+# X-Robots-Tag, robots.txt Disallow, sitemap не отдаётся поисковикам.
+# production требует origin (домен) и production_authorized — сейчас
+# домена нет, это BLOCKED_INPUT, а не повод подставить адрес.
+mode: production
+production_authorized: false
+origin:
+  preview: "http://127.0.0.1:8876"
+  production: "https://bestreciept.site"
+
+server:
+  bind: 127.0.0.1                  # только петля: наружу preview не слушает
+  port: 9211
+  compose_project: null            # отдельный процесс, не контейнер; см. docs/ISOLATION.md
+
+storage:
+  db: var/food-daily-c/preview/food-daily.sqlite3
+  private_sources: var/food-daily-c/private
+  media: var/food-daily-c/media
+  cache: var/food-daily-c/cache
+  build: var/food-daily-c/build
+  editor_secret: var/food-daily-c/secrets/editor.json
+
+pagination:
+  per_page: 24  # делится на 2, 3 и 4 колонки — ряды каталога полные
+
+seo:
+  tag_page_min_items: 2            # тег-страница существует при ≥2 материалах
+  tag_index_min_items: 3           # индексируется при ≥3
+  title_suffix: " — Будни на кухне"
+
+ads:
+  adapter: disabled                # preview: production-кампании и счётчики выключены
+analytics:
+  counters: []                     # подключаются после появления домена
