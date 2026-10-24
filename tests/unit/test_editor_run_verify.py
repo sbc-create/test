@@ -504,3 +504,45 @@ def test_rotate_puts_first_publication_check_domain_first(monkeypatch):
     got = editor_run.rotate(cands, {"animedia.icu": 1})
     assert got[0]["url"] == "https://zonafilm.space/title/c/"
     assert [c["url"].split("/")[2] for c in got[1:]] == ["an1mego.site", "animedia.icu"]
+
+
+def _drafts_root(tmp_path):
+    """Каталог наложений Lords/Zona: drafts.json и published.json по доменам."""
+    root = tmp_path / "overlays"
+    z = root / "zonafilm12.site"
+    z.mkdir(parents=True)
+    (z / "drafts.json").write_text(json.dumps({"site": "zonafilm12.site", "items": {
+        "gotov": {"slug": "gotov", "state": "verified", "quality_problems": []},
+        "uzhe": {"slug": "uzhe", "state": "verified", "quality_problems": []},
+        "plokho": {"slug": "plokho", "state": "verified", "quality_problems": ["стоп-слово"]},
+        "syroy": {"slug": "syroy", "state": "draft", "quality_problems": []},
+    }}), encoding="utf-8")
+    (z / "published.json").write_text(json.dumps({"items": [{"slug": "uzhe"}]}), encoding="utf-8")
+    p = root / "zonafilm.space"  # домен на паузе: его черновики не работа
+    p.mkdir()
+    (p / "drafts.json").write_text(json.dumps({"items": {
+        "pauza": {"slug": "pauza", "state": "verified", "quality_problems": []}}}), encoding="utf-8")
+    return root
+
+
+def test_ready_drafts_are_work_first_and_bring_their_domain(tmp_path):
+    """24.10: 13 черновиков zonafilm12.site лежали, а шлюз их не видел."""
+    f = _gate_files(tmp_path)
+    root = _drafts_root(tmp_path)
+    got = [c["url"] for c in editor_run.готовые_черновики(root)]
+    assert got == ["https://zonafilm12.site/title/gotov/"]
+    d = editor_run.gate(NOW, refresh=False, drafts_root=root, **f)
+    assert d["run"] is True
+    # Порядок внутри next решает доля направления; шаг 0 задания идёт до шага 1
+    # и сам перебирает черновики доменов из "domains" — важно, что домен там.
+    черновики = [c for c in d["next"] if c.get("reason") == "DRAFT_READY"]
+    assert [c["url"] for c in черновики] == ["https://zonafilm12.site/title/gotov/"]
+    assert "zonafilm12.site" in d["domains"]
+
+
+def test_drafts_not_read_from_live_root_with_test_registry(tmp_path, monkeypatch):
+    """Проверки со своими файлами живой /srv не читают."""
+    f = _gate_files(tmp_path)
+    monkeypatch.setattr(editor_run, "готовые_черновики",
+                        lambda root=None: (_ for _ in ()).throw(AssertionError("читал /srv")))
+    editor_run.gate(NOW, refresh=False, **f)

@@ -622,6 +622,7 @@ def gate(
     recent: dict[str, int] | None = None,
     conf: dict | None = None,
     resources_fn=None,
+    drafts_root: Path | None = None,
 ) -> dict:
     """Нужен ли запуск модели. Файлы и /proc: ни модели, ни внешних команд.
 
@@ -663,6 +664,7 @@ def gate(
         state=state,
         refresh=refresh,
         recent=recent,
+        drafts_root=drafts_root,
     )
     if решение.get("allocation_note") and conf["allocation"].get("hold_unworkable_share", True):
         # У отставшего направления работы нет (Lords — пауза публикаций). Его
@@ -750,6 +752,54 @@ def переданные_черновики() -> list[dict]:
         return []
 
 
+def готовые_черновики(root: Path | None = None) -> list[dict]:
+    """Описания, прошедшие prepare_material на витринах Lords/Zona и не опубликованные.
+
+    Зачем. 24.10 пауза снята с zonafilm12.site, а в его drafts.json лежало 13
+    таких черновиков (19.10). Шлюз их работой не считал: домены Zona попадают
+    в "domains" запуска только при свежем кандидате, а единственный кандидат
+    домена уже получил исход. Шаг 0 задания редактора поэтому не видел ни
+    одного черновика. Здесь они становятся кандидатами, и домен попадает в
+    "domains" запуска; шаг 0 идёт до шага 1 и перебирает черновики сам.
+
+    Черновик — заготовка, а не готовый текст: факты сверяет редактор (шаг 0).
+    Только разрешённые и не приостановленные домены; опубликованное (слаг в
+    published.json того же каталога) не берётся. Ошибка чтения — пустой
+    список: подсказка не должна останавливать шлюз.
+    """
+    root = root or OVERLAY_ROOTS["lords"][0]
+    разрешено = set(allowed_domains())
+    out: list[dict] = []
+    try:
+        каталоги = sorted(p for p in root.iterdir() if p.is_dir())
+    except OSError:
+        return out
+    for каталог in каталоги:
+        домен = каталог.name
+        if домен not in разрешено or домен in PAUSED_PUBLISH:
+            continue
+        try:
+            черн = json.loads((каталог / "drafts.json").read_text(encoding="utf-8")).get("items") or {}
+        except (OSError, ValueError):
+            continue
+        try:
+            опубл = json.loads((каталог / "published.json").read_text(encoding="utf-8")).get("items") or []
+        except (OSError, ValueError):
+            опубл = []
+        опубл = опубл.values() if isinstance(опубл, dict) else опубл
+        есть = {str(i.get("slug")) for i in опубл if isinstance(i, dict)}
+        for ч in (черн.values() if isinstance(черн, dict) else черн):
+            if not isinstance(ч, dict) or ч.get("state") != "verified" or ч.get("quality_problems"):
+                continue
+            slug = str(ч.get("slug") or "")
+            if not slug or slug in есть:
+                continue
+            out.append({"url": f"https://{домен}/title/{slug}/", "domain": домен,
+                        "slug": slug, "reason": "DRAFT_READY",
+                        "note": "готовый черновик витрины: шаг 0 задания редактора, факты сверить"})
+    return out
+
+
 def _work(
     now: dt.datetime,
     *,
@@ -760,6 +810,7 @@ def _work(
     state: Path,
     refresh: bool,
     recent: dict[str, int] | None,
+    drafts_root: Path | None = None,
 ) -> dict:
     """Есть ли работа: свободные задания очереди и кандидаты без результата."""
     # Переданные черновики — работа ПЕРВОЙ очереди: текст уже написан и ждёт
@@ -810,6 +861,13 @@ def _work(
         cands = json.loads(candidates.read_text(encoding="utf-8")).get("candidates") or []
     except (OSError, ValueError):
         cands = []
+    # Готовые черновики витрин — тоже кандидаты (24.10, см. готовые_черновики).
+    # Живой каталог черновиков читается только при боевом реестре: проверки
+    # передают свои файлы и черновики (drafts_root) явно, без чтения /srv.
+    if drafts_root is not None or registry == REGISTRY:
+        известные = {_key(c.get("url", "")) for c in cands}
+        cands = [c for c in готовые_черновики(drafts_root)
+                 if _key(c["url"]) not in известные] + cands
     fresh = [c for c in cands if _key(c.get("url", "")) not in done
              and _key(c.get("url", "")).split("/")[2:3] != [] and
              _key(c.get("url", "")).split("/")[2] not in PAUSED_PUBLISH]
@@ -833,6 +891,7 @@ def _work(
             state=state,
             refresh=False,
             recent=recent,
+            drafts_root=drafts_root,
         )
     if fresh:
         fresh = rotate(fresh, recent_publications(now) if recent is None else recent)
@@ -869,6 +928,7 @@ def _work(
             state=state,
             refresh=False,
             recent=recent,
+            drafts_root=drafts_root,
         )
     return {"run": False, "reason": "работы нет: свободных заданий и новых кандидатов нет"}
 
