@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+# food-baking: управление ТОЛЬКО своим preview (127.0.0.1:8864) и инструментами шаблона.
+set -euo pipefail
+HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO="$(cd "$HERE/../.." && pwd)"
+RUN="$REPO/var/food-baking/run"; LOG="$REPO/var/food-baking/logs"
+mkdir -p "$RUN" "$LOG"; cd "$HERE"
+PIDFILE="$RUN/preview.pid"
+alive() { [[ -f "$PIDFILE" ]] && kill -0 "$(cat "$PIDFILE")" 2>/dev/null && grep -q "bakebook.server" "/proc/$(cat "$PIDFILE")/cmdline" 2>/dev/null; }
+health() { python3 -c "import urllib.request;print(urllib.request.urlopen('http://127.0.0.1:8864/healthz',timeout=2).read().decode())"; }
+case "${1:-help}" in
+  import) shift; exec python3 -m bakebook.importer "$@" ;;
+  drafts) shift; exec python3 -m bakebook.drafts "$@" ;;
+  audit) exec python3 -m bakebook.audit ;;
+  build) shift; exec python3 -m bakebook.build "$@" ;;
+  editor-init) shift; exec python3 -m bakebook.editor_secret "$@" ;;
+  start)
+    if alive; then echo "уже работает, pid $(cat "$PIDFILE")"; exit 0; fi
+    nohup python3 -m bakebook.server >>"$LOG/preview.log" 2>&1 & echo $! >"$PIDFILE"
+    for _ in $(seq 1 40); do if health >/dev/null 2>&1; then echo "preview: http://127.0.0.1:8864/ (pid $(cat "$PIDFILE"))"; exit 0; fi; python3 -c "import time;time.sleep(0.25)"; done
+    echo "preview не ответил, журнал: $LOG/preview.log" >&2; exit 1 ;;
+  stop) if alive; then kill "$(cat "$PIDFILE")"; echo "остановлен"; else echo "не запущен"; fi; rm -f "$PIDFILE" ;;
+  restart) bash "$HERE/bin/food-baking" stop; bash "$HERE/bin/food-baking" start ;;
+  status) if alive; then echo "работает, pid $(cat "$PIDFILE")"; health; else echo "не запущен"; exit 3; fi ;;
+  kit) shift; exec python3 -m bakebook.kit "$@" ;;   # комплект переноса: build --out <каталог> | verify-db
+  set-import) shift; exec python3 -m bakebook.set_import "$@" ;;  # партия набора Qwen из приёмника: --dry-run | --limit N
+  test) shift; exec python3 -m pytest -q -p no:cacheprovider -c /dev/null --rootdir "$HERE" --basetemp "$REPO/var/food-baking/pytest" "$HERE/tests" "$@" ;;
+  *) echo "команды: import drafts audit build editor-init start stop restart status test" ;;
+esac

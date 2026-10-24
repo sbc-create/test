@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% from "_pickb.html" import pick %}
+{% block main %}
+<h1>Пеку несколько</h1>
+{% if not bs.recipes %}<p class="lead">Отметьте рецепты, которые собираетесь печь, — покажем их по температурам духовки и соберём общий список продуктов.</p>{% endif %}
+{% if error %}<p class="err" role="alert">{{ error }}</p>{% endif %}
+{% if bs.recipes %}
+<p class="lead">{% for r in bs.recipes %}<a href="{{ r.url }}">{{ r.title }}</a>{% if not loop.last %}; {% endif %}{% endfor %}.</p>
+<section aria-labelledby="h-oven"><h2 id="h-oven">Духовка по температурам</h2>
+  <ol class="ovenline">{% for t, rs in bs.oven %}<li><b>{% if t %}{{ t }} °C{% else %}Без духовки{% endif %}</b>{% for r in rs %}{% set unclear = r.bake_unclear_steps %}<span>{{ r.title }}{% if r.temps|length > 1 %} <i>({{ r.temps|join(' → ') }} °C)</i>{% endif %}{% if r.timers %} — {% for x in r.timers %}{% if x.step in unclear %}{% if loop.first or loop.previtem.step != x.step %}в несколько этапов, <a href="{{ r.url }}#shag-{{ x.step }}">шаг {{ x.step }}</a>{% if not loop.last %}, {% endif %}{% endif %}{% else %}{{ x.minutes }}{% if x.max %}–{{ x.max }}{% endif %} мин{% if not loop.last %}, {% endif %}{% endif %}{% endfor %}{% endif %}</span>{% endfor %}</li>{% endfor %}</ol>
+  <p class="note">Группировка по наибольшей температуре из рецептов. Порядок и совместную выпечку сайт не советует — смотрите шаги рецептов.</p></section>
+<section aria-labelledby="h-list"><h2 id="h-list">Общий список продуктов</h2>
+  <p class="actions"><button type="button" class="bbtn bbtn--line" data-print hidden>Печать</button></p>
+  <ul class="blist" data-blist>{% for it in bs['items'] %}<li><label><input type="checkbox" value="{{ it.name }}|{{ it.unit }}"> <span>{{ it.name }}</span></label> <b>{{ it.amount }}</b><small>{{ it.recipes|join(', ') }}</small></li>{% endfor %}</ul>
+  {% if bs.loose %}<p class="taste"><b>По вкусу и без количества:</b> {{ bs.loose|map(attribute='name')|join(', ') }}</p>{% endif %}
+  <p class="note">Складываются только строки с одинаковым названием и единицей (кг пересчитаны в г, л — в мл). Пересчёта штук в граммы нет.</p></section>
+<h2 id="izmenit">Изменить выбор</h2>
+{% endif %}
+{{ pick(picked) }}
+{% endblock %}

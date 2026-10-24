@@ -1,0 +1,112 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/pirog-so-slivoy-i-golubym-syrom-193240",
+ "title": "Пирог со сливой и голубым сыром",
+ "servings": 8,
+ "prep_minutes": null,
+ "cook_minutes": 90,
+ "total_minutes": 90,
+ "ingredients": [
+  {
+   "raw": "Пшеничная мука, 200 г",
+   "name": "Пшеничная мука",
+   "quantity": 200.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сливочное масло, 120 г",
+   "name": "Сливочное масло",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Коричневый сахар, 1 столовая ложка",
+   "name": "Коричневый сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Сливы, 600 г",
+   "name": "Сливы",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Соль, щепотка",
+   "name": "Соль",
+   "quantity": 1.0,
+   "unit": "pinch"
+  },
+  {
+   "raw": "Куриное яйцо, 1 штука",
+   "name": "Куриное яйцо",
+   "quantity": 1.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Голубой сыр, 120 г",
+   "name": "Голубой сыр",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Грецкие орехи, 70 г",
+   "name": "Грецкие орехи",
+   "quantity": 70.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Кленовый сироп, 50 мл",
+   "name": "Кленовый сироп",
+   "quantity": 50.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Тимьян, 3 веточки",
+   "name": "Тимьян, 3 веточки",
+   "quantity": null,
+   "unit": null
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 0
+   },
+   {
+    "value_c": 180,
+    "step": 2
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 10,
+    "max": 15,
+    "step": 3
+   },
+   {
+    "min": 5,
+    "max": null,
+    "step": 4
+   },
+   {
+    "min": 25,
+    "max": 30,
+    "step": 8
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "53244450507147ced9e9eea10e443e142b5dc2f33514182f78efd8f43193a5d9",
+ "record_id": "fb-39e88caff24c",
+ "group_hint": "pirog",
+ "step_count": 10,
+ "fetched_at": "2026-10-12T06:00:19Z"
+}

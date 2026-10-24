@@ -1,0 +1,62 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/sloenyy-hleb-s-chesnokom-i-suluguni-192038",
+ "title": "Слоеный хлеб с чесноком и сулугуни",
+ "servings": 1,
+ "prep_minutes": null,
+ "cook_minutes": 60,
+ "total_minutes": 60,
+ "ingredients": [
+  {
+   "raw": "Бездрожжевое слоеное тесто, 1 кг",
+   "name": "Бездрожжевое слоеное тесто",
+   "quantity": 1.0,
+   "unit": "kg"
+  },
+  {
+   "raw": "Сыр сулугуни, 500 г",
+   "name": "Сыр сулугуни",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Чеснок, 1 головка",
+   "name": "Чеснок, 1 головка",
+   "quantity": null,
+   "unit": null
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 8
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 35,
+    "max": 40,
+    "step": 8
+   }
+  ],
+  "forms": [
+   {
+    "text": "форму для запекания",
+    "diameter_cm": null,
+    "step": 7
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fb-extract/1.1",
+ "remarks": [
+  "есть ингредиенты без количества"
+ ],
+ "complete": false,
+ "content_hash": "219f79ef401b601a58fa2f68a76f12dcb5e6aba7bf16e917e2a60a53dec9bfc4",
+ "record_id": "fb-124e66a9a720",
+ "group_hint": "hleb",
+ "step_count": 11,
+ "fetched_at": "2026-10-12T06:00:46Z"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "food-baking-qa",
+  "private": true,
+  "description": "QA-зависимости только шаблона food-baking (axe-core)",
+  "devDependencies": { "axe-core": "4.13.0" }
+}

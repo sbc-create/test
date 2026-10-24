@@ -1,0 +1,125 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/zavtraki/kish-so-sparzhey-na-kartofelnom-korzhe-191615",
+ "title": "Киш со спаржей на картофельном корже",
+ "servings": 6,
+ "prep_minutes": null,
+ "cook_minutes": 75,
+ "total_minutes": 75,
+ "ingredients": [
+  {
+   "raw": "Картофель, 900 г",
+   "name": "Картофель",
+   "quantity": 900.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Оливковое масло, 30 мл",
+   "name": "Оливковое масло",
+   "quantity": 30.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Сливочное масло, 30 г",
+   "name": "Сливочное масло",
+   "quantity": 30.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Лук-шалот, 100 г",
+   "name": "Лук-шалот",
+   "quantity": 100.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 6 штук",
+   "name": "Куриное яйцо",
+   "quantity": 6.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сливки 20%-ные, 300 мл",
+   "name": "Сливки 20%-ные",
+   "quantity": 300.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Горчичный порошок, 1 чайная ложка",
+   "name": "Горчичный порошок",
+   "quantity": 1.0,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Мускатный орех, по вкусу",
+   "name": "Мускатный орех",
+   "quantity": null,
+   "unit": "to_taste",
+   "note": "по вкусу"
+  },
+  {
+   "raw": "Эстрагон, 15 г",
+   "name": "Эстрагон",
+   "quantity": 15.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сыр грюйер, 140 г",
+   "name": "Сыр грюйер",
+   "quantity": 140.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Мягкий козий сыр, 120 г",
+   "name": "Мягкий козий сыр",
+   "quantity": 120.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Зеленая спаржа, 230 г",
+   "name": "Зеленая спаржа",
+   "quantity": 230.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Соль, по вкусу",
+   "name": "Соль",
+   "quantity": null,
+   "unit": "to_taste",
+   "note": "по вкусу"
+  },
+  {
+   "raw": "Молотый черный перец, по вкусу",
+   "name": "Молотый черный перец",
+   "quantity": null,
+   "unit": "to_taste",
+   "note": "по вкусу"
+  }
+ ],
+ "source_category": "Завтраки",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 175,
+    "step": 0
+   }
+  ],
+  "bake_times": [
+   {
+    "min": 30,
+    "max": 35,
+    "step": 10
+   }
+  ],
+  "forms": [],
+  "caution_steps": []
+ },
+ "parser_version": "fd-extract/1.3",
+ "remarks": [
+  "перенесено из записи конвейера food-daily rec-5ac2770bdab117e4 (без новой загрузки страницы)"
+ ],
+ "complete": true,
+ "content_hash": "5b77be0d04d9acc140aa9c3365ffdbec8f508ebef8deea311c16e56c1e3ba570",
+ "record_id": "fb-5ac2770bdab1",
+ "group_hint": "pirog",
+ "step_count": 12,
+ "fetched_at": "2026-10-11T21:37:41Z"
+}
