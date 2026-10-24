@@ -1,0 +1,37 @@
+файл                           моя ветка              соседняя               совпадает
+experiments.json               experiments=2 f65d251703b0 experiments=8 f6fffb664422 НЕТ
+active-domains.json            только у меня
+site-cells.json                cells=33 5c1a4f17ee6d  cells=25 ba657f0d2250  НЕТ
+seo-module-defects.json        defects=163 e1295ffcea53 defects=26 682c95fb35f2 НЕТ
+learning-queue.json            только у меня
+analytics.json                 объект 1f801256fd54    объект 87f0fc77a139    НЕТ
+portfolio.json                 sites=0 58df0677565f   sites=0 58df0677565f   да
+template-pool.json             объект e1b66deccfb3    объект e1b66deccfb3    да
+secret-hub.json                объект c134feffbb3a    объект c134feffbb3a    да
+editorial-calendar.json        объект 8d22abf2bf51    объект 8d22abf2bf51    да
+content-backlog.json           объект 188825d63181    объект 188825d63181    да
+data-sources.json              объект 5221fa765384    объект 5221fa765384    да
+SITE-MATRIX.json               sites=6 2fa538dadbd1   sites=6 2fa538dadbd1   да
+load-bearing-paths.json        только у меня
+
+расходятся: 4 из 14
+   experiments.json: у меня experiments=2, у соседа experiments=8
+   site-cells.json: у меня cells=33, у соседа cells=25
+   seo-module-defects.json: у меня defects=163, у соседа defects=26
+   analytics.json: у меня объект, у соседа объект
+инструментов на Python с жёстким путём в чужую копию: 12
+
+чужой файл                   инструментов  кто
+site-cells.json                         9  card-links-audit.py, cell-name-map.py, cross-site-leak-probe.py, empty
+analytics.json                          2  analytics-registry-copies.py, analytics-registry-vs-live.py
+seo-tech-queue.json                     1  executor-stall-check.py
+
+ячеек у меня 33, у соседа 25; ТОЛЬКО в моей копии: 8
+    lordfilm.group
+    lordfilm.msk.ru
+    lordfilm.spb.ru
+    lordserial.group
+    lordserial.msk.ru
+    lordserial.net.ru
+    lordserial.spb.ru
+    lordserial.su
