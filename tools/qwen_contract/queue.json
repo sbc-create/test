@@ -1,0 +1,1287 @@
+{
+ "format": "qwen-dish-queue/1",
+ "built": "2026-10-24",
+ "contract": "tools/qwen_contract/README.md (qwen-dish/1)",
+ "per_day": {
+  "bestreciept.site": 24,
+  "myfood.mobi": 16
+ },
+ "totals": {
+  "bestreciept.site": 100,
+  "myfood.mobi": 53
+ },
+ "rules": [
+  "одно блюдо — один файл dishes/<dish_id>.json; исправление — с тем же dish_id",
+  "source.url — страница конкретного рецепта; энциклопедия — BLOCKED_RIGHTS",
+  "перед отправкой: tools/qwen_recipes_intake.py check <поставка> — код 0, READY"
+ ],
+ "queue": {
+  "bestreciept.site": [
+   {
+    "dish_id": "FD-NIGHT-NEW-001",
+    "title": "Оливье с колбасой",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-002",
+    "title": "Сельдь под шубой",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-004",
+    "title": "Борщ с говядиной",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-005",
+    "title": "Цезарь с курицей",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-006",
+    "title": "Крабовый салат с рисом",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-007",
+    "title": "Винегрет",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "topic_id": "syrniki-bez-muki",
+    "title": "Сырники без муки",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "omlet-v-duhovke",
+    "title": "Омлет в духовке",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "omlet-s-syrom",
+    "title": "Омлет с сыром",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "yaichnica",
+    "title": "Яичница",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "mannaya-kasha",
+    "title": "Манная каша",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "grenki",
+    "title": "Гренки",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tosty",
+    "title": "Тосты на завтрак",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "buterbrody",
+    "title": "Горячие бутерброды",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "sendvichi",
+    "title": "Сэндвичи",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "oladi-iz-kabachkov",
+    "title": "Оладьи из кабачков",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "oladi-bananovye",
+    "title": "Банановые оладьи",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "oladi-tykvennye",
+    "title": "Тыквенные оладьи",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "draniki",
+    "title": "Драники",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "smuzi",
+    "title": "Смузи на завтрак",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "pankeiki",
+    "title": "Панкейки",
+    "kind": "new",
+    "category": "zavtraki",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "shchi",
+    "title": "Щи из свежей капусты",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "kurinyj-sup-s-lapshoj",
+    "title": "Куриный суп с лапшой",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "gribnoj-sup",
+    "title": "Грибной суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "gorohovyj-sup",
+    "title": "Гороховый суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "rybnyj-sup",
+    "title": "Рыбный суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "tomatnyj-sup",
+    "title": "Томатный суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kartofelnyj-sup",
+    "title": "Картофельный суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "grechnevyj-sup",
+    "title": "Гречневый суп",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "solyanka",
+    "title": "Солянка",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "rassolnik",
+    "title": "Рассольник",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "uha",
+    "title": "Уха",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "okroshka",
+    "title": "Окрошка",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "krem-sup",
+    "title": "Крем-суп из овощей",
+    "kind": "new",
+    "category": "supy",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kotlety-domashnie",
+    "title": "Домашние котлеты из фарша",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kotlety-kurinye",
+    "title": "Куриные котлеты",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kotlety-rublenye",
+    "title": "Рубленые котлеты",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kotlety-rybnye",
+    "title": "Рыбные котлеты",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kotlety-po-kievski",
+    "title": "Котлеты по-киевски",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "frikadelki",
+    "title": "Фрикадельки",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "ezhiki",
+    "title": "Ёжики из фарша с рисом",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "golubcy",
+    "title": "Голубцы",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "plov-so-svininoj",
+    "title": "Плов со свининой",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "plov-uzbekskij",
+    "title": "Узбекский плов",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "guliash",
+    "title": "Гуляш",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "azu",
+    "title": "Азу по-татарски",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "zharkoe",
+    "title": "Жаркое с мясом и картошкой",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "otbivnye",
+    "title": "Отбивные на сковороде",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "kurica-zapechennaya",
+    "title": "Запечённая курица",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurica-s-kartoshkoj",
+    "title": "Курица с картошкой в духовке",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurica-tushenaya",
+    "title": "Тушёная курица",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurica-v-slivochnom-souse",
+    "title": "Курица в сливочном соусе",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurica-karri",
+    "title": "Курица карри",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurica-teriyaki",
+    "title": "Курица терияки",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kurinoe-file",
+    "title": "Куриное филе на сковороде",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "indejka",
+    "title": "Индейка с овощами",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "svinina-v-duhovke",
+    "title": "Свинина в духовке",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "govyadina-tushenaya",
+    "title": "Тушёная говядина",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "befstroganov",
+    "title": "Бефстроганов",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "myaso-po-francuzski",
+    "title": "Мясо по-французски",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "pechen-tushenaya",
+    "title": "Печень тушёная с луком",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "skumbriya-v-duhovke",
+    "title": "Скумбрия в духовке",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "treska",
+    "title": "Треска запечённая",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "gorbusha",
+    "title": "Горбуша в духовке",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "losos",
+    "title": "Лосось на сковороде",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "krevetki",
+    "title": "Креветки в чесночном соусе",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kabachki-farshirovannye",
+    "title": "Фаршированные кабачки",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "perec-farshirovannyj",
+    "title": "Фаршированный перец",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kapusta-tushenaya",
+    "title": "Тушёная капуста",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "zapekanka-kartofelnaya",
+    "title": "Картофельная запеканка с фаршем",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "zapekanka-iz-makaron",
+    "title": "Запеканка из макарон",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "pasta-karbonara",
+    "title": "Паста карбонара",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "pasta-s-krevetkami",
+    "title": "Паста с креветками",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "pasta-s-kuricej",
+    "title": "Паста с курицей",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "pasta-bolonez",
+    "title": "Паста болоньезе",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "spagetti",
+    "title": "Спагетти с томатным соусом",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "lazanya",
+    "title": "Лазанья",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "rizotto",
+    "title": "Ризотто с грибами",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "pelmeni",
+    "title": "Домашние пельмени",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "vareniki",
+    "title": "Вареники с картошкой",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "lagman",
+    "title": "Лагман",
+    "kind": "new",
+    "category": "vtorye-blyuda",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "shaurma",
+    "title": "Шаурма дома",
+    "kind": "new",
+    "category": "zakuski",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "burger",
+    "title": "Домашний бургер",
+    "kind": "new",
+    "category": "zakuski",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "lavash-rulet",
+    "title": "Рулет из лаваша",
+    "kind": "new",
+    "category": "zakuski",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "brusketta",
+    "title": "Брускетта",
+    "kind": "new",
+    "category": "zakuski",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "ris-s-ovoshchami",
+    "title": "Рис с овощами",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "zharenyj-ris",
+    "title": "Жареный рис с яйцом",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "bulgur",
+    "title": "Булгур на гарнир",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "zharenaya-kartoshka",
+    "title": "Жареная картошка",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "tsvetnaya-kapusta",
+    "title": "Цветная капуста в духовке",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "brokkoli",
+    "title": "Брокколи на гарнир",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "kabachki-zharenye",
+    "title": "Жареные кабачки с чесноком",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "baklazhany-zapechennye",
+    "title": "Запечённые баклажаны",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "tykva-zapechennaya",
+    "title": "Запечённая тыква",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "griby-zharenye",
+    "title": "Жареные шампиньоны",
+    "kind": "new",
+    "category": "garniry",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "salat-so-svekloj",
+    "title": "Салат со свёклой",
+    "kind": "new",
+    "category": "salaty",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "salat-s-tuncom",
+    "title": "Салат с тунцом",
+    "kind": "new",
+    "category": "salaty",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 5
+   },
+   {
+    "topic_id": "teplyj-salat",
+    "title": "Тёплый салат",
+    "kind": "new",
+    "category": "salaty",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 5
+   },
+   {
+    "topic_id": "ovoshchnoj-salat",
+    "title": "Овощной салат",
+    "kind": "new",
+    "category": "salaty",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 5
+   },
+   {
+    "topic_id": "salat-s-krevetkami",
+    "title": "Салат с креветками",
+    "kind": "new",
+    "category": "salaty",
+    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
+    "day": 5
+   }
+  ],
+  "myfood.mobi": [
+   {
+    "dish_id": "FD-NIGHT-NEW-003",
+    "title": "Шарлотка с яблоками",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-008",
+    "title": "Манник на кефире",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-009",
+    "title": "Медовик со сметанным кремом",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "dish_id": "FD-NIGHT-NEW-010",
+    "title": "Овсяное печенье",
+    "kind": "redo",
+    "fix": "повторить с тем же dish_id: source.url — страница конкретного опубликованного рецепта (не энциклопедия), количества, порции и время — из неё; редакционные шаги со ссылками base_steps на шаги источника",
+    "day": 1
+   },
+   {
+    "topic_id": "vatrushki-s-tvorogom",
+    "title": "Ватрушки с творогом",
+    "kind": "new",
+    "category": "bulochki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tort-zebra",
+    "title": "Торт «Зебра»",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tort-tri-moloka",
+    "title": "Торт «Три молока»",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tiramisu",
+    "title": "Тирамису",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tort-ptiche-moloko",
+    "title": "Торт «Птичье молоко»",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tort-mishka",
+    "title": "Торт «Мишка»",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "tart-taten",
+    "title": "Тарт Татен",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "sochniki-s-tvorogom",
+    "title": "Сочники с творогом",
+    "kind": "new",
+    "category": "pechene",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "shtrudel-s-yablokami",
+    "title": "Штрудель с яблоками",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "shtrudel-s-vishnej",
+    "title": "Штрудель с вишней",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "rulet-s-makom",
+    "title": "Рулет с маком",
+    "kind": "new",
+    "category": "bulochki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "rogaliki-s-povidlom",
+    "title": "Рогалики с повидлом",
+    "kind": "new",
+    "category": "pechene",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 1
+   },
+   {
+    "topic_id": "pryaniki",
+    "title": "Пряники",
+    "kind": "new",
+    "category": "pechene",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "ponchiki",
+    "title": "Пончики",
+    "kind": "new",
+    "category": "bulochki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirozhnoe-kartoshka",
+    "title": "Пирожное «Картошка»",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirozhki-s-yablokami",
+    "title": "Пирожки с яблоками",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirozhki-s-kapustoj",
+    "title": "Пирожки с капустой",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-vishnej",
+    "title": "Пирог с вишней",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-tvorogom",
+    "title": "Пирог с творогом",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-kapustoj",
+    "title": "Пирог с капустой",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-myasom",
+    "title": "Пирог с мясом",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-kartofelem",
+    "title": "Пирог с картофелем",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-gribami",
+    "title": "Пирог с грибами",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-limonom",
+    "title": "Пирог с лимоном",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-s-abrikosami",
+    "title": "Пирог с абрикосами",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pirog-perevertysh",
+    "title": "Пирог-перевёртыш",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "pechene-iz-tvoroga",
+    "title": "Печенье из творога",
+    "kind": "new",
+    "category": "pechene",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "panna-kotta",
+    "title": "Панна-котта",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 2
+   },
+   {
+    "topic_id": "maffiny",
+    "title": "Маффины",
+    "kind": "new",
+    "category": "keks",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kulebyaka",
+    "title": "Кулебяка",
+    "kind": "new",
+    "category": "pirog",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kruassany",
+    "title": "Круассаны",
+    "kind": "new",
+    "category": "sloyki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "keks-na-smetane",
+    "title": "Кекс на сметане",
+    "kind": "new",
+    "category": "keks",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "keks-s-vishnej",
+    "title": "Кекс с вишней",
+    "kind": "new",
+    "category": "keks",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "kapkejki",
+    "title": "Капкейки",
+    "kind": "new",
+    "category": "keks",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "fokachcha",
+    "title": "Фокачча",
+    "kind": "new",
+    "category": "hleb",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "eklery",
+    "title": "Эклеры",
+    "kind": "new",
+    "category": "zavarnoe",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "chizkejk",
+    "title": "Чизкейк",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "chiabatta",
+    "title": "Чиабатта",
+    "kind": "new",
+    "category": "hleb",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "bulochki-s-tvorogom",
+    "title": "Булочки с творогом",
+    "kind": "new",
+    "category": "bulochki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "bubliki",
+    "title": "Бублики",
+    "kind": "new",
+    "category": "bulochki",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "brauni",
+    "title": "Брауни",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "biskvit",
+    "title": "Бисквит",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "baton",
+    "title": "Батон",
+    "kind": "new",
+    "category": "hleb",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "zefir",
+    "title": "Зефир",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 3
+   },
+   {
+    "topic_id": "pastila",
+    "title": "Пастила",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "vafli-venskie",
+    "title": "Венские вафли",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 3,
+    "basis": "адрес есть в 3 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "tort-zaher",
+    "title": "Торт «Захер»",
+    "kind": "new",
+    "category": "tort",
+    "catalogs": 3,
+    "basis": "адрес есть в 3 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "lepeshki-s-syrom",
+    "title": "Лепёшки с сыром",
+    "kind": "new",
+    "category": "hleb",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 4
+   },
+   {
+    "topic_id": "puding",
+    "title": "Пудинг",
+    "kind": "new",
+    "category": "deserty",
+    "catalogs": 4,
+    "basis": "адрес есть в 4 из 12 каталогов реестра обхода (не поисковый спрос)",
+    "day": 4
+   }
+  ]
+ }
+}
