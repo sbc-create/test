@@ -1,0 +1,34 @@
+действующих домéнов в реестре: 25 (плюс 4 ожидают замены и в цель не входят)
+
+ОТКРЫТЫ поиску: 16
+    yummyani.site
+    yummyani.org
+    yummyani.biz
+    yummyani7.site
+    yummyani7.info
+    animedia.icu
+    animedia.space
+    animeg0.site
+    an1meg0.site
+    an1mego.site
+    lordserials22.info
+    1lordserials1.online
+    lordserial33.biz
+    zonafilm12.site
+    zonafilm.space
+    zonafilm.cc
+
+ЗАКРЫТЫ по решению (robots.txt Disallow: / для всех): 8
+    lordfilm.group
+    lordfilm.spb.ru
+    lordfilm.msk.ru
+    lordserial.su
+    lordserial.group
+    lordserial.spb.ru
+    lordserial.msk.ru
+    lordserial.net.ru
+
+НЕДОСТУПНЫ (не измерено): 1
+    lordfilm47.space: curl: (6) Could not resolve host: lordfilm47.s
+
+ЗНАМЕНАТЕЛЬ ЦЕЛИ = 16 открытых витрин
