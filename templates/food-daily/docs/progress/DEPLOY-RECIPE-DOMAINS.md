@@ -769,7 +769,7 @@ dish_id; темы bestreciept — из карты тем `topics.py`, темы �
 Комплект 16 (`food-daily-f080ace` + `food-baking-470d6f3`): репетиция exit 0 (65/94, расхождений 0, noindex,
 `Disallow: /`, карта 109/32); `--dry-run` и `--rollback --dry-run` exit 0; `current` → 16. Опубликован комплект 13.
 
-Итог смены (25.10 ≈ 02:25 МСК):
+Итог смены (25.10 02:15 МСК):
 
 | | bestreciept.site | myfood.mobi |
 | --- | --- | --- |
