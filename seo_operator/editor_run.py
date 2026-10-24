@@ -953,9 +953,13 @@ def _work(
 #: в том числе сохранение авторства (повод паузы 23d1eb2), editorial-overrides-audit.py
 #: код 0, снимок editorial-overlay-before-after --snapshot снят Архитектором.
 #: После первой публикации: --compare код 1 — zonafilm12.site возвращается сюда сразу.
+#: 2026-10-24 13:30Z первая публикация zonafilm12.site (akademiya-vedm), --compare код 0
+#: («записей 3 → 6, ни одна запись, поле и авторство не пропали»), остаток 13 → 10.
+#: 13:34Z вторым шагом снят zonafilm.space: снимок «до» снят Архитектором (5 записей,
+#: чужое поле name у silsila-badalte-rishton-ka). --compare код 1 — вернуть сюда сразу.
 PAUSED_PUBLISH = {
     d: "MCP editorial.py затирает поля editorial-overrides.json (установка правки _живые_правки)"
-    for d in ("zonafilm.space", "zonafilm.cc", "lordfilm47.space",
+    for d in ("zonafilm.cc", "lordfilm47.space",
               "lordserial33.biz", "1lordserials1.online", "lordserials22.info")
 }
 
@@ -984,7 +988,7 @@ def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:
 #: но при равном нуле с an1mego.site стоял четвёртым, и за пять партий до него
 #: не дошло — а от этой публикации зависит снятие паузы с шести витрин.
 #: Строка убирается после сверки editorial-overlay-before-after.py --compare.
-ПЕРВАЯ_ПУБЛИКАЦИЯ: tuple[str, ...] = ("zonafilm12.site",)  # 24.10: первый шаг снятия паузы
+ПЕРВАЯ_ПУБЛИКАЦИЯ: tuple[str, ...] = ("zonafilm.space",)  # 24.10: второй шаг (zonafilm12.site принят)
 
 
 def rotate(cands: list[dict], recent: dict[str, int]) -> list[dict]:

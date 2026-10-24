@@ -525,8 +525,10 @@ def _drafts_root(tmp_path):
     return root
 
 
-def test_ready_drafts_are_work_first_and_bring_their_domain(tmp_path):
+def test_ready_drafts_are_work_first_and_bring_their_domain(tmp_path, monkeypatch):
     """24.10: 13 черновиков zonafilm12.site лежали, а шлюз их не видел."""
+    # Состав паузы задан здесь, а не взят из модуля: он меняется по шагам.
+    monkeypatch.setattr(editor_run, "PAUSED_PUBLISH", {"zonafilm.space": "тест: на паузе"})
     f = _gate_files(tmp_path)
     root = _drafts_root(tmp_path)
     got = [c["url"] for c in editor_run.готовые_черновики(root)]
