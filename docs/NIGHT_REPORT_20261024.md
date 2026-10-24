@@ -288,3 +288,34 @@ T191». Нашла это она сама, а не я при проверке.
 видно из этой ветки (MOD-163), не могли быть затронуты, потому что я ничего не
 выпускала. Их метрики берутся из Метрики, а счётчики в моих прогонах
 заглушены — проверено по коду всех четырёх браузерных инструментов.
+
+## 14. Указатель доказательств
+
+Правило отчёта требует путь к артефакту у каждого числа. Все файлы лежат в `artifacts/evidence/`; существование каждого проверено (ссылок 13 из 13 в реестре, ноль битых).
+
+| находка | файл | чем снято |
+| --- | --- | --- |
+| доступность плеера на заработавших страницах произведений | `player-availability-earning-20261024.txt` | player-availability-sweep.py --paths-file <заработавшие> |
+| доступность плеера на заработавших страницах СЕРИЙ | `player-availability-episodes-20261024.txt` | player-availability-sweep.py --paths-file episode-earning-paths-… |
+| адреса серий с визитами (набор для замера) | `episode-earning-paths-20261024.tsv` | построен из выгрузки кабинета |
+| главные всех 25 витрин | `player-availability-home-20261024.txt` | player-availability-sweep.py --titles 5 |
+| первый экран: 21 с источником, 4 без | `source-arrival-pass1-20261024.txt` | player-availability-sweep.py --paths-file source-arrival-cohort-… |
+| набор первого экрана с датами появления | `source-arrival-cohort-20261024.json` | зафиксирован для второго прохода |
+| порядок первого экрана у восьми витрин | `first-screen-ordering-20261024.txt` | сверка первых пяти карточек |
+| полосы по дате появления (провал доставки опровергнут) | `delivery-gap-cohort-20261024.tsv` | выборка по часовым полосам |
+| фильмы 2026 по давности добавления | `year2026-availability-20261024.txt` | player-availability-sweep.py по полосам |
+| двусторонняя проверка поля playable (MOD-97) | `mod97-playable-two-sided-20261024.txt` | player-availability-sweep.py, 16 карточек zona-03 |
+| сигнал свежести по родам адресов, шесть витрин | `sitemap-freshness-signal-20261024.txt` | sitemap-freshness-signal.py --domains … |
+| состав карты yummyani.site по частям | `yummyani-site-sitemap-parts-20261024.txt` | разбор пяти частей |
+| страницы серий СУЩЕСТВУЮТ вне карты (опровержение моего вывода) | `yummy-series-pages-exist-20261024.txt` | 12 случайных адресов, тип по JSON-LD, адрес взят со страницы |
+| знаменатель цели: 16 открытых, 8 закрытых, 1 недоступна | `goal-denominator-20261024.txt` | обход robots.txt всех 25 домéнов |
+| состояние роста по витринам | `network-growth-state-20261024.txt` | network-growth-state.py |
+| поиск сети за две недели: −9,2 % | `network-search-two-weeks-20261024.txt` | network-search-two-weeks.py (один устоявшийся снимок) |
+| концентрация трафика по всем витринам | `network-traffic-concentration-20261024.txt` | разбор посадочных |
+| концентрация на крупнейшей витрине (медиана 1,0) | `yummyani-site-traffic-concentration-20261024.txt` | тот же разбор |
+| отнесение падения −30 % к ведущему произведению | `yummyani-site-fall-attribution-20261024.txt` | сравнение долей двух снимков |
+| три витрины Zona с одним каталогом: разброс 22 раза | `zona-three-identical-20261024.txt` | сверка каталога, карты и robots |
+| разброс лабораторного LCP по пяти повторам | `page-vitals-variance-20261024.txt` | page-vitals-probe.py ×5 |
+| свежесть витрин K2: все восемь на ожидаемой ревизии | `k2-freshness-20261024.txt` | k2-freshness.py |
+| канарейка MOD-149, телефон и настольное окно | `posters/mod149-canary-phone-20261024.txt` | poster-priority-probe.py |
+| перемер MOD-31, MOD-81, MOD-108 | `recheck-mod31-81-108-20261024.txt` | прямые запросы по их признакам |
