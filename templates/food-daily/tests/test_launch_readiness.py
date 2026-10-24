@@ -213,6 +213,8 @@ def test_chicken_search_is_meat_not_eggs(app):
     eggs = {r.slug for r in app.site.search("куриное яйцо")}
     assert eggs == {r.slug for r in app.site.search("яйцо")} and len(eggs) > len(hits) - 1
     assert views.norm("Куриные яйца, куриный желток, куриная грудка") == "яйца желток куриная грудка"
+    # «приправа для курицы» в составе блюда из индейки — не курица
+    assert not [r.title for r in hits if any("для курицы" in i.name.lower() for i, _ in r.ingredients)]
 
 
 def test_search_matches_word_forms_not_word_middles(app):
@@ -222,8 +224,10 @@ def test_search_matches_word_forms_not_word_middles(app):
     assert titles("сырник") == titles("сырники") == titles("СЫРНИКИ") and titles("сырник")
     assert titles("тыква") == titles("тыквой") and titles("тыква")
     assert not any("сырными" in r.search_text and "сырник" not in r.search_text for r in s.search("сырники"))
-    # «пече» внутри «купечески» и «запеченная» — не «печень»; печёнки среди рецептов нет
-    assert s.search("печень") == []
+    # «пече» внутри «купечески» и «запеченная» — не «печень»: находится только рецепт, где печень есть в составе
+    hits = s.search("печень")
+    assert hits and all("печень" in r.search_text for r in hits)
+    assert not any("купечески" in r.search_text or "запеченн" in r.search_text for r in hits)
     assert s.search("") == [] and s.search("   ") == []
     assert titles("суп с курицей") == titles("суп курицей")
     code, html, _ = app.route("/poisk/", {"q": ["нетакогоблюда"]})

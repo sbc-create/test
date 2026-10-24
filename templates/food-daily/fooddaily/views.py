@@ -126,6 +126,9 @@ COLLECTIONS = {
 EGG = re.compile(r"\bкурин(?:ое|ые|ый|ых|ого|ом|ым|ыми|ой|ая|ую)\s+(?=(?:яйц|яиц|желт|белк|бело))")
 
 
+FOR_WHAT = re.compile(r"\s+для\s+[а-яё]+(?:\s+[а-яё]+)?$", re.I)
+
+
 def norm(s: str) -> str:
     """Нормализация для поиска: регистр, ё→е, пробелы и знаки; «куриное яйцо» → «яйцо»."""
     s = s.lower().replace("ё", "е")
@@ -407,7 +410,8 @@ class Recipe:
 
     @cached_property
     def search_text(self) -> str:
-        names = " ".join(i.name for i, _ in self.ingredients)
+        # «приправа для курицы», «специи для рыбы» — не курица и не рыба: назначение приправы в поиск не идёт
+        names = " ".join(FOR_WHAT.sub("", i.name) for i, _ in self.ingredients)
         return norm(f"{self.title} {names} {' '.join(TAGS.get(t, (t,))[0] for t in self.tags)}")
 
     @cached_property
