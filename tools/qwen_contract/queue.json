@@ -7,7 +7,7 @@
   "myfood.mobi": 16
  },
  "totals": {
-  "bestreciept.site": 100,
+  "bestreciept.site": 87,
   "myfood.mobi": 53
  },
  "rules": [
@@ -92,14 +92,6 @@
     "day": 1
    },
    {
-    "topic_id": "mannaya-kasha",
-    "title": "Манная каша",
-    "kind": "new",
-    "category": "zavtraki",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 1
-   },
-   {
     "topic_id": "grenki",
     "title": "Гренки",
     "kind": "new",
@@ -134,22 +126,6 @@
    {
     "topic_id": "oladi-iz-kabachkov",
     "title": "Оладьи из кабачков",
-    "kind": "new",
-    "category": "zavtraki",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 1
-   },
-   {
-    "topic_id": "oladi-bananovye",
-    "title": "Банановые оладьи",
-    "kind": "new",
-    "category": "zavtraki",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 1
-   },
-   {
-    "topic_id": "oladi-tykvennye",
-    "title": "Тыквенные оладьи",
     "kind": "new",
     "category": "zavtraki",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
@@ -196,20 +172,12 @@
     "day": 1
    },
    {
-    "topic_id": "gribnoj-sup",
-    "title": "Грибной суп",
-    "kind": "new",
-    "category": "supy",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 1
-   },
-   {
     "topic_id": "gorohovyj-sup",
     "title": "Гороховый суп",
     "kind": "new",
     "category": "supy",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
+    "day": 1
    },
    {
     "topic_id": "rybnyj-sup",
@@ -217,7 +185,7 @@
     "kind": "new",
     "category": "supy",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
+    "day": 1
    },
    {
     "topic_id": "tomatnyj-sup",
@@ -225,15 +193,7 @@
     "kind": "new",
     "category": "supy",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
-    "topic_id": "kartofelnyj-sup",
-    "title": "Картофельный суп",
-    "kind": "new",
-    "category": "supy",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
+    "day": 1
    },
    {
     "topic_id": "grechnevyj-sup",
@@ -241,7 +201,7 @@
     "kind": "new",
     "category": "supy",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
+    "day": 1
    },
    {
     "topic_id": "solyanka",
@@ -292,22 +252,6 @@
     "day": 2
    },
    {
-    "topic_id": "kotlety-kurinye",
-    "title": "Куриные котлеты",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
-    "topic_id": "kotlety-rublenye",
-    "title": "Рубленые котлеты",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
     "topic_id": "kotlety-rybnye",
     "title": "Рыбные котлеты",
     "kind": "new",
@@ -340,32 +284,8 @@
     "day": 2
    },
    {
-    "topic_id": "golubcy",
-    "title": "Голубцы",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
     "topic_id": "plov-so-svininoj",
     "title": "Плов со свининой",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
-    "topic_id": "plov-uzbekskij",
-    "title": "Узбекский плов",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 2
-   },
-   {
-    "topic_id": "guliash",
-    "title": "Гуляш",
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
@@ -396,20 +316,12 @@
     "day": 2
    },
    {
-    "topic_id": "kurica-zapechennaya",
-    "title": "Запечённая курица",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
-   },
-   {
     "topic_id": "kurica-s-kartoshkoj",
     "title": "Курица с картошкой в духовке",
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "kurica-tushenaya",
@@ -417,7 +329,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "kurica-v-slivochnom-souse",
@@ -425,7 +337,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "kurica-karri",
@@ -433,7 +345,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "kurica-teriyaki",
@@ -441,7 +353,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "kurinoe-file",
@@ -449,7 +361,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "indejka",
@@ -457,7 +369,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "svinina-v-duhovke",
@@ -465,7 +377,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "govyadina-tushenaya",
@@ -473,7 +385,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "befstroganov",
@@ -481,7 +393,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
+    "day": 2
    },
    {
     "topic_id": "myaso-po-francuzski",
@@ -556,14 +468,6 @@
     "day": 3
    },
    {
-    "topic_id": "kapusta-tushenaya",
-    "title": "Тушёная капуста",
-    "kind": "new",
-    "category": "vtorye-blyuda",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 3
-   },
-   {
     "topic_id": "zapekanka-kartofelnaya",
     "title": "Картофельная запеканка с фаршем",
     "kind": "new",
@@ -593,7 +497,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "pasta-s-kuricej",
@@ -601,7 +505,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "pasta-bolonez",
@@ -609,7 +513,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "spagetti",
@@ -617,7 +521,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "lazanya",
@@ -625,7 +529,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "rizotto",
@@ -633,7 +537,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "pelmeni",
@@ -641,7 +545,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "vareniki",
@@ -649,7 +553,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "lagman",
@@ -657,7 +561,7 @@
     "kind": "new",
     "category": "vtorye-blyuda",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "shaurma",
@@ -665,7 +569,7 @@
     "kind": "new",
     "category": "zakuski",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "burger",
@@ -673,7 +577,7 @@
     "kind": "new",
     "category": "zakuski",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "lavash-rulet",
@@ -681,7 +585,7 @@
     "kind": "new",
     "category": "zakuski",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 4
+    "day": 3
    },
    {
     "topic_id": "brusketta",
@@ -785,15 +689,7 @@
     "kind": "new",
     "category": "salaty",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 5
-   },
-   {
-    "topic_id": "teplyj-salat",
-    "title": "Тёплый салат",
-    "kind": "new",
-    "category": "salaty",
-    "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 5
+    "day": 4
    },
    {
     "topic_id": "ovoshchnoj-salat",
@@ -801,7 +697,7 @@
     "kind": "new",
     "category": "salaty",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 5
+    "day": 4
    },
    {
     "topic_id": "salat-s-krevetkami",
@@ -809,7 +705,7 @@
     "kind": "new",
     "category": "salaty",
     "basis": "карта тем fooddaily/topics.py (сравнительная оценка, не поисковый спрос)",
-    "day": 5
+    "day": 4
    }
   ],
   "myfood.mobi": [
