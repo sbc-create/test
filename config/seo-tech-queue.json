@@ -8035,7 +8035,7 @@
       "direction": "zona",
       "norm": "MOD-111 ред. 2 (docs/seo-operator/REQ_SITEMAP_INDEX_LASTMOD_REV2_20261021.md): дата части в индексе — момент изменения байтов части; неизменная часть сохраняет дату; новые адреса — в хвост, нарезка стабильна.",
       "check": "checks/sitemap_part_stable.py",
-      "status": "released",
+      "status": "live_verified",
       "id": "T310",
       "site": "zonafilm12.site",
       "repo": "var/site-repos/zonafilm12-site",
@@ -8051,7 +8051,7 @@
           "status": 200
         }
       ],
-      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc. | 22.10 06:02Z wt-portable-site-cell-01-dc: исполнитель 20261022T052109Z-1728725 VERIFIED (42cc172); выпуск /srv/zonafilm12-site/current → releases/42cc1723dfc8 (замечен 06:01:47Z). Признак 1 выполнен 06:01:55Z: sitemap.xml, sitemap-1.xml, sitemap-2.xml побайтно = снимку до выпуска (var/seo-audit/zonafilm12-site-T310-pre.json), даты в индексе прежние (2026-10-22, 2025-06-23) — не время выпуска; checks/sitemap_part_stable.py на установленном дереве rc 0. Признак 2 — после следующей доставки каталога (около 04:14Z 23.10), t300_criterion2.py против var/seo-audit/zonafilm12-site-T310-pre."
+      "evidence": "22.10 до 04:31Z wt-portable-site-cell-01-dc: патч сверен с установленным файлом. Признак 2 на zonafilm.space — var/seo-audit/zonafilm-space-T300-criterion2.json.txt. | 22.10 05:03Z: удержание снято — работа продолжена после срока ночи по указанию сторожа цели; приёмку ведёт wt-portable-site-cell-01-dc. | 22.10 06:02Z wt-portable-site-cell-01-dc: исполнитель 20261022T052109Z-1728725 VERIFIED (42cc172); выпуск /srv/zonafilm12-site/current → releases/42cc1723dfc8 (замечен 06:01:47Z). Признак 1 выполнен 06:01:55Z: sitemap.xml, sitemap-1.xml, sitemap-2.xml побайтно = снимку до выпуска (var/seo-audit/zonafilm12-site-T310-pre.json), даты в индексе прежние (2026-10-22, 2025-06-23) — не время выпуска; checks/sitemap_part_stable.py на установленном дереве rc 0. Признак 2 — после следующей доставки каталога (около 04:14Z 23.10), t300_criterion2.py против var/seo-audit/zonafilm12-site-T310-pre. | 24.10 04:10Z wt-portable-site-cell-01-dc: признак 2 выполнен. Доставка каталога zona-03 24.10 04:05:47Z, первая после 22.10 04:13Z (задержка — нехватка места, §5). Команда `python3 automation/local/t300_criterion2.py var/seo-audit/zonafilm12-site-T310-pre zonafilm12.site` → rc 0, «ПРИЗНАК 2: выполнен», violations [], moved 0. sitemap-1.xml: байты изменились, lastmod 2026-10-22 → 2026-10-24T04:07:11Z, адресов 45 000 → 44 996. sitemap-2.xml: lastmod 2025-06-23 → 04:07:12Z, 24 277 → 24 980, добавлено 706. Удалено 7 адресов: проверены 5 из выборки — в каталоге их нет, отвечают 404, то есть карта следует каталогу. Каталог — 69 870 записей."
     },
     {
       "direction": "anime",
