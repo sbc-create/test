@@ -1,0 +1,12 @@
+=== снимок 15.10 (08–14.10) (мера search_landing_pages) ===
+   адресов 65, визитов 11846
+       8167 ( 68.9 %)  neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-
+         90 (  0.8 %)  ne-slishkom-li-ty-sladkaya-bog-soli-sato
+         89 (  0.8 %)  izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotn
+   главная: 2915 (24.6 %)
+=== выгрузка 23.10 (09–22.10) (мера search_landing_pages) ===
+   адресов 82, визитов 11087
+       5284 ( 47.7 %)  neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-
+        335 (  3.0 %)  kiberpank-beguschie-po-krayu-2
+         83 (  0.7 %)  ne-slishkom-li-ty-sladkaya-bog-soli-sato
+   главная: 4703 (42.4 %)
