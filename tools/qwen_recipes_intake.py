@@ -119,28 +119,55 @@ def _load(name: str, raw: bytes, out: dict) -> None:
         out.setdefault(UNREADABLE, {})[name] = str(e)[:80]
 
 
+def safe_path(name: str) -> str | None:
+    """Путь внутри поставки без «./» и пустых частей; None — недопустимый: абсолютный, с «..»,
+    с обратной косой чертой (в архиве из другой ОС это может быть выход из каталога)."""
+    if (
+        not isinstance(name, str)
+        or not name
+        or "\\" in name
+        or name.startswith("/")
+        or ".." in name.split("/")
+    ):
+        return None
+    parts = [x for x in name.split("/") if x not in ("", ".")]
+    return "/".join(parts) or None
+
+
+def _strip_top(names: list[str]) -> str:
+    """Общая внешняя папка поставки (QWEN-…/ любого набора), если все файлы в ней; иначе ''."""
+    tops = {n.split("/", 1)[0] for n in names}
+    return next(iter(tops)) + "/" if len(tops) == 1 and all("/" in n for n in names) else ""
+
+
 def read_set(src: Path) -> dict[str, dict]:
     """{относительный путь: JSON} — из каталога или .tar.gz; только .json внутри набора.
 
-    Неразборчивые файлы не роняют приём, а перечисляются под ключом UNREADABLE: если среди них
-    окажется рецепт, счёт файлов не сойдётся и это будет видно в отчёте."""
-    out: dict[str, dict] = {}
+    Пути — относительно корня поставки: «./» снимается, общая внешняя папка набора (любой set_id,
+    не только 100X5-001) снимается. Неразборчивые файлы и недопустимые пути архива не роняют приём,
+    а перечисляются под ключом UNREADABLE: счёт файлов не сойдётся, и это видно в отчёте."""
+    raw: dict[str, bytes] = {}
+    bad: dict[str, str] = {}
     if src.is_dir():
         for p in sorted(src.rglob("*.json")):
             if p.is_file() and not p.is_symlink():
-                _load(str(p.relative_to(src)), p.read_bytes(), out)
-        return out
-    with tarfile.open(src) as t:
-        for m in t.getmembers():
-            if (
-                not m.isfile()
-                or not m.name.endswith(".json")
-                or m.name.startswith("/")
-                or ".." in m.name.split("/")
-            ):
-                continue
-            name = m.name.split("/", 1)[1] if m.name.startswith(SET_ID + "/") else m.name
-            _load(name, t.extractfile(m).read(), out)
+                raw[str(p.relative_to(src))] = p.read_bytes()
+    else:
+        with tarfile.open(src) as t:
+            for m in t.getmembers():
+                if not m.name.endswith(".json"):
+                    continue
+                name = safe_path(m.name)
+                if name is None or not m.isfile():
+                    bad[m.name] = "недопустимый путь или не обычный файл в архиве"
+                    continue
+                raw[name] = t.extractfile(m).read()
+    top = _strip_top(list(raw))
+    out: dict[str, dict] = {}
+    for name, data in raw.items():
+        _load(name[len(top) :], data, out)
+    if bad:
+        out.setdefault(UNREADABLE, {}).update(bad)
     return out
 
 
@@ -241,14 +268,39 @@ def normalize_dish(files: dict) -> dict:
     Факты (состав, количества, время, источник, шаги источника) — в базу; текст редакции — в один
     вариант с меткой ED. Калорийность и задание на изображение переносятся как есть
     и проверяются в plan."""
-    man = next((d for n, d in files.items() if n.rsplit("/", 1)[-1] == "manifest.json"), {})
+    mans = [
+        (n, d)
+        for n, d in files.items()
+        if n.rsplit("/", 1)[-1] == "manifest.json"
+        and isinstance(d, dict)
+        and d.get("format") == DISH
+    ]
     out: dict = {UNREADABLE: files.get(UNREADABLE, {})} if files.get(UNREADABLE) else {}
+    if len(mans) != 1:  # два манифеста — неясно, какой набор принимать: не угадываем
+        out["manifest.json"] = {
+            "format": DISH,
+            "error": f"manifest.json формата {DISH}: {len(mans)}, нужен один",
+        }
+        return out
+    man_name, man = mans[0]
+    base_dir = man_name.rsplit("/", 1)[0] + "/" if "/" in man_name else ""
     items = []
     for it in man.get("items") or []:
-        d = files.get(it.get("file")) or {}
+        # путь файла — относительно manifest.json: «dishes/x.json», «./x.json», «x.json»
+        rel = safe_path(it.get("file"))
+        key = rel and safe_path(base_dir + rel)
+        d = files.get(key) if key else None
+        d = d if isinstance(d, dict) else {}
         did = it.get("dish_id") or d.get("dish_id")
         if not d:
-            items.append({"base_id": did, "file": f"base/{did}.json", "variants": []})
+            why = (
+                f"недопустимый путь в manifest: {it.get('file')!r}"
+                if not key
+                else f"нет файла {key} из manifest"
+            )
+            items.append(
+                {"base_id": did, "file": f"base/{did}.json", "variants": [], "missing_reason": why}
+            )
             continue
         ed = d.get("editorial") or {}
         names = ed.get("display_names") or {}
@@ -731,6 +783,8 @@ def plan(
     man = next(
         (d for n, d in files.items() if n.rsplit("/", 1)[-1].lower() == "manifest.json"), None
     )
+    if man and man.get("error"):
+        return {"status": "BLOCKED_INPUT", "reason": man["error"], "inspect": inspect(files)}
     if not man or not isinstance(man.get("items"), list):
         return {
             "status": "BLOCKED_INPUT",
@@ -779,7 +833,14 @@ def plan(
         if b is not None and bid in editorial:
             vs = vs + [editorial_variant(editorial[bid], b)]
         if b is None:
-            defer("missing", None, bid, "нет файла базового рецепта", vs, lambda v: "нет базы")
+            defer(
+                "missing",
+                None,
+                bid,
+                item.get("missing_reason") or "нет файла базового рецепта",
+                vs,
+                lambda v: "нет базы",
+            )
             continue
         if (
             man.get("format") != DISH
@@ -966,12 +1027,30 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(prog="qwen_recipes_intake")
     ap.add_argument("cmd", choices=("inspect", "plan", "check"))
     ap.add_argument("src", type=Path)
-    ap.add_argument("--out", type=Path, default=REPO / "var" / "qwen-recipes" / SET_ID)
+    ap.add_argument(
+        "--out", type=Path, default=None, help="по умолчанию var/qwen-recipes/<set_id поставки>"
+    )
     a = ap.parse_args(argv)
     if not a.src.exists():
         print(json.dumps({"status": "BLOCKED_ACCESS", "missing": str(a.src)}, ensure_ascii=False))
         return 2
     files = read_set(a.src)
+    if a.out is None:  # результат каждой поставки — в своём каталоге, не в каталоге 100X5-001
+        man = next(
+            (
+                d
+                for n, d in files.items()
+                if n.rsplit("/", 1)[-1] == "manifest.json" and isinstance(d, dict)
+            ),
+            {},
+        )
+        sid = str(man.get("set_id") or SET_ID)
+        a.out = (
+            REPO
+            / "var"
+            / "qwen-recipes"
+            / (sid if re.fullmatch(r"[A-Za-z0-9._-]+", sid) else SET_ID)
+        )
     if a.cmd == "inspect":
         print(json.dumps(inspect(files), ensure_ascii=False, indent=1))
         return 0

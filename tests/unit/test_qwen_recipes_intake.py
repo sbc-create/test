@@ -636,3 +636,158 @@ def test_old_night_archive_format_still_reads(tmp_path):
         out["variants/A-V1.json"]["steps"][0]["text"]
         == "Варите хлопья 10 минут. Помешивайте, чтобы не пригорели."
     )
+
+
+# --------------------------------------------------------------- пути поставки qwen-dish/1
+EXAMPLE = ROOT / "tools" / "qwen_contract" / "example"
+NO_SITE = {"bestreciept.site": [], "myfood.mobi": []}
+
+
+def _example():
+    man = json.loads((EXAMPLE / "manifest.json").read_text(encoding="utf-8"))
+    dish = (EXAMPLE / "dishes" / "EXAMPLE-001.json").read_bytes()
+    return man, dish
+
+
+def _tgz(path, members):
+    """members: {имя в архиве: bytes}"""
+    import io
+
+    with tarfile.open(path, "w:gz") as t:
+        for name, data in members.items():
+            info = tarfile.TarInfo(name)
+            info.size = len(data)
+            t.addfile(info, io.BytesIO(data))
+    return path
+
+
+def _statuses(src):
+    out = intake.check(intake.read_set(src), NO_SITE)
+    return out, {d["dish_id"]: d for d in out.get("dishes", [])}
+
+
+def _found(src):
+    """Файл блюда найден: статус не missing (образец останавливается правами — источник example.org)."""
+    out, by = _statuses(src)
+    return (
+        out["status"] != "BLOCKED_INPUT"
+        and all(d["status"] != "missing" for d in by.values())
+        and by
+    )
+
+
+def test_dish_paths_directory(tmp_path):
+    assert _found(EXAMPLE)
+
+
+def test_dish_paths_archive_without_outer_folder(tmp_path):
+    man, dish = _example()
+    assert _found(
+        _tgz(
+            tmp_path / "a.tar.gz",
+            {"manifest.json": json.dumps(man).encode(), "dishes/EXAMPLE-001.json": dish},
+        )
+    )
+
+
+def test_dish_paths_archive_with_dot_slash(tmp_path):
+    # как NEW-003: члены архива «./x.json», файл в манифесте — «x.json» или «./x.json»
+    man, dish = _example()
+    man["items"][0]["file"] = "./EXAMPLE-001.json"
+    assert _found(
+        _tgz(
+            tmp_path / "a.tar.gz",
+            {"./manifest.json": json.dumps(man).encode(), "./EXAMPLE-001.json": dish},
+        )
+    )
+
+
+def test_dish_paths_archive_with_new_set_folder(tmp_path):
+    # как NEW-002: внешняя папка с set_id нового набора, внутри manifest.json и dishes/ — раньше ложный missing
+    man, dish = _example()
+    top = "QWEN-NIGHT-RECIPES-NEW-777/"
+    members = {
+        top + "manifest.json": json.dumps(man).encode(),
+        top + "dishes/EXAMPLE-001.json": dish,
+    }
+    assert _found(_tgz(tmp_path / "a.tar.gz", members))
+
+
+def test_dish_paths_truly_missing_file_is_named(tmp_path):
+    man, dish = _example()
+    out, by = _statuses(
+        _tgz(
+            tmp_path / "a.tar.gz",
+            {"manifest.json": json.dumps(man).encode(), "dishes/OTHER.json": dish},
+        )
+    )
+    d = next(iter(by.values()))
+    assert d["status"] == "missing" and "dishes/EXAMPLE-001.json" in d["fix"]
+
+
+def test_dish_paths_dangerous_manifest_paths_are_refused(tmp_path):
+    man, dish = _example()
+    for bad in (
+        "../EXAMPLE-001.json",
+        "/etc/EXAMPLE-001.json",
+        "dishes\\EXAMPLE-001.json",
+        "dishes/../../x.json",
+    ):
+        man["items"][0]["file"] = bad
+        out, by = _statuses(
+            _tgz(
+                tmp_path / "a.tar.gz",
+                {"manifest.json": json.dumps(man).encode(), "dishes/EXAMPLE-001.json": dish},
+            )
+        )
+        d = next(iter(by.values()))
+        assert d["status"] == "missing" and "недопустимый путь" in d["fix"], bad
+
+
+def test_dish_paths_dangerous_archive_member_is_not_read(tmp_path):
+    man, dish = _example()
+    files = intake.read_set(
+        _tgz(
+            tmp_path / "a.tar.gz",
+            {"manifest.json": json.dumps(man).encode(), "../dishes/EXAMPLE-001.json": dish},
+        )
+    )
+    assert "../dishes/EXAMPLE-001.json" in files[intake.UNREADABLE]
+    assert not any(".." in n for n in files)
+
+
+def test_dish_paths_two_manifests_are_ambiguous(tmp_path):
+    man, dish = _example()
+    members = {
+        "a/manifest.json": json.dumps(man).encode(),
+        "b/manifest.json": json.dumps(man).encode(),
+        "a/dishes/EXAMPLE-001.json": dish,
+    }
+    out = intake.plan(intake.read_set(_tgz(tmp_path / "a.tar.gz", members)), NO_SITE, {})
+    assert out["status"] == "BLOCKED_INPUT" and "нужен один" in out["reason"]
+
+
+def test_old_100x5_archive_keeps_its_layout(tmp_path):
+    # старый набор: внешняя папка 100X5-001, внутри manifest/ recipes/ variants/ — пути без папки, как раньше
+    members = {
+        "QWEN-NIGHT-RECIPES-100X5-001/manifest/manifest-food-daily-night-001.json": b'{"x": 1}',
+        "QWEN-NIGHT-RECIPES-100X5-001/recipes/R-1.json": b'{"base_recipe_id": "R-1"}',
+    }
+    files = intake.read_set(_tgz(tmp_path / "a.tar.gz", members))
+    assert set(files) == {"manifest/manifest-food-daily-night-001.json", "recipes/R-1.json"}
+
+
+def test_plan_writes_each_set_to_its_own_folder(tmp_path, monkeypatch):
+    monkeypatch.setattr(intake, "REPO", tmp_path)
+    man, dish = _example()
+    man["set_id"] = "QWEN-NIGHT-RECIPES-NEW-777"
+    src = _tgz(
+        tmp_path / "a.tar.gz",
+        {"manifest.json": json.dumps(man).encode(), "dishes/EXAMPLE-001.json": dish},
+    )
+    monkeypatch.setattr(intake, "published_titles", lambda: NO_SITE)
+    intake.main(["plan", str(src)])
+    assert (
+        tmp_path / "var" / "qwen-recipes" / "QWEN-NIGHT-RECIPES-NEW-777" / "report.json"
+    ).is_file()
+    assert not (tmp_path / "var" / "qwen-recipes" / intake.SET_ID).exists()
