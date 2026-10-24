@@ -1,0 +1,12 @@
+витрина                 частей   адресов   серий                   robots
+lordserials22.info           2     69814     500 Disallow: /poster/ Disal
+zonafilm.cc                  2     69277       0 Disallow: /poster/ Disal
+zonafilm12.site              2     69277       0 Disallow: /poster/ Disal
+витрина                 визитов  адресов  работ  верх.доля   каталог  адресов/1000 записей
+yummyani.site             28601      649    342      59.0%         —                     —
+yummyani7.site             5856      191    113      31.5%         —                     —
+animedia.icu               3474      188    101      30.6%      8693                  21.6
+lordserials22.info         1942      574    414      13.3%     69171                   8.3
+zonafilm.cc                1372      260    212       5.0%     69171                   3.8
+yummyani7.info             1218      127     81      24.8%         —                     —
+zonafilm12.site             511       61     42      69.7%     69171                   0.9
