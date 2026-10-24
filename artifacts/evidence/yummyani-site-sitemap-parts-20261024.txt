@@ -1,0 +1,13 @@
+частей в индексе: 5
+   https://yummyani.site/sitemap/static.xml                       lastmod 2026-08-21T00:00:00
+   https://yummyani.site/sitemap/titles.xml                       lastmod 2026-08-21T00:00:00
+   https://yummyani.site/sitemap/seasons.xml                      lastmod 2026-08-21T00:00:00
+   https://yummyani.site/sitemap/episodes.xml                     lastmod 2026-08-21T00:00:00
+   https://yummyani.site/sitemap/images.xml                       lastmod 2026-08-21T00:00:00
+static.xml             адресов      20, серий       0, сезонов      0
+titles.xml             адресов    8399, серий       0, сезонов      0
+seasons.xml            адресов      50, серий       0, сезонов     50
+episodes.xml           адресов     503, серий     503, сезонов      0
+images.xml             адресов    8381, серий       0, сезонов      0
+
+ИТОГО адресов 17353, серий 503, сезонов 50
