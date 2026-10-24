@@ -1,0 +1,60 @@
+внешняя сверка имён: /home/claude/wt-portable-site-cell-01/artifacts/evidence/verify-today-20261024.json, записей 51, метод: имена собственные текста вне записи каталога → источники, записанные в черновике (source_fetch.py shikimori+credits / pa
+материалов за 2026-10-24: 50; записей каталога найдено 50
+
+ГОДЕН      animedia.icu       urasiman-policiya-buduschego               автор editor/claude-auto/run-20261024T00
+ГОДЕН      animedia.icu       detektiv-konan-s-novym-godom               автор editor/claude-auto/run-20261024T02
+ГОДЕН      animedia.icu       cepnye-hroniki-film-2                      автор editor/claude-auto/run-20261024T05
+ГОДЕН      animedia.icu       delo-vedet-yunyy-detektiv-kindaiti-delo-   автор editor/claude-auto/run-20261024T06
+ГОДЕН      animedia.icu       letopis-voyn-v-shkole-mure                 автор editor/claude-auto/run-20261024T07
+НЕ ПРИНЯТ  animedia.icu       tridcat-tysyach-li-do-chananya             автор editor/claude-auto/run-20261024T10
+           не прошло посторонних_вставок_нет: Аньши, Чанъанем, Баем | внешняя сверка не нашла: Аньши
+ГОДЕН      animedia.space     boevoy-petuh                               автор editor/claude-auto/run-20261024T02
+ГОДЕН      animedia.space     moi-devushki-2                             автор editor/claude-auto/run-20261024T03
+ГОДЕН      animedia.space     nindzya-voin-tobikage                      автор editor/claude-auto/run-20261024T05
+НЕ ПРИНЯТ  animedia.space     detektiv-konan-protiv-kayto-kida           автор editor/claude-auto/run-20261024T06
+           не прошло посторонних_вставок_нет: Госё, Аоямы, Куроба, Кидом, Конаном, Синъити | внешняя сверка не нашла: Синъити
+ГОДЕН      animedia.space     princessy-idoly                            автор editor/claude-auto/run-20261024T07
+ГОДЕН      animedia.space     portret-czyanhu-reki-i-ozera-5             автор editor/claude-auto/run-20261024T10
+ГОДЕН      animedia.space     dobro-pozhalovat-v-deshevyy-restoran-izg   автор editor/claude-auto/run-20261024T11
+ГОДЕН      animedia.space     muzykalnaya-shkola-zvezd-3                 автор editor/claude-auto/run-20261024T19
+ГОДЕН      animedia.space     puteshestvie-na-zapad-ova                  автор editor/claude-auto/run-20261024T20
+ГОДЕН      animedia.space     toriko-tur-dzhampa-2009                    автор editor/claude-auto/run-20261024T22
+ГОДЕН      an1meg0.site       proekt-super-ruki-2                        автор editor/claude-auto/run-20261024T00
+ГОДЕН      an1meg0.site       zona-vosemdesyat-vosem                     автор editor/claude-auto/run-20261024T01
+ГОДЕН      an1meg0.site       tropicheskaya-pomada-horoshenkoe-lekarst   автор editor/claude-auto/run-20261024T02
+ГОДЕН      an1meg0.site       dragon-kvest-geroicheskie-priklyucheniya   автор editor/claude-auto/run-20261024T07
+ГОДЕН      an1meg0.site       gayver-ii                                  автор editor/claude-auto/run-20261024T12
+ГОДЕН      an1meg0.site       slavnyy-pes-lessi                          автор editor/claude-auto/run-20261024T19
+ГОДЕН      an1mego.site       pesnya-rayancuri                           автор editor/claude-auto/run-20261024T00
+ГОДЕН      an1mego.site       kartochnye-boi-avangarda-svyataya-zet-de   автор editor/claude-auto/run-20261024T01
+ГОДЕН      an1mego.site       ommedzi                                    автор editor/claude-auto/run-20261024T05
+ГОДЕН      an1mego.site       angel-po-sosedstvu-2                       автор editor/claude-auto/run-20261024T06
+ГОДЕН      an1mego.site       idolmaster-koncert-na-million              автор editor/claude-auto/run-20261024T10
+ГОДЕН      an1mego.site       studiya-badzya                             автор editor/claude-auto/run-20261024T11
+ГОДЕН      an1mego.site       mobilnyy-voin-gandam-gquuuuuux             автор editor/claude-auto/run-20261024T19
+ГОДЕН      an1mego.site       deti-epohi-seva-suschee-nakazanie          автор editor/claude-auto/run-20261024T20
+ГОДЕН      animeg0.site       el-hazard-stranniki                        автор editor/claude-auto/run-20261024T22
+ГОДЕН      zonafilm.space     chelovek-muravey-i-osa                     автор editor/claude-auto/run-20261024T15
+ГОДЕН      zonafilm.space     puteshestvie-k-centru-zemli                автор editor/claude-auto/run-20261024T14
+ГОДЕН      zonafilm.space     frankenshteyn-sozdal-zhenschinu            автор editor/claude-auto/run-20261024T15
+ГОДЕН      zonafilm.space     zhenschina-kotoraya-mechtala-o-muzhchine   автор editor/claude-auto/run-20261024T18
+ГОДЕН      zonafilm.space     poschadi-menya-velikiy-gospodin-2          автор editor/claude-auto/run-20261024T16
+ГОДЕН      zonafilm.space     legenda-ob-aange-posledniy-mag-vozduha     автор editor/claude-auto/run-20261024T17
+ГОДЕН      zonafilm12.site    moya-skrytaya-pravda                       автор editor/claude-auto/run-20261024T14
+ГОДЕН      zonafilm12.site    baffi-istrebitelnica-vampirov              автор editor/claude-auto/run-20261024T15
+ГОДЕН      zonafilm12.site    monti-payton-i-svyaschennyy-graal          автор editor/claude-auto/run-20261024T18
+ГОДЕН      zonafilm12.site    otryad-samoubiyc-2016                      автор editor/claude-auto/run-20261024T17
+ГОДЕН      zonafilm12.site    22-protiv-zemli-2021                       автор editor/claude-auto/run-20261024T18
+ГОДЕН      zonafilm12.site    pod-pricelom-2                             автор editor/claude-auto/run-20261024T13
+ГОДЕН      zonafilm12.site    piraty-karibskogo-morya-mertvecy-ne-rass   автор editor/claude-auto/run-20261024T14
+ГОДЕН      zonafilm12.site    11-14                                      автор editor/claude-auto/run-20261024T16
+ГОДЕН      zonafilm12.site    akademiya-vedm                             автор editor/claude-auto/run-20261024T13
+ГОДЕН      zonafilm12.site    sobachi-zvezdy                             автор editor/claude-auto/run-20261024T13
+ГОДЕН      zonafilm12.site    tayny-niro-vulfa                           автор editor/claude-auto/run-20261024T16
+ГОДЕН      zonafilm12.site    bratan-munna-2                             автор editor/claude-auto/run-20261024T17
+ГОДЕН      zonafilm12.site    odin-tanec                                 автор editor/claude-auto/run-20261024T22
+
+годны к рецензии: 48; не приняты: 2
+  не принятые отзыва НЕ получают: фиктивная рецензия хуже её отсутствия. Им нужна сверка по внешнему источнику или правка
+
+отзывов записано: 48; отказов операции: 0
