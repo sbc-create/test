@@ -50,6 +50,23 @@ K2 = ("lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
       "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
       "lordserial.net.ru")
 
+#: Хранилища самих витрин: написанное (drafts.json) и размещённое
+#: (title-overlays.json). Размещённое читает витрина.
+НАЛОЖЕНИЯ = pathlib.Path("/srv/sites")
+
+
+def _items(д) -> list[dict]:
+    """`items` бывает и списком, и отображением слаг → запись."""
+    if isinstance(д, dict):
+        д = д.get("items")
+    if isinstance(д, dict):
+        д = list(д.values())
+    return [з for з in (д or []) if isinstance(з, dict)]
+
+
+def хранилища_витрин(корень: pathlib.Path = НАЛОЖЕНИЯ) -> list[pathlib.Path]:
+    return sorted(корень.glob("*/runtime/overlays/*"))
+
 
 def отпечаток(текст: str) -> str:
     """Хеш самого текста: пробелы не считаются различием."""
@@ -183,6 +200,56 @@ def опись(зп: list[dict], файл: pathlib.Path) -> int:
     return 0
 
 
+def опись_витрин(файл: pathlib.Path, корень: pathlib.Path = НАЛОЖЕНИЯ) -> int:
+    """Опись по хранилищам витрин: написанное и размещённое.
+
+    Реестр очереди — не единственный источник: 431 размещённый текст в нём
+    отсутствует вовсе, а написанное по витрине авторитетно именно в
+    `drafts.json`. Без этой половины опись отвечает на вопрос «что в очереди»,
+    а не «что есть».
+    """
+    строки = ["\t".join((
+        "хранилище", "домен", "ID произведения", "слаг", "авторство",
+        "состояние", "хранилище и ключ записи", "изменено", "публичный URL",
+        "знаков"))]
+    каталоги = хранилища_витрин(корень)
+    if not каталоги:
+        print(f"НЕ ИЗМЕРЕНО: хранилищ витрин нет по пути {корень}")
+        return 2
+    for к in каталоги:
+        домен = к.name
+        # Адрес страницы произведения различается по семействам: у Yummy это
+        # /anime/<слаг>, у остальных /title/<слаг> (проверено: на
+        # yummyani.site /title/ отдаёт 404).
+        вид = "anime" if домен.startswith("yummyani") else "title"
+        for имя, вид_хранилища in (("drafts.json", "черновики витрины"),
+                                   ("title-overlays.json", "наложение витрины")):
+            ф = к / имя
+            if not ф.exists():
+                строки.append("\t".join((
+                    вид_хранилища, домен, "", "", "", "ФАЙЛА НЕТ",
+                    str(ф), "", "", "0 (файла нет)")))
+                continue
+            данные = json.loads(ф.read_text(encoding="utf-8"))
+            for и in _items(данные):
+                pr = и.get("provenance") or {}
+                тело = (и.get("body") or "").strip()
+                строки.append("\t".join((
+                    вид_хранилища, домен, и.get("title_id") or "",
+                    и.get("slug") or "",
+                    и.get("author") or pr.get("author") or "не записано",
+                    и.get("state") or ("размещено" if имя.startswith("title") else ""),
+                    f"{ф}#items[slug={и.get('slug')}]",
+                    и.get("prepared_at") or pr.get("written_at")
+                    or данные.get("generated_at") or "не записано",
+                    f"https://{домен}/{вид}/{и.get('slug')}",
+                    str(len(тело)) if тело else "0 (текста нет)")))
+    файл.parent.mkdir(parents=True, exist_ok=True)
+    файл.write_text("\n".join(строки) + "\n", encoding="utf-8")
+    print(f"опись витрин: {файл} — строк {len(строки) - 1} + заголовок")
+    return 0
+
+
 def примеры(зп: list[dict], сколько: int) -> int:
     """Примеры берутся из РАЗНЫХ доменов и разных статусов, а не первые с краю."""
     ст = с_текстом(зп)
@@ -287,20 +354,38 @@ def окно(зп: list[dict], часов: int) -> int:
 
 # --- размещение по авторитетному хранилищу витрины -------------------------
 
-НАЛОЖЕНИЯ = pathlib.Path("/srv/sites")
+#: Второе хранилище размещения, у семейств Lords и Zona:
+#: `/srv/<репозиторий>/data/editorial-overrides.json`, запись
+#: `overrides[*].fields.description`. Измерено 24.10: у этих витрин
+#: `title-overlays.json` нет вовсе, а описания размещены ИМЕННО здесь — 18 на
+#: семь витрин. Проверка, знающая только наложения, объявила бы «размещено 0»
+#: и «механизма нет», тогда как механизм есть и работает.
+НАКЛАДКИ = pathlib.Path("/srv")
 
 
-def _items(д) -> list[dict]:
-    """`items` бывает и списком, и отображением слаг → запись."""
-    if isinstance(д, dict):
-        д = д.get("items")
-    if isinstance(д, dict):
-        д = list(д.values())
-    return [з for з in (д or []) if isinstance(з, dict)]
+def накладка_витрины(домен: str) -> pathlib.Path | None:
+    """Файл накладок витрины по её домену. None — если его нет."""
+    основа = домен.replace(".", "-")
+    for имя in (основа, f"site-{основа}"):
+        п = НАКЛАДКИ / имя / "data" / "editorial-overrides.json"
+        if п.exists():
+            return п
+    return None
 
 
-def хранилища_витрин(корень: pathlib.Path = НАЛОЖЕНИЯ) -> list[pathlib.Path]:
-    return sorted(корень.glob("*/runtime/overlays/*"))
+def описания_накладки(путь: pathlib.Path) -> set[str]:
+    """Отпечатки описаний, размещённых через накладку."""
+    д = json.loads(путь.read_text(encoding="utf-8"))
+    зп = д.get("overrides") or []
+    зп = list(зп.values()) if isinstance(зп, dict) else зп
+    из = set()
+    for з in зп:
+        if not isinstance(з, dict):
+            continue
+        о = (з.get("fields") or {}).get("description")
+        if о and о.strip():
+            из.add(отпечаток(о))
+    return из
 
 
 def размещение(корень: pathlib.Path = НАЛОЖЕНИЯ) -> int:
@@ -332,22 +417,30 @@ def размещение(корень: pathlib.Path = НАЛОЖЕНИЯ) -> int
             {отпечаток(и.get("body") or "")
              for и in _items(json.loads(н.read_text(encoding="utf-8")))}
             if есть_наложение else set())
+        # Второе хранилище размещения — накладка витрины. Без него у семейств
+        # Lords и Zona выходит «размещено 0» при фактически размещённых.
+        накл = накладка_витрины(к.name)
+        из_накладки = описания_накладки(накл) if накл else set()
+        размещённые |= из_накладки
         выверено = [з for з in черновики
                     if з.get("state") == "verified" and not з.get("quality_problems")]
         ждут = [з for з in выверено
                 if отпечаток(з.get("body") or "") not in размещённые]
         готово_нет += len(ждут)
         всего += len(черновики)
-        if not есть_наложение and ждут:
+        if not есть_наложение and not из_накладки and ждут:
             без_файла.append(f"{к.name} ({len(ждут)})")
+        где = "наложение" if есть_наложение else "—"
+        if из_накладки:
+            где = (где + f" + накладка {len(из_накладки)}" if есть_наложение
+                   else f"накладка {len(из_накладки)}")
         print(f"{к.name:24} {len(черновики):11} {len(выверено):9}"
-              f" {len(размещённые):10} {len(ждут):21}"
-              f"  {'есть' if есть_наложение else 'НЕТ ФАЙЛА'}")
+              f" {len(размещённые):10} {len(ждут):21}  {где}")
     print()
     print(f"витрин {len(каталоги)}, черновиков {всего};"
           f" ГОТОВО И НЕ РАЗМЕЩЕНО {готово_нет}")
     if без_файла:
-        print(f"  из них там, где файла наложений нет вовсе: "
+        print(f"  из них там, где НИ наложения, НИ накладки нет вовсе: "
               f"{', '.join(без_файла)}")
         print("  это отсутствие шага публикации, а не отсутствие текста")
     return 0 if готово_нет == 0 else 1
@@ -387,6 +480,7 @@ def главное(argv: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(description=__doc__)
     р.add_argument("--summary", action="store_true")
     р.add_argument("--export", type=pathlib.Path)
+    р.add_argument("--export-sites", type=pathlib.Path)
     р.add_argument("--examples", type=int)
     р.add_argument("--obstacles", action="store_true")
     р.add_argument("--placement", action="store_true")
@@ -419,6 +513,9 @@ def главное(argv: list[str] | None = None) -> int:
     if а.export:
         print("\n== опись ==")
         код |= опись(зп, а.export)
+    if а.export_sites:
+        print("\n== опись по хранилищам витрин ==")
+        код |= опись_витрин(а.export_sites)
     if а.examples:
         print("\n== примеры ==")
         код |= примеры(зп, а.examples)
@@ -432,7 +529,7 @@ def главное(argv: list[str] | None = None) -> int:
         print("\n== сутки против накопленного ==")
         код |= окно(зп, а.window_hours)
     if not any((а.summary, а.export, а.examples, а.obstacles,
-                а.window_hours, а.control, а.placement)):
+                а.window_hours, а.control, а.placement, а.export_sites)):
         р.print_help()
         return 2
     return код

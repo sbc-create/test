@@ -248,19 +248,49 @@ def test_полное_размещение_даёт_ноль_и_код_ноль(
     assert "ГОТОВО И НЕ РАЗМЕЩЕНО 0" in capsys.readouterr().out
 
 
-def test_отсутствие_файла_наложений_названо_отдельно(capsys, tmp_path):
-    """«Нет файла» — отсутствие шага публикации, а не отсутствие текста.
+def test_отсутствие_обоих_хранилищ_размещения_названо_отдельно(capsys, tmp_path):
+    """Ни наложения, ни накладки — отсутствие шага публикации, а не текста.
 
-    Ровно это у шести витрин Lords и Zona: 48 выверенных черновиков без
-    `title-overlays.json` (MOD-165).
+    Хранилищ размещения ДВА, и это измерено 24.10: у семейств Lords и Zona
+    `title-overlays.json` нет вовсе, а описания размещены через
+    `/srv/<репозиторий>/data/editorial-overrides.json` — 17 штук. Первая
+    редакция проверки знала только наложения и потому объявила «механизма
+    размещения нет» там, где он есть и работает (поправка в MOD-165).
     """
     _витрина(tmp_path, "д3.site",
              [{"slug": "a", "body": "готовый текст", "state": "verified",
                "quality_problems": []}], None)
     код = ОПИСЬ.размещение(tmp_path)
     из = capsys.readouterr().out
-    assert "НЕТ ФАЙЛА" in из, из
     assert "отсутствие шага публикации" in из, из
+    assert "НИ наложения, НИ накладки" in из, из
+    assert код == 1
+
+
+def test_накладка_витрины_считается_размещением(capsys, tmp_path, monkeypatch):
+    """Описание в накладке — размещённое, даже когда наложения нет.
+
+    Без этого по шести витринам Lords и Zona выходило «размещено 0» при
+    фактически размещённых 17.
+    """
+    srv = tmp_path / "srv"
+    (srv / "д6-site" / "data").mkdir(parents=True)
+    (srv / "д6-site" / "data" / "editorial-overrides.json").write_text(
+        json.dumps({"site_id": "д6", "overrides": [
+            {"actor": "editor/прогон", "reason": "повод",
+             "fields": {"description": "размещённый текст"}}]},
+            ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(ОПИСЬ, "НАКЛАДКИ", srv)
+
+    _витрина(tmp_path, "д6.site",
+             [{"slug": "a", "body": "размещённый  текст", "state": "verified",
+               "quality_problems": []},
+              {"slug": "b", "body": "ещё не размещённый", "state": "verified",
+               "quality_problems": []}], None)
+    код = ОПИСЬ.размещение(tmp_path)
+    из = capsys.readouterr().out
+    assert "ГОТОВО И НЕ РАЗМЕЩЕНО 1" in из, из
+    assert "накладка 1" in из, из
     assert код == 1
 
 
