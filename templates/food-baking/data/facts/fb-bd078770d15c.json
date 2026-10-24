@@ -1,0 +1,58 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/plyvet-venochek-krasivaya-i-prostaya-vypechka-s-koricey-192094",
+ "title": "Плывет веночек – красивая и простая выпечка с сахаром",
+ "servings": 4,
+ "prep_minutes": null,
+ "cook_minutes": 45,
+ "total_minutes": 45,
+ "ingredients": [
+  {
+   "raw": "Слоеное тесто, 1 кусок",
+   "name": "Слоеное тесто",
+   "quantity": 1.0,
+   "unit": "piece"
+  },
+  {
+   "raw": "Коричневый сахар, 4 столовые ложки",
+   "name": "Коричневый сахар",
+   "quantity": 4.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Сливочное масло, 50 г",
+   "name": "Сливочное масло",
+   "quantity": 50.0,
+   "unit": "g"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 10
+   }
+  ],
+  "bake_times": [],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 9
+   }
+  ],
+  "caution_steps": [
+   5
+  ]
+ },
+ "parser_version": "fd-extract/1.3",
+ "remarks": [
+  "перенесено из записи конвейера food-daily rec-bd078770d15c7b5c (без повторной загрузки страницы)"
+ ],
+ "complete": true,
+ "content_hash": "d69274b53fadf59413a8194c3629cd943c9a44df50974849ba8e74ac7f8c1c16",
+ "record_id": "fb-bd078770d15c",
+ "group_hint": "sloyki",
+ "step_count": 12,
+ "fetched_at": "2026-10-11T21:35:59Z"
+}

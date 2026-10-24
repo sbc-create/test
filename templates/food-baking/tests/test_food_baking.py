@@ -162,7 +162,10 @@ def test_filters_search_not_indexed_and_404s(app):
     assert canon(html) is None
     _, html, _ = get(app, "/poisk/", {"q": ["слива"]})
     assert canon(html) is None and 'class="bcard' in html
-    for p in ("/recept/net/", "/testo/drozhzhevoe/", "/teg/limon/", "/oshibki/net/", "/recepty/page/1/"):
+    from bakebook.drafts import DOUGH_LABELS
+
+    empty_dough = next(k for k in DOUGH_LABELS if k not in app.site.doughs())  # вид теста без рецептов
+    for p in ("/recept/net/", f"/testo/{empty_dough}/", "/teg/limon/", "/oshibki/net/", "/recepty/page/1/"):
         assert get(app, p)[0] == 404, p
 
 

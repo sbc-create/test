@@ -147,7 +147,10 @@ def test_group_pages_and_cards(app):
         st, html, _ = app.route(f"/recepty/{k}/", {})
         assert st == 200 and html.count('class="bcard ') == len(items)
         assert "noindex" in re.search(r'name="robots" content="([^"]+)"', html).group(1)
-    assert app.route("/recepty/sloyki/", {})[0] == 404  # пустой раздел не показывается
+    from bakebook.site import GROUPS
+
+    empty = next(k for k in GROUPS if k not in app.site.groups())
+    assert app.route(f"/recepty/{empty}/", {})[0] == 404  # пустой раздел не показывается
 
 
 def test_recipe_quick_answers_and_anchors(app):

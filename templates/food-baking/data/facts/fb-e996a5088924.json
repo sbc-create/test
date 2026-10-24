@@ -1,0 +1,98 @@
+{
+ "source_url": "https://eda.rambler.ru/recepty/vypechka-deserty/shanezhki-shangi-s-kartoshkoy-na-bezoparnom-teste-193165",
+ "title": "Шанежки (шаньги) с картошкой на безопарном тесте",
+ "servings": 12,
+ "prep_minutes": 60,
+ "cook_minutes": 60,
+ "total_minutes": 120,
+ "ingredients": [
+  {
+   "raw": "Пшеничная мука, 500 г",
+   "name": "Пшеничная мука",
+   "quantity": 500.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сухие дрожжи, 7 г",
+   "name": "Сухие дрожжи",
+   "quantity": 7.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Молоко, 350 мл",
+   "name": "Молоко",
+   "quantity": 350.0,
+   "unit": "ml"
+  },
+  {
+   "raw": "Соль, 0.5 чайных ложек",
+   "name": "Соль",
+   "quantity": 0.5,
+   "unit": "tsp"
+  },
+  {
+   "raw": "Сахар, 1 столовая ложка",
+   "name": "Сахар",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Растительное масло, 2 столовые ложки",
+   "name": "Растительное масло",
+   "quantity": 2.0,
+   "unit": "tbsp"
+  },
+  {
+   "raw": "Картофель, 600 г",
+   "name": "Картофель",
+   "quantity": 600.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Сливочное масло, 40 г",
+   "name": "Сливочное масло",
+   "quantity": 40.0,
+   "unit": "g"
+  },
+  {
+   "raw": "Куриное яйцо, 2 штуки",
+   "name": "Куриное яйцо",
+   "quantity": 2.0,
+   "unit": "pcs"
+  },
+  {
+   "raw": "Сметана, 1 столовая ложка",
+   "name": "Сметана",
+   "quantity": 1.0,
+   "unit": "tbsp"
+  }
+ ],
+ "source_category": "Выпечка и десерты",
+ "oven": {
+  "temperatures": [
+   {
+    "value_c": 180,
+    "step": 20
+   }
+  ],
+  "bake_times": [],
+  "forms": [
+   {
+    "text": "противень",
+    "diameter_cm": null,
+    "step": 20
+   }
+  ],
+  "caution_steps": []
+ },
+ "parser_version": "fd-extract/1.3",
+ "remarks": [
+  "перенесено из записи конвейера food-daily rec-e996a5088924c517 (без повторной загрузки страницы)"
+ ],
+ "complete": true,
+ "content_hash": "f0d957bf5c913ec9cf298d864c2914098213a8cc533c677ac71bc1b230492d30",
+ "record_id": "fb-e996a5088924",
+ "group_hint": "bulochki",
+ "step_count": 25,
+ "fetched_at": "2026-10-11T21:33:49Z"
+}
