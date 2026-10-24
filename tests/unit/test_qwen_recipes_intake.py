@@ -791,3 +791,21 @@ def test_plan_writes_each_set_to_its_own_folder(tmp_path, monkeypatch):
         tmp_path / "var" / "qwen-recipes" / "QWEN-NIGHT-RECIPES-NEW-777" / "report.json"
     ).is_file()
     assert not (tmp_path / "var" / "qwen-recipes" / intake.SET_ID).exists()
+
+
+def test_encyclopedia_is_not_a_recipe_source(tmp_path):
+    # NEW-002/NEW-003: source.url — статья Википедии о блюде; количества и порции из неё не подтверждаются
+    man, dish = _example()
+    d = json.loads(dish)
+    for url in ("https://ru.wikipedia.org/wiki/Оливье", "https://fdc.nal.usda.gov/food/123"):
+        d["source"]["url"] = url
+        src = _tgz(
+            tmp_path / "a.tar.gz",
+            {
+                "manifest.json": json.dumps(man).encode(),
+                "dishes/EXAMPLE-001.json": json.dumps(d).encode(),
+            },
+        )
+        out, by = _statuses(src)
+        x = next(iter(by.values()))
+        assert x["status"] == "rights" and "не страница рецепта" in x["fix"], url

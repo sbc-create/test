@@ -109,6 +109,9 @@ STOP = {"с", "и", "на", "из", "в", "по", "для", "без", "под", 
 
 # ---------------------------------------------------------------- чтение набора
 EXAMPLE_HOSTS = {"example.org", "example.com", "example.net"}
+# энциклопедии и справочники состава: статья о блюде или продукте — не опубликованный рецепт:
+# количества, порции и время в ней не подтверждаются (контракт: source.url — страница рецепта)
+REFERENCE_HOSTS = ("wikipedia.org", "wikimedia.org", "wiktionary.org", "wikibooks.org", "usda.gov")
 UNREADABLE = "_unreadable"  # ключ в результате read_set: файлы, которые не разобрались как JSON
 
 
@@ -569,8 +572,14 @@ def check_base(b: dict) -> list[str]:
             else "BLOCKED_RIGHTS: нет источника фактов (source.url)"
         )
     host = str((b.get("source") or {}).get("url", "")).split("/")[2:3]
-    if host and re.sub(r"^www\.", "", host[0]).split(":")[0] in EXAMPLE_HOSTS:
+    h = re.sub(r"^www\.", "", host[0]).split(":")[0].lower() if host else ""
+    if h in EXAMPLE_HOSTS:
         errs.append("BLOCKED_RIGHTS: источник-пример (example.org) — образец формата, не рецепт")
+    elif any(h == r or h.endswith("." + r) for r in REFERENCE_HOSTS):
+        errs.append(
+            f"BLOCKED_RIGHTS: источник {h} — энциклопедия или справочник, не страница рецепта: "
+            "количества, порции и время из него не подтверждаются"
+        )
     for i, ing in enumerate(b.get("ingredients") or []):
         if not ing.get("name"):
             errs.append(f"ингредиент {i}: нет названия")
