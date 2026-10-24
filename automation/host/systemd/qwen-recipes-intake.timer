@@ -1,0 +1,11 @@
+[Unit]
+Description=bestreciept.site и myfood.mobi: проход приёма поставок Qwen каждые 30 минут
+
+[Timer]
+OnBootSec=5min
+OnUnitActiveSec=30min
+RandomizedDelaySec=120
+Persistent=true
+
+[Install]
+WantedBy=timers.target

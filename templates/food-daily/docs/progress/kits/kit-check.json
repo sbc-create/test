@@ -1,0 +1,196 @@
+{
+ "food-appliances-e2ae237": {
+  "kit": "food-appliances-e2ae237",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "24 passed, 1 skipped in 1.11s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "step-console",
+  "crawl": {
+   "urls": 26,
+   "assets": 3,
+   "bad": []
+  }
+ },
+ "food-baking-3202315": {
+  "kit": "food-baking-3202315",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "34 passed, 1 skipped in 1.98s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "oven-bench",
+  "crawl": {
+   "urls": 26,
+   "assets": 3,
+   "bad": []
+  }
+ },
+ "food-daily-4121565": {
+  "kit": "food-daily-4121565",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "141 passed in 12.33s"
+  ],
+  "test_failed": [],
+  "restore_verify_db": {
+   "ok": true,
+   "content": 24,
+   "versions": 50,
+   "mismatch": []
+  },
+  "restore_refuses_overwrite": true,
+  "revise_after_restore": {
+   "exit": 0,
+   "out": "{\"content_id\": \"fd-00d47e5b9672\", \"version\": 3, \"base\": 2}",
+   "new_version": 3,
+   "old_versions_intact": true,
+   "only_this_item_differs": true
+  },
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "party-list",
+  "crawl": {
+   "urls": 53,
+   "assets": 3,
+   "bad": []
+  }
+ },
+ "food-weekly-1d7cf83": {
+  "kit": "food-weekly-1d7cf83",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "30 passed in 1.45s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "own-week",
+  "crawl": {
+   "urls": 35,
+   "assets": 3,
+   "bad": []
+  }
+ },
+ "games-rpg-d950fc7": {
+  "kit": "games-rpg-d950fc7",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "22 passed in 1.25s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "index-compare",
+  "crawl": {
+   "urls": 36,
+   "assets": 4,
+   "bad": []
+  }
+ },
+ "games-story-79d2753": {
+  "kit": "games-story-79d2753",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "21 passed in 1.03s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "atlas",
+  "crawl": {
+   "urls": 26,
+   "assets": 4,
+   "bad": []
+  }
+ },
+ "games-survival-2debb36": {
+  "kit": "games-survival-2debb36",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "28 passed in 1.56s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "inventory-first",
+  "crawl": {
+   "urls": 37,
+   "assets": 4,
+   "bad": []
+  }
+ },
+ "garden-season-97f7bd6": {
+  "kit": "garden-season-97f7bd6",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "21 passed in 2.50s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "my-plot",
+  "crawl": {
+   "urls": 60,
+   "assets": 4,
+   "bad": []
+  }
+ },
+ "home-practical-e3ad4da": {
+  "kit": "home-practical-e3ad4da",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "23 passed in 1.37s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "home-audit",
+  "crawl": {
+   "urls": 51,
+   "assets": 10,
+   "bad": []
+  }
+ },
+ "plants-home-85a668a": {
+  "kit": "plants-home-85a668a",
+  "sha256sum": 0,
+  "has_git": false,
+  "test": [
+   0,
+   "21 passed in 1.33s"
+  ],
+  "test_failed": [],
+  "healthz_after_s": 0.25,
+  "home": 200,
+  "variant_meta": "my-collection",
+  "crawl": {
+   "urls": 43,
+   "assets": 8,
+   "bad": []
+  }
+ }
+}

@@ -1,0 +1,122 @@
+{
+ "cards": {
+  "food-daily-a": true,
+  "food-daily-b": true,
+  "food-daily-c": true,
+  "food-baking-a": true,
+  "food-baking-b": true,
+  "food-baking-c": true,
+  "food-weekly-a": true,
+  "food-weekly-b": true,
+  "food-weekly-c": true,
+  "food-appliances-a": true,
+  "food-appliances-b": true,
+  "food-appliances-c": true,
+  "home-practical-a": true,
+  "home-practical-b": true,
+  "home-practical-c": true,
+  "garden-season-a": true,
+  "garden-season-b": true,
+  "garden-season-c": true,
+  "plants-home-a": true,
+  "plants-home-b": true,
+  "plants-home-c": true,
+  "games-story-a": true,
+  "games-story-b": true,
+  "games-story-c": true,
+  "games-rpg-a": true,
+  "games-rpg-b": true,
+  "games-rpg-c": true,
+  "games-survival-a": true,
+  "games-survival-b": true,
+  "games-survival-c": true
+ },
+ "primary_rows": {
+  "food-daily C": true,
+  "food-baking B": true,
+  "food-weekly C": true,
+  "food-appliances B": true,
+  "home-practical C": true,
+  "garden-season C": true,
+  "plants-home C": true,
+  "games-story C": true,
+  "games-rpg C": true,
+  "games-survival C": true
+ },
+ "check_gallery_exit": 0,
+ "check_gallery": {
+  "320:light": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "320:dark": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "390:light": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "390:dark": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "768:light": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "768:dark": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "1440:light": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  },
+  "1440:dark": {
+   "status": 200,
+   "hscroll": false,
+   "cards": 30,
+   "recs": 10,
+   "broken_img": 0,
+   "console": [],
+   "axe": []
+  }
+ },
+ "ok": true
+}

@@ -1,0 +1,74 @@
+{
+ "320:light": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "320:dark": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "390:light": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "390:dark": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "768:light": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "768:dark": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "1440:light": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ },
+ "1440:dark": {
+  "status": 200,
+  "hscroll": false,
+  "cards": 30,
+  "recs": 10,
+  "broken_img": 0,
+  "console": [],
+  "axe": []
+ }
+}

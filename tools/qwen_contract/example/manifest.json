@@ -1,0 +1,5 @@
+{
+ "format": "qwen-dish/1",
+ "set_id": "EXAMPLE-QWEN-DISH-001",
+ "items": [{"dish_id": "EXAMPLE-001", "file": "dishes/EXAMPLE-001.json"}]
+}
