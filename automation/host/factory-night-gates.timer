@@ -1,0 +1,18 @@
+[Unit]
+Description=Ворота прогона линии nova-publish за 20 минут до отчётов владельцу
+
+[Timer]
+# Часы узла идут в UTC (проверено `date`): МСК = UTC+3.
+# 06:40 UTC — к отчёту 10:00 МСК, 14:40 — к 18:00 МСК, 18:40 — к 22:00 МСК.
+# Срок выбран ДО отчёта намеренно: результат должен существовать к сроку, а не
+# начинаться в срок.
+OnCalendar=*-*-* 06:40:00 UTC
+OnCalendar=*-*-* 14:40:00 UTC
+OnCalendar=*-*-* 18:40:00 UTC
+# Пропущенный из-за выключенного узла прогон выполняется при запуске.
+Persistent=true
+RandomizedDelaySec=120
+Unit=factory-night-gates.service
+
+[Install]
+WantedBy=timers.target

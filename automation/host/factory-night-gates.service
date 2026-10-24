@@ -1,0 +1,21 @@
+[Unit]
+Description=Ворота прогона линии nova-publish: запуск, продолжение, выдача
+Documentation=file:/home/claude/wt-nova-publish-memory-02/automation/local/night-gates-run.py
+Documentation=file:/home/claude/wt-nova-publish-memory-02/docs/RECURRING_FAILURES.md
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/claude/wt-nova-publish-memory-02
+# PATH задаётся ЯВНО. Измерено 24.10 на соседнем юните этой же линии
+# (k2-catalog-deliver.user.service): systemd даёт юниту минимальный PATH без
+# ~/.local/bin, и шаг доставки падал с «ansible: command not found» четверо
+# суток подряд 19–22.10. Юнит без явного PATH повторит ту же ошибку.
+Environment=PATH=/home/claude/.local/bin:/usr/local/bin:/usr/bin:/bin
+Environment=PYTHONUNBUFFERED=1
+# Только чтение и замеры: ни выпуска, ни записи в постоянные данные витрин,
+# ни изменения конфигурации. Поэтому юнит безопасно ставить по расписанию.
+ExecStart=/usr/bin/python3 automation/local/night-gates-run.py --json
+TimeoutStartSec=1800
+# Вывод остаётся в журнале юнита: по нему судят, сработало ли.
+StandardOutput=journal
+StandardError=journal

@@ -24,6 +24,36 @@ snapshot="${K2_SNAPSHOT:-/srv/site-factory/repo/var/lords/lords/catalog-cache/lo
 work="$repo_root/var/k2-data/deliver"
 publisher="$repo_root/var/k2-data/publisher/automation/host/nova-catalog-publish.py"
 
+# Исполняемый ansible ищется ЯВНО, а не через PATH оболочки.
+#
+# Измерено 24.10: суточный запуск из таймера пользователя падал на шаге
+# копирования с «k2-deliver-catalog.sh: line 115: ansible: command not found»,
+# хотя ansible установлен — /home/claude/.local/bin/ansible. systemd даёт юниту
+# минимальный PATH (/usr/local/bin:/usr/bin:/bin), и этого каталога в нём нет.
+# В интерактивной оболочке тот же скрипт работает: профиль добавляет PATH сам.
+# Отсюда и четыре суточных отказа подряд 19–22.10 — причина была та же, но её
+# вывод уничтожался `>/dev/null`.
+#
+# Отсутствие ansible теперь называется ОТДЕЛЬНОЙ ошибкой до первой витрины:
+# внутри шага оно выглядело как «доставка не удалась», то есть как отказ узла.
+# Порядок поиска важен. PATH спрашивается ПЕРВЫМ: если ansible в нём есть, то
+# именно он и имелся в виду — так работает любая оболочка, и на этом стоят
+# проверки доставки, подкладывающие свой ansible в PATH. Известные каталоги —
+# запасной путь ровно для случая юнита, которому systemd урезал PATH.
+ansible_bin="${ANSIBLE_BIN:-}"
+if [ -z "$ansible_bin" ]; then ansible_bin="$(type -P ansible || true)"; fi
+if [ -z "$ansible_bin" ] && [ -x "$HOME/.local/bin/ansible" ]; then ansible_bin="$HOME/.local/bin/ansible"; fi
+if [ -z "$ansible_bin" ] && [ -x /usr/local/bin/ansible ]; then ansible_bin=/usr/local/bin/ansible; fi
+if [ -z "$ansible_bin" ] && [ -x /usr/bin/ansible ]; then ansible_bin=/usr/bin/ansible; fi
+if [ -z "$ansible_bin" ]; then
+  echo "[x] ansible не найден: ни ANSIBLE_BIN, ни ~/.local/bin, ни /usr/local/bin," >&2
+  echo "    ни /usr/bin, ни PATH=$PATH. Доставка не начата." >&2
+  exit 2
+fi
+# Каталог ansible — в PATH: сам ansible зовёт соседние ansible-* утилиты.
+PATH="$(dirname -- "$ansible_bin"):$PATH"
+export PATH
+
 # `--from-staging <каталог>` берёт уже собранный издателем комплект вместо
 # нового прогона: когда восемь витрин собраны одним прогоном, повторять его по
 # разу на витрину — это 20 минут и лишний износ диска.
@@ -112,7 +142,7 @@ for site in $sites; do
   # lords-10: комплект 111 МиБ» и «[x] доставка не удалась». Шаг, на котором
   # стоит вся цепочка, был единственным, чей вывод уничтожался.
   copy_log="$work/$site-copy.log"
-  if ! ansible -i "$inventory" "$host_ref" -m copy \
+  if ! "$ansible_bin" -i "$inventory" "$host_ref" -m copy \
       -a "src=$box/ dest=/home/k2deploy/stage/incoming/$site/ mode=0644 directory_mode=0755" \
       > "$copy_log" 2>&1; then
     echo "[x] доставка не удалась; причина из ansible:"
@@ -124,7 +154,7 @@ for site in $sites; do
     continue
   fi
 
-  out="$(ansible -i "$inventory" "$host_ref" -m raw \
+  out="$("$ansible_bin" -i "$inventory" "$host_ref" -m raw \
          -a "cd /home/k2deploy/stage/incoming/$site; sha256sum -c SHA256SUMS --quiet; echo rc=\$?" 2>&1)"
   printf '%s\n' "$out" | grep -E "rc=|FAILED" | sed 's/^/   /'
   if ! printf '%s\n' "$out" | grep -q "rc=0"; then
