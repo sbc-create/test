@@ -1,0 +1,17 @@
+слуг                                       тип       серий на стр  код пробы
+smotritelnitsa-sunohary                    TVSeries            12        200
+tenti-lishniy-galakticheskaya-politsiya-na TVSeries             6        200
+poschadi-menya-velikiy-gospodin-3          TVSeries             5        200
+bezgranichnyy-kesuke-hebu                  TVSeries            12        200
+pes-i-nozhnitsy                            TVSeries            11        200
+puteshestvie-na-zapad-sudba                TVSeries            20        200
+yami-shibai-yaponskie-rasskazy-o-privideni TVSeries            13        200
+kosmicheskiy-linkor-yamato-2199            TVSeries            26        200
+unesi-menya-na-lunu-2-sezon                TVSeries            12        200
+ocharuy-menya-blistatelnaya-nora           Movie                0          —
+yarost-bahamuta-nevinnaya-dusha            TVSeries            24        200
+derevo-pod-solntsem                        TVSeries            25        200
+
+в выборке 12 адресов вне карты серий: сериалов 11, у них страниц серий на страницах всего 166
+коды проб у сериалов: {'200': 11}
+произведений вне карты серий всего: 8372 из 8399
