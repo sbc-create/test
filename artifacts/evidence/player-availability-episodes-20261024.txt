@@ -1,0 +1,25 @@
+витрин к замеру: 11, карточек на витрину: 5, предел ожидания: 20 с
+
+витрина                   источник  нет ист.  не разр.  не отдалась  примечание
+контроль lordserials22.info/title/mentalist: источник
+
+an1meg0.site                     5         0         0            0  
+an1mego.site                     2         0         0            0  
+animedia.icu                     5         0         0            0  
+animedia.space                   1         0         0            0  
+animeg0.site                     5         0         0            0  
+lordfilm47.space                 0         0         0            5  /title/igra-smerti-4/season-1/episode-2/ — страница не отдал
+                                                                     /title/csi-mesto-prestupleniya-nyu-york/season-1/episode-23/
+                                                                     /title/igra-smerti-4/season-1/episode-5/ — страница не отдал
+                                                                     /title/raskolotaya-bitvoy-sineva-nebes-2/season-2/episode-4/
+                                                                     /title/igra-smerti-4/season-1/episode-3/ — страница не отдал
+lordserial33.biz                 1         0         0            0  
+lordserials22.info               5         0         0            0  
+zonafilm.cc                      5         0         0            0  
+zonafilm.space                   5         0         0            0  
+zonafilm12.site                  5         0         0            0  
+
+измерено витрин 11 из 11; источник есть хотя бы на одной карточке у 10
+страниц проверено 44: без источника 0, не разрешилось 0
+ВЫВОД: у каждой измеренной витрины источник есть хотя бы на одной карточке выборки
+код: 0
