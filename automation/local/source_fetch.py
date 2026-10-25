@@ -1,12 +1,16 @@
 """Чтение редакционных источников фактов — только разрешённым путём (D199).
 
     python3 automation/local/source_fetch.py shikimori <shikimori_id>
+    python3 automation/local/source_fetch.py card <shikimori_id>
     python3 automation/local/source_fetch.py credits <shikimori_id>
     python3 automation/local/source_fetch.py official <shikimori_id>
     python3 automation/local/source_fetch.py film <imdb> <название> <оригинальное> <год> <movie|tv>
     python3 automation/local/source_fetch.py wikidata <QID>
     python3 automation/local/source_fetch.py page <url>
 
+* `card` — ТОЛЬКО карточка, один запрос вместо двух: год, вид, названия и
+  описание лежат в ней, а `external_links` при сверке сотен записей удваивает
+  нагрузку на источник впустую (`shikimori_card`).
 * `shikimori` — карточка и официальные ссылки через API Shikimori (shikimori.io,
   своё имя приложения в User-Agent, не чаще 4 запросов в секунду). ID берётся
   из каталога сети (`ratings_by_source.shikimori.external_id`), не из поиска.
@@ -665,7 +669,8 @@ def page(url: str) -> dict:
 
 
 def main(argv: list[str]) -> int:
-    commands = {"shikimori": shikimori, "credits": credits, "official": official}
+    commands = {"shikimori": shikimori, "credits": credits, "official": official,
+                "card": shikimori_card}
     if argv and argv[0] == "film" and len(argv) == 6:
         result = film(*argv[1:])
     elif argv and argv[0] == "wikidata" and len(argv) == 2:
