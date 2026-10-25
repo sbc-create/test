@@ -27,6 +27,19 @@ from concurrent.futures import ThreadPoolExecutor
 АГЕНТ = "factory-k2-posterless-works"
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+
+
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику (класс 47)."""
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСХОДНИКИ = КОРЕНЬ / "var" / "k2-data" / "publish-stage8"
 СТРАНИЦЫ = ["/", "/new/", "/catalog/", "/movies/", "/series/"]
@@ -69,7 +82,7 @@ def главная(аргв=None) -> int:
     а = р.parse_args(аргв)
 
     пары = [(с, д) for с, д in витрины().items()
-            if с in {f"lords-{н}" for н in range(10, 18)}]
+            if с in set(_витрины_узла())]
     with ThreadPoolExecutor(max_workers=4) as пул:
         найдено = list(пул.map(lambda п: (п[0], безкартинки(п[1])), пары))
 

@@ -37,6 +37,19 @@ from concurrent.futures import ThreadPoolExecutor
 АГЕНТ = "factory-k2-poster-inventory"
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+
+
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику (класс 47)."""
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСХОДНИКИ = КОРЕНЬ / "var" / "k2-data" / "publish-stage8"
 
@@ -227,7 +240,7 @@ def главная(аргв=None) -> int:
 
     все = витрины()
     нужные = ([с.strip() for с in а.sites.split(",") if с.strip()]
-              or [f"lords-{н}" for н in range(10, 18)])
+              or _витрины_узла())
     пары = [(с, все[с]) for с in нужные if с in все]
     отсутствуют = [с for с in нужные if с not in все]
     for с in отсутствуют:

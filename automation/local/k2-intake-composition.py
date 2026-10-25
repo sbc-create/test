@@ -25,6 +25,19 @@ import sys
 import tempfile
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+
+
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику (класс 47)."""
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
 САЙТЫ_КОРЕНЬ = КОРЕНЬ / "var" / "new-sites"
 sys.path.insert(0, str(КОРЕНЬ / "tests" / "unit"))
 
@@ -67,7 +80,7 @@ def главная(аргв: list[str]) -> int:
     import lords_runtime_harness as H
     from _pytest.monkeypatch import MonkeyPatch
 
-    цели = аргв or [f"lords-{н}" for н in range(10, 18)]
+    цели = аргв or _витрины_узла()
     плохо = 0
     for сайт in цели:
         ядро = САЙТЫ_КОРЕНЬ / сайт / "src" / "lords-frontend.py"

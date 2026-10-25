@@ -26,7 +26,20 @@ from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
-K2 = [f"lords-{н}" for н in range(10, 18)]
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику (класс 47)."""
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
+#: Витрины узла. Ячейка без назначенного номера обязана попадать в проверку:
+#: именно её отсутствие в перечне и прятало бы незаполненный вход владельца.
+K2 = _витрины_узла()
 ОБРАЗЦЫ = (re.compile(r'data-publisher(?:-id)?="(\d{3,6})"'),
            re.compile(r'[?&]publisher_id=(\d{3,6})'),
            re.compile(r'"publisher_id"\s*:\s*"?(\d{3,6})'),

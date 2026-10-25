@@ -21,7 +21,20 @@ from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ОСМОТРЫ = КОРЕНЬ / "var" / "k2-data" / "audit"
-ВОСЕМЬ = [f"lords-{n}" for n in range(10, 18)]
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику (класс 47)."""
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
+#: Витрины узла, а не «восемь»: их тринадцать, и новая ячейка обязана попадать
+#: в отчёт сама (класс 47).
+ВИТРИНЫ = _витрины_узла()
 
 
 def прочитать(site: str, имя: str) -> dict:
@@ -52,7 +65,7 @@ def таблицы() -> str:
 
 def main(только_таблицы: bool = False) -> int:
     строки = []
-    for site in ВОСЕМЬ:
+    for site in ВИТРИНЫ:
         о = прочитать(site, "audit.json")
         с = (прочитать(site, "serial.json") or {}).get("сериал") or {}
         п = прочитать(site, "shelf-order.json")
