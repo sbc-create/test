@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-10-25T01:56:01Z",
+ "updated_at": "2026-10-25T01:57:56Z",
  "note": "Единый список недостатков SEO-модуля. Состояния: proposed → implemented → installed → verified. implemented — код и тесты в ветке; installed — работает в штатном запуске; verified — результат подтверждён на реальных данных штатного запуска. Зона: seo — правит SEO-модуль; shared — общий контракт (очередь, мост, доставка), только через Архитектора; owner — решение или действие владельца. Описание: docs/seo-operator/MODULE_DEFECTS.md.",
  "defects": [
   {
@@ -153,11 +153,12 @@
    "zone": "seo",
    "priority": "P1",
    "state": "implemented",
-   "example": "/var/lib/seo-content-operator/reports/daily/2026-10-08: Site yummyani.site; outbox qwen_delivery = BLOCKED_NO_AUTHORING_CONFIG.",
+   "example": "/var/lib/seo-content-operator/reports/daily/2026-10-08: Site yummyani.site; outbox qwen_delivery = BLOCKED_NO_AUTHORING_CONFIG.\nПЕРЕМЕРЕНО 25.10 (02:0xZ): ОХВАТ ОТЧЁТА НЕ ИЗМЕНИЛСЯ, и это измерено по самим артефактам, а не по впечатлению. В `/home/claude/wt-seo-index-audit-20260930/reports/SEO-CONTENT-DAILY-REPORT-01/artifacts/` за 22, 23 и 24 октября лежит РОВНО ОДИН отчёт на день, и у всех трёх `site: yummyani.site`, `PUBLISHED_TODAY_TOTAL: 0`, `TEXTS_GENERATED_TODAY: 0`, `Qwen: BLOCKED_NO_AUTHORING_CONFIG`.\nЧТО ПРОИСХОДИЛО В СЕТИ В ТЕ ЖЕ СУТКИ (журналы хранилищ витрин, `history.jsonl`, исход `publish` за 24.10):\n| витрина | публикаций |\n| --- | --- |\n| zonafilm12.site | 13 |\n| animedia.space | 11 |\n| an1mego.site | 9 |\n| animedia.icu | 6 |\n| an1meg0.site | 6 |\n| zonafilm.space | 6 |\n| animeg0.site | 2 |\n| **ИТОГО** | **53 на 7 витринах** |\n`yummyani.site` — 0, и это ПРАВДА про ту витрину, которую отчёт описывает. То есть отчёт не врёт, он смотрит не туда: владелец читает «опубликовано сегодня: 0», когда в сети вышло 53 материала.\nСОСТОЯНИЕ ЗАПИСИ ПОЭТОМУ `implemented`, А НЕ `verified`: правка охвата есть в ветке, но работающая служба отчёта (`seo-content-operator-report.service`, `WorkingDirectory=/home/claude/wt-seo-index-audit-20260930`) её не несёт — тот же случай, что с воротами рецензии (MOD-173).\nМЕРА ДЛЯ ВЛАДЕЛЬЦА УЖЕ ЕСТЬ, пока отчёт не исправлен: `python3 automation/local/review-before-publish.py --days 1` печатает публикации ПО ВИТРИНАМ из журналов хранилищ — 51 на 7 витринах за последние сутки на момент замера.",
    "wrong_decision": "Владелец не получает отчёта о сети; состояние двадцати доменов не видно.",
    "change": "Отчёт сети — var/seo-regular/reports/daily/<дата>.md и LATEST.md (seo-regular-daily, 05:40 UTC). Внешний канал не нужен (решение владельца 2026-10-08, Telegram отменён): показ в 10:00 МСК во вкладке «SEO — ОТЧЁТ» (automation/local/seo-report-view.sh) и в рабочем окне сессии, пока она активна.",
    "acceptance": "Вкладка «SEO — ОТЧЁТ» показывает отчёт дня в 10:00 МСК; старые отчёты повторно не выводятся.",
-   "evidence": "cat /var/lib/seo-content-operator/outbox/daily/2026-10-08/OUTBOX_34fdb38d6d2b.json"
+   "evidence": "cat /var/lib/seo-content-operator/outbox/daily/2026-10-08/OUTBOX_34fdb38d6d2b.json",
+   "owner_action": "Отчёт 09:00 по-прежнему описывает одну витрину из 25, и за 22–24.10 это `yummyani.site` с нулями, тогда как в сети за 24.10 вышло 53 материала на 7 витринах. Нужно то же решение, что по MOD-173: влить правку в дерево службы отчёта (`/home/claude/wt-seo-index-audit-20260930`). До тех пор числа сети даёт `automation/local/review-before-publish.py --days 1` — публикации по витринам из журналов хранилищ, с порядком рецензии рядом."
   },
   {
    "id": "MOD-14",
