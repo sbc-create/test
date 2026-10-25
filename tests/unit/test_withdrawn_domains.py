@@ -19,7 +19,8 @@ import pytest
 
 from factory.cell import withdrawn
 
-ИСКЛЮЧЁННЫЕ = {"animedia.space", "lordfilm47.space", "lordserials22.site", "lordserials22.space"}
+ИСКЛЮЧЁННЫЕ = {"animedia.space", "lordfilm47.space", "lordserials22.site", "lordserials22.space",
+               "lordserial101.site", "lordfilm077.site"}
 
 
 def _реестр(путь: Path, ячейки: list[dict]) -> Path:
@@ -192,3 +193,13 @@ def test_техочередь_видит_блок_withdrawal(tmp_path, monkeypat
     _паспорт_с_выводом(tmp_path, monkeypatch, scopes=["new_tasks"])
     assert tech_run.вне_продвижения({"site": "old-site.example"}) == "old-site.example"
     assert tech_run.вне_продвижения({"site": "keep.example"}) is None
+
+
+def test_план_топвизора_не_создаёт_проекты_замороженным(реестр):
+    """Моделирование 25.10: без исключения план создал бы проекты lordserial101.site
+    и lordfilm077.site — замороженным доменам, которых владелец запретил возвращать."""
+    from factory.topvisor import cli, plan
+
+    действия = plan.build([], manifest=cli._действующий_манифест()).actions
+    assert not {a.domain for a in действия} & {"lordserial101.site", "lordfilm077.site"}
+    assert "animedia.icu" in {a.domain for a in действия}

@@ -86,9 +86,11 @@ def test_пустой_план_не_прекращает_работу(monkeypatc
         "команда снова объявляет успех, не дойдя до семантики")
     assert not [m for m, _ in клиент.создано if m == "add/projects_2/projects"], (
         "план не был пуст — проверялся не тот случай")
+    from factory.topvisor.manifest import с_ядром
+    # Группы стратегии манифеста и измеренные входы ядра (config/topvisor-cores.json).
     мои = [p for m, p in клиент.создано
            if m == "add/keywords_2/groups" and p["project_id"] == ид]
-    assert len(мои) == len(spec.groups), (
+    assert len(мои) == len(с_ядром(spec).groups), (
         f"группы не создавались: {клиент.создано[:3]}")
     запросы = [p for m, p in клиент.создано if m == "add/keywords_2/keywords"]
     assert запросы, "запросы не добавлялись"
@@ -105,7 +107,8 @@ def test_повторный_запуск_не_создаёт_дублей(monkey
     было = len(клиент.создано)
     assert было, "первый проход ничего не создал — сравнивать не с чем"
 
-    все_запросы = {к for с in MANIFEST for г in с.groups for к in г.keywords}
+    from factory.topvisor.manifest import с_ядром
+    все_запросы = {к for с in MANIFEST for г in с_ядром(с).groups for к in г.keywords}
 
     class Полный(КлиентЗаглушка):
         def keywords(self, ид):  # noqa: ARG002

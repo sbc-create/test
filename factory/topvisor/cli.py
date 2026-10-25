@@ -273,6 +273,10 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
         spec = by_domain(домен) if домен else None
         if spec is None or withdrawn.выведен(домен):
             continue
+        # Измеренные входы из config/topvisor-cores.json — к группам стратегии.
+        from factory.topvisor.manifest import с_ядром  # noqa: PLC0415
+
+        spec = с_ядром(spec)
         ид = проект.get("id")
         try:
             было = {str(g.get("name") or ""): g.get("id") for g in client.keyword_groups(ид)}

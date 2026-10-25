@@ -1,0 +1,67 @@
+{
+ "version": 1,
+ "built_at": "2026-10-25T22:00:00Z",
+ "source": {
+  "metrika": "var/analytics/cabinet-latest.json",
+  "collected_at": "2026-10-25T05:05:56Z",
+  "measure": "daily_search_landing_pages",
+  "dates": [
+   "2026-10-11",
+   "2026-10-24"
+  ]
+ },
+ "measurement": {
+  "region": 213,
+  "searchers": [
+   "yandex",
+   "google"
+  ],
+  "device": "решение владельца",
+  "depth": 100,
+  "schedule": "нет",
+  "status": "awaiting_owner_budget"
+ },
+ "changes": [
+  {
+   "version": 1,
+   "at": "2026-10-25T22:00:00Z",
+   "what": "первая сборка ядра"
+  }
+ ],
+ "sites": [
+  {
+   "domain": "example-site.org",
+   "strategy": "входы через страницы тайтлов",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 10,
+    "google": 2,
+    "other": 0
+   },
+   "skipped": [],
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Пример тайтла",
+       "target_url": "http://example-site.org/x/"
+      }
+     ]
+    },
+    {
+     "name": "Стратегия",
+     "keywords": [
+      {
+       "query": "аниме онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог"
+       }
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

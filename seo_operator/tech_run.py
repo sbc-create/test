@@ -143,7 +143,7 @@ class ВнеПродвижения(ValueError):
 #: до замены доменов. Тот же перечень, что factory.cell.withdrawn.ИСКЛЮЧЕНЫ
 #: (равенство держит тест); литерал — по той же причине, что ВНЕ_ПРОДВИЖЕНИЯ.
 ИСКЛЮЧЕНЫ_ВЛАДЕЛЬЦЕМ = ("animedia.space", "lordfilm47.space", "lordserials22.site",
-                       "lordserials22.space")
+                       "lordserials22.space", "lordserial101.site", "lordfilm077.site")
 
 
 def выведенные_владельцем(путь: Path | None = None) -> tuple[str, ...]:

@@ -44,6 +44,9 @@ MAPPING = {
     # без проверки не проходят — таймер иначе возьмёт то, что нельзя подтвердить.
     "seo-tech-queue.json": "seo-tech-queue.schema.json",
     "editorial-protected-fields.json": "editorial-protected-fields.schema.json",
+    # Ядро запросов Топвизора: запрос без основания и целевого адреса (или
+    # явного null у запроса стратегии) не отслеживается — сопоставлять нечего.
+    "topvisor-cores.json": "topvisor-cores.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

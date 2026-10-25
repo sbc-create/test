@@ -16,7 +16,9 @@ Manifest декларативен: он описывает, чем сайты о
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+import json
+from dataclasses import dataclass, replace
+from pathlib import Path
 from factory import contact as _КОНТАКТ
 
 #: Адрес для связи, общий для всех сайтов. Владельцем подтверждён.
@@ -302,6 +304,23 @@ MANIFEST: tuple[ProjectSpec, ...] = (
             KeywordGroup("Сезон", ("аниме текущего сезона", "аниме сезона онлайн")),
         ),
     ),
+    # animedia.icu — сайт с поисковым трафиком (3 759 визитов из Яндекса за
+    # 18–24.10, Метрика), у которого в аккаунте не было проекта вовсе
+    # (инвентарь 25.10). Общих запросов здесь нет: ядро — только измеренные
+    # входы из config/topvisor-cores.json (с_ядром), чтобы не отслеживать
+    # придуманный спрос.
+    ProjectSpec(
+        domain="animedia.icu",
+        name="animedia.icu — аниме: тайтлы и серии",
+        profile="каталог аниме Animedia",
+        focus="входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов",
+        metrika_counter=113288667,
+        # Группы раздела — только по измеренным входам (Метрика, 11–24.10):
+        # /catalog/ — 378 визитов из Яндекса (из них /catalog/?year=2026 — 274
+        # за 18–24.10), /schedule/ — 7. Тайтлы и серии — из ядра (с_ядром).
+        groups=(KeywordGroup("Каталог", ("аниме 2026 года", "каталог аниме")),
+                KeywordGroup("Расписание", ("расписание выхода серий аниме", "график выхода аниме"))),
+    ),
     ProjectSpec(
         domain="zonafilm.cc",
         name="zonafilm.cc — кино, сериалы и дорамы",
@@ -365,6 +384,33 @@ MANIFEST: tuple[ProjectSpec, ...] = (
         ),
     ),
 )
+
+
+ЯДРО = Path(__file__).resolve().parents[2] / "config" / "topvisor-cores.json"
+#: Группы ядра, которые добавляются к манифесту: измеренные входы. Группы
+#: стратегии в ядре — копия манифеста, их второй раз не добавляем.
+ПРЕФИКС_ВХОДОВ = "Входы из поиска"
+
+
+def группы_ядра(domain: str, путь: Path | None = None) -> tuple[KeywordGroup, ...]:
+    """Группы «Входы из поиска» сайта из реестра ядра. Нет файла — пусто."""
+    try:
+        данные = json.loads((путь or ЯДРО).read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return ()
+    for сайт in данные.get("sites") or []:
+        if сайт.get("domain") == domain:
+            return tuple(
+                KeywordGroup(г["name"], tuple(к["query"] for к in г["keywords"]))
+                for г in сайт.get("groups") or [] if str(г.get("name", "")).startswith(ПРЕФИКС_ВХОДОВ))
+    return ()
+
+
+def с_ядром(spec: ProjectSpec, путь: Path | None = None) -> ProjectSpec:
+    """Проект манифеста вместе с измеренными входами из ядра."""
+    есть = {г.name for г in spec.groups}
+    return replace(spec, groups=spec.groups + tuple(
+        г for г in группы_ядра(spec.domain, путь) if г.name not in есть))
 
 
 def by_domain(domain: str) -> ProjectSpec | None:

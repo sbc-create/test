@@ -1,0 +1,2715 @@
+{
+ "built_at": "2026-10-25T22:05:24Z",
+ "source": {
+  "metrika": "var/analytics/cabinet-latest.json",
+  "collected_at": "2026-10-25T05:05:56Z",
+  "measure": "daily_search_landing_pages",
+  "dates": [
+   "2026-10-11",
+   "2026-10-24"
+  ]
+ },
+ "note": "визиты Метрики выбирают, что отслеживать; это не клики и не позиции. Запросы групп стратегии — из манифеста, целевой URL не назначен.",
+ "measurement": {
+  "region": 213,
+  "searchers": [
+   "yandex",
+   "google"
+  ],
+  "device": "решение владельца вместе с бюджетом (U8)",
+  "depth": 100,
+  "schedule": "нет: съём платный, лимит автоматических трат 0 ₽; после решения владельца — не чаще одного съёма в сутки, повторов за день нет",
+  "status": "awaiting_owner_budget",
+  "note": "параметры не меняются без новой версии: иначе замеры несопоставимы"
+ },
+ "sites": [
+  {
+   "domain": "animedia.icu",
+   "strategy": "входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 4456,
+    "google": 103,
+    "other": 17
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Безжалостная леди Ния Листон",
+       "target_url": "https://animedia.icu/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 925
+       }
+      },
+      {
+       "query": "Я встречаюсь с тёмным призывателем",
+       "target_url": "https://animedia.icu/title/ya-vstrechayus-s-temnym-prizyvatelem/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 612
+       }
+      },
+      {
+       "query": "Некромант: Я катастрофа",
+       "target_url": "https://animedia.icu/title/nekromant-ya-katastrofa/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 444
+       }
+      },
+      {
+       "query": "Переродившаяся великая святая скрывает, что она святая",
+       "target_url": "https://animedia.icu/title/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 358
+       }
+      },
+      {
+       "query": "Безжалостная леди Ния Листон 1 сезон 3 серия",
+       "target_url": "https://animedia.icu/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 217
+       }
+      },
+      {
+       "query": "Пожиратель звёзд",
+       "target_url": "https://animedia.icu/title/pozhiratel-zvezd/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 136
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3 сезон 5 серия",
+       "target_url": "https://animedia.icu/title/poschadi-menya-velikiy-gospodin-3/season-3/episode-5/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 118
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://animedia.icu/title/poschadi-menya-velikiy-gospodin-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 95
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Чёрный клевер 2 сезон 3 серия",
+       "target_url": "https://animedia.icu/title/chernyy-klever/season-2/episode-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 20
+       }
+      },
+      {
+       "query": "Чёрный клевер 2 сезон 2 серия",
+       "target_url": "https://animedia.icu/title/chernyy-klever-2/season-2/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 20
+       }
+      },
+      {
+       "query": "Сказание о пастухе богов 1 сезон 104 серия",
+       "target_url": "https://animedia.icu/title/skazanie-o-pastuhe-bogov/season-1/episode-104/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 7
+       }
+      },
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье 1 сезон 2 серия",
+       "target_url": "https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 6
+       }
+      },
+      {
+       "query": "Некромант: Я катастрофа",
+       "target_url": "https://animedia.icu/title/nekromant-ya-katastrofa/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Великий правитель 2 сезон 34 серия",
+       "target_url": "https://animedia.icu/title/velikiy-pravitel-2023-2/season-2/episode-34/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Противостояние святого 1 сезон 162 серия",
+       "target_url": "https://animedia.icu/title/protivostoyanie-svyatogo/season-1/episode-162/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Вечная воля 4 сезон 14 серия",
+       "target_url": "https://animedia.icu/title/vechnaya-volya-4/season-4/episode-14/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      }
+     ]
+    },
+    {
+     "name": "Каталог",
+     "keywords": [
+      {
+       "query": "аниме 2026 года",
+       "target_url": null,
+       "basis": {
+        "strategy": "входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов"
+       }
+      },
+      {
+       "query": "каталог аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Расписание",
+     "keywords": [
+      {
+       "query": "расписание выхода серий аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов"
+       }
+      },
+      {
+       "query": "график выхода аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "входы через страницы тайтлов и серий, по измеренным поисковым входам, без общих запросов"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/season-1/episode-17/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/season-1/episode-12/",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "an1mego.site",
+   "strategy": "каталог и топ как точки входа: общий спрос на просмотр аниме",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 0,
+    "google": 18,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Безжалостная леди Ния Листон",
+       "target_url": "https://an1mego.site/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 6
+       }
+      },
+      {
+       "query": "Военная хроника Ромелии",
+       "target_url": "https://an1mego.site/title/voennaya-hronika-romelii/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Не слишком ли ты сладкая, Бог соли Сато?",
+       "target_url": "https://an1mego.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Абсолютная вершина бога войны",
+       "target_url": "https://an1mego.site/title/absolyutnaya-vershina-boga-voyny/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Сильнейшая ведьма в мире стартовала",
+       "target_url": "https://an1mego.site/title/silneyshaya-vedma-v-mire-startovala/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Детектив уже мёртв 2",
+       "target_url": "https://an1mego.site/title/detektiv-uzhe-mertv-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Прохождение параллельного мира вместе с богиней, у которой нет последователей",
+       "target_url": "https://an1mego.site/title/prohozhdenie-parallelnogo-mira-vmeste-s-boginey-u-kotoroy-net-posledovateley-sla/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Драгонболл Зет [ТВ] 2 сезон 29 серия",
+       "target_url": "https://an1mego.site/title/dragonboll-zet-tv/season-2/episode-29/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Каталог",
+     "keywords": [
+      {
+       "query": "каталог аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и топ как точки входа: общий спрос на просмотр аниме"
+       }
+      },
+      {
+       "query": "смотреть аниме онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и топ как точки входа: общий спрос на просмотр аниме"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Топ",
+     "keywords": [
+      {
+       "query": "топ аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и топ как точки входа: общий спрос на просмотр аниме"
+       }
+      },
+      {
+       "query": "лучшее аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и топ как точки входа: общий спрос на просмотр аниме"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "animeg0.site",
+   "strategy": "подборки как точка входа: «что посмотреть» вместо названия",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 3,
+    "google": 68,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+       "target_url": "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+       "target_url": "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 7
+       }
+      },
+      {
+       "query": "Токийские мстители: Битва трёх небожителей",
+       "target_url": "https://animeg0.site/title/tokiyskie-mstiteli-bitva-treh-nebozhiteley/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Даже у студсовета есть косяки!",
+       "target_url": "https://animeg0.site/title/dazhe-u-studsoveta-est-kosyaki/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://animeg0.site/title/poschadi-menya-velikiy-gospodin-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Сильнейшая ведьма в мире стартовала",
+       "target_url": "https://animeg0.site/title/silneyshaya-vedma-v-mire-startovala/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Хорошенькое лекарство",
+       "target_url": "https://animeg0.site/title/horoshenkoe-lekarstvo-zvezdnyy-vsplesk-vremya-povisshee-na-voloske/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Восставший против неба 2 сезон 8 серия",
+       "target_url": "https://animeg0.site/title/vosstavshiy-protiv-neba-2/season-2/episode-8/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Сильнейшая ведьма в мире стартовала 1 сезон 2 серия",
+       "target_url": "https://animeg0.site/title/silneyshaya-vedma-v-mire-startovala/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      }
+     ]
+    },
+    {
+     "name": "Подборки",
+     "keywords": [
+      {
+       "query": "подборки аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "подборки как точка входа: «что посмотреть» вместо названия"
+       }
+      },
+      {
+       "query": "аниме списки",
+       "target_url": null,
+       "basis": {
+        "strategy": "подборки как точка входа: «что посмотреть» вместо названия"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Выбор",
+     "keywords": [
+      {
+       "query": "что посмотреть из аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "подборки как точка входа: «что посмотреть» вместо названия"
+       }
+      },
+      {
+       "query": "аниме на вечер",
+       "target_url": null,
+       "basis": {
+        "strategy": "подборки как точка входа: «что посмотреть» вместо названия"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/season-1/episode-9/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "an1meg0.site",
+   "strategy": "новинки как точка входа: то, что вышло недавно",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 0,
+    "google": 51,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Военная хроника Ромелии",
+       "target_url": "https://an1meg0.site/title/voennaya-hronika-romelii/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 10
+       }
+      },
+      {
+       "query": "Чёрный клевер 2",
+       "target_url": "https://an1meg0.site/title/chernyy-klever-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 7
+       }
+      },
+      {
+       "query": "Изгнанный читер-чародей наслаждается беззаботной второй жизнью",
+       "target_url": "https://an1meg0.site/title/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu-nakl/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Сильнейшая ведьма в мире стартовала 1 сезон 3 серия",
+       "target_url": "https://an1meg0.site/title/silneyshaya-vedma-v-mire-startovala/season-1/episode-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Не слишком ли ты сладкая, Бог соли Сато? 1 сезон 2 серия",
+       "target_url": "https://an1meg0.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Несмотря на то, что я очень робкая благородная девушка, я приняла пари от своего хитрого жениха 1 сезон 2 серия",
+       "target_url": "https://an1meg0.site/title/nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka-ya-prinyala-pari-ot-/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Не слишком ли ты сладкая, Бог соли Сато?",
+       "target_url": "https://an1meg0.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Безжалостная леди Ния Листон 1 сезон 3 серия",
+       "target_url": "https://an1meg0.site/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/season-1/episode-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      }
+     ]
+    },
+    {
+     "name": "Новинки",
+     "keywords": [
+      {
+       "query": "новинки аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "новинки как точка входа: то, что вышло недавно"
+       }
+      },
+      {
+       "query": "новое аниме смотреть",
+       "target_url": null,
+       "basis": {
+        "strategy": "новинки как точка входа: то, что вышло недавно"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Сезон",
+     "keywords": [
+      {
+       "query": "аниме текущего сезона",
+       "target_url": null,
+       "basis": {
+        "strategy": "новинки как точка входа: то, что вышло недавно"
+       }
+      },
+      {
+       "query": "аниме сезона онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "новинки как точка входа: то, что вышло недавно"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "lordserial33.biz",
+   "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 16,
+    "google": 0,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Правила совместной жизни",
+       "target_url": "https://lordserial33.biz/title/pravila-sovmestnoy-zhizni/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Опасные связи",
+       "target_url": "https://lordserial33.biz/title/opasnye-svyazi-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Сейф",
+       "target_url": "https://lordserial33.biz/title/seyf/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Отчим",
+       "target_url": "https://lordserial33.biz/title/otchim/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Волшебный домик Габби в кино",
+       "target_url": "https://lordserial33.biz/title/volshebnyy-domik-gabbi-v-kino/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Монстр в семье: История Стэйси Кэнэнен",
+       "target_url": "https://lordserial33.biz/title/monstr-v-seme-istoriya-steysi-kenenen/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Сейф 1 сезон 2 серия",
+       "target_url": "https://lordserial33.biz/title/seyf/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Сезоны",
+     "keywords": [
+      {
+       "query": "новый сезон сериала",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      },
+      {
+       "query": "смотреть сезон онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      },
+      {
+       "query": "все сезоны подряд",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Эпизоды",
+     "keywords": [
+      {
+       "query": "новая серия смотреть",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      },
+      {
+       "query": "последняя серия онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      },
+      {
+       "query": "дата выхода серии",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Статус",
+     "keywords": [
+      {
+       "query": "сериалы которые сейчас выходят",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      },
+      {
+       "query": "продолжение сериала",
+       "target_url": null,
+       "basis": {
+        "strategy": "глубина сериала: сезоны и номера серий, а не витрина целиком"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "1lordserials1.online",
+   "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 1,
+    "google": 0,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Подборки",
+     "keywords": [
+      {
+       "query": "подборка сериалов",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      },
+      {
+       "query": "лучшие сериалы список",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      },
+      {
+       "query": "топ сериалов",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Рекомендации",
+     "keywords": [
+      {
+       "query": "что посмотреть вечером",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      },
+      {
+       "query": "похожие сериалы",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      },
+      {
+       "query": "советы что посмотреть",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      }
+     ]
+    },
+    {
+     "name": "По настроению",
+     "keywords": [
+      {
+       "query": "сериалы на выходные",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      },
+      {
+       "query": "короткие сериалы",
+       "target_url": null,
+       "basis": {
+        "strategy": "навигация выбором: подборки и «что посмотреть», а не конкретное название"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/chrezvychayno-angliyskiy-skandal/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "lordserials22.info",
+   "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 297,
+    "google": 1408,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Мастер Омюр",
+       "target_url": "https://lordserials22.info/title/master-omyur/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 66
+       }
+      },
+      {
+       "query": "Сыла. Возвращение домой (сериал 2006 – 2008)",
+       "target_url": "https://lordserials22.info/title/syla-vozvraschenie-domoy-serial-2006-2008/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 35
+       }
+      },
+      {
+       "query": "Академия ведьм",
+       "target_url": "https://lordserials22.info/title/akademiya-vedm/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 22
+       }
+      },
+      {
+       "query": "Байки и убийство",
+       "target_url": "https://lordserials22.info/title/bayki-i-ubiystvo/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 18
+       }
+      },
+      {
+       "query": "100 атлетов: Италия",
+       "target_url": "https://lordserials22.info/title/100-atletov-italiya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 16
+       }
+      },
+      {
+       "query": "100 атлетов: Италия 1 сезон 2 серия",
+       "target_url": "https://lordserials22.info/title/100-atletov-italiya/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 15
+       }
+      },
+      {
+       "query": "К востоку от Эдема",
+       "target_url": "https://lordserials22.info/title/k-vostoku-ot-edema/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 10
+       }
+      },
+      {
+       "query": "Внутри круга",
+       "target_url": "https://lordserials22.info/title/vnutri-kruga-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 8
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "100 атлетов: Италия",
+       "target_url": "https://lordserials22.info/title/100-atletov-italiya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 92
+       }
+      },
+      {
+       "query": "К востоку от Эдема",
+       "target_url": "https://lordserials22.info/title/k-vostoku-ot-edema/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 52
+       }
+      },
+      {
+       "query": "Тайный дневник Верити",
+       "target_url": "https://lordserials22.info/title/taynyy-dnevnik-veriti/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 34
+       }
+      },
+      {
+       "query": "Гипотеза любви",
+       "target_url": "https://lordserials22.info/title/gipoteza-lyubvi/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 26
+       }
+      },
+      {
+       "query": "Половина матери",
+       "target_url": "https://lordserials22.info/title/polovina-materi/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 23
+       }
+      },
+      {
+       "query": "Кровь и пот",
+       "target_url": "https://lordserials22.info/title/krov-i-pot/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 21
+       }
+      },
+      {
+       "query": "Байки и убийство",
+       "target_url": "https://lordserials22.info/title/bayki-i-ubiystvo/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 20
+       }
+      },
+      {
+       "query": "100 атлетов: Мексика",
+       "target_url": "https://lordserials22.info/title/100-atletov-meksika/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 18
+       }
+      }
+     ]
+    },
+    {
+     "name": "Мультсериалы",
+     "keywords": [
+      {
+       "query": "смотреть мультсериалы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      },
+      {
+       "query": "новые серии мультсериала",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Мультфильмы",
+     "keywords": [
+      {
+       "query": "мультфильмы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      },
+      {
+       "query": "мультфильмы в хорошем качестве",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Для детей",
+     "keywords": [
+      {
+       "query": "мультфильмы для детей смотреть",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      },
+      {
+       "query": "детские мультсериалы",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через анимацию: мультсериалы и мультфильмы, а не общий каталог"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/akademiya-minerva/",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "yummyani7.site",
+   "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 6674,
+    "google": 26,
+    "other": 18
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Переродившаяся великая святая скрывает, что она святая",
+       "target_url": "https://yummyani7.site/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1640
+       }
+      },
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+       "target_url": "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 474
+       }
+      },
+      {
+       "query": "Даже у студсовета есть косяки!",
+       "target_url": "https://yummyani7.site/anime/dazhe-u-studsoveta-est-kosyaki",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 378
+       }
+      },
+      {
+       "query": "Переродившаяся великая святая скрывает, что она святая 1 сезон 3 серия",
+       "target_url": "https://yummyani7.site/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 305
+       }
+      },
+      {
+       "query": "Одолженная мной магия будет принудительно изъята посредством возобновляемого кредита",
+       "target_url": "https://yummyani7.site/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 226
+       }
+      },
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье 1 сезон 2 серия",
+       "target_url": "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1/episode/2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 136
+       }
+      },
+      {
+       "query": "Я влюбился в тебя, когда ты бежала в лунной ночи",
+       "target_url": "https://yummyani7.site/anime/ya-vlyubilsya-v-tebya-kogda-ty-bezhala-v-lunnoy-nochi",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 125
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://yummyani7.site/anime/poschadi-menya-velikiy-gospodin-3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 109
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Пожиратель звёзд",
+       "target_url": "https://yummyani7.site/anime/pozhiratel-zvezd",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 6
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://yummyani7.site/anime/poschadi-menya-velikiy-gospodin-3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Семь из семи",
+       "target_url": "https://yummyani7.site/anime/sem-iz-semi",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Детектив уже мёртв 2",
+       "target_url": "https://yummyani7.site/anime/detektiv-uzhe-mertv-2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Детектив Конан 1 сезон 199 серия",
+       "target_url": "https://yummyani7.site/anime/detektiv-konan/season/1/episode/199",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Детектив Конан 1 сезон 305 серия",
+       "target_url": "https://yummyani7.site/anime/detektiv-konan/season/1/episode/305",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Переродившаяся великая святая скрывает, что она святая 1 сезон 4 серия",
+       "target_url": "https://yummyani7.site/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/season/1/episode/4",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Каталог",
+     "keywords": [
+      {
+       "query": "каталог аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "аниме по годам",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "аниме по алфавиту",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Новые серии",
+     "keywords": [
+      {
+       "query": "новая серия аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "расписание аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "каталог и новые серии; профиль уточняется после назначения шаблона"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "yummyani7.info",
+   "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 1212,
+    "google": 26,
+    "other": 3
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://yummyani7.info/anime/poschadi-menya-velikiy-gospodin-3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 272
+       }
+      },
+      {
+       "query": "Даже у студсовета есть косяки!",
+       "target_url": "https://yummyani7.info/anime/dazhe-u-studsoveta-est-kosyaki",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 225
+       }
+      },
+      {
+       "query": "Свадьба светлячков 1 сезон 1 серия",
+       "target_url": "https://yummyani7.info/anime/svadba-svetlyachkov/season/1/episode/1",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 76
+       }
+      },
+      {
+       "query": "Даже у студсовета есть косяки! 1 сезон 3 серия",
+       "target_url": "https://yummyani7.info/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 58
+       }
+      },
+      {
+       "query": "Врата Штейна: Найти недостающее звено — Деление на ноль",
+       "target_url": "https://yummyani7.info/anime/vrata-shteyna-nayti-nedostayuschee-zveno-delenie-na-nol",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 47
+       }
+      },
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+       "target_url": "https://yummyani7.info/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 38
+       }
+      },
+      {
+       "query": "Я перевоплотился в гоблина, вопросы есть?",
+       "target_url": "https://yummyani7.info/anime/ya-perevoplotilsya-v-goblina-voprosy-est",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 35
+       }
+      },
+      {
+       "query": "Переродившаяся великая святая скрывает, что она святая",
+       "target_url": "https://yummyani7.info/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 33
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Изгнанный читер-чародей наслаждается беззаботной второй жизнью",
+       "target_url": "https://yummyani7.info/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Одолженная мной магия будет принудительно изъята посредством возобновляемого кредита",
+       "target_url": "https://yummyani7.info/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Невероятное приключение ДжоДжо: Гонка «Стальной шар» 7 сезон 4 серия",
+       "target_url": "https://yummyani7.info/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Изгнанный читер-чародей наслаждается беззаботной второй жизнью 1 сезон 2 серия",
+       "target_url": "https://yummyani7.info/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu/season/1/episode/2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Невероятное приключение ДжоДжо: Гонка «Стальной шар» 7 сезон 5 серия",
+       "target_url": "https://yummyani7.info/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Фу ты, Чебурашка какой!",
+       "target_url": "https://yummyani7.info/anime/fu-ty-cheburashka-kakoy",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Токийские мстители: Битва трёх небожителей",
+       "target_url": "https://yummyani7.info/anime/tokiyskie-mstiteli-bitva-treh-nebozhiteley",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Сасаки и Пи 2",
+       "target_url": "https://yummyani7.info/anime/sasaki-i-pi-2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Жанры",
+     "keywords": [
+      {
+       "query": "аниме сёнэн",
+       "target_url": null,
+       "basis": {
+        "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "аниме романтика",
+       "target_url": null,
+       "basis": {
+        "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "аниме фэнтези",
+       "target_url": null,
+       "basis": {
+        "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Подборки",
+     "keywords": [
+      {
+       "query": "лучшее аниме список",
+       "target_url": null,
+       "basis": {
+        "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона"
+       }
+      },
+      {
+       "query": "топ аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "жанры и подборки как точки входа; профиль уточняется после назначения шаблона"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "yummyani.biz",
+   "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 0,
+    "google": 67,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Чёрный клевер 2",
+       "target_url": "https://yummyani.biz/anime/chernyy-klever-2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 10
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 3",
+       "target_url": "https://yummyani.biz/anime/poschadi-menya-velikiy-gospodin-3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 6
+       }
+      },
+      {
+       "query": "Военная хроника Ромелии",
+       "target_url": "https://yummyani.biz/anime/voennaya-hronika-romelii",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Сильнейшая ведьма в мире стартовала",
+       "target_url": "https://yummyani.biz/anime/silneyshaya-vedma-v-mire-startovala",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Прохождение параллельного мира вместе с богиней, у которой нет последователей",
+       "target_url": "https://yummyani.biz/anime/prohozhdenie-parallelnogo-mira-vmeste-s-boginey-u-kotoroy-net-posledovateley",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Военная хроника Ромелии 1 сезон 3 серия",
+       "target_url": "https://yummyani.biz/anime/voennaya-hronika-romelii/season/1/episode/3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Одолженная мной магия будет принудительно изъята посредством возобновляемого кредита",
+       "target_url": "https://yummyani.biz/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Кресло-танк",
+       "target_url": "https://yummyani.biz/anime/kreslo-tank",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 2
+       }
+      }
+     ]
+    },
+    {
+     "name": "Жанры",
+     "keywords": [
+      {
+       "query": "аниме сёнэн",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме романтика",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме фэнтези",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме детектив",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Каталог",
+     "keywords": [
+      {
+       "query": "каталог аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме по алфавиту",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме по годам",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Релизы",
+     "keywords": [
+      {
+       "query": "новое аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "премьеры аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      },
+      {
+       "query": "аниме этого года",
+       "target_url": null,
+       "basis": {
+        "strategy": "вход через жанр и каталог: сёнэн, романтика, фэнтези как точки входа"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah/season/1/episode/15",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "yummyani.org",
+   "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 3,
+    "google": 204,
+    "other": 1
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Расхититель гробниц",
+       "target_url": "https://yummyani.org/anime/rashititel-grobnits",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 14
+       }
+      },
+      {
+       "query": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+       "target_url": "https://yummyani.org/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 12
+       }
+      },
+      {
+       "query": "Одолженная мной магия будет принудительно изъята посредством возобновляемого кредита",
+       "target_url": "https://yummyani.org/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 11
+       }
+      },
+      {
+       "query": "Некромант: Я катастрофа",
+       "target_url": "https://yummyani.org/anime/nekromant-ya-katastrofa",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 7
+       }
+      },
+      {
+       "query": "За гранью времени 2 сезон 17 серия",
+       "target_url": "https://yummyani.org/anime/za-granyu-vremeni-2/season/2/episode/17",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Во всеоружии: Сила артефактов",
+       "target_url": "https://yummyani.org/anime/vo-vseoruzhii-sila-artefaktov",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Моя судьба злодея",
+       "target_url": "https://yummyani.org/anime/moya-sudba-zlodeya",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Ледяная стена 2",
+       "target_url": "https://yummyani.org/anime/ledyanaya-stena-2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      }
+     ]
+    },
+    {
+     "name": "Онгоинги",
+     "keywords": [
+      {
+       "query": "онгоинг аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      },
+      {
+       "query": "аниме которые сейчас выходят",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      },
+      {
+       "query": "текущие онгоинги",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Оценки",
+     "keywords": [
+      {
+       "query": "рейтинг аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      },
+      {
+       "query": "лучшее аниме по оценкам",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      },
+      {
+       "query": "топ аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Обновления",
+     "keywords": [
+      {
+       "query": "обновления аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      },
+      {
+       "query": "что вышло сегодня аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "то, что идёт прямо сейчас, и как это оценено — динамика, а не каталог"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "yummyani.site",
+   "strategy": "календарь выхода: сезон и номер серии аниме",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 26024,
+    "google": 8,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Невероятное приключение ДжоДжо: Гонка «Стальной шар» 7 сезон 4 серия",
+       "target_url": "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3971
+       }
+      },
+      {
+       "query": "Невероятное приключение ДжоДжо: Гонка «Стальной шар» 7 сезон 3 серия",
+       "target_url": "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3680
+       }
+      },
+      {
+       "query": "Не слишком ли ты сладкая, Бог соли Сато?",
+       "target_url": "https://yummyani.site/anime/ne-slishkom-li-ty-sladkaya-bog-soli-sato",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 194
+       }
+      },
+      {
+       "query": "Киберпанк: Бегущие по краю 2",
+       "target_url": "https://yummyani.site/anime/kiberpank-beguschie-po-krayu-2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 188
+       }
+      },
+      {
+       "query": "Киберпанк: Бегущие по краю 2 сезон 2 серия",
+       "target_url": "https://yummyani.site/anime/kiberpank-beguschie-po-krayu-2/season/2/episode/2",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 119
+       }
+      },
+      {
+       "query": "Изгнанный читер-чародей наслаждается беззаботной второй жизнью",
+       "target_url": "https://yummyani.site/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 112
+       }
+      },
+      {
+       "query": "Даже у студсовета есть косяки!",
+       "target_url": "https://yummyani.site/anime/dazhe-u-studsoveta-est-kosyaki",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 81
+       }
+      },
+      {
+       "query": "Свадьба светлячков",
+       "target_url": "https://yummyani.site/anime/svadba-svetlyachkov",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 74
+       }
+      }
+     ]
+    },
+    {
+     "name": "Новые серии",
+     "keywords": [
+      {
+       "query": "новая серия аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      },
+      {
+       "query": "аниме дата выхода серии",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      },
+      {
+       "query": "расписание аниме",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Сезоны",
+     "keywords": [
+      {
+       "query": "аниме новый сезон",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      },
+      {
+       "query": "смотреть сезон аниме онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Просмотр",
+     "keywords": [
+      {
+       "query": "аниме онлайн в хорошем качестве",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      },
+      {
+       "query": "аниме с озвучкой",
+       "target_url": null,
+       "basis": {
+        "strategy": "календарь выхода: сезон и номер серии аниме"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": []
+  },
+  {
+   "domain": "zonafilm.space",
+   "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 0,
+    "google": 658,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Чёрный клевер 2 сезон 4 серия",
+       "target_url": "https://zonafilm.space/title/chernyy-klever/season-2/episode-4/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 552
+       }
+      },
+      {
+       "query": "Чёрный клевер 2 сезон 5 серия",
+       "target_url": "https://zonafilm.space/title/chernyy-klever/season-2/episode-5/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 15
+       }
+      },
+      {
+       "query": "Доктор Икс",
+       "target_url": "https://zonafilm.space/title/doktor-iks/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 11
+       }
+      },
+      {
+       "query": "Документальный экспресс: ИИ выходит из-под контроля",
+       "target_url": "https://zonafilm.space/title/dokumentalnyy-ekspress-ii-vyhodit-iz-pod-kontrolya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 5
+       }
+      },
+      {
+       "query": "Zindagi Mere Ghar Aana 1 сезон 8 серия",
+       "target_url": "https://zonafilm.space/title/zindagi-mere-ghar-aana/season-1/episode-8/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Чёрный клевер 2",
+       "target_url": "https://zonafilm.space/title/chernyy-klever-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Пощади меня, великий господин! 2",
+       "target_url": "https://zonafilm.space/title/poschadi-menya-velikiy-gospodin-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Дочь небес и моря",
+       "target_url": "https://zonafilm.space/title/doch-nebes-i-morya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      }
+     ]
+    },
+    {
+     "name": "Кино и сериалы",
+     "keywords": [
+      {
+       "query": "кино и сериалы на одном сайте",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "новинки фильмов",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "сериалы онлайн бесплатно",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Дорамы и анимация",
+     "keywords": [
+      {
+       "query": "смотреть дорамы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "дорамы с озвучкой",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "мультфильмы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Подборки",
+     "keywords": [
+      {
+       "query": "лучшие фильмы подборка",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "что посмотреть сегодня",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      },
+      {
+       "query": "новые серии сериалов",
+       "target_url": null,
+       "basis": {
+        "strategy": "смешанный каталог: дорамы и анимация как отдельные входы, плюс подборки"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/chuzhaya-zhizn/",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "zonafilm.cc",
+   "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 2494,
+    "google": 1181,
+    "other": 208
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Человек-паук: Новый день",
+       "target_url": "https://zonafilm.cc/title/chelovek-pauk-novyy-den/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Винтер 1 сезон 2 серия",
+       "target_url": "https://zonafilm.cc/title/vinter/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3
+       }
+      },
+      {
+       "query": "З/Л/О: Сборник",
+       "target_url": "https://zonafilm.cc/title/z-l-o-sbornik/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Иной вид",
+       "target_url": "https://zonafilm.cc/title/inoy-vid/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Неприметный",
+       "target_url": "https://zonafilm.cc/title/neprimetnyy/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Город крови 1 сезон 2 серия",
+       "target_url": "https://zonafilm.cc/title/gorod-krovi/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Академия ведьм",
+       "target_url": "https://zonafilm.cc/title/akademiya-vedm/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Эхо Завтрашнего Дня",
+       "target_url": "https://zonafilm.cc/title/eho-zavtrashnego-dnya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Тайный дневник Верити",
+       "target_url": "https://zonafilm.cc/title/taynyy-dnevnik-veriti/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 73
+       }
+      },
+      {
+       "query": "Дневники вампира",
+       "target_url": "https://zonafilm.cc/title/dnevniki-vampira/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 21
+       }
+      },
+      {
+       "query": "Идём со мной",
+       "target_url": "https://zonafilm.cc/title/idem-so-mnoy/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 16
+       }
+      },
+      {
+       "query": "Семейство Кардашьян",
+       "target_url": "https://zonafilm.cc/title/semeystvo-kardashyan/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 14
+       }
+      },
+      {
+       "query": "Уличный боец: Битва Режиссеров",
+       "target_url": "https://zonafilm.cc/title/ulichnyy-boec-bitva-rezhisserov/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 14
+       }
+      },
+      {
+       "query": "Связь с серийным убийцей",
+       "target_url": "https://zonafilm.cc/title/svyaz-s-seriynym-ubiycey/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 11
+       }
+      },
+      {
+       "query": "Тюрьма «Черный остров»",
+       "target_url": "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 10
+       }
+      },
+      {
+       "query": "Менталист 1 сезон 3 серия",
+       "target_url": "https://zonafilm.cc/title/mentalist/season-1/episode-3/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 10
+       }
+      }
+     ]
+    },
+    {
+     "name": "Фильмы и сериалы",
+     "keywords": [
+      {
+       "query": "фильмы онлайн бесплатно",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      },
+      {
+       "query": "сериалы смотреть онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Анимация и дорамы",
+     "keywords": [
+      {
+       "query": "анимация онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      },
+      {
+       "query": "дорамы онлайн смотреть",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Новое",
+     "keywords": [
+      {
+       "query": "новинки онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      },
+      {
+       "query": "что нового в кино",
+       "target_url": null,
+       "basis": {
+        "strategy": "разделы каталога как входы: фильмы, сериалы, анимация, дорамы, подборки"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/voennyy-povar-stanovitsya-legendoy/",
+     "engine": "google",
+     "reason": "нет записи каталога"
+    }
+   ]
+  },
+  {
+   "domain": "zonafilm12.site",
+   "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки",
+   "in_manifest": true,
+   "search_visits": {
+    "yandex": 363,
+    "google": 156,
+    "other": 0
+   },
+   "groups": [
+    {
+     "name": "Входы из поиска — Яндекс",
+     "keywords": [
+      {
+       "query": "Место, где восходит солнце",
+       "target_url": "https://zonafilm12.site/title/mesto-gde-voshodit-solnce/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Моя любовь - Чёрное море",
+       "target_url": "https://zonafilm12.site/title/moya-lyubov-chernoe-more/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Половина матери 1 сезон 2 серия",
+       "target_url": "https://zonafilm12.site/title/polovina-materi/season-1/episode-2/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 2
+       }
+      },
+      {
+       "query": "Сказка о пепле 1 сезон 1 серия",
+       "target_url": "https://zonafilm12.site/title/skazka-o-peple/season-1/episode-1/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Ты тот, кого я люблю",
+       "target_url": "https://zonafilm12.site/title/ty-tot-kogo-ya-lyublyu/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Половина матери",
+       "target_url": "https://zonafilm12.site/title/polovina-materi/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Летняя песня",
+       "target_url": "https://zonafilm12.site/title/letnyaya-pesnya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      },
+      {
+       "query": "Твоя любовь — огонь",
+       "target_url": "https://zonafilm12.site/title/tvoya-lyubov-ogon/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "yandex",
+        "visits": 1
+       }
+      }
+     ]
+    },
+    {
+     "name": "Входы из поиска — Google",
+     "keywords": [
+      {
+       "query": "Моя скрытая правда",
+       "target_url": "https://zonafilm12.site/title/moya-skrytaya-pravda/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 8
+       }
+      },
+      {
+       "query": "Как жить на Земле",
+       "target_url": "https://zonafilm12.site/title/kak-zhit-na-zemle/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 8
+       }
+      },
+      {
+       "query": "Свадьба с золотой шпилькой",
+       "target_url": "https://zonafilm12.site/title/svadba-s-zolotoy-shpilkoy/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 6
+       }
+      },
+      {
+       "query": "Смертельное прикосновение",
+       "target_url": "https://zonafilm12.site/title/smertelnoe-prikosnovenie/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Не с тем связались",
+       "target_url": "https://zonafilm12.site/title/ne-s-tem-svyazalis/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 4
+       }
+      },
+      {
+       "query": "Подзаряди меня",
+       "target_url": "https://zonafilm12.site/title/podzaryadi-menya/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Прямо как дома",
+       "target_url": "https://zonafilm12.site/title/pryamo-kak-doma/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      },
+      {
+       "query": "Люби меня, словно ненавидишь",
+       "target_url": "https://zonafilm12.site/title/lyubi-menya-slovno-nenavidish/",
+       "basis": {
+        "metric": "ym:s:visits",
+        "engine": "google",
+        "visits": 3
+       }
+      }
+     ]
+    },
+    {
+     "name": "Кино и сериалы",
+     "keywords": [
+      {
+       "query": "смотреть фильмы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      },
+      {
+       "query": "сериалы онлайн бесплатно",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      },
+      {
+       "query": "новинки кино",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Дорамы и анимация",
+     "keywords": [
+      {
+       "query": "смотреть дорамы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      },
+      {
+       "query": "мультфильмы онлайн",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      }
+     ]
+    },
+    {
+     "name": "Подборки",
+     "keywords": [
+      {
+       "query": "что посмотреть сегодня",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      },
+      {
+       "query": "лучшие фильмы подборка",
+       "target_url": null,
+       "basis": {
+        "strategy": "те же входы, что у zonafilm.space, на отдельном домене: разделы каталога и подборки"
+       }
+      }
+     ]
+    }
+   ],
+   "skipped": [
+    {
+     "path": "/title/chuzhaya-zhizn/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/title/chuzhaya-zhizn/season-1/episode-3/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/title/chuzhaya-zhizn/season-1/episode-2/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    },
+    {
+     "path": "/title/chuzhaya-zhizn/season-1/episode-1/",
+     "engine": "yandex",
+     "reason": "нет записи каталога"
+    }
+   ]
+  }
+ ],
+ "version": 2,
+ "changes": [
+  {
+   "version": 1,
+   "at": "2026-10-25T21:56:36Z",
+   "what": "первая сборка ядра"
+  },
+  {
+   "version": 2,
+   "at": "2026-10-25T22:03:07Z",
+   "what": "изменён состав запросов или целевых адресов"
+  }
+ ]
+}
