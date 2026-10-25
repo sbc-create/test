@@ -606,3 +606,30 @@ robots.txt (MOD-181).
 охвата отчёта, B023, B037, кто проверяющий в цикле). Ровно поэтому §7 начинается
 с трёх дешёвых решений, а не со списка по приоритету: приоритет здесь не тот
 порядок, в котором стоит разбирать.
+
+
+## 10. Как проверить каждое число без меня
+
+Все команды только читают. Ни одна не пишет в витрины и не трогает постоянные
+данные.
+
+| что проверяется | команда |
+| --- | --- |
+| цикл идёт, публикации по витринам, порядок рецензии | `python3 automation/local/review-before-publish.py --days 1` |
+| охват рецензий за месяц | `python3 automation/local/review-before-publish.py --days 30` |
+| причины отказов редактора со знаменателем | `python3 automation/local/editorial-refusal-causes.py --days 7` |
+| куда уходит ёмкость редактора | `python3 automation/local/editor-capacity-aim.py --family animedia --days 7` |
+| охват дублей у сестёр (и проверка посылки) | `python3 automation/local/sister-duplicate-scope.py --family animedia` |
+| что готово и не размещено | `python3 automation/local/editorial-inventory.py --placement` |
+| согласованность «следующей серии» | `python3 automation/local/next-episode-consistency.py --limit 30` |
+| доступность витрин (имя пробы класса factory) | `python3 automation/local/public-availability-sweep.py --requests 6` |
+| привязка счётчика к домену | сверка `config/analytics.json` с `ym(<номер>)` живой страницы, см. §3 |
+| сохранённый текст против живой страницы | `python3 automation/local/editorial-live-compare.py --limit 0` |
+| гигиена очереди (дубли заданий, формы адреса) | `python3 automation/local/queue-hygiene.py` |
+| имена материала против записанных источников | `python3 automation/local/names-against-sources.py --slug <слаг>` |
+| весь прогон и запись доказательства | `./scripts/record-evidence.sh` |
+
+Доказательства этой ночи лежат в `artifacts/evidence/` (файлы с датой
+`20261025`), записи реестра — в `config/seo-module-defects.json`, классы
+повторяющихся ошибок — в `docs/RECURRING_FAILURES.md`, журнал хода — в
+`docs/NIGHT_RUN_20261023.md`.
