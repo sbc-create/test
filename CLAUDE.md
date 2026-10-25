@@ -27,8 +27,7 @@ SSH-хостов/DNS-зон/доменов по своей инициативе.
 
 - Никакого произвольного `ssh`/`scp`/`rsync` в цели. Только `python3 -m factory deploy`.
 - Никаких `rm -rf` по широким путям, `mkfs`, `dd` на устройства, `DROP DATABASE`,
-  `git push --force`, `git reset --hard`, `git clean -fdx`, неконтролируемого `sudo`,
-  изменения firewall и DNS вне manifest.
+  `git push --force`, `git reset --hard`, `git clean -fdx`, неконтролируемого `sudo`, firewall и DNS вне manifest.
 - Секреты только через `secret_ref` (Яндекс — файл вне репозитория, systemd LoadCredential).
   Значение не попадает в git, лог, отчёт, скриншот, fixture и prompt; `.env` не читается.
 - Лицензионный архив DLE не коммитится. Сторонние/nulled-сборки не скачиваются.
@@ -90,8 +89,13 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 Нельзя ставить `DONE`, если: провален критический тест; не подтверждена лицензия DLE;
 не подтверждены права/происхождение контента; в production попали test/demo данные;
 нет бэкапа или не проверен rollback; canonical/TLS/домен указывают не на тот сайт;
-обнаружена cross-site утечка; production не авторизован в manifest; отчёт утверждает
-проверку, которая фактически не запускалась.
+обнаружена cross-site утечка; production не авторизован в manifest; отчёт утверждает проверку, которая не запускалась.
+
+**Общий дефект** (`scope: common`) закрывается только полным набором: причина — в каноническом
+слое, есть проверка от повторения, названа версия основы, ДОКАЗАНО наследование новым
+экземпляром из штатного генератора; правка одного домена несёт причину исключения. Перед
+похожей задачей ищи готовое в реестре и коде; у общего компонента один ответственный.
+Правило, измерения и проверка схемой — `docs/COMMON_FIX_INHERITANCE.md`.
 
 Отчёт содержит команду, фактический exit code и путь к артефакту. Формулировки
 «проверено» без запуска — ошибка отчёта, а не стилистика.
@@ -110,16 +114,15 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 
 `.claude/rules/` (подгружаются по путям): `dle-php.md`, `frontend.md`, `content.md`,
 `security.md`, `tests.md`, `infrastructure.md`, `deployment.md`, `seo.md`; аналитика — `docs/YANDEX_ANALYTICS.md`.
-Экономный режим — `docs/TOKEN_ECONOMY.md`: задание, источники, изменения и ресурсы проверяет обычный код ДО модели; опрос моделью запрещён, повтор отказа ограничен.
 Повторяемые процессы — skills: `/research-freeze`, `/site-intake`, `/site-build`, `/site-qa`, `/site-deploy`, `/site-rollback`, `/site-update`, `/incident-report`.
+Экономный режим — `docs/TOKEN_ECONOMY.md`: задание, источники, изменения и ресурсы проверяет обычный код ДО модели; опрос моделью запрещён, повтор отказа ограничен.
 
 ---
 
 # Слой SEO-оператора
 
 Ниже — правила и описание SEO-оператора, перенесённого из ветки
-`claude/seo-operator`. Они дополняют правила фабрики выше и не отменяют их:
-при расхождении действует фабрика.
+`claude/seo-operator`. Они дополняют правила фабрики и не отменяют их: при расхождении действует фабрика.
 
 # Repository guide for Claude sessions
 
@@ -162,7 +165,7 @@ record. Data files match schemas by filename prefix: `seo-audit.*.json` against
 
 ## SEO operator
 
-The operator runs unattended. Start here:
+The operator runs unattended:
 
 ```bash
 ./bin/seo-operator probe               # what data sources are reachable
@@ -171,14 +174,12 @@ The operator runs unattended. Start here:
 
 Key documents: [`blockers.md`](docs/seo-operator/blockers.md) (what is missing),
 [`runbook.md`](docs/seo-operator/runbook.md) (how to operate it),
-[`protected-guardrails.md`](docs/seo-operator/protected-guardrails.md) (what it
-may never do).
+[`protected-guardrails.md`](docs/seo-operator/protected-guardrails.md) (what it may never do).
 
 Two properties matter more than the rest:
 
 - **No fabricated data.** A source that cannot be reached reports the metric as
-  unmeasured with a reason, never as `0`. A factual claim without an approved
-  source cannot be constructed at all.
+  unmeasured with a reason, never as `0`. A claim without an approved source cannot be constructed.
 - **Nothing irreversible.** Every change carries a before/after snapshot and a
   rollback payload before it is applied, and no change reaches more than one
   site or 10% of its pages without an earned verdict.
@@ -194,7 +195,6 @@ Two properties matter more than the rest:
 5. **Never delete or skip a failing test to get green.**
 6. **Never widen beyond canary** without a completed observation and a `keep`
    verdict recorded in `config/experiments.json`.
-7. **Never invent a fact.** Dates, cast, ratings, availability and popularity
-   come from an approved source or do not appear.
+7. **Never invent a fact.** Dates, cast, ratings, availability and popularity come from an approved source or do not appear.
 
 Full detail in [`.claude/rules/seo-session.md`](.claude/rules/seo-session.md).
