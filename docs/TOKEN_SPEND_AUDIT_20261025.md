@@ -198,9 +198,15 @@ python3 -m pytest tests/unit/test_source_availability_precheck.py -q  → 13 pas
 * `yummyani.site/anime/agenty-chetyreh-sezonov-vesenniy-tanets` — описание
   **написано заново** (714 знаков) по источнику `shikimori.io/animes/61443`
   (идентификатор взят из данных страницы, `externalIds.myAnimeList`, а не из
-  поиска — D199). Ворота качества: замечаний нет, состояние черновика
-  `verified`. **Не опубликовано**: нужна независимая рецензия, автор свою
-  работу не принимает;
+  поиска — D199). Ворота качества замечаний не дали. Рецензия — **отдельным
+  проверяющим** (`seo/claude-session/run-20261025T1840Z`, 18:40:41Z): вердикт
+  `accepted`, отпечаток тела совпал, все четыре проверки подтверждены, сверка
+  с источником показала, что добавленных фактов в тексте нет.
+  **Опубликовано** 18:42Z, `state: confirmed`, http 200; на живой странице
+  текст в видимом блоке, в `meta name="description"`, `og:description` и
+  `ld+json`, canonical верный, `robots: index, follow`. Штатный счётчик
+  `occurrences_in_meta` показал 0 — он ищет тело ЦЕЛИКОМ, а витрина meta
+  обрезает; это не дефект;
 * `yummyani.site/anime/absolyutnaya-vershina-boga-voyny` — у источника
   (`shikimori.io/animes/61888`) описания НЕТ вовсе (`description: null`), и
   писать нечего: это `SOURCES_MISSING`, запись уходит в «нужен источник».

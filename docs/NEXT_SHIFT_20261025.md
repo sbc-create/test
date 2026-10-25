@@ -52,14 +52,14 @@
 
 ## Редакционный остаток на 25.10 18:4xZ
 
-1. **Черновик ждёт независимой рецензии.**
+1. **Сделано и проверено публично:**
    `yummyani.site/anime/agenty-chetyreh-sezonov-vesenniy-tanets` — описание
-   написано мной (714 знаков, источник `shikimori.io/animes/61443`), ворота
-   качества замечаний не дали, состояние `verified`. Публиковать его я не
-   вправе: автор свою работу не принимает (MOD-173). Рецензия — отдельным
-   проверяющим: `review_material`, затем `publish`. Черновик лежит в
-   `/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/drafts.json` и
-   виден шлюзу как `DRAFT_READY`.
+   написано (714 знаков, источник `shikimori.io/animes/61443`), отрецензировано
+   ОТДЕЛЬНЫМ проверяющим (`seo/claude-session/run-20261025T1840Z`, вердикт
+   `accepted`, отпечаток совпал, четыре проверки подтверждены) и опубликовано
+   18:42Z: `state: confirmed`, http 200, текст в блоке, meta, og и ld+json,
+   canonical верный, `robots: index, follow`. Независимая проверка публичного
+   URL запрошена у того же проверяющего.
 2. **Нужен источник:** `yummyani.site/anime/absolyutnaya-vershina-boga-voyny` —
    у `shikimori.io/animes/61888` описания нет вовсе. Писать нечего; попутно
    источник расходится с каталогом (`ona` и 19 из 24 серий против `tv` и 2025
