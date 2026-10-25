@@ -57,17 +57,33 @@ export PATH
 # `--from-staging <каталог>` берёт уже собранный издателем комплект вместо
 # нового прогона: когда восемь витрин собраны одним прогоном, повторять его по
 # разу на витрину — это 20 минут и лишний износ диска.
+#
+# `--node <ref>` берёт состав витрин ИЗ РЕЕСТРА (`deploy_target.ref`) вместо
+# перечисления в команде. Так сделано 2026-10-25: суточные юниты доставки
+# перечисляли восемь витрин строкой, и пять новых ячеек того же узла не
+# получали бы обновлений каталога вовсе — отсутствие строки в юните выглядит
+# точно так же, как «доставка настроена». Выведенные из работы ячейки
+# исключаются по признаку паспорта, а не по отсутствию имени.
 from_staging=""
 sites=""
+node=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --from-staging) from_staging="${2:?нужен каталог}"; shift ;;
+    --node) node="${2:?нужен ref узла}"; shift ;;
     *) sites="$sites $1" ;;
   esac
   shift
 done
 sites="$(printf '%s' "$sites" | sed 's/^ *//')"
-[ -n "$sites" ] || { echo "нужен хотя бы один site_id" >&2; exit 2; }
+if [ -n "$node" ]; then
+  from_registry="$(python3 automation/local/node-cell-list.py "$node")" \
+    || { echo "состав узла $node не прочитан из реестра" >&2; exit 2; }
+  [ -n "$from_registry" ] || { echo "в реестре нет витрин узла $node" >&2; exit 2; }
+  sites="$(printf '%s %s' "$sites" "$from_registry" | sed 's/^ *//')"
+  echo "==> состав узла $node из реестра: $from_registry"
+fi
+[ -n "$sites" ] || { echo "нужен хотя бы один site_id или --node <ref>" >&2; exit 2; }
 cd "$repo_root" || exit 1
 
 if [ -z "$from_staging" ] && [ ! -f "$publisher" ]; then

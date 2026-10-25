@@ -9,7 +9,7 @@
 # Запускается от учётной записи claude: root здесь не нужен, потому что
 # доставка пишет только в домашний каталог k2deploy на другой машине, а
 # установку с правами витрины делает корневой приёмщик НА УЗЛЕ.
-Description=K2: доставка свежего каталога восьми витрин
+Description=K2: доставка свежего каталога витрин узла
 After=network-online.target
 
 [Service]
@@ -17,7 +17,10 @@ Type=oneshot
 User=claude
 Group=claude
 WorkingDirectory=/home/claude/wt-nova-publish-memory-02
-ExecStart=/bin/bash automation/local/k2-deliver-catalog.sh lords-10 lords-11 lords-12 lords-13 lords-14 lords-15 lords-16 lords-17
+# Состав витрин — из реестра по `deploy_target.ref`, а не строкой здесь:
+# перечисление стоило бы того, что новая ячейка узла молча осталась бы
+# без обновлений каталога (класс 47 в docs/RECURRING_FAILURES.md).
+ExecStart=/bin/bash automation/local/k2-deliver-catalog.sh --node k2-zomro-01
 # Издатель держит в памяти снимок поставщика целиком: измерено 1,197 ГиБ пика
 # на восьми витринах. Предел ставится выше измеренного, но ниже того, при
 # котором на разделе не останется места работающим витринам.
