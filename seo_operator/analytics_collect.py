@@ -757,6 +757,23 @@ def _измерено(c) -> int:
     return sum(1 for м in c.measurements if м.measured)
 
 
+def _выведенные_домены() -> frozenset[str]:
+    """Домены, выведенные из работы (область `analytics_collection`).
+
+    Читается паспорт ячеек через `factory.cell.registry`, а не свой перечень:
+    второй список разошёлся бы с реестром, и сбор продолжался бы по домену,
+    который владелец вывел. Слой фабрики может быть недоступен (своя
+    установка) — тогда пустое множество, и сбор идёт как прежде: молча
+    остановить сбор по всей сети из-за недоступного импорта было бы хуже.
+    """
+    try:
+        from factory.cell import registry as _cells
+
+        return _cells.выведенные_домены(область="analytics_collection")
+    except Exception:  # noqa: BLE001 — слой недоступен: фильтра нет
+        return frozenset()
+
+
 def collect(
     *,
     date1: str = "7daysAgo",
@@ -782,6 +799,18 @@ def collect(
     """
     provider = _WebmasterBreaker(provider or YandexAnalyticsProvider(dry_run=True))
     entries = registry.load()["properties"]
+    # ВЫВЕДЕННЫЕ ИЗ РАБОТЫ домены не собираются. Решение владельца
+    # 2026-10-25 называет сбор аналитики прямо: расходы на домен
+    # прекращаются, включая сбор. Фильтр стоит ЗДЕСЬ, на пути сбора, а не в
+    # реестре аналитики: запись о счётчике нужна для истории и для проверки
+    # покрытия, и удалять её значило бы терять прошлое. Пропуск называется в
+    # артефакте (`withdrawn`), иначе отсутствие домена в сборе неотличимо от
+    # сбоя.
+    выведены = _выведенные_домены()
+    пропущены = sorted(e.get("domain") for e in entries
+                       if str(e.get("domain") or "").lower() in выведены)
+    entries = [e for e in entries
+               if str(e.get("domain") or "").lower() not in выведены]
     collections = [collect_domain(provider, entry, date1=date1, date2=date2) for entry in entries]
 
     повтор = {"enabled": bool(retry_rate_limited), "cooldown_s": cooldown_s,
@@ -818,6 +847,16 @@ def collect(
         "period": {"date1": date1, "date2": date2},
         "read_only": True,
         "domains": [c.as_dict() for c in collections],
+        # Пропуск по выводу из работы называется ВСЕГДА, даже когда список
+        # пуст: «домена нет в сборе» и «домен выведен владельцем» — разные
+        # состояния, и отчёт без этой строки выдаёт первое за второе.
+        "withdrawn": {
+            "domains": пропущены,
+            "note": ("домены выведены владельцем из активной работы, сбор по "
+                     "ним не велся; записи о счётчиках в реестре сохранены для "
+                     "истории" if пропущены else
+                     "выведенных из работы доменов в реестре аналитики нет"),
+        },
     }
     total = sum(c.as_dict()["total_count"] for c in collections)
     measured = sum(c.as_dict()["measured_count"] for c in collections)

@@ -710,9 +710,21 @@ def test_registry_records_the_live_counters():
         assert entry.counter_id == counter, domain
         # `created` допустим только для счётчиков, заведённых в этом же цикле;
         # повторный прогон обязан их переиспользовать, а не завести второй.
-        assert entry.raw["counter_state"] in ("reused", "created"), (
+        # `disabled` — законное состояние ровно для выведенных из работы
+        # доменов: 2026-10-25 владелец вывел четыре домена, и штатное
+        # `factory analytics disable` отключает СБОР, сохраняя счётчик и его
+        # историю (удаление необратимо и делается в кабинете владельца).
+        # Проверка не ослаблена: `disabled` у домена, который НЕ выведен,
+        # по-прежнему валит её — это означало бы потерянный сбор.
+        from factory.cell import registry as _cells
+
+        выведен = domain.lower() in _cells.выведенные_домены(
+            область="analytics_collection")
+        допустимо = ("reused", "created", "disabled") if выведен else ("reused", "created")
+        assert entry.raw["counter_state"] in допустимо, (
             f"{domain}: состояние {entry.raw['counter_state']!r} означает, что "
             "счётчик не подтверждён Метрикой"
+            + ("" if выведен else "; домен из работы не выведен, значит сбор потерян")
         )
 
 

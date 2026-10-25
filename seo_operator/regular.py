@@ -406,16 +406,41 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
     плана трафика. Убрать домен здесь значило бы заодно снять с него
     поддержку. Поэтому признак едет вместе со строкой (`promotion_excluded`),
     и читают его те обработчики, которых он касается.
+
+    ВЫВЕДЕННЫЕ ИЗ РАБОТЫ домены, наоборот, убираются совсем — и по прямо
+    противоположной причине. Вывод (`withdrawal.withdrawn` в паспорте ячейки,
+    решение владельца) означает, что расходы на домен прекращаются целиком, в
+    том числе обходы и проверки доступности; требование владельца 2026-10-25
+    названо дословно: «автоматическое обнаружение не должно возвращать эти
+    домены в работу». Оставить их здесь значило бы продолжать тратить обходы,
+    а отчёт при этом утверждал бы обратное. Перечень выведенных печатается в
+    ответе отдельным полем `withdrawn`, чтобы пропажа домена из обхода не
+    выглядела сбоем реестра.
     """
     cells = _read_json(sources["cells"], {}).get("cells") or []
     analytics = {
         p.get("domain"): p
         for p in (_read_json(sources["analytics_registry"], {}).get("properties") or [])
     }
+    # Выведенные домены и их псевдонимы — одним множеством, из паспортов того
+    # же файла: отдельного перечня не заводится, иначе он разойдётся с
+    # реестром. Область названа: обход.
+    выведены: set[str] = set()
+    for cell in cells:
+        вывод = cell.get("withdrawal") or {}
+        if not вывод.get("withdrawn"):
+            continue
+        if "availability_crawl" not in (вывод.get("scopes") or ()):
+            continue
+        for d in (cell.get("domain"), *(cell.get("aliases") or ())):
+            if d:
+                выведены.add(str(d).lower())
     out: dict[str, dict] = {}
     for cell in cells:
         domain = str(cell.get("domain") or "")
         if not domain or domain.endswith((".localhost", ".test")) or domain == "localhost":
+            continue
+        if domain.lower() in выведены:
             continue
         promotion = cell.get("promotion") or {}
         out[domain] = {
@@ -426,6 +451,8 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
             "promotion_scopes": list(promotion.get("scopes") or ()),
         }
     for domain in analytics:
+        if domain and domain.lower() in выведены:
+            continue
         if domain and domain not in out:
             # Домен из реестра аналитики, которого нет в реестре ячеек: про
             # продвижение здесь неизвестно ничего. `False` сказал бы «не
@@ -441,6 +468,21 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
         state = _read_json(sources["indexing_states"] / f"{domain}.json", None)
         item["indexing_desired"] = (state or {}).get("desired_state")
     return [out[d] for d in sorted(out)]
+
+
+def withdrawn_domains(sources: dict[str, Path] = SOURCES) -> list[str]:
+    """Домены, выведенные из работы: кого обход НЕ берёт и почему это не сбой.
+
+    Отдельная функция, а не поле строки: выведенного домена в списке обхода
+    нет вовсе, и спросить про него у строки невозможно. Отчёт обязан назвать
+    их отдельно — иначе «домена не стало» неотличимо от пропажи записи.
+    """
+    итог: set[str] = set()
+    for cell in _read_json(sources["cells"], {}).get("cells") or []:
+        вывод = cell.get("withdrawal") or {}
+        if вывод.get("withdrawn"):
+            итог.add(str(cell.get("domain") or "").lower())
+    return sorted(d for d in итог if d)
 
 
 # -------------------------------------------------------------- проверки

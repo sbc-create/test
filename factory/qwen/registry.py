@@ -531,6 +531,13 @@ def путь_доставки(s: "Сайт") -> str:
     "prepare", "publish", "restore", "rollback", "posts-prepare", "posts-publish",
 })
 
+#: Операции, которые НИЧЕГО не меняют. Нужны потому, что вывод домена из
+#: работы прекращает расходы, но не делает сайт невидимым: посмотреть факты,
+#: состояние и очередь по-прежнему можно, и это не «работа по домену».
+ОПЕРАЦИИ_ЧТЕНИЯ = frozenset({
+    "facts", "status", "state", "queue-find", "queue-status", "owns",
+})
+
 
 @dataclass
 class Сайт:
@@ -564,6 +571,12 @@ class Сайт:
     #: в реестре ячеек). Умолчание — False: у действующих сайтов блока нет, и
     #: появление поля их перечень операций не меняет.
     promotion_excluded: bool = False
+    #: Выведен ли сайт из активной работы (решение владельца). Строже
+    #: исключения: снимаются ВСЕ операции, меняющие сайт, а не только
+    #: добавляющие материал.
+    withdrawn: bool = False
+    withdrawal_reason: str = ""
+    replacement_domain: str = ""
     promotion_reason: str = ""
     public_http: str = ""
     handover_state: str = "unknown"
@@ -725,6 +738,17 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
             s.notes.append(
                 "исключён из общего продвижения: "
                 f"{s.promotion_reason or 'причина в паспорте не записана'}")
+        вывод = я.get("withdrawal") or {}
+        s.withdrawn = bool(вывод.get("withdrawn"))
+        s.withdrawal_reason = str(вывод.get("reason") or "")
+        s.replacement_domain = str(вывод.get("replacement_domain") or "")
+        if s.withdrawn:
+            s.notes.append(
+                "ВЫВЕДЕН ИЗ АКТИВНОЙ РАБОТЫ "
+                f"{str(вывод.get('at') or '')[:10]}: "
+                f"{s.withdrawal_reason or 'причина в паспорте не записана'}"
+                + (f"; замена — {s.replacement_domain}" if s.replacement_domain
+                   else "; замена ещё не названа"))
         s.adapter = АДАПТЕРЫ_ПО_РАНТАЙМУ.get(s.template_entrypoint, "")
         if not s.adapter:
             # Рабочей копии у витрины может не быть вовсе: часть сайтов
@@ -843,6 +867,11 @@ def доступные_операции(s: Сайт, *, мех: str = "") -> lis
     # значит рано или поздно её исполнить.
     if s.promotion_excluded:
         операции = [о for о in операции if о not in ОПЕРАЦИИ_ПРОДВИЖЕНИЯ]
+    # Вывод из работы снимает ВСЕ операции, меняющие сайт. Остаются только
+    # читающие: вывод не значит «удалён», данные и готовность к переносу
+    # сохраняются, и смотреть на сайт по-прежнему можно.
+    if s.withdrawn:
+        операции = [о for о in операции if о in ОПЕРАЦИИ_ЧТЕНИЯ]
     return sorted(set(операции))
 
 

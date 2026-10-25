@@ -75,6 +75,44 @@ def cmd_promotion(args) -> int:
     return 0
 
 
+def cmd_withdraw(args) -> int:
+    """Объявить или снять ВЫВОД сайта из активной работы.
+
+    Отличается от `promotion` тем, что прекращает расходы целиком: новые
+    задания, генерацию и публикацию текстов, обходы, повторные проверки, сбор
+    аналитики, проверки позиций, алерты и роль контрольного сайта опытов.
+    Операция только над паспортом: данные, репозиторий и резервные копии она
+    не трогает — их сохранность и есть условие переноса.
+    """
+    if not args.site:
+        print("BLOCKED_INPUT: операции withdraw нужен --site", file=sys.stderr)
+        return 2
+    if args.exclude == args.include:
+        print("BLOCKED_INPUT: нужен ровно один из --exclude (вывести) / "
+              "--include (вернуть в работу)", file=sys.stderr)
+        return 2
+    области = tuple(
+        s.strip() for s in (args.scopes or "").split(",") if s.strip()
+    ) or registry.ОБЛАСТИ_ВЫВОДА
+    сохраняется = tuple(s.strip() for s in (args.keeps or "").split(",") if s.strip())
+    try:
+        ячейка = registry.объявить_вывод(
+            args.site, withdrawn=bool(args.exclude),
+            reason=args.reason or "", authority=args.authority or "",
+            at=getattr(args, "at", "") or "",
+            scopes=области, keeps=сохраняется,
+            replacement_domain=getattr(args, "replacement", "") or "",
+            path=Path(args.registry) if getattr(args, "registry", None) else None)
+    except registry.RegistryError as exc:
+        текст = str(exc)
+        print(текст if текст.startswith("BLOCKED_") else f"BLOCKED_INPUT: {текст}",
+              file=sys.stderr)
+        return 2
+    _print({"site_id": ячейка.site_id, "domain": ячейка.domain,
+            "withdrawal": ячейка.withdrawal})
+    return 0
+
+
 def cmd_templates(args) -> int:
     pool = templates.load()
     free = templates.free_templates()
@@ -594,6 +632,7 @@ ACTIONS = {
     "relocate-data": cmd_relocate_data,
     "registry": cmd_registry,
     "promotion": cmd_promotion,
+    "withdraw": cmd_withdraw,
     "templates": cmd_templates,
     "reserve": cmd_reserve,
     "repo": cmd_repo,
@@ -653,6 +692,9 @@ def register(subparsers) -> None:
                         help="области через запятую; по умолчанию все известные")
     parser.add_argument("--keeps",
                         help="что продолжает работать, через запятую")
+    parser.add_argument("--replacement",
+                        help="домен замены для withdraw; не придумывается")
+    parser.add_argument("--at", help="дата вывода для withdraw; по умолчанию сейчас")
     parser.add_argument("--no-register", dest="no_register", action="store_true",
                         help="не записывать ячейку в реестр: сайт не будет "
                              "получать доставку содержимого")

@@ -399,10 +399,29 @@ def test_gate_gives_candidates_even_when_a_queue_task_is_free(tmp_path):
 
 
 def test_allowed_domains_cover_gate_and_candidate_sites():
+    """Домен может отсутствовать в выдаче ТОЛЬКО по названной в реестре причине.
+
+    Прежняя редакция требовала покрытия всех доменов шлюза и кандидатов без
+    исключений, и это было верно, пока ни один из них не был исключён. С
+    2026-10-25 владелец вывел из активной работы animedia.space и
+    lordfilm47.space, и требование «покрыты все» стало требовать обратного
+    решению владельца.
+
+    Проверка не ослаблена, а уточнена: пропажа домена допустима, если паспорт
+    ячейки называет причину — исключение из продвижения или вывод из работы.
+    Домен, пропавший БЕЗ записи, по-прежнему валит проверку: именно это и
+    защищалось.
+    """
+    from factory.cell import registry as cell_registry
     from seo_operator import regular
 
-    got = editor_run.allowed_domains()
-    assert set(regular.EDITOR_SITES) <= set(got) and set(editor_run.EDITOR_DOMAINS) <= set(got)
+    got = set(editor_run.allowed_domains())
+    ожидались = set(regular.EDITOR_SITES) | set(editor_run.EDITOR_DOMAINS)
+    пропали = ожидались - got
+    названы = cell_registry.исключённые_домены() | cell_registry.выведенные_домены()
+    без_причины = sorted(d for d in пропали if d.lower() not in названы)
+    assert not без_причины, (
+        f"домены пропали из выдачи без записи в реестре: {без_причины}")
 
 
 def test_gate_refreshes_when_a_catalog_domain_ran_out(tmp_path, monkeypatch):

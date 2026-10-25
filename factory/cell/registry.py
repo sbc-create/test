@@ -176,6 +176,23 @@ class Cell:
     #: сайтов не меняется от появления поля. Обратное (отсутствие = исключён)
     #: выключило бы продвижение всей сети одной правкой кода.
     promotion: dict[str, Any] = field(default_factory=dict)
+    #: ВЫВОД ИЗ АКТИВНОЙ РАБОТЫ, объявленный владельцем: `withdrawn` — выведен
+    #: ли сайт, `at` — дата вывода, `scopes` — что именно прекращается,
+    #: `replacement_domain` — чем заменяется (если замена уже названа),
+    #: `reason`/`authority` — почему и чьим решением.
+    #:
+    #: Зачем отдельно от `promotion`. Исключение из продвижения намеренно НЕ
+    #: снимает обходы, проверки доступности и техническое SEO — так и записано
+    #: в `seo_operator/regular.py::discover_domains`: «убрать домен здесь
+    #: значило бы заодно снять с него поддержку». Вывод из работы — другое
+    #: решение: расходы на домен прекращаются ЦЕЛИКОМ, включая обходы, сбор
+    #: аналитики, проверки позиций и алерты. Смешать два решения в одном поле
+    #: значило бы либо выключать поддержку исключённым, либо продолжать тратить
+    #: на выведенных.
+    #:
+    #: Отсутствие блока означает «в работе»: появление поля не меняет
+    #: поведения действующих сайтов.
+    withdrawal: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -236,6 +253,13 @@ class Cell:
             "indexing": dict(self.indexing),
             "analytics": dict(self.analytics),
             "promotion": dict(self.promotion),
+            # `withdrawal` — ровно по той же причине, и она уже подтверждена
+            # делом: 25.10 блок вывода из работы записался операцией и ПРОПАЛ
+            # при сохранении, потому что здесь его не было. Печать паспорта
+            # сообщила «выведен True», а в файле не оказалось ни одного
+            # упоминания — то есть следующий общий прогон вернул бы четыре
+            # домена в работу, и отчёт при этом утверждал бы обратное.
+            "withdrawal": dict(self.withdrawal),
         }
 
 
@@ -260,6 +284,7 @@ def _cell(raw: dict[str, Any]) -> Cell:
         indexing=raw.get("indexing") or {},
         analytics=raw.get("analytics") or {},
         promotion=raw.get("promotion") or {},
+        withdrawal=raw.get("withdrawal") or {},
         status=raw.get("status", "planned"),
     )
 
@@ -310,6 +335,117 @@ def исключённые_домены(path: Path | None = None,
         if исключён_из_продвижения(cell, область):
             итог.update(d.lower() for d in cell.domains)
     return frozenset(итог)
+
+
+#: Что именно прекращается выводом домена из работы. Как и у продвижения,
+#: названия здесь не ярлыки: каждое читает свой обработчик, и проверка
+#: `tests/unit/test_domain_withdrawal.py` падает, если обработчик перестал его
+#: читать. Перечень закрыт: придуманное имя обещало бы остановку, которой никто
+#: не исполняет.
+ОБЛАСТИ_ВЫВОДА = (
+    "new_tasks",             # новые задания редактора и SEO
+    "text_generation",       # генерация и публикация текстов
+    "availability_crawl",    # обходы и проверки доступности
+    "repeat_checks",         # повторные проверки и перепроверки
+    "analytics_collection",  # сбор аналитики
+    "position_checks",       # проверки позиций (Topvisor)
+    "alerts",                # уведомления и алерты
+    "experiment_control",    # роль живого контрольного сайта опытов
+)
+
+
+def выведен_из_работы(cell: Cell, область: str | None = None) -> bool:
+    """Выведен ли сайт из активной работы (целиком или в одной области).
+
+    Отсутствие блока — «в работе»: появление поля не меняет поведения
+    действующих сайтов. Область, не названная в `scopes`, считается НЕ
+    выведенной: вывод, записанный наполовину, не должен читаться как полный.
+    """
+    блок = cell.withdrawal or {}
+    if not блок.get("withdrawn"):
+        return False
+    if область is None:
+        return True
+    return область in (блок.get("scopes") or ())
+
+
+def выведенные_домены(path: Path | None = None,
+                      область: str | None = None) -> frozenset[str]:
+    """Домены (и псевдонимы) всех выведенных ячеек — одним множеством.
+
+    Обработчику нужен именно такой ответ: не «список сайтов в работе», а «кого
+    в него не брать». Общий прогон строит свой список сам, из реестра, и
+    остановка должна быть проверкой на его пути, а не отсутствием имени в
+    чьём-то перечне — иначе автоматическое обнаружение вернёт домен назад.
+    """
+    итог: set[str] = set()
+    for cell in all_cells(path):
+        if выведен_из_работы(cell, область):
+            итог.update(d.lower() for d in cell.domains)
+    return frozenset(итог)
+
+
+def замена_домена(path: Path | None = None) -> dict[str, str]:
+    """Соответствие «выведенный домен → домен замены», где замена названа.
+
+    Нужно для переноса и для постраничных перенаправлений: без этой записи
+    соответствие старых и новых адресов живёт только в переписке.
+    """
+    итог: dict[str, str] = {}
+    for cell in all_cells(path):
+        новый = str((cell.withdrawal or {}).get("replacement_domain") or "").strip()
+        if выведен_из_работы(cell) and новый:
+            for d in cell.domains:
+                итог[d.lower()] = новый.lower()
+    return итог
+
+
+def объявить_вывод(site_id_или_домен: str, *, withdrawn: bool,
+                   reason: str, authority: str, at: str = "",
+                   scopes: tuple[str, ...] = ОБЛАСТИ_ВЫВОДА,
+                   replacement_domain: str = "",
+                   keeps: tuple[str, ...] = (),
+                   path: Path | None = None) -> Cell:
+    """Записать в паспорт ячейки вывод из активной работы.
+
+    Причина, основание и дата обязательны: вывод без них через месяц
+    неотличим от случайной правки, а дата нужна, чтобы прежние измерения
+    остались сопоставимыми — «до вывода» и «после» должны различаться по
+    записи, а не по памяти.
+
+    Домен замены НЕ придумывается: пустая строка означает «замена ещё не
+    названа», и это честное состояние. Подставлять сюда похожее имя нельзя —
+    на этом поле строятся перенаправления.
+    """
+    reason = (reason or "").strip()
+    authority = (authority or "").strip()
+    if not reason or not authority:
+        raise RegistryError(
+            "BLOCKED_INPUT: выводу из работы нужны и reason, и authority")
+    чужие = [s for s in scopes if s not in ОБЛАСТИ_ВЫВОДА]
+    if чужие:
+        raise RegistryError(
+            f"неизвестные области вывода {чужие}; известны: {list(ОБЛАСТИ_ВЫВОДА)}")
+    from dataclasses import replace as _replace
+
+    было = resolve(site_id_или_домен, path)
+    когда = (at or "").strip() or utc_now()
+    блок: dict[str, Any] = {
+        "withdrawn": bool(withdrawn),
+        "at": когда,
+        "scopes": list(scopes),
+        "keeps": list(keeps),
+        "reason": reason,
+        "authority": authority,
+    }
+    if replacement_domain.strip():
+        блок["replacement_domain"] = replacement_domain.strip().lower()
+    прежний = (было.withdrawal or {}).get("history") or []
+    if было.withdrawal:
+        прежний = [*прежний, {к: в for к, в in было.withdrawal.items() if к != "history"}]
+    if прежний:
+        блок["history"] = прежний
+    return register(_replace(было, withdrawal=блок), path=path, replace=True)
 
 
 def без_аналитики_по_решению(запись: dict[str, Any]) -> str:

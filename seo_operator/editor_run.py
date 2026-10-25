@@ -731,11 +731,17 @@ def allowed_domains() -> list[str]:
     все = set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES)
     try:
         исключены = cell_registry.исключённые_домены()
+        # Вывод из работы — отдельное решение владельца и строже исключения:
+        # оно прекращает и новые задания, и генерацию текстов. Читается той же
+        # операцией реестра, перечня своего не заводится.
+        выведены = (cell_registry.выведенные_домены(область="new_tasks")
+                    | cell_registry.выведенные_домены(область="text_generation"))
     except (OSError, ValueError, cell_registry.RegistryError) as ош:
         raise RuntimeError(
             "BLOCKED_INPUT: реестр ячеек не прочитан, исключение из продвижения "
-            f"не проверить: {type(ош).__name__}: {ош}") from None
-    return sorted(д for д in все if д.lower() not in исключены)
+            f"и вывод из работы не проверить: {type(ош).__name__}: {ош}") from None
+    нельзя = исключены | выведены
+    return sorted(д for д in все if д.lower() not in нельзя)
 
 
 def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:

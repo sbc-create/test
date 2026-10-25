@@ -186,7 +186,28 @@
         "open_authorization_id": "e89c03de-05c0-49d0-9882-9b3ba34525a0"
       },
       "analytics": {},
-      "promotion": {}
+      "promotion": {},
+      "withdrawal": {
+        "withdrawn": true,
+        "at": "2026-10-25",
+        "scopes": [
+          "new_tasks",
+          "text_generation",
+          "availability_crawl",
+          "repeat_checks",
+          "analytics_collection",
+          "position_checks",
+          "alerts",
+          "experiment_control"
+        ],
+        "keeps": [
+          "сохранение данных",
+          "резервное копирование",
+          "готовность к переносу"
+        ],
+        "reason": "Решение владельца 2026-10-25: вывод из активной работы до назначения замены домена. Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
+        "authority": "владелец, распоряжение 2026-10-25"
+      }
     },
     {
       "site_id": "animego-02",
@@ -458,6 +479,13 @@
         "data_owner": "pipeline",
         "delivery": "release-queue"
       },
+      "release": {},
+      "indexing": {
+        "open_authorized": true,
+        "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordfilm47.space.json",
+        "open_authorization_id": "9687ce8f-b127-4bcc-bf31-6717aee06b5c",
+        "open_authorization_note": "разрешение владельца: root, 2026-10-04T18:50:01Z. Объявление перенесено из якоря /var/lib/site-cells/owner-consent/lordfilm47.space.json режимом --sync: нового разрешения не выдавалось"
+      },
       "analytics": {
         "topvisor_project_id": 32531504,
         "topvisor_verified_at": "2026-09-27T23:15:42Z",
@@ -467,11 +495,28 @@
         },
         "note": "проект 32531504 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "indexing": {
-        "open_authorized": true,
-        "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordfilm47.space.json",
-        "open_authorization_id": "9687ce8f-b127-4bcc-bf31-6717aee06b5c",
-        "open_authorization_note": "разрешение владельца: root, 2026-10-04T18:50:01Z. Объявление перенесено из якоря /var/lib/site-cells/owner-consent/lordfilm47.space.json режимом --sync: нового разрешения не выдавалось"
+      "promotion": {},
+      "withdrawal": {
+        "withdrawn": true,
+        "at": "2026-10-25",
+        "scopes": [
+          "new_tasks",
+          "text_generation",
+          "availability_crawl",
+          "repeat_checks",
+          "analytics_collection",
+          "position_checks",
+          "alerts",
+          "experiment_control"
+        ],
+        "keeps": [
+          "сохранение данных",
+          "резервное копирование",
+          "готовность к переносу"
+        ],
+        "reason": "Решение владельца 2026-10-25: вывод из активной работы с переносом на lords3rial.site (адрес назван владельцем 2026-10-25). Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
+        "authority": "владелец, распоряжение 2026-10-25",
+        "replacement_domain": "lords3rial.site"
       }
     },
     {
@@ -718,10 +763,6 @@
         "family": "lords",
         "note": "Профиль lords-dorama версии 1.1.0, раздел во владении /dorama/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": "lords-dorama",
         "modules": {},
@@ -729,12 +770,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
         "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
         "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-lordserials22-site.service",
         "previous_unit": null,
@@ -790,6 +841,27 @@
           "наработки шаблона, настройки и publisher_id",
           "возможность переноса на новый домен без повторной сборки"
         ]
+      },
+      "withdrawal": {
+        "withdrawn": true,
+        "at": "2026-10-25",
+        "scopes": [
+          "new_tasks",
+          "text_generation",
+          "availability_crawl",
+          "repeat_checks",
+          "analytics_collection",
+          "position_checks",
+          "alerts",
+          "experiment_control"
+        ],
+        "keeps": [
+          "сохранение данных",
+          "резервное копирование",
+          "готовность к переносу"
+        ],
+        "reason": "Решение владельца 2026-10-25: вывод из активной работы до назначения замены домена. Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
+        "authority": "владелец, распоряжение 2026-10-25"
       }
     },
     {
@@ -810,10 +882,6 @@
         "family": "lords",
         "note": "Профиль lords-anime версии 1.1.0, раздел во владении /anime/. Назначен сессией шаблона Lords: docs/handoff/LORDS_TO_FACTORY-001.md, ветка claude/lords-template-consolidation-01, коммит fd674db4d6ba. Привязка по домену: предложенные там site_id у меня заняты, и запись называет их предложенными. lords-genre выдавать нельзя — объявлен неподдержанным и закреплён за lords-04."
       },
-      "deploy_target": {
-        "ref": "claude-control-01",
-        "server": null
-      },
       "pins": {
         "template": "lords-anime",
         "modules": {},
@@ -821,12 +889,22 @@
           "site_config": "1"
         }
       },
+      "deploy_target": {
+        "ref": "claude-control-01",
+        "server": null
+      },
       "publisher": {
         "provider": "cdnvideohub",
         "publisher_id": null,
         "note": "Идентификатор не хранится в реестре: он приходит из Secret Hub по ссылке publisher_id_ref и попадает в config/player.json при выкладке. Источник назван в docs/LORDS_TEMPLATE_NEWDOMAINS.md семейства Lords. Подставлять сюда число соседнего домена нельзя: 10238 объявлен у пяти действующих витрин.",
         "publisher_id_ref": "secret://cdnvideohub/lords/publisher-id"
       },
+      "data": {},
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
       "runtime": {
         "unit": "nova-lordserials22-space.service",
         "previous_unit": null,
@@ -882,6 +960,27 @@
           "наработки шаблона, настройки и publisher_id",
           "возможность переноса на новый домен без повторной сборки"
         ]
+      },
+      "withdrawal": {
+        "withdrawn": true,
+        "at": "2026-10-25",
+        "scopes": [
+          "new_tasks",
+          "text_generation",
+          "availability_crawl",
+          "repeat_checks",
+          "analytics_collection",
+          "position_checks",
+          "alerts",
+          "experiment_control"
+        ],
+        "keeps": [
+          "сохранение данных",
+          "резервное копирование",
+          "готовность к переносу"
+        ],
+        "reason": "Решение владельца 2026-10-25: вывод из активной работы до назначения замены домена. Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
+        "authority": "владелец, распоряжение 2026-10-25"
       }
     },
     {

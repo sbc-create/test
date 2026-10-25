@@ -1,7 +1,7 @@
 {
  "schema_version": 1,
  "note": "Единственный версионируемый список АКТИВНЫХ домéнов сети и их распределения. Источник — задание владельца от 2026-10-22 (там домены перечислены поимённо по семействам). Правится только по заданию владельца: добавление домена сюда означает, что он получает регулярные проверки, очередь и паспорт.",
- "owner_task": "2026-10-22, «организуй самостоятельное, исследовательское и параллельное развитие всех наших сайтов», §2",
+ "owner_task": "2026-10-22, «организуй самостоятельное, исследовательское и параллельное развитие всех наших сайтов», §2. Уточнение 2026-10-25: animedia.space, lordfilm47.space, lordserials22.site и lordserials22.space выведены из активной работы; lordserials22.info в список вывода НЕ входит. Замена для lordfilm47.space назначена — lords3rial.site. Дата вывода и причина по каждому домену — в паспорте ячейки (withdrawal), здесь не дублируются.",
  "timezone": "Europe/Moscow",
  "families": {
   "yummy": {
@@ -97,14 +97,6 @@
    "passport": "docs/passports/animedia.icu.md"
   },
   {
-   "domain": "animedia.space",
-   "site_id": "animedia-02",
-   "family": "animedia",
-   "state": "active",
-   "queue": "config/domain-queues/animedia.space.json",
-   "passport": "docs/passports/animedia.space.md"
-  },
-  {
    "domain": "animeg0.site",
    "site_id": "animego-03",
    "family": "animego",
@@ -143,14 +135,6 @@
    "state": "active",
    "queue": "config/domain-queues/1lordserials1.online.json",
    "passport": "docs/passports/1lordserials1.online.md"
-  },
-  {
-   "domain": "lordfilm47.space",
-   "site_id": "lords-01",
-   "family": "lords",
-   "state": "active",
-   "queue": "config/domain-queues/lordfilm47.space.json",
-   "passport": "docs/passports/lordfilm47.space.md"
   },
   {
    "domain": "lordserial33.biz",
@@ -255,14 +239,14 @@
    "site_id": "lords-06",
    "family": "lords",
    "state": "awaiting_replacement",
-   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+   "reason": "домен выведен из активной работы решением владельца 2026-10-25; дальнейшие расходы на него прекращены; домен не разрешается в DNS, замена ещё не назначена владельцем"
   },
   {
    "domain": "lordserials22.space",
    "site_id": "lords-07",
    "family": "lords",
    "state": "awaiting_replacement",
-   "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+   "reason": "домен выведен из активной работы решением владельца 2026-10-25; дальнейшие расходы на него прекращены; домен не разрешается в DNS, замена ещё не назначена владельцем"
   },
   {
    "domain": "lordserial101.site",
@@ -277,6 +261,20 @@
    "family": "lords",
    "state": "awaiting_replacement",
    "reason": "домен не разрешается в DNS; продвижение и миграции не запускаются до нового решения владельца"
+  },
+  {
+   "domain": "animedia.space",
+   "site_id": "animedia-02",
+   "family": "animedia",
+   "state": "awaiting_replacement",
+   "reason": "домен выведен из активной работы решением владельца 2026-10-25; дальнейшие расходы на него прекращены: замена ещё не назначена владельцем"
+  },
+  {
+   "domain": "lordfilm47.space",
+   "site_id": "lords-01",
+   "family": "lords",
+   "state": "awaiting_replacement",
+   "reason": "домен выведен из активной работы решением владельца 2026-10-25; дальнейшие расходы на него прекращены: замена назначена владельцем 2026-10-25 — lords3rial.site; перенос готовится"
   }
  ],
  "shared_components": {
