@@ -159,7 +159,8 @@ def выведенные_владельцем(путь: Path | None = None) -> t
         ячейки = []
     return tuple(sorted({*ИСКЛЮЧЕНЫ_ВЛАДЕЛЬЦЕМ,
                          *(str(и).lower() for я in ячейки if isinstance(я, dict)
-                           and я.get("status") == "retired"
+                           and (я.get("status") == "retired"
+                                or bool((я.get("withdrawal") or {}).get("withdrawn")))
                            for и in [я.get("domain"), *(я.get("aliases") or [])] if и)}))
 
 

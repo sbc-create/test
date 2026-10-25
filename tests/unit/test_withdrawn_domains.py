@@ -156,3 +156,39 @@ def test_запись_текстов_отказывает_а_чтение_нет
     with pytest.raises(editorial.ОперацияОтклонена) as отказ:
         editorial._сайт("animedia.space")
     assert "исключён" not in str(отказ.value)
+
+
+def _паспорт_с_выводом(tmp_path, monkeypatch, *, scopes):
+    """Ячейка в форме паспорта Архитектора (2b32d06): блок withdrawal с заменой домена."""
+    п = _реестр(tmp_path / "c.json", [
+        {"site_id": "lords-01", "domain": "old-site.example", "aliases": ["www.old-site.example"],
+         "status": "live",
+         "withdrawal": {"withdrawn": True, "at": "2026-10-25", "scopes": scopes,
+                        "replacement_domain": "new-site.example",
+                        "authority": "владелец, распоряжение 2026-10-25"}},
+        {"site_id": "z-01", "domain": "keep.example", "status": "live"},
+    ])
+    monkeypatch.setenv("SITE_CELLS_REGISTRY", str(п))
+    return п
+
+
+def test_блок_withdrawal_паспорта_исключает_домен_но_не_site_id(tmp_path, monkeypatch):
+    _паспорт_с_выводом(tmp_path, monkeypatch, scopes=["text_generation", "alerts"])
+    assert withdrawn.выведен("old-site.example") and withdrawn.выведен("www.old-site.example")
+    assert not withdrawn.выведен("lords-01")          # ячейка переезжает, а не уходит
+    assert not withdrawn.выведен("new-site.example")  # замена после запуска — в работу
+    assert not withdrawn.выведен("keep.example")
+
+
+def test_область_вне_scopes_не_выведена(tmp_path, monkeypatch):
+    п = _паспорт_с_выводом(tmp_path, monkeypatch, scopes=["text_generation"])
+    assert "old-site.example" in withdrawn.выведенные(п, область="text_generation")
+    assert "old-site.example" not in withdrawn.выведенные(п, область="position_checks")
+
+
+def test_техочередь_видит_блок_withdrawal(tmp_path, monkeypatch):
+    from seo_operator import tech_run
+
+    _паспорт_с_выводом(tmp_path, monkeypatch, scopes=["new_tasks"])
+    assert tech_run.вне_продвижения({"site": "old-site.example"}) == "old-site.example"
+    assert tech_run.вне_продвижения({"site": "keep.example"}) is None
