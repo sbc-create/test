@@ -1,0 +1,25 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T02:22:00Z",
+ "results": [
+  {
+   "domain": "animeg0.site",
+   "slug": "povsednevnaya-zhizn-hosta",
+   "sources": [
+    "https://shikimori.io/animes/60535",
+    "https://animeg0.site/title/povsednevnaya-zhizn-hosta/"
+   ],
+   "unreadable_sources": [],
+   "confirmed": [
+    "Сэкигути"
+   ],
+   "not_found": [],
+   "fragments": {
+    "Сэкигути": "2025-09-27\", \"description\": \"История рассказывает о Хадзимэ Сэкигути — бывшем страховом агенте, который от отчаяния решается на "
+   },
+   "confirmed_by": {
+    "Сэкигути": "https://shikimori.io/animes/60535"
+   }
+  }
+ ]
+}
