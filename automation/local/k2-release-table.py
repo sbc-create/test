@@ -9,8 +9,12 @@
 Поэтому таблица считается. Источники по столбцам названы явно:
 
 * **DNS** — публичный ответ (`dig @8.8.8.8`), а не план и не запись реестра;
-* **HTTPS** — есть ли на узле каталог сертификата домена и покрывает ли он
-  `www` (блок 443 заготовки ссылается на один каталог для обоих имён);
+* **HTTPS** — что домен ОТДАЁТ на рукопожатии (`openssl s_client` с SNI к
+  127.0.0.1:443) и покрывает ли отданный сертификат `www`; чужой сертификат
+  сервера по умолчанию «есть» не считается. Через наличие файла в
+  `/etc/letsencrypt/live` это не измеряется: каталог принадлежит root, и
+  проверка отвечала «нет» на запрет доступа — так таблица объявила блокер
+  «TLS» восьми витринам, у которых сертификат с www живёт до 15.01.2027;
 * **служба** — `systemctl is-active` юнита витрины НА ЕЁ УЗЛЕ;
 * **плеер** — номер в установленной конфигурации ячейки;
 * **каталог** — ревизия и число позиций установленного набора;
@@ -55,15 +59,31 @@ for pair in @@ПАРЫ@@; do
   unit=$(systemctl is-active "nova-$acc.service" 2>/dev/null \
          || echo "нет")
   restarts=$(systemctl show "nova-$acc.service" -p NRestarts --value 2>/dev/null)
-  cert="нет"
-  if [ -s "/etc/letsencrypt/live/$dom/fullchain.pem" ]; then
-    san=$(openssl x509 -noout -ext subjectAltName \
-            -in "/etc/letsencrypt/live/$dom/fullchain.pem" 2>/dev/null)
-    if printf '%s' "$san" | grep -q "DNS:www.$dom"; then
+  # Сертификат измеряется РУКОПОЖАТИЕМ, а не наличием файла. Прежняя
+  # редакция читала /etc/letsencrypt/live/$dom/fullchain.pem, а этот каталог
+  # принадлежит root (drwx------): от учётной записи доставки проверка
+  # «есть ли файл» отвечала «нет» и на отсутствие, и на ЗАПРЕТ ДОСТУПА.
+  # Измерено 25.10: таблица объявляла «TLS» остаточным блокером восьми
+  # действующим витринам, у которых сертификат с www живёт до 15.01.2027.
+  # Рукопожатие двух причин не путает и отвечает на тот самый вопрос — что
+  # витрина РЕАЛЬНО отдаёт по HTTPS, включая то, поднял ли nginx её блок 443.
+  cert="не измерено"
+  pem=$(printf '' | openssl s_client -connect "127.0.0.1:443" \
+          -servername "$dom" 2>/dev/null)
+  if printf '%s' "$pem" | grep -q "BEGIN CERTIFICATE"; then
+    san=$(printf '%s' "$pem" | openssl x509 -noout -ext subjectAltName 2>/dev/null)
+    cn=$(printf '%s' "$pem" | openssl x509 -noout -subject 2>/dev/null)
+    if ! printf '%s' "$san" | grep -q "DNS:$dom"; then
+      # Отдан чужой сертификат: своей конфигурации 443 у домена ещё нет, и
+      # отвечает сертификат сервера по умолчанию. Это НЕ «есть».
+      cert="чужой сертификат ($(printf '%s' "$cn" | sed 's/.*CN = //'))"
+    elif printf '%s' "$san" | grep -q "DNS:www.$dom"; then
       cert="есть, с www"
     else
       cert="есть, без www"
     fi
+  else
+    cert="нет"
   fi
   tls_conf="нет"
   [ -f "/etc/nginx/lords/$sid-tls.conf" ] && tls_conf="установлен"
