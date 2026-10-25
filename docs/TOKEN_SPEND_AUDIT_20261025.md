@@ -188,6 +188,14 @@ python3 -m pytest tests/unit/test_source_availability_precheck.py -q  → 13 pas
 4. **Расход Qwen** у другого провайдера — измерить нечем, нужен доступ к его
    счёту.
 
-Доказательства: `artifacts/token-audit/` (`transcripts-20261025.{txt,json}`,
-`by-action-mine-20261025.txt`, `by-action-mine-24h.txt`, `price-fit.json`,
-`source-precheck-20261025.json`).
+Доказательства — `artifacts/token-audit/` (каталог вне git, `.gitignore: var/*`
+и `artifacts/`; файлы лежат на машине):
+
+* `transcripts-20261025.{txt,json}` — разбор стенограмм за 7 суток и 24 часа;
+* `by-action-mine-20261025.txt`, `by-action-mine-24h.txt` — расход линии
+  Архитектора по видам действий;
+* `price-fit.json` — цены за токен, выведенные по 343 точкам (невязка 1,8·10⁻¹⁴ $);
+* `source-precheck-20261025.json` — завязка в источнике по 22 кандидатам;
+* `node-memory-20261025.json` — держатели памяти узла;
+* `ready-verified-visibility-20261025.json` — 847 готовых текстов против живых
+  страниц.

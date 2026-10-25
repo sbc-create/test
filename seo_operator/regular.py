@@ -53,6 +53,7 @@ import datetime as dt
 import gzip
 import hashlib
 import html
+import importlib.util
 import json
 import os
 import re
@@ -3175,6 +3176,66 @@ def yummy_demand_candidates(
     return out
 
 
+#: Инструмент проверки завязки в источнике. Имя файла с дефисами, поэтому
+#: загружается по пути, а не импортом.
+ПРОВЕРКА_ИСТОЧНИКА = REPO_ROOT / "automation" / "local" / "source-availability-precheck.py"
+
+
+def _проверка_завязки():
+    """Функция `(кандидат) -> (исход, знаков, причина)` или None, если нечем."""
+    try:
+        спец = importlib.util.spec_from_file_location("source_precheck", ПРОВЕРКА_ИСТОЧНИКА)
+        м = importlib.util.module_from_spec(спец)
+        спец.loader.exec_module(м)
+    except Exception:  # noqa: BLE001 — инструмента нет: отбор идёт как прежде
+        return None
+
+    def проверить(кандидат: dict):
+        return м.завязка(м.ид_источника(кандидат))
+
+    return проверить
+
+
+def отсеять_без_завязки(candidates: list[dict], needs_source: list[dict],
+                        проверка=None) -> list[dict]:
+    """Кандидаты, у которых в источнике есть из чего писать.
+
+    Зачем обычным кодом. За 18–25.10 фоновый редактор разобрал 1 463 материала
+    за $224,79 ($0,154 за материал), и 922 разбора кончились `SOURCES_MISSING`:
+    модель читала записанный источник и не находила завязки. Тот же факт
+    инструмент узнаёт одним запросом карточки Shikimori — без обращения к
+    модели вовсе. На 22 кандидатах 25.10: завязка есть у 8, нет у 8, не
+    измерено у 6 (фильмы — путь Wikidata, карточки Shikimori у них нет).
+
+    `НЕ ИЗМЕРЕНО` кандидата НЕ снимает: сбой сети не повод остановить работу, и
+    отказ источника не доказывает отсутствие завязки. Снятый кандидат уходит в
+    `needs_source` с названной причиной — подготовка источников остаётся
+    отдельной задачей, а не повтором того же разбора.
+    """
+    проверить = проверка if проверка is not None else _проверка_завязки()
+    if проверить is None:
+        return candidates
+    годные: list[dict] = []
+    for к in candidates:
+        try:
+            исход, знаков, причина = проверить(к)
+        except Exception:  # noqa: BLE001 — проверка сама отказала: кандидат остаётся
+            годные.append(к)
+            continue
+        if исход != "ЗАВЯЗКИ НЕТ":
+            годные.append({**к, "source_check": исход, "source_chars": знаков})
+            continue
+        needs_source.append({
+            **к,
+            "source_plan": (причина or "в источнике нет описания")
+            + ". Нужна подготовка источника: разбор моделью без завязки "
+            "кончится SOURCES_MISSING",
+            "source_check": исход,
+            "source_chars": знаков,
+        })
+    return годные
+
+
 def step_candidates(ctx: Context) -> Any:
     snaps = sorted(ctx.sources["analytics_snapshots"].glob("analytics-????-??-??.json"))
     if not snaps:
@@ -3192,6 +3253,8 @@ def step_candidates(ctx: Context) -> Any:
     found = (
         yummy_demand_candidates(snaps[-1], published, blocked=net_blocked, held_urls=held) + found
     )
+    # Проверка завязки в источнике — обычным кодом, до обращения к модели.
+    found = отсеять_без_завязки(found, needs)
     out = {
         "snapshot": snaps[-1].name,
         "generated_at": iso(utcnow()),
