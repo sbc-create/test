@@ -461,7 +461,9 @@ def доставка_описаний(site: str) -> tuple[bool, str]:
 #: иначе отвечала бы на запрос без конца.
 КРУГОВ_ВЫДАЧИ = 3
 
-#: Реестр источников: его изменение открывает пересмотр.
+#: Реестр источников: его изменение открывает пересмотр. Путь назван здесь
+#: только для проверок; решение «изменился ли» принимает одно правило —
+#: `seo_operator/regular.py::_source_policy_changed_at`.
 РЕЕСТР_ИСТОЧНИКОВ = (pathlib.Path(__file__).resolve().parents[2]
                      / "config" / "editorial-sources.json")
 
@@ -475,11 +477,21 @@ def _время_события(метка: str) -> dt.datetime | None:
 
 
 def _реестр_изменён(путь: pathlib.Path | None = None) -> dt.datetime | None:
+    """Когда реестр источников изменился по СОДЕРЖАНИЮ.
+
+    Правило одно на весь проект и живёт в
+    `seo_operator/regular.py::_source_policy_changed_at`: два перечня
+    «что считать изменением источников» держали бы разное, и отказ
+    пересматривался бы в одном месте и держался в другом. По `mtime` сравнивать
+    нельзя — файл в рабочей копии трогает git при checkout и слиянии.
+    """
     try:
-        return dt.datetime.fromtimestamp((путь or РЕЕСТР_ИСТОЧНИКОВ).stat().st_mtime,
-                                         dt.timezone.utc)
-    except OSError:
+        from seo_operator import regular
+    except Exception:  # noqa: BLE001 — слой оператора недоступен: пересмотра нет
         return None
+    if путь is not None:
+        return regular._source_policy_changed_at(путь)
+    return regular._source_policy_changed_at()
 
 
 def подряд_отказов(журнал: pathlib.Path | None = None) -> dict[str, dict[str, Any]]:

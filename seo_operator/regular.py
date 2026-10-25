@@ -56,6 +56,7 @@ import html
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 import urllib.error
@@ -2739,10 +2740,78 @@ NETWORK_WIDE = ("SOURCES_MISSING",)
 SOURCE_POLICY = REPO_ROOT / "config" / "editorial-sources.json"
 
 
-def _source_policy_changed_at(path: Path = SOURCE_POLICY) -> dt.datetime | None:
+#: Когда СОДЕРЖИМОЕ реестра источников увидено впервые. Файл состояния, а не
+#: часть реестра: сам реестр от этого не меняется.
+SOURCE_POLICY_SEEN = REPO_ROOT / "var" / "state" / "editorial-sources-seen.json"
+
+
+def _source_policy_changed_at(path: Path = SOURCE_POLICY,
+                              seen: Path = SOURCE_POLICY_SEEN,
+                              now: dt.datetime | None = None) -> dt.datetime | None:
+    """Когда реестр источников изменился ПО СОДЕРЖАНИЮ.
+
+    Почему не `mtime`. Этот момент снимает удержание отказов
+    `REVIEW_ON_NEW_SOURCES`: появился новый путь к фактам — отказ пересматривается.
+    По `mtime` «изменением» считается любое прикосновение к файлу, а в рабочей
+    копии его трогает git: checkout и слияние ветки переписывают файл с тем же
+    содержимым. Следствие предсказуемо и считается: на 25.10 удержание держало
+    266 заданий с исходом `SOURCES_MISSING`, и первое же слияние ветки сняло бы
+    их все разом — редактор перебрал бы те же адреса заново примерно за $40,
+    ничего не найдя, потому что источники не изменились.
+
+    Поэтому сравнивается SHA-256 содержимого. Отметка первой встречи хранится в
+    `var/state/`; нового содержимого там нет — значит, оно появилось сейчас.
+    Файл состояния недоступен для записи — возвращается время сейчас, то есть
+    пересмотр открывается: потерять пересмотр хуже, чем сделать лишний.
+    """
     try:
-        return dt.datetime.fromtimestamp(path.stat().st_mtime, dt.timezone.utc)
+        данные = path.read_bytes()
     except OSError:
+        return None
+    отпечаток = hashlib.sha256(данные).hexdigest()
+    сейчас = now or utcnow()
+    try:
+        запись = json.loads(seen.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        запись = {}
+    было = запись.get(отпечаток)
+    если_было = parse_iso(было) if было else None
+    if если_было:
+        return если_было
+    появилось = _policy_appeared_at(path, отпечаток) or сейчас
+    запись = {отпечаток: iso(появилось)}
+    try:
+        seen.parent.mkdir(parents=True, exist_ok=True)
+        seen.write_text(json.dumps(запись, ensure_ascii=False, indent=1), encoding="utf-8")
+    except OSError:
+        pass
+    return появилось
+
+
+def _policy_appeared_at(path: Path, отпечаток: str) -> dt.datetime | None:
+    """Когда ЭТО содержимое реестра появилось: время коммита, иначе None.
+
+    Отметки о содержимом ещё нет — значит, его увидели впервые, и надо решить,
+    СТАРОЕ оно или НОВОЕ. Взять «сейчас» нельзя: при первом же запуске после
+    развёртывания это сняло бы удержание со всех отказов разом (на 25.10 — 266
+    заданий, около $40 пустого перебора). Поэтому: если рабочая копия файла
+    совпадает с закоммиченной, содержимое СТАРОЕ и появилось в момент коммита;
+    если расходится — его только что написал человек, и это новая политика,
+    открывающая пересмотр (вернётся `None`, вызывающий возьмёт «сейчас»).
+    """
+    try:
+        в_коммите = subprocess.run(
+            ["git", "show", f"HEAD:{path.relative_to(REPO_ROOT)}"],
+            cwd=str(REPO_ROOT), capture_output=True, timeout=30)
+        if в_коммите.returncode != 0:
+            return None
+        if hashlib.sha256(в_коммите.stdout).hexdigest() != отпечаток:
+            return None          # в копии не то, что в коммите: политика новая
+        когда = subprocess.run(
+            ["git", "log", "-1", "--format=%cI", "--", str(path.relative_to(REPO_ROOT))],
+            cwd=str(REPO_ROOT), capture_output=True, text=True, timeout=30)
+        return parse_iso((когда.stdout or "").strip()) if когда.returncode == 0 else None
+    except (OSError, ValueError, subprocess.SubprocessError):
         return None
 
 
