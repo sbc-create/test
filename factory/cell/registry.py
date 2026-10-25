@@ -224,7 +224,7 @@ class Cell:
         return полный
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        запись: dict[str, Any] = {
             "site_id": self.site_id,
             "domain": self.domain,
             "aliases": list(self.aliases),
@@ -259,8 +259,15 @@ class Cell:
             # сообщила «выведен True», а в файле не оказалось ни одного
             # упоминания — то есть следующий общий прогон вернул бы четыре
             # домена в работу, и отчёт при этом утверждал бы обратное.
-            "withdrawal": dict(self.withdrawal),
         }
+        # Пустой блок вывода НЕ пишется: схема требует у него причину,
+        # основание и дату, и `{}` её не проходит. Измерено 25.10 на пяти
+        # новых ячейках: перезапись паспорта добавляла им `"withdrawal": {}`,
+        # и реестр перестал проходить свою схему. Отсутствие блока означает
+        # «в работе» — ровно то, что нужно.
+        if self.withdrawal:
+            запись["withdrawal"] = dict(self.withdrawal)
+        return запись
 
 
 def _cell(raw: dict[str, Any]) -> Cell:

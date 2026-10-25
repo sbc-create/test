@@ -70,12 +70,44 @@ def test_печать_паспорта_перечисляет_все_поля_м
     следующее поле, добавленное в модель и забытое в печати.
     """
     поля = {f.name for f in dataclasses.fields(registry.Cell)}
-    напечатано = set(registry.Cell(
-        site_id="x", domain="x.test", aliases=(), repo={}, template={}, pins={},
-        deploy_target={}, publisher={}, data={}).to_dict())
+    # Ячейка со ЗАПОЛНЕННЫМИ полями: печать обязана перечислить каждое, у
+    # которого есть значение. Прежняя редакция собирала ячейку с пустыми
+    # блоками, и после 25.10 перестала годиться: пустой `withdrawal` намеренно
+    # НЕ печатается (схема требует у него причину, основание и дату, и `{}` её
+    # не проходит). Смысл проверки сохранён — забытое поле по-прежнему ловится.
+    заполненная = registry.Cell(
+        site_id="x", domain="x.test", aliases=("www.x.test",),
+        repo={"path": "var/site-repos/x"}, template={"template_id": "lords-anime"},
+        pins={"source_commit": "0" * 40}, deploy_target={"ref": "k2-zomro-01"},
+        publisher={"publisher_id": None}, data={"database": None},
+        deployed={"build_id": "x"}, content_revision="r1", last_update="2026-10-25",
+        backup={"kind": "x"}, resources={"ram_mib": 447}, runtime={"port": 9136},
+        release={"hold": False}, indexing={"desired_state": "CLOSED"},
+        analytics={"counter_id": 1}, promotion={"excluded": False},
+        withdrawal={"withdrawn": False, "at": "2026-10-25", "reason": "проба",
+                    "authority": "проба"},
+        status="planned")
+    напечатано = set(заполненная.to_dict())
     assert поля - напечатано == set(), (
         f"эти поля паспорта не печатаются и пропадут при записи: "
         f"{sorted(поля - напечатано)}")
+
+
+def test_пустой_блок_вывода_не_печатается():
+    """Исключение из правила выше — названное, а не случайное.
+
+    Схема требует у блока `withdrawal` причину, основание и дату; `{}` её не
+    проходит. Измерено 25.10: перезапись паспорта пяти НОВЫХ ячеек добавляла им
+    `"withdrawal": {}`, и реестр перестал проходить свою схему. Отсутствие
+    блока означает «в работе» — ровно то, что нужно.
+    """
+    пустая = registry.Cell(
+        site_id="x", domain="x.test", aliases=(), repo={}, template={}, pins={},
+        deploy_target={}, publisher={}, data={})
+    assert "withdrawal" not in пустая.to_dict()
+    полная = dataclasses.replace(пустая, withdrawal={
+        "withdrawn": True, "at": "2026-10-25", "reason": "решение", "authority": "владелец"})
+    assert полная.to_dict()["withdrawal"]["withdrawn"] is True
 
 
 @pytest.mark.parametrize("блок,значение", [
