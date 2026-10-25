@@ -2102,6 +2102,52 @@
       "withdrawal": {}
     },
     {
+      "site_id": "lords-21",
+      "domain": "lordserials21.info",
+      "aliases": [],
+      "status": "planned",
+      "repo": {
+        "kind": "local",
+        "path": "/home/claude/wt-nova-publish-memory-02/var/new-sites/lords-21"
+      },
+      "template": {
+        "template_id": "lords-animation",
+        "family": "lords"
+      },
+      "pins": {},
+      "deploy_target": {},
+      "publisher": {
+        "note": "publisher_id ещё не назначен этому домену: это вход владельца. По D177 идентификатор принадлежит конкретному домену и живёт в трёх согласованных местах; семейное значение соседей сюда не копируется. До назначения витрина отдаёт каталог, описания и перечень эпизодов, а воспроизведение не работает."
+      },
+      "data": {
+        "database": null,
+        "media": null
+      },
+      "deployed": {},
+      "content_revision": null,
+      "last_update": null,
+      "backup": {},
+      "resources": {},
+      "runtime": {
+        "unit": "nova-lordserials21-info.service",
+        "previous_unit": null,
+        "port": 9139,
+        "account": "lordserials21-info",
+        "app_dir": "/srv/lordserials21-info/current",
+        "data_dir": "/srv/lordserials21-info/data",
+        "legacy_root": "<data>/site",
+        "reload": "restart",
+        "managed_by": "cell",
+        "data_owner": "pipeline",
+        "delivery": "release-queue"
+      },
+      "release": {},
+      "indexing": {},
+      "analytics": {},
+      "promotion": {},
+      "withdrawal": {}
+    },
+    {
       "site_id": "pilot-local",
       "domain": "pilot.localhost.test",
       "aliases": [],
