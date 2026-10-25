@@ -458,11 +458,19 @@ COUNTERS_WITHOUT_MARKUP = {
 #: же правилу: счётчика нет нигде, создать его нечем без OAuth-токена службы
 #: кабинета, а объявить домен и создать ему счётчик — разные состояния. У них
 #: вдобавок ещё не переведён DNS: публичное имя отдаёт 404, собирать нечего.
+#: Пятёрка 25.10 (lordserials1.* и lordserials21.*) заведена в реестре по тому
+#: же правилу и с ДВУМЯ своими причинами: создание счётчика этим доменам —
+#: отдельный вход владельца (внешние записи в Метрику разрешены ровно трём
+#: счётчикам YummyAnime, inventory/network-allowlist.yaml), а собирать пока
+#: нечего — служба витрины намеренно не запускается без publisher_id
+#: (k2-launch-site.sh, код 3), и DNS ещё указывает на управляющий узел.
 PLANNED_DOMAINS: tuple[str, ...] = (
     "lordserial101.site", "lordfilm077.site",
     "lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
     "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
     "lordserial.net.ru",
+    "lordserials1.cc", "lordserials1.info",
+    "lordserials21.cc", "lordserials21.info", "lordserials21.mobi",
 )
 
 ALL_DOMAINS = sorted(
@@ -634,6 +642,14 @@ WEBMASTER_STATUS = {
     "lordserials22.info": "VERIFIED",
     "lordserials22.site": "PLANNED",
     "lordserials22.space": "PLANNED",
+    # Пятёрка 25.10: домены зарегистрированы и делегированы, но витрины ещё не
+    # отвечают публично, и в Вебмастер их никто не добавлял. Причина та же, что
+    # у партии K2, и проверить её у API нечем (B023).
+    "lordserials1.cc": "PLANNED",
+    "lordserials1.info": "PLANNED",
+    "lordserials21.cc": "PLANNED",
+    "lordserials21.info": "PLANNED",
+    "lordserials21.mobi": "PLANNED",
     "yummyani.biz": "VERIFIED",
     "yummyani.org": "VERIFIED",
     "yummyani.site": "VERIFIED",

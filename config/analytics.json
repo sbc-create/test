@@ -3,7 +3,7 @@
   "provider": "yandex",
   "note": "Реестр аналитики. Здесь хранятся ТОЛЬКО публичные идентификаторы счётчиков и проверяемые статусы; OAuth-токен и client secret сюда не попадают ни при каких условиях. Заполняется командой `python3 -m factory --json analytics apply --confirm-writes`; вручную не редактируется. Три домена YummyAnime — три независимых счётчика, зеркалами их объединять запрещено: у каждого сайта собственная аудитория и собственный отчёт.",
   "seo_indexing_enabled": false,
-  "updated_at": "2026-10-25T20:51:54Z",
+  "updated_at": "2026-10-25T22:30:00Z",
   "properties": [
     {
       "domain": "1lordserials1.online",
@@ -634,6 +634,141 @@
         "season_select": 602711751,
         "title_view": 602711750
       }
+    },
+    {
+      "domain": "lordserials1.cc",
+      "site_id": "lords-18",
+      "counter_name": "Lords — lordserials1.cc",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials1.cc"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": null,
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "счётчика нет: внешние записи в Метрику разрешены владельцем только для трёх счётчиков YummyAnime (inventory/network-allowlist.yaml), создание счётчика этому домену — отдельный вход владельца. Номер соседней витрины не переносится (D138).",
+        "в Вебмастер домен не добавляли: витрина ещё не отвечает публично (служба не запускается без publisher_id, k2-launch-site.sh код 3), а сверить состояние с API нельзя — сеть до api.webmaster.yandex.net не проходит (B023). PLANNED здесь — наше собственное «не добавляли», а не предположение о сервисе."
+      ]
+    },
+    {
+      "domain": "lordserials1.info",
+      "site_id": "lords-19",
+      "counter_name": "Lords — lordserials1.info",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials1.info"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": null,
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "счётчика нет: внешние записи в Метрику разрешены владельцем только для трёх счётчиков YummyAnime (inventory/network-allowlist.yaml), создание счётчика этому домену — отдельный вход владельца. Номер соседней витрины не переносится (D138).",
+        "в Вебмастер домен не добавляли: витрина ещё не отвечает публично (служба не запускается без publisher_id, k2-launch-site.sh код 3), а сверить состояние с API нельзя — сеть до api.webmaster.yandex.net не проходит (B023). PLANNED здесь — наше собственное «не добавляли», а не предположение о сервисе."
+      ]
+    },
+    {
+      "domain": "lordserials21.cc",
+      "site_id": "lords-20",
+      "counter_name": "Lords — lordserials21.cc",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials21.cc"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": null,
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "счётчика нет: внешние записи в Метрику разрешены владельцем только для трёх счётчиков YummyAnime (inventory/network-allowlist.yaml), создание счётчика этому домену — отдельный вход владельца. Номер соседней витрины не переносится (D138).",
+        "в Вебмастер домен не добавляли: витрина ещё не отвечает публично (служба не запускается без publisher_id, k2-launch-site.sh код 3), а сверить состояние с API нельзя — сеть до api.webmaster.yandex.net не проходит (B023). PLANNED здесь — наше собственное «не добавляли», а не предположение о сервисе."
+      ]
+    },
+    {
+      "domain": "lordserials21.info",
+      "site_id": "lords-21",
+      "counter_name": "Lords — lordserials21.info",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials21.info"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": null,
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "счётчика нет: внешние записи в Метрику разрешены владельцем только для трёх счётчиков YummyAnime (inventory/network-allowlist.yaml), создание счётчика этому домену — отдельный вход владельца. Номер соседней витрины не переносится (D138).",
+        "в Вебмастер домен не добавляли: витрина ещё не отвечает публично (служба не запускается без publisher_id, k2-launch-site.sh код 3), а сверить состояние с API нельзя — сеть до api.webmaster.yandex.net не проходит (B023). PLANNED здесь — наше собственное «не добавляли», а не предположение о сервисе."
+      ]
+    },
+    {
+      "domain": "lordserials21.mobi",
+      "site_id": "lords-22",
+      "counter_name": "Lords — lordserials21.mobi",
+      "counter_id": null,
+      "counter_state": "planned",
+      "analytics_enabled": false,
+      "webvisor": false,
+      "allowed_hosts": [
+        "lordserials21.mobi"
+      ],
+      "goals": [],
+      "webmaster": {
+        "enabled": false,
+        "host_id": null,
+        "verification_status": "PLANNED",
+        "verification_type": null,
+        "verification_marker": null,
+        "sitemap_submitted": false
+      },
+      "seo_indexing_enabled": false,
+      "last_checked_at": null,
+      "problems": [
+        "счётчика нет: внешние записи в Метрику разрешены владельцем только для трёх счётчиков YummyAnime (inventory/network-allowlist.yaml), создание счётчика этому домену — отдельный вход владельца. Номер соседней витрины не переносится (D138).",
+        "в Вебмастер домен не добавляли: витрина ещё не отвечает публично (служба не запускается без publisher_id, k2-launch-site.sh код 3), а сверить состояние с API нельзя — сеть до api.webmaster.yandex.net не проходит (B023). PLANNED здесь — наше собственное «не добавляли», а не предположение о сервисе."
+      ]
     },
     {
       "domain": "lordserials22.info",
