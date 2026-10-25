@@ -34,10 +34,20 @@ import sys
 СНИМКИ = pathlib.Path("/srv/lords/.frontend")
 АРЕНДЫ = pathlib.Path("/var/lib/seo-content-operator/editorial_leases.json")
 #: Семейство → (витрины, файл снимка каталога).
+#: Семейство → (витрины, файл снимка каталога).
+#:
+#: Про снимок AnimeGo, измерено 25.10 и записано, чтобы не ошибиться дважды:
+#: `animego-04-details.json` — это символическая ССЫЛКА на
+#: `animedia-02-details.json` (24 байта — размер ссылки, а не пустой файл; я
+#: приняла одно за другое и чуть не объявила изъян там, где его нет). То есть
+#: витрина `animego-04` читает снимок каталога `animedia.space`. Числа по
+#: AnimeGo поэтому считаются по тому каталогу, который витрина и использует.
+#: Снимки `animedia-01` и `animedia-02` при одинаковом размере имеют РАЗНЫЕ
+#: суммы sha256 — значит они по витринам, а не копии.
 СЕМЕЙСТВА = {
     "animedia": (("animedia.icu", "animedia.space"), "animedia-01-details.json"),
     "animego": (("animeg0.site", "an1meg0.site", "an1mego.site"),
-                "animedia-01-details.json"),
+                "animego-04-details.json"),
 }
 ПОРОГ_ЗАВЯЗКИ = 200
 
