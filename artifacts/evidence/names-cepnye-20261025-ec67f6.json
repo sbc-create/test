@@ -1,0 +1,34 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T19:32:21Z",
+ "results": [
+  {
+   "domain": "zonafilm.space",
+   "slug": "cepnye-hroniki-film-1",
+   "sources": [
+    "https://shikimori.io/animes/33728",
+    "https://zonafilm.space/title/cepnye-hroniki-film-1/"
+   ],
+   "extra_sources_not_in_draft": [],
+   "external_sources_with_text": 2,
+   "unreadable_sources": [],
+   "confirmed": [
+    "Свет",
+    "Геццейтаса",
+    "Ююто"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "fragments": {
+    "Свет": "s://shikimori.io/animes/33728\", \"russian\": \"Цепные хроники: Свет Геццейтаса. Фильм\", \"name\": \"Chain Chronicle: Haecceitas no",
+    "Геццейтаса": "hikimori.io/animes/33728\", \"russian\": \"Цепные хроники: Свет Геццейтаса. Фильм\", \"name\": \"Chain Chronicle: Haecceitas no Hikari Par",
+    "Ююто": "\"2016-12-03\", \"released_on\": null, \"description\": \"В землях Ююто люди издавна верили, что их мир — это и есть весь мир, но н"
+   },
+   "confirmed_by": {
+    "Свет": "https://shikimori.io/animes/33728",
+    "Геццейтаса": "https://shikimori.io/animes/33728",
+    "Ююто": "https://shikimori.io/animes/33728"
+   }
+  }
+ ]
+}
