@@ -1,0 +1,30 @@
+=== lordserials1.cc
+   NS: rcode=NOERROR | ответов 2: lordserials1.cc NS april.ns.cloudflare.com (ttl 21600); lordserials1.cc NS pablo.ns.cloudflare.com (ttl 21600)
+   SOA: rcode=NOERROR | ответов 1: lordserials1.cc SOA april.ns.cloudflare.com (ttl 1800)
+   A: rcode=NOERROR | ответов 1: lordserials1.cc A 45.131.182.225 (ttl 300)
+   AAAA: rcode=NOERROR | ответов 0 | authority: lordserials1.cc SOA april.ns.cloudflare.com
+   CNAME: rcode=NOERROR | ответов 0 | authority: lordserials1.cc SOA april.ns.cloudflare.com
+=== lordserials1.info
+   NS: rcode=NOERROR | ответов 2: lordserials1.info NS pablo.ns.cloudflare.com (ttl 21600); lordserials1.info NS april.ns.cloudflare.com (ttl 21600)
+   SOA: rcode=NOERROR | ответов 1: lordserials1.info SOA april.ns.cloudflare.com (ttl 1800)
+   A: rcode=NOERROR | ответов 1: lordserials1.info A 45.131.182.225 (ttl 300)
+   AAAA: rcode=NOERROR | ответов 0 | authority: lordserials1.info SOA april.ns.cloudflare.com
+   CNAME: rcode=NOERROR | ответов 0 | authority: lordserials1.info SOA april.ns.cloudflare.com
+=== lordserials21.cc
+   NS: rcode=NOERROR | ответов 2: lordserials21.cc NS pablo.ns.cloudflare.com (ttl 21600); lordserials21.cc NS april.ns.cloudflare.com (ttl 21600)
+   SOA: rcode=NOERROR | ответов 1: lordserials21.cc SOA april.ns.cloudflare.com (ttl 1800)
+   A: rcode=NOERROR | ответов 1: lordserials21.cc A 45.131.182.225 (ttl 300)
+   AAAA: rcode=NOERROR | ответов 0 | authority: lordserials21.cc SOA april.ns.cloudflare.com
+   CNAME: rcode=NOERROR | ответов 0 | authority: lordserials21.cc SOA april.ns.cloudflare.com
+=== lordserials21.info
+   NS: rcode=NOERROR | ответов 2: lordserials21.info NS pablo.ns.cloudflare.com (ttl 21600); lordserials21.info NS april.ns.cloudflare.com (ttl 21600)
+   SOA: rcode=NOERROR | ответов 1: lordserials21.info SOA april.ns.cloudflare.com (ttl 1800)
+   A: rcode=NOERROR | ответов 1: lordserials21.info A 45.131.182.225 (ttl 300)
+   AAAA: rcode=NOERROR | ответов 0 | authority: lordserials21.info SOA april.ns.cloudflare.com
+   CNAME: rcode=NOERROR | ответов 0 | authority: lordserials21.info SOA april.ns.cloudflare.com
+=== lordserials21.mobi
+   NS: rcode=NOERROR | ответов 2: lordserials21.mobi NS pablo.ns.cloudflare.com (ttl 21600); lordserials21.mobi NS april.ns.cloudflare.com (ttl 21600)
+   SOA: rcode=NOERROR | ответов 1: lordserials21.mobi SOA april.ns.cloudflare.com (ttl 1800)
+   A: rcode=NOERROR | ответов 1: lordserials21.mobi A 45.131.182.225 (ttl 300)
+   AAAA: rcode=NOERROR | ответов 0 | authority: lordserials21.mobi SOA april.ns.cloudflare.com
+   CNAME: rcode=NOERROR | ответов 0 | authority: lordserials21.mobi SOA april.ns.cloudflare.com

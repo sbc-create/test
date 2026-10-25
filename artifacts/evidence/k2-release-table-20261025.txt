@@ -1,0 +1,17 @@
+| домен | DNS | HTTPS | служба | плеер | каталог | индексация | остаточный блокер |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| lordfilm.group | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordfilm.spb.ru | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordfilm.msk.ru | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserial.su | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserial.group | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserial.spb.ru | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserial.msk.ru | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserial.net.ru | 145.63.129.86 ✓ | есть, с www | active | 10454 ✓ | 69966, rev 8edb829a | ? noindex, nofollow | нет |
+| lordserials1.cc | 45.131.182.225 (не цель) | не измерено | не измерено | не измерено ≠  | не измерено | ? не измерено | DNS → TLS |
+| lordserials1.info | 45.131.182.225 (не цель) | не измерено | не измерено | не измерено ≠  | не измерено | ? не измерено | DNS → TLS |
+| lordserials21.cc | 45.131.182.225 (не цель) | не измерено | не измерено | не измерено ≠  | не измерено | ? не измерено | DNS → TLS |
+| lordserials21.info | 45.131.182.225 (не цель) | не измерено | не измерено | не измерено ≠  | не измерено | ? не измерено | DNS → TLS |
+| lordserials21.mobi | 45.131.182.225 (не цель) | не измерено | не измерено | не измерено ≠  | не измерено | ? не измерено | DNS → TLS |
+
+витрин 13, без остаточного блокера 8; перезапусков служб: 0, —

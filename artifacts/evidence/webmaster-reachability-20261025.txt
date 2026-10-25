@@ -1,0 +1,27 @@
+k2-zomro-01 | CHANGED => {
+    "changed": true,
+    "rc": 0,
+    "stderr": "Shared connection to 145.63.129.86 closed.\r\n",
+    "stderr_lines": [
+        "Shared connection to 145.63.129.86 closed."
+    ],
+    "stdout": "{\r\n \"api.webmaster.yandex.net\": {\r\n  \"dns\": [\r\n   \"213.180.193.61\",\r\n   \"2a02:6b8::2:61\"\r\n  ],\r\n  \"tls_и_ответ\": \"TimeoutError: timed out\"\r\n },\r\n \"api-metrika.yandex.net\": {\r\n  \"dns\": [\r\n   \"2a02:6b8::2a3\",\r\n   \"87.250.251.47\"\r\n  ],\r\n  \"tls_и_ответ\": \"HTTP/1.1 404 Not found\"\r\n }\r\n}\r\n",
+    "stdout_lines": [
+        "{",
+        " \"api.webmaster.yandex.net\": {",
+        "  \"dns\": [",
+        "   \"213.180.193.61\",",
+        "   \"2a02:6b8::2:61\"",
+        "  ],",
+        "  \"tls_и_ответ\": \"TimeoutError: timed out\"",
+        " },",
+        " \"api-metrika.yandex.net\": {",
+        "  \"dns\": [",
+        "   \"2a02:6b8::2a3\",",
+        "   \"87.250.251.47\"",
+        "  ],",
+        "  \"tls_и_ответ\": \"HTTP/1.1 404 Not found\"",
+        " }",
+        "}"
+    ]
+}

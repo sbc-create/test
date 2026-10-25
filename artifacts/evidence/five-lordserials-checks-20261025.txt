@@ -1,0 +1,21 @@
+site-config-json               PASS
+pins-json                      PASS
+entrypoint-present             PASS
+runtime-compiles               PASS
+pins-match-sources             PASS
+no-secrets-in-git              PASS
+shell-ascii-names              PASS
+launcher-refuses               PASS
+shell-syntax                   PASS
+manifest-stamp                 PASS
+artifact-contents              PASS
+activate-scenarios             FAIL
+    |   ЗАМЕЧАНИЕ: lords-18 не объявляет publisher_id_expected — сверка publisher_id в сценарии не проводилась; номер соседней витрины подставить нельзя (D138: у каждого домена свой)
+    |   dry_run: {'код': 0, 'дошёл': True, 'песочница не менялась': True}
+    |   успех: {'код': 78, 'ГОТОВО': False, 'старая остановлена раньше новой': False, 'stderr': 'запуск lordserials1.cc остановлен до первого запроса:\n  — нет /tmp/tmprzxwe_fo/srv/releases/dff53a27d67b/config/player.json: плеер без publisher_id не заработает\n'}
+    |   откат: {'код не 0': True, 'сообщил': False, 'прежняя возвращена': False, 'исходные данные целы': True}
+    |   ИТОГ: FAIL
+contact-email                  PASS
+episode-availability           PASS
+checks-all-ran                 PASS
+checks-measured                PASS

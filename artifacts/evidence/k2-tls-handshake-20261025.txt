@@ -1,0 +1,40 @@
+k2-zomro-01 | CHANGED => {
+    "changed": true,
+    "rc": 0,
+    "stderr": "Shared connection to 145.63.129.86 closed.\r\n",
+    "stderr_lines": [
+        "Shared connection to 145.63.129.86 closed."
+    ],
+    "stdout": "{\r\n \"lordfilm.group\": {\r\n  \"разбор\": [\r\n   \"subject=CN = lordfilm.group\",\r\n   \"notAfter=Jan 15 15:21:26 2027 GMT\",\r\n   \"X509v3 Subject Alternative Name:\",\r\n   \"DNS:lordfilm.group, DNS:www.lordfilm.group\"\r\n  ],\r\n  \"renewal\": 14\r\n },\r\n \"lordserial.su\": {\r\n  \"разбор\": [\r\n   \"subject=CN = lordserial.su\",\r\n   \"notAfter=Jan 15 15:22:05 2027 GMT\",\r\n   \"X509v3 Subject Alternative Name:\",\r\n   \"DNS:lordserial.su, DNS:www.lordserial.su\"\r\n  ],\r\n  \"renewal\": 14\r\n },\r\n \"lordserials1.cc\": {\r\n  \"разбор\": [\r\n   \"subject=CN = lordfilm.group\",\r\n   \"notAfter=Jan 15 15:21:26 2027 GMT\",\r\n   \"X509v3 Subject Alternative Name:\",\r\n   \"DNS:lordfilm.group, DNS:www.lordfilm.group\"\r\n  ],\r\n  \"renewal\": \"нет файла\"\r\n }\r\n}\r\n",
+    "stdout_lines": [
+        "{",
+        " \"lordfilm.group\": {",
+        "  \"разбор\": [",
+        "   \"subject=CN = lordfilm.group\",",
+        "   \"notAfter=Jan 15 15:21:26 2027 GMT\",",
+        "   \"X509v3 Subject Alternative Name:\",",
+        "   \"DNS:lordfilm.group, DNS:www.lordfilm.group\"",
+        "  ],",
+        "  \"renewal\": 14",
+        " },",
+        " \"lordserial.su\": {",
+        "  \"разбор\": [",
+        "   \"subject=CN = lordserial.su\",",
+        "   \"notAfter=Jan 15 15:22:05 2027 GMT\",",
+        "   \"X509v3 Subject Alternative Name:\",",
+        "   \"DNS:lordserial.su, DNS:www.lordserial.su\"",
+        "  ],",
+        "  \"renewal\": 14",
+        " },",
+        " \"lordserials1.cc\": {",
+        "  \"разбор\": [",
+        "   \"subject=CN = lordfilm.group\",",
+        "   \"notAfter=Jan 15 15:21:26 2027 GMT\",",
+        "   \"X509v3 Subject Alternative Name:\",",
+        "   \"DNS:lordfilm.group, DNS:www.lordfilm.group\"",
+        "  ],",
+        "  \"renewal\": \"нет файла\"",
+        " }",
+        "}"
+    ]
+}
