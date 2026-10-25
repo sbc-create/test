@@ -110,3 +110,35 @@ def test_пустые_значения_распознаются_по_виду(п
     assert registry._пусто("")
     assert not registry._пусто(0) and not registry._пусто(False)
     assert not registry._пусто({"a": 1}) and not registry._пусто("x")
+
+
+def test_пересборка_сохраняет_примечание_внутри_блока(путь):
+    """Блок генератора непустой целиком, но примечание эксплуатации внутри него
+    пересборку переживает: оно описывает РЕШЕНИЕ, а не сборку."""
+    registry.register(_ячейка("lords-95", "lords95.test"), path=путь)
+    registry.update("lords-95", {"template": {
+        "template_id": "lords-serials", "family": "lords",
+        "note": "профиль общий по D208: исключительные заняты"}}, path=путь)
+
+    registry.register(_ячейка("lords-95", "lords95.test",
+                              template={"template_id": "lords-serials",
+                                        "family": "lords"}),
+                      path=путь, replace=True)
+
+    блок = _запись(путь, "lords-95")["template"]
+    assert блок["note"].startswith("профиль общий")
+    assert блок["template_id"] == "lords-serials"
+
+
+def test_подполе_нового_паспорта_побеждает_прежнее(путь):
+    registry.register(_ячейка("lords-96", "lords96.test",
+                              template={"template_id": "lords-dorama", "family": "lords"}),
+                      path=путь)
+    registry.update("lords-96", {"template": {
+        "template_id": "lords-dorama", "family": "lords", "note": "прежнее"}}, path=путь)
+    registry.register(_ячейка("lords-96", "lords96.test",
+                              template={"template_id": "lords-serials", "family": "lords"}),
+                      path=путь, replace=True)
+    блок = _запись(путь, "lords-96")["template"]
+    assert блок["template_id"] == "lords-serials", "подполе генератора обязано побеждать"
+    assert блок["note"] == "прежнее"
