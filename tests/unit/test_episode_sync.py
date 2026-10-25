@@ -602,10 +602,38 @@ def test_отказ_запуска_называет_причину(tmp_path, mon
 
 
 def test_отказ_без_домена_тоже_назван(tmp_path, monkeypatch, capsys):
-    for имя in ("LORDS_SITE_HOST", "ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
+    for имя in ("LORDS_SITE_HOST", "LORDS_INDEXING_SITE", "LORDS_SITE_DOMAIN",
+                "ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
         monkeypatch.delenv(имя, raising=False)
     assert es.запустить(Рантайм(Подробности(tmp_path / "d.json", {}))) is False
     assert "канонический домен" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("ключ", ["LORDS_SITE_HOST", "LORDS_INDEXING_SITE",
+                                  "LORDS_SITE_DOMAIN"])
+def test_домен_читается_тем_же_набором_ключей_что_в_карте_сайта(tmp_path, monkeypatch, ключ):
+    """Одно понятие — один набор ключей на весь рантайм.
+
+    Измерено 2026-10-25 на свежем экземпляре витрины Lords: генератор
+    выставляет `LORDS_SITE_DOMAIN`, `LORDS_SITE_HOST` не стоит НИ У ОДНОЙ
+    ячейки семейства — ни у пяти новых, ни у восьми действующих. Пока
+    согласование читало только `*_SITE_HOST`, оно отказывало на каждой витрине
+    Lords с «не задан канонический домен», а сборщик карты сайта тот же домен
+    находил: он читает цепочку с `LORDS_SITE_DOMAIN`. Расхождение наборов
+    ключей и есть дефект — не отсутствие переменной.
+    """
+    for имя in ("LORDS_SITE_HOST", "LORDS_INDEXING_SITE", "LORDS_SITE_DOMAIN",
+                "ANIMEDIA_SITE_HOST", "ANIMEGO_SITE_HOST"):
+        monkeypatch.delenv(имя, raising=False)
+    monkeypatch.setenv(ключ, "lordserials1.cc")
+    п = Подробности(tmp_path / "d.json", {})
+    р = Рантайм(п)
+    р.Обработчик.подробности = None
+    запущено = {}
+    monkeypatch.setattr(es.threading, "Thread",
+                        lambda **к: type("П", (), {"start": lambda s: запущено.setdefault("да", к)})())
+    assert es.запустить(р) is True
+    assert запущено["да"]["args"] == (р, "lordserials1.cc")
 
 
 # --- наложение не хранит ошибочное вечно -------------------------------------

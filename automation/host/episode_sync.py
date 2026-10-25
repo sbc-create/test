@@ -810,7 +810,17 @@ def запустить(рантайм) -> bool:
     знает единственный ключ, и спрашивать по остальным значило бы судить о
     доступности по источнику, которого на странице не будет.
     """
+    # Канонический домен читается ТЕМ ЖЕ набором ключей, что в остальном
+    # рантайме (`seo_layer.завести_обновление_карты`), и это не вкусовщина.
+    # Измерено 2026-10-25 на свежем экземпляре витрины Lords: генератор
+    # выставляет `LORDS_SITE_DOMAIN`, ключа `LORDS_SITE_HOST` не ставит НИ У
+    # ОДНОЙ ячейки семейства — ни у пяти новых, ни у восьми действующих, — и
+    # согласование отказывало с «не задан канонический домен» на каждой из
+    # них. Одно и то же понятие, прочитанное разными наборами ключей, даёт
+    # ровно это: половина рантайма домен находит, половина нет.
     домен = (os.environ.get("LORDS_SITE_HOST")
+             or os.environ.get("LORDS_INDEXING_SITE")
+             or os.environ.get("LORDS_SITE_DOMAIN")
              or os.environ.get("ANIMEDIA_SITE_HOST")
              or os.environ.get("ANIMEGO_SITE_HOST") or "").strip()
     плеер = getattr(рантайм, "ПЛЕЕР", {}) or {}
@@ -820,8 +830,8 @@ def запустить(рантайм) -> bool:
     # неотличим от «всё в порядке», и это худший из возможных.
     if not домен:
         print("[nova] согласование не заведено: не задан канонический домен "
-              "(LORDS_SITE_HOST / ANIMEDIA_SITE_HOST / ANIMEGO_SITE_HOST)",
-              flush=True)
+              "(LORDS_SITE_HOST / LORDS_INDEXING_SITE / LORDS_SITE_DOMAIN / "
+              "ANIMEDIA_SITE_HOST / ANIMEGO_SITE_HOST)", flush=True)
         return False
     if not плеер.get("publisher_id"):
         print("[nova] согласование не заведено: у витрины нет publisher_id — "
