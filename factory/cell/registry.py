@@ -572,6 +572,37 @@ def check_publisher_id(value: str) -> str:
     return cleaned
 
 
+def _пусто(значение: object) -> bool:
+    return значение is None or (isinstance(значение, (dict, list, str)) and not значение)
+
+
+def _слить_при_замене(старое: dict[str, Any], новое: dict[str, Any]) -> dict[str, Any]:
+    """Пересборка паспорта не отменяет решений эксплуатации.
+
+    `replace=True` приходит в основном из `factory cell newsite --force`: это
+    пересборка ПРОЕКТА витрины, а не отмена того, что про неё решили потом.
+    Генератор не знает ни выбранного узла, ни бэкапа, ни снятых замеров — в его
+    паспорте эти поля пустые, и прямая запись таким паспортом их стирала.
+    Измерено 2026-10-25: пересборка lords-18…lords-22 на другом профиле снесла
+    у всех пяти `deploy_target` с измеренным размещением (узел, адрес, замер
+    памяти и диска) — то самое поле, по которому привилегированный исполнитель
+    выбирает машину. Это третий случай одного класса: 13.10 так же пропадали
+    `indexing` и `promotion`, 25.10 — `withdrawal`, и каждый раз лечилось
+    добавлением поля в `to_dict`, то есть симптом.
+
+    Поэтому правило здесь одно и не про перечень полей: ПУСТОЕ поле нового
+    паспорта не затирает заполненное старое. Очистка поля остаётся работой
+    `update()`, где она называется явно и проходит проверку формы.
+    """
+    итог = dict(новое)
+    for ключ, прежнее in старое.items():
+        if ключ == "site_id" or _пусто(прежнее):
+            continue
+        if _пусто(итог.get(ключ)):
+            итог[ключ] = прежнее
+    return итог
+
+
 def register(cell: Cell, *, path: Path | None = None, replace: bool = False) -> Cell:
     """Записать паспорт ячейки.
 
@@ -610,7 +641,7 @@ def register(cell: Cell, *, path: Path | None = None, replace: bool = False) -> 
                     f"ячейка {cell.site_id} уже зарегистрирована; "
                     "для изменения используйте update() или replace=True"
                 )
-            cells[existing[0]] = cell.to_dict()
+            cells[existing[0]] = _слить_при_замене(cells[existing[0]], cell.to_dict())
         else:
             cells.append(cell.to_dict())
         cells.sort(key=lambda raw: raw["site_id"])
