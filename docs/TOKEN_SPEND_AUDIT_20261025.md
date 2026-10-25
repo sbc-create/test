@@ -152,7 +152,29 @@ git-ссылками старых веток (`qwen-indexing-lords-20261002`,
 ```
 python3 -m pytest tests/unit/test_queue_repeat_limit.py -q            → 17 passed
 python3 -m pytest tests/unit/test_source_availability_precheck.py -q  → 13 passed
+python3 -m pytest tests/unit/test_editor_gate_quota.py -q             → 12 passed
+python3 -m pytest tests/unit/test_source_policy_change.py -q          →  9 passed
+python3 -m pytest tests/unit/test_candidate_source_precheck.py -q     →  9 passed
+python3 -m pytest tests/unit/test_node_memory_holders.py -q           →  9 passed
+python3 -m pytest tests/unit/test_ready_verified_visibility.py -q     → 17 passed
+python3 -m pytest tests/unit/test_token_spend_audit.py -q             →  6 passed
 отрицательный контроль (мост без придержания)                         → 5 failed, 12 passed
+отрицательный контроль (шлюз без проверки квоты)                      → state «resources» вместо «quota»
+отрицательный контроль (учёт по uuid)                                 → 3 обращения вместо 1
+отрицательный контроль (политика по mtime)                             → дата съехала с 25.10 на 26.10
+```
+
+Полный прогон смены — `./scripts/record-evidence.sh` без таймаута,
+`docs/verification/latest-run.md`, запись 2026-10-25T18:52:19Z на коммите
+`a4fa5b4`:
+
+```
+Stages failed 1
+PASS: Tests (pytest)   → 11 379 passed, 135 skipped, 16 xfailed, 0 failed (963 с)
+FAIL: Lint (ruff)      → 59 замечаний по репозиторию, из них в файлах,
+                          которые я трогала, — НОЛЬ (падение предшествует этой смене)
+PASS: Fixtures validate, Guardrails hold, JSON parses, Registries validate,
+      Schemas compile, Workflows parse
 ```
 
 ## 6. Что сравнивать на следующей партии
