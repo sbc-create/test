@@ -458,6 +458,58 @@ def _pause_after(runs: list[dict], conf: dict) -> tuple[dt.datetime | None, int,
     return end + dt.timedelta(seconds=pause), pause, why
 
 
+#: Как поставщик сообщает об исчерпанной квоте. Строка приходит в
+#: `self_report.result_tail` вместе с `terminal_reason: api_error`.
+ЛИМИТ_В_ХВОСТЕ = re.compile(
+    r"hit your (?P<период>weekly|5-hour|usage) limit"
+    r"(?:[^.]*?resets?\s+(?P<часы>\d{1,2})(?::(?P<минуты>\d{2}))?\s*(?P<ампм>am|pm)?)?",
+    re.I)
+
+
+def квота_исчерпана(runs: list[dict], now: dt.datetime) -> tuple[bool, str, dt.datetime | None]:
+    """(держать ли, причина, до какого времени) по ПОСЛЕДНЕМУ запуску.
+
+    Зачем обычным кодом. 25.10 запуски 07:20Z, 07:50Z и 09:35Z стартовали
+    модель при исчерпанной недельной квоте и получили «You've hit your weekly
+    limit · resets 4pm (UTC)». Токенов это не стоило (`costUSD` 0, чтение кэша
+    0, один оборот — API отказал до расхода), но каждый такой запуск занимает
+    слот цикла и пишет в журнал `INCOMPLETE`, из-за которого включается
+    нарастающий backoff за «сбои подряд» — то есть исправная пауза по квоте
+    превращается в наказание за неё.
+
+    Время сброса берётся из самой строки поставщика и считается в UTC, потому
+    что он сам печатает «(UTC)». Часа в строке нет — держим сутки: это
+    безопаснее, чем ломиться каждые 20 минут, и короче недели.
+    """
+    for r in reversed(runs):
+        if not r.get("model_started"):
+            continue
+        ср = r.get("self_report") or {}
+        хвост = str(ср.get("result_tail") or "")
+        м = ЛИМИТ_В_ХВОСТЕ.search(хвост)
+        if not м:
+            return False, "", None
+        from seo_operator import regular as _рег
+        когда = _рег.parse_iso(r.get("finished_at") or r.get("started_at")) or now
+        if м.group("часы"):
+            час = int(м.group("часы")) % 12
+            if (м.group("ампм") or "").lower() == "pm":
+                час += 12
+            сброс = когда.replace(hour=час, minute=int(м.group("минуты") or 0),
+                                  second=0, microsecond=0)
+            if сброс <= когда:
+                сброс += dt.timedelta(days=1)
+        else:
+            сброс = когда + dt.timedelta(days=1)
+        if now >= сброс:
+            return False, "", None
+        период = (м.group("период") or "").lower()
+        return True, (f"квота поставщика исчерпана ({период or 'лимит'}), "
+                      f"сброс {сброс.strftime('%Y-%m-%dT%H:%M:%SZ')}: "
+                      "модель не запускается"), сброс
+    return False, "", None
+
+
 def _key(url: str) -> str:
     return url.rstrip("/").lower()
 
@@ -477,15 +529,24 @@ def gate(
 ) -> dict:
     """Нужен ли запуск модели. Файлы и /proc: ни модели, ни внешних команд.
 
-    Порядок: (1) пауза после завершения прошлой партии (20 мин; при сбоях
+    Порядок: (0) квота поставщика; (1) пауза после завершения прошлой партии (20 мин; при сбоях
     подряд — нарастающая); (2) ресурсы; (3) работа: свободное задание очереди
     на домене цикла или кандидат без результата. Пропущенные за время простоя
     партии не догоняются: следующая начинается одна, по этому же правилу.
-    Каждый ответ несёт `state`: paused | backoff | resources | no_work | run.
+    Каждый ответ несёт `state`: quota | paused | backoff | resources | no_work | run.
     """
     now = now or dt.datetime.now(dt.timezone.utc)
     conf = conf or cadence()
-    next_at, _pause, why = _pause_after(_runs(state), conf)
+    запуски = _runs(state)
+    держать, почему_квота, до_сброса = квота_исчерпана(запуски, now)
+    if держать:
+        return {
+            "run": False,
+            "state": "quota",
+            "reason": почему_квота,
+            "next_at": до_сброса.strftime("%Y-%m-%dT%H:%M:%SZ"),
+        }
+    next_at, _pause, why = _pause_after(запуски, conf)
     if next_at and now < next_at:
         return {
             "run": False,
