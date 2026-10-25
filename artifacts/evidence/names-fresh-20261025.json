@@ -34,5 +34,6 @@
     "Байшуй": "https://shikimori.io/animes/57995"
    }
   }
- ]
+ ],
+ "by": "эта линия (claude/nova-publish-memory-02), инструмент automation/local/names-against-sources.py"
 }

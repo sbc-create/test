@@ -36,5 +36,6 @@
     "Сердца": "https://shikimori.io/animes/61967"
    }
   }
- ]
+ ],
+ "by": "эта линия (claude/nova-publish-memory-02), инструмент automation/local/names-against-sources.py"
 }

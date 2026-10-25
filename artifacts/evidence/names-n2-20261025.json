@@ -63,5 +63,6 @@
     "Феникс": "https://shikimori.io/animes/2389"
    }
   }
- ]
+ ],
+ "by": "эта линия (claude/nova-publish-memory-02), инструмент automation/local/names-against-sources.py"
 }

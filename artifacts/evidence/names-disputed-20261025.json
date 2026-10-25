@@ -36,5 +36,6 @@
     "Синъити [системы транслитерации: источник пишет «Шиничи»]": "https://shikimori.io/animes/57441"
    }
   }
- ]
+ ],
+ "by": "эта линия (claude/nova-publish-memory-02), инструмент automation/local/names-against-sources.py"
 }

@@ -110,5 +110,6 @@
     "Эрике (как «Erica»)": "https://en.wikipedia.org/wiki/So_Cold_the_River"
    }
   }
- ]
+ ],
+ "by": "эта линия (claude/nova-publish-memory-02), инструмент automation/local/names-against-sources.py"
 }
