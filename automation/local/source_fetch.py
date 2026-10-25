@@ -342,6 +342,35 @@ def _wiki_article(lang: str, title: str, imdb: str = "") -> tuple[int | None, st
     return status, text, url
 
 
+#: Содержательным вводным абзацем считается абзац не короче этого. Короткие
+#: абзацы в начале статьи — это служебные вставки (hatnote, курсив «см. также»),
+#: и принимать их за ввод значило бы отдавать редактору пустоту.
+МИН_ВВОД = 80
+
+
+def _ввод(page: str) -> str:
+    """Вводный абзац статьи. Разметка бывает двух видов, и оба настоящие.
+
+    Измерено 25.10 на `en.wikipedia.org/wiki/30,000_Miles_from_Chang'an`:
+    статья приходит в разметке Parsoid, где абзацы несут атрибуты
+    (`<p id="mwAw">`), а прежний образец требовал буквального `<p>`. Поэтому
+    `lead` возвращался пустым у ЛЮБОЙ статьи этого вида — при живом вводном
+    абзаце, который прямо называл и «rebellion led by An Lushan», и «Li Bai».
+    Редактор получал «завязки нет» и закрывал задание как SOURCES_MISSING,
+    хотя источник завязку содержал.
+
+    Берётся первый абзац не короче `МИН_ВВОД`: первым в разметке обычно идёт
+    пустой `<p class="mw-empty-elt">` или служебная вставка.
+    """
+    м = re.search(r'<div class="mw-content-ltr mw-parser-output"[^>]*>', page)
+    хвост = page[м.end():] if м else page
+    for абзац in re.findall(r"<p\b[^>]*>(.*?)</p>", хвост, re.S):
+        текст = _text(абзац)
+        if len(текст) >= МИН_ВВОД:
+            return текст[:1500]
+    return ""
+
+
 def _section(page: str, names: tuple[str, ...]) -> str:
     """Текст раздела статьи (до следующего заголовка того же уровня)."""
     for name in names:
@@ -353,7 +382,12 @@ def _section(page: str, names: tuple[str, ...]) -> str:
             re.S,
         )
         if m:
-            return _text(m.group(1))[:4000]
+            #: Ссылка «[edit]» у заголовка попадает в текст раздела и выглядит
+            #: частью пересказа. Снимается здесь, а не у читателя.
+            текст = _text(m.group(1))
+            текст = re.sub(r"^\[\s*(?:edit|править[^\]]*)\s*\]\s*", "", текст,
+                           flags=re.IGNORECASE)
+            return текст[:4000]
     return ""
 
 
@@ -464,9 +498,7 @@ def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
             if not re.search(rf"tt{imdb}(?!\d)", page):
                 continue
             qid = re.search(r"wikidata\.org/wiki/(?:Special:EntityPage/)?(Q\d+)", page)
-            lead = re.search(
-                r'<div class="mw-content-ltr mw-parser-output"[^>]*>.*?<p>(.*?)</p>', page, re.S
-            )
+            lead = _ввод(page)
             plot = _section(page, ("Сюжет", "Синопсис", "Plot", "Premise", "Synopsis"))
             return {
                 "ok": True,
@@ -474,7 +506,7 @@ def film(imdb: str, name: str, original: str, year: str, kind: str) -> dict:
                 "url": where,
                 "identity": f"IMDb tt{imdb} найден в статье",
                 "wikidata": qid.group(1) if qid else None,
-                "lead": _text(lead.group(1))[:1500] if lead else None,
+                "lead": lead or None,
                 "plot": plot or None,
                 "tried": tried,
             }
