@@ -347,6 +347,42 @@ def паспорт_ячейки(заказ: Заказ, *, куда: Path, ак�
 #: принадлежит семейству и лежит в `automation/host/`. Поимённо закреплены
 #: случаи из жалоб владельца, поэтому копия «почти такая же» здесь была бы
 #: хуже отсутствия.
+#: Куда вписывается вызов проверки в `checks/run.sh`.
+#:
+#: Вставлять перед `exit "$fail"` нельзя, и это измерено: сторож
+#: `checks-all-ran` считает `expected` как число строк `^check `, а `ran`
+#: наращивает сама обёртка `check`. Строка, добавленная ПОСЛЕ блока сравнения,
+#: попадает в `expected`, но исполняется позже — и сторож падает у КАЖДОГО
+#: нового сайта. Измерено 25.10 на пробном сайте `probe-inherit-01`, созданном
+#: штатным генератором: «объявлено проверок: 14, исполнилось: 13», причём
+#: напечатанная причина («обёртка называется иначе») к делу не относилась.
+#: Поэтому вызов вписывается ПЕРЕД блоком сравнения.
+ЯКОРЬ_ПОДСЧЁТА = '\nif [ "$ran" -ne "$expected" ]; then'
+
+
+def _вписать_проверку(бегунок: Path, строка: str, признак: str) -> bool:
+    """Вписать вызов проверки в `checks/run.sh` перед блоком подсчёта.
+
+    Одно место на всех, кто добавляет проверки: два независимых вписывателя
+    повторили бы и ошибку порядка. Возвращает True, если файл изменён.
+    """
+    if not бегунок.is_file():
+        return False
+    текст = бегунок.read_text(encoding="utf-8")
+    if признак in текст:
+        return False
+    if ЯКОРЬ_ПОДСЧЁТА in текст:
+        текст = текст.replace(ЯКОРЬ_ПОДСЧЁТА, "\n" + строка + ЯКОРЬ_ПОДСЧЁТА, 1)
+    elif '\nexit "$fail"' in текст:
+        # Бегунок без блока подсчёта: вставка перед выходом безопасна, потому
+        # что сравнивать «объявлено против исполнилось» там некому.
+        текст = текст.replace('\nexit "$fail"', "\n" + строка + '\nexit "$fail"', 1)
+    else:
+        текст = текст.rstrip() + "\n" + строка
+    бегунок.write_text(текст, encoding="utf-8")
+    return True
+
+
 ИСТОЧНИК_ПРОВЕРКИ_ДОСТУПНОСТИ = "check_episode_availability.py"
 ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ = "episode_availability.py"
 
@@ -369,18 +405,10 @@ def _записать_проверку_доступности(источник: 
     проверки.mkdir(exist_ok=True)
     shutil.copy2(откуда, проверки / ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ)
 
-    бегунок = проверки / "run.sh"
-    строка = ('check "episode-availability" python3 '
-              f'checks/{ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ}\n')
-    if бегунок.is_file():
-        текст = бегунок.read_text(encoding="utf-8")
-        if ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ not in текст:
-            if '\nexit "$fail"' in текст:
-                текст = текст.replace('\nexit "$fail"',
-                                      "\n" + строка + '\nexit "$fail"')
-            else:
-                текст = текст.rstrip() + "\n" + строка
-            бегунок.write_text(текст, encoding="utf-8")
+    _вписать_проверку(
+        проверки / "run.sh",
+        f'check "episode-availability" python3 checks/{ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ}',
+        ИМЯ_ПРОВЕРКИ_ДОСТУПНОСТИ)
 
 
 def _записать_проверку_контакта(куда: Path) -> None:
@@ -403,15 +431,10 @@ def _записать_проверку_контакта(куда: Path) -> None:
 
     # Проверка, которую никто не вызывает, выпуск не держит.
     бегунок = проверки / "run.sh"
-    строка = ('check "contact-email"     python3 checks/contact_email.py\n')
     if бегунок.is_file():
-        текст = бегунок.read_text(encoding="utf-8")
-        if "checks/contact_email.py" not in текст:
-            if '\nexit "$fail"' in текст:
-                текст = текст.replace('\nexit "$fail"', "\n" + строка + '\nexit "$fail"')
-            else:
-                текст = текст.rstrip() + "\n" + строка
-            бегунок.write_text(текст, encoding="utf-8")
+        _вписать_проверку(
+            бегунок, 'check "contact-email"     python3 checks/contact_email.py',
+            "checks/contact_email.py")
     else:
         бегунок.write_text(
             "#!/usr/bin/env bash\n"
@@ -424,7 +447,9 @@ def _записать_проверку_контакта(куда: Path) -> None:
             '  local name="$1"; shift\n'
             '  if "$@" >/dev/null 2>&1; then say "$name" "PASS"; '
             'else say "$name" "FAIL"; fail=1; fi\n'
-            "}\n\n" + строка + '\nexit "$fail"\n', encoding="utf-8")
+            "}\n\n"
+            'check "contact-email"     python3 checks/contact_email.py\n'
+            '\nexit "$fail"\n', encoding="utf-8")
         бегунок.chmod(0o755)
 
 
