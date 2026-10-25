@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Несут ли собранные бандлы восьми витрин ТЕКУЩИЙ код своих репозиториев.
+"""Несут ли собранные бандлы витрин узла ТЕКУЩИЙ код своих репозиториев.
 
 Зачем отдельная проверка. Доставка кода на узел K2 идёт бандлами
 (`automation/local/refresh-k2-bundles.sh`), и бандл — файл: он остаётся лежать
@@ -29,7 +29,26 @@ from pathlib import Path
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 БАНДЛЫ = КОРЕНЬ / "var" / "k2-data" / "bundles"
 ЗАПИСЬ = КОРЕНЬ / "var" / "k2-data" / "bundle-heads.json"
-ВИТРИНЫ = [f"lords-{н}" for н in range(10, 18)]
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику.
+
+    Перечень витрин здесь был литералом `range(10, 18)`. Класс 47
+    (`docs/RECURRING_FAILURES.md`): состав, перечисленный рядом с реестром,
+    который его уже знает, молча отстаёт от реестра — и отставание ничем не
+    проявляется, потому что ошибок нет.
+    """
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
+#: Витрины узла: у новой ячейки бандл так же устаревает, и не проверять его
+#: значит не замечать этого.
+ВИТРИНЫ = _витрины_узла("k2-zomro-01")
 
 
 def _вывод(команда: list[str]) -> tuple[int, str]:

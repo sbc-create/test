@@ -20,7 +20,25 @@ from pathlib import Path
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ОСМОТРЫ = КОРЕНЬ / "var" / "k2-data" / "audit"
 ВЫХОД = КОРЕНЬ / "var" / "k2-data" / "preview"
-ВОСЕМЬ = [f"lords-{n}" for n in range(10, 18)]
+def _витрины_узла(ref: str = "k2-zomro-01") -> list[str]:
+    """Состав узла из реестра — одним модулем на всю фабрику.
+
+    Перечень витрин здесь был литералом `range(10, 18)`. Класс 47
+    (`docs/RECURRING_FAILURES.md`): состав, перечисленный рядом с реестром,
+    который его уже знает, молча отстаёт от реестра — и отставание ничем не
+    проявляется, потому что ошибок нет.
+    """
+    import importlib.util
+
+    путь = КОРЕНЬ / "automation" / "local" / "node-cell-list.py"
+    сп = importlib.util.spec_from_file_location("node_cell_list", путь)
+    м = importlib.util.module_from_spec(сп)
+    сп.loader.exec_module(м)
+    return list(м.витрины_узла(ref))
+
+
+#: Витрины узла. Имя `ВИТРИНЫ` оставлено бы неправдой: их тринадцать.
+ВИТРИНЫ = _витрины_узла("k2-zomro-01")
 СНИМКИ = [("desktop-home-dark", "Главная, компьютер 1366×768, тёмная тема"),
           ("phone-home-dark", "Главная, телефон 390×844, тёмная тема"),
           ("desktop-home", "Главная, компьютер 1366×768"),
@@ -145,7 +163,7 @@ def карточка(site: str) -> str:
 
 def main() -> int:
     ВЫХОД.mkdir(parents=True, exist_ok=True)
-    карточки = "".join(карточка(с) for с in ВОСЕМЬ)
+    карточки = "".join(карточка(с) for с in ВИТРИНЫ)
     страница = f"""<!doctype html>
 <html lang="ru"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">

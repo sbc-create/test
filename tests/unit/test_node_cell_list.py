@@ -10,6 +10,7 @@
 """
 from __future__ import annotations
 
+import ast
 import importlib.util
 import json
 import pathlib
@@ -90,3 +91,29 @@ def test_сборщик_издателя_берёт_состав_из_того_�
     текст = (КОРЕНЬ / "automation" / "local" / "make-k2-publisher.py").read_text(encoding="utf-8")
     assert "range(10, 18)" not in текст, "перечень витрин снова задан литералом"
     assert м.витрины_узла("k2-zomro-01") == tuple(f"lords-{n}" for n in range(10, 23))
+
+
+@pytest.mark.parametrize("файл,имя", [
+    ("dns-cutover-plan.py", "план перевода DNS"),
+    ("k2-bundle-freshness.py", "свежесть бандлов"),
+    ("build-preview-gallery.py", "галерея превью"),
+    ("make-k2-publisher.py", "сборщик издателя"),
+])
+def test_состав_узла_нигде_не_перечислен_литералом(файл, имя):
+    """Признак класса 47 — перечень состава рядом с реестром, а не слово «восемь».
+
+    Проверяется по месту, где состав ПЕРЕЧИСЛЯЕТСЯ: пока литерал совпадал с
+    реестром, молчали и инструмент, и всякая проверка над ним.
+    """
+    путь = КОРЕНЬ / "automation" / "local" / файл
+    т = путь.read_text(encoding="utf-8")
+    # Разбор КОДА, а не поиск по тексту: упоминание прежнего литерала в
+    # объяснении — это память о дефекте, и её терять не надо. Первая редакция
+    # этой проверки искала подстроку и падала на собственных же комментариях.
+    дерево = ast.parse(т)
+    литералы = [у for у in ast.walk(дерево)
+                if isinstance(у, ast.Call) and getattr(у.func, "id", "") == "range"
+                and [getattr(а, "value", None) for а in у.args] == [10, 18]]
+    assert not литералы, f"{имя}: состав снова задан литералом range(10, 18)"
+    assert "node-cell-list.py" in т, (
+        f"{имя}: состав берётся не из общего модуля — значит где-то ещё")
