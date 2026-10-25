@@ -31,6 +31,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-title-page-linking"
+
 СЕМЕЙСТВА = {
     "lords": "lordserial33.biz",
     "zona": "zonafilm.space",
@@ -42,7 +44,7 @@ import sys
 
 def достать(адрес: str, таймаут: int = 40) -> str | None:
     try:
-        г = subprocess.run(["curl", "-sSL", "-w", "\n@@КОД@@%{http_code}",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "-w", "\n@@КОД@@%{http_code}",
                             "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 20)
     except subprocess.TimeoutExpired:

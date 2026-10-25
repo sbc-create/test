@@ -104,6 +104,7 @@ def главная(argv: list[str]) -> int:
     with sync_playwright() as p:
         б = p.chromium.launch(executable_path=ХРОМ, args=["--no-sandbox"])
         стр = б.new_page()
+        стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         адрес = если if если.startswith("http") else адрес_карточки(стр, если)
         print(f"АДРЕС: {адрес}  (без единого нажатия, {срок:.0f} с)")
         стр.goto(адрес, wait_until="domcontentloaded", timeout=60000)

@@ -26,6 +26,8 @@ import subprocess
 import sys
 from itertools import combinations
 
+АГЕНТ = "factory-cross-site-duplicate-probe"
+
 СЕМЬИ = {
     "animedia": ["animedia.icu", "animedia.space"],
     "animego": ["animeg0.site", "an1meg0.site", "an1mego.site"],
@@ -35,7 +37,7 @@ from itertools import combinations
 
 
 def страница(url: str) -> str:
-    return subprocess.run(["curl", "-sS", "--max-time", "45", url],
+    return subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "45", url],
                           capture_output=True, text=True).stdout or ""
 
 

@@ -28,7 +28,7 @@ import urllib.error
 import urllib.request
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
-ЗАГОЛОВКИ = {"User-Agent": "site-factory-remainder/1.0"}
+ЗАГОЛОВКИ = {"User-Agent": "factory-remainder-registry"}
 ТАЙМАУТ = 25
 
 

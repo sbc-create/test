@@ -11,6 +11,8 @@ import re
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
+АГЕНТ = "factory-editorial-public-state"
+
 ОБЗОР = pathlib.Path("/home/claude/wt-portable-site-cell-01/docs/seo-operator/"
                      "EDITORIAL_REVIEW_20261015.md")
 РЕЕСТР = pathlib.Path("/home/claude/wt-nova-publish-memory-02/config/site-cells.json")
@@ -51,7 +53,7 @@ print(f"кусков слева {len(слева)}, из них настоящи�
 def проверить(домен: str) -> tuple:
     тело = ""
     for путь in СТРАНИЦЫ:
-        г = subprocess.run(["curl", "-sSL", "--max-time", "45",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "45",
                             f"https://{домен}{путь}"],
                            capture_output=True, text=True, timeout=70)
         тело += г.stdout or ""

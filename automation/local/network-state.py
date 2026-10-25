@@ -30,6 +30,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-network-state"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 РЕПОЗИТОРИИ = КОРЕНЬ / "var" / "site-repos"
@@ -63,7 +65,7 @@ def установлено(аккаунт: str) -> tuple[str, str]:
 def публичный(домен: str, таймаут: int = 25) -> tuple[str, str]:
     """`(код ответа, build-id из заголовка)`. Пустое — факт, а не ошибка."""
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-D", "-", "-L",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-D", "-", "-L",
          "--max-time", str(таймаут), f"https://{домен}/"],
         capture_output=True, text=True)
     код, билд = "", ""

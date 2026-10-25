@@ -35,6 +35,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-poster-cause-per-card"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 
 #: Домен → (site_id, каталог данных витрины). Берётся из отчёта публикации
@@ -145,7 +147,7 @@ def загрузка(адрес: str, домен: str, *, загрузчик=Non
     if загрузчик is not None:
         return загрузчик(полный)
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-L", "--max-time", "20",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-L", "--max-time", "20",
          "-w", "%{http_code} %{content_type} %{size_download}", полный],
         capture_output=True, text=True, timeout=40)
     куски = (г.stdout or "").split()

@@ -32,6 +32,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-chain"
+
 КОРЕНЬ = Path(__file__).resolve().parents[1].parent
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСПЫТАТЕЛЬНЫЕ = (".localhost", ".test", ".invalid", ".example")
@@ -78,7 +80,7 @@ def запрос(адрес: str, таймаут: int) -> tuple[str, float, str]
     `таймаут` — предел ожидания истёк.
     """
     итог = subprocess.run(
-        ["curl", "-sS", "-w", "\n%{http_code} %{time_total}",
+        ["curl", "-A", АГЕНТ, "-sS", "-w", "\n%{http_code} %{time_total}",
          "--max-time", str(таймаут), адрес],
         capture_output=True, text=True)
     вывод = итог.stdout or ""

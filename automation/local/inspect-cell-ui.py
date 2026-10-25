@@ -32,6 +32,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+АГЕНТ = "factory-inspect-cell-ui"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 
 #: Что осматриваем. Для каждой поверхности — что обязано быть в ответе.
@@ -65,7 +67,9 @@ def окружение(конфиг: dict, проект: Path, данные: Pat
 
 def ответ(адрес: str, таймаут: float = 30.0) -> tuple[int, bytes, dict]:
     try:
-        с = urllib.request.urlopen(адрес, timeout=таймаут)
+        с = urllib.request.urlopen(
+            urllib.request.Request(адрес, headers={"User-Agent": АГЕНТ}),
+            timeout=таймаут)
         return с.status, с.read(), dict(с.headers)
     except urllib.error.HTTPError as ош:
         return ош.code, ош.read(), dict(ош.headers)

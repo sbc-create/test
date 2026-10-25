@@ -29,6 +29,8 @@ import subprocess
 import sys
 import time
 
+АГЕНТ = "factory-publish-and-accept"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РЕЗУЛЬТАТЫ = pathlib.Path("/var/lib/site-cells/results")
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
@@ -68,7 +70,7 @@ def дождаться(request_id: str, предел: float) -> dict:
 
 def публичное(домен: str) -> dict:
     итог: dict = {"домен": домен}
-    г = subprocess.run(["curl", "-sS", "-o", "/dev/null", "-D", "-", "-L",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-D", "-", "-L",
                         "--max-time", "60", f"https://{домен}/"],
                        capture_output=True, text=True)
     for с in (г.stdout or "").splitlines():
@@ -80,7 +82,7 @@ def публичное(домен: str) -> dict:
             итог["build"] = с.partition(":")[2].strip()
         elif низ.startswith("x-robots-tag:"):
             итог["режим"] = с.partition(":")[2].strip()
-    г2 = subprocess.run(["curl", "-sS", "--max-time", "60",
+    г2 = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "60",
                          f"https://{домен}/robots.txt"], capture_output=True, text=True)
     итог["карта_в_robots"] = "Sitemap:" in (г2.stdout or "")
     return итог

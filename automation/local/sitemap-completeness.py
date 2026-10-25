@@ -37,6 +37,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-completeness"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 #: Круглые пределы, которые ставят в обходчиках карты. Совпадение числа адресов
 #: с одним из них — не доказательство предела, но повод назвать его отдельно.
@@ -50,7 +52,7 @@ from pathlib import Path
 def достать(url: str, таймаут: int = 60) -> tuple[str, str]:
     with tempfile.NamedTemporaryFile(prefix="sc-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
              "-w", "%{http_code}", url],
             capture_output=True, text=True)
         тело = Path(б.name).read_text(encoding="utf-8", errors="replace")

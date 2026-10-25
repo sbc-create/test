@@ -23,6 +23,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-sister-description-overlap"
+
 ОПИСАНИЕ = re.compile(
     r'<meta[^>]+name=["\']description["\'][^>]+content=["\'](.*?)["\']', re.S | re.I)
 АДРЕС = re.compile(r"<loc>\s*(.*?)\s*</loc>", re.S)
@@ -31,7 +33,7 @@ import sys
 def получить(url: str, таймаут: int) -> tuple[str, str]:
     try:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут),
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут),
              "-w", "\n@@КОД:%{http_code}", url],
             capture_output=True, text=True, timeout=таймаут + 10)
     except subprocess.TimeoutExpired:

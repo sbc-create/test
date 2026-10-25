@@ -41,6 +41,8 @@ if str(КОРЕНЬ) not in sys.path:
 
 from factory.qwen import registry  # noqa: E402
 
+АГЕНТ = "factory-content-registry-vs-live"
+
 РЕЕСТР = pathlib.Path("/var/lib/seo-content-operator/registry.json")
 ГОТОВ = "READY_VERIFIED"
 
@@ -90,7 +92,7 @@ def на_странице(адрес: str, тело: str) -> tuple[bool | None, 
     отрезок = re.sub(r"<[^>]+>", "", тело).strip()[:60]
     if not отрезок:
         return None, "тело записи пусто"
-    г = subprocess.run(["curl", "-sSL", "-w", "\n%{http_code}", "--max-time", "30", адрес],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "-w", "\n%{http_code}", "--max-time", "30", адрес],
                        capture_output=True, text=True)
     if г.returncode != 0:
         return None, f"curl код {г.returncode}"

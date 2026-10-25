@@ -40,6 +40,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-facet-pages-check"
+
 КОРЕНЬ = Path(__file__).resolve().parents[1].parent
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСПЫТАТЕЛЬНЫЕ = (".localhost", ".test", ".invalid", ".example")
@@ -58,7 +60,7 @@ def домены_реестра(путь: Path) -> list[str]:
 
 
 def тело(адрес: str, таймаут: int) -> str:
-    г = subprocess.run(["curl", "-sSL", "--max-time", str(таймаут), адрес],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут), адрес],
                        capture_output=True, text=True)
     return г.stdout or ""
 

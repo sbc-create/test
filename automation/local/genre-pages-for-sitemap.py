@@ -34,10 +34,12 @@ import subprocess
 import sys
 import urllib.parse
 
+АГЕНТ = "factory-genre-pages-for-sitemap"
+
 
 def достать(адрес: str, таймаут: int = 40) -> str | None:
     try:
-        г = subprocess.run(["curl", "-sSL", "-w", "\n@@КОД@@%{http_code}",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "-w", "\n@@КОД@@%{http_code}",
                             "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 20)
     except subprocess.TimeoutExpired:

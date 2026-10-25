@@ -28,6 +28,8 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-k2-readiness"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ПАРТИЯ_K2 = "k2-zomro-01"
@@ -58,7 +60,7 @@ def адрес(домен: str) -> str:
 
 def сертификат(домен: str) -> str:
     вывод = команда(
-        ["curl", "-sv", "-o", "/dev/null", "--max-time", "15", f"https://{домен}/"], 30)
+        ["curl", "-A", АГЕНТ, "-sv", "-o", "/dev/null", "--max-time", "15", f"https://{домен}/"], 30)
     кому = re.search(r"subject: .*?CN=([^\s;]+)", вывод)
     до = re.search(r"expire date: ([^\n]+)", вывод)
     ошибка = re.search(r"(SSL certificate problem[^\n]*|SSL_ERROR[^\n]*|"
@@ -75,7 +77,7 @@ def сертификат(домен: str) -> str:
 
 def код(url: str, таймаут: int = 20) -> tuple[int, str]:
     г = subprocess.run(
-        ["curl", "-sk", "-o", "/dev/null", "-D", "-", "-w", "\n%{http_code}",
+        ["curl", "-A", АГЕНТ, "-sk", "-o", "/dev/null", "-D", "-", "-w", "\n%{http_code}",
          "--max-time", str(таймаут), url],
         capture_output=True, text=True, timeout=таймаут + 15)
     весь = г.stdout or ""

@@ -44,6 +44,8 @@ import subprocess
 import sys
 import tempfile
 
+АГЕНТ = "factory-catalog-vs-sitemap-sample"
+
 КАРТОЧКА = re.compile(r'href="(/(?:title|anime|film)/[^"?#]+)"')
 АДРЕС_КАРТЫ = re.compile(r"<loc>\s*([^<\s]+)\s*</loc>")
 КАРТА_КАРТ = re.compile(r"<sitemap>.*?</sitemap>", re.S)
@@ -89,7 +91,7 @@ def классифицировать(слаг: str, в_карте: bool, код:
 def достать(url: str, таймаут: int = 50) -> tuple[int, str]:
     with tempfile.NamedTemporaryFile(suffix=".html") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
              "-w", "%{http_code}", url], capture_output=True, text=True)
         try:
             код = int((г.stdout or "0").strip()[:3])

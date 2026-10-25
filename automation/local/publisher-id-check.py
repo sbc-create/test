@@ -133,7 +133,9 @@ def главная(argv: list[str]) -> int:
         б = p.chromium.launch(executable_path=ХРОМ, args=доводы)
         к = б.new_context(ignore_https_errors=True,
                           viewport={"width": 1280, "height": 800})
+        к.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         стр = к.new_page()
+        стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         запросы: list[str] = []
         стр.on("request", lambda з: запросы.append(з.url)
                if "cdnvideohub" in з.url else None)

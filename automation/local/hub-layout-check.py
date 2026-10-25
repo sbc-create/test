@@ -55,6 +55,7 @@ def домены() -> list[str]:
 
 def по_домену(браузер, домен: str) -> dict:
     стр = браузер.new_page(viewport={"width": 1366, "height": 900})
+    стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
     try:
         стр.goto(f"https://{домен}/", wait_until="load", timeout=60000)
         стр.evaluate("() => document.querySelector('.hub')?.scrollIntoView()")

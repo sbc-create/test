@@ -45,6 +45,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-poster-delivery-audit"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 ОЧЕРЕДИ = КОРЕНЬ / "config" / "domain-queues"
 
@@ -103,7 +105,8 @@ def счётчик(адрес: str) -> bool:
     return any(х in низкий for х in СЧЁТЧИКИ)
 
 
-def страница(url: str, агент: str, таймаут: int = 25) -> tuple[int, str]:
+def страница(url: str, агент: str = АГЕНТ_СТОЛ,
+             таймаут: int = 25) -> tuple[int, str]:
     г = subprocess.run(
         ["curl", "-sL", "-m", str(таймаут), "-H", f"User-Agent: {агент}",
          "-w", "\n@@%{http_code}", url], capture_output=True, text=True)

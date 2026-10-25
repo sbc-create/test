@@ -40,6 +40,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-indexing-registry-vs-live"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ЯЧЕЙКИ = КОРЕНЬ / "config" / "site-cells.json"
 
@@ -51,10 +53,10 @@ def записи() -> list[dict]:
 
 
 def живой(домен: str) -> dict:
-    г = subprocess.run(["curl", "-sSI", "--max-time", "30",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSI", "--max-time", "30",
                         f"https://{домен}/"], capture_output=True, text=True)
     заголовки = re.findall(r"(?mi)^x-robots-tag:\s*(.+)$", г.stdout or "")
-    т = subprocess.run(["curl", "-sS", "--max-time", "45",
+    т = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "45",
                         f"https://{домен}/"], capture_output=True, text=True)
     м = re.search(r'<meta[^>]+name="robots"[^>]+content="([^"]*)"',
                   т.stdout or "", re.I)

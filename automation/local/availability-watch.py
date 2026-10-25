@@ -24,6 +24,8 @@ import subprocess
 import sys
 import time
 
+АГЕНТ = "factory-availability-watch"
+
 ПУТИ_ПО_УМОЛЧАНИЮ = "/,/catalog/,/collections/,/new/"
 
 
@@ -33,7 +35,7 @@ def сейчас() -> str:
 
 def замер(домен: str, путь: str, таймаут: int) -> tuple[str, float]:
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code} %{time_total}",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-w", "%{http_code} %{time_total}",
          "--max-time", str(таймаут), f"https://{домен}{путь}"],
         capture_output=True, text=True)
     части = (г.stdout or "").split()

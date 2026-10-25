@@ -65,6 +65,8 @@ sys.path.insert(0, str(КОРЕНЬ))
 
 from factory.cell import registry  # noqa: E402
 
+АГЕНТ = "factory-yummy-publisher-id"
+
 ПЕРЕМЕННАЯ = "CDNVIDEOHUB_PUBLISHER_ID_PINNED"
 #: Общий файл направления. Инструмент его не читает и не меняет — ни разу.
 ОБЩИЙ = Path("/srv/sites/yummyani-staging/runtime/cdnvideohub/publisher-id")
@@ -127,7 +129,8 @@ def живое_значение(порт: int, домен: str) -> dict:
     устарел бы вместе с каталогом и выглядел бы отказом витрины.
     """
     def достать(адрес: str) -> str:
-        зпр = urllib.request.Request(адрес, headers={"Host": домен})
+        зпр = urllib.request.Request(
+            адрес, headers={"Host": домен, "User-Agent": АГЕНТ})
         return urllib.request.urlopen(зпр, timeout=40).read().decode("utf-8", "replace")
 
     основа = f"http://127.0.0.1:{порт}"

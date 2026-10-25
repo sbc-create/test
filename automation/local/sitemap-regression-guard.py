@@ -63,6 +63,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-regression-guard"
+
 ПРЕДЕЛ_ЧАСТИ = 50_000
 ПРИМЕРОВ = 5
 
@@ -83,7 +85,7 @@ from pathlib import Path
 
 
 def взять(url: str, таймаут: int = 180) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     return г.stdout or ""
 

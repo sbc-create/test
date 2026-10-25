@@ -30,6 +30,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-analytics-registry-vs-live"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 #: Копия, по которой работает служба сбора (её WorkingDirectory). Путь
 #: называется явно: копий реестра несколько, и утверждение без имени копии
@@ -40,7 +42,7 @@ from pathlib import Path
 
 def заголовки(домен: str) -> tuple[str, str]:
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-D", "-", "--max-time", "30",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-D", "-", "--max-time", "30",
          f"https://{домен}/"], capture_output=True, text=True, timeout=60)
     вывод = г.stdout or ""
     код = ""
@@ -55,13 +57,13 @@ def заголовки(домен: str) -> tuple[str, str]:
 
 
 def страница(домен: str) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", "30", f"https://{домен}/"],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "30", f"https://{домен}/"],
                        capture_output=True, text=True, timeout=60)
     return г.stdout or ""
 
 
 def robots(домен: str) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", "30",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "30",
                         f"https://{домен}/robots.txt"],
                        capture_output=True, text=True, timeout=60)
     return г.stdout or ""

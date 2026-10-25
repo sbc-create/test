@@ -24,6 +24,8 @@ import subprocess
 import sys
 from urllib.parse import quote
 
+АГЕНТ = "factory-user-scenarios-probe"
+
 
 def взять(url: str, данные: str = "", куки: str = "") -> tuple[str, str]:
     # `-L`: перенаправление на свой же канонический адрес — это исправное
@@ -34,7 +36,7 @@ def взять(url: str, данные: str = "", куки: str = "") -> tuple[st
     # Код возвращается ПОСЛЕДНИЙ в цепочке, а число переходов печатается
     # рядом: иначе «прошли по 308 и получили 200» стало бы неотличимо от
     # «ответили 200 сразу», а 404 в конце цепочки — незаметным.
-    арг = ["curl", "-sSL", "--max-time", "45",
+    арг = ["curl", "-A", АГЕНТ, "-sSL", "--max-time", "45",
            "-w", "\n@@%{http_code}/%{num_redirects}"]
     if куки:
         арг += ["-H", f"Cookie: {куки}"]

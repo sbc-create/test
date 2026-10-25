@@ -32,6 +32,8 @@ import tempfile
 from pathlib import Path
 from urllib.parse import urljoin
 
+АГЕНТ = "factory-empty-sections-probe"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
 #: Ссылки на разделы, которые витрина даёт сама. Обе формы адреса: путём и
@@ -51,7 +53,7 @@ def достать(url: str, таймаут: int = 40) -> tuple[str, str, dict[s
     with tempfile.NamedTemporaryFile(prefix="es-head-", suffix=".txt") as ф, \
             tempfile.NamedTemporaryFile(prefix="es-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
              "-o", б.name, "-w", "%{url_effective}", url],
             capture_output=True, text=True)
         голова = Path(ф.name).read_text(encoding="utf-8", errors="replace")

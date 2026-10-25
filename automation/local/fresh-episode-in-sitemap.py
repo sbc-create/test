@@ -45,6 +45,8 @@ import sys
 import tempfile
 import urllib.parse
 
+АГЕНТ = "factory-fresh-episode-in-sitemap"
+
 ЖУРНАЛ_ПО_УМОЛЧАНИЮ = pathlib.Path(
     "/srv/sites/yummyani-staging/runtime/episode-state/events.jsonl")
 
@@ -124,13 +126,13 @@ def исход(в_карте: bool, код_страницы: int) -> str:
 
 def _достать(url: str, таймаут: int = 120) -> str:
     with tempfile.NamedTemporaryFile(suffix=".txt") as б:
-        subprocess.run(["curl", "-sSL", "--max-time", str(таймаут),
+        subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут),
                         "-o", б.name, url], capture_output=True)
         return open(б.name, encoding="utf-8", errors="replace").read()
 
 
 def _код(url: str) -> int:
-    г = subprocess.run(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-w", "%{http_code}",
                         "--max-time", "35", url], capture_output=True, text=True)
     try:
         return int((г.stdout or "0").strip()[:3])

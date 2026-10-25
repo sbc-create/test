@@ -24,6 +24,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-public-text-audit"
+
 #: Служебные слова и причина, по которой каждое здесь. Слово ищется как
 #: подстрока без учёта регистра — в тексте, уже очищенном от разметки.
 СЛОВА: dict[str, str] = {
@@ -56,7 +58,7 @@ import sys
 
 
 def достать(url: str, таймаут: int = 45) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "-L", "-w", "\n%{http_code}",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-L", "-w", "\n%{http_code}",
                         "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     т = г.stdout or ""

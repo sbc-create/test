@@ -81,7 +81,7 @@ _ОТКРЫВАТЕЛЬ = urllib.request.build_opener(_Перенаправле�
 def достать(url: str) -> tuple[int | None, str, str]:
     """(код, тело, причина). Причина непустая — значит не измерено."""
     запрос = urllib.request.Request(url, headers={
-        "User-Agent": "site-factory-acceptance/1.0 (breadcrumbs)"})
+        "User-Agent": "factory-breadcrumb-acceptance"})
     ssl.create_default_context()
     try:
         with _ОТКРЫВАТЕЛЬ.open(запрос, timeout=ПРЕДЕЛ_С) as ответ:

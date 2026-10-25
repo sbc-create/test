@@ -30,6 +30,8 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-usability-sweep"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 
@@ -48,7 +50,7 @@ from pathlib import Path
 
 def тело(url: str, таймаут: int = 30) -> tuple[int, float, str]:
     г = subprocess.run(
-        ["curl", "-sL", "-w", "\n%{http_code} %{time_total}", "--max-time", str(таймаут), url],
+        ["curl", "-A", АГЕНТ, "-sL", "-w", "\n%{http_code} %{time_total}", "--max-time", str(таймаут), url],
         capture_output=True, text=True, timeout=таймаут + 20)
     весь = г.stdout or ""
     тело_, _, хвост = весь.rpartition("\n")

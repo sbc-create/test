@@ -44,7 +44,7 @@ import urllib.robotparser
 from pathlib import Path
 from urllib.parse import quote, urlsplit
 
-USER_AGENT = "site-factory-editor/1 (editorial fact check)"
+USER_AGENT = "factory-editorial-fact-check/1"
 SHIKIMORI = "https://shikimori.io"
 AI_AGENTS = ("ClaudeBot", "anthropic-ai", "Claude-Web")
 LOG = Path(__file__).resolve().parents[2] / "var" / "editor-runs" / "sources.jsonl"

@@ -53,6 +53,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-robots-closure-consistency"
+
 РЕЕСТР = pathlib.Path("/home/claude/wt-nova-publish-memory-02/"
                       "config/site-cells.json")
 
@@ -160,7 +162,7 @@ def сверить(замер: dict, замысел: str) -> dict:
 def достать(url: str) -> tuple[int, str, str]:
     """Код, заголовки и тело одного адреса."""
     п = subprocess.run(
-        ["curl", "-sS", "--max-time", "35", "-D", "-", url],
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", "35", "-D", "-", url],
         capture_output=True, text=True)
     текст = п.stdout or ""
     for разделитель in ("\r\n\r\n", "\n\n"):

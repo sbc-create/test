@@ -29,6 +29,8 @@ import time
 import urllib.error
 import urllib.request
 
+АГЕНТ = "factory-cold-render-probe"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 
 
@@ -40,7 +42,8 @@ def свободный_порт() -> int:
 
 def запрос(база: str, путь: str, домен: str, таймаут: float):
     начало = time.monotonic()
-    req = urllib.request.Request(база + путь)
+    req = urllib.request.Request(база + путь,
+                                 headers={"User-Agent": АГЕНТ})
     req.add_header("Host", домен)
     try:
         with urllib.request.urlopen(req, timeout=таймаут) as о:

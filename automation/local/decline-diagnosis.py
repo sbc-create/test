@@ -27,13 +27,15 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-decline-diagnosis"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ТРАФИК = КОРЕНЬ / "var" / "seo" / "traffic-wow.json"
 
 
 def взять(url: str, таймаут: int = 45) -> tuple[str, str, float]:
     п = subprocess.run(
-        ["curl", "-sS", "--max-time", str(таймаут), "-w",
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), "-w",
          "\n@@%{http_code}@@%{time_total}", url],
         capture_output=True, text=True)
     тело = п.stdout or ""
@@ -44,7 +46,7 @@ def взять(url: str, таймаут: int = 45) -> tuple[str, str, float]:
 
 
 def заголовки(url: str) -> dict[str, list[str]]:
-    п = subprocess.run(["curl", "-sSI", "--max-time", "30", url],
+    п = subprocess.run(["curl", "-A", АГЕНТ, "-sSI", "--max-time", "30", url],
                        capture_output=True, text=True)
     итог: dict[str, list[str]] = {}
     for строка in (п.stdout or "").splitlines():

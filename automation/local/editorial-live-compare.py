@@ -69,7 +69,7 @@ def загрузить(url: str, таймаут: int) -> tuple[str, str]:
         г = subprocess.run(
             ["curl", "-sS", "-L", "--max-time", str(таймаут),
              "-w", "\\n@@КОД:%{http_code}",
-             "-A", "Mozilla/5.0 (compatible; site-factory-editorial-check)",
+             "-A", "factory-editorial-live-compare",
              url],
             capture_output=True, text=True, timeout=таймаут + 10)
     except subprocess.TimeoutExpired:

@@ -41,6 +41,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-homepage-cards-audit"
+
 РЕЕСТР = pathlib.Path(__file__).resolve().parents[2] / "config/site-cells.json"
 КАРТОЧЕК = 24
 СТАРЫМ_СЧИТАЕМ_ДО = 10  # лет: порог печати, не приговор
@@ -76,7 +78,7 @@ def каталог_данных(домен: str) -> pathlib.Path | None:
 
 
 def добыть(адрес: str, таймаут: int = 40) -> str:
-    г = subprocess.run(["curl", "-sSL", "--max-time", str(таймаут), адрес],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут), адрес],
                        capture_output=True, text=True)
     return г.stdout if г.returncode == 0 else ""
 

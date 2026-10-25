@@ -22,6 +22,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-orphan-sections-probe"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 
@@ -57,7 +59,7 @@ def код(url: str) -> str:
     смерть раздела, и путать их нельзя: из-за этого вердикт был неверен в обе
     стороны.
     """
-    п = subprocess.run(["curl", "-sSL", "--max-time", "30", "-o", "/dev/null",
+    п = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "30", "-o", "/dev/null",
                         "-w", "%{http_code}", url], capture_output=True, text=True)
     return (п.stdout or "0").strip()
 
@@ -73,7 +75,7 @@ def канонический_свой(домен: str, путь: str) -> bool | 
     проход 20.10 дал 25 «находок» из 25 домéнов, из которых настоящими
     оказались пять.
     """
-    тело = subprocess.run(["curl", "-sSL", "--max-time", "40",
+    тело = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "40",
                            f"https://{домен}{путь}"],
                           capture_output=True, text=True).stdout or ""
     м = re.search(r'<link[^>]+rel="canonical"[^>]+href="([^"]*)"', тело)
@@ -84,7 +86,7 @@ def канонический_свой(домен: str, путь: str) -> bool | 
 
 
 def по_домену(домен: str) -> dict:
-    html = subprocess.run(["curl", "-sS", "--max-time", "45",
+    html = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "45",
                            f"https://{домен}/"],
                           capture_output=True, text=True).stdout or ""
     не_отвечает = not html

@@ -14,6 +14,8 @@ import subprocess
 import sys
 import urllib.parse
 
+АГЕНТ = "factory-search-works-check"
+
 ДОМЕНЫ = ["yummyani.site", "yummyani.biz", "lordserials22.info",
           "lordfilm47.space", "zonafilm.space", "zonafilm.cc",
           "animedia.icu", "animeg0.site", "lordserial.su", "lordfilm.group"]
@@ -21,7 +23,7 @@ import urllib.parse
 
 
 def достать(url: str) -> str:
-    г = subprocess.run(["curl", "-sSL", "--max-time", "40", url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "40", url],
                        capture_output=True)
     return (г.stdout or b"").decode("utf-8", errors="replace")
 

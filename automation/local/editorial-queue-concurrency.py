@@ -23,6 +23,8 @@ import json
 import subprocess
 import sys
 
+АГЕНТ = "factory-editorial-queue-concurrency"
+
 МОСТ = "http://127.0.0.1:9000/mcp"
 КОРЕНЬ = "/home/claude/wt-portable-site-cell-01"
 
@@ -32,7 +34,7 @@ def запрос(имя: str, аргументы: dict) -> dict:
     тело = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
             "params": {"name": имя, "arguments": аргументы}}
     r = subprocess.run(
-        ["curl", "-sS", "--max-time", "120", "-X", "POST",
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", "120", "-X", "POST",
          "-H", "Content-Type: application/json", "-d", json.dumps(тело), МОСТ],
         capture_output=True, text=True)
     if r.returncode != 0:
@@ -83,7 +85,7 @@ def главная(argv: list[str] | None = None) -> int:
                 "params": {"name": "editorial_queue_next",
                            "arguments": {"site": а.site, "owner": в, "limit": 1}}}
         процессы.append((в, subprocess.Popen(
-            ["curl", "-sS", "--max-time", "120", "-X", "POST",
+            ["curl", "-A", АГЕНТ, "-sS", "--max-time", "120", "-X", "POST",
              "-H", "Content-Type: application/json", "-d", json.dumps(тело), МОСТ],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)))
 

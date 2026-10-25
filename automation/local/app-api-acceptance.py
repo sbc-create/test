@@ -57,7 +57,7 @@ class Приёмка:
 
     # --- запрос ---------------------------------------------------------
     def запрос(self, путь: str, *, ключ: str | None = "свой"):
-        заголовки = {"User-Agent": "app-api-acceptance"}
+        заголовки = {"User-Agent": "factory-app-api-acceptance"}
         значение = self.ключ if ключ == "свой" else ключ
         if значение:
             заголовки["X-App-Key"] = значение

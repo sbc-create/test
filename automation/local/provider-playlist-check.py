@@ -67,7 +67,7 @@ def дорожка(номер: str, агрегатор: str, идентифик�
         "Origin": f"https://{домен}",
         "x-origin": f"https://{домен}",
         "Referer": f"https://{домен}/",
-        "User-Agent": "provider-playlist-check",
+        "User-Agent": "factory-provider-playlist-check",
     })
     try:
         with urllib.request.urlopen(запрос, timeout=30) as о:

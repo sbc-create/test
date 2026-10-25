@@ -52,6 +52,7 @@ with sync_playwright() as p:
             print(f"\n{адрес}")
             for имя, (ш, в) in ОКНА.items():
                 страница = браузер.new_page(viewport={"width": ш, "height": в})
+                страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
                 try:
                     страница.goto(адрес, wait_until="load", timeout=45000)
                     з = страница.evaluate(ЗАМЕР)

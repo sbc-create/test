@@ -47,6 +47,8 @@ import sys
 import tempfile
 import time
 
+АГЕНТ = "factory-episode-sitemap-coverage"
+
 #: Позиции в `titles.xml`, те же, что в таблице блока владельца.
 #:
 #: ЧТО ПОЗИЦИЯ ДАЁТ И ЧЕГО НЕ ДАЁТ. В ОДНОМ прогоне она берёт на всех домéнах
@@ -91,7 +93,7 @@ def достать(адрес: str, таймаут: int = 240, кеширова�
             return файл.read_text(encoding="utf-8", errors="replace")
     try:
         г = subprocess.run(
-            ["curl", "-sSL", "-w", "\n@@КОД@@%{http_code}", "--max-time",
+            ["curl", "-A", АГЕНТ, "-sSL", "-w", "\n@@КОД@@%{http_code}", "--max-time",
              str(таймаут), адрес],
             capture_output=True, text=True, timeout=таймаут + 60)
     except subprocess.TimeoutExpired:

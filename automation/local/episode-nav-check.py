@@ -20,6 +20,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-episode-nav-check"
+
 
 
 def номер(путь: str) -> tuple[int, int]:
@@ -52,7 +54,7 @@ def выбрать(серии: list[str]) -> tuple[list[str], list[str]]:
     return list(dict.fromkeys(выборка)), нулевые
 
 def достать(url: str, таймаут: int = 60) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "-L", "-w", "\n%{http_code}",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-L", "-w", "\n%{http_code}",
                         "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     т = г.stdout or ""

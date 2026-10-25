@@ -32,6 +32,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+АГЕНТ = "factory-schema-vs-visible"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
 #: Типы узлов, описывающих само произведение. Остальные (`WebSite`,
@@ -43,7 +45,7 @@ from pathlib import Path
 def достать(url: str, таймаут: int = 40) -> tuple[str, str]:
     with tempfile.NamedTemporaryFile(prefix="sv-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
              "-w", "%{http_code}", url],
             capture_output=True, text=True)
         тело = Path(б.name).read_text(encoding="utf-8", errors="replace")

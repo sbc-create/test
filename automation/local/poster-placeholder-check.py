@@ -43,6 +43,8 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-poster-placeholder-check"
+
 РЕЕСТР = Path(__file__).resolve().parents[2] / "config" / "site-cells.json"
 K2 = ["lordfilm.group", "lordfilm.spb.ru", "lordfilm.msk.ru", "lordserial.su",
       "lordserial.group", "lordserial.spb.ru", "lordserial.msk.ru",
@@ -102,7 +104,7 @@ def домены_реестра() -> list[str]:
 
 
 def взять(url: str, таймаут: int = 40) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     return г.stdout or ""
 

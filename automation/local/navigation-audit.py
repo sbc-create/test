@@ -32,6 +32,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-navigation-audit"
+
 ТАЙМАУТ = 45
 #: Ниже этого числа видимых символов страница считается бессодержательной.
 ПОРОГ_ТЕКСТА = 400
@@ -47,7 +49,7 @@ def достать(url: str) -> tuple[int, str]:
     оценивается как любая другая страница.
     """
     г = subprocess.run(
-        ["curl", "-sSL", "--max-time", str(ТАЙМАУТ), "-w", "\n%{http_code}",
+        ["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(ТАЙМАУТ), "-w", "\n%{http_code}",
          url], capture_output=True)
     вывод = (г.stdout or b"").decode("utf-8", errors="replace")
     строки = вывод.rsplit("\n", 1)

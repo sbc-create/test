@@ -39,6 +39,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-sitemap-index-audit"
+
 ВИТРИНЫ_YUMMY = ("yummyani.site", "yummyani.org", "yummyani.biz",
                  "yummyani7.site", "yummyani7.info")
 
@@ -47,7 +49,7 @@ def достать(адрес: str, таймаут: int) -> tuple[str, str]:
     """Код ответа и тело. Исключение кодом не подменяется."""
     try:
         г = subprocess.run(
-            ["curl", "-sS", "-w", "\n@@КОД@@%{http_code}", "--max-time",
+            ["curl", "-A", АГЕНТ, "-sS", "-w", "\n@@КОД@@%{http_code}", "--max-time",
              str(таймаут), адрес],
             capture_output=True, text=True, timeout=таймаут + 20)
     except subprocess.SubprocessError as ош:

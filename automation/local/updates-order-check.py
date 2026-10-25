@@ -18,6 +18,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-updates-order-check"
+
 #: Как блок обновлений называется у семейств. Заголовок ищется в разметке, а не
 #: угадывается по порядку секций.
 ЗАГОЛОВКИ = ("Обновления", "Новые серии", "Недавно добавлено", "Новинки",
@@ -25,7 +27,7 @@ import sys
 
 
 def достать(url: str, таймаут: int = 60) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "-L", "-w", "\n%{http_code}",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-L", "-w", "\n%{http_code}",
                         "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     т = г.stdout or ""

@@ -69,6 +69,7 @@ def главное(argv: list[str]) -> int:
                                     args=["--no-sandbox"])
         try:
             страница = браузер.new_page()
+            страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             for адрес in адреса:
                 страница.goto(адрес, wait_until="networkidle", timeout=90000)
                 страница.wait_for_timeout(ОЖИДАНИЕ_МС)

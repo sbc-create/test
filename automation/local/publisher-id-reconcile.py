@@ -41,7 +41,7 @@ sys.path.insert(0, str(КОРЕНЬ))
 #: чтобы приёмка этого инструмента могла подставить свой стенд.
 КОРЕНЬ_ЯЧЕЕК = КОРЕНЬ / "var" / "site-repos"
 
-ЗАГОЛОВКИ = {"User-Agent": "site-factory-acceptance/1.0 (publisher)"}
+ЗАГОЛОВКИ = {"User-Agent": "factory-publisher-id-reconcile"}
 ПРЕДЕЛ_С = 30
 КАРТОЧКА = re.compile(r'href="(/(?:title|anime)/[^"]+)"')
 АТРИБУТ = re.compile(r'data-publisher-id="(\d+)"')

@@ -29,6 +29,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-year-corrections-verify-live"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ПОПРАВКИ = КОРЕНЬ / "config/anime-year-corrections.json"
 
@@ -56,7 +58,7 @@ def _модуль(путь: Path, имя: str):
 
 
 def добыть(url: str, таймаут: int = 30) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), url],
                        capture_output=True, text=True, timeout=таймаут + 20)
     return г.stdout
 

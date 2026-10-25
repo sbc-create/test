@@ -28,6 +28,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+АГЕНТ = "factory-domain-matrix"
+
 КОРЕНЬ = Path(__file__).resolve().parents[1].parent
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 РЕЗУЛЬТАТЫ = Path("/var/lib/site-cells/results")
@@ -63,7 +65,7 @@ def живое(домен: str, таймаут: int = 20) -> tuple[str, str, str
         файл_заголовков = Path(ф.name)
     try:
         итог = subprocess.run(
-            ["curl", "-sS", "-D", str(файл_заголовков), "--max-time",
+            ["curl", "-A", АГЕНТ, "-sS", "-D", str(файл_заголовков), "--max-time",
              str(таймаут), f"https://{домен}/"],
             capture_output=True, text=True)
         if итог.returncode:

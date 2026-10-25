@@ -52,6 +52,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-generation-lag"
+
 #: Домен → (каталог данных витрины, site_id). Из отчёта доставки ячеек
 #: (`cell_delivery`), а не по имени домена.
 ВИТРИНЫ = {
@@ -109,7 +111,7 @@ def _когда(п: Path) -> dt.datetime | None:
 
 
 def добыть(url: str, таймаут: int = 60) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), url],
                        capture_output=True, text=True, timeout=таймаут + 30)
     return г.stdout
 

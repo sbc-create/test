@@ -39,7 +39,7 @@ def ответ(домен: str, путь: str, *, тело: bool = False) -> tup
     try:
         соединение = http.client.HTTPConnection(домен, 80, timeout=ТАЙМАУТ)
         соединение.request("GET", путь, headers={"Host": домен,
-                                                 "User-Agent": "redirect-audit"})
+                                                 "User-Agent": "factory-redirect-audit"})
         о = соединение.getresponse()
         код = str(о.status)
         куда = о.getheader("Location") or ""

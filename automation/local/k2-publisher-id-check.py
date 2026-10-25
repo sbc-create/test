@@ -22,6 +22,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-k2-publisher-id-check"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 K2 = [f"lords-{н}" for н in range(10, 18)]
@@ -40,7 +42,7 @@ def домены() -> dict[str, str]:
 
 
 def первый_тайтл(домен: str) -> str:
-    html = subprocess.run(["curl", "-sS", "--max-time", "60",
+    html = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "60",
                            f"https://{домен}/"],
                           capture_output=True, text=True).stdout or ""
     м = re.search(r'href="(/title/[^"]+)"', html)
@@ -53,7 +55,7 @@ def по_витрине(пара: tuple[str, str]) -> dict:
     if not путь:
         return {"site_id": site_id, "домен": домен, "id": None,
                 "почему": "на главной нет ссылок на произведения"}
-    html = subprocess.run(["curl", "-sS", "--max-time", "60",
+    html = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "60",
                            f"https://{домен}{путь}"],
                           capture_output=True, text=True).stdout or ""
     for образец in ОБРАЗЦЫ:

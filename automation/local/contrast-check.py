@@ -143,7 +143,9 @@ def main() -> int:
             for тема in ("light", "dark"):
                 к = браузер.new_context(viewport={"width": 1366, "height": 768},
                                         color_scheme=тема)
+                к.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
                 стр = к.new_page()
+                стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
                 замеры = {}
                 текущий_адрес = None
                 for адрес, селектор, имя in ЦЕЛИ:

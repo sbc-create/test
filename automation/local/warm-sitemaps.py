@@ -66,7 +66,7 @@ def достать(адрес: str, таймаут: float) -> tuple[int | str, s
     # Поймано своим же первым прогоном: инструмент печатал «индекс карт
     # ответил UnicodeEncodeError» про домены, которые отвечают 200.
     запрос = urllib.request.Request(адрес, headers={
-        "User-Agent": "site-factory-warmup/1.0 (sitemap warmup)"})
+        "User-Agent": "factory-sitemap-warmup"})
     try:
         with urllib.request.urlopen(запрос, timeout=таймаут) as о:
             тело = о.read().decode("utf-8", "replace")

@@ -29,6 +29,8 @@ import tempfile
 from pathlib import Path
 from urllib.parse import urlsplit
 
+АГЕНТ = "factory-cross-site-leak-probe"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 #: Формы адреса карточки. Две, и это измерено, а не предположено: Yummy держит
 #: карточку на `/anime/<slug>`, остальные на `/title/<slug>`.
@@ -44,7 +46,7 @@ from urllib.parse import urlsplit
 def достать(url: str, таймаут: int = 50) -> tuple[str, str]:
     with tempfile.NamedTemporaryFile(prefix="csl-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-o", б.name,
              "-w", "%{http_code}", url],
             capture_output=True, text=True)
         тело = Path(б.name).read_text(encoding="utf-8", errors="replace")

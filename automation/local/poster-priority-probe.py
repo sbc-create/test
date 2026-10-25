@@ -200,8 +200,10 @@ def замерить(адрес: str, окно=ОКНО_ТЕЛЕФОНА) -> dic
             if телефон else
             ("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36"
              " (KHTML, like Gecko) Chrome/120.0 Safari/537.36"))
+        контекст.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         перехвачено = _запрет_счётчиков(контекст)
         страница = контекст.new_page()
+        страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         try:
             try:
                 ответ = страница.goto(адрес, wait_until="load", timeout=45000)

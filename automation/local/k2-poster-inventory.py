@@ -34,6 +34,8 @@ import sys
 import tempfile
 from concurrent.futures import ThreadPoolExecutor
 
+АГЕНТ = "factory-k2-poster-inventory"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСХОДНИКИ = КОРЕНЬ / "var" / "k2-data" / "publish-stage8"
@@ -89,7 +91,7 @@ def получить(адрес: str, *, байты: bool = False):
     """
     with tempfile.NamedTemporaryFile(suffix=".bin", delete=True) as ф:
         п = subprocess.run(
-            ["curl", "-sS", "--max-time", "45", "-o", ф.name,
+            ["curl", "-A", АГЕНТ, "-sS", "--max-time", "45", "-o", ф.name,
              "-w", "%{http_code}\t%{content_type}", адрес],
             capture_output=True, text=True)
         мета = (п.stdout or "\t")

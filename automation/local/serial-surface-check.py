@@ -218,7 +218,9 @@ def main() -> int:
                 пуск["executable_path"] = str(ГОТОВЫЙ_CHROMIUM)
             браузер = pw.chromium.launch(**пуск)
             контекст = браузер.new_context(viewport=КОМПЬЮТЕР)
+            контекст.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             стр = контекст.new_page()
+            стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             итог["сериал"] = проверить(стр, база, ожидание)
             контекст.close()
             браузер.close()

@@ -29,6 +29,8 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
+АГЕНТ = "factory-seo-check-cell"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 
 
@@ -45,7 +47,8 @@ def окружение(конфиг: dict, проект: Path, данные: Pat
 
 
 def запрос(база: str, путь: str, домен: str, таймаут: float = 30.0):
-    req = urllib.request.Request(база + путь, headers={"Host": домен})
+    req = urllib.request.Request(base := база + путь,
+                               headers={"Host": домен, "User-Agent": АГЕНТ})
     try:
         с = urllib.request.urlopen(req, timeout=таймаут)
         return с.status, с.read().decode("utf-8", "replace"), dict(с.headers)
@@ -98,7 +101,10 @@ def main() -> int:
     готово = False
     for _ in range(60):
         try:
-            urllib.request.urlopen(f"{база}/healthz", timeout=12)
+            urllib.request.urlopen(
+                urllib.request.Request(f"{база}/healthz",
+                                       headers={"User-Agent": АГЕНТ}),
+                timeout=12)
             готово = True
             break
         except Exception:  # noqa: BLE001

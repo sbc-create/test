@@ -24,6 +24,8 @@ import subprocess
 import sys
 from concurrent.futures import ThreadPoolExecutor
 
+АГЕНТ = "factory-k2-posterless-works"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСХОДНИКИ = КОРЕНЬ / "var" / "k2-data" / "publish-stage8"
@@ -42,7 +44,7 @@ def витрины() -> dict[str, str]:
 
 
 def страница(домен: str, путь: str) -> str:
-    return subprocess.run(["curl", "-sS", "--max-time", "60",
+    return subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", "60",
                            f"https://{домен}{путь}"],
                           capture_output=True, text=True).stdout or ""
 

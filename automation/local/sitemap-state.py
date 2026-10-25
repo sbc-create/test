@@ -17,6 +17,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-sitemap-state"
+
 #: Разделы, которые встречаются у семейств lords/zona/animego. Проверяются ВСЕ,
 #: в карту пойдут только ответившие 200 собственным содержимым.
 КАНДИДАТЫ = ("/movies/", "/series/", "/animation/", "/anime/", "/dorama/",
@@ -25,7 +27,7 @@ import sys
 
 
 def ответ(url: str, таймаут: int = 30) -> tuple[str, str, dict[str, str]]:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), "-D", "-", url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), "-D", "-", url],
                        capture_output=True, text=True)
     всё = г.stdout or ""
     разд = "\r\n\r\n" if "\r\n\r\n" in всё else "\n\n"

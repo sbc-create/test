@@ -36,6 +36,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-slug-identity-across-domains"
+
 СЕМЬЯ_YUMMY = ("yummyani.site", "yummyani.org", "yummyani.biz",
                "yummyani7.site", "yummyani7.info")
 ЖУРНАЛ = pathlib.Path("/srv/sites/yummyani-staging/runtime/"
@@ -80,7 +82,7 @@ def сверить(составы: dict[str, tuple | None]) -> dict:
 
 
 def достать(url: str, таймаут: int = 35) -> tuple[int, str]:
-    г = subprocess.run(["curl", "-sSL", "--max-time", str(таймаут),
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут),
                         "-w", "\n@@КОД@@%{http_code}", url],
                        capture_output=True, text=True)
     текст = г.stdout or ""

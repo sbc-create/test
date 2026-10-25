@@ -29,6 +29,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-public-acceptance"
+
 УЧЁТКИ = pathlib.Path("/srv")
 
 
@@ -55,7 +57,7 @@ def достать(url: str, таймаут: int = 45) -> tuple[str, str, dict[s
     with tempfile.NamedTemporaryFile(prefix="curl-head-", suffix=".txt") as ф, \
             tempfile.NamedTemporaryFile(prefix="curl-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
              "-o", б.name, "-w", "%{url_effective}", url],
             capture_output=True, text=True)
         голова_всё = pathlib.Path(ф.name).read_text(encoding="utf-8", errors="replace")
@@ -1155,7 +1157,7 @@ def нормы_перенаправлений(домен: str, шаг) -> None:
             (f"http://{домен}/", "http → https", f"https://{домен}"),
             (f"https://www.{домен}/", "www → апекс", f"https://{домен}")):
         г = subprocess.run(
-            ["curl", "-sS", "--max-time", "30", "-o", "/dev/null",
+            ["curl", "-A", АГЕНТ, "-sS", "--max-time", "30", "-o", "/dev/null",
              "-w", "%{http_code} %{redirect_url}", адрес],
             capture_output=True, text=True)
         части = (г.stdout or "").split()
@@ -1209,7 +1211,7 @@ def нормы_плеера(домен: str, адреса: list[str], шаг) ->
             "внешнего идентификатора в разметке карточки нет — спрашивать нечем")
         return
     г = subprocess.run(
-        ["curl", "-sS", "--max-time", "30",
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", "30",
          "-H", f"Origin: https://{домен}", "-H", f"Referer: https://{домен}/",
          f"https://plapi.cdnvideohub.com/api/v1/player/sv/playlist"
          f"?pub={номер}&id={идентификатор}&aggr={агрегатор}"],

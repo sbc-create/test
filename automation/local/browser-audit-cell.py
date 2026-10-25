@@ -429,7 +429,9 @@ def осмотр_навигации(стр, база: str, итог: dict) -> No
 def осмотр_телефона(браузер, база: str, снимки: Path, site: str, итог: dict) -> None:
     контекст = браузер.new_context(viewport=ТЕЛЕФОН, is_mobile=True,
                                   has_touch=True, device_scale_factor=2)
+    контекст.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
     стр = контекст.new_page()
+    стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
     стр.goto(база + "/", wait_until="domcontentloaded")
     прокрутка = стр.evaluate(
         "() => ({scroll: document.documentElement.scrollWidth, view: window.innerWidth})")
@@ -531,7 +533,9 @@ def main() -> int:
                 print("браузер: сборка playwright по умолчанию")
             браузер = pw.chromium.launch(**пуск)
             контекст = браузер.new_context(viewport=КОМПЬЮТЕР)
+            контекст.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             стр = контекст.new_page()
+            стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             осмотр(стр, база, итог)
             итог["главная"]["незагруженных изображений перед снимком"] = (
                 дождаться_картинок(стр))
@@ -552,7 +556,9 @@ def main() -> int:
             # Светлые снимки остаются: посетитель со светлой системой увидит
             # именно их.
             тёмный = браузер.new_context(viewport=КОМПЬЮТЕР, color_scheme="dark")
+            тёмный.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             т_стр = тёмный.new_page()
+            т_стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             т_стр.goto(база + "/", wait_until="domcontentloaded")
             дождаться_картинок(т_стр)
             итог.setdefault("тема", {})["палитра на снимке"] = т_стр.evaluate(
@@ -561,7 +567,9 @@ def main() -> int:
             тёмный.close()
             т_тел = браузер.new_context(viewport=ТЕЛЕФОН, color_scheme="dark",
                                         is_mobile=True, has_touch=True)
+            т_тел.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             т_стр2 = т_тел.new_page()
+            т_стр2.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
             т_стр2.goto(база + "/", wait_until="domcontentloaded")
             дождаться_картинок(т_стр2)
             т_стр2.screenshot(path=str(выход / f"{а.site}-phone-home-dark.png"),

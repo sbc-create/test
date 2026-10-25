@@ -26,6 +26,8 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-network-table"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ЯЧЕЙКИ = КОРЕНЬ / "config" / "site-cells.json"
 АНАЛИТИКА = КОРЕНЬ / "config" / "analytics.json"
@@ -91,7 +93,7 @@ def трафик() -> dict[str, dict]:
 
 def живой(домен: str) -> dict:
     п = subprocess.run(
-        ["curl", "-sS", "--max-time", "30", "-o", "/dev/null",
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", "30", "-o", "/dev/null",
          "-w", "%{http_code} %{time_total}", f"https://{домен}/"],
         capture_output=True, text=True)
     части = (п.stdout or "0 0").split()

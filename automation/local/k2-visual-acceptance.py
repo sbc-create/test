@@ -94,6 +94,7 @@ def главная(аргв: list[str]) -> int:
             for имя, ш, в in ШИРИНЫ:
                 стр = б.new_page(viewport={"width": ш, "height": в},
                                  color_scheme=тема)
+                стр.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
                 try:
                     стр.goto(адрес, wait_until="load", timeout=90000)
                     стр.evaluate(ПРОКРУТКА)

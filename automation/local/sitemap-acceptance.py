@@ -21,6 +21,8 @@ import tempfile
 import time
 import xml.etree.ElementTree as ET
 
+АГЕНТ = "factory-sitemap-acceptance"
+
 SM = "{http://www.sitemaps.org/schemas/sitemap/0.9}"
 
 #: Предел шлюза, действующий У КЛИЕНТА. Ответ дольше него обход не получит: он
@@ -156,7 +158,7 @@ def достать(url: str, таймаут: int = 60) -> tuple[str, str, dict[s
     with tempfile.NamedTemporaryFile(prefix="curl-head-", suffix=".txt") as голова_ф:
         начало = time.monotonic()
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", голова_ф.name, url],
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-D", голова_ф.name, url],
             capture_output=True, text=True)
         # Время ответа запоминается рядом с адресом: ответ, не укладывающийся в
         # предел шлюза, обход не получит вовсе — он увидит 504.

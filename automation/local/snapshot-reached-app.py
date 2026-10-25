@@ -78,6 +78,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-snapshot-reached-app"
+
 КАТАЛОГ_ЯЧЕЕК = pathlib.Path("/etc/nginx/cells")
 #: Где лежат юниты и что означает «включён». Константами — чтобы проверка
 #: могла подставить свои каталоги, не трогая системные.
@@ -118,7 +120,7 @@ def заголовки_ответа(порт: str, таймаут: int) -> dict:
     просто не тем эндпоинтом. Такой вывод хуже пробела: он указывает на риск,
     которого нет, и прячет пробел там, где он настоящий.
     """
-    г = subprocess.run(["curl", "-fsS", "-D", "-", "-o", "/dev/null",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-fsS", "-D", "-", "-o", "/dev/null",
                         "--max-time", str(таймаут),
                         f"http://127.0.0.1:{порт}/"],
                        capture_output=True, text=True)
@@ -147,7 +149,7 @@ def путь_по_данным(имя: str) -> str:
 
 
 def ответ_healthz(порт: str, таймаут: int) -> dict:
-    г = subprocess.run(["curl", "-fsS", "--max-time", str(таймаут),
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-fsS", "--max-time", str(таймаут),
                         f"http://127.0.0.1:{порт}/healthz"],
                        capture_output=True, text=True)
     if г.returncode != 0:

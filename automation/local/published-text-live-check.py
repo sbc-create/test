@@ -50,6 +50,8 @@ if str(КОРЕНЬ) not in sys.path:
 
 from factory.qwen import registry  # noqa: E402
 
+АГЕНТ = "factory-published-text-live-check"
+
 ПРОГОНЫ = pathlib.Path("/home/claude/wt-portable-site-cell-01/var/editor-runs")
 ОТРЕЗОК = 60
 
@@ -132,7 +134,7 @@ def склад_витрины(домен: str) -> dict:
 
 def страница(адрес: str) -> tuple[str, str]:
     г = subprocess.run(
-        ["curl", "-sSL", "-w", "\n%{http_code}", "--max-time", "40", адрес],
+        ["curl", "-A", АГЕНТ, "-sSL", "-w", "\n%{http_code}", "--max-time", "40", адрес],
         capture_output=True, text=True)
     if г.returncode != 0:
         return "", f"curl код {г.returncode}"

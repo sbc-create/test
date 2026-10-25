@@ -54,11 +54,13 @@ import re
 import subprocess
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-lastmod-check"
+
 ЮТС = dt.timezone.utc
 
 
 def взять(url: str, таймаут: int = 180) -> str:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), url],
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), url],
                        capture_output=True, text=True)
     return г.stdout or ""
 

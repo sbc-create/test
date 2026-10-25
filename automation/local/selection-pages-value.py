@@ -40,13 +40,15 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-selection-pages-value"
+
 ФОРМЫ = {"country": "country", "year": "year", "genre": "genre"}
 #: Пустая страница отбора в индексе запрещена пакетом — это находка.
 ПУСТО = 0
 
 
 def взять(url: str, таймаут: int) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут),
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут),
                         "-w", "\n%{http_code}", url],
                        capture_output=True, text=True)
     части = (г.stdout or "").rsplit("\n", 1)

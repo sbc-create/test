@@ -30,12 +30,14 @@ import subprocess
 import sys
 import urllib.parse
 
+АГЕНТ = "factory-sitemap-demand-coverage"
+
 ВЫГРУЗКА = pathlib.Path(
     "/home/claude/wt-portable-site-cell-01/var/analytics/cabinet-latest.json")
 
 
 def _достать(адрес: str, предел: int = 60) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "-w", "\n%{http_code}", "--max-time", str(предел),
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-w", "\n%{http_code}", "--max-time", str(предел),
                         адрес], capture_output=True, text=True)
     if г.returncode != 0:
         return "", f"curl код {г.returncode}"

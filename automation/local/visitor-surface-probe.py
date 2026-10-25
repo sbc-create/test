@@ -35,6 +35,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-visitor-surface-probe"
+
 ВИТРИНЫ = (
     "lordserials22.info", "1lordserials1.online", "lordfilm47.space",
     "lordserial33.biz", "zonafilm12.site", "zonafilm.space", "zonafilm.cc",
@@ -55,7 +57,7 @@ import sys
 
 def достать(адрес: str, таймаут: int = 40) -> tuple[int, str]:
     try:
-        г = subprocess.run(["curl", "-sSL", "-w", "\n@@КОД@@%{http_code}",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "-w", "\n@@КОД@@%{http_code}",
                             "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 20)
     except subprocess.TimeoutExpired:
@@ -69,7 +71,7 @@ def достать(адрес: str, таймаут: int = 40) -> tuple[int, str]
 
 def код(адрес: str, таймаут: int = 30) -> int:
     try:
-        г = subprocess.run(["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code}",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-w", "%{http_code}",
                             "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 15)
     except subprocess.TimeoutExpired:
@@ -92,7 +94,7 @@ def код_после_перехода(адрес: str, таймаут: int = 40
     в 404. Поэтому у перенаправления проверяется ЦЕЛЬ.
     """
     try:
-        г = subprocess.run(["curl", "-sSL", "-o", "/dev/null", "-w",
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "-o", "/dev/null", "-w",
                             "%{http_code}", "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 15)
     except subprocess.TimeoutExpired:

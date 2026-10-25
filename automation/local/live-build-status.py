@@ -30,6 +30,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-live-build-status"
+
 РЕЗУЛЬТАТЫ = Path("/var/lib/site-cells/results")
 
 #: Домен → site_id. Берётся из реестра ячеек, а не придумывается: домен, о
@@ -97,7 +99,7 @@ def домены_реестра(корень: Path | None = None) -> tuple[dict[
 def живой_build(домен: str, таймаут: int = 25) -> tuple[str, str]:
     """(build, причина). Пустой build — причина говорит, почему."""
     итог = subprocess.run(
-        ["curl", "-sS", "-D", "-", "-o", "/dev/null", "--max-time",
+        ["curl", "-A", АГЕНТ, "-sS", "-D", "-", "-o", "/dev/null", "--max-time",
          str(таймаут), f"https://{домен}/"],
         capture_output=True, text=True)
     if итог.returncode:

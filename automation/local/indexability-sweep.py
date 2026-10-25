@@ -31,6 +31,8 @@ import subprocess
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+АГЕНТ = "factory-indexability-sweep"
+
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ОБРАЗЦОВ = 3
@@ -38,7 +40,7 @@ from pathlib import Path
 
 def достать(url: str, таймаут: int = 30) -> tuple[int, str, str]:
     г = subprocess.run(
-        ["curl", "-sSL", "-D", "-", "-o", "-", "-w", "\n%{http_code}",
+        ["curl", "-A", АГЕНТ, "-sSL", "-D", "-", "-o", "-", "-w", "\n%{http_code}",
          "--max-time", str(таймаут), url],
         capture_output=True, text=True, timeout=таймаут + 20)
     весь = г.stdout or ""
@@ -54,7 +56,7 @@ def достать(url: str, таймаут: int = 30) -> tuple[int, str, str]:
 
 def код(url: str, таймаут: int = 25) -> int:
     г = subprocess.run(
-        ["curl", "-sSL", "-o", "/dev/null", "-w", "%{http_code}",
+        ["curl", "-A", АГЕНТ, "-sSL", "-o", "/dev/null", "-w", "%{http_code}",
          "--max-time", str(таймаут), url],
         capture_output=True, text=True, timeout=таймаут + 15)
     т = (г.stdout or "").strip()

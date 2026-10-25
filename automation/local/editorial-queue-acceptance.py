@@ -27,6 +27,8 @@ import pathlib
 import subprocess
 import sys
 
+АГЕНТ = "factory-editorial-queue-acceptance"
+
 МОСТ = "http://127.0.0.1:9000/mcp"
 
 
@@ -58,7 +60,7 @@ def токен_доверия() -> str:
 def вызов(имя: str, аргументы: dict) -> dict:
     запрос = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
               "params": {"name": имя, "arguments": аргументы}}
-    команда = ["curl", "-sS", "--max-time", "120", "-X", "POST",
+    команда = ["curl", "-A", АГЕНТ, "-sS", "--max-time", "120", "-X", "POST",
                "-H", "Content-Type: application/json"]
     значение = токен_доверия()
     if значение:

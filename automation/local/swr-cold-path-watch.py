@@ -21,6 +21,8 @@ import subprocess
 import sys
 import time
 
+АГЕНТ = "factory-swr-cold-path-watch"
+
 ПОРТЫ = {"yummyani.org": 3102, "yummyani.biz": 3103}
 ПРЕДЕЛ_С = 4500
 ПАУЗА = 60
@@ -28,7 +30,7 @@ import time
 
 def состояние(домен: str, порт: int) -> str:
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-D", "-", "--max-time", "90",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-D", "-", "--max-time", "90",
          "-H", f"Host: {домен}", f"http://127.0.0.1:{порт}/sitemap/titles.xml"],
         capture_output=True, text=True, timeout=120)
     м = re.search(r"(?im)^x-sitemap-inventory:\s*(.+)$", г.stdout or "")
@@ -37,7 +39,7 @@ def состояние(домен: str, порт: int) -> str:
 
 def публичный(домен: str) -> tuple[str, float]:
     г = subprocess.run(
-        ["curl", "-sS", "-o", "/dev/null", "-w", "%{http_code} %{time_total}",
+        ["curl", "-A", АГЕНТ, "-sS", "-o", "/dev/null", "-w", "%{http_code} %{time_total}",
          "--max-time", "120", f"https://{домен}/sitemap/titles.xml"],
         capture_output=True, text=True, timeout=150)
     части = (г.stdout or "").split()

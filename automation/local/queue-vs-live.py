@@ -28,6 +28,8 @@ import re
 import subprocess
 from concurrent.futures import ThreadPoolExecutor
 
+АГЕНТ = "factory-queue-vs-live"
+
 #: Задача → (адрес, как измерить). Признак описан функцией от текста страницы:
 #: True означает, что ДЕФЕКТ ЖИВ.
 #:
@@ -88,7 +90,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 def достать(url: str) -> tuple[int, str]:
     г = subprocess.run(
-        ["curl", "-sSL", "-w", "\n%{http_code}", "--max-time", "45", url],
+        ["curl", "-A", АГЕНТ, "-sSL", "-w", "\n%{http_code}", "--max-time", "45", url],
         capture_output=True, text=True, timeout=75)
     части = (г.stdout or "").rsplit("\n", 1)
     тело = части[0] if len(части) > 1 else ""

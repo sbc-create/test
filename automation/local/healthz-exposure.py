@@ -34,6 +34,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-healthz-exposure"
+
 КОРЕНЬ = Path(__file__).resolve().parents[1].parent
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 ИСПЫТАТЕЛЬНЫЕ = (".localhost", ".test", ".invalid", ".example")
@@ -117,7 +119,7 @@ def домены(путь: Path) -> list[str]:
 
 def ответ(домен: str, таймаут: int, путь: str = "/healthz") -> tuple[str, str]:
     итог = subprocess.run(
-        ["curl", "-sS", "-w", "\n%{http_code}", "--max-time", str(таймаут),
+        ["curl", "-A", АГЕНТ, "-sS", "-w", "\n%{http_code}", "--max-time", str(таймаут),
          f"https://{домен}{путь}"],
         capture_output=True, text=True)
     вывод = итог.stdout or ""

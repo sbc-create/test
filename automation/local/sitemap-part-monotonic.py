@@ -50,6 +50,8 @@ import subprocess
 import sys
 import tempfile
 
+АГЕНТ = "factory-sitemap-part-monotonic"
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 СНИМКИ = КОРЕНЬ / "var" / "sitemap-snapshots"
 
@@ -100,7 +102,7 @@ def работа(адрес: str) -> str:
 
 def адреса_части(url: str, таймаут: int = 250) -> set[str]:
     with tempfile.NamedTemporaryFile(suffix=".xml") as б:
-        subprocess.run(["curl", "-sSL", "--max-time", str(таймаут),
+        subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут),
                         "-o", б.name, url], capture_output=True)
         текст = open(б.name, encoding="utf-8", errors="replace").read()
     return {а.strip() for а in re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", текст)}
@@ -114,7 +116,7 @@ def части_индекса(индекс_url: str, префикс: str) -> lis
     пределом, и сравнивать их по отдельности нельзя.
     """
     with tempfile.NamedTemporaryFile(suffix=".xml") as б:
-        subprocess.run(["curl", "-sSL", "--max-time", "120",
+        subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "120",
                         "-o", б.name, индекс_url], capture_output=True)
         текст = open(б.name, encoding="utf-8", errors="replace").read()
     все = [а.strip() for а in re.findall(r"<loc>\s*([^<\s]+)\s*</loc>", текст)]
@@ -148,7 +150,7 @@ def отпечатки_частей(части: list[str]) -> dict[str, str]:
     итог: dict[str, str] = {}
     for адрес in части:
         with tempfile.NamedTemporaryFile(suffix=".xml") as б:
-            subprocess.run(["curl", "-sSL", "--max-time", "250",
+            subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", "250",
                             "-o", б.name, адрес], capture_output=True)
             данные = pathlib.Path(б.name).read_bytes()
         итог[адрес.rsplit("/", 1)[-1]] = hashlib.sha256(данные).hexdigest()

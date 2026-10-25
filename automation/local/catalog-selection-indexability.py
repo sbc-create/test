@@ -51,6 +51,8 @@ import subprocess
 import sys
 import urllib.parse
 
+АГЕНТ = "factory-catalog-selection-indexability"
+
 #: Встроенный контроль — ПО ОДНОЙ ФОРМЕ, а не по витрине целиком. На этих
 #: витринах выборка `?type=` закрыта (`noindex, follow`), и находка `ПАРА-ДУБЛЬ`
 #: у них означала бы, что признак пары меряет не правило. Называть их
@@ -67,7 +69,7 @@ import urllib.parse
 
 def достать(адрес: str, таймаут: int = 40) -> str:
     try:
-        г = subprocess.run(["curl", "-sSL", "--max-time", str(таймаут), адрес],
+        г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут), адрес],
                            capture_output=True, text=True, timeout=таймаут + 20)
     except subprocess.TimeoutExpired:
         return ""

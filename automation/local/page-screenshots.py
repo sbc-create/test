@@ -46,6 +46,7 @@ def снять(адрес: str, метка: str, каталог: pathlib.Path,
         try:
             for имя, (ширина, высота) in окна.items():
                 страница = браузер.new_page(viewport={"width": ширина, "height": высота})
+                страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
                 try:
                     ответ = страница.goto(адрес, wait_until="load", timeout=45000)
                     код = ответ.status if ответ else 0

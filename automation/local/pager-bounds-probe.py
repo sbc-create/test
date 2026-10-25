@@ -30,6 +30,8 @@ import tempfile
 from pathlib import Path
 from urllib.parse import urlsplit
 
+АГЕНТ = "factory-pager-bounds-probe"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 #: Раздел, который есть у всех семейств. Проверяется и каталог, и раздел вида:
 #: у них разные вызывающие стороны листалки, и вести себя они могут по-разному.
@@ -45,7 +47,7 @@ def достать(url: str, таймаут: int = 45) -> tuple[str, str, dict[s
     with tempfile.NamedTemporaryFile(prefix="pager-head-", suffix=".txt") as ф, \
             tempfile.NamedTemporaryFile(prefix="pager-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
              "-o", б.name, "-w", "%{url_effective}", url],
             capture_output=True, text=True)
         голова = Path(ф.name).read_text(encoding="utf-8", errors="replace")

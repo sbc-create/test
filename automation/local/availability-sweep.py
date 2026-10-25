@@ -29,7 +29,7 @@ import urllib.error
 import urllib.request
 
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
-ЗАГОЛОВКИ = {"User-Agent": "site-factory-availability/1.0"}
+ЗАГОЛОВКИ = {"User-Agent": "factory-availability-sweep"}
 #: Карты витрин Yummy отдают по 8 000 адресов одной частью, и на 30 секундах
 #: чтение обрывалось: проход сообщал «карта не дала адресов карточек» там, где
 #: карта исправна (измерено 2026-10-09 на yummyani.org, .site и yummyani7.*).

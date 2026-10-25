@@ -33,6 +33,8 @@ import tempfile
 from pathlib import Path
 from urllib.parse import unquote, urljoin
 
+АГЕНТ = "factory-card-links-audit"
+
 ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
 #: Формы адреса карточки. Две, и это измерено (см. pager-bounds-probe).
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
@@ -53,7 +55,7 @@ def достать(url: str, таймаут: int = 40) -> tuple[str, str, dict[s
     with tempfile.NamedTemporaryFile(prefix="cl-head-", suffix=".txt") as ф, \
             tempfile.NamedTemporaryFile(prefix="cl-body-", suffix=".bin") as б:
         г = subprocess.run(
-            ["curl", "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
+            ["curl", "-A", АГЕНТ, "-sS", "-L", "--max-time", str(таймаут), "-D", ф.name,
              "-o", б.name, "-w", "%{url_effective}", url],
             capture_output=True, text=True)
         голова = Path(ф.name).read_text(encoding="utf-8", errors="replace")

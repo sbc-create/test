@@ -36,6 +36,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-catalog-reconcile-anime"
+
 #: Домен → файл подробностей витрины. Берётся из отчёта доставки ячеек, а не
 #: угадывается по имени домена.
 ВИТРИНЫ = {
@@ -48,7 +50,7 @@ from pathlib import Path
 
 
 def добыть(url: str, таймаут: int = 60) -> tuple[str, str]:
-    г = subprocess.run(["curl", "-sS", "--max-time", str(таймаут), "-w",
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sS", "--max-time", str(таймаут), "-w",
                         "\n%{http_code}", url],
                        capture_output=True, text=True,
                        timeout=таймаут + 20)

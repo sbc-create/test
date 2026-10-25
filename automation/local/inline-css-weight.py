@@ -40,6 +40,8 @@ import re
 import subprocess
 import sys
 
+АГЕНТ = "factory-inline-css-weight"
+
 #: Ниже этого прироста правка не стоит отдельного выпуска: на мобильной сети
 #: 2 КиБ — это единицы миллисекунд. Порог назван, а не угадан.
 ПОРОГ_ПРИРОСТА_КИБ = 2.0
@@ -107,7 +109,7 @@ def оценить(замер: dict) -> dict:
 def достать(домен: str) -> tuple[str, str]:
     """Тело страницы и объявленное сервером сжатие."""
     п = subprocess.run(
-        ["curl", "-sS", "--max-time", "40", "--compressed", "-D", "-",
+        ["curl", "-A", АГЕНТ, "-sS", "--max-time", "40", "--compressed", "-D", "-",
          f"https://{домен}/"], capture_output=True, text=True)
     текст = п.stdout or ""
     кодирование = ""

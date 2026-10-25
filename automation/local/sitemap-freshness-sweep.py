@@ -41,6 +41,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+АГЕНТ = "factory-sitemap-freshness-sweep"
+
 #: Домены сети с открытой индексацией. Перечень не расширяется по инициативе
 #: инструмента: домен, которого здесь нет, называется в аргументах.
 #:
@@ -69,7 +71,7 @@ from pathlib import Path
 
 
 def достать(адрес: str, цель: Path, таймаут: int) -> bool:
-    г = subprocess.run(["curl", "-sSL", "--max-time", str(таймаут),
+    г = subprocess.run(["curl", "-A", АГЕНТ, "-sSL", "--max-time", str(таймаут),
                         "-o", str(цель), "-w", "%{http_code}", адрес],
                        capture_output=True, text=True)
     return г.returncode == 0 and (г.stdout or "").strip().endswith("200")

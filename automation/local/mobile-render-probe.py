@@ -258,6 +258,7 @@ def замерить(адрес: str, *, окно: tuple[int, int] = ОКНО_Т
             user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X)"
                        " AppleWebKit/605.1.15 (KHTML, like Gecko)"
                        " Version/17.0 Mobile/15E148 Safari/604.1")
+        страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         _перехвачено = _запрет_счётчиков(страница)
         try:
             try:

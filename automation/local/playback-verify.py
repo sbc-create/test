@@ -206,6 +206,7 @@ def проверить(адрес: str, *, секунд: int = ОКНО_ПО_У�
             args=["--no-sandbox", "--disable-dev-shm-usage",
                   "--autoplay-policy=no-user-gesture-required"])
         страница = браузер.new_page(viewport={"width": окно[0], "height": окно[1]})
+        страница.route("**mc.yandex.*/**", lambda м: м.abort())  # технический прогон не шлёт события в Метрику
         try:
             # Навигация отделена от замеров. Её срыв — «не измерено» ПО ЭТОМУ
             # адресу, а не конец прогона: раньше таймаут `goto` вылетал из

@@ -28,7 +28,7 @@ import urllib.request
 
 def проверить(домен: str) -> tuple[str, str]:
     зап = urllib.request.Request(f"https://{домен}/",
-                                 headers={"User-Agent": "quick-availability"})
+                                 headers={"User-Agent": "factory-quick-availability"})
     try:
         with urllib.request.urlopen(зап, timeout=ТАЙМАУТ) as о:
             return домен, str(о.status)
