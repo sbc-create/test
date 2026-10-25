@@ -112,3 +112,91 @@ visudo -c -f /etc/sudoers.d/k2deploy
 Поэтому пятёрка размещается на k2-zomro-01, а DNS переключается ПОСЛЕ
 готовности: сейчас все пять A-записей указывают на управляющий узел
 (45.131.182.225), новый адрес — 145.63.129.86.
+
+## D. Поднять пятёрку на k2-zomro-01 (всё, что требует root)
+
+Что уже сделано агентом и проверено на узле (к этому блоку готово всё, кроме
+самих привилегированных действий):
+
+| Шаг | Чем проверено |
+| --- | --- |
+| комплект данных и кода пяти витрин доставлен в `/home/k2deploy/stage` | `sha256sum -c` НА УЗЛЕ: по 4 файла на витрину, `rc=0` ×5 |
+| юниты, конфигурации nginx, включаемые файлы режима и точки upstream доставлены | `sha256sum -c` НА УЗЛЕ: 31 файл, `rc=0` |
+| опись узла знает пятёрку | `MANIFEST.json`: ячеек 13 (8 действующих записей дословно прежние) |
+| общий `site-cells-upstreams.conf` собран на ВЕСЬ состав узла | `diff` с файлом узла: ровно +5 блоков, ни один прежний не изменён |
+| выпуск кода опознаёт витрину | `k2-release-code.sh lords-18 --dry-run` → «домен lordserials1.cc, учётка lordserials1-cc, порт 9136» и дальше честный отказ «витрина не запущена, это задача k2-launch-site.sh» |
+| запуск готов по комплекту и памяти | `k2-launch-site.sh <site> --dry-run` ×5 → «комплект на месте, память 5879 МиБ, плеер нет» |
+
+Почему дальше нужен оператор: `sudo -n -l` у `k2deploy` разрешает ровно
+`nginx -t`, `systemctl reload nginx` и `restart` восьми действующих юнитов.
+Ни `useradd`, ни `install` в `/etc`, ни `daemon-reload` там нет — и расширять
+это самому агенту нечем.
+
+```bash
+# ВСЁ НИЖЕ — от root на 145.63.129.86. Пять учётных записей, пять маршрутов.
+set -eu
+acc_list="lordserials1-cc lordserials1-info lordserials21-cc lordserials21-info lordserials21-mobi"
+
+# --- D.1. Учётные записи и каталоги (образец 14.10, те же режимы) --------
+# Код — 2775 с группой витрины (выкладку делает k2deploy), данные — 0750:
+# постоянные данные принадлежат только самой витрине.
+for acc in $acc_list; do
+  id -u "$acc" >/dev/null 2>&1 || useradd --system --home-dir "/srv/$acc" --shell /usr/sbin/nologin "$acc"
+  install -d -m 2775 -o "$acc" -g "$acc" "/srv/$acc"
+  install -d -m 0750 -o "$acc" -g "$acc" "/srv/$acc/data"
+  usermod -aG "$acc" k2deploy
+done
+
+# --- D.2. Юниты ТОЛЬКО пяти новых витрин --------------------------------
+# Глобом `nova-*.service` не ставить: он переустановит юниты восьми
+# действующих витрин, которых эта задача не касается.
+cd /home/k2deploy/stage/units
+install -m 0644 -o root -g root \
+  nova-lordserials1-cc.service nova-lordserials1-cc-candidate.service \
+  nova-lordserials1-info.service nova-lordserials1-info-candidate.service \
+  nova-lordserials21-cc.service nova-lordserials21-cc-candidate.service \
+  nova-lordserials21-info.service nova-lordserials21-info-candidate.service \
+  nova-lordserials21-mobi.service nova-lordserials21-mobi-candidate.service \
+  /etc/systemd/system/
+systemctl daemon-reload
+
+# --- D.3. Общий файл объявлений upstream --------------------------------
+# Доставленный файл собран на все 13 ячеек узла и отличается от стоящего
+# ровно пятью новыми блоками (сверено diff'ом). Порядок важен: без него
+# `nginx -t` на новом маршруте упадёт на неизвестном upstream.
+cp -a /etc/nginx/conf.d/site-cells-upstreams.conf /root/site-cells-upstreams.conf.before-20261025
+install -m 0644 -o root -g root /home/k2deploy/stage/nginx/site-cells-upstreams.conf /etc/nginx/conf.d/
+nginx -t && systemctl reload nginx
+
+# --- D.4. Права на перезапуск пяти служб (§B этого же документа) ---------
+# Выполнить D.4 ДО первого запуска: иначе выпуск кода упрётся в права.
+
+# --- D.5. Запуск витрин ПОСЛЕДОВАТЕЛЬНО, с проверкой памяти -------------
+# k2-launch-site.sh сам: ставит робот-файл и точку upstream (существующие НЕ
+# трогает), ставит конфигурацию домена, проверяет `nginx -t` и при провале
+# снимает ТОЛЬКО свою, перезагружает nginx, раскладывает данные каталога с
+# правами витрины, разворачивает выпуск из бандла — и останавливается перед
+# службой с кодом 3, потому что publisher_id не передан. Это не ошибка
+# прогона, а защита: чужой или выдуманный номер подставлять запрещено.
+for site in lords-18 lords-19 lords-20 lords-21 lords-22; do
+  awk '/^MemAvailable:/{print "доступно памяти, МиБ: " int($2/1024)}' /proc/meminfo
+  bash /home/k2deploy/stage/k2-launch-site.sh "$site" || echo "код $? (3 = нет плеера, маршрут настроен)"
+done
+systemctl list-units --type=service --state=running --no-pager | grep -c nova-   # было 8
+
+# --- D.6. Когда владелец назначит publisher_id пяти доменам -------------
+# По одному файлу на витрину, 0640 владельцу витрины, значение из Secret Hub:
+#   /home/k2deploy/stage/player/<site>-player.json  →  {"publisher_id":"<номер>","source_mode":"provider-id"}
+# затем повторно: k2-launch-site.sh <site>  (он доложит healthz и RSS)
+```
+
+**Чего в блоке нет намеренно.** Сертификатов (TLS-конфигурации витрин
+доставлены, но ставятся после выпуска сертификата: `nginx -t` на конфигурации
+с несуществующим сертификатом падает), переключения DNS и правки режима
+индексации: витрина рождается закрытой, и открытие — отдельное решение
+владельца отдельной операцией.
+
+**DNS.** Переключение A-записей пяти доменов с 45.131.182.225 на 145.63.129.86
+агент выполнить не может: `inventory/dns-zones.yaml` содержит `zones: []`, то
+есть фабрике не выдано ни одной зоны. Это вход владельца — либо запись в
+инвентарь с токеном, ограниченным зоной, либо переключение у регистратора.
