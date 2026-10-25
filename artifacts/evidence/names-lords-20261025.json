@@ -1,0 +1,114 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T01:06:12Z",
+ "results": [
+  {
+   "domain": "lordserial33.biz",
+   "slug": "pravila-sovmestnoy-zhizni",
+   "sources": [
+    "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "snapshot:/srv/lords/.frontend/lords-02-details.json"
+   ],
+   "unreadable_sources": [],
+   "confirmed": [
+    "Одри",
+    "Бингам",
+    "Адам",
+    "Роудс",
+    "Дженн",
+    "Морган",
+    "Расселл",
+    "Данбар",
+    "Адама"
+   ],
+   "not_found": [],
+   "fragments": {
+    "Одри": "ет [ править | править код ] Замужняя пара Бингамов Джэфф и Одри дружат с молодой незамужней парой Адамом Роудс и Дженн Морг",
+    "Бингам": "] Главные [ править | править код ] Патрик Уобертон — Джэфф Бингам, финансовый менеджер и сверх-мачо муж Одри. Он любит спорт ",
+    "Адам": "пружеских парах и их общем друге. Авторы идеи — Том Хёртц и Адам Сэндлер . Сериал впервые вышел на экраны 5 февраля 2007 год",
+    "Роудс": "гамов Джэфф и Одри дружат с молодой незамужней парой Адамом Роудс и Дженн Морган, а также сотрудником Адама и их уже общим др",
+    "Дженн": "эфф и Одри дружат с молодой незамужней парой Адамом Роудс и Дженн Морган, а также сотрудником Адама и их уже общим другом Рас",
+    "Морган": "Одри дружат с молодой незамужней парой Адамом Роудс и Дженн Морган, а также сотрудником Адама и их уже общим другом Расселлом ",
+    "Расселл": "рган, красивая и харизматичная невеста Адама. Дэвид Спейд — Расселл Данбар, невысокий, развратный неженатый друг; нелепый менед",
+    "Данбар": "асивая и харизматичная невеста Адама. Дэвид Спейд — Расселл Данбар, невысокий, развратный неженатый друг; нелепый менеджер-кол",
+    "Адама": "жней парой Адамом Роудс и Дженн Морган, а также сотрудником Адама и их уже общим другом Расселлом Данбаром. Они делятся своим"
+   },
+   "confirmed_by": {
+    "Одри": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Бингам": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Адам": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Роудс": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Дженн": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Морган": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Расселл": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Данбар": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни",
+    "Адама": "https://ru.wikipedia.org/wiki/Правила_совместной_жизни"
+   }
+  },
+  {
+   "domain": "lordserial33.biz",
+   "slug": "volshebnyy-domik-gabbi-v-kino",
+   "sources": [
+    "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "snapshot:/srv/lords/.frontend/lords-02-details.json"
+   ],
+   "unreadable_sources": [],
+   "confirmed": [
+    "Лайла",
+    "Локхарт",
+    "Кранер",
+    "Глория",
+    "Эстефан",
+    "Кошачий",
+    "Кристен"
+   ],
+   "not_found": [],
+   "fragments": {
+    "Лайла": " сочетающем живую съёмку и анимацию, главную роль исполняет Лайла Локхарт Кранер, которая возвращается к своей роли из сериал",
+    "Локхарт": "ающем живую съёмку и анимацию, главную роль исполняет Лайла Локхарт Кранер, которая возвращается к своей роли из сериала. К акт",
+    "Кранер": "вую съёмку и анимацию, главную роль исполняет Лайла Локхарт Кранер, которая возвращается к своей роли из сериала. К актёрскому",
+    "Глория": "ла. К актёрскому составу присоединились Джейсон Мандзукас , Глория Эстефан и Кристен Уиг . В апреле 2024 года студия DreamWork",
+    "Эстефан": "ктёрскому составу присоединились Джейсон Мандзукас , Глория Эстефан и Кристен Уиг . В апреле 2024 года студия DreamWorks Animat",
+    "Кошачий": "ца премии «Грэмми» Глория Эстефан) в городскую страну чудес Кошачьего Франциско. Но когда кукольный домик Габби, её самая ценная ",
+    "Кристен": "составу присоединились Джейсон Мандзукас , Глория Эстефан и Кристен Уиг . В апреле 2024 года студия DreamWorks Animation объяви"
+   },
+   "confirmed_by": {
+    "Лайла": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Локхарт": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Кранер": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Глория": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Эстефан": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Кошачий": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино",
+    "Кристен": "https://ru.wikipedia.org/wiki/Волшебный_домик_Габби_в_кино"
+   }
+  },
+  {
+   "domain": "lordserial33.biz",
+   "slug": "holodnaya-reka",
+   "sources": [
+    "https://en.wikipedia.org/wiki/So_Cold_the_River",
+    "snapshot:/srv/lords/.frontend/lords-02-details.json"
+   ],
+   "unreadable_sources": [],
+   "confirmed": [
+    "Алисса (как «Alyssa»)",
+    "Кэмпбелла (как «Campbell»)",
+    "Брэдфорда (как «Bradford»)",
+    "Эрике (как «Erica»)"
+   ],
+   "not_found": [],
+   "fragments": {
+    "Алисса (как «Alyssa»)": "able. She's persuaded to once again return to this field by Alyssa, the daughter of dying and mysterious billionaire Campbell ",
+    "Кэмпбелла (как «Campbell»)": "by Alyssa, the daughter of dying and mysterious billionaire Campbell Bradford. She is tasked with profiling his life, including ",
+    "Брэдфорда (как «Bradford»)": ", the daughter of dying and mysterious billionaire Campbell Bradford. She is tasked with profiling his life, including his ties ",
+    "Эрике (как «Erica»)": "ovel by the same name by Michael Koryta . Synopsis [ edit ] Erica is a documentary filmmaker who gave up on her career after "
+   },
+   "confirmed_by": {
+    "Алисса (как «Alyssa»)": "https://en.wikipedia.org/wiki/So_Cold_the_River",
+    "Кэмпбелла (как «Campbell»)": "https://en.wikipedia.org/wiki/So_Cold_the_River",
+    "Брэдфорда (как «Bradford»)": "https://en.wikipedia.org/wiki/So_Cold_the_River",
+    "Эрике (как «Erica»)": "https://en.wikipedia.org/wiki/So_Cold_the_River"
+   }
+  }
+ ]
+}

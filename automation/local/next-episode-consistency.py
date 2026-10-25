@@ -200,8 +200,9 @@ def главное(аргв=None) -> int:
     а = р.parse_args(аргв)
     витрины = а.domain or list(ВИТРИНЫ)
 
-    from factory.seo.render_check import chromium_path
     from playwright.sync_api import sync_playwright
+
+    from factory.seo.render_check import chromium_path
 
     строки: list[dict] = []
     with sync_playwright() as p:

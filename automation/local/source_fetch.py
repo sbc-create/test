@@ -42,7 +42,7 @@ import urllib.error
 import urllib.request
 import urllib.robotparser
 from pathlib import Path
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlsplit, urlunsplit
 
 USER_AGENT = "factory-editorial-fact-check/1"
 SHIKIMORI = "https://shikimori.io"
@@ -68,13 +68,32 @@ def _log(**fields) -> None:
         )
 
 
+def безопасный_адрес(url: str) -> str:
+    """Адрес, пригодный для HTTP-запроса: путь и запрос в процентах.
+
+    Измерено 25.10: `page https://ru.wikipedia.org/wiki/Правила_совместной_жизни`
+    падал с `UnicodeEncodeError: 'ascii' codec can't encode` ещё до сети —
+    http.client кодирует строку запроса в ASCII. То есть ЛЮБОЙ источник с
+    русским названием в адресе был недоступен этим путём, и отказ выглядел
+    поломкой инструмента, а не свойством адреса. Кодируется только путь и
+    запрос; схема и хост не меняются, уже закодированные знаки не кодируются
+    повторно (`safe` включает «%»).
+    """
+    ч = urlsplit(url)
+    return urlunsplit((ч.scheme, ч.netloc,
+                       quote(ч.path, safe="/%:@!$&'()*+,;="),
+                       quote(ч.query, safe="=&%:@!$'()*+,;/?"),
+                       quote(ч.fragment, safe="%")))
+
+
 def _get(url: str, timeout: int = 20) -> tuple[int | None, bytes]:
     pause = 0.25 - (time.monotonic() - _last[0])
     if pause > 0:
         time.sleep(pause)
     _last[0] = time.monotonic()
     req = urllib.request.Request(
-        url, headers={"User-Agent": USER_AGENT, "Accept": "application/json, text/html"}
+        безопасный_адрес(url),
+        headers={"User-Agent": USER_AGENT, "Accept": "application/json, text/html"}
     )
     try:
         with urllib.request.urlopen(req, timeout=timeout) as resp:

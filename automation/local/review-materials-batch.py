@@ -134,15 +134,25 @@ def главное(argv: list[str] | None = None) -> int:
     р.add_argument("--reviewer", default="")
     р.add_argument("--record", action="store_true")
     р.add_argument("--limit", type=int, default=0)
+    р.add_argument("--slug", action="append", default=[],
+                   help="только эти слаги; дата тогда не обязательна")
     р.add_argument("--external-verified", type=pathlib.Path,
                    help="файл внешней сверки имён (поля domain, slug, "
                         "not_found): чем подтверждена проверка имён, которую "
                         "этот инструмент сам сделать не может")
     а = р.parse_args(argv)
 
-    зп = черновики(а.date)
+    зп = черновики("" if а.slug else а.date)
+    if а.slug:
+        нужны = set(а.slug)
+        зп = [з for з in зп if (з.get("slug") or "") in нужны]
+        пропали = нужны - {з.get("slug") for з in зп}
+        if пропали:
+            print(f"черновиков с такими слагами нет: {sorted(пропали)}")
     if not зп:
-        print(f"НЕ ИЗМЕРЕНО: черновиков с датой подготовки {а.date} не найдено")
+        условие = (f"слагами {', '.join(а.slug)}" if а.slug
+                   else f"датой подготовки {а.date}")
+        print(f"НЕ ИЗМЕРЕНО: черновиков с {условие} не найдено")
         return 2
     # Уже проверенные откладываются: иначе вывод показывает всю пачку заново,
     # и остаток работы в нём не виден. Измерено 25.10: прогон по 24.10 печатал
@@ -160,7 +170,8 @@ def главное(argv: list[str] | None = None) -> int:
             print(f"   … и ещё {len(проверенные) - 3}")
         print()
     if not зп:
-        print(f"материалов за {а.date} без записи о проверке нет:"
+        print(f"материалов {'по слагам' if а.slug else 'за ' + а.date}"
+              f" без записи о проверке нет:"
               f" все {len(проверенные)} уже проверены")
         return 0
     if а.limit:
@@ -183,7 +194,8 @@ def главное(argv: list[str] | None = None) -> int:
                 внешняя[(з.get("domain") or "", з["slug"])] = з
         print(f"внешняя сверка имён: {а.external_verified}, записей "
               f"{len(внешняя)}, метод: {str(сырое.get('method'))[:120]}")
-    print(f"материалов за {а.date}: {len(зп)}; записей каталога найдено "
+    print(f"материалов {'по слагам' if а.slug else 'за ' + а.date}:"
+          f" {len(зп)}; записей каталога найдено "
           f"{len(записи)}")
     print()
     годны, негодны = [], []

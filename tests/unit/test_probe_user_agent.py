@@ -72,16 +72,15 @@ def _по_умолчанию(дерево: ast.Module, конст: dict[str, str
     """
     итог: dict[str, str] = {}
     for узел in ast.walk(дерево):
-        if not isinstance(узел, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        if not isinstance(узел, ast.FunctionDef | ast.AsyncFunctionDef):
             continue
         арг = узел.args.posonlyargs + узел.args.args + узел.args.kwonlyargs
-        умолч = list(узел.args.defaults) + [д for д in узел.args.kw_defaults if д]
         for имя_а, знач in zip(арг[len(арг) - len(узел.args.defaults):],
-                               узел.args.defaults):
+                               узел.args.defaults, strict=False):
             в = _значение(знач, конст)
             if в is not None:
                 итог.setdefault(имя_а.arg, в)
-        for имя_а, знач in zip(узел.args.kwonlyargs, узел.args.kw_defaults):
+        for имя_а, знач in zip(узел.args.kwonlyargs, узел.args.kw_defaults, strict=False):
             if знач is None:
                 continue
             в = _значение(знач, конст)
@@ -136,7 +135,7 @@ def нарушения_агента(исходник: str, имя: str = "<пр�
 
     for узел in ast.walk(дерево):
         # (а) argv curl
-        if isinstance(узел, (ast.List, ast.Tuple)) and узел.elts:
+        if isinstance(узел, ast.List | ast.Tuple) and узел.elts:
             первый = _значение(узел.elts[0], конст)
             if первый != "curl":
                 continue
@@ -165,7 +164,7 @@ def нарушения_агента(исходник: str, имя: str = "<пр�
                     elif isinstance(заг.value, ast.Name):
                         словарь = словари.get(заг.value.id)
                 if словарь is not None:
-                    for ключ, значение in zip(словарь.keys, словарь.values):
+                    for ключ, значение in zip(словарь.keys, словарь.values, strict=False):
                         if isinstance(ключ, ast.Constant) \
                                 and str(ключ.value).lower() == "user-agent":
                             ua = _значение(значение, конст)
@@ -176,7 +175,7 @@ def нарушения_агента(исходник: str, имя: str = "<пр�
                                 f" не класс {ПРЕФИКС}")
             elif путь.endswith("urlopen") and узел.args:
                 цель = узел.args[0]
-                голый = isinstance(цель, (ast.Constant, ast.JoinedStr)) or (
+                голый = isinstance(цель, ast.Constant | ast.JoinedStr) or (
                     isinstance(цель, ast.BinOp) and isinstance(цель.op, ast.Add))
                 if голый and not _локальный(цель, конст):
                     беды.append(f"{имя}:{узел.lineno}: urlopen по адресу"
