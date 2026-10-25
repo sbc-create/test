@@ -1056,6 +1056,16 @@ MOD-178 (ворота требуют год снимка против источ
 | сохранённый текст против живой страницы | `python3 automation/local/editorial-live-compare.py --limit 0` |
 | гигиена очереди (дубли заданий, формы адреса) | `python3 automation/local/queue-hygiene.py` |
 | имена материала против записанных источников | `python3 automation/local/names-against-sources.py --slug <слаг>` |
+| **цель владельца в числах, со свежим окном и признаком выброса** | `python3 automation/local/goal-visits-per-site.py` |
+| **частота расхождения года снимка и источника** | `python3 automation/local/year-snapshot-vs-source.py --sample 12` |
+| **материалы, ждущие рецензии прямо сейчас** (пусто — значит ждать нечего) | `python3 automation/local/pending-review-watch.py` |
+| отставание карты от доставленного каталога | `python3 automation/local/sitemap-generation-lag.py` |
+| дата индекса карты против свежести частей | `python3 automation/local/sitemap-index-audit.py --all-yummy` |
+| готовность и возраст данных восьми витрин K2 | `python3 automation/local/k2-readiness-probe.py` |
+| суточная публикация каталога: прошла или упала | `python3 automation/local/daily-publish-health.py` |
+| приоритет обложек первого экрана (браузер, Метрика заглушена) | `python3 automation/local/poster-priority-probe.py --url https://lordfilm.group/` |
+| чем витрина закрыта от индексации и прочтёт ли робот запрет | `python3 automation/local/robots-closure-consistency.py` |
+| запись реестра против живого режима индексации | `python3 automation/local/indexing-registry-vs-live.py` |
 | весь прогон и запись доказательства | `./scripts/record-evidence.sh` |
 
 Доказательства этой ночи лежат в `artifacts/evidence/` (файлы с датой
