@@ -1,60 +1,160 @@
 #!/usr/bin/env python3
-"""Расхождение года снимка и года источника: сиквелы против прочих работ."""
-import glob, json, pathlib, random, re, subprocess, sys
-sys.path.insert(0, "/home/claude/wt-nova-publish-memory-02")
-from factory.qwen import editorial
+"""Расходится ли год СНИМКА каталога с годом ИСТОЧНИКА, и как часто.
 
-ИНСТР = "/home/claude/wt-nova-publish-memory-02/automation/local/source_fetch.py"
+Повод — MOD-178. Ворота качества материала требуют назвать в тексте год из
+снимка каталога, а редактор отказывается писать год, которого источник не
+подтверждает. На `an1meg0.site/rukovodstvo-soten-demonov-4` снимок говорит 2020,
+Shikimori 57995 — `aired_on 2024-02-23`; материал непубликуем в обе стороны.
 
-черновики = []
-for путь in sorted(glob.glob("/srv/sites/*/runtime/overlays/*/drafts.json")):
-    дом = pathlib.Path(путь).parent.name
-    try:
-        д = json.loads(pathlib.Path(путь).read_text(encoding="utf-8"))
-    except Exception:
-        continue
-    записи = д.get("items") if isinstance(д, dict) else д
-    пары = записи.items() if isinstance(записи, dict) else [((x or {}).get("slug"), x) for x in (записи or [])]
-    for слаг, зап in пары:
-        ид = [s for s in (зап.get("sources") or []) if "shikimori.io/animes/" in str(s)]
-        if слаг and ид:
-            черновики.append((дом, слаг, ид[0].rsplit("/", 1)[-1]))
+Чего до этого инструмента не было — ЧАСТОТЫ. Охват назывался «не меньше пяти
+пар за 10 суток» (нижняя граница по формулировкам в журнале), а доля работ с
+расхождением не мерилась вовсе. Без неё нельзя отличить дешёвую правку с узким
+следствием от рычага.
 
-сиквел = lambda с: bool(re.search(r"-\d$", с))
-сиквелы = [т for т in черновики if сиквел(т[1])]
-прочие = [т for т in черновики if not сиквел(т[1])]
-случ = random.Random(20261025)
-выборка = (случ.sample(сиквелы, min(12, len(сиквелы)))
-           + случ.sample(прочие, min(12, len(прочие))))
-print(f"черновиков с карточкой Shikimori: {len(черновики)}"
-      f" (сиквелов {len(сиквелы)}, прочих {len(прочие)})")
-print(f"{'вид':8} {'домен':16} {'слаг':34} {'снимок':7} {'источник':9} исход")
-итог = {"сиквел": [0, 0], "прочее": [0, 0]}
-for дом, слаг, ид in выборка:
-    вид = "сиквел" if сиквел(слаг) else "прочее"
-    try:
-        ф = (editorial.факты(дом, слаг).get("facts") or {})
-    except Exception as ош:
-        print(f"{вид:8} {дом:16} {слаг[:34]:34} отказ фактов: {type(ош).__name__}")
-        continue
-    снимок = str(ф.get("year") or "")
-    г = subprocess.run([sys.executable, ИНСТР, "shikimori", ид],
-                       capture_output=True, text=True, timeout=180)
-    ист = ""
-    if г.returncode == 0:
+Три свойства, без которых счёт был бы видимостью:
+
+* **«года в снимке нет» — это НЕ «год совпал».** Такие работы идут в «не
+  измерено» и в знаменатель доли не попадают;
+* **сиквелы считаются отдельно.** Гипотеза, ради которой инструмент и написан:
+  снимок сиквела несёт год ПЕРВОГО сезона. Проверяется разделением выборки, а
+  не общим средним, иначе редкий случай растворится;
+* **выборка воспроизводима** (семя задаётся), и источник читается только
+  штатным путём (`source_fetch.py`, не чаще 4 запросов в секунду).
+
+    python3 automation/local/year-snapshot-vs-source.py --seed 20261025 --sample 12
+"""
+from __future__ import annotations
+
+import argparse
+import glob
+import json
+import pathlib
+import random
+import re
+import subprocess
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
+
+ХРАНИЛИЩА = "/srv/sites/*/runtime/overlays/*/drafts.json"
+ИНСТРУМЕНТ = pathlib.Path(__file__).resolve().parent / "source_fetch.py"
+
+
+def вид_работы(слаг: str) -> str:
+    """«сиквел» у слага, кончающегося числом, иначе «прочее».
+
+    Признак нарочно грубый и назван: `-2`, `-3`, `-4` в конце слага — так сеть
+    записывает сезоны и продолжения. Работа, у которой число стоит в середине
+    (`detektiv-konan-pentagramma-na-milliard`), сиквелом не считается.
+    """
+    return "сиквел" if re.search(r"-\d+$", слаг or "") else "прочее"
+
+
+def год_даты(значение: str) -> str:
+    """Год из даты источника; пустая строка, если даты нет."""
+    с = str(значение or "")
+    return с[:4] if с[:4].isdigit() else ""
+
+
+def исход(снимок: str, источник: str) -> str:
+    if not снимок or not источник:
+        return "НЕ ИЗМЕРЕНО"
+    return "расходятся" if str(снимок) != str(источник) else "совпадают"
+
+
+def свод(записи: list[tuple[str, str]]) -> dict:
+    """Доли по видам работ. Знаменатель — только ИЗМЕРЕННЫЕ работы."""
+    итог: dict[str, dict] = {}
+    for вид, если in записи:
+        с = итог.setdefault(вид, {"измерено": 0, "расходятся": 0, "не измерено": 0})
+        if если == "НЕ ИЗМЕРЕНО":
+            с["не измерено"] += 1
+            continue
+        с["измерено"] += 1
+        if если == "расходятся":
+            с["расходятся"] += 1
+    for с in итог.values():
+        с["доля"] = (f"{с['расходятся'] / с['измерено'] * 100:.0f} %"
+                     if с["измерено"] else "—")
+    return итог
+
+
+def черновики(хранилища: str = ХРАНИЛИЩА) -> list[tuple[str, str, str]]:
+    итог = []
+    for путь in sorted(glob.glob(хранилища)):
+        домен = pathlib.Path(путь).parent.name
         try:
-            д = json.loads(г.stdout)
-            дата = str(д.get("aired_on") or д.get("released_on") or "")
-            ист = дата[:4] if дата[:4].isdigit() else ""
-        except ValueError:
-            pass
-    если = ("НЕ ИЗМЕРЕНО" if not ист or not снимок
-            else "расходятся" if снимок != ист else "совпадают")
-    if если != "НЕ ИЗМЕРЕНО":
-        итог[вид][0] += 1
-        итог[вид][1] += 1 if если == "расходятся" else 0
-    print(f"{вид:8} {дом:16} {слаг[:34]:34} {снимок:7} {ист:9} {если}")
-print()
-for вид, (всего, расх) in итог.items():
-    доля = f"{расх/всего*100:.0f} %" if всего else "—"
-    print(f"{вид}: измерено {всего}, расходятся {расх} ({доля})")
+            данные = json.loads(pathlib.Path(путь).read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        если = данные.get("items") if isinstance(данные, dict) else данные
+        пары = (если.items() if isinstance(если, dict)
+                else [((з or {}).get("slug"), з) for з in (если or [])])
+        for слаг, запись in пары:
+            if not слаг or not isinstance(запись, dict):
+                continue
+            ид = [s for s in (запись.get("sources") or [])
+                  if "shikimori.io/animes/" in str(s)]
+            if ид:
+                итог.append((домен, слаг, str(ид[0]).rsplit("/", 1)[-1]))
+    return итог
+
+
+def год_источника(ид: str, таймаут: int = 180) -> str:
+    г = subprocess.run([sys.executable, str(ИНСТРУМЕНТ), "shikimori", ид],
+                       capture_output=True, text=True, timeout=таймаут)
+    if г.returncode != 0:
+        return ""
+    try:
+        д = json.loads(г.stdout)
+    except ValueError:
+        return ""
+    return год_даты(д.get("aired_on") or д.get("released_on") or "")
+
+
+def главное(аргв=None) -> int:
+    р = argparse.ArgumentParser(description=__doc__)
+    р.add_argument("--seed", type=int, default=20261025)
+    р.add_argument("--sample", type=int, default=12,
+                   help="сколько работ каждого вида брать")
+    а = р.parse_args(аргв)
+
+    from factory.qwen import editorial
+
+    все = черновики()
+    по_виду: dict[str, list] = {}
+    for т in все:
+        по_виду.setdefault(вид_работы(т[1]), []).append(т)
+    print(f"черновиков с карточкой Shikimori: {len(все)}"
+          + "".join(f" ({в} {len(с)})" for в, с in sorted(по_виду.items())))
+    случ = random.Random(а.seed)
+    выборка = []
+    for вид, список in sorted(по_виду.items()):
+        выборка += случ.sample(список, min(а.sample, len(список)))
+
+    печать = f"{'вид':8} {'домен':16} {'слаг':34} {'снимок':7} {'источник':9} исход"
+    print(печать)
+    собрано = []
+    for домен, слаг, ид in выборка:
+        вид = вид_работы(слаг)
+        try:
+            ф = (editorial.факты(домен, слаг).get("facts") or {})
+        except Exception as ош:  # отказ чтения фактов — результат, не сбой
+            print(f"{вид:8} {домен:16} {слаг[:34]:34} отказ фактов:"
+                  f" {type(ош).__name__}")
+            собрано.append((вид, "НЕ ИЗМЕРЕНО"))
+            continue
+        снимок = str(ф.get("year") or "")
+        ист = год_источника(ид)
+        если = исход(снимок, ист)
+        собрано.append((вид, если))
+        print(f"{вид:8} {домен:16} {слаг[:34]:34} {снимок:7} {ист:9} {если}")
+    print()
+    for вид, с in sorted(свод(собрано).items()):
+        print(f"{вид}: измерено {с['измерено']}, расходятся {с['расходятся']}"
+              f" ({с['доля']}), не измерено {с['не измерено']}")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(главное())
