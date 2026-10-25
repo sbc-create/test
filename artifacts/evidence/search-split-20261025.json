@@ -1,0 +1,719 @@
+{
+ "source": "var/analytics/cabinet-latest.json",
+ "collected_at": "2026-10-25T05:05:56Z",
+ "period": {
+  "date1": "7daysAgo",
+  "date2": "yesterday"
+ },
+ "domains": {
+  "1lordserials1.online": {
+   "engines": {
+    "yandex": 1.0
+   },
+   "top_yandex": [
+    [
+     "https://1lordserials1.online/title/chrezvychayno-angliyskiy-skandal/",
+     1.0
+    ]
+   ],
+   "top_google": [],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "an1meg0.site": {
+   "engines": {
+    "google": 24.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://an1meg0.site/title/voennaya-hronika-romelii/",
+     10.0
+    ],
+    [
+     "https://an1meg0.site/title/chernyy-klever-2/",
+     7.0
+    ],
+    [
+     "https://an1meg0.site/title/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu-nakl/#watch",
+     4.0
+    ],
+    [
+     "https://an1meg0.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/season-1/episode-2/",
+     3.0
+    ],
+    [
+     "https://an1meg0.site/title/nesmotrya-na-to-chto-ya-ochen-robkaya-blagorodnaya-devushka-ya-prinyala-pari-ot-/season-1/episode-2/",
+     3.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "an1mego.site": {
+   "engines": {
+    "google": 14.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://an1mego.site/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     6.0
+    ],
+    [
+     "https://an1mego.site/title/voennaya-hronika-romelii/",
+     3.0
+    ],
+    [
+     "https://an1mego.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+     2.0
+    ],
+    [
+     "https://an1mego.site/title/absolyutnaya-vershina-boga-voyny/",
+     2.0
+    ],
+    [
+     "https://an1mego.site/title/silneyshaya-vedma-v-mire-startovala/",
+     1.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "animedia.icu": {
+   "engines": {
+    "yandex": 3759.0,
+    "google": 51.0,
+    "other": 17.0
+   },
+   "top_yandex": [
+    [
+     "https://animedia.icu/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     873.0
+    ],
+    [
+     "https://animedia.icu/title/ya-vstrechayus-s-temnym-prizyvatelem/",
+     597.0
+    ],
+    [
+     "https://animedia.icu/title/nekromant-ya-katastrofa/",
+     438.0
+    ],
+    [
+     "https://animedia.icu/title/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya/",
+     341.0
+    ],
+    [
+     "https://animedia.icu/catalog/?year=2026",
+     274.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://animedia.icu/title/chernyy-klever/season-2/episode-3/",
+     20.0
+    ],
+    [
+     "https://animedia.icu/title/chernyy-klever-2/season-2/episode-2/",
+     20.0
+    ],
+    [
+     "https://animedia.icu/title/skazanie-o-pastuhe-bogov/season-1/episode-104/",
+     7.0
+    ],
+    [
+     "https://animedia.icu/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season-1/episode-2/",
+     6.0
+    ],
+    [
+     "https://animedia.icu/title/nekromant-ya-katastrofa/",
+     5.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "animedia.space": {
+   "engines": {
+    "google": 1.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://animedia.space/title/dragonboll-zet-tv/season-2/episode-167/",
+     1.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "animeg0.site": {
+   "engines": {
+    "google": 50.0
+   },
+   "top_yandex": [
+    [
+     "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+     1.0
+    ],
+    [
+     "https://animeg0.site/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/season-1/episode-9/",
+     1.0
+    ],
+    [
+     "https://animeg0.site/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/",
+     1.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+     7.0
+    ],
+    [
+     "https://animeg0.site/",
+     4.0
+    ],
+    [
+     "https://animeg0.site/title/tokiyskie-mstiteli-bitva-treh-nebozhiteley/",
+     3.0
+    ],
+    [
+     "https://animeg0.site/title/dazhe-u-studsoveta-est-kosyaki/",
+     3.0
+    ],
+    [
+     "https://animeg0.site/title/poschadi-menya-velikiy-gospodin-3/",
+     3.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordfilm47.space": {
+   "engines": {
+    "google": 51.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://lordfilm47.space/title/igra-smerti-4/season-1/episode-2/",
+     8.0
+    ],
+    [
+     "https://lordfilm47.space/title/csi-mesto-prestupleniya-nyu-york/season-1/episode-23/",
+     6.0
+    ],
+    [
+     "https://lordfilm47.space/title/schastlivogo-hellouina-skubi-du-2020/",
+     4.0
+    ],
+    [
+     "https://lordfilm47.space/title/igra-smerti-4/season-1/episode-5/",
+     3.0
+    ],
+    [
+     "https://lordfilm47.space/movies/?year=&genre=&country=&sort=year",
+     2.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordserial33.biz": {
+   "engines": {
+    "yandex": 5.0
+   },
+   "top_yandex": [
+    [
+     "https://lordserial33.biz/title/pravila-sovmestnoy-zhizni/",
+     5.0
+    ],
+    [
+     "https://lordserial33.biz/title/opasnye-svyazi-3/",
+     4.0
+    ],
+    [
+     "https://lordserial33.biz/title/seyf/",
+     3.0
+    ],
+    [
+     "https://lordserial33.biz/title/otchim/",
+     1.0
+    ],
+    [
+     "https://lordserial33.biz/title/volshebnyy-domik-gabbi-v-kino/",
+     1.0
+    ]
+   ],
+   "top_google": [],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordserials22.info": {
+   "engines": {
+    "google": 854.0,
+    "yandex": 74.0
+   },
+   "top_yandex": [
+    [
+     "https://lordserials22.info/title/master-omyur/",
+     66.0
+    ],
+    [
+     "https://lordserials22.info/title/syla-vozvraschenie-domoy-serial-2006-2008/",
+     35.0
+    ],
+    [
+     "https://lordserials22.info/title/akademiya-vedm/",
+     22.0
+    ],
+    [
+     "https://lordserials22.info/title/bayki-i-ubiystvo/",
+     18.0
+    ],
+    [
+     "https://lordserials22.info/title/100-atletov-italiya/",
+     16.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://lordserials22.info/title/100-atletov-italiya/",
+     92.0
+    ],
+    [
+     "https://lordserials22.info/title/k-vostoku-ot-edema/",
+     52.0
+    ],
+    [
+     "https://lordserials22.info/title/taynyy-dnevnik-veriti/",
+     34.0
+    ],
+    [
+     "https://lordserials22.info/title/gipoteza-lyubvi/",
+     26.0
+    ],
+    [
+     "https://lordserials22.info/title/polovina-materi/",
+     23.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordserials22.site": {
+   "engines": {},
+   "top_yandex": [],
+   "top_google": [],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordserials22.space": {
+   "engines": {},
+   "top_yandex": [],
+   "top_google": [],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "yummyani.biz": {
+   "engines": {
+    "google": 22.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://yummyani.biz/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     10.0
+    ],
+    [
+     "https://yummyani.biz/anime/chernyy-klever-2",
+     10.0
+    ],
+    [
+     "https://yummyani.biz/anime/poschadi-menya-velikiy-gospodin-3",
+     6.0
+    ],
+    [
+     "https://yummyani.biz/anime/voennaya-hronika-romelii",
+     5.0
+    ],
+    [
+     "https://yummyani.biz/anime/silneyshaya-vedma-v-mire-startovala",
+     5.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "yummyani.org": {
+   "engines": {
+    "google": 29.0,
+    "yandex": 2.0
+   },
+   "top_yandex": [
+    [
+     "https://yummyani.org/",
+     3.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani.org/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     32.0
+    ],
+    [
+     "https://yummyani.org/",
+     26.0
+    ],
+    [
+     "https://yummyani.org/anime/rashititel-grobnits",
+     14.0
+    ],
+    [
+     "https://yummyani.org/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+     12.0
+    ],
+    [
+     "https://yummyani.org/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+     11.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "yummyani.site": {
+   "engines": {
+    "yandex": 14903.0,
+    "google": 4.0
+   },
+   "top_yandex": [
+    [
+     "https://yummyani.site/",
+     8079.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+     3971.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3",
+     3680.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/6",
+     2600.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/1",
+     1763.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani.site/",
+     8.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "yummyani7.info": {
+   "engines": {
+    "yandex": 534.0,
+    "google": 19.0,
+    "other": 3.0
+   },
+   "top_yandex": [
+    [
+     "https://yummyani7.info/anime/poschadi-menya-velikiy-gospodin-3",
+     272.0
+    ],
+    [
+     "https://yummyani7.info/anime/dazhe-u-studsoveta-est-kosyaki",
+     225.0
+    ],
+    [
+     "https://yummyani7.info/anime/svadba-svetlyachkov/season/1/episode/1",
+     76.0
+    ],
+    [
+     "https://yummyani7.info/anime/dazhe-u-studsoveta-est-kosyaki/season/1/episode/3",
+     58.0
+    ],
+    [
+     "https://yummyani7.info/anime/vrata-shteyna-nayti-nedostayuschee-zveno-delenie-na-nol",
+     47.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani7.info/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu",
+     4.0
+    ],
+    [
+     "https://yummyani7.info/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+     4.0
+    ],
+    [
+     "https://yummyani7.info/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+     3.0
+    ],
+    [
+     "https://yummyani7.info/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu/season/1/episode/2",
+     2.0
+    ],
+    [
+     "https://yummyani7.info/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/5",
+     2.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "yummyani7.site": {
+   "engines": {
+    "yandex": 4113.0,
+    "google": 12.0,
+    "other": 11.0
+   },
+   "top_yandex": [
+    [
+     "https://yummyani7.site/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
+     1640.0
+    ],
+    [
+     "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1",
+     1018.0
+    ],
+    [
+     "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+     474.0
+    ],
+    [
+     "https://yummyani7.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7",
+     459.0
+    ],
+    [
+     "https://yummyani7.site/anime/dazhe-u-studsoveta-est-kosyaki",
+     377.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani7.site/",
+     10.0
+    ],
+    [
+     "https://yummyani7.site/anime/pozhiratel-zvezd",
+     6.0
+    ],
+    [
+     "https://yummyani7.site/anime/poschadi-menya-velikiy-gospodin-3",
+     3.0
+    ],
+    [
+     "https://yummyani7.site/anime/sem-iz-semi",
+     2.0
+    ],
+    [
+     "https://yummyani7.site/anime/detektiv-uzhe-mertv-2",
+     1.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "zonafilm.cc": {
+   "engines": {
+    "yandex": 2494.0,
+    "google": 941.0,
+    "other": 177.0
+   },
+   "top_yandex": [
+    [
+     "https://zonafilm.cc/",
+     2289.0
+    ],
+    [
+     "https://zonafilm.cc/movies/",
+     18.0
+    ],
+    [
+     "https://zonafilm.cc/series/",
+     7.0
+    ],
+    [
+     "https://zonafilm.cc/movies/?page=2",
+     4.0
+    ],
+    [
+     "https://zonafilm.cc/doramas/",
+     3.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://zonafilm.cc/",
+     505.0
+    ],
+    [
+     "https://zonafilm.cc/title/taynyy-dnevnik-veriti/",
+     66.0
+    ],
+    [
+     "https://zonafilm.cc/title/dnevniki-vampira/",
+     21.0
+    ],
+    [
+     "https://zonafilm.cc/title/idem-so-mnoy/",
+     16.0
+    ],
+    [
+     "https://zonafilm.cc/title/voennyy-povar-stanovitsya-legendoy/",
+     14.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "zonafilm.space": {
+   "engines": {
+    "google": 643.0
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://zonafilm.space/title/chernyy-klever/season-2/episode-4/",
+     552.0
+    ],
+    [
+     "https://zonafilm.space/title/chernyy-klever/season-2/episode-5/",
+     15.0
+    ],
+    [
+     "https://zonafilm.space/title/doktor-iks/",
+     11.0
+    ],
+    [
+     "https://zonafilm.space/",
+     5.0
+    ],
+    [
+     "https://zonafilm.space/title/dokumentalnyy-ekspress-ii-vyhodit-iz-pod-kontrolya/",
+     4.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "zonafilm12.site": {
+   "engines": {
+    "google": 89.0,
+    "yandex": 56.0
+   },
+   "top_yandex": [
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/",
+     319.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/episode-3/",
+     10.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/episode-2/",
+     9.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/",
+     5.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/episode-1/",
+     2.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://zonafilm12.site/title/moya-skrytaya-pravda/",
+     8.0
+    ],
+    [
+     "https://zonafilm12.site/title/kak-zhit-na-zemle/",
+     8.0
+    ],
+    [
+     "https://zonafilm12.site/title/svadba-s-zolotoy-shpilkoy/",
+     6.0
+    ],
+    [
+     "https://zonafilm12.site/search/",
+     6.0
+    ],
+    [
+     "https://zonafilm12.site/title/smertelnoe-prikosnovenie/",
+     4.0
+    ]
+   ],
+   "measured": {
+    "search_engines": true,
+    "daily_search_landing_pages": true
+   }
+  },
+  "lordserial101.site": {
+   "engines": {},
+   "top_yandex": [],
+   "top_google": [],
+   "measured": {
+    "search_engines": false,
+    "daily_search_landing_pages": false
+   }
+  },
+  "lordfilm077.site": {
+   "engines": {},
+   "top_yandex": [],
+   "top_google": [],
+   "measured": {
+    "search_engines": false,
+    "daily_search_landing_pages": false
+   }
+  }
+ }
+}
