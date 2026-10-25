@@ -1,0 +1,24 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T19:40:47Z",
+ "results": [
+  {
+   "domain": "yummyani7.site",
+   "slug": "van-pis-epizod-sabo-uzy-treh-bratev-chudesnoe-vossoedinenie-i-unasledovannaya",
+   "sources": [
+    "https://shikimori.io/animes/31289",
+    "https://yummyani7.site/anime/van-pis-epizod-sabo-uzy-treh-bratev-chudesnoe-vossoedinenie-i-unasledovannaya"
+   ],
+   "extra_sources_not_in_draft": [],
+   "external_sources_with_text": 2,
+   "unreadable_sources": [],
+   "confirmed": [],
+   "not_found": [
+    "(записи каталога нет)"
+   ],
+   "own_network_only": [],
+   "fragments": {},
+   "confirmed_by": {}
+  }
+ ]
+}
