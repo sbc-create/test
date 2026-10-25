@@ -104,3 +104,45 @@ def test_описание_называет_пять_исходов():
     for исход in ("СОВПАЛ", "СТАТУС НЕ НА ТОЙ ЗАПИСИ", "РАСХОДИТСЯ",
                   "НЕЧЕГО СРАВНИТЬ", "НЕ ИЗМЕРЕНО"):
         assert исход in текст.split('"""')[1], исход
+
+
+def test_запись_наложения_витрины_тоже_объясняет_страницу(tmp_path, monkeypatch):
+    """Третий источник ответа «чей это текст» — хранилище РАЗМЕЩЕНИЯ.
+
+    Измерено 25.10 на `24-y-okrug-tokio`: текста не было ни в одной записи
+    реестра, и прогон объявил расхождение. На деле текст лежал в наложении
+    витрины с происхождением `authorized_editorial_batch` — то есть страница
+    в порядке, а неверна разметка реестра. Отдельная ловушка внутри той же
+    ошибки: у наложения `items` это СПИСОК, и быстрая проверка по ключу слага
+    записи не находила.
+    """
+    домен = "yummyani.test"
+    корень = tmp_path / "srv"
+    (корень / "stand" / "runtime" / "overlays" / домен).mkdir(parents=True)
+    (корень / "stand" / "runtime" / "overlays" / домен / "title-overlays.json").write_text(
+        МОД.json.dumps({"items": [
+            {"slug": "a", "body": ФРАЗА_Б, "content_id": "batch10-15-a",
+             "source_manifest": {"source_type": "authorized_editorial_batch"}},
+        ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(МОД, "НАЛОЖЕНИЯ", корень)
+    _подмена(ФРАЗА_Б, monkeypatch)
+    своя = {"body": ФРАЗА_А, "canonical_url": f"https://{домен}/anime/a",
+            "status": "ALREADY_LIVE", "content_id": "c1", "target_site": домен}
+    и = МОД.сравнить_запись(своя, 10, [своя])
+    assert и["исход"] == "СТАТУС НЕ НА ТОЙ ЗАПИСИ"
+    assert и["живая_запись"] == "batch10-15-a"
+    assert "authorized_editorial_batch" in и["почему"]
+
+
+def test_наложение_читается_и_когда_items_словарь(tmp_path, monkeypatch):
+    """Обе формы хранилища настоящие, и обе должны читаться."""
+    домен = "yummyani.test"
+    корень = tmp_path / "srv"
+    (корень / "stand" / "runtime" / "overlays" / домен).mkdir(parents=True)
+    (корень / "stand" / "runtime" / "overlays" / домен / "title-overlays.json").write_text(
+        МОД.json.dumps({"items": {"a": {"slug": "a", "body": ФРАЗА_Б,
+                                        "content_id": "x"}}},
+                       ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(МОД, "НАЛОЖЕНИЯ", корень)
+    записи = МОД.записи_наложения(домен)
+    assert len(записи) == 1 and записи[0]["content_id"] == "x"
