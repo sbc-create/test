@@ -397,8 +397,17 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
     """Публичные домены сети из реестра ячеек и реестра аналитики.
 
     Тестовые имена (`*.localhost`, `*.test`) не являются сайтами сети.
+    Исключённые из регулярных проверок сайты (решение владельца 25.10.2026 —
+    animedia.space, lordfilm47.space, lordserials22.site, lordserials22.space;
+    factory.cell.withdrawn) сайтами сети для проверок не считаются: ни
+    главная, ни robots.txt, ни алерт по ним не запускаются. Домен из реестра
+    аналитики пропускается так же — иначе он вернулся бы в обход через второй
+    реестр.
     """
+    from factory.cell import withdrawn
+
     cells = _read_json(sources["cells"], {}).get("cells") or []
+    выведено = withdrawn.выведенные(sources["cells"])
     analytics = {
         p.get("domain"): p
         for p in (_read_json(sources["analytics_registry"], {}).get("properties") or [])
@@ -408,13 +417,15 @@ def discover_domains(sources: dict[str, Path] = SOURCES) -> list[dict]:
         domain = str(cell.get("domain") or "")
         if not domain or domain.endswith((".localhost", ".test")) or domain == "localhost":
             continue
+        if domain.lower() in выведено:
+            continue
         out[domain] = {
             "domain": domain,
             "site_id": cell.get("site_id"),
             "open_authorized": bool((cell.get("indexing") or {}).get("open_authorized")),
         }
     for domain in analytics:
-        if domain and domain not in out:
+        if domain and domain not in out and str(domain).lower() not in выведено:
             out[domain] = {"domain": domain, "site_id": None, "open_authorized": None}
     for domain, item in out.items():
         prop = analytics.get(domain) or {}
@@ -2747,7 +2758,13 @@ def editor_candidates(
     Визиты на серии засчитываются тайтлу: интерес к тайтлу — это они.
     `sites` — домены и их снимки; по умолчанию EDITOR_SITES.
     """
-    sites = EDITOR_SITES if sites is None else sites
+    if sites is None:
+        # Исключённые из написания текстов сайты (решение владельца 25.10.2026)
+        # кандидатов не получают: factory.cell.withdrawn — единый признак.
+        from factory.cell import withdrawn
+
+        выведено = withdrawn.выведенные()
+        sites = {d: s for d, s in EDITOR_SITES.items() if d not in выведено}
     weights: dict[tuple[str, str], float] = {}
     for entry in _read_json(snapshot, {}).get("domains") or []:
         domain = entry.get("domain")

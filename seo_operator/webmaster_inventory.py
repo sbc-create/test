@@ -93,7 +93,14 @@ def inventory(
     provider: YandexAnalyticsProvider | None = None, entries: list[dict] | None = None
 ) -> dict:
     provider = provider or YandexAnalyticsProvider(dry_run=True)
-    entries = entries if entries is not None else registry.load()["properties"]
+    if entries is None:
+        # Исключённые из регулярных проверок сайты не сверяются: решение
+        # владельца 25.10.2026, factory.cell.withdrawn.
+        from factory.cell import withdrawn
+
+        выведено = withdrawn.выведенные()
+        entries = [e for e in registry.load()["properties"]
+                   if not withdrawn.выведен(e.get("domain"), набор=выведено)]
     now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     try:
         hosts = provider.list_hosts()

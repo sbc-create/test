@@ -756,6 +756,14 @@ def collect(
     """
     provider = _WebmasterBreaker(provider or YandexAnalyticsProvider(dry_run=True))
     entries = registry.load()["properties"]
+    # Исключённые из регулярных проверок сайты (решение владельца 25.10.2026,
+    # factory.cell.withdrawn) из сбора исключены. Прежние выгрузки не
+    # переписываются; домены названы в отчёте полем `withdrawn`, а не пропадают.
+    from factory.cell import withdrawn
+
+    выведено = withdrawn.выведенные()
+    пропущены = sorted(e["domain"] for e in entries if withdrawn.выведен(e.get("domain"), набор=выведено))
+    entries = [e for e in entries if e["domain"] not in пропущены]
     collections = [collect_domain(provider, entry, date1=date1, date2=date2) for entry in entries]
 
     повтор = {"enabled": bool(retry_rate_limited), "cooldown_s": cooldown_s,
@@ -792,6 +800,7 @@ def collect(
         "period": {"date1": date1, "date2": date2},
         "read_only": True,
         "domains": [c.as_dict() for c in collections],
+        "withdrawn": пропущены,
     }
     total = sum(c.as_dict()["total_count"] for c in collections)
     measured = sum(c.as_dict()["measured_count"] for c in collections)

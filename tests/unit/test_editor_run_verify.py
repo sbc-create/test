@@ -4,7 +4,19 @@ from __future__ import annotations
 
 import json
 
+import pytest
 from seo_operator import editor_run
+
+
+@pytest.fixture(autouse=True)
+def _без_исключений_владельца(monkeypatch, tmp_path):
+    """Механика шлюза проверяется на прежних фикстурах (animedia.space,
+    lordfilm47.space), поэтому исключение сайтов владельцем 25.10.2026 здесь
+    отключено. Само исключение проверяет tests/unit/test_withdrawn_domains.py."""
+    from factory.cell import withdrawn
+
+    monkeypatch.setattr(withdrawn, "ИСКЛЮЧЕНЫ", {})
+    monkeypatch.setenv("SITE_CELLS_REGISTRY", str(tmp_path / "нет-реестра.json"))
 
 RUN = "20261008T1500Z"
 OWNER = editor_run.owner_for(RUN)

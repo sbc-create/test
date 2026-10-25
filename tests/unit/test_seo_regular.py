@@ -1057,7 +1057,13 @@ def test_control_page_cancels_a_title_wide_rise():
     assert regular.judge(base, after, flat_control)["verdict"] == "GAIN_OBSERVED"
 
 
-def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_path):
+def test_editor_candidates_rank_gaps_and_space_duplicates_by_title_traffic(tmp_path, monkeypatch):
+    # Ранжирование проверяется на прежней паре icu/space; исключение
+    # animedia.space владельцем (25.10.2026) проверяет test_withdrawn_domains.py.
+    from factory.cell import withdrawn
+
+    monkeypatch.setattr(withdrawn, "ИСКЛЮЧЕНЫ", {})
+    monkeypatch.setenv("SITE_CELLS_REGISTRY", str(tmp_path / "нет-реестра.json"))
     snap = tmp_path / "analytics-2026-10-08.json"
     snap.write_text(
         json.dumps(

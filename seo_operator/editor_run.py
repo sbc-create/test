@@ -420,6 +420,12 @@ def очередное_направление(счёт: dict[str, int], доли
     return min(НАПРАВЛЕНИЯ, key=lambda имя: (отставание(имя), имя != "lords"))
 
 
+def _выведенные() -> frozenset[str]:
+    from factory.cell import withdrawn
+
+    return withdrawn.выведенные()
+
+
 def _домен(c: dict) -> str:
     return c.get("domain") or (_key(c.get("url", "")).split("/")[2:3] or [""])[0]
 
@@ -433,8 +439,9 @@ def _по_направлению(fresh: list[dict], open_tasks: list[dict], stat
     должно = очередное_направление(счёт, conf)
     порядок = [должно] + [имя for имя in НАПРАВЛЕНИЯ if имя != должно]
     причина_сдвига = ""
+    выведено = _выведенные()
     for имя in порядок:
-        свои = set(НАПРАВЛЕНИЯ[имя])
+        свои = set(НАПРАВЛЕНИЯ[имя]) - выведено
         кандидаты = [c for c in fresh if _домен(c) in свои]
         задания = [i for i in open_tasks if i.get("target_site") in свои]
         if кандидаты or задания:
@@ -776,7 +783,7 @@ def готовые_черновики(root: Path | None = None) -> list[dict]:
         return out
     for каталог in каталоги:
         домен = каталог.name
-        if домен not in разрешено or домен in PAUSED_PUBLISH:
+        if домен not in разрешено:
             continue
         try:
             черн = json.loads((каталог / "drafts.json").read_text(encoding="utf-8")).get("items") or {}
@@ -844,11 +851,12 @@ def _work(
         items = json.loads(registry.read_text(encoding="utf-8")).get("items") or []
     except (OSError, ValueError):
         items = []
+    закрыто = закрытые()
     open_tasks = [
         i
         for i in items
         if i.get("target_site") in EDITOR_DOMAINS
-        and i.get("target_site") not in PAUSED_PUBLISH
+        and i.get("target_site") not in закрыто
         and i.get("status") == "NEEDS_UPDATE"
         and str(i.get("content_id", "")).replace("request-", "") not in leased
     ]
@@ -870,13 +878,13 @@ def _work(
                  if _key(c["url"]) not in известные] + cands
     fresh = [c for c in cands if _key(c.get("url", "")) not in done
              and _key(c.get("url", "")).split("/")[2:3] != [] and
-             _key(c.get("url", "")).split("/")[2] not in PAUSED_PUBLISH]
+             _key(c.get("url", "")).split("/")[2] not in закрыто]
     # Пересчёт и тогда, когда кандидаты кончились лишь у части каталожных
     # доменов: 2026-10-10 у сайтов Lords/Zona было по 2 кандидата, их закрыли
     # к утру, а список не обновлялся, пока оставались кандидаты Yummy, — за
     # день 52 из 56 публикаций пришлись на Yummy, на Lords ни одной.
     # Пересчёт не чаще раза в час (_refresh_candidates).
-    starving = (set(regular.EDITOR_SITES) - set(PAUSED_PUBLISH)
+    starving = (set(regular.EDITOR_SITES) - закрыто
                 - {_key(c["url"]).split("/")[2] for c in fresh})
     if (not fresh or starving) and refresh and _refresh_candidates(candidates, now):
         # Пересчёт и при открытых заданиях очереди: 2026-10-09 после 17:35 в
@@ -964,12 +972,26 @@ PAUSED_PUBLISH = {
 }
 
 
+def закрытые() -> set[str]:
+    """Домены, на которые редактору нельзя: пауза публикации (PAUSED_PUBLISH)
+    и сайты, исключённые из написания текстов и продвижения (решение владельца
+    25.10.2026 — animedia.space, lordfilm47.space, lordserials22.site,
+    lordserials22.space; factory.cell.withdrawn). Статические перечни выше их
+    ещё называют: признак исключения один, а не правка каждого перечня, иначе
+    следующая правка перечня или обнаружение по реестру вернули бы домен в
+    работу. lords3rial.site (переезд lordfilm47.space) включается после
+    подтверждённого запуска."""
+    from factory.cell import withdrawn
+
+    return set(PAUSED_PUBLISH) | set(withdrawn.выведенные())
+
+
 def allowed_domains() -> list[str]:
     """Домены, на которых редактор публикует: шлюз (EDITOR_DOMAINS) и кандидаты
-    (regular.EDITOR_SITES), без приостановленных. Единственный источник для промпта модели."""
+    (regular.EDITOR_SITES), без приостановленных и исключённых. Единственный источник для промпта модели."""
     from seo_operator import regular
 
-    return sorted((set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES)) - set(PAUSED_PUBLISH))
+    return sorted((set(EDITOR_DOMAINS) | set(regular.EDITOR_SITES)) - закрытые())
 
 
 def recent_publications(now: dt.datetime, *, hours: int = 24) -> dict[str, int]:

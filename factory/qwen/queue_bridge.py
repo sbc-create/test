@@ -332,6 +332,19 @@ _ПАМЯТКА: dict[str, tuple[float, bool, str]] = {}
 СРОК_ПАМЯТКИ_С = 60.0
 
 
+def _выведен(site: str) -> str:
+    """Причина отказа, если площадка исключена из написания текстов (решение
+    владельца 25.10.2026, factory.cell.withdrawn), иначе пусто. Существующие
+    задания площадки остаются в очереди со своим прогрессом: не выдаются и не
+    заводятся новые."""
+    from factory.cell import withdrawn
+
+    if withdrawn.выведен(site):
+        return (f"площадка {site} исключена из написания текстов и продвижения "
+                "до замены домена: задания не выдаются")
+    return ""
+
+
 def доставка_описаний(site: str) -> tuple[bool, str]:
     """Сработает ли на этой площадке публикация описания. (можно, причина).
 
@@ -389,6 +402,8 @@ def взять(*, site: str, owner: str, limit: int = 1,
     """
     actors.проверить(owner, 'queue-next')
     вправе, отказ = брать_задания_вправе(owner)
+    if вправе and (выведен := _выведен(site)):
+        вправе, отказ = False, выведен
     if not вправе:
         return {"site": site, "owner": owner, "claimed": 0, "tasks": [],
                 "blocked_reason": отказ,
@@ -467,6 +482,8 @@ def найти(*, site: str, canonical_url: str,
 def завести(*, site: str, canonical_url: str, headline: str,
             **поля: Any) -> dict[str, Any]:
     """Завести задание по адресу. Идемпотентно: дубля не будет."""
+    if выведен := _выведен(site):
+        raise ОчередьОтклонила(выведен + ". Задание не заведено")
     вид = str(поля.get("content_type") or "TITLE_DESCRIPTION")
     if вид in ТРЕБУЮТ_ДОСТАВКИ:
         можно, причина = доставка_описаний(site)

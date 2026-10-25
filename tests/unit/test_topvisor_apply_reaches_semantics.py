@@ -66,7 +66,9 @@ def все_проекты() -> tuple[list[dict], Any]:
     from factory.topvisor.manifest import MANIFEST
     проекты = [{"id": 4000 + н, "url": с.domain, "site": с.domain}
                for н, с in enumerate(MANIFEST)]
-    spec = next(с for с in MANIFEST if с.groups)
+    from factory.cell import withdrawn
+    # Исключённые из продвижения сайты (решение 25.10.2026) семантику не получают.
+    spec = next(с for с in MANIFEST if с.groups and not withdrawn.выведен(с.domain))
     выбранный = next(p for p in проекты if p["site"] == spec.domain)
     return проекты, (spec, выбранный["id"])
 

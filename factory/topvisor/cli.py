@@ -162,12 +162,25 @@ def описать_связь_с_метрикой(client, projects: list[dict]) 
     return строки
 
 
+def _действующий_манифест():
+    """Манифест без сайтов, исключённых из продвижения (решение владельца
+    25.10.2026, factory.cell.withdrawn): им не создаются и не настраиваются
+    проекты, не добавляется семантика. Чтение настроек (check) не фильтруется:
+    это описание существующего, а не работа на сайт."""
+    from factory.cell import withdrawn  # noqa: PLC0415
+    from factory.topvisor.manifest import MANIFEST  # noqa: PLC0415
+
+    выведено = withdrawn.выведенные()
+    return tuple(s for s in MANIFEST if not withdrawn.выведен(s.domain, набор=выведено))
+
+
 def cmd_plan(args: argparse.Namespace) -> int:
     client = _client(False)
     info = client.bank_info()
     balance = info.get("balance", info.get("sum"))
     current = client.projects()
-    result = planning.build(current, balance=balance if isinstance(balance, int | float) else None)
+    result = planning.build(current, balance=balance if isinstance(balance, int | float) else None,
+                            manifest=_действующий_манифест())
     document = result.as_dict()
     if args.json:
         print(json.dumps(document, ensure_ascii=False, indent=2))
@@ -186,7 +199,7 @@ def cmd_plan(args: argparse.Namespace) -> int:
 def cmd_apply(args: argparse.Namespace) -> int:
     client = _client(True)
     current = client.projects()
-    result = planning.build(current)
+    result = planning.build(current, manifest=_действующий_манифест())
     if result.empty:
         # РАННЕГО ВОЗВРАТА ЗДЕСЬ БЫТЬ НЕ ДОЛЖНО. План отвечает только на вопрос
         # «какие проекты создать»; когда все девять уже созданы, он пуст — и
@@ -252,11 +265,13 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
     from factory.topvisor.manifest import by_domain  # noqa: PLC0415
     from factory.topvisor.plan import normalize_domain  # noqa: PLC0415
 
+    from factory.cell import withdrawn  # noqa: PLC0415
+
     итог = {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
     for проект in projects:
         домен = normalize_domain(str(проект.get("url") or проект.get("site") or ""))
         spec = by_domain(домен) if домен else None
-        if spec is None:
+        if spec is None or withdrawn.выведен(домен):
             continue
         ид = проект.get("id")
         try:

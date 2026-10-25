@@ -251,11 +251,11 @@ def test_excluded_new_lords_domains_never_taken(среда):
     s = среда["state"]
     по_сайту = {**среда["задача"], "id": "T901", "site": "lordfilm.group"}
     по_репо = {**среда["задача"], "id": "T902", "repo": "var/site-repos/lordserial-net-ru"}
-    соседний = {**среда["задача"], "id": "T903", "site": "lordfilm47.space"}
+    соседний = {**среда["задача"], "id": "T903", "site": "lordserial33.biz"}
     assert tech_run.вне_продвижения(по_сайту) == "lordfilm.group"
     assert tech_run.вне_продвижения(по_репо) == "lordserial.net.ru"
     assert tech_run.вне_продвижения(соседний) is None
-    assert tech_run.вне_продвижения({"site": "lordserial.su, lordfilm47.space"}) == "lordserial.su"
+    assert tech_run.вне_продвижения({"site": "lordserial.su, lordserial33.biz"}) == "lordserial.su"
     ид = [з["id"] for з in tech_run.candidates([по_сайту, по_репо, соседний], state=s)]
     assert ид == ["T903"]
     with pytest.raises(tech_run.ВнеПродвижения):
@@ -263,9 +263,27 @@ def test_excluded_new_lords_domains_never_taken(среда):
     assert not (s / "claims.jsonl").exists()
 
 
-def test_real_queue_has_no_task_on_excluded_domains():
+def test_real_queue_has_no_task_on_excluded_domains(monkeypatch):
+    """Восемь новых доменов Lords: задач в очереди нет вовсе.
+
+    Сайты, исключённые владельцем 25.10.2026 (tech_run.ИСКЛЮЧЕНЫ_ВЛАДЕЛЬЦЕМ),
+    здесь не проверяются: их прежние задачи остаются в очереди со своим
+    статусом — прогресс и история сохраняются. Что они не выдаются, проверяет
+    test_real_queue_never_offers_owner_excluded_sites.
+    """
+    monkeypatch.setattr(tech_run, "выведенные_владельцем", lambda путь=None: ())
     задачи = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))["tasks"]
     assert [з["id"] for з in задачи if tech_run.вне_продвижения(з)] == []
+
+
+def test_real_queue_never_offers_owner_excluded_sites(tmp_path):
+    """Задачи animedia.space, lordfilm47.space, lordserials22.site/.space в
+    очереди есть (история), но выбор их не предлагает (решение 25.10.2026)."""
+    задачи = json.loads((ROOT / "config" / "seo-tech-queue.json").read_text(encoding="utf-8"))["tasks"]
+    свои = [з for з in задачи if any(д in str(з.get("site", "")) for д in tech_run.ИСКЛЮЧЕНЫ_ВЛАДЕЛЬЦЕМ)]
+    assert свои, "проверка без задач исключённых сайтов ничего не доказывает"
+    поставленные = [{**з, "status": "queued"} for з in свои]
+    assert tech_run.candidates(поставленные, state=tmp_path) == []
 
 
 def test_excluded_list_matches_editor_and_needs_no_package():

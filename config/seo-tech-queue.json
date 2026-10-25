@@ -8708,7 +8708,7 @@
     {
       "id": "T334",
       "site": "zonafilm.space",
-      "direction": "movies",
+      "direction": "zona",
       "repo": "var/site-repos/zonafilm-space",
       "urls": [
         "https://zonafilm.space/",
