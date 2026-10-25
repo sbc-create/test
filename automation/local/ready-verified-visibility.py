@@ -121,14 +121,17 @@ def _живое(запись: dict) -> int | None:
         return len(str((ф.get("facts") or {}).get("description") or "").strip())
     except Exception:  # noqa: BLE001 — не прочиталось: пробуем конечный адрес
         pass
-    адрес = запись.get("url") or ""
-    конечный = _после_перенаправления(адрес) if адрес else ""
-    if not конечный or конечный == адрес:
+    # Слаг записи и её адрес расходятся: у 173 записей yummyani.site в
+    # `title_id` стоит UUID, тогда как `canonical_url` несёт настоящий слаг
+    # (а страница `/anime/<uuid>` отвечает 308). Поэтому второй попыткой
+    # берётся слаг ИЗ АДРЕСА — и только если он действительно другой.
+    адрес = _после_перенаправления(запись.get("url") or "") if запись.get("url") else ""
+    слаг = адрес.rstrip("/").rsplit("/", 1)[-1] if адрес else ""
+    if not слаг or слаг == запись.get("slug"):
         return None
-    слаг = конечный.rstrip("/").rsplit("/", 1)[-1]
     try:
         ф = editorial._факты_со_страницы(с, слаг)
-    except Exception:  # noqa: BLE001 — и конечный адрес не дал разметки
+    except Exception:  # noqa: BLE001 — и этот адрес не дал разметки
         return None
     return len(str((ф.get("facts") or {}).get("description") or "").strip())
 
