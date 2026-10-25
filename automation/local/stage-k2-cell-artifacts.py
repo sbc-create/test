@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Заготовки для нового узла: юниты и конфигурации nginx восьми ячеек.
+"""Заготовки для узла K2: юниты и конфигурации nginx его ячеек.
 
 Зачем отдельный инструмент. На узле K2 у `k2deploy` нет sudo, а штатные
 установщики (`install-cell-units.py`, `install-site-nginx.sh`) работают от root
@@ -29,7 +29,22 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 КОРЕНЬ = Path(__file__).resolve().parents[2]
 ВЫХОД = КОРЕНЬ / "var" / "k2-stage"
 ЗАГОТОВКИ_NGINX = КОРЕНЬ / "automation" / "host" / "nginx-site"
-ВОСЕМЬ = tuple(f"lords-{n}" for n in range(10, 18))
+def ячейки_узла(ref: str = "k2-zomro-01") -> tuple[str, ...]:
+    """Состав узла по реестру, а не перечнем здесь.
+
+    Перечень был литералом `lords-10…lords-17`, и это ловушка, а не
+    сокращение: общий файл объявлений `site-cells-upstreams.conf` один на узел
+    и собирается ровно по переданному составу. Собранный на восемь ячеек, он
+    снял бы upstream пяти новых; собранный на пять — upstream восьми
+    действующих, то есть положил бы работающие сайты. Теперь состав берётся из
+    `deploy_target.ref` паспортов, и забыть новую ячейку нечем.
+    """
+    данные = json.loads((КОРЕНЬ / "config" / "site-cells.json")
+                        .read_text(encoding="utf-8"))
+    return tuple(sorted(
+        c["site_id"] for c in данные.get("cells") or []
+        if ((c.get("deploy_target") or {}).get("ref") == ref
+            and not (c.get("withdrawal") or {}).get("withdrawn"))))
 
 
 def модуль_юнитов():
@@ -63,8 +78,8 @@ def сумма(путь: Path) -> str:
 def main() -> int:
     р = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    р.add_argument("--sites", default=",".join(ВОСЕМЬ),
-                   help="список site_id через запятую")
+    р.add_argument("--sites", default=",".join(ячейки_узла()),
+                   help="список site_id через запятую; по умолчанию — весь состав узла по реестру")
     р.add_argument("--out", default=str(ВЫХОД))
     а = р.parse_args()
 
