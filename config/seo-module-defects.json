@@ -8,12 +8,13 @@
       "title": "Причина неизмеренного Вебмастера «домен ещё не развёрнут» у работающих доменов",
       "zone": "seo",
       "priority": "P1",
-      "state": "verified",
-      "example": "artifacts/analytics/analytics-2026-10-08.json: у всех 21 домена pages_in_search/excluded_pages/external_links/technical_issues = «сайт не зарегистрирован в Вебмастере: домен ещё не развёрнут», при этом https://yummyani.org/ отвечает 200 (проверка check-2026-10-08T06).",
+      "state": "released",
+      "example": "artifacts/analytics/analytics-2026-10-08.json: у всех 21 домена pages_in_search/excluded_pages/external_links/technical_issues = «сайт не зарегистрирован в Вебмастере: домен ещё не развёрнут», при этом https://yummyani.org/ отвечает 200 (проверка check-2026-10-08T06).\nПЕРЕМЕРЕНО 25.10 06:1xZ ПО СВЕЖЕМУ СНИМКУ (`analytics-2026-10-25.json`, собран\n05:05:56Z) — ЛОЖНОЙ ПРИЧИНЫ БОЛЬШЕ НЕТ. Строк «не развёрнут» и «ещё не» в файле\n**ноль** (прямой поиск по тексту снимка). Все 144 неизмеренных показателя несут\nпричину, соответствующую состоянию:\n  85 — «webmaster: сеть недоступна (URLError). Повторы исчерпаны — фабрика не\n  продолжает с выдуманными данными»;\n  36 — «счётчик Метрики не создан»;\n  20 — «Вебмастер для домена выключен в реестре аналитики»;\n  2 — «Метрика не вернула идентификаторы целей»; 1 — «цели не созданы».\nОтдельная проверка на исходный симптом: среди 16 живых витрин НИ У ОДНОЙ причина\nне говорит о развёртывании или незапущенности — таких случаев 0.\nСостояние записи перевожу в `released`: причина больше не правдоподобная\nнеправда, а названное ограничение.\n",
       "wrong_decision": "Отсутствие данных Вебмастера списывается на «ждём выкладки», хотя выкладка давно прошла и нужна привязка сайта в Вебмастере.",
       "change": "Причина берётся из реестра: пустой host_id, verification_status и дата last_checked_at (seo_operator/analytics_collect.py::_webmaster_unbound_reason).",
       "acceptance": "В снимке analytics-<дата>.json после штатного запуска analytics-cabinet нет текста «не развёрнут»; причина содержит host_id и статус подтверждения.",
-      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess | Штатный сбор analytics-cabinet 2026-10-09T05:07:44Z: показатели Вебмастера измерены у 16 доменов, текста «не развёрнут» нет, top_n у разбивок есть."
+      "evidence": "tests/unit/test_yandex_analytics_operator.py::test_unbound_webmaster_reason_names_the_registry_status_not_a_deploy_guess | Штатный сбор analytics-cabinet 2026-10-09T05:07:44Z: показатели Вебмастера измерены у 16 доменов, текста «не развёрнут» нет, top_n у разбивок есть.",
+      "verify_live": "в снимке аналитики нет ни одной причины «домен ещё не развёрнут»; 25.10 — 0 вхождений, и ни у одной из 16 живых витрин причина не говорит о развёртывании"
     },
     {
       "id": "MOD-02",
