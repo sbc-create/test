@@ -86,6 +86,7 @@ def test_печать_паспорта_перечисляет_все_поля_м
         analytics={"counter_id": 1}, promotion={"excluded": False},
         withdrawal={"withdrawn": False, "at": "2026-10-25", "reason": "проба",
                     "authority": "проба"},
+        editorial={"overlay_confirmed": False},
         status="planned")
     напечатано = set(заполненная.to_dict())
     assert поля - напечатано == set(), (

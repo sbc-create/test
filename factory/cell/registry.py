@@ -193,6 +193,14 @@ class Cell:
     #: Отсутствие блока означает «в работе»: появление поля не меняет
     #: поведения действующих сайтов.
     withdrawal: dict[str, Any] = field(default_factory=dict)
+
+    #: Умеет ли витрина ПОКАЗАТЬ опубликованный редакционный текст и можно ли
+    #: строить кандидатов по её снимку каталога. Поле заводится 2026-10-25
+    #: взамен двух литералов в коде (`editor_run.EDITOR_DOMAINS` и
+    #: `regular.EDITOR_SITES`): состав очереди редактора жил там, и домен
+    #: попадал в публикацию правкой кода, а не записью в паспорте. Признак
+    #: составной: «показ подтверждён» без даты и доказательства не считается.
+    editorial: dict[str, Any] = field(default_factory=dict)
     status: str = "planned"
 
     @property
@@ -267,6 +275,11 @@ class Cell:
         # «в работе» — ровно то, что нужно.
         if self.withdrawal:
             запись["withdrawal"] = dict(self.withdrawal)
+        # `editorial` — по той же причине, что `withdrawal`: пустой блок у
+        # ячейки, которой признак не выдавали, схему не нарушает, но и смысла
+        # не несёт, а снятый блок означал бы «публиковать можно» по умолчанию.
+        if self.editorial:
+            запись["editorial"] = dict(self.editorial)
         return запись
 
 
@@ -292,6 +305,7 @@ def _cell(raw: dict[str, Any]) -> Cell:
         analytics=raw.get("analytics") or {},
         promotion=raw.get("promotion") or {},
         withdrawal=raw.get("withdrawal") or {},
+        editorial=raw.get("editorial") or {},
         status=raw.get("status", "planned"),
     )
 
@@ -453,6 +467,48 @@ def объявить_вывод(site_id_или_домен: str, *, withdrawn: bo
     if прежний:
         блок["history"] = прежний
     return register(_replace(было, withdrawal=блок), path=path, replace=True)
+
+
+def показ_подтверждён(cell_или_запись: Any) -> bool:
+    """Витрина фактически показывает опубликованный редакционный текст.
+
+    Признак положительный и составной: мало флага — нужны дата и
+    доказательство. Иначе «показ подтверждён» держалось бы на слове, а это
+    ровно то состояние, при котором редактор публикует текст, и текст никуда
+    не попадает: мёртвые данные, выглядящие содержимым.
+    """
+    блок = (cell_или_запись.editorial if hasattr(cell_или_запись, "editorial")
+            else (cell_или_запись.get("editorial") or {}))
+    if not (блок or {}).get("overlay_confirmed"):
+        return False
+    return bool(str(блок.get("confirmed_at") or "").strip()
+                and str(блок.get("proof") or "").strip())
+
+
+def домены_публикации(*, path: Path | None = None) -> set[str]:
+    """Домены, на которых редактору разрешено публиковать.
+
+    Единственный источник состава очереди. До 2026-10-25 он жил двумя
+    литералами в коде (`editor_run.EDITOR_DOMAINS` и `regular.EDITOR_SITES`),
+    и домен попадал в публикацию правкой кода: запись в паспорте при этом
+    могла говорить обратное, а снятие признака ничего не прекращало.
+
+    Вычитание исключённых и выведенных остаётся на стороне вызывающего:
+    области у них разные (`editorial_publication`, `text_generation`), и
+    сводить их здесь значило бы прятать решение владельца внутрь состава.
+    """
+    return {c.domain for c in all_cells(path) if показ_подтверждён(c)}
+
+
+def сайты_кандидатов(*, path: Path | None = None) -> dict[str, str]:
+    """Домен → site_id для витрин, по снимку которых строятся кандидаты.
+
+    Отдельно от `домены_публикации`: у семейства Yummy снимка каталога нет
+    вовсе, публикация идёт только заданиями очереди, и кандидатов для них не
+    строят. Это измеренное положение дел, а не настройка.
+    """
+    return {c.domain: c.site_id for c in all_cells(path)
+            if показ_подтверждён(c) and (c.editorial or {}).get("candidates_from_snapshot")}
 
 
 def без_аналитики_по_решению(запись: dict[str, Any]) -> str:
@@ -666,9 +722,11 @@ def update(site_id: str, changes: dict[str, Any], *, path: Path | None = None) -
     # остального в паспорте: она называет чужую ветку, чужой релиз или чужой
     # дефект, и неверная причина хуже отсутствующей — по ней решают, можно ли
     # уже выкладывать.
+    # `editorial` правится точечно намеренно: признак показа выдаётся и
+    # снимается по одной витрине, а пересборка паспорта о нём не знает.
     allowed = {"status", "deployed", "content_revision", "last_update", "backup",
                "resources", "pins", "deploy_target", "repo", "data", "publisher",
-               "template", "aliases", "release", "runtime"}
+               "template", "aliases", "release", "runtime", "editorial"}
     unknown = set(changes) - allowed
     if unknown:
         raise RegistryError(f"эти поля паспорта не обновляются точечно: {sorted(unknown)}")

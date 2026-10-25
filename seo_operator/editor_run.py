@@ -310,38 +310,27 @@ LEASES = Path("/var/lib/seo-content-operator/editorial_leases.json")
 STATE = Path(__file__).resolve().parents[1] / "var" / "editor-runs"
 CANDIDATES = Path(__file__).resolve().parents[1] / "var" / "seo-regular" / "editor-candidates.json"
 ANIMEDIA = ("animedia.icu", "animedia.space")
-#: Где редактор публикует с подтверждённым показом (regular.EDITOR_SITES).
-EDITOR_DOMAINS = (
-    *ANIMEDIA,
-    "zonafilm.space",
-    "lordfilm47.space",
-    "lordserial33.biz",
-    "1lordserials1.online",
-    "lordserials22.info",
-    "zonafilm12.site",
-    # Ночь 9→10 октября: читатель правок выпущен (bf63a60c60bd, исполнитель
-    # ответил live_verified), публикация подтверждена на странице —
-    # zonafilm.cc/title/ad-dzheffri/. До этого витрина не умела показывать
-    # опубликованный текст вовсе.
-    "zonafilm.cc",
-    "an1meg0.site",
-    "an1mego.site",
-    "animeg0.site",
-    # Yummy — только задания очереди: снимка каталога у семейства нет, кандидаты
-    # не строятся. Показ подтверждён 2026-10-09 (накладка по схеме, afd5b65).
-    "yummyani.site",
-    # С 2026-10-09: показ yummyani.org подтверждён первой публикацией
-    # (izgnannyy-reinkarnirovannyy-..., текст в видимой разметке и в meta);
-    # идентификатор первой записи домена даёт поиск самого приложения.
-    "yummyani.org",
-    # Ночь 9→10 октября: контейнеры трёх витрин пересозданы с монтированием
-    # каталога накладок, показ подтверждён публикацией на каждой —
-    # yummyani7.site/anime/ya-vedma-..., yummyani7.info/anime/ya-perevoplotilsya-...,
-    # yummyani.biz/anime/silneyshaya-vedma-... (HTTP 200, текст в основном блоке).
-    "yummyani7.site",
-    "yummyani7.info",
-    "yummyani.biz",
-)
+#: Где редактор публикует с подтверждённым показом. Источник — ПАСПОРТА
+#: ЯЧЕЕК (`editorial.overlay_confirmed` вместе с датой и доказательством), а не
+#: литерал здесь: до 2026-10-25 состав очереди жил двумя литералами в коде, и
+#: домен попадал в публикацию правкой кода, а не записью в паспорте. Снятие
+#: признака в паспорте прекращает публикацию сразу, править код не нужно.
+#:
+#: Семейство Yummy входит сюда, но не в `regular.EDITOR_SITES`: снимка каталога
+#: у него нет, кандидаты не строятся, публикация идёт только заданиями очереди.
+#: Это различие теперь тоже в паспорте — `editorial.candidates_from_snapshot`.
+#:
+#: Недоступный реестр оставляет перечень ПУСТЫМ (fail-closed).
+def _домены_публикации_из_реестра() -> tuple[str, ...]:
+    try:
+        from factory.cell import registry as _реестр
+
+        return tuple(sorted(_реестр.домены_публикации()))
+    except Exception:
+        return ()
+
+
+EDITOR_DOMAINS = _домены_публикации_из_реестра()
 #: Режим запусков (config/editor-run.json). Владелец 2026-10-10: круглосуточно,
 #: пауза 20 минут ПОСЛЕ ЗАВЕРШЕНИЯ партии вместо почасового цикла; таймер,
 #: flock и единственный исполнитель прежние. Значения по умолчанию — те же,
@@ -714,6 +703,11 @@ def _work(
 def allowed_domains() -> list[str]:
     """Домены, на которых редактор публикует: шлюз (EDITOR_DOMAINS) и кандидаты
     (regular.EDITOR_SITES). Единственный источник для промпта модели.
+
+    Оба перечня с 2026-10-25 ПРОИЗВОДНЫЕ от паспортов ячеек
+    (`editorial.overlay_confirmed` вместе с датой и доказательством): состав
+    очереди больше не живёт литералом в коде, и новая принятая витрина входит
+    в очередь записью в реестре, а не правкой этого файла.
 
     Из объединения вычитаются домены, исключённые владельцем из продвижения
     (`promotion.excluded` в реестре ячеек). Вычитание здесь, а не доверие тому,

@@ -44,7 +44,7 @@
         "note": "Выложенная основа, из которой собран действующий выпуск. Проверено побайтово по src/ в /srv/animedia-icu/app."
       },
       "content_revision": null,
-      "last_update": "2026-10-13T19:13:38.714634+00:00",
+      "last_update": "2026-10-25T22:42:57.430803+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -85,6 +85,12 @@
         "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:59Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animedia.icu.json; флаг в реестре без него разрешением не считается",
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/animedia.icu.json",
         "open_authorization_id": "357885f2-4fdf-40ee-8be4-be06c16a5ab8"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "семейство Animedia: факты, доставка и отображение описаний (regular.ANIMEDIA)",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -139,7 +145,7 @@
         "note": "Собрано и проверено. НЕ развёрнуто: активация требует root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:24.886413+00:00",
+      "last_update": "2026-10-25T22:42:57.480836+00:00",
       "backup": {
         "kind": "withdrawal-preserve",
         "at": "2026-10-25T21:04:09.882100+00:00",
@@ -223,6 +229,12 @@
         ],
         "reason": "Решение владельца 2026-10-25: вывод из активной работы до назначения замены домена. Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
         "authority": "владелец, распоряжение 2026-10-25"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "семейство Animedia: факты, доставка и отображение описаний (regular.ANIMEDIA)",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -266,7 +278,7 @@
         "note": "build_id animego-02-32f05a208b1e прочитан публично в /healthz 2026-10-03; runtime_path /srv/an1mego-site/app/src/animego-frontend.py. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T15:11:09.579533+00:00",
+      "last_update": "2026-10-25T22:42:57.764885+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -291,6 +303,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/an1mego.site.json",
         "open_authorization_id": "3f340bb0-f436-467d-a4d4-94f898665752",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/an1mego.site.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "перезапуск моста 534118c, снимок в каталоге данных ячейки; публикации kletka-duha-2 и pesn-nochnyh-sov-2",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -334,7 +352,7 @@
         "note": "build_id animego-03-9575e2715ff1 прочитан публично в /healthz 2026-10-03; runtime_path /srv/animeg0-site/app/src/animego-frontend.py. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T15:11:09.615194+00:00",
+      "last_update": "2026-10-25T22:42:57.793556+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -359,6 +377,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/animeg0.site.json",
         "open_authorization_id": "9ac3246f-8473-4e5a-ae5c-3787816dbef3",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-05T13:41:38Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/animeg0.site.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "перезапуск моста 534118c; показ подтверждён публикацией на странице",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -435,7 +459,13 @@
         },
         "note": "проект 33768290 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "last_update": "2026-10-12T15:53:22.469544+00:00"
+      "last_update": "2026-10-25T22:42:57.739669+00:00",
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "накладка AnimeGo перечитывается без перезапуска (71974e5); an1meg0.site/title/medalistka-2/",
+        "candidates_from_snapshot": true
+      }
     },
     {
       "site_id": "lords-01",
@@ -479,7 +509,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:24.974721+00:00",
+      "last_update": "2026-10-25T22:42:57.547761+00:00",
       "backup": {
         "kind": "withdrawal-preserve",
         "at": "2026-10-25T21:04:11.157545+00:00",
@@ -551,6 +581,12 @@
         "reason": "Решение владельца 2026-10-25: вывод из активной работы с переносом на lords3rial.site (адрес назван владельцем 2026-10-25). Прекращаются новые задания, генерация и публикация текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Данные, репозиторий и резервные копии сохраняются для переноса.",
         "authority": "владелец, распоряжение 2026-10-25",
         "replacement_domain": "lords3rial.site"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "контракт и читатель правок выпущены: f17b9f7/c387529, a1b5d71/4714e0a",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -594,7 +630,7 @@
         "source_commit": "321bd7e8d0bf19e561728f1491692d54aa916f12"
       },
       "content_revision": null,
-      "last_update": "2026-10-15T17:39:22.489071+00:00",
+      "last_update": "2026-10-25T22:42:57.576419+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -624,6 +660,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/lordserial33.biz.json",
         "open_authorization_id": "0dbcbc3c-bf38-4432-8547-4b258948ef92",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:30Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/lordserial33.biz.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "контракт и читатель правок выпущены: f17b9f7/c387529, a1b5d71/4714e0a",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -666,7 +708,7 @@
         "source_commit": "7ad7499d31ff5194d6da2b891f7bd3b6f402ab25"
       },
       "content_revision": null,
-      "last_update": "2026-10-15T17:39:22.489071+00:00",
+      "last_update": "2026-10-25T22:42:57.610308+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -696,6 +738,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/1lordserials1.online.json",
         "open_authorization_id": "f00e6e26-16a8-476c-bcf9-6a45a2452a78",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-04T19:35:57Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/1lordserials1.online.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "читатель правок выпущен (wt-portable-site-cell-01-97, lords-03 e0b6d49); показ подтверждён на странице",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -736,7 +784,7 @@
       "data": {},
       "deployed": {},
       "content_revision": null,
-      "last_update": "2026-10-12T15:11:09.763695+00:00",
+      "last_update": "2026-10-25T22:42:57.645815+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -777,7 +825,13 @@
         },
         "note": "счётчик 113109083 создан службой, отчёт var/analytics/connect-lordserials22.info.json от 2026-09-27T22:47:19Z; домен счётчика по ответу API — lordserials22.info. проект 33762550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "promotion": {}
+      "promotion": {},
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "читатель правок выпущен (wt-portable-site-cell-01-97, lords-05 a6de937); показ подтверждён на странице",
+        "candidates_from_snapshot": true
+      }
     },
     {
       "site_id": "lords-06",
@@ -2415,7 +2469,7 @@
       "data": {},
       "deployed": {},
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.020961+00:00",
+      "last_update": "2026-10-25T22:42:57.871722+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2456,7 +2510,13 @@
         },
         "note": "счётчик 113109087 создан службой, отчёт var/analytics/connect-yummyani7.site.json от 2026-09-27T22:47:25Z; домен счётчика по ответу API — yummyani7.site. проект 33762615 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "promotion": {}
+      "promotion": {},
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-10",
+        "proof": "контейнер пересоздан с монтированием каталога накладок; yummyani7.site/anime/ya-vedma-… (HTTP 200)",
+        "candidates_from_snapshot": false
+      }
     },
     {
       "site_id": "yummy-08",
@@ -2496,7 +2556,7 @@
       "data": {},
       "deployed": {},
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.044166+00:00",
+      "last_update": "2026-10-25T22:42:57.902589+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2537,7 +2597,13 @@
         },
         "note": "счётчик 113109089 создан службой, отчёт var/analytics/connect-yummyani7.info.json от 2026-09-27T22:47:26Z; домен счётчика по ответу API — yummyani7.info. проект 33762646 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "promotion": {}
+      "promotion": {},
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-10",
+        "proof": "контейнер пересоздан с монтированием каталога накладок; yummyani7.info/anime/ya-perevoplotilsya-… (HTTP 200)",
+        "candidates_from_snapshot": false
+      }
     },
     {
       "site_id": "yummy-biz",
@@ -2579,7 +2645,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.105227+00:00",
+      "last_update": "2026-10-25T22:42:57.937056+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2610,6 +2676,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/yummyani.biz.json",
         "open_authorization_id": "52799b26-3ca6-42f1-912b-63ac2bcfa9cc",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-05T04:58:30Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/yummyani.biz.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-10",
+        "proof": "контейнер пересоздан с монтированием каталога накладок; yummyani.biz/anime/silneyshaya-vedma-… (HTTP 200)",
+        "candidates_from_snapshot": false
       }
     },
     {
@@ -2652,7 +2724,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.136848+00:00",
+      "last_update": "2026-10-25T22:42:57.849315+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2677,6 +2749,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531569 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "первая публикация izgnannyy-reinkarnirovannyy-…: текст в видимой разметке и в meta",
+        "candidates_from_snapshot": false
       }
     },
     {
@@ -2719,7 +2797,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.173685+00:00",
+      "last_update": "2026-10-25T22:42:57.819239+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2744,6 +2822,12 @@
           "source": "get/projects_2/projects"
         },
         "note": "проект 32531550 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "накладка по схеме, afd5b65; показ подтверждён",
+        "candidates_from_snapshot": false
       }
     },
     {
@@ -2788,7 +2872,7 @@
         "note": "Выделено, CI зелёный, сценарии активации проверены исполнением. НЕ активировано: нужен root."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.206153+00:00",
+      "last_update": "2026-10-25T22:42:57.511447+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2820,7 +2904,13 @@
         },
         "note": "проект 33238820 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "promotion": {}
+      "promotion": {},
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "первая видимая публикация zonafilm.space/title/ledyanaya-stena/",
+        "candidates_from_snapshot": true
+      }
     },
     {
       "site_id": "zona-02",
@@ -2863,7 +2953,7 @@
         "note": "Владелец выкладки — терминал ZONA-02 (ветка claude/bootstrap-zona-02). Наблюдён процесс на порту 9123 и релиз zona-02-1015c650d8be. Публичной конфигурации nginx нет. Отсюда не выкладывается."
       },
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.241638+00:00",
+      "last_update": "2026-10-25T22:42:57.714865+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2904,6 +2994,12 @@
         "open_authorization_ref": "/var/lib/site-cells/owner-consent/zonafilm.cc.json",
         "open_authorization_id": "e93ced92-a653-4153-b91d-2dc20f49079e",
         "open_authorization_note": "разрешение владельца: claude, 2026-10-04T13:31:45Z. Подтверждение — файл root /var/lib/site-cells/owner-consent/zonafilm.cc.json; флаг в реестре без него разрешением не считается"
+      },
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-10",
+        "proof": "читатель правок выпущен bf63a60c60bd (live_verified); zonafilm.cc/title/ad-dzheffri/",
+        "candidates_from_snapshot": true
       }
     },
     {
@@ -2944,7 +3040,7 @@
       "data": {},
       "deployed": {},
       "content_revision": null,
-      "last_update": "2026-10-12T11:34:25.278484+00:00",
+      "last_update": "2026-10-25T22:42:57.692022+00:00",
       "backup": {},
       "resources": {},
       "runtime": {
@@ -2987,7 +3083,13 @@
         },
         "note": "счётчик 113109081 создан службой, отчёт var/analytics/connect-zonafilm12.site.json от 2026-09-27T22:47:17Z; домен счётчика по ответу API — zonafilm12.site. проект 33762526 прочитан из списка аккаунта. отправка события браузером и визит в статистике не подтверждены: это отдельные состояния и отдельные поля"
       },
-      "promotion": {}
+      "promotion": {},
+      "editorial": {
+        "overlay_confirmed": true,
+        "confirmed_at": "2026-10-09",
+        "proof": "читатель правок выпущен, показ подтверждён публикацией ad-dzheffri на странице",
+        "candidates_from_snapshot": true
+      }
     }
   ]
 }

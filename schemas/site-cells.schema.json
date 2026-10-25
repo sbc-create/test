@@ -1,714 +1,794 @@
 {
- "$schema": "https://json-schema.org/draft/2020-12/schema",
- "$id": "https://site-factory.local/schemas/site-cells.schema.json",
- "title": "Site cell registry",
- "description": "Паспорта переносимых ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Реестр не заводит вторую правду об идентичности сайта — она живёт в config/site-profiles/ и sites/<site_id>/package.yaml, здесь на неё ссылаются. Отозванные идентификаторы издателя запрещены схемой, а не только кодом: подставить такой значит получить пустой плеер на живом сайте.",
- "type": "object",
- "additionalProperties": false,
- "required": [
-  "schema_version",
-  "cells"
- ],
- "properties": {
-  "schema_version": {
-   "const": "1.0"
-  },
-  "note": {
-   "type": "string"
-  },
-  "cells": {
-   "type": "array",
-   "items": {
-    "type": "object",
-    "additionalProperties": false,
-    "required": [
-     "site_id",
-     "domain",
-     "status",
-     "repo",
-     "template",
-     "deploy_target"
-    ],
-    "properties": {
-     "site_id": {
-      "type": "string",
-      "pattern": "^[a-z][a-z0-9-]{1,62}$"
-     },
-     "domain": {
-      "type": "string",
-      "format": "hostname",
-      "minLength": 3
-     },
-     "aliases": {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://site-factory.local/schemas/site-cells.schema.json",
+  "title": "Site cell registry",
+  "description": "Паспорта переносимых ячеек: по домену и site_id задача находит свой проект, шаблон, закреплённые версии и цель выката. Реестр не заводит вторую правду об идентичности сайта — она живёт в config/site-profiles/ и sites/<site_id>/package.yaml, здесь на неё ссылаются. Отозванные идентификаторы издателя запрещены схемой, а не только кодом: подставить такой значит получить пустой плеер на живом сайте.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cells"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "note": {
+      "type": "string"
+    },
+    "cells": {
       "type": "array",
       "items": {
-       "type": "string",
-       "format": "hostname"
-      }
-     },
-     "status": {
-      "enum": [
-       "planned",
-       "not_extracted",
-       "staged",
-       "live",
-       "retired"
-      ],
-      "description": "not_extracted — отдельный Git-проект сайта ещё не выделен. Это честное состояние, а не пропущенное поле."
-     },
-     "repo": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-       "kind": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "enum": [
-         "local",
-         "remote",
-         null
-        ]
-       },
-       "path": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "remote": {
-        "type": [
-         "string",
-         "null"
-        ]
-       }
-      }
-     },
-     "template": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-       "template_id": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "order_id": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "family": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Семейство шаблона. У витрин вне семейства lords оно своё, и без него template_id не однозначен."
-       },
-       "design_version": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Версия оформления шаблона, закреплённая за сайтом."
-       },
-       "note": {
-        "type": "string",
-        "description": "Происхождение закрепления: из пула или исторически."
-       }
-      }
-     },
-     "pins": {
-      "type": "object",
-      "description": "Закреплённые версии. Плавающих значений (latest, main, HEAD) здесь быть не может: завтра сборка дала бы другой результат, а сегодняшняя проверка не доказывала бы ничего.",
-      "additionalProperties": true,
-      "properties": {
-       "common_core": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "not": {
-         "enum": [
-          "latest",
-          "main",
-          "master",
-          "HEAD",
-          "head",
-          "*",
-          ""
-         ]
-        }
-       },
-       "template": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "modules": {
-        "type": "object"
-       },
-       "schemas": {
-        "type": "object"
-       }
-      }
-     },
-     "deploy_target": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-       "ref": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "server": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "note": {
-        "type": "string",
-        "minLength": 10,
-        "description": "Почему выбран ЭТОТ узел — измерением, а не предположением. Введено 2026-10-25: размещение пяти новых витрин выбиралось по свободной памяти, диску и нагрузке двух узлов, и без этой записи основание выбора существовало бы только в отчёте, который через месяц никто не свяжет с паспортом. Поле необязательное: у действующих ячеек его нет, и их поведение от появления поля не меняется."
-       }
-      }
-     },
-     "publisher": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-       "provider": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "publisher_id": {
-        "description": "Открытое значение настройки web component (D89), не учётные данные. Отозванные поставщиком идентификаторы запрещены; с 2026-10-14 набор пуст: 10332 исключён решением D137 (animedia.icu), 10331 и 10333 — решением D213 (zonafilm.space и animedia.space). Запрет не снят: он снова действует, как только в набор впишут значение.",
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "publisher_id_ref": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "note": {
-        "type": "string",
-        "description": "Почему идентификатор издателя именно такой либо почему он пока не назначен. Поле нужно затем же, зачем template.note: запись без объяснения не отличает «ещё не получили» от «забыли»."
-       }
-      }
-     },
-     "data": {
-      "type": "object",
-      "additionalProperties": false,
-      "properties": {
-       "database": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "media": {
-        "type": [
-         "string",
-         "null"
-        ]
-       }
-      }
-     },
-     "deployed": {
-      "type": "object",
-      "additionalProperties": true,
-      "properties": {
-       "release_digest": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "pattern": "^sha256:[0-9a-f]{64}$"
-       },
-       "source_commit": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "artifact": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "built_at": {
-        "type": [
-         "string",
-         "null"
-        ]
-       }
-      }
-     },
-     "content_revision": {
-      "type": [
-       "integer",
-       "string",
-       "null"
-      ]
-     },
-     "last_update": {
-      "type": [
-       "string",
-       "null"
-      ]
-     },
-     "backup": {
-      "type": "object"
-     },
-     "resources": {
-      "type": "object"
-     },
-     "runtime": {
-      "type": "object",
-      "description": "Фактическое размещение витрины на хосте. Нужен производителям данных: до него они знали про службы по захардкоженной таблице, и после переноса сайта таблица продолжала звать прежний unit по имени.",
-      "additionalProperties": false,
-      "properties": {
-       "unit": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "systemd-юнит, который обслуживает домен сейчас"
-       },
-       "previous_unit": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "юнит до переноса; закрыт от ручного запуска, хранится для осознанного отката"
-       },
-       "port": {
-        "type": [
-         "integer",
-         "null"
-        ],
-        "minimum": 1,
-        "maximum": 65535
-       },
-       "account": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "системная учётная запись рантайма"
-       },
-       "app_dir": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "data_dir": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "куда производитель кладёт снимки каталога"
-       },
-       "legacy_root": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "reload": {
-        "enum": [
-         "mtime",
-         "restart",
-         "unknown"
-        ],
-        "description": "Как витрина подхватывает новый снимок. `mtime` — перечитывает сама на запросе, перезапуск не нужен и вреден: он стоит минуты. `restart` — только через перезапуск службы. `unknown` — не проверено, производитель обязан считать это `restart`."
-       },
-       "managed_by": {
-        "enum": [
-         "cell",
-         "monolith"
-        ],
-        "description": "кому принадлежит runtime: выделенной ячейке или прежней установке"
-       },
-       "data_owner": {
-        "enum": [
-         "pipeline",
-         "site_timer",
-         "unknown"
-        ],
-        "description": "Кто пишет каталог данных сайта. `pipeline` — общий производитель содержимого доставляет напрямую. `site_timer` — у сайта собственный перенос, и производитель обязан оставить снимок по общему пути, иначе у одного файла окажется два владельца. Два писателя не дают запаса: они дают гонку, в которой побеждает записавший последним."
-       },
-       "data_dir_before_relocation": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Каталог данных ДО завершённого переезда. Пишется операцией `factory cell relocate-data`, когда она переносит `data_dir_after_relocation` в `data_dir` по измерению включённого юнита. Нужен затем, чтобы история размещения не исчезала: прежний путь называет, где снимок лежал раньше, и по нему видно, какой из двух каталогов можно освобождать. Намерением не является — факт описывает только `data_dir`."
-       },
-       "data_dir_after_relocation": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Каталог данных ПОСЛЕ переезда сайта в собственное размещение. Существует затем, чтобы data_dir всегда описывал факт: пока в data_dir стоял будущий путь, издатель докладывал «каталога данных не существует» и молча пропускал витрину — сайт четвёртые сутки показывал снимок четырёхдневной давности. Значение переносится в data_dir тем же шагом, которым витрина переезжает."
-       },
-       "data_dir_note": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Почему data_dir именно такой. Отдельное поле, а не комментарий: JSON комментариев не имеет, а путь к данным правят редко и по памяти."
-       },
-       "unit_note": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Почему `unit` именно такой. Отдельное поле по той же причине, что и `data_dir_note`: JSON комментариев не имеет, а имя службы правят редко и по памяти. Поле появилось после случая, когда в `unit` стоял юнит МОНОЛИТА: повышение перезапускало бы монолитную службу, её ExecStart ведёт в общее дерево, и выпуск прошёл бы успешно, ничего не переключив — снаружи неотличимо от настоящего."
-       },
-       "updater": {
         "type": "object",
         "additionalProperties": false,
         "required": [
-         "service",
-         "timer"
+          "site_id",
+          "domain",
+          "status",
+          "repo",
+          "template",
+          "deploy_target"
         ],
         "properties": {
-         "service": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*\\.service$"
-         },
-         "timer": {
-          "type": "string",
-          "pattern": "^[a-z0-9][a-z0-9-]*\\.timer$"
-         },
-         "credentials": {
-          "type": "array",
-          "items": {
-           "type": "string",
-           "pattern": "^[a-z0-9_]+:/etc/site-factory/secrets/[^ ]+$"
+          "site_id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,62}$"
           },
-          "uniqueItems": true
-         },
-         "note": {
-          "type": "string"
-         }
-        },
-        "description": "Обработчик обновлений данных витрины. Его юнит и таймер исполнитель ставит при каждом promote из current/deploy/ выпуска (factory/cell/updater_units.py), проверив закрытым белым списком; credentials — единственные LoadCredential, которые юниту разрешены. Без этого поля юнит обработчика не входит в выпуск: так animedia.icu неделю обновлялся кодом app от 27.09."
-       },
-       "delivery": {
-        "enum": [
-         "release-queue",
-         "own-installer",
-         "unknown"
-        ],
-        "description": "Чем КОД этой витрины попадает на площадку. `release-queue` — заявка очереди и привилегированный исполнитель: у витрины есть tools/build_release.py. `own-installer` — собственный deploy/install.sh (rsync + юниты + restart) от root, очереди выпусков у витрины нет вовсе. `unknown` — не проверено; разрешением считать любой путь это НЕ является. Измерено 2026-10-05: у an1mego.site и animeg0.site сборщика нет, и отсутствие объявления заставляло проверку выпускаемости требовать от них сборщик, которого у них не будет."
-       }
-      }
-     },
-     "release": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Правила выпуска этого сайта для автоматического триггера.",
-      "properties": {
-       "hold": {
-        "type": "boolean",
-        "description": "Выпуск приостановлен: сайтом занят кто-то другой. Удержание блокирует ОДИН сайт, а не подготовку остальных."
-       },
-       "hold_reason": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "branch": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Разрешённая ветка выпуска для этого сайта"
-       },
-       "branch_note": {
-        "type": "string",
-        "description": "Почему ветка выпуска именно такая и откуда она взялась. Поле появилось вместе с branch у zona-02: пустая ветка не говорила, откуда берётся выпуск, а объяснение в реестре читают те же, кто принимает решение. additionalProperties остаётся false — объявляется одно поле, ни одно другое не ослабляется."
-       },
-       "observed": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Что ИЗМЕРЕНО на живом сайте в момент записи удержания, в отличие от hold_reason — намерения. Поле появилось потому, что причина удержания уже однажды описывала не то состояние, в котором сайт находился: витрина объявляла один выпуск и исполняла другой, и решение принималось по объявленному. Здесь место для доказательства (например, пути из /proc/<pid>/cmdline), а не для планов."
-       },
-       "hold_history": {
-        "type": "array",
-        "description": "Снятые удержания: по записи на каждое. Нужно потому, что снятие удержания — решение, которое принимают по доказательствам, а затирание `hold_reason` эти доказательства теряло: в реестре оставалось `hold: false` без следа того, кто и на каком основании его снял. Поле только дописывается; `additionalProperties` объекта release остаётся false — объявлено одно поле, ни одно другое не ослаблено.",
-        "items": {
-         "type": "object",
-         "additionalProperties": false,
-         "required": [
-          "reason",
-          "lifted_at",
-          "lifted_by",
-          "evidence"
-         ],
-         "properties": {
-          "reason": {
-           "type": [
-            "string",
-            "null"
-           ],
-           "description": "Прежняя причина удержания, дословно"
+          "domain": {
+            "type": "string",
+            "format": "hostname",
+            "minLength": 3
           },
-          "lifted_at": {
-           "type": "string",
-           "description": "Дата снятия, YYYY-MM-DD"
+          "aliases": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "format": "hostname"
+            }
           },
-          "lifted_by": {
-           "type": "string",
-           "description": "Кто снял: имя сессии или владелец"
+          "status": {
+            "enum": [
+              "planned",
+              "not_extracted",
+              "staged",
+              "live",
+              "retired"
+            ],
+            "description": "not_extracted — отдельный Git-проект сайта ещё не выделен. Это честное состояние, а не пропущенное поле."
           },
-          "evidence": {
-           "type": "string",
-           "description": "Чем проверено, что держать больше нечего: измерения и ответы тех, чья работа могла пострадать"
+          "repo": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "kind": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "enum": [
+                  "local",
+                  "remote",
+                  null
+                ]
+              },
+              "path": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "remote": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "template": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "template_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "order_id": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "family": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Семейство шаблона. У витрин вне семейства lords оно своё, и без него template_id не однозначен."
+              },
+              "design_version": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Версия оформления шаблона, закреплённая за сайтом."
+              },
+              "note": {
+                "type": "string",
+                "description": "Происхождение закрепления: из пула или исторически."
+              }
+            }
+          },
+          "pins": {
+            "type": "object",
+            "description": "Закреплённые версии. Плавающих значений (latest, main, HEAD) здесь быть не может: завтра сборка дала бы другой результат, а сегодняшняя проверка не доказывала бы ничего.",
+            "additionalProperties": true,
+            "properties": {
+              "common_core": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "not": {
+                  "enum": [
+                    "latest",
+                    "main",
+                    "master",
+                    "HEAD",
+                    "head",
+                    "*",
+                    ""
+                  ]
+                }
+              },
+              "template": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "modules": {
+                "type": "object"
+              },
+              "schemas": {
+                "type": "object"
+              }
+            }
+          },
+          "deploy_target": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "server": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "minLength": 10,
+                "description": "Почему выбран ЭТОТ узел — измерением, а не предположением. Введено 2026-10-25: размещение пяти новых витрин выбиралось по свободной памяти, диску и нагрузке двух узлов, и без этой записи основание выбора существовало бы только в отчёте, который через месяц никто не свяжет с паспортом. Поле необязательное: у действующих ячеек его нет, и их поведение от появления поля не меняется."
+              }
+            }
+          },
+          "publisher": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "provider": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "publisher_id": {
+                "description": "Открытое значение настройки web component (D89), не учётные данные. Отозванные поставщиком идентификаторы запрещены; с 2026-10-14 набор пуст: 10332 исключён решением D137 (animedia.icu), 10331 и 10333 — решением D213 (zonafilm.space и animedia.space). Запрет не снят: он снова действует, как только в набор впишут значение.",
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "publisher_id_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "note": {
+                "type": "string",
+                "description": "Почему идентификатор издателя именно такой либо почему он пока не назначен. Поле нужно затем же, зачем template.note: запись без объяснения не отличает «ещё не получили» от «забыли»."
+              }
+            }
+          },
+          "data": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "database": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "media": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "deployed": {
+            "type": "object",
+            "additionalProperties": true,
+            "properties": {
+              "release_digest": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^sha256:[0-9a-f]{64}$"
+              },
+              "source_commit": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "artifact": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "built_at": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
+          },
+          "content_revision": {
+            "type": [
+              "integer",
+              "string",
+              "null"
+            ]
+          },
+          "last_update": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "backup": {
+            "type": "object"
+          },
+          "resources": {
+            "type": "object"
+          },
+          "runtime": {
+            "type": "object",
+            "description": "Фактическое размещение витрины на хосте. Нужен производителям данных: до него они знали про службы по захардкоженной таблице, и после переноса сайта таблица продолжала звать прежний unit по имени.",
+            "additionalProperties": false,
+            "properties": {
+              "unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "systemd-юнит, который обслуживает домен сейчас"
+              },
+              "previous_unit": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "юнит до переноса; закрыт от ручного запуска, хранится для осознанного отката"
+              },
+              "port": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 1,
+                "maximum": 65535
+              },
+              "account": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "системная учётная запись рантайма"
+              },
+              "app_dir": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "data_dir": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "куда производитель кладёт снимки каталога"
+              },
+              "legacy_root": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "reload": {
+                "enum": [
+                  "mtime",
+                  "restart",
+                  "unknown"
+                ],
+                "description": "Как витрина подхватывает новый снимок. `mtime` — перечитывает сама на запросе, перезапуск не нужен и вреден: он стоит минуты. `restart` — только через перезапуск службы. `unknown` — не проверено, производитель обязан считать это `restart`."
+              },
+              "managed_by": {
+                "enum": [
+                  "cell",
+                  "monolith"
+                ],
+                "description": "кому принадлежит runtime: выделенной ячейке или прежней установке"
+              },
+              "data_owner": {
+                "enum": [
+                  "pipeline",
+                  "site_timer",
+                  "unknown"
+                ],
+                "description": "Кто пишет каталог данных сайта. `pipeline` — общий производитель содержимого доставляет напрямую. `site_timer` — у сайта собственный перенос, и производитель обязан оставить снимок по общему пути, иначе у одного файла окажется два владельца. Два писателя не дают запаса: они дают гонку, в которой побеждает записавший последним."
+              },
+              "data_dir_before_relocation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Каталог данных ДО завершённого переезда. Пишется операцией `factory cell relocate-data`, когда она переносит `data_dir_after_relocation` в `data_dir` по измерению включённого юнита. Нужен затем, чтобы история размещения не исчезала: прежний путь называет, где снимок лежал раньше, и по нему видно, какой из двух каталогов можно освобождать. Намерением не является — факт описывает только `data_dir`."
+              },
+              "data_dir_after_relocation": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Каталог данных ПОСЛЕ переезда сайта в собственное размещение. Существует затем, чтобы data_dir всегда описывал факт: пока в data_dir стоял будущий путь, издатель докладывал «каталога данных не существует» и молча пропускал витрину — сайт четвёртые сутки показывал снимок четырёхдневной давности. Значение переносится в data_dir тем же шагом, которым витрина переезжает."
+              },
+              "data_dir_note": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Почему data_dir именно такой. Отдельное поле, а не комментарий: JSON комментариев не имеет, а путь к данным правят редко и по памяти."
+              },
+              "unit_note": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Почему `unit` именно такой. Отдельное поле по той же причине, что и `data_dir_note`: JSON комментариев не имеет, а имя службы правят редко и по памяти. Поле появилось после случая, когда в `unit` стоял юнит МОНОЛИТА: повышение перезапускало бы монолитную службу, её ExecStart ведёт в общее дерево, и выпуск прошёл бы успешно, ничего не переключив — снаружи неотличимо от настоящего."
+              },
+              "updater": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "service",
+                  "timer"
+                ],
+                "properties": {
+                  "service": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*\\.service$"
+                  },
+                  "timer": {
+                    "type": "string",
+                    "pattern": "^[a-z0-9][a-z0-9-]*\\.timer$"
+                  },
+                  "credentials": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^[a-z0-9_]+:/etc/site-factory/secrets/[^ ]+$"
+                    },
+                    "uniqueItems": true
+                  },
+                  "note": {
+                    "type": "string"
+                  }
+                },
+                "description": "Обработчик обновлений данных витрины. Его юнит и таймер исполнитель ставит при каждом promote из current/deploy/ выпуска (factory/cell/updater_units.py), проверив закрытым белым списком; credentials — единственные LoadCredential, которые юниту разрешены. Без этого поля юнит обработчика не входит в выпуск: так animedia.icu неделю обновлялся кодом app от 27.09."
+              },
+              "delivery": {
+                "enum": [
+                  "release-queue",
+                  "own-installer",
+                  "unknown"
+                ],
+                "description": "Чем КОД этой витрины попадает на площадку. `release-queue` — заявка очереди и привилегированный исполнитель: у витрины есть tools/build_release.py. `own-installer` — собственный deploy/install.sh (rsync + юниты + restart) от root, очереди выпусков у витрины нет вовсе. `unknown` — не проверено; разрешением считать любой путь это НЕ является. Измерено 2026-10-05: у an1mego.site и animeg0.site сборщика нет, и отсутствие объявления заставляло проверку выпускаемости требовать от них сборщик, которого у них не будет."
+              }
+            }
+          },
+          "release": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Правила выпуска этого сайта для автоматического триггера.",
+            "properties": {
+              "hold": {
+                "type": "boolean",
+                "description": "Выпуск приостановлен: сайтом занят кто-то другой. Удержание блокирует ОДИН сайт, а не подготовку остальных."
+              },
+              "hold_reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "branch": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Разрешённая ветка выпуска для этого сайта"
+              },
+              "branch_note": {
+                "type": "string",
+                "description": "Почему ветка выпуска именно такая и откуда она взялась. Поле появилось вместе с branch у zona-02: пустая ветка не говорила, откуда берётся выпуск, а объяснение в реестре читают те же, кто принимает решение. additionalProperties остаётся false — объявляется одно поле, ни одно другое не ослабляется."
+              },
+              "observed": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Что ИЗМЕРЕНО на живом сайте в момент записи удержания, в отличие от hold_reason — намерения. Поле появилось потому, что причина удержания уже однажды описывала не то состояние, в котором сайт находился: витрина объявляла один выпуск и исполняла другой, и решение принималось по объявленному. Здесь место для доказательства (например, пути из /proc/<pid>/cmdline), а не для планов."
+              },
+              "hold_history": {
+                "type": "array",
+                "description": "Снятые удержания: по записи на каждое. Нужно потому, что снятие удержания — решение, которое принимают по доказательствам, а затирание `hold_reason` эти доказательства теряло: в реестре оставалось `hold: false` без следа того, кто и на каком основании его снял. Поле только дописывается; `additionalProperties` объекта release остаётся false — объявлено одно поле, ни одно другое не ослаблено.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "reason",
+                    "lifted_at",
+                    "lifted_by",
+                    "evidence"
+                  ],
+                  "properties": {
+                    "reason": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "Прежняя причина удержания, дословно"
+                    },
+                    "lifted_at": {
+                      "type": "string",
+                      "description": "Дата снятия, YYYY-MM-DD"
+                    },
+                    "lifted_by": {
+                      "type": "string",
+                      "description": "Кто снял: имя сессии или владелец"
+                    },
+                    "evidence": {
+                      "type": "string",
+                      "description": "Чем проверено, что держать больше нечего: измерения и ответы тех, чья работа могла пострадать"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "indexing": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Режим индексации, объявленный для этого сайта. Это ЗАПИСЬ УЧЁТА, а не вторая власть: там, где есть авторитетный реестр владельца (indexing-core-registry.json у семейства Yummy), значение обязано с ним совпадать, и расхождение — дефект учёта, а не повод менять режим. Поле появилось для новой партии домена: задание требует записи CLOSED в реестре наряду с noindex в ответе и запретом обхода в robots.txt, и без такого поля «закрыт» существовало бы только в трёх разных местах и ни в одном учёте.",
+            "properties": {
+              "desired_state": {
+                "enum": [
+                  "OPEN",
+                  "CLOSED"
+                ]
+              },
+              "reason": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "authority": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "путь к авторитетному реестру, если он есть"
+              },
+              "open_authorized": {
+                "type": "boolean",
+                "description": "НОВОЕ поле 2026-10-01. Разрешил ли ВЛАДЕЛЕЦ открытие индексации этого сайта. Это РАЗРЕШЕНИЕ, а не состояние: `desired_state` говорит, какой режим объявлен сейчас, а это поле — можно ли его менять на OPEN вообще. Поля разделены потому, что штатная операция смены режима (`python3 -m factory.qwen indexing-set`) выполняется редактором без владельца, и без отдельного разрешения она выдавала бы право сама себе: один и тот же `desired_state` служил бы и разрешением, и результатом его применения. Отсутствие поля означает «не разрешено» — пустое поле здесь не умолчание в пользу открытия."
+              },
+              "open_authorization_note": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "НОВОЕ поле 2026-10-01. Кто и когда разрешил открытие, своими словами. Без него `open_authorized: true` отвечает «можно», но не отвечает «с чьих слов», и проверить разрешение было бы нечем."
+              },
+              "open_authorization_ref": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "НОВОЕ поле 2026-10-04. Путь к КОРНЕВОМУ подтверждению владельца (/var/lib/site-cells/owner-consent/<домен>.json, root:root 0444). Объявлено потому, что флаг `open_authorized` сам по себе разрешением не считается: файл реестра доступен на запись той же учётной записи, под которой работают инструменты, то есть флаг могла поставить модель. Разрешением считается ПАРА: объявление здесь и подтверждение в каталоге root, которое инструмент создать не может. Записывает только команда владельца automation/host/authorize-indexing.sh."
+              },
+              "open_authorization_id": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "НОВОЕ поле 2026-10-04. Идентификатор того же подтверждения владельца. Нужен для различения СВЕЖЕГО разрешения от устаревшего снимка реестра: исполнитель сверяет этот идентификатор с тем, что лежит в корневом подтверждении, и при расхождении говорит «устаревший снимок реестра», а не «разрешения нет». Измерено 2026-10-04: отказ выглядел отсутствием разрешения, хотя владелец его выдал."
+              }
+            }
+          },
+          "promotion": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Исключение сайта из ОБЩЕГО продвижения, объявленное владельцем. Поле появилось 2026-10-13 для партии из восьми витрин lordfilm/lordserial: задание требует развернуть их технически готовыми, но вне общей редакционной и SEO-очереди, генерации описаний и комментариев, периодических автоматических SEO-правок, блоков продвижения, межсайтовой перелинковки и плана выхода на целевой трафик — и зафиксировать это так, чтобы следующий ОБЩИЙ прогон не подключил домены обратно. Отсутствие блока означает «не исключён»: действующие сайты поля не имеют, и его появление их поведения не меняет. Запрет читают обработчики (seo_operator.editor_run.allowed_domains, factory.qwen.registry.доступные_операции), а не только человек; проверка — tests/unit/test_promotion_exclusion.py.",
+            "properties": {
+              "excluded": {
+                "type": "boolean",
+                "description": "Исключён ли сайт. false хранится так же явно, как true: снятое исключение — решение, и отличать его от «решения не было» нужно."
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "editorial_queue",
+                    "seo_queue",
+                    "description_generation",
+                    "comment_generation",
+                    "periodic_seo_edits",
+                    "promotion_blocks",
+                    "cross_site_links",
+                    "traffic_plan"
+                  ]
+                },
+                "description": "Из чего именно исключён. Перечисление закрытое: у каждого имени есть читающий его обработчик, и произвольная строка обещала бы запрет, которого никто не исполняет. Новое имя добавляется вместе с обработчиком и проверкой, а не вперёд них."
+              },
+              "keeps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Что исключение НЕ выключает: выпуск, резервное копирование, проверки доступности, техническое SEO, внутренние ссылки, жанры, навигация. Нужно потому, что «исключён из продвижения» легко прочитать как «выключен», и тогда сайт потеряет поддержку."
+              },
+              "reason": {
+                "type": "string",
+                "description": "Почему исключён, своими словами. Исключение без причины через месяц неотличимо от случайной правки, и снять его будет некому и незачем."
+              },
+              "authority": {
+                "type": "string",
+                "description": "Чьим решением. Исключение — решение владельца, а не настройка: без основания флаг отвечает «не продвигаем», но не отвечает «с чьих слов»."
+              },
+              "recorded_at": {
+                "type": "string",
+                "description": "Когда запись сделана (UTC, ISO 8601)."
+              }
+            }
+          },
+          "analytics": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Подключение аналитики — часть выпуска, а не отдельная задача. Здесь хранятся идентификаторы и ДОКАЗАТЕЛЬСТВА проверки: без них запись «подключено» ничем не отличается от намерения.",
+            "properties": {
+              "metrika_counter_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "description": "Идентификатор счётчика. null — счётчика ещё нет."
+              },
+              "metrika_verified_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда подтверждена фактическая отправка просмотра браузером."
+              },
+              "metrika_data_seen_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда визит подтверждён ЧТЕНИЕМ статистики. Отправка этого не доказывает."
+              },
+              "topvisor_project_id": {
+                "type": [
+                  "integer",
+                  "null"
+                ]
+              },
+              "topvisor_verified_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда проект сверен с аккаунтом: домен, поисковики, регионы, расписание."
+              },
+              "topvisor_settings": {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "additionalProperties": true,
+                "description": "Фактически применённые настройки, прочитанные из аккаунта."
+              },
+              "note": {
+                "type": "string"
+              }
+            }
+          },
+          "withdrawal": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "ВЫВОД ИЗ АКТИВНОЙ РАБОТЫ, объявленный владельцем. Отдельно от `promotion` и по измеренной причине: исключение из продвижения намеренно НЕ снимает обходы, проверки доступности и техническое SEO — так и сказано в `seo_operator/regular.py::discover_domains` («убрать домен здесь значило бы заодно снять с него поддержку»). Вывод из работы прекращает расходы на домен целиком: новые задания, генерацию и публикацию текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Смешать два решения в одном поле значило бы либо выключать поддержку исключённым, либо продолжать тратить на выведенных. Отсутствие блока означает «в работе». Запрет читают обработчики, а не только человек; проверка — tests/unit/test_domain_withdrawal.py.",
+            "properties": {
+              "withdrawn": {
+                "type": "boolean",
+                "description": "Выведен ли сайт. false хранится так же явно, как true: возврат в работу — решение, и отличать его от «решения не было» нужно."
+              },
+              "at": {
+                "type": "string",
+                "minLength": 10,
+                "description": "Дата вывода. Нужна, чтобы прежние измерения остались сопоставимыми: «до вывода» и «после» различаются записью, а не памятью."
+              },
+              "scopes": {
+                "type": "array",
+                "items": {
+                  "enum": [
+                    "new_tasks",
+                    "text_generation",
+                    "availability_crawl",
+                    "repeat_checks",
+                    "analytics_collection",
+                    "position_checks",
+                    "alerts",
+                    "experiment_control"
+                  ]
+                },
+                "description": "Что именно прекращается. Перечисление закрытое: у каждого имени есть читающий его обработчик, и произвольная строка обещала бы остановку, которой никто не исполняет."
+              },
+              "keeps": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Что вывод НЕ выключает: сохранение данных, резервное копирование, готовность к переносу. Нужно потому, что «выведен» легко прочитать как «удалён»."
+              },
+              "replacement_domain": {
+                "type": "string",
+                "minLength": 4,
+                "description": "Домен замены, если владелец его уже назвал. Не придумывается: отсутствие поля означает «замена ещё не названа», и на этом поле строятся постраничные перенаправления."
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10,
+                "description": "Почему выведен, своими словами."
+              },
+              "authority": {
+                "type": "string",
+                "minLength": 3,
+                "description": "Чьим решением. Вывод — решение владельца, а не настройка."
+              },
+              "history": {
+                "type": "array",
+                "items": {
+                  "type": "object"
+                },
+                "description": "Прежние записи вывода и возврата. История не перезаписывается: «был выведен и возвращён» — факт, нужный для сопоставимости измерений."
+              }
+            },
+            "required": [
+              "withdrawn",
+              "at",
+              "reason",
+              "authority"
+            ]
+          },
+          "editorial": {
+            "type": "object",
+            "additionalProperties": false,
+            "description": "Умеет ли витрина ПОКАЗАТЬ опубликованный редакционный текст и можно ли по её снимку строить кандидатов. Поле появилось 2026-10-25, чтобы очередь редактора перестала быть вторым перечнем в коде: до этого состав очереди жил двумя литералами (seo_operator/editor_run.py: EDITOR_DOMAINS и seo_operator/regular.py: EDITOR_SITES), и домен попадал в публикацию правкой кода, а не записью в паспорте. Признак положительный и составной: `overlay_confirmed` без даты и доказательства недопустим, потому что «показ подтверждён» на слово — это ровно то состояние, при котором текст публикуется и никуда не попадает. Снятие признака прекращает публикацию на домене сразу, перечня в коде для этого править не нужно.",
+            "required": [
+              "overlay_confirmed"
+            ],
+            "properties": {
+              "overlay_confirmed": {
+                "type": "boolean",
+                "description": "Опубликованный текст фактически виден на странице витрины."
+              },
+              "confirmed_at": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Когда показ подтверждён (дата или метка времени)."
+              },
+              "proof": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "description": "Чем подтверждён: адрес страницы, где текст виден, и/или выпуск читателя правок."
+              },
+              "candidates_from_snapshot": {
+                "type": "boolean",
+                "description": "Строить ли кандидатов по снимку каталога этой витрины. У семейства Yummy снимка нет вовсе: публикация идёт только заданиями очереди, и кандидаты не строятся — это измеренное положение, а не настройка."
+              },
+              "note": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              }
+            }
           }
-         }
-        }
-       }
-      }
-     },
-     "indexing": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Режим индексации, объявленный для этого сайта. Это ЗАПИСЬ УЧЁТА, а не вторая власть: там, где есть авторитетный реестр владельца (indexing-core-registry.json у семейства Yummy), значение обязано с ним совпадать, и расхождение — дефект учёта, а не повод менять режим. Поле появилось для новой партии домена: задание требует записи CLOSED в реестре наряду с noindex в ответе и запретом обхода в robots.txt, и без такого поля «закрыт» существовало бы только в трёх разных местах и ни в одном учёте.",
-      "properties": {
-       "desired_state": {
-        "enum": [
-         "OPEN",
-         "CLOSED"
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "editorial": {
+                  "properties": {
+                    "overlay_confirmed": {
+                      "const": true
+                    }
+                  },
+                  "required": [
+                    "overlay_confirmed"
+                  ]
+                }
+              },
+              "required": [
+                "editorial"
+              ]
+            },
+            "then": {
+              "properties": {
+                "editorial": {
+                  "required": [
+                    "overlay_confirmed",
+                    "confirmed_at",
+                    "proof"
+                  ],
+                  "properties": {
+                    "confirmed_at": {
+                      "type": "string",
+                      "minLength": 4
+                    },
+                    "proof": {
+                      "type": "string",
+                      "minLength": 8
+                    }
+                  }
+                }
+              }
+            }
+          }
         ]
-       },
-       "reason": {
-        "type": [
-         "string",
-         "null"
-        ]
-       },
-       "authority": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "путь к авторитетному реестру, если он есть"
-       },
-       "open_authorized": {
-        "type": "boolean",
-        "description": "НОВОЕ поле 2026-10-01. Разрешил ли ВЛАДЕЛЕЦ открытие индексации этого сайта. Это РАЗРЕШЕНИЕ, а не состояние: `desired_state` говорит, какой режим объявлен сейчас, а это поле — можно ли его менять на OPEN вообще. Поля разделены потому, что штатная операция смены режима (`python3 -m factory.qwen indexing-set`) выполняется редактором без владельца, и без отдельного разрешения она выдавала бы право сама себе: один и тот же `desired_state` служил бы и разрешением, и результатом его применения. Отсутствие поля означает «не разрешено» — пустое поле здесь не умолчание в пользу открытия."
-       },
-       "open_authorization_note": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "НОВОЕ поле 2026-10-01. Кто и когда разрешил открытие, своими словами. Без него `open_authorized: true` отвечает «можно», но не отвечает «с чьих слов», и проверить разрешение было бы нечем."
-       },
-       "open_authorization_ref": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "НОВОЕ поле 2026-10-04. Путь к КОРНЕВОМУ подтверждению владельца (/var/lib/site-cells/owner-consent/<домен>.json, root:root 0444). Объявлено потому, что флаг `open_authorized` сам по себе разрешением не считается: файл реестра доступен на запись той же учётной записи, под которой работают инструменты, то есть флаг могла поставить модель. Разрешением считается ПАРА: объявление здесь и подтверждение в каталоге root, которое инструмент создать не может. Записывает только команда владельца automation/host/authorize-indexing.sh."
-       },
-       "open_authorization_id": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "НОВОЕ поле 2026-10-04. Идентификатор того же подтверждения владельца. Нужен для различения СВЕЖЕГО разрешения от устаревшего снимка реестра: исполнитель сверяет этот идентификатор с тем, что лежит в корневом подтверждении, и при расхождении говорит «устаревший снимок реестра», а не «разрешения нет». Измерено 2026-10-04: отказ выглядел отсутствием разрешения, хотя владелец его выдал."
-       }
       }
-     },
-     "promotion": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Исключение сайта из ОБЩЕГО продвижения, объявленное владельцем. Поле появилось 2026-10-13 для партии из восьми витрин lordfilm/lordserial: задание требует развернуть их технически готовыми, но вне общей редакционной и SEO-очереди, генерации описаний и комментариев, периодических автоматических SEO-правок, блоков продвижения, межсайтовой перелинковки и плана выхода на целевой трафик — и зафиксировать это так, чтобы следующий ОБЩИЙ прогон не подключил домены обратно. Отсутствие блока означает «не исключён»: действующие сайты поля не имеют, и его появление их поведения не меняет. Запрет читают обработчики (seo_operator.editor_run.allowed_domains, factory.qwen.registry.доступные_операции), а не только человек; проверка — tests/unit/test_promotion_exclusion.py.",
-      "properties": {
-       "excluded": {
-        "type": "boolean",
-        "description": "Исключён ли сайт. false хранится так же явно, как true: снятое исключение — решение, и отличать его от «решения не было» нужно."
-       },
-       "scopes": {
-        "type": "array",
-        "items": {
-         "enum": [
-          "editorial_queue",
-          "seo_queue",
-          "description_generation",
-          "comment_generation",
-          "periodic_seo_edits",
-          "promotion_blocks",
-          "cross_site_links",
-          "traffic_plan"
-         ]
-        },
-        "description": "Из чего именно исключён. Перечисление закрытое: у каждого имени есть читающий его обработчик, и произвольная строка обещала бы запрет, которого никто не исполняет. Новое имя добавляется вместе с обработчиком и проверкой, а не вперёд них."
-       },
-       "keeps": {
-        "type": "array",
-        "items": {
-         "type": "string"
-        },
-        "description": "Что исключение НЕ выключает: выпуск, резервное копирование, проверки доступности, техническое SEO, внутренние ссылки, жанры, навигация. Нужно потому, что «исключён из продвижения» легко прочитать как «выключен», и тогда сайт потеряет поддержку."
-       },
-       "reason": {
-        "type": "string",
-        "description": "Почему исключён, своими словами. Исключение без причины через месяц неотличимо от случайной правки, и снять его будет некому и незачем."
-       },
-       "authority": {
-        "type": "string",
-        "description": "Чьим решением. Исключение — решение владельца, а не настройка: без основания флаг отвечает «не продвигаем», но не отвечает «с чьих слов»."
-       },
-       "recorded_at": {
-        "type": "string",
-        "description": "Когда запись сделана (UTC, ISO 8601)."
-       }
-      }
-     },
-     "analytics": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "Подключение аналитики — часть выпуска, а не отдельная задача. Здесь хранятся идентификаторы и ДОКАЗАТЕЛЬСТВА проверки: без них запись «подключено» ничем не отличается от намерения.",
-      "properties": {
-       "metrika_counter_id": {
-        "type": [
-         "integer",
-         "null"
-        ],
-        "description": "Идентификатор счётчика. null — счётчика ещё нет."
-       },
-       "metrika_verified_at": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Когда подтверждена фактическая отправка просмотра браузером."
-       },
-       "metrika_data_seen_at": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Когда визит подтверждён ЧТЕНИЕМ статистики. Отправка этого не доказывает."
-       },
-       "topvisor_project_id": {
-        "type": [
-         "integer",
-         "null"
-        ]
-       },
-       "topvisor_verified_at": {
-        "type": [
-         "string",
-         "null"
-        ],
-        "description": "Когда проект сверен с аккаунтом: домен, поисковики, регионы, расписание."
-       },
-       "topvisor_settings": {
-        "type": [
-         "object",
-         "null"
-        ],
-        "additionalProperties": true,
-        "description": "Фактически применённые настройки, прочитанные из аккаунта."
-       },
-       "note": {
-        "type": "string"
-       }
-      }
-     },
-     "withdrawal": {
-      "type": "object",
-      "additionalProperties": false,
-      "description": "ВЫВОД ИЗ АКТИВНОЙ РАБОТЫ, объявленный владельцем. Отдельно от `promotion` и по измеренной причине: исключение из продвижения намеренно НЕ снимает обходы, проверки доступности и техническое SEO — так и сказано в `seo_operator/regular.py::discover_domains` («убрать домен здесь значило бы заодно снять с него поддержку»). Вывод из работы прекращает расходы на домен целиком: новые задания, генерацию и публикацию текстов, обходы, повторные проверки, сбор аналитики, проверки позиций, алерты и роль живого контрольного сайта опытов. Смешать два решения в одном поле значило бы либо выключать поддержку исключённым, либо продолжать тратить на выведенных. Отсутствие блока означает «в работе». Запрет читают обработчики, а не только человек; проверка — tests/unit/test_domain_withdrawal.py.",
-      "properties": {
-       "withdrawn": {
-        "type": "boolean",
-        "description": "Выведен ли сайт. false хранится так же явно, как true: возврат в работу — решение, и отличать его от «решения не было» нужно."
-       },
-       "at": {
-        "type": "string",
-        "minLength": 10,
-        "description": "Дата вывода. Нужна, чтобы прежние измерения остались сопоставимыми: «до вывода» и «после» различаются записью, а не памятью."
-       },
-       "scopes": {
-        "type": "array",
-        "items": {
-         "enum": [
-          "new_tasks",
-          "text_generation",
-          "availability_crawl",
-          "repeat_checks",
-          "analytics_collection",
-          "position_checks",
-          "alerts",
-          "experiment_control"
-         ]
-        },
-        "description": "Что именно прекращается. Перечисление закрытое: у каждого имени есть читающий его обработчик, и произвольная строка обещала бы остановку, которой никто не исполняет."
-       },
-       "keeps": {
-        "type": "array",
-        "items": {
-         "type": "string"
-        },
-        "description": "Что вывод НЕ выключает: сохранение данных, резервное копирование, готовность к переносу. Нужно потому, что «выведен» легко прочитать как «удалён»."
-       },
-       "replacement_domain": {
-        "type": "string",
-        "minLength": 4,
-        "description": "Домен замены, если владелец его уже назвал. Не придумывается: отсутствие поля означает «замена ещё не названа», и на этом поле строятся постраничные перенаправления."
-       },
-       "reason": {
-        "type": "string",
-        "minLength": 10,
-        "description": "Почему выведен, своими словами."
-       },
-       "authority": {
-        "type": "string",
-        "minLength": 3,
-        "description": "Чьим решением. Вывод — решение владельца, а не настройка."
-       },
-       "history": {
-        "type": "array",
-        "items": {
-         "type": "object"
-        },
-        "description": "Прежние записи вывода и возврата. История не перезаписывается: «был выведен и возвращён» — факт, нужный для сопоставимости измерений."
-       }
-      },
-      "required": [
-       "withdrawn",
-       "at",
-       "reason",
-       "authority"
-      ]
-     }
     }
-   }
   }
- }
 }
