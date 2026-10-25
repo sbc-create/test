@@ -10,11 +10,18 @@
 # Имена переменных только ASCII: кириллица в именах переменных оболочки падает
 # в работе, а `bash -n` её пропускает (проверено на k2-trial-run.sh).
 #
-# Запуск:  stage-k2-site-payload.sh <site_id> <lords-films|lords-serials>
+# Запуск:  stage-k2-site-payload.sh <site_id> <lords-films|lords-serials> [--code-only]
+#
+# `--code-only` обновляет ТОЛЬКО бандл кода. Нужен потому, что правка в коде
+# происходит чаще, чем меняется снимок каталога, а данные витрины весят
+# 100–135 МиБ: гонять их заново ради нового бандла — это десятки минут и
+# место, которого на управляющем узле 14 ГиБ. Данные при этом не трогаются
+# вовсе, и это важнее экономии: они принадлежат витрине.
 set -uo pipefail
 
 site="${1:?нужен site_id}"
 family="${2:?нужно семейство: lords-films или lords-serials}"
+code_only="${3:-}"
 repo_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 stage="$repo_root/var/k2-data"
 host_ref="k2-zomro-01"
@@ -22,6 +29,27 @@ inventory="$repo_root/var/ansible/hosts.yml"
 
 cd "$repo_root" || exit 1
 mkdir -p "$stage/bundles" "$stage/front/$site"
+
+if [ "$code_only" = "--code-only" ]; then
+  echo "==> режим --code-only: снимок каталога не проецируется и не доставляется"
+  git -C "var/new-sites/$site" bundle create "$stage/bundles/$site.bundle" --all \
+      >/dev/null 2>&1 || { echo "бандл не собрался"; exit 1; }
+  git -C "var/new-sites/$site" bundle verify "$stage/bundles/$site.bundle" \
+      >/dev/null 2>&1 || { echo "бандл не проходит verify"; exit 1; }
+  ( cd "$stage" && sha256sum "bundles/$site.bundle" > "$site.code.sha256" )
+  ansible -i "$inventory" "$host_ref" -m copy \
+      -a "src=$stage/bundles/$site.bundle dest=/home/k2deploy/stage/bundles/$site.bundle mode=0644" \
+      >/dev/null || exit 1
+  ansible -i "$inventory" "$host_ref" -m copy \
+      -a "src=$stage/$site.code.sha256 dest=/home/k2deploy/stage/$site.code.sha256 mode=0644" \
+      >/dev/null || exit 1
+  out="$(ansible -i "$inventory" "$host_ref" -m raw \
+         -a "cd /home/k2deploy/stage; sha256sum -c $site.code.sha256; echo rc=\$?" 2>&1)"
+  printf '%s\n' "$out" | grep -E ': OK|FAILED|rc=' | sed 's/^/   /'
+  printf '%s\n' "$out" | grep -q "rc=0" || { echo "СВЕРКА НА УЗЛЕ НЕ ПРОШЛА"; exit 1; }
+  echo "готово (только код): $site"
+  exit 0
+fi
 
 echo "==> 1. проекция каталога семейства $family на $site"
 python3 automation/local/project-family-catalog.py \
