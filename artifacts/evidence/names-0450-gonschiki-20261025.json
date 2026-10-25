@@ -1,0 +1,30 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T04:26:47Z",
+ "results": [
+  {
+   "domain": "zonafilm12.site",
+   "slug": "bratya-gonschiki-lets-i-gou",
+   "sources": [
+    "https://shikimori.io/animes/2705",
+    "https://zonafilm12.site/title/bratya-gonschiki-lets-i-gou/"
+   ],
+   "external_sources_with_text": 2,
+   "unreadable_sources": [],
+   "confirmed": [
+    "Тэцухиро",
+    "Коситы [основа слова]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "fragments": {
+    "Тэцухиро": "l_creators\": [{\"person\": \"Tetsuhiro Koshita\", \"person_ru\": \"Тэцухиро Косита\", \"roles\": [\"Original Creator\"]}], \"adapted_from\": [",
+    "Коситы [основа слова]": "s\": [{\"person\": \"Tetsuhiro Koshita\", \"person_ru\": \"Тэцухиро Косита\", \"roles\": [\"Original Creator\"]}], \"adapted_from\": [{\"manga"
+   },
+   "confirmed_by": {
+    "Тэцухиро": "https://shikimori.io/animes/2705#credits",
+    "Коситы [основа слова]": "https://shikimori.io/animes/2705#credits"
+   }
+  }
+ ]
+}

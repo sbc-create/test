@@ -182,3 +182,127 @@ def test_таблица_приводит_обе_системы_к_одной_з�
     assert МОД.по_системам("Чиба") == МОД.по_системам("Тиба")
     assert МОД.по_системам("Джиро") == МОД.по_системам("Дзиро")
     assert МОД.по_системам("Аояма") != МОД.по_системам("Куроба")
+
+
+# --- свой источник против внешнего (круговое подтверждение) ------------------
+#
+# Повод измерен 25.10 04:1xZ на `zonafilm12.site/bratya-gonschiki-lets-i-gou`:
+# в `sources` черновика записаны shikimori.io И страница САМОЙ витрины, а текст
+# черновика на этой странице уже стоит. Оба имени (Тэцухиро, Коситы) сверка
+# подтвердила по странице витрины — то есть по тому самому тексту, который
+# проверяла. Подтверждение собой подтверждением не является.
+
+
+def test_страница_своей_витрины_не_считается_внешним_источником():
+    наши = {"zonafilm12.site", "animedia.space"}
+    assert not МОД.внешний_источник(
+        "https://zonafilm12.site/title/bratya-gonschiki-lets-i-gou/", наши)
+    assert МОД.внешний_источник("https://shikimori.io/animes/2705", наши)
+
+
+def test_витрина_сестра_тоже_своя():
+    """Один редакционный текст расходится по сети: сестра — тот же текст."""
+    наши = {"animedia.space", "animedia.icu"}
+    assert not МОД.внешний_источник("https://animedia.icu/title/x/", наши)
+    assert not МОД.внешний_источник("https://www.animedia.icu/title/x/", наши)
+
+
+def test_имя_найденное_только_у_себя_не_подтверждено():
+    наши = {"zonafilm12.site"}
+    тексты = [("https://zonafilm12.site/title/x/",
+               "аниме студии Xebec по манге Тэцухиро Коситы, журнал CoroCoro"),
+              ("https://shikimori.io/animes/2705",
+               "Bakusou Kyoudai Let's & Go, studio Xebec, 1996")]
+    и = МОД.подтвердить_имя("Тэцухиро", тексты, {}, наши)
+    assert и["статус"] == "свой"
+    assert и["адрес"] == "https://zonafilm12.site/title/x/"
+
+
+def test_внешнее_подтверждение_сильнее_своего():
+    наши = {"zonafilm12.site"}
+    тексты = [("https://zonafilm12.site/title/x/", "по манге Тэцухиро Коситы"),
+              ("https://shikimori.io/animes/2705", "манга Тэцухиро Косита")]
+    и = МОД.подтвердить_имя("Тэцухиро", тексты, {}, наши)
+    assert и["статус"] == "внешний"
+    assert и["адрес"] == "https://shikimori.io/animes/2705"
+
+
+def test_имени_нет_нигде():
+    наши = {"zonafilm12.site"}
+    тексты = [("https://shikimori.io/animes/2705", "studio Xebec, 1996")]
+    и = МОД.подтвердить_имя("Тэцухиро", тексты, {}, наши)
+    assert и["статус"] == "нет"
+
+
+def test_наши_домены_читаются_из_паспорта_ячеек():
+    наши = МОД.наши_домены()
+    assert "zonafilm12.site" in наши
+    assert "animedia.space" in наши
+    assert "shikimori.io" not in наши
+
+
+def test_источник_shikimori_читается_двумя_ответами(monkeypatch):
+    """Карточка и раздел авторства — два ответа одного источника.
+
+    Измерено 25.10: «Тацуо Ёсида» в описании карточки `animes/2389` не
+    встречается, а в ответе `credits` стоит в `original_creators[].person_ru`.
+    """
+    вызовы = []
+
+    class Ответ:
+        returncode = 0
+
+        def __init__(self, текст):
+            self.stdout = текст
+            self.stderr = ""
+
+    def подмена(команда, **к):
+        вызовы.append(команда[2])
+        if команда[2] == "credits":
+            return Ответ('{"ok": true, "original_creators":'
+                         ' [{"person_ru": "Тацуо Ёсида"}]}')
+        return Ответ('{"ok": true, "description": "отряд Гатчамен"}')
+
+    monkeypatch.setattr(МОД.subprocess, "run", подмена)
+    тексты, отказы = МОД.источники_произведения("https://shikimori.io/animes/2389")
+    assert вызовы == ["shikimori", "credits"]
+    assert отказы == []
+    assert [а for а, _ in тексты] == ["https://shikimori.io/animes/2389",
+                                      "https://shikimori.io/animes/2389#credits"]
+    и = МОД.подтвердить_имя("Ёсида", тексты, {}, {"an1meg0.site"})
+    assert и["статус"] == "внешний"
+    assert и["адрес"].endswith("#credits")
+
+
+def test_отказ_одного_ответа_не_отменяет_второй(monkeypatch):
+    class Ответ:
+        def __init__(self, код, текст="", ошибка=""):
+            self.returncode = код
+            self.stdout = текст
+            self.stderr = ошибка
+
+    def подмена(команда, **к):
+        if команда[2] == "credits":
+            return Ответ(1, "", "API отказал")
+        return Ответ(0, '{"ok": true, "description": "отряд Гатчамен"}')
+
+    monkeypatch.setattr(МОД.subprocess, "run", подмена)
+    тексты, отказы = МОД.источники_произведения("https://shikimori.io/animes/2389")
+    assert len(тексты) == 1 and len(отказы) == 1
+    assert отказы[0][0].endswith("#credits")
+
+
+def test_не_shikimori_источник_читается_как_раньше(monkeypatch):
+    monkeypatch.setattr(МОД, "прочитать_источник",
+                        lambda а, с="", т=180: ("текст страницы", ""))
+    тексты, отказы = МОД.источники_произведения("https://tatsunoko.co.jp/works/x/")
+    assert тексты == [("https://tatsunoko.co.jp/works/x/", "текст страницы")]
+    assert отказы == []
+
+
+def test_отказ_не_shikimori_источника_назван(monkeypatch):
+    monkeypatch.setattr(МОД, "прочитать_источник",
+                        lambda а, с="", т=180: ("", "robots запрещает"))
+    тексты, отказы = МОД.источники_произведения("https://example.org/x/")
+    assert тексты == []
+    assert отказы == [("https://example.org/x/", "robots запрещает")]

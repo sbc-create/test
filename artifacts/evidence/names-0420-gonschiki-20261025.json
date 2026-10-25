@@ -1,0 +1,28 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T04:11:42Z",
+ "results": [
+  {
+   "domain": "zonafilm12.site",
+   "slug": "bratya-gonschiki-lets-i-gou",
+   "sources": [
+    "https://shikimori.io/animes/2705",
+    "https://zonafilm12.site/title/bratya-gonschiki-lets-i-gou/"
+   ],
+   "unreadable_sources": [],
+   "confirmed": [
+    "Тэцухиро",
+    "Коситы"
+   ],
+   "not_found": [],
+   "fragments": {
+    "Тэцухиро": " (Bakusou Kyoudai Let's & Go) — аниме студии Xebec по манге Тэцухиро Коситы, которая выходила в журнале CoroCoro Comic; сериал з",
+    "Коситы": " Kyoudai Let's & Go) — аниме студии Xebec по манге Тэцухиро Коситы, которая выходила в журнале CoroCoro Comic; сериал завершён"
+   },
+   "confirmed_by": {
+    "Тэцухиро": "https://zonafilm12.site/title/bratya-gonschiki-lets-i-gou/",
+    "Коситы": "https://zonafilm12.site/title/bratya-gonschiki-lets-i-gou/"
+   }
+  }
+ ]
+}

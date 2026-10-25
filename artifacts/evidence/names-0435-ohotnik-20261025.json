@@ -1,0 +1,43 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T04:20:00Z",
+ "results": [
+  {
+   "domain": "zonafilm12.site",
+   "slug": "gorodskoy-ohotnik-angelskaya-pyl",
+   "sources": [
+    "https://shikimori.io/animes/51585",
+    "https://zonafilm12.site/title/gorodskoy-ohotnik-angelskaya-pyl/"
+   ],
+   "external_sources_with_text": 1,
+   "unreadable_sources": [],
+   "confirmed": [
+    "Саэбе",
+    "Кайбара",
+    "Юнион",
+    "Теопе"
+   ],
+   "not_found": [],
+   "own_network_only": [
+    "Цукасы",
+    "Ходзё"
+   ],
+   "fragments": {
+    "Цукасы": "оевик 2023 года студий Sunrise и The Answer Studio по манге Цукасы Ходзё…\", \"«Городской охотник: Ангельская пыль» (City Hunter",
+    "Ходзё": "023 года студий Sunrise и The Answer Studio по манге Цукасы Ходзё…\", \"«Городской охотник: Ангельская пыль» (City Hunter The M",
+    "Саэбе": "ull, \"description\": \"На основе финальной арки манги, где Рё Саэбе предстоит столкнуться со своим тёмным прошлым: его бывший н",
+    "Кайбара": "им тёмным прошлым: его бывший наставник и приёмный отец Син Кайбара, ныне возглавляющий организацию «Юнион Теопе», жаждет его с",
+    "Юнион": " приёмный отец Син Кайбара, ныне возглавляющий организацию «Юнион Теопе», жаждет его смерти, а люди, которым ввели наномашины",
+    "Теопе": "ный отец Син Кайбара, ныне возглавляющий организацию «Юнион Теопе», жаждет его смерти, а люди, которым ввели наномашины и пре"
+   },
+   "confirmed_by": {
+    "Цукасы": "https://zonafilm12.site/title/gorodskoy-ohotnik-angelskaya-pyl/",
+    "Ходзё": "https://zonafilm12.site/title/gorodskoy-ohotnik-angelskaya-pyl/",
+    "Саэбе": "https://shikimori.io/animes/51585",
+    "Кайбара": "https://shikimori.io/animes/51585",
+    "Юнион": "https://shikimori.io/animes/51585",
+    "Теопе": "https://shikimori.io/animes/51585"
+   }
+  }
+ ]
+}
