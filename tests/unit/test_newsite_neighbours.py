@@ -1,0 +1,76 @@
+"""Проверка «путь не ведёт к соседу» обязана иметь, с чем сверять.
+
+`run.py: foreign_paths` есть у каждой витрины с самого начала, но
+`neighbour_site_ids` генератор оставлял ПУСТЫМ — у всех проектов без
+исключения. Пустой перечень делает проверку тождественно пустой: путь к данным
+чужой витрины прошёл бы запуск молча. Это хуже отсутствия проверки, потому что
+механизм выглядит защитой и ничего не измеряет, а межсайтовая утечка названа в
+Definition of Done.
+
+Проверяется и перечень, и то, что он РАБОТАЕТ: подменённый путь должен ловиться.
+"""
+from __future__ import annotations
+
+import json
+from pathlib import Path
+
+import pytest
+
+from factory.cell import newsite
+
+
+def _реестр(tmp_path: Path, ид: tuple[str, ...]) -> Path:
+    путь = tmp_path / "site-cells.json"
+    путь.write_text(json.dumps({"schema_version": "1.0", "cells": [
+        {"site_id": s, "domain": f"{s}.test", "aliases": [], "status": "live",
+         "repo": {"kind": "local", "path": f"var/site-repos/{s}"},
+         "template": {"template_id": "lords-serials", "family": "lords"},
+         "pins": {}, "deploy_target": {"ref": "k2-zomro-01"},
+         "publisher": {}, "data": {}}
+        for s in ид]}, ensure_ascii=False), encoding="utf-8")
+    return путь
+
+
+def test_соседи_берутся_из_реестра_без_самой_ячейки(tmp_path: Path):
+    путь = _реестр(tmp_path, ("lords-18", "lords-19", "lords-20"))
+    соседи = newsite.соседние_ячейки("lords-19", путь)
+    assert соседи == ["lords-18", "lords-20"]
+
+
+def test_недоступный_реестр_даёт_пустой_перечень(tmp_path: Path):
+    """Генератор не вправе отказать из-за реестра и не вправе выдумывать."""
+    assert newsite.соседние_ячейки("lords-19", tmp_path / "нет-такого.json") == []
+
+
+def test_проверка_ловит_путь_к_данным_соседа(tmp_path: Path):
+    """Главное: перечень не украшение, а то, с чем сверяет пусковая проверка."""
+    import importlib.util
+
+    путь_ран = Path("var/new-sites/lords-18/run.py")
+    if not путь_ран.is_file():
+        pytest.skip("проекта lords-18 нет в рабочей копии")
+    spec = importlib.util.spec_from_file_location("run_lords", путь_ран)
+    м = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(м)
+
+    config = {"site_id": "lords-18", "neighbour_site_ids": ["lords-19", "lords-20"]}
+    свои = {"LORDS_CATALOG": "/srv/lordserials1-cc/data/lords-18-catalog.json"}
+    чужие = {"LORDS_CATALOG": "/srv/lordserials1-info/data/lords-19-catalog.json"}
+    assert м.foreign_paths(свои, config) == []
+    плохие = м.foreign_paths(чужие, config)
+    assert плохие and "lords-19" in плохие[0]
+
+
+def test_пустой_перечень_делает_проверку_тождественно_пустой(tmp_path: Path):
+    """Именно это и было: доказательство того, что пустота опасна."""
+    import importlib.util
+
+    путь_ран = Path("var/new-sites/lords-18/run.py")
+    if not путь_ран.is_file():
+        pytest.skip("проекта lords-18 нет в рабочей копии")
+    spec = importlib.util.spec_from_file_location("run_lords2", путь_ран)
+    м = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(м)
+
+    чужие = {"LORDS_CATALOG": "/srv/lordserials1-info/data/lords-19-catalog.json"}
+    assert м.foreign_paths(чужие, {"site_id": "lords-18", "neighbour_site_ids": []}) == []
