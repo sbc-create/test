@@ -215,6 +215,97 @@ def credits(anime_id: int) -> dict:
     return {**info, "original_creators": creators, "adapted_from": sources}
 
 
+#: Разбор robots.txt сделан здесь, а не взят у `urllib.robotparser`, и причина
+#: измерена 25.10 на `yandex.ru/robots.txt` — у стандартного парсера две
+#: ошибки, и они тянут в разные стороны:
+#:
+#: 1. путь правила он прогоняет через `urlparse`, поэтому `Disallow: /?`
+#:    (запрет адресов со строкой запроса) становится у него `Disallow: /` и
+#:    запрещает ВЕСЬ сайт: `can_fetch('*', '/')` даёт False, хотя строки
+#:    `Disallow: /` в файле нет вовсе. Так редакционное чтение отказалось бы от
+#:    прямо разрешённого раздела;
+#: 2. он берёт ПЕРВОЕ совпавшее правило, а не самое длинное. Поэтому при
+#:    `Allow: /support/` выше и `Disallow: /support/security` ниже он разрешил
+#:    бы запрещённый раздел — то есть ошибся бы в сторону нарушения.
+#:
+#: Здесь сделано как описано у поисковиков: совпадение по самому ДЛИННОМУ
+#: образцу, при равной длине побеждает `Allow`; поддержаны `*` и якорь `$`.
+def _образец_подходит(образец: str, цель: str) -> bool:
+    if not образец:
+        return False
+    якорь = образец.endswith("$")
+    тело = образец[:-1] if якорь else образец
+    куски = тело.split("*")
+    место = 0
+    for i, кусок in enumerate(куски):
+        if not кусок:
+            continue
+        if i == 0:
+            if not цель.startswith(кусок):
+                return False
+            место = len(кусок)
+            continue
+        найдено = цель.find(кусок, место)
+        if найдено < 0:
+            return False
+        место = найдено + len(кусок)
+    if якорь:
+        последний = куски[-1]
+        return цель.endswith(последний) if последний else True
+    return True
+
+
+def robots_решение(строки: list[str], агент: str, цель: str) -> tuple[bool, str]:
+    """Разрешён ли адрес `цель` агенту `агент`. (можно, сработавшее правило)."""
+    блоки: list[tuple[list[str], list[tuple[str, str]]]] = []
+    агенты: list[str] = []
+    правила: list[tuple[str, str]] = []
+    собираем_агентов = False
+    for строка in строки:
+        с = строка.split("#", 1)[0].strip()
+        if not с or ":" not in с:
+            continue
+        поле, значение = (ч.strip() for ч in с.split(":", 1))
+        низ = поле.lower()
+        if низ == "user-agent":
+            if правила:
+                блоки.append((агенты, правила))
+                агенты, правила = [], []
+                собираем_агентов = True
+            elif not собираем_агентов:
+                агенты = []
+            агенты.append(значение.lower())
+            собираем_агентов = True
+            continue
+        if низ in ("disallow", "allow"):
+            собираем_агентов = False
+            правила.append((низ, значение))
+    if агенты or правила:
+        блоки.append((агенты, правила))
+
+    низкий_агент = (агент or "").lower()
+    свои: list[tuple[str, str]] | None = None
+    общие: list[tuple[str, str]] | None = None
+    for имена, набор in блоки:
+        for имя in имена:
+            if имя == "*":
+                общие = (общие or []) + набор
+            elif имя and имя in низкий_агент:
+                свои = (свои or []) + набор
+    набор = свои if свои is not None else (общие or [])
+    лучшее: tuple[int, bool, str] | None = None
+    for вид, образец in набор:
+        if not _образец_подходит(образец, цель):
+            continue
+        длина = len(образец)
+        можно = вид == "allow"
+        if лучшее is None or (длина, можно) > (лучшее[0], лучшее[1]):
+            лучшее = (длина, можно, f"{вид}: {образец}")
+    if лучшее is None:
+        return True, "правила не совпали"
+    return лучшее[1], лучшее[2]
+
+
 def _robots_allows(url: str) -> tuple[bool, str]:
     parts = urlsplit(url)
     robots = f"{parts.scheme}://{parts.netloc}/robots.txt"
@@ -223,11 +314,14 @@ def _robots_allows(url: str) -> tuple[bool, str]:
         return True, "robots.txt нет"
     if status != 200:
         return False, f"robots.txt не прочитан ({status}) — без него не читаем"
-    rp = urllib.robotparser.RobotFileParser()
-    rp.parse(raw.decode("utf-8", "replace").splitlines())
+    строки = raw.decode("utf-8", "replace").splitlines()
+    цель = parts.path or "/"
+    if parts.query:
+        цель += "?" + parts.query
     for agent in (USER_AGENT, *AI_AGENTS):
-        if not rp.can_fetch(agent, url):
-            return False, f"robots.txt запрещает {agent}"
+        можно, правило = robots_решение(строки, agent, цель)
+        if not можно:
+            return False, f"robots.txt запрещает {agent} правилом {правило!r}"
     return True, "robots.txt разрешает"
 
 

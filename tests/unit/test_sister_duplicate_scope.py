@@ -110,3 +110,38 @@ def test_карта_не_отдалась_это_не_измерено(tmp_path,
                         lambda д, т=90: ([], "карта не отдалась: код 503"))
     код = МОД.главное(["--domain", "a.test", "--domain", "b.test"])
     assert код == 2 and "НЕ ИЗМЕРЕНО" in capsys.readouterr().err
+
+
+def test_накладка_по_title_id_даёт_отказ_а_не_завышение(tmp_path, monkeypatch, capsys):
+    """Семейства Lords и Zona ставят текст накладкой, и слага в ней нет.
+
+    Если читать только наложение, у них «текста нет» выйдет у ВСЕХ работ, и
+    охват дублей будет завышен. Поэтому мера отказывается считать, а не
+    домысливает сопоставление `title_id` → слаг.
+    """
+    (tmp_path / "zonafilm12-site" / "data").mkdir(parents=True)
+    (tmp_path / "zonafilm12-site" / "data" / "editorial-overrides.json").write_text(
+        json.dumps({"overrides": {
+            "019151ff-2b5f-7270-80ed-4b2b8a8f5326": {
+                "actor": "editor/claude-auto/run-1",
+                "fields": {"description": "текст без слага"}},
+        }}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(МОД, "НАКЛАДКИ", tmp_path)
+    monkeypatch.setattr(МОД, "НАЛОЖЕНИЯ", tmp_path / "нет")
+    код = МОД.главное(["--domain", "zonafilm12.site", "--domain", "zonafilm.cc"])
+    assert код == 2
+    ошибка = capsys.readouterr().err
+    assert "НЕ ИЗМЕРЕНО" in ошибка and "title_id" in ошибка
+
+
+def test_накладка_со_слагом_читается(tmp_path, monkeypatch):
+    (tmp_path / "x-test" / "data").mkdir(parents=True)
+    (tmp_path / "x-test" / "data" / "editorial-overrides.json").write_text(
+        json.dumps({"overrides": [
+            {"slug": "a", "fields": {"description": "есть"}},
+            {"slug": "b", "fields": {"description": "  "}},
+        ]}, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setattr(МОД, "НАКЛАДКИ", tmp_path)
+    monkeypatch.setattr(МОД, "НАЛОЖЕНИЯ", tmp_path / "нет")
+    слаги, без_слага = МОД.размещено_накладкой("x.test")
+    assert слаги == {"a"} and без_слага == 0

@@ -37,6 +37,10 @@ import sys
 
 АГЕНТ = "factory-sister-duplicate-scope"
 НАЛОЖЕНИЯ = pathlib.Path("/srv/sites")
+#: Второе хранилище размещения. У семейств Lords и Zona текст ставится не
+#: наложением, а НАКЛАДКОЙ витрины; если читать только наложение, у них
+#: «текста нет» выйдет у всех работ, и охват дублей будет завышен.
+НАКЛАДКИ = pathlib.Path("/srv")
 СЕМЕЙСТВА = {
     "animedia": ("animedia.icu", "animedia.space"),
     "animego": ("animeg0.site", "an1meg0.site", "an1mego.site"),
@@ -45,9 +49,56 @@ import sys
 }
 
 
+def накладка_витрины(домен: str) -> pathlib.Path | None:
+    основа = домен.replace(".", "-")
+    for имя in (основа, f"site-{основа}"):
+        п = НАКЛАДКИ / имя / "data" / "editorial-overrides.json"
+        if п.is_file():
+            return п
+    return None
+
+
+def размещено_накладкой(домен: str) -> tuple[set[str], int]:
+    """(слаги, число записей без слага) из накладки витрины.
+
+    У накладки запись ключуется по `title_id`, а поля — только `actor`,
+    `fields`, `reason`: слага в ней НЕТ. Сопоставить `title_id` со слагом
+    можно лишь снимком каталога, поэтому такие записи возвращаются ЧИСЛОМ, а
+    не домысливаются. Иначе у семейств Lords и Zona «текста нет» вышло бы у
+    всех работ, и охват дублей был бы завышен.
+    """
+    п = накладка_витрины(домен)
+    if п is None:
+        return set(), 0
+    try:
+        д = json.loads(п.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return set(), 0
+    зп = д.get("overrides") or []
+    зп = list(зп.values()) if isinstance(зп, dict) else зп
+    слаги: set[str] = set()
+    без_слага = 0
+    for з in зп:
+        if not isinstance(з, dict):
+            continue
+        если = ((з.get("fields") or {}).get("description") or "").strip()
+        if not если:
+            continue
+        слаг = з.get("slug") or ""
+        if not слаг:
+            адрес = str(з.get("canonical_path") or з.get("url") or "")
+            слаг = адрес.rstrip("/").rsplit("/", 1)[-1] if адрес else ""
+        if слаг:
+            слаги.add(слаг)
+        else:
+            без_слага += 1
+    return слаги, без_слага
+
+
 def слаги_наложения(домен: str) -> set[str]:
-    """Слаги с размещённым редакционным текстом. Обе формы `items`."""
-    из: set[str] = set()
+    """Слаги с размещённым редакционным текстом: наложение И накладка."""
+    из, _ = размещено_накладкой(домен)
+    из = set(из)
     for путь in sorted(НАЛОЖЕНИЯ.glob(
             f"*/runtime/overlays/{домен}/title-overlays.json")):
         try:
@@ -115,6 +166,15 @@ def главное(аргв=None) -> int:
         return 2
 
     нал = {д: слаги_наложения(д) for д in домены}
+    безымянные = {д: размещено_накладкой(д)[1] for д in домены}
+    если_мешает = {д: n for д, n in безымянные.items() if n}
+    if если_мешает:
+        print("НЕ ИЗМЕРЕНО: у этих витрин размещение ведётся накладкой по"
+              " `title_id`, и слага в записи нет — сопоставление требует"
+              " снимка каталога, домысливать его нельзя:", file=sys.stderr)
+        for д, n in sorted(если_мешает.items()):
+            print(f"   {д}: записей накладки без слага {n}", file=sys.stderr)
+        return 2
     print(f"{'витрина':24} {'размещено текстов':>18}")
     for д in домены:
         print(f"{д:24} {len(нал[д]):18}")
