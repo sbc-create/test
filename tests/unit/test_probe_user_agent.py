@@ -191,6 +191,15 @@ def нарушения_метрики(исходник: str, имя: str = "<п�
     строки = исходник.splitlines()
     беды: list[str] = []
     дерево = ast.parse(исходник)
+    #: Переменные, у которых глушение уже стоит: route на КОНТЕКСТЕ действует
+    #: и на его страницы, поэтому страница от заглушенного контекста находкой
+    #: не является. Без этого проверка требовала бы второго, избыточного
+    #: глушения — а требование лишнего кода учит обходить проверку.
+    заглушены = {
+        ast.unparse(у.func).rsplit(".route", 1)[0]
+        for у in ast.walk(дерево)
+        if isinstance(у, ast.Call) and ast.unparse(у.func).endswith(".route")
+        and "mc.yandex" in ast.unparse(у)}
     for узел in ast.walk(дерево):
         if not isinstance(узел, ast.Assign) or not isinstance(узел.value, ast.Call):
             continue
@@ -199,6 +208,9 @@ def нарушения_метрики(исходник: str, имя: str = "<п�
             continue
         цель = узел.targets[0]
         if not isinstance(цель, ast.Name):
+            continue
+        источник = ast.unparse(узел.value.func).rsplit(".new_", 1)[0]
+        if цель.id in заглушены or источник in заглушены:
             continue
         хвост = "\n".join(строки[узел.end_lineno - 1:узел.end_lineno + 3])
         if f"{цель.id}.route(" not in хвост or "mc.yandex" not in хвост:
@@ -275,3 +287,17 @@ def test_проверка_принимает_заглушенный_контек
               '    контекст = браузер.new_context()\n'
               '    контекст.route("**mc.yandex.*/**", lambda м: м.abort())\n')
     assert нарушения_метрики(хорошо) == []
+
+
+def test_страница_от_заглушенного_контекста_не_находка():
+    """route на контексте действует и на его страницы."""
+    хорошо = ('контекст = браузер.new_context()\n'
+              'контекст.route("**mc.yandex.*/**", lambda м: м.abort())\n'
+              'стр = контекст.new_page()\n')
+    assert нарушения_метрики(хорошо) == []
+
+
+def test_страница_от_незаглушенного_контекста_остаётся_находкой():
+    плохо = ('контекст = браузер.new_context()\n'
+             'стр = контекст.new_page()\n')
+    assert len(нарушения_метрики(плохо)) == 2

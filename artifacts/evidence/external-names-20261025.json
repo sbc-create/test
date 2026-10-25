@@ -1,0 +1,58 @@
+{
+ "method": "source_fetch.py shikimori <id> и page <официальный адрес> — только источники, записанные в самом черновике; имя считается подтверждённым, если встречается в ответе источника в любом письме, однозначно соответствующем имени (яп. 青山剛昌 = Госё Аояма)",
+ "at": "2026-10-25T00:47:50Z",
+ "results": [
+  {
+   "domain": "animedia.icu",
+   "slug": "tridcat-tysyach-li-do-chananya",
+   "source": "https://shikimori.io/animes/54945",
+   "confirmed": [
+    "Чанъан"
+   ],
+   "not_found": [
+    "Аньши",
+    "Бай"
+   ],
+   "note": "у черновика записан ОДИН источник (Shikimori 54945), в его ответе ни «восстание Аньши», ни «Ли Бай» не названы; второго источника у материала нет, поэтому подтвердить нечем"
+  },
+  {
+   "domain": "animedia.space",
+   "slug": "detektiv-konan-protiv-kayto-kida",
+   "source": "https://shikimori.io/animes/57441",
+   "confirmed": [
+    "Куроба (黒羽快斗)",
+    "Кид (怪盗キッド)",
+    "Конан (江戸川コナン)",
+    "Госё (青山剛昌)",
+    "Аояма (青山剛昌, 原作)"
+   ],
+   "not_found": [
+    "Синъити"
+   ],
+   "sources": [
+    "https://shikimori.io/animes/57441",
+    "https://www.conan-movie.jp/2024/tvspecial/index.html"
+   ],
+   "note": "на официальной странице назван 工藤優作 (Юсаку, отец), а 工藤新一 (Синъити) не назван ни там, ни в ответе Shikimori"
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "perevorot-voennogo-dvizheniya-2",
+   "source": "https://shikimori.io/animes/42266",
+   "confirmed": [
+    "Цинъян",
+    "Велик"
+   ],
+   "not_found": []
+  },
+  {
+   "domain": "animeg0.site",
+   "slug": "mag-na-polnuyu-stavku-3",
+   "source": "https://shikimori.io/animes/38528",
+   "confirmed": [
+    "Фань"
+   ],
+   "not_found": []
+  }
+ ]
+}
