@@ -1,0 +1,35 @@
+{
+ "method": "source_fetch.py по источникам, записанным в черновике; сравнение по основе слова; для англоязычного источника соответствие письменностей задано парами --latin",
+ "at": "2026-10-25T05:17:12Z",
+ "results": [
+  {
+   "domain": "animedia.icu",
+   "slug": "tridcat-tysyach-li-do-chananya",
+   "sources": [
+    "https://shikimori.io/animes/54945"
+   ],
+   "extra_sources_not_in_draft": [
+    "https://en.wikipedia.org/wiki/30,000_Miles_from_Chang%27an"
+   ],
+   "external_sources_with_text": 3,
+   "unreadable_sources": [],
+   "confirmed": [
+    "Аньши [системы транслитерации: источник пишет «Анши»]",
+    "Чанъанем [основа слова]",
+    "Баем"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "fragments": {
+    "Аньши [системы транслитерации: источник пишет «Анши»]": ": null, \"description\": \"Через несколько лет после восстания Анши тибетская армия вторглась на юго-запад, и военачальник дина",
+    "Чанъанем [основа слова]": "hikimori.io/animes/54945\", \"russian\": \"Тридцать тысяч ли до Чанъаня\", \"name\": \"Chang An San Wan Li\", \"kind\": \"movie\", \"status\":",
+    "Баем": "й служил военным надзирателем, о своем прошлом общении с Ли Баем.\", \"english\": [\"30,000 Miles From Chang'an\"], \"japanese\": ["
+   },
+   "confirmed_by": {
+    "Аньши [системы транслитерации: источник пишет «Анши»]": "https://shikimori.io/animes/54945",
+    "Чанъанем [основа слова]": "https://shikimori.io/animes/54945",
+    "Баем": "https://shikimori.io/animes/54945"
+   }
+  }
+ ]
+}
