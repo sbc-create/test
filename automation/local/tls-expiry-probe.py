@@ -28,10 +28,18 @@ import datetime as dt
 import json
 import socket
 import ssl
+import os
 import sys
 from pathlib import Path
 
-ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
+#: Паспорт ячеек. Копий несколько, и они расходятся (MOD-164): в копии соседней
+#: линии восьми живых витрин K2 нет, и этот инструмент молча их не проверял.
+#: Читается копия ЭТОГО репозитория; путь переопределяется SITE_CELLS_PATH, а
+#: прочитанная копия и число ячеек называются в выводе — иначе неполный охват
+#: неотличим от полного.
+ПАСПОРТ = Path(os.environ.get("SITE_CELLS_PATH")
+               or Path(__file__).resolve().parents[2] / "config"
+               / "site-cells.json")
 #: Реестр действующих домéнов этой копии. Нужен ВТОРЫМ источником, потому
 #: что паспорт ячеек не знает о восьми живых витринах партии K2 (MOD-107),
 #: и прогон `--all` по одному паспорту печатал «замечаний: 0», молча не
@@ -76,6 +84,7 @@ def из_паспорта() -> list[str]:
     if not ПАСПОРТ.is_file():
         return []
     ячейки = json.loads(ПАСПОРТ.read_text(encoding="utf-8")).get("cells") or []
+    print(f"паспорт ячеек: {ПАСПОРТ} (ячеек {len(ячейки)})")
     return [str(я["domain"]) for я in ячейки if _годный(я.get("domain"))]
 
 

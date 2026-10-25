@@ -24,6 +24,7 @@ import argparse
 import json
 import re
 import subprocess
+import os
 import sys
 import tempfile
 from pathlib import Path
@@ -31,7 +32,14 @@ from urllib.parse import urlsplit
 
 АГЕНТ = "factory-cross-site-leak-probe"
 
-ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
+#: Паспорт ячеек. Копий несколько, и они расходятся (MOD-164): в копии соседней
+#: линии восьми живых витрин K2 нет, и этот инструмент молча их не проверял.
+#: Читается копия ЭТОГО репозитория; путь переопределяется SITE_CELLS_PATH, а
+#: прочитанная копия и число ячеек называются в выводе — иначе неполный охват
+#: неотличим от полного.
+ПАСПОРТ = Path(os.environ.get("SITE_CELLS_PATH")
+               or Path(__file__).resolve().parents[2] / "config"
+               / "site-cells.json")
 #: Формы адреса карточки. Две, и это измерено, а не предположено: Yummy держит
 #: карточку на `/anime/<slug>`, остальные на `/title/<slug>`.
 ФОРМЫ_КАРТОЧКИ = ("/title/", "/anime/")
@@ -103,6 +111,7 @@ def домены() -> list[str]:
     if not ПАСПОРТ.is_file():
         return []
     ячейки = json.loads(ПАСПОРТ.read_text(encoding="utf-8")).get("cells") or []
+    print(f"паспорт ячеек: {ПАСПОРТ} (ячеек {len(ячейки)})")
     return [str(я["domain"]) for я in ячейки
             if я.get("domain")
             and not str(я["domain"]).endswith((".test", ".localhost"))]

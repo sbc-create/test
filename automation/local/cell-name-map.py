@@ -28,10 +28,18 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from pathlib import Path
 
-ПАСПОРТ = Path("/home/claude/wt-portable-site-cell-01/config/site-cells.json")
+#: Паспорт ячеек. Копий несколько, и они расходятся (MOD-164): в копии соседней
+#: линии восьми живых витрин K2 нет, и этот инструмент молча их не проверял.
+#: Читается копия ЭТОГО репозитория; путь переопределяется SITE_CELLS_PATH, а
+#: прочитанная копия и число ячеек называются в выводе — иначе неполный охват
+#: неотличим от полного.
+ПАСПОРТ = Path(os.environ.get("SITE_CELLS_PATH")
+               or Path(__file__).resolve().parents[2] / "config"
+               / "site-cells.json")
 КОПИИ = Path("/home/claude/wt-portable-site-cell-01")
 ЮНИТЫ = Path("/etc/systemd/system")
 УЧЁТКИ = Path("/srv")
@@ -69,6 +77,7 @@ def main() -> int:
         print(f"паспорта ячеек нет: {а.registry} — НЕ ИЗМЕРЕНО")
         return 2
     ячейки = json.loads(а.registry.read_text(encoding="utf-8")).get("cells") or []
+    print(f"паспорт ячеек: {а.registry} (ячеек {len(ячейки)})")
 
     расхождения: list[tuple[str, str]] = []
     print(f"{'site_id':12} {'домен':24} {'копия':26} {'учётка':28} unit-суффикс")
