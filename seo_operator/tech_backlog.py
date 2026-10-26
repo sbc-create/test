@@ -274,6 +274,98 @@ def from_pages(cells: dict[str, dict], fetch: Fetch = _fetch, *, per_site: int =
     return итог
 
 
+#: Позиции Топвизора: свежесть выгрузки и съёма, срок оценки, задач на сайт.
+POSITIONS = REPO / "var" / "topvisor" / "measure-latest.json"
+POSITIONS_MAX_AGE_H = 72
+POSITIONS_CHECK_MAX_AGE_D = 10
+POSITIONS_EVAL_DAYS = 14
+POSITIONS_PER_SITE = 3
+
+
+def from_positions(cells: dict[str, dict], path: Path = POSITIONS,
+                   now: dt.datetime | None = None) -> list[dict]:
+    """Задачи по позициям Топвизора — только по свежему съёму.
+
+    Источник — `factory.topvisor.measure` (var/topvisor/measure-latest.json).
+    Выгрузка старше POSITIONS_MAX_AGE_H или съём сайта старше
+    POSITIONS_CHECK_MAX_AGE_D — задач нет: по устаревшим данным не решают, а
+    устаревание показывают отчёты. Приоритет внутри сайта (Яндекс раньше
+    Google, ПК раньше смартфона):
+
+    1. в выдаче не та страница — `relevant_url` сайта ≠ целевому URL ядра;
+    2. близко к топу — 4–10, страница целевая;
+    3. середина — 11–30, страница целевая.
+
+    «Не найден в пределах глубины» задачей по позиции не становится: это не
+    позиция. В задаче — исходная позиция с датой, регионом и устройством,
+    ожидаемый измеримый эффект и дата оценки; оценивается тем же съёмом
+    Топвизора, не средней позицией Вебмастера и не визитами Метрики."""
+    now = now or _сейчас()
+    данные = _read_json(path, {})
+    try:
+        когда = dt.datetime.fromisoformat(str(данные.get("measured_at")).replace("Z", "+00:00"))
+    except ValueError:
+        return []
+    if (now - когда).total_seconds() > POSITIONS_MAX_AGE_H * 3600:
+        return []
+    порядок = {("yandex", "desktop"): 0, ("yandex", "smartphone"): 1, ("google", "desktop"): 2}
+    итог = []
+    for сайт in данные.get("sites") or []:
+        домен = сайт.get("domain")
+        if домен not in cells or сайт.get("state") != "HAS_DATA":
+            continue
+        c = cells[домен]
+        кандидаты = []
+        for ч in sorted(сайт.get("checks") or [],
+                        key=lambda ч: порядок.get((ч.get("searcher"), ч.get("device")), 9)):
+            if not ч.get("last_check"):
+                continue
+            съём = dt.date.fromisoformat(ч["last_check"])
+            if (now.date() - съём).days > POSITIONS_CHECK_MAX_AGE_D:
+                continue
+            for к in ч.get("keywords") or []:
+                цель, факт, позиция = к.get("target_url"), к.get("relevant_url"), к.get("position")
+                if not цель or позиция is None:
+                    continue
+                if факт and домен in факт and факт.rstrip("/") != цель.rstrip("/"):
+                    вид = (0, "wrong_url", "в выдаче не целевая страница")
+                elif 4 <= позиция <= 10:
+                    вид = (1, "near_top", "близко к топу (4–10)")
+                elif 11 <= позиция <= 30:
+                    вид = (2, "mid", "середина выдачи (11–30)")
+                else:
+                    continue
+                кандидаты.append((вид, порядок.get((ч.get("searcher"), ч.get("device")), 9), позиция, к, ч, съём))
+        взято: set[str] = set()
+        for вид, _п, позиция, к, ч, съём in sorted(кандидаты, key=lambda x: (x[0][0], x[1], x[2])):
+            запрос = str(к.get("query") or "")
+            if запрос.lower() in взято or len(взято) >= POSITIONS_PER_SITE:
+                continue
+            взято.add(запрос.lower())
+            ключ = hashlib.sha1(f"{домен}|{запрос}|{вид[1]}".encode()).hexdigest()[:10]
+            оценка = (съём + dt.timedelta(days=POSITIONS_EVAL_DAYS)).isoformat()
+            где = f"{ч.get('searcher')}/{ч.get('device')}, {ч.get('region_name')}, глубина {ч.get('depth')}"
+            итог.append({
+                "site": домен, "direction": c["direction"], "repo": c["repo"],
+                "urls": [к["target_url"]],
+                "problem": (f"Топвизор {съём.isoformat()} ({где}): «{запрос}» — позиция {позиция}, "
+                            f"{вид[2]}; в выдаче {к.get('relevant_url') or 'адрес не назван'}, "
+                            f"целевая {к['target_url']}"),
+                "norm": ("целевая страница отвечает на запрос: название, заголовок и первый абзац "
+                         "называют то, что ищут, внутренние ссылки ведут на неё, а не на соседнюю"),
+                "expected": (f"исходно: позиция {позиция} на {съём.isoformat()}; цель — "
+                             + ("в выдаче целевая страница" if вид[1] == "wrong_url"
+                                else "1–3" if вид[1] == "near_top" else "4–10")
+                             + f" по тому же съёму ({где}); оценка {оценка} по истории Топвизора "
+                             "(не средняя позиция Вебмастера и не визиты Метрики)"),
+                "check": f"checks/auto_positions_{ключ}.py",
+                "verify_live": f"после выпуска страница {к['target_url']} отвечает 200 и содержит изменение; "
+                               f"позиция — повторным съёмом до {оценка}",
+                "source": _подпись("positions", домен, ключ),
+            })
+    return итог
+
+
 def from_ports(задачи: list[dict], опубликовано: set[str], cells: dict[str, dict]) -> list[dict]:
     """Переносы: у выпущенной задачи с `port_to` — задача на каждый названный сайт."""
     итог = []
@@ -328,7 +420,7 @@ def _опубликованные(state: Path) -> set[str]:
 
 def run(state: Path | None = None, *, links: bool | None = None, fetch: Fetch = _fetch,
         regular_state: Path = REGULAR_STATE, cells_path: Path = CELLS,
-        now: dt.datetime | None = None) -> dict[str, Any]:
+        now: dt.datetime | None = None, positions: Path | None = None) -> dict[str, Any]:
     """Один проход пополнения. Возвращает добавленные задачи и список внимания."""
     state = state or tech_run.STATE
     now = now or _сейчас()
@@ -339,7 +431,8 @@ def run(state: Path | None = None, *, links: bool | None = None, fetch: Fetch = 
         links = not прошлый or (now - dt.datetime.fromisoformat(прошлый.replace("Z", "+00:00"))).total_seconds() > 86400
     cells = promoted_cells(cells_path)
     задачи = tech_run.load_queue(state=state)
-    кандидаты = from_regular(regular_state, cells) + from_ports(задачи, _опубликованные(state), cells)
+    кандидаты = (from_regular(regular_state, cells) + from_ports(задачи, _опубликованные(state), cells)
+                 + from_positions(cells, positions or POSITIONS, now=now))
     if links:
         кандидаты += from_links(cells, fetch) + from_pages(cells, fetch)
     известные = {з.get("source") for з in задачи if з.get("source")}

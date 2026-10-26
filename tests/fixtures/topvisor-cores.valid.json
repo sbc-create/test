@@ -11,15 +11,33 @@
   ]
  },
  "measurement": {
-  "region": 213,
+  "region": "Россия",
+  "region_country": "RU",
   "searchers": [
    "yandex",
    "google"
   ],
-  "device": "решение владельца",
-  "depth": 100,
-  "schedule": "нет",
-  "status": "awaiting_owner_budget"
+  "regions": [
+   {
+    "searcher": "yandex",
+    "device": "desktop"
+   },
+   {
+    "searcher": "yandex",
+    "device": "smartphone"
+   },
+   {
+    "searcher": "google",
+    "device": "desktop"
+   }
+  ],
+  "device": "Яндекс — ПК и смартфон, Google — ПК (разбивки визитов по устройствам в выгрузке Метрики нет)",
+  "depth": 1,
+  "schedule": "съём — topvisor-collect.timer 18:10 UTC (21:10 МСК, окно Яндекс Search API 20:00–05:59 МСК), не чаще раза в сутки на конфигурацию, в пределах месячного лимита владельца; чтение — topvisor-measure.timer 03:40 и 14:40 UTC",
+  "collect": "python3 -m factory.topvisor.cli collect (factory/topvisor/collect.py)",
+  "measure": "python3 -m factory.topvisor.cli measure (factory/topvisor/measure.py)",
+  "status": "awaiting_owner_budget",
+  "note": "параметры не меняются без новой версии: иначе замеры несопоставимы. «Россия», ПК, глубина 1 — как у шести проектов, прочитанных живым API 19.09.2026"
  },
  "changes": [
   {

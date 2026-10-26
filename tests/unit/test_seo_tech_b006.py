@@ -221,9 +221,9 @@ def test_backlog_run_adds_once_validates_and_dedupes_by_url(tmp_path, monkeypatc
     reg.write_text(json.dumps({"open_issues_check": {"a.test|HOME_SLOW": {"domain": "a.test", "code": "HOME_SLOW", "detail": "5 с"}}}))
     fetch = lambda u: (200, "", "")  # noqa: E731 — ссылок и карт нет
     monkeypatch.setattr(tech_run, "load_queue", _загрузчик(очередь))
-    первый = tech_backlog.run(state, links=True, fetch=fetch, regular_state=reg)
+    первый = tech_backlog.run(state, links=True, fetch=fetch, regular_state=reg, positions=tmp_path / "нет-позиций.json")
     assert len(первый["added"]) == 1
-    второй = tech_backlog.run(state, links=True, fetch=fetch, regular_state=reg)
+    второй = tech_backlog.run(state, links=True, fetch=fetch, regular_state=reg, positions=tmp_path / "нет-позиций.json")
     assert второй["added"] == []
     авто = json.loads((state / "auto-tasks.json").read_text())["tasks"]
     assert авто[0]["id"] == "A0001" and авто[0]["status"] == "queued" and авто[0]["check"]
@@ -459,3 +459,64 @@ def test_publish_limit_counts_attempts_not_waits(tmp_path, monkeypatch):
                         lambda к, state, dry_run=False: {"task_id": к["task"]["id"], "decision": решения[к["task"]["id"]]})
     итог = tech_publish.run(tmp_path, dry_run=True, limit=1)
     assert [r["task_id"] for r in итог] == ["T0", "T1", "T2", "T3"]
+
+
+# -- задачи по позициям Топвизора ----------------------------------------------
+
+def _позиции(tmp_path, measured_at, last_check, ключи):
+    import json as _json
+    путь = tmp_path / "measure-latest.json"
+    путь.write_text(_json.dumps({"measured_at": measured_at, "sites": [{
+        "domain": "zonafilm12.site", "state": "HAS_DATA", "checks": [
+            {"searcher": "google", "device": "desktop", "region_name": "Россия", "depth": 1,
+             "last_check": last_check, "keywords": [
+                 {"query": "г", "position": 5, "target_url": "https://zonafilm12.site/title/g/",
+                  "relevant_url": "https://zonafilm12.site/title/g/"}]},
+            {"searcher": "yandex", "device": "desktop", "region_name": "Россия", "depth": 1,
+             "last_check": last_check, "keywords": ключи}]}]}, ensure_ascii=False), encoding="utf-8")
+    return путь
+
+
+def test_позиции_дают_задачи_с_исходной_точкой_и_датой_оценки(tmp_path):
+    import datetime as _dt
+    from seo_operator import tech_backlog as tb
+
+    ячейки = {"zonafilm12.site": {"repo": "var/site-repos/zonafilm12", "direction": "zona", "site_id": "z"}}
+    путь = _позиции(tmp_path, "2026-10-27T03:40:00Z", "2026-10-26", [
+        {"query": "а", "position": 7, "target_url": "https://zonafilm12.site/title/a/",
+         "relevant_url": "https://zonafilm12.site/title/a/"},
+        {"query": "б", "position": 15, "target_url": "https://zonafilm12.site/title/b/",
+         "relevant_url": "https://zonafilm12.site/"},
+        {"query": "в", "position": None, "target_url": "https://zonafilm12.site/title/v/"},
+        {"query": "д", "position": 2, "target_url": "https://zonafilm12.site/title/d/",
+         "relevant_url": "https://zonafilm12.site/title/d/"},
+        {"query": "е", "position": 25, "target_url": "https://zonafilm12.site/title/e/",
+         "relevant_url": "https://zonafilm12.site/title/e/"},
+    ])
+    сейчас = _dt.datetime(2026, 10, 27, 5, 0, tzinfo=_dt.timezone.utc)
+    задачи = tb.from_positions(ячейки, путь, now=сейчас)
+    # Не та страница — первой, затем Яндекс 4–10, затем Google 4–10; не больше трёх.
+    assert [з["urls"][0].rsplit("/", 2)[-2] for з in задачи] == ["b", "a", "g"]
+    assert all("2026-11-09" in з["expected"] for з in задачи), "дата оценки = съём + 14 дней"
+    assert "позиция 7 на 2026-10-26" in задачи[1]["expected"]
+    assert all(з["source"].startswith("auto:positions:zonafilm12.site:") for з in задачи)
+    # «Не найден» (None) — не позиция и не задача.
+    assert not any("/v/" in з["urls"][0] for з in задачи)
+    проверить = tb._валидатор_задачи()
+    for з in задачи:
+        assert проверить({"id": "A0001", "status": "queued", **з}) == []
+
+
+def test_устаревшие_позиции_задач_не_дают(tmp_path):
+    import datetime as _dt
+    from seo_operator import tech_backlog as tb
+
+    ячейки = {"zonafilm12.site": {"repo": "r", "direction": "zona", "site_id": "z"}}
+    ключи = [{"query": "а", "position": 7, "target_url": "https://zonafilm12.site/a/",
+              "relevant_url": "https://zonafilm12.site/a/"}]
+    сейчас = _dt.datetime(2026, 10, 27, 5, 0, tzinfo=_dt.timezone.utc)
+    старая_выгрузка = _позиции(tmp_path, "2026-10-20T03:40:00Z", "2026-10-26", ключи)
+    assert tb.from_positions(ячейки, старая_выгрузка, now=сейчас) == []
+    старый_съём = _позиции(tmp_path, "2026-10-27T03:40:00Z", "2026-10-10", ключи)
+    assert tb.from_positions(ячейки, старый_съём, now=сейчас) == []
+    assert tb.from_positions(ячейки, tmp_path / "нет.json", now=сейчас) == []

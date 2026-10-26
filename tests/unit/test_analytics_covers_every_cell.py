@@ -42,7 +42,6 @@ from factory.topvisor.manifest import by_domain  # noqa: E402
 #: ровно этого класса и привёл к тому, что zonafilm.space жила публично без
 #: проекта, и заметить это было нечем.
 ИЗВЕСТНЫЙ_ПРОБЕЛ_TOPVISOR = {
-    "animedia.icu": "проект не создавался: семья Animedia вне текущего задания",
     "animedia.space": "проект не создавался: семья Animedia вне текущего задания",
 }
 

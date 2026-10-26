@@ -183,12 +183,15 @@ def main() -> int:
             "note": ("визиты Метрики выбирают, что отслеживать; это не клики и не позиции. "
                      "Запросы групп стратегии — из манифеста, целевой URL не назначен."),
             "measurement": прежний.get("measurement") or {
-                "region": manifest.REGION_MOSCOW,
+                "region": manifest.REGION_NAME,
+                "region_country": manifest.REGION_COUNTRY,
                 "searchers": ["yandex", "google"],
-                "device": "решение владельца вместе с бюджетом (U8)",
-                "depth": 100,
-                "schedule": ("нет: съём платный, лимит автоматических трат 0 ₽; после решения "
-                             "владельца — не чаще одного съёма в сутки, повторов за день нет"),
+                "regions": [{"searcher": {0: "yandex", 1: "google"}[пс],
+                             "device": {0: "desktop", 1: "tablet", 2: "smartphone"}[уст]}
+                            for пс, уст in manifest.TARGET_REGIONS],
+                "device": "Яндекс — ПК и смартфон, Google — ПК",
+                "depth": manifest.REGION_DEPTH,
+                "schedule": "в пределах месячного лимита владельца, не чаще раза в сутки на конфигурацию",
                 "status": "awaiting_owner_budget",
                 "note": "параметры не меняются без новой версии: иначе замеры несопоставимы"},
             "sites": сайты}

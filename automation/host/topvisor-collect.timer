@@ -1,0 +1,13 @@
+# 18:10 UTC = 21:10 МСК: внутри окна Яндекс Search API (20:00–05:59 МСК),
+# результаты читает topvisor-measure в 03:40 UTC. Persistent=false: пропущенный
+# платный съём НЕ догоняется — следующий будет в своё время.
+[Unit]
+Description=Топвизор: ежедневный съём позиций в пределах лимита
+
+[Timer]
+OnCalendar=*-*-* 18:10:00 UTC
+Persistent=false
+Unit=topvisor-collect.service
+
+[Install]
+WantedBy=timers.target

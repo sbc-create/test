@@ -1,0 +1,35 @@
+# Платный съём позиций Топвизора — только в пределах лимита владельца.
+#
+#   sudo install -m 0644 automation/host/topvisor-collect.{service,timer} /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now topvisor-collect.timer
+#
+# Без config/topvisor-budget.json (месячный лимит владельца) команда
+# завершается BLOCKED_INPUT (код 3) и ничего не тратит; код 3 считается
+# штатным, чтобы служба не перезапускалась. Допуск на каждый съём:
+# цена от сервиса, лимит месяца и дневная доля остатка, не чаще раза в сутки
+# на конфигурацию, регионы Яндекса — в окне 20:00–05:59 МСК
+# (factory/topvisor/collect.py). Повторов платного вызова нет совсем.
+[Unit]
+Description=Топвизор: съём позиций в пределах лимита владельца
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
+LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli collect >> var/topvisor/collect.log 2>&1'
+SuccessExitStatus=3
+TimeoutStartSec=30min
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true

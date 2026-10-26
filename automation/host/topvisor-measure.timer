@@ -1,0 +1,14 @@
+# Дважды в сутки: 03:40 UTC (06:40 МСК) — после ночного съёма, к отчёту 10:00
+# МСК; 14:40 UTC (17:40 МСК) — к отчёту 18:00 МСК. Чтения бесплатные.
+[Unit]
+Description=Топвизор: бесплатные измерения дважды в сутки
+
+[Timer]
+OnCalendar=*-*-* 03:40:00 UTC
+OnCalendar=*-*-* 14:40:00 UTC
+Persistent=true
+RandomizedDelaySec=300
+Unit=topvisor-measure.service
+
+[Install]
+WantedBy=timers.target

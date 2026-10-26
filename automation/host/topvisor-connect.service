@@ -4,7 +4,9 @@
 #
 # Отличие от topvisor-check: тот только читает (профиль, баланс, список
 # проектов и план). Здесь выполняется `apply`, то есть БЕСПЛАТНЫЕ мутации:
-# создание проекта, добавление поисковой системы, групп и запросов. Платные
+# создание проекта, добавление поисковой системы и региона, групп и запросов,
+# возврат архивного проекта активного сайта в обычные. После записи —
+# бесплатное измерение (measure), то есть перечитывание из сервиса. Платные
 # операции `apply` не выполняет даже с ключом — он их перечисляет, и решение
 # остаётся за владельцем.
 #
@@ -45,7 +47,7 @@ ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/v
 #
 # Права секрета при этом не меняются: он остаётся root-owned файлом, который
 # systemd выдаёт только этому юниту и только на время прогона.
-ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli apply > var/topvisor/connect-latest.txt 2>&1; /usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-after-connect.txt 2>&1'
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli apply > var/topvisor/connect-latest.txt 2>&1; /usr/bin/python3 -m factory.topvisor.cli check > var/topvisor/check-after-connect.txt 2>&1; /usr/bin/python3 -m factory.topvisor.cli measure > var/topvisor/measure-latest.txt 2>&1'
 
 NoNewPrivileges=true
 PrivateTmp=true

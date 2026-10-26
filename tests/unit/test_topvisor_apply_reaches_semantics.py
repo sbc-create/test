@@ -36,15 +36,13 @@ class КлиентЗаглушка:
     def keywords(self, ид) -> list[dict]:  # noqa: ARG002
         return []
 
-    def searchers(self, ид):  # noqa: ARG002
-        # Метод чтения поисковых систем API отвергает как несуществующий, и
-        # клиент это воспроизводит: стенд обязан вести себя как настоящий,
-        # иначе проверка зеленеет на поведении, которого нет.
-        from factory.errors import FactoryError
-        raise FactoryError(
-            "Метод get/projects_2/searchers не в списке разрешённых",
-            required_input="имя метода чтения поисковых систем",
-        )
+    def projects_with_regions(self) -> list[dict]:
+        # Регионов нет, справочник пуст: ключа региона нет — значит, и
+        # региона не добавляется. Стенд не придумывает ответ сервиса.
+        return list(self._проекты)
+
+    def find_regions(self, *a, **k):  # noqa: ARG002
+        return []
 
     def call(self, method: str, payload: dict):
         self.создано.append((method, payload))
@@ -53,6 +51,12 @@ class КлиентЗаглушка:
             следующий = sum(len(v) for v in self.группы.values()) + 1
             self.группы.setdefault(ид, []).append(
                 {"id": следующий, "name": payload["name"]})
+        if method == "add/positions_2/searchers":
+            # Как сервис: добавленная система видна при следующем чтении.
+            for п in self._проекты:
+                if п["id"] == payload["project_id"]:
+                    п.setdefault("searchers", []).append(
+                        {"key": payload["searcher_key"], "regions": []})
         return {"result": 1}
 
 

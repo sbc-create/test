@@ -77,14 +77,24 @@ ALLOWED: dict[str, Method] = {
     m.name: m
     for m in (
         Method("get/bank_2/info", False, Cost.FREE, "тариф, баланс и состояние счёта"),
+        # С `show_searchers_and_regions: 2` метод отдаёт поисковые системы и
+        # регионы проекта вместе с индексами регионов (документация
+        # topvisor.com/ru/api/projects-2/projects/get/, прочитана 26.10.2026).
+        # Прежнего `get/projects_2/searchers` у API нет — проверено 27.09.
         Method("get/projects_2/projects", False, Cost.FREE, "список проектов"),
-        # `get/projects_2/searchers` убран: API отвечает «Call to undefined
-        # method» (прогон 2026-09-27 22:46, var/topvisor/check-latest.txt, все
-        # 15 проектов аккаунта). Список разрешённых означает «проверено, что
-        # метод существует»; этот не существует. Настоящее имя метода для
-        # поисковых систем не подтверждено документом — угадывать нельзя.
-        # `add/projects_2/searchers` остаётся в списке, но в план не попадает:
-        # без проверенного чтения нечем подтвердить результат записи.
+        # Экспорт регионов проекта (CSV). Живой вызов — аудит seo-engine
+        # 19.09.2026 (artifacts/evidence/topvisor-operations-audit-02 в
+        # wt-seo-operator-v2-01): у шести проектов Яндекс и Google, «Россия».
+        Method("get/positions_2/searchers/regions/export", False, Cost.FREE,
+               "регионы проекта (CSV)"),
+        # История позиций. Позиция — число или '--' («не найден в пределах
+        # проверенной глубины»); по архивным проектам метод не работает.
+        Method("get/positions_2/history", False, Cost.FREE, "история позиций"),
+        # Стоимость одного съёма. Ничего не запускает: вызван 19.09 в
+        # read-only аудите seo-engine без списаний (флаги billable = false).
+        Method("get/positions_2/checker/price", False, Cost.FREE,
+               "стоимость одного съёма позиций"),
+        Method("get/system_2/common/regions", False, Cost.FREE, "справочник регионов"),
         Method("get/keywords_2/groups", False, Cost.FREE, "группы запросов"),
         Method("get/keywords_2/keywords", False, Cost.FREE, "запросы"),
         Method("add/projects_2/projects", True, Cost.FREE, "создать проект"),
@@ -96,12 +106,27 @@ ALLOWED: dict[str, Method] = {
         # документации Topvisor нет, а перебор имён у этого API платный.
         # Пока имя не подтверждено документом, правка свойств проекта
         # остаётся операцией владельца в интерфейсе.
-        Method("add/projects_2/searchers", True, Cost.FREE, "добавить поисковую систему"),
+        # Имена записи поисковых систем и регионов — по документации
+        # topvisor.com/ru/api/positions-2/ (26.10.2026). Прежнее
+        # `add/projects_2/searchers` документом не подтверждено и убрано.
+        Method("add/positions_2/searchers", True, Cost.FREE, "добавить поисковую систему"),
+        # Документация называет метод двояко: оглавление — `searchers/regions`
+        # (как у живого `searchers/regions/export`), заголовок страницы метода
+        # — `searchers_regions`. Оба написания взяты из документа, а не
+        # подобраны; второе пробуется только при отказе «нет такого метода».
+        Method("add/positions_2/searchers/regions", True, Cost.FREE, "добавить регион"),
+        Method("add/positions_2/searchers_regions", True, Cost.FREE, "добавить регион"),
+        # Обычный (0) или архивный (-1) проект. Архивный не проверяется и не
+        # отдаёт историю.
+        Method("edit/projects_2/projects/on", True, Cost.FREE, "архивировать или вернуть проект"),
         Method("add/keywords_2/groups", True, Cost.FREE, "создать группу запросов"),
         Method("add/keywords_2/keywords", True, Cost.FREE, "добавить запросы"),
         # Платные — присутствуют, чтобы плановщик мог назвать их и посчитать
         # стоимость, но исполнение закрыто отдельной проверкой ниже.
-        Method("get/positions_2/checker/go", True, Cost.PAID, "запустить съём позиций"),
+        Method("edit/positions_2/checker/go", True, Cost.PAID, "запустить съём позиций"),
+        # Само расписание денег не списывает, но включает автоматические
+        # платные съёмы — поэтому по допуску это платная операция.
+        Method("edit/schedule_2", True, Cost.PAID, "расписание автоматических съёмов"),
         Method("add/audit_2/audit", True, Cost.PAID, "запустить технический аудит"),
     )
 }
@@ -323,9 +348,83 @@ class TopvisorClient:
     # поэтому один точный запрос с разбором ответа — законный способ узнать
     # контракт, в отличие от перебора имён методов, который запрещён.
 
-    def searchers(self, project_id: int) -> list[dict]:
-        result = self.call("get/projects_2/searchers", {"project_id": int(project_id)})
-        return [s for s in (result or []) if isinstance(s, dict)]
+    def projects_with_regions(self) -> list[dict]:
+        """Проекты вместе с поисковыми системами и ВСЕМИ регионами (2 —
+        включённые и выключенные). У региона есть `index` — его и принимают
+        история и съём. Без индекса проекта история читается по чужому
+        региону и выглядит пустой (урок seo-engine, positions_snapshot)."""
+        result = self.call(
+            "get/projects_2/projects",
+            {"limit": 500, "fields": list(self.PROJECT_FIELDS),
+             "show_searchers_and_regions": 2},
+        )
+        return [p for p in (result or []) if isinstance(p, dict)]
+
+    def history(self, project_id: int, regions_indexes: list[int],
+                date1: str, date2: str) -> dict:
+        """История позиций за период. Бесплатное чтение; съём не запускает."""
+        result = self.call("get/positions_2/history", {
+            "project_id": int(project_id),
+            "regions_indexes": [int(i) for i in regions_indexes],
+            "date1": date1, "date2": date2,
+            "show_exists_dates": 1, "show_headers": 1,
+            "positions_fields": ["position", "relevant_url"],
+        })
+        return result if isinstance(result, dict) else {}
+
+    def checker_price(self, project_ids: list[int],
+                      regions_indexes: list[int] | None = None) -> float | None:
+        """Стоимость ОДНОГО съёма в рублях с учётом скидки тарифа.
+
+        Ответ сгруппирован по владельцам, ключ группы — идентификатор
+        владельца (половина учётных данных): здесь только суммируется и
+        наружу не выходит. ``None`` — сервис цену не назвал."""
+        payload: dict = {"filters": [{"name": "id", "operator": "EQUALS",
+                                      "values": [int(i) for i in project_ids]}]}
+        if regions_indexes:
+            payload["regions_indexes"] = [int(i) for i in regions_indexes]
+        result = self.call("get/positions_2/checker/price", payload)
+        группы = (result or {}).get("pricesByUsers") if isinstance(result, dict) else None
+        if not isinstance(группы, dict) or not группы:
+            return None
+        return round(sum(float((g or {}).get("price") or 0) for g in группы.values()
+                         if isinstance(g, dict)), 2)
+
+    def find_regions(self, search: str, searcher_key: int,
+                     country_code: str | None = None) -> list[dict]:
+        payload: dict = {"search": search, "searcher_key": int(searcher_key)}
+        if country_code:
+            payload["country_code"] = country_code
+        result = self.call("get/system_2/common/regions", payload)
+        return [r for r in (result or []) if isinstance(r, dict)]
+
+    def call_paid(self, method: str, payload: dict, допуск: object) -> Any:
+        """Единственная дверь для платного метода: только с бюджетным допуском.
+
+        Допуск выдаёт `factory.topvisor.collect.допуск_съёма` — после чтения
+        лимита владельца, цены съёма, расхода за месяц и проверки «сегодня
+        ещё не снимали». Клиент проверяет, что допуск выдан на ЭТОТ вызов."""
+        from factory.topvisor.collect import Допуск  # noqa: PLC0415
+
+        spec = ALLOWED.get(method)
+        if spec is None or spec.cost != Cost.PAID:
+            raise BlockedInput(f"{method}: не платный метод из списка",
+                               field="topvisor.method", blocks_stage="topvisor")
+        if not isinstance(допуск, Допуск) or not допуск.покрывает(method, payload):
+            self.calls.append(Call(method, True, spec.cost, False, False, "нет бюджетного допуска"))
+            raise BlockedAccess(
+                f"{method} — платный метод без бюджетного допуска",
+                field="topvisor.cost",
+                required_input="лимит владельца в config/topvisor-budget.json",
+                blocks_stage="topvisor",
+            )
+        if self.dry_run:
+            self.calls.append(Call(method, True, spec.cost, False, True, "запланировано, не отправлено"))
+            return None
+        _, body = self._send(method, dict(payload))
+        self._raise_for_errors(method, body)
+        self.calls.append(Call(method, True, spec.cost, True, True, f"допуск {допуск.сумма} ₽"))
+        return body.get("result") if isinstance(body, dict) else body
 
     def keyword_groups(self, project_id: int) -> list[dict]:
         result = self.call("get/keywords_2/groups", {"project_id": int(project_id)})

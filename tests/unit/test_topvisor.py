@@ -61,7 +61,7 @@ def test_paid_mutation_is_refused_even_with_apply():
     log = []
     client = TopvisorClient(credentials=CRED, opener=make_opener([], log), dry_run=False)
     with pytest.raises(BlockedAccess):
-        client.call("get/positions_2/checker/go", {"project_id": 1})
+        client.call("edit/positions_2/checker/go", {"project_id": 1})
     assert log == [], "платный метод не должен уходить в сеть"
 
 
@@ -666,6 +666,12 @@ def test_семантика_создаётся_и_повтор_ничего_не
     spec = by_domain("an1meg0.site")
     assert spec and len(spec.groups) == 2
     первая, вторая = spec.groups
+    # Регионы уже настроены целиком (Яндекс ПК и смартфон, Google ПК) —
+    # добавлять нечего; без этого чтения проверялась бы не семантика.
+    настроен = (200, {"result": [{"id": 5, "url": spec.url, "on": 0, "searchers": [
+        {"key": 0, "regions": [{"index": 1, "key": 225, "name": "Россия", "device": 0},
+                               {"index": 2, "key": 225, "name": "Россия", "device": 2}]},
+        {"key": 1, "regions": [{"index": 3, "key": 2643, "name": "Россия", "device": 0}]}]}]})
     пусто = (200, {"result": []})
     ок = (200, {"result": {"id": 1}})
     ответы = [
@@ -675,6 +681,7 @@ def test_семантика_создаётся_и_повтор_ничего_не
                           {"id": 12, "name": вторая.name}]}),   # перечитали группы
         пусто,                                                  # запросов нет
         ок, ок,                                                 # добавили запросы двух групп
+        настроен,                                               # регионы проекта
     ]
     журнал = []
     client = TopvisorClient(credentials=CRED, dry_run=False,
@@ -682,13 +689,10 @@ def test_семантика_создаётся_и_повтор_ничего_не
     итог = наполнить_семантику(client, [{"id": 5, "url": spec.url, "name": spec.name}])
     assert итог["groups"] == 2, итог
     assert итог["keywords"] == sum(len(g.keywords) for g in spec.groups), итог
-    # Замечания допустимы ровно те, что НАЗЫВАЮТ блокировку: поисковые системы
-    # не настраиваются, пока их нельзя прочитать, и каждый прогон об этом
-    # говорит. Безымянного шума быть не должно — иначе «замечания есть» перестаёт
+    # Безымянного шума быть не должно — иначе «замечания есть» перестаёт
     # что-либо значить и проверка превращается в разрешение на любой текст.
-    посторонние = [n for n in итог["notes"] if "поисковые системы не настроены" not in n]
-    assert посторонние == [], посторонние
-    assert итог["searchers"] == 0, "слепое добавление поисковых систем создало бы дубли"
+    assert итог["notes"] == [], итог["notes"]
+    assert (итог["searchers"], итог["regions"]) == (0, 0), "настроенное не добавляется повторно"
     методы = [з["url"].rsplit("/json/", 1)[-1] for з in журнал]
     assert методы.count("add/keywords_2/groups") == 2, методы
     assert методы.count("add/keywords_2/keywords") == 2, методы
@@ -709,6 +713,7 @@ def test_семантика_создаётся_и_повтор_ничего_не
                               {"id": 12, "name": вторая.name}]}),
             (200, {"result": [{"id": 99, "name": к}
                               for g in spec.groups for к in g.keywords]}),
+            настроен,
         ], журнал2))
     итог2 = наполнить_семантику(повтор, [{"id": 5, "url": spec.url, "name": spec.name}])
     assert (итог2["groups"], итог2["keywords"]) == (0, 0), итог2
@@ -738,5 +743,6 @@ def test_чужой_проект_семантикой_не_трогается():
     client = TopvisorClient(credentials=CRED, dry_run=False,
                             opener=make_opener([], журнал), sleep=lambda _: None)
     итог = наполнить_семантику(client, [{"id": 1, "url": "https://посторонний.test/"}])
-    assert итог == {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
+    assert итог == {"groups": 0, "keywords": 0, "searchers": 0, "regions": 0,
+                    "unarchived": 0, "notes": []}
     assert журнал == []

@@ -1,0 +1,40 @@
+# Измерения Топвизора: настройки проектов, история позиций, цена съёма.
+#
+#   sudo install -m 0644 automation/host/topvisor-measure.{service,timer} /etc/systemd/system/
+#   sudo systemctl daemon-reload && sudo systemctl enable --now topvisor-measure.timer
+#
+# ТОЛЬКО бесплатные чтения (`factory.topvisor.cli measure`): съём здесь не
+# запускается. Итог — var/topvisor/measure-latest.json и строки позиций в
+# var/topvisor/positions.jsonl (без повторов). Ошибка одного проекта пишется в
+# его запись и не останавливает остальные.
+#
+# Повторы ограничены: при сбое всего прогона (нет сети, отказ доступа) — до
+# трёх перезапусков с паузой 15 минут, дальше служба остаётся failed, и
+# устаревание видно по `measured_at` в отчётах 10:00/18:00/22:00 МСК.
+[Unit]
+Description=Топвизор: бесплатные измерения (настройки, история позиций, цена)
+After=network-online.target
+StartLimitIntervalSec=2h
+StartLimitBurst=3
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+LoadCredential=user-id:/etc/site-factory/secrets/topvisor/user-id
+LoadCredential=api-key:/etc/site-factory/secrets/topvisor/api-key
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStartPre=/usr/bin/install -d -m 0755 /home/claude/wt-portable-site-cell-01/var/topvisor
+ExecStart=/bin/sh -c '/usr/bin/python3 -m factory.topvisor.cli measure > var/topvisor/measure-latest.txt 2>&1'
+Restart=on-failure
+RestartSec=15min
+TimeoutStartSec=20min
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/home/claude/wt-portable-site-cell-01/var
+ProtectKernelTunables=true
+RestrictSUIDSGID=true

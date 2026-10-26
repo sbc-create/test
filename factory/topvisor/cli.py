@@ -233,10 +233,111 @@ def cmd_apply(args: argparse.Namespace) -> int:
     заполнено = наполнить_семантику(client, current)
     print(f"Групп создано: {заполнено['groups']}, "
           f"запросов добавлено: {заполнено['keywords']}, "
-          f"поисковых систем добавлено: {заполнено['searchers']}")
+          f"поисковых систем добавлено: {заполнено['searchers']}, "
+          f"регионов добавлено: {заполнено['regions']}, "
+          f"возвращено из архива: {заполнено['unarchived']}")
     for строка in заполнено["notes"]:
         print(f"  ! {строка}")
+    # Перечитываем: «добавлено» — это ответ на запись, а настроено то, что
+    # сервис отдаёт при чтении.
+    try:
+        from factory.topvisor import manifest as м  # noqa: PLC0415
+        from factory.topvisor.measure import регионы  # noqa: PLC0415
+
+        for п in client.projects_with_regions():
+            домен = planning.normalize_domain(str(п.get("url") or п.get("site") or ""))
+            есть = {(р["searcher"], р["device"]) for р in регионы(п) if р["region_name"] == м.REGION_NAME}
+            print(f"  после записи: #{п.get('id')} {домен} on={п.get('on')} регионы {sorted(есть)}")
+    except FactoryError as exc:
+        print(f"  ! перечитать регионы не удалось — {exc.reason}")
     return 0
+
+
+def cmd_measure(args: argparse.Namespace) -> int:
+    """Бесплатные измерения: настройки, история позиций, цена съёма."""
+    from factory.topvisor import measure  # noqa: PLC0415
+
+    client = _client(False)
+    итог = measure.измерить(client)
+    путь = measure.записать(итог)
+    for с in итог["sites"]:
+        полосы = {}
+        for ч in с.get("checks") or []:
+            for k, v in (ч.get("bands") or {}).items():
+                полосы[k] = полосы.get(k, 0) + v
+        print(f"  #{с.get('project_id')} {с['domain']:22s} {с['state']:13s} "
+              f"запросов {с.get('keywords_total')} последний съём {с.get('last_check')} "
+              f"цена съёма {с.get('price_one_check_rub')} ₽ полосы {полосы}"
+              + (f" ошибка: {с['error']}" if с.get("error") else ""))
+    print(f"итог: {путь}")
+    return 0
+
+
+def cmd_collect(args: argparse.Namespace) -> int:
+    """Платный съём в пределах лимита владельца. Без лимита — BLOCKED_INPUT."""
+    import datetime as dt  # noqa: PLC0415
+
+    from factory.topvisor import collect, measure  # noqa: PLC0415
+
+    лимит = collect.лимит()
+    client = _client(not args.dry_run)
+    итог = measure.измерить(client)
+    measure.записать(итог)
+    визиты = _поисковые_визиты()
+    журнал = collect.расходы()
+    сейчас = dt.datetime.now(dt.timezone.utc)
+    запущено = 0
+    for сайт, регионы in collect.очередь(итог, визиты):
+        индексы = [р["index"] for р in регионы]
+        try:
+            цена = client.checker_price([сайт["project_id"]], индексы)
+        except FactoryError as exc:
+            print(f"  {сайт['domain']}: цена не получена — {exc.reason}")
+            continue
+        допуск, причина = collect.допуск_съёма(
+            project_id=сайт["project_id"], regions=регионы, цена=цена,
+            сейчас=сейчас, лимит_руб=лимит, журнал=журнал)
+        print(f"  {сайт['domain']} {[р['searcher'] + '/' + str(р['device']) for р in регионы]}: {причина}")
+        if допуск is None:
+            continue
+        try:
+            client.call_paid(допуск.метод, допуск.payload(), допуск)
+        except FactoryError as exc:
+            print(f"    отказ сервиса: {exc.reason}")
+            continue
+        if not args.dry_run:
+            collect.записать_расход(сайт["project_id"], сайт["domain"], допуск.regions_indexes,
+                                    допуск.сумма, сейчас)
+            журнал.append({"at": сейчас.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                           "project_id": сайт["project_id"],
+                           "regions_indexes": list(допуск.regions_indexes), "price_rub": допуск.сумма})
+            запущено += 1
+    print(f"Запущено съёмов: {запущено}" + (" (dry-run: ничего не отправлено)" if args.dry_run else ""))
+    return 0
+
+
+def _поисковые_визиты() -> dict[str, float]:
+    """Поисковые визиты Метрики за последние 7 дней — только для порядка
+    очереди съёма. Нет выгрузки — пустой порядок, не ошибка."""
+    import collections  # noqa: PLC0415
+    from pathlib import Path  # noqa: PLC0415
+
+    путь = Path(__file__).resolve().parents[2] / "var" / "analytics" / "cabinet-latest.json"
+    try:
+        выгрузка = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    итог: dict[str, float] = collections.Counter()
+    for з in выгрузка.get("domains") or []:
+        строки = [с for м in з.get("measurements") or []
+                  if м.get("key") == "daily_search_landing_pages" and м.get("measured")
+                  for с in м.get("value") or []]
+        даты = sorted({(с.get("dimensions") or [{}])[0].get("name") for с in строки} - {None})
+        последние = set(даты[-7:])
+        for с in строки:
+            if (с.get("dimensions") or [{}])[0].get("name") in последние:
+                итог[з["domain"]] += float((с.get("metrics") or [0])[0] or 0)
+    return dict(итог)
 
 
 def наполнить_семантику(client, projects: list[dict]) -> dict:
@@ -267,7 +368,9 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
 
     from factory.cell import withdrawn  # noqa: PLC0415
 
-    итог = {"groups": 0, "keywords": 0, "searchers": 0, "notes": []}
+    итог = {"groups": 0, "keywords": 0, "searchers": 0, "regions": 0, "unarchived": 0, "notes": []}
+    _КЛЮЧИ_РЕГИОНОВ.clear()
+    _ПРОЕКТЫ_С_РЕГИОНАМИ.clear()
     for проект in projects:
         домен = normalize_domain(str(проект.get("url") or проект.get("site") or ""))
         spec = by_domain(домен) if домен else None
@@ -323,43 +426,138 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
 
 
 def _поисковые_системы(client, ид, домен: str, spec, итог: dict) -> None:
-    """Поисковые системы и регион проекта — ЧИТАЕМ и только потом добавляем.
+    """Поисковые системы и регионы проекта: ЧИТАЕМ, добавляем недостающее,
+    ПЕРЕЧИТЫВАЕМ.
 
-    Почему не «добавить и не думать». Проект без поисковых систем не
-    мониторинг: позиции снимать не по чему. Но слепой `add` без чтения — это
-    ровно тот дубль, который запрещён: у Topvisor нет ни одного способа узнать,
-    что система уже добавлена, кроме чтения, а метод чтения
-    `get/projects_2/searchers` API отвергает как несуществующий (прогон
-    2026-09-27, все 15 проектов аккаунта). Настоящее имя метода документом не
-    подтверждено, и подбирать его запрещено отдельно.
+    Чтение — `get/projects_2/projects` с `show_searchers_and_regions: 2`
+    (документация Топвизора, 26.10.2026): у проекта список поисковых систем,
+    у каждой — регионы с ключом, устройством и глубиной. Прежнее
+    `get/projects_2/searchers` у API не существует, поэтому раньше здесь была
+    названная блокировка (U7); теперь метод чтения подтверждён документом.
 
-    Поэтому здесь не молчание и не риск, а НАЗВАННАЯ блокировка в отчёте: пока
-    прочитать нельзя, добавлять не будем, и каждый прогон об этом скажет.
-    Молчаливый ноль неотличим от «забыли» и живёт годами; названный — нет.
+    Целевая конфигурация — `manifest.TARGET_REGIONS` в регионе
+    `REGION_NAME`. Ключ региона берётся из ответа сервиса: из уже настроенного
+    региона любого проекта аккаунта или из справочника. Регион с другим
+    именем не трогается и не удаляется — удаление ломает историю.
     """
-    объявлено = getattr(spec, "searchers", ()) or ()
+    from factory.topvisor import manifest as м  # noqa: PLC0415
+    from factory.topvisor.measure import регионы  # noqa: PLC0415
+
+    объявлено = tuple(getattr(spec, "searchers", ()) or ())
     if not объявлено:
         return
     try:
-        текущие = client.searchers(ид)
+        проект = _проект_с_регионами(client, ид)
     except FactoryError as exc:
-        итог["notes"].append(
-            f"{домен}: поисковые системы не настроены — прочитать текущие нечем "
-            f"({exc.reason}). Объявлено {len(объявлено)}; слепое добавление "
-            "создало бы дубли, а имя метода чтения документом не подтверждено "
-            "(U7 в knowledge/UNKNOWNS.md)")
+        итог["notes"].append(f"{домен}: регионы не прочитаны — {exc.reason}; ничего не добавляю")
         return
-    есть = {с.get("id") for с in текущие}
-    for система in объявлено:
-        if система in есть:
+    if проект is None:
+        итог["notes"].append(f"{домен}: проект #{ид} не найден при чтении регионов")
+        return
+    есть_пс = {_число((п or {}).get("key", (п or {}).get("searcher_key")))
+               for п in проект.get("searchers") or [] if isinstance(п, dict)}
+    есть = {(р["searcher_key"], р["device"], str(р["region_name"] or "")) for р in регионы(проект)}
+    for ключ_пс, устройство in м.TARGET_REGIONS:
+        if ключ_пс not in объявлено:
             continue
+        if ключ_пс not in есть_пс:
+            try:
+                client.call("add/positions_2/searchers",
+                            {"project_id": int(ид), "searcher_key": int(ключ_пс)})
+                есть_пс.add(ключ_пс)
+                итог["searchers"] += 1
+            except FactoryError as exc:
+                итог["notes"].append(f"{домен}: поисковая система {ключ_пс} не добавлена — {exc.reason}")
+                continue
+        имя_устр = {0: "desktop", 1: "tablet", 2: "smartphone"}[устройство]
+        if (ключ_пс, имя_устр, м.REGION_NAME) in есть:
+            continue
+        ключ_рег = _ключ_региона(client, ключ_пс, итог)
+        if ключ_рег is None:
+            continue
+        полезная = {"project_id": int(ид), "searcher_key": int(ключ_пс),
+                    "region_key": int(ключ_рег), "region_lang": м.REGION_LANG,
+                    "region_device": int(устройство), "region_depth": int(м.REGION_DEPTH)}
         try:
-            client.call("add/projects_2/searchers",
-                        {"project_id": int(ид), "searcher_key": int(система)})
-            итог["searchers"] += 1
+            _добавить_регион(client, полезная)
+            итог["regions"] = итог.get("regions", 0) + 1
         except FactoryError as exc:
             итог["notes"].append(
-                f"{домен}: поисковая система {система} не добавлена — {exc.reason}")
+                f"{домен}: регион {м.REGION_NAME}/{имя_устр} для ПС {ключ_пс} не добавлен — {exc.reason}")
+    # Архивный проект не проверяется и не отдаёт историю. Активный сайт сети
+    # в архиве — это потеря измерений, а не решение о паузе: пауза опыта
+    # касается изменений сайта, не замеров.
+    if _число(проект.get("on")) == -1:
+        try:
+            client.call("edit/projects_2/projects/on",
+                        {"filters": [{"name": "id", "operator": "EQUALS", "values": [int(ид)]}],
+                         "on": 0})
+            итог["unarchived"] = итог.get("unarchived", 0) + 1
+            итог["notes"].append(f"{домен}: проект #{ид} был архивным (on=-1) — возвращён в обычные")
+        except FactoryError as exc:
+            итог["notes"].append(f"{домен}: проект #{ид} архивный, вернуть не удалось — {exc.reason}")
+
+
+def _число(значение):
+    try:
+        return int(str(значение).strip())
+    except (TypeError, ValueError):
+        return None
+
+
+_КЛЮЧИ_РЕГИОНОВ: dict[int, int | None] = {}
+_ПРОЕКТЫ_С_РЕГИОНАМИ: dict[int, dict] = {}
+
+
+def _проект_с_регионами(client, ид) -> dict | None:
+    if not _ПРОЕКТЫ_С_РЕГИОНАМИ:
+        for п in client.projects_with_regions():
+            if _число(п.get("id")) is not None:
+                _ПРОЕКТЫ_С_РЕГИОНАМИ[_число(п.get("id"))] = п
+    return _ПРОЕКТЫ_С_РЕГИОНАМИ.get(_число(ид))
+
+
+def _ключ_региона(client, ключ_пс: int, итог: dict) -> int | None:
+    """Ключ региона `REGION_NAME` для поисковой системы — из ответа сервиса.
+
+    Сначала — из уже настроенных регионов проектов аккаунта (это ключ,
+    который сервис сам записал), затем — справочник. Неоднозначность
+    (несколько разных ключей с тем же именем) — замечание, а не выбор."""
+    from factory.topvisor import manifest as м  # noqa: PLC0415
+    from factory.topvisor.measure import регионы  # noqa: PLC0415
+
+    if ключ_пс in _КЛЮЧИ_РЕГИОНОВ:
+        return _КЛЮЧИ_РЕГИОНОВ[ключ_пс]
+    ключи = {р["region_key"] for п in _ПРОЕКТЫ_С_РЕГИОНАМИ.values() for р in регионы(п)
+             if р["searcher_key"] == ключ_пс and р["region_name"] == м.REGION_NAME
+             and р["region_key"] is not None}
+    if not ключи:
+        try:
+            найдено = client.find_regions(м.REGION_NAME, ключ_пс, м.REGION_COUNTRY)
+        except FactoryError as exc:
+            итог["notes"].append(f"справочник регионов ПС {ключ_пс} не прочитан — {exc.reason}")
+            найдено = []
+        ключи = {_число(р.get("key")) for р in найдено
+                 if str(р.get("name") or "").strip() == м.REGION_NAME and _число(р.get("key")) is not None}
+    if len(ключи) != 1:
+        итог["notes"].append(
+            f"ПС {ключ_пс}: ключ региона «{м.REGION_NAME}» не определён однозначно "
+            f"({sorted(ключи) or 'не найден'}) — регион не добавляю")
+        _КЛЮЧИ_РЕГИОНОВ[ключ_пс] = None
+        return None
+    _КЛЮЧИ_РЕГИОНОВ[ключ_пс] = ключи.pop()
+    return _КЛЮЧИ_РЕГИОНОВ[ключ_пс]
+
+
+def _добавить_регион(client, полезная: dict) -> None:
+    """Имя метода — из документа; второе написание пробуется только при
+    отказе «нет такого метода» на первое (см. client.ALLOWED)."""
+    try:
+        client.call("add/positions_2/searchers/regions", полезная)
+    except FactoryError as exc:
+        if "undefined method" not in str(exc.reason).lower():
+            raise
+        client.call("add/positions_2/searchers_regions", полезная)
 
 
 def cmd_methods(args: argparse.Namespace) -> int:
@@ -378,6 +576,10 @@ def build_parser() -> argparse.ArgumentParser:
     p.set_defaults(func=cmd_plan)
     a = sub.add_parser("apply", help="выполнить бесплатные действия плана")
     a.set_defaults(func=cmd_apply)
+    sub.add_parser("measure", help="бесплатные измерения: настройки, история, цена").set_defaults(func=cmd_measure)
+    c = sub.add_parser("collect", help="платный съём в пределах лимита владельца")
+    c.add_argument("--dry-run", action="store_true", help="решить и показать, ничего не отправляя")
+    c.set_defaults(func=cmd_collect)
     sub.add_parser("methods", help="разрешённые методы и их стоимость").set_defaults(func=cmd_methods)
     return parser
 
