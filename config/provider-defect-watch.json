@@ -1,0 +1,19 @@
+{
+  "about": "Записи, пропавшие из снимка поставщика (docs/seo-operator/PROVIDER_DATA_DEFECTS.md). Проверяются после каждой доставки каталога: automation/local/provider-defect-watch.py. Снимок только читается.",
+  "watch": [
+    {
+      "slug": "chuzhaya-zhizn",
+      "title": "Чужая жизнь",
+      "lost_at": "2026-10-25",
+      "pages": ["https://zonafilm12.site/title/chuzhaya-zhizn/"],
+      "catalogs": ["/srv/lords/.frontend/zona-01-details.json", "/srv/zonafilm-cc/data/zona-02-details.json", "/srv/zonafilm12-site/data/zona-03-details.json"]
+    },
+    {
+      "slug": "izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry",
+      "title": "Изгнанный реинкарнированный тяжёлый рыцарь…",
+      "lost_at": "2026-10-26",
+      "pages": ["https://animedia.icu/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/"],
+      "catalogs": ["/srv/lords/.frontend/animedia-01-details.json"]
+    }
+  ]
+}
