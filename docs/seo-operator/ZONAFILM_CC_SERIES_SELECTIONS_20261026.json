@@ -1,0 +1,1573 @@
+{
+ "schema": "zonafilm-cc.series-selections/1",
+ "site": "zonafilm.cc",
+ "site_id": "zona-02",
+ "prepared_at": "2026-10-26",
+ "prepared_by": "seo/claude-session wt-portable-site-cell-01",
+ "status": "PREPARED_NOT_RELEASED",
+ "release_condition": "не раньше оценки zonafilm.cc 28.10 (T294/T300); см. ZONAFILM_CC_SERIES_FUNNEL_20261026.md",
+ "key": "id — постоянный идентификатор записи каталога (details[].id); slug — для чтения, при расхождении главный id",
+ "sources": {
+  "interest": "artifacts/analytics/analytics-2026-10-26.json daily_search_landing_pages 12–25.10",
+  "episodes": "/srv/zonafilm-cc/data/zona-02-details.json (04:19Z 26.10) против data-candidate (03:48Z 10.10) и zona-02-details.nums.json (15:05Z 26.10)",
+  "live": "GET https://zonafilm.cc/title/<slug>/ 26.10 ~15:30Z"
+ },
+ "collections": [
+  {
+   "key": "aktualnye-serialy",
+   "title": "Актуальные сериалы",
+   "rule": "Сериалы, на страницы которых приходили из поиска в 3 и более разных днях 12–25.10 (не меньше 5 входов, Метрика, только люди). Не «популярное у нас»: другие наши измерения — переходы и запуски видео — пока не собираются.",
+   "items": [
+    {
+     "id": "0191674b-1eee-7fd1-a9b7-933fb0efd4d2",
+     "slug": "dnevniki-vampira",
+     "url": "https://zonafilm.cc/title/dnevniki-vampira/",
+     "name": "Дневники вампира",
+     "original_name": "The Vampire Diaries",
+     "year": 2009,
+     "reason": "Мистическая драма о Елене Гилберт, которая после гибели родителей пытается вернуться к обычной жизни; на сайте доступны все восемь сезонов.",
+     "basis": {
+      "search_entries_12_25_10": 42,
+      "search_entries_19_25_10": 24,
+      "engines": {
+       "Google": 34.0,
+       "Yandex": 8.0
+      },
+      "seasons_now": [
+       [
+        7,
+        22,
+        22
+       ],
+       [
+        8,
+        16,
+        16
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        7,
+        22,
+        22
+       ],
+       [
+        8,
+        16,
+        16
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "1405406",
+      "kinopoisk": "453191"
+     },
+     "player": [
+      "kp",
+      "453191"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191674b-1eee-7fd1-a9b7-933fb0efd4d2.webp"
+    },
+    {
+     "id": "01919ffa-9abd-7862-b3e4-d3330a589849",
+     "slug": "mentalist",
+     "url": "https://zonafilm.cc/title/mentalist/",
+     "name": "Менталист",
+     "original_name": "The Mentalist",
+     "year": 2008,
+     "reason": "Детектив о Патрике Джейне — консультанте, который раскрывает преступления за счёт редкой наблюдательности; все семь сезонов на месте.",
+     "basis": {
+      "search_entries_12_25_10": 31,
+      "search_entries_19_25_10": 26,
+      "engines": {
+       "Google": 26.0,
+       "Yandex": 5.0
+      },
+      "seasons_now": [
+       [
+        6,
+        22,
+        22
+       ],
+       [
+        7,
+        12,
+        12
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        6,
+        22,
+        22
+       ],
+       [
+        7,
+        12,
+        12
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "1196946",
+      "kinopoisk": "412344"
+     },
+     "player": [
+      "kp",
+      "412344"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01919ffa-9abd-7862-b3e4-d3330a589849.webp"
+    },
+    {
+     "id": "019f031e-20f8-783f-a1ea-904b1cc78e47",
+     "slug": "el",
+     "url": "https://zonafilm.cc/title/el/",
+     "name": "Эль",
+     "original_name": "Elle",
+     "year": 2026,
+     "reason": "Новый сериал 2026 года о юности Эль Вудс в 1990-е, все восемь серий первого сезона уже доступны.",
+     "basis": {
+      "search_entries_12_25_10": 22,
+      "search_entries_19_25_10": 22,
+      "engines": {
+       "Google": 20.0,
+       "Yandex": 2.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        8,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "32020831",
+      "kinopoisk": "7530283"
+     },
+     "player": [
+      "kp",
+      "7530283"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019f031e-209c-7233-851b-f40c89620944.webp"
+    },
+    {
+     "id": "0191674c-7549-7f1c-a58f-ff2d92a465a8",
+     "slug": "vikingi",
+     "url": "https://zonafilm.cc/title/vikingi/",
+     "name": "Викинги",
+     "original_name": "Vikings",
+     "year": 2013,
+     "reason": "Историческая сага о Рагнаре и его отряде; доступны все шесть сезонов, можно смотреть с начала.",
+     "basis": {
+      "search_entries_12_25_10": 20,
+      "search_entries_19_25_10": 20,
+      "engines": {
+       "DuckDuckGo": 20.0
+      },
+      "seasons_now": [
+       [
+        5,
+        20,
+        20
+       ],
+       [
+        6,
+        20,
+        20
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        5,
+        20,
+        20
+       ],
+       [
+        6,
+        20,
+        20
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "2306299",
+      "kinopoisk": "682255"
+     },
+     "player": [
+      "kp",
+      "682255"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191674c-7549-7f1c-a58f-ff2d92a465a8.webp"
+    },
+    {
+     "id": "01a0cef8-4607-7a94-b264-85a2548b0c6a",
+     "slug": "tyurma-chernyy-ostrov",
+     "url": "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
+     "name": "Тюрьма «Черный остров»",
+     "original_name": "黑岛监狱",
+     "year": 2026,
+     "reason": "Китайский детектив 2026 года: оперативник под прикрытием попадает в тюрьму «Хэйдао», чтобы раскрыть исчезновения людей. Все 16 серий доступны.",
+     "basis": {
+      "search_entries_12_25_10": 16,
+      "search_entries_19_25_10": 10,
+      "engines": {
+       "Yandex": 6.0,
+       "Google": 10.0
+      },
+      "seasons_now": [
+       [
+        1,
+        16,
+        16
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        16,
+        16
+       ]
+      ]
+     },
+     "ids": {
+      "mdl": "756319"
+     },
+     "player": [
+      "mdl",
+      "756319"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0cef8-4469-7526-ad31-05495027920e.webp"
+    },
+    {
+     "id": "0195e6c3-3b46-7b4f-a137-a25714189113",
+     "slug": "gangsterlend",
+     "url": "https://zonafilm.cc/title/gangsterlend/",
+     "name": "Гангстерленд",
+     "original_name": "MobLand",
+     "year": 2025,
+     "reason": "Криминальная драма о войне двух лондонских кланов — Харриганов и Стивенсонов; второй сезон добрался до шести серий из шести.",
+     "basis": {
+      "search_entries_12_25_10": 15,
+      "search_entries_19_25_10": 15,
+      "engines": {
+       "Google": 14.0,
+       "Yandex": 1.0
+      },
+      "seasons_now": [
+       [
+        1,
+        10,
+        10
+       ],
+       [
+        2,
+        6,
+        6
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        10,
+        10
+       ],
+       [
+        2,
+        3,
+        3
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "31510819",
+      "kinopoisk": "5512084"
+     },
+     "player": [
+      "kp",
+      "5512084"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0dd3b-183e-7aee-ab43-f2edf42fc6db.webp"
+    },
+    {
+     "id": "01a07ac1-9a08-72ea-a7bc-f04d11f946be",
+     "slug": "ulichnyy-boec-bitva-rezhisserov",
+     "url": "https://zonafilm.cc/title/ulichnyy-boec-bitva-rezhisserov/",
+     "name": "Уличный боец: Битва Режиссеров",
+     "original_name": "스트릿 월드 파이터 : 디렉터스 워",
+     "year": 2026,
+     "reason": "Корейское шоу о режиссёрах и хореографах K-pop, спин-офф Street Woman/Man Fighter; выходит сейчас — 7 серий из 10.",
+     "basis": {
+      "search_entries_12_25_10": 15,
+      "search_entries_19_25_10": 6,
+      "engines": {
+       "Google": 15.0
+      },
+      "seasons_now": [
+       [
+        1,
+        7,
+        10
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        6,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "mdl": "810318"
+     },
+     "player": [
+      "mdl",
+      "810318"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a07ac1-97f4-7714-8106-6d336882489a.webp"
+    },
+    {
+     "id": "0192a96b-9d01-7849-9971-66cb93caf0bb",
+     "slug": "semeystvo-kardashyan",
+     "url": "https://zonafilm.cc/title/semeystvo-kardashyan/",
+     "name": "Семейство Кардашьян",
+     "original_name": "Keeping Up with the Kardashians",
+     "year": 2007,
+     "reason": "Реалити о семье Кардашьян; на сайте двадцать сезонов, включая последние.",
+     "basis": {
+      "search_entries_12_25_10": 14,
+      "search_entries_19_25_10": 6,
+      "engines": {
+       "Google": 14.0
+      },
+      "seasons_now": [
+       [
+        19,
+        5,
+        5
+       ],
+       [
+        20,
+        14,
+        14
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        19,
+        5,
+        5
+       ],
+       [
+        20,
+        14,
+        14
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "1086761",
+      "kinopoisk": "586562"
+     },
+     "player": [
+      "kp",
+      "586562"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0192a96b-9d01-7849-9971-66cb93caf0bb.webp"
+    },
+    {
+     "id": "01915163-4abc-70e2-b6be-9f6993b5b7d5",
+     "slug": "dzhentlmeny-3",
+     "url": "https://zonafilm.cc/title/dzhentlmeny-3/",
+     "name": "Джентльмены",
+     "original_name": "The Gentlemen",
+     "year": 2024,
+     "reason": "Комедийный криминальный сериал: молодой наследник обнаруживает, что его наследство связано с чужой наркоимперией. Два сезона по восемь серий.",
+     "basis": {
+      "search_entries_12_25_10": 13,
+      "search_entries_19_25_10": 13,
+      "engines": {
+       "Google": 13.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ],
+       [
+        2,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        8,
+        8
+       ],
+       [
+        2,
+        8,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "13210838",
+      "kinopoisk": "1435343"
+     },
+     "player": [
+      "kp",
+      "1435343"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01915163-4abc-70e2-b6be-9f6993b5b7d5.webp"
+    },
+    {
+     "id": "01a0beb4-b21c-73ce-a55d-02cc4eba5051",
+     "slug": "kvest-vizhna",
+     "url": "https://zonafilm.cc/title/kvest-vizhna/",
+     "name": "Квест Вижна",
+     "original_name": "VisionQuest",
+     "year": 2026,
+     "reason": "Продолжение истории Вижна после «ВандаВижн»; сериал выходит прямо сейчас — на сайте 4 серии из 8.",
+     "basis": {
+      "search_entries_12_25_10": 9,
+      "search_entries_19_25_10": 9,
+      "engines": {
+       "Google": 6.0,
+       "Yandex": 3.0
+      },
+      "seasons_now": [
+       [
+        1,
+        4,
+        8
+       ]
+      ],
+      "seasons_10_10": []
+     },
+     "ids": {
+      "imdb": "23112594",
+      "kinopoisk": "5158783"
+     },
+     "player": [
+      "kp",
+      "5158783"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0beb4-aeb2-7526-a506-a300bc471f70.webp"
+    },
+    {
+     "id": "0191671c-fe8c-739b-8a79-171e0afaf919",
+     "slug": "sverhestestvennoe-3",
+     "url": "https://zonafilm.cc/title/sverhestestvennoe-3/",
+     "name": "Сверхъестественное",
+     "original_name": "Supernatural",
+     "year": 2005,
+     "reason": "Братья Винчестеры колесят по США и расследуют паранормальные дела; все пятнадцать сезонов доступны.",
+     "basis": {
+      "search_entries_12_25_10": 9,
+      "search_entries_19_25_10": 9,
+      "engines": {
+       "Google": 2.0,
+       "Yandex": 7.0
+      },
+      "seasons_now": [
+       [
+        14,
+        20,
+        20
+       ],
+       [
+        15,
+        20,
+        20
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        14,
+        20,
+        20
+       ],
+       [
+        15,
+        20,
+        20
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "460681",
+      "kinopoisk": "178707"
+     },
+     "player": [
+      "kp",
+      "178707"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191671c-fe8c-739b-8a79-171e0afaf919.webp"
+    },
+    {
+     "id": "01916711-c5ff-7355-a77c-9bfc8f2c1d95",
+     "slug": "kak-ya-vstretil-vashu-mamu",
+     "url": "https://zonafilm.cc/title/kak-ya-vstretil-vashu-mamu/",
+     "name": "Как я встретил вашу маму",
+     "original_name": "How I Met Your Mother",
+     "year": 2005,
+     "reason": "Ситком о Теде и его друзьях и о том, как он искал свою любовь; девять сезонов — на долгие вечера.",
+     "basis": {
+      "search_entries_12_25_10": 6,
+      "search_entries_19_25_10": 6,
+      "engines": {
+       "Google": 6.0
+      },
+      "seasons_now": [
+       [
+        8,
+        24,
+        24
+       ],
+       [
+        9,
+        24,
+        24
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        8,
+        24,
+        24
+       ],
+       [
+        9,
+        24,
+        24
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "460649",
+      "kinopoisk": "401522"
+     },
+     "player": [
+      "kp",
+      "401522"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01916711-c5ff-7355-a77c-9bfc8f2c1d95.webp"
+    },
+    {
+     "id": "01a0fd54-529a-784c-a338-aa163fe94ae3",
+     "slug": "akademiya-vedm",
+     "url": "https://zonafilm.cc/title/akademiya-vedm/",
+     "name": "Академия ведьм",
+     "original_name": "Coven Academy",
+     "year": 2026,
+     "reason": "Мистика о девушке Брайар, которая поступает в закрытую школу для юных магов в Новом Орлеане; весь сезон из 21 серии уже доступен.",
+     "basis": {
+      "search_entries_12_25_10": 6,
+      "search_entries_19_25_10": 5,
+      "engines": {
+       "Yandex": 4.0,
+       "Google": 2.0
+      },
+      "seasons_now": [
+       [
+        1,
+        21,
+        21
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        10,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "36064406",
+      "kinopoisk": "9151812"
+     },
+     "player": [
+      "kp",
+      "9151812"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0fd54-51f3-7b11-82db-ffc13bbd0c37.webp"
+    }
+   ]
+  },
+  {
+   "key": "vyshli-novye-serii",
+   "title": "Вышли новые серии",
+   "rule": "Сериалы сезона 2025–2026, у которых между снимками 10.10 и 26.10 на сайте фактически прибавились доступные серии; номера новых серий подтверждены проверкой ячейки (nums) и видны на странице 26.10.",
+   "items": [
+    {
+     "id": "019feabd-93ce-7599-9be6-ad522c2725f6",
+     "slug": "lovushka-zhelaniya",
+     "url": "https://zonafilm.cc/title/lovushka-zhelaniya/",
+     "name": "Ловушка желания",
+     "original_name": "욕망의 덫",
+     "year": 2026,
+     "reason": "Корейская драма мести: героиню ложно обвиняют в убийстве. С 10.10 на сайте стало 39 серий вместо 31.",
+     "basis": {
+      "search_entries_12_25_10": 4,
+      "search_entries_19_25_10": 1,
+      "engines": {
+       "Google": 4.0
+      },
+      "seasons_now": [
+       [
+        1,
+        39,
+        100
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        31,
+        100
+       ]
+      ]
+     },
+     "ids": {
+      "mdl": "810734"
+     },
+     "player": [
+      "mdl",
+      "810734"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019feabd-92b0-7623-b1b7-ca8358858737.webp"
+    },
+    {
+     "id": "01a0f6cf-85b9-7425-a9d8-b98a2745afcc",
+     "slug": "chastnye-syschiki-zapadnoe-poberezhe",
+     "url": "https://zonafilm.cc/title/chastnye-syschiki-zapadnoe-poberezhe/",
+     "name": "Частные сыщики: Западное побережье",
+     "original_name": "Private Eyes West Coast",
+     "year": 2026,
+     "reason": "Мэтт и Энджи — уже супруги с младенцем — открывают сыскное дело в Виктории; с 10.10 вышли серии 3 и 4.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 2,
+      "engines": {
+       "Google": 2.0,
+       "Yandex": 1.0
+      },
+      "seasons_now": [
+       [
+        1,
+        4,
+        10
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        2,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "36235895",
+      "kinopoisk": "13796704"
+     },
+     "player": [
+      "kp",
+      "13796704"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0f6cf-84cd-7b11-9822-91fd339b61b9.webp"
+    },
+    {
+     "id": "01a052a4-359d-763a-bfbd-180b784f0346",
+     "slug": "bratya-9",
+     "url": "https://zonafilm.cc/title/bratya-9/",
+     "name": "Братья",
+     "original_name": "Brothers",
+     "year": 2026,
+     "reason": "Комедия, где Мэттью Макконахи и Вуди Харрельсон узнают семейную тайну; с 10.10 появились 5-я и 6-я серии из 8.",
+     "basis": {
+      "search_entries_12_25_10": 1,
+      "search_entries_19_25_10": 1,
+      "engines": {
+       "Yandex": 1.0
+      },
+      "seasons_now": [
+       [
+        1,
+        6,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        4,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "6773088",
+      "kinopoisk": "12898669"
+     },
+     "player": [
+      "kp",
+      "12898669"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a052a4-0eb9-7622-9a76-ae42d4c24579.webp"
+    },
+    {
+     "id": "01a1157c-420b-7963-a7af-57b69c71d80e",
+     "slug": "morskaya-policiya-nyu-york",
+     "url": "https://zonafilm.cc/title/morskaya-policiya-nyu-york/",
+     "name": "Морская полиция: Нью-Йорк",
+     "original_name": "NCIS: New York",
+     "year": 2026,
+     "reason": "Новый спин-офф «Морской полиции»: Сэм Ханна возвращается в нью-йоркский офис; с 10.10 вышли первые три серии.",
+     "basis": {
+      "search_entries_12_25_10": 1,
+      "search_entries_19_25_10": 1,
+      "engines": {
+       "Google": 1.0
+      },
+      "seasons_now": [
+       [
+        1,
+        3,
+        7
+       ]
+      ],
+      "seasons_10_10": []
+     },
+     "ids": {
+      "imdb": "41814550",
+      "kinopoisk": "12080544"
+     },
+     "player": [
+      "kp",
+      "12080544"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a1157c-4105-7b13-aece-1bd0776ddac0.webp"
+    },
+    {
+     "id": "01a10d1b-7c9a-71c2-a2e2-b9aae468566d",
+     "slug": "mezhdu-shagami",
+     "url": "https://zonafilm.cc/title/mezhdu-shagami/",
+     "name": "Между шагами",
+     "original_name": "연애박사",
+     "year": 2026,
+     "reason": "Корейская романтическая драма о бывшем пловце, ставшем робототехником; с 10.10 добавились серии 3–6 из 12.",
+     "basis": {
+      "search_entries_12_25_10": 1,
+      "search_entries_19_25_10": 0,
+      "engines": {
+       "Google": 1.0
+      },
+      "seasons_now": [
+       [
+        1,
+        6,
+        12
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        2,
+        12
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "39087958",
+      "kinopoisk": "13919169",
+      "mdl": "802430"
+     },
+     "player": [
+      "kp",
+      "13919169"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a10d1b-7b33-7b11-b3cf-518af14926a4.webp"
+    },
+    {
+     "id": "01944abd-4168-719c-baca-d318326b8ed2",
+     "slug": "dok",
+     "url": "https://zonafilm.cc/title/dok/",
+     "name": "Док",
+     "original_name": "Doc",
+     "year": 2025,
+     "reason": "Медицинская драма о докторе Эми Ларсен, которая потеряла память о восьми годах жизни; с 10.10 вышли серии 3–5 третьего сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        2,
+        22,
+        22
+       ],
+       [
+        3,
+        5,
+        5
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        2,
+        22,
+        22
+       ],
+       [
+        3,
+        2,
+        2
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "26748321",
+      "kinopoisk": "6458245"
+     },
+     "player": [
+      "kp",
+      "6458245"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01944abd-4168-719c-baca-d318326b8ed2.webp"
+    },
+    {
+     "id": "019888eb-8730-7e4e-8388-543d68c3e7ea",
+     "slug": "chuzhestranka-krov-ot-krovi-moey",
+     "url": "https://zonafilm.cc/title/chuzhestranka-krov-ot-krovi-moey/",
+     "name": "Чужестранка: Кровь от крови моей",
+     "original_name": "Outlander: Blood of My Blood",
+     "year": 2025,
+     "reason": "Шотландия XVIII века: Брайан Фрейзер и Эллен Маккензи на фоне борьбы братьев Маккензи за земли и титул; с 10.10 вышли серии 4–6 второго сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        10,
+        10
+       ],
+       [
+        2,
+        6,
+        6
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        10,
+        10
+       ],
+       [
+        2,
+        3,
+        3
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "18332852",
+      "kinopoisk": "5089523"
+     },
+     "player": [
+      "kp",
+      "5089523"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019888eb-8730-7e4e-8388-543d68c3e7ea.webp"
+    },
+    {
+     "id": "019cb7e3-8582-74bf-a7dd-d3de2cb768fb",
+     "slug": "chastnyy-detektiv-er-dzhey-deker",
+     "url": "https://zonafilm.cc/title/chastnyy-detektiv-er-dzhey-deker/",
+     "name": "Частный детектив Эр Джей Декер",
+     "original_name": "RJ Decker",
+     "year": 2026,
+     "reason": "Бывший фотограф после тюрьмы становится частным сыщиком в Южной Флориде; с 10.10 вышли 5-я и 6-я серии второго сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        9,
+        9
+       ],
+       [
+        2,
+        6,
+        6
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        9,
+        9
+       ],
+       [
+        2,
+        4,
+        4
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "37063558",
+      "kinopoisk": "11464269"
+     },
+     "player": [
+      "kp",
+      "11464269"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019cb7e3-8582-74bf-a7dd-d3de2cb768fb.webp"
+    },
+    {
+     "id": "019c8ef4-610f-76a4-b7aa-6aa84d5d801d",
+     "slug": "cru",
+     "url": "https://zonafilm.cc/title/cru/",
+     "name": "ЦРУ",
+     "original_name": "CIA",
+     "year": 2026,
+     "reason": "Агент ФБР и оперативник ЦРУ ведут секретную антитеррористическую группу в Нью-Йорке; с 10.10 вышли серии 2 и 3 второго сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        12,
+        12
+       ],
+       [
+        2,
+        3,
+        3
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        12,
+        12
+       ],
+       [
+        2,
+        1,
+        1
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "35515227",
+      "kinopoisk": "11054388"
+     },
+     "player": [
+      "kp",
+      "11054388"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019c8ef4-610f-76a4-b7aa-6aa84d5d801d.webp"
+    },
+    {
+     "id": "0199f699-ac60-762b-ab29-58a750b91475",
+     "slug": "golubaya-krov-boston",
+     "url": "https://zonafilm.cc/title/golubaya-krov-boston/",
+     "name": "Голубая кровь: Бостон",
+     "original_name": "Boston Blue",
+     "year": 2025,
+     "reason": "Детектив Дэнни Рейган переводится из полиции Нью-Йорка в Бостон и получает новую напарницу; с 10.10 вышли первые три серии второго сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        20,
+        20
+       ],
+       [
+        2,
+        3,
+        3
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        20,
+        20
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "35826715",
+      "kinopoisk": "7484321"
+     },
+     "player": [
+      "kp",
+      "7484321"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0199f699-ac60-762b-ab29-58a750b91475.webp"
+    },
+    {
+     "id": "0199cd3a-4066-759a-afd6-4444fd91b89c",
+     "slug": "911-nashvill",
+     "url": "https://zonafilm.cc/title/911-nashvill/",
+     "name": "911: Нашвилл",
+     "original_name": "9-1-1: Nashville",
+     "year": 2025,
+     "reason": "Пожарная часть Нэшвилла и спасатели во главе с капитаном Хартом; с 10.10 вышли первые две серии второго сезона.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        18,
+        18
+       ],
+       [
+        2,
+        2,
+        2
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        18,
+        18
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "33550053",
+      "kinopoisk": "8368127"
+     },
+     "player": [
+      "kp",
+      "8368127"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0199cd3a-4066-759a-afd6-4444fd91b89c.webp"
+    },
+    {
+     "id": "01a05292-274b-7636-869a-2a4d0f789766",
+     "slug": "drop-snegopad-saga",
+     "url": "https://zonafilm.cc/title/drop-snegopad-saga/",
+     "name": "Дроп: Снегопад. Сага.",
+     "original_name": "The Drop: A Snowfall Saga",
+     "year": 2026,
+     "reason": "Лос-Анджелес 1990-х: банды и зарождающаяся музыкальная сцена Южного Централа; с 10.10 вышли 6-я и 7-я серии из 8.",
+     "basis": {
+      "search_entries_12_25_10": 0,
+      "search_entries_19_25_10": 0,
+      "engines": {},
+      "seasons_now": [
+       [
+        1,
+        7,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        5,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "36210894",
+      "kinopoisk": "7918850"
+     },
+     "player": [
+      "kp",
+      "7918850"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a05292-0605-7622-be3b-8a6c9a82f0a2.webp"
+    }
+   ]
+  },
+  {
+   "key": "sezon-celikom",
+   "title": "Сезон целиком",
+   "rule": "Последний сезон доступен полностью: доступных серий столько же, сколько обещано поставщиком, все номера подтверждены проверкой ячейки и видны на странице 26.10.",
+   "items": [
+    {
+     "id": "01a11a9d-1fc6-749f-b5aa-5a4a74eb6452",
+     "slug": "glubina-5",
+     "url": "https://zonafilm.cc/title/glubina-5/",
+     "name": "Глубина",
+     "original_name": "Below",
+     "year": 2026,
+     "reason": "Канадский мистический триллер о рыбацком городке на Ньюфаундленде; сезон из шести серий доступен целиком.",
+     "basis": {
+      "search_entries_12_25_10": 14,
+      "search_entries_19_25_10": 14,
+      "engines": {
+       "Yandex": 14.0
+      },
+      "seasons_now": [
+       [
+        1,
+        6,
+        6
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        6,
+        6
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "35934755",
+      "kinopoisk": "14029326"
+     },
+     "player": [
+      "kp",
+      "14029326"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a11a9d-1f50-7b18-821f-5149ed0fa2d4.webp"
+    },
+    {
+     "id": "0198a209-7852-7a50-bc52-fd1590dfd2ee",
+     "slug": "chuzhoy-zemlya",
+     "url": "https://zonafilm.cc/title/chuzhoy-zemlya/",
+     "name": "Чужой: Земля",
+     "original_name": "Alien: Earth",
+     "year": 2025,
+     "reason": "Сериал во вселенной «Чужого»: корабль Weyland-Yutani с опасными образцами падает на Землю. Все восемь серий сезона.",
+     "basis": {
+      "search_entries_12_25_10": 6,
+      "search_entries_19_25_10": 0,
+      "engines": {
+       "DuckDuckGo": 6.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        8,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "13623632",
+      "kinopoisk": "4308326"
+     },
+     "player": [
+      "kp",
+      "4308326"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0198a209-7852-7a50-bc52-fd1590dfd2ee.webp"
+    },
+    {
+     "id": "01a08fc6-0023-70a9-8694-2d4d86f6eed3",
+     "slug": "legkiy-aromat-orhidei",
+     "url": "https://zonafilm.cc/title/legkiy-aromat-orhidei/",
+     "name": "Легкий аромат орхидеи",
+     "original_name": "兰香如故",
+     "year": 2026,
+     "reason": "Китайская костюмная драма о внучке опального сановника; все 47 серий доступны — можно смотреть без ожидания.",
+     "basis": {
+      "search_entries_12_25_10": 5,
+      "search_entries_19_25_10": 3,
+      "engines": {
+       "Google": 5.0
+      },
+      "seasons_now": [
+       [
+        1,
+        47,
+        47
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        47,
+        47
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "32500958",
+      "kinopoisk": "13352123",
+      "mdl": "754367"
+     },
+     "player": [
+      "kp",
+      "13352123"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a08fc5-fe4c-7526-b158-5f8e885fa44c.webp"
+    },
+    {
+     "id": "01a15d2a-8e22-76b6-871b-a5ecfcd9461e",
+     "slug": "golye-i-napugannye-na-neobitaemom-ostrove",
+     "url": "https://zonafilm.cc/title/golye-i-napugannye-na-neobitaemom-ostrove/",
+     "name": "Голые и напуганные: На необитаемом острове",
+     "original_name": "Naked and Afraid: Shipwrecked",
+     "year": 2026,
+     "reason": "Реалити о выживании: двенадцать участников оказываются ночью в открытом море. Восемь серий сезона целиком.",
+     "basis": {
+      "search_entries_12_25_10": 4,
+      "search_entries_19_25_10": 4,
+      "engines": {
+       "Yandex": 4.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": []
+     },
+     "ids": {
+      "imdb": "43697543",
+      "kinopoisk": "14708614"
+     },
+     "player": [
+      "kp",
+      "14708614"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a15d27-ecc8-7b2c-bca8-e21c06670bbe.webp"
+    },
+    {
+     "id": "01a09b3d-3cb6-7901-b888-4f1f6b60a412",
+     "slug": "kerri-3",
+     "url": "https://zonafilm.cc/title/kerri-3/",
+     "name": "Кэрри",
+     "original_name": "Carrie",
+     "year": 2026,
+     "reason": "Сериал 2026 года о девушке с телекинезом, которую травят сверстники и подавляет мать; все восемь серий уже на сайте.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 3,
+      "engines": {
+       "Yandex": 3.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": []
+     },
+     "ids": {
+      "imdb": "11540908",
+      "kinopoisk": "1343910"
+     },
+     "player": [
+      "kp",
+      "1343910"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a09b3d-3bf3-7526-8256-37525926e237.webp"
+    },
+    {
+     "id": "01a0f647-f55b-73ec-a2ec-ac030b553748",
+     "slug": "prizrachnyy-syschik",
+     "url": "https://zonafilm.cc/title/prizrachnyy-syschik/",
+     "name": "Призрачный сыщик",
+     "original_name": "魅影神捕",
+     "year": 2026,
+     "reason": "Китайский детектив-фэнтези о мастере Цин Яне в Имперском сыскном бюро; с 10.10 сезон дошёл до 30 серий из 30.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 3,
+      "engines": {
+       "Google": 3.0
+      },
+      "seasons_now": [
+       [
+        1,
+        30,
+        30
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        17,
+        30
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "37357034",
+      "kinopoisk": "13746045",
+      "mdl": "757865"
+     },
+     "player": [
+      "kp",
+      "13746045"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0f647-e52f-73ec-8358-43ee720215a1.webp"
+    },
+    {
+     "id": "01a10afe-0501-7a6c-b76c-572c17546054",
+     "slug": "smertelnye-salki",
+     "url": "https://zonafilm.cc/title/smertelnye-salki/",
+     "name": "Смертельные салки",
+     "original_name": "술래게임",
+     "year": 2026,
+     "reason": "Корейское шоу на выживание с погонями и скрытым «преследователем»; все десять выпусков доступны.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 0,
+      "engines": {
+       "Google": 3.0
+      },
+      "seasons_now": [
+       [
+        1,
+        10,
+        10
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        4,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "47742728",
+      "mdl": "811874"
+     },
+     "player": [
+      "mdl",
+      "811874"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a10afe-02fa-7b11-aa8b-ba84773d8cb7.webp"
+    },
+    {
+     "id": "019fbc0b-85dc-79e6-8a56-6665314727b5",
+     "slug": "fonari",
+     "url": "https://zonafilm.cc/title/fonari/",
+     "name": "Фонари",
+     "original_name": "Lanterns",
+     "year": 2026,
+     "reason": "Корпус Зелёных Фонарей: Джон Стюарт и Хэл Джордан расследуют убийство в американской глубинке; восемь серий сезона.",
+     "basis": {
+      "search_entries_12_25_10": 2,
+      "search_entries_19_25_10": 2,
+      "engines": {
+       "Yandex": 2.0
+      },
+      "seasons_now": [
+       [
+        1,
+        8,
+        8
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        1,
+        8,
+        8
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "26545992",
+      "kinopoisk": "5253825"
+     },
+     "player": [
+      "kp",
+      "5253825"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a01e24-67cc-74cb-a514-c3f46b69bad6.webp"
+    },
+    {
+     "id": "0191674b-c72b-77b7-88d6-14728502e7b8",
+     "slug": "detstvo-sheldona",
+     "url": "https://zonafilm.cc/title/detstvo-sheldona/",
+     "name": "Детство Шелдона",
+     "original_name": "Young Sheldon",
+     "year": 2017,
+     "reason": "Детство вундеркинда Шелдона Купера в семье, где его увлечение наукой никто не разделяет; все семь сезонов доступны полностью.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 3,
+      "engines": {
+       "Yandex": 3.0
+      },
+      "seasons_now": [
+       [
+        6,
+        22,
+        22
+       ],
+       [
+        7,
+        14,
+        14
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        6,
+        22,
+        22
+       ],
+       [
+        7,
+        14,
+        14
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "6226232",
+      "kinopoisk": "1040419"
+     },
+     "player": [
+      "kp",
+      "1040419"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191674b-c72b-77b7-88d6-14728502e7b8.webp"
+    },
+    {
+     "id": "0191675e-233e-7b5a-a34e-0b19bf8412e2",
+     "slug": "bumazhnyy-dom",
+     "url": "https://zonafilm.cc/title/bumazhnyy-dom/",
+     "name": "Бумажный дом",
+     "original_name": "La casa de papel",
+     "year": 2017,
+     "reason": "Испанская история об ограблении Королевского монетного двора; пять сезонов, последний — десять серий из десяти.",
+     "basis": {
+      "search_entries_12_25_10": 3,
+      "search_entries_19_25_10": 3,
+      "engines": {
+       "Yandex": 3.0
+      },
+      "seasons_now": [
+       [
+        4,
+        8,
+        8
+       ],
+       [
+        5,
+        10,
+        10
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        4,
+        8,
+        8
+       ],
+       [
+        5,
+        10,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "6468322",
+      "kinopoisk": "1046206"
+     },
+     "player": [
+      "kp",
+      "1046206"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191675e-233e-7b5a-a34e-0b19bf8412e2.webp"
+    },
+    {
+     "id": "019842c8-edf5-7b5e-aaf0-4904113b24fb",
+     "slug": "iz-roda-volkov",
+     "url": "https://zonafilm.cc/title/iz-roda-volkov/",
+     "name": "Из рода волков",
+     "original_name": "Wolfblood",
+     "year": 2012,
+     "reason": "Семейное фэнтези о полуволчице Мэдди, скрывающей свою природу; пять сезонов целиком.",
+     "basis": {
+      "search_entries_12_25_10": 6,
+      "search_entries_19_25_10": 4,
+      "engines": {
+       "Google": 6.0
+      },
+      "seasons_now": [
+       [
+        4,
+        12,
+        12
+       ],
+       [
+        5,
+        10,
+        10
+       ]
+      ],
+      "seasons_10_10": [
+       [
+        4,
+        12,
+        12
+       ],
+       [
+        5,
+        10,
+        10
+       ]
+      ]
+     },
+     "ids": {
+      "imdb": "2321596",
+      "kinopoisk": "707089"
+     },
+     "player": [
+      "kp",
+      "707089"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019842c8-edf5-7b5e-aaf0-4904113b24fb.webp"
+    }
+   ]
+  }
+ ]
+}

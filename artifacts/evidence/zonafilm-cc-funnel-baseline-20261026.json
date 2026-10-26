@@ -1,0 +1,194 @@
+{
+ "site": "zonafilm.cc",
+ "window": "2026-10-19..2026-10-25",
+ "source": "artifacts/analytics/analytics-2026-10-26.json (Метрика, выгрузка 26.10 05:10:50Z)",
+ "traffic_profile": {
+  "all": {
+   "visits": 6939,
+   "bounce_pct": 15.7,
+   "depth": 4.61
+  },
+  "dev:desktop": {
+   "visits": 2890,
+   "bounce_pct": 10.4,
+   "depth": 5.05
+  },
+  "src:organic": {
+   "visits": 6258,
+   "bounce_pct": 13.8,
+   "depth": 4.72
+  },
+  "robot:no": {
+   "visits": 6899,
+   "bounce_pct": 15.3,
+   "depth": 4.63
+  },
+  "dev:mobile": {
+   "visits": 2760,
+   "bounce_pct": 21.5,
+   "depth": 3.9
+  },
+  "dev:tv": {
+   "visits": 940,
+   "bounce_pct": 13.9,
+   "depth": 5.17
+  },
+  "dev:tablet": {
+   "visits": 349,
+   "bounce_pct": 17.5,
+   "depth": 5.06
+  },
+  "src:direct": {
+   "visits": 466,
+   "bounce_pct": 31.5,
+   "depth": 3.98
+  },
+  "src:internal": {
+   "visits": 191,
+   "bounce_pct": 30.4,
+   "depth": 3.2
+  },
+  "robot:yes": {
+   "visits": 40,
+   "bounce_pct": 70.0,
+   "depth": 2.33
+  },
+  "src:None": {
+   "visits": 20,
+   "bounce_pct": 95.0,
+   "depth": 1.05
+  },
+  "src:referral": {
+   "visits": 3,
+   "bounce_pct": 33.3,
+   "depth": 1.33
+  },
+  "src:messenger": {
+   "visits": 1,
+   "bounce_pct": 0.0,
+   "depth": 1.0
+  }
+ },
+ "search_entries_by_landing_type": {
+  "home": 4011.0,
+  "section": 1438.0,
+  "title": 716.0,
+  "search": 93.0
+ },
+ "search_entries_by_engine": {
+  "Yandex": 5109.0,
+  "Google": 937.0,
+  "Bing": 163.0,
+  "DuckDuckGo": 43.0,
+  "Yahoo!": 6.0
+ },
+ "search_entries_daily": {
+  "2026-10-19": {
+   "title": 55.0,
+   "home": 7.0
+  },
+  "2026-10-20": {
+   "home": 20.0,
+   "title": 58.0,
+   "section": 4.0,
+   "search": 1.0
+  },
+  "2026-10-21": {
+   "home": 228.0,
+   "title": 63.0,
+   "section": 12.0,
+   "search": 5.0
+  },
+  "2026-10-22": {
+   "home": 433.0,
+   "title": 102.0,
+   "section": 30.0,
+   "search": 7.0
+  },
+  "2026-10-23": {
+   "home": 312.0,
+   "section": 25.0,
+   "title": 91.0,
+   "search": 5.0
+  },
+  "2026-10-24": {
+   "home": 1860.0,
+   "section": 77.0,
+   "title": 125.0,
+   "search": 17.0
+  },
+  "2026-10-25": {
+   "section": 1290.0,
+   "home": 1151.0,
+   "title": 222.0,
+   "search": 58.0
+  }
+ },
+ "goal_reaches_7d": {
+  "comment_submit": 0.0,
+  "episode_select": 0.0,
+  "filter_apply": 0.0,
+  "player_error": 0.0,
+  "player_ready": 0.0,
+  "player_start": 0.0,
+  "search": 0.0,
+  "season_select": 0.0,
+  "title_view": 0.0
+ },
+ "popular_pages_7d_top": [
+  [
+   "/",
+   7595.0
+  ],
+  [
+   "/movies/",
+   7163.0
+  ],
+  [
+   "/search/",
+   4742.0
+  ],
+  [
+   "/series/",
+   2055.0
+  ],
+  [
+   "/catalog/",
+   2050.0
+  ],
+  [
+   "/new/",
+   1114.0
+  ],
+  [
+   "/collections/",
+   303.0
+  ],
+  [
+   "/animation/",
+   213.0
+  ],
+  [
+   "/doramas/",
+   189.0
+  ],
+  [
+   "/title/vozvraschenie-k-strahu/",
+   83.0
+  ],
+  [
+   "/title/taynyy-dnevnik-veriti/",
+   79.0
+  ],
+  [
+   "/title/lednikovyy-apokalipsis/",
+   77.0
+  ]
+ ],
+ "not_measured": {
+  "player_start": "цели заведены в счётчике, но витрина не вызывает reachGoal (проверено по HTML главной и страницы тайтла и по коду клиента плеера 26.10)",
+  "home_to_title_clicks": "нет событий переходов; Метрика отдаёт только страницы входа и популярные страницы, без последовательностей",
+  "internal_search_queries": "журнал nginx /var/log/nginx/access.log доступен только группе adm; приложение витрины запросы не пишет (log_message → pass)",
+  "our_automation_share": "наши проверки (urllib/curl) JS не исполняют и в Метрику не попадают; в серверных журналах не измерено (нет доступа)"
+ }
+}
