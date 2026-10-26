@@ -43,7 +43,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "bin/seo-operator",
@@ -207,8 +207,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -293,7 +293,26 @@
    "нужны_незакоммиченные": [],
    "самоотносительные": [],
    "смысловые_от_себя": [],
-   "догружаемые": [],
+   "догружаемые": [
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 29,
+     "цель": "0002_ratings_ingestion.py",
+     "разрешён": "migrations/0002_ratings_ingestion.py"
+    },
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 39,
+     "цель": "0003_ratings_local_amd.py",
+     "разрешён": "migrations/0003_ratings_local_amd.py"
+    },
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 49,
+     "цель": "0004_ratings_absence.py",
+     "разрешён": "migrations/0004_ratings_absence.py"
+    }
+   ],
    "задания_строкой": [],
    "состояние_состава": {},
    "обёртка": {
@@ -311,7 +330,11 @@
    "git_запас_переменной": "",
    "перенос": {
     "можно": false,
-    "при_условии": [],
+    "при_условии": [
+     "выпуск обязан включить migrations/0002_ratings_ingestion.py (грузится по пути из factory/ratings/store.py:29)",
+     "выпуск обязан включить migrations/0003_ratings_local_amd.py (грузится по пути из factory/ratings/store.py:39)",
+     "выпуск обязан включить migrations/0004_ratings_absence.py (грузится по пути из factory/ratings/store.py:49)"
+    ],
     "почему": [
      "/usr/local/bin/community-ratings-gateway (root) прибивает службу к рабочей копии: строка 3 — её export перекрывает Environment юнита"
     ]
@@ -373,7 +396,26 @@
    "нужны_незакоммиченные": [],
    "самоотносительные": [],
    "смысловые_от_себя": [],
-   "догружаемые": [],
+   "догружаемые": [
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 29,
+     "цель": "0002_ratings_ingestion.py",
+     "разрешён": "migrations/0002_ratings_ingestion.py"
+    },
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 39,
+     "цель": "0003_ratings_local_amd.py",
+     "разрешён": "migrations/0003_ratings_local_amd.py"
+    },
+    {
+     "файл": "factory/ratings/store.py",
+     "строка": 49,
+     "цель": "0004_ratings_absence.py",
+     "разрешён": "migrations/0004_ratings_absence.py"
+    }
+   ],
    "задания_строкой": [],
    "состояние_состава": {},
    "обёртка": null,
@@ -381,9 +423,13 @@
    "git_запас_переменной": "",
    "перенос": {
     "можно": true,
-    "при_условии": [],
+    "при_условии": [
+     "выпуск обязан включить migrations/0002_ratings_ingestion.py (грузится по пути из factory/ratings/store.py:29)",
+     "выпуск обязан включить migrations/0003_ratings_local_amd.py (грузится по пути из factory/ratings/store.py:39)",
+     "выпуск обязан включить migrations/0004_ratings_absence.py (грузится по пути из factory/ratings/store.py:49)"
+    ],
     "почему": [
-     "самоотносительных путей нет, git по корню не зовёт, состояние вне дерева"
+     "самоотносительный путь переопределяется переменной: выпуск обязан включить migrations/0002_ratings_ingestion.py (грузится по пути из factory/ratings/store.py:29); выпуск обязан включить migrations/0003_ratings_local_amd.py (грузится по пути из factory/ratings/store.py:39); выпуск обязан включить migrations/0004_ratings_absence.py (грузится по пути из factory/ratings/store.py:49)"
     ]
    }
   },
@@ -448,7 +494,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/editor-run.sh",
@@ -606,8 +652,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -896,7 +942,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1059,8 +1105,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -1113,7 +1159,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1276,8 +1322,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -1330,7 +1376,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1493,8 +1539,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -1547,7 +1593,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1710,8 +1756,8 @@
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -1830,7 +1876,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/seo-tech-publish.sh",
@@ -1987,8 +2033,8 @@
     "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -2057,7 +2103,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/seo-tech-run.sh",
@@ -2214,8 +2260,8 @@
     "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
     "var/seo-tech/auto-tasks.json": "",
     "var/seo-tech-wt": "",
-    "var/seo-tech/wt": "",
     "var/site-repos": "",
+    "var/seo-tech/wt": "",
     "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
    },
    "обёртка": null,
@@ -2266,7 +2312,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "factory/__main__.py",
@@ -2471,7 +2517,14 @@
    "нужны_незакоммиченные": [],
    "самоотносительные": [],
    "смысловые_от_себя": [],
-   "догружаемые": [],
+   "догружаемые": [
+    {
+     "файл": "factory/targets/payload_multisite.py",
+     "строка": 41,
+     "цель": "with_app_env.py",
+     "разрешён": "tests/tools/with_app_env.py"
+    }
+   ],
    "задания_строкой": [],
    "состояние_состава": {
     "var/audit/audit.jsonl": "",
@@ -2486,9 +2539,11 @@
    "git_запас_переменной": "",
    "перенос": {
     "можно": true,
-    "при_условии": [],
+    "при_условии": [
+     "выпуск обязан включить tests/tools/with_app_env.py (грузится по пути из factory/targets/payload_multisite.py:41)"
+    ],
     "почему": [
-     "самоотносительных путей нет, git по корню не зовёт, состояние вне дерева"
+     "самоотносительный путь переопределяется переменной: выпуск обязан включить tests/tools/with_app_env.py (грузится по пути из factory/targets/payload_multisite.py:41)"
     ]
    }
   },
@@ -2536,7 +2591,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "factory/qwen/mcp.py",
@@ -2695,7 +2750,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "aa40e9c",
+    "голова": "f7c403c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/yummy-sitemap/yummy-sitemap-warm.sh",
