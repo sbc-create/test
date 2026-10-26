@@ -288,7 +288,12 @@ publish_material (occurrences_in_main_block) и наличие текста на
    ОДИН повтор SOURCES_MISSING (`same_in_row` = 1) работай как обычно: по журналу
    очереди 13 из 52 таких заданий дали текст ровно после одного повтора, после двух — ни одного.
    IDENTITY_UNCLEAR закрывается сразу сознательно: 1 успех из 59 заданий против ~58
-   пустых повторов (automation/local/queue-repeat-audit.py --transitions).
+   пустых повторов (замер сценарием queue-repeat-audit.py --transitions из ветки
+   claude/nova-publish-memory-02, a053c3c; в этой копии сценария нет — запускать
+   его не нужно). Исключение: если прежний отказ шёл путём фильмов (IMDb,
+   Википедия), а у карточки есть ID Shikimori, это не повтор, а другой путь —
+   сверь название по Shikimori (26.10: так подтверждены «Гробница богов 3»
+   и «Мечта Чан Гым»).
 2. Источники (D199, config/editorial-sources.json):
    * editorial_facts {"site", "slug"} — каталог сети;
    * python3 automation/local/source_fetch.py shikimori <shikimori_id> — ID бери из

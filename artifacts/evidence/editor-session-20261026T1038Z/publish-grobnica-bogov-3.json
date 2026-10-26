@@ -1,0 +1,37 @@
+{
+ "version": 1,
+ "result": {
+  "site": "an1meg0.site",
+  "slug": "grobnica-bogov-3",
+  "title_id": "019f4215-6744-7674-bbb9-369f6aa682c8",
+  "generation_id": "qwen-grobnica-bogov-3-1793012165",
+  "items_in_store": 85,
+  "digest_mismatch": "",
+  "delivery": {
+   "backend": "overlay",
+   "entries": 85,
+   "store": "/srv/sites/animego/runtime/overlays/an1meg0.site/title-overlays.json"
+  },
+  "state": "confirmed",
+  "confirmation": {
+   "confirmed": true,
+   "url": "https://an1meg0.site/title/grobnica-bogov-3/",
+   "http": "200",
+   "occurrences_in_main_block": 1,
+   "occurrences_in_meta": 0,
+   "reason": "",
+   "attempts": 3,
+   "waited_for": "появление"
+  },
+  "warnings": [],
+  "store": "/srv/sites/animego/runtime/overlays/an1meg0.site/title-overlays.json"
+ },
+ "confirmed": true,
+ "queue_note": {
+  "task_id": "47fe2b1fe46cd404",
+  "noted": true,
+  "content_id": "request-47fe2b1fe46cd404",
+  "at": "2026-10-26T10:56:27Z",
+  "note": "публикация сообщена инструментом публикации; статус записи не менялся"
+ }
+}

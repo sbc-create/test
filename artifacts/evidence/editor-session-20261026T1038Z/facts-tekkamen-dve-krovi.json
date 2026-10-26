@@ -1,0 +1,31 @@
+{
+ "version": 1,
+ "facts": {
+  "site": "animedia.icu",
+  "site_id": "animedia-01",
+  "slug": "kosmicheskiy-rycar-tekkamen-bleyd-dve-krovi",
+  "title_id": "0199394f-1171-7108-98eb-827da23d53bd",
+  "facts": {
+   "id": "0199394f-1171-7108-98eb-827da23d53bd",
+   "name": "Космический рыцарь Теккамен Блейд: Две крови",
+   "original_name": "Tekkaman Blade: Twin Blood",
+   "year": 1998,
+   "type": "movie",
+   "genres": [
+    "аниме",
+    "боевик",
+    "научная фантастика",
+    "сёнен",
+    "меха"
+   ],
+   "countries": null,
+   "seasons": null,
+   "imdb_rating": null,
+   "playable": true,
+   "description": null,
+   "description_source": null
+  },
+  "source": "/srv/lords/.frontend/animedia-01-details.json",
+  "canonical_url": "https://animedia.icu/title/kosmicheskiy-rycar-tekkamen-bleyd-dve-krovi/"
+ }
+}

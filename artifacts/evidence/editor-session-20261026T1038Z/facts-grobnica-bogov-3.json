@@ -1,0 +1,42 @@
+{
+ "version": 1,
+ "facts": {
+  "site": "an1meg0.site",
+  "site_id": "animego-04",
+  "slug": "grobnica-bogov-3",
+  "title_id": "019f4215-6744-7674-bbb9-369f6aa682c8",
+  "facts": {
+   "id": "019f4215-6744-7674-bbb9-369f6aa682c8",
+   "name": "Гробница богов 3",
+   "original_name": "Shen Mu: Nian Fan",
+   "year": 2025,
+   "type": "tv",
+   "genres": [
+    "боевик",
+    "приключения",
+    "фэнтези",
+    "исторический",
+    "уся",
+    "мультфильм",
+    "аниме"
+   ],
+   "countries": [
+    "Япония",
+    "Китай"
+   ],
+   "seasons": [
+    {
+     "avail": 52,
+     "eps": 52,
+     "n": 3
+    }
+   ],
+   "imdb_rating": 8.3,
+   "playable": true,
+   "description": null,
+   "description_source": null
+  },
+  "source": "/srv/lords/.frontend/animego-04-details.json",
+  "canonical_url": "https://an1meg0.site/title/grobnica-bogov-3/"
+ }
+}

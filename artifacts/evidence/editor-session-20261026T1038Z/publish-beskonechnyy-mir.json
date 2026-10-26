@@ -1,0 +1,37 @@
+{
+ "version": 1,
+ "result": {
+  "site": "animedia.icu",
+  "slug": "beskonechnyy-mir",
+  "title_id": "0199b042-ceb0-7226-ab57-9cbca15e73b7",
+  "generation_id": "qwen-beskonechnyy-mir-1793011294",
+  "items_in_store": 518,
+  "digest_mismatch": "",
+  "delivery": {
+   "backend": "overlay",
+   "entries": 518,
+   "store": "/srv/sites/animedia/runtime/overlays/animedia.icu/title-overlays.json"
+  },
+  "state": "confirmed",
+  "confirmation": {
+   "confirmed": true,
+   "url": "https://animedia.icu/title/beskonechnyy-mir/",
+   "http": "200",
+   "occurrences_in_main_block": 1,
+   "occurrences_in_meta": 0,
+   "reason": "",
+   "attempts": 4,
+   "waited_for": "появление"
+  },
+  "warnings": [],
+  "store": "/srv/sites/animedia/runtime/overlays/animedia.icu/title-overlays.json"
+ },
+ "confirmed": true,
+ "queue_note": {
+  "task_id": "a7d9e06d7ab255b8",
+  "noted": true,
+  "content_id": "request-a7d9e06d7ab255b8",
+  "at": "2026-10-26T10:42:08Z",
+  "note": "публикация сообщена инструментом публикации; статус записи не менялся"
+ }
+}

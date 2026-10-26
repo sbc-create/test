@@ -1,0 +1,41 @@
+{
+ "ok": true,
+ "source_id": "src-shikimori",
+ "url": "https://shikimori.io/animes/51861",
+ "russian": "Гробница богов",
+ "name": "Shen Mu",
+ "kind": "ona",
+ "status": "released",
+ "episodes": 16,
+ "episodes_aired": 11,
+ "aired_on": "2022-07-21",
+ "released_on": "2022-10-27",
+ "description": "Юноша, воскрешённый на Кладбище богов и демонов, ищет правду о падении богов и демонов, случившемся десять тысяч лет назад, на новом континенте, возникшем от столкновения Востока и Запада. Он также пытается разгадать тайну своей возлюбленной Юй Синь, узнать о судьбе своих родителей и понять причину собственного воскрешения. Все нити причин и обид сходятся вокруг главного героя, и в итоге раскрывается история о безбрежных Шести Путях и великой шахматной партии, разыгранной небом и землёй.",
+ "english": [
+  "Tomb of Fallen Gods"
+ ],
+ "japanese": [
+  "神墓"
+ ],
+ "synonyms": [
+  "Гробница падших богов"
+ ],
+ "license_name_ru": null,
+ "studios": [
+  "Rocen",
+  "Wonder Cat Animation"
+ ],
+ "official_links": [
+  "https://list.youku.com/show/id_fcaa728a97b5497a9175"
+ ],
+ "original_creators": [
+  {
+   "person": "Dong Chen",
+   "person_ru": "Дун Чэнь",
+   "roles": [
+    "Original Creator"
+   ]
+  }
+ ],
+ "adapted_from": []
+}

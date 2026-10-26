@@ -1,0 +1,52 @@
+{
+ "ok": true,
+ "source_id": "src-shikimori",
+ "url": "https://shikimori.io/animes/62277",
+ "russian": "Гинтама: Ёшивара в огне",
+ "name": "Gintama Movie 3: Yoshiwara Daienjou",
+ "kind": "movie",
+ "status": "released",
+ "episodes": 1,
+ "episodes_aired": 0,
+ "aired_on": "2026-02-13",
+ "released_on": null,
+ "description": "Обитель вечной ночи и скрытых пороков, подземный квартал Ёсивара, годами отрезан от солнечного света и находится под тиранической властью Ночного Короля — легендарного воителя-ято по имени Хосэн. Чудаковатая троица из мастерской на все руки попадает сюда «по приглашению» уличного воришки Сэйты, который нанял Гинтоки Сакату, Кагуру и Синпати Симуру, чтобы те помогли вызволить из заточения его названую мать.\nПроникновение в охраняемый квартал быстро перерастает в настоящую войну за свободу подпольного города. Объединившись с предводительницей местной стражи Цукуё, Гинтоки бросает вызов непобедимому правителю Ёсивары, пока Кагура сталкивается со своим кровожадным братом Камуи.",
+ "english": [
+  "Gintama the Movie 2026: Yoshiwara in Flames"
+ ],
+ "japanese": [
+  "新劇場版 銀魂 -吉原大炎上-"
+ ],
+ "synonyms": [
+  "Gintama Movie 3: Yoshiwara in Flames"
+ ],
+ "license_name_ru": null,
+ "studios": [
+  "Bandai Namco Pictures"
+ ],
+ "official_links": [
+  "https://wwws.warnerbros.co.jp/shingintamamovie/"
+ ],
+ "original_creators": [
+  {
+   "person": "Hideaki Sorachi",
+   "person_ru": "Хидэаки Сорати",
+   "roles": [
+    "Original Creator"
+   ]
+  }
+ ],
+ "adapted_from": [
+  {
+   "manga_id": 44,
+   "kind": "manga",
+   "russian": "Гинтама",
+   "name": "Gintama",
+   "status": "released",
+   "publishers": [
+    "Shounen Jump (Weekly)"
+   ],
+   "url": "https://shikimori.io/mangas/44"
+  }
+ ]
+}

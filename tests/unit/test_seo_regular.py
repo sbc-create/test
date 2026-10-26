@@ -1631,6 +1631,35 @@ def test_backfill_film_needs_original_name_and_year(tmp_path):
     assert found[0]["film_args"] == ["1", "", "Full", "2021", "movie"]
 
 
+def test_backfill_title_with_mal_id_goes_to_shikimori_not_d200(tmp_path):
+    """Тайтл с ID MAL и IMDb — кандидат Shikimori, а не фильм (26.10: «Гробница
+    богов 3» шла путём D200 по общему на три сезона IMDb и закрывалась
+    IDENTITY_UNCLEAR, хотя Shikimori 61921 совпал с карточкой точно)."""
+    snap = tmp_path / "analytics-2026-10-09.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    (facts / "z-details.json").write_text(
+        json.dumps(
+            {
+                "details": {
+                    "grobnica-bogov-3": {"description": None, "name": "Гробница богов 3",
+                                         "original_name": "Shen Mu: Nian Fan", "year": 2025,
+                                         "external_ids": {"imdb": "31530980", "mal": "61921"}},
+                    "film": {"description": None, "original_name": "Film", "year": 2020,
+                             "external_ids": {"imdb": "7"}},
+                }
+            }
+        ),
+        encoding="utf-8",
+    )
+    found = {c["slug"]: c for c in regular.editor_candidates(snap, facts, set(), sites={"z.ru": "z"})}
+    аниме = found["grobnica-bogov-3"]
+    assert "source_kind" not in аниме and "film_args" not in аниме
+    assert аниме["shikimori_id"] == "61921" and аниме["shikimori_match"] == "external_ids.mal"
+    assert found["film"]["source_kind"] == "film"
+
+
 def test_backfill_films_ordered_by_imdb_votes_not_rating(tmp_path):
     """Высокая оценка на единицах голосов не обгоняет известный фильм (12.10, SOURCES_MISSING 2 из 2)."""
     snap = tmp_path / "analytics-2026-10-09.json"

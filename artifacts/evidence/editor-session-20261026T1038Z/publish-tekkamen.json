@@ -1,0 +1,37 @@
+{
+ "version": 1,
+ "result": {
+  "site": "animedia.icu",
+  "slug": "kosmicheskiy-rycar-tekkamen-bleyd-dve-krovi",
+  "title_id": "0199394f-1171-7108-98eb-827da23d53bd",
+  "generation_id": "qwen-kosmicheskiy-rycar-tekkamen-bleyd-dve-krovi-1793011514",
+  "items_in_store": 519,
+  "digest_mismatch": "",
+  "delivery": {
+   "backend": "overlay",
+   "entries": 519,
+   "store": "/srv/sites/animedia/runtime/overlays/animedia.icu/title-overlays.json"
+  },
+  "state": "confirmed",
+  "confirmation": {
+   "confirmed": true,
+   "url": "https://animedia.icu/title/kosmicheskiy-rycar-tekkamen-bleyd-dve-krovi/",
+   "http": "200",
+   "occurrences_in_main_block": 1,
+   "occurrences_in_meta": 0,
+   "reason": "",
+   "attempts": 4,
+   "waited_for": "появление"
+  },
+  "warnings": [],
+  "store": "/srv/sites/animedia/runtime/overlays/animedia.icu/title-overlays.json"
+ },
+ "confirmed": true,
+ "queue_note": {
+  "task_id": "58c68a281ce0a296",
+  "noted": true,
+  "content_id": "request-58c68a281ce0a296",
+  "at": "2026-10-26T10:45:48Z",
+  "note": "публикация сообщена инструментом публикации; статус записи не менялся"
+ }
+}

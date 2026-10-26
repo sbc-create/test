@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "prepared": {
+  "site": "an1meg0.site",
+  "slug": "grobnica-bogov-3",
+  "title_id": "019f4215-6744-7674-bbb9-369f6aa682c8",
+  "state": "verified",
+  "quality_problems": [],
+  "draft_store": "/srv/sites/animego/runtime/overlays/an1meg0.site/drafts.json"
+ },
+ "ok": true
+}

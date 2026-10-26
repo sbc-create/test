@@ -1,0 +1,38 @@
+{
+ "ok": true,
+ "source_id": "src-shikimori",
+ "url": "https://shikimori.io/animes/2300",
+ "russian": "Космический рыцарь Теккамен Блейд: Две крови",
+ "name": "Uchuu no Kishi Tekkaman Blade OVA: Twin Blood",
+ "kind": "ova",
+ "status": "released",
+ "episodes": 1,
+ "episodes_aired": 1,
+ "aired_on": "1998-06-05",
+ "released_on": null,
+ "description": "Twin Blood - это альтернативная версия первой битвы Блейда и Эвила, в которой дизайн персонажей и механизмов кардинально отличается от остальных игр серии. Блейду / Ди-Бой не нужны пегасы для трансформации, а броня больше напоминает гуманоидов Радама из Tekkaman Blade II.",
+ "english": [
+  "Tekkaman Blade: Twin Blood"
+ ],
+ "japanese": [
+  "宇宙の騎士テッカマンブレード"
+ ],
+ "synonyms": [
+  "Uchuu no Kishi Tekkaman Blade - S1 Twin Blood"
+ ],
+ "license_name_ru": null,
+ "studios": [
+  "Tatsunoko Production"
+ ],
+ "official_links": [],
+ "original_creators": [
+  {
+   "person": "Tatsuo Yoshida",
+   "person_ru": "Тацуо Ёсида",
+   "roles": [
+    "Original Creator"
+   ]
+  }
+ ],
+ "adapted_from": []
+}

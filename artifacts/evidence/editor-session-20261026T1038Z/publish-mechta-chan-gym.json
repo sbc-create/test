@@ -1,0 +1,37 @@
+{
+ "version": 1,
+ "result": {
+  "site": "an1meg0.site",
+  "slug": "mechta-chan-gym",
+  "title_id": "019c7b90-f2c7-794f-98a7-ad0fae9d1f65",
+  "generation_id": "qwen-mechta-chan-gym-1793012313",
+  "items_in_store": 86,
+  "digest_mismatch": "",
+  "delivery": {
+   "backend": "overlay",
+   "entries": 86,
+   "store": "/srv/sites/animego/runtime/overlays/an1meg0.site/title-overlays.json"
+  },
+  "state": "confirmed",
+  "confirmation": {
+   "confirmed": true,
+   "url": "https://an1meg0.site/title/mechta-chan-gym/",
+   "http": "200",
+   "occurrences_in_main_block": 1,
+   "occurrences_in_meta": 0,
+   "reason": "",
+   "attempts": 4,
+   "waited_for": "появление"
+  },
+  "warnings": [],
+  "store": "/srv/sites/animego/runtime/overlays/an1meg0.site/title-overlays.json"
+ },
+ "confirmed": true,
+ "queue_note": {
+  "task_id": "b827ac1d4fa16618",
+  "noted": true,
+  "content_id": "request-b827ac1d4fa16618",
+  "at": "2026-10-26T10:59:06Z",
+  "note": "публикация сообщена инструментом публикации; статус записи не менялся"
+ }
+}

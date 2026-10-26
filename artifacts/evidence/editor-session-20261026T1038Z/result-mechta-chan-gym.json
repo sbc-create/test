@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "result": {
+  "task_id": "b827ac1d4fa16618",
+  "status": "READY_VERIFIED",
+  "queue_status": "VERIFIED",
+  "attempts": 0,
+  "next_attempt_at": "",
+  "label_ignored": false,
+  "gate": {
+   "ok": true,
+   "classification": "PASS",
+   "issues": [],
+   "body_word_count": 46,
+   "fact_count": 4,
+   "reject_reason": "",
+   "status": "READY_VERIFIED"
+  },
+  "next_action": "задание закрыто, можно брать следующее через editorial_queue_next"
+ }
+}

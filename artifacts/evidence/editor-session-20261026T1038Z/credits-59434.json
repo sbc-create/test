@@ -1,0 +1,41 @@
+{
+ "ok": true,
+ "source_id": "src-shikimori",
+ "url": "https://shikimori.io/animes/59434",
+ "russian": "Гробница богов 2",
+ "name": "Shen Mu 2nd Season",
+ "kind": "ona",
+ "status": "released",
+ "episodes": 27,
+ "episodes_aired": 26,
+ "aired_on": "2024-08-10",
+ "released_on": "2025-02-01",
+ "description": "Второй сезон «Гробница богов».",
+ "english": [
+  "Tomb of Fallen Gods 2nd Season"
+ ],
+ "japanese": [
+  "神墓 第二季"
+ ],
+ "synonyms": [
+  "Гробница павших богов 2",
+  "Гробница падших богов 2"
+ ],
+ "license_name_ru": null,
+ "studios": [
+  "Wonder Cat Animation"
+ ],
+ "official_links": [
+  "https://v.youku.com/video?vid=XNjQxMzE0MTQ1Ng"
+ ],
+ "original_creators": [
+  {
+   "person": "Dong Chen",
+   "person_ru": "Дун Чэнь",
+   "roles": [
+    "Original Creator"
+   ]
+  }
+ ],
+ "adapted_from": []
+}

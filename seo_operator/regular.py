@@ -2870,8 +2870,20 @@ def editor_candidates(
                 shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
                 if not mine.get("playable", True):
                     continue
+                mal = (mine.get("external_ids") or {}).get("mal")
                 if shiki.get("match_state") == "external_id_exact+title_verified":
                     оценка = shiki.get("value") or 0
+                elif mal and not shiki:
+                    # ID Shikimori из каталога (MAL и Shikimori нумеруют тайтлы
+                    # одинаково): путь Shikimori, а не D200. Прежде такой тайтл с
+                    # IMDb уходил в фильмы, и редактор закрывал его IDENTITY_UNCLEAR
+                    # по статье Википедии, которой нет: 26.10 четыре из 75
+                    # удержанных — «Гробница богов» 1–3 (один IMDb на три сезона),
+                    # «Мечта Чан Гым»; по ID Shikimori название совпало точно
+                    # (artifacts/evidence/identity-unclear-audit-20261026.json).
+                    # Совпадение названия проверяет редактор, как для всех.
+                    shiki = {"external_id": str(mal), "match_state": "external_ids.mal"}
+                    оценка = 0
                 elif ((mine.get("external_ids") or {}).get("imdb") and not shiki
                       and (mine.get("original_name") or "").strip() and mine.get("year")):
                     # Фильм в запас — только с оригинальным названием и годом:

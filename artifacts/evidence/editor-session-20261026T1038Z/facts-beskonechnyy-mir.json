@@ -1,0 +1,36 @@
+{
+ "version": 1,
+ "facts": {
+  "site": "animedia.icu",
+  "site_id": "animedia-01",
+  "slug": "beskonechnyy-mir",
+  "title_id": "0199b042-ceb0-7226-ab57-9cbca15e73b7",
+  "facts": {
+   "id": "0199b042-ceb0-7226-ab57-9cbca15e73b7",
+   "name": "Бесконечный мир",
+   "original_name": "The Infinitors",
+   "year": 2022,
+   "type": "tv",
+   "genres": [
+    "аниме",
+    "боевик",
+    "фэнтези",
+    "сверхъестественное"
+   ],
+   "countries": null,
+   "seasons": [
+    {
+     "avail": 16,
+     "eps": 16,
+     "n": 1
+    }
+   ],
+   "imdb_rating": null,
+   "playable": true,
+   "description": null,
+   "description_source": null
+  },
+  "source": "/srv/lords/.frontend/animedia-01-details.json",
+  "canonical_url": "https://animedia.icu/title/beskonechnyy-mir/"
+ }
+}

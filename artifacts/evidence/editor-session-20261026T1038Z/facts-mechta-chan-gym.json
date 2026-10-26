@@ -1,0 +1,33 @@
+{
+ "version": 1,
+ "facts": {
+  "site": "an1meg0.site",
+  "site_id": "animego-04",
+  "slug": "mechta-chan-gym",
+  "title_id": "019c7b90-f2c7-794f-98a7-ad0fae9d1f65",
+  "facts": {
+   "id": "019c7b90-f2c7-794f-98a7-ad0fae9d1f65",
+   "name": "Мечта Чан Гым",
+   "original_name": null,
+   "year": null,
+   "type": "tv",
+   "genres": [
+    "аниме"
+   ],
+   "countries": null,
+   "seasons": [
+    {
+     "avail": 26,
+     "eps": 26,
+     "n": 1
+    }
+   ],
+   "imdb_rating": 8.0,
+   "playable": true,
+   "description": null,
+   "description_source": null
+  },
+  "source": "/srv/lords/.frontend/animego-04-details.json",
+  "canonical_url": "https://an1meg0.site/title/mechta-chan-gym/"
+ }
+}

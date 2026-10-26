@@ -1,0 +1,63 @@
+{
+ "ok": true,
+ "source_id": "src-shikimori",
+ "url": "https://shikimori.io/animes/49098",
+ "russian": "Путешествие на Запад: Судьба",
+ "name": "Xi Xing Ji: Suming Pian",
+ "kind": "ona",
+ "status": "released",
+ "episodes": 20,
+ "episodes_aired": 18,
+ "aired_on": "2021-06-02",
+ "released_on": "2021-07-28",
+ "description": "Третий сезон сериала Си Син Цзи.",
+ "english": [
+  "The Westward 3rd Season"
+ ],
+ "japanese": [
+  "西行纪之宿命篇"
+ ],
+ "synonyms": [
+  "Путешествие на Запад 3",
+  "Xi Xing Ji 3rd Season",
+  "Journey to the West",
+  "Westbound",
+  "Westbound Discipline"
+ ],
+ "license_name_ru": null,
+ "studios": [
+  "BYMENT"
+ ],
+ "official_links": [
+  "http://v.qq.com/detail/0/0gsf9fytppje54d.html"
+ ],
+ "original_creators": [
+  {
+   "person": "Zhi Hui Deng",
+   "person_ru": "Чи Фай Тан",
+   "roles": [
+    "Original Character Design"
+   ]
+  },
+  {
+   "person": "Jian He Zheng",
+   "person_ru": "Цзяньхэ Чжэн",
+   "roles": [
+    "Original Creator"
+   ]
+  }
+ ],
+ "adapted_from": [
+  {
+   "manga_id": 109143,
+   "kind": "manhua",
+   "russian": "Путешествие на Запад",
+   "name": "Xi Xing Ji",
+   "status": "ongoing",
+   "publishers": [
+    "u17"
+   ],
+   "url": "https://shikimori.io/mangas/109143"
+  }
+ ]
+}
