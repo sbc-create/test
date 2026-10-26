@@ -103,13 +103,71 @@ sources:
     conclusions:
       - "Frontmatter: name, description, tools, disallowedTools, model, permissionMode, maxTurns, skills, memory, effort."
 
+  # ---------- Топвизор: официальная документация (задание владельца 26.10.2026) ----------
+  - id: SRC-TOPVISOR-API-POSITIONS
+    kind: official_documentation
+    owner: Topvisor
+    url: https://topvisor.com/ru/api/v2-services/positions_2/
+    retrieved_at: "2026-10-26T07:30:00Z"
+    purpose: "методы сервиса позиций: история, цена и запуск съёма, поисковые системы и регионы"
+    status: approved
+    conclusions:
+      - "get/positions_2/history: project_id, regions_indexes, dates или date1/date2; позиция — число или '--' (не найден); по архивным проектам не работает."
+      - "get/positions_2/checker/price: filters (проекты), regions_indexes; ответ price/priceOriginal по владельцам."
+      - "edit/positions_2/checker/go: filters, regions_indexes, do_snapshots; запуск съёма (платный)."
+      - "add/positions_2/searchers: project_id, searcher_key (0 — Яндекс, 1 — Google)."
+      - "Добавление региона: project_id, searcher_key, region_key, region_lang, region_device (0 ПК, 1 планшет, 2 смартфон), region_depth (1–3 Яндекс, 1–10 Google), region_alt. Имя метода в документе двоякое: оглавление — add/positions_2/searchers/regions, заголовок страницы — add/positions_2/searchers_regions."
+      - "edit/positions_2/settings: снимки, сниппеты, поддомены, фильтр, исправление опечаток; расписания здесь нет."
+  - id: SRC-TOPVISOR-API-PROJECTS
+    kind: official_documentation
+    owner: Topvisor
+    url: https://topvisor.com/ru/api/projects-2/projects/get/
+    retrieved_at: "2026-10-26T07:32:00Z"
+    purpose: "список проектов с поисковыми системами и регионами; статус проекта"
+    status: approved
+    conclusions:
+      - "get/projects_2/projects: show_searchers_and_regions (0 — нет, 1 — включённые, 2 — все регионы), include_positions_summary, fields, filters."
+      - "edit/projects_2/projects/on: on = 0 — обычный проект, -1 — архивный (topvisor.com/ru/api/projects-2/projects/edit-projects-on/)."
+  - id: SRC-TOPVISOR-API-SCHEDULE-REGIONS
+    kind: official_documentation
+    owner: Topvisor
+    url: https://topvisor.com/ru/api/v2-services/schedule_2/schedule/edit/
+    retrieved_at: "2026-10-26T07:40:00Z"
+    purpose: "расписание автоматических проверок через API; справочник регионов"
+    status: approved
+    conclusions:
+      - "edit/schedule_2: type, target_id, schedule[] (times: hour/minute; days: ALL, YANDEX_UPDATE, AFTER_CHECK, дни недели, числа, LAST_OF_MONTH)."
+      - "get/system_2/common/regions: searcher_key, search (обязательны), country_code, only_countries (topvisor.com/ru/api/v2-services/system_2/common/get-regions/)."
+  - id: SRC-TOPVISOR-PRICING
+    kind: official_pricing
+    owner: Topvisor
+    url: https://topvisor.com/ru/pricing/
+    retrieved_at: "2026-10-26T07:36:00Z"
+    purpose: "цена проверки позиций и тарифы; состояние Яндекс Search API"
+    status: approved
+    conclusions:
+      - "Проверка позиций: 0,09 ₽ за запрос (Яндекс и Google) на XS; S 0,081 ₽ (999 ₽/мес), M 0,077 ₽ (2 990), L 0,072 ₽ (9 990), XL 0,063 ₽ (29 990). Дата прейскуранта на странице не указана."
+      - "«Проверки в Яндекс Search API частично возобновлены»: вручную и автоматически — 20:00–05:59 МСК; в другое время — режим «Яндекс SERP»."
+  - id: SRC-TOPVISOR-SUPPORT-SCHEDULE
+    kind: official_documentation
+    owner: Topvisor
+    url: https://topvisor.com/ru/support/rankings/tracker/schedule/
+    retrieved_at: "2026-10-26T07:38:00Z"
+    purpose: "автоматические проверки в интерфейсе"
+    status: approved
+    conclusions:
+      - "Расписание: по дням недели/месяца или после апдейтов Яндекса; опция «Не проверять по расписанию, если проверка в этот день уже была»."
+      - "Автоматическая проверка идёт по всем активным ПС, регионам и группам проекта."
+
   # ---------- источники, недоступные из-за egress policy ----------
   - id: SRC-TOPVISOR-YANDEX-SERP-NOTICE
     kind: official_announcement
     owner: Topvisor
     url: https://topvisor.com/ru/news/
     retrieved_at: "2026-10-13T18:05:00Z"
-    status: unavailable_blocked
+    status: superseded
+    superseded_by: SRC-TOPVISOR-PRICING
+    note: "26.10.2026: /ru/news/ отвечает 404; состояние Яндекс Search API взято со страниц /ru/pricing/ и /ru/support/rankings/tracker/"
     evidence: "PreToolUse WebFetch: хост «topvisor.com» не внесён в inventory (13.10 ~18:05Z); список хостов сессия не расширяет"
     required_for: "сообщение Topvisor о недоступности Яндекс Search API для съёма позиций; оставшиеся режимы съёма Яндекса, их глубина и цена за проверку"
   - id: SRC-YANDEX-SEARCH-API-PRICING

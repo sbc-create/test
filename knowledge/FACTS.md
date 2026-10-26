@@ -77,3 +77,16 @@
 | F6.8 | Playwright отдаёт `httpCredentials` только в ответ на 401. Chromium повторяет запрос сам, Firefox — нет; стенд закрыт Basic-авторизацией до любой отдачи. | прогон `--project=firefox` до и после `send: 'always'` |
 | F6.9 | Публично слушают только 22, 80 и 443. PostgreSQL слушает `127.0.0.1:5432`. | `ss -tulpn`, health-check `public_ports` |
 | F6.10 | Ни одного домена, DNS-зоны, лицензии DLE, контракта интеграции и SSH-цели на сервер не передано: `production_capable: false`. | `inventory/*.yaml` — пустые списки |
+
+## F7. Топвизор и поисковые данные (официальная документация и измерения 26.10.2026)
+
+| # | Факт | Источник |
+|---|---|---|
+| F7.1 | Поисковые системы и регионы проекта читаются `get/projects_2/projects` с `show_searchers_and_regions` (2 — все регионы, с индексами); экспорт регионов — `get/positions_2/searchers/regions/export` (CSV без заголовка). Метода `get/projects_2/searchers` у API нет. | SRC-TOPVISOR-API-PROJECTS; живой вызов экспорта — аудит seo-engine 19.09.2026 |
+| F7.2 | Живое чтение 19.09.2026: у yummyani.biz, yummyani.org, yummyani.site, 1lordserials1.online, lordserial33.biz, lordfilm47.space — Яндекс и Google, регион «Россия», ПК, глубина 1; история пуста; цена одного съёма 7,38–14,94 ₽; у zonafilm.space регионов нет. | `artifacts/evidence/topvisor-operations-audit-02/raw/topvisor-live-readonly.json` в wt-seo-operator-v2-01 |
+| F7.3 | Ежедневный инвентарь seo-engine (`seo-engine-topvisor-inventory.timer`) работает в «лёгком» режиме: поисковые системы, регионы и история не читаются (`_lean_transport`), поэтому `engines: []`, `regions: []`, `NOT_READ_SAFETY` — свойство сборщика, а не аккаунта. Поле `on` он сводит к булеву `bool(int(on))`. | `seo_engine/services/daily_inventory_sync.py`, `provider_inventory_sync.py` |
+| F7.4 | История позиций: позиция — число или `'--'` (не найден в пределах проверенной глубины); по архивным проектам (`on = -1`) история и съём не работают. | SRC-TOPVISOR-API-POSITIONS |
+| F7.5 | Цена проверки — 0,09 ₽ за запрос на XS; Яндекс Search API доступен 20:00–05:59 МСК, в остальное время — «Яндекс SERP». | SRC-TOPVISOR-PRICING |
+| F7.6 | Органика Метрики 12–25.10.2026 по устройствам (без роботов): смартфоны 39–76 %, ПК 22–55 % по сайтам с поисковым трафиком. | `var/analytics/cabinet-latest.json`, `daily_traffic_profile` |
+| F7.7 | B023: с этого хоста TCP до 213.180.193.0/24 (api.webmaster.yandex.net) и 87.250.250.242 — нет SYN-ACK, RST и ICMP; путь обрывается после 149.11.20.46; до 213.180.204.0/24 путь иной и рабочий. Отказ — до TLS и до проверки токена. | `artifacts/evidence/b023-path-20261026.json` |
+
