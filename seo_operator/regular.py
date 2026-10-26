@@ -2754,6 +2754,7 @@ def editor_candidates(
     sites: dict[str, str] | None = None,
     needs_source: list[dict] | None = None,
     blocked: set[str] | None = None,
+    held_urls: set[str] | None = None,
 ) -> list[dict]:
     """Что редактору брать, когда очередь пуста: по трафику, с причиной.
 
@@ -2762,7 +2763,16 @@ def editor_candidates(
       только на space, icu — контроль пилота (MOD-25).
     Визиты на серии засчитываются тайтлу: интерес к тайтлу — это они.
     `sites` — домены и их снимки; по умолчанию EDITOR_SITES.
+    `held_urls` — адреса, закрытые последним исходом (`result_holds`): отказ в
+    идентификации держит карточку, а не произведение, и сетевой `blocked` его
+    не видит. Без этого an1meg0.site/vladyka-duhovnogo-mecha (IDENTITY_UNCLEAR
+    третий раз подряд 24.10) 26.10 снова стоял в кандидатах.
     """
+    held = {u.rstrip("/").lower() for u in (held_urls or ())}
+
+    def _закрыт(domain: str, slug: str) -> bool:
+        return f"https://{domain}/title/{slug}".lower() in held
+
     if sites is None:
         # Исключённые из написания текстов сайты (решение владельца 25.10.2026)
         # кандидатов не получают: factory.cell.withdrawn — единый признак.
@@ -2794,7 +2804,7 @@ def editor_candidates(
     # пар icu/space было 9). Другому домену — другая тема или другой формат.
     taken = WorkSet({work_key(x) for _, x in published} | {work_key(x) for x in blocked or ()})
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
-        if (domain, slug) in published or work_key(slug) in taken:
+        if (domain, slug) in published or work_key(slug) in taken or _закрыт(domain, slug):
             continue
         mine = (details.get(domain) or {}).get(slug)
         if not mine:
@@ -2869,6 +2879,7 @@ def editor_candidates(
                 if (
                     (domain, slug) in seen
                     or work_key(slug) in taken
+                    or _закрыт(domain, slug)
                     or (mine.get("description") or "").strip()
                 ):
                     continue
@@ -3085,14 +3096,15 @@ def step_candidates(ctx: Context) -> Any:
         return {"snapshot": None, "candidates": []}
     published = {(i["domain"], i["slug"]) for i in published_items()}
     needs: list[dict] = []
+    held, net_blocked = result_holds(ctx.sources["queue_events"], ctx.now)
     found = editor_candidates(
         snaps[-1],
         ctx.sources["facts_snapshots"],
         published,
         needs_source=needs,
-        blocked=blocked_slugs(ctx.sources["queue_events"], ctx.now),
+        blocked=net_blocked,
+        held_urls=held,
     )
-    held, net_blocked = result_holds(ctx.sources["queue_events"], ctx.now)
     found = (
         yummy_demand_candidates(snaps[-1], published, blocked=net_blocked, held_urls=held) + found
     )

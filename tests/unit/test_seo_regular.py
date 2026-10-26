@@ -1476,6 +1476,33 @@ def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
     assert [(n["slug"], n["source_plan"]) for n in needs] == [("no-id", regular.SOURCE_PLAN[None])]
 
 
+def test_editor_candidates_skip_url_held_by_identity_refusal(tmp_path):
+    """Отказ в идентификации держит карточку (не произведение): адрес из
+    held_urls не предлагается ни по трафику, ни в запас; соседний — да."""
+    snap = tmp_path / "analytics-2026-10-26.json"
+    snap.write_text(json.dumps({"domains": [{"domain": "an1meg0.site", "measurements": [{
+        "key": "popular_pages", "measured": True,
+        "value": [{"dimensions": [{"name": "/title/held-hot/"}], "metrics": [9.0]},
+                  {"dimensions": [{"name": "/title/free-hot/"}], "metrics": [5.0]}]}]}]}),
+        encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    def карточка(имя, mal):
+        return {"name": имя, "description": None, "external_ids": {"mal": mal}, "year": 2020}
+    (facts / "animego-04-details.json").write_text(json.dumps({"details": {
+        "held-hot": карточка("Горячая удержанная", "1"),
+        "free-hot": карточка("Горячая свободная", "2"),
+        "held-cold": карточка("Запас удержанный", "3"),
+        "free-cold": карточка("Запас свободный", "4"),
+    }}), encoding="utf-8")
+    held = {"https://an1meg0.site/title/held-hot", "https://an1meg0.site/title/held-cold/"}
+    found = regular.editor_candidates(snap, facts, set(), sites={"an1meg0.site": "animego-04"},
+                                      held_urls=held)
+    slugs = {c["slug"] for c in found}
+    assert {"free-hot", "free-cold"} <= slugs
+    assert not slugs & {"held-hot", "held-cold"}
+
+
 def test_visible_publication_is_rechecked_daily_to_catch_loss_after_data_update(
     env, tmp_path, monkeypatch
 ):
