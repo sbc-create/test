@@ -18,6 +18,8 @@ from __future__ import annotations
 import importlib.util
 import io
 import json
+import re
+import subprocess
 import shutil
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -71,12 +73,34 @@ def дерево(tmp_path: Path, текст: str, *, очередь=None, сле
     корень = tmp_path / "дерево"
     (корень / "seo_operator").mkdir(parents=True, exist_ok=True)
     (корень / "seo_operator" / "tech_run.py").write_text(текст, encoding="utf-8")
+    # Соседние модули механизма КОПИРУЮТСЯ, а не перечисляются. 26.10 механизм
+    # получил зависимость `paths.py` (корни состояния и реестров, MOD-198), и
+    # стенд перестал собираться: 15 проверок падали с
+    # «FileNotFoundError: …/дерево/seo_operator/paths.py». Ручной список рядом
+    # с деревом, которое само знает состав, — класс 47 в
+    # docs/RECURRING_FAILURES.md. Поэтому состав берётся из ТЕКСТА механизма:
+    # и обычный импорт пакета, и загрузка соседнего файла по имени.
+    соседи = set(re.findall(r"from\s+seo_operator\s+import\s+([\w, ]+)", текст))
+    имена = {и.strip() + ".py" for г in соседи for и in г.split(",") if и.strip()}
+    имена |= set(re.findall(r'with_name\(\s*[\"\']([\w.-]+\.py)[\"\']', текст))
+    for имя in sorted(имена):
+        исходный = МЕХАНИЗМ.parent / имя
+        if исходный.is_file():
+            (корень / "seo_operator" / имя).write_text(
+                исходный.read_text(encoding="utf-8"), encoding="utf-8")
     (корень / "config").mkdir(parents=True, exist_ok=True)
     (корень / "config" / "seo-tech-queue.json").write_text(
         json.dumps(очередь if очередь is not None else ОЧЕРЕДЬ_ДЕРЕВА,
                    ensure_ascii=False), encoding="utf-8")
     состояние = корень / "var" / "seo-tech"
     состояние.mkdir(parents=True, exist_ok=True)
+    # Механизм с 26.10 требует, чтобы живые реестры читались из рабочей копии
+    # под git (RegistryRootError, MOD-198) — и это верно: каталог выпуска
+    # реестрами распоряжаться не должен. Значит подставное дерево обязано быть
+    # рабочей копией, а не просто каталогом. Коммит не нужен: проверяется
+    # наличие .git.
+    subprocess.run(["git", "init", "-q", str(корень)], check=True,
+                   capture_output=True)
     if следы:
         (состояние / "claims.jsonl").write_text("", encoding="utf-8")
         (состояние / "runs.jsonl").write_text("", encoding="utf-8")
