@@ -109,3 +109,33 @@ def test_задание_модели_получает_фактический_к�
     текст = r.stdout
     assert str(состояние / каталог) in текст
     assert not _re.search(r"(?<![/\w])" + _re.escape(каталог), текст), "в задании остался путь от корня копии"
+
+
+@pytest.mark.parametrize("обёртка, задание", [
+    ("automation/host/editor/editor-run.sh", "docs/editor/EDITOR_RUN_PROMPT.md"),
+    ("automation/host/editor/seo-tech-run.sh", "docs/seo-tech/SEO_TECH_RUN_PROMPT.md"),
+])
+def test_обёртка_берёт_код_и_задание_из_выпуска_а_состояние_из_копии(обёртка, задание, tmp_path):
+    """SEO_CODE_ROOT: cd в каталог выпуска, задание — оттуда же; состояние и
+    реестры без своих переменных остаются в рабочей копии и передаются Python."""
+    строки = (КОПИЯ / обёртка).read_text(encoding="utf-8").splitlines()
+    начало = строки.index("WORKTREE=/home/claude/wt-portable-site-cell-01")
+    корни = строки[начало:начало + 4]
+    состояние = next(s for s in строки if s.startswith("STATE="))
+    подстановка = next(s for s in строки if s.startswith('PROMPT="$(sed'))
+    выпуск = tmp_path / "release"
+    (выпуск / задание).parent.mkdir(parents=True)
+    (выпуск / задание).write_text("МЕТКА-ВЫПУСКА var/editor-runs var/seo-tech\n", encoding="utf-8")
+    сценарий = "\n".join([*корни, состояние, 'cd "$REPO" || exit 9', подстановка,
+                          'printf "%s|%s|%s|%s" "$PWD" "$SEO_STATE_ROOT" "$SEO_REGISTRY_ROOT" "$PROMPT"'])
+    среда = {k: v for k, v in os.environ.items()
+             if k not in ("SEO_STATE_ROOT", "SEO_REGISTRY_ROOT", "SEO_TECH_STATE")}
+    r = subprocess.run(["bash", "-c", сценарий], env={**среда, "SEO_CODE_ROOT": str(выпуск), "RUN_ID": "R1"},
+                       capture_output=True, text=True, timeout=30)
+    assert r.returncode == 0, r.stderr
+    кат, сост, реестр, текст = r.stdout.split("|", 3)
+    assert Path(кат) == выпуск
+    assert "МЕТКА-ВЫПУСКА" in текст, "задание читается не из каталога выпуска"
+    копия = "/home/claude/wt-portable-site-cell-01"
+    assert сост == копия and реестр == копия
+    assert f"{копия}/var/" in текст and str(выпуск) + "/var" not in текст

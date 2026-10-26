@@ -16,7 +16,14 @@
 # блокировки недоступны для записи (НЕ «занято»); 75 — занято другим прогоном.
 set -uo pipefail
 
-REPO=/home/claude/wt-portable-site-cell-01
+# Корни (MOD-198): код — SEO_CODE_ROOT (каталог выпуска; задание модели читается
+# оттуда же — после cd), состояние и живые реестры — рабочая копия, пока юнит не
+# задал иное. Python получает те же корни через окружение (seo_operator.paths):
+# без этого в выпуске код и состояние разошлись бы по разным корням.
+WORKTREE=/home/claude/wt-portable-site-cell-01
+REPO="${SEO_CODE_ROOT:-$WORKTREE}"
+export SEO_STATE_ROOT="${SEO_STATE_ROOT:-$WORKTREE}"
+export SEO_REGISTRY_ROOT="${SEO_REGISTRY_ROOT:-$WORKTREE}"
 STATE="${SEO_TECH_STATE:-${SEO_STATE_ROOT:-$REPO}/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
 CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${SEO_TECH_TRIGGER:-manual}"
