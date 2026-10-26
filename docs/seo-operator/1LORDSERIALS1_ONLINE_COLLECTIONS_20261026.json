@@ -1,0 +1,507 @@
+{
+ "schema": "lords.collections/1",
+ "site": "1lordserials1.online",
+ "site_id": "lords-03",
+ "prepared_at": "2026-10-26",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id (решение владельца витрины 26.10)",
+ "direction_rule": "1lordserials1.online — профиль «фильмы и сериалы» (паспорт lords-03, seo_profile.site_direction = films_series): только игровые фильмы и сериалы; аниме, анимация и дорамы — в своих разделах; состав не повторяет подборки Zona и соседнего Lords",
+ "pause": "публикация Lords на паузе до оценки 28.10 (PAUSED_PUBLISH); выпуск — после неё, механизмом ручного состава T337",
+ "collections": [
+  {
+   "key": "britanskie-komedii-korotkie",
+   "title": "Британские комедии: короткие сезоны по 6–8 серий",
+   "viewer_request": "Какую короткую комедию посмотреть за вечер-другой?",
+   "intro": "Комедийные сериалы производства Великобритании (по данным каталога) с короткими сезонами: от мрачного юмора до подростковых историй. Порядок — от комедий о взрослых к подростковым и абсурдным. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 работам; тема «что посмотреть вечером»; отличается от автоматической genre_komediya отбором по стране и длине сезона; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019167ee-ec75-7aaa-801f-5851e88710c6",
+     "slug": "dryan-4",
+     "url": "https://1lordserials1.online/title/dryan-4/",
+     "name": "Дрянь",
+     "original_name": "Fleabag",
+     "year": 2016,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       6,
+       6
+      ]
+     ],
+     "reason": "Остроумная и упивающаяся горестями лондонка бросается на баррикады повседневности; два сезона по 6 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.7 (252807 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019167ee-ec75-7aaa-801f-5851e88710c6.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "019151e1-447e-79a5-ad89-a20cc9af587c",
+     "slug": "sledom-za-zhiznyu",
+     "url": "https://1lordserials1.online/title/sledom-za-zhiznyu/",
+     "name": "Следом за жизнью",
+     "original_name": "After Life",
+     "year": 2019,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       3,
+       6,
+       6
+      ]
+     ],
+     "reason": "После смерти жены Тони решает жить дальше и говорить всё, что думает; три сезона по 6 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.4 (171515 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019151e1-447e-79a5-ad89-a20cc9af587c.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 18 = в каталоге 18; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01920ffb-d719-78ec-8fd5-593321e2224f",
+     "slug": "iskateli-sokrovisch",
+     "url": "https://1lordserials1.online/title/iskateli-sokrovisch/",
+     "name": "Искатели сокровищ",
+     "original_name": "Detectorists",
+     "year": 2014,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       7,
+       7
+      ],
+      [
+       3,
+       6,
+       6
+      ]
+     ],
+     "reason": "Археологи-любители Энди и Лэнс мечтают найти саксонский клад; три сезона.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.6 (27042 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01920ffb-d719-78ec-8fd5-593321e2224f.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 19 = в каталоге 19; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "019174ee-39e2-71f4-9c33-ada295231f28",
+     "slug": "devchonki-iz-derri",
+     "url": "https://1lordserials1.online/title/devchonki-iz-derri/",
+     "name": "Девчонки из Дерри",
+     "original_name": "Derry Girls",
+     "year": 2018,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "reason": "1994 год, Северная Ирландия: Эрин, её семья и подруги — шесть серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.5 (79778 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019174ee-39e2-71f4-9c33-ada295231f28.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 6 = в каталоге 6; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01926341-7c51-71d3-9222-6725ada94ffe",
+     "slug": "moy-bezumnyy-dnevnik",
+     "url": "https://1lordserials1.online/title/moy-bezumnyy-dnevnik/",
+     "name": "Мой безумный дневник",
+     "original_name": "My Mad Fat Diary",
+     "year": 2013,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       7,
+       7
+      ],
+      [
+       3,
+       3,
+       3
+      ]
+     ],
+     "reason": "Жизнь подростков 90-х глазами шестнадцатилетней Рэй; три сезона.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.4 (20069 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01926341-7c51-71d3-9222-6725ada94ffe.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 16 = в каталоге 16; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01916a6f-8ce4-7559-a1b8-66862a93134e",
+     "slug": "konec-go-mira",
+     "url": "https://1lordserials1.online/title/konec-go-mira/",
+     "name": "Конец ***го мира",
+     "original_name": "The End of the F***ing World",
+     "year": 2017,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ],
+      [
+       2,
+       8,
+       8
+      ]
+     ],
+     "reason": "Джеймсу и Алисе по семнадцать: у них начинается роман, и Алиса уговаривает Джеймса искать её отца; два сезона.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (249548 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916a6f-8ce4-7559-a1b8-66862a93134e.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 16 = в каталоге 16; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "01915286-55b8-7906-ad25-3b500cd4ab8b",
+     "slug": "eto-angliya-god-1986",
+     "url": "https://1lordserials1.online/title/eto-angliya-god-1986/",
+     "name": "Это – Англия. Год 1986",
+     "original_name": "This Is England '86",
+     "year": 2010,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       4,
+       4
+      ]
+     ],
+     "reason": "Великобритания 1986 года, через четыре года после Фолклендской войны — четыре серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (15934 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915286-55b8-7906-ad25-3b500cd4ab8b.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 4 = в каталоге 4; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "0192aa83-0a8e-7e6c-8b1d-c371d7a9e336",
+     "slug": "mayti-bush",
+     "url": "https://1lordserials1.online/title/mayti-bush/",
+     "name": "Майти Буш",
+     "original_name": "The Mighty Boosh",
+     "year": 2003,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       3,
+       6,
+       6
+      ]
+     ],
+     "reason": "Магические приключения друзей Винса Нуара и Говарда Муна; три сезона.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (25495 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0192aa83-0a8e-7e6c-8b1d-c371d7a9e336.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 20 = в каталоге 20; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "filmy-o-voyne",
+   "title": "Фильмы о войне: судьбы людей",
+   "viewer_request": "Какой фильм о войне посмотреть, чтобы он был о людях?",
+   "intro": "Фильмы о войнах XX века — от гражданской войны в Испании до Второй мировой — с рейтингом IMDb не ниже 7.5 по данным каталога. Порядок — по времени событий.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 работам; устойчивый жанровый интерес; в автоматических подборках сайта темы нет; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019aa5a2-48f0-7aec-bd84-041e35bc0f13",
+     "slug": "veter-kotoryy-kachaet-veresk",
+     "url": "https://1lordserials1.online/title/veter-kotoryy-kachaet-veresk/",
+     "name": "Ветер, который качает вереск",
+     "original_name": "The Wind That Shakes the Barley",
+     "year": 2006,
+     "type": "movie",
+     "reason": "Начало XX века, Ирландия: врач Дамиен оставляет карьеру ради борьбы за независимость.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019aa5a2-48f0-7aec-bd84-041e35bc0f13.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01a158dd-3d73-78a0-8908-629fe662084e",
+     "slug": "zemlya-i-svoboda",
+     "url": "https://1lordserials1.online/title/zemlya-i-svoboda/",
+     "name": "Земля и свобода",
+     "original_name": "Land and Freedom",
+     "year": 1995,
+     "type": "movie",
+     "reason": "Молодой коммунист Дэйв едет в Испанию сражаться с фашизмом на арагонском фронте.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01a158dd-3a36-7b2c-bacf-7f9c904fe7a7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "019c2c8a-61b3-7576-9061-d8b8061c6533",
+     "slug": "yazyk-babochek",
+     "url": "https://1lordserials1.online/title/yazyk-babochek/",
+     "name": "Язык бабочек",
+     "original_name": "La lengua de las mariposas",
+     "year": 1999,
+     "type": "movie",
+     "reason": "Восьмилетний Мончо идёт в школу в испанской деревне и находит друга в учителе.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019c2c8a-61b3-7576-9061-d8b8061c6533.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01983114-4bc0-7e37-944e-3d180c7ee89b",
+     "slug": "volyn",
+     "url": "https://1lordserials1.online/title/volyn/",
+     "name": "Волынь",
+     "original_name": "Wolyn",
+     "year": 2016,
+     "type": "movie",
+     "reason": "Лето 1939 года: любовь польской девушки и украинского парня на Волыни.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01983114-4bc0-7e37-944e-3d180c7ee89b.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "0198c196-7750-701a-b5d7-dc7b5ba7f703",
+     "slug": "vorovka-knig",
+     "url": "https://1lordserials1.online/title/vorovka-knig/",
+     "name": "Воровка книг",
+     "original_name": "The Book Thief",
+     "year": 2013,
+     "type": "movie",
+     "reason": "Германия, канун Второй мировой: девочка Лизель учится читать и спасает книги.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0198c196-7750-701a-b5d7-dc7b5ba7f703.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01916711-40ac-7096-9a25-780556f7edc6",
+     "slug": "zhizn-prekrasna-2",
+     "url": "https://1lordserials1.online/title/zhizn-prekrasna-2/",
+     "name": "Жизнь прекрасна",
+     "original_name": "La vita è bella",
+     "year": 1997,
+     "type": "movie",
+     "reason": "Отец в концлагере убеждает сына, что всё вокруг — большая игра.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.6 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916711-40ac-7096-9a25-780556f7edc6.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "019bd506-1e7c-70cd-a503-a197178f97b0",
+     "slug": "vrag-u-vorot",
+     "url": "https://1lordserials1.online/title/vrag-u-vorot/",
+     "name": "Враг у ворот",
+     "original_name": "Enemy at the Gates",
+     "year": 2001,
+     "type": "movie",
+     "reason": "Сталинградская битва: немецкое командование отправляет на передовую лучшего стрелка, майора Кенига.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019bd506-1e7c-70cd-a503-a197178f97b0.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "019156d3-36af-77ed-aa41-0c0e3949193f",
+     "slug": "yarost-13",
+     "url": "https://1lordserials1.online/title/yarost-13/",
+     "name": "Ярость",
+     "original_name": "Fury",
+     "year": 2014,
+     "type": "movie",
+     "reason": "Апрель 1945 года: союзники продвигаются вглубь вражеской территории, но путь к победе всё ещё опасен.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019156d3-36af-77ed-aa41-0c0e3949193f.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "fantastika-klassika",
+   "title": "Фантастика-классика: фильмы, с которых стоит начать",
+   "viewer_request": "Какие известные фантастические фильмы посмотреть, если жанр только начинаешь узнавать?",
+   "intro": "Фантастические фильмы 1979–2010 годов с рейтингом IMDb не ниже 8.2 по данным каталога: космос, машины, время и сны. Порядок — по году выхода.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 9 работам; запрос «известный фильм на вечер» из исследования 26.10; отличается от фантастики 2026 на zonafilm.space; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019156d3-6b72-7f11-b57c-398439f16974",
+     "slug": "chuzhoy-2",
+     "url": "https://1lordserials1.online/title/chuzhoy-2/",
+     "name": "Чужой",
+     "original_name": "Alien",
+     "year": 1979,
+     "type": "movie",
+     "reason": "Экипаж грузового корабля исследует сигнал с неизвестной планеты.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019156d3-6b72-7f11-b57c-398439f16974.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01916717-2a3a-7951-a330-91266eac0e5d",
+     "slug": "nechto",
+     "url": "https://1lordserials1.online/title/nechto/",
+     "name": "Нечто",
+     "original_name": "The Thing",
+     "year": 1982,
+     "type": "movie",
+     "reason": "Полярники антарктической станции сталкиваются с существом, принимающим чужой облик.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916717-2a3a-7951-a330-91266eac0e5d.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01916711-4186-7a1c-a6cd-f2dddc34b136",
+     "slug": "nazad-v-buduschee",
+     "url": "https://1lordserials1.online/title/nazad-v-buduschee/",
+     "name": "Назад в будущее",
+     "original_name": "Back to the Future",
+     "year": 1985,
+     "type": "movie",
+     "reason": "Подросток Марти на машине времени попадает в 50-е и встречает своих будущих родителей.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.5 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916711-4186-7a1c-a6cd-f2dddc34b136.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "019156d3-6c20-7444-b2a1-ce9bae23daa4",
+     "slug": "chuzhie-2",
+     "url": "https://1lordserials1.online/title/chuzhie-2/",
+     "name": "Чужие",
+     "original_name": "Aliens",
+     "year": 1986,
+     "type": "movie",
+     "reason": "Элен Рипли и Чужой: вторая встреча.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.4 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019156d3-6c20-7444-b2a1-ce9bae23daa4.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01916711-4127-7b3a-9238-4e1ee15c4bcd",
+     "slug": "terminator-2-sudnyy-den",
+     "url": "https://1lordserials1.online/title/terminator-2-sudnyy-den/",
+     "name": "Терминатор 2: Судный день",
+     "original_name": "Terminator 2: Judgment Day",
+     "year": 1991,
+     "type": "movie",
+     "reason": "Сара Коннор и её сын Джон — будущий лидер людей в войне с машинами.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.6 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916711-4127-7b3a-9238-4e1ee15c4bcd.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01916717-1fa5-788f-8b57-bceb60f61507",
+     "slug": "park-yurskogo-perioda",
+     "url": "https://1lordserials1.online/title/park-yurskogo-perioda/",
+     "name": "Парк Юрского периода",
+     "original_name": "Jurassic Park",
+     "year": 1993,
+     "type": "movie",
+     "reason": "Палеонтологи приезжают в парк на острове, населённый воссозданными динозаврами.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916717-1fa5-788f-8b57-bceb60f61507.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "01915258-8fd3-771f-8824-39397cd276ec",
+     "slug": "matrica-1999",
+     "url": "https://1lordserials1.online/title/matrica-1999/",
+     "name": "Матрица (1999)",
+     "original_name": "The Matrix",
+     "year": 1999,
+     "type": "movie",
+     "reason": "Днём — офисный работник, ночью — хакер Нео, пока однажды всё не меняется.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.7 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915258-8fd3-771f-8824-39397cd276ec.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "01916712-ee3c-7b45-af7c-f2f3724b3eee",
+     "slug": "vechnoe-siyanie-chistogo-razuma",
+     "url": "https://1lordserials1.online/title/vechnoe-siyanie-chistogo-razuma/",
+     "name": "Вечное сияние чистого разума",
+     "original_name": "Eternal Sunshine of the Spotless Mind",
+     "year": 2004,
+     "type": "movie",
+     "reason": "Застенчивый Джоэл однажды садится на электричку к морю и встречает на берегу девушку.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916712-ee3c-7b45-af7c-f2f3724b3eee.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 9,
+     "id": "01915149-e407-738a-a31b-1857545a8e18",
+     "slug": "nachalo-2",
+     "url": "https://1lordserials1.online/title/nachalo-2/",
+     "name": "Начало",
+     "original_name": "Inception",
+     "year": 2010,
+     "type": "movie",
+     "reason": "Вор Кобб крадёт секреты из подсознания людей во время сна.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.8 (число голосов в каталоге не указано); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915149-e407-738a-a31b-1857545a8e18.webp",
+     "checked": "26.10.2026, проверка закончена в 22:24:52Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  }
+ ]
+}
