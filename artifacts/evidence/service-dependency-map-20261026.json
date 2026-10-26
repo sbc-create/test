@@ -43,7 +43,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "bin/seo-operator",
@@ -186,6 +186,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -270,6 +295,7 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {},
    "обёртка": {
     "обёртка": "/usr/local/bin/community-ratings-gateway",
     "владелец": 0,
@@ -349,6 +375,7 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -421,7 +448,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/editor-run.sh",
@@ -558,6 +585,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -671,6 +723,7 @@
      "разрешён": "seo_engine/core/owner_state.py"
     }
    ],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -791,6 +844,7 @@
      "разрешён": "seo_engine/core/owner_state.py"
     }
    ],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "SEO_RELEASE_COMMIT",
@@ -842,7 +896,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -984,6 +1038,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1034,7 +1113,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1176,6 +1255,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1226,7 +1330,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1368,6 +1472,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1418,7 +1547,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "seo_operator/cli.py",
@@ -1560,6 +1689,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1624,6 +1778,7 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1675,7 +1830,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/seo-tech-publish.sh",
@@ -1811,6 +1966,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1877,7 +2057,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/editor/seo-tech-run.sh",
@@ -2013,6 +2193,31 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/seo-tech": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/sources.jsonl": "",
+    "var/audit/operator.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/editor-candidates.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics/cabinet-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/analytics": "SEO_STATE_ROOT (paths.state)",
+    "var/notify": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/reports/daily": "SEO_STATE_ROOT (paths.state)",
+    "var/editor-runs/runs.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/state.json": "SEO_STATE_ROOT (paths.state)",
+    "var/notify/chat-candidates.json": "",
+    "var/seo-regular/hourly": "",
+    "var/editor-runs/ledger.jsonl": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-regular/journal": "",
+    "var/seo-regular/reports/LATEST.md": "",
+    "var/topvisor/measure-latest.json": "SEO_STATE_ROOT (paths.state)",
+    "var/seo-tech/auto-tasks.json": "",
+    "var/seo-tech-wt": "",
+    "var/seo-tech/wt": "",
+    "var/site-repos": "",
+    "var/analytics/webmaster-inventory.json": "SEO_STATE_ROOT (paths.state)"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2061,7 +2266,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "factory/__main__.py",
@@ -2268,6 +2473,14 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/audit/audit.jsonl": "",
+    "var/db": "",
+    "var/state": "",
+    "var/editor-runs/sources.jsonl": "",
+    "var/targets": "",
+    "var/targets/payload-local": ""
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2323,7 +2536,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "factory/qwen/mcp.py",
@@ -2432,6 +2645,9 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/editor-runs/sources.jsonl": ""
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "SEO_RELEASE_COMMIT",
@@ -2479,7 +2695,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
-    "голова": "d7509eb",
+    "голова": "aa40e9c",
     "незакоммичено_всего": 7
    },
    "точка_входа": "automation/host/yummy-sitemap/yummy-sitemap-warm.sh",
@@ -2502,6 +2718,9 @@
    "смысловые_от_себя": [],
    "догружаемые": [],
    "задания_строкой": [],
+   "состояние_состава": {
+    "var/yummy-sitemap/warm-pause.json": "YB_WARM_PAUSE"
+   },
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2607,6 +2826,7 @@
     }
    ],
    "задания_строкой": [],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2844,6 +3064,7 @@
      "разрешён": "seo_engine/services/__init__.py"
     }
    ],
+   "состояние_состава": {},
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2860,6 +3081,378 @@
      "самоотносительный путь переопределяется переменной: выпуск обязан включить seo_engine/services/search_integrations.py — задание названо строкой «seo_engine.services.search_integrations.scheduled_sync» в seo_engine/orchestrator/tasks.py:273, импорта у него нет; выпуск обязан включить seo_engine/services/content_queue.py — задание названо строкой «seo_engine.services.content_queue.scheduled_run» в seo_engine/orchestrator/tasks.py:358, импорта у него нет; выпуск обязан включить seo_engine/services/daily_operator.py — задание названо строкой «seo_engine.services.daily_operator.scheduled_run» в seo_engine/orchestrator/tasks.py:363, импорта у него нет; выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.changesets» в seo_engine/orchestrator/tasks.py:308, импорта у него нет; выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.newsroom» в seo_engine/orchestrator/tasks.py:332, импорта у него нет"
     ]
    }
+  }
+ ],
+ "общие_файлы": [
+  {
+   "файл": "var/analytics",
+   "службы": {
+    "analytics-cabinet.service": "юнит:ExecStartPre",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "расходятся",
+   "согласованы": false,
+   "почему": "разные корни: analytics-cabinet.service=юнит:ExecStartPre, editor-run.service=SEO_STATE_ROOT, seo-regular-check.service=SEO_STATE_ROOT, seo-regular-daily.service=SEO_STATE_ROOT, seo-regular-hourly.service=SEO_STATE_ROOT, seo-regular-weekly.service=SEO_STATE_ROOT, seo-tech-publish.service=SEO_STATE_ROOT, seo-tech-run.service=SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/analytics/cabinet-latest.json",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/analytics/webmaster-inventory.json",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/audit/operator.jsonl",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/editor-runs",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/editor-runs/ledger.jsonl",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/editor-runs/runs.jsonl",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/editor-runs/sources.jsonl",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": "",
+    "site-cell-executor.service": "",
+    "site-factory-mcp.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван, site-cell-executor.service=не назван, site-factory-mcp.service=не назван"
+  },
+  {
+   "файл": "var/notify",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/notify/chat-candidates.json",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-regular",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "юнит:ReadWritePaths",
+    "seo-regular-daily.service": "юнит:ReadWritePaths",
+    "seo-regular-hourly.service": "юнит:ReadWritePaths",
+    "seo-regular-weekly.service": "юнит:ReadWritePaths",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "расходятся",
+   "согласованы": false,
+   "почему": "разные корни: analytics-cabinet.service=SEO_STATE_ROOT, editor-run.service=SEO_STATE_ROOT, seo-regular-check.service=юнит:ReadWritePaths, seo-regular-daily.service=юнит:ReadWritePaths, seo-regular-hourly.service=юнит:ReadWritePaths, seo-regular-weekly.service=юнит:ReadWritePaths, seo-tech-publish.service=SEO_STATE_ROOT, seo-tech-run.service=SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/seo-regular/editor-candidates.json",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/seo-regular/hourly",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-regular/journal",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-regular/reports/LATEST.md",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-regular/reports/daily",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/seo-regular/state.json",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
+  },
+  {
+   "файл": "var/seo-tech",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_TECH_STATE",
+    "seo-tech-run.service": "SEO_TECH_STATE"
+   },
+   "исход": "расходятся",
+   "согласованы": false,
+   "почему": "разные корни: analytics-cabinet.service=SEO_STATE_ROOT, editor-run.service=SEO_STATE_ROOT, seo-regular-check.service=SEO_STATE_ROOT, seo-regular-daily.service=SEO_STATE_ROOT, seo-regular-hourly.service=SEO_STATE_ROOT, seo-regular-weekly.service=SEO_STATE_ROOT, seo-tech-publish.service=SEO_TECH_STATE, seo-tech-run.service=SEO_TECH_STATE"
+  },
+  {
+   "файл": "var/seo-tech-wt",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-tech/auto-tasks.json",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/seo-tech/wt",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/site-repos",
+   "службы": {
+    "analytics-cabinet.service": "",
+    "editor-run.service": "",
+    "seo-regular-check.service": "",
+    "seo-regular-daily.service": "",
+    "seo-regular-hourly.service": "",
+    "seo-regular-weekly.service": "",
+    "seo-tech-publish.service": "",
+    "seo-tech-run.service": ""
+   },
+   "исход": "не измерено",
+   "согласованы": false,
+   "почему": "корень назван не у всех: analytics-cabinet.service=не назван, editor-run.service=не назван, seo-regular-check.service=не назван, seo-regular-daily.service=не назван, seo-regular-hourly.service=не назван, seo-regular-weekly.service=не назван, seo-tech-publish.service=не назван, seo-tech-run.service=не назван"
+  },
+  {
+   "файл": "var/topvisor/measure-latest.json",
+   "службы": {
+    "analytics-cabinet.service": "SEO_STATE_ROOT",
+    "editor-run.service": "SEO_STATE_ROOT",
+    "seo-regular-check.service": "SEO_STATE_ROOT",
+    "seo-regular-daily.service": "SEO_STATE_ROOT",
+    "seo-regular-hourly.service": "SEO_STATE_ROOT",
+    "seo-regular-weekly.service": "SEO_STATE_ROOT",
+    "seo-tech-publish.service": "SEO_STATE_ROOT",
+    "seo-tech-run.service": "SEO_STATE_ROOT"
+   },
+   "исход": "согласованы",
+   "согласованы": true,
+   "почему": "все обращаются через SEO_STATE_ROOT"
   }
  ]
 }
