@@ -1,0 +1,222 @@
+#!/usr/bin/env python3
+"""Сообщить Яндексу об изменившихся страницах витрины (IndexNow).
+
+Зачем. Единственный наш сигнал роботу — `sitemap.xml`, который ждёт обхода.
+Новые серии появляются ежедневно, и до их обхода страница в поиске не
+существует. IndexNow — штатный способ сказать «вот эти адреса изменились», он
+бесплатный и НЕ требует API Вебмастера, то есть не упирается в B023.
+Первоисточник прочитан 26.10.2026: `yandex.ru/support/webmaster/ru/
+indexing-options/index-now.md` и `indexnow/reference.md`.
+
+Что соблюдается и почему именно так:
+
+* **форма GET, по одному адресу.** Инвентарь (`inventory/network-allowlist.yaml`)
+  разрешает для `yandex.com` только GET; пакетная форма — POST, и её
+  разрешение это вход владельца, а не наше решение. GET-форма документирована
+  наравне с POST, так что отказываться от метода из-за этого не нужно;
+* **только ОТКРЫТАЯ индексация.** У восьми витрин K2 и новой пятёрки
+  `robots.txt` закрывает обход целиком решением владельца. Сообщать роботу о
+  закрытых страницах бессмысленно, поэтому режим индексации читается, и при
+  закрытом домене инструмент ОТКАЗЫВАЕТ, а не «пропускает молча»;
+* **ключ только свой.** Ключ привязан к домену и подтверждается файлом
+  `/<ключ>.txt` на самом сайте. Подставить ключ соседа нельзя — ответ будет
+  403 на наши же адреса, и причину будут искать не там;
+* **файл ключа проверяется ДО отправки.** Если сайт его не отдаёт, отправка
+  бессмысленна: это сэкономит 403 и час поиска причины;
+* **ничего не придумывается.** Адреса берутся из карты сайта витрины или из
+  переданного файла, а не сочиняются.
+
+По умолчанию — сухой прогон: печатает, что отправил бы, и ничего не
+отправляет. Отправка требует `--confirm-writes`, как и всякая внешняя запись.
+
+    python3 automation/local/indexnow-submit.py --domain lordserial33.biz
+    python3 automation/local/indexnow-submit.py --domain lordserial33.biz --urls файл.txt
+    python3 automation/local/indexnow-submit.py --domain lordserial33.biz --confirm-writes
+"""
+from __future__ import annotations
+
+import argparse
+import json
+import pathlib
+import socket
+import ssl
+import sys
+import time
+import urllib.parse
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+if str(КОРЕНЬ) not in sys.path:
+    sys.path.insert(0, str(КОРЕНЬ))
+
+РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
+ХОСТ = "yandex.com"
+ПУТЬ = "/indexnow"
+#: Коды ответа из справочника API, со смыслом. Печатаются как есть: «отправлено»
+#: не означает «проиндексировано», документация это прямо оговаривает.
+КОДЫ = {200: "принято", 202: "ключ принят на проверку", 400: "неверный запрос",
+        403: "ключ не подошёл адресам", 422: "неверные параметры", 429: "лимит запросов"}
+ПРЕДЕЛ_ПО_УМОЛЧАНИЮ = 50
+
+
+def ячейка(домен: str) -> dict | None:
+    данные = json.loads(РЕЕСТР.read_text(encoding="utf-8"))
+    for я in данные.get("cells") or []:
+        if я.get("domain") == домен or домен in (я.get("aliases") or []):
+            return я
+    return None
+
+
+def ключ_годен(ключ: str) -> bool:
+    """Те же требования, что в рантайме: 8–128 символов, a-zA-Z0-9 и дефис."""
+    return (8 <= len(ключ) <= 128
+            and all(с.isascii() and (с.isalnum() or с == "-") for с in ключ))
+
+
+def _https(хост: str, запрос: str, *, таймаут: float = 10.0) -> tuple[int | None, str]:
+    """Один GET без сторонних библиотек: нужен только код ответа."""
+    ctx = ssl.create_default_context()
+    try:
+        with socket.create_connection((хост, 443), timeout=таймаут) as s:
+            with ctx.wrap_socket(s, server_hostname=хост) as t:
+                t.sendall(f"GET {запрос} HTTP/1.1\r\nHost: {хост}\r\n"
+                          f"User-Agent: site-factory-indexnow\r\n"
+                          f"Connection: close\r\n\r\n".encode())
+                первая = t.recv(200).decode("latin1").splitlines()[0]
+        части = первая.split()
+        return (int(части[1]) if len(части) > 1 and части[1].isdigit() else None), первая
+    except Exception as ош:  # noqa: BLE001 — причина важнее типа
+        return None, f"{type(ош).__name__}: {ош}"
+
+
+def файл_ключа_отдаётся(домен: str, ключ: str) -> tuple[bool, str]:
+    """Отдаёт ли САМ САЙТ файл ключа — проверка до отправки, а не после 403."""
+    код, строка = _https(домен, f"/{ключ}.txt")
+    if код == 200:
+        return True, f"{домен}/{ключ}.txt отвечает 200"
+    return False, f"{домен}/{ключ}.txt: {строка}"
+
+
+#: Режим индексации живёт ОДНИМ файлом на домен в состоянии рантайма, а не в
+#: паспорте: это постоянные данные сайта (docs/RUNTIME_DATA_OWNERSHIP.md), и
+#: выпуск их только читает. Первая редакция этой функции читала паспорт и
+#: объявляла закрытым lordserial33.biz — домен, у которого в файле состояния
+#: стоит OPEN и подтверждение владельца. Ошибка того же класса, что весь
+#: сегодняшний день: проверка смотрела не туда, где факт.
+СОСТОЯНИЕ_ИНДЕКСАЦИИ = pathlib.Path("/srv/sites/indexing")
+
+
+def индексация_открыта(я: dict, корень: pathlib.Path | None = None) -> tuple[bool, str]:
+    """Открыта ли индексация домена. Неизвестно — считается ЗАКРЫТО.
+
+    Так же, как в рантайме: режим без файла состояния трактуется закрытым.
+    Инструмент, который «на всякий случай» сообщил бы роботу о закрытом
+    домене, работал бы против решения владельца.
+    """
+    домен = я.get("domain") or ""
+    файл = (корень or СОСТОЯНИЕ_ИНДЕКСАЦИИ) / f"{домен}.json"
+    if файл.is_file():
+        try:
+            состояние = json.loads(файл.read_text(encoding="utf-8"))
+        except (OSError, ValueError) as ош:
+            return False, f"{файл} не читается ({type(ош).__name__}) — считаю закрытым"
+        желаемое = str(состояние.get("desired_state") or "").upper()
+        разрешено = bool(состояние.get("owner_authorized_open"))
+        if желаемое == "OPEN" and разрешено:
+            return True, f"{файл.name}: OPEN, открытие разрешено владельцем"
+        if желаемое == "OPEN":
+            return False, (f"{файл.name}: OPEN, но owner_authorized_open не стоит — "
+                           "без разрешения владельца считаю закрытым")
+        return False, f"{файл.name}: {желаемое or 'состояние не названо'}"
+    if (я.get("promotion") or {}).get("excluded"):
+        return False, "файла состояния нет; домен исключён из продвижения"
+    return False, (f"файла состояния {файл} нет: режим не объявлен, "
+                   "считаю закрытым (fail-closed)")
+
+
+def адреса(путь: pathlib.Path | None, предел: int) -> tuple[list[str], str]:
+    if путь is None:
+        return [], "список адресов не передан (--urls)"
+    if not путь.is_file():
+        return [], f"файла {путь} нет"
+    строки = [с.strip() for с in путь.read_text(encoding="utf-8").splitlines()
+              if с.strip() and not с.strip().startswith("#")]
+    плохие = [с for с in строки if not с.startswith("https://")]
+    if плохие:
+        return [], f"в списке {len(плохие)} адресов не начинаются с https:// — первый: {плохие[0][:60]}"
+    return строки[:предел], f"адресов {len(строки)}, беру {min(len(строки), предел)}"
+
+
+def главная(аргв: list[str] | None = None) -> int:
+    р = argparse.ArgumentParser(description=__doc__,
+                                formatter_class=argparse.RawDescriptionHelpFormatter)
+    р.add_argument("--domain", required=True)
+    р.add_argument("--urls", type=pathlib.Path)
+    р.add_argument("--key", help="ключ домена; по умолчанию из паспорта ячейки")
+    р.add_argument("--limit", type=int, default=ПРЕДЕЛ_ПО_УМОЛЧАНИЮ)
+    р.add_argument("--confirm-writes", action="store_true",
+                   help="фактически отправить; без флага только сухой прогон")
+    а = р.parse_args(аргв)
+
+    я = ячейка(а.domain)
+    if я is None:
+        print(f"ОТКАЗ: {а.domain} нет в реестре ячеек", file=sys.stderr)
+        return 2
+    if (я.get("withdrawal") or {}).get("withdrawn"):
+        print(f"ОТКАЗ: {а.domain} выведен из работы решением владельца", file=sys.stderr)
+        return 2
+
+    открыта, почему = индексация_открыта(я)
+    print(f"индексация: {'ОТКРЫТА' if открыта else 'ЗАКРЫТА'} — {почему}")
+    if not открыта:
+        print("ОТКАЗ: сообщать роботу о закрытом домене нечего и незачем", file=sys.stderr)
+        return 3
+
+    ключ = а.key or ((я.get("indexing") or {}).get("indexnow_key") or "")
+    if not ключ:
+        print("ОТКАЗ: ключ IndexNow домену не выдан (ни --key, ни indexing.indexnow_key). "
+              "Это вход владельца: ключ привязан к домену, чужой подставлять нельзя",
+              file=sys.stderr)
+        return 3
+    if not ключ_годен(ключ):
+        print(f"ОТКАЗ: ключ не отвечает требованиям протокола (8–128 символов, a-zA-Z0-9 и дефис)",
+              file=sys.stderr)
+        return 3
+
+    отдаётся, строка = файл_ключа_отдаётся(а.domain, ключ)
+    print(f"файл ключа: {строка}")
+    if not отдаётся:
+        print("ОТКАЗ: сайт не отдаёт файл ключа — отправка дала бы 403", file=sys.stderr)
+        return 3
+
+    список, пояснение = адреса(а.urls, а.limit)
+    print(f"адреса: {пояснение}")
+    if not список:
+        return 3
+
+    if not а.confirm_writes:
+        print(f"сухой прогон: отправил бы {len(список)} адресов на https://{ХОСТ}{ПУТЬ}")
+        for u in список[:5]:
+            print(f"   {u}")
+        print("для фактической отправки нужен --confirm-writes")
+        return 0
+
+    итоги: dict[str, int] = {}
+    for u in список:
+        запрос = (f"{ПУТЬ}?url={urllib.parse.quote(u, safe='')}"
+                  f"&key={urllib.parse.quote(ключ, safe='')}")
+        код, строка = _https(ХОСТ, запрос)
+        имя = КОДЫ.get(код or 0, строка)
+        итоги[f"{код} {имя}"] = итоги.get(f"{код} {имя}", 0) + 1
+        if код == 429:
+            print("429: лимит запросов — останавливаюсь, остальное в следующий прогон")
+            break
+        time.sleep(0.5)
+    for что, сколько in sorted(итоги.items()):
+        print(f"   {что}: {сколько}")
+    print("«принято» означает принятый запрос, а не индексацию: гарантии "
+          "индексации метод не даёт (так сказано в документации)")
+    return 0 if all(к.startswith(("200", "202")) for к in итоги) else 3
+
+
+if __name__ == "__main__":
+    raise SystemExit(главная())
