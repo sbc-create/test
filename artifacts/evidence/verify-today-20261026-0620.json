@@ -1,0 +1,92 @@
+[
+ {
+  "domain": "an1meg0.site",
+  "slug": "gordyy-vladyka-vechnosti",
+  "sources": [
+   "https://shikimori.io/animes/57613",
+   "https://an1meg0.site/title/gordyy-vladyka-vechnosti/"
+  ],
+  "names": [
+   "Culture",
+   "Hong",
+   "Ruo",
+   "Империи",
+   "Куаншэн",
+   "Люэр",
+   "Силин",
+   "Шиян",
+   "Шэньлун"
+  ],
+  "confirmed": [
+   "Culture",
+   "Hong",
+   "Ruo",
+   "Империи",
+   "Куаншэн",
+   "Люэр",
+   "Силин",
+   "Шиян",
+   "Шэньлун"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "animeg0.site",
+  "slug": "dostoynyy-nebes",
+  "sources": [
+   "https://shikimori.io/animes/62618",
+   "https://animeg0.site/title/dostoynyy-nebes/"
+  ],
+  "names": [
+   "Honglu",
+   "Technology",
+   "Гуи",
+   "Дин",
+   "Духов",
+   "Лин",
+   "Луофэн",
+   "Луофэне",
+   "Отделе",
+   "Сяо"
+  ],
+  "confirmed": [
+   "Honglu",
+   "Technology",
+   "Гуи",
+   "Дин",
+   "Духов",
+   "Лин",
+   "Луофэн",
+   "Луофэне",
+   "Отделе",
+   "Сяо"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "yummyani7.site",
+  "slug": "nidzien",
+  "sources": [
+   "https://shikimori.io/animes/53077",
+   "https://shikimori.io/mangas/130167",
+   "https://yummyani7.site/anime/nidzien"
+  ],
+  "names": [
+   "Sunrise",
+   "Кимино",
+   "Мияко",
+   "Хадзимэ",
+   "Хито",
+   "Ятатэ"
+  ],
+  "confirmed": [
+   "Sunrise",
+   "Кимино",
+   "Мияко",
+   "Хадзимэ",
+   "Хито",
+   "Ятатэ"
+  ],
+  "not_found": []
+ }
+]

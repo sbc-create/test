@@ -1,0 +1,41 @@
+[
+ {
+  "domain": "an1meg0.site",
+  "slug": "gordyy-vladyka-vechnosti",
+  "at": "2026-10-26T06:30:22Z",
+  "author": "editor/claude-auto/run-20261026T062003Z",
+  "url": "https://an1meg0.site/title/gordyy-vladyka-vechnosti/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 984
+ },
+ {
+  "domain": "animeg0.site",
+  "slug": "dostoynyy-nebes",
+  "at": "2026-10-26T06:32:33Z",
+  "author": "editor/claude-auto/run-20261026T062003Z",
+  "url": "https://animeg0.site/title/dostoynyy-nebes/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 874
+ },
+ {
+  "domain": "yummyani7.site",
+  "slug": "nidzien",
+  "at": "2026-10-26T06:25:02Z",
+  "author": "editor/claude-auto/run-20261026T062003Z",
+  "url": "https://yummyani7.site/anime/nidzien",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 3,
+  "chars": 464
+ }
+]
