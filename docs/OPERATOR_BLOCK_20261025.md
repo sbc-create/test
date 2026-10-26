@@ -255,43 +255,70 @@ visudo -c -f /etc/sudoers.d/k2deploy
 это самому агенту нечем.
 
 ```bash
-# ВСЁ НИЖЕ — от root на 145.63.129.86. Пять учётных записей, пять маршрутов.
+# ВСЁ НИЖЕ — от root НА УЗЛЕ k2-zomro-01 (145.63.129.86).
+# Пути абсолютные и сверены на этом узле 26.10.2026 07:2xZ.
+# После каждого шага — проверка результата этим же блоком.
 set -eu
-acc_list="lordserials1-cc lordserials1-info lordserials21-cc lordserials21-info lordserials21-mobi"
 
-# --- D.1. Учётные записи и каталоги (образец 14.10, те же режимы) --------
+# --- D.1. Учётные записи и каталоги пяти витрин -------------------------
 # Код — 2775 с группой витрины (выкладку делает k2deploy), данные — 0750:
 # постоянные данные принадлежат только самой витрине.
-for acc in $acc_list; do
+for acc in lordserials1-cc lordserials1-info lordserials21-cc lordserials21-info lordserials21-mobi; do
   id -u "$acc" >/dev/null 2>&1 || useradd --system --home-dir "/srv/$acc" --shell /usr/sbin/nologin "$acc"
   install -d -m 2775 -o "$acc" -g "$acc" "/srv/$acc"
   install -d -m 0750 -o "$acc" -g "$acc" "/srv/$acc/data"
   usermod -aG "$acc" k2deploy
 done
+# Проверка D.1: пять учётных записей, права каталогов, k2deploy в группах.
+for acc in lordserials1-cc lordserials1-info lordserials21-cc lordserials21-info lordserials21-mobi; do
+  printf '%s uid=%s srv=%s data=%s k2deploy_в_группе=%s\n' "$acc" \
+    "$(id -u "$acc")" \
+    "$(stat -c %a /srv/$acc)" "$(stat -c %a /srv/$acc/data)" \
+    "$(id -nG k2deploy | tr ' ' '\n' | grep -cx "$acc")"
+done   # ожидается: srv=2775 data=750 k2deploy_в_группе=1 у всех пяти
 
 # --- D.2. Юниты ТОЛЬКО пяти новых витрин --------------------------------
 # Глобом `nova-*.service` не ставить: он переустановит юниты восьми
-# действующих витрин, которых эта задача не касается.
-cd /home/k2deploy/stage/units
+# действующих витрин, которых эта задача не касается. Десять файлов
+# (основной и candidate на витрину) проверены на месте 26.10.
 install -m 0644 -o root -g root \
-  nova-lordserials1-cc.service nova-lordserials1-cc-candidate.service \
-  nova-lordserials1-info.service nova-lordserials1-info-candidate.service \
-  nova-lordserials21-cc.service nova-lordserials21-cc-candidate.service \
-  nova-lordserials21-info.service nova-lordserials21-info-candidate.service \
-  nova-lordserials21-mobi.service nova-lordserials21-mobi-candidate.service \
+  /home/k2deploy/stage/units/nova-lordserials1-cc.service \
+  /home/k2deploy/stage/units/nova-lordserials1-cc-candidate.service \
+  /home/k2deploy/stage/units/nova-lordserials1-info.service \
+  /home/k2deploy/stage/units/nova-lordserials1-info-candidate.service \
+  /home/k2deploy/stage/units/nova-lordserials21-cc.service \
+  /home/k2deploy/stage/units/nova-lordserials21-cc-candidate.service \
+  /home/k2deploy/stage/units/nova-lordserials21-info.service \
+  /home/k2deploy/stage/units/nova-lordserials21-info-candidate.service \
+  /home/k2deploy/stage/units/nova-lordserials21-mobi.service \
+  /home/k2deploy/stage/units/nova-lordserials21-mobi-candidate.service \
   /etc/systemd/system/
 systemctl daemon-reload
+# Проверка D.2: ровно 10 новых юнитов и ни один не включён (включает запуск).
+ls -1 /etc/systemd/system/nova-lordserials*.service | wc -l        # ожидается 10
+systemctl is-enabled nova-lordserials1-cc.service || true          # ожидается disabled
 
 # --- D.3. Общий файл объявлений upstream --------------------------------
 # Доставленный файл собран на все 13 ячеек узла и отличается от стоящего
-# ровно пятью новыми блоками (сверено diff'ом). Порядок важен: без него
-# `nginx -t` на новом маршруте упадёт на неизвестном upstream.
-cp -a /etc/nginx/conf.d/site-cells-upstreams.conf /root/site-cells-upstreams.conf.before-20261025
-install -m 0644 -o root -g root /home/k2deploy/stage/nginx/site-cells-upstreams.conf /etc/nginx/conf.d/
+# ровно пятью новыми блоками: сверено 26.10 — заготовка строгое надмножество
+# установленного. Порядок важен: без этого шага `nginx -t` на новом маршруте
+# упадёт на неизвестном upstream.
+cp -a /etc/nginx/conf.d/site-cells-upstreams.conf \
+      "/root/site-cells-upstreams.conf.before-$(date -u +%Y%m%dT%H%M%SZ)"
+install -m 0644 -o root -g root \
+  /home/k2deploy/stage/nginx/site-cells-upstreams.conf /etc/nginx/conf.d/
 nginx -t && systemctl reload nginx
+# Проверка D.3: тринадцать объявлений upstream и живой nginx.
+grep -c '^upstream cell_' /etc/nginx/conf.d/site-cells-upstreams.conf   # ожидается 13
+systemctl is-active nginx                                               # ожидается active
+curl -sS -o /dev/null -w 'действующая витрина отвечает: %{http_code}\n' \
+  --max-time 10 https://lordserial.su/                                  # ожидается 200
 
-# --- D.4. Права на перезапуск пяти служб (§B этого же документа) ---------
-# Выполнить D.4 ДО первого запуска: иначе выпуск кода упрётся в права.
+# --- D.4. Права на перезапуск пяти служб --------------------------------
+# Содержимое и порядок — §B этого же документа (временный файл, visudo -c,
+# только потом install). Выполнить ДО первого запуска: иначе выпуск кода
+# упрётся в права. Проверка: sudo -n -l -U k2deploy | grep -c nova-lordserials
+# ожидается 5.
 
 # --- D.5. Запуск витрин ПОСЛЕДОВАТЕЛЬНО, с проверкой памяти -------------
 # k2-launch-site.sh сам: ставит робот-файл и точку upstream (существующие НЕ
@@ -301,15 +328,29 @@ nginx -t && systemctl reload nginx
 # службой с кодом 3, потому что publisher_id не передан. Это не ошибка
 # прогона, а защита: чужой или выдуманный номер подставлять запрещено.
 for site in lords-18 lords-19 lords-20 lords-21 lords-22; do
-  awk '/^MemAvailable:/{print "доступно памяти, МиБ: " int($2/1024)}' /proc/meminfo
+  awk '/^MemAvailable:/{printf "=== %s: доступно памяти %d МиБ\n", "'"$site"'", int($2/1024)}' /proc/meminfo
   bash /home/k2deploy/stage/k2-launch-site.sh "$site" || echo "код $? (3 = нет плеера, маршрут настроен)"
 done
-systemctl list-units --type=service --state=running --no-pager | grep -c nova-   # было 8
+# Проверка D.5: маршруты, данные и выпуски на месте; служб по-прежнему 8.
+ls -1 /etc/nginx/lords/lords-1[89].conf /etc/nginx/lords/lords-2[0-2].conf | wc -l  # ожидается 5
+ls -1 /etc/nginx/cells/lords-1[89].robots /etc/nginx/cells/lords-2[0-2].robots | wc -l  # ожидается 5
+for acc in lordserials1-cc lordserials1-info lordserials21-cc lordserials21-info lordserials21-mobi; do
+  printf '%s данных=%s выпуск=%s\n' "$acc" \
+    "$(ls -1 /srv/$acc/data/*.json 2>/dev/null | wc -l)" \
+    "$(readlink -f /srv/$acc/current 2>/dev/null || echo нет)"
+done   # ожидается: данных=3, выпуск — путь в releases/<12 знаков>
+systemctl list-units --type=service --state=running --no-pager | grep -c '^\s*nova-'  # ожидается 8: пятёрка не стартует без плеера
+free -m | awk '/^Mem:/{print "доступно памяти после шага:", $7, "МиБ"}'
 
 # --- D.6. Когда владелец назначит publisher_id пяти доменам -------------
-# По одному файлу на витрину, 0640 владельцу витрины, значение из Secret Hub:
-#   /home/k2deploy/stage/player/<site>-player.json  →  {"publisher_id":"<номер>","source_mode":"provider-id"}
-# затем повторно: k2-launch-site.sh <site>  (он доложит healthz и RSS)
+# По одному файлу на витрину, значение из Secret Hub, ничего не подставлять:
+#   /home/k2deploy/stage/player/lords-18-player.json
+#   … и так для lords-19, lords-20, lords-21, lords-22
+#   содержимое: {"publisher_id":"<номер домена>","source_mode":"provider-id"}
+# затем повторно, по одной витрине:
+#   bash /home/k2deploy/stage/k2-launch-site.sh lords-18
+# он сам поднимет службу, дождётся healthz, прогреет и доложит RSS.
+# Проверка D.6: curl -sS -o /dev/null -w '%{http_code}\n' 127.0.0.1:9136/healthz
 ```
 
 ```bash
