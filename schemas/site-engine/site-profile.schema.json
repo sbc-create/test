@@ -247,6 +247,21 @@
         },
         "editorial_profile": {
           "type": "string"
+        },
+        "site_direction": {
+          "type": "string",
+          "enum": [
+            "films_series",
+            "anime",
+            "animation",
+            "dorama"
+          ],
+          "description": "Направление сайта — что на нём главное для подборок, редакционного отбора и текстов (решение владельца 26.10.2026, D223). Не путать с content_directions: это типы записей поставщика (movie/series), они не говорят, аниме ли это. Отсутствие поля — направление не подтверждено, угадывать по бренду нельзя."
+        },
+        "site_direction_basis": {
+          "type": "string",
+          "minLength": 10,
+          "description": "Чем подтверждено направление: заголовок X-Site-Factory-Profile, семейство в config/site-cells.json, решение владельца."
         }
       }
     },

@@ -193,7 +193,9 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "lordfilm47.space",
-    "editorial_profile": "lords-01-editorial"
+    "editorial_profile": "lords-01-editorial",
+    "site_direction": "films_series",
+    "site_direction_basis": "заголовок X-Site-Factory-Profile: zona-general (zonafilm.space, 26.10.2026); content_directions movie/series"
   },
   "analytics_profile": {
     "enabled": true,

@@ -129,9 +129,28 @@ SITE_DIRECTION = {
 ANIME_GENRES = frozenset({"аниме", "дунхуа"})
 
 
+def site_direction(domain: str) -> str | None:
+    """Направление домена: из паспорта (config/site-profiles/*.json,
+    seo_profile.site_direction), иначе из SITE_DIRECTION для доменов без паспорта.
+    content_directions паспорта не используется: это типы записей поставщика
+    (у Animedia там movie/series, хотя сайт аниме)."""
+    try:
+        root = _paths.registry("config", "site-profiles")
+    except Exception:  # noqa: BLE001 — корень реестров не задан (выпуск без git)
+        root = None
+    if root is not None and root.is_dir():
+        for path in sorted(root.glob("*.json")):
+            prof = _read_json(path, {})
+            if domain in (prof.get("domains") or []):
+                found = (prof.get("seo_profile") or {}).get("site_direction")
+                if found:
+                    return found
+    return SITE_DIRECTION.get(domain)
+
+
 def off_direction(domain: str, mine: dict) -> bool:
     """Запись не соответствует направлению домена (аниме на сайте фильмов и сериалов)."""
-    if SITE_DIRECTION.get(domain) != "films_series":
+    if site_direction(domain) != "films_series":
         return False
     if ANIME_GENRES & {str(g).strip().lower() for g in (mine.get("genres") or [])}:
         return True

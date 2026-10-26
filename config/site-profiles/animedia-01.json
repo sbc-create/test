@@ -189,7 +189,7 @@
    "expose_hit_miss_stale": true
   }
  },
- "seo_profile": {
+ "seo_profile": {"site_direction": "anime", "site_direction_basis": "семейство animedia в config/site-cells.json (шаблон animedia-nova); каталог — аниме, поле content_directions movie/series — типы записей поставщика", 
   "enabled": true,
   "indexing_enabled": false,
   "canonical_host": "lordfilm47.space",

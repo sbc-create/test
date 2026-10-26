@@ -1901,3 +1901,27 @@ def test_editor_candidates_keep_site_direction(tmp_path):
     animego = {c["slug"] for c in regular.editor_candidates(
         snap, facts, set(), sites={"an1meg0.site": "animego-04"})}
     assert "anime-hot" in animego
+
+
+def test_site_direction_comes_from_profile_not_content_directions(tmp_path, monkeypatch):
+    """Направление — из seo_profile.site_direction паспорта. content_directions
+    (movie/series) — типы записей поставщика: у Animedia они такие же, как у
+    Zona, но сайт аниме, и аниме там не отсекается."""
+    root = tmp_path / "reg"
+    (root / ".git").mkdir(parents=True)
+    prof = root / "config" / "site-profiles"
+    prof.mkdir(parents=True)
+    (prof / "a.json").write_text(json.dumps({"domains": ["anime.example"],
+        "content_directions": ["movie", "series"],
+        "seo_profile": {"enabled": True, "indexing_enabled": True, "site_direction": "anime"}}), encoding="utf-8")
+    (prof / "f.json").write_text(json.dumps({"domains": ["films.example"],
+        "content_directions": ["movie", "series"],
+        "seo_profile": {"enabled": True, "indexing_enabled": True, "site_direction": "films_series"}}), encoding="utf-8")
+    monkeypatch.setenv("SEO_REGISTRY_ROOT", str(root))
+    anime = {"genres": ["аниме"], "external_ids": {"mal": "1"}}
+    assert regular.site_direction("anime.example") == "anime"
+    assert regular.site_direction("films.example") == "films_series"
+    assert regular.off_direction("anime.example", anime) is False
+    assert regular.off_direction("films.example", anime) is True
+    # Домен без паспорта — запасная карта в коде.
+    assert regular.site_direction("zonafilm.cc") == "films_series"

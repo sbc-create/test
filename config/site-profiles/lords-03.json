@@ -193,7 +193,9 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "1lordserials1.online",
-    "editorial_profile": "lords-03-editorial"
+    "editorial_profile": "lords-03-editorial",
+    "site_direction": "films_series",
+    "site_direction_basis": "content_directions movie/series этого профиля; шаблон lords-curated (config/site-cells.json); подтверждение владельца 26.10: сайты Lords, посвящённые фильмам и сериалам"
   },
   "analytics_profile": {
     "enabled": true,

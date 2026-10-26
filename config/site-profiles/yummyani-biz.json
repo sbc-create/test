@@ -211,7 +211,9 @@
     "enabled": true,
     "indexing_enabled": false,
     "canonical_host": "yummyani.biz",
-    "editorial_profile": "yummyani-biz-editorial"
+    "editorial_profile": "yummyani-biz-editorial",
+    "site_direction": "anime",
+    "site_direction_basis": "content_directions anime в этом профиле; семейство yummy"
   },
   "analytics_profile": {
     "enabled": true,

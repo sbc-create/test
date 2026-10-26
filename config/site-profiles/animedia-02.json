@@ -194,7 +194,9 @@
     "indexing_enabled": false,
     "canonical_host": "animedia.space",
     "editorial_profile": "animedia-02-editorial",
-    "note": "canonical_host и editorial_profile прежде указывали на lordfilm47.space и lords-01-editorial — чужой сайт. Исправлено на собственные."
+    "note": "canonical_host и editorial_profile прежде указывали на lordfilm47.space и lords-01-editorial — чужой сайт. Исправлено на собственные.",
+    "site_direction": "anime",
+    "site_direction_basis": "семейство animedia в config/site-cells.json (шаблон animedia-space); домен выведен владельцем 25.10 — направление фиксируется, работа не ведётся"
   },
   "analytics_profile": {
     "enabled": false,
