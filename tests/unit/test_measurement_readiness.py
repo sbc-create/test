@@ -104,3 +104,67 @@ def test_готовность_требует_всех_трёх_систем(monk
                          _сбор("x.test", [{"key": "visitors", "measured": True, "value": 9}]),
                          "проба")
     assert итог["готовность"] == "НЕ ГОТОВО"
+
+
+# --- Topvisor: состояние измеряется, а не утверждается в коде ----------------
+
+def _состояние_topvisor(tmp_path, *, строки, сводка=None, тревога=None, здоровье=None):
+    к = tmp_path / "topvisor-inventory"
+    к.mkdir()
+    (к / "mapping-matrix.json").write_text(json.dumps(
+        {"generated_at": "2026-10-26T04:26:03Z",
+         "mapping_summary": сводка if сводка is not None else {"MAPPED_EXACT_COUNT": 1},
+         "rows": строки}, ensure_ascii=False), encoding="utf-8")
+    (к / "health.json").write_text(json.dumps(
+        здоровье or {"source": "LIVE_READ_ONLY", "read_only_call_count": 52,
+                     "last_success_at": "2026-10-26T04:26:03Z",
+                     "SYNC_COST_STATE": "VERIFIED_NON_BILLABLE",
+                     "SYNC_RUN_COST_RUB": 0, "timer_deployed": True,
+                     "consecutive_successes": 47, "freshness_hours": 36,
+                     "stale": False}, ensure_ascii=False), encoding="utf-8")
+    if тревога is not None:
+        (к / "alert.json").write_text(json.dumps(тревога, ensure_ascii=False),
+                                      encoding="utf-8")
+    return к
+
+
+def test_расхождение_сводки_и_строк_объясняется_до_выбора_числа(tmp_path):
+    """Две меры одного предмета: сводка говорит 2, строк MATCHED_EXACT одна.
+
+    Так и измерено 26.10: разницу даёт ZERO_QUERIES — проект есть, запросов
+    нет. Для готовности это разные состояния, поэтому берётся строка домена,
+    а расхождение называется, а не разрешается молча (класс 47).
+    """
+    строки = [{"canonical_domain": "а.ru", "mapping_state": "MATCHED_EXACT"},
+              {"canonical_domain": "б.ru", "mapping_state": "ZERO_QUERIES"}]
+    снимок = инс._topvisor_снимок(_состояние_topvisor(
+        tmp_path, строки=строки, сводка={"MAPPED_EXACT_COUNT": 2}))
+    assert снимок["расхождение"] and "ZERO_QUERIES" in снимок["расхождение"]
+    assert "берётся строка домена" in снимок["расхождение"]
+
+
+def test_совпадение_сводки_и_строк_расхождением_не_объявляется(tmp_path):
+    строки = [{"canonical_domain": "а.ru", "mapping_state": "MATCHED_EXACT"}]
+    снимок = инс._topvisor_снимок(_состояние_topvisor(
+        tmp_path, строки=строки, сводка={"MAPPED_EXACT_COUNT": 1}))
+    assert снимок["расхождение"] is None
+
+
+def test_активная_тревога_инвентаря_попадает_в_причину(tmp_path):
+    снимок = инс._topvisor_снимок(_состояние_topvisor(
+        tmp_path, строки=[{"canonical_domain": "а.ru", "mapping_state": "MATCHED_EXACT"}],
+        тревога={"active": True, "reasons": ["INVENTORY_DRIFT"]}))
+    assert снимок["тревога"]["reasons"] == ["INVENTORY_DRIFT"]
+
+
+def test_погашенная_тревога_не_считается_активной(tmp_path):
+    снимок = инс._topvisor_снимок(_состояние_topvisor(
+        tmp_path, строки=[{"canonical_domain": "а.ru", "mapping_state": "MATCHED_EXACT"}],
+        тревога={"active": False, "reasons": ["INVENTORY_DRIFT"]}))
+    assert снимок["тревога"] is None
+
+
+def test_отсутствующий_каталог_состояния_называет_причину(tmp_path):
+    снимок = инс._topvisor_снимок(tmp_path / "нет-такого")
+    assert снимок["здоровье"] is None
+    assert "нет" in снимок["почему_нет"]
