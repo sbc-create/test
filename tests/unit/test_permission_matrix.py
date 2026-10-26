@@ -494,6 +494,13 @@ class TestProfileProperties:
             # п. 4 «Изучи актуальную официальную документацию». API Топвизора
             # (api.topvisor.com) здесь не открывается — к нему ходят службы.
             "topvisor.com",
+            # Исследование спроса и устройства подборок для zonafilm.cc:
+            # задание владельца 26.10.2026 называет эти адреса дословно (D213).
+            # Только GET; тексты и факты оттуда на сайт не переносятся.
+            # www.ivi.tv — переадресация 302 с названного www.ivi.ru/collections.
+            "www.kinopoisk.ru", "wordstat.yandex.ru", "www.netflix.com",
+            "okko.tv", "www.ivi.ru", "www.ivi.tv", "daily.afisha.ru",
+            "www.bfi.org.uk",
         }
         # Написание доменов Animego различается символами и проверяется здесь
         # буквально: an1mego — цифра 1 и буква o, animeg0 — буква i и цифра 0,

@@ -239,3 +239,44 @@ hosts:
   # Telegram (api.telegram.org) НЕ внесён: доставка отчётов через бота
   # отменена владельцем 2026-10-08; отчёты сохраняются для чтения по запросу.
 
+
+  # --- исследование спроса и редакционных подборок (только чтение) ----------
+  # Задание владельца 26.10.2026 (получено после 15:48Z по date -u) по zonafilm.cc: «Начни с
+  # самостоятельного исследования самых востребованных фильмов и сериалов 2026
+  # года» и «Изучи конкретные удачные подборки»; адреса перечислены владельцем
+  # дословно. Только GET. Сохраняются наши выводы (позиции, числа голосов,
+  # устройство подборки), но не тексты, изображения и подборки целиком; факты
+  # для страниц сайта по-прежнему только из config/editorial-sources.json.
+  # Конфликт с CLOSED_WORLD и решение — knowledge/DECISIONS.md, 26.10.2026.
+  - ref: research-kinopoisk
+    host: www.kinopoisk.ru
+    purpose: "популярность фильмов и сериалов внутри сервиса; тематические списки (/lists/)"
+    methods: [GET]
+  - ref: research-wordstat
+    host: wordstat.yandex.ru
+    purpose: "поисковый спрос, если доступен без входа; частотность не выдумывается"
+    methods: [GET]
+  - ref: research-netflix-tudum
+    host: www.netflix.com
+    purpose: "Tudum: топ-10 платформы и рекомендации «что смотреть» (/tudum/...)"
+    methods: [GET]
+  - ref: research-okko
+    host: okko.tv
+    purpose: "устройство подборок (/collection/...)"
+    methods: [GET]
+  - ref: research-ivi
+    host: www.ivi.ru
+    purpose: "устройство подборок (/collections)"
+    methods: [GET]
+  - ref: research-ivi-tv
+    host: www.ivi.tv
+    purpose: "переадресация www.ivi.ru/collections (302, 26.10, в окне 15:55–16:17Z) — тот же сервис, адрес из задания владельца"
+    methods: [GET]
+  - ref: research-afisha-daily
+    host: daily.afisha.ru
+    purpose: "редакционные подборки кино (/cinema/)"
+    methods: [GET]
+  - ref: research-bfi
+    host: www.bfi.org.uk
+    purpose: "редакционные списки (/articles/type/lists)"
+    methods: [GET]

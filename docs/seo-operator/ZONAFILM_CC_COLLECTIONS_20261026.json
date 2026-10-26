@@ -1,0 +1,1981 @@
+{
+ "schema": "zonafilm-cc.collections/2",
+ "site": "zonafilm.cc",
+ "site_id": "zona-02",
+ "prepared_at": "2026-10-26",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id (решение владельца витрины 26.10)",
+ "collections": [
+  {
+   "key": "premery-serialov-2026",
+   "title": "Сериальные премьеры 2026 года, о которых говорят",
+   "viewer_request": "Какие новые сериалы этого года сейчас смотрят и обсуждают?",
+   "intro": "Новые сериалы 2026 года, к которым сейчас есть заметный интерес: по спискам популярного Кинопоиска, топу Netflix и запросам, с которыми приходят к нам. Сначала сезоны, доступные целиком, затем те, что ещё выходят, — у них указано, сколько серий уже есть.",
+   "items": [
+    {
+     "order": 1,
+     "id": "01a11a9d-1fc6-749f-b5aa-5a4a74eb6452",
+     "slug": "glubina-5",
+     "url": "https://zonafilm.cc/title/glubina-5/",
+     "name": "Глубина",
+     "original_name": "Below",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 6,
+     "reason": "Канадский триллер о рыбаке с Ньюфаундленда, у которого остался только старший сын; шесть серий доступны целиком.",
+     "interest_basis": [
+      "Netflix Top 10 (англ. сериалы), 12–18.10.2026: №1 за неделю",
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №26",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (14)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a11a9d-1f50-7b18-821f-5149ed0fa2d4.webp",
+     "player": [
+      "kp",
+      "14029326"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "01a0f6d4-c030-7425-bf9b-0aca995f3fca",
+     "slug": "k-vostoku-ot-edema",
+     "url": "https://zonafilm.cc/title/k-vostoku-ot-edema/",
+     "name": "К востоку от Эдема",
+     "original_name": "East of Eden",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "page_episode_links": 7,
+     "reason": "Семейная сага о Трасках и Гамильтонах в долине Салинас, где снова разыгрывается история Каина и Авеля; семь серий.",
+     "interest_basis": [
+      "Netflix Top 10 (англ. сериалы), 12–18.10.2026: №2",
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №17"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0f6d4-bf6b-7b11-8e7c-48ae252c1977.webp",
+     "player": [
+      "kp",
+      "7865896"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01a09b3d-3cb6-7901-b888-4f1f6b60a412",
+     "slug": "kerri-3",
+     "url": "https://zonafilm.cc/title/kerri-3/",
+     "name": "Кэрри",
+     "original_name": "Carrie",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "История девушки с телекинезом, которую травят сверстники и подавляет мать; восемь серий, все на сайте.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №7",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (3)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a09b3d-3bf3-7526-8256-37525926e237.webp",
+     "player": [
+      "kp",
+      "1343910"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "019f031e-20f8-783f-a1ea-904b1cc78e47",
+     "slug": "el",
+     "url": "https://zonafilm.cc/title/el/",
+     "name": "Эль",
+     "original_name": "Elle",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "Взросление Эль Вудс в 1990-е — драма с юмором; восемь серий первого сезона.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (22, 4 дня)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019f031e-209c-7233-851b-f40c89620944.webp",
+     "player": [
+      "kp",
+      "7530283"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01a0cef8-4607-7a94-b264-85a2548b0c6a",
+     "slug": "tyurma-chernyy-ostrov",
+     "url": "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
+     "name": "Тюрьма «Черный остров»",
+     "original_name": "黑岛监狱",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       16,
+       16
+      ]
+     ],
+     "page_episode_links": 16,
+     "reason": "Китайский детектив: оперативник под прикрытием в тюрьме, связанной с исчезновениями людей; 16 серий.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (16, 7 дней)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0cef8-4469-7526-ad31-05495027920e.webp",
+     "player": [
+      "mdl",
+      "756319"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками mdl+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01a0fd54-529a-784c-a338-aa163fe94ae3",
+     "slug": "akademiya-vedm",
+     "url": "https://zonafilm.cc/title/akademiya-vedm/",
+     "name": "Академия ведьм",
+     "original_name": "Coven Academy",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       21,
+       21
+      ]
+     ],
+     "page_episode_links": 21,
+     "reason": "Мистика о закрытой школе юных ведьм в Новом Орлеане; весь сезон из 21 серии.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (6)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0fd54-51f3-7b11-82db-ffc13bbd0c37.webp",
+     "player": [
+      "kp",
+      "9151812"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01a0beb4-b21c-73ce-a55d-02cc4eba5051",
+     "slug": "kvest-vizhna",
+     "url": "https://zonafilm.cc/title/kvest-vizhna/",
+     "name": "Квест Вижна",
+     "original_name": "VisionQuest",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       4,
+       8
+      ]
+     ],
+     "page_episode_links": 4,
+     "reason": "Вижн после «ВандаВижн» пытается восстановить свою личность; сериал выходит, сейчас 4 серии из 8.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №33",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (9)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0beb4-aeb2-7526-a506-a300bc471f70.webp",
+     "player": [
+      "kp",
+      "5158783"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "01a052a6-2e24-763c-bc1e-36d9b73c94b0",
+     "slug": "baba-yaga",
+     "url": "https://zonafilm.cc/title/baba-yaga/",
+     "name": "Баба-яга",
+     "original_name": "Yaga",
+     "year": 2026,
+     "seasons": [
+      [
+       1,
+       2,
+       8
+      ]
+     ],
+     "page_episode_links": 2,
+     "reason": "Детектив ищет пропавшего наследника рыбного промысла и сталкивается с древней магией; выходит, сейчас 2 серии из 8.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №24"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a052a6-0493-7622-bbee-8ceb4ebcc431.webp",
+     "player": [
+      "kp",
+      "13516692"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "novinki-kino-2026",
+   "title": "Новинки кино 2026 года, к которым сейчас интерес",
+   "viewer_request": "Какие фильмы этого года сейчас ищут и смотрят?",
+   "intro": "Фильмы, вышедшие в 2026 году и стоящие сейчас в списке популярного на Кинопоиске. Это текущий интерес, а не итоги года: список меняется каждый день. Порядок — от больших премьер к историям поменьше.",
+   "items": [
+    {
+     "order": 1,
+     "id": "019cf346-78bb-7ae5-8e87-5f71ac0a20f8",
+     "slug": "proekt-konec-sveta",
+     "url": "https://zonafilm.cc/title/proekt-konec-sveta/",
+     "name": "Проект «Конец света»",
+     "original_name": "Project Hail Mary",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Учёный просыпается один на корабле, летящем к Тау Кита, не помня себя, — а от его миссии зависит спасение Земли.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №15",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (2)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019cf346-78bb-7ae5-8e87-5f71ac0a20f8.webp",
+     "player": [
+      "kp",
+      "1382256"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "019f6a7b-fabe-7b8b-8783-c6afc73ff1b6",
+     "slug": "odisseya",
+     "url": "https://zonafilm.cc/title/odisseya/",
+     "name": "Одиссея",
+     "original_name": "The Odyssey",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Возвращение Одиссея на Итаку после Троянской войны — с циклопами, сиренами и великанами-людоедами.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №5"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019f6a7b-fa7e-78c2-8d63-963ea489d9f6.webp",
+     "player": [
+      "kp",
+      "6385370"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "019f0d8e-13ae-7655-a968-b8d99b65e0ac",
+     "slug": "chelovek-pauk-novyy-den",
+     "url": "https://zonafilm.cc/title/chelovek-pauk-novyy-den/",
+     "name": "Человек-паук: Новый день",
+     "original_name": "Spider-Man: Brand New Day",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Питер Паркер, которого забыл весь мир, в одиночку защищает Нью-Йорк, а его силы начинают меняться.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №3",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (11)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0be1a-3c65-7526-98b4-37e10e22b978.webp",
+     "player": [
+      "kp",
+      "5494049"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "01a0d32b-4279-754f-bfe8-a6ab9d402ecc",
+     "slug": "taynyy-dnevnik-veriti",
+     "url": "https://zonafilm.cc/title/taynyy-dnevnik-veriti/",
+     "name": "Тайный дневник Верити",
+     "original_name": "Verity",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Писательница берётся дописать романы известного автора после несчастного случая с ней, и работа принимает неожиданный оборот.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №10",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (75 — больше всех фильмов)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0d32b-41d2-7526-8094-9df79108acdb.webp",
+     "player": [
+      "kp",
+      "6789621"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01a0b3e2-8ece-7af1-a630-840e09dcdc1e",
+     "slug": "obitel-zla-2",
+     "url": "https://zonafilm.cc/title/obitel-zla-2/",
+     "name": "Обитель зла",
+     "original_name": "Resident Evil",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Курьер с посылкой попадает в больницу в разгар вспышки вируса и вынужден выживать.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №2"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0b3e2-8e39-7526-9625-6390a20e67c9.webp",
+     "player": [
+      "kp",
+      "7378605"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01a0c138-a64b-73d8-bf66-2fe2052acb7d",
+     "slug": "serdce-zverya",
+     "url": "https://zonafilm.cc/title/serdce-zverya/",
+     "name": "Сердце зверя",
+     "original_name": "Heart of the Beast",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Боец спецназа и его служебная собака после авиакатастрофы выживают в глуши Аляски.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №19"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0c138-a5b3-7526-a5a0-db180ad7de40.webp",
+     "player": [
+      "kp",
+      "7077372"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01a08802-2f77-7e9d-8c66-bda6cfc47cb3",
+     "slug": "nadezhda",
+     "url": "https://zonafilm.cc/title/nadezhda/",
+     "name": "Надежда",
+     "original_name": "Hopeu",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Корейская фантастика: находка в лесу у портового городка запускает обратный отсчёт для людей.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №18"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a08802-2dc2-7526-b7dd-2757cf178bfd.webp",
+     "player": [
+      "kp",
+      "5230825"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh+mdl, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "019f07e2-2cac-7492-957d-3d6de5a716af",
+     "slug": "priglashenie",
+     "url": "https://zonafilm.cc/title/priglashenie/",
+     "name": "Приглашение",
+     "original_name": "The Invite",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Комедия о паре, которая зовёт в гости слишком страстных соседей, и вечер идёт не по плану.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №44"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019f07e2-2c59-7233-a608-9878ef96bd7a.webp",
+     "player": [
+      "kp",
+      "5138994"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 9,
+     "id": "01a052c9-7090-7640-9c32-737878eaca65",
+     "slug": "priyatel",
+     "url": "https://zonafilm.cc/title/priyatel/",
+     "name": "Приятель",
+     "original_name": "Buddy",
+     "year": 2026,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Хоррор о детском телешоу, где плюшевый единорог начинает избавляться от непослушных детей.",
+     "interest_basis": [
+      "Кинопоиск «Популярные фильмы», 26.10.2026: №43"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a052c9-4c01-7622-8d35-609891ce9963.webp",
+     "player": [
+      "kp",
+      "8549783"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "posle-gangsterlenda",
+   "title": "Если понравился «Гангстерленд»: кланы и борьба за власть",
+   "viewer_request": "Что посмотреть после «Гангстерленда»?",
+   "intro": "«Гангстерленд» — один из самых популярных сериалов на Кинопоиске и один из частых запросов к нашему сайту. Если хочется ещё историй о семьях, которые держат город, — вот с чего продолжить. Сначала британские банды, затем американская мафия.",
+   "items": [
+    {
+     "order": 1,
+     "id": "0195e6c3-3b46-7b4f-a137-a25714189113",
+     "slug": "gangsterlend",
+     "url": "https://zonafilm.cc/title/gangsterlend/",
+     "name": "Гангстерленд",
+     "original_name": "MobLand",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 16,
+     "reason": "Война двух лондонских кланов, Харриганов и Стивенсонов; оба сезона доступны.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №3",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (15)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0dd3b-183e-7aee-ab43-f2edf42fc6db.webp",
+     "player": [
+      "kp",
+      "5512084"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "01916711-6492-7090-8781-703ad1852af4",
+     "slug": "ostrye-kozyrki",
+     "url": "https://zonafilm.cc/title/ostrye-kozyrki/",
+     "name": "Острые козырьки",
+     "original_name": "Peaky Blinders",
+     "year": 2013,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       3,
+       6,
+       6
+      ],
+      [
+       4,
+       6,
+       6
+      ],
+      [
+       5,
+       6,
+       6
+      ],
+      [
+       6,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 36,
+     "reason": "Семья Шелби и Бирмингем 1920-х: банда, ставшая одной из самых влиятельных; шесть сезонов.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (2)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01916711-6492-7090-8781-703ad1852af4.webp",
+     "player": [
+      "kp",
+      "716587"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01915163-4abc-70e2-b6be-9f6993b5b7d5",
+     "slug": "dzhentlmeny-3",
+     "url": "https://zonafilm.cc/title/dzhentlmeny-3/",
+     "name": "Джентльмены",
+     "original_name": "The Gentlemen",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ],
+      [
+       2,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 16,
+     "reason": "Молодой наследник узнаёт, что его наследство связано с чужой наркоимперией; два сезона.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №14",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (13)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01915163-4abc-70e2-b6be-9f6993b5b7d5.webp",
+     "player": [
+      "kp",
+      "1435343"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "01921ac7-f494-7dd0-9620-2c611a2c0af7",
+     "slug": "pingvin",
+     "url": "https://zonafilm.cc/title/pingvin/",
+     "name": "Пингвин",
+     "original_name": "The Penguin",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "После смерти Фальконе Освальд Кобблпот борется за его место в Готэме; восемь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01921ac7-f494-7dd0-9620-2c611a2c0af7.webp",
+     "player": [
+      "kp",
+      "4635062"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "019154c7-4ca1-7ec1-9889-77e4b280fdbc",
+     "slug": "korol-talsy",
+     "url": "https://zonafilm.cc/title/korol-talsy/",
+     "name": "Король Талсы",
+     "original_name": "Tulsa King",
+     "year": 2022,
+     "seasons": [
+      [
+       1,
+       9,
+       9
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 31,
+     "reason": "Нью-йоркский мафиози после 25 лет тюрьмы строит новую империю в Оклахоме; уже выходит четвёртый сезон.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (1)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019154c7-4ca1-7ec1-9889-77e4b280fdbc.webp",
+     "player": [
+      "kp",
+      "4760854"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01915136-994f-7fed-975b-e8a3947e94b5",
+     "slug": "mer-kingstauna",
+     "url": "https://zonafilm.cc/title/mer-kingstauna/",
+     "name": "Мэр Кингстауна",
+     "original_name": "Mayor of Kingstown",
+     "year": 2021,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ],
+      [
+       4,
+       10,
+       10
+      ],
+      [
+       5,
+       0,
+       1
+      ]
+     ],
+     "page_episode_links": 40,
+     "reason": "Семья Макласки неофициально правит городом, живущим за счёт тюрем; четыре сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915136-994f-7fed-975b-e8a3947e94b5.webp",
+     "player": [
+      "kp",
+      "4420223"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "019167af-fbc0-7699-8238-9b9c395d1d69",
+     "slug": "ozark",
+     "url": "https://zonafilm.cc/title/ozark/",
+     "name": "Озарк",
+     "original_name": "Ozark",
+     "year": 2017,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ],
+      [
+       4,
+       14,
+       14
+      ]
+     ],
+     "page_episode_links": 44,
+     "reason": "Финансист из-за огромных долгов тайно перевозит семью в курортный Озарк; четыре сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/019167af-fbc0-7699-8238-9b9c395d1d69.webp",
+     "player": [
+      "kp",
+      "1045553"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "01916718-a0e9-7367-b8f5-d8d3c6a1fd07",
+     "slug": "narko",
+     "url": "https://zonafilm.cc/title/narko/",
+     "name": "Нарко",
+     "original_name": "Narcos",
+     "year": 2015,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 30,
+     "reason": "Хроника жизни наркобарона Пабло Эскобара; три сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916718-a0e9-7367-b8f5-d8d3c6a1fd07.webp",
+     "player": [
+      "kp",
+      "821565"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 9,
+     "id": "01919c2d-e2af-78bd-9c67-44af3be03384",
+     "slug": "snegopad",
+     "url": "https://zonafilm.cc/title/snegopad/",
+     "name": "Снегопад",
+     "original_name": "Snowfall",
+     "year": 2017,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ],
+      [
+       4,
+       10,
+       10
+      ],
+      [
+       5,
+       10,
+       10
+      ],
+      [
+       6,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 60,
+     "reason": "Лос-Анджелес начала 1980-х и начало эпидемии крэка; шесть сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01919c2d-e2af-78bd-9c67-44af3be03384.webp",
+     "player": [
+      "kp",
+      "909854"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 10,
+     "id": "0191675c-d391-7f41-8647-f6ece585582b",
+     "slug": "fargo-2",
+     "url": "https://zonafilm.cc/title/fargo-2/",
+     "name": "Фарго",
+     "original_name": "Fargo",
+     "year": 2014,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ],
+      [
+       4,
+       11,
+       11
+      ],
+      [
+       5,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 51,
+     "reason": "Случайная встреча в провинциальной больнице запускает череду жестоких преступлений; пять сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0191675c-d391-7f41-8647-f6ece585582b.webp",
+     "player": [
+      "kp",
+      "767379"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 11,
+     "id": "01915258-a7b2-724b-8689-087735dd5a3c",
+     "slug": "krestnyy-otec-1972",
+     "url": "https://zonafilm.cc/title/krestnyy-otec-1972/",
+     "name": "Крестный отец (1972)",
+     "original_name": "The Godfather",
+     "year": 1972,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Фильм о сицилийской семье Корлеоне в Нью-Йорке 1945–1955 годов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915258-a7b2-724b-8689-087735dd5a3c.webp",
+     "player": [
+      "kp",
+      "325"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "shpiony-i-vlast",
+   "title": "Шпионы, дипломаты и тайны власти",
+   "viewer_request": "Хочу напряжённый сериал о разведке и политике.",
+   "intro": "Истории о людях, от решений которых зависит больше, чем их собственная жизнь: дипломатах, агентах и тех, кто их охраняет. Сначала свежие сезоны, затем сериалы и фильм, которые можно посмотреть целиком.",
+   "items": [
+    {
+     "order": 1,
+     "id": "0191512c-acb3-7879-a63d-4aada6a73fb8",
+     "slug": "diplomatka",
+     "url": "https://zonafilm.cc/title/diplomatka/",
+     "name": "Дипломатка",
+     "original_name": "The Diplomat",
+     "year": 2023,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       3,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 30,
+     "reason": "Дипломат Кейт Уайлер соглашается на престижный пост в разгар международного кризиса; на сайте уже 4-й сезон.",
+     "interest_basis": [
+      "Netflix Top 10 (англ. сериалы), 12–18.10.2026: «The Diplomat» S4 — №5"
+     ],
+     "poster": "https://poster.cdnvideohub.com/0191512c-acb3-7879-a63d-4aada6a73fb8.webp",
+     "player": [
+      "kp",
+      "4859971"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "019522f1-8244-727e-8c6b-1561ad4385ad",
+     "slug": "nulevoy-den",
+     "url": "https://zonafilm.cc/title/nulevoy-den/",
+     "name": "Нулевой день",
+     "original_name": "Zero Day",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 6,
+     "reason": "Бывший президент США расследует кибератаку и рискует собственными тайнами; шесть серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/019522f1-8244-727e-8c6b-1561ad4385ad.webp",
+     "player": [
+      "kp",
+      "5379179"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01915277-bb37-71c4-8d00-bb115fa28eea",
+     "slug": "nochnoy-agent",
+     "url": "https://zonafilm.cc/title/nochnoy-agent/",
+     "name": "Ночной агент",
+     "original_name": "The Night Agent",
+     "year": 2023,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 30,
+     "reason": "Агент ФБР принимает звонок на линию экстренной связи и попадает в центр заговора; три сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915277-bb37-71c4-8d00-bb115fa28eea.webp",
+     "player": [
+      "kp",
+      "4542045"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "019154c7-277e-7167-a5f2-0e0c37e02111",
+     "slug": "medlennye-loshadi",
+     "url": "https://zonafilm.cc/title/medlennye-loshadi/",
+     "name": "Медленные лошади",
+     "original_name": "Slow Horses",
+     "year": 2022,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ],
+      [
+       2,
+       6,
+       6
+      ],
+      [
+       3,
+       6,
+       6
+      ],
+      [
+       4,
+       6,
+       6
+      ],
+      [
+       5,
+       6,
+       6
+      ],
+      [
+       6,
+       2,
+       2
+      ]
+     ],
+     "page_episode_links": 32,
+     "reason": "Отдел провинившихся британских разведчиков получает второй шанс; шесть сезонов.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №39"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019154c7-277e-7167-a5f2-0e0c37e02111.webp",
+     "player": [
+      "kp",
+      "1331649"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01930f18-e226-7348-ad36-7d72802f4d8f",
+     "slug": "den-shakala",
+     "url": "https://zonafilm.cc/title/den-shakala/",
+     "name": "День Шакала",
+     "original_name": "The Day of the Jackal",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 10,
+     "reason": "Британская разведчица идёт по следу киллера по прозвищу Шакал; десять серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01930f18-e226-7348-ad36-7d72802f4d8f.webp",
+     "player": [
+      "kp",
+      "5461927"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01916723-ecef-7c06-b68f-bf8b3fe44a8d",
+     "slug": "telohranitel-12",
+     "url": "https://zonafilm.cc/title/telohranitel-12/",
+     "name": "Телохранитель",
+     "original_name": "Bodyguard",
+     "year": 2018,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 6,
+     "reason": "Ветеран войны охраняет министра, чьи взгляды ему чужды; шесть серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916723-ecef-7c06-b68f-bf8b3fe44a8d.webp",
+     "player": [
+      "kp",
+      "1176115"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01916798-332e-7d8f-99a5-c04d705cd0a2",
+     "slug": "starik",
+     "url": "https://zonafilm.cc/title/starik/",
+     "name": "Старик",
+     "original_name": "The Old Man",
+     "year": 2022,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ],
+      [
+       2,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 15,
+     "reason": "Бывший оперативник ЦРУ понимает, что прошлое вернулось, когда к нему приходит киллер; два сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916798-332e-7d8f-99a5-c04d705cd0a2.webp",
+     "player": [
+      "kp",
+      "1304786"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "019151e1-5728-7880-ac51-fd284a0002a1",
+     "slug": "razvedchik",
+     "url": "https://zonafilm.cc/title/razvedchik/",
+     "name": "Разведчик",
+     "original_name": "The Spy",
+     "year": 2019,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 6,
+     "reason": "Эли Коэн под чужим именем внедряется в окружение сирийской власти в 1960-е; шесть серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/019151e1-5728-7880-ac51-fd284a0002a1.webp",
+     "player": [
+      "kp",
+      "1137755"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 9,
+     "id": "0199dc3d-a0ac-7a4c-9f62-67f279b1697b",
+     "slug": "dom-iz-dinamita",
+     "url": "https://zonafilm.cc/title/dom-iz-dinamita/",
+     "name": "Дом из динамита",
+     "original_name": "A House of Dynamite",
+     "year": 2025,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Фильм: 20 минут до удара неизвестно кем запущенной ракеты.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0199dc3d-a0ac-7a4c-9f62-67f279b1697b.webp",
+     "player": [
+      "kp",
+      "6332958"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "posle-mentalista",
+   "title": "Если понравился «Менталист»: сыщики с необычным даром",
+   "viewer_request": "Детектив, где дело раскрывает наблюдательность героя.",
+   "intro": "«Менталист» — среди популярных сериалов Кинопоиска и второй по числу поисковых входов к нам. Здесь сериалы о консультантах и сыщиках, которые видят то, чего не замечают другие: ложь в жестах, мелкие детали, чужие страхи.",
+   "items": [
+    {
+     "order": 1,
+     "id": "01919ffa-9abd-7862-b3e4-d3330a589849",
+     "slug": "mentalist",
+     "url": "https://zonafilm.cc/title/mentalist/",
+     "name": "Менталист",
+     "original_name": "The Mentalist",
+     "year": 2008,
+     "seasons": [
+      [
+       1,
+       23,
+       23
+      ],
+      [
+       2,
+       23,
+       23
+      ],
+      [
+       3,
+       22,
+       22
+      ],
+      [
+       4,
+       24,
+       24
+      ],
+      [
+       5,
+       22,
+       22
+      ],
+      [
+       6,
+       22,
+       22
+      ],
+      [
+       7,
+       12,
+       12
+      ]
+     ],
+     "page_episode_links": 148,
+     "reason": "Бывший «медиум» Патрик Джейн консультирует Калифорнийское бюро расследований; семь сезонов.",
+     "interest_basis": [
+      "Кинопоиск «Популярные сериалы», 26.10.2026: №16",
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (31, 9 дней)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01919ffa-9abd-7862-b3e4-d3330a589849.webp",
+     "player": [
+      "kp",
+      "412344"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "01916717-40d0-7935-bc9e-d58d72b7b82d",
+     "slug": "obmani-menya-2",
+     "url": "https://zonafilm.cc/title/obmani-menya-2/",
+     "name": "Обмани меня",
+     "original_name": "Lie to Me",
+     "year": 2009,
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ],
+      [
+       2,
+       22,
+       22
+      ],
+      [
+       3,
+       13,
+       13
+      ]
+     ],
+     "page_episode_links": 48,
+     "reason": "Доктор Лайтман распознаёт ложь по жестам и мимике; три сезона.",
+     "interest_basis": [
+      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (1)"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01916717-40d0-7935-bc9e-d58d72b7b82d.webp",
+     "player": [
+      "kp",
+      "428930"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01916717-2c0c-7bf1-a24c-8f45b350e397",
+     "slug": "kasl",
+     "url": "https://zonafilm.cc/title/kasl/",
+     "name": "Касл",
+     "original_name": "Castle",
+     "year": 2009,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       24,
+       24
+      ],
+      [
+       3,
+       24,
+       24
+      ],
+      [
+       4,
+       23,
+       23
+      ],
+      [
+       5,
+       24,
+       24
+      ],
+      [
+       6,
+       23,
+       23
+      ],
+      [
+       7,
+       23,
+       23
+      ],
+      [
+       8,
+       22,
+       22
+      ]
+     ],
+     "page_episode_links": 173,
+     "reason": "Автор детективов помогает полиции поймать подражателя своих книг; восемь сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916717-2c0c-7bf1-a24c-8f45b350e397.webp",
+     "player": [
+      "kp",
+      "409640"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "0191526d-e8c7-76d8-8797-80e09272eaa1",
+     "slug": "sherlok",
+     "url": "https://zonafilm.cc/title/sherlok/",
+     "name": "Шерлок",
+     "original_name": "Sherlock",
+     "year": 2010,
+     "seasons": [
+      [
+       1,
+       3,
+       3
+      ],
+      [
+       2,
+       3,
+       3
+      ],
+      [
+       3,
+       3,
+       3
+      ],
+      [
+       4,
+       4,
+       4
+      ]
+     ],
+     "page_episode_links": 13,
+     "reason": "Шерлок Холмс в Лондоне наших дней; четыре сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0191526d-e8c7-76d8-8797-80e09272eaa1.webp",
+     "player": [
+      "kp",
+      "502838"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01916715-847f-7c93-97cc-b2674b90d996",
+     "slug": "elementarno",
+     "url": "https://zonafilm.cc/title/elementarno/",
+     "name": "Элементарно",
+     "original_name": "Elementary",
+     "year": 2012,
+     "seasons": [
+      [
+       1,
+       23,
+       23
+      ],
+      [
+       2,
+       24,
+       24
+      ],
+      [
+       3,
+       24,
+       24
+      ],
+      [
+       4,
+       24,
+       24
+      ],
+      [
+       5,
+       24,
+       24
+      ],
+      [
+       6,
+       21,
+       21
+      ],
+      [
+       7,
+       13,
+       13
+      ]
+     ],
+     "page_episode_links": 153,
+     "reason": "Холмс консультирует полицию Нью-Йорка, рядом с ним доктор Джоан Ватсон; семь сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916715-847f-7c93-97cc-b2674b90d996.webp",
+     "player": [
+      "kp",
+      "661210"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01988e24-8a2f-7f2f-9e4a-08b1d0e21389",
+     "slug": "yasnovidec",
+     "url": "https://zonafilm.cc/title/yasnovidec/",
+     "name": "Ясновидец",
+     "original_name": "Psych",
+     "year": 2006,
+     "seasons": [
+      [
+       1,
+       15,
+       15
+      ],
+      [
+       2,
+       16,
+       16
+      ],
+      [
+       3,
+       16,
+       16
+      ],
+      [
+       4,
+       16,
+       16
+      ],
+      [
+       5,
+       16,
+       16
+      ],
+      [
+       6,
+       16,
+       16
+      ],
+      [
+       7,
+       15,
+       15
+      ],
+      [
+       8,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 120,
+     "reason": "Наблюдательный консультант выдаёт себя за ясновидящего — детектив с комедией; восемь сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01988e24-8a2f-7f2f-9e4a-08b1d0e21389.webp",
+     "player": [
+      "kp",
+      "399965"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01983119-0df6-789b-8d3d-7f143ef5ad61",
+     "slug": "defektivnyy-detektiv",
+     "url": "https://zonafilm.cc/title/defektivnyy-detektiv/",
+     "name": "Дефективный детектив",
+     "original_name": "Monk",
+     "year": 2002,
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ],
+      [
+       2,
+       16,
+       16
+      ],
+      [
+       3,
+       16,
+       16
+      ],
+      [
+       4,
+       16,
+       16
+      ],
+      [
+       5,
+       16,
+       16
+      ],
+      [
+       6,
+       16,
+       16
+      ],
+      [
+       7,
+       16,
+       16
+      ],
+      [
+       8,
+       16,
+       16
+      ]
+     ],
+     "page_episode_links": 124,
+     "reason": "Блестящий сыщик Эдриан Монк и его расстройства после гибели жены; восемь сезонов.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01983119-0df6-789b-8d3d-7f143ef5ad61.webp",
+     "player": [
+      "kp",
+      "230371"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "01971bee-f642-7c1f-80f3-c895d37dd79f",
+     "slug": "otdel-q",
+     "url": "https://zonafilm.cc/title/otdel-q/",
+     "name": "Отдел Q",
+     "original_name": "Dept. Q",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       9,
+       9
+      ]
+     ],
+     "page_episode_links": 9,
+     "reason": "Эдинбургский инспектор возглавляет отдел старых нераскрытых дел; девять серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01971bee-f642-7c1f-80f3-c895d37dd79f.webp",
+     "player": [
+      "kp",
+      "7316538"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 9,
+     "id": "0191671a-dfab-714d-b062-32a3649070d5",
+     "slug": "ohotnik-za-razumom",
+     "url": "https://zonafilm.cc/title/ohotnik-za-razumom/",
+     "name": "Охотник за разумом",
+     "original_name": "Mindhunter",
+     "year": 2017,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       9,
+       9
+      ]
+     ],
+     "page_episode_links": 19,
+     "reason": "Агенты ФБР 1970-х опрашивают серийных убийц, чтобы понять их; два сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0191671a-dfab-714d-b062-32a3649070d5.webp",
+     "player": [
+      "kp",
+      "958500"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "serial-za-vyhodnye",
+   "title": "Сериал на выходные: один сезон, до восьми серий",
+   "viewer_request": "Хочу посмотреть историю целиком за пару вечеров.",
+   "intro": "Сериалы, у которых на сайте один сезон и не больше восьми серий: можно начать в пятницу и досмотреть к воскресенью. Все серии доступны и проверены. Больше всего здесь расследований внутри одной семьи, одной компании или одного дома.",
+   "items": [
+    {
+     "order": 1,
+     "id": "01958f20-3f94-71b8-a625-cee9e130901e",
+     "slug": "podrostok",
+     "url": "https://zonafilm.cc/title/podrostok/",
+     "name": "Подросток",
+     "original_name": "Adolescence",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       4,
+       4
+      ]
+     ],
+     "page_episode_links": 4,
+     "reason": "13-летнего Джейми обвиняют в убийстве одноклассницы; четыре серии.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01958f20-3f94-71b8-a625-cee9e130901e.webp",
+     "player": [
+      "kp",
+      "6559163"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "0191ce51-413e-7fb4-9f41-634e80ef2b86",
+     "slug": "idealnaya-para-2",
+     "url": "https://zonafilm.cc/title/idealnaya-para-2/",
+     "name": "Идеальная пара",
+     "original_name": "The Perfect Couple",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "page_episode_links": 6,
+     "reason": "Тело в гавани Нантакета накануне свадьбы — и подозреваемыми становятся все гости; шесть серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0191ce51-413e-7fb4-9f41-634e80ef2b86.webp",
+     "player": [
+      "kp",
+      "5139249"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01915137-4dbe-724a-96d3-19551e118b47",
+     "slug": "hod-korolevy",
+     "url": "https://zonafilm.cc/title/hod-korolevy/",
+     "name": "Ход королевы",
+     "original_name": "The Queen's Gambit",
+     "year": 2020,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "page_episode_links": 7,
+     "reason": "После смерти матери девятилетняя Бет Хармон попадает в приют, где знакомится с уборщиком Шайбелем; семь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915137-4dbe-724a-96d3-19551e118b47.webp",
+     "player": [
+      "kp",
+      "1253633"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "01928d87-28a1-7994-820e-0d17c933bfa0",
+     "slug": "vse-sovpadeniya-nesluchayny",
+     "url": "https://zonafilm.cc/title/vse-sovpadeniya-nesluchayny/",
+     "name": "Все совпадения неслучайны",
+     "original_name": "Disclaimer",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "page_episode_links": 7,
+     "reason": "Журналистка узнаёт себя в романе, раскрывающем её тайну; семь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01928d87-28a1-7994-820e-0d17c933bfa0.webp",
+     "player": [
+      "kp",
+      "4889432"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh+mdl, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01915163-468e-7ca1-b474-b9b59cc8263c",
+     "slug": "olenenok-mini-serial-2024",
+     "url": "https://zonafilm.cc/title/olenenok-mini-serial-2024/",
+     "name": "Оленёнок (мини–сериал 2024)",
+     "original_name": "Baby Reindeer",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "page_episode_links": 7,
+     "reason": "Начинающий комик угощает незнакомку чаем — и это меняет его жизнь; семь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915163-468e-7ca1-b474-b9b59cc8263c.webp",
+     "player": [
+      "kp",
+      "5165951"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "0199282f-8b42-75b0-bb36-4fcfbdd7fcd0",
+     "slug": "zadanie-2",
+     "url": "https://zonafilm.cc/title/zadanie-2/",
+     "name": "Задание",
+     "original_name": "Task",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "page_episode_links": 7,
+     "reason": "Агент ФБР ищет грабителей, и главный подозреваемый — обычный семьянин; семь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0199282f-8b42-75b0-bb36-4fcfbdd7fcd0.webp",
+     "player": [
+      "kp",
+      "6553393"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01915136-acba-7744-bec7-b0e5da1b56c8",
+     "slug": "prezumpciya-nevinovnosti",
+     "url": "https://zonafilm.cc/title/prezumpciya-nevinovnosti/",
+     "name": "Презумпция невиновности",
+     "original_name": "Presumed Innocent",
+     "year": 2024,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "Прокурор расследует убийство коллеги, с которой у него был роман; восемь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915136-acba-7744-bec7-b0e5da1b56c8.webp",
+     "player": [
+      "kp",
+      "4852097"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 8,
+     "id": "0195b303-85de-742c-b904-3bfbec1b9535",
+     "slug": "rezidenciya",
+     "url": "https://zonafilm.cc/title/rezidenciya/",
+     "name": "Резиденция",
+     "original_name": "The Residence",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "Убийство на приёме в Белом доме: под подозрением гости и персонал; восемь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0195b303-85de-742c-b904-3bfbec1b9535.webp",
+     "player": [
+      "kp",
+      "5141899"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 9,
+     "id": "01995c49-ea8e-7f76-867e-e6c0fb67b79c",
+     "slug": "chernyy-krolik",
+     "url": "https://zonafilm.cc/title/chernyy-krolik/",
+     "name": "Чёрный кролик",
+     "original_name": "Black Rabbit",
+     "year": 2025,
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "page_episode_links": 8,
+     "reason": "Ресторатор из Нью-Йорка рискует бизнесом, когда возвращается его брат; восемь серий.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01995c49-ea8e-7f76-867e-e6c0fb67b79c.webp",
+     "player": [
+      "kp",
+      "5212130"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  },
+  {
+   "key": "golovolomki",
+   "title": "Кино-головоломки: сны, память и время",
+   "viewer_request": "Хочу фильм или сериал, над которым придётся подумать.",
+   "intro": "Истории, где правила реальности нарушены и зрителю приходится собирать картину вместе с героем: кражи во сне, жизнь без памяти о последних минутах, время, идущее вспять. Сначала фильмы, затем два сериала.",
+   "items": [
+    {
+     "order": 1,
+     "id": "01915149-e407-738a-a31b-1857545a8e18",
+     "slug": "nachalo-2",
+     "url": "https://zonafilm.cc/title/nachalo-2/",
+     "name": "Начало",
+     "original_name": "Inception",
+     "year": 2010,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Вор крадёт секреты из подсознания людей во время сна.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915149-e407-738a-a31b-1857545a8e18.webp",
+     "player": [
+      "kp",
+      "447301"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 2,
+     "id": "01916711-73a8-73a8-afb3-3158e89e4500",
+     "slug": "memento",
+     "url": "https://zonafilm.cc/title/memento/",
+     "name": "Мементо",
+     "original_name": "Memento",
+     "year": 2000,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Человек, не помнящий последних 15 минут, ищет убийцу жены.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916711-73a8-73a8-afb3-3158e89e4500.webp",
+     "player": [
+      "kp",
+      "335"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 3,
+     "id": "01915254-d429-7011-9132-72470f296ffc",
+     "slug": "prestizh-2006",
+     "url": "https://zonafilm.cc/title/prestizh-2006/",
+     "name": "Престиж (2006)",
+     "original_name": "The Prestige",
+     "year": 2006,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Соперничество двух лондонских иллюзионистов рубежа веков перерастает в войну.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915254-d429-7011-9132-72470f296ffc.webp",
+     "player": [
+      "kp",
+      "195334"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 4,
+     "id": "0191514f-ebed-7aaf-8ac6-82e0cbcca1a3",
+     "slug": "dovod",
+     "url": "https://zonafilm.cc/title/dovod/",
+     "name": "Довод",
+     "original_name": "Tenet",
+     "year": 2020,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Агенты используют технологию будущего, позволяющую времени идти вспять.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/0191514f-ebed-7aaf-8ac6-82e0cbcca1a3.webp",
+     "player": [
+      "kp",
+      "1236063"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 5,
+     "id": "01915149-e115-73d3-933b-165fc42f14d6",
+     "slug": "interstellar",
+     "url": "https://zonafilm.cc/title/interstellar/",
+     "name": "Интерстеллар",
+     "original_name": "Interstellar",
+     "year": 2014,
+     "seasons": [],
+     "page_episode_links": 0,
+     "reason": "Исследователи уходят сквозь червоточину, пока Земля переживает продовольственный кризис.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915149-e115-73d3-933b-165fc42f14d6.webp",
+     "player": [
+      "kp",
+      "258687"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 6,
+     "id": "01915285-7068-7720-af12-2cc4b8d9bd62",
+     "slug": "razdelenie",
+     "url": "https://zonafilm.cc/title/razdelenie/",
+     "name": "Разделение",
+     "original_name": "Severance",
+     "year": 2022,
+     "seasons": [
+      [
+       1,
+       9,
+       9
+      ],
+      [
+       2,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 19,
+     "reason": "Сотрудникам отделяют рабочие воспоминания от личных; два сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01915285-7068-7720-af12-2cc4b8d9bd62.webp",
+     "player": [
+      "kp",
+      "1343318"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    },
+    {
+     "order": 7,
+     "id": "01916714-03fd-7f53-b4f0-257bfc072ca0",
+     "slug": "izvne-2",
+     "url": "https://zonafilm.cc/title/izvne-2/",
+     "name": "Извне",
+     "original_name": "From",
+     "year": 2022,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ],
+      [
+       2,
+       10,
+       10
+      ],
+      [
+       3,
+       10,
+       10
+      ],
+      [
+       4,
+       10,
+       10
+      ]
+     ],
+     "page_episode_links": 40,
+     "reason": "Городок в лесу, из которого невозможно выбраться; четыре сезона.",
+     "interest_basis": [],
+     "poster": "https://poster.cdnvideohub.com/01916714-03fd-7f53-b4f0-257bfc072ca0.webp",
+     "player": [
+      "kp",
+      "4476885"
+     ],
+     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
+    }
+   ]
+  }
+ ]
+}

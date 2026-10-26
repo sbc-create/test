@@ -570,3 +570,99 @@ sources:
     conclusions:
       - "ym:s:date и ym:s:isRobot перечислены в справочнике группировок визитов."
       - "ym:s:<attribution>SearchEngineRoot (поисковая система, например lastsign) перечислена там же — поисковые визиты по дням раздельно для Яндекса и Google."
+  # --- исследование спроса и редакционных подборок zonafilm.cc ---------------
+  # Задание владельца 26.10.2026; запросы выполнены в окне 15:55:29Z–16:17:34Z (date -u до и после),
+  # retrieved_at — верхняя граница окна, точное время каждого запроса не записано; хосты внесены в inventory/network-allowlist.yaml
+  # с той же ссылкой. Все страницы прочитаны через WebFetch — это пересказ страницы
+  # моделью, а не сырой текст: прямой GET к kinopoisk.ru уходит на sso.kinopoisk.ru
+  # (форма входа), обходить её не стали. Поэтому sha256 содержимого нет, и выводы
+  # ниже — сигналы спроса и устройство подборок, а не факты для страниц сайта.
+  - id: SRC-KP-POPULAR-FILMS
+    kind: third_party_ranking
+    owner: Кинопоиск (Яндекс)
+    url: https://www.kinopoisk.ru/lists/movies/popular-films/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "сигнал текущего интереса внутри сервиса; не факты для сайта, не итоги года"
+    method: "WebFetch (пересказ); дословно сверены строки №1, 4, 6, 7, 41 — оценки и число оценок совпали"
+    conclusions:
+      - "Сам список говорит: «Рейтинг составлен на основе посещаемости страниц фильмов, а также запросов к поисковой системе сайта. Список обновляется один раз в сутки» — это интерес сейчас, а не за год."
+      - "Число оценок и позиция не связаны: «Чудо-Юдо» №4 при 1 429 оценках, «Джентльмены» (2019) №21 при 2,6 млн."
+  - id: SRC-KP-POPULAR-SERIES
+    kind: third_party_ranking
+    owner: Кинопоиск (Яндекс)
+    url: https://www.kinopoisk.ru/lists/movies/popular-series/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "сигнал текущего интереса внутри сервиса; не факты для сайта"
+    method: "WebFetch (пересказ)"
+    conclusions:
+      - "Та же методика (посещаемость и поиск по сайту, обновление раз в сутки). В топ-50 26.10 — 13 российских сериалов 2026 года; в каталоге zonafilm.cc из них нет ни одного."
+  - id: SRC-KP-LISTS-CATEGORIES
+    kind: third_party_editorial
+    owner: Кинопоиск (Яндекс)
+    url: https://www.kinopoisk.ru/lists/categories/movies/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "устройство тематических и режиссёрских списков"
+    method: "WebFetch (пересказ); разобран список /lists/movies/guy_ritchie/"
+    conclusions:
+      - "Тематические списки — по сюжетной теме (вампиры, космос, апокалипсис) и по режиссёру; режиссёрский список хронологический, без редакционного текста."
+  - id: SRC-NETFLIX-TOP10
+    kind: third_party_ranking
+    owner: Netflix
+    url: https://www.netflix.com/tudum/top10/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "просмотры внутри Netflix за неделю 12–18.10.2026; только платформа Netflix"
+    method: "WebFetch (пересказ); страницы /tudum/top10/ и /tudum/top10/tv"
+    conclusions:
+      - "Англоязычные сериалы: Below: Limited Series №1 (21,2 млн просмотров), East of Eden: Limited Series №2, The Diplomat S4 №5."
+  - id: SRC-NETFLIX-WHAT-TO-WATCH
+    kind: third_party_editorial
+    owner: Netflix
+    url: https://www.netflix.com/tudum/topics/what-to-watch
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "устройство редакционных подборок"
+    method: "WebFetch (пересказ); разобраны political-dramas-movies-shows, best-thrillers-on-netflix, the-west-wing-debora-cahn-favorite-episodes, eat-the-rich-satires"
+  - id: SRC-IVI-COLLECTIONS
+    kind: third_party_editorial
+    owner: Иви
+    url: https://www.ivi.tv/collections
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "устройство подборок; www.ivi.ru/collections отвечает 302 на www.ivi.tv/collections"
+    method: "WebFetch (пересказ); разобрана /collections/movies-plot-twist"
+  - id: SRC-AFISHA-DAILY-CINEMA
+    kind: third_party_editorial
+    owner: Афиша Daily
+    url: https://daily.afisha.ru/cinema/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "редакционные подборки (пример подхода, не рейтинг)"
+    method: "WebFetch (пересказ); разобраны 37631 (хоррор-сериалы), 30019 («Полураспад»), 37966 (хорроры 2026)"
+  - id: SRC-BFI-LISTS
+    kind: third_party_editorial
+    owner: British Film Institute
+    url: https://www.bfi.org.uk/articles/type/lists
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: approved
+    scope: "авторские узкие списки (пример подхода)"
+    method: "WebFetch (пересказ); разобраны 10-great-tv-miniseries-1980s, 10-great-films-about-dinner-parties"
+  - id: SRC-OKKO-COLLECTIONS
+    kind: third_party_editorial
+    owner: Okko
+    url: https://okko.tv/collection/collections_web
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: unavailable_blocked
+    evidence: "WebFetch: HTTP 403 Forbidden на /collection/collections_web и на https://okko.tv/ (в окне 15:55–16:17Z 26.10)"
+    required_for: "подборки по настроению и «что смотреть после» у Okko"
+  - id: SRC-WORDSTAT
+    kind: search_demand
+    owner: Яндекс
+    url: https://wordstat.yandex.ru/
+    retrieved_at: "2026-10-26T16:17:34Z"
+    status: unavailable_blocked
+    evidence: "WebFetch: страница показывает «Некоторые данные могут быть временно недоступны», частотности нет (в окне 15:55–16:17Z 26.10)"
+    required_for: "поисковая частотность названий в Яндексе; без неё частотность не приводится"
