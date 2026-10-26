@@ -1,0 +1,177 @@
+{
+ "method": "сверка автором по тексту источника (Shikimori description / статья Википедии из source_fetch.py film), 26.10.2026 SEO wt-portable-site-cell-01; имена — в падежной форме, как в тексте черновика; в скобках — форма в источнике",
+ "results": [
+  {
+   "domain": "zonafilm12.site",
+   "slug": "empatiya-2",
+   "confirmed": [
+    "Бьен [https://ru.wikipedia.org/wiki/%D0%AD%D0%BC%D0%BF%D0%B0%D1%82%D0%B8%D1%8F_(%D1%82%D0%B5%D0%BB%D0%B5%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB): «Бьен-Эме»]",
+    "Ройаль [https://ru.wikipedia.org/wiki/%D0%AD%D0%BC%D0%BF%D0%B0%D1%82%D0%B8%D1%8F_(%D1%82%D0%B5%D0%BB%D0%B5%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB): «Мон-Ройаль»]",
+    "Монреале [https://ru.wikipedia.org/wiki/%D0%AD%D0%BC%D0%BF%D0%B0%D1%82%D0%B8%D1%8F_(%D1%82%D0%B5%D0%BB%D0%B5%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB): «Монреале»]",
+    "Мортимером [https://ru.wikipedia.org/wiki/%D0%AD%D0%BC%D0%BF%D0%B0%D1%82%D0%B8%D1%8F_(%D1%82%D0%B5%D0%BB%D0%B5%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB): «Мортимер»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://ru.wikipedia.org/wiki/%D0%AD%D0%BC%D0%BF%D0%B0%D1%82%D0%B8%D1%8F_(%D1%82%D0%B5%D0%BB%D0%B5%D1%81%D0%B5%D1%80%D0%B8%D0%B0%D0%BB)"
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "dzho-pera-govorit-s-vami",
+   "confirmed": [
+    "Маркетте [https://en.wikipedia.org/wiki/Joe_Pera_Talks_with_You: «Marquette»]",
+    "Мичиган [https://en.wikipedia.org/wiki/Joe_Pera_Talks_with_You: «Michigan»]",
+    "Верхнем [https://en.wikipedia.org/wiki/Joe_Pera_Talks_with_You: «Upper Peninsula»]",
+    "Сарой [https://en.wikipedia.org/wiki/Joe_Pera_Talks_with_You: «Sarah»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://en.wikipedia.org/wiki/Joe_Pera_Talks_with_You"
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "parizaad",
+   "confirmed": [
+    "Паризаад [https://en.wikipedia.org/wiki/Parizaad: «Parizaad»]",
+    "Равалпинди [https://en.wikipedia.org/wiki/Parizaad: «Rawalpindi»]",
+    "Саида [https://en.wikipedia.org/wiki/Parizaad: «Saeeda»]",
+    "Нахид [https://en.wikipedia.org/wiki/Parizaad: «Naheed»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://en.wikipedia.org/wiki/Parizaad"
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "c-o",
+   "confirmed": [
+    "Кантчарапалеме [https://en.wikipedia.org/wiki/C%2Fo_Kancharapalem: «Kancharapalem»]",
+    "Висакхапатнам [https://en.wikipedia.org/wiki/C%2Fo_Kancharapalem: «Visakhapatnam»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://en.wikipedia.org/wiki/C%2Fo_Kancharapalem"
+  },
+  {
+   "domain": "zonafilm12.site",
+   "slug": "shorsi",
+   "confirmed": [
+    "Садбери [https://en.wikipedia.org/wiki/Shoresy: «Sudbury»]",
+    "Бульдогс [https://en.wikipedia.org/wiki/Shoresy: «Bulldogs»]",
+    "Северного [https://en.wikipedia.org/wiki/Shoresy: «Northern Ontario»]",
+    "Онтарио [https://en.wikipedia.org/wiki/Shoresy: «Ontario»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://en.wikipedia.org/wiki/Shoresy"
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "sang-e-mah",
+   "confirmed": [
+    "Ласпираан [https://en.wikipedia.org/wiki/Sang-e-Mah: «Laspiraan»]",
+    "Насруллы [https://en.wikipedia.org/wiki/Sang-e-Mah: «Nasrullah»]",
+    "Хана [https://en.wikipedia.org/wiki/Sang-e-Mah: «Khan»]",
+    "Хаджи [https://en.wikipedia.org/wiki/Sang-e-Mah: «Haji»]",
+    "Марджану [https://en.wikipedia.org/wiki/Sang-e-Mah: «Marjaan»]",
+    "Хану [https://en.wikipedia.org/wiki/Sang-e-Mah: «Khan»]",
+    "Зарсанге [https://en.wikipedia.org/wiki/Sang-e-Mah: «Zarsanga»]",
+    "Хилманда [https://en.wikipedia.org/wiki/Sang-e-Mah: «Hilmand»]",
+    "Хикмат [https://en.wikipedia.org/wiki/Sang-e-Mah: «Hikmat»]",
+    "Гуль [https://en.wikipedia.org/wiki/Sang-e-Mah: «Gul Meena»]",
+    "Мину [https://en.wikipedia.org/wiki/Sang-e-Mah: «Gul Meena»]",
+    "Заргуна [https://en.wikipedia.org/wiki/Sang-e-Mah: «Zarghuna»]",
+    "Гхаг [https://en.wikipedia.org/wiki/Sang-e-Mah: «Ghag»]",
+    "Мины [https://en.wikipedia.org/wiki/Sang-e-Mah: «Gul Meena»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://en.wikipedia.org/wiki/Sang-e-Mah"
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "bezdomnyy",
+   "confirmed": [
+    "Джун [Shikimori 59868: «Джун»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/59868"
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "slabyy-pyatitysyacheletniy-drakon-vegetarianec-2",
+   "confirmed": [
+    "Рэйко [Shikimori 58779: «Рэйко»]",
+    "Асгар [Shikimori 58779: «Асгаре»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/58779"
+  },
+  {
+   "domain": "zonafilm.space",
+   "slug": "povsednevnaya-zhizn-stazhera-muchitelya",
+   "confirmed": [
+    "Яворы [Shikimori 61886: «Явора»]",
+    "Цугуми [Shikimori 61886: «Цугуми»]",
+    "Спиритус [Shikimori 61886: «Спиритус»]",
+    "Микэ [Shikimori 61886: «Микэ»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/61886"
+  },
+  {
+   "domain": "animedia.icu",
+   "slug": "priklyucheniya-digimonov-02-nachalo",
+   "confirmed": [
+    "Эосмоном [Shikimori 49523: «Эосмоном»]",
+    "Дайсукэ [Shikimori 49523: «Дайсукэ»]",
+    "Мияко [Shikimori 49523: «Мияко»]",
+    "Иори [Shikimori 49523: «Иори»]",
+    "Такэру [Shikimori 49523: «Такэру»]",
+    "Кари [Shikimori 49523: «Кари»]",
+    "Оваду [Shikimori 49523: «Овада»]",
+    "Дигивайсом [Shikimori 49523: «Дигивайс»]",
+    "Дигидестинированным [Shikimori 49523: «Дигидестинированным»]",
+    "Уккомон [Shikimori 49523: «Уккомон»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/49523"
+  },
+  {
+   "domain": "an1meg0.site",
+   "slug": "krasnyy-foton-zillion",
+   "confirmed": [
+    "Марис [Shikimori 2688: «Марис»]",
+    "Ноза [Shikimori 2688: «Ноза»]",
+    "Оружейная [Shikimori 2688: «Оружейная»]",
+    "Джей [Shikimori 2688: «Джей»]",
+    "Чамп [Shikimori 2688: «Чамп»]",
+    "Эппл [Shikimori 2688: «Эппл»]",
+    "Белыми [Shikimori 2688: «Белых»]",
+    "Нозе [Shikimori 2688: «Ноза»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/2688"
+  },
+  {
+   "domain": "an1mego.site",
+   "slug": "argonavis-iz-ura-mechte",
+   "confirmed": [
+    "Нанахоси [Shikimori 40677: «Нанахоси»]",
+    "Горё [Shikimori 40677: «Горё»]",
+    "Ватару [Shikimori 40677: «Ватару»]",
+    "Матоба [Shikimori 40677: «Матоба»]",
+    "Кикё [Shikimori 40677: «Кикё»]",
+    "Банри [Shikimori 40677: «Банри»]",
+    "Сироиси [Shikimori 40677: «Сироиси»]"
+   ],
+   "not_found": [],
+   "own_network_only": [],
+   "source": "https://shikimori.io/animes/40677"
+  }
+ ]
+}
