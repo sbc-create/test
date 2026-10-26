@@ -165,7 +165,45 @@ def расписание(юнит: str) -> tuple[str, str]:
     return "РАСПИСАНИЕ", f"{юнит} включён, последнее срабатывание {когда:%Y-%m-%d %H:%MZ} ({часов:.0f} ч назад)"
 
 
-def по_домену(я: dict, сбор: dict | None, пояснение: str) -> dict:
+#: Дерево, из которого работает служба сбора: там же лежит и её манифест.
+ДЕРЕВО_СЛУЖБЫ = pathlib.Path("/home/claude/wt-portable-site-cell-01")
+
+
+def _проект_topvisor(домен: str, дерево: pathlib.Path):
+    """Проект Topvisor по домену из манифеста НАЗВАННОГО дерева."""
+    путь = дерево / "factory" / "topvisor" / "manifest.py"
+    if not путь.is_file():
+        return None, f"манифеста нет по пути {путь}"
+    # Два условия, без которых модуль из ЧУЖОГО дерева не загружается, и оба
+    # выяснены измерением, а не догадкой:
+    #   * корень того дерева должен стоять в sys.path первым — манифест
+    #     импортирует `factory.contact`, и без этого подхватился бы мой;
+    #   * модуль обязан попасть в sys.modules ДО exec_module — иначе
+    #     `@dataclass` внутри него падает с `AttributeError: 'NoneType'
+    #     object has no attribute '__dict__'` (dataclasses ищет модуль класса
+    #     в sys.modules). Проверено на манифесте линии SEO.
+    имя = "topvisor_manifest_внешний"
+    прежний_путь = list(sys.path)
+    прежний_модуль = sys.modules.get(имя)
+    try:
+        sys.path.insert(0, str(дерево))
+        сп = importlib.util.spec_from_file_location(имя, путь)
+        м = importlib.util.module_from_spec(сп)
+        sys.modules[имя] = м
+        сп.loader.exec_module(м)
+        return м.by_domain(домен), ""
+    except Exception as ош:  # noqa: BLE001 — причина важнее типа
+        return None, f"манифест {путь} не прочитан: {type(ош).__name__}: {ош}"
+    finally:
+        sys.path[:] = прежний_путь
+        if прежний_модуль is None:
+            sys.modules.pop(имя, None)
+        else:
+            sys.modules[имя] = прежний_модуль
+
+
+def по_домену(я: dict, сбор: dict | None, пояснение: str,
+              дерево_манифеста: pathlib.Path = ДЕРЕВО_СЛУЖБЫ) -> dict:
     домен = я["domain"]
     итог = {"домен": домен, "site_id": я["site_id"], "статус_ячейки": я.get("status"),
             "системы": {}}
@@ -207,7 +245,15 @@ def по_домену(я: dict, сбор: dict | None, пояснение: str) 
         состояние = (НЕТ_ДАННЫХ,
                      f"права: {вм.get('verification_status', 'нет поля')}, "
                      f"host_id: {вм.get('host_id') or 'нет'}")
-    расп_вм = расписание("webmaster-inventory.timer")
+    # Вебмастер опрашивает суточный сбор кабинета (`analytics_collect`:
+    # WEBMASTER_RESOURCES), а не отдельный юнит. Первая редакция искала
+    # `webmaster-inventory.timer` и печатала «таймера нет» — это ручной опрос,
+    # у него таймера и не должно быть. Поправку дала линия SEO, проверено:
+    # в последнем cabinet-latest.json 75 измерений Вебмастера с причиной
+    # «сеть недоступна (URLError)», то есть расписание работает, а данных нет
+    # из-за B023. Разница существенная: «нет расписания» требует завести
+    # таймер, «нет данных» — снять сетевое ограничение.
+    расп_вм = расписание("analytics-cabinet.timer")
     итог["системы"]["вебмастер"] = {
         "настроено": состояние[0], "почему": состояние[1],
         "данные": НЕТ_ДАННЫХ,
@@ -217,13 +263,13 @@ def по_домену(я: dict, сбор: dict | None, пояснение: str) 
     }
 
     # --- Topvisor ----------------------------------------------------------
-    try:
-        from factory.topvisor.manifest import by_domain
-        проект = by_domain(домен)
-    except Exception as ош:  # noqa: BLE001 — манифест может не импортироваться в чужом дереве
-        проект, ош_текст = None, f"манифест не прочитан: {type(ош).__name__}"
-    else:
-        ош_текст = ""
+    # Манифест Topvisor читается ИЗ НАЗВАННОГО ДЕРЕВА и дерево печатается.
+    # Причина измерена 26.10: служба сбора работает из рабочей копии линии SEO
+    # (MOD-198), и состав проектов там ДРУГОЙ — animedia.icu в их манифесте
+    # есть, в моей ветви нет. Инструмент, читающий артефакты из одного дерева,
+    # а конфигурацию из другого, печатает смесь двух состояний и называет
+    # пробелом то, чего в работающей системе нет.
+    проект, ош_текст = _проект_topvisor(домен, дерево_манифеста)
     if проект is None:
         тв = {"настроено": НЕТ_ДАННЫХ,
               "почему": ош_текст or "домена нет в манифесте Topvisor — "
@@ -251,18 +297,23 @@ def главная(аргв: list[str] | None = None) -> int:
     р.add_argument("--domain", action="append", default=[],
                    help="проверить только эти домены")
     р.add_argument("--artifacts", type=pathlib.Path, default=АРТЕФАКТЫ)
+    р.add_argument("--manifest-tree", type=pathlib.Path, default=ДЕРЕВО_СЛУЖБЫ,
+                   help="дерево, из которого читать манифест Topvisor "
+                        "(по умолчанию — дерево работающей службы сбора)")
     р.add_argument("--json", action="store_true")
     а = р.parse_args(аргв)
 
     сбор, пояснение = последний_сбор(а.artifacts)
     записи = [я for я in домены() if not а.domain or я["domain"] in а.domain]
-    итоги = [по_домену(я, сбор, пояснение) for я in записи]
+    итоги = [по_домену(я, сбор, пояснение, а.manifest_tree) for я in записи]
 
     if а.json:
         print(json.dumps({"artifacts": str(а.artifacts), "сбор": пояснение,
+                          "manifest_tree": str(а.manifest_tree),
                           "домены": итоги}, ensure_ascii=False, indent=1))
     else:
         print(f"артефакты сбора: {пояснение}")
+        print(f"манифест Topvisor прочитан из: {а.manifest_tree}")
         print(f"{'домен':24} {'ячейка':12} метрика / вебмастер / topvisor")
         for и in итоги:
             кратко = " | ".join(
