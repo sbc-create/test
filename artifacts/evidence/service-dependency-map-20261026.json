@@ -178,6 +178,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -260,6 +261,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": {
     "обёртка": "/usr/local/bin/community-ratings-gateway",
     "владелец": 0,
@@ -338,6 +340,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -539,6 +542,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -582,7 +586,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "9621a7a",
+    "голова": "4e14f6d",
     "незакоммичено_всего": 39
    },
    "точка_входа": "scripts/seo_content_operator_daily_report.py",
@@ -643,6 +647,14 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [
+    {
+     "файл": "seo_engine/content_operator/indexability_guard.py",
+     "строка": 29,
+     "ссылка": "seo_engine.core.owner_state.OWNER_STATE_MATRIX",
+     "разрешён": "seo_engine/core/owner_state.py"
+    }
+   ],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -650,10 +662,11 @@
     "можно": true,
     "при_условии": [
      "проверить, что от корня строки 11 (python: __file__) берётся только код",
-     "проверить, что от корня строки 76 (python: __file__) берётся только код"
+     "проверить, что от корня строки 76 (python: __file__) берётся только код",
+     "выпуск обязан включить seo_engine/core/owner_state.py — задание названо строкой «seo_engine.core.owner_state.OWNER_STATE_MATRIX» в seo_engine/content_operator/indexability_guard.py:29, импорта у него нет"
     ],
     "почему": [
-     "самоотносительный путь переопределяется переменной: проверить, что от корня строки 11 (python: __file__) берётся только код; проверить, что от корня строки 76 (python: __file__) берётся только код"
+     "самоотносительный путь переопределяется переменной: проверить, что от корня строки 11 (python: __file__) берётся только код; проверить, что от корня строки 76 (python: __file__) берётся только код; выпуск обязан включить seo_engine/core/owner_state.py — задание названо строкой «seo_engine.core.owner_state.OWNER_STATE_MATRIX» в seo_engine/content_operator/indexability_guard.py:29, импорта у него нет"
     ]
    }
   },
@@ -687,7 +700,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "9621a7a",
+    "голова": "4e14f6d",
     "незакоммичено_всего": 39
    },
    "точка_входа": "scripts/seo_content_operator_stage2_daily.py",
@@ -754,6 +767,14 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [
+    {
+     "файл": "seo_engine/content_operator/indexability_guard.py",
+     "строка": 29,
+     "ссылка": "seo_engine.core.owner_state.OWNER_STATE_MATRIX",
+     "разрешён": "seo_engine/core/owner_state.py"
+    }
+   ],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "SEO_RELEASE_COMMIT",
@@ -761,10 +782,11 @@
     "можно": true,
     "при_условии": [
      "проверить, что от корня строки 16 (python: __file__) берётся только код",
-     "юнит задаёт SEO_RELEASE_COMMIT (git по корню остаётся запасом для рабочего дерева)"
+     "юнит задаёт SEO_RELEASE_COMMIT (git по корню остаётся запасом для рабочего дерева)",
+     "выпуск обязан включить seo_engine/core/owner_state.py — задание названо строкой «seo_engine.core.owner_state.OWNER_STATE_MATRIX» в seo_engine/content_operator/indexability_guard.py:29, импорта у него нет"
     ],
     "почему": [
-     "самоотносительный путь переопределяется переменной: проверить, что от корня строки 16 (python: __file__) берётся только код; юнит задаёт SEO_RELEASE_COMMIT (git по корню остаётся запасом для рабочего дерева)"
+     "самоотносительный путь переопределяется переменной: проверить, что от корня строки 16 (python: __file__) берётся только код; юнит задаёт SEO_RELEASE_COMMIT (git по корню остаётся запасом для рабочего дерева); выпуск обязан включить seo_engine/core/owner_state.py — задание названо строкой «seo_engine.core.owner_state.OWNER_STATE_MATRIX» в seo_engine/content_operator/indexability_guard.py:29, импорта у него нет"
     ]
    }
   },
@@ -938,6 +960,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1121,6 +1144,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1304,6 +1328,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1487,6 +1512,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1528,7 +1554,7 @@
    },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "9621a7a",
+    "голова": "4e14f6d",
     "незакоммичено_всего": 39
    },
    "точка_входа": "seo_engine/content_operator/report_server.py",
@@ -1549,6 +1575,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1728,6 +1755,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -1921,6 +1949,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2174,6 +2203,7 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2336,6 +2366,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": true,
    "git_запас_переменной": "",
@@ -2404,6 +2435,7 @@
    ],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2508,6 +2540,7 @@
      "разрешён": "automation/host/seo_qwen_review.py"
     }
    ],
+   "задания_строкой": [],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
@@ -2713,14 +2746,52 @@
    "самоотносительные": [],
    "смысловые_от_себя": [],
    "догружаемые": [],
+   "задания_строкой": [
+    {
+     "файл": "seo_engine/orchestrator/tasks.py",
+     "строка": 273,
+     "ссылка": "seo_engine.services.search_integrations.scheduled_sync",
+     "разрешён": "seo_engine/services/search_integrations.py"
+    },
+    {
+     "файл": "seo_engine/orchestrator/tasks.py",
+     "строка": 358,
+     "ссылка": "seo_engine.services.content_queue.scheduled_run",
+     "разрешён": "seo_engine/services/content_queue.py"
+    },
+    {
+     "файл": "seo_engine/orchestrator/tasks.py",
+     "строка": 363,
+     "ссылка": "seo_engine.services.daily_operator.scheduled_run",
+     "разрешён": "seo_engine/services/daily_operator.py"
+    },
+    {
+     "файл": "seo_engine/orchestrator/tasks.py",
+     "строка": 308,
+     "ссылка": "seo_engine.services.changesets",
+     "разрешён": "seo_engine/services/__init__.py"
+    },
+    {
+     "файл": "seo_engine/orchestrator/tasks.py",
+     "строка": 332,
+     "ссылка": "seo_engine.services.newsroom",
+     "разрешён": "seo_engine/services/__init__.py"
+    }
+   ],
    "обёртка": null,
    "зовёт_git_по_корню": false,
    "git_запас_переменной": "",
    "перенос": {
     "можно": true,
-    "при_условии": [],
+    "при_условии": [
+     "выпуск обязан включить seo_engine/services/search_integrations.py — задание названо строкой «seo_engine.services.search_integrations.scheduled_sync» в seo_engine/orchestrator/tasks.py:273, импорта у него нет",
+     "выпуск обязан включить seo_engine/services/content_queue.py — задание названо строкой «seo_engine.services.content_queue.scheduled_run» в seo_engine/orchestrator/tasks.py:358, импорта у него нет",
+     "выпуск обязан включить seo_engine/services/daily_operator.py — задание названо строкой «seo_engine.services.daily_operator.scheduled_run» в seo_engine/orchestrator/tasks.py:363, импорта у него нет",
+     "выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.changesets» в seo_engine/orchestrator/tasks.py:308, импорта у него нет",
+     "выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.newsroom» в seo_engine/orchestrator/tasks.py:332, импорта у него нет"
+    ],
     "почему": [
-     "самоотносительных путей нет, git по корню не зовёт, состояние вне дерева"
+     "самоотносительный путь переопределяется переменной: выпуск обязан включить seo_engine/services/search_integrations.py — задание названо строкой «seo_engine.services.search_integrations.scheduled_sync» в seo_engine/orchestrator/tasks.py:273, импорта у него нет; выпуск обязан включить seo_engine/services/content_queue.py — задание названо строкой «seo_engine.services.content_queue.scheduled_run» в seo_engine/orchestrator/tasks.py:358, импорта у него нет; выпуск обязан включить seo_engine/services/daily_operator.py — задание названо строкой «seo_engine.services.daily_operator.scheduled_run» в seo_engine/orchestrator/tasks.py:363, импорта у него нет; выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.changesets» в seo_engine/orchestrator/tasks.py:308, импорта у него нет; выпуск обязан включить seo_engine/services/__init__.py — задание названо строкой «seo_engine.services.newsroom» в seo_engine/orchestrator/tasks.py:332, импорта у него нет"
     ]
    }
   }
