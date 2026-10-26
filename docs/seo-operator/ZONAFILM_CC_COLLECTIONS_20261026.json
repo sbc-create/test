@@ -126,33 +126,6 @@
     },
     {
      "order": 5,
-     "id": "01a0cef8-4607-7a94-b264-85a2548b0c6a",
-     "slug": "tyurma-chernyy-ostrov",
-     "url": "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
-     "name": "Тюрьма «Черный остров»",
-     "original_name": "黑岛监狱",
-     "year": 2026,
-     "seasons": [
-      [
-       1,
-       16,
-       16
-      ]
-     ],
-     "page_episode_links": 16,
-     "reason": "Китайский детектив: оперативник под прикрытием в тюрьме, связанной с исчезновениями людей; 16 серий.",
-     "interest_basis": [
-      "наша Метрика: поисковые входы на страницу 12–25.10.2026 (16, 7 дней)"
-     ],
-     "poster": "https://poster.cdnvideohub.com/01a0cef8-4469-7526-ad31-05495027920e.webp",
-     "player": [
-      "mdl",
-      "756319"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками mdl+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 6,
      "id": "01a0fd54-529a-784c-a338-aa163fe94ae3",
      "slug": "akademiya-vedm",
      "url": "https://zonafilm.cc/title/akademiya-vedm/",
@@ -179,7 +152,7 @@
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     },
     {
-     "order": 7,
+     "order": 6,
      "id": "01a0beb4-b21c-73ce-a55d-02cc4eba5051",
      "slug": "kvest-vizhna",
      "url": "https://zonafilm.cc/title/kvest-vizhna/",
@@ -207,7 +180,7 @@
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     },
     {
-     "order": 8,
+     "order": 7,
      "id": "01a052a6-2e24-763c-bc1e-36d9b73c94b0",
      "slug": "baba-yaga",
      "url": "https://zonafilm.cc/title/baba-yaga/",
@@ -233,7 +206,8 @@
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/series/"
   },
   {
    "key": "novinki-kino-2026",
@@ -372,27 +346,6 @@
     },
     {
      "order": 7,
-     "id": "01a08802-2f77-7e9d-8c66-bda6cfc47cb3",
-     "slug": "nadezhda",
-     "url": "https://zonafilm.cc/title/nadezhda/",
-     "name": "Надежда",
-     "original_name": "Hopeu",
-     "year": 2026,
-     "seasons": [],
-     "page_episode_links": 0,
-     "reason": "Корейская фантастика: находка в лесу у портового городка запускает обратный отсчёт для людей.",
-     "interest_basis": [
-      "Кинопоиск «Популярные фильмы», 26.10.2026: №18"
-     ],
-     "poster": "https://poster.cdnvideohub.com/01a08802-2dc2-7526-b7dd-2757cf178bfd.webp",
-     "player": [
-      "kp",
-      "5230825"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh+mdl, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 8,
      "id": "019f07e2-2cac-7492-957d-3d6de5a716af",
      "slug": "priglashenie",
      "url": "https://zonafilm.cc/title/priglashenie/",
@@ -413,7 +366,7 @@
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     },
     {
-     "order": 9,
+     "order": 8,
      "id": "01a052c9-7090-7640-9c32-737878eaca65",
      "slug": "priyatel",
      "url": "https://zonafilm.cc/title/priyatel/",
@@ -433,13 +386,14 @@
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/movies/"
   },
   {
    "key": "posle-gangsterlenda",
    "title": "Если понравился «Гангстерленд»: кланы и борьба за власть",
    "viewer_request": "Что посмотреть после «Гангстерленда»?",
-   "intro": "«Гангстерленд» — один из самых популярных сериалов на Кинопоиске и один из частых запросов к нашему сайту. Если хочется ещё историй о семьях, которые держат город, — вот с чего продолжить. Сначала британские банды, затем американская мафия.",
+   "intro": "«Гангстерленд» — один из самых популярных сериалов на Кинопоиске и один из частых запросов к нашему сайту. Если хочется ещё историй о семьях, которые держат город, — вот с чего продолжить. Сначала британские банды, затем американские.",
    "items": [
     {
      "order": 1,
@@ -835,33 +789,15 @@
       "767379"
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 11,
-     "id": "01915258-a7b2-724b-8689-087735dd5a3c",
-     "slug": "krestnyy-otec-1972",
-     "url": "https://zonafilm.cc/title/krestnyy-otec-1972/",
-     "name": "Крестный отец (1972)",
-     "original_name": "The Godfather",
-     "year": 1972,
-     "seasons": [],
-     "page_episode_links": 0,
-     "reason": "Фильм о сицилийской семье Корлеоне в Нью-Йорке 1945–1955 годов.",
-     "interest_basis": [],
-     "poster": "https://poster.cdnvideohub.com/01915258-a7b2-724b-8689-087735dd5a3c.webp",
-     "player": [
-      "kp",
-      "325"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/series/"
   },
   {
    "key": "shpiony-i-vlast",
    "title": "Шпионы, дипломаты и тайны власти",
    "viewer_request": "Хочу напряжённый сериал о разведке и политике.",
-   "intro": "Истории о людях, от решений которых зависит больше, чем их собственная жизнь: дипломатах, агентах и тех, кто их охраняет. Сначала свежие сезоны, затем сериалы и фильм, которые можно посмотреть целиком.",
+   "intro": "Сериалы о людях, от решений которых зависит больше, чем их собственная жизнь: дипломатах, агентах и тех, кто их охраняет. Сначала свежие сезоны, затем то, что можно посмотреть целиком.",
    "items": [
     {
      "order": 1,
@@ -1116,27 +1052,9 @@
       "1137755"
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 9,
-     "id": "0199dc3d-a0ac-7a4c-9f62-67f279b1697b",
-     "slug": "dom-iz-dinamita",
-     "url": "https://zonafilm.cc/title/dom-iz-dinamita/",
-     "name": "Дом из динамита",
-     "original_name": "A House of Dynamite",
-     "year": 2025,
-     "seasons": [],
-     "page_episode_links": 0,
-     "reason": "Фильм: 20 минут до удара неизвестно кем запущенной ракеты.",
-     "interest_basis": [],
-     "poster": "https://poster.cdnvideohub.com/0199dc3d-a0ac-7a4c-9f62-67f279b1697b.webp",
-     "player": [
-      "kp",
-      "6332958"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/series/"
   },
   {
    "key": "posle-mentalista",
@@ -1569,7 +1487,8 @@
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/series/"
   },
   {
    "key": "serial-za-vyhodnye",
@@ -1802,13 +1721,14 @@
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/series/"
   },
   {
    "key": "golovolomki",
    "title": "Кино-головоломки: сны, память и время",
-   "viewer_request": "Хочу фильм или сериал, над которым придётся подумать.",
-   "intro": "Истории, где правила реальности нарушены и зрителю приходится собирать картину вместе с героем: кражи во сне, жизнь без памяти о последних минутах, время, идущее вспять. Сначала фильмы, затем два сериала.",
+   "viewer_request": "Хочу фильм, над которым придётся подумать.",
+   "intro": "Фильмы, где правила реальности нарушены и зрителю приходится собирать картину вместе с героем: кражи во сне, жизнь без памяти о последних минутах, время, идущее вспять.",
    "items": [
     {
      "order": 1,
@@ -1904,78 +1824,210 @@
       "258687"
      ],
      "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 6,
-     "id": "01915285-7068-7720-af12-2cc4b8d9bd62",
-     "slug": "razdelenie",
-     "url": "https://zonafilm.cc/title/razdelenie/",
-     "name": "Разделение",
-     "original_name": "Severance",
-     "year": 2022,
-     "seasons": [
-      [
-       1,
-       9,
-       9
-      ],
-      [
-       2,
-       10,
-       10
-      ]
-     ],
-     "page_episode_links": 19,
-     "reason": "Сотрудникам отделяют рабочие воспоминания от личных; два сезона.",
-     "interest_basis": [],
-     "poster": "https://poster.cdnvideohub.com/01915285-7068-7720-af12-2cc4b8d9bd62.webp",
-     "player": [
-      "kp",
-      "1343318"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
-    },
-    {
-     "order": 7,
-     "id": "01916714-03fd-7f53-b4f0-257bfc072ca0",
-     "slug": "izvne-2",
-     "url": "https://zonafilm.cc/title/izvne-2/",
-     "name": "Извне",
-     "original_name": "From",
-     "year": 2022,
-     "seasons": [
-      [
-       1,
-       10,
-       10
-      ],
-      [
-       2,
-       10,
-       10
-      ],
-      [
-       3,
-       10,
-       10
-      ],
-      [
-       4,
-       10,
-       10
-      ]
-     ],
-     "page_episode_links": 40,
-     "reason": "Городок в лесу, из которого невозможно выбраться; четыре сезона.",
-     "interest_basis": [],
-     "poster": "https://poster.cdnvideohub.com/01916714-03fd-7f53-b4f0-257bfc072ca0.webp",
-     "player": [
-      "kp",
-      "4476885"
-     ],
-     "checked": "26.10.2026 в окне 15:55–16:17Z (date -u): 200, canonical на себя, index,follow, постер 200, плеер с источниками kp+cvh, ID плеера = ID каталога; воспроизведение в браузере не проверялось"
     }
-   ]
+   ],
+   "section": "/movies/",
+   "shortage": "5 фильмов — меньше ориентира 6–12; сериалы «Разделение» и «Извне» убраны (раздел «Фильмы»). Других фильмов с подтверждённой темой в проверенном пуле нет — не дополняется"
+  },
+  {
+   "key": "dorama-novye-i-celikom",
+   "section": "/doramas/",
+   "title": "Дорамы: новые серии и сезоны целиком",
+   "viewer_request": "Какую дораму начать сейчас — чтобы уже было что смотреть?",
+   "intro": "Корейские и китайские дорамы из каталога, у которых недавно вышли новые серии или сезон доступен целиком. Для раздела «Дорамы», а не для общей сериальной полки.",
+   "items": [
+    {
+     "id": "01a0cef8-4607-7a94-b264-85a2548b0c6a",
+     "slug": "tyurma-chernyy-ostrov",
+     "url": "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
+     "name": "Тюрьма «Черный остров»",
+     "original_name": "黑岛监狱",
+     "year": 2026,
+     "reason": "Китайский детектив 2026 года: оперативник под прикрытием попадает в тюрьму «Хэйдао», чтобы раскрыть исчезновения людей. Все 16 серий доступны.",
+     "ids": {
+      "mdl": "756319"
+     },
+     "player": [
+      "mdl",
+      "756319"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0cef8-4469-7526-ad31-05495027920e.webp",
+     "order": 1,
+     "seasons": [
+      [
+       1,
+       16,
+       16
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "019feabd-93ce-7599-9be6-ad522c2725f6",
+     "slug": "lovushka-zhelaniya",
+     "url": "https://zonafilm.cc/title/lovushka-zhelaniya/",
+     "name": "Ловушка желания",
+     "original_name": "욕망의 덫",
+     "year": 2026,
+     "reason": "Корейская драма мести: героиню ложно обвиняют в убийстве. С 10.10 на сайте стало 39 серий вместо 31.",
+     "ids": {
+      "mdl": "810734"
+     },
+     "player": [
+      "mdl",
+      "810734"
+     ],
+     "poster": "https://poster.cdnvideohub.com/019feabd-92b0-7623-b1b7-ca8358858737.webp",
+     "order": 2,
+     "seasons": [
+      [
+       1,
+       39,
+       100
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "01a10d1b-7c9a-71c2-a2e2-b9aae468566d",
+     "slug": "mezhdu-shagami",
+     "url": "https://zonafilm.cc/title/mezhdu-shagami/",
+     "name": "Между шагами",
+     "original_name": "연애박사",
+     "year": 2026,
+     "reason": "Корейская романтическая драма о бывшем пловце, ставшем робототехником; с 10.10 добавились серии 3–6 из 12.",
+     "ids": {
+      "imdb": "39087958",
+      "kinopoisk": "13919169",
+      "mdl": "802430"
+     },
+     "player": [
+      "kp",
+      "13919169"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a10d1b-7b33-7b11-b3cf-518af14926a4.webp",
+     "order": 3,
+     "seasons": [
+      [
+       1,
+       6,
+       12
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "01a08fc6-0023-70a9-8694-2d4d86f6eed3",
+     "slug": "legkiy-aromat-orhidei",
+     "url": "https://zonafilm.cc/title/legkiy-aromat-orhidei/",
+     "name": "Легкий аромат орхидеи",
+     "original_name": "兰香如故",
+     "year": 2026,
+     "reason": "Китайская костюмная драма о внучке опального сановника; все 47 серий доступны — можно смотреть без ожидания.",
+     "ids": {
+      "imdb": "32500958",
+      "kinopoisk": "13352123",
+      "mdl": "754367"
+     },
+     "player": [
+      "kp",
+      "13352123"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a08fc5-fe4c-7526-b158-5f8e885fa44c.webp",
+     "order": 4,
+     "seasons": [
+      [
+       1,
+       47,
+       47
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "01a0f647-f55b-73ec-a2ec-ac030b553748",
+     "slug": "prizrachnyy-syschik",
+     "url": "https://zonafilm.cc/title/prizrachnyy-syschik/",
+     "name": "Призрачный сыщик",
+     "original_name": "魅影神捕",
+     "year": 2026,
+     "reason": "Китайский детектив-фэнтези о мастере Цин Яне в Имперском сыскном бюро; с 10.10 сезон дошёл до 30 серий из 30.",
+     "ids": {
+      "imdb": "37357034",
+      "kinopoisk": "13746045",
+      "mdl": "757865"
+     },
+     "player": [
+      "kp",
+      "13746045"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a0f647-e52f-73ec-8358-43ee720215a1.webp",
+     "order": 5,
+     "seasons": [
+      [
+       1,
+       30,
+       30
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "01a10afe-0501-7a6c-b76c-572c17546054",
+     "slug": "smertelnye-salki",
+     "url": "https://zonafilm.cc/title/smertelnye-salki/",
+     "name": "Смертельные салки",
+     "original_name": "술래게임",
+     "year": 2026,
+     "reason": "Корейское шоу на выживание с погонями и скрытым «преследователем»; все десять выпусков доступны.",
+     "ids": {
+      "imdb": "47742728",
+      "mdl": "811874"
+     },
+     "player": [
+      "mdl",
+      "811874"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a10afe-02fa-7b11-aa8b-ba84773d8cb7.webp",
+     "order": 6,
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ]
+     ],
+     "interest_basis": []
+    },
+    {
+     "id": "01a07ac1-9a08-72ea-a7bc-f04d11f946be",
+     "slug": "ulichnyy-boec-bitva-rezhisserov",
+     "url": "https://zonafilm.cc/title/ulichnyy-boec-bitva-rezhisserov/",
+     "name": "Уличный боец: Битва Режиссеров",
+     "original_name": "스트릿 월드 파이터 : 디렉터스 워",
+     "year": 2026,
+     "reason": "Корейское шоу о режиссёрах и хореографах K-pop, спин-офф Street Woman/Man Fighter; выходит сейчас — 7 серий из 10.",
+     "ids": {
+      "mdl": "810318"
+     },
+     "player": [
+      "mdl",
+      "810318"
+     ],
+     "poster": "https://poster.cdnvideohub.com/01a07ac1-97f4-7714-8106-6d336882489a.webp",
+     "order": 7,
+     "seasons": [
+      [
+       1,
+       7,
+       10
+      ]
+     ],
+     "interest_basis": []
+    }
+   ],
+   "note": "состав взят из уже проверенных 26.10 страниц (подборки утренней поставки); пояснения прежние"
   }
- ]
+ ],
+ "direction_rule": "zonafilm.cc — профиль zona-general: на главной и в «Фильмах»/«Сериалах» только игровые фильмы/сериалы своего раздела; дорамы — в /doramas/, аниме — в разделе анимации (правило владельца 26.10)"
 }

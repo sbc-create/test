@@ -613,44 +613,6 @@
    "rule": "Сериалы сезона 2025–2026, у которых между снимками 10.10 и 26.10 на сайте фактически прибавились доступные серии; номера новых серий подтверждены проверкой ячейки (nums) и видны на странице 26.10.",
    "items": [
     {
-     "id": "019feabd-93ce-7599-9be6-ad522c2725f6",
-     "slug": "lovushka-zhelaniya",
-     "url": "https://zonafilm.cc/title/lovushka-zhelaniya/",
-     "name": "Ловушка желания",
-     "original_name": "욕망의 덫",
-     "year": 2026,
-     "reason": "Корейская драма мести: героиню ложно обвиняют в убийстве. С 10.10 на сайте стало 39 серий вместо 31.",
-     "basis": {
-      "search_entries_12_25_10": 4,
-      "search_entries_19_25_10": 1,
-      "engines": {
-       "Google": 4.0
-      },
-      "seasons_now": [
-       [
-        1,
-        39,
-        100
-       ]
-      ],
-      "seasons_10_10": [
-       [
-        1,
-        31,
-        100
-       ]
-      ]
-     },
-     "ids": {
-      "mdl": "810734"
-     },
-     "player": [
-      "mdl",
-      "810734"
-     ],
-     "poster": "https://poster.cdnvideohub.com/019feabd-92b0-7623-b1b7-ca8358858737.webp"
-    },
-    {
      "id": "01a0f6cf-85b9-7425-a9d8-b98a2745afcc",
      "slug": "chastnye-syschiki-zapadnoe-poberezhe",
      "url": "https://zonafilm.cc/title/chastnye-syschiki-zapadnoe-poberezhe/",
@@ -688,7 +650,8 @@
       "kp",
       "13796704"
      ],
-     "poster": "https://poster.cdnvideohub.com/01a0f6cf-84cd-7b11-9822-91fd339b61b9.webp"
+     "poster": "https://poster.cdnvideohub.com/01a0f6cf-84cd-7b11-9822-91fd339b61b9.webp",
+     "order": 1
     },
     {
      "id": "01a052a4-359d-763a-bfbd-180b784f0346",
@@ -727,7 +690,8 @@
       "kp",
       "12898669"
      ],
-     "poster": "https://poster.cdnvideohub.com/01a052a4-0eb9-7622-9a76-ae42d4c24579.webp"
+     "poster": "https://poster.cdnvideohub.com/01a052a4-0eb9-7622-9a76-ae42d4c24579.webp",
+     "order": 2
     },
     {
      "id": "01a1157c-420b-7963-a7af-57b69c71d80e",
@@ -760,47 +724,8 @@
       "kp",
       "12080544"
      ],
-     "poster": "https://poster.cdnvideohub.com/01a1157c-4105-7b13-aece-1bd0776ddac0.webp"
-    },
-    {
-     "id": "01a10d1b-7c9a-71c2-a2e2-b9aae468566d",
-     "slug": "mezhdu-shagami",
-     "url": "https://zonafilm.cc/title/mezhdu-shagami/",
-     "name": "Между шагами",
-     "original_name": "연애박사",
-     "year": 2026,
-     "reason": "Корейская романтическая драма о бывшем пловце, ставшем робототехником; с 10.10 добавились серии 3–6 из 12.",
-     "basis": {
-      "search_entries_12_25_10": 1,
-      "search_entries_19_25_10": 0,
-      "engines": {
-       "Google": 1.0
-      },
-      "seasons_now": [
-       [
-        1,
-        6,
-        12
-       ]
-      ],
-      "seasons_10_10": [
-       [
-        1,
-        2,
-        12
-       ]
-      ]
-     },
-     "ids": {
-      "imdb": "39087958",
-      "kinopoisk": "13919169",
-      "mdl": "802430"
-     },
-     "player": [
-      "kp",
-      "13919169"
-     ],
-     "poster": "https://poster.cdnvideohub.com/01a10d1b-7b33-7b11-b3cf-518af14926a4.webp"
+     "poster": "https://poster.cdnvideohub.com/01a1157c-4105-7b13-aece-1bd0776ddac0.webp",
+     "order": 3
     },
     {
      "id": "01944abd-4168-719c-baca-d318326b8ed2",
@@ -847,7 +772,8 @@
       "kp",
       "6458245"
      ],
-     "poster": "https://poster.cdnvideohub.com/01944abd-4168-719c-baca-d318326b8ed2.webp"
+     "poster": "https://poster.cdnvideohub.com/01944abd-4168-719c-baca-d318326b8ed2.webp",
+     "order": 4
     },
     {
      "id": "019888eb-8730-7e4e-8388-543d68c3e7ea",
@@ -894,7 +820,8 @@
       "kp",
       "5089523"
      ],
-     "poster": "https://poster.cdnvideohub.com/019888eb-8730-7e4e-8388-543d68c3e7ea.webp"
+     "poster": "https://poster.cdnvideohub.com/019888eb-8730-7e4e-8388-543d68c3e7ea.webp",
+     "order": 5
     },
     {
      "id": "019cb7e3-8582-74bf-a7dd-d3de2cb768fb",
@@ -941,7 +868,8 @@
       "kp",
       "11464269"
      ],
-     "poster": "https://poster.cdnvideohub.com/019cb7e3-8582-74bf-a7dd-d3de2cb768fb.webp"
+     "poster": "https://poster.cdnvideohub.com/019cb7e3-8582-74bf-a7dd-d3de2cb768fb.webp",
+     "order": 6
     },
     {
      "id": "019c8ef4-610f-76a4-b7aa-6aa84d5d801d",
@@ -988,7 +916,8 @@
       "kp",
       "11054388"
      ],
-     "poster": "https://poster.cdnvideohub.com/019c8ef4-610f-76a4-b7aa-6aa84d5d801d.webp"
+     "poster": "https://poster.cdnvideohub.com/019c8ef4-610f-76a4-b7aa-6aa84d5d801d.webp",
+     "order": 7
     },
     {
      "id": "0199f699-ac60-762b-ab29-58a750b91475",
@@ -1030,7 +959,8 @@
       "kp",
       "7484321"
      ],
-     "poster": "https://poster.cdnvideohub.com/0199f699-ac60-762b-ab29-58a750b91475.webp"
+     "poster": "https://poster.cdnvideohub.com/0199f699-ac60-762b-ab29-58a750b91475.webp",
+     "order": 8
     },
     {
      "id": "0199cd3a-4066-759a-afd6-4444fd91b89c",
@@ -1072,7 +1002,8 @@
       "kp",
       "8368127"
      ],
-     "poster": "https://poster.cdnvideohub.com/0199cd3a-4066-759a-afd6-4444fd91b89c.webp"
+     "poster": "https://poster.cdnvideohub.com/0199cd3a-4066-759a-afd6-4444fd91b89c.webp",
+     "order": 9
     },
     {
      "id": "01a05292-274b-7636-869a-2a4d0f789766",
@@ -1109,7 +1040,8 @@
       "kp",
       "7918850"
      ],
-     "poster": "https://poster.cdnvideohub.com/01a05292-0605-7622-be3b-8a6c9a82f0a2.webp"
+     "poster": "https://poster.cdnvideohub.com/01a05292-0605-7622-be3b-8a6c9a82f0a2.webp",
+     "order": 10
     }
    ]
   },
@@ -1569,5 +1501,6 @@
     }
    ]
   }
- ]
+ ],
+ "direction_rule": "zonafilm.cc — профиль zona-general: на главной и в «Фильмах»/«Сериалах» только игровые фильмы/сериалы своего раздела; дорамы — в /doramas/, аниме — в разделе анимации (правило владельца 26.10)"
 }
