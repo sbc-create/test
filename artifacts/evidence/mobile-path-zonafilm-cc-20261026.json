@@ -1,0 +1,118 @@
+{
+ "what": "мобильный путь «подборка → карточка → начало воспроизведения», Chromium 1234 headless, эмуляция iPhone 13, ru-RU",
+ "kind": "публичная проверка существующих подборок живого сайта (новые подборки не выпущены, проверочного экземпляра нет)",
+ "path": [
+  {
+   "step": "hub",
+   "url": "https://zonafilm.cc/collections/",
+   "collection_links": 12,
+   "first": [
+    "/collection/new_series_releases/",
+    "/collection/recently_added/",
+    "/collection/recently_added_movies/"
+   ]
+  },
+  {
+   "step": "collection",
+   "url": "https://zonafilm.cc/collection/new_series_releases/",
+   "cards": 60,
+   "first": [
+    "/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+    "/title/eto-ty-nezhdanno-negadanno/"
+   ]
+  },
+  {
+   "step": "title",
+   "url": "https://zonafilm.cc/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+   "player_state_before": "resolving",
+   "video_player": true
+  },
+  {
+   "step": "after_tap",
+   "player_state": "ready",
+   "video": {
+    "t": 0.09,
+    "paused": true,
+    "rs": 4,
+    "src": "blob:https://player.cdnvideohub.com/cd29b51d-a15a-4249-ac10-",
+    "frame": "https://player.cdnvideohub.com/s2/v2.38.2/frame/"
+   }
+  }
+ ],
+ "playback": {
+  "url": "https://zonafilm.cc/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+  "started": "20:48:47Z",
+  "finished": "20:49:20Z",
+  "player_buttons": [
+   {
+    "tag": "BUTTON",
+    "cls": "chip",
+    "aria": "Сезон, серия и озвучка",
+    "x": 71,
+    "y": 28,
+    "w": 126
+   },
+   {
+    "tag": "BUTTON",
+    "cls": "icon-button settings-button",
+    "aria": "Настройки",
+    "x": 162,
+    "y": 28,
+    "w": 40
+   },
+   {
+    "tag": "DIV",
+    "cls": "player-wrapper s-6",
+    "aria": "Видеоплеер",
+    "x": 182,
+    "y": 103,
+    "w": 364
+   },
+   {
+    "tag": "VIDEO",
+    "cls": "player-media",
+    "aria": null,
+    "x": 182,
+    "y": 103,
+    "w": 364
+   },
+   {
+    "tag": "DIV",
+    "cls": "playButton s-a",
+    "aria": "Смотреть",
+    "x": 182,
+    "y": 103,
+    "w": 96
+   },
+   {
+    "tag": "DIV",
+    "cls": "playButtonBackground s-a",
+    "aria": null,
+    "x": 182,
+    "y": 103,
+    "w": 96
+   }
+  ],
+  "tap2": {
+   "button": {
+    "tag": "DIV",
+    "cls": "player-wrapper s-6",
+    "aria": "Видеоплеер",
+    "x": 182,
+    "y": 103,
+    "w": 364
+   }
+  },
+  "currentTime_series_every_2_5s": [
+   0.623374,
+   3.246302,
+   5.853147,
+   8.486787,
+   11.021636,
+   13.592107
+  ],
+  "playing_confirmed": true
+ },
+ "finding": "первое нажатие на блок плеера только загружает проигрыватель (data-state ready, видео на паузе, t=0.09); воспроизведение начинается вторым нажатием по кнопке «Смотреть» внутри плеера",
+ "not_measured": "получение событий Метрикой — отдельно (цели в живом выпуске zonafilm.cc не отправляются)"
+}
