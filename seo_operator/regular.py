@@ -1857,8 +1857,12 @@ def calendar_day_section(script: Path | None, day: dt.date) -> str:
     календарного раздела отчёт не останавливает: он выходит с названной причиной.
     """
     head = f"\n\n## Вчера по календарю МСК ({day.isoformat()}, 00:00–23:59)\n\n"
-    if not script or not Path(script).is_file():
+    if not script:
         return head + "Не сформировано: календарный отчёт не подключён к этому прогону.\n"
+    if not Path(script).is_file():
+        # Путь назван, а файла нет — это поломка состава (MOD-198: выпуск без
+        # догружаемого сценария), а не настройка. Отчёт её так и называет.
+        return head + f"Не сформировано: СБОЙ — сценарий календарного отчёта не найден по пути {script}.\n"
     try:
         import importlib.util
 

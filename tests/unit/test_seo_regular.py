@@ -1820,6 +1820,9 @@ def test_calendar_day_section_never_breaks_the_report(tmp_path):
     """13.10: отчёт 10:00 несёт вчерашние сутки МСК; сбой раздела отчёт не роняет."""
     day = dt.date(2026, 10, 12)
     assert "не подключён" in regular.calendar_day_section(None, day)
+    # Путь назван, файла нет (выпуск без сценария) — сбой, а не «не подключён».
+    пропал = regular.calendar_day_section(tmp_path / "нет.py", day)
+    assert "СБОЙ" in пропал and "не подключён" not in пропал and "нет.py" in пропал
 
     broken = tmp_path / "broken.py"
     broken.write_text(
