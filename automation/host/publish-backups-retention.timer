@@ -1,0 +1,12 @@
+[Unit]
+Description=publish-backups: план удержания раз в сутки
+# Время выбрано так, чтобы не пересекаться с суточным публикатором (он пишет
+# копии около 03:3xZ) и с суточным сбором кабинета (05:00Z).
+[Timer]
+OnCalendar=*-*-* 06:40:00 UTC
+RandomizedDelaySec=300
+Persistent=true
+Unit=publish-backups-retention.service
+
+[Install]
+WantedBy=timers.target

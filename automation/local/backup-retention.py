@@ -143,7 +143,22 @@ def главное(аргв=None) -> int:
     р.add_argument("--apply", action="store_true",
                    help="удалить; без него только план")
     р.add_argument("--dir", default=str(КАТАЛОГ), help="каталог копий")
+    р.add_argument("--out-dir", help=(
+        "куда положить план с датой в имени (plan-ГГГГММДД.txt). Дата "
+        "подставляется ЗДЕСЬ, а не в юните: в юните systemd `%d` — специфер "
+        "каталога credentials, и дом запрещает его подстановку (проверка "
+        "tests/unit/test_host_units_call_cli_correctly.py поймала это сразу)"))
     опции = р.parse_args(аргв)
+
+    поток = None
+    if опции.out_dir:
+        import datetime as _dt
+        каталог_вывода = Path(опции.out_dir)
+        каталог_вывода.mkdir(parents=True, exist_ok=True)
+        метка = _dt.datetime.now(_dt.timezone.utc).strftime("%Y%m%d")
+        путь_вывода = каталог_вывода / f"plan-{метка}.txt"
+        поток = путь_вывода.open("w", encoding="utf-8")
+        sys.stdout = поток
 
     каталог = Path(опции.dir)
     if not каталог.is_dir():

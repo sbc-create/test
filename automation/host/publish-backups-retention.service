@@ -1,0 +1,40 @@
+[Unit]
+# Срок хранения суточных копий публикатора: ПЛАН по расписанию.
+#
+# Почему план, а не уборка. `var/lords/publish-backups` — суточные снимки
+# ПОСТОЯННЫХ ДАННЫХ витрин, и правило фабрики прямое: выпуск, сборка,
+# установщик и откат их только читают (docs/RUNTIME_DATA_OWNERSHIP.md).
+# Удаление — решение владельца, и срок хранения тоже его: поэтому юнит каждый
+# день считает и ЗАПИСЫВАЕТ, что освободилось бы, и ничего не удаляет.
+#
+# Повод измерен и повторён: 15.10 каталог 26,68 ГиБ (32 набора), 17.10 после
+# РАЗОВОГО прогона 9,2 ГБ (7 наборов), 21.10 снова 14 ГБ (11), 26.10 — 20 ГБ
+# (16 наборов, прирост ~1,2 ГБ в сутки). Разовая уборка дала девять суток;
+# расписания не было, и каталог вернулся к прежнему размеру. Отчёт по
+# расписанию не решает вопрос, но делает его видимым каждый день, а не раз в
+# пять суток случайно.
+#
+# Когда владелец назовёт срок — строка ExecStart заменяется на вариант с
+# `--apply --keep-days N` (он в комментарии ниже), и это ЕДИНСТВЕННОЕ, что
+# нужно поменять.
+Description=publish-backups: суточный план удержания копий (без удаления)
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/srv/site-factory/k2-delivery
+# Дата в имени файла подставляется САМИМ инструментом (--out-dir): в юните
+# systemd `%d` — специфер каталога credentials, и подстановка даты через
+# `date +%Y%m%d` его задевает. Проверка дома это поймала сразу.
+ExecStart=/usr/bin/python3 /srv/site-factory/k2-delivery/automation/local/backup-retention.py --keep-days 7 --out-dir /srv/site-factory/k2-delivery/var/retention
+# Вариант с уборкой — ТОЛЬКО по решению владельца о сроке:
+# ExecStart=/usr/bin/python3 /srv/site-factory/k2-delivery/automation/local/backup-retention.py --keep-days 7 --apply
+MemoryMax=256M
+TasksMax=16
+NoNewPrivileges=yes
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
