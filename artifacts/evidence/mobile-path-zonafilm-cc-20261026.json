@@ -113,6 +113,116 @@
   ],
   "playing_confirmed": true
  },
- "finding": "первое нажатие на блок плеера только загружает проигрыватель (data-state ready, видео на паузе, t=0.09); воспроизведение начинается вторым нажатием по кнопке «Смотреть» внутри плеера",
- "not_measured": "получение событий Метрикой — отдельно (цели в живом выпуске zonafilm.cc не отправляются)"
+ "finding": "первое нажатие на блок плеера только загружает проигрыватель (data-state ready, видео на паузе, t=0.09); воспроизведение начинается вторым нажатием по кнопке «Смотреть» внутри плеера; так же на zonafilm.space и zonafilm12.site",
+ "not_measured": "получение событий Метрикой — отдельно (цели в живом выпуске zonafilm.cc не отправляются)",
+ "other_sites": {
+  "zonafilm.space": {
+   "path": [
+    {
+     "step": "hub",
+     "url": "https://zonafilm.space/collections/",
+     "collection_links": 11,
+     "first": [
+      "/collection/new_series_releases/",
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/"
+     ]
+    },
+    {
+     "step": "collection",
+     "url": "https://zonafilm.space/collection/new_series_releases/",
+     "cards": 60,
+     "first": [
+      "/title/rashititel-grobnic/",
+      "/title/pylayuschee-leto/"
+     ]
+    },
+    {
+     "step": "title",
+     "url": "https://zonafilm.space/title/rashititel-grobnic/",
+     "player_state_before": "resolving",
+     "video_player": true
+    },
+    {
+     "step": "after_tap",
+     "player_state": "ready",
+     "video": {
+      "t": 0.093322,
+      "paused": true,
+      "rs": 4,
+      "src": "blob:https://player.cdnvideohub.com/03d9f0e0-af10-4664-be31-",
+      "frame": "https://player.cdnvideohub.com/s2/v2.38.2/frame/"
+     }
+    }
+   ],
+   "playback": {
+    "url": "https://zonafilm.space/title/rashititel-grobnic/",
+    "started": "21:00:43Z",
+    "finished": "21:01:11Z",
+    "currentTime_series_every_2_5s": [
+     3.644145,
+     6.158144,
+     8.67232,
+     11.188904,
+     13.710366,
+     16.23617
+    ],
+    "playing_confirmed": true
+   }
+  },
+  "zonafilm12.site": {
+   "path": [
+    {
+     "step": "hub",
+     "url": "https://zonafilm12.site/collections/",
+     "collection_links": 12,
+     "first": [
+      "/collection/new_series_releases/",
+      "/collection/recently_added/",
+      "/collection/recently_added_movies/"
+     ]
+    },
+    {
+     "step": "collection",
+     "url": "https://zonafilm12.site/collection/new_series_releases/",
+     "cards": 60,
+     "first": [
+      "/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+      "/title/eto-ty-nezhdanno-negadanno/"
+     ]
+    },
+    {
+     "step": "title",
+     "url": "https://zonafilm12.site/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+     "player_state_before": "resolving",
+     "video_player": true
+    },
+    {
+     "step": "after_tap",
+     "player_state": "ready",
+     "video": {
+      "t": 0.09,
+      "paused": true,
+      "rs": 4,
+      "src": "blob:https://player.cdnvideohub.com/70700e12-b823-4da0-a8b4-",
+      "frame": "https://player.cdnvideohub.com/s2/v2.38.2/frame/"
+     }
+    }
+   ],
+   "playback": {
+    "url": "https://zonafilm12.site/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+    "started": "21:01:13Z",
+    "finished": "21:01:43Z",
+    "currentTime_series_every_2_5s": [
+     0.09,
+     2.197073,
+     4.724429,
+     7.24579,
+     9.759315,
+     12.276036
+    ],
+    "playing_confirmed": true
+   }
+  }
+ }
 }
