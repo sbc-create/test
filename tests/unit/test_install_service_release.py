@@ -165,3 +165,55 @@ def test_сторонний_пакет_не_считается_недостаю�
     (выпуск / "pkg" / "main.py").write_text(
         "import sqlalchemy\nfrom fastapi import FastAPI\n", encoding="utf-8")
     assert инс.самодостаточен(выпуск) == []
+
+
+# --- Проверка drop-in до переключения (предложение линии SEO) ----------------
+
+def _dropin(tmp_path, текст: str):
+    ф = tmp_path / "release.conf"
+    ф.write_text(текст, encoding="utf-8")
+    return ф
+
+
+def test_корень_состояния_обязан_быть_префиксом_путей_записи(tmp_path):
+    """systemd НЕ раскрывает переменные окружения в ReadWritePaths и ExecStartPre.
+
+    Поэтому Environment=SEO_STATE_ROOT на них не влияет, и при переносе
+    состояния каталог надо перечислить ещё и там. Без этой проверки
+    расхождение поймается не до переключения, а первой записью: песочница
+    запретит её, и служба упадёт уже после.
+    """
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ReadWritePaths=/home/копия/var/seo-regular\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 1
+    assert any("РАСХОЖДЕНИЕ" in с and "ReadWritePaths" in с for с in строки)
+
+
+def test_согласованный_dropin_проходит(tmp_path):
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ReadWritePaths=/srv/состояние/var/seo-regular\n"
+                "ExecStartPre=/usr/bin/install -d /srv/состояние/var/analytics\n"
+                "ExecStart=/usr/bin/python3 -m служба --out /srv/состояние/var/о.json\n")
+    код, _строки = инс.проверить_dropin(ф)
+    assert код == 0
+
+
+def test_исполняемый_файл_путём_записи_не_считается(tmp_path):
+    """`/usr/bin/install -d …`: первое слово — бинарь, а не место записи."""
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ExecStartPre=/usr/bin/install -d /srv/состояние/var/x\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 0, строки
+    assert not any("/usr/bin/install" in с for с in строки)
+
+
+def test_без_корня_состояния_проверять_нечего(tmp_path):
+    """Третий исход: состояние осталось в рабочей копии — это не отказ."""
+    ф = _dropin(tmp_path, "[Service]\nWorkingDirectory=/srv/выпуск\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 2
+    assert any("проверять нечего" in с for с in строки)

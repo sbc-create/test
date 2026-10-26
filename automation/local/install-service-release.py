@@ -319,15 +319,96 @@ def откатить(служба: str, корень_выпусков: pathlib.P
     return 0
 
 
+#: Поля юнита, в которых стоят пути ЗАПИСИ. systemd не раскрывает в них
+#: переменные окружения, поэтому `Environment=SEO_STATE_ROOT=…` на них не
+#: влияет: каталог придётся перечислить ещё и здесь.
+ПОЛЯ_ЗАПИСИ = ("ReadWritePaths", "ExecStartPre", "ExecStartPost", "StateDirectory")
+#: Системные каталоги исполняемых файлов: путь оттуда — не место записи.
+КАТАЛОГИ_БИНАРЕЙ = ("/usr/bin/", "/bin/", "/usr/sbin/", "/sbin/", "/usr/local/bin/")
+
+
+def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
+    """Корень состояния обязан быть префиксом каждого пути записи в drop-in.
+
+    Проверку предложила линия wt-portable-site-cell-01 после измерения пар
+    «писатель — читатель», и причина названа точно: systemd НЕ раскрывает
+    переменные окружения в `ReadWritePaths`, `ExecStartPre` и `--out`. Значит
+    при переносе состояния drop-in обязан перечислить тот же каталог ещё и
+    там, иначе расхождение поймается не здесь, а первой записью: песочница
+    запретит её, и служба упадёт уже после переключения.
+
+    Возвращает (код, строки отчёта). Код 0 — согласовано, 1 — расхождение,
+    2 — проверять нечего (корень состояния в drop-in не задан).
+    """
+    if not файл.is_file():
+        return 2, [f"ОТКАЗ: нет {файл}"]
+    строки = файл.read_text(encoding="utf-8", errors="replace").splitlines()
+    корень = ""
+    пути: list[tuple[str, str]] = []
+    for строка in строки:
+        голая = строка.strip()
+        if голая.startswith("#") or "=" not in голая:
+            continue
+        ключ, значение = голая.split("=", 1)
+        ключ, значение = ключ.strip(), значение.strip()
+        if ключ == "Environment" and значение.startswith("SEO_STATE_ROOT="):
+            корень = значение.split("=", 1)[1].strip().strip('"')
+        elif ключ in ПОЛЯ_ЗАПИСИ:
+            части = значение.split()
+            # У ExecStartPre/Post первое слово — ИСПОЛНЯЕМЫЙ ФАЙЛ, а не путь
+            # записи: `/usr/bin/install -d …`. Без этого отсечения проверка
+            # объявляла расхождением сам install.
+            if ключ.startswith("ExecStart") and части:
+                части = части[1:]
+            пути += [(ключ, с) for с in части
+                     if с.startswith("/") and not с.startswith(КАТАЛОГИ_БИНАРЕЙ)]
+        elif ключ == "ExecStart":
+            части = значение.split()
+            for н, с in enumerate(части):
+                if с in ("--out", "--out-dir", "--state-dir") and н + 1 < len(части):
+                    пути.append((f"ExecStart {с}", части[н + 1]))
+                elif с.startswith("--out="):
+                    пути.append(("ExecStart --out", с.split("=", 1)[1]))
+    отчёт = [f"drop-in {файл}"]
+    if not корень:
+        отчёт.append("   SEO_STATE_ROOT не задан — состояние остаётся в рабочей "
+                     "копии, проверять нечего")
+        return 2, отчёт
+    отчёт.append(f"   SEO_STATE_ROOT = {корень}")
+    плохо = []
+    for поле, путь in пути:
+        согласован = путь.startswith(корень.rstrip("/"))
+        отчёт.append(f"   [{'ок ' if согласован else 'НЕТ'}] {поле}: {путь}")
+        if not согласован:
+            плохо.append((поле, путь))
+    if not пути:
+        отчёт.append("   путей записи в drop-in нет")
+    for поле, путь in плохо:
+        отчёт.append(f"   РАСХОЖДЕНИЕ: {поле} ведёт вне корня состояния — "
+                     "systemd не раскроет здесь переменную, и запись пойдёт "
+                     "не туда (или песочница её запретит)")
+    return (1 if плохо else 0), отчёт
+
+
 def главная(аргв: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(description=__doc__,
                                 formatter_class=argparse.RawDescriptionHelpFormatter)
-    р.add_argument("--service", required=True)
+    р.add_argument("--service", default="")
     р.add_argument("--root", type=pathlib.Path, default=ВЫПУСКИ)
     р.add_argument("--provision", action="store_true", help="разложить новый выпуск")
     р.add_argument("--verify", action="store_true", help="сверить текущий выпуск с описью")
     р.add_argument("--rollback", action="store_true", help="переключить current на прежний")
+    р.add_argument("--check-dropin", type=pathlib.Path,
+                   help="проверить drop-in: корень состояния — префикс всех путей записи")
     а = р.parse_args(аргв)
+    if а.check_dropin:
+        код, строки = проверить_dropin(а.check_dropin)
+        for с in строки:
+            print(с)
+        return код
+    if not а.service:
+        print("ОТКАЗ: нужен --service (или --check-dropin)", file=sys.stderr)
+        return 2
 
     if а.verify:
         return сверить(а.service, а.root)
