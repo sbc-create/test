@@ -91,6 +91,47 @@ def проекты() -> dict[str, dict]:
     return итог
 
 
+ИЗМЕРЕНИЕ_TOPVISOR = КОРЕНЬ / "var" / "topvisor" / "measure-latest.json"
+ЯДРО_TOPVISOR = КОРЕНЬ / "config" / "topvisor-cores.json"
+
+
+def измерения(путь: Path = ИЗМЕРЕНИЕ_TOPVISOR) -> dict[str, dict]:
+    """Домен → фактические настройки из `topvisor measure`. Нет файла — пусто."""
+    import sys  # noqa: PLC0415
+
+    try:
+        данные = json.loads(путь.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+    sys.path.insert(0, str(КОРЕНЬ))
+    from factory.topvisor.manifest import by_domain  # noqa: PLC0415
+
+    try:
+        ядро = json.loads(ЯДРО_TOPVISOR.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        ядро = {}
+    итог = {}
+    for с in данные.get("sites") or []:
+        if not с.get("domain") or с.get("project_id") is None:
+            continue
+        spec = by_domain(с["domain"])
+        итог[с["domain"]] = {
+            "project_id": int(с["project_id"]),
+            "measured_at": данные.get("measured_at"),
+            "source": "factory.topvisor.cli measure (get/projects_2/projects с регионами)",
+            "state": с.get("state"),
+            "on_raw": с.get("on_raw"),
+            "regions": [{k: р.get(k) for k in ("index", "searcher", "device", "region_name",
+                                               "region_key", "depth", "enabled")}
+                        for р in с.get("regions") or []],
+            "keywords_total": с.get("keywords_total"),
+            "last_check": с.get("last_check"),
+            "strategy": spec.focus if spec else None,
+            "core_version": ядро.get("version"),
+        }
+    return итог
+
+
 def main(argv: list[str] | None = None) -> int:
     р = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     р.add_argument("--apply", action="store_true", help="записать; без флага только показывает")
@@ -103,7 +144,7 @@ def main(argv: list[str] | None = None) -> int:
     for ячейка in реестр["cells"]:
         домен = ячейка["domain"]
         м, т = метрика.get(домен), топвизор.get(домен)
-        if not м and not т:
+        if not м and not т and домен not in измерения():
             continue
         блок = dict(ячейка.get("analytics") or {})
         было = json.dumps(блок, ensure_ascii=False, sort_keys=True)
@@ -121,6 +162,16 @@ def main(argv: list[str] | None = None) -> int:
             настройки["name"] = т["name"]
             настройки["source"] = "get/projects_2/projects"
             блок["topvisor_settings"] = настройки
+        замер = измерения().get(домен)
+        if замер:
+            # Измерение `topvisor measure` — чтение аккаунта с регионами
+            # (show_searchers_and_regions): это и есть «фактически применённые
+            # настройки». Стратегия — из манифеста, ядро — версия реестра.
+            настройки = dict(блок.get("topvisor_settings") or {})
+            настройки.update(замер)
+            блок["topvisor_settings"] = настройки
+            блок["topvisor_project_id"] = замер["project_id"]
+            блок["topvisor_verified_at"] = замер["measured_at"]
 
         части = []
         if м:
