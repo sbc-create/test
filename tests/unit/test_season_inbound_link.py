@@ -20,6 +20,8 @@ from __future__ import annotations
 import pathlib
 import re
 
+import pytest
+
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 РАНТАЙМ = КОРЕНЬ / "automation" / "host" / "lords-frontend.py"
 ТЕКСТ = РАНТАЙМ.read_text(encoding="utf-8")
@@ -116,3 +118,61 @@ def test_разметка_крошек_отражает_путь_url():
         звенья = [(э.get("name"), bool(э.get("item"))) for э in разметка["itemListElement"]]
         assert звенья == [("Проба", True), ("Сериалы", True), ("Скотты", True),
                           ("1 сезон", True), ("1 серия", False)], (имя_класса, звенья)
+
+
+# --- Крошки РАЗМЕТКОЙ, а не только видимой строкой ---------------------------
+
+def _страница_серии(tmp_path, monkeypatch, семейство: str, оформление=None):
+    """Готовая страница серии того же вида, что отдаёт витрина."""
+    import lords_runtime_harness as оснастка
+
+    с = оснастка.Стенд(tmp_path, site_id=f"{семейство}-крошки",
+                       семейство=семейство, версия_оформления=оформление)
+    с.записать_каталог([оснастка.запись("skotty", title="Скотты", kind="Сериал")])
+    с.записать_подробности([оснастка.подробность("skotty", type_="series")])
+    с.записать_плеер()
+    модуль = оснастка.загрузить(с, monkeypatch)
+    вид = оснастка.вид(модуль)
+    запись = next(з for з in вид.д.items if з["slug"] == "skotty")
+    деталь = вид.п.записи.get("skotty") or {}
+    try:
+        return модуль, вид.серия(запись, деталь, 1, 1)
+    finally:
+        оснастка.выгрузить(модуль)
+
+
+def _схемы(страница: str) -> list:
+    import json
+    import re
+    блоки = re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>',
+                       страница, re.S)
+    return [json.loads(б) for б in блоки]
+
+
+@pytest.mark.parametrize("семейство,оформление",
+                         [("lords", None), ("zona", "1.2.0")])
+def test_страница_серии_несёт_breadcrumblist(tmp_path, monkeypatch,
+                                             семейство, оформление):
+    """Измерено 26.10 отрисовкой артефакта lords-18: на странице серии стоял
+    только TVEpisode, а BreadcrumbList не выходил вовсе — `schema_крошек`
+    звалась лишь на странице сезона. Видимые крошки при этом были полными, и
+    проверка, вызывающая `schema_крошек` напрямую, подтверждала цепочку,
+    которой на странице нет.
+    """
+    _, страница = _страница_серии(tmp_path, monkeypatch, семейство, оформление)
+    типы = [с.get("@type") for с in _схемы(страница)]
+    assert "BreadcrumbList" in типы, типы
+    assert "TVEpisode" in типы, типы
+
+
+@pytest.mark.parametrize("семейство,оформление",
+                         [("lords", None), ("zona", "1.2.0")])
+def test_разметка_крошек_страницы_повторяет_путь(tmp_path, monkeypatch,
+                                                 семейство, оформление):
+    _, страница = _страница_серии(tmp_path, monkeypatch, семейство, оформление)
+    крошки = next(с for с in _схемы(страница) if с.get("@type") == "BreadcrumbList")
+    звенья = [(э.get("name"), bool(э.get("item")))
+              for э in крошки["itemListElement"]]
+    assert [и for и, _ in звенья][-2:] == ["1 сезон", "1 серия"], звенья
+    адреса = [э.get("item") for э in крошки["itemListElement"] if э.get("item")]
+    assert any(а.endswith("/title/skotty/season-1/") for а in адреса), адреса
