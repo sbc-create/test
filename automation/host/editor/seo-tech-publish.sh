@@ -8,7 +8,7 @@
 set -uo pipefail
 
 REPO=/home/claude/wt-portable-site-cell-01
-STATE="${SEO_TECH_STATE:-$REPO/var/seo-tech}"
+STATE="${SEO_TECH_STATE:-${SEO_STATE_ROOT:-$REPO}/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
 export SEO_TECH_STATE="$STATE"
 
 cd "$REPO" || { echo "seo-tech-publish: нет каталога $REPO" >&2; exit 70; }

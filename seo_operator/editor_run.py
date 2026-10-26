@@ -29,6 +29,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from seo_operator import paths
+
 QUEUE_EVENTS = Path("/var/lib/seo-content-operator/queue_events.jsonl")
 OVERLAY_ROOTS = {
     "animedia": (Path("/srv/sites/animedia/runtime/overlays"), "/title/{slug}/"),
@@ -317,8 +319,8 @@ def current_state(state: Path | None = None, now: dt.datetime | None = None) -> 
 
 REGISTRY = Path("/var/lib/seo-content-operator/registry.json")
 LEASES = Path("/var/lib/seo-content-operator/editorial_leases.json")
-STATE = Path(__file__).resolve().parents[1] / "var" / "editor-runs"
-CANDIDATES = Path(__file__).resolve().parents[1] / "var" / "seo-regular" / "editor-candidates.json"
+STATE = paths.state("var", "editor-runs")
+CANDIDATES = paths.state("var", "seo-regular", "editor-candidates.json")
 ANIMEDIA = ("animedia.icu", "animedia.space")
 #: Где редактор публикует с подтверждённым показом (regular.EDITOR_SITES).
 EDITOR_DOMAINS = (

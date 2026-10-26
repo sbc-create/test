@@ -24,6 +24,8 @@ import json
 import statistics
 from pathlib import Path
 
+from seo_operator import paths
+
 ROOT = Path(__file__).resolve().parents[1]
 GOAL = 5000
 
@@ -139,16 +141,16 @@ def markdown(r: dict) -> str:
 
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser()
-    ap.add_argument("--export", default=str(ROOT / "var/analytics/cabinet-latest.json"))
-    ap.add_argument("--out-dir", default=str(ROOT / "docs/seo-operator/goal-review"))
+    ap.add_argument("--export", default=str(paths.state("var", "analytics", "cabinet-latest.json")))
+    ap.add_argument("--out-dir", default=str(paths.registry("docs", "seo-operator", "goal-review")))
     a = ap.parse_args(argv)
     r = review(json.load(open(a.export, encoding="utf-8")))
     out = Path(a.out_dir)
     out.mkdir(parents=True, exist_ok=True)
     stem = f"goal-review-{r['weeks']['w2'][1]}"
     (out / f"{stem}.md").write_text(markdown(r), encoding="utf-8")
-    (ROOT / "var/analytics").mkdir(parents=True, exist_ok=True)
-    (ROOT / "var/analytics" / f"{stem}.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
+    paths.state("var", "analytics").mkdir(parents=True, exist_ok=True)
+    paths.state("var", "analytics", f"{stem}.json").write_text(json.dumps(r, ensure_ascii=False, indent=1), encoding="utf-8")
     print(out / f"{stem}.md")
     return 0
 

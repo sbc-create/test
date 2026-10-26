@@ -12,8 +12,10 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator, FormatChecker
 
+from seo_operator import paths
+
 REPO_ROOT = Path(__file__).resolve().parent.parent
-CONFIG_DIR = REPO_ROOT / "config"
+CONFIG_DIR = paths.registry("config")  # живой реестр (MOD-198)
 SCHEMA_DIR = REPO_ROOT / "schemas"
 
 

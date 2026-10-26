@@ -12,7 +12,7 @@
 set -uo pipefail
 
 REPO=/home/claude/wt-portable-site-cell-01
-STATE="$REPO/var/editor-runs"
+STATE="${SEO_STATE_ROOT:-$REPO}/var/editor-runs"  # тот же корень, что seo_operator.paths.state (MOD-198)
 CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${EDITOR_RUN_TRIGGER:-manual}"
 LIMIT_S="${EDITOR_RUN_TIMEOUT:-1500}"

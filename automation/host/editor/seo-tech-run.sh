@@ -17,7 +17,7 @@
 set -uo pipefail
 
 REPO=/home/claude/wt-portable-site-cell-01
-STATE="${SEO_TECH_STATE:-$REPO/var/seo-tech}"
+STATE="${SEO_TECH_STATE:-${SEO_STATE_ROOT:-$REPO}/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
 CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${SEO_TECH_TRIGGER:-manual}"
 LIMIT_S="${SEO_TECH_TIMEOUT:-1500}"          # модель

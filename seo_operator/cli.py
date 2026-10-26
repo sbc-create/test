@@ -17,6 +17,7 @@ import sys
 from datetime import date
 from pathlib import Path
 
+from seo_operator import paths
 from seo_operator.audit import AuditLog
 from seo_operator.datasources.live import probe_all
 from seo_operator.pipeline import Mode, Operator
@@ -25,7 +26,7 @@ from seo_operator.reporting import daily_report, weekly_report
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 FIXTURE_PORTFOLIO = REPO_ROOT / "config" / "portfolio.fixture.json"
-REAL_PORTFOLIO = REPO_ROOT / "config" / "portfolio.json"
+REAL_PORTFOLIO = paths.registry("config", "portfolio.json")
 FIXTURE_PAGES = REPO_ROOT / "tests" / "fixtures" / "crawl.fixture-anime.json"
 
 
@@ -40,7 +41,7 @@ def _operator(use_fixture: bool) -> Operator:
     portfolio_path = FIXTURE_PORTFOLIO if use_fixture else REAL_PORTFOLIO
     return Operator(
         portfolio=load_portfolio(portfolio_path),
-        audit_log=AuditLog(REPO_ROOT / "var" / "audit" / "operator.jsonl"),
+        audit_log=AuditLog(paths.state("var", "audit", "operator.jsonl")),
         allow_synthetic=use_fixture,
     )
 
@@ -136,7 +137,7 @@ def cmd_analytics_collect(args) -> int:
     report = collect(
         date1=args.date1,
         date2=args.date2,
-        artifacts_dir=REPO_ROOT / "artifacts" / "analytics",
+        artifacts_dir=paths.state("artifacts", "analytics"),
     )
     if args.json:
         print(json.dumps(report, ensure_ascii=False, indent=2))

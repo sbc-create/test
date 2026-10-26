@@ -29,11 +29,22 @@ import subprocess
 from pathlib import Path
 from typing import Any
 
+try:
+    from seo_operator import paths
+except ImportError:
+    # Модуль грузится и без пакета (по пути файла, `python3 -I`): корни путей
+    # берутся из соседнего paths.py тем же способом.
+    import importlib.util as _iu
+
+    _spec = _iu.spec_from_file_location("seo_operator_paths", Path(__file__).with_name("paths.py"))
+    paths = _iu.module_from_spec(_spec)
+    _spec.loader.exec_module(paths)
+
 REPO = Path(__file__).resolve().parents[1]
 # Переопределения окружением — для приёмки и тестов на отдельном состоянии, чтобы
 # проверка механизма не тратила попытки настоящих задач.
-QUEUE = Path(os.environ.get("SEO_TECH_QUEUE") or REPO / "config" / "seo-tech-queue.json")
-STATE = Path(os.environ.get("SEO_TECH_STATE") or REPO / "var" / "seo-tech")
+QUEUE = Path(os.environ.get("SEO_TECH_QUEUE") or paths.registry("config", "seo-tech-queue.json"))
+STATE = Path(os.environ.get("SEO_TECH_STATE") or paths.state("var", "seo-tech"))
 #: Задачи, поставленные пополнением очереди (tech_backlog): лежат в состоянии, а не в
 #: отслеживаемом config/ — служба не правит файлы git; сессия переносит их в очередь.
 AUTO_QUEUE_NAME = "auto-tasks.json"
@@ -152,7 +163,7 @@ def выведенные_владельцем(путь: Path | None = None) -> t
     но без импорта. Нечитаемый реестр — только перечень: отказ чтения не должен
     останавливать техработу остальных сайтов.
     """
-    путь = путь or Path(os.environ.get("SITE_CELLS_REGISTRY") or REPO / "config" / "site-cells.json")
+    путь = путь or Path(os.environ.get("SITE_CELLS_REGISTRY") or paths.registry("config", "site-cells.json"))
     try:
         ячейки = json.loads(путь.read_text(encoding="utf-8")).get("cells") or []
     except (OSError, ValueError, AttributeError):
@@ -522,7 +533,7 @@ def claim(задача: dict, run_id: str, state: Path = STATE, now: dt.datetime
         fh.write(f"{run_id} {now.strftime('%Y-%m-%dT%H:%M:%SZ')} "
                  f"pid={владелец['pid']} start={владелец['start']} boot={владелец['boot']}\n")
     try:
-        репо = REPO / задача["repo"]
+        репо = paths.state(задача["repo"])
         база = _git(репо, "rev-parse", "HEAD")
         ветка = f"claude/seo-tech-{задача['id'].lower()}-{run_id.lower()}"
         копия = каталог_копий(state) / run_id
@@ -621,7 +632,7 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
         владелец = замок.read_text(encoding="utf-8").split()[0] if замок and замок.exists() else ""
         живой = замок is not None and _замок_свеж(замок, now) and владелец == run_id
         if run_id in закрытые or not живой:
-            репо = REPO / к["repo"] if к else None
+            репо = paths.state(к["repo"]) if к else None
             if репо:
                 _git(репо, "worktree", "remove", "--force", str(копия), check=False)
                 репозитории.add(репо)
@@ -636,7 +647,7 @@ def prune_worktrees(state: Path = STATE, now: dt.datetime | None = None) -> list
     try:
         for з in load_queue():
             if з.get("repo") and "*" not in з["repo"] and "<" not in з["repo"]:
-                репозитории.add(REPO / з["repo"])
+                репозитории.add(paths.state(з["repo"]))
     except (OSError, ValueError, KeyError):
         pass
     for репо in репозитории:
@@ -686,7 +697,7 @@ def verify(run_id: str, state: Path = STATE, run_all: bool = True) -> dict[str, 
         return {"run_id": run_id, "verdict": "NO_TASK", "steps": {}, "notes": ["захвата с таким run_id нет"]}
     задачи = {з["id"]: з for з in load_queue()}
     задача = задачи.get(захват["task_id"], {})
-    репо = REPO / захват["repo"]
+    репо = paths.state(захват["repo"])
     шаги: dict[str, bool] = {}
     заметки: list[str] = []
 
@@ -816,7 +827,7 @@ def release_worktree(run_id: str, state: Path = STATE) -> None:
     """Рабочая копия прогона убирается; ВЕТКА остаётся для просмотра человеком."""
     захват = next((к for к in _claims(state) if к["run_id"] == run_id), None)
     if захват:
-        _git(REPO / захват["repo"], "worktree", "remove", "--force", захват["worktree"], check=False)
+        _git(paths.state(захват["repo"]), "worktree", "remove", "--force", захват["worktree"], check=False)
         замок = _замок(state, захват["task_id"])
         if замок.exists() and замок.read_text(encoding="utf-8").split()[:1] == [run_id]:
             замок.unlink(missing_ok=True)

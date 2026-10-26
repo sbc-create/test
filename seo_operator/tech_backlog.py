@@ -31,11 +31,11 @@ import urllib.request
 from pathlib import Path
 from typing import Any, Callable
 
-from seo_operator import tech_run
+from seo_operator import paths, tech_run
 
 REPO = tech_run.REPO
-REGULAR_STATE = REPO / "var" / "seo-regular" / "state.json"
-CELLS = REPO / "config" / "site-cells.json"
+REGULAR_STATE = paths.state("var", "seo-regular", "state.json")
+CELLS = paths.registry("config", "site-cells.json")
 
 #: Коды регулярной проверки, которые чинятся в коде витрины → шаблон задачи.
 TECH_CODES: dict[str, dict[str, str]] = {
@@ -96,7 +96,7 @@ def promoted_cells(cells_path: Path = CELLS) -> dict[str, dict[str, str]]:
         # решает наличие репозитория витрины. Восемь новых доменов отсекаются ниже по списку.
         if not домен or not путь or c.get("status") not in (None, "live", "active", "not_extracted"):
             continue
-        if not (REPO / путь).is_dir():
+        if not paths.state(путь).is_dir():
             continue
         # Yummy: код страниц — в контейнере Next.js, вне var/site-repos и вне cell trigger
         # (B016, T081) — задачи туда ставить нельзя: правка легла бы не в тот репозиторий.
@@ -275,7 +275,7 @@ def from_pages(cells: dict[str, dict], fetch: Fetch = _fetch, *, per_site: int =
 
 
 #: Позиции Топвизора: свежесть выгрузки и съёма, срок оценки, задач на сайт.
-POSITIONS = REPO / "var" / "topvisor" / "measure-latest.json"
+POSITIONS = paths.state("var", "topvisor", "measure-latest.json")
 POSITIONS_MAX_AGE_H = 72
 POSITIONS_CHECK_MAX_AGE_D = 10
 POSITIONS_EVAL_DAYS = 14

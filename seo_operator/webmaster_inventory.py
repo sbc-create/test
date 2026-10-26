@@ -34,9 +34,10 @@ from typing import Any
 from factory.analytics import registry
 from factory.analytics.yandex import YandexAnalyticsProvider, normalize_domain
 from factory.errors import FactoryError
+from seo_operator import paths
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
-OUT = REPO_ROOT / "var" / "analytics" / "webmaster-inventory.json"
+OUT = paths.state("var", "analytics", "webmaster-inventory.json")
 
 
 def exact_host_id(domain: str) -> str:

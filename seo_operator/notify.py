@@ -32,8 +32,11 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import Any
 
+from seo_operator import paths
+
 REPO_ROOT = Path(__file__).resolve().parents[1]
-STATE = REPO_ROOT / "var" / "notify"
+STATE = paths.state("var", "notify")
+DAILY_REPORTS = paths.state("var", "seo-regular", "reports", "daily")
 API = "https://api.telegram.org"
 LIMIT = 4000  # предел сообщения Telegram — 4096 знаков
 
@@ -215,7 +218,7 @@ def _daily_summary(report_json: Path) -> str:
 
 
 def _editor_runs(since: dt.datetime) -> list[dict]:
-    log = REPO_ROOT / "var" / "editor-runs" / "runs.jsonl"
+    log = paths.state("var", "editor-runs", "runs.jsonl")
     out = []
     if log.is_file():
         for line in log.read_text(encoding="utf-8").splitlines():
@@ -237,7 +240,7 @@ def daily(
     *,
     today: str | None = None,
     state: Path = STATE,
-    reports: Path = REPO_ROOT / "var" / "seo-regular" / "reports" / "daily",
+    reports: Path = DAILY_REPORTS,
 ) -> dict:
     today = today or dt.datetime.now(dt.timezone(dt.timedelta(hours=3))).strftime("%Y-%m-%d")
     md, js = reports / f"{today}.md", reports / f"{today}.json"
@@ -274,7 +277,7 @@ def collect_alerts(now: dt.datetime | None = None) -> dict[str, str]:
     """Ошибки, требующие вмешательства. Ключ — устойчивый идентификатор ошибки."""
     now = now or dt.datetime.now(dt.timezone.utc)
     out: dict[str, str] = {}
-    st = json.loads((REPO_ROOT / "var" / "seo-regular" / "state.json").read_text(encoding="utf-8"))
+    st = json.loads(paths.state("var", "seo-regular", "state.json").read_text(encoding="utf-8"))
     for key, it in (st.get("open_issues_check") or {}).items():
         if it.get("severity") == "critical":
             out[f"site:{key}"] = f"Сайт {it['domain']}: {it['code']} — {it.get('detail', '')}"
@@ -284,7 +287,7 @@ def collect_alerts(now: dt.datetime | None = None) -> dict[str, str]:
                 f"Фоновый редактор, запуск {r['run_id']}: {r.get('verdict')}, "
                 f"выход модели {r.get('model_exit')}, шаги {r.get('steps')}"
             )
-    snaps = sorted((REPO_ROOT / "artifacts" / "analytics").glob("analytics-????-??-??.json"))
+    snaps = sorted(paths.state("artifacts", "analytics").glob("analytics-????-??-??.json"))
     if snaps:
         age = (
             now - dt.datetime.fromisoformat(snaps[-1].name[10:20]).replace(tzinfo=dt.timezone.utc)

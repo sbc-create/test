@@ -66,6 +66,7 @@ from pathlib import Path
 from typing import Any
 
 from seo_operator import page_audit
+from seo_operator import paths as _paths
 from seo_operator.scheduler import Checkpoint, FileLock, LockBusy
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
@@ -84,20 +85,20 @@ USER_AGENT = "site-factory-seo-regular/1 (read-only check)"
 
 #: Источники. Все читаются, ни один не пишется.
 SOURCES = {
-    "cells": REPO_ROOT / "config" / "site-cells.json",
-    "analytics_registry": REPO_ROOT / "config" / "analytics.json",
-    "analytics_snapshots": REPO_ROOT / "artifacts" / "analytics",
+    "cells": _paths.registry("config", "site-cells.json"),
+    "analytics_registry": _paths.registry("config", "analytics.json"),
+    "analytics_snapshots": _paths.state("artifacts", "analytics"),
     "indexing_states": Path("/srv/sites/indexing"),
     "queue_registry": Path("/var/lib/seo-content-operator/registry.json"),
     "queue_events": Path("/var/lib/seo-content-operator/queue_events.jsonl"),
     "content_operator_state": Path("/var/lib/seo-content-operator/state.json"),
-    "defects": REPO_ROOT / "config" / "seo-module-defects.json",
-    "changes_ledger": REPO_ROOT / "config" / "seo-changes.json",
+    "defects": _paths.registry("config", "seo-module-defects.json"),
+    "changes_ledger": _paths.registry("config", "seo-changes.json"),
     # Строки журнала изменений, которые дописывает фоновый редактор (в git не
     # коммитит — в репозиторий их переносит сессия).
-    "changes_ledger_runs": REPO_ROOT / "var" / "editor-runs" / "ledger.jsonl",
+    "changes_ledger_runs": _paths.state("var", "editor-runs", "ledger.jsonl"),
     "facts_snapshots": Path("/srv/lords/.frontend"),
-    "coverage_blockers": REPO_ROOT / "config" / "editor-coverage-blockers.json",
+    "coverage_blockers": _paths.registry("config", "editor-coverage-blockers.json"),
     # Календарные сутки МСК (владелец 13.10: отчёт — за вчерашний день 00:00–23:59).
     "calendar_day_script": REPO_ROOT / "automation" / "local" / "editor-day-report.py",
 }
@@ -1914,7 +1915,7 @@ def allocation_section(now: dt.datetime, *, gate_log: Path | None = None,
         for row in published if published is not None else published_since(начало):
             домен = row["url"].split("/")[2]
             страницы[editor_run.направление_домена(домен) or "вне"].add(row["url"])
-        очередь = json.loads((queue or (REPO_ROOT / "config" / "seo-tech-queue.json")).read_text(encoding="utf-8"))
+        очередь = json.loads((queue or _paths.registry("config", "seo-tech-queue.json")).read_text(encoding="utf-8"))
         тех = {н: {} for н in ("anime", "lords")}
         for з in очередь.get("tasks") or []:
             if з.get("direction") in тех:
@@ -2613,7 +2614,7 @@ IDENTITY_OUTCOMES = ("IDENTITY_UNCLEAR", "IDENTITY_REJECTED")
 def shared_catalog_domain(domain: str) -> bool:
     """Домен строится из общего снимка Lords/Zona (по идентификатору ячейки)."""
     return str(EDITOR_SITES.get(domain, "")).startswith(("lords-", "zona-"))
-SOURCE_POLICY = REPO_ROOT / "config" / "editorial-sources.json"
+SOURCE_POLICY = _paths.registry("config", "editorial-sources.json")
 
 
 def _source_policy_changed_at(path: Path = SOURCE_POLICY) -> dt.datetime | None:
@@ -3321,7 +3322,7 @@ def step_daily_report(ctx: Context) -> Any:
             f"var/seo-regular/reports/daily/{ctx.now.astimezone(MSK):%Y-%m-%d}.md"
         ),
     }
-    report["editor"] = editor_day(REPO_ROOT / "var" / "editor-runs", ctx.now - dt.timedelta(days=1))
+    report["editor"] = editor_day(_paths.state("var", "editor-runs"), ctx.now - dt.timedelta(days=1))
     report["published_24h"] = published_since(ctx.now - dt.timedelta(days=1))
     report["owner_needs"] = owner_needs(ctx.sources["defects"])
     try:
@@ -3487,7 +3488,7 @@ def step_hourly(ctx: Context) -> Any:
                 results += 1
                 outcomes[e.get("outcome")] = outcomes.get(e.get("outcome"), 0) + 1
     runs = []
-    log = REPO_ROOT / "var" / "editor-runs" / "runs.jsonl"
+    log = _paths.state("var", "editor-runs", "runs.jsonl")
     if log.is_file():
         for line in log.read_text(encoding="utf-8").splitlines():
             try:
@@ -3644,7 +3645,7 @@ def run(
     """Один запуск режима. Возвращает итог с кодом выхода."""
     if mode not in PLANS:
         raise ValueError(f"неизвестный режим {mode!r}")
-    root = Path(root or os.environ.get("SEO_REGULAR_ROOT") or REPO_ROOT / "var" / "seo-regular")
+    root = Path(root or os.environ.get("SEO_REGULAR_ROOT") or _paths.state("var", "seo-regular"))
     root.mkdir(parents=True, exist_ok=True)
     now = now or utcnow()
     run_id = slot_id(mode, now)
@@ -3832,7 +3833,7 @@ def status(
     срабатывания. И отдельно — завершённые запуски из собственного журнала с
     триггером: запуск по расписанию и ручной не смешиваются.
     """
-    root = Path(root or os.environ.get("SEO_REGULAR_ROOT") or REPO_ROOT / "var" / "seo-regular")
+    root = Path(root or os.environ.get("SEO_REGULAR_ROOT") or _paths.state("var", "seo-regular"))
     state = _read_json(root / "state.json", {})
     out: dict[str, Any] = {"root": str(root), "modes": {}}
     for mode in MODES:
