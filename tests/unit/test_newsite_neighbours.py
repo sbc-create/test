@@ -90,3 +90,41 @@ def test_новый_проект_получает_требование_к_под
     assert "schemas/site-collections.schema.json" in источник
     assert "индексации" in источник and "профилю этого домена" in источник
     assert "НЕ измеряется" in источник
+
+
+# --- Путь проекта в паспорте -------------------------------------------------
+
+def test_путь_проекта_в_паспорте_относителен_корню(tmp_path):
+    """Абсолютный путь одного рабочего дерева в реестре — неверная настройка.
+
+    Измерено 26.10 при перезакреплении пятёрки на исправленную основу:
+    генератор записывал в паспорт `/home/claude/wt-nova-publish-memory-02/var/
+    new-sites/lords-18`, и это попало бы в коммит. Реестр читают другие
+    рабочие деревья, другие машины и проверки — для них такой путь неверен, а
+    выглядит как настройка, а не как след чужой машины.
+    """
+    from factory.cell import newsite
+
+    корень = tmp_path / "repo"
+    (корень / "var" / "new-sites" / "lords-99").mkdir(parents=True)
+    заказ = newsite.Заказ(site_id="lords-99", domain="proba.invalid",
+                          profile="lords-serials", port=9199, family="lords")
+    паспорт = newsite.паспорт_ячейки(
+        заказ, куда=корень / "var" / "new-sites" / "lords-99",
+        аккаунт="lords-99", корень_сайта="/srv/lords-99", корень=корень)
+    assert паспорт.repo["path"] == "var/new-sites/lords-99"
+
+
+def test_путь_снаружи_корня_остаётся_абсолютным(tmp_path):
+    """Относительным его не сделать, а выдумывать другой нельзя."""
+    from factory.cell import newsite
+
+    корень = tmp_path / "repo"
+    корень.mkdir()
+    снаружи = tmp_path / "другое-дерево" / "lords-99"
+    снаружи.mkdir(parents=True)
+    заказ = newsite.Заказ(site_id="lords-99", domain="proba.invalid",
+                          profile="lords-serials", port=9199, family="lords")
+    паспорт = newsite.паспорт_ячейки(заказ, куда=снаружи, аккаунт="lords-99",
+                                     корень_сайта="/srv/lords-99", корень=корень)
+    assert паспорт.repo["path"] == str(снаружи)
