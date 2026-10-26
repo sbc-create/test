@@ -168,3 +168,47 @@ def test_генератор_не_стирает_репозиторий_сайт�
     текст = str(сбой.value)
     assert "promote-cell-pins.py" in текст, текст
     assert (куда / ".git").is_dir(), "каталог .git всё равно стёрт"
+
+
+def test_новый_проект_получает_проверку_подборок_в_run_sh(tmp_path):
+    """Требование, которое надо вспомнить, рано или поздно не запускается.
+
+    Поручение владельца 26.10: «проверь, что приёмка подборок действительно
+    вызывается штатным выпуском. Наличие команды в AGENTS.md само по себе
+    этого не подтверждает». Измерено до этой правки: `checks/run.sh` о
+    подборках не знал вовсе.
+    """
+    from factory.cell import newsite as нс
+
+    куда = tmp_path / "проект"
+    (куда / "checks").mkdir(parents=True)
+    (куда / "checks" / "run.sh").write_text(
+        "#!/usr/bin/env bash\n"
+        'expected="$(grep -cE \'^(check|step) \' "$0")"\n'
+        'check "site-config-json"  python3 -c "pass"\n'
+        '\nif [ "$ran" -ne "$expected" ]; then\n  exit 1\nfi\n'
+        '\nexit "$fail"\n', encoding="utf-8")
+    нс._записать_проверку_подборок(Path(нс.__file__).resolve().parents[2], куда)
+    бегунок = (куда / "checks" / "run.sh").read_text(encoding="utf-8")
+    assert 'check "collections"' in бегунок
+    # Вызов обязан стоять ПЕРЕД блоком подсчёта, иначе сторож `checks-all-ran`
+    # падает у каждого нового сайта.
+    assert бегунок.index('check "collections"') < бегунок.index('"$ran" -ne "$expected"')
+    assert (куда / "checks" / "check_collections.py").is_file()
+    # Схема КОПИРУЕТСЯ в проект: проверка выпуска не ходит за требованиями в
+    # чужое дерево.
+    assert (куда / "config" / "site-collections.schema.json").is_file()
+
+
+def test_повторный_прогон_не_дублирует_вызов_подборок(tmp_path):
+    from factory.cell import newsite as нс
+
+    куда = tmp_path / "проект"
+    (куда / "checks").mkdir(parents=True)
+    (куда / "checks" / "run.sh").write_text(
+        '#!/usr/bin/env bash\n\nif [ "$ran" -ne "$expected" ]; then\n  exit 1\nfi\n',
+        encoding="utf-8")
+    нс._записать_проверку_подборок(Path(нс.__file__).resolve().parents[2], куда)
+    нс._записать_проверку_подборок(Path(нс.__file__).resolve().parents[2], куда)
+    бегунок = (куда / "checks" / "run.sh").read_text(encoding="utf-8")
+    assert бегунок.count('check "collections"') == 1

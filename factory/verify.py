@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import base64
 import json
+import sys
 import os
 import re
 import urllib.error
@@ -616,6 +617,70 @@ def verify_payload_multisite(site_id: str, package: dict, base_url: str, *, job_
     return checks, reports
 
 
+
+def _путь_в_отчёт(путь: Path) -> str:
+    """Путь артефакта: относительный от корня, иначе абсолютный.
+
+    `relative_to` на пути ВНЕ корня бросает ValueError, и ворота падали бы не
+    на том, что проверяют. Каталог артефактов вне дерева — законное положение
+    (стенд, временный каталог), и отвечать на него исключением значит терять
+    результат проверки из-за формы пути.
+    """
+    try:
+        return str(путь.relative_to(PATHS.root))
+    except ValueError:
+        return str(путь)
+
+
+#: Где витрина объявляет свои подборки. Одно место: иначе ворота искали бы файл
+#: там, где его нет, и молча зачитывали бы отсутствие за исправность.
+ФАЙЛ_ПОДБОРОК = "collections.json"
+
+
+def _ворота_подборок(site_id: str, build_dir: Path, out_dir: Path) -> Check:
+    """Приёмка подборок как ворота ВЫПУСКА, а не как команда в документации.
+
+    Повод назван владельцем прямо: «проверь, что приёмка подборок
+    действительно вызывается штатным выпуском; наличие команды в AGENTS.md
+    само по себе этого не подтверждает». Измерено 26.10: ни `factory verify`,
+    ни `checks/run.sh` проекта о подборках не знали.
+
+    Три различимых исхода, и третий существует не для красоты:
+
+    * файла подборок нет — ворота отвечают «не применимо» с НЕЗАПУЩЕННОЙ
+      командой (`exit_code=None`). Синтетический ноль здесь был бы ложью:
+      проверка не выполнялась;
+    * файл есть и приёмка прошла — ворота зелёные, и в отчёте стоит код
+      выхода настоящей команды;
+    * приёмка нашла беду — ворота красные, вывод приёмки лежит артефактом.
+    """
+    import subprocess
+
+    # `base_url` здесь не нужен намеренно: приёмка строит адреса из САМОГО
+    # файла подборок (поле `site`), и подставлять ей базовый адрес окружения
+    # значило бы проверять не ту витрину, на которую подборки объявлены.
+    файл = build_dir / ФАЙЛ_ПОДБОРОК
+    if not файл.is_file():
+        файл = PATHS.root / "sites" / site_id / ФАЙЛ_ПОДБОРОК
+    приёмка = PATHS.root / "automation" / "local" / "collections-acceptance.py"
+    артефакт = out_dir / "collections.txt"
+    if not файл.is_file():
+        артефакт.write_text(
+            f"не применимо: витрина {site_id} не объявляет подборок "
+            f"({ФАЙЛ_ПОДБОРОК} нет ни в сборке, ни в пакете сайта)\n",
+            encoding="utf-8")
+        return Check("collections", f"python3 {приёмка.name} <файла нет>", None, True,
+                     _путь_в_отчёт(артефакт),
+                     {"status": "skipped", "reason": "файла подборок нет"},
+                     severity="major")
+    команда = [sys.executable, str(приёмка), str(файл), "--sample", "2"]
+    итог = subprocess.run(команда, capture_output=True, text=True, timeout=600)
+    артефакт.write_text((итог.stdout or "") + (итог.stderr or ""), encoding="utf-8")
+    return Check("collections", " ".join(команда[1:]), итог.returncode,
+                 итог.returncode == 0, _путь_в_отчёт(артефакт),
+                 {"status": "ok" if итог.returncode == 0 else "failed"},
+                 severity="major")
+
 def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth: str = "",
            environment: str = "staging", skip_browser: bool = False,
            job_id: str | None = None) -> tuple[list[Check], list[Report]]:
@@ -630,6 +695,8 @@ def verify(site_id: str, package: dict, build_dir: Path, base_url: str, *, auth:
     reports.append(lint_report)
     checks.append(Check("seo-lint", f"python3 -m factory seo-lint --site {site_id}", 0 if lint_report.passed else 1,
                         lint_report.passed, str((out_dir / "seo-lint.json").relative_to(PATHS.root)), lint_report.counts))
+
+    checks.append(_ворота_подборок(site_id, build_dir, out_dir))
 
     crawl_report = crawl_mod.crawl(base_url, build_dir, auth=auth, environment=environment)
     (out_dir / "seo-crawl.json").write_text(json.dumps(redact_obj(crawl_report.as_dict()), ensure_ascii=False, indent=2), encoding="utf-8")
