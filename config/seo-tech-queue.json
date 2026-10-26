@@ -8845,7 +8845,8 @@
       "live_check": "после выпуска: заголовки h2 на / и состав полки онгоингов",
       "verify_live": true,
       "status": "session",
-      "owner_action": "ведёт Архитектор (шаблон animedia-nova); SEO даёт состав-критерий и тексты вступлений"
+      "owner_action": "ведёт Архитектор (шаблон animedia-nova); SEO даёт состав-критерий и тексты вступлений",
+      "seo_delivery": "26.10 22:21Z: три редакционные подборки с ручным составом по id — docs/seo-operator/ANIMEDIA_ICU_COLLECTIONS_20261026.json (anime-odin-sezon 8 → /series/, anime-filmy-na-vecher 8 → /movies/, anime-filmy-po-serialam 8 → /movies/); collections-acceptance 0 нарушений, 6/6 живых; выпуск — тем же механизмом ручного состава, что T337/T340"
     },
     {
       "id": "T340",
