@@ -1,0 +1,21 @@
+[v] lords-10  lordfilm.group         публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordfilm.group.']
+[v] lords-11  lordfilm.spb.ru        публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordfilm.spb.ru.']
+[v] lords-12  lordfilm.msk.ru        публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordfilm.msk.ru.']
+[v] lords-13  lordserial.su          публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordserial.su.']
+[v] lords-14  lordserial.group       публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordserial.group.']
+[v] lords-15  lordserial.spb.ru      публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordserial.spb.ru.']
+[v] lords-16  lordserial.msk.ru      публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordserial.msk.ru.']
+[v] lords-17  lordserial.net.ru      публичный A=['145.63.129.86'] авторитетный A=['145.63.129.86'] www=['lordserial.net.ru.']
+[x] lords-18  lordserials1.cc        публичный A=['45.131.182.225'] авторитетный A=['45.131.182.225'] www=['lordserials1.cc.']
+      нужно: A lordserials1.cc → 145.63.129.86 (сейчас ['45.131.182.225'])
+[x] lords-19  lordserials1.info      публичный A=['45.131.182.225'] авторитетный A=['45.131.182.225'] www=['lordserials1.info.']
+      нужно: A lordserials1.info → 145.63.129.86 (сейчас ['45.131.182.225'])
+[x] lords-20  lordserials21.cc       публичный A=['45.131.182.225'] авторитетный A=['45.131.182.225'] www=['lordserials21.cc.']
+      нужно: A lordserials21.cc → 145.63.129.86 (сейчас ['45.131.182.225'])
+[x] lords-21  lordserials21.info     публичный A=['45.131.182.225'] авторитетный A=['45.131.182.225'] www=['lordserials21.info.']
+      нужно: A lordserials21.info → 145.63.129.86 (сейчас ['45.131.182.225'])
+[x] lords-22  lordserials21.mobi     публичный A=['45.131.182.225'] авторитетный A=['45.131.182.225'] www=['lordserials21.mobi.']
+      нужно: A lordserials21.mobi → 145.63.129.86 (сейчас ['45.131.182.225'])
+
+снимок (он же план откату): var/k2-data/dns-k2.json
+изменений требуется: 5

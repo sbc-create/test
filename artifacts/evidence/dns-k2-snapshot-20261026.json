@@ -1,0 +1,524 @@
+{
+  "batch": "k2",
+  "target_a": "145.63.129.86",
+  "node": "k2-zomro-01",
+  "snapshot": [
+    {
+      "домен": "lordfilm.group",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordfilm.group.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordfilm.group."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordfilm.group.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordfilm.group."
+        ]
+      },
+      "site_id": "lords-10",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordfilm.spb.ru",
+      "ns": [
+        "vin.ns.cloudflare.com.",
+        "lina.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordfilm.spb.ru.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordfilm.spb.ru."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "vin.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordfilm.spb.ru.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordfilm.spb.ru."
+        ]
+      },
+      "site_id": "lords-11",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordfilm.msk.ru",
+      "ns": [
+        "vin.ns.cloudflare.com.",
+        "lina.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordfilm.msk.ru.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordfilm.msk.ru."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "vin.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordfilm.msk.ru.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordfilm.msk.ru."
+        ]
+      },
+      "site_id": "lords-12",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserial.su",
+      "ns": [
+        "april.ns.cloudflare.com.",
+        "pablo.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserial.su.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordserial.su."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "april.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserial.su.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordserial.su."
+        ]
+      },
+      "site_id": "lords-13",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserial.group",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserial.group.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordserial.group."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserial.group.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordserial.group."
+        ]
+      },
+      "site_id": "lords-14",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserial.spb.ru",
+      "ns": [
+        "lina.ns.cloudflare.com.",
+        "vin.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserial.spb.ru.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordserial.spb.ru."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "lina.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserial.spb.ru.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordserial.spb.ru."
+        ]
+      },
+      "site_id": "lords-15",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserial.msk.ru",
+      "ns": [
+        "lina.ns.cloudflare.com.",
+        "vin.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserial.msk.ru.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordserial.msk.ru."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "lina.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserial.msk.ru.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordserial.msk.ru."
+        ]
+      },
+      "site_id": "lords-16",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserial.net.ru",
+      "ns": [
+        "lina.ns.cloudflare.com.",
+        "vin.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserial.net.ru.",
+          "145.63.129.86"
+        ],
+        "CNAME": [
+          "lordserial.net.ru."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "lina.ns.cloudflare.com",
+        "A": [
+          "145.63.129.86"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserial.net.ru.",
+          "145.63.129.86"
+        ],
+        "www_CNAME": [
+          "lordserial.net.ru."
+        ]
+      },
+      "site_id": "lords-17",
+      "нужные изменения": []
+    },
+    {
+      "домен": "lordserials1.cc",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserials1.cc.",
+          "45.131.182.225"
+        ],
+        "CNAME": [
+          "lordserials1.cc."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserials1.cc.",
+          "45.131.182.225"
+        ],
+        "www_CNAME": [
+          "lordserials1.cc."
+        ]
+      },
+      "site_id": "lords-18",
+      "нужные изменения": [
+        "A lordserials1.cc → 145.63.129.86 (сейчас ['45.131.182.225'])"
+      ]
+    },
+    {
+      "домен": "lordserials1.info",
+      "ns": [
+        "april.ns.cloudflare.com.",
+        "pablo.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserials1.info.",
+          "45.131.182.225"
+        ],
+        "CNAME": [
+          "lordserials1.info."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "april.ns.cloudflare.com",
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserials1.info.",
+          "45.131.182.225"
+        ],
+        "www_CNAME": [
+          "lordserials1.info."
+        ]
+      },
+      "site_id": "lords-19",
+      "нужные изменения": [
+        "A lordserials1.info → 145.63.129.86 (сейчас ['45.131.182.225'])"
+      ]
+    },
+    {
+      "домен": "lordserials21.cc",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserials21.cc.",
+          "45.131.182.225"
+        ],
+        "CNAME": [
+          "lordserials21.cc."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserials21.cc.",
+          "45.131.182.225"
+        ],
+        "www_CNAME": [
+          "lordserials21.cc."
+        ]
+      },
+      "site_id": "lords-20",
+      "нужные изменения": [
+        "A lordserials21.cc → 145.63.129.86 (сейчас ['45.131.182.225'])"
+      ]
+    },
+    {
+      "домен": "lordserials21.info",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserials21.info.",
+          "45.131.182.225"
+        ],
+        "CNAME": [
+          "lordserials21.info."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserials21.info.",
+          "45.131.182.225"
+        ],
+        "www_CNAME": [
+          "lordserials21.info."
+        ]
+      },
+      "site_id": "lords-21",
+      "нужные изменения": [
+        "A lordserials21.info → 145.63.129.86 (сейчас ['45.131.182.225'])"
+      ]
+    },
+    {
+      "домен": "lordserials21.mobi",
+      "ns": [
+        "pablo.ns.cloudflare.com.",
+        "april.ns.cloudflare.com."
+      ],
+      "публичный": {
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "CNAME": []
+      },
+      "www": {
+        "A": [
+          "lordserials21.mobi.",
+          "45.131.182.225"
+        ],
+        "CNAME": [
+          "lordserials21.mobi."
+        ]
+      },
+      "авторитетный": {
+        "сервер": "pablo.ns.cloudflare.com",
+        "A": [
+          "45.131.182.225"
+        ],
+        "AAAA": [],
+        "www_A": [
+          "lordserials21.mobi.",
+          "45.131.182.225"
+        ],
+        "www_CNAME": [
+          "lordserials21.mobi."
+        ]
+      },
+      "site_id": "lords-22",
+      "нужные изменения": [
+        "A lordserials21.mobi → 145.63.129.86 (сейчас ['45.131.182.225'])"
+      ]
+    }
+  ]
+}
