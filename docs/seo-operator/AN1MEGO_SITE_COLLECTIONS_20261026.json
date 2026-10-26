@@ -1,0 +1,481 @@
+{
+ "schema": "animego.collections/1",
+ "site": "an1mego.site",
+ "site_id": "animego-02",
+ "prepared_at": "2026-10-26",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id (решение владельца витрины 26.10)",
+ "direction_rule": "an1mego.site — аниме-сайт семейства animego: только японское аниме (вместе жанры «аниме» и «мультфильм», страна Япония), продолжения со второго сезона не берутся; составы не повторяют animedia.icu и соседние AnimeGo",
+ "pause": "T191 (опыт с разделом онгоингов AnimeGo) — наблюдение до 14.11; выпуск подборок после него, чтобы не смешивать эффекты",
+ "shortages": [
+  "исключены до сверки, потому что число серий на странице не равно каталогу: kapitan-cubasa-tv-4-sezon-1, zvuchi-eufonium, royal-v-lesu-3, kosmicheskiy-dendi-tv-1, makross-plyus, master-musi-2, kogda-plachut-cikady-2, piraty-chernoy-laguny-2, magicheskaya-bitva, emma-viktorianskaya-romantika, korzinka-fruktov-2019, ochen-priyatno-bog-tv-1, lyubov-problema-dlya-otaku-2, dzyubey-mladshaya"
+ ],
+ "collections": [
+  {
+   "key": "romanticheskie-komedii",
+   "title": "Романтические комедии: школьная любовь и неловкие признания",
+   "viewer_request": "Какое лёгкое аниме про любовь посмотреть?",
+   "intro": "Романтические комедии, в основном по 12–13 серий: неловкие признания, ночные прогулки, попадание в другой мир и школьные пары. Сначала короткие сериалы, затем длинные. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 работам; жанровый спрос на романтические комедии; не повторяет подборки animedia.icu; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01915120-67a9-75fd-abbc-6fda49f4aee4",
+     "slug": "ezhemesyachnoe-sedze-nodzaki-kuna",
+     "url": "https://an1mego.site/title/ezhemesyachnoe-sedze-nodzaki-kuna/",
+     "name": "Ежемесячное сёдзё Нодзаки-куна",
+     "original_name": "Gekkan shôjo Nozaki-kun",
+     "year": 2014,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Тиё наконец решается признаться Нодзаки из другого класса, но ей не хватает сил ясно сказать о чувствах; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (4926 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915120-67a9-75fd-abbc-6fda49f4aee4.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "0191511e-55e0-7ba3-89a5-65e1335f3099",
+     "slug": "doroga-yunosti",
+     "url": "https://an1mego.site/title/doroga-yunosti/",
+     "name": "Дорога юности",
+     "original_name": "Ao Haru Ride",
+     "year": 2014,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Футаба не переносит парней — кроме одного, Танаки; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (8561 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191511e-55e0-7ba3-89a5-65e1335f3099.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "0191513f-8c75-7f5e-9dd7-19b9bb4b65f1",
+     "slug": "rayskiy-poceluy-3",
+     "url": "https://an1mego.site/title/rayskiy-poceluy-3/",
+     "name": "Райский поцелуй",
+     "original_name": "Paradise Kiss",
+     "year": 2005,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Отличница Юкари, всю жизнь бывшая хорошей девочкой, тайно влюблена в одноклассника; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (2734 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191513f-8c75-7f5e-9dd7-19b9bb4b65f1.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01915149-29a1-7505-b248-b6646c6549df",
+     "slug": "bolshe-chem-para-menshe-chem-lyubovniki",
+     "url": "https://an1mego.site/title/bolshe-chem-para-menshe-chem-lyubovniki/",
+     "name": "Больше чем пара, меньше чем любовники",
+     "original_name": "Fuufu Ijou, Koibito Miman.",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Школа Дзиро Якуина только на первый взгляд обычная; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (7966 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915149-29a1-7505-b248-b6646c6549df.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "0191ae22-c2b5-7051-b87f-8e1b499f0731",
+     "slug": "romanticheskiy-ubiyca",
+     "url": "https://an1mego.site/title/romanticheskiy-ubiyca/",
+     "name": "Романтический убийца",
+     "original_name": "Romantic Killer",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Геймершу Андзу волшебное существо переносит в мир, полный симпатичных парней; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (5239 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191ae22-c2b5-7051-b87f-8e1b499f0731.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01915146-b690-7761-8f01-ab54442bee73",
+     "slug": "pesn-nochnyh-sov",
+     "url": "https://an1mego.site/title/pesn-nochnyh-sov/",
+     "name": "Песнь ночных сов",
+     "original_name": "Yofukashi no uta",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Бросивший школу Ко из-за бессонницы гуляет по ночам и встречает загадочную девушку; 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (8226 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915146-b690-7761-8f01-ab54442bee73.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "01916864-cbaa-739a-8c10-718b0af49718",
+     "slug": "stalnaya-trevoga-2",
+     "url": "https://an1mego.site/title/stalnaya-trevoga-2/",
+     "name": "Стальная тревога!",
+     "original_name": "Full Metal Panic!",
+     "year": 2002,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       24,
+       24
+      ]
+     ],
+     "reason": "За старшеклассницей Канамэ охотится террористическая организация, уверенная в её особых способностях; 24 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (6388 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916864-cbaa-739a-8c10-718b0af49718.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 24 = в каталоге 24; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "01917e94-a252-75a3-9824-a174ff9253f2",
+     "slug": "prezident-gornichnaya",
+     "url": "https://an1mego.site/title/prezident-gornichnaya/",
+     "name": "Президент – горничная!",
+     "original_name": "Kaichou wa meido-sama!",
+     "year": 2010,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       28,
+       28
+      ]
+     ],
+     "reason": "В буйную мужскую школу Сэйка ввели совместное обучение, но нравы пока не смягчились; 28 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.9 (11237 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01917e94-a252-75a3-9824-a174ff9253f2.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 28 = в каталоге 28; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "korotkie-komedii",
+   "title": "Короткие комедии: до 12 серий",
+   "viewer_request": "Какую смешную короткую аниме-комедию посмотреть за вечер-два?",
+   "intro": "Комедийные сериалы не длиннее 12 серий: студенческая жизнь, якудза с девочкой-эспером, школьные игры и сюрреалистическая сказка. Порядок — от самых коротких. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 6 работам; тема «что посмотреть вечером»; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01a109c2-a7dd-7fd9-950d-0f4e9b7e1413",
+     "slug": "volshebnica-cukune",
+     "url": "https://an1mego.site/title/volshebnica-cukune/",
+     "name": "Волшебница Цукунэ",
+     "original_name": "Majokko Tsukune-chan",
+     "year": 2005,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       6,
+       6
+      ]
+     ],
+     "reason": "Сюрреалистическая комедия о ведьмочке Цукунэ, патрулирующей королевство на метле; 6 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (10 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01a109c2-9fea-7b11-9460-bff26746cce9.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 6 = в каталоге 6; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "019217b6-7d0d-7bb8-b14c-ab90391548b7",
+     "slug": "starshaya-shkola-bi-bop",
+     "url": "https://an1mego.site/title/starshaya-shkola-bi-bop/",
+     "name": "Старшая школа Би-Боп",
+     "original_name": "Be-Bop High School",
+     "year": 1990,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       7,
+       7
+      ]
+     ],
+     "reason": "Хироси и Тору важнее девочки и драки с парнями из других школ, чем учёба; 7 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (47 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019217b6-7d0d-7bb8-b14c-ab90391548b7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 7 = в каталоге 7; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "0191ae23-534f-795d-bc10-ace8c3cb156b",
+     "slug": "kotaro-kotoryy-zhivet-sam-po-sebe-2",
+     "url": "https://an1mego.site/title/kotaro-kotoryy-zhivet-sam-po-sebe-2/",
+     "name": "Котаро, который живёт сам по себе",
+     "original_name": "Kotaro wa Hitorigurashi",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       10,
+       10
+      ]
+     ],
+     "reason": "Маленький мальчик переезжает в многоквартирный дом и дружит с нищим мангакой; 10 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (6154 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191ae23-534f-795d-bc10-ace8c3cb156b.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 10 = в каталоге 10; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01927cca-c0e3-7ff9-b0a1-4bcb3a01d7b8",
+     "slug": "skaz-o-chetyreh-s-polovinoy-tatami",
+     "url": "https://an1mego.site/title/skaz-o-chetyreh-s-polovinoy-tatami/",
+     "name": "Сказ о четырех с половиной татами",
+     "original_name": "Yojohan shinwa taikei",
+     "year": 2010,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       11,
+       11
+      ]
+     ],
+     "reason": "Студент Киотского университета выбрал не тот клуб и не того друга; 11 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.4 (5941 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01927cca-c0e3-7ff9-b0a1-4bcb3a01d7b8.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 11 = в каталоге 11; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01923e57-2db7-7d04-a86d-00ae39eb2796",
+     "slug": "prazdnik-kukol",
+     "url": "https://an1mego.site/title/prazdnik-kukol/",
+     "name": "Праздник кукол",
+     "original_name": "Hinamatsuri",
+     "year": 2018,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Члену якудзы на голову падает девочка с необычными способностями; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (3060 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01923e57-2db7-7d04-a86d-00ae39eb2796.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "019174a7-57bb-7a53-9661-1ee5c98cc828",
+     "slug": "davayte-sygraem",
+     "url": "https://an1mego.site/title/davayte-sygraem/",
+     "name": "Давайте сыграем",
+     "original_name": "Asobi Asobase",
+     "year": 2018,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Касуми хороша в играх, но ненавидит их; школьные будни трёх подруг; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (2298 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019174a7-57bb-7a53-9661-1ee5c98cc828.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "anime-dlya-semi",
+   "title": "Аниме для всей семьи",
+   "viewer_request": "Какое аниме посмотреть с ребёнком?",
+   "intro": "Сериалы и фильмы с жанром «семейный» или «детское» в каталоге: Муми-тролли, коты-самураи, маленькие исследователи мира и классические гонки. Сначала фильмы, затем сериалы. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 7 работам; запрос «аниме для детей» — семейный просмотр; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01929768-57e0-772e-b587-7217c9ebce44",
+     "slug": "kometa-v-doline-mumi-trolley",
+     "url": "https://an1mego.site/title/kometa-v-doline-mumi-trolley/",
+     "name": "Комета в Долине Муми-троллей",
+     "original_name": "Muumindani no Suisei",
+     "year": 1992,
+     "type": "movie",
+     "reason": "Муми-тролль и друзья идут в обсерваторию узнать, когда на Землю упадёт комета. Фильм.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (2608 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01929768-57e0-772e-b587-7217c9ebce44.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01920d64-db95-7fa6-96fa-a7ace637a6b1",
+     "slug": "malenkiy-nemo-priklyucheniya-v-strane-snov",
+     "url": "https://an1mego.site/title/malenkiy-nemo-priklyucheniya-v-strane-snov/",
+     "name": "Маленький Немо: Приключения в стране снов",
+     "original_name": "Little Nemo",
+     "year": 1989,
+     "type": "movie",
+     "reason": "Мальчику Немо снится погоня, а наутро в город приезжает цирк. Фильм.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.1 (8960 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01920d64-db95-7fa6-96fa-a7ace637a6b1.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "0191ae22-d7a8-7743-a0c1-0ca013734f8e",
+     "slug": "tikava",
+     "url": "https://an1mego.site/title/tikava/",
+     "name": "Тикава",
+     "original_name": "Chiikawa",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       356,
+       356
+      ]
+     ],
+     "reason": "Три маленьких существа каждый день узнают о мире что-то новое; 356 коротких серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (371 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191ae22-d7a8-7743-a0c1-0ca013734f8e.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 356 = в каталоге 356; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01925b4e-889d-7a49-a0de-9b8475b2631d",
+     "slug": "detektivy-akademii-klamp",
+     "url": "https://an1mego.site/title/detektivy-akademii-klamp/",
+     "name": "Детективы академии КЛАМП",
+     "original_name": "Clamp gakuen tanteidan",
+     "year": 1997,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       26,
+       26
+      ]
+     ],
+     "reason": "Трое учеников начальной школы открывают детективное агентство; 26 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.3 (93 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01925b4e-889d-7a49-a0de-9b8475b2631d.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01921669-276c-7003-997a-142313e6f344",
+     "slug": "koty-samurai",
+     "url": "https://an1mego.site/title/koty-samurai/",
+     "name": "Коты-самураи",
+     "original_name": "Samurai Pizza Cats",
+     "year": 1991,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       54,
+       54
+      ]
+     ],
+     "reason": "Три кота защищают город Малый Токио от преступников и работают в пиццерии; 54 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.2 (1160 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01921669-276c-7003-997a-142313e6f344.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 54 = в каталоге 54; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "0191d0e9-da8a-77c1-8e04-8dd17aa48224",
+     "slug": "gonschik-spidi",
+     "url": "https://an1mego.site/title/gonschik-spidi/",
+     "name": "Гонщик Спиди",
+     "original_name": "Mahha GoGoGo",
+     "year": 1967,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       52,
+       52
+      ]
+     ],
+     "reason": "Подросток Спиди гоняет по всему миру на «Mach 5», построенном его отцом; 52 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.2 (3914 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191d0e9-da8a-77c1-8e04-8dd17aa48224.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 52 = в каталоге 52; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "0192166d-152c-71a5-a89f-8fa956b4cfb7",
+     "slug": "bezotvetstvennyy-kapitan-taylor",
+     "url": "https://an1mego.site/title/bezotvetstvennyy-kapitan-taylor/",
+     "name": "Безответственный капитан Тайлор",
+     "original_name": "Musekinin kanchô Tairâ",
+     "year": 1993,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       26,
+       26
+      ]
+     ],
+     "reason": "Тайлор планировал лёгкую армейскую службу и спокойную отставку; 26 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (602 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0192166d-152c-71a5-a89f-8fa956b4cfb7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  }
+ ]
+}

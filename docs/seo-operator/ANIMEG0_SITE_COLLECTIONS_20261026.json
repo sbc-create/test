@@ -1,0 +1,460 @@
+{
+ "schema": "animego.collections/1",
+ "site": "animeg0.site",
+ "site_id": "animego-03",
+ "prepared_at": "2026-10-26",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id (решение владельца витрины 26.10)",
+ "direction_rule": "animeg0.site — аниме-сайт семейства animego: только японское аниме (вместе жанры «аниме» и «мультфильм», страна Япония), продолжения со второго сезона не берутся; составы не повторяют animedia.icu и соседние AnimeGo",
+ "pause": "T191 (опыт с разделом онгоингов AnimeGo) — наблюдение до 14.11; выпуск подборок после него, чтобы не смешивать эффекты",
+ "shortages": [
+  "исключены до сверки, потому что число серий на странице не равно каталогу: kapitan-cubasa-tv-4-sezon-1, zvuchi-eufonium, royal-v-lesu-3, kosmicheskiy-dendi-tv-1, makross-plyus, master-musi-2, kogda-plachut-cikady-2, piraty-chernoy-laguny-2, magicheskaya-bitva, emma-viktorianskaya-romantika, korzinka-fruktov-2019, ochen-priyatno-bog-tv-1, lyubov-problema-dlya-otaku-2, dzyubey-mladshaya"
+ ],
+ "collections": [
+  {
+   "key": "detektivy-i-trillery",
+   "title": "Аниме-детективы и триллеры",
+   "viewer_request": "Какое аниме с расследованием или напряжённым сюжетом посмотреть?",
+   "intro": "Сериалы с расследованием, загадкой или опасной игрой: роботы-жертвы, тайна гибели подруги, мафия и игра в маджонг на всё. Порядок — от коротких сериалов к длинным. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 7 работам; жанровый спрос на детективы и триллеры; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019154c6-1d4a-7928-8a67-a83b71aa211a",
+     "slug": "pluton",
+     "url": "https://animeg0.site/title/pluton/",
+     "name": "Плутон",
+     "original_name": "Pluto",
+     "year": 2023,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       8,
+       8
+      ]
+     ],
+     "reason": "Инспектор Гезихт расследует убийства самых совершенных роботов мира и сам оказывается в опасности; 8 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (21352 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019154c6-1d4a-7928-8a67-a83b71aa211a.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 8 = в каталоге 8; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01915121-406a-7041-b9eb-7f0243f3d5c1",
+     "slug": "vostochnyy-edem-3",
+     "url": "https://animeg0.site/title/vostochnyy-edem-3/",
+     "name": "Восточный Эдем",
+     "original_name": "Higashi no Eden",
+     "year": 2009,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       11,
+       11
+      ]
+     ],
+     "reason": "Саки Морими во время поездки по США встречает молодого соотечественника; 11 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.6 (1207 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915121-406a-7041-b9eb-7f0243f3d5c1.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 11 = в каталоге 11; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "019152a5-e2d1-7096-8212-8e122b0425d5",
+     "slug": "id-vtorzhenie",
+     "url": "https://animeg0.site/title/id-vtorzhenie/",
+     "name": "ID: Вторжение",
+     "original_name": "ID:Invaded",
+     "year": 2020,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Детектив проникает в подсознание преступников с помощью системы, которая чувствует намерение убить; 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (3842 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019152a5-e2d1-7096-8212-8e122b0425d5.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "0191512c-7c3f-765c-abe0-5f2946f920fb",
+     "slug": "letnee-vremya",
+     "url": "https://animeg0.site/title/letnee-vremya/",
+     "name": "Летнее время",
+     "original_name": "Summertime Render",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       25,
+       25
+      ]
+     ],
+     "reason": "Синпэй возвращается на родной остров на похороны подруги детства и находит странности в её гибели; 25 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (11356 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191512c-7c3f-765c-abe0-5f2946f920fb.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 25 = в каталоге 25; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01915126-0b57-7ab4-9986-c99d6ffdf4d3",
+     "slug": "temnyy-dvoreckiy-3",
+     "url": "https://animeg0.site/title/temnyy-dvoreckiy-3/",
+     "name": "Темный дворецкий",
+     "original_name": "Kuroshitsuji",
+     "year": 2008,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       24,
+       24
+      ]
+     ],
+     "reason": "Альтернативная Англия XIX века: юный граф Сиэль и безупречный дворецкий Себастьян; 24 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (11441 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915126-0b57-7ab4-9986-c99d6ffdf4d3.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 24 = в каталоге 24; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01921b9d-c20f-7d94-83ad-6d83b261845a",
+     "slug": "akagi-legenda-madzhonga",
+     "url": "https://animeg0.site/title/akagi-legenda-madzhonga/",
+     "name": "Акаги, легенда маджонга",
+     "original_name": "Akagi",
+     "year": 2005,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       26,
+       26
+      ]
+     ],
+     "reason": "Шигеру Акаги появляется в маджонг-гостиной, где проигравшийся должник ставит всё на последнюю партию; 26 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (928 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01921b9d-c20f-7d94-83ad-6d83b261845a.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "0191513f-959a-760a-83be-f53f13e9e37b",
+     "slug": "prizrak-rekviem-po-prizraku",
+     "url": "https://animeg0.site/title/prizrak-rekviem-po-prizraku/",
+     "name": "Призрак: Реквием по Призраку",
+     "original_name": "Phantom: Requiem for the Phantom",
+     "year": 2009,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       26,
+       26
+      ]
+     ],
+     "reason": "Организация «Инферно» руками легендарного киллера Фантома устраняет боссов американской мафии; 26 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (2241 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191513f-959a-760a-83be-f53f13e9e37b.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "anime-uzhasy",
+   "title": "Аниме-ужасы: вампиры, зомби и призраки",
+   "viewer_request": "Какое страшное аниме посмотреть вечером?",
+   "intro": "Сериалы с жанром «ужасы» в каталоге: охотники на вампиров, зомби-апокалипсис, деревня с тайной, школьные привидения. Порядок — от коротких сериалов к длинным. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 6 работам; жанровый спрос на хоррор; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "0191526e-b021-7fbc-9e95-8f1dbe18653f",
+     "slug": "predsmertnyy-spisok-zombi",
+     "url": "https://animeg0.site/title/predsmertnyy-spisok-zombi/",
+     "name": "Предсмертный список зомби",
+     "original_name": "Zom 100: Bucket List of the Dead",
+     "year": 2023,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Выгоревший офисный работник Акира радуется зомби-апокалипсису: на работу больше можно не ходить; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.3 (13842 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191526e-b021-7fbc-9e95-8f1dbe18653f.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01916a15-fdb7-7582-97b4-68e44eefd5bb",
+     "slug": "hellsing-voyna-s-nechistyu",
+     "url": "https://animeg0.site/title/hellsing-voyna-s-nechistyu/",
+     "name": "Хеллсинг: Война с нечистью",
+     "original_name": "Herushingu",
+     "year": 2001,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Тайная организация «Хеллсинг» сражается с вампирами со времён профессора Ван Хелсинга; 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (20939 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916a15-fdb7-7582-97b4-68e44eefd5bb.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01927e13-efd0-7d94-9b0e-a6559bb2aba1",
+     "slug": "usopshie",
+     "url": "https://animeg0.site/title/usopshie/",
+     "name": "Усопшие",
+     "original_name": "Shiki",
+     "year": 2010,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       22,
+       22
+      ]
+     ],
+     "reason": "Горная деревня Сотоба в конце XX века, откуда молодёжь мечтает уехать в город; 22 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (4875 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01927e13-efd0-7d94-9b0e-a6559bb2aba1.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 22 = в каталоге 22; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01916898-f224-75f2-afe0-97432cc7dd9f",
+     "slug": "sverhestestvennoe-animaciya",
+     "url": "https://animeg0.site/title/sverhestestvennoe-animaciya/",
+     "name": "Сверхъестественное: Анимация",
+     "original_name": "Supernatural: The Anime",
+     "year": 2011,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       22,
+       22
+      ]
+     ],
+     "reason": "Аниме-версия «Сверхъестественного»: братья Винчестеры расследуют паранормальные случаи; 22 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.3 (2636 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916898-f224-75f2-afe0-97432cc7dd9f.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 22 = в каталоге 22; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "0191d4cb-00dc-77e7-9e14-8c9edd929037",
+     "slug": "shevale-d-eon",
+     "url": "https://animeg0.site/title/shevale-d-eon/",
+     "name": "Шевалье Д'Эон",
+     "original_name": "Eru kazado",
+     "year": 2006,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       24,
+       24
+      ]
+     ],
+     "reason": "Разорённая Франция, где маньяки и убийцы действуют не таясь; 24 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.3 (4454 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191d4cb-00dc-77e7-9e14-8c9edd929037.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 24 = в каталоге 24; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "0191d38d-88ee-7e53-ae8a-dbc784e62bc7",
+     "slug": "ohota-na-privideniy",
+     "url": "https://animeg0.site/title/ohota-na-privideniy/",
+     "name": "Охота на привидений",
+     "original_name": "Ghost Hunt",
+     "year": 2006,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       25,
+       25
+      ]
+     ],
+     "reason": "Школьницы рассказывают истории о призраках старого корпуса, который всё никак не снесут; 25 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.4 (1798 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191d38d-88ee-7e53-ae8a-dbc784e62bc7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 25 = в каталоге 25; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "istoricheskoe-anime",
+   "title": "Историческое аниме: эпоха Эдо, Франция XIX века, Вторая мировая",
+   "viewer_request": "Какое аниме про историю посмотреть?",
+   "intro": "Сериалы и фильмы с жанром «исторический» в каталоге: самураи на излёте сёгуната, полиция Эдо, «Отверженные» и судьбы детей в годы войны. Порядок — по времени событий. Все серии из каталога доступны на странице.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 7 работам; тематический спрос на историческое аниме; не повторяет военные фильмы animedia.icu; не комбинация фильтров"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01926379-0885-7f4b-a069-743641aa0bd7",
+     "slug": "chudnye-veschi",
+     "url": "https://animeg0.site/title/chudnye-veschi/",
+     "name": "Чудные вещи",
+     "original_name": "Hyouge Mono",
+     "year": 2011,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       39,
+       39
+      ]
+     ],
+     "reason": "Эпоха Смут в Японии — комедийная история о князе и его временах; 39 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (116 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01926379-0885-7f4b-a069-743641aa0bd7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 39 = в каталоге 39; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "019278b6-2b9f-75b2-9028-d0af4bd9a61d",
+     "slug": "vremya-bitv",
+     "url": "https://animeg0.site/title/vremya-bitv/",
+     "name": "Время битв",
+     "original_name": "Mutsu Enmei Ryu Gaiden: Shura no Toki",
+     "year": 2004,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       26,
+       26
+      ]
+     ],
+     "reason": "Легенды о непобедимом боевом искусстве Муцу Эммэй-рю, побеждающем без оружия; 26 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (185 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019278b6-2b9f-75b2-9028-d0af4bd9a61d.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01921a9c-99b4-7f6f-a669-16fdfb5e5192",
+     "slug": "onihey",
+     "url": "https://animeg0.site/title/onihey/",
+     "name": "Онихэй",
+     "original_name": "Onihei",
+     "year": 2017,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Начальник особой полиции Эдо ловит поджигателей и грабителей с помощью бывших преступников; 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (412 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01921a9c-99b4-7f6f-a669-16fdfb5e5192.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01927356-4e30-7d78-a5a0-0726780b7139",
+     "slug": "dom-pyati-listev",
+     "url": "https://animeg0.site/title/dom-pyati-listev/",
+     "name": "Дом Пяти листьев",
+     "original_name": "Sarai-ya goyô",
+     "year": 2010,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Конец эпохи Эдо: талантливый, но застенчивый самурай Акицу ищет работу; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (730 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01927356-4e30-7d78-a5a0-0726780b7139.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01921cda-bb0c-78ce-813c-0051cc601631",
+     "slug": "otverzhennye-kozetta",
+     "url": "https://animeg0.site/title/otverzhennye-kozetta/",
+     "name": "Отверженные: Козетта",
+     "original_name": "Re mizeraburu: shoujo kozetto",
+     "year": 2007,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       52,
+       52
+      ]
+     ],
+     "reason": "Франция XIX века: маленькая Козетта и её мать Фантина, которой никто не даёт работы; 52 серии.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (749 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01921cda-bb0c-78ce-813c-0051cc601631.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 52 = в каталоге 52; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "019b451b-cca0-7722-9c2a-b02d8470429a",
+     "slug": "ognennyy-dozhd",
+     "url": "https://animeg0.site/title/ognennyy-dozhd/",
+     "name": "Огненный дождь",
+     "original_name": "Hi no Ame ga Furu",
+     "year": 1988,
+     "type": "movie",
+     "reason": "1945 год, Фукуока: мирная жизнь школьников в городке, которого ещё не коснулась война. Фильм.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (36 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019b451b-cca0-7722-9c2a-b02d8470429a.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "019287be-32a7-70ad-89f9-d16d4a3b16f8",
+     "slug": "dnevnik-kaeko",
+     "url": "https://animeg0.site/title/dnevnik-kaeko/",
+     "name": "Дневник Каёко",
+     "original_name": "Ushiro no shoumen daare",
+     "year": 1991,
+     "type": "movie",
+     "reason": "Токио, маленькая школьница Каёко ждёт рождения брата или сестры. Фильм.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (506 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019287be-32a7-70ad-89f9-d16d4a3b16f8.webp",
+     "checked": "26.10.2026, проверка закончена в 22:29:24Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  }
+ ]
+}
