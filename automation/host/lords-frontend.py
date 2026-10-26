@@ -1679,14 +1679,14 @@ def сезон_по_номеру(деталь: dict, номер: int) -> dict | 
 # series-feed: два сериальных домена не должны выглядеть одним.
 ЛОРДС_ТОКЕНЫ_SERIALS = {
     **ЛОРДС_ТОКЕНЫ,
-    "page": "#0e1116", "sheet": "#eef1f5", "acc": "#c8761a", "accdk": "#a35e10",
+    "page": "#0e1116", "sheet": "#eef1f5", "acc": "#ab6516", "accdk": "#935410",
     "bar": "#19202b", "accent2": "#3f6ea8", "soft": "#F3EDE4",
 }
 # Films-077: глубокий индиго с коралловым акцентом. Своя палитра, не копия
 # cinema-v2.
 ЛОРДС_ТОКЕНЫ_FILMS = {
     **ЛОРДС_ТОКЕНЫ,
-    "page": "#0d0f1a", "sheet": "#f0eef6", "acc": "#d2544b", "accdk": "#ad3f38",
+    "page": "#0d0f1a", "sheet": "#f0eef6", "acc": "#c74f47", "accdk": "#ad3f38",
     "bar": "#1a1c2e", "accent2": "#5a4fa3", "soft": "#F6E9E7",
 }
 # Animation: тёплая охра на оливковом.
@@ -2261,14 +2261,18 @@ background:radial-gradient(120% 140% at 50% 0,@GREENDARK@ 0,#0e1013 68%)}
 .hd__in{display:flex;align-items:center;gap:12px;min-height:64px;height:64px;
 padding:0 12px;flex-wrap:nowrap;position:relative}
 @media(min-width:1024px){.hd__in{height:70px;min-height:70px;padding:0 18px;gap:16px}}
-.hd__logo{display:flex;align-items:center;gap:9px;font-weight:800;font-size:17px;
-letter-spacing:.5px;text-transform:uppercase;color:@INK@;flex:0 1 auto;
-max-width:min(42vw,220px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-@media(min-width:1024px){.hd__logo{font-size:19px;max-width:240px}}
+.hd__logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:clamp(11.5px,3.2vw,14px);
+letter-spacing:0;text-transform:uppercase;color:@INK@;flex:0 1 auto;
+max-width:min(56vw,300px);overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* Ширина подобрана по САМОМУ ДЛИННОМУ имени партии: lordserial.spb.ru — 17
+   знаков прописными. При прежних 220/240px оно обрезалось молча, и в шапке
+   стояло «LORDFILM.GROU». Межбуквенный интервал уменьшен с .5 до .3px по той
+   же причине: он добавлял имени почти десять пикселей ни за чем. */
+@media(min-width:1024px){.hd__logo{font-size:17px;letter-spacing:.2px;flex:0 0 auto;max-width:320px}}
 .hd__mark{width:30px;height:30px;border-radius:5px;background:@ACC@;color:#fff;
 display:grid;place-items:center;font-size:15px;font-weight:800;flex:0 0 auto}
 .hd__menu{display:inline-flex;align-items:center;justify-content:center;
-width:44px;height:44px;border:1px solid @LINE@;border-radius:4px;background:#fff;
+width:44px;height:44px;border:1px solid @LINE@;border-radius:4px;background:@CARD@;
 color:@INK@;font-size:20px;cursor:pointer;margin-left:auto;flex:0 0 auto}
 @media(min-width:1024px){.hd__menu{display:none}}
 .hd__nav{display:none;position:absolute;left:0;right:0;top:100%;z-index:50;
@@ -2279,16 +2283,18 @@ background:@CARD@;box-shadow:0 12px 28px #0004;max-height:min(70vh,520px);overfl
 flex-wrap:nowrap;padding:0;border:0;gap:2px;min-width:0;overflow:visible;box-shadow:none;
 max-height:none;background:transparent}}
 .hd__nav a{padding:12px 14px;border-radius:4px;font-size:14px;font-weight:700;
-text-transform:uppercase;letter-spacing:.3px;color:#39414a;min-height:44px;
+text-transform:uppercase;letter-spacing:.3px;color:@INK@;min-height:44px;
 display:flex;align-items:center;white-space:nowrap}
-@media(min-width:1024px){.hd__nav a{padding:8px 10px;font-size:13px;min-height:44px}}
+@media(min-width:1024px){.hd__nav a{padding:8px 7px;font-size:13px;min-height:44px}
+.hd__nav{overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.hd__nav::-webkit-scrollbar{display:none}}
 .hd__nav a:hover{background:@SOFT@;color:@ACCDK@}
 .hd__nav a[aria-current]{color:@ACCDK@;box-shadow:inset 0 -2px 0 @ACC@}
-.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:#fff;
-flex:1 1 auto;min-width:0;max-width:100%}
-@media(min-width:1024px){.hd__s{flex:0 0 200px;max-width:200px}}
-.hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:@INK@;background:#fff}
-.hd__s button{border:0;background:#fff;color:#6a737d;padding:0 12px;cursor:pointer;font-size:14px;
+.hd__s{display:flex;border:1px solid @LINE@;border-radius:4px;overflow:hidden;background:@CARD@;
+flex:1 1 80px;min-width:80px;max-width:100%}
+@media(min-width:1024px){.hd__s{flex:0 1 200px;max-width:200px;min-width:140px}}
+.hd__s input{border:0;padding:10px 11px;font-size:13px;width:100%;min-width:0;color:@INK@;background:@CARD@}
+.hd__s button{border:0;background:@CARD@;color:@DIM@;padding:0 12px;cursor:pointer;font-size:14px;
 min-width:44px;min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 .hd__s button:hover{color:@ACCDK@}
 .hd__s button svg{width:18px;height:18px;display:block}
@@ -2301,7 +2307,7 @@ max-width:42ch;line-height:1.25}
 html[data-design="lords-series-feed-v2"] .lead{font-size:22px;font-weight:700;color:@GREENDARK@}
 html[data-design="lords-cinema-v2"] .lead{font-size:22px;font-weight:700}
 /* Заголовок раздела: настоящий H2 + «Весь раздел». */
-.lead{font-size:20px;font-weight:600;color:#3a4149;margin:16px 0 12px}
+.lead{font-size:20px;font-weight:600;color:@INK@;margin:16px 0 12px}
 .sec-rail{margin:0 0 18px}
 .sec-rail__h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;
 margin:0 0 12px;flex-wrap:wrap}
@@ -2314,7 +2320,7 @@ min-height:44px;display:inline-flex;align-items:center}
 .tabs__pill{display:inline-flex;align-items:center;gap:7px;background:@ACC@;color:#fff;
 font-weight:700;font-size:15px;padding:10px 18px;border-radius:4px}
 .tabs a{background:@CARD@;border:1px solid @LINE@;border-radius:4px;padding:9px 15px;
-font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
+font-size:13px;color:@INK@;font-weight:600;min-height:44px;display:inline-flex;align-items:center}
 .tabs a:hover{color:@ACCDK@;border-color:@ACC@}
 .tabs a[aria-current]{background:@BAR@;color:#fff;border-color:@BAR@}
 /* Compact catalog filters (shared functional contract; tokens stay profile-scoped). */
@@ -2322,7 +2328,7 @@ font-size:13px;color:#4a535d;font-weight:600;min-height:44px;display:inline-flex
 .filt__row{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end}
 .filt__seg{display:inline-flex;flex-wrap:wrap;gap:4px;align-items:center}
 .filt__seg a{background:@CARD@;border:1px solid @LINE@;border-radius:3px;padding:6px 10px;
-font-size:12px;font-weight:600;color:#4a535d;min-height:36px;display:inline-flex;align-items:center}
+font-size:12px;font-weight:600;color:@INK@;min-height:36px;display:inline-flex;align-items:center}
 .filt__seg a[aria-current]{background:@ACC@;color:#fff;border-color:@ACC@}
 .filt__form{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-end;flex:1 1 auto}
 .filt__field{display:flex;flex-direction:column;gap:2px;font-size:11px;font-weight:600;color:@DIM@}
@@ -2462,11 +2468,11 @@ gap:0;min-height:0}
 /* Листалка. */
 .pg{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;margin:22px 0 8px}
 .pg a,.pg span{min-width:36px;text-align:center;padding:8px 10px;border-radius:4px;
-border:1px solid @LINE@;background:@CARD@;font-size:13px;font-weight:600;color:#4a535d}
+border:1px solid @LINE@;background:@CARD@;font-size:13px;font-weight:600;color:@INK@}
 .pg span[aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
 .pg em{border:0;background:0;font-style:normal;color:@DIM@;align-self:center}
 /* Крошки, страница тайтла. */
-.crumbs{background:#e3e7eb;border-bottom:1px solid @LINE@;font-size:12px;color:#5b6470;
+.crumbs{background:@LINE@;border-bottom:1px solid @LINE@;font-size:12px;color:@INK@;
 padding:9px 18px}
 .crumbs a{color:@ACCDK@;font-weight:600;display:inline-block;padding:5px 2px}
 .crumbs b{font-weight:600;color:@INK@}
@@ -2478,25 +2484,25 @@ margin:14px 0;border:1px solid @LINE@;border-radius:4px}
 object-fit:cover;display:block}
 .tw__ps .c__none{font-size:13px}
 .tw h1{font-size:20px;line-height:1.3;font-weight:600;margin:0 0 12px;color:@INK@}
-.plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:#333a42}
+.plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:@INK@}
 .plot .none{color:@DIM@;font-style:italic}
 .plot a{display:inline-block;padding:5px 2px;color:@ACCDK@;font-weight:600}
 .facts{display:grid;grid-template-columns:1fr;gap:4px 26px;margin:14px 0 0;font-size:13px}
 @media(min-width:720px){.facts{grid-template-columns:1fr 1fr}}
-.facts div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dotted #dfe4e9}
-.facts dt{font-weight:700;color:#39414a;flex:0 0 auto}
-.facts dd{margin:0;color:#4d555e}
+.facts div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dotted @LINE@}
+.facts dt{font-weight:700;color:@INK@;flex:0 0 auto}
+.facts dd{margin:0;color:@DIM@}
 .facts a{color:@ACCDK@;font-weight:600;display:inline-block;padding:5px 2px}
 /* Высота ссылки жанра — 14 px по строке, и пальцем в неё не попасть.
    Измерено пробой целей касания: 238 попаданий ниже 24 px, и все —
    эти ссылки. Отступ поднимает цель до 24 px, не меняя типографики. */
 .rates{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 0}
 .rate{border:2px solid;border-radius:4px;padding:8px 14px;font-size:13px;font-weight:700;
-background:#fff}
+background:@CARD@}
 .rate--kp{border-color:@KP@;color:@KP@}
 .rate--imdb{border-color:#9a7b00;color:#6f5900}
 .rate small{display:block;font-weight:600;font-size:11px;color:@DIM@;margin-top:2px}
-.claim{text-align:center;font-weight:700;font-size:15px;color:#3a4149;margin:18px 0 0}
+.claim{text-align:center;font-weight:700;font-size:15px;color:@INK@;margin:18px 0 0}
 /* Плеер: полоса вкладок и поле 16:9. Кадр — контейнер media viewport;
    iframe/SDK обязаны заполнять его целиком, а не центрироваться мелким
    прямоугольником в чёрном поле (см. zona .zpl__f geometry). */
@@ -2505,7 +2511,7 @@ background:#fff}
 flex-wrap:wrap;border-radius:4px 4px 0 0}
 .pl__tab{padding:12px 18px;font-size:13px;font-weight:700;color:#b9c2cc}
 .pl__tab[aria-current]{background:@ACC@;color:#fff;border-radius:3px 3px 0 0}
-.pl__note{margin-left:auto;color:#8d97a2;font-size:12px;padding:12px 4px}
+.pl__note{margin-left:auto;color:@DIM@;font-size:12px;padding:12px 4px}
 .pl__note:empty{display:none}
 .pl__frame{position:relative;width:100%;aspect-ratio:16/9;background:#05070a;
 border-radius:0 0 4px 4px;overflow:hidden;max-height:none}
@@ -2550,14 +2556,14 @@ padding:26px 20px;text-align:center;color:#d6dde5;z-index:2;background:rgba(5,7,
 .sea__h span{font-size:12px;color:@DIM@}
 .eps{display:flex;flex-wrap:wrap;gap:8px}
 .eps a{min-width:44px;min-height:44px;text-align:center;padding:10px 8px;border:1px solid @LINE@;
-border-radius:3px;font-size:13px;font-weight:600;background:#fff;color:#3f4750;
+border-radius:3px;font-size:13px;font-weight:600;background:@CARD@;color:@INK@;
 display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box}
 .eps a:hover{border-color:@ACC@;color:@ACCDK@}
 .eps a[aria-current]{background:@ACC@;border-color:@ACC@;color:#fff}
 .eps [data-off]{color:@MUTE@;background:#f3f5f7;cursor:default;pointer-events:none}
 .epnav{display:flex;justify-content:space-between;gap:10px;margin:14px 0 0;flex-wrap:wrap}
 .epnav a,.epnav span{padding:12px 14px;border:1px solid @LINE@;border-radius:4px;
-font-size:13px;font-weight:600;background:#fff;color:#3f4750;min-height:44px;
+font-size:13px;font-weight:600;background:@CARD@;color:@INK@;min-height:44px;
 display:inline-flex;align-items:center;box-sizing:border-box}
 .epnav span{color:@MUTE@;background:#f3f5f7}
 /* Похожее и подвал. */
@@ -2566,24 +2572,25 @@ display:inline-flex;align-items:center;box-sizing:border-box}
 @media(min-width:1024px){.rel{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}}
 @media(min-width:1280px){.rel{grid-template-columns:repeat(6,minmax(0,1fr));gap:18px}}
 .empty{background:@CARD@;border:1px solid @LINE@;border-radius:4px;padding:44px 22px;
-text-align:center;color:#4d555e;margin:14px 0}
+text-align:center;color:@DIM@;margin:14px 0}
 .empty b{display:block;font-size:17px;color:@INK@;margin-bottom:8px}
 .empty a{display:inline-block;padding:6px 2px;color:@ACCDK@;font-weight:600}
 .nf{text-align:center;padding:56px 20px}
 .nf b{display:block;font-size:64px;font-weight:800;color:@ACC@;line-height:1}
 .nf h1{font-size:20px;font-weight:600;margin:10px 0 8px}
-.nf p{color:#4d555e;margin:0 auto 18px;max-width:460px}
+.nf p{color:@DIM@;margin:0 auto 18px;max-width:460px}
 .nf a{display:inline-block;background:@ACC@;color:#fff;font-weight:700;padding:11px 22px;
 border-radius:4px}
 .ft{background:@CARD@;border-top:3px solid @ACC@;margin-top:26px;padding:22px 18px 18px;
-color:#5b6470;font-size:13px}
+color:@DIM@;font-size:13px}
 .ft__cols{display:grid;gap:18px;grid-template-columns:1fr;margin-bottom:12px}
 @media(min-width:720px){.ft__cols{grid-template-columns:repeat(4,1fr)}}
 .ft__col b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.4px;
 color:@INK@;margin-bottom:8px}
-.ft__col a{display:block;padding:6px 0;color:#4a535d;font-weight:600;min-height:44px}
+.ft__col a{display:block;padding:6px 0;color:@INK@;font-weight:600;min-height:44px}
 .ft__col a:hover{color:@ACCDK@}
-.ft__about{font-size:12.5px;line-height:1.5;color:#5b6470;max-width:52ch;margin:0 0 12px}
+.ft__about{font-size:12.5px;line-height:1.5;color:@DIM@;max-width:52ch;margin:0 0 12px}
+.sf-contact{max-width:100%;min-width:0;overflow-wrap:anywhere;word-break:break-word;line-height:1.45;color:var(--a-ink,var(--z-ink,var(--ag-ink,inherit)))}.sf-contact a{color:inherit;text-decoration:underline;text-underline-offset:2px}.sf-contact a:hover{text-decoration:none}
 .ft__bar{display:flex;justify-content:space-between;align-items:center;gap:10px;
 border-top:1px solid @LINE@;padding-top:12px;color:@DIM@;font-size:12px}
 html[data-design="lords-series-feed-v2"] .ft{border-top-color:@ACCENT2@}
@@ -2598,7 +2605,7 @@ html[data-design="lords-curated-v2"] .ft{border-top-color:@ACCENT2@}
 color:inherit;text-decoration:none;min-height:120px}
 .hub__c:hover{border-color:@ACC@}
 .hub__c b{display:block;font-size:15px;margin-bottom:6px;color:@INK@}
-.hub__c p{margin:0;font-size:12.5px;color:#5b6470;line-height:1.45}
+.hub__c p{margin:0;font-size:12.5px;color:@DIM@;line-height:1.45}
 /* ТОЛЬКО последняя строка карточки, а не каждый span внутри неё.
    Прежний селектор `.hub__c span` (класс+элемент, вес 0,1,1) перебивал
    `.hub__g{display:grid}` (вес 0,1,0), и сетка превью превращалась в столбец
@@ -3151,6 +3158,7 @@ margin:0 0 16px}
 .zft__col{display:flex;flex-direction:column;gap:6px;min-width:0}
 .zft__col b{color:@INK@;font-size:13px;margin:0 0 4px}
 .zft__col a{color:@ACC@;font-weight:500}
+.sf-contact{max-width:100%;min-width:0;overflow-wrap:anywhere;word-break:break-word;line-height:1.45;color:var(--a-ink,var(--z-ink,var(--ag-ink,inherit)))}.sf-contact a{color:inherit;text-decoration:underline;text-underline-offset:2px}.sf-contact a:hover{text-decoration:none}
 .zft__bar{display:flex;justify-content:flex-end;align-items:center}
 .zvb{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:11px;
 border:0;padding:0;background:transparent;color:@MUTE@}
@@ -3457,6 +3465,7 @@ box-shadow:var(--a-shadow-soft);color:inherit;text-decoration:none}
 .zft__col a{display:block;font-size:13px;color:@DIM@;padding:3px 0}
 .zft__col a:hover{color:@ACC@}
 .zft__about{font-size:13px;color:@DIM@;line-height:1.45;margin:0}
+.sf-contact{max-width:100%;min-width:0;overflow-wrap:anywhere;word-break:break-word;line-height:1.45;color:var(--a-ink,var(--z-ink,var(--ag-ink,inherit)))}.sf-contact a{color:inherit;text-decoration:underline;text-underline-offset:2px}.sf-contact a:hover{text-decoration:none}
 .zft__bar{display:flex;justify-content:space-between;gap:12px;align-items:center;
 padding-top:10px;border-top:1px solid @LINE@;font-size:12px;color:@MUTE@;flex-wrap:wrap}
 .zvb{font-size:11px;color:@MUTE@;opacity:.85;white-space:nowrap}
@@ -4639,6 +4648,48 @@ def _се_значение(се: dict, ключ: str):
     return зн() if callable(зн) else зн
 
 
+
+def _контакт_подвала(обёртка: str = "span", класс: str = "sf-contact") -> str:
+    """Строка обратной связи для общего подвала.
+
+    Адрес берётся из окружения, куда его кладёт `run.py` из `config/site.json`
+    (ключ `contact_email`). Пустое значение — не повод подставить умолчание:
+    выдуманный адрес хуже отсутствующего, потому что письма по нему уходят в
+    никуда и никто об этом не узнаёт.
+
+    Ссылка настоящая `mailto:`, и сам адрес остаётся текстом — его копируют
+    выделением куда чаще, чем нажимают. `overflow-wrap` в стиле рядом: длинный
+    адрес обязан переноситься, а не раздвигать страницу на телефоне.
+
+    Обёртка и класс задаются вызовом: у AnimeGo проверка витрины требует, чтобы
+    в её таблице стилей не было ни одного класса без приставки `ag-`, и общее
+    имя `sf-contact` там законно не проходит. Разметка семейства остаётся
+    разметкой семейства.
+    """
+    import os as _os
+    адрес = str(_os.environ.get("SITE_CONTACT_EMAIL") or "").strip()
+    if not адрес or "@" not in адрес or " " in адрес:
+        return ""
+    видимый = html.escape(адрес)
+    return (f'<{обёртка} class="{класс}">Обратная связь: '
+            f'<a href="mailto:{видимый}">{видимый}</a></{обёртка}>')
+
+
+def _метка_по_имени(имя: str) -> str:
+    """Пара букв для знака в шапке — из имени домена витрины.
+
+    Семейная метка одна на всё семейство, и сериальные витрины показывали «LF».
+    Здесь метка принадлежит САЙТУ: `lordserial.su` → «LS`, `lordfilm.group` →
+    «LF». Непустой результат обязателен — иначе возвращается пустая строка, и
+    вызывающий берёт семейную метку, а не ставит заглушку.
+    """
+    метка_домена = str(имя or "").strip().lower().split(".")[0]
+    if not метка_домена:
+        return ""
+    if метка_домена.startswith("lord") and len(метка_домена) > 4:
+        return ("L" + метка_домена[4]).upper()
+    return метка_домена[:2].upper()
+
 class Вид:
     """Общая механика семейства: данные, адреса, разметка Schema.
 
@@ -5553,7 +5604,7 @@ class ВидЛордс(Вид):
 <a class="skip" href="#main">Перейти к содержимому</a>
 <div class="sheet">
 <header class="hd"><div class="hd__in">
-<a class="hd__logo" href="/"><span class="hd__mark" aria-hidden="true">{html.escape(self.се["метка"])}</span>{html.escape(self.имя)}</a>
+<a class="hd__logo" href="/"><span class="hd__mark" aria-hidden="true">{html.escape(_метка_по_имени(self.имя) or self.се["метка"])}</span>{html.escape(self.имя)}</a>
 <form class="hd__s" action="/search/" method="get" role="search">
 <label class="vh" for="q">Поиск по каталогу</label>
 <input id="q" name="q" placeholder="{html.escape(self.се["поиск"])}"{q_attr}>
@@ -5606,11 +5657,12 @@ class ВидЛордс(Вид):
             '<footer class="ft">'
             '<div class="ft__cols">'
             f"{col1}"
-            f'<div class="ft__col"><b>Жанры</b>{жанры or "<span>жанры появятся из sidecar</span>"}</div>'
+            f'<div class="ft__col"><b>Жанры</b>{жанры or ""}</div>'
             f'<div class="ft__col"><b>Годы</b>{годы or "<span>—</span>"}</div>'
             f'<div class="ft__col"><b>О сайте</b><p class="ft__about">{about}</p></div>'
             "</div>"
             f'<div class="ft__bar"><span>© {html.escape(self.имя)}</span>'
+                f'{_контакт_подвала()}'
             '<span>Каталог фильмов и сериалов</span></div>'
             "</footer>")
 
@@ -5889,6 +5941,71 @@ class ВидЛордс(Вид):
             страны = self._полоса_стран_и_эпох()
             if страны:
                 полосы.append(страны)
+        elif дизайн == "lords-serials-v2":
+            # ПОРЯДОК ПОЛОК — по направлению. Прежде оба новых дизайна молча
+            # попадали в общую ветвь «Cinema IA», и сериальный домен открывался
+            # полкой «Фильмы», а «Сериалы» уходили в самый низ. Подписи и
+            # состав блоков те же — переставлен только порядок.
+            сериалы = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ))
+            if сериалы:
+                полосы.append(self._полоса("Сериалы", "/series/", сериалы))
+            нов = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ), добор=готовые)
+            if not нов:
+                нов = взять(готовые)
+            if нов:
+                полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
+                                           показать_добавлено=True))
+            популяр, week, dig = популярные_недельный(
+                раздела(РАЗДЕЛ_СЕРИАЛЫ) or готовые, _оценка_полки, сколько=РЯД_ПОЛКИ * 5)
+            показ = взять(популяр, добор=готовые)
+            if показ:
+                полосы.append(self._полоса(
+                    "Высокие оценки", "/collection/top_rated/", показ,
+                    attrs=(f' data-popular-week="{html.escape(week)}"'
+                           f' data-popular-digest="{html.escape(dig)}"'
+                           f' data-popular-mode="WEEKLY_SNAPSHOT"')))
+            жанр_блок = self._полоса_жанров()
+            if жанр_блок:
+                полосы.append(жанр_блок)
+            if КОЛЛЕКЦИИ is not None:
+                под = self._полоса_подборок()
+                if под:
+                    полосы.append(под)
+            фильмы = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ))
+            if фильмы:
+                полосы.append(self._полоса("Фильмы", "/movies/", фильмы))
+        elif дизайн == "lords-films-v2":
+            # Фильмовое направление: порядок сейчас совпадает с общей ветвью,
+            # и ветвь выписана ЯВНО именно поэтому — правка оформления
+            # кинопортала не должна молча менять фильмовый домен.
+            фильмы = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ))
+            if фильмы:
+                полосы.append(self._полоса("Фильмы", "/movies/", фильмы))
+            нов = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ), добор=готовые)
+            if not нов:
+                нов = взять(готовые)
+            if нов:
+                полосы.append(self._полоса("Недавно добавлено", "/new/", нов,
+                                           показать_добавлено=True))
+            популяр, week, dig = популярные_недельный(
+                раздела(РАЗДЕЛ_ФИЛЬМЫ) or готовые, _оценка_полки, сколько=РЯД_ПОЛКИ * 5)
+            показ = взять(популяр, добор=готовые)
+            if показ:
+                полосы.append(self._полоса(
+                    "Высокие оценки", "/collection/top_rated/", показ,
+                    attrs=(f' data-popular-week="{html.escape(week)}"'
+                           f' data-popular-digest="{html.escape(dig)}"'
+                           f' data-popular-mode="WEEKLY_SNAPSHOT"')))
+            жанр_блок = self._полоса_жанров()
+            if жанр_блок:
+                полосы.append(жанр_блок)
+            if КОЛЛЕКЦИИ is not None:
+                под = self._полоса_подборок()
+                if под:
+                    полосы.append(под)
+            сериалы = взять(раздела(РАЗДЕЛ_СЕРИАЛЫ))
+            if сериалы:
+                полосы.append(self._полоса("Сериалы", "/series/", сериалы))
         else:
             # Cinema IA: films → new-in-catalog → popular → genres → collections.
             фильмы = взять(раздела(РАЗДЕЛ_ФИЛЬМЫ))
@@ -5931,6 +6048,31 @@ class ВидЛордс(Вид):
             about_p = (f"Каталог {html.escape(self.имя)} опирается на переданные "
                        "жанры, годы и оценки. Редакционные пометки — только при "
                        "наличии подтверждённого источника.")
+        elif дизайн == "lords-serials-v2":
+            # Текст направления, а не общий: под заголовком «Сериалы онлайн»
+            # стояла фраза про фильмы и мультфильмы — сайт противоречил сам
+            # себе в двух строках подряд. Формулировки взяты из согласованного
+            # профиля blueprints/lords/profiles/lords-serials.yaml (sections.home).
+            lead_sub = (f"{html.escape(self.имя)} показывает состояние сериального "
+                        "каталога: какие серии вышли последними, какие сезоны "
+                        "доступны целиком и куда идти дальше — по жанру, по году "
+                        "или через поиск.")
+            about_p = (f"Каталог {html.escape(self.имя)} — общий сериальный, а не "
+                       "тематический: аниме, дорамы и мультсериалы здесь такие же "
+                       "сериалы, как остальные. Название, год, тип и постер — из "
+                       "источника; ничего, что не подтверждено снимком каталога, "
+                       "на страницах не появляется.")
+        elif дизайн == "lords-films-v2":
+            # То же по фильмовому профилю (lords-films.yaml): общий каталог
+            # полного метра, без обещания сериалов.
+            lead_sub = (f"{html.escape(self.имя)} показывает состояние фильмового "
+                        "каталога: что добавлено последним, какие жанры и годы "
+                        "доступны и куда идти дальше.")
+            about_p = (f"Каталог {html.escape(self.имя)} — общий фильмовый, а не "
+                       "тематический: мультфильмы и зарубежное кино здесь такие же "
+                       "фильмы, как остальные. Название, год, тип и постер — из "
+                       "источника; ничего, что не подтверждено снимком каталога, "
+                       "на страницах не появляется.")
         else:
             lead_sub = (f"{html.escape(self.имя)} показывает фильмы, сериалы и мультфильмы "
                         "в кинематографической сетке постеров. Подборки и фильтры "
@@ -5941,11 +6083,11 @@ class ВидЛордс(Вид):
 
         intro = (
             f'<h1 class="lead">{html.escape(_се_значение(self.се, "лид"))}</h1>'
-            f'<p class="zsub" style="margin:0 0 14px;color:#5b6470;font-size:13.5px;line-height:1.55">'
+            f'<p class="zsub" style="margin:0 0 14px;color:var(--t-dim);font-size:13.5px;line-height:1.55">'
             f"{lead_sub}</p>")
         bottom = (
             '<section class="sec" style="margin-top:22px"><h2>О каталоге</h2>'
-            f'<p style="margin:0;line-height:1.6;color:#4d555e;font-size:14px;max-width:68ch">'
+            f'<p style="margin:0;line-height:1.6;color:var(--t-dim);font-size:14px;max-width:68ch">'
             f"{about_p}</p></section>")
         тело = intro + _склеить(полосы) + bottom
         # ЗАГОЛОВОК И ОПИСАНИЕ ГЛАВНОЙ — ПО ДИЗАЙНУ.
@@ -6179,7 +6321,7 @@ class ВидЛордс(Вид):
                     '<a href="/catalog/">Открыть каталог</a></div>')
         else:
             тело = (f'<h1 class="lead">Подборки</h1>'
-                    f'<p class="zsub" style="margin:0 0 12px;color:#5b6470">'
+                    f'<p class="zsub" style="margin:0 0 12px;color:var(--t-dim)">'
                     f"Тематические выборки — не полный каталог.</p>"
                     f'<div class="hub">{"".join(карточки)}</div>')
         return self.оболочка(тело, f"Подборки — {self.имя}", "/collections/",
@@ -6365,11 +6507,11 @@ class ВидЛордс(Вид):
                     f"{html.escape(as_of[:10] if len(as_of) >= 10 else as_of)}"
                     f"</time></span>")
             подзаг = (
-                f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">'
+                f'<p class="zsub" style="margin:0 0 10px;color:var(--t-dim)">'
                 f"{len(набор)} записей по дате добавления в каталог"
                 f"{as_of_html}</p>")
         else:
-            подзаг = (f'<p class="zsub" style="margin:0 0 10px;color:#5b6470">'
+            подзаг = (f'<p class="zsub" style="margin:0 0 10px;color:var(--t-dim)">'
                       f"{len(набор)} записей в выборке</p>")
         if выбрано.get("_unknown"):
             пусто = ('<div class="empty"><b>Неизвестный фильтр</b>'
@@ -6407,9 +6549,22 @@ class ВидЛордс(Вид):
                 канон_пути = f"/country/{страна_код}/"
             elif год_знач and not _без("year"):
                 канон_пути = f"/year/{год_знач}/"
+        # Описание страницы раздела — ФАКТЫ ВЫБОРКИ. Прежняя строка
+        # «подборка из каталога» была тавтологична и одинакова у всех
+        # разделов и фасетов: в выдаче это повторяющийся шаблон без
+        # сведений. Число записей — то же, что в подзаголовке страницы
+        # (`len(набор)`), поля фильтра — те, что действительно есть в
+        # разметке (жанр, год, страна, сортировка).
+        if разд == "/new":
+            опис_разд = (f"{титул} на {self.имя}: {len(набор)} записей "
+                         "по дате добавления в каталог.")
+        else:
+            опис_разд = (f"{титул} на {self.имя}: {len(набор)} записей. "
+                         "Фильтры по жанру, году и стране, сортировка по дате, "
+                         "названию, году и оценке.")
         return self.оболочка(тело, f"{титул} — {self.имя}", канон_пути,
                              актив=разд + "/",
-                             описание=f"{титул} на {self.имя}: подборка из каталога.",
+                             описание=опис_разд,
                              индексируема=not тонкий_фасет(
                                  канон_пути, разд + "/", len(набор)))
 
@@ -6761,7 +6916,8 @@ class ВидЗона(Вид):
             f'<div class="zft__col"><b>Жанры</b>{жанры or "<span>—</span>"}</div>'
             '<div class="zft__col"><b>Каталог</b>'
             '<a href="/search/">Поиск</a></div></div>'
-            f'<div class="zft__bar"><span class="zvb">Zona {html.escape(ВЕРСИЯ)} · '
+            f'<div class="zft__bar">{_контакт_подвала()}'
+            f'<span class="zvb">Zona {html.escape(ВЕРСИЯ)} · '
             f"{html.escape(source)}</span></div>"
             "</footer>")
 
@@ -7884,6 +8040,7 @@ class ВидАнимедиа(ВидЗона):
             f'<p class="zft__about">{html.escape(домен["footer_about"])}</p></div>'
             "</div>"
             f'<div class="zft__bar"><span>© {html.escape(self.имя)}</span>'
+            f'{_контакт_подвала()}'
             f'<span class="zvb" title="{html.escape(tip)}">'
             f"Animedia {html.escape(ВЕРСИЯ)} · {html.escape(runtime)}</span></div>"
             "</footer>")

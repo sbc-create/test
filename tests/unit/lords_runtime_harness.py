@@ -93,16 +93,34 @@ class Стенд:
     """Каталог, подробности, манифест и настройка плеера одного теста."""
 
     def __init__(self, корень: Path, *, профиль: str = "lords-general",
-                 site_id: str = "lords-test") -> None:
+                 site_id: str = "lords-test",
+                 имя_витрины: str = "Тестовая витрина",
+                 семейство: str | None = None,
+                 версия_оформления: str | None = None) -> None:
         self.корень = корень
         self.site_id = site_id
+        #: Имя витрины участвует в разметке (знак в шапке собирается из него),
+        #: поэтому оно задаётся стендом, а не переменной окружения снаружи:
+        #: `окружение` всё равно перезаписало бы внешнюю.
+        self.имя_витрины = имя_витрины
         self.каталог = корень / f"{site_id}-catalog.json"
         self.подробности = корень / f"{site_id}-details.json"
         self.манифест = корень / "config" / "template-manifest.json"
         self.плеер = корень / "config" / "player.json"
         self.манифест.parent.mkdir(parents=True, exist_ok=True)
+        #: Семейство витрина читает из манифеста на импорте — переменная
+        #: окружения его не выбирает. Без этого параметра проверка «во всех
+        #: трёх подвалах» шла бы трижды по одному и тому же виду Lords.
+        поля = {"profile": профиль}
+        if семейство:
+            поля["template_family"] = семейство
+        #: Версия оформления решает, какой вид семейства поднимется: вид
+        #: Animedia объявлен только для 1.2.x, и на умолчании 1.0.2 витрина
+        #: намеренно исполняет прежнюю ветку.
+        if версия_оформления:
+            поля["design_version"] = версия_оформления
         self.манифест.write_text(
-            json.dumps(манифест(profile=профиль), ensure_ascii=False, indent=1) + "\n",
+            json.dumps(манифест(**поля), ensure_ascii=False, indent=1) + "\n",
             encoding="utf-8")
 
     def записать_каталог(self, записи: list[dict], *, revision: str = "rev-1") -> None:
@@ -137,7 +155,7 @@ class Стенд:
             "LORDS_DETAILS": str(self.подробности),
             "LORDS_PLAYER_CONFIG": str(self.плеер),
             "LORDS_LEGACY_ROOT": str(self.корень / "legacy"),
-            "LORDS_SITE_NAME": "Тестовая витрина",
+            "LORDS_SITE_NAME": self.имя_витрины,
             "LORDS_SITE_ID": self.site_id,
         }
 
