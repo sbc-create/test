@@ -1,0 +1,1235 @@
+{
+ "снято": "2026-10-26T08:16Z…08:26Z",
+ "кем": "линия Архитектора (wt-nova-publish-memory-02), серверная часть по запросу линии SEO",
+ "инструменты": [
+  "automation/local/net-path-probe.py (коммит 52c7c8e, линия SEO)",
+  "prefix-matrix.py и port-sweep.py (эта проверка)",
+  "v6-check.py (эта проверка)"
+ ],
+ "машины": {
+  "управляющий": "45.131.182.225",
+  "узел_K2": "145.63.129.86"
+ },
+ "путь_управляющий": {
+  "at": "2026-10-26T08:16:12Z",
+  "paths": [
+   {
+    "target": "213.180.193.61",
+    "tcp443": "timeout (нет SYN-ACK и нет RST/ICMP)",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "45.131.182.1",
+      "icmp": "ttl_exceeded",
+      "ms": 3
+     },
+     {
+      "ttl": 2,
+      "from": "149.11.228.255",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 3,
+      "from": "185.35.147.153",
+      "icmp": "ttl_exceeded",
+      "ms": 0
+     },
+     {
+      "ttl": 4,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.20.46",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 6,
+     "from": "154.25.3.177",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   },
+   {
+    "target": "213.180.204.242",
+    "tcp443": "connected",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "45.131.182.1",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 2,
+      "from": "185.35.144.2",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 3,
+      "from": "149.11.228.254",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 4,
+      "from": "185.35.147.208",
+      "icmp": "ttl_exceeded",
+      "ms": 0
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 7,
+     "from": "149.11.21.114",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   },
+   {
+    "target": "87.250.250.242",
+    "tcp443": "timeout (нет SYN-ACK и нет RST/ICMP)",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "45.131.182.1",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 2,
+      "from": "149.11.228.255",
+      "icmp": "ttl_exceeded",
+      "ms": 0
+     },
+     {
+      "ttl": 3,
+      "from": "185.35.147.153",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 4,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.20.46",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 6,
+     "from": "154.25.3.177",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   }
+  ]
+ },
+ "путь_K2": {
+  "at": "2026-10-26T08:18:06Z",
+  "paths": [
+   {
+    "target": "213.180.193.61",
+    "tcp443": "timeout (нет SYN-ACK и нет RST/ICMP)",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "145.63.129.1",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 2,
+      "from": "185.35.144.2",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 3,
+      "from": "149.11.228.254",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 4,
+      "from": "185.35.147.208",
+      "icmp": "ttl_exceeded",
+      "ms": 0
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.20.46",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 6,
+     "from": "154.25.3.177",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   },
+   {
+    "target": "213.180.204.242",
+    "tcp443": "connected",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "145.63.129.1",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 2,
+      "from": "149.11.228.255",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 3,
+      "from": "149.11.228.254",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 4,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 7,
+     "from": "149.11.21.114",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   },
+   {
+    "target": "87.250.250.242",
+    "tcp443": "timeout (нет SYN-ACK и нет RST/ICMP)",
+    "hops": [
+     {
+      "ttl": 1,
+      "from": "145.63.129.1",
+      "icmp": "ttl_exceeded",
+      "ms": 2
+     },
+     {
+      "ttl": 2,
+      "from": "149.11.228.255",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 3,
+      "from": "185.35.147.153",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 4,
+      "from": "185.35.147.208",
+      "icmp": "ttl_exceeded",
+      "ms": 0
+     },
+     {
+      "ttl": 5,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 6,
+      "from": "154.25.3.177",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 7,
+      "from": "149.11.21.114",
+      "icmp": "ttl_exceeded",
+      "ms": 1
+     },
+     {
+      "ttl": 8,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 9,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 10,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 11,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 12,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 13,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 14,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 15,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 16,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 17,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 18,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 19,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     },
+     {
+      "ttl": 20,
+      "from": null,
+      "icmp": null,
+      "ms": null
+     }
+    ],
+    "last_responding_hop": {
+     "ttl": 7,
+     "from": "149.11.21.114",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    "reached": false
+   }
+  ]
+ },
+ "префиксы_управляющий": {
+  "at": "2026-10-26T08:20:04Z",
+  "цели": [
+   {
+    "адрес": "213.180.193.61",
+    "что": "api.webmaster.yandex.net",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.193.1",
+    "что": "шлюз того же префикса",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.193.3",
+    "что": "тот же префикс",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.204.242",
+    "что": "api-metrika (A-запись)",
+    "префикс": "213.180.204.0/24",
+    "tcp443": "connected (35 мс)",
+    "tcp80": "connected (38 мс)"
+   },
+   {
+    "адрес": "213.180.204.1",
+    "что": "тот же префикс",
+    "префикс": "213.180.204.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "87.250.250.242",
+    "что": "ya.ru",
+    "префикс": "87.250.250.0/24",
+    "tcp443": "timeout",
+    "tcp80": "connected (33 мс)"
+   },
+   {
+    "адрес": "87.250.251.47",
+    "что": "api-metrika (вторая A)",
+    "префикс": "87.250.251.0/24",
+    "tcp443": "connected (35 мс)",
+    "tcp80": "connected (37 мс)"
+   }
+  ]
+ },
+ "префиксы_K2": {
+  "at": "2026-10-26T08:21:16Z",
+  "цели": [
+   {
+    "адрес": "213.180.193.61",
+    "что": "api.webmaster.yandex.net",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.193.1",
+    "что": "шлюз того же префикса",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.193.3",
+    "что": "тот же префикс",
+    "префикс": "213.180.193.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "213.180.204.242",
+    "что": "api-metrika (A-запись)",
+    "префикс": "213.180.204.0/24",
+    "tcp443": "connected (35 мс)",
+    "tcp80": "connected (37 мс)"
+   },
+   {
+    "адрес": "213.180.204.1",
+    "что": "тот же префикс",
+    "префикс": "213.180.204.0/24",
+    "tcp443": "timeout",
+    "tcp80": "timeout"
+   },
+   {
+    "адрес": "87.250.250.242",
+    "что": "ya.ru",
+    "префикс": "87.250.250.0/24",
+    "tcp443": "timeout",
+    "tcp80": "connected (35 мс)"
+   },
+   {
+    "адрес": "87.250.251.47",
+    "что": "api-metrika (вторая A)",
+    "префикс": "87.250.251.0/24",
+    "tcp443": "connected (34 мс)",
+    "tcp80": "connected (36 мс)"
+   }
+  ]
+ },
+ "порты_управляющий": {
+  "at": "2026-10-26T08:22:35Z",
+  "цели": {
+   "213.180.193.61": {
+    "что": "api.webmaster.yandex.net",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   },
+   "87.250.250.242": {
+    "что": "ya.ru",
+    "порты": {
+     "80": "connected 38мс",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "Connection refused",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   },
+   "213.180.204.242": {
+    "что": "api-metrika (контроль)",
+    "порты": {
+     "80": "connected 38мс",
+     "443": "connected 38мс",
+     "22": "timeout",
+     "53": "timeout",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   }
+  }
+ },
+ "порты_K2": {
+  "at": "2026-10-26T08:24:20Z",
+  "цели": {
+   "213.180.193.61": {
+    "что": "api.webmaster.yandex.net",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   },
+   "87.250.250.242": {
+    "что": "ya.ru",
+    "порты": {
+     "80": "connected 34мс",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "Connection refused",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   },
+   "213.180.204.242": {
+    "что": "api-metrika (контроль)",
+    "порты": {
+     "80": "connected 40мс",
+     "443": "connected 35мс",
+     "22": "timeout",
+     "53": "timeout",
+     "8443": "timeout",
+     "7443": "timeout"
+    }
+   }
+  }
+ },
+ "ipv6_K2": {
+  "at": "2026-10-26T08:25:49Z",
+  "v6": {
+   "2a02:6b8::2:61": {
+    "что": "api.webmaster.yandex.net (v6)",
+    "tcp443": "timeout"
+   },
+   "2a02:6b8::2a3": {
+    "что": "api-metrika.yandex.net (v6)",
+    "tcp443": "connected 35мс"
+   }
+  }
+ },
+ "ipv6_управляющий": {
+  "at": "2026-10-26T08:24:12Z",
+  "v6": {
+   "2a02:6b8::2:61": {
+    "что": "api.webmaster.yandex.net (v6)",
+    "tcp443": "timeout"
+   },
+   "2a02:6b8::2a3": {
+    "что": "api-metrika.yandex.net (v6)",
+    "tcp443": "connected 35мс"
+   }
+  }
+ },
+ "вывод": [
+  "Маршрут ЕСТЬ до обоих «недостижимых» префиксов: до 87.250.250.242 порт 80 соединяется за 36 мс и порт 53 отвечает RST; до 213.180.193.0/24 отвечает порт 53 на 213.180.193.1 (34 мс).",
+  "Теряются конкретные порты назначения: 80, 443, 22 к 213.180.193.0/24 и 443, 22 к 87.250.250.0/24 — молча, без RST и ICMP.",
+  "Контроль отвечает с обеих машин: 213.180.204.242 и 87.250.251.47 на 80 и 443; IPv6 2a02:6b8::2a3 на 443.",
+  "api.webmaster.yandex.net недостижим и по IPv6 (2a02:6b8::2:61) — семейство адресов симптом не объясняет.",
+  "Матрица на двух машинах совпала построчно при РАЗНЫХ первых хопах (ECMP), то есть симптом следует за назначением, а не за путём.",
+  "Прежняя формулировка «чёрная дыра маршрута после 149.11.20.46» неверна: отсутствие маршрута опровергается ответами на порту 53 в обоих префиксах."
+ ],
+ "матрица_управляющий": {
+  "at": "2026-10-26T08:30:12Z",
+  "ipv4": [
+   {
+    "адрес": "213.180.193.61",
+    "префикс": "213.180.193.0/24",
+    "что": "api.webmaster.yandex.net",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "213.180.193.1",
+    "префикс": "213.180.193.0/24",
+    "что": "тот же префикс",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "connected 34мс"
+    }
+   },
+   {
+    "адрес": "213.180.193.3",
+    "префикс": "213.180.193.0/24",
+    "что": "тот же префикс",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "87.250.250.242",
+    "префикс": "87.250.250.0/24",
+    "что": "ya.ru",
+    "роль": "цель",
+    "порты": {
+     "80": "connected 36мс",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "Connection refused"
+    }
+   },
+   {
+    "адрес": "213.180.204.242",
+    "префикс": "213.180.204.0/24",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "порты": {
+     "80": "connected 37мс",
+     "443": "connected 34мс",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "87.250.251.47",
+    "префикс": "87.250.251.0/24",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "порты": {
+     "80": "connected 35мс",
+     "443": "connected 36мс",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   }
+  ],
+  "ipv6": [
+   {
+    "адрес": "2a02:6b8::2:61",
+    "что": "api.webmaster.yandex.net",
+    "роль": "цель",
+    "tcp443": "timeout"
+   },
+   {
+    "адрес": "2a02:6b8::2a3",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "tcp443": "connected 36мс"
+   }
+  ],
+  "выводы": [
+   "213.180.193.61: молчат все проверенные порты — ни SYN-ACK, ни RST, ни ICMP",
+   "213.180.193.1: маршрут ЕСТЬ (отвечают порты 53), теряются только остальные — это фильтр по порту, не отсутствие маршрута",
+   "213.180.193.3: молчат все проверенные порты — ни SYN-ACK, ни RST, ни ICMP",
+   "87.250.250.242: маршрут ЕСТЬ (отвечают порты 80, 53), теряются только остальные — это фильтр по порту, не отсутствие маршрута",
+   "IPv6 у машины работает (контрольный адрес соединяется), значит семейство адресов симптом не объясняет"
+  ]
+ },
+ "матрица_K2": {
+  "at": "2026-10-26T08:32:03Z",
+  "ipv4": [
+   {
+    "адрес": "213.180.193.61",
+    "префикс": "213.180.193.0/24",
+    "что": "api.webmaster.yandex.net",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "213.180.193.1",
+    "префикс": "213.180.193.0/24",
+    "что": "тот же префикс",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "connected 34мс"
+    }
+   },
+   {
+    "адрес": "213.180.193.3",
+    "префикс": "213.180.193.0/24",
+    "что": "тот же префикс",
+    "роль": "цель",
+    "порты": {
+     "80": "timeout",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "87.250.250.242",
+    "префикс": "87.250.250.0/24",
+    "что": "ya.ru",
+    "роль": "цель",
+    "порты": {
+     "80": "connected 36мс",
+     "443": "timeout",
+     "22": "timeout",
+     "53": "Connection refused"
+    }
+   },
+   {
+    "адрес": "213.180.204.242",
+    "префикс": "213.180.204.0/24",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "порты": {
+     "80": "connected 37мс",
+     "443": "connected 35мс",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   },
+   {
+    "адрес": "87.250.251.47",
+    "префикс": "87.250.251.0/24",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "порты": {
+     "80": "connected 37мс",
+     "443": "connected 36мс",
+     "22": "timeout",
+     "53": "timeout"
+    }
+   }
+  ],
+  "ipv6": [
+   {
+    "адрес": "2a02:6b8::2:61",
+    "что": "api.webmaster.yandex.net",
+    "роль": "цель",
+    "tcp443": "timeout"
+   },
+   {
+    "адрес": "2a02:6b8::2a3",
+    "что": "api-metrika.yandex.net",
+    "роль": "контроль",
+    "tcp443": "connected 32мс"
+   }
+  ],
+  "выводы": [
+   "213.180.193.61: молчат все проверенные порты — ни SYN-ACK, ни RST, ни ICMP",
+   "213.180.193.1: маршрут ЕСТЬ (отвечают порты 53), теряются только остальные — это фильтр по порту, не отсутствие маршрута",
+   "213.180.193.3: молчат все проверенные порты — ни SYN-ACK, ни RST, ни ICMP",
+   "87.250.250.242: маршрут ЕСТЬ (отвечают порты 80, 53), теряются только остальные — это фильтр по порту, не отсутствие маршрута",
+   "IPv6 у машины работает (контрольный адрес соединяется), значит семейство адресов симптом не объясняет"
+  ]
+ }
+}
