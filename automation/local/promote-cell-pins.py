@@ -194,11 +194,71 @@ def продвинуть(site_id: str, *, корень: pathlib.Path = КОРЕ�
     пины["pins"]["source_commit"] = коммит
     пины["pins"]["source_dirty"] = False
     пины["pins"]["build_id"] = f"template-{коммит[:12]}"
-    замок.write_text(json.dumps(пины, ensure_ascii=False, indent=1) + "\n",
-                     encoding="utf-8")
+    _записать(замок, пины)
+    итог["происхождение"] = обновить_происхождение(путь, коммит, корень)
     итог["исход"] = "продвинуто"
     итог["коммит"] = коммит
     return итог
+
+
+def _отступ(текст: str) -> int:
+    """Отступ ФАЙЛА, а не свой любимый: иначе правка одного поля перепишет весь
+    файл, и в обзоре изменений не видно, что менялось."""
+    строки = текст.splitlines()
+    вторая = next((с for с in строки[1:] if с.strip()), "")
+    return (len(вторая) - len(вторая.lstrip())) or 1
+
+
+def _записать(путь: pathlib.Path, данные) -> None:
+    отступ = _отступ(путь.read_text(encoding="utf-8"))
+    путь.write_text(json.dumps(данные, ensure_ascii=False, indent=отступ) + "\n",
+                    encoding="utf-8")
+
+
+def версия_шаблона(корень: pathlib.Path) -> str:
+    """Версия оформления семейства — из того же файла, что читает генератор."""
+    п = корень / "status" / "lords-template-version.json"
+    if not п.is_file():
+        return ""
+    try:
+        return str(json.loads(п.read_text(encoding="utf-8")).get("version") or "")
+    except (OSError, ValueError):
+        return ""
+
+
+def обновить_происхождение(проект: pathlib.Path, коммит: str,
+                           корень: pathlib.Path) -> dict:
+    """`template_origin` в манифесте — тоже про ЗАКРЕПЛЁННЫЙ шаблон.
+
+    Его забыли, и это поймала собственная проверка проекта, а не обзор:
+    `checks/manifest_stamp.py` сверяет `template_origin.source_commit` с замком
+    и на восьми ячейках K2 ответил «происхождение шаблона разошлось с замком»
+    (CI 26.10, прогоны 404067…). Поле описывает происхождение ЗАКРЕПЛЁННОГО
+    шаблона, а продвижение меняет именно его — значит менять поле обязано
+    продвижение. Сборка его не трогает, и это сказано в самом поле.
+    """
+    манифест = проект / "config" / "template-manifest.json"
+    if not манифест.is_file():
+        return {"исход": "манифеста нет"}
+    текст = манифест.read_text(encoding="utf-8")
+    д = json.loads(текст)
+    было = dict(д.get("template_origin") or {})
+    if not было:
+        return {"исход": "поля template_origin нет"}
+    новое = dict(было)
+    новое["source_commit"] = коммит
+    новое["source_dirty"] = False
+    новое["build_id"] = f"template-{коммит[:12]}"
+    версия = версия_шаблона(корень)
+    if версия:
+        новое["design_version"] = версия
+    if новое == было:
+        return {"исход": "совпадает"}
+    д["template_origin"] = новое
+    _записать(манифест, д)
+    return {"исход": "обновлено", "было": (было.get("source_commit") or "")[:12],
+            "стало": коммит[:12],
+            "design_version": новое.get("design_version", "")}
 
 
 def все_ячейки(реестр: pathlib.Path = РЕЕСТР) -> list:
@@ -231,6 +291,9 @@ def main(аргументы=None) -> int:
                     строка += f" … всего {len(имена)}"
         elif исход in ("обновить", "продвинуто"):
             строка += f" файлов {len(итог['файлов к обновлению'])}"
+            пр = итог.get("происхождение") or {}
+            if пр.get("исход") == "обновлено":
+                строка += f", происхождение {пр['было']}→{пр['стало']}"
             if итог.get("чужие"):
                 строка += f", не наших {len(итог['чужие'])}"
         elif исход in ("нет проекта", "другой источник"):

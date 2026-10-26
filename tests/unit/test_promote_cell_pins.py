@@ -145,3 +145,47 @@ def test_вердикт_умеет_падать():
     """Инструмент-вердикт без ненулевого выхода в воротах всегда зелёный."""
     текст = ИНСТРУМЕНТ.read_text(encoding="utf-8")
     assert "return 1" in текст
+
+
+def test_продвижение_обновляет_происхождение_шаблона(модуль, tmp_path, monkeypatch):
+    """`template_origin` описывает ЗАКРЕПЛЁННЫЙ шаблон — значит его меняет продвижение.
+
+    Поле забыли, и это поймала собственная проверка проекта, а не обзор:
+    `checks/manifest_stamp.py` сверяет `template_origin.source_commit` с замком
+    и на восьми ячейках партии K2 ответил «происхождение шаблона разошлось с
+    замком» — восемь прогонов CI 26.10 стали красными. Сборка это поле не
+    трогает, и так написано в самом поле.
+    """
+    корень, проект, реестр = _стенд(tmp_path, копия="def общая():\n    return 1\n",
+                                    канон="def общая():\n    return 2\n")
+    (корень / "status").mkdir()
+    (корень / "status" / "lords-template-version.json").write_text(
+        json.dumps({"version": "9.9.9"}), encoding="utf-8")
+    (проект / "config").mkdir()
+    (проект / "config" / "template-manifest.json").write_text(json.dumps({
+        "schema_version": 1,
+        "template_origin": {"source_commit": "0" * 40, "source_dirty": False,
+                            "build_id": "template-000000000000",
+                            "template_family": "lords", "design_version": "1.0.0",
+                            "note": "Происхождение закреплённого шаблона."},
+    }, ensure_ascii=False, indent=1), encoding="utf-8")
+    monkeypatch.setattr(модуль, "коммит_фабрики", lambda корень=None: ("c" * 40, False))
+    итог = модуль.продвинуть("c-1", корень=корень, реестр=реестр)
+    assert итог["исход"] == "продвинуто", итог
+    assert итог["происхождение"]["исход"] == "обновлено"
+    м = json.loads((проект / "config" / "template-manifest.json").read_text(
+        encoding="utf-8"))
+    assert м["template_origin"]["source_commit"] == "c" * 40
+    assert м["template_origin"]["build_id"] == "template-cccccccccccc"
+    assert м["template_origin"]["design_version"] == "9.9.9"
+    # Пояснение поля не затирается: оно объясняет, кто поле НЕ меняет.
+    assert "Происхождение закреплённого шаблона" in м["template_origin"]["note"]
+
+
+def test_манифест_без_происхождения_не_придумывается(модуль, tmp_path, monkeypatch):
+    """Нет поля — нечего обновлять; выдумывать происхождение нельзя."""
+    корень, проект, реестр = _стенд(tmp_path, копия="def общая():\n    return 1\n",
+                                    канон="def общая():\n    return 2\n")
+    monkeypatch.setattr(модуль, "коммит_фабрики", lambda корень=None: ("d" * 40, False))
+    итог = модуль.продвинуть("c-1", корень=корень, реестр=реестр)
+    assert итог["происхождение"]["исход"] == "манифеста нет"
