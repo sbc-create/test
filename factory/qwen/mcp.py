@@ -133,6 +133,17 @@ def _версия_кода() -> dict[str, Any]:
     называл только коммит дерева, этот вопрос изнутри был неразрешим.
     """
     корень = pathlib.Path(__file__).resolve().parents[2]
+    # Выпуск вне рабочей копии (MOD-198): каталог выпуска не репозиторий, и
+    # `git -C` по нему либо отказал бы, либо назвал бы выпуск рабочим деревом.
+    # Установщик выпуска пишет коммит источника в SEO_RELEASE_COMMIT; git — запас.
+    выпуск = os.environ.get("SEO_RELEASE_COMMIT", "").strip()
+    if выпуск:
+        return {"release": str(корень), "worktree": None, "commit": выпуск[:12],
+                "branch": None, "dirty": False,
+                "process_started_at": _ЗАПУЩЕН,
+                "loaded_note": ("код из неизменяемого выпуска: commit — коммит "
+                                "источника выпуска (SEO_RELEASE_COMMIT), загружен "
+                                "на момент process_started_at")}
     def git(*арг: str) -> str:
         п = subprocess.run(["git", "-C", str(корень), *арг],
                            capture_output=True, text=True)
@@ -175,7 +186,9 @@ _доверие = threading.local()
 def путь_токена() -> pathlib.Path:
     if ФАЙЛ_ТОКЕНА:
         return pathlib.Path(ФАЙЛ_ТОКЕНА)
-    корень = pathlib.Path(__file__).resolve().parents[2]
+    # Тот же корень состояния, что у клиента (automation/local/bridge_call.py) и
+    # seo_operator.paths: писатель и читатель токена берут одну переменную.
+    корень = pathlib.Path(os.environ.get("SEO_STATE_ROOT") or pathlib.Path(__file__).resolve().parents[2])
     return корень / "var" / "bridge-trusted-token"
 
 

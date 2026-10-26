@@ -28,8 +28,9 @@ def токен() -> str:
         return из_среды
     путь = os.environ.get("FACTORY_BRIDGE_TRUSTED_TOKEN_FILE", "").strip()
     файл = (pathlib.Path(путь) if путь
-            else pathlib.Path(__file__).resolve().parents[2] / "var"
-            / "bridge-trusted-token")
+            else pathlib.Path(os.environ.get("SEO_STATE_ROOT")
+                              or pathlib.Path(__file__).resolve().parents[2])
+            / "var" / "bridge-trusted-token")  # корень — как у моста (MOD-198)
     try:
         return файл.read_text(encoding="utf-8").strip()
     except OSError:
