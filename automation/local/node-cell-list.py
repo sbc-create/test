@@ -25,12 +25,26 @@ import sys
 РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
 
 
-def витрины_узла(ref: str, реестр: pathlib.Path | None = None) -> list[str]:
+def ячейки(реестр: pathlib.Path | None = None) -> list[dict]:
+    """Все паспорта реестра, как они записаны."""
     данные = json.loads((реестр or РЕЕСТР).read_text(encoding="utf-8"))
+    return данные.get("cells") or []
+
+
+def выведена(ячейка: dict) -> bool:
+    """Признак вывода из работы — ОДИН на все инструменты.
+
+    Отдельной функцией, потому что второе место, решающее «работает ли
+    витрина», однажды решит иначе: ровно так узел объявлял восемь витрин из
+    тринадцати (класс 47).
+    """
+    return bool((ячейка.get("withdrawal") or {}).get("withdrawn"))
+
+
+def витрины_узла(ref: str, реестр: pathlib.Path | None = None) -> list[str]:
     return sorted(
-        c["site_id"] for c in данные.get("cells") or []
-        if (c.get("deploy_target") or {}).get("ref") == ref
-        and not (c.get("withdrawal") or {}).get("withdrawn"))
+        c["site_id"] for c in ячейки(реестр)
+        if (c.get("deploy_target") or {}).get("ref") == ref and not выведена(c))
 
 
 def main(argv: list[str]) -> int:
