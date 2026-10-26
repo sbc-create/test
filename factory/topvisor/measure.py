@@ -29,14 +29,19 @@ from __future__ import annotations
 
 import datetime as dt
 import json
+import os
 from collections import Counter
 from pathlib import Path
 
 from factory.errors import FactoryError
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
-ВЫХОД = КОРЕНЬ / "var" / "topvisor"
-ЯДРО = КОРЕНЬ / "config" / "topvisor-cores.json"
+# Корни (MOD-198) — те же переменные, что у seo_operator.paths: писатель этого
+# файла и его читатели (tech_backlog, record-analytics-ids) берут один корень.
+СОСТОЯНИЕ = Path(os.environ.get("SEO_STATE_ROOT") or КОРЕНЬ)
+РЕЕСТРЫ = Path(os.environ.get("SEO_REGISTRY_ROOT") or КОРЕНЬ)
+ВЫХОД = СОСТОЯНИЕ / "var" / "topvisor"
+ЯДРО = РЕЕСТРЫ / "config" / "topvisor-cores.json"
 ДНЕЙ_ИСТОРИИ = 35
 
 #: Полосы позиций, общие для отчётов и выбора задач.

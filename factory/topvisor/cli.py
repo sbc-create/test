@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 
 from factory.errors import FactoryError
@@ -322,7 +323,7 @@ def _поисковые_визиты() -> dict[str, float]:
     import collections  # noqa: PLC0415
     from pathlib import Path  # noqa: PLC0415
 
-    путь = Path(__file__).resolve().parents[2] / "var" / "analytics" / "cabinet-latest.json"
+    путь = Path(os.environ.get("SEO_STATE_ROOT") or Path(__file__).resolve().parents[2]) / "var" / "analytics" / "cabinet-latest.json"
     try:
         выгрузка = json.loads(путь.read_text(encoding="utf-8"))
     except (OSError, ValueError):
@@ -363,10 +364,9 @@ def наполнить_семантику(client, projects: list[dict]) -> dict:
     ответит ошибкой с их указанием — и она попадёт в отчёт целиком, как это уже
     произошло с `fields[n].name` и `Call to undefined method`.
     """
+    from factory.cell import withdrawn  # noqa: PLC0415
     from factory.topvisor.manifest import by_domain  # noqa: PLC0415
     from factory.topvisor.plan import normalize_domain  # noqa: PLC0415
-
-    from factory.cell import withdrawn  # noqa: PLC0415
 
     итог = {"groups": 0, "keywords": 0, "searchers": 0, "regions": 0, "unarchived": 0, "notes": []}
     _КЛЮЧИ_РЕГИОНОВ.clear()

@@ -32,6 +32,7 @@ print(json.dumps({
     "regular_cells": str(regular.SOURCES["cells"]),
     "regular_ledger_runs": str(regular.SOURCES["changes_ledger_runs"]),
     "backlog_positions": str(tech_backlog.POSITIONS),
+    "topvisor_measure_out": str(__import__("factory.topvisor.measure", fromlist=["x"]).ВЫХОД / "measure-latest.json"),
 }))
 """
 
@@ -71,6 +72,8 @@ def test_корни_разводят_код_состояние_и_реестры
     # Писатели и читатели состояния — под одним корнем.
     for ключ in ("editor_state", "tech_state", "notify_state", "regular_ledger_runs", "backlog_positions"):
         assert п[ключ].startswith(str(состояние) + os.sep), ключ
+    # Пара «писатель — читатель»: Топвизор пишет измерение туда, где его ищет техочередь.
+    assert п["topvisor_measure_out"] == п["backlog_positions"]
     # Живые реестры — из рабочей копии, не из выпуска.
     for ключ in ("tech_queue", "regular_cells"):
         assert п[ключ].startswith(str(КОПИЯ) + os.sep) and not п[ключ].startswith(str(выпуск)), ключ

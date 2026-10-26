@@ -22,17 +22,20 @@
 """
 from __future__ import annotations
 
+import calendar
 import datetime as dt
 import json
-import calendar
+import os
 from dataclasses import dataclass
 from pathlib import Path
 
 from factory.errors import BlockedInput
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
-БЮДЖЕТ = КОРЕНЬ / "config" / "topvisor-budget.json"
-ЖУРНАЛ = КОРЕНЬ / "var" / "topvisor" / "spend.jsonl"
+# Корни (MOD-198) — те же переменные, что у seo_operator.paths: писатель этого
+# файла и его читатели (tech_backlog, record-analytics-ids) берут один корень.
+БЮДЖЕТ = Path(os.environ.get("SEO_REGISTRY_ROOT") or КОРЕНЬ) / "config" / "topvisor-budget.json"
+ЖУРНАЛ = Path(os.environ.get("SEO_STATE_ROOT") or КОРЕНЬ) / "var" / "topvisor" / "spend.jsonl"
 МСК = dt.timezone(dt.timedelta(hours=3))
 ЯНДЕКС = 0
 

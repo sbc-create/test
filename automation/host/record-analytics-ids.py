@@ -25,20 +25,25 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
 
 КОРЕНЬ = Path(__file__).resolve().parents[2]
-РЕЕСТР = КОРЕНЬ / "config" / "site-cells.json"
-ОТЧЁТЫ_МЕТРИКИ = КОРЕНЬ / "var" / "analytics"
+# Корни (MOD-198) — как у seo_operator.paths: отчёты пишут службы в корень
+# состояния, реестр ячеек — живой, в рабочей копии.
+СОСТОЯНИЕ = Path(os.environ.get("SEO_STATE_ROOT") or КОРЕНЬ)
+РЕЕСТРЫ = Path(os.environ.get("SEO_REGISTRY_ROOT") or КОРЕНЬ)
+РЕЕСТР = РЕЕСТРЫ / "config" / "site-cells.json"
+ОТЧЁТЫ_МЕТРИКИ = СОСТОЯНИЕ / "var" / "analytics"
 #: Отчёты Topvisor. Берётся САМЫЙ СВЕЖИЙ из двух: `check-latest.txt` пишется до
 #: применения плана, `check-after-connect.txt` — после. Если читать только
 #: первый, только что созданные проекты в реестр не попадут: ровно так два
 #: проекта (#33768290 и #33768310) остались бы незаписанными.
 ОТЧЁТЫ_TOPVISOR = (
-    КОРЕНЬ / "var" / "topvisor" / "check-after-connect.txt",
-    КОРЕНЬ / "var" / "topvisor" / "check-latest.txt",
+    СОСТОЯНИЕ / "var" / "topvisor" / "check-after-connect.txt",
+    СОСТОЯНИЕ / "var" / "topvisor" / "check-latest.txt",
 )
 
 
@@ -91,8 +96,8 @@ def проекты() -> dict[str, dict]:
     return итог
 
 
-ИЗМЕРЕНИЕ_TOPVISOR = КОРЕНЬ / "var" / "topvisor" / "measure-latest.json"
-ЯДРО_TOPVISOR = КОРЕНЬ / "config" / "topvisor-cores.json"
+ИЗМЕРЕНИЕ_TOPVISOR = СОСТОЯНИЕ / "var" / "topvisor" / "measure-latest.json"
+ЯДРО_TOPVISOR = РЕЕСТРЫ / "config" / "topvisor-cores.json"
 
 
 def измерения(путь: Path = ИЗМЕРЕНИЕ_TOPVISOR) -> dict[str, dict]:
@@ -178,7 +183,7 @@ def main(argv: list[str] | None = None) -> int:
             домен_api = м.get("api_site")
             части.append(
                 f"счётчик {м['counter_id']} создан службой, отчёт "
-                f"{Path(м['_отчёт']).relative_to(КОРЕНЬ)} от {м['_время']}"
+                f"{Path(м['_отчёт']).relative_to(СОСТОЯНИЕ)} от {м['_время']}"
                 + (
                     f"; домен счётчика по ответу API — {домен_api}"
                     if домен_api
