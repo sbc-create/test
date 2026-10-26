@@ -18,6 +18,28 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ConditionPathExists": [
+     "/home/claude/wt-portable-site-cell-01/config/analytics.json"
+    ],
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var",
+     "/home/claude/wt-portable-site-cell-01/artifacts"
+    ],
+    "ExecStartPre": [
+     "/usr/bin/install",
+     "/home/claude/wt-portable-site-cell-01/var/analytics"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -75,6 +97,21 @@
     "Environment": "PYTHONPATH=/home/claude/wt-ratings-ingestion-01"
    },
    "дерево": "/home/claude/wt-ratings-ingestion-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/srv/site-factory/repo/var/ratings",
+     "/home/claude/wt-ratings-ingestion-01"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "cursor/ratings-ingestion-01",
     "голова": "ec29b2c",
@@ -126,6 +163,16 @@
     "Environment": "PYTHONPATH=/home/claude/wt-ratings-ingestion-01; COMMUNITY_ROLLOUT_FLAGS_PATH=/srv/site-factory/repo/var/ratings/community_rollout_flags.json; COMMUNITY_IDENTITY_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_identity_hmac; COMMUNITY_ROLLOUT_SALT_FILE=/etc/site-factory/secrets/community_rollout_salt; COMMUNITY_IP_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_ip_hmac"
    },
    "дерево": "/home/claude/wt-ratings-ingestion-01",
+   "путевые_поля_юнита": {},
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "cursor/ratings-ingestion-01",
     "голова": "ec29b2c",
@@ -168,6 +215,44 @@
     "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1; EDITOR_RUN_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude"
+    ]
+   },
+   "неимпортные": {
+    "документы": [
+     "docs/editor/EDITORIAL_RULES.md",
+     "docs/editor/EDITOR_RUN_PROMPT.md"
+    ],
+    "сценарии": [
+     "automation/local/bridge_call.py",
+     "automation/local/comment-audit.py",
+     "automation/local/comment-visible-check.py",
+     "automation/local/source_fetch.py"
+    ],
+    "конфигурация": [
+     "config/editor-run.json",
+     "config/editorial-sources.json"
+    ],
+    "состояние": [
+     "var/editor-runs/ledger.jsonl",
+     "var/editor-runs/next.json",
+     "var/editor-runs/run-"
+    ],
+    "бинари_вне_дерева": [
+     "/home/claude/.local/bin/claude"
+    ],
+    "агентная": true,
+    "правила_агента": [
+     "CLAUDE.md",
+     ".claude/settings.json",
+     ".claude/hooks",
+     ".claude/rules",
+     ".claude/skills",
+     ".claude/agents"
+    ]
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -228,10 +313,20 @@
     "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; SEO_CONTENT_OPERATOR_SITE=yummyani.site; SEO_CONTENT_OPERATOR_REPORT_TRIGGER=systemd-report-timer; SEO_CONTENT_OPERATOR_REPORT_ROOT=/var/lib/seo-content-operator/reports/daily; SEO_CONTENT_OPERATOR_REPORT_OUTBOX=/var/lib/seo-content-operator/outbox/daily; SEO_CONTENT_OPERATOR_REPORT_LOCK=/run/seo-content-operator/report.lock.json"
    },
    "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "путевые_поля_юнита": {},
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "fd6d00a",
-    "незакоммичено_всего": 44
+    "голова": "ff8d678",
+    "незакоммичено_всего": 39
    },
    "точка_входа": "scripts/seo_content_operator_daily_report.py",
    "как_определена": "файл из ExecStart",
@@ -274,9 +369,7 @@
     "/var/lib/seo-content-operator/state.json",
     "/var/lib/seo-content-operator/suppression.json"
    ],
-   "нужны_незакоммиченные": [
-    "seo_engine/content_operator/daily_ops_report.py"
-   ]
+   "нужны_незакоммиченные": []
   },
   {
    "служба": "seo-content-operator.service",
@@ -295,10 +388,20 @@
     "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; SEO_CONTENT_OPERATOR_SITE=yummyani.site; SEO_CONTENT_OPERATOR_STATE=/var/lib/seo-content-operator/state.json; SEO_CONTENT_OPERATOR_LOCK=/run/seo-content-operator/lock.json; SEO_CONTENT_OPERATOR_KILL=/var/lib/seo-content-operator/kill_switch.json"
    },
    "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "путевые_поля_юнита": {},
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "fd6d00a",
-    "незакоммичено_всего": 44
+    "голова": "ff8d678",
+    "незакоммичено_всего": 39
    },
    "точка_входа": "scripts/seo_content_operator_stage2_daily.py",
    "как_определена": "файл из ExecStart",
@@ -353,10 +456,7 @@
     "/var/lib/seo-content-operator/state.json",
     "/var/lib/seo-content-operator/suppression.json"
    ],
-   "нужны_незакоммиченные": [
-    "scripts/seo_content_operator_stage2_daily.py",
-    "seo_engine/content_operator/ongoing_intake.py"
-   ]
+   "нужны_незакоммиченные": []
   },
   {
    "служба": "seo-regular-check.service",
@@ -375,6 +475,25 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var/seo-regular"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [
+     "config/portfolio.json"
+    ],
+    "состояние": [
+     "var/seo-tech/next.json",
+     "var/seo-tech/runs.jsonl"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -433,6 +552,25 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var/seo-regular"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [
+     "config/portfolio.json"
+    ],
+    "состояние": [
+     "var/seo-tech/next.json",
+     "var/seo-tech/runs.jsonl"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -491,6 +629,25 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var/seo-regular"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [
+     "config/portfolio.json"
+    ],
+    "состояние": [
+     "var/seo-tech/next.json",
+     "var/seo-tech/runs.jsonl"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -549,6 +706,25 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var/seo-regular"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [
+     "config/portfolio.json"
+    ],
+    "состояние": [
+     "var/seo-tech/next.json",
+     "var/seo-tech/runs.jsonl"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -605,10 +781,20 @@
     "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; PYTHONDONTWRITEBYTECODE=1"
    },
    "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "путевые_поля_юнита": {},
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/seo-preflight-20261002",
-    "голова": "fd6d00a",
-    "незакоммичено_всего": 44
+    "голова": "ff8d678",
+    "незакоммичено_всего": 39
    },
    "точка_входа": "seo_engine/content_operator/report_server.py",
    "как_определена": "модуль seo_engine.content_operator.report_server",
@@ -643,6 +829,24 @@
     "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var",
+     "/home/claude/.config/gh",
+     "/var/lib/site-cells"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [
+     "var/seo-tech/publish.jsonl"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -704,6 +908,35 @@
     "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1; SEO_TECH_TRIGGER=systemd-timer"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/.claude",
+     "/home/claude/wt-portable-site-cell-01/var"
+    ]
+   },
+   "неимпортные": {
+    "документы": [
+     "docs/seo-tech/SEO_TECH_RUN_PROMPT.md"
+    ],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [
+     "var/seo-tech/",
+     "var/seo-tech/next.json."
+    ],
+    "бинари_вне_дерева": [
+     "/home/claude/.local/bin/claude"
+    ],
+    "агентная": true,
+    "правила_агента": [
+     "CLAUDE.md",
+     ".claude/settings.json",
+     ".claude/hooks",
+     ".claude/rules",
+     ".claude/skills",
+     ".claude/agents"
+    ]
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -762,6 +995,21 @@
     "Environment": "PYTHONPATH=/usr/local/lib/site-factory-cell; SITE_CELL_QUEUE=/var/lib/site-cells; PYTHONDONTWRITEBYTECODE=1"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/config",
+     "/usr/local/lib/site-factory-cell/config"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -828,6 +1076,33 @@
     "Environment": "PYTHONDONTWRITEBYTECODE=1"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {
+    "ReadWritePaths": [
+     "/home/claude/wt-portable-site-cell-01/var"
+    ]
+   },
+   "неимпортные": {
+    "документы": [
+     "docs/QWEN_MCP_BRIDGE.md",
+     "docs/QWEN_MCP_CHANNEL_CHECKS.md"
+    ],
+    "сценарии": [
+     "automation/host/install-owner-consent-codes.sh",
+     "automation/srv-qwen/connect-site-factory-bridge.sh"
+    ],
+    "конфигурация": [
+     "config/analytics.json",
+     "config/site-cells.json",
+     "inventory/network-allowlist.yaml",
+     "inventory/ssh-hosts.yaml"
+    ],
+    "состояние": [
+     "var/"
+    ],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -871,6 +1146,16 @@
     "User": "claude"
    },
    "дерево": "/home/claude/wt-portable-site-cell-01",
+   "путевые_поля_юнита": {},
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/nova-publish-memory-01",
     "голова": "6401a8e",
@@ -901,6 +1186,22 @@
     "WorkingDirectory": "/home/claude/wt-seo007"
    },
    "дерево": "/home/claude/wt-seo007",
+   "путевые_поля_юнита": {
+    "ExecStartPost": [
+     "/srv/site-factory/repo/.venv/bin/python",
+     "/home/claude/wt-seo007/automation/host/seo-daily-report.py",
+     "/home/claude/wt-seo007/artifacts/seo-daily"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "claude/fleet-seo-007-e2e-readiness",
     "голова": "84736ca",
@@ -946,6 +1247,20 @@
     "Environment": "PYTHONPATH=/home/claude/wt-seo-operator-v2-01; SEO_ENGINE_ENV=production; SEO_ENGINE_TOPVISOR_SYNC_STATE_DIR=%h/.local/share/seo-engine/topvisor-inventory; SEO_ENGINE_DATABASE_URL=sqlite+pysqlite:///%h/.local/share/seo-engine/topvisor-inventory/inventory.db; SEO_ENGINE_ALLOW_PRIVATE_TARGETS=1"
    },
    "дерево": "/home/claude/wt-seo-operator-v2-01",
+   "путевые_поля_юнита": {
+    "ExecStartPre": [
+     "/bin/true"
+    ]
+   },
+   "неимпортные": {
+    "документы": [],
+    "сценарии": [],
+    "конфигурация": [],
+    "состояние": [],
+    "бинари_вне_дерева": [],
+    "агентная": false,
+    "правила_агента": []
+   },
    "состояние_дерева": {
     "ветка": "cursor/seo-operator-v2-01",
     "голова": "5f26ed4",
