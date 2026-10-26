@@ -1052,13 +1052,14 @@ def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) 
     if not snaps:
         return False
     published = {(i["domain"], i["slug"]) for i in regular.published_items()}
+    held, net_blocked = regular.result_holds(regular.SOURCES["queue_events"], now)
     found = regular.editor_candidates(
         snaps[-1],
         regular.SOURCES["facts_snapshots"],
         published,
-        blocked=regular.blocked_slugs(regular.SOURCES["queue_events"], now),
+        blocked=net_blocked,
+        held_urls=held,
     )
-    held, net_blocked = regular.result_holds(regular.SOURCES["queue_events"], now)
     # Кандидаты Yummy по спросу дорогие (чтение карточек ~1 мин): переиспользуются
     # из прежнего файла сутки, если адрес всё ещё не закрыт и не опубликован;
     # заново читаются, только когда таких не осталось.

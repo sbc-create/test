@@ -560,3 +560,29 @@ def test_drafts_not_read_from_live_root_with_test_registry(tmp_path, monkeypatch
     monkeypatch.setattr(editor_run, "готовые_черновики",
                         lambda root=None: (_ for _ in ()).throw(AssertionError("читал /srv")))
     editor_run.gate(NOW, refresh=False, **f)
+
+
+def test_gate_refresh_passes_identity_holds_to_candidates(tmp_path, monkeypatch):
+    """Пересчёт шлюза отдаёт editor_candidates адреса, удержанные последним
+    исходом: 26.10 an1meg0.site/vladyka-duhovnogo-mecha (IDENTITY_UNCLEAR трижды)
+    снова стоял в списке, собранном шлюзом в 13:20Z."""
+    from seo_operator import regular
+
+    snaps = tmp_path / "analytics"
+    snaps.mkdir()
+    (snaps / "analytics-2026-10-26.json").write_text("{}", encoding="utf-8")
+    monkeypatch.setitem(regular.SOURCES, "analytics_snapshots", snaps)
+    monkeypatch.setattr(regular, "published_items", lambda: [])
+    held = {"https://an1meg0.site/title/vladyka-duhovnogo-mecha"}
+    monkeypatch.setattr(regular, "result_holds", lambda *a, **k: (held, {"net"}))
+    monkeypatch.setattr(regular, "yummy_demand_candidates", lambda *a, **k: [])
+    seen = {}
+
+    def fake(*a, **k):
+        seen.update(k)
+        return []
+
+    monkeypatch.setattr(regular, "editor_candidates", fake)
+    path = tmp_path / "editor-candidates.json"
+    assert editor_run._refresh_candidates(path, NOW) is True
+    assert seen["held_urls"] == held and seen["blocked"] == {"net"}
