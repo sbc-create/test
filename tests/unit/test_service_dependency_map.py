@@ -479,3 +479,38 @@ def test_живая_служба_с_заданиями_строкой_несёт
     ссылки = {з["разрешён"] for з in р["задания_строкой"]}
     assert len(ссылки) >= 3, р["задания_строкой"]
     assert "seo_engine/services/content_queue.py" in ссылки
+
+
+def test_догрузка_по_цепочке_сегментов_находится(tmp_path):
+    """`КОРЕНЬ / "automation" / "local" / "x.py"` — тот же случай, другой вид.
+
+    Найдено 26.10 линией wt-portable-site-cell-01: её суточный отчёт грузится
+    так, и односегментный образец его не видел. Следствие в выпуске было бы
+    тихим: раздел отчёта выходил бы пустым с пояснением «календарный отчёт не
+    подключён к этому прогону», то есть как настройка, а не как потеря файла.
+    """
+    (tmp_path / "automation" / "local").mkdir(parents=True)
+    (tmp_path / "automation" / "local" / "отчёт.py").write_text("", encoding="utf-8")
+    вход = tmp_path / "служба.py"
+    вход.write_text('КОРЕНЬ = Path(__file__).resolve().parents[1]\n'
+                    'СЦЕНАРИЙ = КОРЕНЬ / "automation" / "local" / "отчёт.py"\n',
+                    encoding="utf-8")
+    найдено = инс.догружаемые({вход}, tmp_path)
+    assert [(з["цель"], з["разрешён"]) for з in найдено] == [
+        ("отчёт.py", "automation/local/отчёт.py")]
+
+
+def test_цепочка_без_py_на_конце_догрузкой_не_считается(tmp_path):
+    """`КОРЕНЬ / "var" / "состояние"` — это данные, а не модуль."""
+    вход = tmp_path / "служба.py"
+    вход.write_text('КОРЕНЬ = Path(__file__).resolve().parent\n'
+                    'СОСТОЯНИЕ = КОРЕНЬ / "var" / "seo-tech"\n', encoding="utf-8")
+    assert инс.догружаемые({вход}, tmp_path) == []
+
+
+def test_живая_служба_несёт_загружаемый_по_пути_отчёт():
+    """Состав seo-regular-* обязан включать automation/local/editor-day-report.py."""
+    записи = {з["служба"]: инс.разобрать(з) for з in инс.службы_из_копий()}
+    р = записи["seo-regular-daily.service"]
+    цели = {з["разрешён"] for з in р["догружаемые"]}
+    assert "automation/local/editor-day-report.py" in цели, р["догружаемые"]
