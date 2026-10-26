@@ -221,6 +221,59 @@ def зависимости_оболочки(файл: pathlib.Path, дерево
     return собрано
 
 
+def _кандидаты_импорта(дерево_ast, файл: pathlib.Path, дерево: pathlib.Path,
+                       *, обязательные_только: bool = False) -> list[str]:
+    """Пути модулей, которые мог иметь в виду каждый импорт файла.
+
+    Разбор «только по узел.module» терял два вида, и оба нашлись запуском, а
+    не сверкой сумм — выпуск считался целым, а служба не импортировалась:
+
+    1. `from factory.community import metrics_store` — это импорт МОДУЛЯ,
+       записанный как импорт имени. Поэтому каждое имя проверяется ещё и как
+       подмодуль пакета.
+    2. относительный импорт (`level > 0`) пропускался целиком: условие
+       требовало `level == 0`. Внутри пакета такой импорт — обычное дело.
+
+    Имя при `from X import Y` — ПРЕДПОЛОЖЕНИЕ: Y бывает и подмодулем, и
+    классом. Для сбора состава предположение безвредно (не нашлось — и ладно),
+    а для вердикта «в выпуске не хватает файла» оно даёт ложную находку:
+    `from seo_engine.content_operator.models import PriorityScore` числился
+    отсутствующим модулем. Поэтому `обязательные_только=True` оставляет лишь
+    то, что ОБЯЗАНО быть модулем.
+    """
+    итог: list[str] = []
+    for узел in ast.walk(дерево_ast):
+        if isinstance(узел, ast.Import):
+            итог += [а.name.replace(".", "/") for а in узел.names]
+            continue
+        if not isinstance(узел, ast.ImportFrom):
+            continue
+        if узел.level == 0:
+            основа = (узел.module or "").replace(".", "/")
+            if not основа:
+                continue
+            итог.append(основа)
+            if not обязательные_только:
+                итог += [f"{основа}/{а.name}" for а in узел.names]
+            continue
+        каталог = файл.parent
+        for _ in range(узел.level - 1):
+            каталог = каталог.parent
+        try:
+            относительно = каталог.relative_to(дерево)
+        except ValueError:
+            continue
+        части = [] if str(относительно) == "." else [str(относительно)]
+        if узел.module:
+            части.append(узел.module.replace(".", "/"))
+        основа = "/".join(части)
+        if основа and узел.module:
+            итог.append(основа)
+        if not обязательные_только:
+            итог += ["/".join(п for п in (основа, а.name) if п) for а in узел.names]
+    return list(dict.fromkeys(итог))
+
+
 def импорты(файл: pathlib.Path, дерево: pathlib.Path, собрано: set[pathlib.Path] | None = None) -> set[pathlib.Path]:
     """Транзитивные импорты, разрешённые в этом же дереве."""
     собрано = собрано if собрано is not None else set()
@@ -234,15 +287,9 @@ def импорты(файл: pathlib.Path, дерево: pathlib.Path, собр�
         дерево_ast = ast.parse(текст)
     except (OSError, SyntaxError, ValueError):
         return собрано
-    имена: list[str] = []
-    for узел in ast.walk(дерево_ast):
-        if isinstance(узел, ast.Import):
-            имена += [а.name for а in узел.names]
-        elif isinstance(узел, ast.ImportFrom) and узел.module and узел.level == 0:
-            имена.append(узел.module)
-    for имя in имена:
-        путь = дерево / (имя.replace(".", "/") + ".py")
-        пакет = дерево / имя.replace(".", "/") / "__init__.py"
+    for имя in _кандидаты_импорта(дерево_ast, файл, дерево):
+        путь = дерево / (имя + ".py")
+        пакет = дерево / имя / "__init__.py"
         for кандидат in (путь, пакет):
             if кандидат.is_file():
                 импорты(кандидат, дерево, собрано)

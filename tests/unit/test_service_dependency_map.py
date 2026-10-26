@@ -195,3 +195,44 @@ def test_чистая_служба_переносима_без_условий():
     assert чистая["можно"] is True and чистая["при_условии"] == []
     живая = по_имени["seo-regular-daily.service"]["перенос"]
     assert живая["можно"] is False, "служба на живых очередях не переносима без правки"
+
+
+# --- Состав выпуска: импорт модуля через `from … import` и относительный -----
+
+def test_from_import_модуля_попадает_в_состав(tmp_path):
+    """Найдено запуском: сверка сумм давала 0 расхождений, а служба не импортировалась.
+
+    `from factory.community import metrics_store` разбор считал импортом
+    ИМЕНИ, модуль в выпуск не попадал, и установленная копия падала с
+    ImportError на первой же строке.
+    """
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (tmp_path / "pkg" / "store.py").write_text("ЗНАЧЕНИЕ = 1\n", encoding="utf-8")
+    вход = tmp_path / "pkg" / "main.py"
+    вход.write_text("from pkg import store\n", encoding="utf-8")
+    состав = {str(ф.relative_to(tmp_path)) for ф in инс.импорты(вход, tmp_path)}
+    assert "pkg/store.py" in состав
+
+
+def test_относительный_импорт_попадает_в_состав(tmp_path):
+    """Прежнее условие `level == 0` пропускало весь внутрипакетный импорт."""
+    (tmp_path / "pkg").mkdir()
+    (tmp_path / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (tmp_path / "pkg" / "models.py").write_text("КЛАСС = 1\n", encoding="utf-8")
+    вход = tmp_path / "pkg" / "main.py"
+    вход.write_text("from .models import КЛАСС\nfrom . import models\n", encoding="utf-8")
+    состав = {str(ф.relative_to(tmp_path)) for ф in инс.импорты(вход, tmp_path)}
+    assert "pkg/models.py" in состав
+
+
+def test_имя_при_from_import_не_считается_обязательным_модулем(tmp_path):
+    """Иначе `from pkg.models import Класс` даёт ложную находку «нет модуля»."""
+    вход = tmp_path / "main.py"
+    вход.write_text("from pkg.models import Класс\n", encoding="utf-8")
+    import ast
+    разбор = ast.parse(вход.read_text(encoding="utf-8"))
+    все = инс._кандидаты_импорта(разбор, вход, tmp_path)
+    обязательные = инс._кандидаты_импорта(разбор, вход, tmp_path, обязательные_только=True)
+    assert "pkg/models/Класс" in все
+    assert обязательные == ["pkg/models"]

@@ -131,3 +131,37 @@ def test_первый_выпуск_службы_просмотра_провер�
     if not (корень / "seo-report-viewer.service" / "current").is_symlink():
         pytest.skip("выпуск службы просмотра на этой машине не разложен")
     assert инс.сверить("seo-report-viewer.service", корень) == 0
+
+
+def test_сверка_находит_недостающий_импорт(tmp_path):
+    """Выпуск, целый по суммам, но неполный по коду, должен валить сверку.
+
+    Повод измерен 26.10 на двух службах из трёх: community-ratings-monitor
+    был установлен без factory/community/metrics_store.py, а
+    seo-engine-topvisor-inventory — 17 файлами из 149, и оба давали
+    «расхождений 0». Запуск ловил это, сверка — нет.
+    """
+    дерево = tmp_path / "дерево"
+    (дерево / "pkg").mkdir(parents=True)
+    (дерево / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (дерево / "pkg" / "store.py").write_text("ЗНАЧЕНИЕ = 1\n", encoding="utf-8")
+    выпуск = tmp_path / "releases" / "20261026T000000Z-abcdef"
+    (выпуск / "pkg").mkdir(parents=True)
+    (выпуск / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (выпуск / "pkg" / "main.py").write_text("from pkg import store\n", encoding="utf-8")
+    # Без дерева-источника случай неразрешим и молчит — это и было дырой.
+    assert инс.самодостаточен(выпуск) == []
+    нет = инс.самодостаточен(выпуск, дерево)
+    assert нет == ["pkg/main.py → pkg.store"], нет
+    (выпуск / "pkg" / "store.py").write_text("ЗНАЧЕНИЕ = 1\n", encoding="utf-8")
+    assert инс.самодостаточен(выпуск, дерево) == []
+
+
+def test_сторонний_пакет_не_считается_недостающим(tmp_path):
+    """Сторонние зависимости живут в venv: их отсутствие — другой разговор."""
+    выпуск = tmp_path / "releases" / "20261026T000000Z-abcdef"
+    (выпуск / "pkg").mkdir(parents=True)
+    (выпуск / "pkg" / "__init__.py").write_text("", encoding="utf-8")
+    (выпуск / "pkg" / "main.py").write_text(
+        "import sqlalchemy\nfrom fastapi import FastAPI\n", encoding="utf-8")
+    assert инс.самодостаточен(выпуск) == []
