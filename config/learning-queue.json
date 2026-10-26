@@ -426,7 +426,7 @@
     "источник недоступен: github.com не в inventory/network-allowlist.yaml (проверено 26.10, отказ хука)"
    ],
    "conclusion": "источник недоступен: хост github.com не объявлен в inventory/network-allowlist.yaml, хук закрывает запрос (проверено 26.10). Вход владельца назван в docs/RESEARCH_SOURCES_VS_K2_20261026.md §5",
-   "status": "ждёт входа владельца",
+   "status": "гипотеза",
    "recorded_in": [
     "docs/RESEARCH_SOURCES_VS_K2_20261026.md"
    ],
