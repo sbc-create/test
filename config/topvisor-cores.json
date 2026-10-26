@@ -31,7 +31,7 @@
     "device": "desktop"
    }
   ],
-  "device": "Яндекс — ПК и смартфон, Google — ПК (разбивки визитов по устройствам в выгрузке Метрики нет)",
+  "device": "Яндекс — ПК и смартфон, Google — ПК: органика Метрики 12–25.10 по устройствам — смартфоны 39–76 %, ПК 22–55 % (daily_traffic_profile); Google одной строкой ради цены",
   "depth": 1,
   "schedule": "съём — topvisor-collect.timer 18:10 UTC (21:10 МСК, окно Яндекс Search API 20:00–05:59 МСК), не чаще раза в сутки на конфигурацию, в пределах месячного лимита владельца; чтение — topvisor-measure.timer 03:40 и 14:40 UTC",
   "collect": "python3 -m factory.topvisor.cli collect (factory/topvisor/collect.py)",

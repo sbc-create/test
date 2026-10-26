@@ -85,6 +85,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "daily_traffic_profile",
         # 2026-10-22: поисковые входы по страницам по дням и системам (скачки внутри недели)
         "daily_search_landing_pages",
+        # 2026-10-26: карты сайта и сводка Вебмастера (задание: Sitemap и его обработка)
+        "sitemaps", "webmaster_summary",
     }
 
 

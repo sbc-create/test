@@ -110,6 +110,11 @@ WEBMASTER_RESOURCES = (
     ("excluded_pages", "События страниц в поиске: появления и исключения", "search_urls_events"),
     ("external_links", "Внешние ссылки", "external_links"),
     ("technical_issues", "Технические проблемы", "diagnostics"),
+    # Добавлены 26.10.2026 (задание владельца: Sitemap и его обработка,
+    # главный адрес и страницы в поиске по каждому домену). Оба ресурса уже
+    # описаны в knowledge/YANDEX_ANALYTICS_CONTRACT.yaml.
+    ("sitemaps", "Карты сайта и их обработка", "sitemaps"),
+    ("webmaster_summary", "Сводка Вебмастера: страницы в поиске, проблемы, ИКС", "summary"),
 )
 
 
