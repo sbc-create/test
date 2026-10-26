@@ -1,0 +1,110 @@
+{
+  "run_id": "20261026T082005Z",
+  "owner": "editor/claude-auto/run-20261026T082005Z",
+  "window": [
+    "2026-10-26T08:20:05Z",
+    "2026-10-26T08:39:07Z"
+  ],
+  "steps": {
+    "claimed": true,
+    "source_read": true,
+    "written": true,
+    "published": true,
+    "public_page_verified": true
+  },
+  "complete": true,
+  "tasks": [
+    "020548b0ec54ed86",
+    "2f4d3f70bcac78d3",
+    "718ad8c3745263ee",
+    "a7d9e06d7ab255b8",
+    "ca7fa3c601316575"
+  ],
+  "results": [
+    {
+      "task_id": "ca7fa3c601316575",
+      "outcome": "TEXT_WRITTEN",
+      "gate": "BLOCKED_INSUFFICIENT_FACTS"
+    },
+    {
+      "task_id": "ca7fa3c601316575",
+      "outcome": "TEXT_WRITTEN",
+      "gate": "READY_VERIFIED"
+    },
+    {
+      "task_id": "718ad8c3745263ee",
+      "outcome": "TEXT_WRITTEN",
+      "gate": "READY_VERIFIED"
+    },
+    {
+      "task_id": "020548b0ec54ed86",
+      "outcome": "TEXT_WRITTEN",
+      "gate": "READY_VERIFIED"
+    }
+  ],
+  "outcomes": [
+    {
+      "task_id": "2f4d3f70bcac78d3",
+      "outcome": "SOURCES_MISSING"
+    },
+    {
+      "task_id": "ca7fa3c601316575",
+      "outcome": "TEXT_WRITTEN"
+    },
+    {
+      "task_id": "ca7fa3c601316575",
+      "outcome": "TEXT_WRITTEN"
+    },
+    {
+      "task_id": "718ad8c3745263ee",
+      "outcome": "TEXT_WRITTEN"
+    },
+    {
+      "task_id": "020548b0ec54ed86",
+      "outcome": "TEXT_WRITTEN"
+    }
+  ],
+  "unresolved": [
+    "a7d9e06d7ab255b8"
+  ],
+  "comments_published": 0,
+  "publications": [
+    {
+      "site": "zonafilm.space",
+      "slug": "ya-velikiy-bog",
+      "at": "2026-10-26T08:26:06Z",
+      "url": "https://zonafilm.space/title/ya-velikiy-bog/"
+    },
+    {
+      "site": "zonafilm.space",
+      "slug": "legenda-o-mechnike-3",
+      "at": "2026-10-26T08:32:09Z",
+      "url": "https://zonafilm.space/title/legenda-o-mechnike-3/"
+    },
+    {
+      "site": "animeg0.site",
+      "slug": "povelitel-tayn-pashalki",
+      "at": "2026-10-26T08:36:06Z",
+      "url": "https://animeg0.site/title/povelitel-tayn-pashalki/"
+    }
+  ],
+  "pages": [
+    {
+      "url": "https://zonafilm.space/title/ya-velikiy-bog/",
+      "status": 200,
+      "text_visible": true
+    },
+    {
+      "url": "https://zonafilm.space/title/legenda-o-mechnike-3/",
+      "status": 200,
+      "text_visible": true
+    },
+    {
+      "url": "https://animeg0.site/title/povelitel-tayn-pashalki/",
+      "status": 200,
+      "text_visible": true
+    }
+  ],
+  "bridge_calls_seen": 57,
+  "checked_at": "2026-10-26T08:39:09Z"
+}
