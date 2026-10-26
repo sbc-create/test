@@ -1,0 +1,271 @@
+{
+ "at": "2026-10-26T07:53:39Z",
+ "paths": [
+  {
+   "target": "213.180.193.61",
+   "tcp443": "timeout (нет SYN-ACK и нет RST/ICMP)",
+   "hops": [
+    {
+     "ttl": 1,
+     "from": "45.131.182.1",
+     "icmp": "ttl_exceeded",
+     "ms": 2
+    },
+    {
+     "ttl": 2,
+     "from": "149.11.228.255",
+     "icmp": "ttl_exceeded",
+     "ms": 0
+    },
+    {
+     "ttl": 3,
+     "from": "185.35.147.153",
+     "icmp": "ttl_exceeded",
+     "ms": 0
+    },
+    {
+     "ttl": 4,
+     "from": "154.25.3.177",
+     "icmp": "ttl_exceeded",
+     "ms": 2
+    },
+    {
+     "ttl": 5,
+     "from": "149.11.20.46",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    {
+     "ttl": 6,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 7,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 8,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 9,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 10,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 11,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 12,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 13,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 14,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 15,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 16,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 17,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 18,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 19,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 20,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    }
+   ],
+   "last_responding_hop": {
+    "ttl": 5,
+    "from": "149.11.20.46",
+    "icmp": "ttl_exceeded",
+    "ms": 1
+   },
+   "reached": false
+  },
+  {
+   "target": "213.180.204.242",
+   "tcp443": "connected",
+   "hops": [
+    {
+     "ttl": 1,
+     "from": "45.131.182.1",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    {
+     "ttl": 2,
+     "from": "185.35.144.2",
+     "icmp": "ttl_exceeded",
+     "ms": 0
+    },
+    {
+     "ttl": 3,
+     "from": "185.35.147.153",
+     "icmp": "ttl_exceeded",
+     "ms": 0
+    },
+    {
+     "ttl": 4,
+     "from": "185.35.147.208",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    {
+     "ttl": 5,
+     "from": "149.11.21.114",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    {
+     "ttl": 6,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 7,
+     "from": "149.11.21.114",
+     "icmp": "ttl_exceeded",
+     "ms": 1
+    },
+    {
+     "ttl": 8,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 9,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 10,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 11,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 12,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 13,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 14,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 15,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 16,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 17,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 18,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 19,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    },
+    {
+     "ttl": 20,
+     "from": null,
+     "icmp": null,
+     "ms": null
+    }
+   ],
+   "last_responding_hop": {
+    "ttl": 7,
+    "from": "149.11.21.114",
+    "icmp": "ttl_exceeded",
+    "ms": 1
+   },
+   "reached": false
+  }
+ ]
+}

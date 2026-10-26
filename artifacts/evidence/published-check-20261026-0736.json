@@ -1,0 +1,41 @@
+[
+ {
+  "domain": "an1meg0.site",
+  "slug": "puteshestvie-na-zapad-proschay-ukun",
+  "at": "2026-10-26T07:47:17Z",
+  "author": "editor/claude-auto/run-20261026T073619Z",
+  "url": "https://an1meg0.site/title/puteshestvie-na-zapad-proschay-ukun/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 699
+ },
+ {
+  "domain": "an1mego.site",
+  "slug": "moya-strannaya-zhizn",
+  "at": "2026-10-26T07:43:30Z",
+  "author": "editor/claude-auto/run-20261026T073619Z",
+  "url": "https://an1mego.site/title/moya-strannaya-zhizn/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 790
+ },
+ {
+  "domain": "zonafilm12.site",
+  "slug": "dropkik-zlogo-duha-konec-veka",
+  "at": "2026-10-26T07:51:08Z",
+  "author": "editor/claude-auto/run-20261026T073619Z",
+  "url": "https://zonafilm12.site/title/dropkik-zlogo-duha-konec-veka/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 445
+ }
+]

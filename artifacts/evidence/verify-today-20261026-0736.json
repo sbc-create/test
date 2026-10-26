@@ -1,0 +1,87 @@
+[
+ {
+  "domain": "an1meg0.site",
+  "slug": "puteshestvie-na-zapad-proschay-ukun",
+  "sources": [
+   "https://shikimori.io/animes/42209",
+   "https://an1meg0.site/title/puteshestvie-na-zapad-proschay-ukun/"
+  ],
+  "names": [
+   "Пяти",
+   "Рулай",
+   "Сунь",
+   "Укуне",
+   "Укуном",
+   "Цзяньхэ",
+   "Чжэна"
+  ],
+  "confirmed": [
+   "Пяти",
+   "Рулай",
+   "Сунь",
+   "Укуне",
+   "Укуном",
+   "Цзяньхэ",
+   "Чжэна"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "an1mego.site",
+  "slug": "moya-strannaya-zhizn",
+  "sources": [
+   "https://shikimori.io/animes/60591",
+   "https://an1mego.site/title/moya-strannaya-zhizn/"
+  ],
+  "names": [
+   "Animation",
+   "Just",
+   "Meowment",
+   "Paper",
+   "Plane",
+   "Studio",
+   "Мяомяо",
+   "Цзи",
+   "Чэнцзэ"
+  ],
+  "confirmed": [
+   "Animation",
+   "Just",
+   "Meowment",
+   "Paper",
+   "Plane",
+   "Studio",
+   "Мяомяо",
+   "Цзи",
+   "Чэнцзэ"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "zonafilm12.site",
+  "slug": "dropkik-zlogo-duha-konec-veka",
+  "sources": [
+   "https://shikimori.io/animes/55237",
+   "https://zonafilm12.site/title/dropkik-zlogo-duha-konec-veka/"
+  ],
+  "names": [
+   "Makaria",
+   "Yukiwo",
+   "Асо",
+   "Дзимботё",
+   "Такамори",
+   "Ханазоно",
+   "Юринэ"
+  ],
+  "confirmed": [
+   "Makaria",
+   "Yukiwo",
+   "Асо",
+   "Дзимботё",
+   "Такамори",
+   "Ханазоно",
+   "Юринэ"
+  ],
+  "not_found": []
+ }
+]
