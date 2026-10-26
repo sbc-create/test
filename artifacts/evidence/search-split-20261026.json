@@ -1,0 +1,1050 @@
+{
+ "source": "var/analytics/cabinet-latest.json",
+ "collected_at": "2026-10-26T05:10:50Z",
+ "domains": {
+  "1lordserials1.online": {
+   "engines": {
+    "yandex": 1.0
+   },
+   "dates": [
+    "2026-10-22",
+    "2026-10-22"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://1lordserials1.online/title/chrezvychayno-angliyskiy-skandal/",
+     1.0
+    ]
+   ],
+   "top_google": [],
+   "weeks": {
+    "12-18.10": {},
+    "19-25.10": {
+     "yandex": 1.0
+    },
+    "days_with_rows": {
+     "B": 1
+    }
+   }
+  },
+  "an1meg0.site": {
+   "engines": {
+    "google": 53.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://an1meg0.site/title/voennaya-hronika-romelii/",
+     11.0
+    ],
+    [
+     "https://an1meg0.site/title/chernyy-klever-2/",
+     7.0
+    ],
+    [
+     "https://an1meg0.site/title/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu-nakl/#watch",
+     5.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 30.0
+    },
+    "19-25.10": {
+     "google": 23.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 7
+    }
+   }
+  },
+  "an1mego.site": {
+   "engines": {
+    "google": 18.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-23"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": false,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://an1mego.site/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     6.0
+    ],
+    [
+     "https://an1mego.site/title/voennaya-hronika-romelii/",
+     3.0
+    ],
+    [
+     "https://an1mego.site/title/ne-slishkom-li-ty-sladkaya-bog-soli-sato/",
+     2.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 4.0
+    },
+    "19-25.10": {
+     "google": 14.0
+    },
+    "days_with_rows": {
+     "B": 5,
+     "A": 4
+    }
+   }
+  },
+  "animedia.icu": {
+   "engines": {
+    "yandex": 4656.0,
+    "google": 109.0,
+    "other": 19.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://animedia.icu/title/bezzhalostnaya-ledi-niya-liston-edinstvennaya-v-svoem-rode-istoriya-voitelnicy-b/",
+     907.0
+    ],
+    [
+     "https://animedia.icu/title/ya-vstrechayus-s-temnym-prizyvatelem/",
+     621.0
+    ],
+    [
+     "https://animedia.icu/title/nekromant-ya-katastrofa/",
+     423.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://animedia.icu/title/chernyy-klever-2/season-2/episode-2/",
+     21.0
+    ],
+    [
+     "https://animedia.icu/title/chernyy-klever/season-2/episode-3/",
+     20.0
+    ],
+    [
+     "https://animedia.icu/title/skazanie-o-pastuhe-bogov/season-1/episode-104/",
+     7.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 698.0,
+     "google": 56.0,
+     "other": 1.0
+    },
+    "19-25.10": {
+     "yandex": 3958.0,
+     "google": 53.0,
+     "other": 18.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 7
+    }
+   }
+  },
+  "animeg0.site": {
+   "engines": {
+    "google": 68.0,
+    "yandex": 3.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": false,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+     1.0
+    ],
+    [
+     "https://animeg0.site/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/season-1/episode-9/",
+     1.0
+    ],
+    [
+     "https://animeg0.site/title/izgnannyy-reinkarnirovannyy-tyazhelyy-rycar-ne-imeet-sebe-ravnyh-v-znaniyah-igry/",
+     1.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://animeg0.site/title/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/",
+     7.0
+    ],
+    [
+     "https://animeg0.site/",
+     4.0
+    ],
+    [
+     "https://animeg0.site/title/tokiyskie-mstiteli-bitva-treh-nebozhiteley/",
+     3.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 20.0,
+     "yandex": 3.0
+    },
+    "19-25.10": {
+     "google": 48.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 7
+    }
+   }
+  },
+  "lordserial33.biz": {
+   "engines": {
+    "yandex": 18.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://lordserial33.biz/title/pravila-sovmestnoy-zhizni/",
+     5.0
+    ],
+    [
+     "https://lordserial33.biz/title/opasnye-svyazi-3/",
+     4.0
+    ],
+    [
+     "https://lordserial33.biz/title/seyf/",
+     4.0
+    ]
+   ],
+   "top_google": [],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 10.0
+    },
+    "19-25.10": {
+     "yandex": 8.0
+    },
+    "days_with_rows": {
+     "A": 4,
+     "B": 4
+    }
+   }
+  },
+  "lordserials22.info": {
+   "engines": {
+    "google": 1371.0,
+    "yandex": 277.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://lordserials22.info/title/master-omyur/",
+     67.0
+    ],
+    [
+     "https://lordserials22.info/title/syla-vozvraschenie-domoy-serial-2006-2008/",
+     30.0
+    ],
+    [
+     "https://lordserials22.info/title/100-atletov-italiya/",
+     18.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://lordserials22.info/title/100-atletov-italiya/",
+     89.0
+    ],
+    [
+     "https://lordserials22.info/title/k-vostoku-ot-edema/",
+     50.0
+    ],
+    [
+     "https://lordserials22.info/title/taynyy-dnevnik-veriti/",
+     23.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 199.0,
+     "google": 594.0
+    },
+    "19-25.10": {
+     "google": 777.0,
+     "yandex": 78.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 7
+    }
+   }
+  },
+  "yummyani.biz": {
+   "engines": {
+    "google": 64.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-24"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://yummyani.biz/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     10.0
+    ],
+    [
+     "https://yummyani.biz/anime/chernyy-klever-2",
+     10.0
+    ],
+    [
+     "https://yummyani.biz/anime/poschadi-menya-velikiy-gospodin-3",
+     6.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 48.0
+    },
+    "19-25.10": {
+     "google": 16.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 5
+    }
+   }
+  },
+  "yummyani.org": {
+   "engines": {
+    "google": 170.0,
+    "yandex": 4.0,
+    "other": 1.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://yummyani.org/",
+     4.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani.org/anime/izgnannyy-reinkarnirovannyy-tyazhelyy-rytsar-ne-imeet-sebe-ravnyh-v-znaniyah",
+     31.0
+    ],
+    [
+     "https://yummyani.org/",
+     25.0
+    ],
+    [
+     "https://yummyani.org/anime/rashititel-grobnits",
+     13.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 152.0,
+     "yandex": 3.0,
+     "other": 1.0
+    },
+    "19-25.10": {
+     "google": 18.0,
+     "yandex": 1.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 7
+    }
+   }
+  },
+  "yummyani.site": {
+   "engines": {
+    "yandex": 26055.0,
+    "google": 8.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://yummyani.site/",
+     7749.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/3",
+     3970.0
+    ],
+    [
+     "https://yummyani.site/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/6",
+     3190.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani.site/",
+     8.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 11272.0,
+     "google": 4.0
+    },
+    "19-25.10": {
+     "yandex": 14783.0,
+     "google": 4.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 7
+    }
+   }
+  },
+  "yummyani7.info": {
+   "engines": {
+    "yandex": 1189.0,
+    "google": 24.0,
+    "other": 4.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://yummyani7.info/anime/poschadi-menya-velikiy-gospodin-3",
+     252.0
+    ],
+    [
+     "https://yummyani7.info/anime/dazhe-u-studsoveta-est-kosyaki",
+     212.0
+    ],
+    [
+     "https://yummyani7.info/anime/svadba-svetlyachkov/season/1/episode/1",
+     76.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani7.info/anime/izgnannyy-chiter-charodey-naslazhdaetsya-bezzabotnoy-vtoroy-zhiznyu-ya-mogu",
+     4.0
+    ],
+    [
+     "https://yummyani7.info/anime/neveroyatnoe-priklyuchenie-dzhodzho-gonka-stalnoy-shar/season/7/episode/4",
+     3.0
+    ],
+    [
+     "https://yummyani7.info/anime/odolzhennaya-mnoy-magiya-budet-prinuditelno-izyata-posredstvom-vozobnovlyaemogo",
+     3.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 709.0,
+     "google": 13.0
+    },
+    "19-25.10": {
+     "yandex": 480.0,
+     "google": 11.0,
+     "other": 4.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 7
+    }
+   }
+  },
+  "yummyani7.site": {
+   "engines": {
+    "yandex": 7065.0,
+    "google": 25.0,
+    "other": 19.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://yummyani7.site/anime/pererodivshayasya-velikaya-svyataya-skryvaet-chto-ona-svyataya",
+     1667.0
+    ],
+    [
+     "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele/season/1",
+     1020.0
+    ],
+    [
+     "https://yummyani7.site/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+     474.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://yummyani7.site/",
+     10.0
+    ],
+    [
+     "https://yummyani7.site/anime/pozhiratel-zvezd",
+     5.0
+    ],
+    [
+     "https://yummyani7.site/anime/poschadi-menya-velikiy-gospodin-3",
+     3.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 2814.0,
+     "google": 15.0,
+     "other": 9.0
+    },
+    "19-25.10": {
+     "yandex": 4251.0,
+     "google": 10.0,
+     "other": 10.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 7
+    }
+   }
+  },
+  "zonafilm.cc": {
+   "engines": {
+    "yandex": 5109.0,
+    "google": 1227.0,
+    "other": 264.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://zonafilm.cc/",
+     3430.0
+    ],
+    [
+     "https://zonafilm.cc/movies/",
+     1178.0
+    ],
+    [
+     "https://zonafilm.cc/series/",
+     29.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://zonafilm.cc/",
+     512.0
+    ],
+    [
+     "https://zonafilm.cc/title/taynyy-dnevnik-veriti/",
+     67.0
+    ],
+    [
+     "https://zonafilm.cc/title/dnevniki-vampira/",
+     21.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "other": 52.0,
+     "google": 290.0
+    },
+    "19-25.10": {
+     "yandex": 5109.0,
+     "google": 937.0,
+     "other": 212.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 7
+    }
+   }
+  },
+  "zonafilm.space": {
+   "engines": {
+    "google": 733.0
+   },
+   "dates": [
+    "2026-10-14",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": false,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [],
+   "top_google": [
+    [
+     "https://zonafilm.space/title/chernyy-klever/season-2/episode-4/",
+     611.0
+    ],
+    [
+     "https://zonafilm.space/title/chernyy-klever/season-2/episode-5/",
+     19.0
+    ],
+    [
+     "https://zonafilm.space/title/doktor-iks/",
+     11.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "google": 23.0
+    },
+    "19-25.10": {
+     "google": 710.0
+    },
+    "days_with_rows": {
+     "B": 7,
+     "A": 5
+    }
+   }
+  },
+  "zonafilm12.site": {
+   "engines": {
+    "yandex": 307.0,
+    "google": 177.0
+   },
+   "dates": [
+    "2026-10-12",
+    "2026-10-25"
+   ],
+   "measured": {
+    "visitors": true,
+    "visits": true,
+    "page_depth": true,
+    "avg_visit_duration": true,
+    "bounce_rate": true,
+    "traffic_sources": true,
+    "search_engines": true,
+    "landing_pages": true,
+    "popular_pages": true,
+    "goal_reaches": true,
+    "daily_users": true,
+    "search_landing_pages": true,
+    "daily_search": true,
+    "daily_traffic_profile": true,
+    "daily_search_landing_pages": true,
+    "counter_passport": true,
+    "today_users": true,
+    "today_search": true,
+    "pages_in_search": false,
+    "excluded_pages": false,
+    "external_links": false,
+    "technical_issues": false,
+    "popular_queries": false
+   },
+   "top_yandex": [
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/",
+     264.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/episode-3/",
+     10.0
+    ],
+    [
+     "https://zonafilm12.site/title/chuzhaya-zhizn/season-1/episode-2/",
+     8.0
+    ]
+   ],
+   "top_google": [
+    [
+     "https://zonafilm12.site/title/kak-zhit-na-zemle/",
+     9.0
+    ],
+    [
+     "https://zonafilm12.site/title/moya-skrytaya-pravda/",
+     8.0
+    ],
+    [
+     "https://zonafilm12.site/title/svadba-s-zolotoy-shpilkoy/",
+     7.0
+    ]
+   ],
+   "weeks": {
+    "12-18.10": {
+     "yandex": 264.0,
+     "google": 64.0
+    },
+    "19-25.10": {
+     "yandex": 43.0,
+     "google": 113.0
+    },
+    "days_with_rows": {
+     "A": 7,
+     "B": 7
+    }
+   }
+  }
+ },
+ "note": "визиты из поиска (ym:s:visits), не клики; недели 12–18.10 и 19–25.10 из одной выгрузки"
+}
