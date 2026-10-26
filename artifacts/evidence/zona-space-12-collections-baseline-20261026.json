@@ -1,0 +1,52 @@
+{
+ "prepared": "26.10.2026 после 22:04Z (date -u)",
+ "source": "artifacts/analytics/analytics-2026-10-26.json, collected_at 2026-10-26T05:10:50Z, период 7daysAgo..yesterday (19–25.10)",
+ "sites": {
+  "zonafilm.space": {
+   "visits": 808.0,
+   "users": 760.0,
+   "pageviews_home_sections_collections (top-20)": {
+    "/": 34.0,
+    "/movies/": 16.0,
+    "/series/": 11.0,
+    "/collection/new_series_releases/": 10.0,
+    "/collections/": 7.0
+   },
+   "landings_home_sections_collections (top-20)": {
+    "/": 23.0
+   },
+   "collection_titles_in_top20_pageviews": {},
+   "goals": "не измерено: цели не созданы",
+   "note": "страницы вне топ-20 поштучно не измерены (не нули); начало воспроизведения по Метрике до выпуска целей не измеряется"
+  },
+  "zonafilm12.site": {
+   "visits": 267.0,
+   "users": 195.0,
+   "pageviews_home_sections_collections (top-20)": {
+    "/movies/": 54.0,
+    "/": 45.0,
+    "/series/": 16.0
+   },
+   "landings_home_sections_collections (top-20)": {
+    "/": 29.0,
+    "/movies/": 16.0,
+    "/series/": 6.0
+   },
+   "collection_titles_in_top20_pageviews": {},
+   "goals": {
+    "comment_submit": 0.0,
+    "episode_select": 0.0,
+    "filter_apply": 0.0,
+    "player_error": 0.0,
+    "player_ready": 0.0,
+    "player_start": 0.0,
+    "search": 0.0,
+    "season_select": 0.0,
+    "title_view": 0.0
+   },
+   "note": "страницы вне топ-20 поштучно не измерены (не нули); начало воспроизведения по Метрике до выпуска целей не измеряется",
+   "goals_reading": "цели созданы, но все 0, включая title_view, при 267 визитах и просмотрах карточек — события не отправляются; эти нули не являются измерением, базой не используются"
+  }
+ },
+ "after_release": "через 7 полных суток после выпуска T340: переходы на /collection/<key>/ (pageviews), переходы подборка → карточка, отдельно — начало воспроизведения по цели player_start, если цели отправляются; поисковый эффект отдельно, не раньше 14 суток"
+}

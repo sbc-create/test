@@ -8846,6 +8846,29 @@
       "verify_live": true,
       "status": "session",
       "owner_action": "ведёт Архитектор (шаблон animedia-nova); SEO даёт состав-критерий и тексты вступлений"
+    },
+    {
+      "id": "T340",
+      "site": "zonafilm.space, zonafilm12.site",
+      "direction": "films_series",
+      "repo": "var/site-repos (витрины zona-01 и zona-03)",
+      "urls": [
+        "https://zonafilm.space/",
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/series/",
+        "https://zonafilm12.site/",
+        "https://zonafilm12.site/movies/",
+        "https://zonafilm12.site/series/"
+      ],
+      "problem": "Поручение владельца 26.10 (после 21:34Z, дословно — docs/seo-operator/TASK_20261026_SEO_CONTINUATION.md): «Пользователь должен находить подходящий фильм или сериал через главную страницу и тематические разделы». Сейчас на обеих витринах только автоматические подборки (new_*, recently_added, top_rated, current_season); редакционных тематических подборок с вступлением и пояснениями нет.",
+      "norm": "knowledge/SEO_KNOWLEDGE_PACK.md §11; D223 (направление films_series); schemas/site-collections.schema.json (у Архитектора); состав держится по id каталога",
+      "expected": "Выпустить по три редакционные подборки на каждой витрине из docs/seo-operator/ZONAFILM_SPACE_COLLECTIONS_20261026.json и ZONAFILM12_SITE_COLLECTIONS_20261026.json: (1) адрес /collection/<key>/ с заголовком, вступлением, порядком и пояснением к каждой карточке ровно как в файле; (2) ссылка на подборку с главной и из раздела, указанного в поле section (/movies/ или /series/), и в хабе /collections/; (3) индексация по полю indexing; (4) обновление каталога не меняет состав — исчезнувший id не подменяется, а помечается для SEO",
+      "check": "collections-acceptance.py <файл> --sample 2 без нарушений (до выпуска: 0 нарушений, 6/6 живых, 26.10 22:04Z); после выпуска: 6 адресов /collection/<key>/ отдают 200, canonical на себя, состав и порядок = файл; ссылки видны на /, в разделе и на /collections/ на телефоне и компьютере; SEO повторяет браузерный путь главная/раздел → подборка → карточка → currentTime > 0",
+      "evidence": "docs/seo-operator/ZONAFILM_SPACE_COLLECTIONS_20261026.json; docs/seo-operator/ZONAFILM12_SITE_COLLECTIONS_20261026.json; исходные показатели artifacts/evidence/zona-space-12-collections-baseline-20261026.json",
+      "live_check": "после выпуска: /collection/<key>/ ×6, ссылки на / и в разделах, мобильный путь до воспроизведения",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор (отображение, навигация, выпуск); SEO — темы, состав, пояснения, публичная приёмка и измерение"
     }
   ]
 }
