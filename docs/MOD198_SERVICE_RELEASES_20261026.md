@@ -286,9 +286,28 @@ curl -sS -o /dev/null -w 'после откату: HTTP %{http_code}\n' \
 
 | вердикт | служб | кто |
 | --- | --- | --- |
-| можно без условий | 5 | community-ratings-gateway, community-ratings-monitor, seo-report-viewer, site-cell-executor, seo-engine-topvisor-inventory |
-| можно при условии | 1 | yummy-sitemap-warm (юнит обязан задать `YUMMY_WARM_PAUSE_FILE`) |
-| нельзя без правки | 12 | причина названа у каждой: самоотносительный корень, git по своему корню, состояние в дереве, точка входа не определена |
+| можно без условий | 4 | community-ratings-monitor, seo-report-viewer, site-cell-executor, seo-engine-topvisor-inventory |
+| можно при условии | 11 | пять служб на `seo_operator/cli.py`, `analytics-cabinet`, `seo-daily-cycle`, `seo-content-operator-report`, `seo-tech-publish`, `editor-run`, `seo-tech-run`, `yummy-sitemap-warm` — у каждой условие названо переменной юнита |
+| нельзя без правки | 3 | `community-ratings-gateway` (обёртка root прибивает копию), `seo-content-operator` и `site-factory-mcp` (зовут `git -C` по своему корню) |
+
+**Эта таблица за час сменилась дважды, и обе причины названы, потому что
+«12 нельзя» и «3 нельзя» — разный вывод для оператора.**
+
+Первая смена — чужая работа: линия SEO вынесла корни состояния и реестров в
+параметры (`8bf52ba`, затем `4574dd3`), и девять служб перешли из «нельзя» в
+«можно при условии». Вторая — мои собственные ложные отказы, найденные при
+проверке той правки: сканировалась только точка входа, а переопределение
+уехало на модуль глубже; схема и фикстура считались живыми реестрами; текст
+справки `--record` считался доступом к состоянию; вложенный путь под
+параметризованным корнем считался отдельным.
+
+Заодно нашёлся ложный ПРОПУСК в другую сторону: `community-ratings-gateway`
+числился «можно без условий», пока я не прочитал его обёртку
+`/usr/local/bin/community-ratings-gateway` — она принадлежит root и делает
+`export PYTHONPATH` на рабочую копию, а `export` в обёртке перекрывает
+`Environment` юнита. И второй: `seo-daily-cycle` грузит
+`automation/host/seo_qwen_review.py` по пути от своего каталога, и 15 файлов
+состава его не включали.
 
 **Важное про `yummy-sitemap-warm`.** Путь паузы читает служба
 (`YUMMY_WARM_PAUSE_FILE`), а ПИШЕТ его приёмка `yummy-b016-release.py` из
@@ -303,6 +322,8 @@ curl -sS -o /dev/null -w 'после откату: HTTP %{http_code}\n' \
 | seo-report-viewer | 20261026T102613Z-fd6d00a78905 | 11 | 0 расхождений, 0 недостающих | HTTP 200, 18 837 байт |
 | community-ratings-monitor | 20261026T113854Z-ec29b2c7fa04 | 10 | 0 / 0 | импорт из выпуска, `REPORT_DIR` остался абсолютным |
 | seo-engine-topvisor-inventory | 20261026T114139Z-5f26ed4fbd52 | 149 | 0 / 0 | `--mode status` отработал: 17 проектов, `source LIVE_READ_ONLY`, `stale false` |
+| community-ratings-gateway | 20261026T120638Z-ec29b2c7fa04 | 20 | 0 / 0 | выпуск готов, но переключение бессмысленно до правки обёртки (root) |
+| site-cell-executor | 20261026T120650Z-c1a901a6f0a8 | 145 | 0 / 0 | выпуск готов; переключение — после группы помельче |
 
 Оба новых выпуска сперва были НЕПОЛНЫ и при этом давали «расхождений 0»:
 разбор импортов не видел `from factory.community import metrics_store` и
