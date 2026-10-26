@@ -1,13 +1,13 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-10-26.5
-frozen_at: '2026-10-26T16:25:43Z'
+freeze_version: 2026-10-26.7
+frozen_at: '2026-10-26T19:48:51Z'
 file_count: 13
-aggregate_sha256: fcbf2b9067955499c1c77e8d0ee8325a752cdd82b91c1f58028db693ed818c7c
+aggregate_sha256: c7ccec585120d6dbc88267270684972411486ccfea4a01d69ed371ba3e709b94
 files:
 - path: knowledge/DECISIONS.md
-  sha256: d86c813edf089999f2abc24cdcfe6eff4f0bd255b62eefa3afc56b50fe19c14b
-  bytes: 225960
+  sha256: 7b90e8c81cb57235db83da26b2610253fe845c58185e02009f449e8e07ad2958
+  bytes: 227508
 - path: knowledge/DLE_20_COMPATIBILITY.md
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042
@@ -21,8 +21,8 @@ files:
   sha256: 6355fe8ebf5316f99e133f56c5c7fce799e261369f92c882b0efc837439bc4d5
   bytes: 18231
 - path: knowledge/SEO_KNOWLEDGE_PACK.md
-  sha256: d45df5a959e3508ef14857fd07603d2b28d89ed7a2a0b74af19bccb17c6761aa
-  bytes: 16309
+  sha256: 4b0ac165e79f3d577656a48b96b0ff90a2574165e871ff8b4af42ac5d4f465c5
+  bytes: 17430
 - path: knowledge/SOURCE_REGISTRY.yaml
   sha256: 05edfb061b6e0f240954477c3d0c4579f213288e08cdb9a93ce21add406fa682
   bytes: 43484
