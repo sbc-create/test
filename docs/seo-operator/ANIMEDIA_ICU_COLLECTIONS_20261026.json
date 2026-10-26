@@ -1,0 +1,446 @@
+{
+ "schema": "animedia-icu.collections/1",
+ "site": "animedia.icu",
+ "site_id": "animedia-01",
+ "prepared_at": "2026-10-26",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id (решение владельца витрины 26.10)",
+ "direction_rule": "animedia.icu — аниме-сайт (seo_profile.site_direction = anime): в подборках только японское аниме (жанры «аниме» и «мультфильм», страна Япония); игровые японские фильмы с ошибочным жанром «аниме» в снимке («Расёмон», «Харакири», «Рай и ад») исключены; подборка онгоингов сезона — T339 у Архитектора, здесь не дублируется",
+ "shortages": [
+  "Аниме 2025–2026 с полностью вышедшими сезонами и рейтингом: в снимке нет ни одного сериала с avail = eps и ≥ 800 оценок — тема отдана подборке онгоингов T339",
+  "kiberpank-beguschie-po-krayu (на странице 20 ссылок на серии при 10 в каталоге) и gospozha-kaguya-v-lyubvi-kak-na-voyne-4 (37 при 12) исключены до сверки"
+ ],
+ "collections": [
+  {
+   "key": "anime-odin-sezon",
+   "title": "Аниме в один сезон: можно досмотреть за выходные",
+   "viewer_request": "Какое аниме посмотреть целиком, без десятков сезонов и долгого ожидания?",
+   "intro": "Аниме-сериалы из одного сезона на 11–13 серий: все серии из каталога доступны на странице, историю можно пройти за два-три вечера. Порядок — от драмы и романтики к мистике и экшену, чтобы было из чего выбрать под настроение. В подборку вошли сериалы с рейтингом IMDb не ниже 7.8 по данным каталога; сериалы, у которых на странице больше серий, чем в каталоге, не включены до сверки.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 сериалам; запрос «аниме, которое можно досмотреть» — тема «какой сериал выбрать» из поручения владельца 26.10; не повторяет автоматическую short_series"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019174d3-d2c5-786a-b25e-5f1439a20440",
+     "slug": "vayolet-evergarden",
+     "url": "https://animedia.icu/title/vayolet-evergarden/",
+     "name": "Вайолет Эвергарден",
+     "original_name": "Violet Evergarden",
+     "year": 2018,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Девушка работает «автозапоминающей куклой» — помогает людям облечь чувства в письма; тихая драма в 13 сериях.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.4 (43211 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019174d3-d2c5-786a-b25e-5f1439a20440.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "0191514f-4c10-7c04-8817-cbef5fc90074",
+     "slug": "nevidannyy-cvetok-2",
+     "url": "https://animedia.icu/title/nevidannyy-cvetok-2/",
+     "name": "Невиданный цветок",
+     "original_name": "Ano hi mita hana no namae o bokutachi wa mada shiranai.",
+     "year": 2011,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       11,
+       11
+      ]
+     ],
+     "reason": "Друзья детства, разошедшиеся после гибели подруги, снова сталкиваются друг с другом; драма о вине и взрослении в 11 сериях.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (18954 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191514f-4c10-7c04-8817-cbef5fc90074.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 11 = в каталоге 11; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "0191512d-2347-7609-8d35-9e1f3fb4b846",
+     "slug": "lyubov-s-igolochki",
+     "url": "https://animedia.icu/title/lyubov-s-igolochki/",
+     "name": "Любовь с иголочки",
+     "original_name": "Sono Bisque Doll wa Koi wo Suru",
+     "year": 2022,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Замкнутый школьник, который шьёт кукол, и общительная Марин Китагава находят общее увлечение — романтическая комедия, 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.9 (29264 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191512d-2347-7609-8d35-9e1f3fb4b846.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "019174d2-997f-7978-8a14-50b69e9c2c11",
+     "slug": "etot-glupyy-svin-ne-ponimaet-mechtu-devochki-zayki",
+     "url": "https://animedia.icu/title/etot-glupyy-svin-ne-ponimaet-mechtu-devochki-zayki/",
+     "name": "Этот глупый свин не понимает мечту девочки-зайки",
+     "original_name": "Seishun Buta Yaro wa Bunny Girl-senpai no Yume wo Minai",
+     "year": 2018,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Сакута пытается понять, почему окружающие перестали замечать актрису Маи; романтика с загадкой, 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (27909 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019174d2-997f-7978-8a14-50b69e9c2c11.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01926151-252d-7aa2-a8d8-d6680cd17fe3",
+     "slug": "eksperimenty-leyn",
+     "url": "https://animedia.icu/title/eksperimenty-leyn/",
+     "name": "Эксперименты Лэйн",
+     "original_name": "Serial Experiments Lain",
+     "year": 1998,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Школьница получает письмо от погибшей подруги, и граница между реальностью и Сетью начинает стираться — психологический триллер, 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (22925 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01926151-252d-7aa2-a8d8-d6680cd17fe3.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "0191686b-655f-7df4-bc4e-e3b6e2a26e87",
+     "slug": "parad-smerti",
+     "url": "https://animedia.icu/title/parad-smerti/",
+     "name": "Парад смерти",
+     "original_name": "Death Parade",
+     "year": 2015,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Умершие попадают в бар, где бармен Деким устраивает им смертельную игру и решает их судьбу; 12 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (25772 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191686b-655f-7df4-bc4e-e3b6e2a26e87.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "0191685f-0e78-7c3d-87bf-e82f018bceb2",
+     "slug": "dorohedoro",
+     "url": "https://animedia.icu/title/dorohedoro/",
+     "name": "Дорохэдоро",
+     "original_name": "Dorohedoro",
+     "year": 2020,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       13,
+       13
+      ]
+     ],
+     "reason": "Никайдо и Кайман — человек с головой крокодила и без памяти — охотятся на магов в мрачном и смешном мире Дыры; 13 серий.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (16864 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191685f-0e78-7c3d-87bf-e82f018bceb2.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 13 = в каталоге 13; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "01915138-ff0a-76b8-a2f2-b06a62e01039",
+     "slug": "kaydzyu-8",
+     "url": "https://animedia.icu/title/kaydzyu-8/",
+     "name": "Кайдзю № 8",
+     "original_name": "Kaijuu 8-gou",
+     "year": 2024,
+     "type": "tv",
+     "seasons": [
+      [
+       1,
+       12,
+       12
+      ]
+     ],
+     "reason": "Уборщик останков монстров Кафка Хибино всё ещё мечтает попасть в Корпус обороны — экшен о кайдзю в 12 сериях.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (34024 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01915138-ff0a-76b8-a2f2-b06a62e01039.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; серий на странице 12 = в каталоге 12; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "anime-filmy-na-vecher",
+   "title": "Полнометражное аниме на вечер: самостоятельные истории",
+   "viewer_request": "Какой аниме-фильм посмотреть, если не смотрел никаких сериалов?",
+   "intro": "Аниме-фильмы, которые не требуют знания сериалов: каждая история начинается и заканчивается в одном фильме. Сначала — сказки и семейное кино, затем — фантастика, спорт и фильмы о войне. Отобраны фильмы с рейтингом IMDb не ниже 7.6 по данным каталога.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 фильмам; тема «что посмотреть вечером» из поручения владельца 26.10; отличается от автоматической anime_movies отбором самостоятельных историй"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01916739-698e-7b1b-bdcb-d5c4707021fd",
+     "slug": "moy-sosed-totoro-2",
+     "url": "https://animedia.icu/title/moy-sosed-totoro-2/",
+     "name": "Мой сосед Тоторо",
+     "original_name": "Tonari no Totoro",
+     "year": 1988,
+     "type": "movie",
+     "reason": "Сёстры Сацуки и Мэй переезжают в деревню и знакомятся с лесным духом Тоторо — добрая история для семейного просмотра.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (439683 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916739-698e-7b1b-bdcb-d5c4707021fd.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01916718-7e1b-729c-9c23-d7c5938415ec",
+     "slug": "hodyachiy-zamok-2",
+     "url": "https://animedia.icu/title/hodyachiy-zamok-2/",
+     "name": "Ходячий замок",
+     "original_name": "Howl no Ugoku Shiro",
+     "year": 2004,
+     "type": "movie",
+     "reason": "Заколдованная в старуху Софи попадает в ходячий дом волшебника Хаула и заключает союз с демоном Кальцифером.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (521500 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916718-7e1b-729c-9c23-d7c5938415ec.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01916711-ca7c-7c72-b02b-1e7e25cd4bb8",
+     "slug": "princessa-mononoke",
+     "url": "https://animedia.icu/title/princessa-mononoke/",
+     "name": "Принцесса Мононоке",
+     "original_name": "Mononoke-hime",
+     "year": 1997,
+     "type": "movie",
+     "reason": "Принц Аситака, получивший проклятие, оказывается в войне людей с духами леса.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (490829 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916711-ca7c-7c72-b02b-1e7e25cd4bb8.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "019169d4-7aaa-7a07-81f1-99aa82e9a97c",
+     "slug": "volchi-deti-ame-i-yuki-2",
+     "url": "https://animedia.icu/title/volchi-deti-ame-i-yuki-2/",
+     "name": "Волчьи дети Амэ и Юки",
+     "original_name": "Okami kodomo no Ame to Yuki",
+     "year": 2012,
+     "type": "movie",
+     "reason": "Мать растит в деревне детей-оборотней, которым приходится прятать свою природу; семейная драма.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.1 (55759 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019169d4-7aaa-7a07-81f1-99aa82e9a97c.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "0192882c-4e3b-79a8-843d-3918f257bfa0",
+     "slug": "paprika-2",
+     "url": "https://animedia.icu/title/paprika-2/",
+     "name": "Паприка",
+     "original_name": "Paprika",
+     "year": 2006,
+     "type": "movie",
+     "reason": "Из лаборатории украдены устройства для проникновения в сны, и учёная ищет их вместе с загадочной Паприкой — фантастический детектив.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (115778 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0192882c-4e3b-79a8-843d-3918f257bfa0.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "0191d23b-5741-7e0c-9096-5865ec489489",
+     "slug": "pervyy-slem-dank",
+     "url": "https://animedia.icu/title/pervyy-slem-dank/",
+     "name": "Первый слэм-данк",
+     "original_name": "The First Slam Dunk",
+     "year": 2022,
+     "type": "movie",
+     "reason": "Школьная баскетбольная команда Сёхоку готовится к матчу с действующим чемпионом — спортивная драма.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (13323 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191d23b-5741-7e0c-9096-5865ec489489.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "0191877f-67cc-7b62-8a0e-e7b0d80a2076",
+     "slug": "v-etom-ugolke-mira",
+     "url": "https://animedia.icu/title/v-etom-ugolke-mira/",
+     "name": "В этом уголке мира",
+     "original_name": "Kono sekai no katasumi ni",
+     "year": 2016,
+     "type": "movie",
+     "reason": "Конец 1930-х: Судзу переезжает из Хиросимы к мужу в Куре, и война идёт фоном повседневной жизни.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (14130 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191877f-67cc-7b62-8a0e-e7b0d80a2076.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "019156d3-2159-7db6-b19e-96fbcbca0e3c",
+     "slug": "bosonogiy-gen",
+     "url": "https://animedia.icu/title/bosonogiy-gen/",
+     "name": "Босоногий Гэн",
+     "original_name": "Hadashi no Gen",
+     "year": 1983,
+     "type": "movie",
+     "reason": "Конец Второй мировой и атомная бомбардировка: мальчик Гэн остаётся опорой для матери — фильм о войне.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (10619 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019156d3-2159-7db6-b19e-96fbcbca0e3c.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  },
+  {
+   "key": "anime-filmy-po-serialam",
+   "title": "Аниме-фильмы по любимым сериалам",
+   "viewer_request": "Посмотрел сериал — какой полнометражный фильм по нему есть на сайте?",
+   "intro": "Полнометражные фильмы, продолжающие известные аниме-сериалы: их лучше смотреть после сериала, потому что герои и события уже знакомы. Порядок — по числу оценок на IMDb по данным каталога, от самых обсуждаемых.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснения к 8 фильмам; отдельная потребность — фильм после сериала; не пересекается с подборкой самостоятельных фильмов"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "0191514c-de9b-77b0-ad89-b6ffc3ab6ddc",
+     "slug": "istrebitel-demonov-poezd-beskonechnyy-2",
+     "url": "https://animedia.icu/title/istrebitel-demonov-poezd-beskonechnyy-2/",
+     "name": "Истребитель демонов: Поезд «Бесконечный»",
+     "original_name": "Kimetsu no Yaiba Movie: Mugen Ressha-hen",
+     "year": 2020,
+     "type": "movie",
+     "reason": "Тандзиро, Нэдзуко, Иносукэ и Дзэницу расследуют исчезновения людей в поезде «Бесконечный» — продолжение «Истребителя демонов».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (103295 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191514c-de9b-77b0-ad89-b6ffc3ab6ddc.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 2,
+     "id": "01918ca9-d822-7fa9-88f8-bae891948d0d",
+     "slug": "re-zero-zhizn-s-nulya-v-drugom-mire-zamorozhennye-uzy",
+     "url": "https://animedia.icu/title/re-zero-zhizn-s-nulya-v-drugom-mire-zamorozhennye-uzy/",
+     "name": "Re: Zero — жизнь с нуля в другом мире: Замороженные узы",
+     "original_name": "Re: Zero kara Hajimeru Isekai Seikatsu: Hyouketsu no Kizuna",
+     "year": 2019,
+     "type": "movie",
+     "reason": "Фильм по «Re: Zero» об Эмилии: она просыпается в снежном лесу без памяти и учится жить заново с духом Паком.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (93572 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01918ca9-d822-7fa9-88f8-bae891948d0d.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 3,
+     "id": "01916a14-6a81-7ef2-b09c-5e1a3974b80e",
+     "slug": "evangelion-2-0-ty-ne-proydesh",
+     "url": "https://animedia.icu/title/evangelion-2-0-ty-ne-proydesh/",
+     "name": "Евангелион 2.0: Ты (не) пройдешь",
+     "original_name": "Evangelion: 2.0 You Can (Not) Advance",
+     "year": 2009,
+     "type": "movie",
+     "reason": "Синдзи продолжает пилотировать «Еву-01», а в NERV появляются новые пилоты — Аска и Мари.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.9 (29514 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916a14-6a81-7ef2-b09c-5e1a3974b80e.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 4,
+     "id": "01916a15-f2c8-7744-aca9-211fcf49c5a7",
+     "slug": "evangelion-3-0-1-0-kak-to-raz",
+     "url": "https://animedia.icu/title/evangelion-3-0-1-0-kak-to-raz/",
+     "name": "Евангелион 3.0+1.0: Как-то раз",
+     "original_name": "Evangelion: 3.0+1.0 Thrice Upon a Time",
+     "year": 2021,
+     "type": "movie",
+     "reason": "Продолжение «Евангелиона»: флот WILLE отбивает Париж, а Синдзи теряет волю к жизни.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (18956 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916a15-f2c8-7744-aca9-211fcf49c5a7.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 5,
+     "id": "01916c9b-c02f-7cd1-8f78-c59adde95334",
+     "slug": "van-pis-z",
+     "url": "https://animedia.icu/title/van-pis-z/",
+     "name": "Ван-Пис: Z",
+     "original_name": "One Piece Film Z",
+     "year": 2012,
+     "type": "movie",
+     "reason": "Команда Луффи против бывшего адмирала Зетто, который хочет уничтожить пиратов, — полнометражный «Ван-Пис».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (11967 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916c9b-c02f-7cd1-8f78-c59adde95334.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 6,
+     "id": "01918269-4483-7e47-b4e4-dde683022d4d",
+     "slug": "moya-geroyskaya-akademiya-film-2-geroi-vosstanut",
+     "url": "https://animedia.icu/title/moya-geroyskaya-akademiya-film-2-geroi-vosstanut/",
+     "name": "Моя геройская академия. Фильм 2: Герои восстанут",
+     "original_name": "Boku no Hero Academia the Movie 2: Heroes:Rising",
+     "year": 2019,
+     "type": "movie",
+     "reason": "Мидория и одноклассники на острове встречают опасного злодея — фильм по «Моей геройской академии».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.8 (13296 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01918269-4483-7e47-b4e4-dde683022d4d.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 7,
+     "id": "01917eaf-4a8a-7081-972d-9b9b23b2c993",
+     "slug": "etot-glupyy-svin-ne-ponimaet-mechtu-devochki-mechtatelnicy",
+     "url": "https://animedia.icu/title/etot-glupyy-svin-ne-ponimaet-mechtu-devochki-mechtatelnicy/",
+     "name": "Этот глупый свин не понимает мечту девочки-мечтательницы",
+     "original_name": "Seishun Buta Yaro wa Yumemiru Shoujo no Yume wo Minai",
+     "year": 2019,
+     "type": "movie",
+     "reason": "Продолжение сериала о Сакуте и Маи: в их жизнь возвращается Сёко Макинохара, первая любовь Сакуты.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (10904 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01917eaf-4a8a-7081-972d-9b9b23b2c993.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 8,
+     "id": "0191f638-ea20-723a-9d16-2330822d10a1",
+     "slug": "drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna",
+     "url": "https://animedia.icu/title/drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna/",
+     "name": "Драконий жемчуг Зет 12: Возрождение Фьюжна",
+     "original_name": "Dragon Ball Z: Fukkatsu no Fusion!! Gokuu to Vegeta",
+     "year": 1995,
+     "type": "movie",
+     "reason": "Злая энергия вырывается в мир живых, и мёртвые возвращаются — полнометражный «Драконий жемчуг Зет».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (13882 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191f638-ea20-723a-9d16-2330822d10a1.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    }
+   ]
+  }
+ ]
+}
