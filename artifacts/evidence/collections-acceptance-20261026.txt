@@ -1,0 +1,15 @@
+
+=== ZONAFILM_CC_COLLECTIONS_20261026.json: zonafilm.cc (zona-02), состояние PREPARED_NOT_RELEASED
+  схема: нарушений 15
+     collections/0: 'indexing' is a required property
+     collections/1: 'indexing' is a required property
+     collections/2: 'indexing' is a required property
+     collections/3: 'indexing' is a required property
+     collections/4: 'indexing' is a required property
+     collections/5: 'indexing' is a required property
+     collections/6: 'indexing' is a required property
+     collections/7: 'indexing' is a required property
+  живые факты: не измерено (запрошен режим без сети)
+  мобильный сценарий: НЕ ИЗМЕРЕНО — нужны события аналитики, а не разметка (цели выпущены не на всех витринах)
+
+одинаковых подборок у разных витрин: 0
