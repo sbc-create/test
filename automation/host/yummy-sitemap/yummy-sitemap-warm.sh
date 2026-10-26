@@ -13,7 +13,10 @@
 set -u
 # Управляемая пауза (приёмка B016, yummy-b016-release.py accept): файл с крайним сроком.
 # Просроченная пауза не действует — прогрев возобновится сам, даже если приёмка оборвалась.
-PAUSE_FILE="$(cd "$(dirname "$0")/../../.." && pwd)/var/yummy-sitemap/warm-pause.json"
+# Путь — параметр юнита (YUMMY_WARM_PAUSE_FILE): при запуске из выпуска вне рабочей
+# копии (MOD-198) dirname $0 укажет на каталог выпуска, и пауза приёмки молча
+# перестала бы действовать. По умолчанию — прежний путь от корня рабочей копии.
+PAUSE_FILE="${YUMMY_WARM_PAUSE_FILE:-$(cd "$(dirname "$0")/../../.." && pwd)/var/yummy-sitemap/warm-pause.json}"
 if [ -f "$PAUSE_FILE" ] && python3 -c 'import json,sys,time; sys.exit(0 if json.load(open(sys.argv[1]))["until"] > time.time() else 1)' "$PAUSE_FILE" 2>/dev/null; then
   echo "warm paused: $PAUSE_FILE"
   exit 0
