@@ -609,3 +609,178 @@ sources:
     conclusions:
       - "ym:s:date и ym:s:isRobot перечислены в справочнике группировок визитов."
       - "ym:s:<attribution>SearchEngineRoot (поисковая система, например lastsign) перечислена там же — поисковые визиты по дням раздельно для Яндекса и Google."
+  # ---------- чтение 2026-10-26: справка Яндекс Вебмастера ----------
+  # Повод: задание владельца «изучи готовые SEO-навыки и внедри полезное».
+  # Хост yandex.ru объявлен в inventory/network-allowlist.yaml на GET, поэтому
+  # эта часть задания выполнима без расширения доступа.
+  - id: SRC-YA-WM-INDEX
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/llms.txt
+    retrieved_at: "2026-10-26T07:40:00Z"
+    version_seen: "machine index, revision r21762422"
+    purpose: "машинный индекс справки Вебмастера: по нему выбраны страницы для чтения"
+    status: approved
+    conclusions:
+      - "Справка отдаёт машинный индекс всех страниц — читать можно по делу, а не вслепую."
+  - id: SRC-YA-CLEANPARAM
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/robot-workings/clean-param.md
+    retrieved_at: "2026-10-26T07:45:00Z"
+    version_seen: "docs snapshot 2026-10-26"
+    purpose: "директива Clean-param: синтаксис, пределы, отличие от Disallow"
+    status: approved
+    conclusions:
+      - "Синтаксис `Clean-param: p0[&p1..] [path]`, предел 500 символов на правило, межсекционная."
+      - "Disallow имеет приоритет: закрытый адрес правилами Clean-param не обрабатывается."
+      - "utm_* и ysclid Яндекс отбрасывает САМ, директива для них не нужна."
+      - "Директива для параметров, НЕ меняющих содержание: к фасетам каталога не применима — подтверждает наш вывод от 22.10."
+  - id: SRC-YA-INDEXNOW
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/indexing-options/index-now.md
+    retrieved_at: "2026-10-26T07:50:00Z"
+    version_seen: "docs snapshot 2026-10-26"
+    purpose: "протокол IndexNow: назначение, ключ, ограничения"
+    status: approved
+    conclusions:
+      - "Назначение: сообщить о НОВЫХ, изменённых и удалённых страницах, а не обо всех."
+      - "Гарантии индексации метод НЕ даёт — так сказано прямо."
+      - "Подтверждение владения — файлом ключа на самом сайте, API Вебмастера не требуется."
+  - id: SRC-YA-INDEXNOW-REF
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/indexnow/reference.md
+    retrieved_at: "2026-10-26T07:52:00Z"
+    version_seen: "docs snapshot 2026-10-26"
+    purpose: "справочник запросов IndexNow: формы, пределы, коды ответа"
+    status: approved
+    conclusions:
+      - "GET https://yandex.com/indexnow?url=&key=[&keyLocation=] — один адрес."
+      - "POST https://yandex.com/indexnow с JSON {host,key,keyLocation,urlList} — до 10 000 адресов за запрос."
+      - "Ключ: 8–128 символов, только a-zA-Z0-9 и дефис."
+      - "Коды: 200 принято, 202 ключ на проверке, 403 ключ не подошёл адресам, 422 параметры, 429 лимит по IP."
+  - id: SRC-YA-CRAWL-RATE
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/service/crawl-rate.md
+    retrieved_at: "2026-10-26T07:55:00Z"
+    version_seen: "docs snapshot 2026-10-26"
+    purpose: "скорость обхода: что можно менять и что рекомендуется вместо этого"
+    status: approved
+    conclusions:
+      - "По умолчанию скорость считают алгоритмы Яндекса; заданная вручную может не соблюдаться."
+      - "Рекомендация прямая: не занижать скорость, а закрывать ненужные страницы в robots.txt."
+  - id: SRC-YA-SITE-REGION
+    kind: official_documentation
+    owner: Яндекс
+    url: https://yandex.ru/support/webmaster/ru/site-geography/site-region.md
+    retrieved_at: "2026-10-26T07:58:00Z"
+    version_seen: "docs snapshot 2026-10-26"
+    purpose: "региональность сайта: как задаётся и на что влияет"
+    status: approved
+    conclusions:
+      - "Статус «Нет региона» существует и назначается в Вебмастере после модерации."
+      - "Региональная привязка не исключает сайт из выдачи других регионов и является лишь одним из факторов."
+      - "Регион сайта и регион СЪЁМА позиций — разные величины; у нас съём в Москве (213)."
+  - id: SRC-ANTHROPIC-FRONTEND-DESIGN
+    kind: official_skill
+    owner: Anthropic
+    path: /home/claude/.claude/plugins/marketplaces/claude-plugins-official/plugins/frontend-design/skills/frontend-design/SKILL.md
+    retrieved_at: "2026-10-26T08:05:00Z"
+    version_seen: "локальная копия маркетплейса плагинов, 71 строка"
+    purpose: "подход к визуальному решению интерфейса; перечень признаков генерации"
+    status: approved
+    conclusions:
+      - "Установка «каждому клиенту своя визуальная личность» нашей архитектуре противоречит сознательно: один рантайм на семейство."
+      - "Применим проверяемый перечень признаков шаблонности: одинаковые карточки с одним радиусом и тенью, ALL-CAPS надстрочники, мета-строки через средние точки, «→» в тексте ссылок, подкрашенный почти-чёрный."
+
+  # ---------- недоступные 2026-10-26: не изучены, за изученные не выдаются ----
+  # Отказ выдаёт PreToolUse-хук, читающий inventory/network-allowlist.yaml:
+  # «WebFetch: хост «github.com» не внесён в inventory». Расширение инвентаря —
+  # вход владельца; обход хука запрещён и не выполнялся.
+  - id: SRC-GH-MARKETINGSKILLS
+    kind: third_party_skillset
+    owner: coreyhaines31
+    url: https://github.com/coreyhaines31/marketingskills
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "навыки seo-audit, programmatic-seo, site-architecture — названы владельцем"
+    status: unavailable_blocked
+    conclusions:
+      - "Хост github.com не объявлен в inventory/network-allowlist.yaml; отказ хука зафиксирован."
+  - id: SRC-GH-CLAUDE-SEO
+    kind: third_party_skillset
+    owner: AgriciDaniel
+    url: https://github.com/AgriciDaniel/claude-seo
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "разделение аудита между специалистами, сбор доказательств"
+    status: unavailable_blocked
+    conclusions: ["Та же причина: хост не в инвентаре."]
+  - id: SRC-GH-SEOMATOR
+    kind: third_party_skillset
+    owner: seo-skills
+    url: https://github.com/seo-skills/seo-audit-skill
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "машинные проверки, сравнение до/после"
+    status: unavailable_blocked
+    conclusions: ["Та же причина: хост не в инвентаре."]
+  - id: SRC-GH-SERANKING
+    kind: third_party_skillset
+    owner: seranking
+    url: https://github.com/seranking/seo-skills
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "конкуренты, кластеризация, редакционные задания"
+    status: unavailable_blocked
+    conclusions: ["Та же причина: хост не в инвентаре."]
+  - id: SRC-GH-ANTHROPIC-SKILLS
+    kind: official_skill
+    owner: Anthropic
+    url: https://github.com/anthropics/skills
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "webapp-testing (frontend-design прочитан локально)"
+    status: unavailable_blocked
+    conclusions:
+      - "Хост не в инвентаре; в локальном маркетплейсе плагинов webapp-testing отсутствует."
+  - id: SRC-GH-AUTONOMOUS-CODING
+    kind: official_example
+    owner: Anthropic
+    url: https://github.com/anthropics/claude-quickstarts/tree/main/autonomous-coding
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "промпты инициализации и продолжения, сохранение прогресса между сессиями"
+    status: unavailable_blocked
+    conclusions: ["Та же причина: хост не в инвентаре."]
+  - id: SRC-GH-VERCEL
+    kind: third_party_skillset
+    owner: Vercel
+    url: https://github.com/vercel-labs/agent-skills
+    retrieved_at: "2026-10-26T07:35:00Z"
+    version_seen: "не получено"
+    purpose: "проверка интерфейсов, переиспользование общей основы"
+    status: unavailable_blocked
+    conclusions: ["Та же причина: хост не в инвентаре."]
+  - id: SRC-CC-SKILLS-DOCS-2026
+    kind: official_documentation
+    owner: Anthropic
+    url: https://code.claude.com/docs/en/skills
+    retrieved_at: "2026-10-26T07:36:00Z"
+    version_seen: "не получено"
+    purpose: "официальная документация по skills и subagents, перечитать на 2026-10"
+    status: unavailable_blocked
+    conclusions:
+      - "Хост code.claude.com в инвентаре отсутствует: прежние выписки SRC-CC-* остаются в силе как последнее прочитанное."
+  - id: SRC-TOPVISOR-SUPPORT
+    kind: official_documentation
+    owner: Topvisor
+    url: https://topvisor.com/ru/support/
+    retrieved_at: "2026-10-26T07:36:00Z"
+    version_seen: "не получено"
+    purpose: "проекты, регионы, устройства, источник выдачи, глубина, расписание съёма"
+    status: unavailable_blocked
+    conclusions: ["Хост не в инвентаре; настройки Topvisor описаны по нашему манифесту, не по справке."]
