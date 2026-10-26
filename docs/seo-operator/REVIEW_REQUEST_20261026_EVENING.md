@@ -35,3 +35,10 @@
 | zonafilm.space | parizaad | новый, сериал | статья Википедии `film-parizaad.json` (Naheed → Нахид, Rawalpindi → Равалпинди, Saeeda → Саида) | `f74043209fbd9245` |
 | zonafilm12.site | c-o | новый, фильм | статья Википедии `film-c-o.json` (Visakhapatnam → Висакхапатнам, Kancharapalem → Кантчарапалем) | `253572a3706a2795` |
 
+## Дополнение 21:09Z — ещё 2 черновика
+
+| Домен | Слаг | Что это | Источник фактов | body_digest |
+|---|---|---|---|---|
+| zonafilm12.site | shorsi | новый, сериал | статья Википедии `film-shorsi.json` (Sudbury Bulldogs → «Садбери Бульдогс», Nat → Нэт, Northern Ontario → Северное Онтарио) | `c6de49f3c25603ba` |
+| zonafilm.space | sang-e-mah | новый, сериал | статья Википедии `film-sang-e-mah.json` (Laspiraan → Ласпираан, Hilmand → Хилманд, Nasrullah Khan → Насрулла Хан, Haji Marjaan Khan → Хаджи Марджан Хан, Zarsanga → Зарсанга, Hikmat → Хикмат, Gul Meena → Гуль Мина, Zarghuna → Заргуна, Ghag → «Гхаг») | `9c4b5a021cbcae35` |
+
