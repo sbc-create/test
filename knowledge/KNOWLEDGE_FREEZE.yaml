@@ -1,19 +1,19 @@
 # Сгенерировано `python3 -m factory knowledge freeze`. Вручную не редактируется.
 schema_version: 1
-freeze_version: 2026-10-26.1
-frozen_at: '2026-10-26T09:55:49Z'
+freeze_version: 2026-10-26.2
+frozen_at: '2026-10-26T18:21:06Z'
 file_count: 13
-aggregate_sha256: 2af4d77ac79f4101f9c77744116d0ece7b6e15fbd82d24006e92cc427989d686
+aggregate_sha256: 3ab88c9ba58331941e53e23ef6e7f93291c4f4c2832babc8a6807319dad2ad0c
 files:
 - path: knowledge/DECISIONS.md
-  sha256: 1ee193df8066c6990be8536c981e1ed161f06e77908d985fe77b6ed721731699
-  bytes: 276285
+  sha256: dab44a6f72b5091de4d734184c090599a9bcef18a44bb74768f3bd036b660637
+  bytes: 280535
 - path: knowledge/DLE_20_COMPATIBILITY.md
   sha256: 3ae18bd0c3abd391d16378ec296f14c3bc2162cd6ed9d1a2c58855420f816e0f
   bytes: 7042
 - path: knowledge/FACTS.md
-  sha256: 8b04195be352f7a7b9c5a30893e660b205e662c19c8d91b54dc945a08b81cab5
-  bytes: 20521
+  sha256: 378bd8e8d60a799be39d51238d28e0c5edbdaddd2f347dd295c4e8364bfe7025
+  bytes: 21495
 - path: knowledge/INFRASTRUCTURE_INVENTORY.yaml
   sha256: da2fbee80fc73624818f157b554f6a5b3e6c97161aba11d05063f364de866ded
   bytes: 6811
@@ -24,11 +24,11 @@ files:
   sha256: c9483795c075751d69afa143dc55c23ed125899c02ee40658b20ac3d07d852ff
   bytes: 13254
 - path: knowledge/SOURCE_REGISTRY.yaml
-  sha256: 8f94702b19f9536c9ed78489d2ae2e26a75d9e94d464a4002d5db12e496b93fb
-  bytes: 50255
+  sha256: 55ba0d79b52aab31344a63b75e39c62901616871268407b4b0a9a9fe90883c20
+  bytes: 54304
 - path: knowledge/THIRD_PARTY_REVIEW.md
-  sha256: 49ce7afbafff69c7a2b2021c86c9fe19d379918192ee759333364715f695a62f
-  bytes: 5745
+  sha256: bef20a31c14ded8300cc5360176c8b3a3ff06f169b979036873a45ea9418e608
+  bytes: 7932
 - path: knowledge/UNKNOWNS.md
   sha256: 8b50abe7136eda8501aef492d0a036a14825737a26f00835af2c8804c42f260b
   bytes: 8906

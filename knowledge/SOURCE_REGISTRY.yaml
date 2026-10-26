@@ -684,6 +684,40 @@ sources:
       - "Статус «Нет региона» существует и назначается в Вебмастере после модерации."
       - "Региональная привязка не исключает сайт из выдачи других регионов и является лишь одним из факторов."
       - "Регион сайта и регион СЪЁМА позиций — разные величины; у нас съём в Москве (213)."
+  - id: SRC-SP-PARALLEL-AGENTS
+    kind: official_skill
+    owner: Anthropic (маркетплейс плагинов, набор superpowers 7.0.0)
+    path: /home/claude/.claude/plugins/cache/claude-plugins-official/superpowers/7.0.0/skills/dispatching-parallel-agents/SKILL.md
+    retrieved_at: 2026-10-26T18:19:35Z
+    version_seen: локальная копия, 167 строк, sha256 1968923066f3b707eb01d1992cdf4c42284c3855f70253b9cd5000ff45fca13c
+    purpose: организация параллельных исполнителей; условия, при которых параллельная работа допустима
+    status: approved
+    conclusions:
+      - "В ПЕРЕЧНЕ ВЛАДЕЛЬЦА ЭТОГО ИСТОЧНИКА НЕТ. Прочитан потому, что названные наборы недоступны, а этот лежит локально; заменой названного источника не считается."
+      - "Принят критерий, которого у нас не было записано правилом: параллельная работа допустима при ОТСУТСТВИИ общего состояния между задачами, а не просто при разных исполнителях. Их формулировка: «Don't use when: failures are related; need to understand full system state; agents would interfere with each other»."
+      - "Отклонена модель эфемерных подагентов с конструируемым контекстом: у нас постоянные линии с владением доменами и перепиской, и для многодневной работы это сильнее — контекст владения не собирается заново на каждую задачу."
+  - id: SRC-SP-VERIFY-BEFORE-DONE
+    kind: official_skill
+    owner: Anthropic (маркетплейс плагинов, набор superpowers 7.0.0)
+    path: /home/claude/.claude/plugins/cache/claude-plugins-official/superpowers/7.0.0/skills/verification-before-completion/SKILL.md
+    retrieved_at: 2026-10-26T18:19:35Z
+    version_seen: локальная копия, 120 строк, sha256 2befe7fc55bcadaa3d97dd9e8efeb633d2561c0ebe74c5a8b17c4d9e7e4520b3
+    purpose: приёмка собственной работы; что считается доказательством завершённости
+    status: approved
+    conclusions:
+      - "В ПЕРЕЧНЕ ВЛАДЕЛЬЦА ЭТОГО ИСТОЧНИКА НЕТ; прочитан как доступный локально."
+      - "Наше правило строже в части артефакта: мы требуем команду, фактический код выхода и путь к артефакту, у них — факт запуска."
+      - "Принято одно усиление: свежесть доказательства в пределах ТОГО ЖЕ сообщения. Их строка «If you haven't run the verification command in this message, you cannot claim it passes» и таблица, где «Previous run» прямо назван недостаточным."
+  - id: SRC-ANTHROPIC-WEBAPP-TESTING-LOCAL
+    kind: official_skill
+    owner: Anthropic
+    path: /home/claude/.claude/plugins
+    retrieved_at: 2026-10-26T18:19:35Z
+    version_seen: не получено
+    purpose: webapp-testing — названный владельцем источник; проверка, нет ли его локально
+    status: unavailable_blocked
+    conclusions:
+      - "Измерено: поиск по локальному маркетплейсу (`find /home/claude/.claude/plugins -iname '*webapp*'`) не находит ничего при 92 локальных SKILL.md. Значит обойти блокировку github.com локальной копией нельзя, и источник остаётся непрочитанным."
   - id: SRC-ANTHROPIC-FRONTEND-DESIGN
     kind: official_skill
     owner: Anthropic
