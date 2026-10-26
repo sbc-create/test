@@ -1,0 +1,64 @@
+[
+ {
+  "domain": "animeg0.site",
+  "slug": "moguschestvennye-ucheniki",
+  "sources": [
+   "https://shikimori.io/animes/60137",
+   "https://animeg0.site/title/moguschestvennye-ucheniki/"
+  ],
+  "names": [
+   "Dongman",
+   "Shuiniu"
+  ],
+  "confirmed": [
+   "Dongman",
+   "Shuiniu"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "zonafilm.space",
+  "slug": "voin-megamen",
+  "sources": [
+   "https://shikimori.io/animes/1710",
+   "https://zonafilm.space/title/voin-megamen/"
+  ],
+  "names": [
+   "Capcom",
+   "Xebec",
+   "Нэтто",
+   "Рокман",
+   "Хикари"
+  ],
+  "confirmed": [
+   "Capcom",
+   "Xebec",
+   "Нэтто",
+   "Рокман",
+   "Хикари"
+  ],
+  "not_found": []
+ },
+ {
+  "domain": "zonafilm12.site",
+  "slug": "trapeciya",
+  "sources": [
+   "https://shikimori.io/animes/57508",
+   "https://trapezium-movie.com/",
+   "https://zonafilm12.site/title/trapeciya/"
+  ],
+  "names": [
+   "Clover",
+   "Nogizaka",
+   "Кадзуми",
+   "Такаямы"
+  ],
+  "confirmed": [
+   "Clover",
+   "Nogizaka",
+   "Кадзуми",
+   "Такаямы"
+  ],
+  "not_found": []
+ }
+]

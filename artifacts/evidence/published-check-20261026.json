@@ -1,0 +1,41 @@
+[
+ {
+  "domain": "animeg0.site",
+  "slug": "moguschestvennye-ucheniki",
+  "at": "2026-10-26T01:36:52Z",
+  "author": "editor/claude-auto/run-20261026T011504Z",
+  "url": "https://animeg0.site/title/moguschestvennye-ucheniki/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 523
+ },
+ {
+  "domain": "zonafilm.space",
+  "slug": "voin-megamen",
+  "at": "2026-10-26T01:34:05Z",
+  "author": "editor/claude-auto/run-20261026T011504Z",
+  "url": "https://zonafilm.space/title/voin-megamen/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 2,
+  "chars": 603
+ },
+ {
+  "domain": "zonafilm12.site",
+  "slug": "trapeciya",
+  "at": "2026-10-26T01:33:09Z",
+  "author": "editor/claude-auto/run-20261026T011504Z",
+  "url": "https://zonafilm12.site/title/trapeciya/",
+  "status": 200,
+  "text_on_page": true,
+  "canonical_self": true,
+  "robots": "index, follow",
+  "sources_recorded": 3,
+  "chars": 542
+ }
+]
