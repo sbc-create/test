@@ -1,0 +1,333 @@
+........................................................................ [  0%]
+........................................................................ [  1%]
+...............................................xx...........ssssssss.... [  1%]
+.........sssssssssssss........sssssssssssss...........sssssssssssssss... [  2%]
+........................................................................ [  3%]
+........................................................................ [  3%]
+.........................................................ss............. [  4%]
+........................................................................ [  5%]
+........................................................................ [  5%]
+........................................................................ [  6%]
+........................................................................ [  7%]
+........................................................................ [  7%]
+........................................................................ [  8%]
+........................................................................ [  8%]
+.....................ssssssss........................................... [  9%]
+.....................................ss.ss............s..xxxxxs.sssxsssx [ 10%]
+.xxxsxx.......................................s......................... [ 10%]
+........................................................................ [ 11%]
+........................................................................ [ 12%]
+........................................................................ [ 12%]
+........................................................................ [ 13%]
+........................................................................ [ 14%]
+........................................................................ [ 14%]
+........................................................................ [ 15%]
+........................................................................ [ 16%]
+........................................................................ [ 16%]
+........................................................................ [ 17%]
+........................................................................ [ 17%]
+........................................................................ [ 18%]
+........................................................................ [ 19%]
+........................................................................ [ 19%]
+........................................................................ [ 20%]
+........................................................................ [ 21%]
+........................................................................ [ 21%]
+........................................................................ [ 22%]
+........................................................................ [ 23%]
+........................................................................ [ 23%]
+........................................................................ [ 24%]
+........................................................................ [ 25%]
+........................................................................ [ 25%]
+........................................................................ [ 26%]
+........................................................................ [ 26%]
+........................................................................ [ 27%]
+........................................................................ [ 28%]
+........................................................................ [ 28%]
+........................................................................ [ 29%]
+........................................................................ [ 30%]
+........................................................................ [ 30%]
+........................................................................ [ 31%]
+........................................................................ [ 32%]
+........................................................................ [ 32%]
+........................................................................ [ 33%]
+....sssss..s..s.ssssssssssss............................................ [ 34%]
+........................................................................ [ 34%]
+........................................................................ [ 35%]
+........................................................................ [ 35%]
+........................................................................ [ 36%]
+........................................................................ [ 37%]
+........................................................................ [ 37%]
+........................................................................ [ 38%]
+........................................................................ [ 39%]
+........................................................................ [ 39%]
+.....................................................ss................. [ 40%]
+........................................................................ [ 41%]
+........................................................................ [ 41%]
+........................................................................ [ 42%]
+........................................................................ [ 43%]
+........................................................................ [ 43%]
+........................................................................ [ 44%]
+........................................................................ [ 44%]
+........................................................................ [ 45%]
+........................................................................ [ 46%]
+........................................................................ [ 46%]
+........................................................................ [ 47%]
+........................................................................ [ 48%]
+........................................................................ [ 48%]
+..........................................................xx............ [ 49%]
+........................................................................ [ 50%]
+........................................................................ [ 50%]
+............................................sssss....................... [ 51%]
+........................................................................ [ 52%]
+........................................................................ [ 52%]
+...................ssss.sss....................sssss.ssss.sss........... [ 53%]
+..sssss..sssss.........................ssss.sss....................sssss [ 53%]
+........................................................................ [ 54%]
+........................................................................ [ 55%]
+........................................................................ [ 55%]
+........................................................................ [ 56%]
+........................................................................ [ 57%]
+........................................................................ [ 57%]
+........................................................................ [ 58%]
+........................................................................ [ 59%]
+........................................................................ [ 59%]
+........................................................................ [ 60%]
+........................................................................ [ 61%]
+........................................................................ [ 61%]
+........................................................................ [ 62%]
+........................................................................ [ 62%]
+.............................s.......................................... [ 63%]
+........................................................................ [ 64%]
+........................................................................ [ 64%]
+........................................................................ [ 65%]
+........................................................................ [ 66%]
+........................................................................ [ 66%]
+........................................................................ [ 67%]
+........................................................................ [ 68%]
+........................................................................ [ 68%]
+........................................................................ [ 69%]
+........................................................................ [ 70%]
+........................................................................ [ 70%]
+........................................................................ [ 71%]
+.....s.................................................................. [ 71%]
+........................................................................ [ 72%]
+........................................................................ [ 73%]
+........................................................................ [ 73%]
+.............................................s.......................... [ 74%]
+........................................................................ [ 75%]
+........................................................................ [ 75%]
+........................................................................ [ 76%]
+........................................................................ [ 77%]
+........................................................................ [ 77%]
+........................................................................ [ 78%]
+........................................................................ [ 79%]
+........................................................................ [ 79%]
+........................................................................ [ 80%]
+........................................................................ [ 80%]
+........................................................................ [ 81%]
+........................................................................ [ 82%]
+.............................................ss........ssssssssss....... [ 82%]
+........................................................................ [ 83%]
+........................................................................ [ 84%]
+........................................................................ [ 84%]
+........................................................................ [ 85%]
+........................................................................ [ 86%]
+........................................................................ [ 86%]
+........................................................................ [ 87%]
+........................................................................ [ 88%]
+........................................................................ [ 88%]
+........................................................................ [ 89%]
+........................................................................ [ 89%]
+........................................................................ [ 90%]
+........................................................................ [ 91%]
+........................................................................ [ 91%]
+........................................................................ [ 92%]
+........................................................................ [ 93%]
+........................................................................ [ 93%]
+........................................................................ [ 94%]
+........................................................................ [ 95%]
+........................................................................ [ 95%]
+........................................................................ [ 96%]
+........................................................................ [ 97%]
+........................................................................ [ 97%]
+........................................................................ [ 98%]
+........................................................................ [ 98%]
+........................................................................ [ 99%]
+................................................                         [100%]
+=============================== warnings summary ===============================
+tests/unit/test_metrika_survives_release.py:109
+  /home/claude/wt-nova-publish-memory-02/tests/unit/test_metrika_survives_release.py:109: DeprecationWarning: invalid escape sequence '\('
+    РИСОВАЛЬЩИК = """
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+=========================== short test summary info ============================
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordfilm.group: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordfilm.spb.ru: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordfilm.msk.ru: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordserial.su: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordserial.group: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordserial.spb.ru: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordserial.msk.ru: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:96: lordserial.net.ru: проект позиций не создаётся по решению — Яндекс.Метрика НЕ устанавливается и Google Analytics вместо неё НЕ подключается — решение владельца от 2026-10-13 для па
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: animedia.icu: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: animedia.space: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: an1mego.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: animeg0.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: an1meg0.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordfilm47.space: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserial33.biz: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: 1lordserials1.online: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials22.info: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials22.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials22.space: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserial101.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordfilm077.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials1.cc: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials1.info: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials21.cc: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials21.info: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: lordserials21.mobi: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: yummyani7.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: yummyani7.info: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: yummyani.biz: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: yummyani.org: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: yummyani.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: zonafilm.space: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: zonafilm.cc: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:116: zonafilm12.site: исключением из покрытия не пользуется
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial101.site: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordfilm077.site: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordfilm.group: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordfilm.spb.ru: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordfilm.msk.ru: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial.su: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial.group: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial.spb.ru: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial.msk.ru: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserial.net.ru: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserials1.cc: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserials1.info: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserials21.cc: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserials21.info: счётчик ещё не создан
+SKIPPED [1] tests/unit/test_analytics_covers_every_cell.py:137: lordserials21.mobi: счётчик ещё не создан
+SKIPPED [2] tests/unit/test_analytics_unit_execstart.py:176: в этом дереве нет .venv
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:92: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:99: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:115: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:129: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:148: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:156: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:169: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_admin_exec.py:183: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space → /home/claude/wt-portable-site-cell-01/var/site-repos/zonafilm-space; исполнитель отказывает по границе раньше проверяемого поведения
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:139: an1meg0-site: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:139: an1mego-site: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:139: animedia-space: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:139: animeg0-site: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:139: zonafilm-cc: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:221: animedia-space: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordfilm077-site: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordfilm47-space: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordserial101-site: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordserials22-info: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordserials22-site: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:238: lordserials22-space: манифест объявлен нештампованным (build_id=worktree-unbuilt), цифру ставит сборщик
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:221: zonafilm-cc: сверять нечего
+SKIPPED [1] tests/unit/test_cell_entrypoint_contract.py:336: zonafilm-cc: закрепление моделью template_sha256 — исходники по отдельности не пинуются по построению
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: factory-night-gates.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: k2-catalog-apply.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: k2-catalog-deliver.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: k2-catalog-deliver.user.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: selection-indexability.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: sitemap-reconcile.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:115: yummy-content-refresh.service: не запускает команду репозитория
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: analytics-connect@.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: factory-night-gates.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: k2-catalog-apply.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: k2-catalog-deliver.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: k2-catalog-deliver.user.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: selection-indexability.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: site-cell-executor.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: site-factory-mcp.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: sitemap-reconcile.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: topvisor-check.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: topvisor-connect.service: условие не про этот юнит
+SKIPPED [1] tests/unit/test_host_units_call_cli_correctly.py:132: yummy-content-refresh.service: условие не про этот юнит
+SKIPPED [2] tests/unit/test_lords_apply_python_fragments.py:152: интерпретатор тестов и так 3.10 — сравнивать не с чем
+SKIPPED [1] tests/unit/test_metrika_survives_release.py:77: yummyani.biz: витрина проксирует 127.0.0.1:3103, разметку счётчика отдаёт приложение выше по потоку
+SKIPPED [1] tests/unit/test_metrika_survives_release.py:77: yummyani.org: витрина проксирует 127.0.0.1:3102, разметку счётчика отдаёт приложение выше по потоку
+SKIPPED [1] tests/unit/test_metrika_survives_release.py:77: yummyani.site: витрина проксирует 127.0.0.1:3101, разметку счётчика отдаёт приложение выше по потоку
+SKIPPED [1] tests/unit/test_metrika_survives_release.py:77: yummyani7.info: витрина проксирует 127.0.0.1:3105, разметку счётчика отдаёт приложение выше по потоку
+SKIPPED [1] tests/unit/test_metrika_survives_release.py:77: yummyani7.site: витрина проксирует 127.0.0.1:3104, разметку счётчика отдаёт приложение выше по потоку
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: animedia-01: семейство Animedia ведётся вне этого реестра заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: animedia-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: animego-02: прямая установка (managed_by: monolith): своя конфигурация в sites-available, заготовка не создавалась
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: animego-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: lords-01: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: lords-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: lords-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: yummy-biz: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: yummy-org: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: yummy-site: семейство Yummy обслуживается контейнером, конфигурация иной формы
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: zona-01: витрина работает с августа, конфигурация установлена до появления заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:75: zona-02: то же: конфигурация zona-02.conf установлена на хосте
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: animedia-01: семейство Animedia ведётся вне этого реестра заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: animedia-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: animego-02: прямая установка (managed_by: monolith): своя конфигурация в sites-available, заготовка не создавалась
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: animego-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: lords-01: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: lords-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: lords-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:120: lords-18: индексация объявлена как None
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:120: lords-19: индексация объявлена как None
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:120: lords-20: индексация объявлена как None
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:120: lords-21: индексация объявлена как None
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:120: lords-22: индексация объявлена как None
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: yummy-biz: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: yummy-org: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: yummy-site: семейство Yummy обслуживается контейнером, конфигурация иной формы
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: zona-01: витрина работает с августа, конфигурация установлена до появления заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:117: zona-02: то же: конфигурация zona-02.conf установлена на хосте
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: animedia-01: семейство Animedia ведётся вне этого реестра заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: animedia-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: animego-02: прямая установка (managed_by: monolith): своя конфигурация в sites-available, заготовка не создавалась
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: animego-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: lords-01: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: lords-02: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: lords-03: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: yummy-biz: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: yummy-org: то же
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: yummy-site: семейство Yummy обслуживается контейнером, конфигурация иной формы
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: zona-01: витрина работает с августа, конфигурация установлена до появления заготовок
+SKIPPED [1] tests/unit/test_nginx_templates_for_cells.py:227: zona-02: то же: конфигурация zona-02.conf установлена на хосте
+SKIPPED [1] tests/unit/test_public_wording_check_layers.py:170: прежней версии без правки в истории нет — сравнивать нечего
+SKIPPED [1] tests/unit/test_runtime_data_ownership.py:398: рабочая копия сайта лежит вне этого каталога: /home/claude/wt-nova-publish-memory-02/var/site-repos/lordserials22-info → /home/claude/wt-portable-site-cell-01/var/site-repos/lordserials22-info; ворота отвечают «состояние данных неизвестно» раньше проверяемого блокера
+SKIPPED [1] tests/unit/test_secret_hub_host.py:117: каталог секретов закрыт для этой учётной записи: состояние ключа не измерено (так и задумано)
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-08: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-09: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-18: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-19: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-20: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-21: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: lords-22: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: yummy-07: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: yummy-08: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: yummy-biz: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: yummy-org: рантайм не читает SITE_CONTACT_EMAIL
+SKIPPED [1] tests/unit/test_site_config_declares_contact.py:243: yummy-site: рантайм не читает SITE_CONTACT_EMAIL
+XFAIL tests/unit/test_analytics_covers_every_cell.py::test_домен_есть_в_манифесте_topvisor[animedia.icu] - проект не создавался: семья Animedia вне текущего задания
+XFAIL tests/unit/test_analytics_covers_every_cell.py::test_домен_есть_в_манифесте_topvisor[animedia.space] - проект не создавался: семья Animedia вне текущего задания
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_принадлежит_одной_ячейке - цифра закрепляет не свою ячейку: 1831c87730ebc674… у 1lordserials1-online, lordserial33-biz; 4fef6e78f242bdf7… у yummyani7-info, yummyani7-site; 60aa6158126f6152… у yummyani-biz, yummyani-org, yummyani-site
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[1lordserials1-online] - 1lordserials1-online: закрепление устарело — объявлено 1831c87730ebc674…, точка входа 93bb9f104e67f056…, сумма рантайма df26dc035a18d38d…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[an1meg0-site] - an1meg0-site: artifact_sha256 несёт цифру точки входа, а не целого артефакта — объявлено 931f3c16df4442fe…, сумма рантайма 0e7ba5e5a83abdcc…; правка только в модуле оформления такой цифрой не поймается
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[an1mego-site] - an1mego-site: artifact_sha256 несёт цифру точки входа, а не целого артефакта — объявлено 129c067a8e44473a…, сумма рантайма 8bb73b58f84a66bf…; правка только в модуле оформления такой цифрой не поймается
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[animedia-icu] - animedia-icu: закрепление устарело — объявлено 65ba6ee7b68cd6e9…, точка входа a3ab1593d8fc9ad4…, сумма рантайма 82ddb113c85a843a…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[lordserial33-biz] - lordserial33-biz: закрепление устарело — объявлено 1831c87730ebc674…, точка входа cd8398e8180c0f19…, сумма рантайма 089c46a3e987bc23…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[yummyani-biz] - yummyani-biz: закрепление устарело — объявлено 60aa6158126f6152…, точка входа 76c91e5b3cffa399…, сумма рантайма d2089838a5d1d677…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[yummyani-site] - yummyani-site: закрепление устарело — объявлено 60aa6158126f6152…, точка входа 8e86ed843679096d…, сумма рантайма 6c9f06a918dd0955…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[yummyani7-info] - yummyani7-info: закрепление устарело — объявлено 4fef6e78f242bdf7…, точка входа 4da0bbfc9bb23d56…, сумма рантайма 7b53f83fe6afc302…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[yummyani7-site] - yummyani7-site: закрепление устарело — объявлено 4fef6e78f242bdf7…, точка входа 4da0bbfc9bb23d56…, сумма рантайма 71ce324ec071b82b…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[zonafilm-space] - zonafilm-space: закрепление устарело по обоим полям — code_file_sha256 ba33083e904cb721… и artifact_sha256 a41c5f1685c9e55c… не отвечают ни точке входа 6f0663149b06d202…, ни сумме рантайма f151a43b49061511…
+XFAIL tests/unit/test_cell_entrypoint_contract.py::test_цифра_артефакта_считается_по_точке_входа[zonafilm12-site] - zonafilm12-site: закрепление устарело — объявлено 6c1eca7faaed46d7…, точка входа 53823d8c9f53284c…, сумма рантайма 82e4f347877702ca…
+XFAIL tests/unit/test_lords_theme.py::test_обе_темы_читаются_в_каждом_профиле[lords-serials] - D212а: белый на acc #c8761a = 3.46; исправлено в ячейках партии K2, семейный рантайм — отдельный выпуск
+XFAIL tests/unit/test_lords_theme.py::test_обе_темы_читаются_в_каждом_профиле[lords-films] - D212а: белый на acc #d2544b = 4.11; исправлено в ячейках партии K2, семейный рантайм — отдельный выпуск
+11037 passed, 155 skipped, 16 xfailed, 1 warning in 950.31s (0:15:50)
