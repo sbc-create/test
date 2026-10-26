@@ -217,3 +217,58 @@ def test_без_корня_состояния_проверять_нечего(tm
     код, строки = инс.проверить_dropin(ф)
     assert код == 2
     assert any("проверять нечего" in с for с in строки)
+
+
+# --- Правила подстановки проверены по установленной версии systemd -----------
+
+def test_ссылка_на_корень_в_аргументах_exec_это_верная_запись(tmp_path):
+    """На systemd 249.11 подстановка в аргументах Exec* ЕСТЬ, и это проверено по man.
+
+    Дословно (systemd.service(5) той же сборки): «Basic environment variable
+    substitution is supported. Use "${FOO}" … always resulting in exactly a
+    single argument». Требовать в Exec* литерального префикса значит
+    запрещать верную запись — ровно тот ложный запрет, которого быть не
+    должно.
+    """
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ExecStartPre=/usr/bin/install -d ${SEO_STATE_ROOT}/var/analytics\n"
+                "ExecStart=/usr/bin/python3 -m служба "
+                "--out ${SEO_STATE_ROOT}/var/analytics/о.json\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 0, строки
+    assert not any("РАСХОЖДЕНИЕ" in с for с in строки)
+
+
+def test_ссылка_на_корень_в_readwritepaths_это_дефект(tmp_path):
+    """А здесь подстановки нет: «takes a space-separated list of paths».
+
+    Ссылка попадёт буквально, и каталог окажется не тем — причём отказ придёт
+    на первой записи, когда юнит уже переключён.
+    """
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ReadWritePaths=${SEO_STATE_ROOT}/var/seo-regular\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 1
+    assert any("подстановки НЕТ" in с for с in строки)
+
+
+def test_чужая_переменная_в_exec_это_не_проверено_а_не_запрет(tmp_path):
+    """Переменная может быть объявлена в другом месте юнита или в EnvironmentFile."""
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ExecStart=/usr/bin/python3 -m служба --out ${ДРУГОЙ_КОРЕНЬ}/var/о.json\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 0
+    assert any("НЕ ПРОВЕРЕНО" in с for с in строки)
+
+
+def test_спецификатор_статически_не_проверяется(tmp_path):
+    """`%h`, `%t` раскрывает systemd; объявлять это расхождением нельзя."""
+    ф = _dropin(tmp_path, "[Service]\n"
+                "Environment=SEO_STATE_ROOT=/srv/состояние\n"
+                "ExecStart=/usr/bin/python3 -m служба --out %h/var/о.json\n")
+    код, строки = инс.проверить_dropin(ф)
+    assert код == 0
+    assert any("спецификатор" in с for с in строки)

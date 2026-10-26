@@ -38,6 +38,7 @@ import hashlib
 import importlib.util
 import json
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -319,12 +320,41 @@ def откатить(служба: str, корень_выпусков: pathlib.P
     return 0
 
 
-#: Поля юнита, в которых стоят пути ЗАПИСИ. systemd не раскрывает в них
-#: переменные окружения, поэтому `Environment=SEO_STATE_ROOT=…` на них не
-#: влияет: каталог придётся перечислить ещё и здесь.
-ПОЛЯ_ЗАПИСИ = ("ReadWritePaths", "ExecStartPre", "ExecStartPost", "StateDirectory")
+#: Поля юнита, в которых стоят пути ЗАПИСИ. Правила у них РАЗНЫЕ, и это
+#: проверено на установленной версии (systemd 249.11-0ubuntu3.23, man из той же
+#: сборки), а не взято из общего знания:
+#:
+#: * `Exec*` — подстановка ЕСТЬ: «Basic environment variable substitution is
+#:   supported. Use "${FOO}" … always resulting in exactly a single argument.
+#:   Use "$FOO" as a separate word … split at whitespace» (systemd.service(5)).
+#:   Там же: «first argument (i.e. the program to execute) may not be a
+#:   variable» — то есть исполняемый файл переменной быть не может, а аргументы
+#:   могут. Поэтому `--out ${SEO_STATE_ROOT}/var/…` — ПРАВИЛЬНАЯ запись, и
+#:   требовать там литерального префикса значит запрещать верное.
+#: * `ReadWritePaths=` — «takes a space-separated list of paths»
+#:   (systemd.exec(5)); подстановки переменных в описании нет. Ссылка на
+#:   переменную попадёт туда буквально, то есть каталог окажется не тем.
+#: * `StateDirectory=` — путь относительно /var/lib, каталог создаёт systemd;
+#:   абсолютным он не бывает и префиксной проверке не подлежит.
+ПОЛЯ_ПОДСТАНОВКИ = ("ExecStart", "ExecStartPre", "ExecStartPost", "ExecStop",
+                    "ExecReload")
+ПОЛЯ_БУКВАЛЬНЫЕ = ("ReadWritePaths", "ReadOnlyPaths", "BindPaths")
+ПОЛЯ_ЗАПИСИ = ПОЛЯ_ПОДСТАНОВКИ + ПОЛЯ_БУКВАЛЬНЫЕ + ("StateDirectory",)
+#: Ссылка на переменную в значении: `$ИМЯ` или `${ИМЯ}`.
+ОБРАЗЕЦ_ССЫЛКИ = r"\$\{?(\w+)\}?"
 #: Системные каталоги исполняемых файлов: путь оттуда — не место записи.
 КАТАЛОГИ_БИНАРЕЙ = ("/usr/bin/", "/bin/", "/usr/sbin/", "/sbin/", "/usr/local/bin/")
+
+
+def _похоже_на_путь(слово: str) -> bool:
+    """Путь — абсолютный ИЛИ начинающийся ссылкой на переменную.
+
+    Фильтр «начинается со слэша» отбрасывал `${SEO_STATE_ROOT}/var/…`, то
+    есть именно ту запись, которая на этой версии systemd верна для Exec*.
+    """
+    if слово.startswith("/"):
+        return True
+    return bool(re.match(r"\$\{?\w+\}?/", слово))
 
 
 def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
@@ -345,6 +375,7 @@ def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
     строки = файл.read_text(encoding="utf-8", errors="replace").splitlines()
     корень = ""
     пути: list[tuple[str, str]] = []
+    отложенные: list[tuple[str, str, str]] = []
     for строка in строки:
         голая = строка.strip()
         if голая.startswith("#") or "=" not in голая:
@@ -353,6 +384,10 @@ def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
         ключ, значение = ключ.strip(), значение.strip()
         if ключ == "Environment" and значение.startswith("SEO_STATE_ROOT="):
             корень = значение.split("=", 1)[1].strip().strip('"')
+        elif ключ == "StateDirectory":
+            отложенные.append(("StateDirectory", значение,
+                               "путь относительно /var/lib, каталог создаёт "
+                               "systemd — префиксной проверке не подлежит"))
         elif ключ in ПОЛЯ_ЗАПИСИ:
             части = значение.split()
             # У ExecStartPre/Post первое слово — ИСПОЛНЯЕМЫЙ ФАЙЛ, а не путь
@@ -361,7 +396,7 @@ def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
             if ключ.startswith("ExecStart") and части:
                 части = части[1:]
             пути += [(ключ, с) for с in части
-                     if с.startswith("/") and not с.startswith(КАТАЛОГИ_БИНАРЕЙ)]
+                     if _похоже_на_путь(с) and not с.startswith(КАТАЛОГИ_БИНАРЕЙ)]
         elif ключ == "ExecStart":
             части = значение.split()
             for н, с in enumerate(части):
@@ -369,24 +404,50 @@ def проверить_dropin(файл: pathlib.Path) -> tuple[int, list[str]]:
                     пути.append((f"ExecStart {с}", части[н + 1]))
                 elif с.startswith("--out="):
                     пути.append(("ExecStart --out", с.split("=", 1)[1]))
-    отчёт = [f"drop-in {файл}"]
+    отчёт = [f"drop-in {файл}", "   правила проверены по man установленной версии "
+             "systemd 249.11: в Exec* подстановка есть, в ReadWritePaths нет"]
     if not корень:
         отчёт.append("   SEO_STATE_ROOT не задан — состояние остаётся в рабочей "
                      "копии, проверять нечего")
         return 2, отчёт
     отчёт.append(f"   SEO_STATE_ROOT = {корень}")
-    плохо = []
+    плохо, неясно = [], []
+    имя_корня = "SEO_STATE_ROOT"
     for поле, путь in пути:
+        база = поле.split()[0]
+        ссылки = re.findall(ОБРАЗЕЦ_ССЫЛКИ, путь)
+        if ссылки and база in ПОЛЯ_ПОДСТАНОВКИ:
+            # Подстановка здесь работает: ссылка на корень состояния — верная
+            # и предпочтительная запись, литерального префикса не требуется.
+            согласован = имя_корня in ссылки
+            отчёт.append(f"   [{'ок ' if согласован else '?  '}] {поле}: {путь}"
+                         + ("" if согласован else
+                            f" — подставляется {', '.join(ссылки)}, а не {имя_корня}"))
+            if not согласован:
+                неясно.append((поле, путь, "подставляется чужая переменная"))
+            continue
+        if ссылки and база in ПОЛЯ_БУКВАЛЬНЫЕ:
+            отчёт.append(f"   [НЕТ] {поле}: {путь}")
+            плохо.append((поле, путь, "здесь подстановки НЕТ — ссылка попадёт "
+                                     "буквально, и каталог окажется не тем"))
+            continue
+        if "%" in путь:
+            отчёт.append(f"   [?  ] {поле}: {путь} — спецификатор раскрывает systemd, "
+                         "статически не проверяется")
+            неясно.append((поле, путь, "спецификатор"))
+            continue
         согласован = путь.startswith(корень.rstrip("/"))
         отчёт.append(f"   [{'ок ' if согласован else 'НЕТ'}] {поле}: {путь}")
         if not согласован:
-            плохо.append((поле, путь))
+            плохо.append((поле, путь, "ведёт вне корня состояния"))
     if not пути:
         отчёт.append("   путей записи в drop-in нет")
-    for поле, путь in плохо:
-        отчёт.append(f"   РАСХОЖДЕНИЕ: {поле} ведёт вне корня состояния — "
-                     "systemd не раскроет здесь переменную, и запись пойдёт "
-                     "не туда (или песочница её запретит)")
+    for поле, значение, почему in отложенные:
+        отчёт.append(f"   [—  ] {поле}={значение} — {почему}")
+    for поле, путь, почему in плохо:
+        отчёт.append(f"   РАСХОЖДЕНИЕ: {поле} — {почему}")
+    for поле, путь, почему in неясно:
+        отчёт.append(f"   НЕ ПРОВЕРЕНО: {поле} — {почему}")
     return (1 if плохо else 0), отчёт
 
 
