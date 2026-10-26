@@ -24,7 +24,7 @@ WORKTREE=/home/claude/wt-portable-site-cell-01
 REPO="${SEO_CODE_ROOT:-$WORKTREE}"
 export SEO_STATE_ROOT="${SEO_STATE_ROOT:-$WORKTREE}"
 export SEO_REGISTRY_ROOT="${SEO_REGISTRY_ROOT:-$WORKTREE}"
-STATE="${SEO_TECH_STATE:-${SEO_STATE_ROOT:-$REPO}/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
+STATE="${SEO_TECH_STATE:-$SEO_STATE_ROOT/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
 CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${SEO_TECH_TRIGGER:-manual}"
 LIMIT_S="${SEO_TECH_TIMEOUT:-1500}"          # модель
@@ -91,7 +91,7 @@ esac
 # Пути состояния в задании — те же, что у обёртки и seo_operator.paths (MOD-198):
 # модель идёт по пути из текста, а не по переменной, поэтому текст получает
 # фактический каталог состояния, а не путь от корня копии.
-PROMPT="$(sed -e "s/{{RUN_ID}}/$RUN_ID/g" -e "s#var/seo-tech#$STATE#g" -e "s#artifacts/analytics#${SEO_STATE_ROOT:-$REPO}/artifacts/analytics#g" docs/seo-tech/SEO_TECH_RUN_PROMPT.md)"
+PROMPT="$(sed -e "s/{{RUN_ID}}/$RUN_ID/g" -e "s#var/seo-tech#$STATE#g" -e "s#artifacts/analytics#$SEO_STATE_ROOT/artifacts/analytics#g" docs/seo-tech/SEO_TECH_RUN_PROMPT.md)"
 # timeout -k: после LIMIT_S — SIGTERM, ещё через GRACE_S — SIGKILL. 124 — тайм-аут, 137 — добит.
 timeout -k "$GRACE_S" "$LIMIT_S" "$CLAUDE_BIN" -p "$PROMPT" --output-format json \
   --max-turns "${SEO_TECH_MAX_TURNS:-150}" \

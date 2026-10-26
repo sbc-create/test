@@ -19,7 +19,7 @@ WORKTREE=/home/claude/wt-portable-site-cell-01
 REPO="${SEO_CODE_ROOT:-$WORKTREE}"
 export SEO_STATE_ROOT="${SEO_STATE_ROOT:-$WORKTREE}"
 export SEO_REGISTRY_ROOT="${SEO_REGISTRY_ROOT:-$WORKTREE}"
-STATE="${SEO_STATE_ROOT:-$REPO}/var/editor-runs"  # тот же корень, что seo_operator.paths.state (MOD-198)
+STATE="$SEO_STATE_ROOT/var/editor-runs"  # тот же корень, что seo_operator.paths.state (MOD-198)
 CLAUDE_BIN="${CLAUDE_BIN:-/home/claude/.local/bin/claude}"
 TRIGGER="${EDITOR_RUN_TRIGGER:-manual}"
 LIMIT_S="${EDITOR_RUN_TIMEOUT:-1500}"
@@ -58,7 +58,7 @@ STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 # Пути состояния в задании — те же, что у обёртки и seo_operator.paths (MOD-198):
 # модель идёт по пути из текста, а не по переменной, поэтому текст получает
 # фактический каталог состояния, а не путь от корня копии.
-PROMPT="$(sed -e "s/{{RUN_ID}}/$RUN_ID/g" -e "s#var/editor-runs#$STATE#g" -e "s#artifacts/analytics#${SEO_STATE_ROOT:-$REPO}/artifacts/analytics#g" docs/editor/EDITOR_RUN_PROMPT.md)"
+PROMPT="$(sed -e "s/{{RUN_ID}}/$RUN_ID/g" -e "s#var/editor-runs#$STATE#g" -e "s#artifacts/analytics#$SEO_STATE_ROOT/artifacts/analytics#g" docs/editor/EDITOR_RUN_PROMPT.md)"
 
 # ПРЕДЕЛ ХОДОВ ИЗМЕРЕН, а не выбран. При восьмидесяти запуск 20261009T232501Z
 # упёрся в него (`terminal_reason: max_turns`, `num_turns: 81`), успев

@@ -15,7 +15,7 @@ WORKTREE=/home/claude/wt-portable-site-cell-01
 REPO="${SEO_CODE_ROOT:-$WORKTREE}"
 export SEO_STATE_ROOT="${SEO_STATE_ROOT:-$WORKTREE}"
 export SEO_REGISTRY_ROOT="${SEO_REGISTRY_ROOT:-$WORKTREE}"
-STATE="${SEO_TECH_STATE:-${SEO_STATE_ROOT:-$REPO}/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
+STATE="${SEO_TECH_STATE:-$SEO_STATE_ROOT/var/seo-tech}"  # корень состояния — как у seo_operator.paths (MOD-198)
 export SEO_TECH_STATE="$STATE"
 
 cd "$REPO" || { echo "seo-tech-publish: нет каталога $REPO" >&2; exit 70; }
