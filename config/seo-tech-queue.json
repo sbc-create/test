@@ -8807,6 +8807,26 @@
       "verify_live": true,
       "status": "blocked",
       "owner_action": "исполнитель — Архитектор (шаблон zona-nova, collection_contract). Пауза zonafilm.cc до оценки 28.10 (T294/T300); выпуск после рантайма с целями Метрики (b3df4ae) и недели исходных данных"
+    },
+    {
+      "id": "T338",
+      "site": "zonafilm.space",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space",
+      "urls": [
+        "https://zonafilm.space/title/rashititel-grobnic/",
+        "https://zonafilm12.site/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/",
+        "https://zonafilm.cc/title/desyat-hrabrecov-sanada-teni-desyati-nindzya/"
+      ],
+      "problem": "Мобильный путь (Chromium, эмуляция iPhone 13, 26.10 20:45–21:05Z): первое нажатие на блок плеера только загружает проигрыватель — data-state «ready», видео в кадре плеера на паузе, currentTime 0,09, readyState 4; воспроизведение начинается лишь вторым нажатием по кнопке «Смотреть» (div.playButton) внутри кадра player.cdnvideohub.com. Одинаково на zonafilm.cc, zonafilm.space, zonafilm12.site. Посетитель телефона, нажавший один раз, видит неподвижный кадр.",
+      "norm": "поручение владельца 26.10 п. 3: проверка «подборка → карточка → начало воспроизведения»; один жест пользователя должен начинать просмотр (жест пользователя разрешает воспроизведение со звуком в мобильных браузерах)",
+      "expected": "одно нажатие на блок плеера на телефоне начинает воспроизведение (currentTime растёт), либо первое нажатие сразу показывает кнопку «Смотреть» поверх кадра без промежуточного неподвижного состояния",
+      "check": "python3 сценарий Playwright из artifacts/evidence/mobile-path-zonafilm-cc-20261026.json: после ОДНОГО нажатия currentTime растёт >3 с за 15 с",
+      "evidence": "artifacts/evidence/mobile-path-zonafilm-cc-20261026.json (коммиты fcb3135, 2afc9e7)",
+      "live_check": "после выпуска — тот же сценарий на трёх доменах Zona",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор (шаблон zona-nova, СКРИПТ_ПЛЕЕРА_КЛИЕНТ); zonafilm.cc — после оценки 28.10, zonafilm.space и zonafilm12.site — без паузы изменений"
     }
   ]
 }
