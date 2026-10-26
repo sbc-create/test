@@ -378,9 +378,11 @@
    ],
    "conclusion": "",
    "status": "подтверждено источниками",
-   "recorded_in": "docs/RESEARCH_SOURCES_VS_K2_20261026.md",
+   "recorded_in": [
+    "docs/RESEARCH_SOURCES_VS_K2_20261026.md"
+   ],
    "created": "2026-10-26",
-   "minutes": 0,
+   "minutes": 12,
    "updated": "2026-10-26"
   },
   {
@@ -400,9 +402,11 @@
    ],
    "conclusion": "",
    "status": "гипотеза",
-   "recorded_in": "docs/RESEARCH_SOURCES_VS_K2_20261026.md",
+   "recorded_in": [
+    "docs/RESEARCH_SOURCES_VS_K2_20261026.md"
+   ],
    "created": "2026-10-26",
-   "minutes": 0,
+   "minutes": 7,
    "updated": "2026-10-26"
   },
   {
@@ -411,7 +415,11 @@
    "direction": "intent",
    "question": "Что из готовых наборов SEO-навыков (marketingskills seo-audit / programmatic-seo / site-architecture, claude-seo, SEOmator, SE Ranking) применимо к русскоязычному каталогу фильмов и сериалов с приоритетом Яндекса — и что из этого у нас уже есть?",
    "why_now": "Задание владельца 26.10 требует изучить их по первоисточнику. Хост github.com не объявлен в inventory/network-allowlist.yaml, и хук закрывает запрос; расширять инвентарь сам не вправе. Пока источник недоступен, вопрос остаётся открытым и за изученный не выдаётся.",
-   "sites": [],
+   "sites": [
+    "lordserial33.biz",
+    "animedia.icu",
+    "zonafilm.space"
+   ],
    "check_on": "после внесения хостов в инвентарь — чтение инструкций навыков целиком",
    "expected_output": "по каждому набору: применимость к нашему рынку, что уже есть в K2, подтверждённый пробел, предлагаемое изменение, проверка",
    "sources": [
@@ -419,9 +427,11 @@
    ],
    "conclusion": "источник недоступен: хост github.com не объявлен в inventory/network-allowlist.yaml, хук закрывает запрос (проверено 26.10). Вход владельца назван в docs/RESEARCH_SOURCES_VS_K2_20261026.md §5",
    "status": "гипотеза",
-   "recorded_in": "docs/RESEARCH_SOURCES_VS_K2_20261026.md",
+   "recorded_in": [
+    "docs/RESEARCH_SOURCES_VS_K2_20261026.md"
+   ],
    "created": "2026-10-26",
-   "minutes": 0,
+   "minutes": 4,
    "updated": "2026-10-26"
   }
  ],
