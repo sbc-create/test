@@ -5,6 +5,27 @@
 # агента запрещено: отсутствие записи означает BLOCKED_INPUT, а не «разрешено всё».
 schema_version: 1
 hosts:
+  # L-015: доступ к источникам по поручению владельца
+  - ref: github-api-research-readonly
+    host: api.github.com
+    purpose: 'L-015: чтение описаний и перечня файлов исследуемых репозиториев'
+    methods:
+    - GET
+  - ref: github-raw-research-readonly
+    host: raw.githubusercontent.com
+    purpose: 'L-015: чтение файлов исследуемых репозиториев'
+    methods:
+    - GET
+  - ref: topvisor-support-readonly
+    host: topvisor.com
+    purpose: 'L-015: чтение официальной справки Topvisor'
+    methods:
+    - GET
+  - ref: claude-code-docs-readonly
+    host: code.claude.com
+    purpose: 'L-015: чтение официальной документации Claude Code'
+    methods:
+    - GET
   # --- Яндекс.Метрика и Яндекс.Вебмастер -----------------------------------
   # Внесены заданием «полная автоматизация Яндекс.Метрики и Вебмастера»
   # (2026-08-23). Владелец разрешил реальные внешние записи ровно для трёх
