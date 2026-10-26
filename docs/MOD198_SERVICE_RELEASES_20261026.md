@@ -267,3 +267,124 @@ curl -sS -o /dev/null -w 'после откату: HTTP %{http_code}\n' \
    встречается. Файлы есть в истории git, то есть восстановимы. Диск сейчас:
    204 ГиБ всего, 191 занято, **13 свободно (94 %)**. Кто удалил — из моей
    линии не видно; это вопрос к владельцу, а не повод угадывать.
+
+## Вторая группа переноса: измерение, два выпуска и готовые команды (26.10 11:4xZ)
+
+### 1. Группу выбирает вердикт, а не число файлов
+
+Прежняя намеченная четвёрка (`yummy-sitemap-warm`, `community-ratings-monitor`,
+`seo-daily-cycle`, `seo-engine-topvisor-inventory`) была выбрана по числу
+файлов, и это неверная мерка. `yummy-sitemap-warm` — один файл, но путь к
+файлу паузы собирался от самого сценария, и после переноса приостановленный
+прогрев возобновился бы сам, то есть пауза приёмки B016 чужой линии тихо
+перестала бы действовать. Линия Yummy сделала путь параметром
+(`YUMMY_WARM_PAUSE_FILE`, коммит 78d995a), и служба перешла в «можно при
+условии».
+
+Итог по 18 службам (`automation/local/service-dependency-map.py`,
+доказательство `artifacts/evidence/service-dependency-map-20261026.json`):
+
+| вердикт | служб | кто |
+| --- | --- | --- |
+| можно без условий | 5 | community-ratings-gateway, community-ratings-monitor, seo-report-viewer, site-cell-executor, seo-engine-topvisor-inventory |
+| можно при условии | 1 | yummy-sitemap-warm (юнит обязан задать `YUMMY_WARM_PAUSE_FILE`) |
+| нельзя без правки | 12 | причина названа у каждой: самоотносительный корень, git по своему корню, состояние в дереве, точка входа не определена |
+
+**Важное про `yummy-sitemap-warm`.** Путь паузы читает служба
+(`YUMMY_WARM_PAUSE_FILE`), а ПИШЕТ его приёмка `yummy-b016-release.py` из
+переменной `YB_WARM_PAUSE`. Имена разные. При переключении обе переменные
+обязаны указывать на один файл, иначе приёмка поставит паузу туда, куда
+служба не смотрит.
+
+### 2. Что фактически установлено и проверено
+
+| служба | выпуск | файлов | сверка | проверка делом |
+| --- | --- | --- | --- | --- |
+| seo-report-viewer | 20261026T102613Z-fd6d00a78905 | 11 | 0 расхождений, 0 недостающих | HTTP 200, 18 837 байт |
+| community-ratings-monitor | 20261026T113854Z-ec29b2c7fa04 | 10 | 0 / 0 | импорт из выпуска, `REPORT_DIR` остался абсолютным |
+| seo-engine-topvisor-inventory | 20261026T114139Z-5f26ed4fbd52 | 149 | 0 / 0 | `--mode status` отработал: 17 проектов, `source LIVE_READ_ONLY`, `stale false` |
+
+Оба новых выпуска сперва были НЕПОЛНЫ и при этом давали «расхождений 0»:
+разбор импортов не видел `from factory.community import metrics_store` и
+относительных импортов. Поймал это запуск, а не сверка; теперь сверка
+проверяет самодостаточность выпуска (оракул — дерево-источник).
+
+`seo-engine-topvisor-inventory` получил свой venv
+(`/srv/site-factory/services/seo-engine-topvisor-inventory.service/venv`,
+Python 3.11.16, uv): без него перенос половинчатый — код из выпуска,
+интерпретатор из рабочей копии.
+
+### 3. Готовый блок оператора: пользовательская служба (без root)
+
+Сервер — узел фабрики, пользователь `claude`. Drop-in лежит в репозитории:
+`automation/host/mod198/seo-engine-topvisor-inventory.service.d-release.conf`.
+
+```bash
+# ДО: откуда служба работает сейчас и когда следующий штатный запуск
+systemctl --user show -p WorkingDirectory -p ExecStart seo-engine-topvisor-inventory.service
+systemctl --user list-timers seo-engine-topvisor-inventory.timer --all
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/install-service-release.py \
+  --service seo-engine-topvisor-inventory.service --verify   # ждём: расхождений 0, недостающих 0
+
+# ПЕРЕКЛЮЧЕНИЕ
+mkdir -p /home/claude/.config/systemd/user/seo-engine-topvisor-inventory.service.d
+cp /home/claude/wt-nova-publish-memory-02/automation/host/mod198/seo-engine-topvisor-inventory.service.d-release.conf \
+   /home/claude/.config/systemd/user/seo-engine-topvisor-inventory.service.d/release.conf
+systemctl --user daemon-reload
+
+# ПОСЛЕ: путь, пробный запуск, результат и следующий запуск
+systemctl --user show -p WorkingDirectory -p ExecStart seo-engine-topvisor-inventory.service
+systemctl --user start seo-engine-topvisor-inventory.service
+systemctl --user status seo-engine-topvisor-inventory.service --no-pager | head -20
+journalctl --user -u seo-engine-topvisor-inventory.service -n 30 --no-pager
+ls -l /home/claude/.local/share/seo-engine/topvisor-inventory/   # состояние на месте, не в выпуске
+systemctl --user list-timers seo-engine-topvisor-inventory.timer --all  # следующий — 04:20 UTC
+
+# ОТКАТ (любой из двух уровней)
+rm /home/claude/.config/systemd/user/seo-engine-topvisor-inventory.service.d/release.conf
+systemctl --user daemon-reload          # 1) вернуться к запуску из рабочей копии
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/install-service-release.py \
+  --service seo-engine-topvisor-inventory.service --rollback   # 2) вернуть прежний выпуск
+```
+
+### 4. Готовый блок оператора: системная служба (нужен root)
+
+Служба `community-ratings-monitor` системная и работает как `User=lords`,
+таймер — каждые 15 минут (`OnUnitActiveSec=15min`), поэтому результат виден
+быстро. Выпуск читаем всем, секреты остаются в `/etc/site-factory/secrets`.
+
+```bash
+# ДО
+systemctl show -p WorkingDirectory -p ExecStart -p User community-ratings-monitor.service
+systemctl list-timers community-ratings-monitor.timer --all
+ls -t /srv/site-factory/repo/var/ratings/monitor | head -3   # последний отчёт ДО переключения
+
+# ПЕРЕКЛЮЧЕНИЕ
+sudo mkdir -p /etc/systemd/system/community-ratings-monitor.service.d
+sudo cp /home/claude/wt-nova-publish-memory-02/automation/host/mod198/community-ratings-monitor.service.d-release.conf \
+        /etc/systemd/system/community-ratings-monitor.service.d/release.conf
+sudo systemctl daemon-reload
+
+# ПОСЛЕ
+systemctl show -p WorkingDirectory -p ExecStart community-ratings-monitor.service
+sudo systemctl start community-ratings-monitor.service
+systemctl status community-ratings-monitor.service --no-pager | head -20
+ls -t /srv/site-factory/repo/var/ratings/monitor | head -3   # появился НОВЫЙ отчёт
+systemctl list-timers community-ratings-monitor.timer --all  # следующий запуск через ≤15 минут
+
+# ОТКАТ
+sudo rm /etc/systemd/system/community-ratings-monitor.service.d/release.conf
+sudo systemctl daemon-reload
+```
+
+### 5. Чего я намеренно не делал
+
+* **Общей остановки 18 служб нет** и не будет: переключение идёт по одной, с
+  проверкой результата и следующего запуска.
+* **Drop-in не положен в живой systemd.** Файлы лежат в репозитории; копирование
+  и `daemon-reload` — шаг оператора. Положить файл молча значит сменить
+  определение действующей службы без ведома того, кто её ведёт.
+* **Пароль базы не читался.** `seo-engine-topvisor-inventory` в режиме status с
+  postgres-URL падает на пароле из `EnvironmentFile`; с настоящим sqlite-URL
+  юнита он работает. `.env` не открывался.
+* **Службы чужих линий не переключались** и ничего в их деревьях не менялось.
