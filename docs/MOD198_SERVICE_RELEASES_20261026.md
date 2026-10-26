@@ -324,6 +324,52 @@ curl -sS -o /dev/null -w 'после откату: HTTP %{http_code}\n' \
 | seo-engine-topvisor-inventory | 20261026T114139Z-5f26ed4fbd52 | 149 | 0 / 0 | `--mode status` отработал: 17 проектов, `source LIVE_READ_ONLY`, `stale false` |
 | community-ratings-gateway | 20261026T120638Z-ec29b2c7fa04 | 20 | 0 / 0 | выпуск готов, но переключение бессмысленно до правки обёртки (root) |
 | site-cell-executor | 20261026T120650Z-c1a901a6f0a8 | 145 | 0 / 0 | выпуск готов; переключение — после группы помельче |
+| seo-content-operator | 20261026T124548Z-9621a7a3f6ef | 36 | 0 / 0 | свой venv (Python 3.11.16); из выпуска `_code_version()` даёт `9621a7a3f6ef` из `SEO_RELEASE_COMMIT`, без переменной — `unknown` (отрицательный контроль) |
+
+### 2-бис. Готовый блок оператора: суточная служба отчёта (нужен root)
+
+Служба системная. Линия, которая её ведёт (`wt-seo-index-audit-20260930`),
+готовность подтвердила и прямо сказала, что переключение живой суточной службы
+одобрить не может — это решение владельца. Условие переключения одно и
+проверено делом: коммит берётся из переменной, а не из `git`.
+
+```bash
+# ДО
+systemctl show -p WorkingDirectory -p ExecStart -p Environment seo-content-operator.service
+systemctl list-timers seo-content-operator.timer --all
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/install-service-release.py \
+  --service seo-content-operator.service --verify     # ждём: файлов 36, расхождений 0, недостающих 0
+
+# ПЕРЕКЛЮЧЕНИЕ (drop-in; каталог выпуска и его venv)
+sudo mkdir -p /etc/systemd/system/seo-content-operator.service.d
+sudo tee /etc/systemd/system/seo-content-operator.service.d/release.conf >/dev/null <<'CONF'
+[Service]
+WorkingDirectory=/srv/site-factory/services/seo-content-operator.service/current
+Environment=PYTHONPATH=/srv/site-factory/services/seo-content-operator.service/current
+Environment=SEO_RELEASE_COMMIT=9621a7a3f6ef
+ExecStart=
+ExecStart=/srv/site-factory/services/seo-content-operator.service/venv/bin/python scripts/seo_content_operator_stage2_daily.py
+CONF
+sudo systemctl daemon-reload
+
+# ПОСЛЕ: отчёт обязан назвать КОММИТ ВЫПУСКА, а не «unknown»
+systemctl show -p WorkingDirectory -p ExecStart seo-content-operator.service
+sudo systemctl start seo-content-operator.service
+journalctl -u seo-content-operator.service -n 40 --no-pager | grep -i "commit\|version\|9621a7a"
+systemctl list-timers seo-content-operator.timer --all
+
+# ОТКАТ
+sudo rm /etc/systemd/system/seo-content-operator.service.d/release.conf
+sudo systemctl daemon-reload
+python3 /home/claude/wt-nova-publish-memory-02/automation/local/install-service-release.py \
+  --service seo-content-operator.service --rollback
+```
+
+**Почему `SEO_RELEASE_COMMIT` обязателен, а не желателен.** Проверено обоими
+исходами: с переменной `_code_version()` из выпуска даёт `9621a7a3f6ef`, без
+неё — `unknown`, потому что каталог выпуска не репозиторий. Без переменной
+служба работать будет, но отчёт перестанет различать версии кода, по которому
+построен.
 
 Оба новых выпуска сперва были НЕПОЛНЫ и при этом давали «расхождений 0»:
 разбор импортов не видел `from factory.community import metrics_store` и
