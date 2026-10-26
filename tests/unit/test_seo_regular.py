@@ -1414,9 +1414,9 @@ def test_editor_candidates_stream_large_snapshot_and_keep_only_gaps(tmp_path, mo
         ),
         encoding="utf-8",
     )
-    found = regular.editor_candidates(snap, facts, set(), sites={"zonafilm.space": "zona-01"})
+    found = regular.editor_candidates(snap, facts, set(), sites={"animedia.icu": "zona-01"})
     assert [(c["site"], c["slug"], c["shikimori_id"]) for c in found] == [
-        ("zonafilm.space", "ledyanaya-stena", "60852")
+        ("animedia.icu", "ledyanaya-stena", "60852")
     ]
 
 
@@ -1437,7 +1437,7 @@ def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
             {
                 "domains": [
                     {
-                        "domain": "zonafilm.space",
+                        "domain": "animedia.icu",
                         "measurements": [
                             {
                                 "key": "popular_pages",
@@ -1469,7 +1469,7 @@ def test_editor_candidates_skip_gaps_without_any_source(tmp_path):
     )
     needs: list[dict] = []
     found = regular.editor_candidates(
-        snap, facts, set(), sites={"zonafilm.space": "zona-01"}, needs_source=needs
+        snap, facts, set(), sites={"animedia.icu": "zona-01"}, needs_source=needs
     )
     assert [c["slug"] for c in found] == ["with-id"]
     # карточка без источника не исключена, а учтена для поиска источника
@@ -1886,15 +1886,18 @@ def test_editor_candidates_keep_site_direction(tmp_path):
              "genres": ["аниме", "фэнтези"]}
     dunhua = {"name": "Дунхуа", "description": None, "external_ids": {"mal": "2"}, "year": 2021,
               "genres": ["дунхуа"]}
+    # Аниме без жанров в снимке (так бывает: genres null), но с MAL ID.
+    nogenre = {"name": "Без жанров", "description": None, "external_ids": {"mal": "3"}, "year": 2022}
     film = {"name": "Фильм", "original_name": "Film", "description": None, "year": 2019,
             "external_ids": {"imdb": "tt1"}, "genres": ["драма"], "type": "movie"}
     for sid in ("zona-01", "animego-04"):
         (facts / f"{sid}-details.json").write_text(json.dumps({"details": {
-            "anime-hot": anime, "dunhua-cold": dunhua, "film-cold": film}}), encoding="utf-8")
+            "anime-hot": anime, "dunhua-cold": dunhua, "nogenre-cold": nogenre,
+            "film-cold": film}}), encoding="utf-8")
     zona = {c["slug"] for c in regular.editor_candidates(
         snap, facts, set(), sites={"zonafilm.space": "zona-01"})}
     assert "film-cold" in zona
-    assert not zona & {"anime-hot", "dunhua-cold"}
+    assert not zona & {"anime-hot", "dunhua-cold", "nogenre-cold"}
     animego = {c["slug"] for c in regular.editor_candidates(
         snap, facts, set(), sites={"an1meg0.site": "animego-04"})}
     assert "anime-hot" in animego

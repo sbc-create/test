@@ -131,9 +131,15 @@ ANIME_GENRES = frozenset({"аниме", "дунхуа"})
 
 def off_direction(domain: str, mine: dict) -> bool:
     """Запись не соответствует направлению домена (аниме на сайте фильмов и сериалов)."""
-    if SITE_DIRECTION.get(domain) == "films_series":
-        return bool(ANIME_GENRES & {str(g).strip().lower() for g in (mine.get("genres") or [])})
-    return False
+    if SITE_DIRECTION.get(domain) != "films_series":
+        return False
+    if ANIME_GENRES & {str(g).strip().lower() for g in (mine.get("genres") or [])}:
+        return True
+    # Жанров у записи может не быть вовсе (zona-01 mag-na-polnuyu-stavku-…: genres
+    # null, 26.10), а сопоставление с Shikimori или MAL ID — признак аниме-базы:
+    # такие записи на сайте фильмов и сериалов тоже не предлагаются.
+    shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
+    return bool(shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal"))
 
 
 EDITOR_SITES = {
