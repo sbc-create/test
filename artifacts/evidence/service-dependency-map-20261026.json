@@ -1,0 +1,977 @@
+{
+ "служб": 18,
+ "службы": [
+  {
+   "служба": "analytics-cabinet.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "analytics-cabinet.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/home/claude/wt-portable-site-cell-01/bin/seo-operator analytics-collect  --json --out /home/claude/wt-portable-site-cell-01/var/analytics/cabinet-latest.json",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "bin/seo-operator",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 24,
+   "код": [
+    "bin/seo-operator",
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "community-ratings-gateway.service",
+   "уровень": "система",
+   "копии": [
+    "wt-ratings-ingestion-01"
+   ],
+   "включена_сама": true,
+   "таймеры": [],
+   "юнит": {
+    "ExecStart": "/usr/local/bin/community-ratings-gateway",
+    "WorkingDirectory": "/home/claude/wt-ratings-ingestion-01",
+    "User": "lords",
+    "Environment": "PYTHONPATH=/home/claude/wt-ratings-ingestion-01"
+   },
+   "дерево": "/home/claude/wt-ratings-ingestion-01",
+   "состояние_дерева": {
+    "ветка": "cursor/ratings-ingestion-01",
+    "голова": "ec29b2c",
+    "незакоммичено_всего": 277
+   },
+   "точка_входа": "factory/community/http_gateway.py",
+   "как_определена": "через обёртку /usr/local/bin/community-ratings-gateway (PYTHONPATH на рабочую копию)",
+   "файлов_кода": 17,
+   "код": [
+    "factory/community/__init__.py",
+    "factory/community/antifraud.py",
+    "factory/community/api.py",
+    "factory/community/cohort.py",
+    "factory/community/formulas.py",
+    "factory/community/http_gateway.py",
+    "factory/community/identity_v1.py",
+    "factory/community/metrics.py",
+    "factory/community/policy.py",
+    "factory/community/rollout.py",
+    "factory/community/service.py",
+    "factory/community/spaces.py",
+    "factory/community/store.py",
+    "factory/paths.py",
+    "factory/ratings/models.py",
+    "factory/ratings/prod_db.py",
+    "factory/ratings/store.py"
+   ],
+   "конфигурация": [],
+   "данные": [
+    "/srv/site-factory/repo/var/ratings",
+    "/srv/site-factory/repo/var/ratings/community_rollout_flags.json"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "community-ratings-monitor.service",
+   "уровень": "система",
+   "копии": [
+    "wt-ratings-ingestion-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "community-ratings-monitor.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -c 'from factory.community.monitor_once import main; raise SystemExit(main())'",
+    "WorkingDirectory": "/home/claude/wt-ratings-ingestion-01",
+    "User": "lords",
+    "Environment": "PYTHONPATH=/home/claude/wt-ratings-ingestion-01; COMMUNITY_ROLLOUT_FLAGS_PATH=/srv/site-factory/repo/var/ratings/community_rollout_flags.json; COMMUNITY_IDENTITY_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_identity_hmac; COMMUNITY_ROLLOUT_SALT_FILE=/etc/site-factory/secrets/community_rollout_salt; COMMUNITY_IP_HMAC_SECRET_FILE=/etc/site-factory/secrets/community_ip_hmac"
+   },
+   "дерево": "/home/claude/wt-ratings-ingestion-01",
+   "состояние_дерева": {
+    "ветка": "cursor/ratings-ingestion-01",
+    "голова": "ec29b2c",
+    "незакоммичено_всего": 277
+   },
+   "точка_входа": "factory/community/monitor_once.py",
+   "как_определена": "импорт из -c: factory.community.monitor_once",
+   "файлов_кода": 7,
+   "код": [
+    "factory/community/__init__.py",
+    "factory/community/monitor_once.py",
+    "factory/community/rollout.py",
+    "factory/paths.py",
+    "factory/ratings/models.py",
+    "factory/ratings/prod_db.py",
+    "factory/ratings/store.py"
+   ],
+   "конфигурация": [],
+   "данные": [
+    "/srv/site-factory/repo/var/ratings",
+    "/srv/site-factory/repo/var/ratings/community_rollout_flags.json",
+    "/srv/site-factory/repo/var/ratings/monitor"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "editor-run.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "editor-run.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/editor-run.sh",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1; EDITOR_RUN_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "automation/host/editor/editor-run.sh",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 25,
+   "код": [
+    "automation/host/editor/editor-run.sh",
+    "automation/local/comment-visible-check.py",
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-content-operator-report.service",
+   "уровень": "система",
+   "копии": [
+    "wt-seo-index-audit-20260930"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-content-operator-report.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/home/claude/wt-seo-index-audit-20260930/.venv/bin/python /home/claude/wt-seo-index-audit-20260930/scripts/seo_content_operator_daily_report.py",
+    "WorkingDirectory": "/home/claude/wt-seo-index-audit-20260930",
+    "User": "claude",
+    "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; SEO_CONTENT_OPERATOR_SITE=yummyani.site; SEO_CONTENT_OPERATOR_REPORT_TRIGGER=systemd-report-timer; SEO_CONTENT_OPERATOR_REPORT_ROOT=/var/lib/seo-content-operator/reports/daily; SEO_CONTENT_OPERATOR_REPORT_OUTBOX=/var/lib/seo-content-operator/outbox/daily; SEO_CONTENT_OPERATOR_REPORT_LOCK=/run/seo-content-operator/report.lock.json"
+   },
+   "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "состояние_дерева": {
+    "ветка": "claude/seo-preflight-20261002",
+    "голова": "fd6d00a",
+    "незакоммичено_всего": 44
+   },
+   "точка_входа": "scripts/seo_content_operator_daily_report.py",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 20,
+   "код": [
+    "scripts/seo_content_operator_daily_report.py",
+    "seo_engine/content_operator/authoring_config.py",
+    "seo_engine/content_operator/contours.py",
+    "seo_engine/content_operator/daily_ops_report.py",
+    "seo_engine/content_operator/daily_summary.py",
+    "seo_engine/content_operator/indexability_guard.py",
+    "seo_engine/content_operator/kill_switch.py",
+    "seo_engine/content_operator/models.py",
+    "seo_engine/content_operator/queue_reconcile.py",
+    "seo_engine/content_operator/registry.py",
+    "seo_engine/content_operator/report_verdict.py",
+    "seo_engine/content_operator/run_journal.py",
+    "seo_engine/content_operator/run_outcome.py",
+    "seo_engine/content_operator/run_report.py",
+    "seo_engine/content_operator/run_store.py",
+    "seo_engine/content_operator/scheduler.py",
+    "seo_engine/content_operator/stale_runs.py",
+    "seo_engine/content_operator/webmaster_section.py",
+    "seo_engine/core/owner_state.py",
+    "seo_engine/core/redaction.py"
+   ],
+   "конфигурация": [],
+   "данные": [
+    "/srv/lords/.frontend/indexing-policy.json",
+    "/srv/sites/yummyani-staging/runtime/overlays/yummyani.site/title-overlays.json",
+    "/var/lib/seo-content-operator",
+    "/var/lib/seo-content-operator/journals",
+    "/var/lib/seo-content-operator/kill_switch.json",
+    "/var/lib/seo-content-operator/outbox/daily",
+    "/var/lib/seo-content-operator/queue_events.jsonl",
+    "/var/lib/seo-content-operator/registry.json",
+    "/var/lib/seo-content-operator/reports/daily",
+    "/var/lib/seo-content-operator/reports/daily-summary",
+    "/var/lib/seo-content-operator/reports/runs",
+    "/var/lib/seo-content-operator/state.json",
+    "/var/lib/seo-content-operator/suppression.json"
+   ],
+   "нужны_незакоммиченные": [
+    "seo_engine/content_operator/daily_ops_report.py"
+   ]
+  },
+  {
+   "служба": "seo-content-operator.service",
+   "уровень": "система",
+   "копии": [
+    "wt-seo-index-audit-20260930"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-content-operator.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/home/claude/wt-seo-index-audit-20260930/.venv/bin/python /home/claude/wt-seo-index-audit-20260930/scripts/seo_content_operator_stage2_daily.py",
+    "WorkingDirectory": "/home/claude/wt-seo-index-audit-20260930",
+    "User": "claude",
+    "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; SEO_CONTENT_OPERATOR_SITE=yummyani.site; SEO_CONTENT_OPERATOR_STATE=/var/lib/seo-content-operator/state.json; SEO_CONTENT_OPERATOR_LOCK=/run/seo-content-operator/lock.json; SEO_CONTENT_OPERATOR_KILL=/var/lib/seo-content-operator/kill_switch.json"
+   },
+   "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "состояние_дерева": {
+    "ветка": "claude/seo-preflight-20261002",
+    "голова": "fd6d00a",
+    "незакоммичено_всего": 44
+   },
+   "точка_входа": "scripts/seo_content_operator_stage2_daily.py",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 33,
+   "код": [
+    "scripts/seo_content_operator_stage2_daily.py",
+    "seo_engine/content_operator/authoring_config.py",
+    "seo_engine/content_operator/catalog_snapshot.py",
+    "seo_engine/content_operator/catalog_sources.py",
+    "seo_engine/content_operator/contours.py",
+    "seo_engine/content_operator/coverage.py",
+    "seo_engine/content_operator/daily_cycle.py",
+    "seo_engine/content_operator/daily_report.py",
+    "seo_engine/content_operator/duplicates.py",
+    "seo_engine/content_operator/hashing.py",
+    "seo_engine/content_operator/http_fetch.py",
+    "seo_engine/content_operator/indexability_guard.py",
+    "seo_engine/content_operator/kill_switch.py",
+    "seo_engine/content_operator/lifecycle.py",
+    "seo_engine/content_operator/methodology.py",
+    "seo_engine/content_operator/models.py",
+    "seo_engine/content_operator/ongoing_intake.py",
+    "seo_engine/content_operator/policies.py",
+    "seo_engine/content_operator/priority.py",
+    "seo_engine/content_operator/public_verify.py",
+    "seo_engine/content_operator/publish.py",
+    "seo_engine/content_operator/queue_reconcile.py",
+    "seo_engine/content_operator/qwen_report.py",
+    "seo_engine/content_operator/registry.py",
+    "seo_engine/content_operator/run_journal.py",
+    "seo_engine/content_operator/run_outcome.py",
+    "seo_engine/content_operator/run_report.py",
+    "seo_engine/content_operator/run_store.py",
+    "seo_engine/content_operator/scheduler.py",
+    "seo_engine/content_operator/title_overlays.py",
+    "seo_engine/content_operator/trigger_source.py",
+    "seo_engine/core/owner_state.py",
+    "seo_engine/core/redaction.py"
+   ],
+   "конфигурация": [],
+   "данные": [
+    "/srv/lords/.frontend/indexing-policy.json",
+    "/srv/sites/yummyani-staging/runtime/overlays/yummyani.site",
+    "/srv/yummyani-site/data/yummy-readmodel.sqlite3",
+    "/var/lib/seo-content-operator",
+    "/var/lib/seo-content-operator/journals",
+    "/var/lib/seo-content-operator/kill_switch.json",
+    "/var/lib/seo-content-operator/outbox",
+    "/var/lib/seo-content-operator/queue_events.jsonl",
+    "/var/lib/seo-content-operator/registry.json",
+    "/var/lib/seo-content-operator/reports/runs",
+    "/var/lib/seo-content-operator/state.json",
+    "/var/lib/seo-content-operator/suppression.json"
+   ],
+   "нужны_незакоммиченные": [
+    "scripts/seo_content_operator_stage2_daily.py",
+    "seo_engine/content_operator/ongoing_intake.py"
+   ]
+  },
+  {
+   "служба": "seo-regular-check.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-regular-check.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m seo_operator.cli regular check --trigger systemd-timer",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "seo_operator/cli.py",
+   "как_определена": "модуль seo_operator.cli",
+   "файлов_кода": 23,
+   "код": [
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-regular-daily.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-regular-daily.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m seo_operator.cli regular daily --trigger systemd-timer",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "seo_operator/cli.py",
+   "как_определена": "модуль seo_operator.cli",
+   "файлов_кода": 23,
+   "код": [
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-regular-hourly.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-regular-hourly.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m seo_operator.cli regular hourly --trigger systemd-timer",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "seo_operator/cli.py",
+   "как_определена": "модуль seo_operator.cli",
+   "файлов_кода": 23,
+   "код": [
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-regular-weekly.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-regular-weekly.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m seo_operator.cli regular weekly --trigger systemd-timer",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1; SEO_REGULAR_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "seo_operator/cli.py",
+   "как_определена": "модуль seo_operator.cli",
+   "файлов_кода": 23,
+   "код": [
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-report-viewer.service",
+   "уровень": "система",
+   "копии": [
+    "wt-seo-index-audit-20260930"
+   ],
+   "включена_сама": true,
+   "таймеры": [],
+   "юнит": {
+    "ExecStart": "/home/claude/wt-seo-index-audit-20260930/.venv/bin/python  -m seo_engine.content_operator.report_server  --root /var/lib/seo-content-operator/reports/runs  --bind 127.0.0.1 --port 8231",
+    "WorkingDirectory": "/home/claude/wt-seo-index-audit-20260930",
+    "User": "claude",
+    "Environment": "PYTHONPATH=/home/claude/wt-seo-index-audit-20260930; PYTHONDONTWRITEBYTECODE=1"
+   },
+   "дерево": "/home/claude/wt-seo-index-audit-20260930",
+   "состояние_дерева": {
+    "ветка": "claude/seo-preflight-20261002",
+    "голова": "fd6d00a",
+    "незакоммичено_всего": 44
+   },
+   "точка_входа": "seo_engine/content_operator/report_server.py",
+   "как_определена": "модуль seo_engine.content_operator.report_server",
+   "файлов_кода": 4,
+   "код": [
+    "seo_engine/content_operator/report_server.py",
+    "seo_engine/content_operator/run_report.py",
+    "seo_engine/content_operator/run_store.py",
+    "seo_engine/core/redaction.py"
+   ],
+   "конфигурация": [],
+   "данные": [
+    "/var/lib/seo-content-operator/reports/daily-summary",
+    "/var/lib/seo-content-operator/reports/runs"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-tech-publish.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-tech-publish.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-publish.sh",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "automation/host/editor/seo-tech-publish.sh",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 25,
+   "код": [
+    "automation/host/editor/seo-tech-publish.sh",
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/tech_publish.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "/var/lib/site-cells/results",
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-tech-run.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-tech-run.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/editor/seo-tech-run.sh",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "HOME=/home/claude; PYTHONDONTWRITEBYTECODE=1; SEO_TECH_TRIGGER=systemd-timer"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "automation/host/editor/seo-tech-run.sh",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 24,
+   "код": [
+    "automation/host/editor/seo-tech-run.sh",
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py",
+    "seo_operator/__init__.py",
+    "seo_operator/analytics_collect.py",
+    "seo_operator/audit.py",
+    "seo_operator/cli.py",
+    "seo_operator/datasources/base.py",
+    "seo_operator/datasources/live.py",
+    "seo_operator/experiments.py",
+    "seo_operator/factory_bridge.py",
+    "seo_operator/pipeline.py",
+    "seo_operator/quality.py",
+    "seo_operator/registry.py",
+    "seo_operator/reporting.py",
+    "seo_operator/technical_seo.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/operator.jsonl"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "site-cell-executor.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "site-cell-executor.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m factory cell serve --confirm-activation",
+    "WorkingDirectory": "/usr/local/lib/site-factory-cell",
+    "Environment": "PYTHONPATH=/usr/local/lib/site-factory-cell; SITE_CELL_QUEUE=/var/lib/site-cells; PYTHONDONTWRITEBYTECODE=1"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "factory/__main__.py",
+   "как_определена": "пакет factory",
+   "файлов_кода": 28,
+   "код": [
+    "factory/__init__.py",
+    "factory/__main__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/cli.py",
+    "factory/errors.py",
+    "factory/input_request.py",
+    "factory/locks.py",
+    "factory/lords/__init__.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/report.py",
+    "factory/retry.py",
+    "factory/secret_hub/__init__.py",
+    "factory/seo/__init__.py",
+    "factory/seo/model.py",
+    "factory/seo/report.py",
+    "factory/state.py",
+    "factory/targets/__init__.py",
+    "factory/targets/base.py",
+    "factory/targets/local_disposable.py",
+    "factory/targets/payload_multisite.py",
+    "factory/targets/ssh_ansible.py",
+    "factory/templates/__init__.py",
+    "factory/templates/contract.py"
+   ],
+   "конфигурация": [
+    "blueprints/dle20/profiles/paths.yaml",
+    "blueprints/payload-next-multisite",
+    "inventory/dns-zones.yaml",
+    "inventory/targets.yaml",
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "var/audit/audit.jsonl",
+    "var/targets/payload-local"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "site-factory-mcp.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": true,
+   "таймеры": [],
+   "юнит": {
+    "ExecStart": "/usr/bin/python3 -m factory.qwen.mcp --http 127.0.0.1:9000 --read-only",
+    "WorkingDirectory": "/home/claude/wt-portable-site-cell-01",
+    "User": "claude",
+    "Environment": "PYTHONDONTWRITEBYTECODE=1"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "factory/qwen/mcp.py",
+   "как_определена": "модуль factory.qwen.mcp",
+   "файлов_кода": 12,
+   "код": [
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/cell/__init__.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/qwen/__init__.py",
+    "factory/qwen/mcp.py",
+    "factory/redaction.py",
+    "factory/retry.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "yummy-sitemap-warm.service",
+   "уровень": "система",
+   "копии": [
+    "wt-portable-site-cell-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "yummy-sitemap-warm.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/usr/bin/bash /home/claude/wt-portable-site-cell-01/automation/host/yummy-sitemap/yummy-sitemap-warm.sh",
+    "User": "claude"
+   },
+   "дерево": "/home/claude/wt-portable-site-cell-01",
+   "состояние_дерева": {
+    "ветка": "claude/nova-publish-memory-01",
+    "голова": "6401a8e",
+    "незакоммичено_всего": 6
+   },
+   "точка_входа": "automation/host/yummy-sitemap/yummy-sitemap-warm.sh",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 1,
+   "код": [
+    "automation/host/yummy-sitemap/yummy-sitemap-warm.sh"
+   ],
+   "конфигурация": [],
+   "данные": [],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-daily-cycle.service",
+   "уровень": "пользователь",
+   "копии": [
+    "wt-seo007"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-daily-cycle.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/srv/site-factory/repo/.venv/bin/python  /home/claude/wt-seo007/automation/host/seo-daily-cycle.py  --out /home/claude/wt-seo007/artifacts/seo-daily",
+    "WorkingDirectory": "/home/claude/wt-seo007"
+   },
+   "дерево": "/home/claude/wt-seo007",
+   "состояние_дерева": {
+    "ветка": "claude/fleet-seo-007-e2e-readiness",
+    "голова": "84736ca",
+    "незакоммичено_всего": 218
+   },
+   "точка_входа": "automation/host/seo-daily-cycle.py",
+   "как_определена": "файл из ExecStart",
+   "файлов_кода": 10,
+   "код": [
+    "automation/host/seo-daily-cycle.py",
+    "factory/__init__.py",
+    "factory/analytics/__init__.py",
+    "factory/analytics/credentials.py",
+    "factory/analytics/transport.py",
+    "factory/analytics/yandex.py",
+    "factory/errors.py",
+    "factory/paths.py",
+    "factory/redaction.py",
+    "factory/retry.py"
+   ],
+   "конфигурация": [
+    "knowledge/YANDEX_ANALYTICS_CONTRACT.yaml"
+   ],
+   "данные": [
+    "/srv/lords/.frontend"
+   ],
+   "нужны_незакоммиченные": []
+  },
+  {
+   "служба": "seo-engine-topvisor-inventory.service",
+   "уровень": "пользователь",
+   "копии": [
+    "wt-seo-operator-v2-01"
+   ],
+   "включена_сама": false,
+   "таймеры": [
+    "seo-engine-topvisor-inventory.timer"
+   ],
+   "юнит": {
+    "ExecStart": "/home/claude/wt-seo-operator-v2-01/.venv/bin/python -m seo_engine.cli seo-inventory-sync --mode now --actor systemd-timer",
+    "WorkingDirectory": "/home/claude/wt-seo-operator-v2-01",
+    "EnvironmentFile": "-/home/claude/work-seo/seo-engine/.env",
+    "Environment": "PYTHONPATH=/home/claude/wt-seo-operator-v2-01; SEO_ENGINE_ENV=production; SEO_ENGINE_TOPVISOR_SYNC_STATE_DIR=%h/.local/share/seo-engine/topvisor-inventory; SEO_ENGINE_DATABASE_URL=sqlite+pysqlite:///%h/.local/share/seo-engine/topvisor-inventory/inventory.db; SEO_ENGINE_ALLOW_PRIVATE_TARGETS=1"
+   },
+   "дерево": "/home/claude/wt-seo-operator-v2-01",
+   "состояние_дерева": {
+    "ветка": "cursor/seo-operator-v2-01",
+    "голова": "5f26ed4",
+    "незакоммичено_всего": 39
+   },
+   "точка_входа": "seo_engine/cli.py",
+   "как_определена": "модуль seo_engine.cli",
+   "файлов_кода": 13,
+   "код": [
+    "seo_engine/cli.py",
+    "seo_engine/core/config.py",
+    "seo_engine/core/crypto.py",
+    "seo_engine/core/enums.py",
+    "seo_engine/core/redaction.py",
+    "seo_engine/editorial/storage.py",
+    "seo_engine/security/passwords.py",
+    "seo_engine/services/__init__.py",
+    "seo_engine/services/unit_of_work.py",
+    "seo_engine/storage/__init__.py",
+    "seo_engine/storage/base.py",
+    "seo_engine/storage/db.py",
+    "seo_engine/storage/entities.py"
+   ],
+   "конфигурация": [],
+   "данные": [],
+   "нужны_незакоммиченные": []
+  }
+ ]
+}
