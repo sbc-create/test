@@ -8,8 +8,8 @@
 - подборки (состав по `details[].id`, порядок, пояснения, основания, проверка) — `ZONAFILM_CC_COLLECTIONS_20261026.json`;
 - превью — `ZONAFILM_CC_COLLECTIONS_PREVIEW_20261026.html`;
 - разбор чужих подборок — `knowledge/THIRD_PARTY_REVIEW.md`, раздел «Редакционные подборки»;
-- принципы отбора — `knowledge/SEO_KNOWLEDGE_PACK.md` §11 (freeze 2026-10-26.4);
-- источники — `knowledge/SOURCE_REGISTRY.yaml` (SRC-KP-*, SRC-NETFLIX-*, …), решение о CLOSED_WORLD — D213.
+- принципы отбора — `knowledge/SEO_KNOWLEDGE_PACK.md` §11 (freeze 2026-10-26.5);
+- источники — `knowledge/SOURCE_REGISTRY.yaml` (SRC-KP-*, SRC-NETFLIX-*, …), решение о CLOSED_WORLD — D220.
 
 ## 1. Источники и их ограничения
 

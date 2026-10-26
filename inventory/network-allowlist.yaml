@@ -247,7 +247,7 @@ hosts:
   # дословно. Только GET. Сохраняются наши выводы (позиции, числа голосов,
   # устройство подборки), но не тексты, изображения и подборки целиком; факты
   # для страниц сайта по-прежнему только из config/editorial-sources.json.
-  # Конфликт с CLOSED_WORLD и решение — knowledge/DECISIONS.md, 26.10.2026.
+  # Конфликт с CLOSED_WORLD и решение — knowledge/DECISIONS.md, D220 (26.10.2026).
   - ref: research-kinopoisk
     host: www.kinopoisk.ru
     purpose: "популярность фильмов и сериалов внутри сервиса; тематические списки (/lists/)"
