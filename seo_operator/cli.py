@@ -66,7 +66,7 @@ def cmd_factory_portfolio(args) -> int:
     """
     from seo_operator.factory_bridge import portfolio_view
 
-    view = portfolio_view(REPO_ROOT)
+    view = portfolio_view(paths.registry_root())  # sites/*/package.yaml — живой реестр, не выпуск
     if args.json:
         print(json.dumps(view, ensure_ascii=False, indent=2))
     else:

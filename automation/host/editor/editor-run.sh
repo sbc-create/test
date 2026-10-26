@@ -48,7 +48,10 @@ fi
 
 RUN_ID="$(date -u +%Y%m%dT%H%M%SZ)"
 STARTED="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-PROMPT="$(sed "s/{{RUN_ID}}/$RUN_ID/g" docs/editor/EDITOR_RUN_PROMPT.md)"
+# Пути состояния в задании — те же, что у обёртки и seo_operator.paths (MOD-198):
+# модель идёт по пути из текста, а не по переменной, поэтому текст получает
+# фактический каталог состояния, а не путь от корня копии.
+PROMPT="$(sed -e "s/{{RUN_ID}}/$RUN_ID/g" -e "s#var/editor-runs#$STATE#g" -e "s#artifacts/analytics#${SEO_STATE_ROOT:-$REPO}/artifacts/analytics#g" docs/editor/EDITOR_RUN_PROMPT.md)"
 
 # ПРЕДЕЛ ХОДОВ ИЗМЕРЕН, а не выбран. При восьмидесяти запуск 20261009T232501Z
 # упёрся в него (`terminal_reason: max_turns`, `num_turns: 81`), успев

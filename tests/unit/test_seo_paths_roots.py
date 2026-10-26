@@ -87,3 +87,25 @@ def test_корень_реестров_не_под_git_отвергается(mo
     monkeypatch.setenv("SEO_REGISTRY_ROOT", str(tmp_path))
     with pytest.raises(paths.RegistryRootError):
         paths.registry("config", "seo-tech-queue.json")
+
+
+@pytest.mark.parametrize("обёртка, задание, каталог", [
+    ("automation/host/editor/editor-run.sh", "docs/editor/EDITOR_RUN_PROMPT.md", "var/editor-runs"),
+    ("automation/host/editor/seo-tech-run.sh", "docs/seo-tech/SEO_TECH_RUN_PROMPT.md", "var/seo-tech"),
+])
+def test_задание_модели_получает_фактический_каталог_состояния(обёртка, задание, каталог, tmp_path):
+    """Модель идёт по пути из текста задания: в нём должен стоять каталог
+    состояния обёртки, а не путь от корня копии (иначе перенос уводит запись)."""
+    import re as _re
+    строка = next(s for s in (КОПИЯ / обёртка).read_text(encoding="utf-8").splitlines()
+                  if s.startswith('PROMPT="$(sed'))
+    assert каталог in (КОПИЯ / задание).read_text(encoding="utf-8")
+    состояние = tmp_path / "state"
+    r = subprocess.run(["bash", "-c", f'{строка}\nprintf "%s" "$PROMPT"'], cwd=КОПИЯ,
+                       env={**os.environ, "RUN_ID": "R1", "REPO": str(КОПИЯ),
+                            "STATE": str(состояние / каталог), "SEO_STATE_ROOT": str(состояние)},
+                       capture_output=True, text=True, timeout=30)
+    assert r.returncode == 0, r.stderr
+    текст = r.stdout
+    assert str(состояние / каталог) in текст
+    assert not _re.search(r"(?<![/\w])" + _re.escape(каталог), текст), "в задании остался путь от корня копии"
