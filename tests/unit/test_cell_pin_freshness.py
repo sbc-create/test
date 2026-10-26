@@ -28,8 +28,13 @@ def _дерево(tmp_path, *, сумма_рантайма: bytes, пин: str |
     if копия is not None:
         (проект / "src" / инс.РАНТАЙМ).write_bytes(копия)
     if пин is not None:
+        # `repo_path` обязателен: по нему инструмент решает, ВЕДЁТ ли рантайм
+        # ячейки эта фабрика. Стенд без него описывал бы ячейку чужой линии, и
+        # проверки свежести измеряли бы не тот исход.
         (проект / "pins.lock.json").write_text(json.dumps(
-            {"files": {инс.РАНТАЙМ: {"sha256": пин}}}), encoding="utf-8")
+            {"files": {инс.РАНТАЙМ: {
+                "sha256": пин,
+                "repo_path": f"automation/host/{инс.РАНТАЙМ}"}}}), encoding="utf-8")
     реестр = tmp_path / "site-cells.json"
     реестр.write_text(json.dumps({"cells": [
         {"site_id": "проба", "domain": "проба.ru",
@@ -86,4 +91,67 @@ def test_живая_сеть_разобрана_без_ошибок():
     записи = инс.свежесть()
     assert записи, "ни одной ячейки не разобрано"
     исходы = {з["исход"] for з in записи}
-    assert исходы <= {инс.СОВПАДАЕТ, инс.УСТАРЕЛ, инс.НЕТ_ПРОЕКТА}
+    assert исходы <= {инс.СОВПАДАЕТ, инс.УСТАРЕЛ, инс.НЕТ_ПРОЕКТА,
+                      инс.ДРУГОЙ_ИСТОЧНИК}
+
+
+# --- Чужой источник устаревшим не считается ----------------------------------
+
+def test_рантайм_не_из_фабрики_это_другой_источник(tmp_path):
+    """Измерено 26.10: счёт «21 потребитель шаблона» был завышен.
+
+    У animedia-01, zona-01 и zona-03 файл `lords-frontend.py` закреплён с
+    пустым `repo_path` — он приезжает отдельным выпуском своей линии, а не из
+    этой фабрики. Сверять его с каноном значит объявлять устаревшим чужой
+    файл: у zona-01 в нём 105 своих имён, то есть отдельная линия оформления
+    целиком.
+    """
+    import json
+
+    модуль = инс
+    корень = tmp_path / "factory"
+    (корень / "automation" / "host").mkdir(parents=True)
+    (корень / "automation" / "host" / "lords-frontend.py").write_text(
+        "x = 1\n", encoding="utf-8")
+    проект = корень / "var" / "site-repos" / "чужой"
+    (проект / "src").mkdir(parents=True)
+    (проект / "src" / "lords-frontend.py").write_text("x = 2\n", encoding="utf-8")
+    (проект / "pins.lock.json").write_text(json.dumps({
+        "files": {"lords-frontend.py": {"sha256": "z" * 64, "repo_path": ""}}},
+        ensure_ascii=False), encoding="utf-8")
+    реестр = корень / "config" / "site-cells.json"
+    реестр.parent.mkdir(parents=True)
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "чужой-01", "domain": "proba.invalid",
+         "repo": {"kind": "local", "path": "var/site-repos/чужой"}}]},
+        ensure_ascii=False), encoding="utf-8")
+    записи = модуль.свежесть(реестр, корень)
+    assert [з["исход"] for з in записи] == [модуль.ДРУГОЙ_ИСТОЧНИК], записи
+
+
+def test_рантайм_из_фабрики_по_прежнему_сверяется(tmp_path):
+    """Отрицательный контроль: исход «другой источник» не должен съесть всё."""
+    import hashlib
+    import json
+
+    модуль = инс
+    корень = tmp_path / "factory"
+    (корень / "automation" / "host").mkdir(parents=True)
+    (корень / "automation" / "host" / "lords-frontend.py").write_text(
+        "x = 1\n", encoding="utf-8")
+    проект = корень / "var" / "new-sites" / "свой"
+    (проект / "src").mkdir(parents=True)
+    (проект / "src" / "lords-frontend.py").write_text("x = 2\n", encoding="utf-8")
+    (проект / "pins.lock.json").write_text(json.dumps({
+        "files": {"lords-frontend.py": {
+            "sha256": hashlib.sha256(b"x = 2\n").hexdigest(),
+            "repo_path": "automation/host/lords-frontend.py"}}},
+        ensure_ascii=False), encoding="utf-8")
+    реестр = корень / "config" / "site-cells.json"
+    реестр.parent.mkdir(parents=True)
+    реестр.write_text(json.dumps({"cells": [
+        {"site_id": "свой-01", "domain": "proba.invalid",
+         "repo": {"kind": "local", "path": "var/new-sites/свой"}}]},
+        ensure_ascii=False), encoding="utf-8")
+    записи = модуль.свежесть(реестр, корень)
+    assert [з["исход"] for з in записи] == [модуль.УСТАРЕЛ], записи
