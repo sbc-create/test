@@ -1,0 +1,87 @@
+{
+ "kind": "ПРОВЕРКА ДО ВЫПУСКА: карточка → начало воспроизведения (подборки ещё не выпущены, шаг «главная/раздел → подборка» будет проверен после T340)",
+ "window": "26.10.2026, прогон закончен в 22:08:30Z (date -u)",
+ "tool": "Playwright + Chromium 1234, эмуляция iPhone 13, ru-RU; currentTime <video> через все фреймы и shadow root",
+ "criterion": "playing_confirmed = currentTime растёт между замерами; наличие источников и ID плеера воспроизведением не считается",
+ "note": "старт со второго нажатия («Смотреть» внутри плеера) — T338 у Архитектора",
+ "results": [
+  {
+   "url": "https://zonafilm.space/title/nevozmozhno-poverit/",
+   "started": "22:06:12Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    0.093411,
+    2.136119,
+    4.647927,
+    7.177199,
+    9.690349,
+    12.210777
+   ]
+  },
+  {
+   "url": "https://zonafilm.space/title/shepot-za-oknom/",
+   "started": "22:05:41Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    0.266024,
+    2.778834,
+    5.301182,
+    7.824351,
+    10.341954,
+    12.857185
+   ]
+  },
+  {
+   "url": "https://zonafilm.space/title/supergerl/",
+   "started": "22:06:41Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    4.120421,
+    6.628535,
+    9.153023,
+    11.67931,
+    14.194989,
+    16.740135
+   ]
+  },
+  {
+   "url": "https://zonafilm12.site/title/rycar-semi-korolevstv/",
+   "started": "22:07:10Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    0.093411,
+    0.449788,
+    2.974905,
+    5.494493,
+    8.006252,
+    10.52047
+   ]
+  },
+  {
+   "url": "https://zonafilm12.site/title/soobscheniya-dlya-izabel/",
+   "started": "22:07:38Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    0.334748,
+    2.845163,
+    5.369618,
+    7.878489,
+    10.386912,
+    12.896821
+   ]
+  },
+  {
+   "url": "https://zonafilm12.site/title/vikingi/",
+   "started": "22:08:04Z",
+   "playing_confirmed": true,
+   "currentTime_series": [
+    0.093411,
+    1.426607,
+    3.938798,
+    6.450471,
+    8.961664,
+    11.474734
+   ]
+  }
+ ]
+}
