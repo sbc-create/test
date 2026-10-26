@@ -146,3 +146,25 @@ def test_новый_проект_получает_правило_закрыти�
     for файл in ("CLAUDE.md", "docs/LONG_RUNS.md"):
         текст = (корень / файл).read_text(encoding="utf-8")
         assert "задача закрывается только после достижения" in текст.lower(), файл
+
+
+def test_генератор_не_стирает_репозиторий_сайта(tmp_path):
+    """`--force` не имеет права потерять историю сайта и файлы вне состава.
+
+    Измерено 26.10: пересоздание проекта генератором стёрло `.git` у пяти
+    проектов пятёрки вместе с первым коммитом, и три штатные проверки проекта
+    снова ответили отказом. У действующего сайта тем же движением ушёл бы
+    `config/player.json` с publisher_id — его кладут вне Git.
+    """
+    import pytest
+
+    куда = tmp_path / "проект"
+    (куда / ".git").mkdir(parents=True)
+    заказ = newsite.Заказ(site_id="lords-99", domain="proba.invalid",
+                          profile="lords-serials", port=9199, family="lords")
+    with pytest.raises(newsite.NewSiteError) as сбой:
+        newsite.создать(заказ, корень=tmp_path / "нет-такого", куда=куда,
+                        force=True, регистрировать=False)
+    текст = str(сбой.value)
+    assert "promote-cell-pins.py" in текст, текст
+    assert (куда / ".git").is_dir(), "каталог .git всё равно стёрт"
