@@ -1869,3 +1869,32 @@ def test_calendar_day_section_never_breaks_the_report(tmp_path):
     text = regular.calendar_day_section(ok, day)
     assert "### Выпуск редактора за 2026-10-12" in text
     assert "\n### Адреса" in text and "\n## Адреса" not in text
+
+
+def test_editor_candidates_keep_site_direction(tmp_path):
+    """Правило владельца 26.10: на сайте фильмов и сериалов (Zona) аниме в
+    кандидаты не идёт ни по трафику, ни в запас; на аниме-сайте та же запись
+    остаётся кандидатом."""
+    snap = tmp_path / "analytics-2026-10-26.json"
+    snap.write_text(json.dumps({"domains": [
+        {"domain": d, "measurements": [{"key": "popular_pages", "measured": True,
+         "value": [{"dimensions": [{"name": "/title/anime-hot/"}], "metrics": [9.0]}]}]}
+        for d in ("zonafilm.space", "an1meg0.site")]}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    anime = {"name": "Аниме", "description": None, "external_ids": {"mal": "1"}, "year": 2020,
+             "genres": ["аниме", "фэнтези"]}
+    dunhua = {"name": "Дунхуа", "description": None, "external_ids": {"mal": "2"}, "year": 2021,
+              "genres": ["дунхуа"]}
+    film = {"name": "Фильм", "original_name": "Film", "description": None, "year": 2019,
+            "external_ids": {"imdb": "tt1"}, "genres": ["драма"], "type": "movie"}
+    for sid in ("zona-01", "animego-04"):
+        (facts / f"{sid}-details.json").write_text(json.dumps({"details": {
+            "anime-hot": anime, "dunhua-cold": dunhua, "film-cold": film}}), encoding="utf-8")
+    zona = {c["slug"] for c in regular.editor_candidates(
+        snap, facts, set(), sites={"zonafilm.space": "zona-01"})}
+    assert "film-cold" in zona
+    assert not zona & {"anime-hot", "dunhua-cold"}
+    animego = {c["slug"] for c in regular.editor_candidates(
+        snap, facts, set(), sites={"an1meg0.site": "animego-04"})}
+    assert "anime-hot" in animego

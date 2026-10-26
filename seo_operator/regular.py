@@ -109,6 +109,33 @@ ANIMEDIA = {"animedia.icu": "animedia-01", "animedia.space": "animedia-02"}
 
 #: Домены, где редактор публикует описания с подтверждённым показом. Zona —
 #: с 2026-10-09: первая видимая публикация zonafilm.space/title/ledyanaya-stena/.
+#: Направление домена — что на нём главное (правило владельца 26.10.2026:
+#: подборки и редакционная работа соответствуют направлению сайта и разделу;
+#: на Zona и киносайтах Lords не смещаться в аниме). Только подтверждённое:
+#: Zona — профиль zona-general в заголовке X-Site-Factory-Profile (26.10);
+#: Animedia и AnimeGo — аниме по семейству в config/site-cells.json. Lords не
+#: внесены: их профили (lords-new, lords-curated, lords-animation) направление
+#: прямо не называют, а угадывать по названию правило запрещает.
+SITE_DIRECTION = {
+    "zonafilm.cc": "films_series",
+    "zonafilm.space": "films_series",
+    "zonafilm12.site": "films_series",
+    "animedia.icu": "anime",
+    "an1mego.site": "anime",
+    "animeg0.site": "anime",
+    "an1meg0.site": "anime",
+}
+#: Жанры каталога, которыми запись помечена как аниме/китайская анимация.
+ANIME_GENRES = frozenset({"аниме", "дунхуа"})
+
+
+def off_direction(domain: str, mine: dict) -> bool:
+    """Запись не соответствует направлению домена (аниме на сайте фильмов и сериалов)."""
+    if SITE_DIRECTION.get(domain) == "films_series":
+        return bool(ANIME_GENRES & {str(g).strip().lower() for g in (mine.get("genres") or [])})
+    return False
+
+
 EDITOR_SITES = {
     **ANIMEDIA,
     "zonafilm.space": "zona-01",
@@ -150,6 +177,9 @@ _EDITOR_FIELDS = (
     "type",
     "countries",
     "imdb_rating",
+    # Жанры — для направления домена (off_direction): аниме не идёт в кандидаты
+    # сайта фильмов и сериалов.
+    "genres",
 )
 
 #: Источник фактов по типу произведения. Одобрен только путь аниме (D199). Для
@@ -2807,7 +2837,7 @@ def editor_candidates(
         if (domain, slug) in published or work_key(slug) in taken or _закрыт(domain, slug):
             continue
         mine = (details.get(domain) or {}).get(slug)
-        if not mine:
+        if not mine or off_direction(domain, mine):
             continue
         desc = (mine.get("description") or "").strip()
         other = (details.get("animedia.icu") or {}).get(slug) or {}
@@ -2880,6 +2910,7 @@ def editor_candidates(
                     (domain, slug) in seen
                     or work_key(slug) in taken
                     or _закрыт(domain, slug)
+                    or off_direction(domain, mine)
                     or (mine.get("description") or "").strip()
                 ):
                     continue
