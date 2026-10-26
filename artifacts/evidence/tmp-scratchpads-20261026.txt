@@ -1,0 +1,43 @@
+снято 2026-10-26T11:03:43Z
+каталогов сессий: 38; всего 11.24 ГиБ
+старше 7 суток: 11.11 ГиБ
+
+    МиБ  сутки  дерево  каталог
+   4302   14.6    есть  -home-claude
+   2483   27.9    есть  -home-claude-wt-lordserials22-info-player-01
+   1239    7.2    есть  -home-claude-wt-portable-site-cell-01
+    917   33.5    есть  -home-claude-wt-zona-02-launch-01
+    887   33.2    есть  -home-claude-wt-animedia-space-visual-01
+    661   14.6    есть  -home-claude-wt-template-food-daily
+    276   30.1    есть  -home-claude-wt-lordfilm47-space-fixes-01
+    132   32.6    есть  -home-claude-wt-lords-02-template-01
+    128   25.0    есть  -home-claude-wt-portable-site-cell-01-var-site-repos-zonafilm12-site
+    126    2.5    есть  -home-claude-wt-nova-publish-memory-02
+     82   32.7    есть  -home-claude-wt-zona-space-template-01
+     80   30.1    есть  -home-claude-wt-1lordserials1-online-fixes-01
+     64   20.8    есть  -home-claude-wt-portable-site-cell-01-var-site-repos-animedia-space
+     33   33.6    есть  -home-claude-wt-zona-real-slider-01
+     30   32.6    есть  -home-claude-wt-animego-template-01
+     20   27.9    есть  -home-claude-wt-an1mego-site
+     10   29.1    есть  -home-claude-wt-animedia-icu-visual-01
+      9   25.7    есть  -home-claude-wt-seo-index-audit-20260930
+      8    0.0     НЕТ  bash-edit-diff
+      2   10.7     НЕТ  mg
+      2   10.6     НЕТ  clean
+      1   33.6    есть  -home-claude-wt-community-comments-platform-01
+      1   29.2    есть  -home-claude-wt-yummyani-biz-visual-01
+      1   28.8     НЕТ  ci-artifact
+      1   28.8     НЕТ  ci2
+      1   28.8     НЕТ  ci3
+      1   28.7     НЕТ  ci4
+      1   28.7     НЕТ  ci5
+      1   28.7     НЕТ  ci6
+      1   28.7     НЕТ  ci7
+      1   28.7     НЕТ  ci8
+      1   28.6     НЕТ  ci9
+      1   28.6     НЕТ  ci10
+      1   28.6     НЕТ  ci11
+      1   28.6     НЕТ  ci12
+      1   20.8    есть  -home-claude-wt-performance-audit-20261005T163059Z
+      1   10.9     НЕТ  -home-claude-wf-dummy
+      1    7.1     НЕТ  -home-claude-wf
