@@ -1,0 +1,440 @@
+{
+ "schema": "home-editorial.collections/1",
+ "site": "zonafilm12.site",
+ "site_id": "zona-03",
+ "prepared_at": "2026-10-27",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id; слаг — запасной ключ",
+ "task": "docs/seo-operator/TASK_20261027_HOME_COLLECTIONS.md",
+ "direction_rule": "films_series: на главной Zona — фильмы и сериалы; аниме, дорамы и дунхуа исключены (D223)",
+ "selection_rule": "Высокая оценка на малой выборке первого места не даёт: сначала работы с большим числом голосов и подтверждённым интересом, свежие работы с малой выборкой — ниже и с отдельным основанием. Исключаются работы, у которых число серий на странице не совпадает с каталогом.",
+ "shortages": [
+  "Universal: «Злая. Часть 2» (zlaya-chast-2, Universal) не включена — первой части в каталоге нет; «Смерч 2» не включён — прокат за пределами США у другой студии.",
+  "«Дипломатка» (diplomatka) не включена: на странице 4-й сезон, в каталоге 3 — число сезонов не совпадает."
+ ],
+ "collections": [
+  {
+   "key": "serialy-na-vecher-vybor-redakcii",
+   "title": "Сериалы на вечер: выбор редакции",
+   "viewer_request": "Что включить сегодня вечером из сериалов?",
+   "intro": "Сериалы с большим числом зрительских оценок и устойчивым интересом: детективы, триллеры, криминальная комедия и мистика. Все серии каждого сериала есть на сайте. Свежая экранизация с малым числом оценок — в конце, как редакционный выбор.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; состав выбран редакцией по источникам, не комбинация фильтров; индексация не шире раздела витрины"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01915163-4abc-70e2-b6be-9f6993b5b7d5",
+     "slug": "dzhentlmeny-3",
+     "url": "https://zonafilm12.site/title/dzhentlmeny-3/",
+     "name": "Джентльмены",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "13210838",
+      "kinopoisk": "1435343"
+     },
+     "reason": "Молодой человек узнаёт, что его большое наследство связано с наркоимперией, — криминальная комедия в двух сезонах.",
+     "basis": "IMDb 8.0 по данным каталога, число голосов в каталоге не указано; Кинопоиск, популярные сериалы на 26.10: №14, оценка 7.9 при 124 108 оценках — исследование 26.10 (ZONAFILM_CC_RESEARCH_20261026.md, Кинопоиск «популярные сериалы» на 26.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 16 = в каталоге 16; воспроизведение — в публичной приёмке",
+     "original_name": "The Gentlemen"
+    },
+    {
+     "order": 2,
+     "id": "0191529d-7182-7278-a52d-ca19d4a5f6f7",
+     "slug": "uensdey",
+     "url": "https://zonafilm12.site/title/uensdey/",
+     "name": "Уэнсдэй",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "13443470",
+      "kinopoisk": "4365427"
+     },
+     "reason": "Уэнсдэй Аддамс в академии Nevermore учится управлять своими способностями, чтобы остановить серийного убийцу.",
+     "basis": "IMDb 8.0 по данным каталога, 508771 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 16 = в каталоге 16; воспроизведение — в публичной приёмке",
+     "original_name": "Wednesday"
+    },
+    {
+     "order": 3,
+     "id": "0191671d-96ce-7614-b869-2a8dc7c0b67c",
+     "slug": "dzhek-richer-2",
+     "url": "https://zonafilm12.site/title/dzhek-richer-2/",
+     "name": "Джек Ричер",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "9288030",
+      "kinopoisk": "1209839"
+     },
+     "reason": "Бывший военный полицейский попадает под подозрение в убийстве в маленьком городке — и сам берётся найти настоящих убийц. Четыре сезона.",
+     "basis": "IMDb 8.0 по данным каталога, 312324 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 32 = в каталоге 32; воспроизведение — в публичной приёмке",
+     "original_name": "Reacher"
+    },
+    {
+     "order": 4,
+     "id": "01930f18-e226-7348-ad36-7d72802f4d8f",
+     "slug": "den-shakala",
+     "url": "https://zonafilm12.site/title/den-shakala/",
+     "name": "День Шакала",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "24053860",
+      "kinopoisk": "5461927"
+     },
+     "reason": "Сотрудница британской разведки выходит на след неуловимого наёмного убийцы, который меняет внешность.",
+     "basis": "IMDb 8.1 по данным каталога, 137187 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 10 = в каталоге 10; воспроизведение — в публичной приёмке",
+     "original_name": "The Day of the Jackal"
+    },
+    {
+     "order": 5,
+     "id": "01971bee-f642-7c1f-80f3-c895d37dd79f",
+     "slug": "otdel-q",
+     "url": "https://zonafilm12.site/title/otdel-q/",
+     "name": "Отдел Q",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "27995114",
+      "kinopoisk": "7316538"
+     },
+     "reason": "Эдинбург: детектив после ранения возглавляет отдел старых нераскрытых дел и сам выбирает, что расследовать.",
+     "basis": "IMDb 8.1 по данным каталога, 119102 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 9 = в каталоге 9; воспроизведение — в публичной приёмке",
+     "original_name": "Dept. Q"
+    },
+    {
+     "order": 6,
+     "id": "01933f60-b8c8-700c-a4c9-ea4ec5aa1d41",
+     "slug": "lendmen",
+     "url": "https://zonafilm12.site/title/lendmen/",
+     "name": "Лэндмен",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14186672",
+      "kinopoisk": "4909559"
+     },
+     "reason": "Техас, нефть и человек, который решает проблемы компании — с картелями, полицией, конкурентами и собственной семьёй.",
+     "basis": "IMDb 8.2 по данным каталога, 115907 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 20 = в каталоге 20; воспроизведение — в публичной приёмке",
+     "original_name": "Landman"
+    },
+    {
+     "order": 7,
+     "id": "01916ec5-af86-7c90-a280-40b5bbd01c64",
+     "slug": "ripli",
+     "url": "https://zonafilm12.site/title/ripli/",
+     "name": "Рипли",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "11016042",
+      "kinopoisk": "1311083"
+     },
+     "reason": "1960 год: мелкий мошенник Том Рипли получает деньги за поездку в Италию — уговорить богатого наследника вернуться домой.",
+     "basis": "IMDb 8.1 по данным каталога, 69822 голосов (выгрузка imdb-datasets 14.09.2026)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 8 = в каталоге 8; воспроизведение — в публичной приёмке",
+     "original_name": "Ripley"
+    },
+    {
+     "order": 8,
+     "id": "01a09b3d-3cb6-7901-b888-4f1f6b60a412",
+     "slug": "kerri-3",
+     "url": "https://zonafilm12.site/title/kerri-3/",
+     "name": "Кэрри",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "11540908",
+      "kinopoisk": "1343910"
+     },
+     "reason": "Девушка с телекинетическими способностями, школьная травля и властная мать — история, которая заканчивается кровавой трагедией. Все восемь серий на сайте.",
+     "basis": "IMDb 7.3 по данным каталога, 769 голосов (выгрузка imdb-datasets 14.09.2026); СВЕЖАЯ РАБОТА С МАЛОЙ ВЫБОРКОЙ IMDb — редакционный выбор, поэтому последней; интерес: Кинопоиск, популярные сериалы на 26.10: №7, оценка 7.4 при 17 595 оценках — исследование 26.10 (ZONAFILM_CC_RESEARCH_20261026.md, Кинопоиск «популярные сериалы» на 26.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 8 = в каталоге 8; воспроизведение — в публичной приёмке",
+     "original_name": "Carrie"
+    }
+   ],
+   "home_rail": true
+  },
+  {
+   "key": "apple-tv-serialy",
+   "title": "Apple TV: сериалы, о которых говорят",
+   "viewer_request": "Что посмотреть из сериалов Apple TV?",
+   "intro": "Оригинальные сериалы Apple TV — принадлежность подтверждена страницами Apple TV Press. Фантастика о работе и памяти, шпионская драма, жизнь в бункере, закулисье телеэфира, тюремный триллер и комедия о Голливуде.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; состав выбран редакцией по источникам, не комбинация фильтров; индексация не шире раздела витрины"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01915285-7068-7720-af12-2cc4b8d9bd62",
+     "slug": "razdelenie",
+     "url": "https://zonafilm12.site/title/razdelenie/",
+     "name": "Разделение",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "11280740",
+      "kinopoisk": "1343318"
+     },
+     "reason": "Корпорация разделяет память сотрудников на рабочую и личную — и одному из них это начинает казаться ошибкой.",
+     "basis": "IMDb 8.6 по данным каталога, 405892 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 19 = в каталоге 19; воспроизведение — в публичной приёмке",
+     "original_name": "Severance",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/severance/"
+    },
+    {
+     "order": 2,
+     "id": "019154c7-277e-7167-a5f2-0e0c37e02111",
+     "slug": "medlennye-loshadi",
+     "url": "https://zonafilm12.site/title/medlennye-loshadi/",
+     "name": "Медленные лошади",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "5875444",
+      "kinopoisk": "1331649"
+     },
+     "reason": "Провинившихся агентов британской разведки ссылают в отдел Слоу-Хаус, но однажды им дают второй шанс. Шесть сезонов.",
+     "basis": "IMDb 8.3 по данным каталога, 155570 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original; 6-й сезон — с 16.09.2026",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 32 = в каталоге 32; воспроизведение — в публичной приёмке",
+     "original_name": "Slow Horses",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/slow-horses/"
+    },
+    {
+     "order": 3,
+     "id": "019168a3-809b-7827-8b1c-75d9d80c7ad8",
+     "slug": "ukrytie-5",
+     "url": "https://zonafilm12.site/title/ukrytie-5/",
+     "name": "Укрытие",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14688458",
+      "kinopoisk": "4541515"
+     },
+     "reason": "Люди живут в бункере на 144 этажа и верят, что снаружи нельзя дышать.",
+     "basis": "IMDb 8.1 по данным каталога, число голосов в каталоге не указано; Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 30 = в каталоге 30; воспроизведение — в публичной приёмке",
+     "original_name": "Silo",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/silo/"
+    },
+    {
+     "order": 4,
+     "id": "019151e1-59eb-777c-8dd6-103046ee824b",
+     "slug": "utrennee-shou-2",
+     "url": "https://zonafilm12.site/title/utrennee-shou-2/",
+     "name": "Утреннее шоу",
+     "year": 2019,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "7203552",
+      "kinopoisk": "1048143"
+     },
+     "reason": "Закулисье утреннего эфира: ведущая теряет многолетнего партнёра после скандала, а в студии появляется журналистка, для которой правда важнее связей.",
+     "basis": "IMDb 8.1 по данным каталога, 152346 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 40 = в каталоге 40; воспроизведение — в публичной приёмке",
+     "original_name": "The Morning Show",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/the-morning-show/"
+    },
+    {
+     "order": 5,
+     "id": "019154c7-1951-7257-81dd-591d1533cc62",
+     "slug": "chernaya-ptica",
+     "url": "https://zonafilm12.site/title/chernaya-ptica/",
+     "name": "Чёрная птица",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "4301160",
+      "kinopoisk": "4397580"
+     },
+     "reason": "Осуждённому предлагают свободу, если в тюрьме строгого режима он добьётся признания от подозреваемого в серийных убийствах.",
+     "basis": "IMDb 8.1 по данным каталога, 148060 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 6 = в каталоге 6; воспроизведение — в публичной приёмке",
+     "original_name": "Black Bird",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/black-bird/"
+    },
+    {
+     "order": 6,
+     "id": "0195d12d-fff4-74ec-8a8d-a604b45f27cc",
+     "slug": "kinostudiya",
+     "url": "https://zonafilm12.site/title/kinostudiya/",
+     "name": "Киностудия",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "23649128",
+      "kinopoisk": "6579800"
+     },
+     "reason": "Новый глава киностудии запускает дорогой супергеройский фильм — комедия о том, как делают кино.",
+     "basis": "IMDb 8.0 по данным каталога, 70057 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 10 = в каталоге 10; воспроизведение — в публичной приёмке",
+     "original_name": "The Studio",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/the-studio/"
+    },
+    {
+     "order": 7,
+     "id": "01916cbf-53b7-7853-9f1d-e138b0996698",
+     "slug": "uroki-himii",
+     "url": "https://zonafilm12.site/title/uroki-himii/",
+     "name": "Уроки химии",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "13911628",
+      "kinopoisk": "4367624"
+     },
+     "reason": "1950-е: женщина-учёный становится ведущей кулинарного шоу и учит зрительниц не только рецептам.",
+     "basis": "IMDb 8.2 по данным каталога, 56277 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 8 = в каталоге 8; воспроизведение — в публичной приёмке",
+     "original_name": "Lessons in Chemistry",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/lessons-in-chemistry/"
+    },
+    {
+     "order": 8,
+     "id": "01915286-4fbc-7dd6-9e78-5d27f555cff3",
+     "slug": "zagovor-sester-garvi",
+     "url": "https://zonafilm12.site/title/zagovor-sester-garvi/",
+     "name": "Заговор сестёр Гарви",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "15469618",
+      "kinopoisk": "4646634"
+     },
+     "reason": "После гибели зятя страховая компания начинает расследование, и подозрение падает на пятерых сестёр.",
+     "basis": "IMDb 8.2 по данным каталога, 55620 голосов (выгрузка imdb-datasets 14.09.2026); Apple Original",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 18 = в каталоге 18; воспроизведение — в публичной приёмке",
+     "original_name": "Bad Sisters",
+     "source": "Apple TV Press, проверено 27.10.2026",
+     "source_url": "https://www.apple.com/tv-pr/originals/bad-sisters/"
+    }
+   ]
+  },
+  {
+   "key": "universal-pictures",
+   "title": "Universal Pictures: большие фильмы студии",
+   "viewer_request": "Какие фильмы Universal стоит посмотреть?",
+   "intro": "Фильмы, которые Universal Pictures производила или выпускала в прокат: «Одиссея» Кристофера Нолана, «Оппенгеймер», анимация DreamWorks «Дикий робот», «Каскадёры» и «Нет». Принадлежность сверена по источникам, а не по названию.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; состав выбран редакцией по источникам, не комбинация фильтров; индексация не шире раздела витрины"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019f6a7b-fabe-7b8b-8783-c6afc73ff1b6",
+     "slug": "odisseya",
+     "url": "https://zonafilm12.site/title/odisseya/",
+     "name": "Одиссея",
+     "year": 2026,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "33764258",
+      "kinopoisk": "6385370"
+     },
+     "reason": "Одиссей возвращается на Итаку после Троянской войны — через циклопов, сирен и великанов. Режиссёр Кристофер Нолан.",
+     "basis": "Universal Pictures — производство и прокат (Rotten Tomatoes и en.wikipedia, 27.10); IMDb tt33764258 сверен",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "The Odyssey",
+     "source": "Rotten Tomatoes, проверено 27.10.2026",
+     "source_url": "https://www.rottentomatoes.com/m/the_odyssey_2026"
+    },
+    {
+     "order": 2,
+     "id": "0191524c-142d-74e6-8924-6e26cbf83b5c",
+     "slug": "oppengeymer-2023",
+     "url": "https://zonafilm12.site/title/oppengeymer-2023/",
+     "name": "Оппенгеймер (2023)",
+     "year": 2023,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "15398776",
+      "kinopoisk": "4664634"
+     },
+     "reason": "История физика Роберта Оппенгеймера, который во время Второй мировой войны руководил Манхэттенским проектом.",
+     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Oppenheimer",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Oppenheimer_(film)"
+    },
+    {
+     "order": 3,
+     "id": "0192b34c-9591-736b-92ab-97bb022c2d74",
+     "slug": "dikiy-robot",
+     "url": "https://zonafilm12.site/title/dikiy-robot/",
+     "name": "Дикий робот",
+     "year": 2024,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "29623480",
+      "kinopoisk": "5457899"
+     },
+     "reason": "Робот-помощник оказывается на необитаемом острове, учит язык животных и заботится о гусёнке — анимация DreamWorks.",
+     "basis": "DreamWorks Animation, прокат Universal Pictures (en.wikipedia, 27.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "The Wild Robot",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Wild_Robot_(film)"
+    },
+    {
+     "order": 4,
+     "id": "0191511d-126b-7252-97d8-21aaacfa28c5",
+     "slug": "kaskadery",
+     "url": "https://zonafilm12.site/title/kaskadery/",
+     "name": "Каскадёры",
+     "year": 2024,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1684562",
+      "kinopoisk": "535243"
+     },
+     "reason": "Каскадёр возвращается на съёмочную площадку бывшей девушки и ищет пропавшую звезду боевиков.",
+     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "The Fall Guy",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Fall_Guy_(2024_film)"
+    },
+    {
+     "order": 5,
+     "id": "0191524c-5b35-7086-9552-f7516259897e",
+     "slug": "net-2022",
+     "url": "https://zonafilm12.site/title/net-2022/",
+     "name": "Нет (2022)",
+     "year": 2022,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "10954984",
+      "kinopoisk": "1447137"
+     },
+     "reason": "Брат и сестра пытаются спасти семейное ранчо, где разводят лошадей для съёмок, и замечают в окрестностях НЛО.",
+     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
+     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Nope",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Nope_(film)"
+    }
+   ]
+  }
+ ]
+}

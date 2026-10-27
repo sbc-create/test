@@ -1,0 +1,100 @@
+{
+ "schema": "site-announcements/1",
+ "site": "zonafilm12.site",
+ "site_id": "zona-03",
+ "updated": "2026-10-27",
+ "title": "Ждём премьеру",
+ "intro": "Объявленные зарубежные релизы с официальными датами. Это не доступные просмотры: даты относятся к кино или платформе за рубежом, а не к появлению на нашем сайте. Список — выбор редакции, а не измеренный рейтинг ожидания.",
+ "note": "Narnia: The Magician’s Nephew не включена: кино 12.02.2027, Netflix 02.04.2027 (netflix.com/tudum, 15.10.2026). Порядок — по дате выпуска.",
+ "items": [
+  {
+   "order": 1,
+   "name": "Голодные игры: Рассвет жатвы",
+   "original_name": "The Hunger Games: Sunrise on the Reaping",
+   "release": {
+    "date": "2026-11-20",
+    "kind": "кинотеатральный",
+    "territory": "США, IMAX"
+   },
+   "source": "https://hungergames.movie/",
+   "reason": "Экранизация романа Сьюзен Коллинз: молодые годы Хеймитча Эбернети и 50-е Голодные игры, в которых он победил. Режиссёр Фрэнсис Лоуренс.",
+   "catalog": null,
+   "checked": "27.10.2026: дата и вид выпуска — en.wikipedia (The Hunger Games: Sunrise on the Reaping (film), tt32558705) и ru.wikipedia; официальная страница даты в тексте не показывает; в каталоге записи нет"
+  },
+  {
+   "order": 2,
+   "name": "The Further Mis-Adventures of Cliff Booth",
+   "original_name": "The Further Mis-Adventures of Cliff Booth",
+   "release": {
+    "date": "2026-11-25",
+    "kind": "кинотеатральный",
+    "territory": "IMAX, ограниченный двухнедельный показ",
+    "second": {
+     "date": "2026-12-23",
+     "kind": "платформа",
+     "territory": "Netflix"
+    }
+   },
+   "source": "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+   "reason": "Фильм Netflix: режиссёр Дэвид Финчер, сценарий Квентина Тарантино, Брэд Питт снова в роли Клиффа Бута.",
+   "catalog": null,
+   "checked": "27.10.2026: netflix.com/tudum (статья 21.09.2026); в каталоге записи нет"
+  },
+  {
+   "order": 3,
+   "name": "Focker-In-Law",
+   "original_name": "Focker-In-Law",
+   "release": {
+    "date": "2026-11-25",
+    "kind": "кинотеатральный",
+    "territory": "США"
+   },
+   "source": "https://www.universalpictures.com/movies/focker-in-law/",
+   "reason": "Новая комедия Universal с Робертом Де Ниро, Беном Стиллером и Арианой Гранде.",
+   "catalog": null,
+   "checked": "27.10.2026: universalpictures.com («Only in theaters»); русское название не подтверждено источником — оригинальное; в каталоге записи нет"
+  },
+  {
+   "order": 4,
+   "name": "Way of the Warrior Kid",
+   "original_name": "Way of the Warrior Kid",
+   "release": {
+    "date": "2026-11-25",
+    "kind": "платформа",
+    "territory": "Apple TV"
+   },
+   "source": "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+   "reason": "Фильм Apple Original режиссёра Макджи с Крисом Прэттом и Джудом Хиллом.",
+   "catalog": null,
+   "checked": "27.10.2026: apple.com/tv-pr; русское название не подтверждено источником — оригинальное; в каталоге записи нет"
+  },
+  {
+   "order": 5,
+   "name": "Дюна: Часть третья",
+   "original_name": "Dune: Part Three",
+   "release": {
+    "date": "2026-12-18",
+    "kind": "кинотеатральный",
+    "territory": "США, IMAX"
+   },
+   "source": "https://www.warnerbros.com/movies/dune-part-three",
+   "reason": "Третий и заключительный фильм трилогии Дени Вильнёва.",
+   "catalog": null,
+   "checked": "27.10.2026: дата — en.wikipedia и ru.wikipedia (tt31378509); официальная страница Warner Bros. даты в тексте не показывает; в каталоге записи нет"
+  },
+  {
+   "order": 6,
+   "name": "Мстители: Доктор Дум",
+   "original_name": "Avengers: Doomsday",
+   "release": {
+    "date": "2026-12-18",
+    "kind": "кинотеатральный",
+    "territory": "США (Великобритания — 16.12)"
+   },
+   "source": "https://www.marvel.com/movies/avengers-doomsday",
+   "reason": "Новый фильм о Мстителях режиссёров Энтони и Джо Руссо.",
+   "catalog": null,
+   "checked": "27.10.2026: marvel.com ответил 403; дата — en.wikipedia (США 18.12, Великобритания 16.12), русское название — ru.wikipedia; в каталоге записи нет"
+  }
+ ]
+}
