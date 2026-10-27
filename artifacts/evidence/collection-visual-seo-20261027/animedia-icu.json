@@ -1,0 +1,180 @@
+{
+ "checked_at": "13:35:45Z",
+ "pages": {
+  "https://animedia.icu/collection/letniy-sezon-2026-celikom/": {
+   "390": {
+    "cards": 5,
+    "first_row": 2,
+    "poster_w": 172,
+    "poster_h": 258,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Статус выхода и число серий — по Shikimori."
+   },
+   "1440": {
+    "cards": 5,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Статус выхода и число серий — по Shikimori."
+   },
+   "1920": {
+    "cards": 5,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Статус выхода и число серий — по Shikimori."
+   }
+  },
+  "https://animedia.icu/collection/anime-serialy-kotorye-stoit-posmotret/": {
+   "390": {
+    "cards": 8,
+    "first_row": 2,
+    "poster_w": 172,
+    "poster_h": 258,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb."
+   },
+   "1440": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb."
+   },
+   "1920": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb."
+   }
+  },
+  "https://animedia.icu/collection/anime-odin-sezon/": {
+   "390": {
+    "cards": 8,
+    "first_row": 2,
+    "poster_w": 172,
+    "poster_h": 258,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   },
+   "1440": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   },
+   "1920": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   }
+  },
+  "https://animedia.icu/collection/anime-filmy-na-vecher/": {
+   "390": {
+    "cards": 8,
+    "first_row": 2,
+    "poster_w": 172,
+    "poster_h": 258,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   },
+   "1440": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   },
+   "1920": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки — IMDb."
+   }
+  },
+  "https://animedia.icu/collection/anime-filmy-po-serialam/": {
+   "390": {
+    "cards": 8,
+    "first_row": 2,
+    "poster_w": 172,
+    "poster_h": 258,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+   },
+   "1440": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+   },
+   "1920": {
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+   }
+  }
+ }
+}
