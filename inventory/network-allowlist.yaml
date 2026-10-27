@@ -280,3 +280,44 @@ hosts:
     host: www.bfi.org.uk
     purpose: "редакционные списки (/articles/type/lists)"
     methods: [GET]
+
+  # --- источники редакционных подборок главной (только чтение) --------------
+  # Задание владельца 27.10.2026 (получено после 08:01Z, первая date -u после
+  # него — 08:56:26Z), `docs/seo-operator/TASK_20261027_HOME_COLLECTIONS.md`:
+  # адреса перечислены владельцем дословно как «источники для сверки рецензий и
+  # количества оценок» и «официальные источники» дат и принадлежности. Только
+  # GET. С сайта берутся только проверяемые факты (дата и вид выпуска,
+  # территория, студия/платформа, процент рецензий и их число как отдельное
+  # основание отбора); тексты, постеры и описания не копируются. Решение — D224.
+  - ref: owner-rottentomatoes
+    host: www.rottentomatoes.com
+    purpose: "сверка рецензий: доля положительных и число рецензий/оценок (/m/<фильм>)"
+    methods: [GET]
+  - ref: owner-boxofficemojo
+    host: www.boxofficemojo.com
+    purpose: "мировые сборы 2026 (/year/world/2026/) — отдельное основание, не рейтинг"
+    methods: [GET]
+  - ref: owner-hungergames
+    host: hungergames.movie
+    purpose: "официальный сайт: дата и вид выпуска The Hunger Games: Sunrise on the Reaping"
+    methods: [GET]
+  - ref: owner-universal
+    host: www.universalpictures.com
+    purpose: "официальный сайт студии: Focker-In-Law, фильмы Universal"
+    methods: [GET]
+  - ref: owner-apple-tv-pr
+    host: www.apple.com
+    purpose: "Apple TV PR (/tv-pr/originals/...): принадлежность и даты Apple Original"
+    methods: [GET]
+  - ref: owner-warnerbros
+    host: www.warnerbros.com
+    purpose: "официальный сайт студии: Dune: Part Three"
+    methods: [GET]
+  - ref: owner-marvel
+    host: www.marvel.com
+    purpose: "официальный сайт: Avengers: Doomsday"
+    methods: [GET]
+  - ref: owner-sonypictures
+    host: www.sonypictures.com
+    purpose: "официальный сайт студии: фильмы Sony Pictures (/movies)"
+    methods: [GET]
