@@ -1,0 +1,67 @@
+{
+ "измерено": "2026-10-27T10:20:14Z",
+ "сегодня": "2026-10-27",
+ "витрины": [
+  {
+   "витрина": "animedia-01",
+   "подборки": {
+    "витрина": "animedia-01",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/animedia-icu/config/collections.json",
+    "подборок": 4,
+    "работ": 32,
+    "беды": [],
+    "исход": "чисто",
+    "ревизия каталога": "a318c944a98c4ade9c5cae0e7762eb9d"
+   },
+   "анонсы": {
+    "витрина": "animedia-01",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/animedia-icu/config/announcements.json",
+    "анонсов": 0,
+    "показано": 0,
+    "беды": [],
+    "исход": "чисто",
+    "примечание": "файла анонсов нет — блок на витрине не показывается"
+   }
+  },
+  {
+   "витрина": "zona-01",
+   "подборки": {
+    "витрина": "zona-01",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space/config/collections.json",
+    "подборок": 5,
+    "работ": 33,
+    "беды": [],
+    "исход": "чисто",
+    "ревизия каталога": "a318c944a98c4ade9c5cae0e7762eb9d"
+   },
+   "анонсы": {
+    "витрина": "zona-01",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm-space/config/announcements.json",
+    "анонсов": 6,
+    "показано": 6,
+    "беды": [],
+    "исход": "чисто"
+   }
+  },
+  {
+   "витрина": "zona-03",
+   "подборки": {
+    "витрина": "zona-03",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm12-site/config/collections.json",
+    "подборок": 6,
+    "работ": 47,
+    "беды": [],
+    "исход": "чисто",
+    "ревизия каталога": "a318c944a98c4ade9c5cae0e7762eb9d"
+   },
+   "анонсы": {
+    "витрина": "zona-03",
+    "файл": "/home/claude/wt-nova-publish-memory-02/var/site-repos/zonafilm12-site/config/announcements.json",
+    "анонсов": 6,
+    "показано": 6,
+    "беды": [],
+    "исход": "чисто"
+   }
+  }
+ ]
+}
