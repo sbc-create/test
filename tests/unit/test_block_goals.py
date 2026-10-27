@@ -110,3 +110,16 @@ def test_инструмент_отказывает_без_отправки_це�
         и = subprocess.run([sys.executable, str(ИНСТРУМЕНТ), str(ф)],
                            capture_output=True, text=True, timeout=120)
     assert и.returncode != 0 and "ОТКАЗ" in (и.stdout + и.stderr)
+
+
+@pytest.mark.parametrize("путь", (*ВИТРИНЫ, КАНОН), ids=lambda п: п.parts[-3])
+def test_наблюдатель_ждёт_разметку(путь):
+    """Регресс 27.10: скрипт целей стоит в head и исполнялся ДО разбора body —
+    `querySelectorAll` не находил ни одного блока, и `block_view` не уходил
+    никогда. Живой перехват это и показал: `block_click` приходил, показ — нет.
+    """
+    разметка, _ = _разметка(путь)
+    assert "DOMContentLoaded" in разметка, разметка[-400:]
+    assert "document.readyState==='loading'" in разметка
+    # Пустой список блоков не создаёт наблюдателя впустую.
+    assert "if(!бл.length){return;}" in разметка

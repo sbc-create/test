@@ -881,14 +881,20 @@ def цели_метрики(номер: str) -> str:
         "},true);"
         # Показ блока: половина высоты в экране. Одна отправка на загрузку
         # страницы, иначе прокрутка туда-сюда накрутила бы показы.
-        "try{if(window.IntersectionObserver){"
+        "function начать(){try{if(!window.IntersectionObserver){return;}"
         "var o=new IntersectionObserver(function(es){"
         "for(var i=0;i<es.length;i++){if(es[i].isIntersecting){"
         "window.__sfGoalOnce('block_view');o.disconnect();return;}}},"
         "{threshold:0.5});"
-        "document.querySelectorAll('[data-block-key]').forEach(function(el){"
-        "o.observe(el);});"
-        "}}catch(e){}"
+        "var бл=document.querySelectorAll('[data-block-key]');"
+        "if(!бл.length){return;}"
+        "for(var j=0;j<бл.length;j++){o.observe(бл[j]);}"
+        "}catch(e){}}"
+        # Скрипт стоит в head и исполняется ДО разбора body: в этот момент
+        # блоков в документе ещё нет, и наблюдать нечего. Поэтому установка
+        # откладывается до готовности разметки.
+        "if(document.readyState==='loading'){"
+        "document.addEventListener('DOMContentLoaded',начать);}else{начать();}"
         "})();</script>"
     )
 
