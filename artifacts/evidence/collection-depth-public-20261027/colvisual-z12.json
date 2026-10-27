@@ -1,0 +1,210 @@
+{
+ "checked_at": "16:37:05Z",
+ "pages": {
+  "https://zonafilm12.site/collection/apple-tv-serialy/": {
+   "390": {
+    "first_card_top": 408,
+    "viewport_h": 664,
+    "cards": 20,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность — по Викиданным и страницам Apple TV Press. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 20,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность — по Викиданным и страницам Apple TV Press. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 20,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность — по Викиданным и страницам Apple TV Press. Оценки — IMDb."
+   }
+  },
+  "https://zonafilm12.site/collection/serialy-na-vecher-vybor-redakcii/": {
+   "390": {
+    "first_card_top": 408,
+    "viewport_h": 664,
+    "cards": 16,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске."
+   },
+   "1440": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 16,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске."
+   },
+   "1920": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 16,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске."
+   }
+  },
+  "https://zonafilm12.site/collection/sony-pictures/": {
+   "390": {
+    "first_card_top": 408,
+    "viewport_h": 664,
+    "cards": 15,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Прокат Columbia Pictures — по Википедии. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Прокат Columbia Pictures — по Википедии. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Прокат Columbia Pictures — по Википедии. Оценки — IMDb."
+   }
+  },
+  "https://zonafilm12.site/collection/universal-pictures/": {
+   "390": {
+    "first_card_top": 426,
+    "viewport_h": 664,
+    "cards": 15,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Студия и прокат — по Википедии. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Студия и прокат — по Википедии. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Студия и прокат — по Википедии. Оценки — IMDb."
+   }
+  },
+  "https://zonafilm12.site/collection/komedii-na-vecher-2026/": {
+   "390": {
+    "first_card_top": 379,
+    "viewport_h": 664,
+    "cards": 8,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 8,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   }
+  }
+ }
+}

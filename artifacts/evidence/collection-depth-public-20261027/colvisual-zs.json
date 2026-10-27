@@ -1,0 +1,210 @@
+{
+ "checked_at": "16:36:26Z",
+ "pages": {
+  "https://zonafilm.space/collection/serialy-kotorye-stoit-posmotret/": {
+   "390": {
+    "first_card_top": 428,
+    "viewport_h": 664,
+    "cards": 20,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске."
+   },
+   "1440": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 20,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске."
+   },
+   "1920": {
+    "first_card_top": 374,
+    "viewport_h": 1000,
+    "cards": 20,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске."
+   }
+  },
+  "https://zonafilm.space/collection/netflix-serialy/": {
+   "390": {
+    "first_card_top": 481,
+    "viewport_h": 664,
+    "cards": 17,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность Netflix — по Викиданным (оригинальный вещатель). Оценки и число голосов — IMDb."
+   },
+   "1440": {
+    "first_card_top": 392,
+    "viewport_h": 1000,
+    "cards": 17,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность Netflix — по Викиданным (оригинальный вещатель). Оценки и число голосов — IMDb."
+   },
+   "1920": {
+    "first_card_top": 392,
+    "viewport_h": 1000,
+    "cards": 17,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Принадлежность Netflix — по Викиданным (оригинальный вещатель). Оценки и число голосов — IMDb."
+   }
+  },
+  "https://zonafilm.space/collection/luchshee-2026/": {
+   "390": {
+    "first_card_top": 445,
+    "viewport_h": 664,
+    "cards": 10,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Первые четыре — по Rotten Tomatoes, остальные — IMDb от 7.0 при 10 000+ голосов. Кассовые сборы — не оценка."
+   },
+   "1440": {
+    "first_card_top": 392,
+    "viewport_h": 1000,
+    "cards": 10,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Первые четыре — по Rotten Tomatoes, остальные — IMDb от 7.0 при 10 000+ голосов. Кассовые сборы — не оценка."
+   },
+   "1920": {
+    "first_card_top": 392,
+    "viewport_h": 1000,
+    "cards": 10,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Первые четыре — по Rotten Tomatoes, остальные — IMDb от 7.0 при 10 000+ голосов. Кассовые сборы — не оценка."
+   }
+  },
+  "https://zonafilm.space/collection/trillery-na-vecher-2026/": {
+   "390": {
+    "first_card_top": 397,
+    "viewport_h": 664,
+    "cards": 9,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 9,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 9,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb."
+   }
+  },
+  "https://zonafilm.space/collection/fantastika-2026/": {
+   "390": {
+    "first_card_top": 415,
+    "viewport_h": 664,
+    "cards": 7,
+    "first_row": 2,
+    "poster_w": 177,
+    "poster_h": 266,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   },
+   "1440": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 7,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   },
+   "1920": {
+    "first_card_top": 344,
+    "viewport_h": 1000,
+    "cards": 7,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+   }
+  }
+ }
+}

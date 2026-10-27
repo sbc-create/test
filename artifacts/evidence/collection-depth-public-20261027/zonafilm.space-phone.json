@@ -1,0 +1,76 @@
+{
+ "site": "zonafilm.space",
+ "device": "phone",
+ "started": "16:38:27Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 80,
+ "rail_imgs": 20,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [
+  {
+   "src": "afilm.space/poster/01916711-6492-7090-8781-703ad1852af4.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "afilm.space/poster/0191518d-651c-7b22-9a4b-0962c54db2ec.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "afilm.space/poster/01916717-cc6d-75b4-9fa2-d8d4ffa32edd.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "afilm.space/poster/0191671d-66c0-78b8-af2b-8c210ed3af5e.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": false
+  }
+ ],
+ "rail_first": "/title/ostrye-kozyrki/",
+ "home_to_card_s": 0.67,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.6,
+   4.6,
+   5.7,
+   6.7
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.43,
+ "collection_first": "/title/hod-korolevy/",
+ "collection_to_card_s": 0.6,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.3,
+   4.3,
+   5.3,
+   6.4
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "16:39:27Z"
+}

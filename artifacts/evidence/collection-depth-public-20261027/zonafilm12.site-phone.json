@@ -1,0 +1,90 @@
+{
+ "site": "zonafilm12.site",
+ "device": "phone",
+ "started": "16:40:13Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-na-vecher-vybor-redakcii",
+ "rail_top_px": 80,
+ "rail_imgs": 16,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [
+  {
+   "src": "film12.site/poster/0191526d-e8c7-76d8-8797-80e09272eaa1.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "film12.site/poster/0191671d-66c0-78b8-af2b-8c210ed3af5e.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "film12.site/poster/0191529d-7182-7278-a52d-ca19d4a5f6f7.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "film12.site/poster/01915285-7068-7720-af12-2cc4b8d9bd62.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": false
+  },
+  {
+   "src": "film12.site/poster/0197f895-a1ac-7287-b864-839cfc9c3250.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": false
+  },
+  {
+   "src": "film12.site/poster/019154c7-277e-7167-a5f2-0e0c37e02111.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": false
+  }
+ ],
+ "rail_first": "/title/sherlok/",
+ "home_to_card_s": 0.56,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.8,
+   4.8,
+   5.8,
+   6.8
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.5,
+ "collection_first": "/title/razdelenie/",
+ "collection_to_card_s": 0.36,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.5,
+   4.5,
+   5.5,
+   6.5
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "16:41:04Z"
+}
