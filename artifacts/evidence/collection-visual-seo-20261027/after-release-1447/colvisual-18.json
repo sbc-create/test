@@ -1,0 +1,817 @@
+{
+ "run": "colvisual.py, 18 страниц × 390(iPhone 13: 390×664)/1440/1920, UA factory-seo-acceptance",
+ "releases": {
+  "animedia.icu": "76bee39",
+  "zonafilm.space": "517e203",
+  "zonafilm12.site": "8c7659b"
+ },
+ "sites": {
+  "zs": {
+   "checked_at": "14:47:38Z",
+   "pages": {
+    "https://zonafilm.space/collection/serialy-kotorye-stoit-posmotret/": {
+     "390": {
+      "first_card_top": 406,
+      "viewport_h": 664,
+      "cards": 9,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске.",
+      "row_bottom": 670,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 9,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 9,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес к сериалам — популярное на Кинопоиске."
+     }
+    },
+    "https://zonafilm.space/collection/luchshee-2026/": {
+     "390": {
+      "first_card_top": 454,
+      "viewport_h": 664,
+      "cards": 4,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Выбор учитывает отзывы критиков и зрителей (Rotten Tomatoes); кассовые сборы (Box Office Mojo) — отдельный признак, а не оценка.",
+      "row_bottom": 718,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 392,
+      "viewport_h": 1000,
+      "cards": 4,
+      "first_row": 4,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Выбор учитывает отзывы критиков и зрителей (Rotten Tomatoes); кассовые сборы (Box Office Mojo) — отдельный признак, а не оценка."
+     },
+     "1920": {
+      "first_card_top": 392,
+      "viewport_h": 1000,
+      "cards": 4,
+      "first_row": 4,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Выбор учитывает отзывы критиков и зрителей (Rotten Tomatoes); кассовые сборы (Box Office Mojo) — отдельный признак, а не оценка."
+     }
+    },
+    "https://zonafilm.space/collection/netflix-serialy/": {
+     "390": {
+      "first_card_top": 441,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность Netflix — по Википедии. Оценки — IMDb.",
+      "row_bottom": 705,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность Netflix — по Википедии. Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность Netflix — по Википедии. Оценки — IMDb."
+     }
+    },
+    "https://zonafilm.space/collection/trillery-na-vecher-2026/": {
+     "390": {
+      "first_card_top": 406,
+      "viewport_h": 664,
+      "cards": 6,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb.",
+      "row_bottom": 670,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 6,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 6,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма, а не дата появления на сайте. Оценки — IMDb."
+     }
+    },
+    "https://zonafilm.space/collection/mini-serialy-rassledovaniya/": {
+     "390": {
+      "first_card_top": 460,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Число серий — по данным каталога сайта.",
+      "row_bottom": 724,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Число серий — по данным каталога сайта."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Число серий — по данным каталога сайта."
+     }
+    },
+    "https://zonafilm.space/collection/fantastika-2026/": {
+     "390": {
+      "first_card_top": 424,
+      "viewport_h": 664,
+      "cards": 6,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb.",
+      "row_bottom": 688,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 6,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 6,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+     }
+    }
+   }
+  },
+  "z12": {
+   "checked_at": "14:48:39Z",
+   "pages": {
+    "https://zonafilm12.site/collection/serialy-na-vecher-vybor-redakcii/": {
+     "390": {
+      "first_card_top": 386,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске.",
+      "row_bottom": 650,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb; интерес — популярное на Кинопоиске."
+     }
+    },
+    "https://zonafilm12.site/collection/apple-tv-serialy/": {
+     "390": {
+      "first_card_top": 369,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность — по страницам Apple TV Press.",
+      "row_bottom": 633,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 324,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность — по страницам Apple TV Press."
+     },
+     "1920": {
+      "first_card_top": 324,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Принадлежность — по страницам Apple TV Press."
+     }
+    },
+    "https://zonafilm12.site/collection/universal-pictures/": {
+     "390": {
+      "first_card_top": 385,
+      "viewport_h": 664,
+      "cards": 5,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Студия и прокат — по Википедии и Rotten Tomatoes.",
+      "row_bottom": 649,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 324,
+      "viewport_h": 1000,
+      "cards": 5,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Студия и прокат — по Википедии и Rotten Tomatoes."
+     },
+     "1920": {
+      "first_card_top": 324,
+      "viewport_h": 1000,
+      "cards": 5,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Студия и прокат — по Википедии и Rotten Tomatoes."
+     }
+    },
+    "https://zonafilm12.site/collection/sony-pictures/": {
+     "390": {
+      "first_card_top": 369,
+      "viewport_h": 664,
+      "cards": 7,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Прокат Sony Pictures — по Википедии.",
+      "row_bottom": 633,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 7,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Прокат Sony Pictures — по Википедии."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 7,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Прокат Sony Pictures — по Википедии."
+     }
+    },
+    "https://zonafilm12.site/collection/serialy-2025-2026/": {
+     "390": {
+      "first_card_top": 424,
+      "viewport_h": 664,
+      "cards": 9,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb.",
+      "row_bottom": 688,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 9,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 9,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+     }
+    },
+    "https://zonafilm12.site/collection/komedii-na-vecher-2026/": {
+     "390": {
+      "first_card_top": 388,
+      "viewport_h": 664,
+      "cards": 7,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb.",
+      "row_bottom": 652,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 7,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 344,
+      "viewport_h": 1000,
+      "cards": 7,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Год — год выхода фильма. Оценки — IMDb."
+     }
+    },
+    "https://zonafilm12.site/collection/istoricheskie-sagi/": {
+     "390": {
+      "first_card_top": 393,
+      "viewport_h": 664,
+      "cards": 10,
+      "first_row": 2,
+      "poster_w": 176,
+      "poster_h": 264,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": null,
+      "row_bottom": 657,
+      "row_lt_844": true,
+      "row_lt_664": true
+     },
+     "1440": {
+      "first_card_top": 312,
+      "viewport_h": 1000,
+      "cards": 10,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": null
+     },
+     "1920": {
+      "first_card_top": 312,
+      "viewport_h": 1000,
+      "cards": 10,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": null
+     }
+    }
+   }
+  },
+  "am": {
+   "checked_at": "14:49:41Z",
+   "pages": {
+    "https://animedia.icu/collection/anime-serialy-kotorye-stoit-posmotret/": {
+     "390": {
+      "first_card_top": 542,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 172,
+      "poster_h": 258,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb.",
+      "row_bottom": 800,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb."
+     },
+     "1920": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки и их число — IMDb."
+     }
+    },
+    "https://animedia.icu/collection/letniy-sezon-2026-celikom/": {
+     "390": {
+      "first_card_top": 613,
+      "viewport_h": 664,
+      "cards": 5,
+      "first_row": 2,
+      "poster_w": 172,
+      "poster_h": 258,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Статус выхода и число серий — по Shikimori.",
+      "row_bottom": 871,
+      "row_lt_844": false,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 390,
+      "viewport_h": 1000,
+      "cards": 5,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Статус выхода и число серий — по Shikimori."
+     },
+     "1920": {
+      "first_card_top": 390,
+      "viewport_h": 1000,
+      "cards": 5,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Статус выхода и число серий — по Shikimori."
+     }
+    },
+    "https://animedia.icu/collection/anime-odin-sezon/": {
+     "390": {
+      "first_card_top": 559,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 172,
+      "poster_h": 258,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb.",
+      "row_bottom": 817,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb."
+     }
+    },
+    "https://animedia.icu/collection/anime-filmy-po-serialam/": {
+     "390": {
+      "first_card_top": 479,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 172,
+      "poster_h": 258,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb.",
+      "row_bottom": 737,
+      "row_lt_844": true,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 336,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+     },
+     "1920": {
+      "first_card_top": 336,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Порядок — по числу зрительских оценок на IMDb."
+     }
+    },
+    "https://animedia.icu/collection/anime-filmy-na-vecher/": {
+     "390": {
+      "first_card_top": 601,
+      "viewport_h": 664,
+      "cards": 8,
+      "first_row": 2,
+      "poster_w": 172,
+      "poster_h": 258,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb.",
+      "row_bottom": 859,
+      "row_lt_844": false,
+      "row_lt_664": false
+     },
+     "1440": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb."
+     },
+     "1920": {
+      "first_card_top": 357,
+      "viewport_h": 1000,
+      "cards": 8,
+      "first_row": 5,
+      "poster_w": 255,
+      "poster_h": 383,
+      "ratio": 0.67,
+      "title_gap_px": 0,
+      "hscroll": false,
+      "status": 200,
+      "sources_note_shown": "Оценки — IMDb."
+     }
+    }
+   }
+  }
+ }
+}
