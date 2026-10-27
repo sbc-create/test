@@ -666,3 +666,189 @@ sources:
     status: unavailable_blocked
     evidence: "WebFetch: страница показывает «Некоторые данные могут быть временно недоступны», частотности нет (в окне 15:55–16:17Z 26.10)"
     required_for: "поисковая частотность названий в Яндексе; без неё частотность не приводится"
+  - id: SRC-RT-PROJECT-HAIL-MARY
+    kind: review_aggregator
+    owner: Rotten Tomatoes (Fandango)
+    url: https://www.rottentomatoes.com/m/project_hail_mary
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Project Hail Mary: доля положительных рецензий и их число, Popcornmeter, даты и вид выпуска, дистрибьютор — основание отбора, не средняя оценка"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-RT-THE-ODYSSEY-2026
+    kind: review_aggregator
+    owner: Rotten Tomatoes (Fandango)
+    url: https://www.rottentomatoes.com/m/the_odyssey_2026
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "The Odyssey (2026): доля положительных рецензий и их число, Popcornmeter, даты и вид выпуска, дистрибьютор — основание отбора, не средняя оценка"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-RT-SPIDER-MAN-BRAND-NEW-DAY
+    kind: review_aggregator
+    owner: Rotten Tomatoes (Fandango)
+    url: https://www.rottentomatoes.com/m/spider_man_brand_new_day
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Spider-Man: Brand New Day: доля положительных рецензий и их число, Popcornmeter, даты и вид выпуска, дистрибьютор — основание отбора, не средняя оценка"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-RT-HOPPERS
+    kind: review_aggregator
+    owner: Rotten Tomatoes (Fandango)
+    url: https://www.rottentomatoes.com/m/hoppers
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Hoppers: доля положительных рецензий и их число, Popcornmeter, даты и вид выпуска, дистрибьютор — основание отбора, не средняя оценка"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-BOM-WORLD-2026
+    kind: box_office
+    owner: Box Office Mojo (IMDbPro)
+    url: https://www.boxofficemojo.com/year/world/2026/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "мировые сборы 2026 — отдельное основание, не оценка; дата актуальности на странице не указана"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-HUNGERGAMES-OFFICIAL
+    kind: official_site
+    owner: Lionsgate
+    url: https://hungergames.movie/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "официальный сайт фильма; даты выпуска в тексте нет — дата сверена по Википедии"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-NETFLIX-CLIFF-BOOTH
+    kind: official_platform
+    owner: Netflix
+    url: https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Cliff Booth: IMAX 25.11.2026, Netflix 23.12.2026; Финчер, Тарантино, Питт"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-NETFLIX-FALL-2026
+    kind: official_platform
+    owner: Netflix
+    url: https://www.netflix.com/tudum/features/new-fall-movies-on-netflix-2026
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "фильмы Netflix осени 2026: Animals (Аффлек, 09.10), UNABOMBER (Мец, 25.09)"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-NETFLIX-NARNIA
+    kind: official_platform
+    owner: Netflix
+    url: https://www.netflix.com/tudum/articles/narnia-release-date
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Narnia: The Magician’s Nephew — кино 12.02.2027, Netflix 02.04.2027"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-UNIVERSAL-FOCKER
+    kind: official_studio
+    owner: Universal Pictures
+    url: https://www.universalpictures.com/movies/focker-in-law/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "Focker-In-Law: 25.11.2026, только кинотеатры, США; актёры"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-WAY-OF-THE-WARRIOR-KID
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "way-of-the-warrior-kid: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-SEVERANCE
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/severance/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "severance: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-SLOW-HORSES
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/slow-horses/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "slow-horses: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-THE-STUDIO
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/the-studio/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "the-studio: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-LESSONS-IN-CHEMISTRY
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/lessons-in-chemistry/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "lessons-in-chemistry: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-BAD-SISTERS
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/bad-sisters/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "bad-sisters: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-THE-MORNING-SHOW
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/the-morning-show/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "the-morning-show: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-SILO
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/silo/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "silo: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-APPLE-TVPR-BLACK-BIRD
+    kind: official_platform
+    owner: Apple TV Press
+    url: https://www.apple.com/tv-pr/originals/black-bird/
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "black-bird: принадлежность Apple Original, даты"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-WB-DUNE3
+    kind: official_studio
+    owner: Warner Bros.
+    url: https://www.warnerbros.com/movies/dune-part-three
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "официальная страница; даты в тексте нет — дата сверена по Википедии"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+  - id: SRC-MARVEL-DOOMSDAY
+    kind: official_studio
+    owner: Marvel Studios
+    url: https://www.marvel.com/movies/avengers-doomsday
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: unavailable_blocked
+    scope: "официальная страница Avengers: Doomsday"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+    evidence: "WebFetch: HTTP 403 Forbidden (27.10, окно 08:56–09:14Z); дата и название сверены по en/ru.wikipedia"
+  - id: SRC-SONY-MOVIES
+    kind: official_studio
+    owner: Sony Pictures
+    url: https://www.sonypictures.com/movies
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: unavailable_blocked
+    scope: "список фильмов Sony Pictures"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
+    evidence: "WebFetch: «unable to fetch from www.sonypictures.com» (27.10, окно 08:56–09:14Z); принадлежность сверена по en.wikipedia"
+  - id: SRC-WIKI-HOME-20261027
+    kind: encyclopedia
+    owner: Wikipedia (en, ru)
+    url: https://en.wikipedia.org/wiki/The_Odyssey_(2026_film)
+    retrieved_at: "2026-10-27T09:14:36Z"
+    status: approved
+    scope: "идентичность (IMDb ID) и даты: The Odyssey (ru: tt33764258), Unabomber (tt6933238), Animals (tt31049299), The Social Reckoning (tt37510326), Hunger Games: Sunrise on the Reaping (tt32558705), Dune: Part Three (tt31378509), Avengers: Doomsday; дистрибьюторы Oppenheimer, The Wild Robot, The Fall Guy, Nope, Wicked: For Good, Spider-Man: Brand New Day"
+    method: "WebFetch (пересказ фактов), в окне 08:56–09:14Z 27.10 (date -u); задание владельца 27.10 (TASK_20261027_HOME_COLLECTIONS.md), D224"
