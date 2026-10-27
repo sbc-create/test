@@ -1,0 +1,128 @@
+{
+ "checked_at": "19:32:53Z",
+ "pages": {
+  "https://animedia.icu/collection/anime-filmy-na-vecher/": {
+   "390": {
+    "first_card_top": 557,
+    "viewport_h": 664,
+    "cards": 15,
+    "first_row": 2,
+    "poster_w": 173,
+    "poster_h": 260,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия — Shikimori."
+   },
+   "1440": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия — Shikimori."
+   },
+   "1920": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 15,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия — Shikimori."
+   }
+  },
+  "https://animedia.icu/collection/anime-serialy-kotorye-stoit-posmotret/": {
+   "390": {
+    "first_card_top": 554,
+    "viewport_h": 664,
+    "cards": 13,
+    "first_row": 2,
+    "poster_w": 173,
+    "poster_h": 260,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; статус и число серий — Shikimori."
+   },
+   "1440": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 13,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; статус и число серий — Shikimori."
+   },
+   "1920": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 13,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; статус и число серий — Shikimori."
+   }
+  },
+  "https://animedia.icu/collection/korotkie-anime-serialy/": {
+   "390": {
+    "first_card_top": 512,
+    "viewport_h": 664,
+    "cards": 12,
+    "first_row": 2,
+    "poster_w": 173,
+    "poster_h": 260,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия и число серий — Shikimori."
+   },
+   "1440": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 12,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия и число серий — Shikimori."
+   },
+   "1920": {
+    "first_card_top": 390,
+    "viewport_h": 1000,
+    "cards": 12,
+    "first_row": 5,
+    "poster_w": 255,
+    "poster_h": 383,
+    "ratio": 0.67,
+    "title_gap_px": 0,
+    "hscroll": false,
+    "status": 200,
+    "sources_note_shown": "Оценки и их число — IMDb; студия и число серий — Shikimori."
+   }
+  }
+ }
+}
