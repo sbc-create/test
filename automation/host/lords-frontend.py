@@ -3896,6 +3896,17 @@ def разметка_плеера(вид, запись: dict, деталь: dict
  try{ cands=JSON.parse(host.getAttribute('data-src-candidates')||'[]')||[]; }catch(e){ cands=[]; }
  var idx=0, token=0, поднялся=false, отказ=false, seen, timers=[], maxFallback=3;
  var baseAttrs={}, progress={t0:0, c0:0, ok:false};
+ /* T338: ПЕРВОЕ нажатие зрителя тратится на разрешение источника.
+    Измерено 27.10 на живых витринах: без нажатия состояние остаётся
+    `resolving` и медиа не появляется даже через двадцать секунд — то есть
+    разрешение запускает именно нажатие. После него состояние доходит до
+    `ready`, а воспроизведение не начинается: нужно второе нажатие, и от
+    первого до `currentTime >= 1` проходит 7–10 секунд (12 прогонов из 12,
+    телефон и компьютер, независимая приёмка линии SEO).
+    Жест у нас УЖЕ есть — мы его просто теряем. Поэтому желание
+    запоминается и применяется к медиа, как только оно появилось. Этапы
+    плеера при этом не меняются: resolving → ready → ok идут как были. */
+ var хотел_играть=false, пуск_сделан=0;
  function el(){ return host.querySelector('video-player'); }
  function clearTimers(){ timers.forEach(clearTimeout); timers=[]; if(seen){clearInterval(seen);seen=null;} }
  function providerShell(node){
@@ -4094,6 +4105,22 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   host.appendChild(n);
   bind(n, ++token);
  }
+ /* Запас, если `play()` отклонён политикой автозапуска: нажать кнопку пуска
+    САМОГО провайдера. Ищется по его разметке в теневом дереве; не найдена —
+    ничего не делаем и ничего не обещаем. */
+ function нажать_кнопку(node){
+  try{
+   var корни=[node && node.shadowRoot], i=0;
+   while(i<корни.length){
+    var r=корни[i++]; if(!r) continue;
+    var b=r.querySelector('.playButton,[aria-label="Смотреть"],[aria-label="Play"]');
+    if(b){ b.click(); return true; }
+    var все=r.querySelectorAll('*');
+    for(var j=0;j<все.length;j++){ if(все[j].shadowRoot) корни.push(все[j].shadowRoot); }
+   }
+  }catch(e){}
+  return false;
+ }
  function markPlaying(evName, ct){
   if(отказ) return;
   поднялся=true;
@@ -4160,6 +4187,17 @@ def разметка_плеера(вид, запись: dict, деталь: dict
    var v=nestedVideo(node);
    fitPlayerTree(node);
    if(v) observeProgress(v, my);
+   /* Донести желание зрителя до появившегося медиа. Условия намеренно узкие:
+      только если зритель НАЖАЛ, только пока ничего не играло (currentTime
+      почти ноль) и только ОДИН раз на этот монтаж. Иначе мы боролись бы с
+      тем, кто поставил на паузу сам. */
+   if(v && хотел_играть && пуск_сделан!==my && v.paused && (v.currentTime||0)<0.25){
+    пуск_сделан=my;
+    try{
+     var обещание=v.play();
+     if(обещание && обещание.catch){ обещание.catch(function(){ нажать_кнопку(node); }); }
+    }catch(e){ нажать_кнопку(node); }
+   }
    if(shell && !поднялся){
     /* Provider chrome mounted — keep resolving/active, never false-fail over it. */
     state('active');
@@ -4178,6 +4216,13 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   },15000));
   ensureLayoutObserver(node, my);
  }
+ /* Нажатие по рамке плеера — это и есть «хочу смотреть». Слушатель стоит на
+    рамке, а не на документе: щелчок по описанию или по меню желанием смотреть
+    не является. `capture` нужен, чтобы жест был записан и тогда, когда его
+    съедает разметка провайдера внутри. */
+ f.addEventListener('click', function(){ хотел_играть=true; }, true);
+ f.addEventListener('touchstart', function(){ хотел_играть=true; },
+                    {capture:true, passive:true});
  var first=el();
  if(first){
   if(!cands.length){
