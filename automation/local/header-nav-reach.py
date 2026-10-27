@@ -94,7 +94,17 @@ def главная(аргв=None) -> int:
     р = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     р.add_argument("--url", required=True, action="append")
     р.add_argument("--json", action="store_true")
+    р.add_argument("--widths", default="",
+                   help="ширины через запятую вместо набора по умолчанию: "
+                        "нужны, когда ищешь, где именно меню перестаёт "
+                        "помещаться, а не проверяешь известные точки")
     а = р.parse_args(аргв)
+    ширины = ШИРИНЫ
+    if а.widths:
+        ширины = tuple(int(ч.strip()) for ч in а.widths.split(",") if ч.strip())
+        if not ширины:
+            print("ОТКАЗ: --widths без ширин", file=sys.stderr)
+            return 2
     from factory.seo.render_check import chromium_path
     from playwright.sync_api import sync_playwright
 
@@ -107,7 +117,7 @@ def главная(аргв=None) -> int:
         бр = pw.chromium.launch(**пуск)
         try:
             for адрес in а.url:
-                for ш in ШИРИНЫ:
+                for ш in ширины:
                     з = проверить(бр, адрес, ш)
                     з["url"] = адрес
                     итоги.append(з)
