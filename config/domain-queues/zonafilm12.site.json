@@ -121,6 +121,20 @@
    "owner": "Архитектор",
    "created": "2026-10-27",
    "updated": "2026-10-27"
+  },
+  {
+   "id": "Q-zonafilm12.site-009",
+   "state": "исследовано",
+   "title": "приоритет загрузки обложек первого экрана есть только у zonafilm.space",
+   "problem": "`заглушка_постера` этой витрины знает единственный режим `loading=\"lazy\"`, а у zonafilm.space первые обложки идут с `loading=\"eager\" fetchpriority=\"high\"` (T334/MOD-149). Первый экран здесь грузится позже без всякой причины",
+   "evidence": "Измерено 27.10 тестом tests/unit/test_poster_sizes_zona.py: в теле `заглушка_постера` у zonafilm-space есть 'loading=\"eager\" fetchpriority=\"high\"', у zonafilm12-site и у канонического automation/host/lords-frontend.py — нет. Проверка витрины poster-priority-zona есть только в репозитории zonafilm-space.",
+   "action": "перенести режимы приоритета в канон и в эту витрину тем же способом, что и прочие общие правки (инструмент по якорям), и завести проверку poster-priority в её checks",
+   "baseline_metric": "режимов приоритета: 1 из 3 витрин линии",
+   "expected_change": "первые обложки первого экрана грузятся сразу на всех трёх",
+   "verify_by": "checks/poster_priority_zona.py в репозитории витрины — код 0",
+   "owner": "Архитектор",
+   "created": "2026-10-27",
+   "updated": "2026-10-27"
   }
  ],
  "baseline": {
