@@ -202,15 +202,24 @@ def test_происхождение_проверяется_и_при_совпа�
     """
     текст = "def общая():\n    return 1\n"
     корень, проект, реестр = _стенд(tmp_path, копия=текст, канон=текст)
+    # Ровно то состояние, которое оставила прежняя редакция инструмента: замок
+    # уже назвал новый коммит, манифест остался на прежнем.
+    замок = json.loads((проект / "pins.lock.json").read_text(encoding="utf-8"))
+    замок["pins"]["source_commit"] = "e" * 40
+    (проект / "pins.lock.json").write_text(
+        json.dumps(замок, ensure_ascii=False, indent=1), encoding="utf-8")
     (проект / "config").mkdir()
     (проект / "config" / "template-manifest.json").write_text(json.dumps({
         "template_origin": {"source_commit": "0" * 40, "source_dirty": False,
                             "build_id": "template-000000000000",
                             "note": "Происхождение закреплённого шаблона."},
     }, ensure_ascii=False, indent=1), encoding="utf-8")
-    monkeypatch.setattr(модуль, "коммит_фабрики", lambda корень=None: ("e" * 40, False))
+    # HEAD фабрики НАМЕРЕННО третий: происхождение обязано выровняться по
+    # ЗАМКУ, а не по свежему коммиту — в проекте установлено то, что в замке.
+    monkeypatch.setattr(модуль, "коммит_фабрики", lambda корень=None: ("f" * 40, False))
     итог = модуль.продвинуть("c-1", корень=корень, реестр=реестр)
     assert итог["исход"] == "происхождение", итог
     м = json.loads((проект / "config" / "template-manifest.json").read_text(
         encoding="utf-8"))
-    assert м["template_origin"]["source_commit"] == "e" * 40
+    assert м["template_origin"]["source_commit"] == "e" * 40, \
+        "происхождение выровнено не по замку"

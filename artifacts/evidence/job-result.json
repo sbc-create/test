@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "job_id": "pilot-local-create-20261019T154958Z-eb95cb",
+  "job_id": "pilot-local-create-20261026T223241Z-a5fa94",
   "site_id": "pilot-local",
   "environment": "staging",
   "requested_action": "create",
@@ -14,28 +14,28 @@
       "blocks_stage": "STAGING_QA"
     }
   ],
-  "started_at": "2026-10-19T15:49:58Z",
-  "finished_at": "2026-10-19T15:50:26Z",
-  "factory_commit": "62f76e6a4fb133f46b0e1ae307c8a33180367eb3",
-  "knowledge_freeze_version": "2026-10-18.1",
-  "build_id": "7593e6728b40c6ba",
-  "release_id": "7593e6728b40c6ba",
-  "previous_release_id": "7593e6728b40c6ba",
+  "started_at": "2026-10-26T22:32:40Z",
+  "finished_at": "2026-10-26T22:32:45Z",
+  "factory_commit": "e943e063a2b4b17da69a2ed92411df4ed01e6d54",
+  "knowledge_freeze_version": "2026-10-26.4",
+  "build_id": "b60dc22dc23a8f00",
+  "release_id": "b60dc22dc23a8f00",
+  "previous_release_id": "b60dc22dc23a8f00",
   "steps": [
     {
       "id": "knowledge_freeze",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
-      "detail": "freeze 2026-10-18.1 цел",
+      "detail": "freeze 2026-10-26.4 цел",
       "mutation": false
     },
     {
       "id": "validate",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "Пакет прошёл схему и семантику",
       "mutation": false
@@ -43,17 +43,17 @@
     {
       "id": "build",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
-      "detail": "build_id=7593e6728b40c6ba, маршрутов 48",
+      "detail": "build_id=b60dc22dc23a8f00, маршрутов 48",
       "mutation": false
     },
     {
       "id": "prepare_dirs",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "Каталоги цели готовы: /home/claude/wt-nova-publish-memory-02/var/targets/local-disposable/pilot-local",
       "mutation": false
@@ -61,26 +61,26 @@
     {
       "id": "backup",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
-      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20261019T154958Z.tar.gz",
+      "detail": "Бэкап изменяемых данных: var/backups/pilot-local-staging-20261026T223241Z.tar.gz",
       "mutation": false
     },
     {
       "id": "upload_release",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:58Z",
-      "finished_at": "2026-10-19T15:49:58Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
-      "detail": "Релиз 7593e6728b40c6ba уже присутствует — повторная выгрузка не выполнялась",
+      "detail": "Релиз b60dc22dc23a8f00 уже присутствует — повторная выгрузка не выполнялась",
       "mutation": true
     },
     {
       "id": "health_check",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "Проверка кандидата на отдельном порту 8081: HTTP 200, 2048 байт",
       "mutation": false
@@ -88,17 +88,17 @@
     {
       "id": "switch_current",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
-      "detail": "current уже указывает на 7593e6728b40c6ba",
+      "detail": "current уже указывает на b60dc22dc23a8f00",
       "mutation": true
     },
     {
       "id": "start_server",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
       "mutation": true
@@ -106,8 +106,8 @@
     {
       "id": "post_switch_health",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "Проверка после переключения: HTTP 200, 2048 байт",
       "mutation": false
@@ -115,8 +115,8 @@
     {
       "id": "prune_releases",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:41Z",
+      "finished_at": "2026-10-26T22:32:41Z",
       "exit_code": 0,
       "detail": "Удалено устаревших релизов: 0; хранится 3 плюс защищённые (текущий и предыдущий)",
       "mutation": false
@@ -124,10 +124,10 @@
     {
       "id": "restore_test",
       "status": "ok",
-      "started_at": "2026-10-19T15:49:59Z",
-      "finished_at": "2026-10-19T15:49:59Z",
+      "started_at": "2026-10-26T22:32:42Z",
+      "finished_at": "2026-10-26T22:32:42Z",
       "exit_code": 0,
-      "detail": "Восстановление бэкапа в /home/claude/wt-nova-publish-memory-02/var/restore-probe/pilot-local-7593e6728b40c6ba: подтверждено",
+      "detail": "Восстановление бэкапа в /home/claude/wt-nova-publish-memory-02/var/restore-probe/pilot-local-b60dc22dc23a8f00: подтверждено",
       "mutation": false
     }
   ],
@@ -137,9 +137,9 @@
       "command": "python3 -m factory deploy --site pilot-local (restore probe)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "var/restore-probe/pilot-local-7593e6728b40c6ba",
+      "artifact": "var/restore-probe/pilot-local-b60dc22dc23a8f00",
       "counts": {
-        "archive": "var/backups/pilot-local-staging-20261019T154958Z.tar.gz"
+        "archive": "var/backups/pilot-local-staging-20261026T223241Z.tar.gz"
       },
       "severity": "critical"
     },
@@ -148,7 +148,7 @@
       "command": "python3 -m factory seo-lint --site pilot-local",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-lint.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-lint.json",
       "counts": {
         "sitemap_urls": 45,
         "routes": 48,
@@ -160,11 +160,23 @@
       "severity": "critical"
     },
     {
+      "id": "collections",
+      "command": "python3 collections-acceptance.py <файла нет>",
+      "exit_code": null,
+      "passed": true,
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/collections.txt",
+      "counts": {
+        "status": "skipped",
+        "reason": "файла подборок нет"
+      },
+      "severity": "major"
+    },
+    {
       "id": "seo-crawl",
       "command": "python3 -m factory seo-crawl --site pilot-local --base http://127.0.0.1:8082",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-crawl.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-crawl.json",
       "counts": {
         "fetched": 45,
         "unique_urls": 45,
@@ -179,7 +191,7 @@
       "command": "node tools/browser-audit.js --base http://127.0.0.1:8082",
       "exit_code": 2,
       "passed": false,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-render.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-render.json",
       "counts": {
         "status": "failed",
         "exit_code": 2
@@ -191,7 +203,7 @@
       "command": "python3 -m factory verify --site pilot-local (security)",
       "exit_code": 1,
       "passed": false,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/security-smoke.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/security-smoke.json",
       "counts": {
         "checked_paths": 8,
         "root_status": 0
@@ -203,7 +215,7 @@
       "command": "python3 -m factory verify --site pilot-local (acceptance)",
       "exit_code": 1,
       "passed": false,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/acceptance-routes.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/acceptance-routes.json",
       "counts": {
         "routes": 11
       },
@@ -214,7 +226,7 @@
       "command": "python3 -m factory verify --site pilot-local (major budget)",
       "exit_code": 0,
       "passed": true,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/major-findings-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/major-findings-budget.json",
       "counts": {
         "status": "ok",
         "major": 0,
@@ -227,7 +239,7 @@
       "command": "python3 -m factory verify --site pilot-local (performance)",
       "exit_code": 1,
       "passed": false,
-      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/performance-budget.json",
+      "artifact": "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/performance-budget.json",
       "counts": {
         "status": "failed",
         "lab_lcp_ms_max": null,
@@ -249,44 +261,45 @@
     }
   ],
   "artifacts": [
-    "artifacts/build/pilot-local/7593e6728b40c6ba/report.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-lint.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-crawl.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-render.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/security-smoke.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/acceptance-routes.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/major-findings-budget.json",
-    "artifacts/qa/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/performance-budget.json",
-    "artifacts/seo/pilot-local/pilot-local-create-20261019T154958Z-eb95cb/seo-report.json"
+    "artifacts/build/pilot-local/b60dc22dc23a8f00/report.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-lint.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/collections.txt",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-crawl.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-render.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/security-smoke.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/acceptance-routes.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/major-findings-budget.json",
+    "artifacts/qa/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/performance-budget.json",
+    "artifacts/seo/pilot-local/pilot-local-create-20261026T223241Z-a5fa94/seo-report.json"
   ],
   "mutations": [
     {
       "target": "/home/claude/wt-nova-publish-memory-02/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
-      "detail": "Релиз 7593e6728b40c6ba уже присутствует — повторная выгрузка не выполнялась",
-      "at": "2026-10-19T15:49:58Z",
+      "detail": "Релиз b60dc22dc23a8f00 уже присутствует — повторная выгрузка не выполнялась",
+      "at": "2026-10-26T22:32:41Z",
       "idempotent_noop": true
     },
     {
       "target": "/home/claude/wt-nova-publish-memory-02/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
-      "detail": "current уже указывает на 7593e6728b40c6ba",
-      "at": "2026-10-19T15:49:59Z",
+      "detail": "current уже указывает на b60dc22dc23a8f00",
+      "at": "2026-10-26T22:32:41Z",
       "idempotent_noop": true
     },
     {
       "target": "/home/claude/wt-nova-publish-memory-02/var/targets/local-disposable/pilot-local",
       "kind": "filesystem",
       "detail": "PHP-сервер обслуживает current на 127.0.0.1:8082",
-      "at": "2026-10-19T15:49:59Z",
+      "at": "2026-10-26T22:32:41Z",
       "idempotent_noop": false
     }
   ],
   "backup": {
     "taken": true,
-    "ref": "var/backups/pilot-local-staging-20261019T154958Z.tar.gz",
+    "ref": "var/backups/pilot-local-staging-20261026T223241Z.tar.gz",
     "restore_verified": true,
-    "verified_at": "2026-10-19T15:49:59Z"
+    "verified_at": "2026-10-26T22:32:42Z"
   },
   "seo_summary": {
     "pages_total": 48,

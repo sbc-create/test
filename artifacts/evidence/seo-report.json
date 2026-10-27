@@ -59,7 +59,7 @@
           "check": "browser",
           "severity": "critical",
           "url": "http://127.0.0.1:8082",
-          "message": "Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/lekcii/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/lekcii/\", waiting until \"load\"\u001b[22m\n",
+          "message": "Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/\nCall log:\n\u001b[2m  - navigating to \"http://127.0.0.1:8082/\", waiting until \"load\"\u001b[22m\n",
           "rule": ""
         }
       ]

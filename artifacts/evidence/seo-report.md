@@ -22,9 +22,10 @@
 
 | severity | check | url | сообщение |
 |---|---|---|---|
-| critical | browser | `http://127.0.0.1:8082` | Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/lekcii/
+| critical | browser | `http://127.0.0.1:8082` | Браузерная проверка завершилась без отчёта: Error: page.goto: net::ERR_CONNECTION_REFUSED at http://127.0.0.1:8082/
 Call log:
-[2m  - navigating to "http://127.0.0.1:8082/lekcii/", waiting unti |
+[2m  - navigating to "http://127.0.0.1:8082/", waiting until "load"[22m
+ |
 
 ## security-smoke — FAILED
 

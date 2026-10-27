@@ -43,8 +43,8 @@ SSH-хостов/DNS-зон/доменов по своей инициативе.
 
 Правка файлов репозитория, сборка, тесты, линтеры, зависимости и git в ветке `claude/*`
 идут без подтверждений: решение выдают PreToolUse-хуки поверх `seo_operator/unattended.py`.
-Профиль умеет только разрешать; запреты остаются в `guard_rules` и `guardrails`.
-Два исхода (`allow`/`deny`) и стоп-сигналы — `docs/UNATTENDED_SAFE.md`, матрица — `tests/unit/test_permission_matrix.py`.
+Профиль умеет только разрешать; запреты остаются в `guard_rules` и `guardrails`. Два
+исхода и стоп-сигналы — `docs/UNATTENDED_SAFE.md`, матрица — `tests/unit/test_permission_matrix.py`.
 
 ## Команды
 
@@ -86,45 +86,41 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 
 ## Definition of Done
 
-**Задача закрывается только после достижения и проверки заявленного результата.**
-Прямое поручение владельца 26.10, действует на всех исполнителей — фабрику, SEO-линию,
-редактора. «Подготовлено», «написан инструмент», «прошли тесты», «передано другому
-исполнителю» и «записано в очередь» — промежуточные состояния, а не закрытие.
-Проваленная проверка означает: найти причину, исправить и ПОВТОРИТЬ проверку в той же
-задаче, без нового запроса владельцу. Передача считается состоявшейся после
-подтверждения принявшего и начала работы, а не после отправки. Остаток закрывается
-только ДОКАЗАННЫМ внешним ограничением с названной операцией входа.
+**Задача закрывается только после достижения и проверки заявленного результата**
+(поручение владельца 26.10, на всех исполнителей). «Подготовлено», «прошли тесты»,
+«передано», «записано в очередь» — промежуточные состояния. Проваленная проверка: найти
+причину, исправить и ПОВТОРИТЬ проверку в той же задаче. Передача состоялась после
+подтверждения принявшего. Остаток — только ДОКАЗАННОЕ внешнее ограничение с названной
+операцией входа (`docs/LONG_RUNS.md`).
 
 Нельзя ставить `DONE`, если: провален критический тест; не подтверждена лицензия DLE;
 не подтверждены права/происхождение контента; в production попали test/demo данные;
 нет бэкапа или не проверен rollback; canonical/TLS/домен указывают не на тот сайт;
 обнаружена cross-site утечка; production не авторизован в manifest; отчёт утверждает проверку, которая не запускалась.
 
-**Общий дефект** (`scope: common`) закрывается только полным набором: причина — в каноническом
-слое, есть проверка от повторения, названа версия основы, ДОКАЗАНО наследование новым
-экземпляром из штатного генератора; правка одного домена несёт причину исключения. Перед
-похожей задачей ищи готовое в реестре и коде; у общего компонента один ответственный.
-Правило, измерения и проверка схемой — `docs/COMMON_FIX_INHERITANCE.md`.
+**Общий дефект** (`scope: common`): причина — в каноническом слое, есть проверка от
+повторения, названа версия основы, ДОКАЗАНО наследование новым экземпляром из штатного
+генератора; правка одного домена несёт причину исключения. У общего компонента один
+ответственный; шаблон действующей витрины обновляет `promote-cell-pins.py`, а не
+пересоздание проекта генератором. Правило — `docs/COMMON_FIX_INHERITANCE.md`.
 
-Отчёт содержит команду, фактический exit code и путь к артефакту. Формулировки
-«проверено» без запуска — ошибка отчёта, а не стилистика.
+Отчёт содержит команду, фактический exit code и путь к артефакту; «проверено» без
+запуска — ошибка отчёта, а не стилистика.
 
 ## Ночные и длительные задания
 
 **Работать весь согласованный срок, пока остаются полезные разрешённые действия.**
 Промежуточный отчёт задание не завершает; блокер одного пункта не останавливает
-остальные. Завершение — выполненные критерии приёмки либо исчерпанные действия,
-где по каждому остатку названо ДОКАЗАННОЕ внешнее ограничение. Автономного
-продолжения после завершения хода нет: не завершать ход, пока есть что делать.
-Правило целиком, причина и границы инструментов — `docs/LONG_RUNS.md`;
-контрольная точка текущего задания — `docs/NIGHT_RUN_TEN_DOMAINS.md`.
+остальные. Не завершать ход, пока есть что делать: автономного продолжения после
+завершения хода нет. Границы инструментов — `docs/LONG_RUNS.md`; контрольная точка
+задания — `docs/NIGHT_RUN_TEN_DOMAINS.md`.
 
 ## Детальные правила
 
 `.claude/rules/` (подгружаются по путям): `dle-php.md`, `frontend.md`, `content.md`,
 `security.md`, `tests.md`, `infrastructure.md`, `deployment.md`, `seo.md`; аналитика — `docs/YANDEX_ANALYTICS.md`.
-Повторяемые процессы — skills: `/research-freeze`, `/site-intake`, `/site-build`, `/site-qa`, `/site-deploy`, `/site-rollback`, `/site-update`, `/incident-report`.
-Экономный режим — `docs/TOKEN_ECONOMY.md`: задание, источники, изменения и ресурсы проверяет обычный код ДО модели; опрос моделью запрещён, повтор отказа ограничен.
+Повторяемые процессы — skills в `.claude/skills/`. Экономный режим — `docs/TOKEN_ECONOMY.md`:
+задание, источники и ресурсы проверяет обычный код ДО модели, повтор отказа ограничен.
 
 ---
 
@@ -142,18 +138,12 @@ an **SEO session** operates under. Read this file first; it is the entry point.
 
 | Path | Purpose |
 | --- | --- |
-| `.claude/rules/` | Operating rules for sessions in this repo |
-| `.claude/hooks/session-start.sh` | Provisions the environment on session start |
-| `.claude/hooks/pretooluse-guard.sh` | Permission guard for every tool call |
-| `seo_operator/` | The autonomous SEO editorial operator |
+| `.claude/rules/`, `.claude/hooks/` | Operating rules; session-start and permission guard |
+| `seo_operator/`, `bin/seo-operator` | The autonomous SEO editorial operator and its CLI |
 | `config/` | Registries: portfolio, data sources, calendar, backlog, experiments |
 | `docs/seo-operator/` | Operator policies, strategies, demos and daily reports |
-| `bin/seo-operator` | Operator CLI |
 | `docs/knowledge/` | SEO knowledge pack — read before doing SEO work |
-| `schemas/` | JSON Schemas every data artifact must validate against |
-| `scripts/` | Validation, verification, evidence, and bundle tooling |
-| `tests/` | Pytest suite guarding the schemas and validator |
-| `docs/verification/` | Committed evidence of verification runs |
+| `scripts/`, `docs/verification/` | Validation and evidence tooling; committed evidence |
 | `.github/workflows/` | CI and deployment automation |
 
 ## Environment, commits, data
@@ -181,17 +171,16 @@ The operator runs unattended:
 ./bin/seo-operator dry-run --fixture   # full run against the synthetic tenant
 ```
 
-Key documents: [`blockers.md`](docs/seo-operator/blockers.md) (what is missing),
-[`runbook.md`](docs/seo-operator/runbook.md) (how to operate it),
-[`protected-guardrails.md`](docs/seo-operator/protected-guardrails.md) (what it may never do).
+Key documents in `docs/seo-operator/`: `blockers.md` (what is missing), `runbook.md`
+(how to operate it), `protected-guardrails.md` (what it may never do).
 
 Two properties matter more than the rest:
 
-- **No fabricated data.** A source that cannot be reached reports the metric as
-  unmeasured with a reason, never as `0`. A claim without an approved source cannot be constructed.
-- **Nothing irreversible.** Every change carries a before/after snapshot and a
-  rollback payload before it is applied, and no change reaches more than one
-  site or 10% of its pages without an earned verdict.
+- **No fabricated data.** An unreachable source reports the metric as unmeasured with a
+  reason, never as `0`; a claim without an approved source cannot be constructed.
+- **Nothing irreversible.** Every change carries a before/after snapshot and a rollback
+  payload before it is applied, and nothing reaches more than one site or 10% of its
+  pages without an earned verdict.
 
 ## Rules that are not negotiable
 

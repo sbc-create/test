@@ -37,8 +37,8 @@
       "gate": "SITE_REPO",
       "status": "PASS",
       "detail": {
-        "path": "/tmp/cell-pilot-e2srxmxl/repos/pilot-cell",
-        "commit": "84cd44a082b12891fcd78326a744da2e59f2179e",
+        "path": "/tmp/cell-pilot-4rw6lkww/repos/pilot-cell",
+        "commit": "57885bf4b3ac4048f9e7c7edf27ccd061d0d5760",
         "checks_exit_code": 0,
         "checks_output": "manifest-is-json                   PASS\npins-are-json                      PASS\ntemplate-present                   PASS\nno-floating-pins                   PASS\nno-data-or-secrets                 PASS\nshell-ascii-names                  PASS"
       }
@@ -47,7 +47,7 @@
       "gate": "REMOTE_CI",
       "status": "NOT_RUN",
       "detail": {
-        "ci_template": "/tmp/cell-pilot-e2srxmxl/repos/pilot-cell/.github/workflows/release.yml",
+        "ci_template": "/tmp/cell-pilot-4rw6lkww/repos/pilot-cell/.github/workflows/release.yml",
         "ci_template_parses": true,
         "remote_created": false,
         "reason": "пространство Git-проектов для сайтов не передано и прав на создание репозиториев нет; подготовлен локальный Git-пилот и шаблон CI, настоящий remote не создавался"
@@ -57,8 +57,8 @@
       "gate": "RELEASE_DIGEST",
       "status": "PASS",
       "detail": {
-        "digest": "sha256:6fc6d59a8aec58a560f5842fd1d59573c36daf4fcbee8a12f3e100453ac60063",
-        "source_commit": "84cd44a082b12891fcd78326a744da2e59f2179e",
+        "digest": "sha256:55e076d4de3916f9ed743a95b6083f066d5eedd8d75041c6e7a5b02a55befe59",
+        "source_commit": "57885bf4b3ac4048f9e7c7edf27ccd061d0d5760",
         "reproducible": true
       }
     },
@@ -86,8 +86,8 @@
       "gate": "LOCAL_DB",
       "status": "PASS",
       "detail": {
-        "database": "/tmp/cell-pilot-e2srxmxl/hosts/pilot-cell/data/site.sqlite3",
-        "neighbour_database": "/tmp/cell-pilot-e2srxmxl/hosts/neighbour-cell/data/site.sqlite3",
+        "database": "/tmp/cell-pilot-4rw6lkww/hosts/pilot-cell/data/site.sqlite3",
+        "neighbour_database": "/tmp/cell-pilot-4rw6lkww/hosts/neighbour-cell/data/site.sqlite3",
         "separate_files": true,
         "inside_release_directory": false,
         "note": "у каждого сайта свой файл базы; общий writable том не используется"
@@ -203,16 +203,16 @@
       "gate": "STALE_DEPLOY_REJECTED",
       "status": "PASS",
       "detail": {
-        "deployed": "78b7c2b93e89",
-        "attempted": "84cd44a082b1"
+        "deployed": "b32cc14579eb",
+        "attempted": "57885bf4b3ac"
       }
     },
     {
       "gate": "TARGETED_DEPLOY",
       "status": "PASS",
       "detail": {
-        "deployed_digest": "sha256:35009816bb35c0db15e93e6930ac2ca5006b6fa69368c9e0f9bb5c2913fa8ee8",
-        "expected_digest": "sha256:35009816bb35c0db15e93e6930ac2ca5006b6fa69368c9e0f9bb5c2913fa8ee8",
+        "deployed_digest": "sha256:5946fee8867ca018b3f697f1450027aa8fda9b5b3f79c93b4ecf86951c22e9e8",
+        "expected_digest": "sha256:5946fee8867ca018b3f697f1450027aa8fda9b5b3f79c93b4ecf86951c22e9e8",
         "sites_touched": [
           "pilot-cell"
         ],
@@ -223,8 +223,8 @@
       "gate": "NEIGHBOR_UNCHANGED",
       "status": "PASS",
       "detail": {
-        "digest_before": "sha256:85550428b8fa8a1cd821f79b09fff4990ba72fdb394310380ca124d64ef3aad8",
-        "digest_after": "sha256:85550428b8fa8a1cd821f79b09fff4990ba72fdb394310380ca124d64ef3aad8",
+        "digest_before": "sha256:0498812cbc9a450e9bef7a2f4063682ce8e0ddaf5658f77823923c3bde764483",
+        "digest_after": "sha256:0498812cbc9a450e9bef7a2f4063682ce8e0ddaf5658f77823923c3bde764483",
         "rows_before": {
           "identities": 1,
           "comments": 1,
@@ -292,9 +292,9 @@
       "detail": {
         "site_disk_bytes": 252132,
         "site_disk_mb": 0.2,
-        "release_artifact_bytes": 8379,
-        "free_bytes_on_host": 8813617152,
-        "free_gb_on_host": 8.2,
+        "release_artifact_bytes": 8380,
+        "free_bytes_on_host": 13032030208,
+        "free_gb_on_host": 12.1,
         "note": "RAM пилота не измерялась: витрина статическая, постоянного процесса сайта в пилоте нет"
       }
     },
@@ -348,20 +348,20 @@
   "facts": {
     "pilot_site": "pilot-cell",
     "pilot_domain": "pilot-cell.invalid",
-    "site_repo": "/tmp/cell-pilot-e2srxmxl/repos/pilot-cell",
-    "source_commit": "78b7c2b93e8968b4adfa9de7dff5e962f881f93a",
-    "release_digest": "sha256:35009816bb35c0db15e93e6930ac2ca5006b6fa69368c9e0f9bb5c2913fa8ee8",
+    "site_repo": "/tmp/cell-pilot-4rw6lkww/repos/pilot-cell",
+    "source_commit": "b32cc14579ebd18ff5cea5cb2dc2f4c3cf480c29",
+    "release_digest": "sha256:5946fee8867ca018b3f697f1450027aa8fda9b5b3f79c93b4ecf86951c22e9e8",
     "template_id": "lords-curated",
     "publisher_id": "10252",
     "content_revision": 6,
     "routes_published": 6,
-    "registry": "/tmp/cell-pilot-e2srxmxl/site-cells.json"
+    "registry": "/tmp/cell-pilot-4rw6lkww/site-cells.json"
   },
   "summary": {
     "pass": 27,
     "fail": 0,
     "not_run": 6
   },
-  "pilot_root": "/tmp/cell-pilot-e2srxmxl",
+  "pilot_root": "/tmp/cell-pilot-4rw6lkww",
   "pilot_root_kept": false
 }
