@@ -99,6 +99,16 @@ if str(КОРЕНЬ) not in sys.path:
     'горизонтальная прокрутка':
         document.documentElement.scrollWidth - window.innerWidth,
     'высота страницы': document.documentElement.scrollHeight,
+    // Виден ли верх первой карточки в первом экране. Считается в CSS-пикселях
+    // от верха документа: по снимку это определить нельзя — снимок отдан в
+    // физических пикселях, и при DPR 3 высота 2532 соответствует 844 CSS.
+    // Ровно на этом я и ошибся, прочитав снимок как разметку.
+    'верх первой карточки': первая
+        ? Math.round(первая.getBoundingClientRect().top + window.scrollY) : null,
+    'высота окна': window.innerHeight,
+    'карточка в первом экране': первая
+        ? (первая.getBoundingClientRect().top + window.scrollY) < window.innerHeight
+        : null,
     'перенос за рамку': карточки.filter(
         к => к.scrollWidth > к.clientWidth + 1).length,
   };
