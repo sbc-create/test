@@ -8846,12 +8846,13 @@
       "verify_live": true,
       "status": "session",
       "owner_action": "ведёт Архитектор (шаблон animedia-nova); SEO даёт состав-критерий и тексты вступлений",
-      "seo_delivery": "26.10 22:21Z: три редакционные подборки с ручным составом по id — docs/seo-operator/ANIMEDIA_ICU_COLLECTIONS_20261026.json (anime-odin-sezon 8 → /series/, anime-filmy-na-vecher 8 → /movies/, anime-filmy-po-serialam 8 → /movies/); collections-acceptance 0 нарушений, 6/6 живых; выпуск — тем же механизмом ручного состава, что T337/T340"
+      "seo_delivery": "26.10 22:21Z: три редакционные подборки с ручным составом по id — docs/seo-operator/ANIMEDIA_ICU_COLLECTIONS_20261026.json (anime-odin-sezon 8 → /series/, anime-filmy-na-vecher 8 → /movies/, anime-filmy-po-serialam 8 → /movies/); collections-acceptance 0 нарушений, 6/6 живых; выпуск — тем же механизмом ручного состава, что T337/T340",
+      "seo_delivery_2": "27.10 18:20–18:33Z, замер живых страниц (пробы factory-seo-acceptance) и снимка: (1) сделано выпуском 5ec676b: «Сериалы с сериями» → «Аниме-сериалы»; осталось: нижний h2 «Animedia ICU — сериалы, фильмы и дунхуа» → «Animedia ICU — аниме-сериалы, аниме-фильмы и дунхуа». (2) отдельную подборку онгоингов НЕ заводить: /schedule/ (200, index, canonical на себя) уже показывает все 77 выходов недели = 77 названий расписания AniList, сопоставленных с каталогом; подборка по признаку «серия в расписании недели и новая серия на сайте с 1.10» дала бы 73 названия, из них 73 — те же, то есть дубль. Вместо неё — /schedule/ как страница онгоингов: H1 «Онгоинги {сезон} {год}: расписание серий» (сезон по дате: январь–март зима, апрель–июнь весна, июль–сентябрь лето, октябрь–декабрь осень); вступление «Аниме и дунхуа, у которых сейчас выходят новые серии, — по дням недели. Время московское; если серия уже есть на сайте, это отмечено.»; description «Онгоинги {сезон} {год} на Animedia: {N} выходов на неделе по дням, время московское (UTC+3).»; пункт навигации «Онгоинги» → /schedule/. (3) /catalog/?year=2026 уже 200, index, canonical на себя, H1 «Аниме 2026 года»; своего вступления нет. Текст: «Аниме {год} года на сайте: {N} названий — сериалы, фильмы и дунхуа этого года. Что выходит сейчас — в расписании онгоингов, законченные летние сериалы — в подборке летнего сезона.» (N — из каталога, сейчас 315 на странице, 324 в снимке подробностей). (4) найден дубль: /collection/current_season/ «Этого года» — те же 315 названий в том же порядке, что /catalog/?year=2026, обе index и canonical на себя; описание «Названия самого свежего года, представленного в каталоге.» — служебный текст фильтра. Предложение: убрать раздел так же, как «С видео» (решение в collection_contract.py), или canonical на /catalog/?year={год}."
     },
     {
       "id": "T340",
       "site": "zonafilm.space, zonafilm12.site",
-      "direction": "films_series",
+      "direction": "zona",
       "repo": "var/site-repos (витрины zona-01 и zona-03)",
       "urls": [
         "https://zonafilm.space/",
@@ -8874,7 +8875,7 @@
     {
       "id": "T341",
       "site": "zonafilm.space, zonafilm12.site, animedia.icu",
-      "direction": "films_series; anime (animedia.icu)",
+      "direction": "network",
       "repo": "var/site-repos (витрины zona-01, zona-03, animedia-01)",
       "urls": [
         "https://zonafilm.space/",
