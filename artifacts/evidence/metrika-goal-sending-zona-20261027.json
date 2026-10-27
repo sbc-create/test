@@ -1,0 +1,35 @@
+{
+ "checked": "sending of Metrika goals on public pages (not reception)",
+ "rows": [
+  {
+   "site": "zonafilm.space",
+   "started": "06:47:56Z",
+   "goal_requests": [
+    "goal://zonafilm.space/title_view&page-ref=https://zonafilm.space/title/shepot-za",
+    "goal://zonafilm.space/title_view&page-ref=https://zonafilm.space/title/shepot-za",
+    "goal://zonafilm.space/player_ready&page-ref=https://zonafilm.space/title/shepot-",
+    "goal://zonafilm.space/player_ready&page-ref=https://zonafilm.space/title/shepot-"
+   ],
+   "sfGoal_calls": [],
+   "sfGoal_defined_on_collection": "function",
+   "sfGoal_defined_on_card": "function",
+   "ym_present": "function",
+   "finished": "06:48:19Z"
+  },
+  {
+   "site": "zonafilm12.site",
+   "started": "06:48:19Z",
+   "goal_requests": [
+    "goal://zonafilm12.site/title_view&page-ref=https://zonafilm12.site/title/rycar-s",
+    "goal://zonafilm12.site/title_view&page-ref=https://zonafilm12.site/title/rycar-s",
+    "goal://zonafilm12.site/player_ready&page-ref=https://zonafilm12.site/title/rycar",
+    "goal://zonafilm12.site/player_ready&page-ref=https://zonafilm12.site/title/rycar"
+   ],
+   "sfGoal_calls": [],
+   "sfGoal_defined_on_collection": "function",
+   "sfGoal_defined_on_card": "function",
+   "ym_present": "function",
+   "finished": "06:48:41Z"
+  }
+ ]
+}
