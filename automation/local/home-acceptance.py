@@ -88,6 +88,9 @@ window.addEventListener('message', function(ev){
   function polka(){ return [...document.querySelectorAll('.zr1 .zb')]; }
   const обложки = [...document.querySelectorAll('.zr1 .zb img')];
   const визитки = [...document.querySelectorAll('.zcl__c, .zhub__c')];
+  const h1 = [...document.querySelectorAll('h1')];
+  const подпись_полки = полка && полка.querySelector('h1,h2,h3')
+      ? полка.querySelector('h1,h2,h3').textContent.trim() : '';
   const анонсы = document.querySelector('[data-block-key="announce"]');
   const анонс_ссылки = анонсы
       ? [...анонсы.querySelectorAll('a')].map(a => a.getAttribute('href') || '')
@@ -114,6 +117,21 @@ window.addEventListener('message', function(ev){
     'анонсов': анонсы ? анонсы.querySelectorAll('.zann__c').length : 0,
     'ссылок на просмотр в анонсах': анонс_ссылки.filter(h => h.includes('/title/')).length,
     'внешних источников в анонсах': анонс_ссылки.filter(h => h.startsWith('http')).length,
+    // Заголовок первого уровня принадлежит СТРАНИЦЕ, а не блоку внутри неё.
+    // 27.10 редакционная полка забрала его себе: главная называлась «Сериалы,
+    // которые стоит посмотреть» вместо предмета сайта, и признака об этом не
+    // было ни в одной проверке.
+    'заголовков h1': h1.length,
+    'h1 главной': h1.length ? h1[0].textContent.trim().slice(0, 80) : null,
+    'h1 забрала полка': !!подпись_полки && h1.length > 0
+        && h1[0].textContent.trim() === подпись_полки,
+    'подпись полки': подпись_полки.slice(0, 80),
+    // H1, равный <title>, — тоже дефект: страница говорит одно и то же дважды
+    // и не добавляет ни слова. Измерено на zonafilm.cc, где они совпадают
+    // побайтно (замер линии SEO, 27.10).
+    'h1 равен заголовку': h1.length > 0
+        && h1[0].textContent.trim() === document.title.trim(),
+    'заголовок страницы': document.title.trim().slice(0, 80),
     'горизонтальная прокрутка': document.documentElement.scrollWidth - window.innerWidth,
     'первая карточка полки': карточки.length
         ? карточки[0].getAttribute('href') : null,
@@ -241,6 +259,26 @@ def тёмная(браузер, домен: str, снимки: pathlib.Path) ->
         контекст.close()
 
 
+def беда_прохода(и: dict) -> bool:
+    """Что считать бедой одного прохода. Отдельной функцией — чтобы «0 бед»
+    было проверяемо без браузера: иначе итог ничего не значит."""
+    return bool(
+        и.get("беда")
+        or и.get("обложек без файла")
+        or и.get("визиток в экране без обложки")
+        or и.get("растянутых обложек")
+        or и.get("ссылок на просмотр в анонсах")
+        # Ни одного H1 — у страницы нет заголовка первого уровня; больше
+        # одного — их два на одной странице; заголовок, равный подписи полки,
+        # означает, что страница называется подборкой, а не сайтом (измерено
+        # 27.10 на zonafilm.space и zonafilm12.site); равный <title> —
+        # что страница повторяет сама себя (zonafilm.cc, замер линии SEO).
+        or (и.get("заголовков h1") is not None and и.get("заголовков h1") != 1)
+        or и.get("h1 забрала полка")
+        or и.get("h1 равен заголовку")
+        or (и.get("горизонтальная прокрутка") or 0) > 0)
+
+
 def главная(аргв=None) -> int:
     р = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     р.add_argument("--domain", required=True,
@@ -278,12 +316,7 @@ def главная(аргв=None) -> int:
     else:
         for и in итоги:
             print(json.dumps(и, ensure_ascii=False))
-    беда = sum(1 for и in итоги if и.get("беда")
-               or и.get("обложек без файла")
-               or и.get("визиток в экране без обложки")
-               or и.get("растянутых обложек")
-               or и.get("ссылок на просмотр в анонсах")
-               or (и.get("горизонтальная прокрутка") or 0) > 0)
+    беда = sum(1 for и in итоги if беда_прохода(и))
     print(f"\nпроходов с бедой: {беда} из {len(итоги)}")
     return 1 if беда else 0
 
