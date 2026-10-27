@@ -2010,8 +2010,53 @@ clip:rect(0 0 0 0);white-space:nowrap;border:0}
 """
 
 
+#: Оформление страницы редакционной подборки. Лежит ЗДЕСЬ, рядом с общим
+#: листом, а не в листе семейства: разметку даёт общий построитель
+#: `ручная_подборка`, и правила обязаны приезжать вместе с ним. До 27.10 они
+#: лежали только в `ЛОРДС_СТИЛЬ`, и Zona с Animedia отдавали страницу без
+#: оформления: одна карточка в ряду, постер во всю ширину содержимого
+#: (измерено 1340×565 на ширинах 1440 и 1920).
+#:
+#: Общий лист конкатенируется ПЕРЕД листом семейства, поэтому эти правила
+#: ничего не отнимают у семейства, где своё оформление уже есть.
+СТИЛЬ_ПОДБОРКИ = """
+.col__grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:20px 14px;max-width:1340px;margin:0 auto 28px;padding:0}
+@media (min-width:600px){.col__grid{
+  grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 16px}}
+@media (min-width:900px){.col__grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media (min-width:1360px){.col__grid{
+  grid-template-columns:repeat(5,minmax(0,1fr))}}
+.col__i{display:flex;flex-direction:column;min-width:0}
+.col__i .c{display:block;text-decoration:none;color:inherit;min-width:0}
+/* Рамка постера одна на все карточки: отношение 2:3 задано рамкой, а картинка
+   заполняет её `cover`. Пропорции не искажаются ни при каком исходном кадре —
+   нестандартный кадр обрезается, а не растягивается. */
+.col__i .c__p{display:block;position:relative;width:100%;aspect-ratio:2/3;
+  overflow:hidden;border-radius:10px;background:rgba(128,128,128,.16)}
+.col__i .c__p img{display:block;width:100%;height:100%;
+  object-fit:cover;object-position:center}
+.col__i .c__b{padding:8px 2px 0;min-width:0}
+/* Длинные названия аниме обрезаются по двум строкам: иначе одна карточка
+   растягивает весь ряд, и сетка разъезжается по высоте. */
+.col__i .c__t{font-weight:600;font-size:15px;line-height:1.25;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;overflow-wrap:anywhere}
+.col__i .c__m{margin-top:3px;font-size:12px;opacity:.7}
+.col__i .c__m span+span{margin-left:6px}
+.col__i .col__why{margin:6px 2px 0;font-size:13px;line-height:1.4;opacity:.85;
+  display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
+  overflow:hidden;overflow-wrap:anywhere}
+/* Вступление и служебные строки — по ширине чтения, а не во всю рамку. */
+.claim{max-width:74ch;line-height:1.5}
+.col__upd,.col__gone,.col__src{max-width:74ch}
+.col__src{margin:0 0 14px;font-size:12px;opacity:.65;line-height:1.45}
+"""
+
+
 def _общее(токены: dict) -> str:
-    return ОБЩЕЕ_1_1.replace("@ACC@", токены["acc"])
+    return ОБЩЕЕ_1_1.replace("@ACC@", токены["acc"]) + СТИЛЬ_ПОДБОРКИ
 
 
 #: Горизонтальная лента поступлений на главной Lords.
@@ -5442,11 +5487,20 @@ class Вид:
         if подборка.section:
             звенья.append((подборка.section, _подпись_раздела(подборка.section)))
         звенья += [("/collections/", "Подборки"), ("", подборка.title)]
+        # Справка об источниках — отдельная мелкая строка под вступлением, а
+        # не часть его. Вступление отвечает читателю, зачем смотреть; откуда
+        # взяты сведения — справка (поручение владельца 27.10). Поля нет —
+        # строки нет: пустая справка хуже её отсутствия.
+        справка = ""
+        если_справка = getattr(подборка, "sources_note", "")
+        if если_справка:
+            справка = (f'<p class="col__src">'
+                       f'{html.escape(если_справка)}</p>')
         тело = (f'<section class="sec"><div class="sec__h">'
                 f"<h1>{html.escape(подборка.title)}</h1>"
                 f'<a href="/collections/">Все подборки →</a></div>'
                 f'<p class="claim">{html.escape(подборка.intro)}</p>'
-                f"{сетка}{потери}</section>")
+                f"{справка}{сетка}{потери}</section>")
         return self.оболочка(
             тело, f"{подборка.title} — {self.имя}", подборка.canonical_path,
             актив=подборка.section or "/collections/",

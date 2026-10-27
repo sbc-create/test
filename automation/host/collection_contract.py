@@ -598,6 +598,13 @@ class РучнаяПодборка:
     indexing_open: bool
     indexing_reason: str
     works: tuple = ()
+    #: Справка об источниках: откуда взяты сведения о составе. Необязательное
+    #: поле, и место у него отдельное — мелкой строкой под вступлением.
+    #: Во вступлении таким сведениям не место: оно отвечает читателю, зачем
+    #: смотреть, а не рассказывает, как мы сверялись (поручение владельца
+    #: 27.10). Пустое поле строки не рисует: пустая справка хуже её
+    #: отсутствия.
+    sources_note: str = ""
 
     @property
     def canonical_path(self) -> str:
@@ -634,6 +641,7 @@ def ручные_подборки(данные: dict) -> list:
             intro=str(с.get("intro") or ""), section=str(с.get("section") or ""),
             indexing_open=bool(индексация.get("open")),
             indexing_reason=str(индексация["reason"]),
+            sources_note=str(с.get("sources_note") or ""),
             works=tuple(sorted(работы, key=lambda р: р.order))))
     return итог
 
