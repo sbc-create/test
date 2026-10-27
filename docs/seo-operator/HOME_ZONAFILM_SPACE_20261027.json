@@ -9,9 +9,9 @@
  "direction_rule": "films_series: на главной Zona — фильмы и сериалы; аниме, дорамы и дунхуа исключены (D223)",
  "selection_rule": "Высокая оценка на малой выборке первого места не даёт: сначала работы с большим числом голосов и подтверждённым интересом, свежие работы с малой выборкой — ниже и с отдельным основанием. Исключаются работы, у которых число серий на странице не совпадает с каталогом.",
  "shortages": [
-  "Netflix 2026: из исходного списка в каталоге UNABOMBER (unabomber, tt6933238 — Netflix, Янус Мец) и Animals (zhivotnye-2, tt31049299 — Netflix, Бен Аффлек; в каталоге нет описания, страны и жанров). Две работы — меньше трёх; подборка не создана, добивать не стал. Клифф Бут — в анонсах.",
   "Sony Pictures: Spider-Man: Brand New Day (chelovek-pauk-novyy-den, Columbia/Sony Pictures Releasing) и The Social Reckoning (socialnaya-rasplata, tt37510326, Sony Pictures Releasing/Columbia, США с 09.10.2026) — две работы, подборка не создана. sonypictures.com недоступен для чтения (отказ загрузки 27.10), принадлежность — по Википедии.",
-  "Narnia: The Magician’s Nephew не включена: 12.02.2027 кино, 02.04.2027 Netflix (netflix.com/tudum, 15.10.2026)."
+  "Narnia: The Magician’s Nephew не включена: 12.02.2027 кино, 02.04.2027 Netflix (netflix.com/tudum, 15.10.2026).",
+  "Netflix: фильмы 2026 года из исходного списка (UNABOMBER — unabomber; Animals — zhivotnye-2, tt31049299, без описания в каталоге) — две работы, отдельная подборка фильмов не создана; вместо неё подборка оригинальных сериалов Netflix (8). Клифф Бут — в анонсах."
  ],
  "collections": [
   {
@@ -271,6 +271,171 @@
     }
    ],
    "updated": "2026-10-27"
+  },
+  {
+   "key": "netflix-serialy",
+   "title": "Netflix: сериалы, которые стали событием",
+   "viewer_request": "Какой сериал Netflix посмотреть целиком?",
+   "intro": "Оригинальные сериалы Netflix с большим числом зрительских оценок: криминальные саги, немецкая фантастика о времени, шахматная драма, расследования ФБР и политический триллер. Принадлежность Netflix подтверждена по источнику, а не по названию; все серии каждого сериала есть на сайте.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; принадлежность подтверждена источником; индексация не шире раздела витрины"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01916718-a0e9-7367-b8f5-d8d3c6a1fd07",
+     "slug": "narko",
+     "url": "https://zonafilm.space/title/narko/",
+     "name": "Нарко",
+     "year": 2015,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "2707408",
+      "kinopoisk": "821565"
+     },
+     "reason": "Хроника криминальной жизни колумбийского наркобарона Пабло Эскобара. Три сезона.",
+     "basis": "Netflix — сеть показа, производство Gaumont Television и Netflix; IMDb 8.7 по данным каталога, 536232 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Narcos",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 30 = в каталоге 30; воспроизведение — в публичной приёмке",
+     "original_name": "Narcos"
+    },
+    {
+     "order": 2,
+     "id": "0191671d-66c0-78b8-af2b-8c210ed3af5e",
+     "slug": "tma-6",
+     "url": "https://zonafilm.space/title/tma-6/",
+     "name": "Тьма",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "5753856",
+      "kinopoisk": "1032606"
+     },
+     "reason": "В маленьком немецком городке исчезают двое детей, и у четырёх семей всплывают тёмные тайны прошлого. Три сезона, история закончена.",
+     "basis": "Netflix — сеть показа; Германия; 3 сезона, 2017–2020; IMDb 8.7 по данным каталога, 561552 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Dark_(TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 26 = в каталоге 26; воспроизведение — в публичной приёмке",
+     "original_name": "Dark"
+    },
+    {
+     "order": 3,
+     "id": "01915137-4dbe-724a-96d3-19551e118b47",
+     "slug": "hod-korolevy",
+     "url": "https://zonafilm.space/title/hod-korolevy/",
+     "name": "Ход королевы",
+     "year": 2020,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "10048342",
+      "kinopoisk": "1253633"
+     },
+     "reason": "Девочка-сирота из приюта в Кентукки 1950-х учится играть в шахматы у уборщика — семь серий, одна законченная история.",
+     "basis": "Netflix — сеть показа; мини-сериал, 7 серий; IMDb 8.5 по данным каталога, 678232 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Queen%27s_Gambit_(miniseries)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 7 = в каталоге 7; воспроизведение — в публичной приёмке",
+     "original_name": "The Queen's Gambit"
+    },
+    {
+     "order": 4,
+     "id": "0191671a-dfab-714d-b062-32a3649070d5",
+     "slug": "ohotnik-za-razumom",
+     "url": "https://zonafilm.space/title/ohotnik-za-razumom/",
+     "name": "Охотник за разумом",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "5290382",
+      "kinopoisk": "958500"
+     },
+     "reason": "Конец 1970-х: двое агентов ФБР опрашивают серийных убийц в тюрьмах, чтобы понять их мышление и раскрывать новые дела.",
+     "basis": "Netflix — сеть показа; исполнительный продюсер — Дэвид Финчер; IMDb 8.6 по данным каталога, 405679 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Mindhunter_(TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 19 = в каталоге 19; воспроизведение — в публичной приёмке",
+     "original_name": "Mindhunter"
+    },
+    {
+     "order": 5,
+     "id": "019167af-fbc0-7699-8238-9b9c395d1d69",
+     "slug": "ozark",
+     "url": "https://zonafilm.space/title/ozark/",
+     "name": "Озарк",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "5071412",
+      "kinopoisk": "1045553"
+     },
+     "reason": "Финансовый консультант с семьёй тайно переезжает в курортный городок в Миссури, чтобы поправить дела после крупных долгов. Четыре сезона.",
+     "basis": "Netflix — сеть показа; 4 сезона, 2017–2022; IMDb 8.4 по данным каталога, 399113 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Ozark_(TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 44 = в каталоге 44; воспроизведение — в публичной приёмке",
+     "original_name": "Ozark"
+    },
+    {
+     "order": 6,
+     "id": "01923c68-38a3-7525-ac14-f3d04f5975ed",
+     "slug": "kartochnyy-domik-2",
+     "url": "https://zonafilm.space/title/kartochnyy-domik-2/",
+     "name": "Карточный домик",
+     "year": 2013,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1856010",
+      "kinopoisk": "581937"
+     },
+     "reason": "Конгрессмен, которому не дали обещанный пост госсекретаря, вместе с женой начинает свою игру за власть в Вашингтоне. Шесть сезонов.",
+     "basis": "Netflix — сеть показа; 6 сезонов, 2013–2018; IMDb 8.6 по данным каталога, 563327 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/House_of_Cards_(American_TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 73 = в каталоге 73; воспроизведение — в публичной приёмке",
+     "original_name": "House of Cards"
+    },
+    {
+     "order": 7,
+     "id": "01916742-7a2a-78d6-a2a3-63d9195f0314",
+     "slug": "korona",
+     "url": "https://zonafilm.space/title/korona/",
+     "name": "Корона",
+     "year": 2016,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "4786824",
+      "kinopoisk": "924910"
+     },
+     "reason": "История королевы Елизаветы II начиная со свадьбы в 1947 году. Шесть сезонов.",
+     "basis": "Netflix — сеть показа; 6 сезонов, 2016–2023; IMDb 8.6 по данным каталога, 284804 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Crown_(TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 60 = в каталоге 60; воспроизведение — в публичной приёмке",
+     "original_name": "The Crown"
+    },
+    {
+     "order": 8,
+     "id": "01916a01-4e87-7394-8cb8-fa208d261a90",
+     "slug": "gryznya",
+     "url": "https://zonafilm.space/title/gryznya/",
+     "name": "Грызня",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14403178",
+      "kinopoisk": "4477341"
+     },
+     "reason": "Двое незнакомцев сталкиваются машинами на парковке, и мелкая ссора перерастает во вражду, в которой оба готовы на всё.",
+     "basis": "Netflix — сеть показа; IMDb 8.0 по данным каталога, 180192 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Beef_(TV_series)",
+     "checked": "2026-10-27T12:01:26Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; серий на странице 18 = в каталоге 18; воспроизведение — в публичной приёмке",
+     "original_name": "Beef"
+    }
+   ]
   }
  ]
 }

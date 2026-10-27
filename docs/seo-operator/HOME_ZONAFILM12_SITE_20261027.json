@@ -10,7 +10,8 @@
  "selection_rule": "Высокая оценка на малой выборке первого места не даёт: сначала работы с большим числом голосов и подтверждённым интересом, свежие работы с малой выборкой — ниже и с отдельным основанием. Исключаются работы, у которых число серий на странице не совпадает с каталогом.",
  "shortages": [
   "Universal: «Злая. Часть 2» (zlaya-chast-2, Universal) не включена — первой части в каталоге нет; «Смерч 2» не включён — прокат за пределами США у другой студии.",
-  "«Дипломатка» (diplomatka) не включена: на странице 4-й сезон, в каталоге 3 — число сезонов не совпадает."
+  "«Дипломатка» (diplomatka) не включена: на странице 4-й сезон, в каталоге 3 — число сезонов не совпадает.",
+  "Sony Pictures: sonypictures.com недоступен (отказ загрузки 27.10) — принадлежность каждого фильма сверена по en.wikipedia (Distributed by Sony Pictures Releasing)."
  ],
  "collections": [
   {
@@ -433,6 +434,151 @@
      "original_name": "Nope",
      "source": "en.wikipedia, проверено 27.10.2026",
      "source_url": "https://en.wikipedia.org/wiki/Nope_(film)"
+    }
+   ]
+  },
+  {
+   "key": "sony-pictures",
+   "title": "Sony Pictures: Человек-паук и не только",
+   "viewer_request": "Какие фильмы Sony Pictures стоит посмотреть?",
+   "intro": "Фильмы, которые Sony Pictures выпускала в прокат: три истории о Человеке-пауке и анимационная «Паутина вселенных», Голливуд 1969 года у Тарантино, «28 лет спустя» Дэнни Бойла и новый фильм Аарона Соркина. Принадлежность сверена по источникам; свежий фильм с малым числом оценок — последним.",
+   "section": "/movies/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; принадлежность подтверждена источником; индексация не шире раздела витрины"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019151e9-28b0-73fd-9efb-912189252f39",
+     "slug": "chelovek-pauk-pautina-vselennyh-2023",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-pautina-vselennyh-2023/",
+     "name": "Человек-паук: Паутина вселенных (2023)",
+     "year": 2023,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "9362722",
+      "kinopoisk": "1219177"
+     },
+     "reason": "Майлз попадает в Мультивселенную и встречает команду Пауков из других миров — и решает, что значит быть героем. Анимационный фильм.",
+     "basis": "Columbia Pictures и Sony Pictures Animation; прокат Sony Pictures Releasing; IMDb 8.5 по данным каталога, число голосов в каталоге не указано",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Across_the_Spider-Verse",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Spider-Man: Across the Spider-Verse"
+    },
+    {
+     "order": 2,
+     "id": "01915149-e3dc-77ed-827c-68da9533c17d",
+     "slug": "chelovek-pauk-cherez-vselennye",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-cherez-vselennye/",
+     "name": "Человек-паук: Через вселенные",
+     "year": 2018,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "4633694",
+      "kinopoisk": "920265"
+     },
+     "reason": "Коллайдер открывает окна между измерениями, и в каждом оказывается свой Человек-паук — анимационный фильм.",
+     "basis": "Columbia Pictures и Sony Pictures Animation; прокат Sony Pictures Releasing; IMDb 8.4 по данным каталога, число голосов в каталоге не указано",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Into_the_Spider-Verse",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Spider-Man: Into the Spider-Verse"
+    },
+    {
+     "order": 3,
+     "id": "0191512f-bb5d-7666-87f9-f1f93e404639",
+     "slug": "chelovek-pauk-net-puti-domoy",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-net-puti-domoy/",
+     "name": "Человек-паук: Нет пути домой",
+     "year": 2021,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "10872600",
+      "kinopoisk": "1309570"
+     },
+     "reason": "Мир узнал, кто такой Человек-паук, и Питер Паркер просит помощи у Доктора Стрэнджа — но всё становится только опаснее.",
+     "basis": "Columbia Pictures, Marvel Studios; прокат Sony Pictures Releasing; IMDb 8.1 по данным каталога, число голосов в каталоге не указано",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_No_Way_Home",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Spider-Man: No Way Home"
+    },
+    {
+     "order": 4,
+     "id": "019f0d8e-13ae-7655-a968-b8d99b65e0ac",
+     "slug": "chelovek-pauk-novyy-den",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-novyy-den/",
+     "name": "Человек-паук: Новый день",
+     "year": 2026,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "22084616",
+      "kinopoisk": "5494049"
+     },
+     "reason": "Питер Паркер один в городе, который его забыл, а его способности начинают меняться.",
+     "basis": "Columbia Pictures, Marvel Studios; прокат Sony Pictures Releasing (en.wikipedia); RT 90% из 439 рецензий; IMDb 8.0 по данным каталога, 297243 голосов (imdb-datasets 14.09.2026)",
+     "source": "Rotten Tomatoes и en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://www.rottentomatoes.com/m/spider_man_brand_new_day",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Spider-Man: Brand New Day"
+    },
+    {
+     "order": 5,
+     "id": "0191524c-5cf3-7ea0-ad92-759b53a575c9",
+     "slug": "odnazhdy-v-gollivude-2019",
+     "url": "https://zonafilm12.site/title/odnazhdy-v-gollivude-2019/",
+     "name": "Однажды в… Голливуде (2019)",
+     "year": 2019,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "7131622",
+      "kinopoisk": "1047883"
+     },
+     "reason": "1969 год: актёр Рик Далтон и его дублёр Клифф Бут ищут своё место в меняющемся Голливуде. Фильм Квентина Тарантино.",
+     "basis": "Columbia Pictures; прокат Sony Pictures Releasing; режиссёр Квентин Тарантино; IMDb 7.6 по данным каталога, число голосов в каталоге не указано",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "Once Upon a Time in...  Hollywood"
+    },
+    {
+     "order": 6,
+     "id": "01978905-e82c-789e-9009-7b76a53af7f3",
+     "slug": "28-let-spustya",
+     "url": "https://zonafilm12.site/title/28-let-spustya/",
+     "name": "28 лет спустя",
+     "year": 2025,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "10548174",
+      "kinopoisk": "5445182"
+     },
+     "reason": "Британия через 28 лет после вспышки вируса: 12-летний мальчик ищет врача для умирающей матери. Режиссёр Дэнни Бойл.",
+     "basis": "Columbia Pictures; прокат Sony Pictures Releasing; режиссёр Дэнни Бойл; IMDb 6.6 по данным каталога, число голосов в каталоге не указано",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/28_Years_Later",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "original_name": "28 Years Later"
+    },
+    {
+     "order": 7,
+     "id": "01a0d32b-e92f-754f-afef-bbed014a9ab9",
+     "slug": "socialnaya-rasplata",
+     "url": "https://zonafilm12.site/title/socialnaya-rasplata/",
+     "name": "Социальная расплата",
+     "year": 2026,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "37510326",
+      "kinopoisk": "8883816"
+     },
+     "reason": "Новый фильм Аарона Соркина — сценарий и режиссура; в ролях Джереми Аллен Уайт, Майки Мэдисон и Джереми Стронг.",
+     "basis": "Sony Pictures Releasing / Columbia Pictures; США с 09.10.2026; СВЕЖАЯ РАБОТА С МАЛОЙ ВЫБОРКОЙ (IMDb 6.7 при 1075 голосах) — редакционный выбор, поэтому последней; описания в каталоге нет, пояснение по Википедии; IMDb 6.7 по данным каталога, 1075 голосов (imdb-datasets 14.09.2026)",
+     "source": "en.wikipedia, проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Social_Reckoning",
+     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке"
     }
    ]
   }
