@@ -40,7 +40,7 @@
   "позиция": 0.09,
   "адрес подборки": "https://zonafilm12.site/collection/apple-tv-serialy/",
   "на подборке": true,
-  "из подборки в карточку": true
+  "беда": "TimeoutError: Locator.click: Timeout 15000ms exceeded.\nCall log:\n  - waiting for locator(\"a[href^=\\\"/title/\\\"]\").first\n    - locator resolved to <a class=\"c\" href=\"/title/razdelenie/\">…</a>\n  - attempting click act"
  },
  {
   "домен": "zonafilm12.site",
@@ -53,8 +53,8 @@
   "обложек ждут прокрутки": 1,
   "растянутых обложек": 0,
   "визиток подборок": 13,
-  "визиток с обложкой": 13,
-  "визиток в экране без обложки": 0,
+  "визиток с обложкой": 12,
+  "визиток в экране без обложки": 1,
   "ключи блоков": [
    "rail:serialy-na-vecher-vybor-redakcii",
    "card:apple-tv-serialy",
