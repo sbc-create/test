@@ -85,3 +85,54 @@ def test_цель_player_start_не_сдвинулась():
     # значила бы на разных витринах разное.
     до_жеста = с.split("f.addEventListener('click'")[0]
     assert "window.__sfGoalOnce('player_start')" in до_жеста
+
+
+# --- Доставка на линию Zona --------------------------------------------------
+
+def _скрипт_файла(путь: pathlib.Path) -> str:
+    т = путь.read_text(encoding="utf-8")
+    н = т.index('СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """') + len('СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """')
+    return т[н:т.index('"""', н)]
+
+
+ЛИНИЯ_ZONA = [КОРЕНЬ / "var" / "site-repos" / имя / "src" / "lords-frontend.py"
+              for имя in ("zonafilm-space", "zonafilm12-site")]
+
+
+def test_инструмент_доставки_отказывает_на_каноне():
+    """У канона своя правка; общий инструмент с двумя наборами якорей скрыл бы
+    различие вместо того, чтобы его назвать."""
+    и = subprocess.run(
+        [sys.executable, str(КОРЕНЬ / "automation" / "host"
+                             / "apply-first-tap-patch.py"), str(РАНТАЙМ)],
+        capture_output=True, text=True, timeout=180)
+    assert и.returncode != 0
+    assert "armPlayTimers" in и.stdout + и.stderr
+
+
+def test_линия_zona_приведена():
+    и = subprocess.run(
+        [sys.executable, str(КОРЕНЬ / "automation" / "host"
+                             / "apply-first-tap-patch.py"), "--check",
+         *[str(п) for п in ЛИНИЯ_ZONA]],
+        capture_output=True, text=True, timeout=180)
+    assert и.returncode == 0, и.stdout + и.stderr
+
+
+def test_на_линии_zona_реклама_не_перебивается():
+    """Показ не запускается во время рекламного ролика: у этой линии есть
+    `adActive`, и условие обязано его учитывать."""
+    for путь in ЛИНИЯ_ZONA:
+        с = _скрипт_файла(путь)
+        assert "хотел_играть && !adActive" in с, путь
+        assert "пуск_сделан!==метка" in с, путь
+
+
+def test_скрипты_линии_zona_разбираются_как_javascript():
+    for путь in ЛИНИЯ_ZONA:
+        with tempfile.NamedTemporaryFile("w", suffix=".js", delete=False,
+                                         encoding="utf-8") as ф:
+            ф.write(_скрипт_файла(путь))
+            имя = ф.name
+        г = subprocess.run(["node", "--check", имя], capture_output=True, text=True)
+        assert г.returncode == 0, (путь, г.stderr[:300])
