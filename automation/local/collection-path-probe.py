@@ -167,7 +167,12 @@ def пройти(домен: str, вход: str, ключ: str, размер: tu
                     "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
                     "Mobile/15E148 Safari/604.1") if мобильный else None)
     контекст.add_init_script(ПЕРЕХВАТ)
+    # Технический прогон не шлёт события в Метрику: иначе проба попадает в
+    # статистику ЛЮДЕЙ и раздувает те самые просмотры, которыми обосновывается
+    # состав полок. Глушение ставится ДО первого перехода.
+    контекст.route("**mc.yandex.*/**", lambda м: м.abort())
     страница = контекст.new_page()
+    страница.route("**mc.yandex.*/**", lambda м: м.abort())
     try:
         страница.goto(f"https://{домен}{вход}", wait_until="domcontentloaded",
                       timeout=45000)

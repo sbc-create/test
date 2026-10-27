@@ -22,8 +22,13 @@ import pytest
          for имя in ("zonafilm-space", "zonafilm12-site")]
 #: Тот же закрытый список, что в каноне. Расхождение означало бы, что одна цель
 #: значит на разных витринах разное.
+#: Закрытый список. Две цели о рекомендательных блоках добавлены 27.10:
+#: показов блоков не измеряла ни одна цель, и «блок показали, но из него не
+#: переходят» было неотличимо от «блок никто не видел». Ключ блока в цель не
+#: уходит — третьего аргумента у точки отправки нет по устройству.
 ЦЕЛИ = ("title_view", "search", "filter_apply", "season_select",
-        "episode_select", "player_start", "player_ready", "player_error")
+        "episode_select", "player_start", "player_ready", "player_error",
+        "block_view", "block_click")
 
 
 def test_линия_приведена():

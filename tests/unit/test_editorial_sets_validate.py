@@ -1,0 +1,185 @@
+"""Проверка редакционных наборов против снимка: что она обязана ловить.
+
+Состав подборки выбирают однажды, каталог меняется каждую ночь, и страница
+продолжает отдавать 200 при любой из потерь. Поэтому проверяется поведение
+самой меры: пропавшая работа, потерянный источник видео, чужой профиль,
+расхождение года в заголовке, просроченный анонс и анонс, который уже стал
+доступным просмотром.
+
+Сеть и живые снимки не нужны: витрины подменяются каталогом из временного
+каталога теста.
+"""
+from __future__ import annotations
+
+import importlib.util
+import json
+import pathlib
+
+import pytest
+
+КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
+ПУТЬ = КОРЕНЬ / "automation" / "local" / "editorial-sets-validate.py"
+
+
+@pytest.fixture(scope="module")
+def модуль():
+    спец = importlib.util.spec_from_file_location("editorial_sets_validate", ПУТЬ)
+    м = importlib.util.module_from_spec(спец)
+    спец.loader.exec_module(м)
+    return м
+
+
+def _витрина(tmp_path: pathlib.Path, *, работы, подборка=None, анонсы=None,
+             направление="films_series") -> tuple:
+    """Снимок и проект витрины на диске; возвращает ключ витрины."""
+    данные = tmp_path / "data"
+    проект = tmp_path / "project" / "config"
+    данные.mkdir(parents=True, exist_ok=True)
+    проект.mkdir(parents=True, exist_ok=True)
+    каталог = {"revision": "проба", "builtAt": "2026-10-27T00:00:00Z",
+               "items": [{"slug": р["slug"], "title": р["name"],
+                          "year": р.get("year", 2026),
+                          "poster": р.get("poster", "https://p/x.webp")}
+                         for р in работы]}
+    подробности = {"details": {
+        р["slug"]: {"id": р["id"], "name": р["name"], "year": р.get("year", 2026),
+                    "type": "movie", "playable": р.get("playable", True),
+                    "genres": р.get("genres", []),
+                    "poster_url": р.get("poster", "https://p/x.webp")}
+        for р in работы}}
+    (данные / "c.json").write_text(json.dumps(каталог, ensure_ascii=False),
+                                   encoding="utf-8")
+    (данные / "d.json").write_text(json.dumps(подробности, ensure_ascii=False),
+                                   encoding="utf-8")
+    if подборка is not None:
+        (проект / "collections.json").write_text(
+            json.dumps({"collections": [подборка]}, ensure_ascii=False),
+            encoding="utf-8")
+    if анонсы is not None:
+        (проект / "announcements.json").write_text(
+            json.dumps({"schema": "site-announcements/1", "items": анонсы},
+                       ensure_ascii=False), encoding="utf-8")
+    return (str(данные / "c.json"), str(данные / "d.json"),
+            str(проект.parent.relative_to(КОРЕНЬ)) if str(проект).startswith(str(КОРЕНЬ))
+            else str(проект.parent), направление)
+
+
+def _подключить(модуль, tmp_path, **kw):
+    кат, дет, проект, направление = _витрина(tmp_path, **kw)
+    модуль.ВИТРИНЫ["проба"] = (кат, дет, проект, направление)
+    модуль.КОРЕНЬ = pathlib.Path("/")
+    return "проба"
+
+
+def test_пропавшая_работа_названа(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Есть", "id": "id-1"}],
+        подборка={"key": "k", "title": "Подборка", "items": [
+            {"id": "id-1", "name": "Есть"},
+            {"id": "id-пропал", "name": "Пропала"}]})
+    итог = модуль.проверить_подборки(ячейка)
+    assert итог["исход"] == модуль.ДЕФЕКТ
+    assert any("Пропала" in б and "пропала из снимка" in б for б in итог["беды"]), итог
+
+
+def test_работа_без_видео_и_без_постера(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Без видео", "id": "id-1",
+                 "playable": False, "poster": ""}],
+        подборка={"key": "k", "title": "Подборка",
+                  "items": [{"id": "id-1", "name": "Без видео"}]})
+    итог = модуль.проверить_подборки(ячейка)
+    беды = " ".join(итог["беды"])
+    assert "без источника видео" in беды and "без постера" in беды, итог
+
+
+def test_чужой_профиль_витрины(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Аниме", "id": "id-1",
+                 "genres": ["аниме", "фэнтези"]}],
+        подборка={"key": "k", "title": "Подборка",
+                  "items": [{"id": "id-1", "name": "Аниме"}]},
+        направление="films_series")
+    итог = модуль.проверить_подборки(ячейка)
+    assert any("витрине фильмов и сериалов" in б for б in итог["беды"]), итог
+
+
+def test_год_в_заголовке_против_состава(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Старое", "id": "id-1", "year": 2025}],
+        подборка={"key": "k", "title": "Триллеры 2026 года",
+                  "items": [{"id": "id-1", "name": "Старое"}]})
+    итог = модуль.проверить_подборки(ячейка)
+    assert any("в заголовке 2026" in б for б in итог["беды"]), итог
+
+
+def test_лучшее_года_без_даты_обновления(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Фильм", "id": "id-1"}],
+        подборка={"key": "k", "title": "Лучшее из вышедшего в 2026 году",
+                  "items": [{"id": "id-1", "name": "Фильм"}]})
+    итог = модуль.проверить_подборки(ячейка)
+    assert any("без даты обновления" in б for б in итог["беды"]), итог
+
+
+def test_анонс_уже_доступный_к_просмотру(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path,
+        работы=[{"slug": "a", "name": "Вышло", "id": "id-1", "playable": True}],
+        анонсы=[{"name": "Вышло", "release": {"date": "2026-12-01"},
+                 "source": "https://example.test/x",
+                 "reason": "пояснение длиннее двадцати знаков",
+                 "catalog": {"id": "id-1", "slug": "a", "playable": True}}])
+    итог = модуль.проверить_анонсы(ячейка, "2026-10-27")
+    assert any("уже доступна к просмотру" in б for б in итог["беды"]), итог
+
+
+def test_просроченный_анонс(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path, работы=[{"slug": "a", "name": "X", "id": "id-1"}],
+        анонсы=[{"name": "Старое", "release": {"date": "2026-01-01"},
+                 "source": "https://example.test/x",
+                 "reason": "пояснение длиннее двадцати знаков", "catalog": None}])
+    итог = модуль.проверить_анонсы(ячейка, "2026-10-27")
+    assert any("все объявленные даты в прошлом" in б for б in итог["беды"]), итог
+    assert итог["показано"] == 0
+    assert any("заполнять его случайными карточками нельзя" in б
+               for б in итог["беды"]), "не сказано, что блок просто скрывается"
+
+
+def test_вторая_дата_держит_анонс(модуль, tmp_path):
+    """Кино прошло, платформа впереди — ожидание ещё живо."""
+    ячейка = _подключить(
+        модуль, tmp_path, работы=[{"slug": "a", "name": "X", "id": "id-1"}],
+        анонсы=[{"name": "Два события",
+                 "release": {"date": "2026-10-01", "second": {"date": "2026-12-23"}},
+                 "source": "https://example.test/x",
+                 "reason": "пояснение длиннее двадцати знаков", "catalog": None}])
+    итог = модуль.проверить_анонсы(ячейка, "2026-10-27")
+    assert итог["показано"] == 1, итог
+    assert итог["исход"] == модуль.ЧИСТО, итог
+
+
+def test_анонс_без_источника_и_пояснения(модуль, tmp_path):
+    ячейка = _подключить(
+        модуль, tmp_path, работы=[{"slug": "a", "name": "X", "id": "id-1"}],
+        анонсы=[{"name": "Пустой", "release": {"date": "2026-12-01"},
+                 "source": "", "reason": "мало", "catalog": None}])
+    итог = модуль.проверить_анонсы(ячейка, "2026-10-27")
+    беды = " ".join(итог["беды"])
+    assert "нет официального источника" in беды and "нет человеческого пояснения" in беды
+
+
+def test_живые_витрины_проверяются_без_дефектов():
+    """Текущее состояние трёх витрин: мера обязана пройти и ничего не найти."""
+    import subprocess
+    import sys
+    и = subprocess.run([sys.executable, str(ПУТЬ)], capture_output=True,
+                       text=True, timeout=300)
+    assert и.returncode == 0, и.stdout + и.stderr
+    assert "с дефектом 0" in и.stdout, и.stdout

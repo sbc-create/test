@@ -24,8 +24,13 @@ import pytest
 ИНСТРУМЕНТ = КОРЕНЬ / "automation" / "host" / "apply-goals-patch.py"
 РАНТАЙМ = (КОРЕНЬ / "var" / "site-repos" / "animedia-icu" / "src"
            / "animedia-frontend.py")
+#: Закрытый список. Две цели о рекомендательных блоках добавлены 27.10:
+#: показов блоков не измеряла ни одна цель, и «блок показали, но из него не
+#: переходят» было неотличимо от «блок никто не видел». Ключ блока в цель не
+#: уходит — третьего аргумента у точки отправки нет по устройству.
 ЦЕЛИ = ("title_view", "search", "filter_apply", "season_select",
-        "episode_select", "player_start", "player_ready", "player_error")
+        "episode_select", "player_start", "player_ready", "player_error",
+        "block_view", "block_click")
 
 
 def _текст() -> str:

@@ -824,6 +824,8 @@ def тег_метрики() -> str:
     "player_start",     # площадка запросила воспроизведение
     "player_ready",     # плеер поднялся
     "player_error",     # запуск не состоялся
+    "block_view",       # рекомендательный блок показан (ключ блока не передаётся)
+    "block_click",      # из рекомендательного блока перешли в карточку
 )
 
 
@@ -872,7 +874,21 @@ def цели_метрики(номер: str) -> str:
         "var h=a.getAttribute('href')||'';"
         "if(/\\/season-\\d+\\/episode-\\d+\\/?$/.test(h)){g('episode_select');}"
         "else if(/\\/season-\\d+\\/?$/.test(h)){g('season_select');}"
+        # Переход ИЗ рекомендательного блока: ключ блока остаётся в разметке,
+        # в цель он не уходит — третьего аргумента у точки отправки нет.
+        "var b=a.closest&&a.closest('[data-block-key]');"
+        "if(b){g('block_click');}"
         "},true);"
+        # Показ блока: половина высоты в экране. Одна отправка на загрузку
+        # страницы, иначе прокрутка туда-сюда накрутила бы показы.
+        "try{if(window.IntersectionObserver){"
+        "var o=new IntersectionObserver(function(es){"
+        "for(var i=0;i<es.length;i++){if(es[i].isIntersecting){"
+        "window.__sfGoalOnce('block_view');o.disconnect();return;}}},"
+        "{threshold:0.5});"
+        "document.querySelectorAll('[data-block-key]').forEach(function(el){"
+        "o.observe(el);});"
+        "}}catch(e){}"
         "})();</script>"
     )
 
@@ -4267,13 +4283,132 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 _ПОСТЕР_ENV = os.environ.get("LORDS_POSTER_SAME_ORIGIN", "").strip().lower()
 ПОСТЕРЫ_СВОИМ_АДРЕСОМ = (
     _ПОСТЕР_ENV in ("1", "true", "yes")
-    or (_ПОСТЕР_ENV not in ("0", "false", "no") and СЕМЕЙСТВО == "animedia")
+    or (_ПОСТЕР_ENV not in ("0", "false", "no")
+        and СЕМЕЙСТВО in ("animedia", "zona"))
 )
 ВНЕШНИЙ_ПОСТЕР = "https://poster.cdnvideohub.com/"
 ПОСТЕР_HOSTS = frozenset({"poster.cdnvideohub.com"})
 ПОСТЕР_MAX_BYTES = 2_500_000
-_ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
+_ПОСТЕР_КЭШ: dict[str | tuple[str, int], tuple[float, bytes, str]] = {}
 _ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
+
+
+#: Закрытый набор ширин /poster/<ключ>?w=N: прочие w — как без параметра,
+#: чтобы память и адреса не размножались. Вариант уже предела берётся из
+#: обложки предела, шире — из исходника; увеличения нет никогда.
+ПОСТЕР_ШИРИНЫ = (160, 240, 320, 720)
+#: Форма обложки: самое широкое окно показа — 0,83, поэтому кадр шире порога
+#: обрезается по центру до цели. Срезается только то, что `object-fit:cover`
+#: и так не показывает.
+ПОСТЕР_ПОРОГ_ФОРМЫ = 0.94
+ПОСТЕР_ЦЕЛЬ_ФОРМЫ = 0.85
+#: Сколько помнить отказ источника, прежде чем спрашивать снова.
+ПОСТЕР_НЕГАТИВ_СЕК = 300
+
+
+def _предел_постера(значение: str | None, умолчание: int = 480) -> int:
+    """Предел ширины из окружения. Мусор не меняет витрину молча."""
+    текст = (значение or "").strip()
+    if текст.isdigit() and 160 <= int(текст) <= 2000:
+        return int(текст)
+    return умолчание
+
+
+ПОСТЕР_МАКС_ШИРИНА = _предел_постера(os.environ.get("LORDS_POSTER_MAX_WIDTH"))
+
+#: `sizes` по блокам: измеренный максимум отрисовки с запасом вверх. Без него
+#: браузер считает показ равным ширине окна и берёт самый крупный файл.
+ПОКАЗ_ПОЛКА = "(min-width:1024px) 240px, (min-width:640px) 200px, 164px"
+ПОКАЗ_СЕТКА = "(min-width:1200px) 180px, (min-width:640px) 200px, 164px"
+ПОКАЗ_ОБЛОЖКА = "(min-width:1024px) 320px, (min-width:640px) 280px, 240px"
+
+
+def _уменьшить_постер(данные: bytes, тип: str,
+                      ширина: int | None = None) -> tuple[bytes, str]:
+    """WebP/JPEG шире предела — до предела тем же форматом; иначе как есть.
+
+    Нет Pillow, ошибка разбора или кодирования, анимация, картинка больше
+    4000×6000 или результат не меньше исходника — исходные байты без
+    изменений. Витрина обязана отдать обложку и без уменьшения.
+    """
+    if тип not in ("image/webp", "image/jpeg"):
+        return данные, тип
+    предел = ширина or ПОСТЕР_МАКС_ШИРИНА
+    try:
+        import io
+        from PIL import Image
+
+        with Image.open(io.BytesIO(данные)) as im:
+            if getattr(im, "n_frames", 1) > 1:
+                return данные, тип
+            w, h = im.size
+            if w > 4000 or h > 6000:
+                return данные, тип
+            обрезать = w > h * ПОСТЕР_ПОРОГ_ФОРМЫ
+            if not обрезать and w <= предел:
+                return данные, тип
+            icc = im.info.get("icc_profile")
+            im.load()
+            мал = im
+            if обрезать:
+                узкая = max(1, round(h * ПОСТЕР_ЦЕЛЬ_ФОРМЫ))
+                слева = (w - узкая) // 2
+                мал = im.crop((слева, 0, слева + узкая, h))
+                w = узкая
+            if w > предел:
+                мал = мал.resize((предел, max(1, round(h * предел / w))),
+                                 Image.LANCZOS)
+        опции: dict = {"icc_profile": icc} if icc else {}
+        буф = io.BytesIO()
+        if тип == "image/webp":
+            if мал.mode not in ("RGB", "RGBA"):
+                мал = мал.convert("RGBA" if "A" in мал.getbands() else "RGB")
+            мал.save(буф, "WEBP", quality=85, method=4, **опции)
+        else:
+            if мал.mode not in ("RGB", "L", "CMYK"):
+                мал = мал.convert("RGB")
+            мал.save(буф, "JPEG", quality=85, optimize=True, progressive=True,
+                     **опции)
+        новые = буф.getvalue()
+    except Exception:  # noqa: BLE001 — любая ошибка: отдать источник как есть
+        return данные, тип
+    if not новые or len(новые) >= len(данные):
+        return данные, тип
+    return новые, тип
+
+
+def _ширина_постера(запрос: str) -> int | None:
+    """`w` ровно из набора и ровно одним значением; иначе None."""
+    if not запрос:
+        return None
+    значения = parse_qs(запрос).get("w") or []
+    if len(значения) != 1 or not значения[0].isdigit():
+        return None
+    w = int(значения[0])
+    return w if w in ПОСТЕР_ШИРИНЫ else None
+
+
+def _набор_постера(адрес: str | None, показ_css: int | str | None) -> str:
+    """`srcset`/`sizes` для своего адреса обложки; для чужого — пусто.
+
+    Кандидаты шире предела добавляются только когда показ больше 240 px:
+    при двойной плотности ему нужен файл шире предела.
+    """
+    if not показ_css or not адрес or not str(адрес).startswith("/poster/"):
+        return ""
+    а = html.escape(str(адрес))
+    условия = isinstance(показ_css, str)
+    шире = условия and any(
+        часть.strip().split()[-1].endswith("px")
+        and int(часть.strip().split()[-1][:-2]) > 240
+        for часть in показ_css.split(","))
+    кандидаты = ", ".join(
+        [f"{а}?w={w} {w}w" for w in ПОСТЕР_ШИРИНЫ if w < ПОСТЕР_МАКС_ШИРИНА]
+        + [f"{а} {ПОСТЕР_МАКС_ШИРИНА}w"]
+        + [f"{а}?w={w} {w}w" for w in ПОСТЕР_ШИРИНЫ
+           if шире and w > ПОСТЕР_МАКС_ШИРИНА])
+    sizes = html.escape(показ_css) if условия else f"{показ_css}px"
+    return f' srcset="{кандидаты}" sizes="{sizes}"'
 
 
 def _адрес_постера(адрес: str | None) -> str | None:
@@ -4295,7 +4430,7 @@ def _постер_безопасный_ключ(хвост: str) -> str | None:
     return хвост
 
 
-def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
+def отдать_постер(хвост: str, запрос: str = "") -> tuple[int, bytes, str]:
     """First-party proxy: allowlist host, timeouts, size/MIME limits, caches."""
     import http.client
     import time
@@ -4306,9 +4441,19 @@ def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
     сейчас = time.time()
     if ключ in _ПОСТЕР_НЕГАТИВ and сейчас - _ПОСТЕР_НЕГАТИВ[ключ] < 300:
         return 404, b"", "text/plain"
+    ширина = _ширина_постера(запрос)
+    if ширина:
+        вариант = _ПОСТЕР_КЭШ.get((ключ, ширина))
+        if вариант and сейчас - вариант[0] < 86_400:
+            return 200, вариант[1], вариант[2]
     кэш = _ПОСТЕР_КЭШ.get(ключ)
-    if кэш and сейчас - кэш[0] < 86_400:
-        return 200, кэш[1], кэш[2]
+    шире = bool(ширина) and ширина > ПОСТЕР_МАКС_ШИРИНА
+    if кэш and сейчас - кэш[0] < 86_400 and not шире:
+        if not ширина:
+            return 200, кэш[1], кэш[2]
+        данные, тип = _уменьшить_постер(кэш[1], кэш[2], ширина)
+        _ПОСТЕР_КЭШ[(ключ, ширина)] = (кэш[0], данные, тип)
+        return 200, данные, тип
     try:
         соед = http.client.HTTPSConnection("poster.cdnvideohub.com", timeout=4)
         соед.request("GET", "/" + ключ, headers={
@@ -4330,7 +4475,16 @@ def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
         if len(данные) > ПОСТЕР_MAX_BYTES:
             _ПОСТЕР_НЕГАТИВ[ключ] = сейчас
             return 413, b"", "text/plain"
-        _ПОСТЕР_КЭШ[ключ] = (сейчас, данные, тип)
+        исходник, тип_исходника = данные, тип
+        данные, тип = _уменьшить_постер(данные, тип)
+        if not (шире and кэш and сейчас - кэш[0] < 86_400):
+            _ПОСТЕР_КЭШ[ключ] = (сейчас, данные, тип)
+        if шире:
+            данные, тип = _уменьшить_постер(исходник, тип_исходника, ширина)
+            _ПОСТЕР_КЭШ[(ключ, ширина)] = (сейчас, данные, тип)
+        elif ширина:
+            данные, тип = _уменьшить_постер(данные, тип, ширина)
+            _ПОСТЕР_КЭШ[(ключ, ширина)] = (сейчас, данные, тип)
         if len(_ПОСТЕР_КЭШ) > 512:
             # Простой LRU-суррогат: выкинуть самые старые четверть.
             устаревшие = sorted(_ПОСТЕР_КЭШ.items(), key=lambda п: п[1][0])[:128]
@@ -4342,7 +4496,7 @@ def отдать_постер(хвост: str) -> tuple[int, bytes, str]:
         return 504, b"", "text/plain"
 
 
-_ПОСТЕР_КЭШ: dict[str, tuple[float, bytes, str]] = {}
+_ПОСТЕР_КЭШ: dict[str | tuple[str, int], tuple[float, bytes, str]] = {}
 _ПОСТЕР_НЕГАТИВ: dict[str, float] = {}
 
 
@@ -9069,7 +9223,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 return self._отдать(b"", "text/plain; charset=utf-8", код=404)
             return self._отдать(данные, "application/xml; charset=utf-8")
         if путь.startswith("/poster/"):
-            код, тело, тип = отдать_постер(путь[len("/poster/"):])
+            код, тело, тип = отдать_постер(путь[len("/poster/"):],
+                                            разбор.query)
             if код != 200:
                 return self._отдать(тело or b"", тип or "text/plain", код=код)
             self.send_response(200)

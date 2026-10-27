@@ -4,80 +4,201 @@
   "description": "Требования владельца к качественной подборке, записанные проверяемо. Форма взята у подготовленной поставки линии SEO (zonafilm-cc.collections/2), а не придумана: схема описывает то, что уже делается, и добавляет только обязательность решения об индексации. Общими являются механизм и требования; состав и подача принадлежат профилю домена.",
   "type": "object",
   "additionalProperties": true,
-  "required": ["schema", "site", "site_id", "prepared_at", "status", "key", "direction_rule", "collections"],
+  "required": [
+    "schema",
+    "site",
+    "site_id",
+    "prepared_at",
+    "status",
+    "key",
+    "direction_rule",
+    "collections"
+  ],
   "properties": {
-    "schema": {"type": "string", "pattern": "^[a-z0-9.-]+\\.collections/[0-9]+$"},
-    "site": {"type": "string", "minLength": 4},
-    "site_id": {"type": "string", "minLength": 3},
-    "prepared_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}"},
+    "schema": {
+      "type": "string",
+      "pattern": "^[a-z0-9.-]+\\.collections/[0-9]+$"
+    },
+    "site": {
+      "type": "string",
+      "minLength": 4
+    },
+    "site_id": {
+      "type": "string",
+      "minLength": 3
+    },
+    "prepared_at": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}"
+    },
     "status": {
       "description": "Состояние поставки. Отделяет подготовленное от выпущенного: «подготовлено» результатом не считается.",
-      "enum": ["PREPARED_NOT_RELEASED", "RELEASED", "VERIFIED_LIVE", "EFFECT_MEASURED", "WITHDRAWN"]
+      "enum": [
+        "PREPARED_NOT_RELEASED",
+        "RELEASED",
+        "VERIFIED_LIVE",
+        "EFFECT_MEASURED",
+        "WITHDRAWN"
+      ]
     },
-    "key": {"type": "string", "minLength": 3},
+    "key": {
+      "type": "string",
+      "minLength": 3
+    },
     "direction_rule": {
       "description": "Соответствие направлению сайта: чем состав этой витрины отличается от соседней.",
-      "type": "string", "minLength": 40
+      "type": "string",
+      "minLength": 40
     },
     "collections": {
-      "type": "array", "minItems": 1,
+      "type": "array",
+      "minItems": 1,
       "items": {
         "type": "object",
         "additionalProperties": true,
-        "required": ["key", "title", "viewer_request", "intro", "section", "indexing", "items"],
+        "required": [
+          "key",
+          "title",
+          "viewer_request",
+          "intro",
+          "section",
+          "indexing",
+          "items"
+        ],
         "properties": {
           "key": {
             "description": "Устойчивый ключ подборки: из него строится адрес, и он не меняется при пересборке состава.",
-            "type": "string", "pattern": "^[a-z0-9-]{3,60}$"
+            "type": "string",
+            "pattern": "^[a-z0-9-]{3,60}$"
           },
-          "title": {"type": "string", "minLength": 8},
+          "title": {
+            "type": "string",
+            "minLength": 8
+          },
           "viewer_request": {
             "description": "Понятная потребность пользователя своими словами, а не название фильтра.",
-            "type": "string", "minLength": 20
+            "type": "string",
+            "minLength": 20
           },
           "intro": {
             "description": "Содержательное описание и объяснение выбора. Технические фразы и пересказ чужих текстов запрещены правилами содержания.",
-            "type": "string", "minLength": 80
+            "type": "string",
+            "minLength": 80
           },
-          "section": {"type": "string", "pattern": "^/"},
+          "section": {
+            "type": "string",
+            "pattern": "^/"
+          },
           "indexing": {
             "description": "Обоснованное решение об индексации. Произвольные комбинации фильтров и технические теги автоматически не открываются.",
             "type": "object",
-            "required": ["open", "reason"],
+            "required": [
+              "open",
+              "reason"
+            ],
             "properties": {
-              "open": {"type": "boolean"},
-              "reason": {"type": "string", "minLength": 20}
+              "open": {
+                "type": "boolean"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 20
+              }
             }
           },
           "items": {
-            "type": "array", "minItems": 3,
+            "type": "array",
+            "minItems": 3,
             "items": {
               "type": "object",
               "additionalProperties": true,
-              "required": ["order", "id", "slug", "url", "name", "year", "reason", "checked"],
+              "required": [
+                "order",
+                "id",
+                "slug",
+                "url",
+                "name",
+                "year",
+                "reason",
+                "checked"
+              ],
               "properties": {
                 "order": {
                   "description": "Осмысленный порядок карточек: число, а не случайность выдачи.",
-                  "type": "integer", "minimum": 1
+                  "type": "integer",
+                  "minimum": 1
                 },
                 "id": {
                   "description": "Постоянный идентификатор каталога (details[].id). Slug ключом не является: решение владельца витрины 26.10.",
-                  "type": "string", "minLength": 8
+                  "type": "string",
+                  "minLength": 8
                 },
-                "slug": {"type": "string", "minLength": 1},
-                "url": {"type": "string", "pattern": "^https://"},
-                "name": {"type": "string", "minLength": 1},
-                "year": {"type": "integer", "minimum": 1895},
+                "slug": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "url": {
+                  "type": "string",
+                  "pattern": "^https://"
+                },
+                "name": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "year": {
+                  "type": "integer",
+                  "minimum": 1895
+                },
                 "reason": {
                   "description": "Объяснение выбора именно этой работы. Год выпуска сам по себе причиной не является, а старый фильм плохим кандидатом не является.",
-                  "type": "string", "minLength": 30
+                  "type": "string",
+                  "minLength": 30
                 },
                 "checked": {
                   "description": "Когда состояние работы проверялось живой страницей.",
-                  "type": "string", "minLength": 10
+                  "type": "string",
+                  "minLength": 10
+                },
+                "demand_basis": {
+                  "type": "string",
+                  "minLength": 10,
+                  "description": "Внутреннее основание спроса: место в перечне источника или измеренное число открытий страниц за названный период. Посетителю не показывается; отвечает на вопрос «почему такой порядок» в отчёте. Устарело с 27.10: новое имя — `basis`; поле остаётся читаемым, пока выложены файлы с ним."
+                },
+                "source": {
+                  "type": "string",
+                  "minLength": 10,
+                  "description": "Источник факта включения: ссылка или название источника и дата передачи. Доля положительных рецензий средней оценкой не называется."
+                },
+                "external_ids": {
+                  "type": "object",
+                  "description": "Внешние идентификаторы записи из каталога. Нужны там, где в каталоге есть однофамильцы: совпадение имени доказательством не считается."
+                },
+                "source_url": {
+                  "type": "string",
+                  "pattern": "^https?://",
+                  "description": "Официальный источник факта включения — ссылкой. Доля положительных рецензий средней оценкой не называется, а зарубежная популярность не выдаётся за измеренный спрос российской аудитории."
+                },
+                "basis": {
+                  "type": "string",
+                  "minLength": 10,
+                  "description": "Внутреннее основание включения и порядка: место в перечне источника, число оценок, измеренные открытия страниц. ПОСЕТИТЕЛЮ НЕ ПОКАЗЫВАЕТСЯ — на странице печатается только `reason`. Заменяет прежнее `demand_basis`."
                 }
               }
             }
+          },
+          "home_rail": {
+            "type": "boolean",
+            "description": "Полка главной: подборка выходит ПЕРВОЙ лентой главной крупными постерами, а не плашкой. Поле необязательное; витрина без него собирает главную прежним порядком. Введено 2026-10-27 по поручению владельца: первый экран обязан помогать выбрать, что смотреть."
+          },
+          "removed_note": {
+            "type": "string",
+            "minLength": 20,
+            "description": "Почему из состава убрана работа. Пустым не бывает: состав сокращён решением человека, и причина обязана остаться в файле, а не в переписке."
+          },
+          "updated": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+            "description": "Дата последнего пересмотра состава. Обязательна для промежуточных подборок («лучшее года»): без неё читатель не отличит свежий выбор от прошлогоднего."
           }
         }
       }
