@@ -37,6 +37,19 @@ if str(КОРЕНЬ) not in sys.path:
     sys.path.insert(0, str(КОРЕНЬ))
 
 РАЗМЕРЫ = (("телефон", 390, 844, True, 2), ("компьютер", 1366, 768, False, 1))
+
+
+def _адрес(домен: str) -> str:
+    """Схема по адресу: локальный стенд отвечает по http, витрина — по https.
+
+    Прибивать https нельзя: тогда приёмку не прогнать ДО выпуска, а прогон
+    после выпуска — это уже проверка выложенного, а не проверка перед ним.
+    """
+    домен = домен.strip()
+    if домен.startswith("http://") or домен.startswith("https://"):
+        return домен.rstrip("/")
+    местный = домен.startswith(("127.0.0.1", "localhost", "[::1]"))
+    return ("http://" if местный else "https://") + домен
 #: Рост позиции, после которого показ считается начавшимся. Наличие позиции
 #: признаком не является: поставщик отдаёт один `timeupdate` с 0.09 и держит
 #: его — источник разрешён, картинка стоит (замер 27.10).
@@ -56,6 +69,11 @@ window.addEventListener('message', function(ev){
 """
 
 ОСМОТР = """() => {
+  const видна = (i) => {
+      const r = i.getBoundingClientRect();
+      return r.bottom > 0 && r.top < window.innerHeight
+             && r.right > 0 && r.left < window.innerWidth;
+  };
   const нужно = (i) => Math.round(
       i.getBoundingClientRect().width * window.devicePixelRatio);
   const кандидат = (i) => {
@@ -79,11 +97,18 @@ window.addEventListener('message', function(ev){
     'полка первая': !!полка && !!первый && первый.classList.contains('zr1'),
     'карточек полки': карточки.length,
     'обложек полки': обложки.length,
-    'обложек без файла': обложки.filter(i => !i.naturalWidth).length,
+    // Пустой может быть только та обложка, которой ещё нет в экране: ниже
+    // сгиба они грузятся лениво, и это не дефект. Дефект — пустая обложка
+    // В ЭКРАНЕ: именно её зритель видит буквой или дырой.
+    'обложек без файла': обложки.filter(i => !i.naturalWidth && видна(i)).length,
+    'обложек ждут прокрутки': обложки.filter(i => !i.naturalWidth && !видна(i)).length,
     'растянутых обложек': obl_rast(),
     'визиток подборок': визитки.length,
     'визиток с обложкой': визитки.filter(
         c => c.querySelector('img') && c.querySelector('img').naturalWidth > 0).length,
+    'визиток в экране без обложки': визитки.filter(
+        c => видна(c) && c.querySelector('img')
+             && !c.querySelector('img').naturalWidth).length,
     'ключи блоков': [...document.querySelectorAll('[data-block-key]')]
         .slice(0, 12).map(e => e.getAttribute('data-block-key')),
     'анонсов': анонсы ? анонсы.querySelectorAll('.zann__c').length : 0,
@@ -133,7 +158,7 @@ def пройти(браузер, домен: str, размер, снимки: pa
     с = контекст.new_page()
     с.route("**mc.yandex.*/**", lambda м: м.abort())
     try:
-        с.goto(f"https://{домен}/", wait_until="load", timeout=60000)
+        с.goto(_адрес(домен) + "/", wait_until="load", timeout=60000)
         с.wait_for_timeout(2500)
         итог.update(с.evaluate(ОСМОТР))
         снимки.mkdir(parents=True, exist_ok=True)
@@ -174,7 +199,7 @@ def пройти(браузер, домен: str, размер, снимки: pa
                 нажатий if начало is not None and позиция - начало >= РОСТ_С else None)
             итог["позиция"] = round(позиция, 2)
         # --- визитка → страница подборки → карточка ------------------------
-        с.goto(f"https://{домен}/", wait_until="load", timeout=60000)
+        с.goto(_адрес(домен) + "/", wait_until="load", timeout=60000)
         с.wait_for_timeout(1500)
         визитка = с.locator(".zcl__c, .zhub__c").first
         if визитка.count():
@@ -203,7 +228,7 @@ def тёмная(браузер, домен: str, снимки: pathlib.Path) ->
     контекст.route("**mc.yandex.*/**", lambda м: м.abort())
     с = контекст.new_page()
     try:
-        с.goto(f"https://{домен}/", wait_until="load", timeout=60000)
+        с.goto(_адрес(домен) + "/", wait_until="load", timeout=60000)
         с.wait_for_timeout(2000)
         файл = снимки / f"{домен}-главная-телефон-тёмная.png"
         с.screenshot(path=str(файл))
@@ -218,7 +243,8 @@ def тёмная(браузер, домен: str, снимки: pathlib.Path) ->
 
 def главная(аргв=None) -> int:
     р = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    р.add_argument("--domain", required=True)
+    р.add_argument("--domain", required=True,
+                   help="домен витрины или 127.0.0.1:<порт> локального стенда")
     р.add_argument("--out", default=None)
     р.add_argument("--json", action="store_true")
     а = р.parse_args(аргв)
@@ -246,7 +272,9 @@ def главная(аргв=None) -> int:
         for и in итоги:
             print(json.dumps(и, ensure_ascii=False))
     беда = sum(1 for и in итоги if и.get("беда")
-               or и.get("обложек без файла") or и.get("растянутых обложек")
+               or и.get("обложек без файла")
+               or и.get("визиток в экране без обложки")
+               or и.get("растянутых обложек")
                or и.get("ссылок на просмотр в анонсах")
                or (и.get("горизонтальная прокрутка") or 0) > 0)
     print(f"\nпроходов с бедой: {беда} из {len(итоги)}")
