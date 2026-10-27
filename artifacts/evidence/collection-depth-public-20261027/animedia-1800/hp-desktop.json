@@ -1,0 +1,39 @@
+{
+ "site": "animedia.icu",
+ "device": "desktop",
+ "started": "18:02:46Z",
+ "home_status": 200,
+ "rail_key": "rail:anime-serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 1846,
+ "rail_imgs": 13,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [],
+ "rail_first": "/title/provozhayuschaya-v-posledniy-put-friren/",
+ "home_to_card_s": 0.61,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.7,
+   4.7,
+   5.7,
+   6.7
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": null,
+ "home_to_collection_s": 0.51,
+ "collection_first": "/title/vayolet-evergarden/",
+ "collection_to_card_s": 0.46,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.2,
+   4.3,
+   5.3,
+   6.3
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "18:03:35Z"
+}
