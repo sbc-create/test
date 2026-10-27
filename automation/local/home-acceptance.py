@@ -38,6 +38,33 @@ if str(КОРЕНЬ) not in sys.path:
 
 РАЗМЕРЫ = (("телефон", 390, 844, True, 2), ("компьютер", 1366, 768, False, 1))
 
+#: Высота и плотность по ширине. Телефонная ширина идёт с DPR 2, иначе снимок
+#: врёт о размере: физические пиксели — не пиксели CSS, и 27.10 на этом уже
+#: вышла ошибка — «карточка ниже сгиба» была прочитана с DPR 3.
+ВЫСОТЫ = {390: (844, True, 2), 414: (896, True, 2), 1366: (768, False, 1),
+          1440: (900, False, 1), 1920: (1080, False, 1)}
+
+
+def размеры_по_ширинам(строка: str) -> tuple:
+    """`--widths 390,1440,1920` → спецификации размеров.
+
+    Неизвестная ширина не угадывается высотой «на глаз»: без высоты снимок
+    нельзя сравнивать с другим снимком, поэтому перечень закрытый.
+    """
+    итог = []
+    for кусок in (с.strip() for с in строка.split(",") if с.strip()):
+        ширина = int(кусок)
+        if ширина not in ВЫСОТЫ:
+            raise SystemExit(f"ОТКАЗ: для ширины {ширина} не объявлена высота — "
+                             f"известны {sorted(ВЫСОТЫ)}")
+        высота, телефон, плотность = ВЫСОТЫ[ширина]
+        имя = ("телефон" if телефон else "компьютер") + f" {ширина}"
+        итог.append((имя, ширина, высота, телефон, плотность))
+    if not итог:
+        raise SystemExit("ОТКАЗ: --widths без ширин")
+    return tuple(итог)
+
+
 
 def _адрес(домен: str) -> str:
     """Схема по адресу: локальный стенд отвечает по http, витрина — по https.
@@ -114,6 +141,33 @@ window.addEventListener('message', function(ev){
              && !c.querySelector('img').naturalWidth).length,
     'ключи блоков': [...document.querySelectorAll('[data-block-key]')]
         .slice(0, 12).map(e => e.getAttribute('data-block-key')),
+    // Сетка визиток подборок на главной. Владелец 27.10: «убери
+    // композиционные пустоты», четыре карточки на компьютере — 2×2. Ряд
+    // считается по ВЕРХНЕЙ координате карточки: число колонок из CSS здесь
+    // не читается, читается то, как браузер в итоге разложил.
+    'визиток в первом ряду': (() => {
+        if (!визитки.length) return 0;
+        const верх = Math.round(визитки[0].getBoundingClientRect().top);
+        return визитки.filter(
+            c => Math.abs(Math.round(c.getBoundingClientRect().top) - верх) <= 4).length;
+    })(),
+    'рядов визиток': (() => {
+        const верхи = new Set(визитки.map(
+            c => Math.round(c.getBoundingClientRect().top / 8)));
+        return верхи.size;
+    })(),
+    'ширина визитки': визитки.length
+        ? Math.round(визитки[0].getBoundingClientRect().width) : 0,
+    // Пустота последнего ряда: сколько ячеек в нём не занято. При четырёх
+    // карточках и трёх колонках это 2 — ровно то, что было видно дырой.
+    'пустых ячеек последнего ряда': (() => {
+        if (!визитки.length) return 0;
+        const верх = Math.round(визитки[0].getBoundingClientRect().top);
+        const в_ряду = визитки.filter(
+            c => Math.abs(Math.round(c.getBoundingClientRect().top) - верх) <= 4).length;
+        const остаток = визитки.length % в_ряду;
+        return остаток ? в_ряду - остаток : 0;
+    })(),
     'анонсов': анонсы ? анонсы.querySelectorAll('.zann__c').length : 0,
     'ссылок на просмотр в анонсах': анонс_ссылки.filter(h => h.includes('/title/')).length,
     'внешних источников в анонсах': анонс_ссылки.filter(h => h.startsWith('http')).length,
@@ -288,7 +342,11 @@ def главная(аргв=None) -> int:
     р.add_argument("--out-json", default="",
                    help="записать отчёт файлом: строка итога туда не попадает, "
                         "и файл остаётся разбираемым JSON")
+    р.add_argument("--widths", default="",
+                   help="ширины через запятую вместо пары по умолчанию, "
+                        f"например 390,1440,1920 (известны {sorted(ВЫСОТЫ)})")
     а = р.parse_args(аргв)
+    размеры = размеры_по_ширинам(а.widths) if а.widths else РАЗМЕРЫ
     снимки = pathlib.Path(а.out or (КОРЕНЬ / "artifacts" / "evidence" / "home-acceptance"))
     from factory.seo.render_check import chromium_path
     from playwright.sync_api import sync_playwright
@@ -301,7 +359,7 @@ def главная(аргв=None) -> int:
     with sync_playwright() as pw:
         бр = pw.chromium.launch(**пуск)
         try:
-            for размер in РАЗМЕРЫ:
+            for размер in размеры:
                 итоги.append(пройти(бр, а.domain, размер, снимки))
             итоги.append({"домен": а.domain, "размер": "телефон, тёмная тема",
                           **тёмная(бр, а.domain, снимки)})
