@@ -1,0 +1,82 @@
+{
+ "site": "animedia.icu",
+ "device": "phone",
+ "started": "09:44:44Z",
+ "home_status": 200,
+ "rail_key": "rail:anime-serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 126,
+ "rail_imgs": 8,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [
+  {
+   "src": "nimedia.icu/poster/0191526c-27a2-768c-8c2f-925f0b3e8e4d.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "nimedia.icu/poster/019154c6-1d4a-7928-8a67-a83b71aa211a.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "nimedia.icu/poster/0191683c-d179-76a1-be48-f1c1d91c08d0.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "nimedia.icu/poster/01916829-d346-751e-b55f-93e3706413ae.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "nimedia.icu/poster/0191683d-7c40-7704-b255-e8a8cd1f69f6.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "nimedia.icu/poster/01916834-2883-7c63-802c-39eca868118b.webp",
+   "nw": 151,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  }
+ ],
+ "rail_first": "/title/provozhayuschaya-v-posledniy-put-friren/",
+ "home_to_card_s": 0.61,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.3,
+   4.3,
+   5.3,
+   6.3
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": null,
+ "home_to_collection_s": 0.39,
+ "collection_first": "/title/moy-sosed-totoro-2/",
+ "collection_to_card_s": 0.44,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.6,
+   4.6,
+   5.6,
+   6.6
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "09:45:35Z"
+}

@@ -1,0 +1,47 @@
+{
+ "site": "zonafilm12.site",
+ "device": "desktop",
+ "started": "09:43:58Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-na-vecher-vybor-redakcii",
+ "rail_top_px": 110,
+ "rail_imgs": 8,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [],
+ "rail_first": "/title/dzhentlmeny-3/",
+ "home_to_card_s": 0.52,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.1,
+   4.1,
+   5.1,
+   6.1
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.39,
+ "collection_first": "/title/odisseya/",
+ "collection_to_card_s": 0.52,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.0,
+   4.0,
+   5.0,
+   6.0
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "09:44:44Z"
+}

@@ -1,0 +1,70 @@
+{
+ "site": "zonafilm.space",
+ "device": "phone",
+ "started": "09:41:31Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 80,
+ "rail_imgs": 9,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [
+  {
+   "src": "afilm.space/poster/01a0dd3b-183e-7aee-ab43-f2edf42fc6db.webp",
+   "nw": 102,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  }
+ ],
+ "rail_imgs_below_dpr": [
+  {
+   "src": "afilm.space/poster/01915285-7068-7720-af12-2cc4b8d9bd62.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "afilm.space/poster/01958f20-3f94-71b8-a625-cee9e130901e.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  }
+ ],
+ "rail_first": "/title/gangsterlend/",
+ "home_to_card_s": 0.64,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.7,
+   4.7,
+   5.7,
+   6.7
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.36,
+ "collection_first": "/title/proekt-konec-sveta/",
+ "collection_to_card_s": 0.71,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.0,
+   4.0,
+   5.1,
+   6.1
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "09:42:24Z"
+}
