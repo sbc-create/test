@@ -2048,6 +2048,13 @@ clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .col__i .col__why{margin:6px 2px 0;font-size:13px;line-height:1.4;opacity:.85;
   display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;
   overflow:hidden;overflow-wrap:anywhere}
+/* Телефон: повтор названия в крошках убран, чтобы первый ряд постеров
+   помещался в первый экран. Измерено до правки на 390×844: верх первой
+   карточки 613, высота рамки 258, нижний край ряда 871 при окне 844.
+   Прячется ТОЛЬКО на странице подборки и только на узком экране; в JSON-LD
+   цепочка остаётся полной. Вступление не обрезается — оно объясняет, зачем
+   смотреть. */
+@media (max-width:599px){.zcr--coll .zcr__cur{display:none}}
 /* Вступление и служебные строки — по ширине чтения, а не во всю рамку. */
 .claim{max-width:74ch;line-height:1.5}
 .col__upd,.col__gone,.col__src{max-width:74ch}
@@ -5496,7 +5503,7 @@ class Вид:
         if если_справка:
             справка = (f'<p class="col__src">'
                        f'{html.escape(если_справка)}</p>')
-        тело = (f'<section class="sec"><div class="sec__h">'
+        тело = (f'<section class="sec sec--coll"><div class="sec__h">'
                 f"<h1>{html.escape(подборка.title)}</h1>"
                 f'<a href="/collections/">Все подборки →</a></div>'
                 f'<p class="claim">{html.escape(подборка.intro)}</p>'
@@ -5506,7 +5513,11 @@ class Вид:
             актив=подборка.section or "/collections/",
             описание=подборка.intro[:300],
             разметка=(self.schema_крошек(звенья),),
-            крошки=self.крошки(звенья),
+            # Цепочка этой страницы помечена: правило прячет повтор названия
+            # только здесь и только на узком экране. Крошки общие для всех
+            # страниц витрины. В JSON-LD цепочка остаётся полной.
+            крошки=self.крошки(звенья).replace(
+                'class="zcr"', 'class="zcr zcr--coll"', 1),
             индексируема=bool(подборка.indexing_open))
 
 
@@ -7398,11 +7409,25 @@ class ВидЗона(Вид):
         return f'<nav class="zpg" aria-label="Страницы">{"".join(куски)}</nav>'
 
     def крошки(self, звенья) -> str:
+        """Цепочка крошек. Текущая страница — отдельным узлом со своим
+        разделителем.
+
+        Прежде она была голым текстовым узлом, и убрать её с узкого экрана
+        было нечем: спрятать можно элемент, а не текст, и если спрятать
+        только имя, остался бы висящий слеш. Видимый текст от этой правки не
+        меняется ни на знак — меняется только то, что у него появился узел.
+        """
         куски = []
-        for адрес, имя in звенья:
-            куски.append(f'<a href="{адрес}">{html.escape(имя)}</a>' if адрес
-                         else html.escape(имя))
-        return f'<nav class="zcr" aria-label="Хлебные крошки">{" / ".join(куски)}</nav>'
+        for н, (адрес, имя) in enumerate(звенья):
+            разделитель = " / " if н else ""
+            if адрес:
+                куски.append(f'{разделитель}'
+                             f'<a href="{адрес}">{html.escape(имя)}</a>')
+            else:
+                куски.append(f'<span class="zcr__cur">{разделитель}'
+                             f'{html.escape(имя)}</span>')
+        return (f'<nav class="zcr" aria-label="Хлебные крошки">'
+                f'{"".join(куски)}</nav>')
 
     # --- страницы -----------------------------------------------------
     def главная(self) -> str:
