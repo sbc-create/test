@@ -204,3 +204,24 @@ animedia.icu (1252 просмотра за 20–26.10 против 414 у гла
 просрочен или уже стал доступным просмотром. Мера только измеряет: при отказе
 источника состав остаётся прежним либо блок скрывается — «добивать» его
 случайными карточками запрещено.
+
+## Выложено и проверено (вторая часть)
+
+| витрина | выпуск | исход | первый экран на живом адресе |
+| --- | --- | --- | --- |
+| zonafilm.space | `a4a52b18fad8`, CI 40480126097 | activated / live_verified | полка «Сериалы, которые стоит посмотреть» — 9 карточек; визиток 11; анонсов 6; ключи блоков на месте |
+| zonafilm12.site | `a8e38b9c33d7`, CI 40480129305 | activated / live_verified | полка «Сериалы на вечер: выбор редакции» — 8 карточек; визиток 13; анонсов 6 |
+| animedia.icu | `db1b2bdbbf5b`, CI 40480133388 | activated / live_verified | проверка отложена окном MOD-204 (503 при `healthz` 200) |
+
+Публичные адреса подборок:
+
+* zonafilm.space — `/collection/serialy-kotorye-stoit-posmotret/` (полка главной),
+  `/collection/luchshee-2026/`, `/collection/trillery-na-vecher-2026/`,
+  `/collection/mini-serialy-rassledovaniya/`, `/collection/fantastika-2026/`;
+* zonafilm12.site — `/collection/serialy-na-vecher-vybor-redakcii/` (полка),
+  `/collection/apple-tv-serialy/`, `/collection/universal-pictures/`,
+  `/collection/serialy-2025-2026/`, `/collection/komedii-na-vecher-2026/`,
+  `/collection/istoricheskie-sagi/`;
+* animedia.icu — `/collection/anime-serialy-kotorye-stoit-posmotret/` (полка),
+  `/collection/anime-odin-sezon/`, `/collection/anime-filmy-na-vecher/`,
+  `/collection/anime-filmy-po-serialam/`.
