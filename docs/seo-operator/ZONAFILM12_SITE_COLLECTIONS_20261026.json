@@ -239,6 +239,20 @@
    "items": [
     {
      "order": 1,
+     "id": "019f07e2-2cac-7492-957d-3d6de5a716af",
+     "slug": "priglashenie",
+     "url": "https://zonafilm12.site/title/priglashenie/",
+     "name": "Приглашение",
+     "original_name": "The Invite",
+     "year": 2026,
+     "type": "movie",
+     "reason": "Пара, у которой отношения остыли, зовёт в гости шумных соседей — и вечер меняет направление после их необычного предложения. Комедия для взрослых.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (66867 голосов); используется как порог отбора (не ниже 5.5), а не как обещание качества",
+     "poster": "https://poster.cdnvideohub.com/019f07e2-2c59-7233-a608-9878ef96bd7a.webp",
+     "checked": "2026-10-27T15:58:52Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10"
+    },
+    {
+     "order": 2,
      "id": "019ee03b-ffcd-7444-b8e7-10fbaac66f4f",
      "slug": "soobscheniya-dlya-izabel",
      "url": "https://zonafilm12.site/title/soobscheniya-dlya-izabel/",
@@ -252,7 +266,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 2,
+     "order": 3,
      "id": "019ef345-a95c-79e1-9026-b248a9d512da",
      "slug": "v-poiskah-emili",
      "url": "https://zonafilm12.site/title/v-poiskah-emili/",
@@ -266,7 +280,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 3,
+     "order": 4,
      "id": "019fac92-0ec9-77f1-ab47-33fabb6f82e0",
      "slug": "tolko-na-odnu-noch",
      "url": "https://zonafilm12.site/title/tolko-na-odnu-noch/",
@@ -280,7 +294,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 4,
+     "order": 5,
      "id": "01a06b15-83be-7222-a8d5-8415ba99df30",
      "slug": "meydey",
      "url": "https://zonafilm12.site/title/meydey/",
@@ -294,7 +308,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 5,
+     "order": 6,
      "id": "01a0022d-29eb-74dd-9b6b-4d41eb4197de",
      "slug": "ne-govori-udachi",
      "url": "https://zonafilm12.site/title/ne-govori-udachi/",
@@ -308,7 +322,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 6,
+     "order": 7,
      "id": "019f07df-48e5-7492-b2b9-0445241a84a9",
      "slug": "bratik",
      "url": "https://zonafilm12.site/title/bratik/",
@@ -322,7 +336,7 @@
      "checked": "26.10.2026 в окне 21:35–21:38Z (date -u; прогон закончен в 21:38:11Z): 200, canonical на себя, index, follow, постер 200, источники плеера kp+cvh; описание в каталоге есть; воспроизведение в браузере — в публичной приёмке после выпуска"
     },
     {
-     "order": 7,
+     "order": 8,
      "id": "019f9325-ce5b-7109-af6d-976c5fe172cb",
      "slug": "dink",
      "url": "https://zonafilm12.site/title/dink/",

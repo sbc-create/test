@@ -8,7 +8,8 @@
  "direction_rule": "animedia.icu — аниме-сайт (seo_profile.site_direction = anime): в подборках только японское аниме (жанры «аниме» и «мультфильм», страна Япония); игровые японские фильмы с ошибочным жанром «аниме» в снимке («Расёмон», «Харакири», «Рай и ад») исключены; подборка онгоингов сезона — T339 у Архитектора, здесь не дублируется",
  "shortages": [
   "Аниме 2025–2026 с полностью вышедшими сезонами и рейтингом: в снимке нет ни одного сериала с avail = eps и ≥ 800 оценок — тема отдана подборке онгоингов T339",
-  "kiberpank-beguschie-po-krayu (на странице 20 ссылок на серии при 10 в каталоге) и gospozha-kaguya-v-lyubvi-kak-na-voyne-4 (37 при 12) исключены до сверки"
+  "kiberpank-beguschie-po-krayu (на странице 20 ссылок на серии при 10 в каталоге) и gospozha-kaguya-v-lyubvi-kak-na-voyne-4 (37 при 12) исключены до сверки",
+  "Пересмотр 27.10 (поручение о полноте): аниме animedia-01, воспроизводится, IMDb ≥ 7.5 при ≥ 10 000 голосов. Фильмы — 29, не использованы 13 → самостоятельные (не по сериалу) и анимационные: «Форма голоса», «Меч чужака», «Судзумэ, закрывающая двери», «Железобетон» → в «Полнометражное аниме на вечер» (8 → 12); по сериалам: «Евангелион 1.0», «Поднятие уровня в одиночку: Повторное пробуждение» → в «Аниме-фильмы по сериалам» (8 → 10). Не взяты: «Харакири», «Рай и ад», «Расёмон», «Годзилла: Минус один» — игровые фильмы (жанр «аниме» у поставщика ошибочен); «Истребитель демонов: Гора Натагумо» — нет описания ни в каталоге, ни на Shikimori (нет MAL ID). Один сезон: из 41 по порогу не использованы 27, все — продолжения или первые сезоны продолжающихся сериалов, кроме «Хеллсинга: Война с нечистью» — без MAL ID статус не подтверждается; «Аниме в один сезон» остаётся 8."
  ],
  "collections": [
   {
@@ -315,6 +316,62 @@
      "rating_basis": "рейтинг IMDb по данным каталога: 8.0 (10619 голосов); порог отбора, не обещание качества",
      "poster": "https://poster.cdnvideohub.com/019156d3-2159-7db6-b19e-96fbcbca0e3c.webp",
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "id": "01915254-3cf4-7e40-a6b3-a7e71a6b8564",
+     "slug": "forma-golosa-2016",
+     "url": "https://animedia.icu/title/forma-golosa-2016/",
+     "name": "Форма голоса (2016)",
+     "original_name": "Koe no katachi",
+     "year": 2016,
+     "type": "movie",
+     "reason": "Сёя понимает, что в школе превратил жизнь глухой одноклассницы Сёко в ад, и ищет, как сказать ей важное. Драма Kyoto Animation о вине и примирении.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.2 (149854 голосов); порог отбора, не обещание качества; Shikimori: movie, released, студия Kyoto Animation",
+     "poster": "https://poster.cdnvideohub.com/01915254-3cf4-7e40-a6b3-a7e71a6b8564.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 9
+    },
+    {
+     "id": "01915142-8f15-799d-8ad8-d4a153cf925f",
+     "slug": "mech-chuzhaka",
+     "url": "https://animedia.icu/title/mech-chuzhaka/",
+     "name": "Меч чужака",
+     "original_name": "Stranger: Mukou Hadan",
+     "year": 2007,
+     "type": "movie",
+     "reason": "Япония эпохи Сэнгоку: безымянный ронин защищает мальчика-сироту, которого преследуют самураи и бойцы из Китая. Самурайский боевик студии Bones.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (20149 голосов); порог отбора, не обещание качества; Shikimori: movie, released, студия Bones",
+     "poster": "https://poster.cdnvideohub.com/01915142-8f15-799d-8ad8-d4a153cf925f.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 10
+    },
+    {
+     "id": "0191524c-5858-7007-a77c-8d82d1f60220",
+     "slug": "sudzume-zakryvayuschaya-dveri",
+     "url": "https://animedia.icu/title/sudzume-zakryvayuschaya-dveri/",
+     "name": "Судзумэ, закрывающая двери",
+     "original_name": "Suzume no tojimari",
+     "year": 2022,
+     "type": "movie",
+     "reason": "Старшеклассница идёт за незнакомцем и находит странную дверь, одиноко стоящую среди заброшенного места. Приключение студии CoMix Wave Films.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (65854 голосов); порог отбора, не обещание качества; Shikimori: movie, released, студия CoMix Wave Films",
+     "poster": "https://poster.cdnvideohub.com/0191524c-5858-7007-a77c-8d82d1f60220.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 11
+    },
+    {
+     "id": "0191ae21-dc04-7ad9-bde8-424cfc28973d",
+     "slug": "zhelezobeton",
+     "url": "https://animedia.icu/title/zhelezobeton/",
+     "name": "Железобетон",
+     "original_name": "Tekkon kinkurito",
+     "year": 2006,
+     "type": "movie",
+     "reason": "Двое мальчиков-сирот, Чёрный и Белый, хозяйничают на улицах Города Сокровищ и мешают планам якудза. Фильм Studio 4°C.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (15786 голосов); порог отбора, не обещание качества; Shikimori: movie, released, студия Studio 4°C",
+     "poster": "https://poster.cdnvideohub.com/0191ae21-dc04-7ad9-bde8-424cfc28973d.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 12
     }
    ],
    "sources_note": "Оценки — IMDb."
@@ -359,7 +416,21 @@
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     },
     {
-     "order": 3,
+     "id": "01916a14-7546-7a28-9064-f6f48de92b10",
+     "slug": "evangelion-1-0-ty-ne-odin",
+     "url": "https://animedia.icu/title/evangelion-1-0-ty-ne-odin/",
+     "name": "Евангелион 1.0: Ты (не) один",
+     "original_name": "Evangelion: 1.0 You Are (Not) Alone",
+     "year": 2007,
+     "type": "movie",
+     "reason": "2015 год, Токио-3: после глобальной катастрофы на Землю нападают Ангелы, и противостоять им могут только гигантские биороботы. Первый из фильмов «Евангелиона» в подборке — до 2.0 и 3.0+1.0.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.5 (32393 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916a14-7546-7a28-9064-f6f48de92b10.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 3
+    },
+    {
+     "order": 4,
      "id": "01916a14-6a81-7ef2-b09c-5e1a3974b80e",
      "slug": "evangelion-2-0-ty-ne-proydesh",
      "url": "https://animedia.icu/title/evangelion-2-0-ty-ne-proydesh/",
@@ -373,7 +444,7 @@
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     },
     {
-     "order": 4,
+     "order": 5,
      "id": "01916a15-f2c8-7744-aca9-211fcf49c5a7",
      "slug": "evangelion-3-0-1-0-kak-to-raz",
      "url": "https://animedia.icu/title/evangelion-3-0-1-0-kak-to-raz/",
@@ -387,21 +458,35 @@
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     },
     {
-     "order": 5,
-     "id": "01916c9b-c02f-7cd1-8f78-c59adde95334",
-     "slug": "van-pis-z",
-     "url": "https://animedia.icu/title/van-pis-z/",
-     "name": "Ван-Пис: Z",
-     "original_name": "One Piece Film Z",
-     "year": 2012,
+     "id": "01942c0e-2408-7fcc-bebf-24524e2e3a08",
+     "slug": "podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie",
+     "url": "https://animedia.icu/title/podnyatie-urovnya-v-odinochku-povtornoe-probuzhdenie/",
+     "name": "Поднятие уровня в одиночку: Повторное пробуждение",
+     "original_name": "Solo Leveling: ReAwakening",
+     "year": 2024,
      "type": "movie",
-     "reason": "Команда Луффи против бывшего адмирала Зетто, который хочет уничтожить пиратов, — полнометражный «Ван-Пис».",
-     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (11967 голосов); порог отбора, не обещание качества",
-     "poster": "https://poster.cdnvideohub.com/01916c9b-c02f-7cd1-8f78-c59adde95334.webp",
+     "reason": "Сон Джин-у — охотник низшего E-ранга в мире, где из врат выходят монстры. Фильм по сериалу «Поднятие уровня в одиночку» для тех, кто его смотрел.",
+     "rating_basis": "рейтинг IMDb по данным каталога: 8.7 (17828 голосов); порог отбора, не обещание качества; Shikimori: movie, released, студия A-1 Pictures",
+     "poster": "https://poster.cdnvideohub.com/01942c0e-2408-7fcc-bebf-24524e2e3a08.webp",
+     "checked": "2026-10-27T15:59:45Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер; добавлено при пересмотре 27.10",
+     "order": 6
+    },
+    {
+     "order": 7,
+     "id": "0191f638-ea20-723a-9d16-2330822d10a1",
+     "slug": "drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna",
+     "url": "https://animedia.icu/title/drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna/",
+     "name": "Драконий жемчуг Зет 12: Возрождение Фьюжна",
+     "original_name": "Dragon Ball Z: Fukkatsu no Fusion!! Gokuu to Vegeta",
+     "year": 1995,
+     "type": "movie",
+     "reason": "Злая энергия вырывается в мир живых, и мёртвые возвращаются — полнометражный «Драконий жемчуг Зет».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (13882 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/0191f638-ea20-723a-9d16-2330822d10a1.webp",
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     },
     {
-     "order": 6,
+     "order": 8,
      "id": "01918269-4483-7e47-b4e4-dde683022d4d",
      "slug": "moya-geroyskaya-akademiya-film-2-geroi-vosstanut",
      "url": "https://animedia.icu/title/moya-geroyskaya-akademiya-film-2-geroi-vosstanut/",
@@ -415,7 +500,21 @@
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     },
     {
-     "order": 7,
+     "order": 9,
+     "id": "01916c9b-c02f-7cd1-8f78-c59adde95334",
+     "slug": "van-pis-z",
+     "url": "https://animedia.icu/title/van-pis-z/",
+     "name": "Ван-Пис: Z",
+     "original_name": "One Piece Film Z",
+     "year": 2012,
+     "type": "movie",
+     "reason": "Команда Луффи против бывшего адмирала Зетто, который хочет уничтожить пиратов, — полнометражный «Ван-Пис».",
+     "rating_basis": "рейтинг IMDb по данным каталога: 7.7 (11967 голосов); порог отбора, не обещание качества",
+     "poster": "https://poster.cdnvideohub.com/01916c9b-c02f-7cd1-8f78-c59adde95334.webp",
+     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
+    },
+    {
+     "order": 10,
      "id": "01917eaf-4a8a-7081-972d-9b9b23b2c993",
      "slug": "etot-glupyy-svin-ne-ponimaet-mechtu-devochki-mechtatelnicy",
      "url": "https://animedia.icu/title/etot-glupyy-svin-ne-ponimaet-mechtu-devochki-mechtatelnicy/",
@@ -426,20 +525,6 @@
      "reason": "Продолжение сериала о Сакуте и Маи: в их жизнь возвращается Сёко Макинохара, первая любовь Сакуты.",
      "rating_basis": "рейтинг IMDb по данным каталога: 8.3 (10904 голосов); порог отбора, не обещание качества",
      "poster": "https://poster.cdnvideohub.com/01917eaf-4a8a-7081-972d-9b9b23b2c993.webp",
-     "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
-    },
-    {
-     "order": 8,
-     "id": "0191f638-ea20-723a-9d16-2330822d10a1",
-     "slug": "drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna",
-     "url": "https://animedia.icu/title/drakoniy-zhemchug-zet-12-vozrozhdenie-fyuzhna/",
-     "name": "Драконий жемчуг Зет 12: Возрождение Фьюжна",
-     "original_name": "Dragon Ball Z: Fukkatsu no Fusion!! Gokuu to Vegeta",
-     "year": 1995,
-     "type": "movie",
-     "reason": "Злая энергия вырывается в мир живых, и мёртвые возвращаются — полнометражный «Драконий жемчуг Зет».",
-     "rating_basis": "рейтинг IMDb по данным каталога: 7.6 (13882 голосов); порог отбора, не обещание качества",
-     "poster": "https://poster.cdnvideohub.com/0191f638-ea20-723a-9d16-2330822d10a1.webp",
      "checked": "26.10.2026, проверка закончена в 22:20:11Z (date -u): 200, canonical на себя, index, follow, постер 200, плеер на странице; воспроизведение — в публичной приёмке после выпуска"
     }
    ],
