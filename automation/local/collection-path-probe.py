@@ -45,24 +45,109 @@ if str(КОРЕНЬ) not in sys.path:
 НАЖАТИЙ = 3
 
 
-def _плеер_играет(страница) -> float:
-    """Текущая позиция воспроизведения, 0.0 — не играет.
+#: Перехват сообщений поставщика ставится ДО загрузки страницы: позиция
+#: воспроизведения у плеера в чужом кадре приходит только сообщением
+#: (`timeupdate` с `data.position`), и перехват после нажатия пропустил бы его.
+#: Имена событий взяты из обработчика самого рантайма, а не придуманы.
+ПЕРЕХВАТ = """
+window.__ппСобытия = [];
+window.__ппПозиция = 0;
+window.addEventListener('message', function(ev){
+  if (!ev || !ev.origin || ev.origin.indexOf('cdnvideohub') < 0) return;
+  var d = ev.data;
+  try { if (typeof d === 'string') d = JSON.parse(d); } catch (e) { return; }
+  if (!d || !d.eventType) return;
+  window.__ппСобытия.push(d.eventType);
+  var данные = d.data;
+  if (d.eventType === 'timeupdate' && данные && typeof данные.position === 'number'
+      && данные.position > window.__ппПозиция) {
+    window.__ппПозиция = данные.position;
+  }
+}, false);
+"""
 
-    Источников два, и оба нужны: витрина может показывать <video> напрямую или
-    фрейм поставщика, у которого позиция приходит сообщением и складывается в
-    `window.__pmLastPos` (так устроена подтверждающая проводка плеера).
+
+def _плеер_играет(страница) -> float:
+    """Позиция воспроизведения, 0.0 — не играет. Три источника, все реальные.
+
+    1. `<video>` в документе витрины — когда SDK отдаёт медиа нам.
+    2. `<video>` внутри ОТКРЫТЫХ теневых деревьев: у `video-player` корень
+       открыт, и обход нужен — `document.querySelector` сквозь тень не видит.
+    3. Сообщения поставщика (`timeupdate` с `data.position`): у плеера в чужом
+       кадре это ЕДИНСТВЕННЫЙ наблюдаемый признак, и ровно его читает сам
+       рантайм витрины.
+
+    Прежняя версия читала `window.__pmLastPos` — переменной с таким именем нет
+    ни в одном рантайме, то есть на витрине с плеером в чужом кадре проверка не
+    могла ответить «играет» никогда. Это была беда измерения, а не витрины, и
+    отчёт о ней был бы ложным дефектом.
     """
     try:
         return float(страница.evaluate(
             """() => {
-                const v = document.querySelector('video');
-                if (v && !Number.isNaN(v.currentTime) && v.currentTime > 0)
-                    return v.currentTime;
-                const p = window.__pmLastPos;
+                const глубоко = (корень, уровень) => {
+                    if (!корень || уровень > 6) return 0;
+                    const v = корень.querySelector ? корень.querySelector('video') : null;
+                    if (v && !Number.isNaN(v.currentTime) && v.currentTime > 0)
+                        return v.currentTime;
+                    const узлы = корень.querySelectorAll ? корень.querySelectorAll('*') : [];
+                    for (const n of узлы) {
+                        if (n.shadowRoot) {
+                            const р = глубоко(n.shadowRoot, уровень + 1);
+                            if (р > 0) return р;
+                        }
+                    }
+                    return 0;
+                };
+                const прямо = глубоко(document, 0);
+                if (прямо > 0) return прямо;
+                const p = window.__ппПозиция;
                 return (typeof p === 'number' && p > 0) ? p : 0;
             }"""))
     except Exception:  # noqa: BLE001 — страница могла уйти на переход
         return 0.0
+
+
+def _состояние_плеера(страница) -> dict:
+    """Что витрина САМА говорит о плеере: её метка состояния и текст плашки.
+
+    Нужно для честного отчёта о неудаче: «просмотр не начался» без состояния
+    не отличает отказ поставщика от неподтверждённого запуска.
+    """
+    try:
+        return страница.evaluate(
+            """() => {
+                const f = document.querySelector('[data-player]');
+                const st = f && f.querySelector('[data-player-state]');
+                return {
+                    "состояние": f ? (f.getAttribute('data-state') || '') : null,
+                    "плашка": st && !st.hidden ? (st.innerText || '').slice(0, 160) : '',
+                    "события поставщика": (window.__ппСобытия || []).slice(0, 24),
+                };
+            }""") or {}
+    except Exception:  # noqa: BLE001
+        return {}
+
+
+#: Насколько позиция должна ВЫРАСТИ, чтобы считать это воспроизведением.
+#: Замер 27.10 на zonafilm.space: после первого нажатия поставщик отдаёт
+#: ровно один `timeupdate` с позицией 0.09 и держит её 45 секунд — источник
+#: разрешён, картинка не идёт. Признак «позиция больше нуля» принял бы это за
+#: просмотр, то есть отчитался бы за зрителя, который ничего не увидел.
+#: Воспроизведение — это РОСТ позиции, а не её наличие.
+РОСТ_С = 0.5
+
+
+def _идёт(страница, позиция: float, начало) -> bool:
+    """Идёт ли воспроизведение: рост позиции или признание самой витрины.
+
+    Второй источник — метка `data-state="playing"`: рантайм ставит её только
+    из `confirmPlaying`, то есть при позиции не меньше трёх секунд. Если он уже
+    признал показ, спорить с ним нечем.
+    """
+    if начало is not None and позиция - начало >= РОСТ_С:
+        return True
+    return (_состояние_плеера(страница) or {}).get("состояние") == "playing"
 
 
 def пройти(домен: str, вход: str, ключ: str, размер: tuple, снимки: pathlib.Path,
@@ -75,6 +160,7 @@ def пройти(домен: str, вход: str, ключ: str, размер: tu
         user_agent=("Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
                     "AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 "
                     "Mobile/15E148 Safari/604.1") if мобильный else None)
+    контекст.add_init_script(ПЕРЕХВАТ)
     страница = контекст.new_page()
     try:
         страница.goto(f"https://{домен}{вход}", wait_until="domcontentloaded",
@@ -116,17 +202,23 @@ def пройти(домен: str, вход: str, ключ: str, размер: tu
                 рамка.click(timeout=15000)
             except Exception as сбой:  # noqa: BLE001
                 итог.setdefault("нажатие не удалось", str(сбой)[:160])
-            край = time.monotonic() + ОЖИДАНИЕ_С
+            начало, край = None, time.monotonic() + ОЖИДАНИЕ_С
             while time.monotonic() < край:
                 позиция = _плеер_играет(страница)
-                if позиция > 0:
+                if начало is None and позиция > 0:
+                    начало = позиция
+                if _идёт(страница, позиция, начало):
                     break
-                страница.wait_for_timeout(500)
-            if позиция > 0:
+                страница.wait_for_timeout(1000)
+            if _идёт(страница, позиция, начало):
                 break
-        итог["нажатий до старта"] = нажатий if позиция > 0 else None
+        итог.update(_состояние_плеера(страница))
+        идёт = _идёт(страница, позиция, начало)
+        итог["нажатий до старта"] = нажатий if идёт else None
         итог["позиция"] = round(позиция, 2)
-        итог["просмотр начался"] = позиция > 0
+        итог["позиция выросла на"] = (round(позиция - начало, 2)
+                                      if начало is not None else None)
+        итог["просмотр начался"] = идёт
         снимки.mkdir(parents=True, exist_ok=True)
         файл = снимки / f"{домен}-{ключ}-{имя}.png"
         страница.screenshot(path=str(файл), full_page=False)
