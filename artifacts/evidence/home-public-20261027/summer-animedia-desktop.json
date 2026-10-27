@@ -1,0 +1,39 @@
+{
+ "site": "animedia.icu",
+ "device": "desktop",
+ "started": "12:23:34Z",
+ "home_status": 200,
+ "rail_key": "rail:anime-serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 90,
+ "rail_imgs": 8,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [],
+ "rail_first": "/title/provozhayuschaya-v-posledniy-put-friren/",
+ "home_to_card_s": 0.72,
+ "rail_card_play": {
+  "taps": 1,
+  "series_tail": [
+   3.1,
+   4.1,
+   5.1,
+   6.1
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": null,
+ "home_to_collection_s": 0.44,
+ "collection_first": "/title/prizrak-v-dospehah-2026/",
+ "collection_to_card_s": 0.37,
+ "collection_card_play": {
+  "taps": 3,
+  "series_tail": [
+   3.9,
+   4.9,
+   5.9,
+   7.0
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "12:24:20Z"
+}
