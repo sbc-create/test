@@ -1,0 +1,47 @@
+{
+ "site": "zonafilm.space",
+ "device": "desktop",
+ "started": "12:42:11Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-kotorye-stoit-posmotret",
+ "rail_top_px": 110,
+ "rail_imgs": 9,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [],
+ "rail_first": "/title/gangsterlend/",
+ "home_to_card_s": 0.53,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.4,
+   4.4,
+   5.4,
+   6.4
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.43,
+ "collection_first": "/title/narko/",
+ "collection_to_card_s": 0.31,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.5,
+   4.5,
+   5.6,
+   6.6
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "12:42:57Z"
+}

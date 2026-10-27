@@ -1,0 +1,69 @@
+{
+ "site": "zonafilm12.site",
+ "device": "phone",
+ "started": "12:42:57Z",
+ "home_status": 200,
+ "rail_key": "rail:serialy-na-vecher-vybor-redakcii",
+ "rail_top_px": 80,
+ "rail_imgs": 8,
+ "rail_imgs_broken": 0,
+ "rail_imgs_upscaled": [],
+ "rail_imgs_below_dpr": [
+  {
+   "src": "film12.site/poster/01915163-4abc-70e2-b6be-9f6993b5b7d5.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "film12.site/poster/0191529d-7182-7278-a52d-ca19d4a5f6f7.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  },
+  {
+   "src": "film12.site/poster/0191671d-96ce-7614-b869-2a8dc7c0b67c.webp",
+   "nw": 164,
+   "cw": 150,
+   "dpr": 3,
+   "complete": true
+  }
+ ],
+ "rail_first": "/title/dzhentlmeny-3/",
+ "home_to_card_s": 0.73,
+ "rail_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.4,
+   4.4,
+   5.4,
+   6.4
+  ],
+  "playing_confirmed": true
+ },
+ "announce_links": [
+  "https://hungergames.movie/",
+  "https://www.netflix.com/tudum/articles/david-fincher-new-film-release-date",
+  "https://www.universalpictures.com/movies/focker-in-law/",
+  "https://www.apple.com/tv-pr/originals/way-of-the-warrior-kid/",
+  "https://www.warnerbros.com/movies/dune-part-three",
+  "https://www.marvel.com/movies/avengers-doomsday"
+ ],
+ "announce_title_links": 0,
+ "home_to_collection_s": 0.64,
+ "collection_first": "/title/chelovek-pauk-pautina-vselennyh-2023/",
+ "collection_to_card_s": 0.37,
+ "collection_card_play": {
+  "taps": 2,
+  "series_tail": [
+   3.1,
+   4.1,
+   5.1,
+   6.1
+  ],
+  "playing_confirmed": true
+ },
+ "finished": "12:43:50Z"
+}
