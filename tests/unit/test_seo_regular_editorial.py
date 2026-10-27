@@ -68,3 +68,48 @@ def test_non_json_answer_is_not_measured(tmp_path):
 def test_check_plan_runs_editorial_before_diff():
     names = [n for n, _ in regular.PLANS["check"]]
     assert names.index("editorial") < names.index("diff")
+
+
+def test_memory_hungry_script_is_not_measured_and_parent_survives(tmp_path):
+    # 27.10 17:25Z прогон оборвался на этом шаге без записи; валидатору нужно ~560 МБ
+    # при MemoryMax=512M у юнита. Предел у дочернего процесса — его сбой, а не смерть прогона.
+    script = _script(tmp_path, """
+        blob = bytearray(600 << 20)
+        print("{}")
+    """)
+    res = regular.editorial_sets(script, memory_mb=200)
+    assert res["measured"] is False
+    assert "памят" in res["reason"]
+
+
+def test_step_marks_start_before_calling_script(tmp_path):
+    events = []
+
+    class J:
+        def write(self, event, **kw):
+            events.append(event)
+
+    class Ctx:
+        sources = {"editorial_validator": None}
+        journal = J()
+
+    regular.step_editorial(Ctx())
+    assert events[:2] == ["editorial_started", "editorial_checked"]
+
+
+def test_by_site_keeps_measured_sites_when_one_fails(tmp_path):
+    # Zona упирается в память, Animedia — нет: частичное измерение лучше «не измерено» целиком.
+    script = _script(tmp_path, """
+        import json, sys
+        site = sys.argv[sys.argv.index("--site") + 1]
+        if site == "zona-01":
+            raise MemoryError
+        print(json.dumps({"измерено": "t", "витрины": [
+            {"витрина": site, "подборки": {"исход": "чисто", "беды": []},
+             "анонсы": {"исход": "чисто", "беды": []}}]}))
+    """)
+    res = regular.editorial_sets_by_site(script, ("animedia-01", "zona-01"))
+    assert res["measured"] is False and res["defects"] == 0
+    assert [x["site"] for x in res["sites"]] == ["animedia-01", "animedia-01"]
+    assert res["unmeasured"] == [{"site": "zona-01",
+                                  "reason": "не хватило памяти: предел 420 МБ, юниту дано 512 МБ"}]

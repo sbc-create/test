@@ -3267,7 +3267,14 @@ def _diff(previous: dict[str, dict], current: dict[str, dict]) -> dict:
     }
 
 
-def editorial_sets(script: Path | None, *, timeout: float = 120) -> dict:
+# Предел памяти валидатора ниже MemoryMax=512M у seo-regular-check.service: на Zona ему
+# нужно ~560 МБ (27.10), и превышение лимита юнита обрывает весь прогон без записи
+# в журнал (check-2026-10-27T1725). Свой предел превращает это в «не измерено».
+EDITORIAL_MEMORY_MB = 420
+
+
+def editorial_sets(script: Path | None, *, site: str | None = None, timeout: float = 120,
+                   memory_mb: int = EDITORIAL_MEMORY_MB) -> dict:
     """Подборки и анонсы трёх витрин против текущего снимка (editorial-sets-validate.py).
 
     Сценарий ничего не правит: код 0 — чисто, 1 — найден дефект, 2 — не измерено.
@@ -3278,16 +3285,23 @@ def editorial_sets(script: Path | None, *, timeout: float = 120) -> dict:
         return {"measured": False, "reason": "проверка подборок не подключена к этому прогону"}
     if not Path(script).is_file():
         return {"measured": False, "reason": f"СБОЙ: сценарий не найден по пути {script}"}
+    import resource
     import subprocess
+
+    def _cap() -> None:
+        resource.setrlimit(resource.RLIMIT_AS, (memory_mb << 20, memory_mb << 20))
 
     try:
         proc = subprocess.run(
-            [sys.executable, str(script), "--json"],
+            [sys.executable, str(script), "--json", *(["--site", site] if site else [])],
             cwd=str(Path(script).resolve().parents[2]),
-            capture_output=True, text=True, timeout=timeout,
+            capture_output=True, text=True, timeout=timeout, preexec_fn=_cap,
         )
     except subprocess.TimeoutExpired:
         return {"measured": False, "reason": f"не уложилась в {timeout:.0f} с"}
+    if "MemoryError" in proc.stderr:
+        return {"measured": False, "rc": proc.returncode,
+                "reason": f"не хватило памяти: предел {memory_mb} МБ, юниту дано 512 МБ"}
     try:
         data = json.loads(proc.stdout)
     except ValueError:
@@ -3306,10 +3320,30 @@ def editorial_sets(script: Path | None, *, timeout: float = 120) -> dict:
             "defects": sum(len(x["defects"]) for x in sites)}
 
 
+EDITORIAL_SITES = ("animedia-01", "zona-01", "zona-03")
+
+
+def editorial_sets_by_site(script: Path | None, sites: tuple[str, ...] = EDITORIAL_SITES) -> dict:
+    """По витрине за вызов: пик памяти — одна витрина, сбой одной не гасит остальные."""
+    if not script or not Path(script).is_file():
+        return editorial_sets(script)
+    parts = [(s, editorial_sets(script, site=s)) for s in sites]
+    unmeasured = [{"site": s, "reason": r.get("reason")} for s, r in parts if not r.get("measured")]
+    rows = [x for _, r in parts if r.get("measured") for x in r.get("sites") or []]
+    return {"measured": not unmeasured, "rc": max((r.get("rc") or 0) for _, r in parts),
+            "measured_at": max((r.get("measured_at") or "" for _, r in parts), default=""),
+            "sites": rows, "defects": sum(len(x["defects"]) for x in rows),
+            "unmeasured": unmeasured,
+            "reason": "; ".join(f"{u['site']}: {u['reason']}" for u in unmeasured) or None}
+
+
 def step_editorial(ctx: Context) -> Any:
-    res = editorial_sets(ctx.sources.get("editorial_validator"))
+    # Отметка до вызова: если процесс прогона погибнет внутри шага, журнал покажет где.
+    ctx.journal.write("editorial_started")
+    res = editorial_sets_by_site(ctx.sources.get("editorial_validator"))
     ctx.journal.write("editorial_checked", measured=res.get("measured"), rc=res.get("rc"),
-                      defects=res.get("defects"), reason=res.get("reason"))
+                      defects=res.get("defects"), reason=res.get("reason"),
+                      measured_sites=sorted({x["site"] for x in res.get("sites") or []}))
     for x in res.get("sites") or []:
         for d in x["defects"]:
             ctx.journal.write("editorial_defect", site=x["site"], kind=x["kind"], defect=d)
