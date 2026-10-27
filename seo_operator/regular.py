@@ -101,6 +101,10 @@ SOURCES = {
     "coverage_blockers": _paths.registry("config", "editor-coverage-blockers.json"),
     # Календарные сутки МСК (владелец 13.10: отчёт — за вчерашний день 00:00–23:59).
     "calendar_day_script": REPO_ROOT / "automation" / "local" / "editor-day-report.py",
+    # Подборки и анонсы против ТЕКУЩЕГО снимка каталога (поручение владельца 27.10:
+    # состав должен пережить обновление каталога). Сценарий и рантайм-конфиги
+    # подборок — в дереве Архитектора; проверка только читает.
+    "editorial_validator": Path("/home/claude/wt-nova-publish-memory-02/automation/local/editorial-sets-validate.py"),
 }
 
 #: Домены Animedia и их снимки фактов: только у этого семейства есть факты,
@@ -3263,6 +3267,55 @@ def _diff(previous: dict[str, dict], current: dict[str, dict]) -> dict:
     }
 
 
+def editorial_sets(script: Path | None, *, timeout: float = 120) -> dict:
+    """Подборки и анонсы трёх витрин против текущего снимка (editorial-sets-validate.py).
+
+    Сценарий ничего не правит: код 0 — чисто, 1 — найден дефект, 2 — не измерено.
+    Его сбой регулярную проверку не роняет: шаг выходит «не измерено» с причиной,
+    а не нулём дефектов.
+    """
+    if not script:
+        return {"measured": False, "reason": "проверка подборок не подключена к этому прогону"}
+    if not Path(script).is_file():
+        return {"measured": False, "reason": f"СБОЙ: сценарий не найден по пути {script}"}
+    import subprocess
+
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--json"],
+            cwd=str(Path(script).resolve().parents[2]),
+            capture_output=True, text=True, timeout=timeout,
+        )
+    except subprocess.TimeoutExpired:
+        return {"measured": False, "reason": f"не уложилась в {timeout:.0f} с"}
+    try:
+        data = json.loads(proc.stdout)
+    except ValueError:
+        return {"measured": False, "rc": proc.returncode,
+                "reason": f"ответ не JSON (код {proc.returncode}): {proc.stderr[-300:]}"}
+    sites = []
+    for v in data.get("витрины") or []:
+        for kind in ("подборки", "анонсы"):
+            part = v.get(kind) or {}
+            sites.append({
+                "site": v.get("витрина"), "kind": kind, "outcome": part.get("исход"),
+                "defects": part.get("беды") or [], "revision": part.get("ревизия каталога"),
+            })
+    return {"measured": proc.returncode in (0, 1), "rc": proc.returncode,
+            "measured_at": data.get("измерено"), "sites": sites,
+            "defects": sum(len(x["defects"]) for x in sites)}
+
+
+def step_editorial(ctx: Context) -> Any:
+    res = editorial_sets(ctx.sources.get("editorial_validator"))
+    ctx.journal.write("editorial_checked", measured=res.get("measured"), rc=res.get("rc"),
+                      defects=res.get("defects"), reason=res.get("reason"))
+    for x in res.get("sites") or []:
+        for d in x["defects"]:
+            ctx.journal.write("editorial_defect", site=x["site"], kind=x["kind"], defect=d)
+    return res
+
+
 def step_diff(ctx: Context) -> Any:
     """Сравнение с прошлым набором проблем. Уведомляет только о НОВОМ."""
     availability = ctx.result("availability") or []
@@ -3606,6 +3659,7 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
         ("availability", step_availability),
         ("analytics", step_analytics),
         ("publications", step_publications),
+        ("editorial", step_editorial),
         ("diff", step_diff),
     ],
     "daily": [
