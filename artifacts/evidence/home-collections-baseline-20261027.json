@@ -1,0 +1,65 @@
+{
+ "prepared": "27.10.2026 после 09:16Z (date -u)",
+ "source": "artifacts/analytics/analytics-2026-10-27.json, collected_at 2026-10-27T05:07:54Z, период 7daysAgo..yesterday (20–26.10)",
+ "sites": {
+  "zonafilm.space": {
+   "visits": 803.0,
+   "page_depth": 1.94271482,
+   "home_and_hubs_pageviews_top20": {
+    "/catalog/": 56.0,
+    "/": 37.0,
+    "/movies/": 16.0,
+    "/collection/new_series_releases/": 11.0,
+    "/series/": 11.0,
+    "/collections/": 7.0
+   },
+   "goal_reaches": "не измерено",
+   "block_impressions": "не измерено: событий показа блоков нет — нужна цель показа/клика полки (T341)",
+   "note": "страницы вне топ-20 поштучно не измерены (не нули)"
+  },
+  "zonafilm12.site": {
+   "visits": 242.0,
+   "page_depth": 2.38429752,
+   "home_and_hubs_pageviews_top20": {
+    "/movies/": 58.0,
+    "/": 44.0,
+    "/catalog/": 33.0,
+    "/series/": 12.0
+   },
+   "goal_reaches": {
+    "comment_submit": 0.0,
+    "episode_select": 0.0,
+    "filter_apply": 0.0,
+    "player_error": 0.0,
+    "player_ready": 0.0,
+    "player_start": 0.0,
+    "search": 0.0,
+    "season_select": 0.0,
+    "title_view": 0.0
+   },
+   "block_impressions": "не измерено: событий показа блоков нет — нужна цель показа/клика полки (T341)",
+   "note": "страницы вне топ-20 поштучно не измерены (не нули)"
+  },
+  "animedia.icu": {
+   "visits": 4417.0,
+   "page_depth": 2.17500566,
+   "home_and_hubs_pageviews_top20": {
+    "/catalog/": 1252.0,
+    "/": 414.0
+   },
+   "goal_reaches": {
+    "comment_submit": 0.0,
+    "episode_select": 0.0,
+    "filter_apply": 0.0,
+    "player_error": 0.0,
+    "player_ready": 0.0,
+    "player_start": 0.0,
+    "search": 0.0,
+    "season_select": 0.0,
+    "title_view": 0.0
+   },
+   "block_impressions": "не измерено: событий показа блоков нет — нужна цель показа/клика полки (T341)",
+   "note": "страницы вне топ-20 поштучно не измерены (не нули)"
+  }
+ }
+}
