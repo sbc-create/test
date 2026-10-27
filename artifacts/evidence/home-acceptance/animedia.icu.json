@@ -1,0 +1,75 @@
+[
+ {
+  "домен": "animedia.icu",
+  "размер": "телефон",
+  "первый блок": "zr1",
+  "полка первая": true,
+  "карточек полки": 8,
+  "обложек полки": 8,
+  "обложек без файла": 0,
+  "обложек ждут прокрутки": 2,
+  "растянутых обложек": 0,
+  "визиток подборок": 4,
+  "визиток с обложкой": 4,
+  "визиток в экране без обложки": 0,
+  "ключи блоков": [
+   "rail:anime-serialy-kotorye-stoit-posmotret"
+  ],
+  "анонсов": 0,
+  "ссылок на просмотр в анонсах": 0,
+  "внешних источников в анонсах": 0,
+  "горизонтальная прокрутка": 0,
+  "первая карточка полки": "/title/provozhayuschaya-v-posledniy-put-friren/",
+  "первая визитка": "/collection/anime-serialy-kotorye-stoit-posmotret/",
+  "снимок главной": "artifacts/evidence/home-acceptance/animedia.icu-главная-телефон.png",
+  "адрес работы": "https://animedia.icu/title/provozhayuschaya-v-posledniy-put-friren/",
+  "на работе": true,
+  "плеер есть": true,
+  "нажатий до просмотра": null,
+  "позиция": 0.0,
+  "адрес подборки": "https://animedia.icu/collection/anime-serialy-kotorye-stoit-posmotret/",
+  "на подборке": true,
+  "из подборки в карточку": true
+ },
+ {
+  "домен": "animedia.icu",
+  "размер": "компьютер",
+  "первый блок": "zr1",
+  "полка первая": true,
+  "карточек полки": 8,
+  "обложек полки": 8,
+  "обложек без файла": 0,
+  "обложек ждут прокрутки": 0,
+  "растянутых обложек": 0,
+  "визиток подборок": 4,
+  "визиток с обложкой": 4,
+  "визиток в экране без обложки": 0,
+  "ключи блоков": [
+   "rail:anime-serialy-kotorye-stoit-posmotret"
+  ],
+  "анонсов": 0,
+  "ссылок на просмотр в анонсах": 0,
+  "внешних источников в анонсах": 0,
+  "горизонтальная прокрутка": 0,
+  "первая карточка полки": "/title/provozhayuschaya-v-posledniy-put-friren/",
+  "первая визитка": "/collection/anime-serialy-kotorye-stoit-posmotret/",
+  "снимок главной": "artifacts/evidence/home-acceptance/animedia.icu-главная-компьютер.png",
+  "адрес работы": "https://animedia.icu/title/provozhayuschaya-v-posledniy-put-friren/",
+  "на работе": true,
+  "плеер есть": true,
+  "нажатий до просмотра": null,
+  "позиция": 0.0,
+  "адрес подборки": "https://animedia.icu/collection/anime-serialy-kotorye-stoit-posmotret/",
+  "на подборке": true,
+  "из подборки в карточку": true
+ },
+ {
+  "домен": "animedia.icu",
+  "размер": "телефон, тёмная тема",
+  "снимок": "artifacts/evidence/home-acceptance/animedia.icu-главная-телефон-тёмная.png",
+  "карточек полки": 8,
+  "обложек без файла": 0
+ }
+]
+
+проходов с бедой: 0 из 3

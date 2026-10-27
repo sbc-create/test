@@ -247,6 +247,9 @@ def главная(аргв=None) -> int:
                    help="домен витрины или 127.0.0.1:<порт> локального стенда")
     р.add_argument("--out", default=None)
     р.add_argument("--json", action="store_true")
+    р.add_argument("--out-json", default="",
+                   help="записать отчёт файлом: строка итога туда не попадает, "
+                        "и файл остаётся разбираемым JSON")
     а = р.parse_args(аргв)
     снимки = pathlib.Path(а.out or (КОРЕНЬ / "artifacts" / "evidence" / "home-acceptance"))
     from factory.seo.render_check import chromium_path
@@ -266,6 +269,10 @@ def главная(аргв=None) -> int:
                           **тёмная(бр, а.domain, снимки)})
         finally:
             бр.close()
+    if а.out_json:
+        pathlib.Path(а.out_json).write_text(
+            json.dumps(итоги, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(f"отчёт: {а.out_json}")
     if а.json:
         print(json.dumps(итоги, ensure_ascii=False, indent=1))
     else:

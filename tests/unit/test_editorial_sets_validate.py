@@ -183,3 +183,22 @@ def test_живые_витрины_проверяются_без_дефекто�
                        text=True, timeout=300)
     assert и.returncode == 0, и.stdout + и.stderr
     assert "с дефектом 0" in и.stdout, и.stdout
+
+
+def test_дата_пересмотра_видна_на_странице():
+    """§2 поручения: промежуточная подборка показывает дату обновления.
+
+    Поле `updated` в файле было, а на странице его не было — нашла линия SEO
+    27.10 09:45Z на /collection/luchshee-2026/. Проверяется рантайм: строка
+    строится из поля, а не пишется руками.
+    """
+    for имя in ("zonafilm-space", "zonafilm12-site"):
+        т = (КОРЕНЬ / "var" / "site-repos" / имя / "src"
+             / "lords-frontend.py").read_text(encoding="utf-8")
+        assert 'getattr(подборка, "updated", "")' in т, имя
+        assert "Состав пересмотрен" in т, имя
+        assert ".col__upd{" in т, имя
+        контракт = (КОРЕНЬ / "var" / "site-repos" / имя / "src"
+                    / "collection_contract.py").read_text(encoding="utf-8")
+        assert "updated: str" in контракт, имя
+        assert 'updated=str(с.get("updated") or "")' in контракт, имя
