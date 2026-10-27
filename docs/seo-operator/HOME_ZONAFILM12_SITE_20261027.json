@@ -11,7 +11,8 @@
  "shortages": [
   "Universal: «Злая. Часть 2» (zlaya-chast-2, Universal) не включена — первой части в каталоге нет; «Смерч 2» не включён — прокат за пределами США у другой студии.",
   "«Дипломатка» (diplomatka) не включена: на странице 4-й сезон, в каталоге 3 — число сезонов не совпадает.",
-  "Sony Pictures: sonypictures.com недоступен (отказ загрузки 27.10) — принадлежность каждого фильма сверена по en.wikipedia (Distributed by Sony Pictures Releasing)."
+  "Sony Pictures: sonypictures.com недоступен (отказ загрузки 27.10) — принадлежность каждого фильма сверена по en.wikipedia (Distributed by Sony Pictures Releasing).",
+  "Sony и Universal (пересмотр 27.10): списки en.wikipedia «List of Columbia Pictures films» и «List of Universal Pictures films» за 2010–2029 → совпадение с каталогом zona-03 по оригинальному названию и году ±1 (фильм воспроизводится, есть постер): Columbia 162, Universal 289 → без частичного проката (international/U.S. distribution only, distribution in …) и с оценкой IMDb ≥ 7.0: 28 и 34 → редакционно исключены новинки 2026 без числа голосов («Обитель зла», «28 лет спустя: Храм костей»), «Человек на Луне» (у поставщика жанр «дорама» — витрина Zona его отклонит), «Пэдмен», семейные комедии и документальные фильмы ниже 7.3 → Sony 15, Universal 15; каждая статья сверена по IMDb. Убраны прежние позиции ниже 7.0: «28 лет спустя» 6.6, «Социальная расплата» 6.7, «Каскадёры» 6.8, «Нет» 6.8."
  ],
  "collections": [
   {
@@ -335,7 +336,7 @@
    "key": "universal-pictures",
    "title": "Universal Pictures: большие фильмы студии",
    "viewer_request": "Какие фильмы Universal стоит посмотреть?",
-   "intro": "Большие фильмы Universal Pictures: «Одиссея» Кристофера Нолана, «Оппенгеймер», анимация DreamWorks «Дикий робот», «Каскадёры» и «Нет».",
+   "intro": "Большие фильмы Universal Pictures: «Одиссея» и «Оппенгеймер» Нолана, анимация DreamWorks и Illumination, «Прочь», музыкальная биография N.W.A., «Форсаж 5» и боевик «Никто».",
    "section": "/movies/",
    "indexing": {
     "open": true,
@@ -354,34 +355,15 @@
       "imdb": "33764258",
       "kinopoisk": "6385370"
      },
-     "reason": "Одиссей возвращается на Итаку после Троянской войны — через циклопов, сирен и великанов. Режиссёр Кристофер Нолан.",
-     "basis": "Universal Pictures — производство и прокат (Rotten Tomatoes и en.wikipedia, 27.10); IMDb tt33764258 сверен",
-     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "The Odyssey",
-     "source": "Rotten Tomatoes, проверено 27.10.2026",
-     "source_url": "https://www.rottentomatoes.com/m/the_odyssey_2026"
+     "reason": "Одиссей возвращается на Итаку после Троянской войны — через циклопов, сирен и великанов. Приключенческий эпос Кристофера Нолана.",
+     "basis": "List of Universal Pictures films: «co-production with Syncopy»; статья Википедии сверена по IMDb tt33764258; IMDb 8.4 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Odyssey_(2026_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "The Odyssey"
     },
     {
      "order": 2,
-     "id": "0191524c-142d-74e6-8924-6e26cbf83b5c",
-     "slug": "oppengeymer-2023",
-     "url": "https://zonafilm12.site/title/oppengeymer-2023/",
-     "name": "Оппенгеймер (2023)",
-     "year": 2023,
-     "type": "movie",
-     "external_ids": {
-      "imdb": "15398776",
-      "kinopoisk": "4664634"
-     },
-     "reason": "История физика Роберта Оппенгеймера, который во время Второй мировой войны руководил Манхэттенским проектом.",
-     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
-     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "Oppenheimer",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/Oppenheimer_(film)"
-    },
-    {
-     "order": 3,
      "id": "0192b34c-9591-736b-92ab-97bb022c2d74",
      "slug": "dikiy-robot",
      "url": "https://zonafilm12.site/title/dikiy-robot/",
@@ -392,59 +374,269 @@
       "imdb": "29623480",
       "kinopoisk": "5457899"
      },
-     "reason": "Робот-помощник оказывается на необитаемом острове, учит язык животных и заботится о гусёнке — анимация DreamWorks.",
-     "basis": "DreamWorks Animation, прокат Universal Pictures (en.wikipedia, 27.10)",
-     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "The Wild Robot",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/The_Wild_Robot_(film)"
+     "reason": "Робот-помощник оказывается на необитаемом острове, учит язык животных и заботится о гусёнке. Анимация DreamWorks для всей семьи.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by DreamWorks Animation ; co-distributed in Japan by GAGA»; статья Википедии сверена по IMDb tt29623480; IMDb 8.2 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Wild_Robot",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "The Wild Robot"
+    },
+    {
+     "order": 3,
+     "id": "0191524c-142d-74e6-8924-6e26cbf83b5c",
+     "slug": "oppengeymer-2023",
+     "url": "https://zonafilm12.site/title/oppengeymer-2023/",
+     "name": "Оппенгеймер (2023)",
+     "year": 2023,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "15398776",
+      "kinopoisk": "4664634"
+     },
+     "reason": "История физика Роберта Оппенгеймера, который во время Второй мировой войны руководил Манхэттенским проектом. Биографическая драма Нолана.",
+     "basis": "List of Universal Pictures films: «Winner of the Academy Award for Best Picture Winner of the Golden Globe Award for Best Motion Picture – Drama co-production with Syncopy and Atlas Entertainment»; статья Википедии сверена по IMDb tt15398776; IMDb 8.2 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Oppenheimer_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Oppenheimer"
     },
     {
      "order": 4,
-     "id": "0191511d-126b-7252-97d8-21aaacfa28c5",
-     "slug": "kaskadery",
-     "url": "https://zonafilm12.site/title/kaskadery/",
-     "name": "Каскадёры",
-     "year": 2024,
-     "type": "movie",
-     "external_ids": {
-      "imdb": "1684562",
-      "kinopoisk": "535243"
-     },
-     "reason": "Каскадёр возвращается на съёмочную площадку бывшей девушки и ищет пропавшую звезду боевиков.",
-     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
-     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "The Fall Guy",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/The_Fall_Guy_(2024_film)"
-    },
-    {
-     "order": 5,
-     "id": "0191524c-5b35-7086-9552-f7516259897e",
-     "slug": "net-2022",
-     "url": "https://zonafilm12.site/title/net-2022/",
-     "name": "Нет (2022)",
+     "id": "019151f5-48e7-7405-89b9-9bfc3f64a559",
+     "slug": "kot-v-sapogah-2-poslednee-zhelanie-2022",
+     "url": "https://zonafilm12.site/title/kot-v-sapogah-2-poslednee-zhelanie-2022/",
+     "name": "Кот в сапогах 2: Последнее желание (2022)",
      "year": 2022,
      "type": "movie",
      "external_ids": {
-      "imdb": "10954984",
-      "kinopoisk": "1447137"
+      "imdb": "3915174",
+      "kinopoisk": "840821"
      },
-     "reason": "Брат и сестра пытаются спасти семейное ранчо, где разводят лошадей для съёмок, и замечают в окрестностях НЛО.",
-     "basis": "Universal Pictures — производство и прокат (en.wikipedia, 27.10)",
-     "checked": "2026-10-27T09:08:22Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "Nope",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/Nope_(film)"
+     "reason": "Кот в сапогах растратил восемь жизней из девяти и решает забыть о подвигах — но ненадолго. Анимация DreamWorks для детей и взрослых.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by DreamWorks Animation ; co-distributed in Japan by GAGA»; статья Википедии сверена по IMDb tt3915174; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Puss_in_Boots:_The_Last_Wish",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Puss in Boots: The Last Wish"
+    },
+    {
+     "order": 5,
+     "id": "0197f068-23bd-77e6-bf38-590df169a59e",
+     "slug": "proch-2",
+     "url": "https://zonafilm12.site/title/proch-2/",
+     "name": "Прочь",
+     "year": 2017,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "5052448",
+      "kinopoisk": "944708"
+     },
+     "reason": "Фотограф едет знакомиться с родителями девушки в уединённый загородный дом, и визит оказывается не тем, чем кажется. Триллер с ужасами.",
+     "basis": "List of Universal Pictures films: «Nominee of the Academy Award for Best Picture distribution only; produced by Blumhouse Productions , QC Entertainment and Monkeypaw Productions»; статья Википедии сверена по IMDb tt5052448; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Get_Out",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Get Out"
+    },
+    {
+     "order": 6,
+     "id": "0198659d-9839-76a7-961c-89ba426a71eb",
+     "slug": "golos-ulic",
+     "url": "https://zonafilm12.site/title/golos-ulic/",
+     "name": "Голос улиц",
+     "year": 2015,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1398426",
+      "kinopoisk": "462867"
+     },
+     "reason": "1987 год: пятеро парней из пригорода Лос-Анджелеса создают группу N.W.A. и становятся знаменитыми. Музыкальная биография.",
+     "basis": "List of Universal Pictures films: «co-production with Legendary Pictures , New Line Cinema , Cube Vision , Crucial Films and Broken Chair Flickz»; статья Википедии сверена по IMDb tt1398426; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Straight_Outta_Compton_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Straight Outta Compton"
+    },
+    {
+     "order": 7,
+     "id": "0193fb21-b188-7f0d-b728-384fb485591c",
+     "slug": "boyfrend-iz-buduschego",
+     "url": "https://zonafilm12.site/title/boyfrend-iz-buduschego/",
+     "name": "Бойфренд из будущего",
+     "year": 2013,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "2194499",
+      "kinopoisk": "662596"
+     },
+     "reason": "Молодой юрист умеет перемещаться во времени и повторяет первое свидание снова и снова. Романтическая комедия с фантастикой.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by Working Title Films and Relativity Media»; статья Википедии сверена по IMDb tt2194499; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/About_Time_(2013_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "About Time"
+    },
+    {
+     "order": 8,
+     "id": "019750ce-ddc4-75cc-9eb7-1c4503d77ffb",
+     "slug": "kak-priruchit-drakona",
+     "url": "https://zonafilm12.site/title/kak-priruchit-drakona/",
+     "name": "Как приручить дракона",
+     "year": 2025,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "26743210",
+      "kinopoisk": "5267432"
+     },
+     "reason": "Подросток из племени викингов, воюющего с драконами, дружит с драконом Беззубиком. Фильм 2025 года для семейного просмотра.",
+     "basis": "List of Universal Pictures films: «co-production with DreamWorks Pictures (uncredited), DreamWorks Animation and Marc Platt Productions»; статья Википедии сверена по IMDb tt26743210; IMDb 7.7 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/How_to_Train_Your_Dragon_(2025_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "How to Train Your Dragon"
+    },
+    {
+     "order": 9,
+     "id": "01a02352-ea5e-7175-a26d-93e9086bb812",
+     "slug": "gadkiy-ya",
+     "url": "https://zonafilm12.site/title/gadkiy-ya/",
+     "name": "Гадкий я",
+     "year": 2010,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1323594",
+      "kinopoisk": "432724"
+     },
+     "reason": "Злодей Грю с армией миньонов собирается украсть Луну, но ему приходится заботиться о трёх сиротах. Семейная анимация Illumination.",
+     "basis": "List of Universal Pictures films: «co-production with Illumination Entertainment»; статья Википедии сверена по IMDb tt1323594; IMDb 7.6 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Despicable_Me_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Despicable Me"
+    },
+    {
+     "order": 10,
+     "id": "0199864a-2c9e-7222-bf2a-0382b8155e53",
+     "slug": "skott-piligrim-protiv-vseh",
+     "url": "https://zonafilm12.site/title/skott-piligrim-protiv-vseh/",
+     "name": "Скотт Пилигрим против всех",
+     "year": 2010,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "446029",
+      "kinopoisk": "105948"
+     },
+     "reason": "Чтобы встречаться с девушкой мечты, Скотту нужно победить семерых её бывших. Комедийный боевик с романтикой.",
+     "basis": "List of Universal Pictures films: «co-production with Marc Platt Productions and Big Talk Productions»; статья Википедии сверена по IMDb tt446029; IMDb 7.5 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Scott_Pilgrim_vs._the_World",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Scott Pilgrim vs. the World"
+    },
+    {
+     "order": 11,
+     "id": "0196f8e7-2832-7fc5-bdd3-5df953bc69b4",
+     "slug": "nikto-2",
+     "url": "https://zonafilm12.site/title/nikto-2/",
+     "name": "Никто",
+     "year": 2021,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "7888964",
+      "kinopoisk": "1309596"
+     },
+     "reason": "Неприметный аудитор Хатч после ограбления своего дома отправляется искать грабителей и ввязывается в драку с хулиганами. Криминальный боевик.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by 87North Productions , Odenkirk Provissiero Entertainment, Eighty Two Films and Perfect World Pictures»; статья Википедии сверена по IMDb tt7888964; IMDb 7.4 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Nobody_(2021_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Nobody"
+    },
+    {
+     "order": 12,
+     "id": "019961ba-fd2f-7808-b98e-a92d15e0ad11",
+     "slug": "kak-priruchit-drakona-3",
+     "url": "https://zonafilm12.site/title/kak-priruchit-drakona-3/",
+     "name": "Как приручить дракона 3",
+     "year": 2019,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "2386490",
+      "kinopoisk": "706655"
+     },
+     "reason": "Иккинг и Беззубик сталкиваются с охотником на драконов, а появление Дневной Фурии меняет жизнь острова. Завершение анимационной трилогии DreamWorks.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by DreamWorks Animation ; co-distributed in Japan by GAGA; first DreamWorks Animation film to be distributed by Universal Pictures»; статья Википедии сверена по IMDb tt2386490; IMDb 7.4 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/How_to_Train_Your_Dragon:_The_Hidden_World",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "How to Train Your Dragon: The Hidden World"
+    },
+    {
+     "order": 13,
+     "id": "01915163-035d-734d-9713-48661a0581e3",
+     "slug": "ee-pravda",
+     "url": "https://zonafilm12.site/title/ee-pravda/",
+     "name": "Её правда",
+     "year": 2022,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "11198810",
+      "kinopoisk": "4502700"
+     },
+     "reason": "Журналистки The New York Times расследуют преступления Харви Вайнштейна и убеждают пострадавших заговорить. Драма о журналистике по реальным событиям.",
+     "basis": "List of Universal Pictures films: «co-production with Annapurna Pictures and Plan B Entertainment»; статья Википедии сверена по IMDb tt11198810; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/She_Said_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "She Said"
+    },
+    {
+     "order": 14,
+     "id": "0197e5a6-c7f6-73f3-9d26-295aeeab154d",
+     "slug": "split",
+     "url": "https://zonafilm12.site/title/split/",
+     "name": "Сплит",
+     "year": 2016,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "4972582",
+      "kinopoisk": "930534"
+     },
+     "reason": "Незнакомец похищает трёх школьниц, и у похитителя 23 личности. Психологический триллер.",
+     "basis": "List of Universal Pictures films: «distribution only; produced by Blinding Edge Pictures and Blumhouse Productions»; статья Википедии сверена по IMDb tt4972582; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Split_(2016_American_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Split"
+    },
+    {
+     "order": 15,
+     "id": "0193f96a-4179-7c97-b913-e38389104b97",
+     "slug": "forsazh-5",
+     "url": "https://zonafilm12.site/title/forsazh-5/",
+     "name": "Форсаж 5",
+     "year": 2011,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1596343",
+      "kinopoisk": "496943"
+     },
+     "reason": "Брайан О’Коннер, Доминик и Миа Торетто скрываются от полиции после побега Доминика. Боевик о погонях и криминале.",
+     "basis": "List of Universal Pictures films: «co-production with Original Film and One Race Films»; статья Википедии сверена по IMDb tt1596343; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Fast_Five",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Fast Five"
     }
    ],
-   "sources_note": "Студия и прокат — по Википедии и Rotten Tomatoes."
+   "sources_note": "Студия и прокат — по Википедии. Оценки — IMDb.",
+   "updated": "2026-10-27"
   },
   {
    "key": "sony-pictures",
    "title": "Sony Pictures: Человек-паук и не только",
    "viewer_request": "Какие фильмы Sony Pictures стоит посмотреть?",
-   "intro": "Фильмы Sony Pictures: три истории о Человеке-пауке и анимационная «Паутина вселенных», Голливуд 1969 года у Тарантино, «28 лет спустя» Дэнни Бойла и новый фильм Аарона Соркина.",
+   "intro": "Фильмы Columbia Pictures и Sony: шесть историй о Человеке-пауке, «Социальная сеть», «Капитан Филлипс», «Маленькие женщины», Тарантино о Голливуде 1969 года, военная драма и боевики.",
    "section": "/movies/",
    "indexing": {
     "open": true,
@@ -463,11 +655,11 @@
       "imdb": "9362722",
       "kinopoisk": "1219177"
      },
-     "reason": "Майлз попадает в Мультивселенную и встречает команду Пауков из других миров — и решает, что значит быть героем. Анимационный фильм.",
-     "basis": "Columbia Pictures и Sony Pictures Animation; прокат Sony Pictures Releasing; IMDb 8.5 по данным каталога, число голосов в каталоге не указано",
-     "source": "en.wikipedia, проверено 27.10.2026",
+     "reason": "Майлз попадает в Мультивселенную и встречает команду Пауков из других миров — и решает, что значит быть героем. Анимация для всей семьи и поклонников комиксов.",
+     "basis": "List of Columbia Pictures films: «co-production with Marvel Entertainment , Sony Pictures Animation , Pascal Pictures, Lord Miller Productions and Arad Productions»; статья Википедии сверена по IMDb tt9362722; IMDb 8.5 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
      "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Across_the_Spider-Verse",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
      "original_name": "Spider-Man: Across the Spider-Verse"
     },
     {
@@ -482,11 +674,11 @@
       "imdb": "4633694",
       "kinopoisk": "920265"
      },
-     "reason": "Коллайдер открывает окна между измерениями, и в каждом оказывается свой Человек-паук — анимационный фильм.",
-     "basis": "Columbia Pictures и Sony Pictures Animation; прокат Sony Pictures Releasing; IMDb 8.4 по данным каталога, число голосов в каталоге не указано",
-     "source": "en.wikipedia, проверено 27.10.2026",
+     "reason": "Коллайдер открывает окна между измерениями, и в каждом оказывается свой Человек-паук. Анимационный фильм — лучше начинать с него, а потом смотреть «Паутину вселенных».",
+     "basis": "List of Columbia Pictures films: «Winner of the Academy Award for Best Animated Feature co-production with Sony Pictures Animation , Marvel Entertainment , Arad Productions, Lord Miller Producti»; статья Википедии сверена по IMDb tt4633694; IMDb 8.4 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
      "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Into_the_Spider-Verse",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
      "original_name": "Spider-Man: Into the Spider-Verse"
     },
     {
@@ -501,11 +693,11 @@
       "imdb": "10872600",
       "kinopoisk": "1309570"
      },
-     "reason": "Мир узнал, кто такой Человек-паук, и Питер Паркер просит помощи у Доктора Стрэнджа — но всё становится только опаснее.",
-     "basis": "Columbia Pictures, Marvel Studios; прокат Sony Pictures Releasing; IMDb 8.1 по данным каталога, число голосов в каталоге не указано",
-     "source": "en.wikipedia, проверено 27.10.2026",
+     "reason": "Мир узнал, кто такой Человек-паук, и Питер Паркер просит помощи у Доктора Стрэнджа — но всё становится только опаснее. Для тех, кто смотрел предыдущие фильмы о Питере.",
+     "basis": "List of Columbia Pictures films: «co-production with Marvel Studios and Pascal Pictures»; статья Википедии сверена по IMDb tt10872600; IMDb 8.1 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
      "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_No_Way_Home",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
      "original_name": "Spider-Man: No Way Home"
     },
     {
@@ -520,15 +712,72 @@
       "imdb": "22084616",
       "kinopoisk": "5494049"
      },
-     "reason": "Питер Паркер один в городе, который его забыл, а его способности начинают меняться.",
-     "basis": "Columbia Pictures, Marvel Studios; прокат Sony Pictures Releasing (en.wikipedia); RT 90% из 439 рецензий; IMDb 8.0 по данным каталога, 297243 голосов (imdb-datasets 14.09.2026)",
-     "source": "Rotten Tomatoes и en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://www.rottentomatoes.com/m/spider_man_brand_new_day",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "reason": "Питер Паркер один в городе, который его забыл, а его способности начинают меняться. Новый фильм 2026 года о Человеке-пауке.",
+     "basis": "List of Columbia Pictures films: «co-production with Marvel Studios and Pascal Pictures»; статья Википедии сверена по IMDb tt22084616; IMDb 8.0 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Brand_New_Day",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
      "original_name": "Spider-Man: Brand New Day"
     },
     {
      "order": 5,
+     "id": "019151e1-472d-797d-b7ba-ee5d79721210",
+     "slug": "malenkie-zhenschiny-3",
+     "url": "https://zonafilm12.site/title/malenkie-zhenschiny-3/",
+     "name": "Маленькие женщины",
+     "year": 2019,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "3281548",
+      "kinopoisk": "807339"
+     },
+     "reason": "Взросление четырёх непохожих сестёр во времена Гражданской войны: первая любовь, разочарования и поиск себя. Экранизация для любителей семейных драм.",
+     "basis": "List of Columbia Pictures films: «Nominee for the Academy Award for Best Picture co-production with Regency Enterprises and Pascal Pictures»; статья Википедии сверена по IMDb tt3281548; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Little_Women_(2019_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Little Women"
+    },
+    {
+     "order": 6,
+     "id": "0198c1e3-fdad-72f6-a16e-44b372d23650",
+     "slug": "kapitan-fillips",
+     "url": "https://zonafilm12.site/title/kapitan-fillips/",
+     "name": "Капитан Филлипс",
+     "year": 2013,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1535109",
+      "kinopoisk": "484438"
+     },
+     "reason": "2009 год: сомалийские пираты захватывают контейнеровоз и берут в заложники капитана Ричарда Филлипса. Триллер по реальным событиям.",
+     "basis": "List of Columbia Pictures films: «Nominee for the Academy Award for Best Picture Nominee of the Golden Globe Award for Best Motion Picture – Drama co-production with Scott Rudin Productions , Mi»; статья Википедии сверена по IMDb tt1535109; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Captain_Phillips_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Captain Phillips"
+    },
+    {
+     "order": 7,
+     "id": "01915254-4463-7254-9c88-db38675f68ab",
+     "slug": "socialnaya-set-2010",
+     "url": "https://zonafilm12.site/title/socialnaya-set-2010/",
+     "name": "Социальная сеть (2010)",
+     "year": 2010,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "1285016",
+      "kinopoisk": "427198"
+     },
+     "reason": "Октябрь 2003 года: студент Гарварда Марк Цукерберг после расставания с девушкой запускает студенческий сайт-рейтинг. Биографическая драма о реальных людях.",
+     "basis": "List of Columbia Pictures films: «Nominee for the Academy Award for Best Picture Winner of the Golden Globe Award for Best Motion Picture – Drama co-production with Relativity Media , Scott Rudi»; статья Википедии сверена по IMDb tt1285016; IMDb 7.8 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Social_Network",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "The Social Network"
+    },
+    {
+     "order": 8,
      "id": "0191524c-5cf3-7ea0-ad92-759b53a575c9",
      "slug": "odnazhdy-v-gollivude-2019",
      "url": "https://zonafilm12.site/title/odnazhdy-v-gollivude-2019/",
@@ -539,52 +788,149 @@
       "imdb": "7131622",
       "kinopoisk": "1047883"
      },
-     "reason": "1969 год: актёр Рик Далтон и его дублёр Клифф Бут ищут своё место в меняющемся Голливуде. Фильм Квентина Тарантино.",
-     "basis": "Columbia Pictures; прокат Sony Pictures Releasing; режиссёр Квентин Тарантино; IMDb 7.6 по данным каталога, число голосов в каталоге не указано",
-     "source": "en.wikipedia, проверено 27.10.2026",
+     "reason": "1969 год: актёр Рик Далтон и его дублёр Клифф Бут ищут своё место в меняющемся Голливуде. Фильм Квентина Тарантино — для любителей его кино и старого Голливуда.",
+     "basis": "List of Columbia Pictures films: «Nominee for the Academy Award for Best Picture Winner of the Golden Globe Award for Best Motion Picture – Musical or Comedy distribution outside China, Hong Kon»; статья Википедии сверена по IMDb tt7131622; IMDb 7.6 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
      "source_url": "https://en.wikipedia.org/wiki/Once_Upon_a_Time_in_Hollywood",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
      "original_name": "Once Upon a Time in...  Hollywood"
     },
     {
-     "order": 6,
-     "id": "01978905-e82c-789e-9009-7b76a53af7f3",
-     "slug": "28-let-spustya",
-     "url": "https://zonafilm12.site/title/28-let-spustya/",
-     "name": "28 лет спустя",
-     "year": 2025,
+     "order": 9,
+     "id": "019156d3-36af-77ed-aa41-0c0e3949193f",
+     "slug": "yarost-13",
+     "url": "https://zonafilm12.site/title/yarost-13/",
+     "name": "Ярость",
+     "year": 2014,
      "type": "movie",
      "external_ids": {
-      "imdb": "10548174",
-      "kinopoisk": "5445182"
+      "imdb": "2713180",
+      "kinopoisk": "740644"
      },
-     "reason": "Британия через 28 лет после вспышки вируса: 12-летний мальчик ищет врача для умирающей матери. Режиссёр Дэнни Бойл.",
-     "basis": "Columbia Pictures; прокат Sony Pictures Releasing; режиссёр Дэнни Бойл; IMDb 6.6 по данным каталога, число голосов в каталоге не указано",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/28_Years_Later",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке",
-     "original_name": "28 Years Later"
+     "reason": "Апрель 1945 года: союзники продвигаются вглубь вражеской территории, и солдаты знают, что до победы погибнут ещё многие. Военная драма.",
+     "basis": "List of Columbia Pictures films: «distribution outside Italy, Eastern Europe, the Baltics, the Middle East, Turkey, Africa and Asia excluding Korea only; produced by QED International , Le Grisb»; статья Википедии сверена по IMDb tt2713180; IMDb 7.6 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Fury_(2014_film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Fury"
     },
     {
-     "order": 7,
-     "id": "01a0d32b-e92f-754f-afef-bbed014a9ab9",
-     "slug": "socialnaya-rasplata",
-     "url": "https://zonafilm12.site/title/socialnaya-rasplata/",
-     "name": "Социальная расплата",
-     "year": 2026,
+     "order": 10,
+     "id": "01915254-437f-7239-945c-edffa2c00def",
+     "slug": "chelovek-kotoryy-izmenil-vse-2011",
+     "url": "https://zonafilm12.site/title/chelovek-kotoryy-izmenil-vse-2011/",
+     "name": "Человек, который изменил всё (2011)",
+     "year": 2011,
      "type": "movie",
      "external_ids": {
-      "imdb": "37510326",
-      "kinopoisk": "8883816"
+      "imdb": "1210166",
+      "kinopoisk": "432791"
      },
-     "reason": "Новый фильм Аарона Соркина — сценарий и режиссура; в ролях Джереми Аллен Уайт, Майки Мэдисон и Джереми Стронг.",
-     "basis": "Sony Pictures Releasing / Columbia Pictures; США с 09.10.2026; СВЕЖАЯ РАБОТА С МАЛОЙ ВЫБОРКОЙ (IMDb 6.7 при 1075 голосах) — редакционный выбор, поэтому последней; описания в каталоге нет, пояснение по Википедии; IMDb 6.7 по данным каталога, 1075 голосов (imdb-datasets 14.09.2026)",
-     "source": "en.wikipedia, проверено 27.10.2026",
-     "source_url": "https://en.wikipedia.org/wiki/The_Social_Reckoning",
-     "checked": "2026-10-27T12:01:35Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер на странице; воспроизведение — в публичной приёмке"
+     "reason": "Менеджер бейсбольной команды с маленьким бюджетом вместе с молодым экономистом меняет систему подбора игроков. Спортивная драма по реальной истории.",
+     "basis": "List of Columbia Pictures films: «Nominee for the Academy Award for Best Picture Nominee of the Golden Globe Award for Best Motion Picture – Drama co-production with Scott Rudin Productions , Mi»; статья Википедии сверена по IMDb tt1210166; IMDb 7.6 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Moneyball_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Moneyball"
+    },
+    {
+     "order": 11,
+     "id": "0191524c-58b5-74a4-9f7d-3d29756a5bb8",
+     "slug": "moy-uzhasnyy-sosed-2022",
+     "url": "https://zonafilm12.site/title/moy-uzhasnyy-sosed-2022/",
+     "name": "Мой ужасный сосед (2022)",
+     "year": 2022,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "7405458",
+      "kinopoisk": "1074910"
+     },
+     "reason": "Отто неохотно знакомится с весёлой семьёй, переехавшей по соседству, и неожиданная дружба с Марисоль меняет его жизнь. Комедийная драма.",
+     "basis": "List of Columbia Pictures films: «co-production with Stage 6 Films , SF Studios , Artistic Films, Playtone , 2Dux², STXfilms and Big Indie Pictures»; статья Википедии сверена по IMDb tt7405458; IMDb 7.5 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/A_Man_Called_Otto",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "A Man Called Otto"
+    },
+    {
+     "order": 12,
+     "id": "019156d3-9841-7910-b702-8519ca27d9f2",
+     "slug": "chelovek-pauk-vozvraschenie-domoy",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-vozvraschenie-domoy/",
+     "name": "Человек-паук: Возвращение домой",
+     "year": 2017,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "2250912",
+      "kinopoisk": "690593"
+     },
+     "reason": "После встречи с Мстителями Питер Паркер пытается жить обычной жизнью, а Тони Старк становится его наставником. Самый ранний фильм о Питере в подборке — с него удобно начать.",
+     "basis": "List of Columbia Pictures films: «co-production with Marvel Studios and Pascal Pictures»; статья Википедии сверена по IMDb tt2250912; IMDb 7.4 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Homecoming",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Spider-Man: Homecoming"
+    },
+    {
+     "order": 13,
+     "id": "0191524c-5889-76b9-b041-a8e3a2237a5d",
+     "slug": "bystree-puli-2022",
+     "url": "https://zonafilm12.site/title/bystree-puli-2022/",
+     "name": "Быстрее пули (2022)",
+     "year": 2022,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "12593682",
+      "kinopoisk": "1392550"
+     },
+     "reason": "Наёмник должен выкрасть чемоданчик в скоростном поезде Токио — Киото, но поезд полон других киллеров. Боевик с комедией.",
+     "basis": "List of Columbia Pictures films: «co-production with 87North Productions»; статья Википедии сверена по IMDb tt12593682; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Bullet_Train_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Bullet Train"
+    },
+    {
+     "order": 14,
+     "id": "019156d3-9864-79e6-8e45-904ea6a0099f",
+     "slug": "chelovek-pauk-vdali-ot-doma",
+     "url": "https://zonafilm12.site/title/chelovek-pauk-vdali-ot-doma/",
+     "name": "Человек-паук: Вдали от дома",
+     "year": 2019,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "6320628",
+      "kinopoisk": "1008445"
+     },
+     "reason": "Питер Паркер едет с классом на каникулы в Европу и в Венеции оказывается в центре сражения. Приключения с юмором, следующий по году фильм о Питере.",
+     "basis": "List of Columbia Pictures films: «co-production with Marvel Studios and Pascal Pictures»; статья Википедии сверена по IMDb tt6320628; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/Spider-Man:_Far_From_Home",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "Spider-Man: Far from Home"
+    },
+    {
+     "order": 15,
+     "id": "0199578e-9927-7ae4-a6f8-25399a0b6dd3",
+     "slug": "velikiy-uravnitel",
+     "url": "https://zonafilm12.site/title/velikiy-uravnitel/",
+     "name": "Великий уравнитель",
+     "year": 2014,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "455944",
+      "kinopoisk": "196707"
+     },
+     "reason": "Бывший агент ЦРУ работает продавцом и обещал забыть прошлое, но вступается за девушку, попавшую в беду. Криминальный боевик.",
+     "basis": "List of Columbia Pictures films: «distribution outside Australia, New Zealand and Singapore theatrically only; co-production with Village Roadshow Pictures , Escape Artists , ZHIV Productions an»; статья Википедии сверена по IMDb tt455944; IMDb 7.3 по данным каталога (число голосов в каталоге не указано); правило: оценка ≥ 7.0, без частичного проката; порядок — по оценке",
+     "source": "en.wikipedia через source_fetch.py (D200), проверено 27.10.2026",
+     "source_url": "https://en.wikipedia.org/wiki/The_Equalizer_(film)",
+     "checked": "2026-10-27T15:54:40Z: 200, canonical на себя, index, follow, постер страницы = постер каталога, плеер",
+     "original_name": "The Equalizer"
     }
    ],
-   "sources_note": "Прокат Sony Pictures — по Википедии."
+   "sources_note": "Прокат Columbia Pictures — по Википедии. Оценки — IMDb.",
+   "updated": "2026-10-27"
   }
  ]
 }
