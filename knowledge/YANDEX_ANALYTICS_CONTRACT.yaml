@@ -239,6 +239,14 @@ webmaster:
     search_urls_events_history: "GET /v4/user/{user-id}/hosts/{host-id}/search-urls/events/history"
     popular_queries: "GET /v4/user/{user-id}/hosts/{host-id}/search-queries/popular"
     popular_queries_indicators: [TOTAL_SHOWS, TOTAL_CLICKS, AVG_SHOW_POSITION, AVG_CLICK_POSITION]
+    # SRC-YA-WEBMASTER-POPULAR-QUERIES-2: без date_from/date_to — «последняя неделя» API
+    # (в выгрузках 27–28.10 это 2026-09-30…2026-10-06), а не прошлые 7 суток календаря.
+    popular_queries_params:
+      date_from: "datetime, необязательный"
+      date_to: "datetime, необязательный"
+      device_type_indicator: "ApiDeviceTypeIndicator, по умолчанию ALL"
+      limit: "1–500, по умолчанию 500"
+      offset: "≥ 0, по умолчанию 0"
     external_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/external/samples"
     broken_internal_links: "GET /v4/user/{user-id}/hosts/{host-id}/links/internal/broken/samples"
     diagnostics: "GET /v4/user/{user-id}/hosts/{host-id}/diagnostics"

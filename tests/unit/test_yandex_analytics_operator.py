@@ -87,6 +87,8 @@ def test_all_thirteen_groups_of_the_brief_are_present():
         "daily_search_landing_pages",
         # 2026-10-26: карты сайта и сводка Вебмастера (задание: Sitemap и его обработка)
         "sitemaps", "webmaster_summary",
+        # 2026-10-28: популярные запросы с явным окном 7 суток (без дат API отдал 30.09–06.10)
+        "popular_queries_recent",
     }
 
 
@@ -373,12 +375,13 @@ def test_webmaster_network_outage_is_tried_once_per_run(monkeypatch, reason, net
     provider = _NetDownWebmaster(reason)
     report = analytics_collect.collect(provider=provider)
 
-    per_domain = len(analytics_collect.WEBMASTER_RESOURCES) + 1
+    # + popular_queries и popular_queries_recent (явные даты, SRC-YA-WEBMASTER-POPULAR-QUERIES-2)
+    per_domain = len(analytics_collect.WEBMASTER_RESOURCES) + 2
     assert provider.webmaster_calls == (1 if network else 2 * per_domain)
     for domain in report["domains"]:
         by_key = {m["key"]: m for m in domain["measurements"]}
         assert by_key["visits"]["measured"] is True  # Метрика не страдает
-        for key in ("pages_in_search", "popular_queries"):
+        for key in ("pages_in_search", "popular_queries", "popular_queries_recent"):
             assert by_key[key]["measured"] is False
             assert by_key[key]["value"] == analytics_collect.NOT_MEASURED
             assert reason.split(".")[0] in by_key[key]["reason"]

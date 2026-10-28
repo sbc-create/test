@@ -545,10 +545,32 @@ sources:
     retrieved_at: "2026-10-10T08:21:22Z"
     sha256: c451a5e786cf7383563909bd0f24e568418efaff9f0df4976d0d13166b571b5e
     purpose: "индикаторы популярных запросов: показы, клики, средние позиции показа и клика"
-    status: approved
+    status: superseded
+    superseded_by: SRC-YA-WEBMASTER-POPULAR-QUERIES-2
     conclusions:
       - "query_indicator принимает TOTAL_SHOWS, TOTAL_CLICKS, AVG_SHOW_POSITION, AVG_CLICK_POSITION (ApiQueryIndicator); параметр повторяемый."
       - "Без TOTAL_CLICKS клики в ответе не приходят: кликабельность по снимкам до 2026-10-10 не измерена, а не равна нулю."
+  - id: SRC-YA-WEBMASTER-POPULAR-QUERIES-2
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/webmaster/doc/ru/reference/host-search-queries-popular
+    retrieved_at: "2026-10-28T10:42:49Z"
+    sha256: 49185837e963a1a8dc353d1de1e70c199955580f620962c33c3b1cf0e970ed16
+    purpose: "период и устройство популярных запросов: date_from, date_to, device_type_indicator, limit"
+    status: approved
+    method: "прямой GET страницы (HTTP 200, 318104 байт), текст разобран из HTML"
+    conclusions:
+      - "Выводы SRC-YA-WEBMASTER-POPULAR-QUERIES про query_indicator остаются в силе."
+      - "Необязательные date_from и date_to (<datetime>): «Если не указан, то данные возвращаются за последнюю неделю»."
+      - "device_type_indicator (ApiDeviceTypeIndicator), по умолчанию ALL; limit 1–500, по умолчанию 500; offset ≥ 0."
+      - "Выгрузки 27–28.10 без дат вернули окно 2026-09-30…2026-10-06 у всех 15 хостов: «последняя неделя» API — не прошлые 7 суток календаря. Есть ли у Вебмастера данные позже 06.10, покажет только запрос с явными датами."
+  - id: SRC-YA-WEBMASTER-INSEARCH-HISTORY
+    kind: official_documentation
+    owner: Yandex
+    url: https://yandex.ru/dev/webmaster/doc/ru/reference/host-id-search-urls-in-search-history
+    retrieved_at: "2026-10-28T10:42:49Z"
+    status: unavailable_blocked
+    evidence: "HTTP 404 Not Found по угаданному адресу страницы; адрес в документации не найден — параметры периода истории «страниц в поиске» не вносятся"
   - id: SRC-YA-METRIKA-COUNTER-GET
     kind: official_documentation
     owner: Yandex

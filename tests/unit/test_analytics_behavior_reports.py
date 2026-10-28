@@ -98,3 +98,25 @@ def test_failure_is_not_measured_with_the_api_reason():
     by_key = _reports(StubProvider(fail=BlockedAnalyticsAccess("Query is too complicated")))
     for key in KEYS:
         assert by_key[key]["measured"] is False and "too complicated" in by_key[key]["reason"], key
+
+
+def test_recent_popular_queries_ask_for_explicit_last_seven_days():
+    """Без дат Вебмастер отдал 30.09–06.10 у всех хостов (27–28.10): окно задаётся явно."""
+    seen = []
+
+    class P(StubProvider):
+        def get_webmaster_report(self, host_id, resource, params=None):
+            seen.append(params)
+            return super().get_webmaster_report(host_id, resource, params)
+
+    m = analytics_collect._popular_queries_recent(P(), "h", now=NOW).as_dict()
+    assert m["measured"] and m["key"] == "popular_queries_recent"
+    assert seen[0]["date_from"] == "2026-10-22T00:00:00+03:00" and seen[0]["date_to"] == "2026-10-28T23:59:59+03:00"
+    assert seen[0]["query_indicator"] == analytics_collect.QUERY_INDICATORS
+
+
+def test_recent_popular_queries_failure_keeps_the_default_request():
+    by_key = {m["key"]: m for m in analytics_collect.collect_domain(
+        StubProvider(fail=BlockedAnalyticsAccess("bad date")), LIVE_ENTRY, date1="a", date2="b").as_dict()["measurements"]}
+    assert by_key["popular_queries_recent"]["measured"] is False and "bad date" in by_key["popular_queries_recent"]["reason"]
+    assert "popular_queries" in by_key

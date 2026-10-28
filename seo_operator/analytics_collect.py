@@ -298,6 +298,10 @@ def collect_domain(
         out.measurements.append(
             _unmeasured("popular_queries", "Популярные запросы", reason, "popular_queries")
         )
+        out.measurements.append(
+            _unmeasured("popular_queries_recent", "Популярные запросы за последние 7 полных суток",
+                        reason, "popular_queries")
+        )
     else:
         for key, title, resource in WEBMASTER_RESOURCES:
             try:
@@ -314,6 +318,7 @@ def collect_domain(
             except FactoryError as exc:
                 out.measurements.append(_unmeasured(key, title, exc.reason, resource))
         out.measurements.append(_popular_queries(provider, host_id))
+        out.measurements.append(_popular_queries_recent(provider, host_id))
 
     return out
 
@@ -725,6 +730,32 @@ def _popular_queries(provider, host_id: str) -> Measurement:
         )
     except FactoryError as exc:
         return _unmeasured("popular_queries", "Популярные запросы", exc.reason, "popular_queries")
+
+
+#: Окно популярных запросов с явными датами (SRC-YA-WEBMASTER-POPULAR-QUERIES-2): без
+#: date_from/date_to API отдаёт свою «последнюю неделю», а в выгрузках 27–28.10 это было
+#: 30.09–06.10 у всех хостов. Явное окно различает «данных нет» и «их не спрашивали».
+RECENT_QUERY_DAYS = 7
+
+
+def _popular_queries_recent(provider, host_id: str, now: _dt.datetime | None = None) -> Measurement:
+    """Популярные запросы за последние RECENT_QUERY_DAYS полных суток МСК. Только чтение."""
+    today = (now or _dt.datetime.now(_dt.timezone.utc)).astimezone(BEHAVIOR_TZ).date()
+    first = today - _dt.timedelta(days=RECENT_QUERY_DAYS)
+    last = today - _dt.timedelta(days=1)
+    title = f"Популярные запросы за {first.isoformat()}…{last.isoformat()} (явные даты)"
+    try:
+        payload = provider.get_webmaster_report(
+            host_id,
+            "popular_queries",
+            {"order_by": "TOTAL_SHOWS", "query_indicator": QUERY_INDICATORS,
+             "date_from": f"{first.isoformat()}T00:00:00+03:00",
+             "date_to": f"{last.isoformat()}T23:59:59+03:00"},
+        )
+        return Measurement(key="popular_queries_recent", title=title, measured=True,
+                           value=payload.get("payload"), source="popular_queries")
+    except FactoryError as exc:
+        return _unmeasured("popular_queries_recent", title, exc.reason, "popular_queries")
 
 
 def _goal_reaches(provider, entry: dict, counter_id: int, date1: str, date2: str) -> Measurement:
