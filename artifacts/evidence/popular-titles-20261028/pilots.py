@@ -1,0 +1,115 @@
+"""Три пилотные подборки списка владельца (поручение 28.10, п. 5) в форме config/collections.json витрин.
+
+Состав — по id каталога 28.10 03:17Z; причина каждой работы пересказывает описание каталога, без
+выдуманных фактов; «checked» — живая проба этой сессии (live/pilot-*.json). Выход — по файлу на сайт
+в docs/seo-operator/<САЙТ>_COLLECTIONS_20261028.json, статус PREPARED_NOT_RELEASED: выпуск — Архитектор (T348).
+"""
+import json
+import pathlib
+
+HERE = pathlib.Path(__file__).resolve().parent
+ROOT = HERE.parents[2]
+SNAP = {"zonafilm.space": "/srv/zonafilm-space/data/zona-01-details.json",
+        "zonafilm12.site": "/srv/zonafilm12-site/data/zona-03-details.json",
+        "animedia.icu": "/srv/animedia-icu/data/animedia-01-details.json"}
+SITE_ID = {"zonafilm.space": "zona-01", "zonafilm12.site": "zona-03", "animedia.icu": "animedia-01"}
+PROBE = {"zonafilm.space": "pilot-mistika-zonafilm.space.json", "zonafilm12.site": "pilot-turkish-zonafilm12.site.json",
+         "animedia.icu": "pilot-isekai-animedia.icu.json"}
+
+PILOTS = {
+    "zonafilm.space": {
+        "key": "mistika-i-neobyasnimoe", "title": "Мистика и необъяснимое", "section": "/series/",
+        "viewer_request": "Хочу сериал про то, что нельзя объяснить: проклятые места, призраки, паранормальные дела.",
+        "intro": "Сериалы о том, что не укладывается в привычные законы: места, откуда нельзя уйти, острова с дурной славой, "
+                 "архивы паранормальных дел и герои с необычным даром. Сначала истории о странных местах, затем — расследования необъяснимого.",
+        "items": [
+            (1, "izvne-2", "Затерянный в лесу городок не отпускает тех, кто туда попал: днём жители пытаются наладить быт и найти выход, ночью прячутся от тех, кто приходит из леса."),
+            (25, "buhta-vdov", "Мэр городка на острове в Новой Англии хочет привлечь туристов, а местные жители уверены, что остров проклят."),
+            (330, "sekretnye-materialy", "Агенты ФБР Малдер и Скалли разбирают архив нераскрытых дел о паранормальном: он верит в необъяснимое, она ищет разумный ответ."),
+            (297, "sverhestestvennoe-3", "Братья Сэм и Дин Винчестеры ездят по США на Chevrolet Impala 1967 года и расследуют паранормальные случаи, многие из которых взяты из городских легенд."),
+            (12, "grimm", "Детектив из Портленда узнаёт, что происходит из рода охотников-Гриммов, и начинает видеть сверхъестественных существ среди людей."),
+            (338, "uensdey", "Уэнсдэй Аддамс учится в академии «Невермор» и осваивает экстрасенсорный дар, чтобы остановить серийного убийцу и раскрыть тайну родителей."),
+            (57, "kerri-3", "Девушка с телекинезом, которую травят сверстники и подавляет властная мать, — сериал 2026 года по знаменитой истории."),
+        ],
+    },
+    "zonafilm12.site": {
+        "key": "turetskie-dramy-semeynye-tayny", "title": "Турецкие драмы о семейных тайнах", "section": "/series/",
+        "viewer_request": "Хочу турецкий сериал, где всё держится на семейных секретах.",
+        "intro": "Турецкие сериалы, в которых сюжет движут тайны семьи: исчезнувший муж, неизвестный отец, скрытое прошлое "
+                 "и наследники влиятельных домов. Сначала сериалы 2026 года, затем — прошлых лет.",
+        "items": [
+            (328, "korallovyy-dvorec", "После исчезновения мужа Джемре оказывается в особняке «Коралл», где её судьбу меняют тайны прошлого, семейные распри и запретная любовь."),
+            (375, "polovina-materi", "Учительница берёт под опеку осиротевшую племянницу и едет в Каппадокию искать её отца — в знатную семью, где их появление поднимает старые обиды."),
+            (300, "ty-tot-kogo-ya-lyublyu", "Наследник стамбульской семьи женится на деревенской девушке, спасшей ему жизнь, и привозит её в дом, полный тайн и интриг, где о ней никто не знал."),
+            (309, "mechta-eshrefa", "Богач Эшреф влюбляется в молодую певицу, не зная, что она скрывает секреты, связанные с его собственным прошлым."),
+            (333, "zavist", "Сениха всю жизнь жила в тени любимого брата; раскрывая чужие тайны, она готовит месть."),
+            (None, "ot-kogo-my-bezhali-mama", "Мать, скрывающая загадочное прошлое, живёт с дочерью в бегах — их домом становятся отели."),
+            (None, "milochka", "Через 30 лет после трагедии семья возвращается в родные края, где её настигают подавленные чувства и неприятные секреты."),
+        ],
+    },
+    "animedia.icu": {
+        "key": "pererozhdenie-i-zhizn-v-drugom-mire", "title": "Перерождение и жизнь в другом мире", "section": "/series/",
+        "viewer_request": "Хочу аниме, где герой умирает или засыпает — и начинает новую жизнь в другом мире.",
+        "intro": "Аниме о второй жизни: герой погибает, перерождается или просыпается в мире игры — и начинает всё заново. "
+                 "Здесь и фермерство вдали от людей, и путь бывшего короля, и офисный трудоголик, ставший опорой отряда. Одна работа — один первый сезон.",
+        "items": [
+            (266, "chto-budet-delat-silneyshiy-korol-v-svoey-vtoroy-zhizni", "Всесильный, но одинокий король погибает и перерождается младенцем Артуром на магическом континенте Дикатен — с памятью о прошлой жизни."),
+            (259, "fermerskaya-zhizn-v-inom-mire", "Умерший от болезни Хираку получает от бога-творца новую жизнь, крепкое тело и волшебный инструмент — и посвящает её земледелию вдали от людей."),
+            (225, "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov", "Офисный неудачник гибнет по нелепой случайности и перерождается в мире жёсткой отомэ-игры, где мужчин не ставят ни во что."),
+            (255, "samyy-silnyy-v-mire-zastupnik-strana-labirinta-i-iskateli-priklyucheniy", "Японский трудоголик после аварии возрождается в Стране лабиринтов, где перерожденцы обязаны собрать отряд, — и становится его надёжным тылом."),
+            (211, "neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga", "Перерожденец без дара к магии через четыреста лет рождается в третий раз — в мире, где магия деградировала, и его знания делают его сильнейшим."),
+            (267, "rycar-skelet-vstupaet-v-parallelnyy-mir", "Игрок засыпает за любимой игрой и просыпается в её мире в доспехах своего персонажа — рыцаря-скелета Арка."),
+        ],
+    },
+}
+
+
+#: Работы, уже стоящие в других подборках сайта (сверка с config/collections.json витрины 28.10).
+#: Оставлены намеренно: тематическая подборка отвечает другому запросу, чем подборка платформы или сезона.
+OVERLAPS = {
+    "zonafilm.space": ["uensdey — также в netflix-serialy (подборка платформы)"],
+    "zonafilm12.site": [],
+    "animedia.icu": ["samyy-silnyy-v-mire-zastupnik-… и neobyknovennyy-neudachnik-… — также в letniy-sezon-2026-celikom (подборка сезона)"],
+}
+
+
+def main():
+    for site, p in PILOTS.items():
+        det = json.loads(pathlib.Path(SNAP[site]).read_text(encoding="utf-8"))
+        probe = {c["url"]: c for c in json.loads((HERE / "live" / PROBE[site]).read_text(encoding="utf-8"))["cards"]}
+        items = []
+        for order, (row, slug, reason) in enumerate(p["items"], 1):
+            v = det["details"][slug]
+            url = f"https://{site}/title/{slug}/"
+            c = probe[url]
+            assert v.get("playable") and c["status"] == 200 and c["canonical_self"], slug
+            items.append({
+                "order": order, "id": v["id"], "slug": slug, "url": url, "name": v["name"],
+                "original_name": v.get("original_name"), "year": v.get("year"), "type": v.get("type"),
+                "external_ids": {k: x for k, x in (v.get("external_ids") or {}).items() if k in ("imdb", "kinopoisk", "mal")},
+                "reason": reason,
+                "basis": (f"строка {row} списка владельца 28.10; " if row else "дополнение из каталога (поручение 28.10 п. 5: обоснованное дополнение); ")
+                         + "тема подтверждена описанием каталога; воспроизведение есть (playable)",
+                "source": f"каталог {SITE_ID[site]} (description), сборка {det['catalog_built_at']}",
+                "checked": f"2026-10-28 (live/{PROBE[site]}): {c['status']}, canonical на себя, {c['robots']}",
+            })
+        doc = {
+            "schema": "popular-titles-pilot.collections/1", "prepared_at": "2026-10-28", "status": "PREPARED_NOT_RELEASED",
+            "key": "id = details[].id", "site": site, "site_id": SITE_ID[site],
+            "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
+            "overlaps": OVERLAPS[site],
+            "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
+            "collections": [{
+                "key": p["key"], "title": p["title"], "viewer_request": p["viewer_request"], "intro": p["intro"],
+                "section": p["section"],
+                "indexing": {"open": True, "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"},
+                "items": items,
+            }],
+        }
+        name = site.upper().replace(".", "_")
+        out = ROOT / "docs" / "seo-operator" / f"{name}_COLLECTIONS_20261028.json"
+        out.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+        print(out.relative_to(ROOT), len(items))
+
+
+main()

@@ -1,0 +1,138 @@
+{
+ "schema": "popular-titles-pilot.collections/1",
+ "prepared_at": "2026-10-28",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id",
+ "site": "animedia.icu",
+ "site_id": "animedia-01",
+ "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
+ "overlaps": [
+  "samyy-silnyy-v-mire-zastupnik-… и neobyknovennyy-neudachnik-… — также в letniy-sezon-2026-celikom (подборка сезона)"
+ ],
+ "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
+ "collections": [
+  {
+   "key": "pererozhdenie-i-zhizn-v-drugom-mire",
+   "title": "Перерождение и жизнь в другом мире",
+   "viewer_request": "Хочу аниме, где герой умирает или засыпает — и начинает новую жизнь в другом мире.",
+   "intro": "Аниме о второй жизни: герой погибает, перерождается или просыпается в мире игры — и начинает всё заново. Здесь и фермерство вдали от людей, и путь бывшего короля, и офисный трудоголик, ставший опорой отряда. Одна работа — один первый сезон.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "0195e675-651f-73b8-b5f9-749cfdd3757e",
+     "slug": "chto-budet-delat-silneyshiy-korol-v-svoey-vtoroy-zhizni",
+     "url": "https://animedia.icu/title/chto-budet-delat-silneyshiy-korol-v-svoey-vtoroy-zhizni/",
+     "name": "Что будет делать сильнейший король в своей второй жизни?",
+     "original_name": "The Beginning After the End",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "kinopoisk": "8490197",
+      "mal": "60146"
+     },
+     "reason": "Всесильный, но одинокий король погибает и перерождается младенцем Артуром на магическом континенте Дикатен — с памятью о прошлой жизни.",
+     "basis": "строка 266 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "019168ca-7f4e-7198-9391-144b23f3c957",
+     "slug": "fermerskaya-zhizn-v-inom-mire",
+     "url": "https://animedia.icu/title/fermerskaya-zhizn-v-inom-mire/",
+     "name": "Фермерская жизнь в ином мире",
+     "original_name": "Isekai Nonbiri Nouka",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "19223420",
+      "kinopoisk": "5270432",
+      "mal": "51462"
+     },
+     "reason": "Умерший от болезни Хираку получает от бога-творца новую жизнь, крепкое тело и волшебный инструмент — и посвящает её земледелию вдали от людей.",
+     "basis": "строка 259 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "01915146-fd7f-7f38-a5da-57a04710f14b",
+     "slug": "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov",
+     "url": "https://animedia.icu/title/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov/",
+     "name": "Мир отомэ-игр — это тяжёлый мир для мобов",
+     "original_name": "Otome Game Sekai wa Mob ni Kibishii Sekai desu",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "16255458",
+      "kinopoisk": "4775373",
+      "mal": "50461"
+     },
+     "reason": "Офисный неудачник гибнет по нелепой случайности и перерождается в мире жёсткой отомэ-игры, где мужчин не ставят ни во что.",
+     "basis": "строка 225 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019efa4b-6c2d-7ee7-bd17-07e486d8462c",
+     "slug": "samyy-silnyy-v-mire-zastupnik-strana-labirinta-i-iskateli-priklyucheniy",
+     "url": "https://animedia.icu/title/samyy-silnyy-v-mire-zastupnik-strana-labirinta-i-iskateli-priklyucheniy/",
+     "name": "Самый сильный в мире заступник: Страна лабиринта и искатели приключений",
+     "original_name": "Sekai Saikyou no Kouei: Meikyuukoku no Shinjin Tansakusha",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "41293112",
+      "mal": "62435"
+     },
+     "reason": "Японский трудоголик после аварии возрождается в Стране лабиринтов, где перерожденцы обязаны собрать отряд, — и становится его надёжным тылом.",
+     "basis": "строка 255 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "019efa55-2f12-7ef3-ac54-2872cf15fe94",
+     "slug": "neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga",
+     "url": "https://animedia.icu/title/neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga/",
+     "name": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга",
+     "original_name": "Rakudai Kenja no Gakuin Musou: Nidome no Tensei, S-Rank Cheat Majutsushi Boukenroku",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "40550160",
+      "mal": "63508"
+     },
+     "reason": "Перерожденец без дара к магии через четыреста лет рождается в третий раз — в мире, где магия деградировала, и его знания делают его сильнейшим.",
+     "basis": "строка 211 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "01915150-04c7-732a-b99f-f0f9bbb0465a",
+     "slug": "rycar-skelet-vstupaet-v-parallelnyy-mir",
+     "url": "https://animedia.icu/title/rycar-skelet-vstupaet-v-parallelnyy-mir/",
+     "name": "Рыцарь-скелет вступает в параллельный мир",
+     "original_name": "Skeleton Knight in Another World",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "kinopoisk": "4830660",
+      "mal": "48760"
+     },
+     "reason": "Игрок засыпает за любимой игрой и просыпается в её мире в доспехах своего персонажа — рыцаря-скелета Арка.",
+     "basis": "строка 267 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  }
+ ]
+}

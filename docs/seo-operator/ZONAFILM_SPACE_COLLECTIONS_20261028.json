@@ -1,0 +1,154 @@
+{
+ "schema": "popular-titles-pilot.collections/1",
+ "prepared_at": "2026-10-28",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id",
+ "site": "zonafilm.space",
+ "site_id": "zona-01",
+ "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
+ "overlaps": [
+  "uensdey — также в netflix-serialy (подборка платформы)"
+ ],
+ "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
+ "collections": [
+  {
+   "key": "mistika-i-neobyasnimoe",
+   "title": "Мистика и необъяснимое",
+   "viewer_request": "Хочу сериал про то, что нельзя объяснить: проклятые места, призраки, паранормальные дела.",
+   "intro": "Сериалы о том, что не укладывается в привычные законы: места, откуда нельзя уйти, острова с дурной славой, архивы паранормальных дел и герои с необычным даром. Сначала истории о странных местах, затем — расследования необъяснимого.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01916714-03fd-7f53-b4f0-257bfc072ca0",
+     "slug": "izvne-2",
+     "url": "https://zonafilm.space/title/izvne-2/",
+     "name": "Извне",
+     "original_name": "From",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "9813792",
+      "kinopoisk": "4476885"
+     },
+     "reason": "Затерянный в лесу городок не отпускает тех, кто туда попал: днём жители пытаются наладить быт и найти выход, ночью прячутся от тех, кто приходит из леса.",
+     "basis": "строка 1 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "019dd78f-6329-763d-b509-1a82397f12b6",
+     "slug": "buhta-vdov",
+     "url": "https://zonafilm.space/title/buhta-vdov/",
+     "name": "Бухта вдов",
+     "original_name": "Widow's Bay",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "33332385",
+      "kinopoisk": "6555657"
+     },
+     "reason": "Мэр городка на острове в Новой Англии хочет привлечь туристов, а местные жители уверены, что остров проклят.",
+     "basis": "строка 25 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "019167fd-a4c9-79c9-a532-9336fbe291a2",
+     "slug": "sekretnye-materialy",
+     "url": "https://zonafilm.space/title/sekretnye-materialy/",
+     "name": "Секретные материалы",
+     "original_name": "The X Files",
+     "year": 1993,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "106179",
+      "kinopoisk": "77046"
+     },
+     "reason": "Агенты ФБР Малдер и Скалли разбирают архив нераскрытых дел о паранормальном: он верит в необъяснимое, она ищет разумный ответ.",
+     "basis": "строка 330 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "0191671c-fe8c-739b-8a79-171e0afaf919",
+     "slug": "sverhestestvennoe-3",
+     "url": "https://zonafilm.space/title/sverhestestvennoe-3/",
+     "name": "Сверхъестественное",
+     "original_name": "Supernatural",
+     "year": 2005,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "460681",
+      "kinopoisk": "178707"
+     },
+     "reason": "Братья Сэм и Дин Винчестеры ездят по США на Chevrolet Impala 1967 года и расследуют паранормальные случаи, многие из которых взяты из городских легенд.",
+     "basis": "строка 297 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01916717-4c84-7a4e-b3e2-bc5e20344a72",
+     "slug": "grimm",
+     "url": "https://zonafilm.space/title/grimm/",
+     "name": "Гримм",
+     "original_name": "Grimm",
+     "year": 2011,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1830617",
+      "kinopoisk": "582314"
+     },
+     "reason": "Детектив из Портленда узнаёт, что происходит из рода охотников-Гриммов, и начинает видеть сверхъестественных существ среди людей.",
+     "basis": "строка 12 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "0191529d-7182-7278-a52d-ca19d4a5f6f7",
+     "slug": "uensdey",
+     "url": "https://zonafilm.space/title/uensdey/",
+     "name": "Уэнсдэй",
+     "original_name": "Wednesday",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "13443470",
+      "kinopoisk": "4365427"
+     },
+     "reason": "Уэнсдэй Аддамс учится в академии «Невермор» и осваивает экстрасенсорный дар, чтобы остановить серийного убийцу и раскрыть тайну родителей.",
+     "basis": "строка 338 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "01a09b3d-3cb6-7901-b888-4f1f6b60a412",
+     "slug": "kerri-3",
+     "url": "https://zonafilm.space/title/kerri-3/",
+     "name": "Кэрри",
+     "original_name": "Carrie",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "11540908",
+      "kinopoisk": "1343910"
+     },
+     "reason": "Девушка с телекинезом, которую травят сверстники и подавляет властная мать, — сериал 2026 года по знаменитой истории.",
+     "basis": "строка 57 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  }
+ ]
+}

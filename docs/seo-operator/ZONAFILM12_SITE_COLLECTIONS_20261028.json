@@ -1,0 +1,152 @@
+{
+ "schema": "popular-titles-pilot.collections/1",
+ "prepared_at": "2026-10-28",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id",
+ "site": "zonafilm12.site",
+ "site_id": "zona-03",
+ "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
+ "overlaps": [],
+ "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
+ "collections": [
+  {
+   "key": "turetskie-dramy-semeynye-tayny",
+   "title": "Турецкие драмы о семейных тайнах",
+   "viewer_request": "Хочу турецкий сериал, где всё держится на семейных секретах.",
+   "intro": "Турецкие сериалы, в которых сюжет движут тайны семьи: исчезнувший муж, неизвестный отец, скрытое прошлое и наследники влиятельных домов. Сначала сериалы 2026 года, затем — прошлых лет.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01a04d56-2bea-75cf-aae4-ed393aedf1da",
+     "slug": "korallovyy-dvorec",
+     "url": "https://zonafilm12.site/title/korallovyy-dvorec/",
+     "name": "Коралловый дворец",
+     "original_name": "Mercan Köşk",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "43631370",
+      "kinopoisk": "13941372"
+     },
+     "reason": "После исчезновения мужа Джемре оказывается в особняке «Коралл», где её судьбу меняют тайны прошлого, семейные распри и запретная любовь.",
+     "basis": "строка 328 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01a0cd6d-cce2-7fe7-91f6-3805f950e5fe",
+     "slug": "polovina-materi",
+     "url": "https://zonafilm12.site/title/polovina-materi/",
+     "name": "Половина матери",
+     "original_name": "Anne Yarisi",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "44632465",
+      "kinopoisk": "14041813"
+     },
+     "reason": "Учительница берёт под опеку осиротевшую племянницу и едет в Каппадокию искать её отца — в знатную семью, где их появление поднимает старые обиды.",
+     "basis": "строка 375 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "019c56a2-e383-7735-82bd-3ce930649dee",
+     "slug": "ty-tot-kogo-ya-lyublyu",
+     "url": "https://zonafilm12.site/title/ty-tot-kogo-ya-lyublyu/",
+     "name": "Ты тот, кого я люблю",
+     "original_name": "Sevdigim sensin",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "38987259",
+      "kinopoisk": "11219875"
+     },
+     "reason": "Наследник стамбульской семьи женится на деревенской девушке, спасшей ему жизнь, и привозит её в дом, полный тайн и интриг, где о ней никто не знал.",
+     "basis": "строка 300 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "01964315-b347-7607-9aa9-6078f930a72e",
+     "slug": "mechta-eshrefa",
+     "url": "https://zonafilm12.site/title/mechta-eshrefa/",
+     "name": "Мечта Эшрефа",
+     "original_name": "Esref Rüya",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "35069642",
+      "kinopoisk": "7652015"
+     },
+     "reason": "Богач Эшреф влюбляется в молодую певицу, не зная, что она скрывает секреты, связанные с его собственным прошлым.",
+     "basis": "строка 309 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01997551-bd36-70d5-a06b-237d20f52cb3",
+     "slug": "zavist",
+     "url": "https://zonafilm12.site/title/zavist/",
+     "name": "Зависть",
+     "original_name": "Kiskanmak",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "38235386",
+      "kinopoisk": "9171461"
+     },
+     "reason": "Сениха всю жизнь жила в тени любимого брата; раскрывая чужие тайны, она готовит месть.",
+     "basis": "строка 333 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "0191514f-ecda-7299-bbbd-6964563ec530",
+     "slug": "ot-kogo-my-bezhali-mama",
+     "url": "https://zonafilm12.site/title/ot-kogo-my-bezhali-mama/",
+     "name": "От кого мы бежали, мама?",
+     "original_name": "Biz Kimden Kaçiyorduk Anne?",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "16163746",
+      "kinopoisk": "4823982"
+     },
+     "reason": "Мать, скрывающая загадочное прошлое, живёт с дочерью в бегах — их домом становятся отели.",
+     "basis": "дополнение из каталога (поручение 28.10 п. 5: обоснованное дополнение); тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "01980fe4-e80c-746b-80a5-47ff4d127d00",
+     "slug": "milochka",
+     "url": "https://zonafilm12.site/title/milochka/",
+     "name": "Милочка",
+     "original_name": "Cici",
+     "year": 2022,
+     "type": "movie",
+     "external_ids": {
+      "imdb": "22227936",
+      "kinopoisk": "5133197"
+     },
+     "reason": "Через 30 лет после трагедии семья возвращается в родные края, где её настигают подавленные чувства и неприятные секреты.",
+     "basis": "дополнение из каталога (поручение 28.10 п. 5: обоснованное дополнение); тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  }
+ ]
+}
