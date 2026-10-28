@@ -75,7 +75,96 @@ import urllib.parse
          "def построить_индекс(", "def _дополнить_формы_поиска(",
          "def сбросить_указатель(", "def main() -> int:")
 
-ЯКОРЬ = "def main() -> int:"
+ОБЁРТКА = """#!/usr/bin/env python3
+\"\"\"Запуск витрины: закреплённый артефакт плюс правки сайта (T347).
+
+Почему обёртка, а не правка артефакта
+-------------------------------------
+
+`src/lords-frontend.py` — ЗАКРЕПЛЁННЫЙ артефакт шаблона: `pins.lock.json`
+сверяет его байты с исходным коммитом, и проверка выпускного набора
+`verify_pins` отказывает при любом расхождении. Измерено 28.10: правка
+наложений прямо в артефакте дала `pins-match-sources FAIL`
+(«sha256 d0583aa04af2 вместо dd111ee18f2d»), и выпуск с таким состоянием не
+прошёл бы. Путь «поправить шаблон и продвинуть» для этой витрины закрыт:
+`promote-cell-pins.py` отказывает, когда у витрины есть свои имена вне канона,
+а их тут 105 (у zona-03 — 100), и продвижение их стёрло бы.
+
+Поэтому артефакт остаётся байт-в-байт своим пином, а правки ставятся ПОВЕРХ —
+ровно так, как это сделано у `zonafilm.cc`. Точка входа объявлена в
+`config/site.json: entrypoint`, откуда её и берёт `run.py` (строка 180), и
+оттуда же её читает `entrypoint_present.py` — зеркало сходится по построению,
+`pins.lock.json` не трогается.
+
+`--check` сюда не доходит: его обрабатывает сам `run.py` ранним возвратом.
+\"\"\"
+from __future__ import annotations
+
+import importlib.util
+import json
+import sys
+from pathlib import Path
+
+КОРЕНЬ = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(КОРЕНЬ))
+
+#: Имя артефакта берётся из замка, а не из кода: так обёртка не станет вторым
+#: местом, где это имя записано.
+_ПИНЫ = json.loads((КОРЕНЬ / "pins.lock.json").read_text(encoding="utf-8"))
+АРТЕФАКТ = КОРЕНЬ / "src" / str(_ПИНЫ["pins"]["entrypoint"])
+
+
+def загрузить_рантайм():
+    \"\"\"Импорт закреплённого артефакта как модуля, с регистрацией в sys.modules.
+
+    Регистрация обязательна: артефакт и его соседи импортируют друг друга по
+    имени, а наложения ставятся на этот же объект модуля.
+    \"\"\"
+    if not АРТЕФАКТ.is_file():
+        raise SystemExit(f"нет артефакта {АРТЕФАКТ}")
+    sys.path.insert(0, str(АРТЕФАКТ.parent))
+    спец = importlib.util.spec_from_file_location("nova_runtime", АРТЕФАКТ)
+    модуль = importlib.util.module_from_spec(спец)
+    sys.modules["nova_runtime"] = модуль
+    спец.loader.exec_module(модуль)
+    return модуль
+
+
+def применить(рантайм) -> list:
+    \"\"\"Поставить правки сайта поверх рантайма. Возвращает их перечень.
+
+    Порядок обязателен: одноимённые, затем дословное имя (имя работы сильнее
+    числа голосов), затем короткие слова — их повтор должен пройти через оба
+    упорядочивания.
+    \"\"\"
+    from src import search_aliases, search_exact_form
+    from src import search_same_name, search_short_words
+
+    словарь = json.loads((КОРЕНЬ / "config" / "search-aliases.json")
+                         .read_text(encoding="utf-8"))
+    внесено = [
+        search_aliases.установить(рантайм, словарь),
+        search_same_name.установить(рантайм),
+        search_exact_form.установить(рантайм),
+        search_short_words.установить(рантайм),
+    ]
+    return внесено
+
+
+def main() -> int:
+    рантайм = загрузить_рантайм()
+    внесено = применить(рантайм)
+    домен = json.loads((КОРЕНЬ / "config" / "site.json")
+                       .read_text(encoding="utf-8")).get("domain", "витрина")
+    print(f"[{домен}] правки сайта: {', '.join(внесено)}", flush=True)
+    return рантайм.main()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
+"""
+
+ЯКОРЬ_УСТАРЕЛ = "def main() -> int:"
 
 ВСТАВКА = '''# T347: варианты названия — синоним по словарю, короткое служебное слово,
 # порядок одноимённых, дословное имя первым. Разбор — src/search_aliases.py,
@@ -93,13 +182,40 @@ import search_exact_form as _ДОСЛОВНО  # noqa: E402
 import search_same_name as _ОДНОИМЁННЫЕ  # noqa: E402
 import search_short_words as _КОРОТКИЕ  # noqa: E402
 
+class _СамРантайм:
+    """Доступ к глобальным именам этого модуля как к атрибутам.
+
+    Нельзя брать `sys.modules[__name__]`: проверка, которая загружает рантайм
+    модулем (`spec_from_file_location("ядро", …)` + `exec_module`), в
+    `sys.modules` его НЕ регистрирует, и обращение падало с `KeyError: 'ядро'`
+    — измерено полным набором zonafilm.space 28.10 на checks/similar_fast.py.
+    На живом сайте `run.py` исполняет файл как `__main__`, поэтому там дефект
+    не проявлялся: прогон двух выбранных проверок его и не увидел.
+
+    Посредник читает и ПИШЕТ настоящие глобальные имена, поэтому обёртки
+    (`построить_индекс`, `Данные.искать`) попадают туда же, откуда их берёт
+    `main()`.
+    """
+
+    def __getattr__(self, имя):
+        try:
+            return globals()[имя]
+        except KeyError as сбой:
+            raise AttributeError(имя) from сбой
+
+    def __setattr__(self, имя, значение):
+        globals()[имя] = значение
+
+
+_ЭТОТ_РАНТАЙМ = _СамРантайм()
+
 _ВАРИАНТЫ_НАЗВАНИЯ = [
-    _СИНОНИМЫ.установить(sys.modules[__name__], json.loads(
+    _СИНОНИМЫ.установить(_ЭТОТ_РАНТАЙМ, json.loads(
         (Path(__file__).resolve().parent.parent / "config"
          / "search-aliases.json").read_text(encoding="utf-8"))),
-    _ОДНОИМЁННЫЕ.установить(sys.modules[__name__]),
-    _ДОСЛОВНО.установить(sys.modules[__name__]),
-    _КОРОТКИЕ.установить(sys.modules[__name__]),
+    _ОДНОИМЁННЫЕ.установить(_ЭТОТ_РАНТАЙМ),
+    _ДОСЛОВНО.установить(_ЭТОТ_РАНТАЙМ),
+    _КОРОТКИЕ.установить(_ЭТОТ_РАНТАЙМ),
 ]
 
 
@@ -134,16 +250,32 @@ _КАРТОЧКА = re.compile(r'data-testid="title-card" href="/title/([^/"]+)/
 
 
 def _правка(репо: pathlib.Path) -> tuple[bool, str]:
-    рантайм = репо / "src" / "lords-frontend.py"
-    if not рантайм.is_file():
-        return False, f"нет рантайма {рантайм}"
-    текст = рантайм.read_text(encoding="utf-8")
+    """Обёртка и объявление точки входа. Закреплённый артефакт НЕ трогается.
+
+    Измерено 28.10: правка наложений прямо в `src/lords-frontend.py` дала
+    `pins-match-sources FAIL` — артефакт закреплён в `pins.lock.json`, и
+    выпускная проверка сверяет его байты. Поэтому ставится обёртка:
+    `run.py` берёт путь из `config["entrypoint"]` (строка 180), а
+    `entrypoint_present.py` читает то же поле первым, так что зеркало сходится,
+    а замок остаётся нетронутым.
+    """
+    артефакт = репо / "src" / "lords-frontend.py"
+    if not артефакт.is_file():
+        return False, f"нет артефакта {артефакт}"
+    текст = артефакт.read_text(encoding="utf-8")
     if "_ВАРИАНТЫ_НАЗВАНИЯ" in текст:
-        return False, "уже"
+        return False, ("артефакт несёт прежнюю вставку — сперва верните его к "
+                       "закреплённым байтам")
     плохие = [и for и in ИМЕНА if текст.count(и) != 1]
     if плохие:
         return False, ("в рантайме нет или неоднозначны имена: "
                        + ", ".join(и.strip() for и in плохие))
+    настройка = репо / "config" / "site.json"
+    if not настройка.is_file():
+        return False, f"нет {настройка}"
+    cfg = json.loads(настройка.read_text(encoding="utf-8"))
+    if str(cfg.get("entrypoint") or "") == "serve.py" and (репо / "src" / "serve.py").is_file():
+        return False, "уже"
     for имя in МОДУЛИ:
         источник = ИСТОЧНИК / "src" / имя
         if not источник.is_file():
@@ -153,13 +285,32 @@ def _правка(репо: pathlib.Path) -> tuple[bool, str]:
     if not словарь.is_file():
         return False, f"нет словаря {словарь}"
     (репо / "config" / СЛОВАРЬ).write_bytes(словарь.read_bytes())
-    новый = текст.replace(ЯКОРЬ, ВСТАВКА + ЯКОРЬ, 1)
     try:
-        ast.parse(новый)
+        ast.parse(ОБЁРТКА)
     except SyntaxError as сбой:
-        return False, f"правка дала бы SyntaxError: {сбой.msg} (строка {сбой.lineno})"
-    рантайм.write_text(новый, encoding="utf-8")
-    return True, "правлено"
+        return False, f"обёртка не разбирается: {сбой.msg}"
+    (репо / "src" / "serve.py").write_text(ОБЁРТКА, encoding="utf-8")
+    cfg["entrypoint"] = "serve.py"
+    настройка.write_text(json.dumps(cfg, ensure_ascii=False, indent=1) + "\n",
+                         encoding="utf-8")
+    return True, "обёртка поставлена, точка входа объявлена в config/site.json"
+
+
+def _замок_и_зеркало(репо: pathlib.Path) -> list[str]:
+    """Две выпускные проверки, ради которых прежний слой и отменён."""
+    беды = []
+    for имя in ("verify_pins", "entrypoint_present"):
+        файл = репо / "checks" / f"{имя}.py"
+        if not файл.is_file():
+            continue
+        готово = subprocess.run(  # noqa: S603
+            [sys.executable, f"checks/{имя}.py"], cwd=репо,
+            capture_output=True, text=True, timeout=600)
+        if готово.returncode != 0:
+            хвост = ((готово.stdout or "") + (готово.stderr or "")).strip()
+            беды.append(f"{имя}: код {готово.returncode} — "
+                        + (хвост.splitlines()[-1][:120] if хвост else "без вывода"))
+    return беды
 
 
 def _данные(репо: pathlib.Path) -> pathlib.Path | None:
@@ -376,6 +527,10 @@ def применить(репо: pathlib.Path, писать: bool,
         сделано, причина = _правка(копия)
         if not сделано:
             return ("skip", причина) if причина == "уже" else ("refuse", причина)
+        беды_выпуска = _замок_и_зеркало(копия)
+        if беды_выпуска:
+            return "refuse", ("выпускные проверки не зелёные: "
+                              + "; ".join(беды_выпуска))
         код, пояснение = _прогнать(копия, слаги)
         if код == 2:
             return "refuse", f"НЕ ИЗМЕРЕНО: {пояснение}"
