@@ -1,0 +1,700 @@
+{
+ "host": "zonafilm.cc",
+ "started": "2026-10-28T13:10:13Z",
+ "sections": {
+  "/animation/": {
+   "status": 200,
+   "options": 98,
+   "dead": 41,
+   "rows": [
+    {
+     "label": "драма",
+     "url": "/animation/?genre=drama&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "комедия",
+     "url": "/animation/?genre=comedy&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "мелодрама",
+     "url": "/animation/?genre=melodrama&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "боевик",
+     "url": "/animation/?genre=action&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "триллер",
+     "url": "/animation/?genre=triller&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "дорама",
+     "url": "/animation/?genre=dorama&sort=newest",
+     "status": 200,
+     "cards": 22,
+     "robots": "index, follow"
+    },
+    {
+     "label": "криминал",
+     "url": "/animation/?genre=kriminal&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "аниме",
+     "url": "/animation/?genre=anime&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "фэнтези",
+     "url": "/animation/?genre=fentezi&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "приключения",
+     "url": "/animation/?genre=priklyucheniya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "ужасы",
+     "url": "/animation/?genre=uzhasy&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "мультфильм",
+     "url": "/animation/?genre=animation&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "детектив",
+     "url": "/animation/?genre=detective&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "фантастика",
+     "url": "/animation/?genre=fantastika&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "семейный",
+     "url": "/animation/?genre=semeynyy&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "исторический",
+     "url": "/animation/?genre=history&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "документальный",
+     "url": "/animation/?genre=dokumentalnyy&sort=newest",
+     "status": 200,
+     "cards": 23,
+     "robots": "index, follow"
+    },
+    {
+     "label": "биография",
+     "url": "/animation/?genre=biografiya&sort=newest",
+     "status": 200,
+     "cards": 20,
+     "robots": "index, follow"
+    },
+    {
+     "label": "военный",
+     "url": "/animation/?genre=voennyy&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "спорт",
+     "url": "/animation/?genre=sport&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "музыка",
+     "url": "/animation/?genre=muzyka&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "короткометражка",
+     "url": "/animation/?genre=korotkometrazhka&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "турецкий сериал",
+     "url": "/animation/?genre=tureckiyserial&sort=newest",
+     "status": 200,
+     "cards": 3,
+     "robots": "index, follow"
+    },
+    {
+     "label": "мюзикл",
+     "url": "/animation/?genre=myuzikl&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "сёнен",
+     "url": "/animation/?genre=senen&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "школа",
+     "url": "/animation/?genre=shkola&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "научная фантастика",
+     "url": "/animation/?genre=nauchnayafantastika&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "дунхуа",
+     "url": "/animation/?genre=dunhua&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "вестерн",
+     "url": "/animation/?genre=vestern&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "сверхъестественное",
+     "url": "/animation/?genre=sverhestestvennoe&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "мистика",
+     "url": "/animation/?genre=mistika&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "меха",
+     "url": "/animation/?genre=meha&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "сэйнэн",
+     "url": "/animation/?genre=seynen&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "детское",
+     "url": "/animation/?genre=detskoe&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "этти",
+     "url": "/animation/?genre=etti&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "уся",
+     "url": "/animation/?genre=usya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "повседневность",
+     "url": "/animation/?genre=povsednevnost&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "Молодёжное",
+     "url": "/animation/?genre=molodezhnoe&sort=newest",
+     "status": 200,
+     "cards": 1,
+     "robots": "index, follow"
+    },
+    {
+     "label": "психология",
+     "url": "/animation/?genre=psihologiya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "гарем",
+     "url": "/animation/?genre=garem&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "сёдзё",
+     "url": "/animation/?genre=sedze&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "пародия",
+     "url": "/animation/?genre=parodiya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "космос",
+     "url": "/animation/?genre=kosmos&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "болливуд",
+     "url": "/animation/?genre=bollivud&sort=newest",
+     "status": 200,
+     "cards": 1,
+     "robots": "index, follow"
+    },
+    {
+     "label": "Короткие серии",
+     "url": "/animation/?genre=korotkieserii&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "реальное тв",
+     "url": "/animation/?genre=realnoetv&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Костюмированная драма",
+     "url": "/animation/?genre=kostyumirovannayadrama&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "полиция",
+     "url": "/animation/?genre=policiya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "демоны",
+     "url": "/animation/?genre=demony&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "самураи",
+     "url": "/animation/?genre=samurai&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "игра",
+     "url": "/animation/?genre=igra&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "вертикальные",
+     "url": "/animation/?genre=vertikalnye&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "саспенс",
+     "url": "/animation/?genre=saspens&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "вампиры",
+     "url": "/animation/?genre=vampiry&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "концерт",
+     "url": "/animation/?genre=koncert&sort=newest",
+     "status": 200,
+     "cards": 1,
+     "robots": "index, follow"
+    },
+    {
+     "label": "еда",
+     "url": "/animation/?genre=eda&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "гурман",
+     "url": "/animation/?genre=gurman&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "фильм-нуар",
+     "url": "/animation/?genre=filmnuar&sort=newest",
+     "status": 200,
+     "cards": 1,
+     "robots": "index, follow"
+    },
+    {
+     "label": "бизнес",
+     "url": "/animation/?genre=biznes&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "дзёсей",
+     "url": "/animation/?genre=dzesey&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "ток-шоу",
+     "url": "/animation/?genre=tokshou&sort=newest",
+     "status": 200,
+     "cards": 4,
+     "robots": "index, follow"
+    },
+    {
+     "label": "лайв-экшн",
+     "url": "/animation/?genre=layvekshn&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Обучение",
+     "url": "/animation/?genre=obuchenie&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "медицина",
+     "url": "/animation/?genre=medicina&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "деменция",
+     "url": "/animation/?genre=demenciya&sort=newest",
+     "status": 200,
+     "cards": 28,
+     "robots": "index, follow"
+    },
+    {
+     "label": "политика",
+     "url": "/animation/?genre=politika&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Месть",
+     "url": "/animation/?genre=mest&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "новости",
+     "url": "/animation/?genre=novosti&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Работа",
+     "url": "/animation/?genre=rabota&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "боевые искусства",
+     "url": "/animation/?genre=boevyeiskusstva&sort=newest",
+     "status": 200,
+     "cards": 2,
+     "robots": "index, follow"
+    },
+    {
+     "label": "Веб",
+     "url": "/animation/?genre=veb&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Юриспруденция",
+     "url": "/animation/?genre=yurisprudenciya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "дружба",
+     "url": "/animation/?genre=druzhba&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Фестивальный",
+     "url": "/animation/?genre=festivalnyy&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Путешествия во времени",
+     "url": "/animation/?genre=puteshestviyavovremeni&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "церемония",
+     "url": "/animation/?genre=ceremoniya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Ai",
+     "url": "/animation/?genre=ai&sort=newest",
+     "status": 200,
+     "cards": 9,
+     "robots": "index, follow"
+    },
+    {
+     "label": "Болезнь",
+     "url": "/animation/?genre=bolezn&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Призраки",
+     "url": "/animation/?genre=prizraki&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Черная комедия",
+     "url": "/animation/?genre=chernayakomediya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Шпионаж",
+     "url": "/animation/?genre=shpionazh&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Гендерная интрига",
+     "url": "/animation/?genre=gendernayaintriga&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Суперспособности",
+     "url": "/animation/?genre=supersposobnosti&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Банды/Якудза",
+     "url": "/animation/?genre=bandyyakudza&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Антология",
+     "url": "/animation/?genre=antologiya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Временная петля",
+     "url": "/animation/?genre=vremennayapetlya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Второй шанс",
+     "url": "/animation/?genre=vtoroyshans&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Катастрофа",
+     "url": "/animation/?genre=katastrofa&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Киберспорт",
+     "url": "/animation/?genre=kibersport&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Религия",
+     "url": "/animation/?genre=religiya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Трагедия",
+     "url": "/animation/?genre=tragediya&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Реклама",
+     "url": "/animation/?genre=reklama&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Будущее",
+     "url": "/animation/?genre=buduschee&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Токусацу",
+     "url": "/animation/?genre=tokusacu&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Тайга",
+     "url": "/animation/?genre=tayga&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Артхаус",
+     "url": "/animation/?genre=arthaus&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Животные",
+     "url": "/animation/?genre=zhivotnye&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    },
+    {
+     "label": "Ситком",
+     "url": "/animation/?genre=sitkom&sort=newest",
+     "status": 404,
+     "cards": 0,
+     "robots": null
+    }
+   ]
+  }
+ },
+ "finished": "2026-10-28T13:10:51Z"
+}

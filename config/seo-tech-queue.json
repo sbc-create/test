@@ -8974,6 +8974,29 @@
       "verify_live": true,
       "status": "session",
       "owner_action": "ведёт Архитектор; SEO — приёмка и оценка по referer_to_page (/movies/ → /title/) и exit_pages"
+    },
+    {
+      "id": "T346",
+      "site": "zonafilm.space, zonafilm12.site",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-space, var/site-repos/zonafilm12-site",
+      "urls": [
+        "https://zonafilm.space/movies/",
+        "https://zonafilm.space/series/",
+        "https://zonafilm.space/animation/",
+        "https://zonafilm12.site/movies/",
+        "https://zonafilm12.site/series/",
+        "https://zonafilm12.site/animation/"
+      ],
+      "problem": "Перенос T345 (поручение владельца 28.10, п. 4). Сплошной обход 28.10 12:53–13:09Z, по одному запросу, метка factory-seo-acceptance: фильтр «Жанр» разделов предлагает все жанры каталога, пункты без записей раздела ведут на 404 с нулём карточек. zonafilm.space: /movies/ 78 из 127, /series/ 86 из 127, /animation/ 53 из 127; zonafilm12.site: /movies/ 64 из 98, /series/ 66 из 98, /animation/ 41 из 98. /catalog/ — 0 тупиков на обоих. Служебных меток «…контент» в перечнях нет, noindex на пунктах нет.",
+      "norm": "T345 и его критерий check; docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md §9–§10; поручение владельца 28.10 п. 4 (подтверждённое решение — на совместимые сайты через очередь)",
+      "expected": "То же, что принято по T345 на zonafilm.cc: в фильтре раздела только жанры с записями раздела, с числом, равным «Результаты по фильтрам: N»; без технических жанров рантайма (единый источник, не копия); жанры вне раздела — ссылкой на /catalog/?genre=; 404-адреса фильтров остаются 404. Рантаймы zona-01 и zona-03 отличаются от zona-02 — механизм переносится по смыслу, не копией файла; проверка — сплошной обход, а не признаки проводки.",
+      "check": "SEO: сплошной обход genrescan_host.py по /movies/, /series/, /animation/ каждой витрины, телефон 390 и компьютер 1440 — 0 тупиков, число в подписи = числу выдачи, ни одного пункта на noindex; повтор после следующего обновления каталога. Влияние на поведение оценивается отдельно на каждой витрине (referer_to_page, exit_pages) — после включения расширенной выгрузки для этих доменов.",
+      "evidence": "artifacts/evidence/zonafilm-cc-behavior-20261028/coverage/genre-zonafilm.space.json, genre-zonafilm12.site.json, genrescan_host.py",
+      "live_check": "фильтр жанра на /movies/, /series/, /animation/, телефон 390 и компьютер 1440",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор после живой приёмки T345 на zonafilm.cc (выпуск — после восстановления CI; zonafilm.space — с учётом действующих экспериментов витрины); SEO — приёмка обходом и отдельная оценка эффекта"
     }
   ]
 }
