@@ -1,0 +1,190 @@
+{
+ "about": "Карточки списка популярных тайтлов владельца — фоновому редактору впереди пробелов по трафику (причина OWNER_LIST, seo_operator.regular.editor_candidates). Сопоставление всех 392 строк — match-decisions-20261028.json в каталоге доказательств; сюда попадает партия, выбранная по спросу наших сайтов и показателю владельца (batch1.py).",
+ "source": {
+  "name": "Яндекс Метрика «Заголовки страниц», 28.04–28.10.2026, сообщение владельца 28.10.2026",
+  "received": "2026-10-28",
+  "evidence": "artifacts/evidence/popular-titles-20261028/"
+ },
+ "items": [
+  {
+   "row": 229,
+   "site": "zonafilm.space",
+   "slug": "chernyy-klever",
+   "batch": 1
+  },
+  {
+   "row": 214,
+   "site": "animedia.icu",
+   "slug": "atele-koldovskih-kolpakov",
+   "batch": 1
+  },
+  {
+   "row": 240,
+   "site": "animedia.icu",
+   "slug": "chernyy-klever-2",
+   "batch": 1
+  },
+  {
+   "row": 242,
+   "site": "animedia.icu",
+   "slug": "vo-vseoruzhii-sila-artefaktov",
+   "batch": 1
+  },
+  {
+   "row": 271,
+   "site": "animedia.icu",
+   "slug": "boevoy-master-2",
+   "batch": 1
+  },
+  {
+   "row": 375,
+   "site": "zonafilm12.site",
+   "slug": "polovina-materi",
+   "batch": 1
+  },
+  {
+   "row": 15,
+   "site": "zonafilm.space",
+   "slug": "chelovek-pauk-novyy-den",
+   "batch": 1
+  },
+  {
+   "row": 219,
+   "site": "animedia.icu",
+   "slug": "protivostoyanie-svyatogo",
+   "batch": 1
+  },
+  {
+   "row": 302,
+   "site": "zonafilm.space",
+   "slug": "dnevniki-vampira",
+   "batch": 1
+  },
+  {
+   "row": 38,
+   "site": "zonafilm.space",
+   "slug": "mentalist",
+   "batch": 1
+  },
+  {
+   "row": 290,
+   "site": "animedia.icu",
+   "slug": "pozhiratel-zvezd-4",
+   "batch": 1
+  },
+  {
+   "row": 6,
+   "site": "zonafilm.space",
+   "slug": "gangsterlend",
+   "batch": 1
+  },
+  {
+   "row": 7,
+   "site": "zonafilm.space",
+   "slug": "odisseya",
+   "batch": 1
+  },
+  {
+   "row": 221,
+   "site": "animedia.icu",
+   "slug": "proshlo-desyat-let-s-momenta-kak-ya-skazal-ostavte-eto-na-menya-i-uhodite-i-stal",
+   "batch": 1
+  },
+  {
+   "row": 311,
+   "site": "zonafilm.space",
+   "slug": "ochen-strannye-dela",
+   "batch": 1
+  },
+  {
+   "row": 392,
+   "site": "zonafilm.space",
+   "slug": "kvest-vizhna",
+   "batch": 1
+  },
+  {
+   "row": 328,
+   "site": "zonafilm12.site",
+   "slug": "korallovyy-dvorec",
+   "batch": 1
+  },
+  {
+   "row": 297,
+   "site": "zonafilm.space",
+   "slug": "sverhestestvennoe-3",
+   "batch": 1
+  },
+  {
+   "row": 202,
+   "site": "animedia.icu",
+   "slug": "van-pis",
+   "batch": 1
+  },
+  {
+   "row": 300,
+   "site": "zonafilm12.site",
+   "slug": "ty-tot-kogo-ya-lyublyu",
+   "batch": 1
+  },
+  {
+   "row": 1,
+   "site": "zonafilm.space",
+   "slug": "izvne-2",
+   "batch": 1
+  },
+  {
+   "row": 204,
+   "site": "animedia.icu",
+   "slug": "tabakoshka",
+   "batch": 1
+  },
+  {
+   "row": 206,
+   "site": "animedia.icu",
+   "slug": "blich-tysyacheletnyaya-krovavaya-voyna",
+   "batch": 1
+  },
+  {
+   "row": 208,
+   "site": "animedia.icu",
+   "slug": "blich-2",
+   "batch": 1
+  },
+  {
+   "row": 209,
+   "site": "animedia.icu",
+   "slug": "dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr",
+   "batch": 1
+  },
+  {
+   "row": 306,
+   "site": "zonafilm.space",
+   "slug": "luchshe-zvonite-solu",
+   "batch": 1
+  },
+  {
+   "row": 210,
+   "site": "animedia.icu",
+   "slug": "magicheskaya-bitva-smertelnaya-migraciya",
+   "batch": 1
+  },
+  {
+   "row": 211,
+   "site": "animedia.icu",
+   "slug": "neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga",
+   "batch": 1
+  },
+  {
+   "row": 215,
+   "site": "animedia.icu",
+   "slug": "cugai-zagrobnogo-mira",
+   "batch": 1
+  },
+  {
+   "row": 216,
+   "site": "animedia.icu",
+   "slug": "chernyy-fakel",
+   "batch": 1
+  }
+ ]
+}

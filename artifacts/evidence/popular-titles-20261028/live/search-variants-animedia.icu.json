@@ -1,0 +1,81 @@
+{
+ "host": "animedia.icu",
+ "at": "2026-10-28T15:49:49Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "rows": [
+  {
+   "query": "Мир отомэ-игр",
+   "expected": "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov",
+    "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov-2"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Принцесса-рыцарь",
+   "expected": "princessa-rycar-nevesta-varvara",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "princessa-rycar-nevesta-varvara"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Добро пожаловать в класс превосходства 4: Второй год",
+   "expected": "dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Блич",
+   "expected": "blich-2",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "blich-2",
+    "blich-vospominaniya-ni-o-kom",
+    "blich-vospominaniya-pod-dozhdem",
+    "blich-vosstanie-almaznoy-pyli",
+    "blich-glava-iz-ada"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Необъятный океан",
+   "expected": "neobyatnyy-okean",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "neobyatnyy-okean",
+    "neobyatnyy-okean-2",
+    "neobyatnyy-okean-3"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Фермерская жизнь в ином мире",
+   "expected": "fermerskaya-zhizn-v-inom-mire",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "fermerskaya-zhizn-v-inom-mire",
+    "fermerskaya-zhizn-v-inom-mire-2"
+   ],
+   "suggest_first5": []
+  }
+ ]
+}

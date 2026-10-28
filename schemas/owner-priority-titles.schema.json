@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/sbc-create/test/schemas/owner-priority-titles.schema.json",
+  "title": "Owner Priority Titles",
+  "description": "Cards the owner's popular-titles list sends to the background editor ahead of traffic gaps (seo_operator.regular.editor_candidates, reason OWNER_LIST). Every item names the source row it comes from, so a text on the site can be traced back to the owner's list; the list itself and the row-by-row matching live in the evidence directory named in `source.evidence`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["source", "items"],
+  "properties": {
+    "about": {"type": "string"},
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "received", "evidence"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "received": {"type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$"},
+        "evidence": {"type": "string", "minLength": 1}
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["row", "site", "slug", "batch"],
+        "properties": {
+          "row": {"type": "integer", "minimum": 1},
+          "site": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*\\.[a-z]+$"},
+          "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+          "batch": {"type": "integer", "minimum": 1}
+        }
+      }
+    }
+  }
+}

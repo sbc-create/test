@@ -1,0 +1,127 @@
+{
+ "host": "zonafilm12.site",
+ "started": "2026-10-28T15:49:08Z",
+ "finished": "2026-10-28T15:49:10Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm12.site/title/korallovyy-dvorec/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/korallovyy-dvorec/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Коралловый дворец — смотреть онлайн — Zona Cinema",
+   "h1": "Коралловый дворец",
+   "description": "После исчезновения мужа Джемре оказывается в таинственном особняке «Коралл», где тайны прошлого, семейные распри и запретная любовь меняют её судьбу.",
+   "player": true,
+   "search": {
+    "query": "Коралловый дворец",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/polovina-materi/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/polovina-materi/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Половина матери — смотреть онлайн — Zona Cinema",
+   "h1": "Половина матери",
+   "description": "После того как сестра Зейнеп — Зерен — трагически погибает в Германии, учительница берёт под свою опеку её дочь, маленькую Эге. Стремясь отыскать отца девочки, Али, Зейнеп…",
+   "player": true,
+   "search": {
+    "query": "Половина матери",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/ty-tot-kogo-ya-lyublyu/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/ty-tot-kogo-ya-lyublyu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ты тот, кого я люблю — смотреть онлайн — Zona Cinema",
+   "h1": "Ты тот, кого я люблю",
+   "description": "Эркан Алдур, наследник влиятельной стамбульской семьи, проходит срочную службу в отдалённой деревне. После землетрясения он помогает местным жителям и встречает Диджле — девушку…",
+   "player": true,
+   "search": {
+    "query": "Ты тот, кого я люблю",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/zavist/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/zavist/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Зависть (2025) — смотреть онлайн — Zona Cinema",
+   "h1": "Зависть",
+   "description": "Сениха не знала материнской заботы, ведь всё лучшее с детства доставалось её брату Халиту. Только в его будущее вливались семейные деньги: он учился в элитных школах, добился…",
+   "player": true,
+   "search": {
+    "query": "Зависть",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/mechta-eshrefa/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/mechta-eshrefa/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мечта Эшрефа — смотреть онлайн — Zona Cinema",
+   "h1": "Мечта Эшрефа",
+   "description": "Влиятельный богач Эшреф, потерявший веру в любовь, влюбляется в молодую певицу. Он не знает, что девушка скрывает секреты, связанные с его собственным прошлым.",
+   "player": true,
+   "search": {
+    "query": "Мечта Эшрефа",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/milochka/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/milochka/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Милочка — смотреть онлайн — Zona Cinema",
+   "h1": "Милочка",
+   "description": "После трагической утраты семья переезжает в город. Спустя 30 лет они возвращаются в родные края, где их настигают подавленные эмоции и неприятные секреты.",
+   "player": true,
+   "search": {
+    "query": "Милочка",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/ot-kogo-my-bezhali-mama/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/ot-kogo-my-bezhali-mama/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "От кого мы бежали, мама? — смотреть онлайн — Zona Cinema",
+   "h1": "От кого мы бежали, мама?",
+   "description": "Скрывая свое загадочное прошлое, мать живёт в бегах вместе с дочерью. Отели становятся для них домом, а другие люди — потенциальной угрозой.",
+   "player": true,
+   "search": {
+    "query": "От кого мы бежали, мама?",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  }
+ ]
+}

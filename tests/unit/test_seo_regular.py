@@ -1925,3 +1925,58 @@ def test_site_direction_comes_from_profile_not_content_directions(tmp_path, monk
     assert regular.off_direction("films.example", anime) is True
     # Домен без паспорта — запасная карта в коде.
     assert regular.site_direction("zonafilm.cc") == "films_series"
+
+
+def _owner_case(tmp_path, details):
+    snap = tmp_path / "analytics-2026-10-28.json"
+    snap.write_text(json.dumps({"domains": []}), encoding="utf-8")
+    facts = tmp_path / "facts"
+    facts.mkdir()
+    (facts / "zona-01-details.json").write_text(json.dumps({"details": details}), encoding="utf-8")
+    return snap, facts
+
+
+def test_owner_list_cards_go_first_even_with_provider_synopsis(tmp_path):
+    """Поручение 28.10, п. 3: карточке из списка владельца нужно своё описание и при синопсисе поставщика."""
+    snap, facts = _owner_case(tmp_path, {
+        "izvne-2": {"name": "Извне", "description": "Синопсис поставщика.", "playable": True,
+                    "external_ids": {"imdb": "9813792"}, "original_name": "From", "year": 2022, "type": "tv"},
+    })
+    found = regular.editor_candidates(snap, facts, set(), sites={"zonafilm.space": "zona-01"},
+                                      priority=[{"row": 1, "site": "zonafilm.space", "slug": "izvne-2", "batch": 1}])
+    assert [(c["slug"], c["reason"], c["has_synopsis"], c["owner_row"]) for c in found] == [
+        ("izvne-2", "OWNER_LIST", True, 1)
+    ]
+    assert found[0]["film_args"][0] == "9813792"
+
+
+def test_owner_list_takes_at_most_its_share_of_the_batch(tmp_path):
+    details = {f"s{i}": {"name": f"С{i}", "description": "Есть.", "playable": True,
+                         "external_ids": {"imdb": str(100 + i)}, "original_name": "X", "year": 2020}
+               for i in range(6)}
+    snap, facts = _owner_case(tmp_path, details)
+    prio = [{"row": i + 1, "site": "zonafilm.space", "slug": f"s{i}", "batch": 1} for i in range(6)]
+    found = regular.editor_candidates(snap, facts, set(), limit=4, sites={"zonafilm.space": "zona-01"}, priority=prio)
+    assert [c["slug"] for c in found if c["reason"] == "OWNER_LIST"] == ["s0", "s1"]
+
+
+def test_owner_list_respects_network_rule_and_site_direction(tmp_path):
+    """Одно своё описание на сеть; аниме не идёт на сайт фильмов и сериалов даже из списка владельца."""
+    snap, facts = _owner_case(tmp_path, {
+        "uzhe-napisano": {"name": "Уже", "description": "Есть.", "external_ids": {"imdb": "1"}},
+        "anime-na-zona": {"name": "Аниме", "description": "Есть.", "genres": ["аниме"], "external_ids": {"mal": "5"}},
+        "bez-istochnika": {"name": "Без ID", "description": "Есть."},
+    })
+    prio = [{"row": n, "site": "zonafilm.space", "slug": s, "batch": 1}
+            for n, s in ((1, "uzhe-napisano"), (2, "anime-na-zona"), (3, "bez-istochnika"))]
+    found = regular.editor_candidates(snap, facts, {("zonafilm12.site", "uzhe-napisano")},
+                                      sites={"zonafilm.space": "zona-01"}, priority=prio)
+    assert [c for c in found if c["reason"] == "OWNER_LIST"] == []
+
+
+def test_owner_priority_registry_rows_are_cards_of_the_list(tmp_path):
+    path = tmp_path / "owner-priority-titles.json"
+    path.write_text(json.dumps({"items": [{"row": 7, "site": "zonafilm.space", "slug": "odisseya", "batch": 1}]}),
+                    encoding="utf-8")
+    assert regular.owner_priority(path) == [{"row": 7, "site": "zonafilm.space", "slug": "odisseya", "batch": 1}]
+    assert regular.owner_priority(tmp_path / "net.json") == []

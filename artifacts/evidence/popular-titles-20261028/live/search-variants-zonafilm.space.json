@@ -1,0 +1,197 @@
+{
+ "host": "zonafilm.space",
+ "at": "2026-10-28T15:49:45Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "rows": [
+  {
+   "query": "Легенда Вокс Машины",
+   "expected": "legenda-o-vox-machina",
+   "status": 200,
+   "match_position": null,
+   "suggest_position": null,
+   "matches_first5": [],
+   "suggest_first5": []
+  },
+  {
+   "query": "Легенда о Vox Machina",
+   "expected": "legenda-o-vox-machina",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "legenda-o-vox-machina"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Улыбающиеся друзья",
+   "expected": "zadornye-druzya",
+   "status": 200,
+   "match_position": null,
+   "suggest_position": null,
+   "matches_first5": [],
+   "suggest_first5": []
+  },
+  {
+   "query": "C.S.I. Место преступления",
+   "expected": "csi-mesto-prestupleniya",
+   "status": 200,
+   "match_position": 7,
+   "suggest_position": null,
+   "matches_first5": [
+    "mesto-prestupleniya-po-tu-storonu-granicy",
+    "mesto-prestupleniya-2",
+    "mesto-prestupleniya-nochnoy-berlin",
+    "mesto-prestupleniya-ischeznovenie-v-otele-sesil-mini-serial-2021",
+    "mesto-prestupleniya-ubiyca-s-tayms-skver"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Этим летом я стала красивой",
+   "expected": "to-leto-kogda-ya-pohoroshela",
+   "status": 200,
+   "match_position": null,
+   "suggest_position": null,
+   "matches_first5": [],
+   "suggest_first5": []
+  },
+  {
+   "query": "Очень страшное кино 6",
+   "expected": "ochen-strashnoe-kino",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "ochen-strashnoe-kino",
+    "ochen-strashnoe-kino-6",
+    "ochen-strashnoe-kino-5",
+    "ochen-strashnoe-kino-4",
+    "ochen-strashnoe-kino-3"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Любовь, смерть и роботы",
+   "expected": "lyubov-smert-roboty",
+   "status": 200,
+   "match_position": null,
+   "suggest_position": null,
+   "matches_first5": [],
+   "suggest_first5": []
+  },
+  {
+   "query": "Мой демон",
+   "expected": "moy-demon-serial-2023-2024",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "moy-demon-serial-2023-2024"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Сверхъестественное",
+   "expected": "sverhestestvennoe-3",
+   "status": 200,
+   "match_position": 3,
+   "suggest_position": null,
+   "matches_first5": [
+    "sverhestestvennoe-2",
+    "sverhestestvennoe",
+    "sverhestestvennoe-3",
+    "sverhestestvennoe-perezhivanie",
+    "sverhestestvennoe-znaki"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Гримм",
+   "expected": "grimm",
+   "status": 200,
+   "match_position": 2,
+   "suggest_position": null,
+   "matches_first5": [
+    "grimm-2",
+    "grimm",
+    "sestry-grimm",
+    "zloveschie-istorii-po-skazkam-bratev-grimm",
+    "zametki-grimm"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Извне",
+   "expected": "izvne-2",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "izvne-2",
+    "izvne",
+    "drozh-zemli-udar-izvne",
+    "vtorzhenie-izvne"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Укрытие",
+   "expected": "ukrytie-5",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "ukrytie-5",
+    "ukrytie-4",
+    "ukrytie-3",
+    "ukrytie",
+    "ukrytie-2"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Одиссея",
+   "expected": "odisseya",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "odisseya",
+    "odisseya-2",
+    "odisseya-4",
+    "odisseya-3",
+    "odisseya-6"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Джек Ричер",
+   "expected": "dzhek-richer-2",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "dzhek-richer-2",
+    "dzhek-richer",
+    "dzhek-richer-2-nikogda-ne-vozvraschaysya"
+   ],
+   "suggest_first5": []
+  },
+  {
+   "query": "Мумия",
+   "expected": "mumiya",
+   "status": 200,
+   "match_position": 1,
+   "suggest_position": null,
+   "matches_first5": [
+    "mumiya",
+    "mumiya-3",
+    "mumiya-4",
+    "mumiya-2",
+    "mumiya-vozmezdie"
+   ],
+   "suggest_first5": []
+  }
+ ]
+}

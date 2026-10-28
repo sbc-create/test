@@ -1,0 +1,195 @@
+{
+ "host": "zonafilm.space",
+ "started": "2026-10-28T15:50:42Z",
+ "finished": "2026-10-28T15:50:45Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm.space/title/chernyy-klever/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chernyy-klever/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Чёрный клевер — смотреть онлайн — Zona Cinema",
+   "h1": "Чёрный клевер",
+   "description": "Ещё младенцами в один и тот же день Аста с Юно были подброшены под двери церкви одной отдалённой деревни. Годы шли, мальчики росли, а миром вокруг них правила магия. Юно…",
+   "player": true,
+   "search": {
+    "query": "Чёрный клевер",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/chelovek-pauk-novyy-den/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chelovek-pauk-novyy-den/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Человек-паук: Новый день — смотреть онлайн — Zona Cinema",
+   "h1": "Человек-паук: Новый день",
+   "description": "Одинокий и повзрослевший Питер Паркер полностью посвящает себя борьбе с преступностью в Нью-Йорке, поскольку 4 года назад после заклинания Доктора Стренджа мир и все близкие…",
+   "player": true,
+   "search": {
+    "query": "Человек-паук: Новый день",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/dnevniki-vampira/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/dnevniki-vampira/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Дневники вампира (2009) — смотреть онлайн — Zona Cinema",
+   "h1": "Дневники вампира",
+   "description": "Прошло всего четыре месяца после трагической аварии, в которой погибли их родители, и 17-летняя Елена Гилберт и ее 15-летний брат Джереми все еще пытаются оправиться от потери и…",
+   "player": true,
+   "search": {
+    "query": "Дневники вампира",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mentalist/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mentalist/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Менталист — смотреть онлайн — Zona Cinema",
+   "h1": "Менталист",
+   "description": "Патрик Джейн - детектив и независимый консультант из Калифорнийского Бюро Расследований (КБР), он использует свои отточенные, как лезвие, навыки наблюдения для раскрытия тяжких…",
+   "player": true,
+   "search": {
+    "query": "Менталист",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/gangsterlend/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/gangsterlend/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Гангстерленд — смотреть онлайн — Zona Cinema",
+   "h1": "Гангстерленд",
+   "description": "Лондон. Две могущественных криминальных семьи, Харриганы и Стивенсоны, ведут войну за власть, избегая прямой конфронтации. Но шаткое перемирие может нарушить исчезновение Томми…",
+   "player": true,
+   "search": {
+    "query": "Гангстерленд",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/odisseya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/odisseya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Одиссея (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Одиссея",
+   "description": "После Троянской войны Одиссей, царь Итаки, во главе небольшого войска возвращается домой к своей жене Пенелопе. На своём пути Одиссей сталкивается со множеством испытаний…",
+   "player": true,
+   "search": {
+    "query": "Одиссея",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ochen-strannye-dela/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ochen-strannye-dela/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Очень странные дела — смотреть онлайн — Zona Cinema",
+   "h1": "Очень странные дела",
+   "description": "«Очень странные дела» — сериал 2016 года. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Очень странные дела",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kvest-vizhna/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kvest-vizhna/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Квест Вижна — смотреть онлайн — Zona Cinema",
+   "h1": "Квест Вижна",
+   "description": "После событий &quot;ВандаВижн&quot; Вижн пытается восстановить свою личность.",
+   "player": true,
+   "search": {
+    "query": "Квест Вижна",
+    "status": 200,
+    "position": 1,
+    "results_seen": 14
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сверхъестественное (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Сверхъестественное",
+   "description": "Сериал рассказывает о приключениях братьев Сэма и Дина Винчестеров, которые путешествуют по Соединённым Штатам на чёрном автомобиле Chevrolet Impala 1967 года, расследуют…",
+   "player": true,
+   "search": {
+    "query": "Сверхъестественное",
+    "status": 200,
+    "position": 3,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/izvne-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/izvne-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Извне (2022) — смотреть онлайн — Zona Cinema",
+   "h1": "Извне",
+   "description": "Затерянный в лесу городок пленяет каждого, кому не посчастливилось туда попасть — покинуть это место невозможно. Днем невольные жители пытаются выстроить подобие нормального…",
+   "player": true,
+   "search": {
+    "query": "Извне",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/luchshe-zvonite-solu/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/luchshe-zvonite-solu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Лучше звоните Солу — смотреть онлайн — Zona Cinema",
+   "h1": "Лучше звоните Солу",
+   "description": "История об испытаниях и невзгодах, которые приходится преодолеть Солу Гудману, адвокату по уголовным делам, в тот период, когда он пытается открыть свою собственную адвокатскую…",
+   "player": true,
+   "search": {
+    "query": "Лучше звоните Солу",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  }
+ ]
+}

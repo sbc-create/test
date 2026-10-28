@@ -49,6 +49,8 @@ MAPPING = {
     "topvisor-cores.json": "topvisor-cores.schema.json",
     # Пропавшие записи поставщика: без даты пропажи, страниц и снимков проверять нечего.
     "provider-defect-watch.json": "provider-defect-watch.schema.json",
+    # Список владельца для редактора: без строки источника текст на сайте не проследить.
+    "owner-priority-titles.json": "owner-priority-titles.schema.json",
 }
 
 # Производные артефакты: файл порождается из другого источника и в некоторых

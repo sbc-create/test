@@ -1,0 +1,127 @@
+{
+ "host": "zonafilm.space",
+ "started": "2026-10-28T15:49:07Z",
+ "finished": "2026-10-28T15:49:08Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm.space/title/izvne-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/izvne-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Извне (2022) — смотреть онлайн — Zona Cinema",
+   "h1": "Извне",
+   "description": "Затерянный в лесу городок пленяет каждого, кому не посчастливилось туда попасть — покинуть это место невозможно. Днем невольные жители пытаются выстроить подобие нормального…",
+   "player": true,
+   "search": {
+    "query": "Извне",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сверхъестественное (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Сверхъестественное",
+   "description": "Сериал рассказывает о приключениях братьев Сэма и Дина Винчестеров, которые путешествуют по Соединённым Штатам на чёрном автомобиле Chevrolet Impala 1967 года, расследуют…",
+   "player": true,
+   "search": {
+    "query": "Сверхъестественное",
+    "status": 200,
+    "position": 3,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sekretnye-materialy/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sekretnye-materialy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Секретные материалы — смотреть онлайн — Zona Cinema",
+   "h1": "Секретные материалы",
+   "description": "Агентам ФБР Дане Скалли и Фоксу Малдеру поручают работу над проектом «Секретные материалы». Это архив нераскрытых дел, связанных с паранормальными явлениями. Малдер верит в…",
+   "player": true,
+   "search": {
+    "query": "Секретные материалы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 13
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/grimm/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/grimm/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Гримм (2011) — смотреть онлайн — Zona Cinema",
+   "h1": "Гримм",
+   "description": "Действие происходит в современном Портленде, где детектив из отдела убийств узнаёт, что он является потомком группы охотников, известных как «Гриммы», которые сражаются, чтобы…",
+   "player": true,
+   "search": {
+    "query": "Гримм",
+    "status": 200,
+    "position": 2,
+    "results_seen": 11
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/uensdey/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/uensdey/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Уэнсдэй — смотреть онлайн — Zona Cinema",
+   "h1": "Уэнсдэй",
+   "description": "Уэнздей, дочь Гомеса и Мортиши Аддамс, учится в академии Nevermore. Ей предстоит освоить экстрасенсорные способности, чтобы остановить местного серийного убийцу и раскрыть тайну…",
+   "player": true,
+   "search": {
+    "query": "Уэнсдэй",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/buhta-vdov/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/buhta-vdov/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Бухта вдов — смотреть онлайн — Zona Cinema",
+   "h1": "Бухта вдов",
+   "description": "Том Лофтис, мэр города на небольшом острове в Новой Англии, противостоит суеверным местным жителям, которые считают свой остров проклятым. Том всеми силами старается развивать…",
+   "player": true,
+   "search": {
+    "query": "Бухта вдов",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kerri-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kerri-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Кэрри (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Кэрри",
+   "description": "Ограждённая от мира девушка с телекинетическими способностями подвергается травле, и под влиянием своей властной матери всё заканчивается жуткой кровавой трагедией.",
+   "player": true,
+   "search": {
+    "query": "Кэрри",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  }
+ ]
+}

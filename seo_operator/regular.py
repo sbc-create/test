@@ -99,6 +99,8 @@ SOURCES = {
     "changes_ledger_runs": _paths.state("var", "editor-runs", "ledger.jsonl"),
     "facts_snapshots": Path("/srv/lords/.frontend"),
     "coverage_blockers": _paths.registry("config", "editor-coverage-blockers.json"),
+    # Список популярных тайтлов владельца (28.10): карточки впереди пробелов по трафику.
+    "owner_priority": _paths.registry("config", "owner-priority-titles.json"),
     # Календарные сутки МСК (владелец 13.10: отчёт — за вчерашний день 00:00–23:59).
     "calendar_day_script": REPO_ROOT / "automation" / "local" / "editor-day-report.py",
     # Подборки и анонсы против ТЕКУЩЕГО снимка каталога (поручение владельца 27.10:
@@ -2804,6 +2806,16 @@ def _film_candidate(domain: str, slug: str, mine: dict, weight: float, reason: s
     }
 
 
+def owner_priority(path: Path | None = None) -> list[dict]:
+    """Карточки из списка популярных тайтлов владельца (config/owner-priority-titles.json)."""
+    return list(_read_json(path or SOURCES["owner_priority"], {}).get("items") or [])
+
+
+#: Доля партии под список владельца: остальное — пробелы по трафику. Без потолка
+#: список в сотни строк вытеснил бы заглушки на посещаемых страницах целиком.
+OWNER_SHARE = 0.5
+
+
 def editor_candidates(
     snapshot: Path,
     facts_dir: Path,
@@ -2814,12 +2826,17 @@ def editor_candidates(
     needs_source: list[dict] | None = None,
     blocked: set[str] | None = None,
     held_urls: set[str] | None = None,
+    priority: list[dict] | None = None,
 ) -> list[dict]:
     """Что редактору брать, когда очередь пуста: по трафику, с причиной.
 
     * GAP — описания нет вовсе (заглушка на странице);
     * DUPLICATE — синопсис есть и дословно совпадает на icu и space; меняется
-      только на space, icu — контроль пилота (MOD-25).
+      только на space, icu — контроль пилота (MOD-25);
+    * OWNER_LIST — карточка из списка популярных тайтлов владельца (`priority`):
+      своё описание нужно и при синопсисе поставщика (поручение 28.10, п. 3).
+      Идёт первой, но не больше OWNER_SHARE партии; правило «одно своё описание
+      произведения на сеть» и закрытые исходом адреса действуют и здесь.
     Визиты на серии засчитываются тайтлу: интерес к тайтлу — это они.
     `sites` — домены и их снимки; по умолчанию EDITOR_SITES.
     `held_urls` — адреса, закрытые последним исходом (`result_holds`): отказ в
@@ -2850,9 +2867,11 @@ def editor_candidates(
                 m = re.match(r"^/title/([^/]+)/", path)
                 if m:
                     weights[(domain, m.group(1))] = weights.get((domain, m.group(1)), 0.0) + metric
+    wanted_owner = {(p.get("site"), p.get("slug")) for p in priority or ()}
     details = {
         d: _details_for_editor(
-            _details_path(facts_dir, sid), {slug for dom, slug in weights if dom == d}
+            _details_path(facts_dir, sid),
+            {slug for dom, slug in weights if dom == d} | {slug for dom, slug in wanted_owner if dom == d},
         )
         for d, sid in sites.items()
     }
@@ -2862,6 +2881,38 @@ def editor_candidates(
     # синонимайз, который владелец запретил 2026-10-09 (за ночь 08→09.10 таких
     # пар icu/space было 9). Другому домену — другая тема или другой формат.
     taken = WorkSet({work_key(x) for _, x in published} | {work_key(x) for x in blocked or ()})
+    for item in priority or ():
+        if len(out) >= int(limit * OWNER_SHARE):
+            break
+        domain, slug = item.get("site"), item.get("slug")
+        if domain not in sites or (domain, slug) in published or work_key(slug) in taken or _закрыт(domain, slug):
+            continue
+        mine = (details.get(domain) or {}).get(slug)
+        if not mine or off_direction(domain, mine):
+            continue
+        has_synopsis = bool((mine.get("description") or "").strip())
+        shiki = (mine.get("ratings_by_source") or {}).get("shikimori") or {}
+        source_id = shiki.get("external_id") or (mine.get("external_ids") or {}).get("mal")
+        weight = weights.get((domain, slug), 0.0)
+        if source_id:
+            cand = {
+                "site": domain,
+                "slug": slug,
+                "url": f"https://{domain}/title/{slug}/",
+                "weight": weight,
+                "reason": "OWNER_LIST",
+                "has_synopsis": has_synopsis,
+                "headline": mine.get("name"),
+                "shikimori_id": source_id,
+                "shikimori_match": shiki.get("match_state"),
+            }
+        elif (mine.get("external_ids") or {}).get("imdb"):
+            cand = {**_film_candidate(domain, slug, mine, weight, "OWNER_LIST"), "has_synopsis": has_synopsis}
+        else:
+            continue  # писать не из чего; строка остаётся в учёте списка (match-decisions)
+        cand["owner_row"] = item.get("row")
+        taken.add(work_key(slug))
+        out.append(cand)
     for (domain, slug), weight in sorted(weights.items(), key=lambda kv: -kv[1]):
         if (domain, slug) in published or work_key(slug) in taken or _закрыт(domain, slug):
             continue
@@ -3164,6 +3215,7 @@ def step_candidates(ctx: Context) -> Any:
         needs_source=needs,
         blocked=net_blocked,
         held_urls=held,
+        priority=owner_priority(ctx.sources.get("owner_priority")),
     )
     found = (
         yummy_demand_candidates(snaps[-1], published, blocked=net_blocked, held_urls=held) + found

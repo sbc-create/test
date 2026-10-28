@@ -1,0 +1,159 @@
+{
+ "collected_at": "2026-10-28T05:02:49Z",
+ "period": {
+  "date1": "7daysAgo",
+  "date2": "yesterday"
+ },
+ "top_n_per_domain": 20,
+ "signals": {
+  "chernyy-klever-2": {
+   "an1meg0.site:landing_pages": 7,
+   "an1meg0.site:popular_pages": 7,
+   "animedia.icu:landing_pages": 18,
+   "animedia.icu:search_landing_pages": 32
+  },
+  "nekromant-ya-katastrofa": {
+   "animedia.icu:landing_pages": 256,
+   "animedia.icu:popular_pages": 386,
+   "animedia.icu:search_landing_pages": 273
+  },
+  "atele-koldovskih-kolpakov": {
+   "animedia.icu:landing_pages": 45,
+   "animedia.icu:popular_pages": 67,
+   "animedia.icu:search_landing_pages": 58
+  },
+  "vo-vseoruzhii-sila-artefaktov": {
+   "animedia.icu:landing_pages": 20,
+   "animedia.icu:search_landing_pages": 26
+  },
+  "boevoy-master-2": {
+   "animedia.icu:search_landing_pages": 22
+  },
+  "protivostoyanie-svyatogo": {
+   "animedia.icu:search_landing_pages": 15
+  },
+  "pozhiratel-zvezd-4": {
+   "animedia.icu:search_landing_pages": 13
+  },
+  "proshlo-desyat-let-s-momenta-kak-ya-skazal-ostavte-eto-na-menya-i-uhodite-i-stal": {
+   "animedia.icu:search_landing_pages": 6
+  },
+  "hot-ya-i-bezdarnaya-zlodeyka-skazka-o-tom-kak-babochka-i-krysa-pomenyalis-mestam": {
+   "animedia.icu:search_landing_pages": 3
+  },
+  "neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga": {
+   "animedia.icu:search_landing_pages": 3
+  },
+  "za-granyu-vremeni-2": {
+   "animedia.icu:search_landing_pages": 3
+  },
+  "blich-tysyacheletnyaya-krovavaya-voyna": {
+   "animedia.icu:search_landing_pages": 2
+  },
+  "protivostoyaschiy-nebesam": {
+   "animedia.icu:search_landing_pages": 2
+  },
+  "skazanie-o-pastuhe-bogov": {
+   "animedia.icu:search_landing_pages": 2
+  },
+  "velikiy-pravitel-2023-2": {
+   "animedia.icu:search_landing_pages": 2
+  },
+  "klevatess-2-korol-demonicheskih-zverey-i-legenda-o-lozhnom-geroe": {
+   "animeg0.site:landing_pages": 2,
+   "zonafilm.space:landing_pages": 5
+  },
+  "kontinent-sily-i-duha": {
+   "animeg0.site:landing_pages": 1,
+   "animeg0.site:search_landing_pages": 1
+  },
+  "vechnaya-volya-4": {
+   "animeg0.site:search_landing_pages": 1
+  },
+  "vlast-knizhnogo-chervya-priemnaya-doch-lorda": {
+   "animeg0.site:search_landing_pages": 1
+  },
+  "polovina-materi": {
+   "lordserials22.info:landing_pages": 17,
+   "lordserials22.info:popular_pages": 19,
+   "lordserials22.info:search_landing_pages": 19,
+   "zonafilm12.site:search_landing_pages": 1
+  },
+  "avatar-legenda-ob-aange": {
+   "lordserials22.info:search_landing_pages": 2
+  },
+  "drugaya-lyubov-no-ne-ty": {
+   "lordserials22.info:search_landing_pages": 1
+  },
+  "dzhek-richer-2": {
+   "lordserials22.info:search_landing_pages": 1
+  },
+  "chelovek-pauk-novyy-den": {
+   "zonafilm.cc:landing_pages": 18,
+   "zonafilm.cc:popular_pages": 91,
+   "zonafilm.cc:search_landing_pages": 16
+  },
+  "odisseya": {
+   "zonafilm.cc:popular_pages": 73,
+   "zonafilm.cc:search_landing_pages": 10
+  },
+  "dnevniki-vampira": {
+   "zonafilm.cc:search_landing_pages": 14
+  },
+  "dzhentlmeny-3": {
+   "zonafilm.cc:search_landing_pages": 9,
+   "zonafilm12.site:popular_pages": 5
+  },
+  "gangsterlend": {
+   "zonafilm.cc:search_landing_pages": 12
+  },
+  "kvest-vizhna": {
+   "zonafilm.cc:search_landing_pages": 6
+  },
+  "ochen-strannye-dela": {
+   "zonafilm.cc:search_landing_pages": 6
+  },
+  "korallovyy-dvorec": {
+   "zonafilm.cc:search_landing_pages": 5
+  },
+  "mentalist": {
+   "zonafilm.cc:search_landing_pages": 13,
+   "zonafilm.space:search_landing_pages": 1
+  },
+  "sverhestestvennoe-3": {
+   "zonafilm.cc:search_landing_pages": 4
+  },
+  "druzya-3": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "griffiny": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "izvne-2": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "korol-talsy": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "temnaya-materiya": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "zhena-princa-xxi-veka": {
+   "zonafilm.cc:search_landing_pages": 3
+  },
+  "chernyy-klever": {
+   "zonafilm.space:landing_pages": 695,
+   "zonafilm.space:popular_pages": 1155,
+   "zonafilm.space:search_landing_pages": 646
+  },
+  "rashititel-grobnic": {
+   "zonafilm.space:landing_pages": 7
+  },
+  "fermerskaya-zhizn-v-inom-mire-2": {
+   "zonafilm.space:search_landing_pages": 1
+  },
+  "pylayuschee-leto": {
+   "zonafilm.space:search_landing_pages": 1
+  }
+ }
+}

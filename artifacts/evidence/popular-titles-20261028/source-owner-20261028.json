@@ -1,0 +1,2755 @@
+{
+ "source": "Яндекс Метрика, отчёт «Заголовки страниц», 28.04–28.10.2026; 1000 сайтов × 100 заголовков; сообщение владельца 28.10.2026",
+ "caveat": "просмотры страниц (карточки, сезоны, серии) — не зрители, не просмотры видео, не частотность запроса; число сайтов не доказывает низкую конкуренцию",
+ "rows": [
+  {
+   "n": 1,
+   "title": "Извне",
+   "pageviews": 8797745,
+   "sites": 129,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 2,
+   "title": "Отчаянные домохозяйки",
+   "pageviews": 4142655,
+   "sites": 26,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 3,
+   "title": "Рик и Морти",
+   "pageviews": 3698382,
+   "sites": 33,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 4,
+   "title": "Обсессия",
+   "pageviews": 2055528,
+   "sites": 23,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 5,
+   "title": "Вне кампуса",
+   "pageviews": 1874570,
+   "sites": 36,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 6,
+   "title": "Гангстерленд",
+   "pageviews": 1720033,
+   "sites": 78,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 7,
+   "title": "Одиссея",
+   "pageviews": 1314617,
+   "sites": 80,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 8,
+   "title": "Неуязвимый",
+   "pageviews": 1242751,
+   "sites": 22,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 9,
+   "title": "Острые козырьки",
+   "pageviews": 1122300,
+   "sites": 42,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 10,
+   "title": "Джек Ричер",
+   "pageviews": 1096446,
+   "sites": 74,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 11,
+   "title": "Фонари",
+   "pageviews": 1090395,
+   "sites": 64,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 12,
+   "title": "Гримм",
+   "pageviews": 1073440,
+   "sites": 36,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 13,
+   "title": "Ранчо Даттонов",
+   "pageviews": 1069261,
+   "sites": 53,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 14,
+   "title": "Укрытие",
+   "pageviews": 1001689,
+   "sites": 76,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 15,
+   "title": "Человек-паук: Новый день",
+   "pageviews": 892826,
+   "sites": 77,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 16,
+   "title": "Закулисье реальности",
+   "pageviews": 852857,
+   "sites": 33,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 17,
+   "title": "Дом Дракона",
+   "pageviews": 826157,
+   "sites": 62,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 18,
+   "title": "Игра Престолов",
+   "pageviews": 749980,
+   "sites": 39,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 19,
+   "title": "Мандалорец и Грогу",
+   "pageviews": 715031,
+   "sites": 68,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 20,
+   "title": "Касл",
+   "pageviews": 706360,
+   "sites": 50,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 21,
+   "title": "Джентльмены",
+   "pageviews": 652022,
+   "sites": 42,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 22,
+   "title": "Дьявол носит Prada 2",
+   "pageviews": 642669,
+   "sites": 37,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 23,
+   "title": "Стерлинг-Поинт",
+   "pageviews": 582181,
+   "sites": 21,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 24,
+   "title": "Очень страшное кино 6",
+   "pageviews": 568354,
+   "sites": 47,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 25,
+   "title": "Бухта вдов",
+   "pageviews": 522491,
+   "sites": 42,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 26,
+   "title": "Мыслить как преступник",
+   "pageviews": 513702,
+   "sites": 43,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 27,
+   "title": "Большой потенциал",
+   "pageviews": 508390,
+   "sites": 33,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 28,
+   "title": "Колония",
+   "pageviews": 468244,
+   "sites": 40,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 29,
+   "title": "Медленные лошади",
+   "pageviews": 453534,
+   "sites": 46,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 30,
+   "title": "Надежда",
+   "pageviews": 452276,
+   "sites": 34,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 31,
+   "title": "Мортал Комбат 2",
+   "pageviews": 438716,
+   "sites": 71,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 32,
+   "title": "Ты",
+   "pageviews": 413650,
+   "sites": 46,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 33,
+   "title": "Лаки",
+   "pageviews": 395797,
+   "sites": 37,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 34,
+   "title": "Мыс страха",
+   "pageviews": 390560,
+   "sites": 28,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 35,
+   "title": "Властелин колец: Кольца власти",
+   "pageviews": 380060,
+   "sites": 12,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 36,
+   "title": "Холод",
+   "pageviews": 374001,
+   "sites": 21,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 37,
+   "title": "Стюарт Блум не смог спасти вселенную",
+   "pageviews": 349965,
+   "sites": 27,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 38,
+   "title": "Менталист",
+   "pageviews": 349899,
+   "sites": 48,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 39,
+   "title": "Южный Парк",
+   "pageviews": 339936,
+   "sites": 26,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 40,
+   "title": "День разоблачения",
+   "pageviews": 338601,
+   "sites": 50,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 41,
+   "title": "Моана",
+   "pageviews": 330549,
+   "sites": 44,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 42,
+   "title": "Заветы",
+   "pageviews": 325485,
+   "sites": 12,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 43,
+   "title": "Внешние отмели",
+   "pageviews": 319861,
+   "sites": 18,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 44,
+   "title": "Во все тяжкие",
+   "pageviews": 319488,
+   "sites": 42,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 45,
+   "title": "Коммерсант",
+   "pageviews": 310581,
+   "sites": 11,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 46,
+   "title": "Мумия",
+   "pageviews": 308669,
+   "sites": 34,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 47,
+   "title": "Приговор",
+   "pageviews": 306864,
+   "sites": 17,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 48,
+   "title": "Реальные пацаны",
+   "pageviews": 305689,
+   "sites": 9,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 49,
+   "title": "Снегопад",
+   "pageviews": 304372,
+   "sites": 8,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 50,
+   "title": "Интерны",
+   "pageviews": 302296,
+   "sites": 17,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 51,
+   "title": "Каштановый человечек",
+   "pageviews": 295275,
+   "sites": 22,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 52,
+   "title": "Супергёрл",
+   "pageviews": 294335,
+   "sites": 40,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 53,
+   "title": "Фишер",
+   "pageviews": 293197,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 54,
+   "title": "C.S.I. Место преступления",
+   "pageviews": 286124,
+   "sites": 35,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 55,
+   "title": "Я тебя отыщу",
+   "pageviews": 282725,
+   "sites": 15,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 56,
+   "title": "Дьявол может плакать",
+   "pageviews": 282289,
+   "sites": 25,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 57,
+   "title": "Кэрри",
+   "pageviews": 282193,
+   "sites": 25,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 58,
+   "title": "Ковчег",
+   "pageviews": 281425,
+   "sites": 50,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 59,
+   "title": "Властелины вселенной",
+   "pageviews": 276324,
+   "sites": 33,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 60,
+   "title": "Этим летом я стала красивой",
+   "pageviews": 273478,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 61,
+   "title": "Ферма Кларксона",
+   "pageviews": 272742,
+   "sites": 8,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 62,
+   "title": "Вершина",
+   "pageviews": 271569,
+   "sites": 27,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 63,
+   "title": "Тёмная материя",
+   "pageviews": 269922,
+   "sites": 56,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 64,
+   "title": "One Piece. Большой куш",
+   "pageviews": 268103,
+   "sites": 6,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 65,
+   "title": "Йеллоустоун: Маршалы",
+   "pageviews": 264102,
+   "sites": 26,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 66,
+   "title": "Закон и порядок. Специальный корпус",
+   "pageviews": 261297,
+   "sites": 31,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 67,
+   "title": "Хороший доктор",
+   "pageviews": 258596,
+   "sites": 15,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 68,
+   "title": "Шерлок",
+   "pageviews": 241554,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 69,
+   "title": "Король Талсы",
+   "pageviews": 236740,
+   "sites": 36,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 70,
+   "title": "Бывает и хуже",
+   "pageviews": 234950,
+   "sites": 21,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 71,
+   "title": "Шугар",
+   "pageviews": 233193,
+   "sites": 29,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 72,
+   "title": "Макстон-холл",
+   "pageviews": 229858,
+   "sites": 6,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 73,
+   "title": "Детство Шелдона",
+   "pageviews": 229360,
+   "sites": 15,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 74,
+   "title": "Осколки",
+   "pageviews": 225868,
+   "sites": 22,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 75,
+   "title": "У Марго проблемы с деньгами",
+   "pageviews": 225024,
+   "sites": 8,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 76,
+   "title": "Легенда Вокс Машины",
+   "pageviews": 223539,
+   "sites": 4,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 77,
+   "title": "Военная машина",
+   "pageviews": 216795,
+   "sites": 35,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 78,
+   "title": "Молодой Шерлок",
+   "pageviews": 212920,
+   "sites": 28,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 79,
+   "title": "Новичок",
+   "pageviews": 211972,
+   "sites": 27,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 80,
+   "title": "Каратель: Последнее убийство",
+   "pageviews": 194822,
+   "sites": 22,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 81,
+   "title": "Грязные деньги",
+   "pageviews": 192727,
+   "sites": 36,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 82,
+   "title": "Зловещие мертвецы: Пекло",
+   "pageviews": 190975,
+   "sites": 24,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 83,
+   "title": "Лэндмен",
+   "pageviews": 187494,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 84,
+   "title": "Яростная",
+   "pageviews": 187312,
+   "sites": 24,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 85,
+   "title": "Инспектор Гаврилов",
+   "pageviews": 176442,
+   "sites": 20,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 86,
+   "title": "Декстер",
+   "pageviews": 175674,
+   "sites": 28,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 87,
+   "title": "Мы все мертвы",
+   "pageviews": 171487,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 88,
+   "title": "Милые обманщицы",
+   "pageviews": 169663,
+   "sites": 12,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 89,
+   "title": "Хокум",
+   "pageviews": 168131,
+   "sites": 25,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 90,
+   "title": "История игрушек 5",
+   "pageviews": 166131,
+   "sites": 17,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 91,
+   "title": "Медики Чикаго",
+   "pageviews": 162862,
+   "sites": 20,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 92,
+   "title": "Получеловек",
+   "pageviews": 161142,
+   "sites": 17,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 93,
+   "title": "Чисто английские убийства",
+   "pageviews": 159123,
+   "sites": 19,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 94,
+   "title": "Обитель зла",
+   "pageviews": 157238,
+   "sites": 35,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 95,
+   "title": "Пассажир",
+   "pageviews": 156741,
+   "sites": 29,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 96,
+   "title": "Улыбающиеся друзья",
+   "pageviews": 156170,
+   "sites": 9,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 97,
+   "title": "Майкл",
+   "pageviews": 154052,
+   "sites": 18,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 98,
+   "title": "Скорая помощь",
+   "pageviews": 153071,
+   "sites": 31,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 99,
+   "title": "Ольга",
+   "pageviews": 151918,
+   "sites": 8,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 100,
+   "title": "Универ. Новая общага",
+   "pageviews": 150202,
+   "sites": 13,
+   "source_category": "Лорд"
+  },
+  {
+   "n": 101,
+   "title": "Истинное образование",
+   "pageviews": 3581095,
+   "sites": 76,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 102,
+   "title": "Жена принца XXI века",
+   "pageviews": 3196924,
+   "sites": 65,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 103,
+   "title": "Мечтаю о тебе",
+   "pageviews": 3192609,
+   "sites": 60,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 104,
+   "title": "Пылающее лето",
+   "pageviews": 2685326,
+   "sites": 59,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 105,
+   "title": "Ясное утро ранней весны",
+   "pageviews": 2230901,
+   "sites": 41,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 106,
+   "title": "Военный повар становится легендой",
+   "pageviews": 1954916,
+   "sites": 58,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 107,
+   "title": "Менеджер Ким",
+   "pageviews": 1942870,
+   "sites": 41,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 108,
+   "title": "Дивный новый мир",
+   "pageviews": 1440664,
+   "sites": 52,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 109,
+   "title": "Тайный аудит",
+   "pageviews": 1154654,
+   "sites": 53,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 110,
+   "title": "Двойной путь",
+   "pageviews": 1152654,
+   "sites": 45,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 111,
+   "title": "Мо Ли",
+   "pageviews": 999384,
+   "sites": 58,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 112,
+   "title": "Расцвет силы",
+   "pageviews": 873846,
+   "sites": 40,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 113,
+   "title": "Абсолютная ценность романтики",
+   "pageviews": 871236,
+   "sites": 40,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 114,
+   "title": "Доктор Икс: Эпоха белой мафии",
+   "pageviews": 867711,
+   "sites": 27,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 115,
+   "title": "Пентхаус",
+   "pageviews": 680576,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 116,
+   "title": "В погоне за нефритом",
+   "pageviews": 677264,
+   "sites": 54,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 117,
+   "title": "Эта проклятая любовь",
+   "pageviews": 670033,
+   "sites": 22,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 118,
+   "title": "Пугало",
+   "pageviews": 637025,
+   "sites": 46,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 119,
+   "title": "Птичья кость",
+   "pageviews": 588135,
+   "sites": 44,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 120,
+   "title": "С любовью к тебе",
+   "pageviews": 572311,
+   "sites": 34,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 121,
+   "title": "Плач осени",
+   "pageviews": 571883,
+   "sites": 35,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 122,
+   "title": "В четыре руки",
+   "pageviews": 557845,
+   "sites": 18,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 123,
+   "title": "Благородный Чэнь и прекрасная Цзинь",
+   "pageviews": 554887,
+   "sites": 49,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 124,
+   "title": "Пара, созданная на небесах",
+   "pageviews": 542772,
+   "sites": 49,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 125,
+   "title": "Завтра снова на работу",
+   "pageviews": 536030,
+   "sites": 47,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 126,
+   "title": "Фейерверк Любви",
+   "pageviews": 504266,
+   "sites": 44,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 127,
+   "title": "Подзаряди меня",
+   "pageviews": 471889,
+   "sites": 27,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 128,
+   "title": "Любимый сотрудник",
+   "pageviews": 469802,
+   "sites": 13,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 129,
+   "title": "Лёгкий аромат орхидеи",
+   "pageviews": 465397,
+   "sites": 23,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 130,
+   "title": "Чудо-дураки",
+   "pageviews": 463913,
+   "sites": 18,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 131,
+   "title": "Сегодня тоже всё распродано",
+   "pageviews": 462437,
+   "sites": 38,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 132,
+   "title": "Пугающий роман",
+   "pageviews": 447238,
+   "sites": 57,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 133,
+   "title": "Другая любовь, но не ты",
+   "pageviews": 412806,
+   "sites": 14,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 134,
+   "title": "Выдающийся талант",
+   "pageviews": 405238,
+   "sites": 42,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 135,
+   "title": "Цветы расцветают в роскоши",
+   "pageviews": 393122,
+   "sites": 23,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 136,
+   "title": "Хватай Сон-Джэ и беги",
+   "pageviews": 392238,
+   "sites": 10,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 137,
+   "title": "Истинная красота",
+   "pageviews": 380211,
+   "sites": 6,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 138,
+   "title": "Апартаменты",
+   "pageviews": 379542,
+   "sites": 16,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 139,
+   "title": "Чаша весны",
+   "pageviews": 362602,
+   "sites": 32,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 140,
+   "title": "Мой сигнальный огонь",
+   "pageviews": 349712,
+   "sites": 15,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 141,
+   "title": "И вспыхнуло пламя",
+   "pageviews": 342672,
+   "sites": 30,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 142,
+   "title": "Адвокат призраков",
+   "pageviews": 321410,
+   "sites": 41,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 143,
+   "title": "Стойкий доктор",
+   "pageviews": 321064,
+   "sites": 29,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 144,
+   "title": "Председатель-новичок Кан",
+   "pageviews": 315995,
+   "sites": 40,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 145,
+   "title": "Влюбиться в твою улыбку",
+   "pageviews": 293408,
+   "sites": 5,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 146,
+   "title": "Передай золотую шпильку",
+   "pageviews": 286682,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 147,
+   "title": "Новый сотрудник, Председатель Кан",
+   "pageviews": 285480,
+   "sites": 10,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 148,
+   "title": "Расцвет власти",
+   "pageviews": 274657,
+   "sites": 31,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 149,
+   "title": "Киберкраш: Влюбиться в твою улыбку",
+   "pageviews": 263014,
+   "sites": 12,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 150,
+   "title": "Ослепительно",
+   "pageviews": 261790,
+   "sites": 32,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 151,
+   "title": "Приключения Чжань Чжао",
+   "pageviews": 259352,
+   "sites": 45,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 152,
+   "title": "Империя как выкуп",
+   "pageviews": 256863,
+   "sites": 22,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 153,
+   "title": "Хороший мальчик",
+   "pageviews": 253448,
+   "sites": 28,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 154,
+   "title": "Любимая сотрудница",
+   "pageviews": 246900,
+   "sites": 25,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 155,
+   "title": "Охотничьи псы",
+   "pageviews": 240093,
+   "sites": 20,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 156,
+   "title": "Полет к моему сердцу",
+   "pageviews": 234759,
+   "sites": 18,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 157,
+   "title": "Узел",
+   "pageviews": 233912,
+   "sites": 21,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 158,
+   "title": "Учебная группа",
+   "pageviews": 233754,
+   "sites": 10,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 159,
+   "title": "Очарование",
+   "pageviews": 224759,
+   "sites": 17,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 160,
+   "title": "Замужняя женщина-убийца",
+   "pageviews": 222059,
+   "sites": 24,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 161,
+   "title": "Чудесный слух",
+   "pageviews": 210041,
+   "sites": 4,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 162,
+   "title": "Дорога к успеху",
+   "pageviews": 193880,
+   "sites": 15,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 163,
+   "title": "Тысяча ароматов",
+   "pageviews": 193640,
+   "sites": 25,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 164,
+   "title": "Восточный дворец",
+   "pageviews": 185955,
+   "sites": 21,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 165,
+   "title": "Скрытая любовь",
+   "pageviews": 185005,
+   "sites": 26,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 166,
+   "title": "Дружеское соперничество",
+   "pageviews": 180455,
+   "sites": 3,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 167,
+   "title": "Псих, но всё в порядке",
+   "pageviews": 173024,
+   "sites": 2,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 168,
+   "title": "Выходи замуж за моего супруга",
+   "pageviews": 172575,
+   "sites": 21,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 169,
+   "title": "Болтун",
+   "pageviews": 168768,
+   "sites": 11,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 170,
+   "title": "Мой демон",
+   "pageviews": 168381,
+   "sites": 24,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 171,
+   "title": "Ключ к сердцу Феникса",
+   "pageviews": 164674,
+   "sites": 11,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 172,
+   "title": "Деловое предложение",
+   "pageviews": 162128,
+   "sites": 18,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 173,
+   "title": "Сказание о Кумихо",
+   "pageviews": 156661,
+   "sites": 5,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 174,
+   "title": "Алхимия душ",
+   "pageviews": 155782,
+   "sites": 13,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 175,
+   "title": "Любовь в облаках",
+   "pageviews": 150793,
+   "sites": 27,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 176,
+   "title": "Такси Делюкс",
+   "pageviews": 150535,
+   "sites": 2,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 177,
+   "title": "Аромат орхидеи",
+   "pageviews": 150252,
+   "sites": 27,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 178,
+   "title": "Первый мороз",
+   "pageviews": 149385,
+   "sites": 13,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 179,
+   "title": "Аромат тысячи благовоний",
+   "pageviews": 147996,
+   "sites": 3,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 180,
+   "title": "Прикоснуться к душе",
+   "pageviews": 144237,
+   "sites": 12,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 181,
+   "title": "Суперглупцы",
+   "pageviews": 142215,
+   "sites": 21,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 182,
+   "title": "Неукротимый: Повелитель Чэньцин",
+   "pageviews": 139479,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 183,
+   "title": "Под прикрытием в старшей школе",
+   "pageviews": 136923,
+   "sites": 13,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 184,
+   "title": "Возрождение из ледяного озера",
+   "pageviews": 132658,
+   "sites": 28,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 185,
+   "title": "Самое лучшее",
+   "pageviews": 130767,
+   "sites": 15,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 186,
+   "title": "Клетки Юми 3",
+   "pageviews": 125512,
+   "sites": 4,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 187,
+   "title": "Только ради любви",
+   "pageviews": 125099,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 188,
+   "title": "Долгая песнь",
+   "pageviews": 123524,
+   "sites": 15,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 189,
+   "title": "Эта чёртова любовь",
+   "pageviews": 122084,
+   "sites": 13,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 190,
+   "title": "Потомки солнца",
+   "pageviews": 121624,
+   "sites": 6,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 191,
+   "title": "Императрица Ки",
+   "pageviews": 119958,
+   "sites": 6,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 192,
+   "title": "Завеса теней",
+   "pageviews": 117769,
+   "sites": 17,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 193,
+   "title": "Легенда о розовых облаках",
+   "pageviews": 117035,
+   "sites": 33,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 194,
+   "title": "Любовь за гранью смерти",
+   "pageviews": 113409,
+   "sites": 20,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 195,
+   "title": "Винченцо",
+   "pageviews": 112787,
+   "sites": 15,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 196,
+   "title": "Каждый борется со своей собственной никчемностью",
+   "pageviews": 109661,
+   "sites": 20,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 197,
+   "title": "Дуан с тобой",
+   "pageviews": 107177,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 198,
+   "title": "Судьбоносные сердца",
+   "pageviews": 107109,
+   "sites": 18,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 199,
+   "title": "Мышь",
+   "pageviews": 106131,
+   "sites": 9,
+   "source_category": "Дорама"
+  },
+  {
+   "n": 200,
+   "title": "Реинкарнация безработного: История о приключениях в другом мире 3",
+   "pageviews": 12204257,
+   "sites": 62,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 201,
+   "title": "О моём перерождении в слизь 4",
+   "pageviews": 9191592,
+   "sites": 60,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 202,
+   "title": "Ван-Пис",
+   "pageviews": 9151814,
+   "sites": 123,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 203,
+   "title": "Изгнанный реинкарнированный тяжёлый рыцарь не имеет себе равных в знаниях игры",
+   "pageviews": 8107951,
+   "sites": 127,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 204,
+   "title": "Табакошка",
+   "pageviews": 6821050,
+   "sites": 94,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 205,
+   "title": "О моём перерождении в слизь",
+   "pageviews": 6135105,
+   "sites": 108,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 206,
+   "title": "Блич: Тысячелетняя кровавая война",
+   "pageviews": 5012673,
+   "sites": 76,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 207,
+   "title": "Re:Zero. Жизнь с нуля в альтернативном мире 4",
+   "pageviews": 4938566,
+   "sites": 50,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 208,
+   "title": "Блич",
+   "pageviews": 4924116,
+   "sites": 54,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 209,
+   "title": "Добро пожаловать в класс превосходства 4: Второй год",
+   "pageviews": 4777427,
+   "sites": 75,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 210,
+   "title": "Магическая битва: Смертельная миграция",
+   "pageviews": 4631730,
+   "sites": 65,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 211,
+   "title": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга",
+   "pageviews": 4625735,
+   "sites": 111,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 212,
+   "title": "Наруто",
+   "pageviews": 4595830,
+   "sites": 43,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 213,
+   "title": "Расхититель гробниц",
+   "pageviews": 4270300,
+   "sites": 38,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 214,
+   "title": "Ателье колдовских колпаков",
+   "pageviews": 4231739,
+   "sites": 95,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 215,
+   "title": "Цугаи загробного мира",
+   "pageviews": 4079684,
+   "sites": 108,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 216,
+   "title": "Чёрный факел",
+   "pageviews": 3992673,
+   "sites": 101,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 217,
+   "title": "Необъятный океан",
+   "pageviews": 3795856,
+   "sites": 58,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 218,
+   "title": "Re:Zero. Жизнь с нуля в альтернативном мире",
+   "pageviews": 3770570,
+   "sites": 64,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 219,
+   "title": "Противостояние святого",
+   "pageviews": 3706916,
+   "sites": 57,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 220,
+   "title": "Крестьянин 999 уровня",
+   "pageviews": 3648190,
+   "sites": 75,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 221,
+   "title": "Прошло десять лет с момента, как я сказал «Оставьте это на меня и уходите», и стал легендой",
+   "pageviews": 3589920,
+   "sites": 105,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 222,
+   "title": "История о перекуре за супермаркетом",
+   "pageviews": 3556048,
+   "sites": 45,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 223,
+   "title": "Расколотая битвой синева небес 5",
+   "pageviews": 3496629,
+   "sites": 36,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 224,
+   "title": "Наруто: Ураганные хроники",
+   "pageviews": 3353287,
+   "sites": 42,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 225,
+   "title": "Мир отомэ-игр",
+   "pageviews": 2944114,
+   "sites": 98,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 226,
+   "title": "Население приграничного владения начинается с нуля",
+   "pageviews": 2882457,
+   "sites": 98,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 227,
+   "title": "Реинкарнация безработного: История о приключениях в другом мире",
+   "pageviews": 2586043,
+   "sites": 102,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 228,
+   "title": "Я подружился со второй самой симпатичной девушкой в классе",
+   "pageviews": 2581977,
+   "sites": 46,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 229,
+   "title": "Чёрный клевер",
+   "pageviews": 2535150,
+   "sites": 85,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 230,
+   "title": "Принцесса-рыцарь",
+   "pageviews": 2477900,
+   "sites": 103,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 231,
+   "title": "Хоть я и бездарная злодейка: Сказка о том, как бабочка и крыса поменялись местами в девичьем дворе",
+   "pageviews": 2448626,
+   "sites": 64,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 232,
+   "title": "Боевой континент 2: Непревзойдённый клан Тан",
+   "pageviews": 2358089,
+   "sites": 46,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 233,
+   "title": "Меч и жезл Вистории",
+   "pageviews": 2291365,
+   "sites": 71,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 234,
+   "title": "Сказание о пастухе богов",
+   "pageviews": 2215365,
+   "sites": 50,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 235,
+   "title": "Провожающая в последний путь Фрирен",
+   "pageviews": 2125086,
+   "sites": 13,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 236,
+   "title": "Невероятное приключение ДжоДжо: Гонка «Стальной шар»",
+   "pageviews": 1987301,
+   "sites": 31,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 237,
+   "title": "Монолог фармацевта",
+   "pageviews": 1937821,
+   "sites": 63,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 238,
+   "title": "За гранью времени",
+   "pageviews": 1925533,
+   "sites": 40,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 239,
+   "title": "Безупречный мир",
+   "pageviews": 1869058,
+   "sites": 45,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 240,
+   "title": "Чёрный клевер 2",
+   "pageviews": 1857929,
+   "sites": 40,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 241,
+   "title": "Путешествие к бессмертию",
+   "pageviews": 1819539,
+   "sites": 52,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 242,
+   "title": "Во всеоружии: Сила артефактов",
+   "pageviews": 1784544,
+   "sites": 62,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 243,
+   "title": "Хантер х Хантер",
+   "pageviews": 1710748,
+   "sites": 9,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 244,
+   "title": "Поглощённая звезда",
+   "pageviews": 1705207,
+   "sites": 2,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 245,
+   "title": "Киберпанк: Бегущие по краю",
+   "pageviews": 1703442,
+   "sites": 23,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 246,
+   "title": "Доктор Стоун: Научное будущее. Часть 3",
+   "pageviews": 1602124,
+   "sites": 17,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 247,
+   "title": "Разгневанная леди поклялась отомстить: Я разрушу свою страну с помощью силы гримуара",
+   "pageviews": 1586477,
+   "sites": 74,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 248,
+   "title": "Тайная битва за престол сильнейшего принца-дуралея",
+   "pageviews": 1576206,
+   "sites": 82,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 249,
+   "title": "Окутывая небеса",
+   "pageviews": 1523574,
+   "sites": 37,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 250,
+   "title": "Брачный токсин",
+   "pageviews": 1498879,
+   "sites": 27,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 251,
+   "title": "Убивая юность",
+   "pageviews": 1489990,
+   "sites": 53,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 252,
+   "title": "Необъятный океан 3",
+   "pageviews": 1484037,
+   "sites": 20,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 253,
+   "title": "Фермерская жизнь в ином мире 2",
+   "pageviews": 1423951,
+   "sites": 37,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 254,
+   "title": "Тетрадь смерти",
+   "pageviews": 1413813,
+   "sites": 6,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 255,
+   "title": "Самый сильный в мире заступник: Страна лабиринта и искатели приключений",
+   "pageviews": 1407012,
+   "sites": 87,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 256,
+   "title": "Поднятие уровня в одиночку",
+   "pageviews": 1391675,
+   "sites": 69,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 257,
+   "title": "Адский уровень: Хардкорный геймер на самой высокой сложности в другом мире 2",
+   "pageviews": 1388931,
+   "sites": 1,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 258,
+   "title": "Приговорённый быть героем: Тюремные записи девять тысяч четвёртого штрафного отряда героев",
+   "pageviews": 1361178,
+   "sites": 26,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 259,
+   "title": "Фермерская жизнь в ином мире",
+   "pageviews": 1335135,
+   "sites": 74,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 260,
+   "title": "Некромант: Я катастрофа",
+   "pageviews": 1332475,
+   "sites": 11,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 261,
+   "title": "Клеватесс 2: Король демонических зверей и легенда о ложном герое",
+   "pageviews": 1331494,
+   "sites": 99,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 262,
+   "title": "Противостоящий небесам",
+   "pageviews": 1303261,
+   "sites": 51,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 263,
+   "title": "Киберпанк: Бегущие по краю 2",
+   "pageviews": 1265150,
+   "sites": 14,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 264,
+   "title": "Троецарствие Японии",
+   "pageviews": 1252703,
+   "sites": 21,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 265,
+   "title": "Где те девушки, что были бы добры к отаку?",
+   "pageviews": 1223857,
+   "sites": 33,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 266,
+   "title": "Что будет делать сильнейший король в своей второй жизни?",
+   "pageviews": 1212759,
+   "sites": 77,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 267,
+   "title": "Рыцарь-скелет вступает в параллельный мир",
+   "pageviews": 1212359,
+   "sites": 74,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 268,
+   "title": "Континент силы и духа",
+   "pageviews": 1197251,
+   "sites": 36,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 269,
+   "title": "Аватар: Легенда об Аанге",
+   "pageviews": 1192022,
+   "sites": 48,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 270,
+   "title": "Старик из деревни становится Святым мечом",
+   "pageviews": 1191235,
+   "sites": 72,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 271,
+   "title": "Боевой мастер",
+   "pageviews": 1176612,
+   "sites": 30,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 272,
+   "title": "Похоже, сильнейшая профессия",
+   "pageviews": 1174890,
+   "sites": 71,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 273,
+   "title": "Ледяная стена",
+   "pageviews": 1130476,
+   "sites": 16,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 274,
+   "title": "Военная хроника маленькой девочки",
+   "pageviews": 1128882,
+   "sites": 53,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 275,
+   "title": "Адский рай",
+   "pageviews": 1111826,
+   "sites": 31,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 276,
+   "title": "Власть книжного червя: Приёмная дочь лорда",
+   "pageviews": 1098105,
+   "sites": 74,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 277,
+   "title": "Свадьба светлячков",
+   "pageviews": 1085464,
+   "sites": 18,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 278,
+   "title": "Аккуратная и симпатичная девочка в моей новой школе",
+   "pageviews": 1080295,
+   "sites": 29,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 279,
+   "title": "Монолог фармацевта 3",
+   "pageviews": 1071285,
+   "sites": 21,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 280,
+   "title": "Извивающийся дракон",
+   "pageviews": 967688,
+   "sites": 15,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 281,
+   "title": "Сильнейший: История Юньсяо Ли",
+   "pageviews": 961928,
+   "sites": 29,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 282,
+   "title": "Воинственный бог девяти солнц",
+   "pageviews": 960815,
+   "sites": 30,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 283,
+   "title": "Доктор Стоун: Научное будущее",
+   "pageviews": 946355,
+   "sites": 11,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 284,
+   "title": "Добро пожаловать в ад, Ирума",
+   "pageviews": 939413,
+   "sites": 49,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 285,
+   "title": "Магическая битва 2",
+   "pageviews": 938130,
+   "sites": 12,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 286,
+   "title": "Боевой мастер 2",
+   "pageviews": 914342,
+   "sites": 3,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 287,
+   "title": "Вечная воля 4",
+   "pageviews": 905560,
+   "sites": 15,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 288,
+   "title": "Наруто 2",
+   "pageviews": 897061,
+   "sites": 7,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 289,
+   "title": "Меч и жезл Вистории 2",
+   "pageviews": 881171,
+   "sites": 2,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 290,
+   "title": "Пожиратель звёзд 4",
+   "pageviews": 876323,
+   "sites": 6,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 291,
+   "title": "Адский рай 2",
+   "pageviews": 868687,
+   "sites": 33,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 292,
+   "title": "Гачиакута",
+   "pageviews": 849078,
+   "sites": 6,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 293,
+   "title": "Военная хроника маленькой девочки 2",
+   "pageviews": 846003,
+   "sites": 15,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 294,
+   "title": "Великий правитель 2",
+   "pageviews": 841525,
+   "sites": 21,
+   "source_category": "Аниме"
+  },
+  {
+   "n": 295,
+   "title": "Далёкий город",
+   "pageviews": 22023598,
+   "sites": 79,
+   "source_category": "Другое"
+  },
+  {
+   "n": 296,
+   "title": "Розы и грехи",
+   "pageviews": 13894786,
+   "sites": 70,
+   "source_category": "Другое"
+  },
+  {
+   "n": 297,
+   "title": "Сверхъестественное",
+   "pageviews": 13738649,
+   "sites": 63,
+   "source_category": "Другое"
+  },
+  {
+   "n": 298,
+   "title": "Ещё семнадцать",
+   "pageviews": 10696200,
+   "sites": 17,
+   "source_category": "Другое"
+  },
+  {
+   "n": 299,
+   "title": "Возможно любовь",
+   "pageviews": 9381398,
+   "sites": 11,
+   "source_category": "Другое"
+  },
+  {
+   "n": 300,
+   "title": "Ты тот, кого я люблю",
+   "pageviews": 9070832,
+   "sites": 34,
+   "source_category": "Другое"
+  },
+  {
+   "n": 301,
+   "title": "Под землёй",
+   "pageviews": 7386320,
+   "sites": 42,
+   "source_category": "Другое"
+  },
+  {
+   "n": 302,
+   "title": "Дневники вампира",
+   "pageviews": 6419680,
+   "sites": 50,
+   "source_category": "Другое"
+  },
+  {
+   "n": 303,
+   "title": "Невеста",
+   "pageviews": 5884241,
+   "sites": 81,
+   "source_category": "Другое"
+  },
+  {
+   "n": 304,
+   "title": "Это всего лишь Стамбул",
+   "pageviews": 5840423,
+   "sites": 31,
+   "source_category": "Другое"
+  },
+  {
+   "n": 305,
+   "title": "Между",
+   "pageviews": 5460516,
+   "sites": 46,
+   "source_category": "Другое"
+  },
+  {
+   "n": 306,
+   "title": "Лучше звоните Солу",
+   "pageviews": 4746153,
+   "sites": 41,
+   "source_category": "Другое"
+  },
+  {
+   "n": 307,
+   "title": "Это море переполнится",
+   "pageviews": 4517047,
+   "sites": 61,
+   "source_category": "Другое"
+  },
+  {
+   "n": 308,
+   "title": "Клюквенный щербет",
+   "pageviews": 4396220,
+   "sites": 61,
+   "source_category": "Другое"
+  },
+  {
+   "n": 309,
+   "title": "Мечта Эшрефа",
+   "pageviews": 3659892,
+   "sites": 49,
+   "source_category": "Другое"
+  },
+  {
+   "n": 310,
+   "title": "Закон природы",
+   "pageviews": 3438665,
+   "sites": 27,
+   "source_category": "Другое"
+  },
+  {
+   "n": 311,
+   "title": "Очень странные дела",
+   "pageviews": 3212160,
+   "sites": 29,
+   "source_category": "Другое"
+  },
+  {
+   "n": 312,
+   "title": "Преемник: зов предков",
+   "pageviews": 2595715,
+   "sites": 44,
+   "source_category": "Другое"
+  },
+  {
+   "n": 313,
+   "title": "Паук-Нуар",
+   "pageviews": 2457129,
+   "sites": 41,
+   "source_category": "Другое"
+  },
+  {
+   "n": 314,
+   "title": "Волчонок",
+   "pageviews": 2393407,
+   "sites": 18,
+   "source_category": "Другое"
+  },
+  {
+   "n": 315,
+   "title": "Пацаны",
+   "pageviews": 1836318,
+   "sites": 55,
+   "source_category": "Другое"
+  },
+  {
+   "n": 316,
+   "title": "Гриффины",
+   "pageviews": 1789432,
+   "sites": 25,
+   "source_category": "Другое"
+  },
+  {
+   "n": 317,
+   "title": "Чужестранка",
+   "pageviews": 1648731,
+   "sites": 40,
+   "source_category": "Другое"
+  },
+  {
+   "n": 318,
+   "title": "Бумажный дом",
+   "pageviews": 1636360,
+   "sites": 23,
+   "source_category": "Другое"
+  },
+  {
+   "n": 319,
+   "title": "Голяк",
+   "pageviews": 1633097,
+   "sites": 23,
+   "source_category": "Другое"
+  },
+  {
+   "n": 320,
+   "title": "Семья",
+   "pageviews": 1597677,
+   "sites": 66,
+   "source_category": "Другое"
+  },
+  {
+   "n": 321,
+   "title": "Йеллоустоун",
+   "pageviews": 1573631,
+   "sites": 28,
+   "source_category": "Другое"
+  },
+  {
+   "n": 322,
+   "title": "Теория большого взрыва",
+   "pageviews": 1361803,
+   "sites": 44,
+   "source_category": "Другое"
+  },
+  {
+   "n": 323,
+   "title": "Любовная рана",
+   "pageviews": 1252832,
+   "sites": 23,
+   "source_category": "Другое"
+  },
+  {
+   "n": 324,
+   "title": "Сотня",
+   "pageviews": 1226460,
+   "sites": 31,
+   "source_category": "Другое"
+  },
+  {
+   "n": 325,
+   "title": "Дурнушка",
+   "pageviews": 1198841,
+   "sites": 34,
+   "source_category": "Другое"
+  },
+  {
+   "n": 326,
+   "title": "Футурама",
+   "pageviews": 1116160,
+   "sites": 22,
+   "source_category": "Другое"
+  },
+  {
+   "n": 327,
+   "title": "Основание: Орхан",
+   "pageviews": 1034989,
+   "sites": 40,
+   "source_category": "Другое"
+  },
+  {
+   "n": 328,
+   "title": "Коралловый дворец",
+   "pageviews": 1007992,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 329,
+   "title": "Парень",
+   "pageviews": 994815,
+   "sites": 17,
+   "source_category": "Другое"
+  },
+  {
+   "n": 330,
+   "title": "Секретные материалы",
+   "pageviews": 956204,
+   "sites": 37,
+   "source_category": "Другое"
+  },
+  {
+   "n": 331,
+   "title": "Больница Питт",
+   "pageviews": 951004,
+   "sites": 23,
+   "source_category": "Другое"
+  },
+  {
+   "n": 332,
+   "title": "Доктор Кто",
+   "pageviews": 914304,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 333,
+   "title": "Зависть",
+   "pageviews": 912082,
+   "sites": 36,
+   "source_category": "Другое"
+  },
+  {
+   "n": 334,
+   "title": "Ночная сказка",
+   "pageviews": 910876,
+   "sites": 40,
+   "source_category": "Другое"
+  },
+  {
+   "n": 335,
+   "title": "Твоя любовь",
+   "pageviews": 908216,
+   "sites": 19,
+   "source_category": "Другое"
+  },
+  {
+   "n": 336,
+   "title": "Мистер Робот",
+   "pageviews": 899911,
+   "sites": 8,
+   "source_category": "Другое"
+  },
+  {
+   "n": 337,
+   "title": "Эмили в Париже",
+   "pageviews": 891871,
+   "sites": 9,
+   "source_category": "Другое"
+  },
+  {
+   "n": 338,
+   "title": "Уэнсдэй",
+   "pageviews": 883199,
+   "sites": 17,
+   "source_category": "Другое"
+  },
+  {
+   "n": 339,
+   "title": "Кровавые цветы",
+   "pageviews": 853603,
+   "sites": 41,
+   "source_category": "Другое"
+  },
+  {
+   "n": 340,
+   "title": "Бойтесь ходячих мертвецов",
+   "pageviews": 841658,
+   "sites": 15,
+   "source_category": "Другое"
+  },
+  {
+   "n": 341,
+   "title": "Флэш",
+   "pageviews": 825636,
+   "sites": 15,
+   "source_category": "Другое"
+  },
+  {
+   "n": 342,
+   "title": "Офис",
+   "pageviews": 795422,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 343,
+   "title": "Клан Сопрано",
+   "pageviews": 794222,
+   "sites": 11,
+   "source_category": "Другое"
+  },
+  {
+   "n": 344,
+   "title": "Чукур",
+   "pageviews": 756594,
+   "sites": 53,
+   "source_category": "Другое"
+  },
+  {
+   "n": 345,
+   "title": "Рана матери",
+   "pageviews": 737386,
+   "sites": 6,
+   "source_category": "Другое"
+  },
+  {
+   "n": 346,
+   "title": "Люди Икс '97",
+   "pageviews": 711250,
+   "sites": 17,
+   "source_category": "Другое"
+  },
+  {
+   "n": 347,
+   "title": "Тайны Смолвиля",
+   "pageviews": 701304,
+   "sites": 8,
+   "source_category": "Другое"
+  },
+  {
+   "n": 348,
+   "title": "Держи мою руку",
+   "pageviews": 697937,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 349,
+   "title": "Каратель",
+   "pageviews": 682787,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 350,
+   "title": "Мехмед: Султан Завоевателей",
+   "pageviews": 677128,
+   "sites": 31,
+   "source_category": "Другое"
+  },
+  {
+   "n": 351,
+   "title": "Чужая жизнь",
+   "pageviews": 669453,
+   "sites": 12,
+   "source_category": "Другое"
+  },
+  {
+   "n": 352,
+   "title": "Легенда о Vox Machina",
+   "pageviews": 660820,
+   "sites": 11,
+   "source_category": "Другое"
+  },
+  {
+   "n": 353,
+   "title": "Задорные друзья",
+   "pageviews": 657949,
+   "sites": 7,
+   "source_category": "Другое"
+  },
+  {
+   "n": 354,
+   "title": "Симпсоны",
+   "pageviews": 657021,
+   "sites": 16,
+   "source_category": "Другое"
+  },
+  {
+   "n": 355,
+   "title": "Ривердейл",
+   "pageviews": 649990,
+   "sites": 1,
+   "source_category": "Другое"
+  },
+  {
+   "n": 356,
+   "title": "Сорвиголова: Рождённый заново",
+   "pageviews": 617131,
+   "sites": 29,
+   "source_category": "Другое"
+  },
+  {
+   "n": 357,
+   "title": "Ходячие мертвецы",
+   "pageviews": 614955,
+   "sites": 30,
+   "source_category": "Другое"
+  },
+  {
+   "n": 358,
+   "title": "Ветреный холм",
+   "pageviews": 601077,
+   "sites": 41,
+   "source_category": "Другое"
+  },
+  {
+   "n": 359,
+   "title": "Кости",
+   "pageviews": 587547,
+   "sites": 38,
+   "source_category": "Другое"
+  },
+  {
+   "n": 360,
+   "title": "Звёздные войны. Дарт Мол: Повелитель теней",
+   "pageviews": 575721,
+   "sites": 13,
+   "source_category": "Другое"
+  },
+  {
+   "n": 361,
+   "title": "Благие знамения",
+   "pageviews": 565134,
+   "sites": 3,
+   "source_category": "Другое"
+  },
+  {
+   "n": 362,
+   "title": "Сорвиголова",
+   "pageviews": 544643,
+   "sites": 7,
+   "source_category": "Другое"
+  },
+  {
+   "n": 363,
+   "title": "Плен",
+   "pageviews": 537875,
+   "sites": 38,
+   "source_category": "Другое"
+  },
+  {
+   "n": 364,
+   "title": "Клиника",
+   "pageviews": 537080,
+   "sites": 20,
+   "source_category": "Другое"
+  },
+  {
+   "n": 365,
+   "title": "Солёный кофе",
+   "pageviews": 524403,
+   "sites": 19,
+   "source_category": "Другое"
+  },
+  {
+   "n": 366,
+   "title": "Друзья",
+   "pageviews": 515537,
+   "sites": 20,
+   "source_category": "Другое"
+  },
+  {
+   "n": 367,
+   "title": "Место, где восходит солнце",
+   "pageviews": 505198,
+   "sites": 20,
+   "source_category": "Другое"
+  },
+  {
+   "n": 368,
+   "title": "Удивительный мир Гамбола",
+   "pageviews": 498174,
+   "sites": 22,
+   "source_category": "Другое"
+  },
+  {
+   "n": 369,
+   "title": "Любовь, смерть и роботы",
+   "pageviews": 465420,
+   "sites": 15,
+   "source_category": "Другое"
+  },
+  {
+   "n": 370,
+   "title": "Кобра Кай",
+   "pageviews": 462142,
+   "sites": 10,
+   "source_category": "Другое"
+  },
+  {
+   "n": 371,
+   "title": "Фоллаут",
+   "pageviews": 449021,
+   "sites": 42,
+   "source_category": "Другое"
+  },
+  {
+   "n": 372,
+   "title": "Безграничная любовь",
+   "pageviews": 437567,
+   "sites": 36,
+   "source_category": "Другое"
+  },
+  {
+   "n": 373,
+   "title": "Чёрное сердце",
+   "pageviews": 413452,
+   "sites": 26,
+   "source_category": "Другое"
+  },
+  {
+   "n": 374,
+   "title": "Достоинство",
+   "pageviews": 410475,
+   "sites": 29,
+   "source_category": "Другое"
+  },
+  {
+   "n": 375,
+   "title": "Половина матери",
+   "pageviews": 409975,
+   "sites": 17,
+   "source_category": "Другое"
+  },
+  {
+   "n": 376,
+   "title": "Мошенники",
+   "pageviews": 408980,
+   "sites": 27,
+   "source_category": "Другое"
+  },
+  {
+   "n": 377,
+   "title": "Финес и Ферб",
+   "pageviews": 403201,
+   "sites": 7,
+   "source_category": "Другое"
+  },
+  {
+   "n": 378,
+   "title": "Мандалорец",
+   "pageviews": 392913,
+   "sites": 16,
+   "source_category": "Другое"
+  },
+  {
+   "n": 379,
+   "title": "Бриджертоны",
+   "pageviews": 391130,
+   "sites": 10,
+   "source_category": "Другое"
+  },
+  {
+   "n": 380,
+   "title": "Губка Боб Квадратные Штаны",
+   "pageviews": 387923,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 381,
+   "title": "Сыны анархии",
+   "pageviews": 383456,
+   "sites": 5,
+   "source_category": "Другое"
+  },
+  {
+   "n": 382,
+   "title": "Шершни",
+   "pageviews": 379273,
+   "sites": 6,
+   "source_category": "Другое"
+  },
+  {
+   "n": 383,
+   "title": "Черепашки-ниндзя",
+   "pageviews": 372412,
+   "sites": 12,
+   "source_category": "Другое"
+  },
+  {
+   "n": 384,
+   "title": "Чёрный список",
+   "pageviews": 372009,
+   "sites": 20,
+   "source_category": "Другое"
+  },
+  {
+   "n": 385,
+   "title": "Прослушка",
+   "pageviews": 364586,
+   "sites": 13,
+   "source_category": "Другое"
+  },
+  {
+   "n": 386,
+   "title": "Банши",
+   "pageviews": 361377,
+   "sites": 14,
+   "source_category": "Другое"
+  },
+  {
+   "n": 387,
+   "title": "Половое воспитание",
+   "pageviews": 359450,
+   "sites": 3,
+   "source_category": "Другое"
+  },
+  {
+   "n": 388,
+   "title": "Беззащитные",
+   "pageviews": 358589,
+   "sites": 24,
+   "source_category": "Другое"
+  },
+  {
+   "n": 389,
+   "title": "Бахар",
+   "pageviews": 351051,
+   "sites": 15,
+   "source_category": "Другое"
+  },
+  {
+   "n": 390,
+   "title": "Любовь и трон",
+   "pageviews": 349908,
+   "sites": 26,
+   "source_category": "Другое"
+  },
+  {
+   "n": 391,
+   "title": "Моя любовь",
+   "pageviews": 349027,
+   "sites": 15,
+   "source_category": "Другое"
+  },
+  {
+   "n": 392,
+   "title": "Квест Вижна",
+   "pageviews": 344048,
+   "sites": 23,
+   "source_category": "Другое"
+  }
+ ],
+ "control": {
+  "problems": [],
+  "total": 542960164,
+  "duplicate_titles": []
+ }
+}

@@ -1,0 +1,110 @@
+{
+ "host": "animedia.icu",
+ "started": "2026-10-28T15:49:17Z",
+ "finished": "2026-10-28T15:49:27Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://animedia.icu/title/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мир отомэ-игр — это тяжёлый мир для мобов — смотреть онлайн — Animedia",
+   "h1": "Мир отомэ-игр — это тяжёлый мир для мобов",
+   "description": "Если не везёт в жизни, то вряд ли повезёт в смерти, а того меньше — в перерождении. Этот удручающий принцип с абсолютной точностью сработал в случае с офисным…",
+   "player": true,
+   "search": {
+    "query": "Мир отомэ-игр — это тяжёлый мир для мобов",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга — смотреть онлайн — Animedia",
+   "h1": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга",
+   "description": "Переродившись, современный японец упорно трудился, постигая азы магии, многого добился и заслужил честь вступить в отряд героя. Вместе с тремя другими магами и героем они смогли…",
+   "player": true,
+   "search": {
+    "query": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/samyy-silnyy-v-mire-zastupnik-strana-labirinta-i-iskateli-priklyucheniy/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/samyy-silnyy-v-mire-zastupnik-strana-labirinta-i-iskateli-priklyucheniy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Самый сильный в мире заступник: Страна лабиринта и искатели приключений — смотреть онлайн — Animedia",
+   "h1": "Самый сильный в мире заступник: Страна лабиринта и искатели приключений",
+   "description": "Атобэ Арихито — тот самый японец, вынужденный трудиться на износ. Он работал даже в автобусе, в котором вместе с коллегами ехал отдохнуть. Проснувшись после аварии, он обнаружил…",
+   "player": true,
+   "search": {
+    "query": "Самый сильный в мире заступник: Страна лабиринта и искатели приключений",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/fermerskaya-zhizn-v-inom-mire/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/fermerskaya-zhizn-v-inom-mire/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Фермерская жизнь в ином мире — смотреть онлайн — Animedia",
+   "h1": "Фермерская жизнь в ином мире",
+   "description": "Прожив недолгую, полную страданий и боли жизнь и умерев от неизлечимой болезни, Хираку Матио попал на аудиенцию к богу-творцу. Тут-то и выяснилось, что его несчастная жизнь была…",
+   "player": true,
+   "search": {
+    "query": "Фермерская жизнь в ином мире",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/chto-budet-delat-silneyshiy-korol-v-svoey-vtoroy-zhizni/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/chto-budet-delat-silneyshiy-korol-v-svoey-vtoroy-zhizni/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Что будет делать сильнейший король в своей второй жизни? — смотреть онлайн — Animedia",
+   "h1": "Что будет делать сильнейший король в своей второй жизни?",
+   "description": "Король Грей был самым могущественным правителем своего мира. Однако за маской триумфа скрывалась глубокая душевная пустота. Одиночество стало его постоянным спутником, отравляя…",
+   "player": true,
+   "search": {
+    "query": "Что будет делать сильнейший король в своей второй жизни?",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/rycar-skelet-vstupaet-v-parallelnyy-mir/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/rycar-skelet-vstupaet-v-parallelnyy-mir/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Рыцарь-скелет вступает в параллельный мир — смотреть онлайн — Animedia",
+   "h1": "Рыцарь-скелет вступает в параллельный мир",
+   "description": "Современный мир пестрит разнообразием технологий, новомодных гаджетов и, конечно, изобилием компьютерных игр на любой возраст и вкус. Главного героя покорила игра в жанре…",
+   "player": true,
+   "search": {
+    "query": "Рыцарь-скелет вступает в параллельный мир",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  }
+ ]
+}

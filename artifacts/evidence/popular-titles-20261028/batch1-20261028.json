@@ -1,0 +1,350 @@
+{
+ "rule": "Первая партия: 30 карточек на активных совместимых сайтах (28.10).\n\nОтбор: статус matched*, воспроизведение есть, у направления есть активный сайт, где выпуск сейчас возможен\n(Zona space/12 — игровые фильмы/сериалы и турецкие; animedia.icu — аниме и дунхуа). Порядок:\nсначала спрос на наших сайтах (входы из поиска за 21–27.10, ≥ 5 — сигнал, меньше — шум),\nзатем показатель владельца. Полугодовой показатель — сигнал выбора, не измеренный спрос.\nДорамы (zonafilm.cc) и Lords в эту партию не входят: пауза/CI, не по приоритету.",
+ "eligible": 174,
+ "batch": [
+  {
+   "n": 229,
+   "title": "Чёрный клевер",
+   "slug": "chernyy-klever",
+   "direction": "anime",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.space": 646
+   },
+   "our_search_visits_7d": 646,
+   "owner_pageviews": 2535150
+  },
+  {
+   "n": 214,
+   "title": "Ателье колдовских колпаков",
+   "slug": "atele-koldovskih-kolpakov",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 58
+   },
+   "our_search_visits_7d": 58,
+   "owner_pageviews": 4231739
+  },
+  {
+   "n": 240,
+   "title": "Чёрный клевер 2",
+   "slug": "chernyy-klever-2",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 32
+   },
+   "our_search_visits_7d": 32,
+   "owner_pageviews": 1857929
+  },
+  {
+   "n": 242,
+   "title": "Во всеоружии: Сила артефактов",
+   "slug": "vo-vseoruzhii-sila-artefaktov",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 26
+   },
+   "our_search_visits_7d": 26,
+   "owner_pageviews": 1784544
+  },
+  {
+   "n": 271,
+   "title": "Боевой мастер",
+   "slug": "boevoy-master-2",
+   "direction": "donghua",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 22
+   },
+   "our_search_visits_7d": 22,
+   "owner_pageviews": 1176612
+  },
+  {
+   "n": 375,
+   "title": "Половина матери",
+   "slug": "polovina-materi",
+   "direction": "turkish",
+   "site": "zonafilm12.site",
+   "search_by_domain_7d": {
+    "lordserials22.info": 19,
+    "zonafilm12.site": 1
+   },
+   "our_search_visits_7d": 20,
+   "owner_pageviews": 409975
+  },
+  {
+   "n": 15,
+   "title": "Человек-паук: Новый день",
+   "slug": "chelovek-pauk-novyy-den",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 16
+   },
+   "our_search_visits_7d": 16,
+   "owner_pageviews": 892826
+  },
+  {
+   "n": 219,
+   "title": "Противостояние святого",
+   "slug": "protivostoyanie-svyatogo",
+   "direction": "donghua",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 15
+   },
+   "our_search_visits_7d": 15,
+   "owner_pageviews": 3706916
+  },
+  {
+   "n": 302,
+   "title": "Дневники вампира",
+   "slug": "dnevniki-vampira",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 14
+   },
+   "our_search_visits_7d": 14,
+   "owner_pageviews": 6419680
+  },
+  {
+   "n": 38,
+   "title": "Менталист",
+   "slug": "mentalist",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 13,
+    "zonafilm.space": 1
+   },
+   "our_search_visits_7d": 14,
+   "owner_pageviews": 349899
+  },
+  {
+   "n": 290,
+   "title": "Пожиратель звёзд 4",
+   "slug": "pozhiratel-zvezd-4",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 13
+   },
+   "our_search_visits_7d": 13,
+   "owner_pageviews": 876323
+  },
+  {
+   "n": 6,
+   "title": "Гангстерленд",
+   "slug": "gangsterlend",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 12
+   },
+   "our_search_visits_7d": 12,
+   "owner_pageviews": 1720033
+  },
+  {
+   "n": 7,
+   "title": "Одиссея",
+   "slug": "odisseya",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 10
+   },
+   "our_search_visits_7d": 10,
+   "owner_pageviews": 1314617
+  },
+  {
+   "n": 221,
+   "title": "Прошло десять лет с момента, как я сказал «Оставьте это на меня и уходите», и стал легендой",
+   "slug": "proshlo-desyat-let-s-momenta-kak-ya-skazal-ostavte-eto-na-menya-i-uhodite-i-stal",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 6
+   },
+   "our_search_visits_7d": 6,
+   "owner_pageviews": 3589920
+  },
+  {
+   "n": 311,
+   "title": "Очень странные дела",
+   "slug": "ochen-strannye-dela",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 6
+   },
+   "our_search_visits_7d": 6,
+   "owner_pageviews": 3212160
+  },
+  {
+   "n": 392,
+   "title": "Квест Вижна",
+   "slug": "kvest-vizhna",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 6
+   },
+   "our_search_visits_7d": 6,
+   "owner_pageviews": 344048
+  },
+  {
+   "n": 328,
+   "title": "Коралловый дворец",
+   "slug": "korallovyy-dvorec",
+   "direction": "turkish",
+   "site": "zonafilm12.site",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 5
+   },
+   "our_search_visits_7d": 5,
+   "owner_pageviews": 1007992
+  },
+  {
+   "n": 297,
+   "title": "Сверхъестественное",
+   "slug": "sverhestestvennoe-3",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 4
+   },
+   "our_search_visits_7d": 4,
+   "owner_pageviews": 13738649
+  },
+  {
+   "n": 202,
+   "title": "Ван-Пис",
+   "slug": "van-pis",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 9151814
+  },
+  {
+   "n": 300,
+   "title": "Ты тот, кого я люблю",
+   "slug": "ty-tot-kogo-ya-lyublyu",
+   "direction": "turkish",
+   "site": "zonafilm12.site",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 9070832
+  },
+  {
+   "n": 1,
+   "title": "Извне",
+   "slug": "izvne-2",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {
+    "zonafilm.cc": 3
+   },
+   "our_search_visits_7d": 3,
+   "owner_pageviews": 8797745
+  },
+  {
+   "n": 204,
+   "title": "Табакошка",
+   "slug": "tabakoshka",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 6821050
+  },
+  {
+   "n": 206,
+   "title": "Блич: Тысячелетняя кровавая война",
+   "slug": "blich-tysyacheletnyaya-krovavaya-voyna",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 2
+   },
+   "our_search_visits_7d": 2,
+   "owner_pageviews": 5012673
+  },
+  {
+   "n": 208,
+   "title": "Блич",
+   "slug": "blich-2",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 4924116
+  },
+  {
+   "n": 209,
+   "title": "Добро пожаловать в класс превосходства 4: Второй год",
+   "slug": "dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 4777427
+  },
+  {
+   "n": 306,
+   "title": "Лучше звоните Солу",
+   "slug": "luchshe-zvonite-solu",
+   "direction": "live",
+   "site": "zonafilm.space",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 4746153
+  },
+  {
+   "n": 210,
+   "title": "Магическая битва: Смертельная миграция",
+   "slug": "magicheskaya-bitva-smertelnaya-migraciya",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 4631730
+  },
+  {
+   "n": 211,
+   "title": "Необыкновенный неудачник: Дневник переродившегося колдуна S-ранга",
+   "slug": "neobyknovennyy-neudachnik-dnevnik-pererodivshegosya-kolduna-s-ranga",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {
+    "animedia.icu": 3
+   },
+   "our_search_visits_7d": 3,
+   "owner_pageviews": 4625735
+  },
+  {
+   "n": 215,
+   "title": "Цугаи загробного мира",
+   "slug": "cugai-zagrobnogo-mira",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 4079684
+  },
+  {
+   "n": 216,
+   "title": "Чёрный факел",
+   "slug": "chernyy-fakel",
+   "direction": "anime",
+   "site": "animedia.icu",
+   "search_by_domain_7d": {},
+   "our_search_visits_7d": 0,
+   "owner_pageviews": 3992673
+  }
+ ]
+}

@@ -1059,6 +1059,7 @@ def _refresh_candidates(path: Path, now: dt.datetime, *, min_age_s: int = 3600) 
         published,
         blocked=net_blocked,
         held_urls=held,
+        priority=regular.owner_priority(),
     )
     # Кандидаты Yummy по спросу дорогие (чтение карточек ~1 мин): переиспользуются
     # из прежнего файла сутки, если адрес всё ещё не закрыт и не опубликован;
