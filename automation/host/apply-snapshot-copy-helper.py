@@ -163,12 +163,18 @@ def _правка(путь: pathlib.Path) -> tuple[bool, str]:
     return True, "правлено"
 
 
-def _наложить(репо: pathlib.Path) -> tuple[list[str], list[str]]:
+def _наложить(репо: pathlib.Path,
+              только: str = "") -> tuple[list[str], list[str]]:
     каталог = репо / "checks"
     (каталог / "_snapshot_copy.py").write_bytes(ИСТОЧНИК.read_bytes())
     правлены, отказы = [], []
     for f in sorted(каталог.glob("*.py")):
         if f.name.startswith("_"):
+            continue
+        # Одно семейство за раз — порядок, принятый с линией ячейки 28.10:
+        # 65 проверок парка правятся не одним ходом, а семействами, каждое со
+        # своим прогоном на копии.
+        if только and not f.name.startswith(только):
             continue
         надо, причина = _правка(f)
         if надо:
@@ -178,7 +184,8 @@ def _наложить(репо: pathlib.Path) -> tuple[list[str], list[str]]:
     return правлены, отказы
 
 
-def применить(репо: pathlib.Path, писать: bool) -> tuple[str, str]:
+def применить(репо: pathlib.Path, писать: bool,
+              только: str = "") -> tuple[str, str]:
     if not ИСТОЧНИК.is_file():
         return "refuse", f"нет источника помощника {ИСТОЧНИК}"
     if not (репо / "checks").is_dir():
@@ -190,11 +197,12 @@ def применить(репо: pathlib.Path, писать: bool) -> tuple[str,
         shutil.copytree(репо, копия, symlinks=True,
                         ignore=shutil.ignore_patterns(
                             "__pycache__", ".git", "var", "artifacts"))
-        правлены, отказы = _наложить(копия)
+        правлены, отказы = _наложить(копия, только)
         if отказы:
             return "refuse", "; ".join(отказы)
         if not правлены:
-            return "skip", "копирующих циклов известной формы не нашлось"
+            return "skip", ("копирующих циклов известной формы не нашлось"
+                        + (f" среди «{только}*»" if только else ""))
         беды = []
         for имя in правлены:
             готово = subprocess.run(  # noqa: S603
@@ -215,7 +223,7 @@ def применить(репо: pathlib.Path, писать: bool) -> tuple[str,
     if not писать:
         return "ok", (f"прогон на копии зелёный; будет правлено {len(правлены)}: "
                       + ", ".join(правлены))
-    правлены2, отказы2 = _наложить(репо)
+    правлены2, отказы2 = _наложить(репо, только)
     if отказы2:
         return "refuse", "; ".join(отказы2)
     return "ok", (f"правлено и подтверждено прогоном {len(правлены2)}: "
@@ -227,9 +235,12 @@ def main() -> int:
     р.add_argument("--repo", required=True)
     р.add_argument("--check", action="store_true")
     р.add_argument("--dry-run", action="store_true")
+    р.add_argument("--only", default="",
+                   help="префикс имени проверки: одно семейство за раз")
     а = р.parse_args()
     репо = pathlib.Path(а.repo).resolve()
-    исход, пояснение = применить(репо, писать=not (а.check or а.dry_run))
+    исход, пояснение = применить(репо, писать=not (а.check or а.dry_run),
+                                 только=а.only)
     print(f"[{исход:6s}] {репо.name}: {пояснение}")
     if исход == "refuse":
         return 2
