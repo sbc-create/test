@@ -1,0 +1,15 @@
+# Перезапись pm2.py (одно нажатие, Метрика заблокирована), 28.10 ~11:00Z.
+# Файл pm-onetap-2.json НЕ записан: на последнем случае (телефон, Тюрьма) скрипт упал на клике «К плееру».
+# Строки ниже переписаны из вывода консоли прогона (grep по max_position/taps/adComplete/playing), не из файла.
+   max_position 57.624017 first ≥3 s at 40.6 last (95.7, 57.624017)      # компьютер, yarost-na-predele
+desktop yarost-na-predele taps [5.3] state playing
+    [21.4, 'adComplete', 'Preroll', 1]
+    [37.3, 'adComplete', 'Preroll', 1]
+   max_position 48.281709 first ≥3 s at 50.9 last (96.1, 48.281709)      # компьютер, tyurma-chernyy-ostrov
+desktop tyurma-chernyy-ostrov taps [5.9] state playing
+    [23, 'adComplete', 'Preroll', 1]
+    [47.7, 'adComplete', 'Preroll', 1]
+    [47.7, 'statechange', 'playing', 1]
+   max_position 86.465443 first ≥3 s at 13 last (96.6, 86.465443)        # телефон, yarost-na-predele
+phone yarost-na-predele taps [5.9] state playing
+# Порядок вывода: строка max_position печаталась ДО заголовка своего случая.
