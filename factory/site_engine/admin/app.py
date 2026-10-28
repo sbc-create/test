@@ -143,6 +143,12 @@ class AdminApp:
             return self._record(self._dashboard(session, flash, label, csrf))
         if method == "GET" and rest == ["audit"]:
             return self._record(self._audit(session, flash, label, csrf))
+        if rest[:2] == ["apps", "kinateka"]:
+            from factory.site_engine.admin.app_section import AppSection
+
+            ответ = AppSection(self).handle(session, method, rest[2:], form, flash, label, csrf)
+            if ответ is not None:
+                return self._record(ответ)
         if rest[:1] == ["sites"] and len(rest) >= 2:
             site_id = rest[1]
             tail = rest[2:]

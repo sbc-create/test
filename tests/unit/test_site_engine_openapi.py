@@ -19,7 +19,8 @@ ROOT = Path(__file__).resolve().parents[2]
 ВКЛЮЧЁН = {"SITE_ENGINE_API_ENABLED": "1", "SITE_ENGINE_ENVIRONMENT": "test"}
 УПРАВЛЕНИЕ = {
     "SITE_ENGINE_CONTROL_WRITES": "1",
-    "SITE_ENGINE_CONTROL_TOKENS": "t=read,jobs:write,config:write,cache:write,audit:read",
+    "SITE_ENGINE_APP_CONFIG_WRITES": "1",
+    "SITE_ENGINE_CONTROL_TOKENS": "t=read,jobs:write,config:write,cache:write,audit:read,app:write",
 }
 ЗАГОЛОВКИ = {"Authorization": "Bearer t"}
 
@@ -38,6 +39,16 @@ ROOT = Path(__file__).resolve().parents[2]
     "/api/v1/content-health/{siteId}": {},
     "/api/v1/reasons": {},
     "/api/v1/playback-policy": {},
+    # Приложение «Кинатека»: тела без обязательных полей — маршрут отвечает
+    # 400 до любой записи, и проверка описания ничего не публикует.
+    "/api/v1/apps/{appId}": {},
+    "/api/v1/apps/{appId}/catalog": {"q": "проба"},
+    "/api/v1/apps/{appId}/revisions/{revision}": {},
+    "/api/v1/apps/{appId}/channels/{channel}": {},
+    "/api/v1/apps/{appId}/channels/{channel}/draft": {},
+    "/api/v1/apps/{appId}/channels/{channel}/publish": {},
+    "/api/v1/apps/{appId}/channels/{channel}/rollback": {},
+    "/api/v1/apps/{appId}/channels/{channel}/import": {},
 }
 
 
@@ -83,6 +94,9 @@ class TestОписание:
             конкретный = (путь.replace("{siteId}", "lords-01")
                           .replace("{jobId}", "нет-такого")
                           .replace("{traceId}", "0" * 32)
+                          .replace("{appId}", "kinateka")
+                          .replace("{channel}", "sandbox")
+                          .replace("{revision}", "1")
                           .replace("{siteId}", "lords-01"))
             ответ = control.handle(метод, конкретный,
                                    body=dict(ПРОБНЫЕ_ТЕЛА[путь]), headers=ЗАГОЛОВКИ)

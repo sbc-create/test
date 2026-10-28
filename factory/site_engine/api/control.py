@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any
 
 from factory import audit, locks, queue
-from factory.site_engine.api import compat, content_health, reasons
+from factory.site_engine.api import app_config, compat, content_health, reasons
 from factory.site_engine.api.app import ApiResponse, error
 from factory.site_engine.api.idempotency import (
     CONFLICT,
@@ -63,7 +63,11 @@ SCOPE_JOBS = "jobs:write"
 SCOPE_CONFIG = "config:write"
 SCOPE_CACHE = "cache:write"
 SCOPE_AUDIT = "audit:read"
-KNOWN_SCOPES = frozenset({SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT})
+# Главная и подборки приложения «Кинатека». Своя область: право редактора
+# подборок не должно давать права на настройки витрин, и наоборот.
+SCOPE_APP = "app:write"
+KNOWN_SCOPES = frozenset({SCOPE_READ, SCOPE_JOBS, SCOPE_CONFIG, SCOPE_CACHE, SCOPE_AUDIT,
+                          SCOPE_APP})
 
 # Действия, которые разрешено ставить в очередь. Список закрытый: очередь
 # исполняет то, что в ней лежит, поэтому свободное поле action означало бы
@@ -136,6 +140,16 @@ def writes_enabled(env: dict[str, str] | None = None) -> bool:
     """Запись выключена по умолчанию и включается отдельно от чтения."""
     env = env if env is not None else {}
     return str(env.get("SITE_ENGINE_CONTROL_WRITES", "")).strip().lower() in {"1", "true", "yes", "on"}
+
+
+def app_writes_enabled(env: dict[str, str] | None = None) -> bool:
+    """Запись конфигурации приложения — свой выключатель.
+
+    Включить публикацию подборок не должно значить включить запись настроек
+    витрин (SITE_ENGINE_CONTROL_WRITES): радиус у них разный.
+    """
+    env = env if env is not None else {}
+    return str(env.get("SITE_ENGINE_APP_CONFIG_WRITES", "")).strip().lower() in {"1", "true", "yes", "on"}
 
 
 def _token_id(token: str) -> str:
@@ -330,6 +344,9 @@ class ControlApi:
         # Показатели, которые считает не этот модуль: их поставщик регистрирует
         # себя сам. Иначе управляющий слой начал бы знать про админку.
         self._gauges: dict[str, Any] = {}
+        # Указатель каталога для проверки состава подборок — по приложению,
+        # строится при первом обращении (снимок — десятки мегабайт).
+        self._app_catalogs: dict[str, app_config.CatalogIndex] = {}
 
     @property
     def tracer(self) -> Tracer:
@@ -517,7 +534,8 @@ class ControlApi:
         # Запись выключена — маршрут не существует. Отвечать 403 значит
         # подтверждать, что здесь есть что включать.
         mutating = method in {"POST", "PATCH", "PUT", "DELETE"}
-        if mutating and not writes_enabled(self._env):
+        app_route = rest[:1] == ["apps"]
+        if mutating and not (app_writes_enabled(self._env) if app_route else writes_enabled(self._env)):
             raise ControlDenied(404, "not_found", "маршрут не найден")
 
         principal = self._authenticate(headers)
@@ -552,6 +570,8 @@ class ControlApi:
         if method == "GET" and len(rest) == 2 and rest[0] == "jobs":
             principal.require(SCOPE_READ)
             return self._job_status(rest[1])
+        if app_route:
+            return self._app_route(principal, method, rest[1:], body, correlation_id)
         if rest[:1] == ["sites"] and len(rest) >= 3:
             site_id = rest[1]
             self._check_site_id(site_id)
@@ -763,6 +783,232 @@ class ControlApi:
         return ApiResponse(status=200, body={"applied": True, "diff": diff,
                                                    "previousVersion": current_version,
                                                    "version": new_version})
+
+    # ---- приложение «Кинатека»: главная и подборки ------------------------
+
+    def _app_route(self, principal: Principal, method: str, rest: list[str],
+                   body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        if not rest or rest[0] not in app_config.APPS:
+            raise ControlDenied(404, "not_found", "маршрут не найден")
+        app_id, tail = rest[0], rest[1:]
+        try:
+            if method == "GET" and not tail:
+                principal.require(SCOPE_READ)
+                return self._app_overview(app_id)
+            if method == "GET" and tail == ["catalog"]:
+                principal.require(SCOPE_READ)
+                return self._app_catalog_search(app_id, body)
+            if method == "GET" and len(tail) == 2 and tail[0] == "revisions":
+                principal.require(SCOPE_READ)
+                if not tail[1].isdigit():
+                    raise ControlDenied(400, "invalid_revision", "номер ревизии — целое")
+                return ApiResponse(status=200, body=self._app_store(app_id).revision(int(tail[1])))
+            if len(tail) >= 2 and tail[0] == "channels":
+                channel = tail[1]
+                if channel not in app_config.CHANNELS:
+                    raise ControlDenied(404, "channel_not_found", "нет такого канала",
+                                        allowed=list(app_config.CHANNELS))
+                action = tail[2:]
+                if method == "GET" and not action:
+                    principal.require(SCOPE_READ)
+                    return self._app_channel(app_id, channel)
+                if method == "PUT" and action == ["draft"]:
+                    principal.require(SCOPE_APP)
+                    return self._app_save_draft(principal, app_id, channel, body, correlation_id)
+                if method == "POST" and action == ["publish"]:
+                    principal.require(SCOPE_APP)
+                    return self._app_publish(principal, app_id, channel, body, correlation_id)
+                if method == "POST" and action == ["rollback"]:
+                    principal.require(SCOPE_APP)
+                    return self._app_rollback(principal, app_id, channel, body, correlation_id)
+                if method == "POST" and action == ["import"]:
+                    principal.require(SCOPE_APP)
+                    return self._app_import(principal, app_id, channel, body, correlation_id)
+        except app_config.AppConfigError as exc:
+            raise ControlDenied(exc.status, exc.code, exc.message, **exc.extra) from exc
+        except (OSError, ValueError) as exc:
+            raise ControlDenied(503, "app_config_unavailable",
+                                "хранилище конфигурации приложения недоступно",
+                                reason=type(exc).__name__) from exc
+        raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _app_site(self, app_id: str) -> str:
+        return app_config.APPS[app_id]["site"]
+
+    def _app_store(self, app_id: str) -> app_config.ConfigStore:
+        return app_config.ConfigStore(self._root / "var" / "app-config" / self._app_site(app_id),
+                                      now=self._now)
+
+    def _app_catalog(self, app_id: str) -> app_config.CatalogIndex:
+        if app_id not in self._app_catalogs:
+            site = self._app_site(app_id)
+            data_dir = self._env.get(f"SITE_ENGINE_APP_CATALOG_DIR_{site.replace('-', '_').upper()}",
+                                     "/srv/animedia-icu/data")
+            self._app_catalogs[app_id] = app_config.CatalogIndex(Path(data_dir), site)
+        return self._app_catalogs[app_id]
+
+    def _app_overview(self, app_id: str) -> ApiResponse:
+        store = self._app_store(app_id)
+        channels = {}
+        for channel in app_config.CHANNELS:
+            current = store.current(channel)
+            rev = store.revision(current) if current else None
+            _, draft_version = store.draft(channel)
+            channels[channel] = {
+                "current": current,
+                "revisionId": rev.get("revisionId") if rev else None,
+                "publishedAt": rev.get("publishedAt") if rev else None,
+                "publishedBy": rev.get("publishedBy") if rev else None,
+                "draftVersion": draft_version,
+            }
+        return ApiResponse(status=200, body={
+            "app": app_id, "title": app_config.APPS[app_id]["title"], "site": self._app_site(app_id),
+            "schema": app_config.SCHEMA, "channels": channels, "history": store.history(50),
+            "writesEnabled": app_writes_enabled(self._env)})
+
+    def _app_channel(self, app_id: str, channel: str) -> ApiResponse:
+        store = self._app_store(app_id)
+        catalog = self._app_catalog(app_id)
+        doc, version = store.draft(channel)
+        current = store.current(channel)
+        problems = app_config.check(doc, catalog, now=float(self._now()))
+        return ApiResponse(status=200, body={
+            "app": app_id, "channel": channel, "draft": doc, "draftVersion": version,
+            "problems": problems, "publishable": not problems,
+            "preview": app_config.preview(doc, catalog) if isinstance(doc, dict) else None,
+            "current": current,
+            "currentRevision": store.revision(current) if current else None,
+            "revisions": [r for r in store.history(200) if r.get("channel") == channel],
+            "catalogRevision": catalog.revision, "catalogError": catalog.error,
+            "genresNotForHome": sorted(app_config.GENRES_NOT_FOR_HOME)})
+
+    def _app_catalog_search(self, app_id: str, body: dict[str, Any]) -> ApiResponse:
+        needle = str(body.get("q") or "").strip()
+        if not 2 <= len(needle) <= 100:
+            raise ControlDenied(400, "bad_request", "q от 2 до 100 знаков")
+        found = self._app_catalog(app_id).search(needle)
+        return ApiResponse(status=200, body={"items": [
+            {**t.as_dict(), "notForHome": sorted(app_config.GENRES_NOT_FOR_HOME.intersection(t.genres))}
+            for t in found]})
+
+    def _app_locked(self, app_id: str, channel: str):
+        return locks.site_lock(f"app-{app_id}", channel, timeout=2.0)
+
+    def _app_audit(self, principal: Principal, app_id: str, channel: str, action: str,
+                   correlation_id: str, extra: dict[str, Any]) -> None:
+        audit.record(
+            job_id=correlation_id, site_id=self._app_site(app_id), environment=channel,
+            action=f"control.app.{action}", target=f"apps/{app_id}/channels/{channel}",
+            mutation=True, exit_code=0,
+            extra={"correlation_id": correlation_id, "actor_token": principal.token_id,
+                   "trace_id": self._trace_context.trace_id, **extra})
+
+    def _app_save_draft(self, principal: Principal, app_id: str, channel: str,
+                        body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        doc = body.get("draft")
+        expected = str(body.get("expectedVersion") or "").strip()
+        if not isinstance(doc, dict):
+            raise ControlDenied(400, "invalid_body", "нужен объект draft")
+        if not expected:
+            raise ControlDenied(400, "invalid_body", "нужна expectedVersion — версия прочитанного черновика")
+        # Форма проверяется при сохранении, состав — при публикации: черновик
+        # вправе быть незаконченным, опубликованная ревизия — нет.
+        form_problems = [p for p in app_config.check(doc, None, now=float(self._now()))
+                         if p["where"] in ("документ", "schema")]
+        if form_problems:
+            raise ControlDenied(422, "invalid_draft", "черновик не принят", problems=form_problems)
+        try:
+            with self._app_locked(app_id, channel):
+                version = self._app_store(app_id).save_draft(channel, doc, expected)
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "app_busy", "по каналу уже идёт операция") from exc
+        self._app_audit(principal, app_id, channel, "draft.save", correlation_id,
+                        {"version_before": expected, "version_after": version})
+        problems = app_config.check(doc, self._app_catalog(app_id), now=float(self._now()))
+        return ApiResponse(status=200, body={"saved": True, "draftVersion": version,
+                                             "problems": problems, "publishable": not problems})
+
+    def _expected_revision(self, body: dict[str, Any]) -> int | None:
+        if "expectedRevision" not in body:
+            raise ControlDenied(400, "invalid_body",
+                                "нужна expectedRevision — действующая ревизия канала (null, если её нет)")
+        raw = body.get("expectedRevision")
+        if raw is None:
+            return None
+        if isinstance(raw, bool) or not isinstance(raw, int):
+            raise ControlDenied(400, "invalid_body", "expectedRevision — целое или null")
+        return raw
+
+    def _app_publish(self, principal: Principal, app_id: str, channel: str,
+                     body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        expected_version = str(body.get("expectedVersion") or "").strip()
+        expected_revision = self._expected_revision(body)
+        comment = str(body.get("comment") or "").strip()[:300]
+        store = self._app_store(app_id)
+        catalog = self._app_catalog(app_id)
+        try:
+            with self._app_locked(app_id, channel):
+                doc, version = store.draft(channel)
+                if expected_version != version:
+                    raise ControlDenied(409, "version_conflict", "черновик изменился с момента чтения",
+                                        expected_version=expected_version, current_version=version)
+                problems = app_config.check(doc, catalog, now=float(self._now()))
+                if problems:
+                    raise ControlDenied(422, "not_publishable", "черновик не готов к публикации",
+                                        problems=problems)
+                if body.get("dryRun"):
+                    return ApiResponse(status=200, body={"dryRun": True, "publishable": True,
+                                                         "current": store.current(channel)})
+                revision = store.publish(channel, doc, by=principal.token_id, comment=comment,
+                                         expected_revision=expected_revision)
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "app_busy", "по каналу уже идёт операция") from exc
+        self._app_audit(principal, app_id, channel, "publish", correlation_id,
+                        {"revision": revision["revision"], "revisionId": revision["revisionId"],
+                         "previous": expected_revision, "comment": comment})
+        return ApiResponse(status=200, body={"published": True, "revision": revision["revision"],
+                                             "revisionId": revision["revisionId"],
+                                             "previous": expected_revision})
+
+    def _app_rollback(self, principal: Principal, app_id: str, channel: str,
+                      body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        to = body.get("toRevision")
+        if isinstance(to, bool) or not isinstance(to, int):
+            raise ControlDenied(400, "invalid_body", "нужен toRevision — номер ревизии этого канала")
+        expected_revision = self._expected_revision(body)
+        comment = str(body.get("comment") or "").strip()[:300]
+        try:
+            with self._app_locked(app_id, channel):
+                target = self._app_store(app_id).rollback(
+                    channel, to, by=principal.token_id, comment=comment,
+                    expected_revision=expected_revision)
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "app_busy", "по каналу уже идёт операция") from exc
+        self._app_audit(principal, app_id, channel, "rollback", correlation_id,
+                        {"revision": to, "rollbackOf": expected_revision, "comment": comment})
+        return ApiResponse(status=200, body={"rolledBack": True, "revision": to,
+                                             "revisionId": target.get("revisionId"),
+                                             "previous": expected_revision})
+
+    def _app_import(self, principal: Principal, app_id: str, channel: str,
+                    body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        """Ревизия другого канала → черновик этого. Публикация — отдельным шагом,
+        со своей проверкой и записью: перенос в production не бывает побочным."""
+        source = body.get("fromRevision")
+        if isinstance(source, bool) or not isinstance(source, int):
+            raise ControlDenied(400, "invalid_body", "нужен fromRevision")
+        expected = str(body.get("expectedVersion") or "").strip()
+        store = self._app_store(app_id)
+        try:
+            with self._app_locked(app_id, channel):
+                doc = store.document_of(store.revision(source))
+                version = store.save_draft(channel, doc, expected)
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "app_busy", "по каналу уже идёт операция") from exc
+        self._app_audit(principal, app_id, channel, "draft.import", correlation_id,
+                        {"fromRevision": source, "version_after": version})
+        return ApiResponse(status=200, body={"saved": True, "draftVersion": version,
+                                             "fromRevision": source})
 
     def _invalidate_cache(
         self,

@@ -202,12 +202,14 @@ class _Handler(http.server.BaseHTTPRequestHandler):
         if self.command != "HEAD":
             self.wfile.write(payload)
 
-    def _handle_admin(self, method: str, path: str) -> None:
+    def _handle_admin(self, method: str, path: str, query: dict | None = None) -> None:
         app = getattr(self.server, "admin_app", None)
         if app is None:
             self._error(404, "not_found", "маршрут не найден")
             return
-        form: dict[str, str] = {}
+        # GET получает строку запроса (поиск тайтла в разделе приложения):
+        # ничего не меняет, а форма POST по-прежнему только из тела.
+        form: dict[str, str] = dict(query or {}) if method == "GET" else {}
         if method == "POST":
             parsed = self._read_form()
             if parsed is None:
@@ -289,7 +291,7 @@ class _Handler(http.server.BaseHTTPRequestHandler):
 
     def _serve(self, method: str, path: str, query: dict) -> None:
         if path == "/admin" or path.startswith("/admin/"):
-            self._handle_admin(method, path)
+            self._handle_admin(method, path, query)
             return
 
         body = self._read_body()

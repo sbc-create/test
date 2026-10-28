@@ -97,6 +97,7 @@ def page(title: str, body: str, *, session_label: str = "", csrf: str = "") -> s
         f"<title>{_e(title)} — админка фабрики</title><style>{STYLE}</style></head><body>"
         '<header><h1><a href="/admin" style="color:inherit;text-decoration:none">'
         "Админка фабрики</a></h1>"
+        '<a href="/admin/apps/kinateka">Приложение «Кинатека»</a>'
         '<a href="/admin/audit">Журнал</a><span class="sp"></span>'
         f"{nav}</header><main>{body}</main></body></html>"
     )
