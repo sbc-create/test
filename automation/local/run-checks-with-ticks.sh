@@ -15,6 +15,13 @@ pause_to_tick() {
   rest=$((now_min % 5))
   target=$(( (now_min - rest + 5 + 1) % 60 ))
   printf 'ПАУЗА: свободно %s МиБ, стенд не поднимается до :%02d (такт :%02d)\n' "$mem" "$target" "$(( (target + 59) % 60 ))"
+  # Окно объявляется открытым только по ЧИСЛУ. Измерено 28.10: останов снял
+  # стенды, а оставшаяся проверка держала 551 МиБ, и при 1982 МиБ против порога
+  # 2048 шлюз соседней линии не стартовал — а я доложил окно открытым.
+  if [ "$mem" -lt 2048 ]; then
+    printf 'ПАУЗА: свободно %s МиБ — НИЖЕ порога 2048, окно ложное; ищу, кто держит\n' "$mem"
+    python3 /home/claude/wt-nova-publish-memory-02/automation/host/_orphan_stands.py --list 2>&1 | head -6
+  fi
   while [ "$(date -u +%M)" != "$(printf '%02d' "$target")" ]; do sleep 5; done
   printf 'ПАУЗА: такт пройден в %sZ\n' "$(date -u +%H:%M:%S)"
 }
