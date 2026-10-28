@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated_at": "2026-10-28T15:00:00Z",
+ "updated_at": "2026-10-28T12:30:01Z",
  "note": "Единый список недостатков SEO-модуля. Состояния: proposed → implemented → installed → verified. implemented — код и тесты в ветке; installed — работает в штатном запуске; verified — результат подтверждён на реальных данных штатного запуска. Зона: seo — правит SEO-модуль; shared — общий контракт (очередь, мост, доставка), только через Архитектора; owner — решение или действие владельца. Описание: docs/seo-operator/MODULE_DEFECTS.md.",
  "defects": [
   {
