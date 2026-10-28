@@ -134,6 +134,37 @@ def _мутации(копия: pathlib.Path, имя: str, снимок: str) ->
     return беды
 
 
+def _объявить(репо: pathlib.Path, имя: str) -> tuple[bool, str]:
+    """Одна строка `check` заменяется ДВУМЯ: --static и --snapshot.
+
+    Объявление — не ручной шаг: необъявленная половина выглядит как пройденная
+    (MOD-225), а объявленная вручную разойдётся с файлом. Снимковая половина
+    оборачивается так же, как прочие снимковые проверки витрины: код 2 на
+    машине без снимка не валит прогон, а правило MOD-221 ловит его пропуском.
+    """
+    раннер = репо / "checks" / "run.sh"
+    if not раннер.is_file():
+        return False, f"нет {раннер}"
+    текст = раннер.read_text(encoding="utf-8")
+    метка = имя.replace("_", "-")
+    if f'"{метка}-static"' in текст:
+        return False, "уже"
+    строки = [с for с in текст.splitlines(keepends=True)
+              if f'check "{метка}"' in с]
+    if len(строки) != 1:
+        return False, (f"строка check «{метка}» встречается "
+                       f"{len(строки)} раз — объявление неоднозначно")
+    старая = строки[0]
+    отступ = старая[:len(старая) - len(старая.lstrip())]
+    новые = (
+        f'{отступ}check "{метка}-static"   python3 checks/{имя}.py --static\n'
+        f'{отступ}check "{метка}-snapshot" bash -c \'python3 checks/{имя}.py '
+        f'--snapshot; rc=$?; [ "$rc" -eq 2 ] && exit 0; exit "$rc"\'\n'
+    )
+    раннер.write_text(текст.replace(старая, новые, 1), encoding="utf-8")
+    return True, f"объявлены две строки: {метка}-static и {метка}-snapshot"
+
+
 def применить(репо: pathlib.Path, имя: str, писать: bool) -> tuple[str, str]:
     цель = репо / "checks" / f"{имя}.py"
     if not цель.is_file():
@@ -172,8 +203,18 @@ def применить(репо: pathlib.Path, имя: str, писать: bool) 
     сделано, причина2 = _правка(цель)
     if not сделано:
         return "refuse", f"правка витрины не прошла: {причина2}"
-    return "ok", ("разделено; четыре мутации пройдены. ОБЪЯВИТЕ ДВЕ СТРОКИ check "
-                  "в run.sh: --static и --snapshot (вторая с обёрткой rc=2 → 0)")
+    объявлено, причина3 = _объявить(репо, имя)
+    if not объявлено and причина3 != "уже":
+        return "refuse", (f"файл разделён, а объявление не прошло: {причина3} — "
+                          "половина осталась невызываемой, верните файл")
+    сторож = subprocess.run(  # noqa: S603
+        [sys.executable, "checks/checks_declared.py"], cwd=репо,
+        capture_output=True, text=True, timeout=600)
+    if сторож.returncode != 0:
+        хвост = ((сторож.stdout or "") + (сторож.stderr or "")).strip()
+        return "refuse", ("сторож объявлений не зелёный: "
+                          + (хвост.splitlines()[-1][:120] if хвост else "без вывода"))
+    return "ok", f"разделено, четыре мутации пройдены; {причина3}"
 
 
 def main() -> int:
