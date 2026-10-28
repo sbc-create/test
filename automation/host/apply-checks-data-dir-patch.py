@@ -58,9 +58,30 @@ import sys
 ИСТОЧНИК_РЕЗОЛВЕРА = (pathlib.Path(__file__).resolve().parent
                       / "lords-checks" / "_snapshot_dir.py")
 
-ЯКОРЬ = 'Path(os.environ.get("SITE_DATA_DIR") or "/nonexistent-site-data")'
-ЗАМЕНА = ('Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()\n'
-          '                   or "/nonexistent-site-data")')
+#: Формы, которыми проверки берут каталог данных. Все измерены по checks/*.py
+#: zonafilm-cc 28.10; к первой добавились остальные после находки владельца
+#: общего кода: запасной путь по ИМЕНИ КАТАЛОГА репозитория — второй источник
+#: правды, и `_snapshot_dir.py` прямо говорит, что имя каталога адресом данных
+#: не считается. У 1lordserials1-online (каталог site-…) такой путь
+#: промахивается; у zonafilm-cc имя совпадает и вреда сегодня нет.
+ПАРЫ_ЯКОРЕЙ = (
+    ('Path(os.environ.get("SITE_DATA_DIR") or "/nonexistent-site-data")',
+     'Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()\n'
+     '                   or "/nonexistent-site-data")'),
+    ('Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")',
+     'Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()\n'
+     '                   or f"/srv/{КОРЕНЬ.name}/data")'),
+    ('Path(os.environ.get("ZONA_FIXTURE_DIR", f"/srv/{КОРЕНЬ.name}/data"))',
+     'Path(os.environ.get("ZONA_FIXTURE_DIR") or _каталог_снимков()\n'
+     '                 or f"/srv/{КОРЕНЬ.name}/data")'),
+    ('pathlib.Path(f"/srv/{КОРЕНЬ.name}/data")',
+     'pathlib.Path(_каталог_снимков() or f"/srv/{КОРЕНЬ.name}/data")'),
+)
+
+#: Первый якорь оставлен отдельным именем: по нему инструмент узнаёт файлы,
+#: которые правил до расширения.
+ЯКОРЬ = ПАРЫ_ЯКОРЕЙ[0][0]
+ЗАМЕНА = ПАРЫ_ЯКОРЕЙ[0][1]
 
 #: Вторая стража у части проверок: смотрит прямо на переменную окружения, и
 #: найденный адрес её не убеждает. Измерено на sitemap_index_lastmod.py:169.
@@ -122,13 +143,18 @@ def _правка_файла(путь: pathlib.Path, писать: bool) -> tupl
     текст = путь.read_text(encoding="utf-8")
     if "_каталог_снимков()" in текст:
         return False, "уже"
-    n = текст.count(ЯКОРЬ)
-    if n != 1:
-        return False, f"якорь найден {n} раз(а)"
+    подошли = [(я, з) for я, з in ПАРЫ_ЯКОРЕЙ if текст.count(я) == 1]
+    многие = [я for я, _ in ПАРЫ_ЯКОРЕЙ if текст.count(я) > 1]
+    if многие:
+        return False, "якорь встречается больше одного раза"
+    if not подошли:
+        return False, "ни одна известная форма адреса данных не найдена"
     после = _после_документации(текст)
     if после < 0:
         return False, "файл не разбирается, вставлять нечего"
-    новый = текст.replace(ЯКОРЬ, ЗАМЕНА, 1)
+    новый = текст
+    for я, з in подошли:
+        новый = новый.replace(я, з, 1)
     # Вторая стража, если она есть: найденный адрес должен её убеждать.
     if ЯКОРЬ_СТРАЖИ in новый:
         новый = новый.replace(ЯКОРЬ_СТРАЖИ, ЗАМЕНА_СТРАЖИ)
@@ -150,9 +176,22 @@ def применить(репо: pathlib.Path, писать: bool) -> tuple[str,
         return "refuse", f"нет каталога {каталог}"
     if not ИСТОЧНИК_РЕЗОЛВЕРА.is_file():
         return "refuse", f"нет источника резолвера {ИСТОЧНИК_РЕЗОЛВЕРА}"
-    цели = sorted(f for f in каталог.glob("*.py") if ЯКОРЬ in f.read_text(
-        encoding="utf-8", errors="replace") or "_каталог_снимков()" in f.read_text(
-        encoding="utf-8", errors="replace"))
+    def подходит(f: pathlib.Path) -> bool:
+        т = f.read_text(encoding="utf-8", errors="replace")
+        if "_каталог_снимков()" in т:
+            return True
+        # Форма с именем каталога правится только там, где НЕТ шага по
+        # настройке: у восьми моих проверок этот путь стоит последним, после
+        # окружения, настройки и домена, и он там на месте.
+        если_настройка = "deployment" in т or "data_dir" in т
+        for я, _ in ПАРЫ_ЯКОРЕЙ:
+            if т.count(я) == 1:
+                if "КОРЕНЬ.name" in я and если_настройка:
+                    continue
+                return True
+        return False
+
+    цели = sorted(f for f in каталог.glob("*.py") if подходит(f))
     if not цели:
         return "skip", "ни одна проверка не берёт каталог из «/nonexistent-site-data»"
 
