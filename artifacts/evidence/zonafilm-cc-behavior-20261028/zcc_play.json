@@ -1,0 +1,118 @@
+{
+ "phone yarost-na-predele": [
+  [
+   "before",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap1",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap2",
+   {
+    "state": "playing",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ]
+ ],
+ "phone prizrak-gilmor-haus": [
+  [
+   "before",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap1",
+   {
+    "state": "playing",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap2",
+   {
+    "state": "playing",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ]
+ ],
+ "desktop yarost-na-predele": [
+  [
+   "before",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap1",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap2",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ]
+ ],
+ "desktop prizrak-gilmor-haus": [
+  [
+   "before",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap1",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ],
+  [
+   "tap2",
+   {
+    "state": "ready",
+    "videos": 0,
+    "playing": false,
+    "t": []
+   }
+  ]
+ ]
+}

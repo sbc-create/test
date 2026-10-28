@@ -1,0 +1,360 @@
+{
+ "phone /movies/": {
+  "start": "/movies/",
+  "title_links": 28,
+  "ym_tag": true,
+  "first": "/title/prizrak-gilmor-haus/",
+  "first_top": 311,
+  "h1": "Фильмы",
+  "next_data": false,
+  "innerH": 664,
+  "hits_on_start": [
+   {
+    "t": 0.23,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 0.78,
+    "path": "/metrika/advert.gif",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 0.84,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 0.87,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 0.93,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "after_url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+  "nav_s": 4.46,
+  "hits_after_click": [
+   {
+    "t": 4.08,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 4.7,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 4.89,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 4.96,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "card_ym_tag": true,
+  "card_player": {
+   "iframes": [],
+   "video": 0,
+   "playerlike": [],
+   "h1": "Призрак Гилмор-хаус"
+  }
+ },
+ "phone /": {
+  "start": "/",
+  "title_links": 87,
+  "ym_tag": true,
+  "first": "/title/most-plachuschih-detey/",
+  "first_top": 206,
+  "h1": "Zona — фильмы и сериалы онлайн",
+  "next_data": false,
+  "innerH": 664,
+  "hits_on_start": [
+   {
+    "t": 0.88,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 1.23,
+    "path": "/metrika/advert.gif",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 1.24,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 1.25,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 1.26,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "after_url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+  "nav_s": 4.8,
+  "hits_after_click": [
+   {
+    "t": 5.36,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 5.56,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 5.57,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 5.59,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "card_ym_tag": true,
+  "card_player": {
+   "iframes": [],
+   "video": 0,
+   "playerlike": [],
+   "h1": "Мост плачущих детей"
+  }
+ },
+ "desktop /movies/": {
+  "start": "/movies/",
+  "title_links": 28,
+  "ym_tag": true,
+  "first": "/title/prizrak-gilmor-haus/",
+  "first_top": 402,
+  "h1": "Фильмы",
+  "next_data": false,
+  "innerH": 900,
+  "hits_on_start": [
+   {
+    "t": 0.22,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 1.2,
+    "path": "/sync_cookie_image_check",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 1.21,
+    "path": "/metrika/advert.gif",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 1.35,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 1.37,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 1.43,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/movies/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "after_url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+  "nav_s": 4.57,
+  "hits_after_click": [
+   {
+    "t": 5.23,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 5.94,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 6.02,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 6.08,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/prizrak-gilmor-haus/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "card_ym_tag": true,
+  "card_player": {
+   "iframes": [],
+   "video": 0,
+   "playerlike": [],
+   "h1": "Призрак Гилмор-хаус"
+  }
+ },
+ "desktop /": {
+  "start": "/",
+  "title_links": 87,
+  "ym_tag": true,
+  "first": "/title/most-plachuschih-detey/",
+  "first_top": 208,
+  "h1": "Zona — фильмы и сериалы онлайн",
+  "next_data": false,
+  "innerH": 900,
+  "hits_on_start": [
+   {
+    "t": 0.25,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 0.79,
+    "path": "/sync_cookie_image_check",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 0.81,
+    "path": "/metrika/advert.gif",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 0.86,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 0.87,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 0.88,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "after_url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+  "nav_s": 5.4,
+  "hits_after_click": [
+   {
+    "t": 6.25,
+    "path": "/metrika/tag.js",
+    "page-url": null,
+    "ar": false,
+    "pv": false
+   },
+   {
+    "t": 6.66,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 6.74,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   },
+   {
+    "t": 6.74,
+    "path": "/watch/113110481",
+    "page-url": "https://zonafilm.cc/title/most-plachuschih-detey/",
+    "ar": false,
+    "pv": true
+   }
+  ],
+  "card_ym_tag": true,
+  "card_player": {
+   "iframes": [],
+   "video": 0,
+   "playerlike": [],
+   "h1": "Мост плачущих детей"
+  }
+ }
+}

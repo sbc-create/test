@@ -1,0 +1,121 @@
+{
+ "yarost-na-predele": {
+  "cta_top": 880,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "vozvraschenie-k-strahu": {
+  "cta_top": 843,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "prizrak-gilmor-haus": {
+  "cta_top": 820,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "chelovek-pauk-novyy-den": {
+  "cta_top": 947,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "taynyy-dnevnik-veriti": {
+  "cta_top": 947,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "golye-i-napugannye-na-neobitaemom-ostrove": {
+  "cta_top": 988,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ },
+ "odisseya": {
+  "cta_top": 880,
+  "states": [
+   [
+    1,
+    "ready"
+   ]
+  ],
+  "final": {
+   "state": "ready",
+   "msg_visible": false,
+   "msg": "Видео временно недоступноПопробуйте другую озвучку или вернитесь позже.",
+   "vp_children": "shadow:2",
+   "iframe": false,
+   "head": "Видео готово"
+  }
+ }
+}

@@ -1,0 +1,176 @@
+{
+ "phone yarost-na-predele": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    10,
+    "provider"
+   ]
+  ],
+  "player_top": 1053,
+  "viewport_h": 664
+ },
+ "phone vozvraschenie-k-strahu": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1016,
+  "viewport_h": 664
+ },
+ "phone prizrak-gilmor-haus": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    10,
+    "provider"
+   ]
+  ],
+  "player_top": 993,
+  "viewport_h": 664
+ },
+ "phone chelovek-pauk-novyy-den": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1121,
+  "viewport_h": 664
+ },
+ "phone taynyy-dnevnik-veriti": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1121,
+  "viewport_h": 664
+ },
+ "phone lednikovyy-apokalipsis": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1039,
+  "viewport_h": 664
+ },
+ "phone ya-hochu-bolshego": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1029,
+  "viewport_h": 664
+ },
+ "phone golye-i-napugannye-na-neobitaemom-ostrove": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1162,
+  "viewport_h": 664
+ },
+ "phone ya-ubila-ego-vo-sne": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 902,
+  "viewport_h": 664
+ },
+ "phone odisseya": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1053,
+  "viewport_h": 664
+ },
+ "phone ya-idu-iskat-2": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ]
+  ],
+  "player_top": 1054,
+  "viewport_h": 664
+ },
+ "desktop yarost-na-predele": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    2,
+    "ready"
+   ]
+  ],
+  "player_top": 644,
+  "viewport_h": 900
+ },
+ "desktop vozvraschenie-k-strahu": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    2,
+    "ready"
+   ]
+  ],
+  "player_top": 632,
+  "viewport_h": 900
+ },
+ "desktop prizrak-gilmor-haus": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    2,
+    "ready"
+   ]
+  ],
+  "player_top": 632,
+  "viewport_h": 900
+ },
+ "desktop chelovek-pauk-novyy-den": {
+  "states": [
+   [
+    1,
+    "resolving"
+   ],
+   [
+    3,
+    "ready"
+   ]
+  ],
+  "player_top": 693,
+  "viewport_h": 900
+ }
+}

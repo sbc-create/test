@@ -1,0 +1,110 @@
+[
+ {
+  "path": "/",
+  "status": 200,
+  "ttfb_s": 0.04,
+  "total_s": 0.04,
+  "kb": 137,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/movies/",
+  "status": 200,
+  "ttfb_s": 0.11,
+  "total_s": 0.11,
+  "kb": 120,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/series/",
+  "status": 200,
+  "ttfb_s": 0.11,
+  "total_s": 0.11,
+  "kb": 117,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F",
+  "status": 200,
+  "ttfb_s": 0.03,
+  "total_s": 0.03,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/prizrak-gilmor-haus/",
+  "status": 200,
+  "ttfb_s": 0.21,
+  "total_s": 0.21,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/most-plachuschih-detey/",
+  "status": 200,
+  "ttfb_s": 0.03,
+  "total_s": 0.03,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/yarost-na-predele/",
+  "status": 200,
+  "ttfb_s": 0.03,
+  "total_s": 0.04,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/odisseya/",
+  "status": 200,
+  "ttfb_s": 0.23,
+  "total_s": 0.23,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/golye-i-napugannye-na-neobitaemom-ostrove/",
+  "status": 200,
+  "ttfb_s": 0.11,
+  "total_s": 0.11,
+  "kb": 93,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/tyurma-chernyy-ostrov/",
+  "status": 200,
+  "ttfb_s": 0.14,
+  "total_s": 0.14,
+  "kb": 92,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/movies/",
+  "status": 200,
+  "ttfb_s": 0.09,
+  "total_s": 0.09,
+  "kb": 120,
+  "cache": null,
+  "player_marker": true
+ },
+ {
+  "path": "/title/prizrak-gilmor-haus/",
+  "status": 200,
+  "ttfb_s": 0.02,
+  "total_s": 0.02,
+  "kb": 90,
+  "cache": null,
+  "player_marker": true
+ }
+]
