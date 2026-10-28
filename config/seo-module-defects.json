@@ -3021,7 +3021,7 @@
   {
    "id": "MOD-220",
    "title": "indexing_live_switch.py отдаёт код 0, ничего не измерив: каталог данных строится из имени репозитория",
-   "zone": "qa",
+   "zone": "shared",
    "priority": "P1",
    "state": "measured",
    "scope": "common",
