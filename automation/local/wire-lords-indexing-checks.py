@@ -39,6 +39,27 @@
 доставку не останавливает — останавливает расхождение НАБЛЮДАЕМОГО поведения,
 потому что именно его и закрепляет проверка.
 
+Чего первой версии не хватало — исправлено 28.10 по разбору линии ячейки
+----------------------------------------------------------------------
+
+Первая версия сравнивала поведение ТОЛЬКО `src/indexing_mode.py` и пропустила
+то, что проверка зовёт ещё и ПРОВОДКУ: `run.py` загружается как `run_lords` и
+у него берётся `дополнения(НАСТРОЙКА)`. Эта функция есть лишь у
+`lordserials22.info`; у `lordserial33.biz` и `1lordserials1.online` та же по
+смыслу проводка (`LORDS_INDEXING_SITE`, `LORDS_INDEXING_RELEASE_PERMITS_OPEN`
+из `config.indexing.release_permits_open`) написана прямо в запуске и в
+функцию не вынесена. Доставка прошла, обе проверки упали на
+`AttributeError`, и это сломанные ворота, а не защита: такая проверка
+остановила бы любой выпуск, ничего не доказав.
+
+Отсюда два исправления:
+
+* ворота сравнивают ПРОВОДКУ — наличие вызываемой `дополнения` и те же
+  переменные окружения при разрешении `true` и `false`;
+* после доставки проверка ЗАПУСКАЕТСЯ, и если она не зелёная, доставленные
+  файлы удаляются, а причина называется. Доставить проверку и не убедиться,
+  что она работает, — ровно то, чем первая версия и подвела.
+
 Чего инструмент не делает
 -------------------------
 
@@ -56,6 +77,7 @@ import hashlib
 import importlib.util
 import json
 import pathlib
+import subprocess
 import sys
 
 ПРОВЕРКИ = ("indexing_mode_rules.py", "indexing_live_switch.py")
@@ -101,6 +123,68 @@ def _наблюдаемое(корень: pathlib.Path) -> tuple[dict | None, st
     return наблюдение, ""
 
 
+def _проводка(корень: pathlib.Path) -> tuple[dict | None, str]:
+    """То, что проверка берёт у run.py: вызываемая `дополнения` и её вывод.
+
+    Проверка загружает run.py как `run_lords` и зовёт `дополнения(НАСТРОЙКА)`.
+    Если функции нет, проверка падает на AttributeError — это сломанные
+    ворота, и доставлять её нельзя.
+    """
+    f = корень / "run.py"
+    if not f.is_file():
+        return None, f"нет {f}"
+    sys.path.insert(0, str(корень))
+    try:
+        спец = importlib.util.spec_from_file_location(
+            f"пуск_{hashlib.sha256(str(f).encode()).hexdigest()[:8]}", f)
+        if спец is None or спец.loader is None:
+            return None, f"run.py не загружается: {f}"
+        м = importlib.util.module_from_spec(спец)
+        спец.loader.exec_module(м)
+    except Exception as сбой:  # noqa: BLE001
+        return None, f"run.py не исполняется: {type(сбой).__name__}: {сбой}"
+    finally:
+        sys.path.pop(0)
+
+    доп = getattr(м, "дополнения", None)
+    if доп is None or not callable(доп):
+        return None, ("в run.py нет вызываемой `дополнения` — проверка зовёт "
+                      "именно её и упадёт на AttributeError; проводка написана "
+                      "прямо в запуске и не вынесена в функцию")
+    снято: dict = {}
+    for ярлык, разрешено in (("разрешено", True), ("не разрешено", False)):
+        проба = {"domain": "проба.test", "site_id": "проба",
+                 "indexing": {"release_permits_open": разрешено}}
+        try:
+            вывод = доп(проба)
+        except Exception as сбой:  # noqa: BLE001
+            return None, f"`дополнения` падает при {ярлык}: {type(сбой).__name__}: {сбой}"
+        if not isinstance(вывод, dict):
+            return None, f"`дополнения` вернула {type(вывод).__name__}, ожидался dict"
+        снято[ярлык] = {к: v for к, v in sorted(вывод.items())
+                        if "INDEXING" in к.upper()}
+    return снято, ""
+
+
+def _прогнать(цель: pathlib.Path, имена: tuple[str, ...]) -> tuple[bool, str]:
+    """Запускает доставленные проверки. Зелёная — 0; «не измерено» — 2."""
+    беды = []
+    for имя in имена:
+        try:
+            готово = subprocess.run(  # noqa: S603 — запуск проверки витрины
+                [sys.executable, str(цель / "checks" / имя)],
+                cwd=цель, capture_output=True, text=True, timeout=600)
+        except subprocess.TimeoutExpired:
+            беды.append(f"{имя}: не уложилась в 600 с")
+            continue
+        if готово.returncode == 0:
+            continue
+        хвост = (готово.stderr or готово.stdout or "").strip().splitlines()
+        беды.append(f"{имя}: код {готово.returncode}"
+                    + (f" — {хвост[-1][:160]}" if хвост else ""))
+    return (not беды), "; ".join(беды)
+
+
 def _настройка(корень: pathlib.Path) -> tuple[dict | None, str]:
     f = корень / "config" / "site.json"
     if not f.is_file():
@@ -128,6 +212,20 @@ def доставить(источник: pathlib.Path, цель: pathlib.Path,
         return "refuse", ("наблюдаемое поведение механизма расходится, перенос "
                           f"остановлен — {подробно}")
 
+    эталон_пров, причина = _проводка(источник)
+    if эталон_пров is None:
+        return "refuse", f"источник, проводка: {причина}"
+    своя_пров, причина = _проводка(цель)
+    if своя_пров is None:
+        return "refuse", f"цель, проводка: {причина}"
+    расх_пров = [к for к in эталон_пров if эталон_пров[к] != своя_пров[к]]
+    if расх_пров:
+        подробно = "; ".join(
+            f"{к}: источник {эталон_пров[к]!r}, цель {своя_пров[к]!r}"
+            for к in расх_пров)
+        return "refuse", ("проводка run.py расходится, перенос остановлен — "
+                          f"{подробно}")
+
     настройка, причина = _настройка(цель)
     if настройка is None:
         return "refuse", причина
@@ -151,9 +249,21 @@ def доставить(источник: pathlib.Path, цель: pathlib.Path,
             return "refuse", f"в источнике нет {откуда}"
         if писать:
             (каталог / имя).write_bytes(откуда.read_bytes())
+
     хвост = f"; уже были: {', '.join(уже)}" if уже else ""
-    действие = "доставлено" if писать else "будет доставлено"
-    return "ok", f"{действие}: {', '.join(если_нет)}{хвост}"
+    if not писать:
+        return "ok", f"будет доставлено: {', '.join(если_нет)}{хвост}"
+
+    # Доставить проверку и не убедиться, что она работает, — это не защита.
+    зелено, беды = _прогнать(цель, tuple(если_нет))
+    if not зелено:
+        for имя in если_нет:
+            (каталог / имя).unlink(missing_ok=True)
+        return "refuse", ("доставлено и откачено: проверка не зелёная, "
+                          f"{беды}. Сломанные ворота остановили бы выпуск, "
+                          "ничего не доказав — причина выше это находка, "
+                          "а не повод ослабить проверку")
+    return "ok", f"доставлено и прогнано зелёным: {', '.join(если_нет)}{хвост}"
 
 
 def main() -> int:

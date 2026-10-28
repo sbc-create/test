@@ -17,6 +17,26 @@ import pytest
 КОРЕНЬ = pathlib.Path(__file__).resolve().parents[2]
 ПУТЬ = КОРЕНЬ / "automation" / "local" / "wire-lords-indexing-checks.py"
 
+ПУСК_С_ФУНКЦИЕЙ = '''
+def дополнения(config, данные=None):
+    env = {}
+    домен = str(config.get("domain") or "").strip()
+    if домен:
+        env["LORDS_INDEXING_SITE"] = домен
+    разрешение = (config.get("indexing") or {}).get("release_permits_open")
+    env["LORDS_INDEXING_RELEASE_PERMITS_OPEN"] = (
+        "true" if разрешение is True else "false")
+    return env
+'''
+
+#: Проводка та же по смыслу, но прямо в запуске — именно так у 33 и 1on.
+ПУСК_БЕЗ_ФУНКЦИИ = '''
+def main():
+    env = {}
+    env["LORDS_INDEXING_SITE"] = "x"
+    return env
+'''
+
 МОДУЛЬ_РЕЖИМА = '''
 ЗАКРЫТ = "CLOSED"
 ОТКРЫТ = "OPEN"
@@ -48,7 +68,8 @@ def ин():
 
 
 def _витрина(корень: pathlib.Path, домен: str, добавка: str = "",
-             с_проверками: bool = False) -> pathlib.Path:
+             с_проверками: bool = False, пуск: str = ПУСК_С_ФУНКЦИЕЙ,
+             проверки_зелёные: bool = True) -> pathlib.Path:
     (корень / "src").mkdir(parents=True)
     (корень / "checks").mkdir(parents=True)
     (корень / "config").mkdir(parents=True)
@@ -56,10 +77,14 @@ def _витрина(корень: pathlib.Path, домен: str, добавка:
         МОДУЛЬ_РЕЖИМА.replace("{ДОБАВКА}", добавка), encoding="utf-8")
     (корень / "config" / "site.json").write_text(
         json.dumps({"domain": домен}), encoding="utf-8")
+    (корень / "run.py").write_text(пуск, encoding="utf-8")
     if с_проверками:
+        тело = "import sys\nsys.exit(0)\n" if проверки_зелёные else (
+            "import sys\nprint('AttributeError: нет дополнения', file=sys.stderr)\n"
+            "sys.exit(1)\n")
         for имя in ("indexing_mode_rules.py", "indexing_live_switch.py"):
             (корень / "checks" / имя).write_text(
-                f"# проверка {имя}\n", encoding="utf-8")
+                f"# проверка {имя}\n" + тело, encoding="utf-8")
     return корень
 
 
@@ -156,3 +181,59 @@ def test_нерабочий_модуль_источника_останавлив
     исход, пояснение = ин.доставить(ист, цель, писать=True)
     assert исход == "refuse"
     assert "источник" in пояснение
+
+
+def test_отказ_когда_проводки_нет(ин, tmp_path):
+    """run.py цели не даёт `дополнения` — проверка упадёт на AttributeError."""
+    ист = _витрина(tmp_path / "ист", "a.test", с_проверками=True)
+    цель = _витрина(tmp_path / "цель", "b.test", пуск=ПУСК_БЕЗ_ФУНКЦИИ)
+    исход, пояснение = ин.доставить(ист, цель, писать=True)
+    assert исход == "refuse"
+    assert "дополнения" in пояснение
+    assert "AttributeError" in пояснение
+    assert not (цель / "checks" / "indexing_mode_rules.py").exists()
+
+
+def test_отказ_когда_проводка_даёт_другое(ин, tmp_path):
+    """Функция есть, но при разрешении true отдаёт не то же значение."""
+    ист = _витрина(tmp_path / "ист", "a.test", с_проверками=True)
+    испорчено = ПУСК_С_ФУНКЦИЕЙ.replace('"true" if разрешение is True else "false"',
+                                        '"true"')
+    цель = _витрина(tmp_path / "цель", "b.test", пуск=испорчено)
+    исход, пояснение = ин.доставить(ист, цель, писать=True)
+    assert исход == "refuse"
+    assert "проводка run.py расходится" in пояснение
+    assert not (цель / "checks" / "indexing_mode_rules.py").exists()
+
+
+def test_красный_прогон_откатывает_доставку(ин, tmp_path):
+    """Доставить проверку и не убедиться, что она работает, — не защита."""
+    ист = _витрина(tmp_path / "ист", "a.test", с_проверками=True,
+                   проверки_зелёные=False)
+    цель = _витрина(tmp_path / "цель", "b.test")
+    исход, пояснение = ин.доставить(ист, цель, писать=True)
+    assert исход == "refuse"
+    assert "откачено" in пояснение
+    assert "не повод ослабить проверку" in пояснение
+    assert not (цель / "checks" / "indexing_mode_rules.py").exists(), \
+        "красный прогон обязан убрать доставленное"
+    assert not (цель / "checks" / "indexing_live_switch.py").exists()
+
+
+def test_зелёный_прогон_оставляет_файлы(ин, tmp_path):
+    ист = _витрина(tmp_path / "ист", "a.test", с_проверками=True)
+    цель = _витрина(tmp_path / "цель", "b.test")
+    исход, пояснение = ин.доставить(ист, цель, писать=True)
+    assert исход == "ok", пояснение
+    assert "прогнано зелёным" in пояснение
+    assert (цель / "checks" / "indexing_mode_rules.py").is_file()
+
+
+def test_dry_run_не_запускает_проверок(ин, tmp_path):
+    """В сухом прогоне ничего не пишется, значит и запускать нечего."""
+    ист = _витрина(tmp_path / "ист", "a.test", с_проверками=True,
+                   проверки_зелёные=False)
+    цель = _витрина(tmp_path / "цель", "b.test")
+    исход, пояснение = ин.доставить(ист, цель, писать=False)
+    assert исход == "ok"
+    assert "будет доставлено" in пояснение
