@@ -1,0 +1,127 @@
+{
+ "host": "animedia.icu",
+ "started": "2026-10-28T16:11:00Z",
+ "finished": "2026-10-28T16:11:12Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://animedia.icu/title/van-pis/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/van-pis/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ван-Пис — смотреть онлайн — Animedia",
+   "h1": "Ван-Пис",
+   "description": "«Ван-Пис» (One Piece) — приключенческий сёнен студии Toei Animation, который выходит с октября 1999 года. Король пиратов Гол Д. Роджер был единственным, кто прошёл весь Гранд…",
+   "player": true,
+   "search": {
+    "query": "Ван-Пис",
+    "status": 200,
+    "position": 1,
+    "results_seen": 24
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/chernyy-klever/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/chernyy-klever/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Чёрный клевер — смотреть онлайн — Animedia",
+   "h1": "Чёрный клевер",
+   "description": "«Чёрный клевер» — фэнтези-аниме студии Studio Pierrot, вышедшее в октябре 2017 года. Аста и Юно ещё младенцами оказались на пороге церкви в глухой деревне и пообещали друг другу…",
+   "player": true,
+   "search": {
+    "query": "Чёрный клевер",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/blich-2/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/blich-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Блич — смотреть онлайн — Animedia",
+   "h1": "Блич",
+   "description": "Ичиго Куросаки с детства мог видеть призраков и духов умерших. Сейчас ему пятнадцать, живёт он в современной Японии и учится в старшей школе. В один ничем не примечательный день…",
+   "player": true,
+   "search": {
+    "query": "Блич",
+    "status": 200,
+    "position": 1,
+    "results_seen": 16
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/magicheskaya-bitva/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/magicheskaya-bitva/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Магическая битва — смотреть онлайн — Animedia",
+   "h1": "Магическая битва",
+   "description": "Мир, в котором демоны питаются людьми, а те об этом даже не догадываются. Когда-то давно самый могущественный демон был повержен, а части его тела разбросаны по свету. Тот, кто…",
+   "player": true,
+   "search": {
+    "query": "Магическая битва",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/doktor-stoun/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/doktor-stoun/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Доктор Стоун — смотреть онлайн — Animedia",
+   "h1": "Доктор Стоун",
+   "description": "Ничего не предвещало тот роковой день, когда внезапная ослепляющая вспышка уничтожила человечество, превратив всех людей в камень. С той катастрофы минуло несколько тысячелетий…",
+   "player": true,
+   "search": {
+    "query": "Доктор Стоун",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/provozhayuschaya-v-posledniy-put-friren/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/provozhayuschaya-v-posledniy-put-friren/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Провожающая в последний путь Фрирен — смотреть онлайн — Animedia",
+   "h1": "Провожающая в последний путь Фрирен",
+   "description": "«Провожающая в последний путь Фрирен» (Sousou no Frieren) — фэнтезийная драма студии Madhouse, премьера которой состоялась в сентябре 2023 года; 28 серий. Отряд героя Химмеля…",
+   "player": true,
+   "search": {
+    "query": "Провожающая в последний путь Фрирен",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://animedia.icu/title/mech-i-zhezl-vistorii/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/mech-i-zhezl-vistorii/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Меч и жезл Вистории — смотреть онлайн — Animedia",
+   "h1": "Меч и жезл Вистории",
+   "description": "«Меч и жезл Вистории» (Tsue to Tsurugi no Wistoria) — фэнтезийный боевик студий Actas и Bandai Namco Pictures, премьера которого состоялась в июле 2024 года; 12 серий. Когда-то…",
+   "player": true,
+   "search": {
+    "query": "Меч и жезл Вистории",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  }
+ ]
+}

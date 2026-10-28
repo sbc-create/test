@@ -7,6 +7,7 @@
  "site_id": "animedia-01",
  "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
  "overlaps": [
+  "provozhayuschaya-v-posledniy-put-friren — также в anime-serialy-kotorye-stoit-posmotret (выбор редакции)",
   "samyy-silnyy-v-mire-zastupnik-… и neobyknovennyy-neudachnik-… — также в letniy-sezon-2026-celikom (подборка сезона)"
  ],
  "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
@@ -288,6 +289,150 @@
      "basis": "строка 238 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
      "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
      "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  },
+  {
+   "key": "bolshie-priklyucheniya-anime",
+   "title": "Большие приключенческие аниме",
+   "viewer_request": "Хочу длинное приключенческое аниме, в которое можно уйти надолго.",
+   "intro": "Долгие приключенческие сериалы: поиски сокровища, магические миры, битвы с демонами, путешествие после победы и цивилизация, которую возрождают наукой. В подборке — первый сезон каждой истории.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019169b6-9f49-7086-a8d3-76f1e2558ffa",
+     "slug": "van-pis",
+     "url": "https://animedia.icu/title/van-pis/",
+     "name": "Ван-Пис",
+     "original_name": "One Piece",
+     "year": 1999,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "388629",
+      "kinopoisk": "382731",
+      "mal": "21"
+     },
+     "reason": "Король пиратов Гол Д. Роджер спрятал сокровище Ван-Пис — и после его смерти на его поиски бросились смельчаки со всего мира. Сериал выходит с 1999 года.",
+     "basis": "строка 202 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01916ce6-f76d-7134-9d59-7073a3d3d9ec",
+     "slug": "chernyy-klever",
+     "url": "https://animedia.icu/title/chernyy-klever/",
+     "name": "Чёрный клевер",
+     "original_name": "Black Clover",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "7441658",
+      "kinopoisk": "1049731",
+      "mal": "34572"
+     },
+     "reason": "Подкидыши Аста и Юно растут в мире, где правит магия: Юно — одарённый чародей, а Аста не может освоить и простейшего заклинания.",
+     "basis": "строка 229 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "0194b31d-0c9f-736d-b89d-a7f3a3ad4810",
+     "slug": "blich-2",
+     "url": "https://animedia.icu/title/blich-2/",
+     "name": "Блич",
+     "original_name": "Bleach",
+     "year": 2004,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "0434665",
+      "kinopoisk": "258621",
+      "mal": "269"
+     },
+     "reason": "Пятнадцатилетний Ичиго, с детства видящий духов, спасая раненую синигами Рукию, забирает её силу и сам становится синигами.",
+     "basis": "строка 208 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "0191514c-b8f1-7916-a82f-932e530ce644",
+     "slug": "magicheskaya-bitva",
+     "url": "https://animedia.icu/title/magicheskaya-bitva/",
+     "name": "Магическая битва",
+     "original_name": "Jujutsu Kaisen",
+     "year": 2020,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "12343534",
+      "kinopoisk": "1381125",
+      "mal": "40748"
+     },
+     "reason": "Демоны питаются людьми, а части тела сильнейшего из них разбросаны по свету; школьник Юдзи Итадори оказывается в центре борьбы за них.",
+     "basis": "строка 285 (в списке — 2-й сезон) списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01955964-69f2-7465-a1bf-999af58ed7c6",
+     "slug": "doktor-stoun",
+     "url": "https://animedia.icu/title/doktor-stoun/",
+     "name": "Доктор Стоун",
+     "original_name": "Dr. Stone",
+     "year": 2019,
+     "type": "tv",
+     "external_ids": {
+      "mal": "38691"
+     },
+     "reason": "Вспышка превратила всё человечество в камень; через тысячелетия Сэнку Исигами просыпается и решает возродить цивилизацию силой науки.",
+     "basis": "строка 283 (в списке — «Научное будущее») списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "0191526c-27a2-768c-8c2f-925f0b3e8e4d",
+     "slug": "provozhayuschaya-v-posledniy-put-friren",
+     "url": "https://animedia.icu/title/provozhayuschaya-v-posledniy-put-friren/",
+     "name": "Провожающая в последний путь Фрирен",
+     "original_name": "Sousou no Frieren",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "22248376",
+      "kinopoisk": "5401195",
+      "mal": "52991"
+     },
+     "reason": "После победы над королём демонов эльфийка Фрирен переживает спутников-людей и отправляется в новое путешествие — искать смысл прожитого.",
+     "basis": "строка 235 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "01915155-1d89-7b71-9446-2c75a95b9306",
+     "slug": "mech-i-zhezl-vistorii",
+     "url": "https://animedia.icu/title/mech-i-zhezl-vistorii/",
+     "name": "Меч и жезл Вистории",
+     "original_name": "Tsue to Tsurugi no Wistoria",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "31889371",
+      "kinopoisk": "6527083",
+      "mal": "58059"
+     },
+     "reason": "Уилл Серфорт без капли магии поступает в магическую академию, чтобы стать одним из пяти великих магов и остаться рядом с возлюбленной.",
+     "basis": "строка 233 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-adventure-animedia.icu.json): 200, canonical на себя, index, follow"
     }
    ]
   }
