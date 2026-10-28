@@ -1,0 +1,93 @@
+{
+ "host": "zonafilm12.site",
+ "started": "2026-10-28T16:09:53Z",
+ "finished": "2026-10-28T16:09:54Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm12.site/title/vne-kampusa/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/vne-kampusa/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Вне кампуса — смотреть онлайн — Zona Cinema",
+   "h1": "Вне кампуса",
+   "description": "События развиваются в вымышленном Брайарском университете. Отличница и поп-певица Ханна Уэллс влюблена в местную знаменитость, звезду футбола Джастина Кола, но тот не замечает…",
+   "player": true,
+   "search": {
+    "query": "Вне кампуса",
+    "status": 200,
+    "position": 1,
+    "results_seen": 14
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/makston-holl/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/makston-holl/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Макстон-холл — смотреть онлайн — Zona Cinema",
+   "h1": "Макстон-холл",
+   "description": "Простая девушка Руби Белл попадает в элитный колледж, получив стипендию. Вскоре она случайно узнает секрет высокомерного однокурсника Джеймса Бофорта. Он пытается всеми…",
+   "player": true,
+   "search": {
+    "query": "Макстон-холл",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/to-leto-kogda-ya-pohoroshela/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/to-leto-kogda-ya-pohoroshela/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "То лето, когда я похорошела — смотреть онлайн — Zona Cinema",
+   "h1": "То лето, когда я похорошела",
+   "description": "О любовном треугольнике между одной девушкой и двумя братьями.",
+   "player": true,
+   "search": {
+    "query": "То лето, когда я похорошела",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/emili-v-parizhe/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/emili-v-parizhe/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Эмили в Париже — смотреть онлайн — Zona Cinema",
+   "h1": "Эмили в Париже",
+   "description": "Американка Эмили получает неожиданное предложение отправиться в Париж по работе. Ей предстоит столкнуться с местной культурой, найти новых друзей и любовь.",
+   "player": true,
+   "search": {
+    "query": "Эмили в Париже",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/detstvo-sheldona/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/detstvo-sheldona/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Детство Шелдона — смотреть онлайн — Zona Cinema",
+   "h1": "Детство Шелдона",
+   "description": "История о непростом детстве вундеркинда Шелдона Купера. Родители юного гения не разделяют увлечения сына наукой: его мать очень религиозна, а отец, бывший футбольный тренер…",
+   "player": true,
+   "search": {
+    "query": "Детство Шелдона",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  }
+ ]
+}

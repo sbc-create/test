@@ -288,6 +288,109 @@
      "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
     }
    ]
+  },
+  {
+   "key": "lyubov-i-vzroslenie",
+   "title": "Любовь и взросление",
+   "viewer_request": "Хочу лёгкий сериал про первую любовь, учёбу и взросление.",
+   "intro": "Сериалы о первой любви и о том, как взрослеют: студенческие романы, элитный колледж, лето с любовным треугольником, переезд в Париж и детство будущего гения. Сначала истории о любви, в конце — о взрослении.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019e2101-7e2d-75d2-ac6e-f54085f8de6e",
+     "slug": "vne-kampusa",
+     "url": "https://zonafilm12.site/title/vne-kampusa/",
+     "name": "Вне кампуса",
+     "original_name": "Off Campus",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "33546863",
+      "kinopoisk": "11804709"
+     },
+     "reason": "Отличница и поп-певица Ханна влюблена в звезду университетского футбола, который её не замечает, — и затевает игру, чтобы вызвать его ревность.",
+     "basis": "строка 5 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-love-growing-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01915163-fd50-7ab6-9b76-aecbad2fa52f",
+     "slug": "makston-holl",
+     "url": "https://zonafilm12.site/title/makston-holl/",
+     "name": "Макстон-холл",
+     "original_name": "Maxton Hall - Die Welt zwischen uns",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "27792190",
+      "kinopoisk": "5454228"
+     },
+     "reason": "Стипендиатка Руби Белл в элитном колледже случайно узнаёт секрет высокомерного Джеймса Бофорта — он пытается купить её молчание, а между ними вспыхивает искра.",
+     "basis": "строка 72 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-love-growing-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "0191512f-a2a8-7336-9d20-fa0acd3d829a",
+     "slug": "to-leto-kogda-ya-pohoroshela",
+     "url": "https://zonafilm12.site/title/to-leto-kogda-ya-pohoroshela/",
+     "name": "То лето, когда я похорошела",
+     "original_name": "The Summer I Turned Pretty",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14016500",
+      "kinopoisk": "4626683"
+     },
+     "reason": "Любовный треугольник одной девушки и двух братьев.",
+     "basis": "строка 60 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-love-growing-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019167ca-e38f-763a-b764-b217c24abf86",
+     "slug": "emili-v-parizhe",
+     "url": "https://zonafilm12.site/title/emili-v-parizhe/",
+     "name": "Эмили в Париже",
+     "original_name": "Emily in Paris",
+     "year": 2020,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "8962124",
+      "kinopoisk": "1190441"
+     },
+     "reason": "Американка Эмили по работе переезжает в Париж — новая культура, новые друзья и любовь.",
+     "basis": "строка 337 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-love-growing-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "0191674b-c72b-77b7-88d6-14728502e7b8",
+     "slug": "detstvo-sheldona",
+     "url": "https://zonafilm12.site/title/detstvo-sheldona/",
+     "name": "Детство Шелдона",
+     "original_name": "Young Sheldon",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "6226232",
+      "kinopoisk": "1040419"
+     },
+     "reason": "Детство вундеркинда Шелдона Купера: религиозная мать, отец-тренер и сверстники, с которыми не складывается.",
+     "basis": "строка 73 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-love-growing-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    }
+   ]
   }
  ]
 }
