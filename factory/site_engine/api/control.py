@@ -878,6 +878,10 @@ class ControlApi:
             "preview": app_config.preview(doc, catalog) if isinstance(doc, dict) else None,
             "current": current,
             "currentRevision": store.revision(current) if current else None,
+            # Черновик после отката остаётся прежним — редактор должен видеть, что
+            # он не совпадает с тем, что сейчас получает приложение.
+            "draftDiffersFromCurrent": (app_config.version_of(store.document_of(store.revision(current)))
+                                        != version) if current else True,
             "revisions": [r for r in store.history(200) if r.get("channel") == channel],
             "catalogRevision": catalog.revision, "catalogError": catalog.error,
             "genresNotForHome": sorted(app_config.GENRES_NOT_FOR_HOME)})

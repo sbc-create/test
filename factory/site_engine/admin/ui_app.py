@@ -31,10 +31,14 @@ background:linear-gradient(90deg,#000c,#0004),var(--line);color:#fff;margin:6px 
 border:1px solid var(--line);margin-right:6px}
 td input,td select{min-width:70px}
 td.n input{width:64px;min-width:0}
+td.t{max-width:260px}
+td.r{min-width:300px}td.r textarea{font-size:13.5px}
+td.s{width:170px}td.s input{margin-bottom:4px;font-size:12.5px}
 .thumb{width:46px;height:69px;object-fit:cover;border-radius:5px;background:var(--line)}
 .problems li{color:var(--bad)}
 .pill{display:inline-block;border-radius:20px;padding:1px 9px;font-size:12px;border:1px solid}
 .pill.ok{color:var(--ok);border-color:var(--ok)}.pill.bad{color:var(--bad);border-color:var(--bad)}
+input[type=color]{height:36px;padding:3px}
 textarea.json{min-height:320px;font:12.5px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace}
 </style>"""
 
@@ -203,16 +207,22 @@ def channel(body: dict, *, flash, session_label: str, csrf: str, can_write: bool
                '<div class="row"><div><label>Комментарий к публикации</label>'
                '<input name="comment" maxlength="300" placeholder="что изменилось"></div>'
                f'<button type="submit"{dis if not problems else " disabled"}>Опубликовать в {_e(ch)}</button></div></form>')
+    differs = ""
+    if current and body.get("draftDiffersFromCurrent"):
+        differs = (f'<p class="hint">Черновик отличается от действующей ревизии {_e(current)} — '
+                   "приложение получает действующую, а не черновик.</p>")
     imp = ""
-    if ch == "production" and can_write:
+    if can_write:
+        label = ("Перенести ревизию sandbox в черновик production (номер)" if ch == "production"
+                 else "Взять ревизию в черновик (номер) — например, после отката")
         imp = (f'<form method="post" action="{base}/import">{_hidden(csrf, version)}'
-               '<div class="row"><div><label>Перенести ревизию sandbox в черновик production (номер)</label>'
-               '<input name="fromRevision" inputmode="numeric" required></div>'
+               f'<div class="row"><div><label>{label}</label>'
+               f'<input name="fromRevision" inputmode="numeric" value="{_e(current or "")}" required></div>'
                '<button class="ghost" type="submit">Скопировать в черновик</button></div></form>')
     head = (f'<div class="card"><h2>Кинатека · канал {_e(ch)}</h2><p class="hint">{_e(CHANNEL_WORDS.get(ch, ""))}. '
             f'Каталог <code>{_e((body.get("catalogRevision") or "")[:12])}</code>'
             + (f' — <span style="color:var(--bad)">{_e(body.get("catalogError"))}</span>' if body.get("catalogError") else "")
-            + f'</p><p>{status}</p><p>{ready}</p>{_problems(problems)}{publish}{imp}</div>')
+            + f'</p><p>{status}</p>{differs}<p>{ready}</p>{_problems(problems)}{publish}{imp}</div>')
 
     # блоки главной
     cols = [c.get("id") for c in draft.get("collections") or []]
@@ -327,16 +337,17 @@ def collection(body: dict, cid: str, *, flash, session_label: str, csrf: str, ca
                 if it.get("contentId") in missing else "")
         rows.append(f'<tr><td class="n"><input name="order_{key}" value="{n}" inputmode="numeric"{dis}></td>'
                     f'<td><img class="thumb" alt="" src="{_e(live.get("posterUrl") or "")}"></td>'
-                    f'<td><b>{_e(live.get("title") or it.get("title") or "")}</b> {_e(live.get("year") or "")}'
+                    f'<td class="t"><b>{_e(live.get("title") or it.get("title") or "")}</b> {_e(live.get("year") or "")}'
                     f'<br><code>{key}</code> {flag}</td>'
-                    f'<td><input name="reason_{key}" value="{_e(it.get("reason") or "")}" maxlength="140"{dis}></td>'
-                    f'<td><input name="source_{key}" value="{_e(it.get("source") or "")}"{dis}></td>'
-                    f'<td><input name="checkedAt_{key}" value="{_e(it.get("checkedAt") or "")}"{dis}></td>'
+                    f'<td class="r"><textarea name="reason_{key}" rows="3" maxlength="140"{dis}>'
+                    f'{_e(it.get("reason") or "")}</textarea></td>'
+                    f'<td class="s"><input name="source_{key}" value="{_e(it.get("source") or "")}"{dis}>'
+                    f'<input name="checkedAt_{key}" value="{_e(it.get("checkedAt") or "")}" title="проверено"{dis}></td>'
                     f'<td><input type="checkbox" name="remove_{key}" value="1"{dis}></td></tr>')
     form = (f'<form method="post" action="{base}/collections/{_e(cid)}">{_hidden(csrf, version)}{meta}'
             '<h3>Состав</h3><p class="hint">Порядок — числами. Причина — коротко и только то, что подтверждает '
             "источник: дата импорта — не премьера, оценка — не популярность.</p>"
-            '<table><tr><th>№</th><th></th><th>Тайтл</th><th>Причина</th><th>Источник</th><th>Проверено</th>'
+            '<table><tr><th>№</th><th></th><th>Тайтл</th><th>Причина</th><th>Источник · проверено</th>'
             "<th>Убрать</th></tr>" + "".join(rows) + "</table>"
             '<label>Добавить позиции — по строке «contentId | причина | источник»</label>'
             f'<textarea name="add" rows="3"{dis}></textarea>'

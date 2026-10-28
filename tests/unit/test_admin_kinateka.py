@@ -342,3 +342,18 @@ def test_поиск_тайтла_на_странице_подборки(admin, a
     r = admin.handle("GET", "/admin/apps/kinateka/sandbox/collections/week", form={"q": "откров"},
                      cookies=cookies)
     assert ECCHI in r.html and "не для общей главной" in r.html
+
+
+def test_после_отката_черновик_помечен_и_берётся_из_ревизии(admin, api):
+    cookies, csrf = войти(admin)
+    assert publish(api, "sandbox", doc()).status == 200
+    assert publish(api, "sandbox", doc(items=(B, A)), expected=1).status == 200
+    call(api, "POST", "/api/v1/apps/kinateka/channels/sandbox/rollback", {"toRevision": 1, "expectedRevision": 2})
+    html = страница(admin, cookies)
+    assert "Черновик отличается от действующей ревизии 1" in html
+    admin.handle("POST", "/admin/apps/kinateka/sandbox/import", cookies=cookies, form={
+        CSRF_FIELD: csrf, "draftVersion": версия(html), "fromRevision": "1"})
+    html = страница(admin, cookies)
+    assert "Черновик отличается" not in html
+    черновик = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body["draft"]
+    assert [i["contentId"] for i in черновик["collections"][0]["items"]] == [A, B]
