@@ -1,0 +1,39 @@
+{
+ "at": "2026-10-28T18:17:47Z",
+ "rows": [
+  {
+   "url": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "published_at": "2026-10-28T18:13:02Z",
+   "author": "editor/claude-auto/run-20261028T175504Z",
+   "body_chars": 853,
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "text_on_page": true,
+   "catalog": {
+    "name": "Сверхъестественное",
+    "year": 2005,
+    "original_name": "Supernatural"
+   },
+   "year_in_text": true,
+   "body_head": "«Сверхъестественное» (Supernatural) — американский сериал, премьера которого состоялась 13 сентября 2005 года. Первый сезон выходил на канале The WB, следующие — на The CW; сериал завершён после пятнадцати сезонов.\n\nКогда Сэм Винчестер был младенцем, а его старшему брату Дину было четыре года, их ма"
+  },
+  {
+   "url": "https://zonafilm.space/title/odisseya/",
+   "published_at": "2026-10-28T18:17:04Z",
+   "author": "editor/claude-auto/run-20261028T175504Z",
+   "body_chars": 782,
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "text_on_page": true,
+   "catalog": {
+    "name": "Одиссея",
+    "year": 2026,
+    "original_name": "The Odyssey"
+   },
+   "year_in_text": true,
+   "body_head": "«Одиссея» (The Odyssey) — фильм Кристофера Нолана 2026 года, экранизация гомеровской саги производства Великобритании и США. Нолан выступил режиссёром и автором сценария, продюсерами — Эмма Томас и сам Нолан через свою компанию Syncopy. Картину снимали в разных странах на новую плёночную технологию "
+  }
+ ]
+}
