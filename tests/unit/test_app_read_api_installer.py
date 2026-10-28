@@ -409,3 +409,24 @@ def test_повторный_запуск_после_частичной_уста�
     assert 'if grep -q "$MARK" "$SITE_CONF"; then' in текст
     assert "повторная установка ничего не удвоит" in текст
     assert "--replace" not in текст
+
+
+def test_откат_выпуска_возвращает_прежний_код_и_юнит():
+    """Три возврата разные: снять службу (--rollback), вернуть прежний код
+    (--rollback-release), вернуть ревизию главной (указатель в админке)."""
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    установка = текст.index('run install -m 0644 -o root -g root "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"')
+    assert текст.index('"${INSTALLED_SCRIPT}.previous"') < установка, "прежний выпуск сохраняется до замены"
+    откат = текст.split('if [ "$rollback_release" = 1 ]; then', 1)[1].split("exit 0", 1)[0]
+    assert '"${INSTALLED_SCRIPT}.previous" "$INSTALLED_SCRIPT"' in откат
+    assert '"${UNIT_PATH}.previous" "$UNIT_PATH"' in откат, "прежний код не знает новых аргументов запуска"
+    assert "restart" in откат
+    assert "$SNIPPET" not in откат and "KEY_FILE" not in откат, "маршрут и ключ откат выпуска не трогает"
+
+
+def test_каталог_ревизий_создаётся_до_юнита():
+    текст = СЦЕНАРИЙ.read_text(encoding="utf-8")
+    assert текст.index('"$CONFIG_DIR"\n') < текст.index("cat > \"$TMP_UNIT\""), \
+        "ReadOnlyPaths с несуществующим путём не даёт службе стартовать"
+    assert "ReadOnlyPaths=${DATA_DIR} ${INSTALL_DIR} ${CONFIG_DIR}" in текст
+    assert "\nReadWritePaths=" not in текст, "служба по-прежнему ничего не пишет"

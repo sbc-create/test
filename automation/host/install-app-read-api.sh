@@ -3,6 +3,7 @@
 #
 #   sudo bash automation/host/install-app-read-api.sh            # установить
 #   sudo bash automation/host/install-app-read-api.sh --rollback  # откатить
+#   sudo bash automation/host/install-app-read-api.sh --rollback-release # прежний выпуск кода
 #   sudo bash automation/host/install-app-read-api.sh --rotate-key # сменить ключ
 #        bash automation/host/install-app-read-api.sh --dry-run    # показать
 #
@@ -18,6 +19,12 @@
 # Чего НЕ делается: ни один существующий маршрут сайта не меняется и не
 # удаляется; TLS, DNS, firewall и витрины не затрагиваются; платных ресурсов не
 # создаётся. Служба никуда не пишет и в сеть не выходит.
+#
+# Откат выпуска (`--rollback-release`) возвращает ПРЕЖНИЙ код службы и прежний
+# юнит, сохранённые этой же установкой при замене (`*.previous`), и
+# перезапускает службу. Маршрут, ключ и данные не трогаются. Это путь «новый код
+# службы оказался плохим»; он отличается и от снятия службы целиком, и от отката
+# конфигурации главной приложения (указатель канала в админке).
 #
 # Откат (`--rollback`) снимает РОВНО эти изменения: восстанавливает файл сайта
 # из копии, снятой этой же установкой, убирает сниппет, останавливает и
@@ -62,9 +69,15 @@ SERVICE_SCRIPT="${SRC_ROOT}/automation/host/app-read-api.py"
 INSTALL_DIR="/usr/local/lib/site-factory"
 INSTALLED_SCRIPT="${INSTALL_DIR}/app-read-api-${SITE_ID}.py"
 MARK="app-read-api-${SITE_ID}"
+# Опубликованные ревизии главной приложения «Кинатека» (контракт
+# kinateka-config/1). Пишет Control API (учётная запись RUN_USER), служба только
+# читает. Каталог в общем состоянии фабрики, а не в релизе: откат кода не должен
+# уносить опубликованные ревизии.
+CONFIG_DIR="/srv/site-factory/repo/var/app-config/${SITE_ID}"
 
 dry_run=0
 rollback=0
+rollback_release=0
 rotate_key=0
 # Разбираются ВСЕ аргументы, а не только первый. Прежняя форма читала `$1` и
 # молча отбрасывала остальное: `--dry-run --rotate-key` выполнялся как один
@@ -74,6 +87,7 @@ while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) dry_run=1; shift ;;
     --rollback) rollback=1; shift ;;
+    --rollback-release) rollback_release=1; shift ;;
     --rotate-key) rotate_key=1; shift ;;
     *) printf 'неизвестный аргумент %s\n' "$1" >&2; exit 2 ;;
   esac
@@ -89,6 +103,9 @@ ok()  { printf '   \033[32mOK\033[0m   %s\n' "$*"; }
 run() { if [ "$dry_run" = 1 ]; then printf '   [сухой прогон] %s\n' "$*"; else "$@"; fi; }
 
 [ "$dry_run" = 1 ] || [ "$(id -u)" = 0 ] || die "нужен root"
+if [ "$rollback_release" = 1 ] && { [ "$rollback" = 1 ] || [ "$rotate_key" = 1 ]; }; then
+  die "--rollback-release выполняется отдельно"
+fi
 
 # --- откат ------------------------------------------------------------------
 if [ "$rollback" = 1 ]; then
@@ -114,6 +131,28 @@ if [ "$rollback" = 1 ]; then
   run rm -f "$INSTALLED_SCRIPT" "${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md"
   run systemctl daemon-reload
   ok "служба остановлена и отключена; ключ клиента оставлен на месте"
+  exit 0
+fi
+
+# --- откат выпуска кода -----------------------------------------------------
+if [ "$rollback_release" = 1 ]; then
+  log "возврат прежнего выпуска кода службы"
+  [ -f "${INSTALLED_SCRIPT}.previous" ] || die "прежнего выпуска нет: ${INSTALLED_SCRIPT}.previous"
+  # Текущий становится «прежним»: повторный вызов возвращает обратно, а не теряет выпуск.
+  run cp -p "$INSTALLED_SCRIPT" "${INSTALLED_SCRIPT}.rollback-tmp"
+  run cp -p "${INSTALLED_SCRIPT}.previous" "$INSTALLED_SCRIPT"
+  run mv "${INSTALLED_SCRIPT}.rollback-tmp" "${INSTALLED_SCRIPT}.previous"
+  if [ -f "${UNIT_PATH}.previous" ]; then
+    # Юнит вместе с кодом: аргументы запуска нового выпуска (--config-dir)
+    # прежний код не знает и упал бы на старте.
+    run cp -p "$UNIT_PATH" "${UNIT_PATH}.rollback-tmp"
+    run cp -p "${UNIT_PATH}.previous" "$UNIT_PATH"
+    run mv "${UNIT_PATH}.rollback-tmp" "${UNIT_PATH}.previous"
+    run systemctl daemon-reload
+  fi
+  run systemctl reload-or-restart "$UNIT"   # у службы нет reload: это перезапуск
+  ok "служба перезапущена на прежнем выпуске; sha256 кода:"
+  run sha256sum "$INSTALLED_SCRIPT"
   exit 0
 fi
 
@@ -265,6 +304,12 @@ elif ! cmp -s "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"; then
   CODE_CHANGED=1
 fi
 run install -d -m 0755 -o root -g root "$INSTALL_DIR"
+if [ "$CODE_CHANGED" = 1 ] && [ -f "$INSTALLED_SCRIPT" ]; then
+  # Прежний выпуск остаётся рядом: без него «откатить код» значило бы снять
+  # службу целиком (--rollback), а это другой путь.
+  run cp -p "$INSTALLED_SCRIPT" "${INSTALLED_SCRIPT}.previous"
+  ok "прежний выпуск сохранён: ${INSTALLED_SCRIPT}.previous"
+fi
 run install -m 0644 -o root -g root "$SERVICE_SCRIPT" "$INSTALLED_SCRIPT"
 if [ "$CODE_CHANGED" = 1 ]; then
   ok "код службы отличался от выложенного — потребуется перезапуск"
@@ -275,6 +320,13 @@ fi
 run install -m 0644 -o root -g root "${SRC_ROOT}/docs/APP_READ_API.md" \
     "${INSTALL_DIR}/app-read-api-${SITE_ID}.doc.md"
 ok "код службы и контракт не зависят от рабочего дерева сессии"
+
+# --- каталог ревизий главной приложения --------------------------------------
+# Создаётся до юнита: ReadOnlyPaths с несуществующим путём не даёт службе
+# стартовать. Владелец — учётная запись Control API, которая в него пишет.
+log "каталог ревизий главной ${CONFIG_DIR}"
+run install -d -m 0755 -o "$RUN_USER" -g "$RUN_USER" "$(dirname "$CONFIG_DIR")" "$CONFIG_DIR"
+ok "каталог есть; содержимое не трогается"
 
 # --- служба -----------------------------------------------------------------
 log "служба ${UNIT}"
@@ -292,7 +344,8 @@ User=${RUN_USER}
 Group=${RUN_USER}
 WorkingDirectory=${INSTALL_DIR}
 ExecStart=/usr/bin/python3 ${INSTALLED_SCRIPT} --site ${SITE_ID} \\
-    --data-dir ${DATA_DIR} --bind ${BIND} --port ${PORT} --key-file ${KEY_FILE}
+    --data-dir ${DATA_DIR} --bind ${BIND} --port ${PORT} --key-file ${KEY_FILE} \\
+    --config-dir ${CONFIG_DIR}
 Restart=on-failure
 RestartSec=3
 
@@ -310,7 +363,7 @@ ProtectControlGroups=yes
 RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
 LockPersonality=yes
 MemoryDenyWriteExecute=yes
-ReadOnlyPaths=${DATA_DIR} ${INSTALL_DIR}
+ReadOnlyPaths=${DATA_DIR} ${INSTALL_DIR} ${CONFIG_DIR}
 # Измерено на снимке 8547 тайтлов: 108 МиБ. Предел с запасом, чтобы утечка
 # добирала память не у витрин и не у редактора.
 MemoryMax=512M
@@ -325,6 +378,11 @@ if [ "$dry_run" = 1 ]; then
   printf '   [сухой прогон] записать %s:\n' "$UNIT_PATH"
   sed 's/^/      /' "$TMP_UNIT"
 else
+  if [ -f "$UNIT_PATH" ] && ! cmp -s "$TMP_UNIT" "$UNIT_PATH"; then
+    cp -p "$UNIT_PATH" "${UNIT_PATH}.previous"
+    CODE_CHANGED=1
+    ok "прежний юнит сохранён: ${UNIT_PATH}.previous"
+  fi
   install -m 0644 -o root -g root "$TMP_UNIT" "$UNIT_PATH"
   ok "юнит записан: $UNIT_PATH"
 fi

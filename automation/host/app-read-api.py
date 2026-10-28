@@ -22,7 +22,15 @@
   внутренний кадр и запрашивает поток. См. `docs/APP_READ_API.md`;
 * «где смотреть» — только ПОДТВЕРЖДЁННЫЕ предложения официальных сервисов из
   отдельного хранилища `<site>-offers.json`. Пока одобренного источника таких
-  сведений нет, файла нет, и ответ — `status: unknown`, а не «нигде нет».
+  сведений нет, файла нет, и ответ — `status: unknown`, а не «нигде нет»;
+* главная и подборки приложения «Кинатека» — ОПУБЛИКОВАННАЯ ревизия канала
+  (`config/{sandbox|production}`, контракт `kinateka-config/1`). Ревизии пишет
+  Control API (раздел админки), служба только читает указатель канала и
+  подставляет в позиции подборок поля из ТЕКУЩЕГО снимка.
+
+Снимок перечитывается, когда витрина его обновила (раньше читался один раз при
+старте, и после ежедневного обновления служба отдавала вчерашний каталог до
+перезапуска). Новый указатель строится в стороне и подменяет старый целиком.
 
 Память. Снимок подробностей — десятки мегабайт, и разбор его целиком стоит
 гигабайт. Поэтому при старте строится УЗКИЙ указатель: только поля, которые
@@ -38,6 +46,7 @@ import json
 import os
 import pathlib
 import re
+import threading
 import time
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, unquote, urlparse
@@ -53,6 +62,17 @@ from urllib.parse import parse_qs, unquote, urlparse
 # Ссылка на поиск или главную сервиса — не доказательство, что произведение там есть.
 ПУТЬ_ПОИСКА = re.compile(r"(^|/)(search|poisk|find|results)(/|$)", re.IGNORECASE)
 ЗАПРОС_ПОИСКА = re.compile(r"(^|&)(q|query|text|search|s|kp_query)=", re.IGNORECASE)
+# Конфигурация главной приложения.
+КАНАЛЫ = ("sandbox", "production")
+СХЕМА_КОНФИГУРАЦИИ = "kinateka-config/1"
+# Жанры, с которыми тайтл не показывается на ОБЩЕЙ главной, даже если редактор
+# его поставил: возрастной метки в каталоге нет, и жанр — единственный признак
+# откровенной обложки, который у нас есть (наблюдение 27.10: «этти» в «Популярном
+# за неделю»). Тот же список проверяет Control API при публикации; здесь —
+# вторая ступень на случай, если жанр появился у тайтла после публикации.
+ЖАНРЫ_НЕ_ДЛЯ_ГЛАВНОЙ = frozenset({"этти", "хентай", "эротика", "гарем"})
+# Как часто сверять, не обновила ли витрина снимок.
+ПРОВЕРКА_СНИМКА_СЕК = 60
 
 
 def _нормализовать(с: str) -> str:
@@ -299,10 +319,146 @@ def ответ_предложений(данные: dict | None, ид: str, ре
             "checkedAt": данные.get("generatedAt"), "dropped": отброшено}
 
 
+class ХранилищеКонфигурации:
+    """Опубликованные ревизии главной приложения — только чтение.
+
+    Раскладка (пишет Control API, см. `factory/site_engine/api/app_config.py`):
+    `revisions/<n>.json` — неизменяемые ревизии, `published-<канал>.json` —
+    указатель `{"revision": n}`, который меняется атомарной подменой файла.
+    Каналы раздельны: указатель sandbox не читается для production.
+
+    Состояния, как у предложений, не сливаются: нет указателя — `NO_CONFIG`
+    (клиент строит свою главную), указатель или ревизия не читаются — 503
+    (клиент оставляет последнюю рабочую ревизию).
+    """
+
+    def __init__(self, корень: pathlib.Path | None) -> None:
+        self.корень = корень
+        self._метки: dict[str, tuple] = {}
+        self._ревизии: dict[str, dict] = {}
+
+    def действующая(self, канал: str) -> tuple[dict | None, str | None]:
+        """(ревизия, ошибка); оба None — в канале ничего не опубликовано."""
+        if self.корень is None:
+            return None, None
+        указатель = self.корень / f"published-{канал}.json"
+        try:
+            ст = указатель.stat()
+        except FileNotFoundError:
+            self._метки.pop(канал, None)
+            self._ревизии.pop(канал, None)
+            return None, None
+        except OSError as ош:
+            return None, f"хранилище конфигурации недоступно: {type(ош).__name__}"
+        метка = (ст.st_mtime_ns, ст.st_size)
+        if метка != self._метки.get(канал):
+            try:
+                номер = int(json.loads(указатель.read_text(encoding="utf-8"))["revision"])
+                ревизия = json.loads((self.корень / "revisions" / f"{номер}.json")
+                                     .read_text(encoding="utf-8"))
+                if (ревизия.get("schema") != СХЕМА_КОНФИГУРАЦИИ or ревизия.get("channel") != канал
+                        or int(ревизия.get("revision") or 0) != номер):
+                    raise ValueError("ревизия не той схемы, канала или номера")
+            except (OSError, ValueError, KeyError, TypeError) as ош:
+                return None, f"опубликованная ревизия не читается: {type(ош).__name__}: {ош}"
+            self._метки[канал], self._ревизии[канал] = метка, ревизия
+        return self._ревизии[канал], None
+
+
+def отдать_конфигурацию(ревизия: dict, каталог: "Каталог") -> dict:
+    """Ревизия в отдаваемой форме: позиции подборок дополнены из ТЕКУЩЕГО снимка.
+
+    Состав задан по `contentId` и порядок его не меняется. Позиция, которой в
+    снимке нет, или тайтл с жанром не для общей главной уходят в `missing`
+    (клиент их не показывает), а не исчезают молча: редактор видит число.
+    """
+    тело = json.loads(json.dumps(ревизия))
+    for подборка in тело.get("collections") or []:
+        оставлены, нет = [], []
+        for поз in подборка.get("items") or []:
+            запись = каталог.по_ид.get(str(поз.get("contentId") or ""))
+            if запись is None or ЖАНРЫ_НЕ_ДЛЯ_ГЛАВНОЙ & {ж.lower() for ж in запись["genres"]}:
+                нет.append(поз.get("contentId"))
+                continue
+            поз["title"] = запись["titleRu"] or поз.get("title")
+            поз["type"] = "movie" if запись["type"] == "MOVIE" else "series"
+            if запись["artwork"].get("posterUrl"):
+                поз["posterUrl"] = запись["artwork"]["posterUrl"]
+            if запись.get("year"):
+                поз["year"] = запись["year"]
+            оставлены.append(поз)
+        подборка["items"] = оставлены
+        подборка["missing"] = нет
+    тело["catalogRevision"] = каталог.revision
+    return тело
+
+
+class ОбновительСнимка:
+    """Перечитывает снимок, когда витрина его обновила, не останавливая службу.
+
+    Признак обновления — метка (время изменения, размер) файлов каталога и
+    подробностей. Новый указатель строится в отдельном потоке и подменяет
+    прежний одним присваиванием: запросы, пришедшие во время сборки, получают
+    прежний снимок целиком, а не смесь. Сборка не чаще раза в `интервал`
+    секунд: подробности витрина дописывает часто, а разбор стоит сотни МиБ на
+    время сборки. Неудачная сборка (файл в процессе записи) оставляет прежний
+    снимок и называется в состоянии.
+    """
+
+    def __init__(self, site_id: str, корень: pathlib.Path, *, интервал: float = 600.0,
+                 часы=time.monotonic) -> None:
+        self.site_id, self.корень, self.интервал, self._часы = site_id, корень, интервал, часы
+        self._метка = self._снять_метку()
+        self._сверено = self._часы()
+        self._собрано = self._часы()
+        self._поток: threading.Thread | None = None
+        self.ошибка: str | None = None
+        self.перечитано: str | None = None
+
+    def _снять_метку(self) -> tuple:
+        метка = []
+        for имя in (f"{self.site_id}-catalog.json", f"{self.site_id}-details.json"):
+            try:
+                ст = (self.корень / имя).stat()
+                метка.append((ст.st_mtime_ns, ст.st_size))
+            except OSError:
+                метка.append(None)
+        return tuple(метка)
+
+    def сверить(self, *, ждать: bool = False) -> None:
+        сейчас = self._часы()
+        if сейчас - self._сверено < ПРОВЕРКА_СНИМКА_СЕК and not ждать:
+            return
+        self._сверено = сейчас
+        if self._поток is not None and self._поток.is_alive():
+            return
+        метка = self._снять_метку()
+        if метка == self._метка or (сейчас - self._собрано < self.интервал and not ждать):
+            return
+        self._собрано = сейчас
+        self._поток = threading.Thread(target=self._собрать, args=(метка,), daemon=True)
+        self._поток.start()
+        if ждать:
+            self._поток.join()
+
+    def _собрать(self, метка: tuple) -> None:
+        try:
+            новый = Каталог(self.site_id, self.корень)
+        except (OSError, ValueError) as ош:
+            self.ошибка = f"снимок не перечитан: {type(ош).__name__}"
+            return
+        Обработчик.каталог = новый
+        self._метка, self.ошибка = метка, None
+        self.перечитано = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        gc.collect()
+
+
 class Обработчик(BaseHTTPRequestHandler):
     server_version = ВЕРСИЯ
     каталог: Каталог
     предложения: ХранилищеПредложений | None = None
+    конфигурация: ХранилищеКонфигурации | None = None
+    обновитель: "ОбновительСнимка | None" = None
     ключ: str = ""
     счётчик: dict = {}
 
@@ -315,7 +471,8 @@ class Обработчик(BaseHTTPRequestHandler):
         self.send_response(код)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(данные)))
-        self.send_header("Cache-Control", "public, max-age=300")
+        if "Cache-Control" not in (заголовки or {}):
+            self.send_header("Cache-Control", "public, max-age=300")
         self.send_header("X-Catalog-Revision", self.каталог.revision[:32])
         for к, з in (заголовки or {}).items():
             self.send_header(к, з)
@@ -388,6 +545,8 @@ class Обработчик(BaseHTTPRequestHandler):
                                "в сегменте пути закодирован разделитель")
         путь = путь.rstrip("/") or "/"
         параметры = parse_qs(разбор.query)
+        if self.обновитель is not None:
+            self.обновитель.сверить()
         # Два адреса состояния, и оба нужны.
         #
         # `/healthz` — локальная проверка установщика и юнита: наружу он НЕ
@@ -421,7 +580,13 @@ class Обработчик(BaseHTTPRequestHandler):
                 "site": self.каталог.site_id,
                 "titles": len(self.каталог.по_ид),
                 "catalogRevision": self.каталог.revision,
-                "catalogBuiltAt": self.каталог.built_at})
+                "catalogBuiltAt": self.каталог.built_at,
+                "catalogReloadedAt": self.обновитель.перечитано if self.обновитель else None,
+                "catalogReloadError": self.обновитель.ошибка if self.обновитель else None,
+                "configChannels": {к: (р or {}).get("revisionId") if not ош else "error"
+                                   for к in КАНАЛЫ
+                                   for р, ош in [self.конфигурация.действующая(к)
+                                                 if self.конфигурация else (None, None)]}})
         if not self._ключ_верен():
             return self._отказ(
                 401, "unauthorized",
@@ -557,6 +722,28 @@ class Обработчик(BaseHTTPRequestHandler):
                 return self._отказ(503, "offers_unavailable", ошибка, {"Retry-After": "60"})
             return self._ответ(200, ответ_предложений(данные, ид, регион, time.time()))
 
+        # Главная и подборки приложения: действующая ревизия канала. Каналы
+        # закрыты списком — произвольное имя не должно читать произвольный файл.
+        м = re.fullmatch(r"/api/app/v1/config/([^/]+)", путь)
+        if м:
+            канал = м.group(1)
+            if канал not in КАНАЛЫ:
+                return self._отказ(404, "not_found", "нет такого канала")
+            ревизия, ошибка = (self.конфигурация.действующая(канал)
+                               if self.конфигурация else (None, None))
+            if ошибка:
+                return self._отказ(503, "config_unavailable", ошибка, {"Retry-After": "60"})
+            if ревизия is None:
+                return self._отказ(404, "NO_CONFIG", f"в канале {канал} ничего не опубликовано")
+            метка = f'"{ревизия.get("revisionId")}.{self.каталог.revision[:12]}"'
+            if self.headers.get("If-None-Match") == метка:
+                self.send_response(304)
+                self.send_header("ETag", метка)
+                self.end_headers()
+                return
+            return self._ответ(200, отдать_конфигурацию(ревизия, self.каталог),
+                               {"ETag": метка, "Cache-Control": "max-age=60"})
+
         return self._отказ(404, "not_found", "нет такого маршрута")
 
 
@@ -567,9 +754,13 @@ def главное(argv=None) -> int:
     ap.add_argument("--bind", default="127.0.0.1")
     ap.add_argument("--port", type=int, default=9180)
     ap.add_argument("--key-file", type=pathlib.Path, default=None)
+    ap.add_argument("--config-dir", type=pathlib.Path, default=None,
+                    help="каталог ревизий главной приложения (пишет Control API)")
     a = ap.parse_args(argv)
     Обработчик.каталог = Каталог(a.site, a.data_dir)
     Обработчик.предложения = ХранилищеПредложений(a.data_dir / f"{a.site}-offers.json")
+    Обработчик.конфигурация = ХранилищеКонфигурации(a.config_dir)
+    Обработчик.обновитель = ОбновительСнимка(a.site, a.data_dir)
     if a.key_file and a.key_file.is_file():
         Обработчик.ключ = a.key_file.read_text(encoding="utf-8").strip()
     rss = 0
