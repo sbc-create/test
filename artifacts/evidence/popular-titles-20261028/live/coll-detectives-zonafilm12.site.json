@@ -1,0 +1,127 @@
+{
+ "host": "zonafilm12.site",
+ "started": "2026-10-28T16:07:35Z",
+ "finished": "2026-10-28T16:07:36Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm12.site/title/mentalist/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/mentalist/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Менталист — смотреть онлайн — Zona Cinema",
+   "h1": "Менталист",
+   "description": "Патрик Джейн - детектив и независимый консультант из Калифорнийского Бюро Расследований (КБР), он использует свои отточенные, как лезвие, навыки наблюдения для раскрытия тяжких…",
+   "player": true,
+   "search": {
+    "query": "Менталист",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/kasl/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/kasl/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Касл (2009) — смотреть онлайн — Zona Cinema",
+   "h1": "Касл",
+   "description": "Знакомьтесь, Ричард Касл - успешный писатель детективного жанра, который в последней книге убил своего главного героя. Но кажется, что одному из почитателей его таланта книги…",
+   "player": true,
+   "search": {
+    "query": "Касл",
+    "status": 200,
+    "position": 2,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/bolshoy-potencial/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/bolshoy-potencial/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Большой потенциал — смотреть онлайн — Zona Cinema",
+   "h1": "Большой потенциал",
+   "description": "Морган, мать-одиночка с тремя детьми, работает уборщицей в полицейском участке. Однажды она становится свидетельницей преступления. Ее исключительный ум позволяет ей быстро…",
+   "player": true,
+   "search": {
+    "query": "Большой потенциал",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/kosti-3/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/kosti-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Кости (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Кости",
+   "description": "Доктор Темперанс Бреннан - блестящий, но одинокий антрополог, получает то, чего она меньше всего желала – напарника. Бюро посылает ей амбициозного агента ФБР Сили Бута, чтобы…",
+   "player": true,
+   "search": {
+    "query": "Кости",
+    "status": 200,
+    "position": 3,
+    "results_seen": 21
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/sherlok/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/sherlok/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Шерлок (2010) — смотреть онлайн — Zona Cinema",
+   "h1": "Шерлок",
+   "description": "События разворачиваются в наши дни. Он прошел Афганистан, остался инвалидом. По возвращении в родные края встречается с загадочным, но своеобразным гениальным человеком. Тот в…",
+   "player": true,
+   "search": {
+    "query": "Шерлок",
+    "status": 200,
+    "position": 2,
+    "results_seen": 20
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/molodoy-sherlok-2/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/molodoy-sherlok-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Молодой Шерлок (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Молодой Шерлок",
+   "description": "1870-е годы. Шерлок Холмс, 19-летний студент Оксфордского университета, оказывается вовлечён в убийство. Шерлок берётся за своё первое расследование, чтобы избежать заключения…",
+   "player": true,
+   "search": {
+    "query": "Молодой Шерлок",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm12.site/title/shugar/",
+   "status": 200,
+   "canonical": "https://zonafilm12.site/title/shugar/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Шугар — смотреть онлайн — Zona Cinema",
+   "h1": "Шугар",
+   "description": "Частный детектив Джон Шугар специализируется на розыске пропавших, не любит применять насилие и страдает от внезапных приступов. Известный кинопродюсер Джонатан Сигел нанимает…",
+   "player": true,
+   "search": {
+    "query": "Шугар",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  }
+ ]
+}

@@ -6,7 +6,9 @@
  "site": "zonafilm12.site",
  "site_id": "zona-03",
  "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
- "overlaps": [],
+ "overlaps": [
+  "sherlok — также в serialy-na-vecher-vybor-redakcii; shugar — также в apple-tv-serialy (подборки выбора редакции и платформы)"
+ ],
  "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
  "collections": [
   {
@@ -145,6 +147,145 @@
      "basis": "дополнение из каталога (поручение 28.10 п. 5: обоснованное дополнение); тема подтверждена описанием каталога; воспроизведение есть (playable)",
      "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
      "checked": "2026-10-28 (live/pilot-turkish-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  },
+  {
+   "key": "detektivy-s-neobychnymi-syschikami",
+   "title": "Детективы с необычными сыщиками",
+   "viewer_request": "Хочу детективный сериал, где дело раскрывает не обычный полицейский.",
+   "intro": "Сериалы, где преступления раскрывают люди не из полиции или не по правилам: бывший «медиум», автор детективов, уборщица с исключительным умом, антрополог, частный сыщик с приступами и сам Шерлок Холмс — в наши дни и в юности.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01919ffa-9abd-7862-b3e4-d3330a589849",
+     "slug": "mentalist",
+     "url": "https://zonafilm12.site/title/mentalist/",
+     "name": "Менталист",
+     "original_name": "The Mentalist",
+     "year": 2008,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1196946",
+      "kinopoisk": "412344"
+     },
+     "reason": "Патрик Джейн когда-то выдавал себя за медиума, а теперь консультирует калифорнийское бюро расследований — и раскрывает дела наблюдательностью, нарушая протокол.",
+     "basis": "строка 38 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01916717-2c0c-7bf1-a24c-8f45b350e397",
+     "slug": "kasl",
+     "url": "https://zonafilm12.site/title/kasl/",
+     "name": "Касл",
+     "original_name": "Castle",
+     "year": 2009,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1219024",
+      "kinopoisk": "409640"
+     },
+     "reason": "Автор детективов Ричард Касл помогает полиции, когда в городе появляется подражатель, убивающий так, как Касл убивал героев своих книг.",
+     "basis": "строка 20 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "01925816-511e-7f74-8997-98b16ee5b66d",
+     "slug": "bolshoy-potencial",
+     "url": "https://zonafilm12.site/title/bolshoy-potencial/",
+     "name": "Большой потенциал",
+     "original_name": "High Potential",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "22091076",
+      "kinopoisk": "5499519"
+     },
+     "reason": "Мать троих детей Морган моет полы в полицейском участке, пока её исключительный ум не замечают — и не зовут консультантом в расследования.",
+     "basis": "строка 27 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "01916c0f-5cf5-7380-a5c2-7710bce5f668",
+     "slug": "kosti-3",
+     "url": "https://zonafilm12.site/title/kosti-3/",
+     "name": "Кости",
+     "original_name": "Bones",
+     "year": 2005,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "460627",
+      "kinopoisk": "243595"
+     },
+     "reason": "Антрополог Темперанс Бреннан и агент ФБР Сили Бут раскрывают старые дела по костям давно пропавших людей.",
+     "basis": "строка 359 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "0191526d-e8c7-76d8-8797-80e09272eaa1",
+     "slug": "sherlok",
+     "url": "https://zonafilm12.site/title/sherlok/",
+     "name": "Шерлок",
+     "original_name": "Sherlock",
+     "year": 2010,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1475582",
+      "kinopoisk": "502838"
+     },
+     "reason": "Холмс в Лондоне 2010 года: ветеран Афганистана Джон Ватсон находит соседа по квартире — гениального сыщика, к которому Скотланд-Ярд идёт с необъяснимыми убийствами.",
+     "basis": "строка 68 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "019cb8a6-c3b8-7716-a6b2-1112c390afe9",
+     "slug": "molodoy-sherlok-2",
+     "url": "https://zonafilm12.site/title/molodoy-sherlok-2/",
+     "name": "Молодой Шерлок",
+     "original_name": null,
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "8599532",
+      "kinopoisk": "5591410"
+     },
+     "reason": "1870-е: 19-летний студент Оксфорда Шерлок Холмс берётся за первое расследование, чтобы не попасть в тюрьму, — и выходит на всемирный заговор.",
+     "basis": "строка 78 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "01916ec4-9755-7f48-8cae-0d995804059e",
+     "slug": "shugar",
+     "url": "https://zonafilm12.site/title/shugar/",
+     "name": "Шугар",
+     "original_name": "Sugar",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "16418808",
+      "kinopoisk": "5080554"
+     },
+     "reason": "Частный детектив Джон Шугар ищет пропавших, избегает насилия и страдает от внезапных приступов; продюсер нанимает его найти исчезнувшую внучку.",
+     "basis": "строка 71 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-03 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-detectives-zonafilm12.site.json): 200, canonical на себя, index, follow"
     }
    ]
   }
