@@ -1,0 +1,5573 @@
+[
+ {
+  "q": "сумерки",
+  "visits": 10.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Сумерки",
+    1998,
+    "Фильм",
+    "sumerki-5"
+   ],
+   [
+    "Сумерки",
+    2025,
+    "Фильм",
+    "sumerki-4"
+   ],
+   [
+    "Сумерки",
+    null,
+    "Сериал",
+    "sumerki"
+   ],
+   [
+    "Сумерки",
+    2020,
+    "Сериал",
+    "sumerki-2"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [],
+  "results_total": 20,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sumerki-4",
+   "sumerki-2",
+   "sumerki-3",
+   "sumerki-5",
+   "sumerki"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Пираты",
+  "visits": 4.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Пираты",
+    1986,
+    "Фильм",
+    "piraty"
+   ],
+   [
+    "Пираты",
+    1999,
+    "Сериал",
+    "piraty-2"
+   ],
+   [
+    "Пираты",
+    2011,
+    "Сериал",
+    "piraty-3"
+   ],
+   [
+    "Пираты",
+    2014,
+    "Фильм",
+    "piraty-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 41,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "piraty-4",
+   "piraty-3",
+   "piraty-2",
+   "piraty",
+   "piraty-bolshe-chem-legenda"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "астрал",
+  "visits": 4.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Астрал",
+    2011,
+    "Фильм",
+    "astral"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 26,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "astral",
+   "astral-6-oni-uzhe-zdes",
+   "astral-inoy-mir",
+   "astral-amulet-zla",
+   "astral-vlast-tmy"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Астрал",
+  "visits": 4.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Астрал",
+    2011,
+    "Фильм",
+    "astral"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 26,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "astral",
+   "astral-6-oni-uzhe-zdes",
+   "astral-inoy-mir",
+   "astral-amulet-zla",
+   "astral-vlast-tmy"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Феи",
+  "visits": 4.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Феи",
+    2008,
+    "Мультфильм",
+    "fei"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 19,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "fei",
+   "fei-zagadka-piratskogo-ostrova",
+   "fei-legenda-o-chudovische",
+   "fei-sport-i-tort",
+   "fei-tayna-zimnego-lesa"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "правдивая ложь",
+  "visits": 3.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Правдивая ложь",
+    1994,
+    "Фильм",
+    "pravdivaya-lozh"
+   ],
+   [
+    "Правдивая ложь",
+    2023,
+    "Сериал",
+    "pravdivaya-lozh-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "pravdivaya-lozh-2",
+   "pravdivaya-lozh"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 13
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "другой мир",
+  "visits": 3.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Другой мир",
+    2013,
+    "Фильм",
+    "drugoy-mir-6"
+   ],
+   [
+    "Другой мир",
+    2003,
+    "Фильм",
+    "drugoy-mir"
+   ],
+   [
+    "Другой мир",
+    2005,
+    "Фильм",
+    "drugoy-mir-2"
+   ],
+   [
+    "Другой мир",
+    2019,
+    "Сериал",
+    "drugoy-mir-3"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [],
+  "results_total": 21,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "drugoy-mir-3",
+   "drugoy-mir-4",
+   "drugoy-mir-6",
+   "drugoy-mir-2",
+   "drugoy-mir"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 3
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "ИДУ ИСКАТЬ",
+  "visits": 2.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Я иду искать (2019)",
+    2019,
+    "Фильм",
+    "ya-idu-iskat-2019"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "я иду искать",
+   "я иду искать 2"
+  ],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "ya-idu-iskat-2",
+   "ya-idu-iskat-korolevskaya-igra",
+   "ya-idu-iskat-2019",
+   "lyubov-i-gde-ee-iskat"
+  ],
+  "pos": 3,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Плохой парень",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Плохой парень",
+    null,
+    "Фильм",
+    "plohoy-paren"
+   ],
+   [
+    "Плохой парень",
+    2017,
+    "Фильм",
+    "plohoy-paren-2"
+   ],
+   [
+    "Плохой парень",
+    2022,
+    "Сериал",
+    "plohoy-paren-3"
+   ],
+   [
+    "Плохой парень",
+    2010,
+    "Сериал",
+    "plohoy-paren-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 6,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "plohoy-paren-3",
+   "plohoy-paren-2",
+   "plohoy-paren-4",
+   "plohoy-paren",
+   "plohoy-paren-i-ya-2-perehvat"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 12
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Темные начала",
+  "visits": 2.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Новые начала",
+    2025,
+    "Фильм",
+    "novye-nachala"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "новые начала"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "бегущий в лабиринте",
+  "visits": 2.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Бегущий в лабиринте",
+    2014,
+    "Фильм",
+    "beguschiy-v-labirinte"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "beguschiy-v-labirinte",
+   "beguschiy-v-labirinte-lekarstvo-ot-smerti",
+   "beguschiy-v-labirinte-ispytanie-ognem"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "сумерки 3",
+  "visits": 2.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Сумерки",
+    1998,
+    "Фильм",
+    "sumerki-5"
+   ],
+   [
+    "Сумерки",
+    2025,
+    "Фильм",
+    "sumerki-4"
+   ],
+   [
+    "Сумерки",
+    null,
+    "Сериал",
+    "sumerki"
+   ],
+   [
+    "Сумерки",
+    2020,
+    "Сериал",
+    "sumerki-2"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [
+   "сумерки"
+  ],
+  "results_total": 20,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sumerki-4",
+   "sumerki-2",
+   "sumerki-3",
+   "sumerki-2008",
+   "sumerki-5"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Спецы",
+  "visits": 2.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "транс",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Транс",
+    2020,
+    "Фильм",
+    "trans-2"
+   ],
+   [
+    "Транс",
+    2013,
+    "Фильм",
+    "trans"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 53,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "trans-2",
+   "trans",
+   "translyaciya-uzhasa",
+   "transformery-kibermir",
+   "transamazoniya"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Жить заново",
+  "visits": 2.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "зачем мы женимся 2--7",
+  "visits": 2.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Зачем мы женимся?",
+    2007,
+    "Фильм",
+    "zachem-my-zhenimsya"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "зачем мы женимся",
+   "зачем мы женимся снова"
+  ],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zachem-my-zhenimsya",
+   "zachem-my-zhenimsya-snova",
+   "zachem-my-opyat-zhenimsya"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Сумерки",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Сумерки",
+    1998,
+    "Фильм",
+    "sumerki-5"
+   ],
+   [
+    "Сумерки",
+    2025,
+    "Фильм",
+    "sumerki-4"
+   ],
+   [
+    "Сумерки",
+    null,
+    "Сериал",
+    "sumerki"
+   ],
+   [
+    "Сумерки",
+    2020,
+    "Сериал",
+    "sumerki-2"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [],
+  "results_total": 20,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sumerki-4",
+   "sumerki-2",
+   "sumerki-3",
+   "sumerki-5",
+   "sumerki"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "одиссея",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Одиссея",
+    1992,
+    "Сериал",
+    "odisseya-6"
+   ],
+   [
+    "Одиссея",
+    2026,
+    "Фильм",
+    "odisseya"
+   ],
+   [
+    "Одиссея",
+    2025,
+    "Фильм",
+    "odisseya-2"
+   ],
+   [
+    "Одиссея",
+    2013,
+    "Сериал",
+    "odisseya-3"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [],
+  "results_total": 38,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "odisseya",
+   "odisseya-2",
+   "odisseya-4",
+   "odisseya-3",
+   "odisseya-6"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Невский",
+  "visits": 2.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Призрачный вор",
+  "visits": 2.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Призрачный вор Яманеко",
+    null,
+    "Сериал",
+    "prizrachnyy-vor-yamaneko"
+   ],
+   [
+    "Призрачный вор Роман",
+    2013,
+    "Мультфильм",
+    "prizrachnyy-vor-roman"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "prizrachnyy-vor-roman",
+   "prizrachnyy-vor-yamaneko"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 12
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Дневники вампира",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Дневники вампира",
+    1997,
+    "Фильм",
+    "dnevniki-vampira-2"
+   ],
+   [
+    "Дневники вампира",
+    2009,
+    "Сериал",
+    "dnevniki-vampira"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "dnevniki-vampira",
+   "dnevniki-vampira-2",
+   "o-moem-pererozhdenii-v-sliz-dnevnik-slizi",
+   "dnevnik-poezdki-v-iokogamu-za-pokupkami-ova-1"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 171
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Мятеж",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Мятеж",
+    1929,
+    "Фильм",
+    "myatezh-3"
+   ],
+   [
+    "Мятеж",
+    1996,
+    "Фильм",
+    "myatezh-4"
+   ],
+   [
+    "Мятеж",
+    1982,
+    "Фильм",
+    "myatezh-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 22,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "myatezh-4",
+   "myatezh-2",
+   "myatezh-3",
+   "myatezhnaya-lyubov-2",
+   "myatezhnaya-lyubov"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "человек паук",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Человек-паук",
+    2017,
+    "Мультфильм",
+    "chelovek-pauk"
+   ],
+   [
+    "Человек-паук",
+    1994,
+    "Мультфильм",
+    "chelovek-pauk-3"
+   ],
+   [
+    "Человек-Паук",
+    2002,
+    "Фильм",
+    "chelovek-pauk-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 26,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "chelovek-pauk",
+   "chelovek-pauk-2",
+   "chelovek-pauk-3",
+   "chelovek-pauk-novyy-den",
+   "chelovek-pauk-lotos"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 64
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "стражи галактики",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Стражи Галактики",
+    2015,
+    "Мультфильм",
+    "strazhi-galaktiki-2"
+   ],
+   [
+    "Стражи Галактики",
+    2014,
+    "Фильм",
+    "strazhi-galaktiki"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "strazhi-galaktiki-2",
+   "strazhi-galaktiki",
+   "strazhi-galaktiki-chast-3-2023",
+   "strazhi-galaktiki-prazdnichnyy-specvypusk",
+   "strazhi-galaktiki-chast-2"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 78
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Лило и Стич",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Лило и Стич",
+    2002,
+    "Мультфильм",
+    "lilo-i-stich"
+   ],
+   [
+    "Лило и Стич",
+    2025,
+    "Фильм",
+    "lilo-i-stich-2"
+   ],
+   [
+    "Лило и Стич",
+    2003,
+    "Мультфильм",
+    "lilo-i-stich-3"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "lilo-i-stich-2",
+   "lilo-i-stich-3",
+   "lilo-i-stich",
+   "lilo-i-stich-2-bolshaya-problema-sticha"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Обител зла",
+  "visits": 2.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Обитель зла",
+    2026,
+    "Фильм",
+    "obitel-zla-2"
+   ],
+   [
+    "Обитель зла (2002)",
+    2002,
+    "Фильм",
+    "obitel-zla-2002"
+   ],
+   [
+    "Обитель зла",
+    2022,
+    "Сериал",
+    "obitel-zla"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [
+   "обитель зла",
+   "обитель зла 3"
+  ],
+  "results_total": 17,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "obitel-zla-2",
+   "paranormalnye-yavleniya-obitel-zla",
+   "obitel-zla-ostrov-smerti",
+   "obitel-zla",
+   "obitel-zla-beskonechnaya-tma"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "План побега 2",
+  "visits": 2.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "План побега 2",
+    2018,
+    "Фильм",
+    "plan-pobega-2"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "plan-pobega-2",
+   "plan-pobega-3",
+   "plan-pobega"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "мятеж",
+  "visits": 2.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Мятеж",
+    1929,
+    "Фильм",
+    "myatezh-3"
+   ],
+   [
+    "Мятеж",
+    1996,
+    "Фильм",
+    "myatezh-4"
+   ],
+   [
+    "Мятеж",
+    1982,
+    "Фильм",
+    "myatezh-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 22,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "myatezh-4",
+   "myatezh-2",
+   "myatezh-3",
+   "myatezhnaya-lyubov-2",
+   "myatezhnaya-lyubov"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Терра нова",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Терра Нова",
+    2011,
+    "Сериал",
+    "terra-nova"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "terra-nova"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 12
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Токийские мстители",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Токийские мстители",
+    2021,
+    "Сериал",
+    "tokiyskie-mstiteli"
+   ],
+   [
+    "Токийские мстители",
+    2021,
+    "Фильм",
+    "tokiyskie-mstiteli-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "tokiyskie-mstiteli",
+   "tokiyskie-mstiteli-2",
+   "tokiyskie-mstiteli-bitva-treh-nebozhiteley",
+   "tokiyskie-mstiteli-2-krovavyy-hellouin-reshayuschaya-bitva",
+   "tokiyskie-mstiteli-2-krovavyy-hellouin-sudba"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 24
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Движение",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Движение Джейн",
+    2022,
+    "Фильм",
+    "dvizhenie-dzheyn"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 8,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "dvizhenie-dzheyn",
+   "odno-bystroe-dvizhenie",
+   "obnaruzheno-dvizhenie",
+   "sovremennoe-dvizhenie",
+   "brounovskoe-dvizhenie"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "трасса 60",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Трасса 60",
+    2001,
+    "Фильм",
+    "trassa-60"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 6,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "trassa-60",
+   "trassa-65",
+   "trassa-15",
+   "trassa-1",
+   "trassa-318"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "синистер",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Синистер",
+    2012,
+    "Фильм",
+    "sinister"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sinister",
+   "sinister-pervoe-proklyatie",
+   "sinister-semeynoe-proklyatie",
+   "sinister-novye-dushi",
+   "sinister-2"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "конг остров черепа",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Конг: Остров черепа",
+    2017,
+    "Фильм",
+    "kong-ostrov-cherepa"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "kong-ostrov-cherepa"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "lbuuth",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Военная машина",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Военная машина",
+    2026,
+    "Фильм",
+    "voennaya-mashina"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "voennaya-mashina",
+   "voennaya-mashina-vtoroy-mirovoy-voyny-germaniya",
+   "mashina-vremeni-v-tekile",
+   "mashina-vremeni-v-dzhakuzi-2",
+   "mashina-vremeni-v-dzhakuzi"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "зомбилэнд",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Зомбилэнд",
+    2013,
+    "Фильм",
+    "zombilend"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zombilend",
+   "zombilend-saga-film",
+   "nash-zombilend"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "фаfбюро",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "эдем",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Эдем",
+    2024,
+    "Фильм",
+    "edem"
+   ],
+   [
+    "Эдем",
+    2021,
+    "Сериал",
+    "edem-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 12,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "edem",
+   "edem-2",
+   "edem-rayskiy-ostrov",
+   "nulevoy-edem-2",
+   "nulevoy-edem"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "крестный отец",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Крестный отец",
+    1975,
+    "Фильм",
+    "krestnyy-otec-2"
+   ],
+   [
+    "Крёстный отец",
+    2020,
+    "Фильм",
+    "krestnyy-otec"
+   ],
+   [
+    "Крестный отец (1972)",
+    1972,
+    "Фильм",
+    "krestnyy-otec-1972"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "krestnyy-otec-2",
+   "krestnyy-otec-3",
+   "krestnyy-otec-2-1974",
+   "krestnyy-otec-1972"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "спецы",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Географ глобус пропил",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Другие",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Другие",
+    2025,
+    "Фильм",
+    "drugie-3"
+   ],
+   [
+    "Другие",
+    2025,
+    "Фильм",
+    "drugie"
+   ],
+   [
+    "Другие",
+    2001,
+    "Фильм",
+    "drugie-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 20,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "drugie",
+   "drugie-3",
+   "drugie-2",
+   "drugie-novaya-obitel",
+   "drugie-miry"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Праздники",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Праздники и друзья: Да здравствует жизнь!",
+    2024,
+    "Фильм",
+    "prazdniki-i-druzya-da-zdravstvuet-zhizn"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 16,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "prazdniki-i-druzya-da-zdravstvuet-zhizn",
+   "schastlivye-prazdniki-na-cherri-leyn",
+   "uspet-na-prazdniki",
+   "otel-na-prazdniki",
+   "pohischenie-schenok-na-prazdniki"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "аг целител",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "celitel",
+   "ranenyy-celitel",
+   "ubiyca-i-celitel"
+  ],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "крысиные бега",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Крысиные бега",
+    2001,
+    "Фильм",
+    "krysinye-bega"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "krysinye-bega"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Обсессия",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "эволюция",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Эволюция",
+    2026,
+    "Сериал",
+    "evolyuciya"
+   ],
+   [
+    "Эволюция",
+    2001,
+    "Фильм",
+    "evolyuciya-2"
+   ],
+   [
+    "Эволюция",
+    2015,
+    "Фильм",
+    "evolyuciya-3"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 28,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "evolyuciya",
+   "evolyuciya-3",
+   "evolyuciya-2",
+   "evolyuciya-cherepashek-nindzya-film",
+   "evolyuciya-planety"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 5
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "агент свыше",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Агент свыше",
+    2026,
+    "Сериал",
+    "agent-svyshe"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "agent-svyshe"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 8
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "пылающее лето",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Пылающее лето",
+    2026,
+    "Сериал",
+    "pylayuschee-leto"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "pylayuschee-leto"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 29
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "невский",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Бабадук",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Бабадук",
+    2014,
+    "Фильм",
+    "babaduk"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "babaduk"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Диана астер",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Зверополис",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Зверополис",
+    2016,
+    "Мультфильм",
+    "zveropolis-2"
+   ],
+   [
+    "Зверополис+",
+    2022,
+    "Мультфильм",
+    "zveropolis"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zveropolis",
+   "zveropolis-2",
+   "zveropolis-2-2",
+   "zveropoisk",
+   "zveropoy"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 6
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Пираты карибского моря",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Пираты Карибского моря. Истории Кодекса: Замужество",
+    2011,
+    "Фильм",
+    "piraty-karibskogo-morya-istorii-kodeksa-zamuzhestvo"
+   ],
+   [
+    "Пираты Карибского моря: Сундук мертвеца",
+    2006,
+    "Фильм",
+    "piraty-karibskogo-morya-sunduk-mertveca"
+   ],
+   [
+    "Пираты Карибского моря: Проклятие Черной жемчужины",
+    2003,
+    "Фильм",
+    "piraty-karibskogo-morya-proklyatie-chernoy-zhemchuzhiny"
+   ],
+   [
+    "Пираты Карибского моря: На странных берегах",
+    2011,
+    "Фильм",
+    "piraty-karibskogo-morya-na-strannyh-beregah"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [],
+  "results_total": 6,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "piraty-karibskogo-morya-mertvecy-ne-rasskazyvayut-skazki",
+   "piraty-karibskogo-morya-istorii-kodeksa-zamuzhestvo",
+   "piraty-karibskogo-morya-na-strannyh-beregah",
+   "piraty-karibskogo-morya-3-na-krayu-sveta",
+   "piraty-karibskogo-morya-sunduk-mertveca"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Полдень",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Полдень",
+    2016,
+    "Фильм",
+    "polden"
+   ],
+   [
+    "Полдень",
+    2022,
+    "Фильм",
+    "polden-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "polden-2",
+   "polden",
+   "zvezdy-v-polden",
+   "zharkiy-polden",
+   "shanhayskiy-polden"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Техасская",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Техасская резня бензопилой 3D",
+    2013,
+    "Фильм",
+    "tehasskaya-reznya-benzopiloy-3d"
+   ],
+   [
+    "Техасская ведьма",
+    2022,
+    "Фильм",
+    "tehasskaya-vedma"
+   ],
+   [
+    "Техасская резня бензопилой: Начало",
+    2006,
+    "Фильм",
+    "tehasskaya-reznya-benzopiloy-nachalo"
+   ],
+   [
+    "Техасская резня бензопилой 4: Новое поколение",
+    1995,
+    "Фильм",
+    "tehasskaya-reznya-benzopiloy-4-novoe-pokolenie"
+   ]
+  ],
+  "n_targets": 8,
+  "near": [],
+  "results_total": 8,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "tehasskaya-vedma",
+   "tehasskaya-reznya-benzopiloy-2021",
+   "tehasskaya-reznya-benzopiloy-3d",
+   "tehasskaya-reznya-benzopiloy-nachalo",
+   "tehasskaya-reznya-benzopiloy"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "бар гадкий койот",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Бар «Гадкий койот»",
+    2000,
+    "Фильм",
+    "bar-gadkiy-koyot"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "bar-gadkiy-koyot"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "люпен",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Люпен",
+    2021,
+    "Сериал",
+    "lyupen"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 52,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "lyupen",
+   "lyupen-iii-bessmertnaya-rodoslovnaya",
+   "lyupen-iii-dzenigata-i-dva-lyupena",
+   "lyupen-iii-protiv-koshachego-glaza",
+   "lyupen-nachalo"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 17
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "ольга",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Ольга",
+    2004,
+    "Фильм",
+    "olga"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "olga"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "648965",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Аватар",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Аватар",
+    2004,
+    "Фильм",
+    "avatar"
+   ],
+   [
+    "Аватар (2009)",
+    2009,
+    "Фильм",
+    "avatar-2009"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 14,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "avatar",
+   "avatar-sem-ubezhisch",
+   "avatar-plamya-i-pepel",
+   "avatar-legenda-ob-aange-2",
+   "avatar-put-vody-2022"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Айда",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Айа",
+    1987,
+    "Сериал",
+    "aya"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "айа",
+   "кайдан"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 2
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Далекий город  2 сезон",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Дикий город",
+    2015,
+    "Фильм",
+    "dikiy-gorod"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "дикий город"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Домашний арест",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Домашний арест",
+    2019,
+    "Фильм",
+    "domashniy-arest"
+   ],
+   [
+    "Домашний арест",
+    1996,
+    "Фильм",
+    "domashniy-arest-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "domashniy-arest",
+   "domashniy-arest-2",
+   "nash-domashniy-arest"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Киберкраш",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Коралина",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Коралина в Стране Кошмаров (2008)",
+    2009,
+    "Мультфильм",
+    "koralina-v-strane-koshmarov-2008"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "koralina-v-strane-koshmarov-2008"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Кровавая барыня",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Кровавая бойня",
+    2024,
+    "Фильм",
+    "krovavaya-boynya"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "кровавая бойня"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Майкл",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Майкл",
+    1996,
+    "Фильм",
+    "maykl"
+   ],
+   [
+    "Майкл",
+    2023,
+    "Фильм",
+    "maykl-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 16,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "maykl-2",
+   "maykl",
+   "maykl-dzhekson-i-ego-istoriya",
+   "maykl-dzhekson-v-pogone-za-pravdoy",
+   "maykl-hatchens-mystify"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Обитель зла",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Обитель зла",
+    2026,
+    "Фильм",
+    "obitel-zla-2"
+   ],
+   [
+    "Обитель зла (2002)",
+    2002,
+    "Фильм",
+    "obitel-zla-2002"
+   ],
+   [
+    "Обитель зла",
+    2022,
+    "Сериал",
+    "obitel-zla"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 17,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "obitel-zla-2",
+   "obitel-zla",
+   "obitel-zla-ostrov-smerti",
+   "obitel-zla-beskonechnaya-tma",
+   "obitel-zla-rakkun-siti"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Портал",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Портал",
+    2018,
+    "Фильм",
+    "portal"
+   ],
+   [
+    "Портал",
+    2021,
+    "Фильм",
+    "portal-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 8,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "portal-2",
+   "portal",
+   "portal-v-ad",
+   "portal-sredi-sosen",
+   "portaly-vremeni"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Руки вверх 2024",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Руки вверх!",
+    2010,
+    "Фильм",
+    "ruki-vverh-2"
+   ],
+   [
+    "Руки вверх",
+    2025,
+    "Фильм",
+    "ruki-vverh"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [
+   "руки вверх"
+  ],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "ruki-vverh",
+   "ruki-vverh-2",
+   "ruki-vverh-ili-grabiteli-neudachniki"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Сваты",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Сваты",
+    2008,
+    "Сериал",
+    "svaty-3"
+   ],
+   [
+    "Сваты",
+    2021,
+    "Фильм",
+    "svaty"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "svaty",
+   "svaty-3",
+   "svaty-2"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Топи",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Утопия",
+    2003,
+    "Фильм",
+    "utopiya-5"
+   ],
+   [
+    "Утопия",
+    2014,
+    "Сериал",
+    "utopiya"
+   ],
+   [
+    "Утопия",
+    2022,
+    "Фильм",
+    "utopiya-2"
+   ],
+   [
+    "Утопия",
+    2020,
+    "Сериал",
+    "utopiya-3"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [
+   "утопия"
+  ],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "topit-v-vine-bushuyuschee-plamya-pechali",
+   "topitsya-zaprescheno"
+  ],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Холоп 3",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "holod"
+  ],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Шрек",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Шрек: Триллер",
+    2011,
+    "Мультфильм",
+    "shrek-triller"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "shrek-triller"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "атака титанов",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "гарри поттер",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Гарри Поттер: Турнир факультетов Хогвартса",
+    2021,
+    "Сериал",
+    "garri-potter-turnir-fakultetov-hogvartsa"
+   ],
+   [
+    "Гарри Поттер: История магии",
+    2017,
+    "Фильм",
+    "garri-potter-istoriya-magii"
+   ],
+   [
+    "Гарри Поттер: Волшебники выпечки",
+    2024,
+    "Сериал",
+    "garri-potter-volshebniki-vypechki"
+   ],
+   [
+    "Гарри Поттер и узник Азкабана",
+    2004,
+    "Фильм",
+    "garri-potter-i-uznik-azkabana"
+   ]
+  ],
+  "n_targets": 12,
+  "near": [],
+  "results_total": 15,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "garri-potter-volshebniki-vypechki",
+   "garri-potter-20-let-spustya-vozvraschenie-v-hogvarts",
+   "garri-potter-turnir-fakultetov-hogvartsa",
+   "garri-potter-istoriya-magii",
+   "garri-potter-i-dary-smerti-chast-ii-2011"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 12
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "гипнозис",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Гипноз",
+    2024,
+    "Фильм",
+    "gipnoz"
+   ],
+   [
+    "Гипноз",
+    2021,
+    "Фильм",
+    "gipnoz-2"
+   ],
+   [
+    "Гипноз",
+    2023,
+    "Фильм",
+    "gipnoz-3"
+   ],
+   [
+    "Гипноз",
+    2004,
+    "Фильм",
+    "gipnoz-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [
+   "гипноз"
+  ],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "gipnoz",
+   "gipnoz-3",
+   "gipnoz-2",
+   "gipnoz-4"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "железный человек",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Железный человек",
+    1994,
+    "Мультфильм",
+    "zheleznyy-chelovek"
+   ],
+   [
+    "Железный человек",
+    2014,
+    "Сериал",
+    "zheleznyy-chelovek-5"
+   ],
+   [
+    "Железный человек",
+    2010,
+    "Мультфильм",
+    "zheleznyy-chelovek-4"
+   ],
+   [
+    "Железный человек",
+    2008,
+    "Фильм",
+    "zheleznyy-chelovek-2"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 15,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zheleznyy-chelovek-5",
+   "zheleznyy-chelovek-4",
+   "zheleznyy-chelovek-2",
+   "zheleznyy-chelovek",
+   "zheleznyy-chelovek-i-ego-neveroyatnye-druzya"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 18
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "звонок",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Звонок",
+    2002,
+    "Фильм",
+    "zvonok"
+   ],
+   [
+    "Звонок",
+    2023,
+    "Фильм",
+    "zvonok-3"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 27,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zvonok-3",
+   "zvonok",
+   "zvonok-iz-proshlogo",
+   "zvonok-angelu",
+   "zvonok-smerti"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "кот в сапогах",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Кот в сапогах",
+    2011,
+    "Мультфильм",
+    "kot-v-sapogah-2"
+   ],
+   [
+    "Кот в сапогах",
+    2009,
+    "Фильм",
+    "kot-v-sapogah-3"
+   ],
+   [
+    "Кот в сапогах",
+    1969,
+    "Фильм",
+    "kot-v-sapogah"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 9,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "kot-v-sapogah-2",
+   "kot-v-sapogah-3",
+   "kot-v-sapogah",
+   "kot-v-sapogah-poslednee-zhelanie-trezubec-2023",
+   "kot-v-sapogah-2-poslednee-zhelanie-2022"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "рики",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Рики",
+    2025,
+    "Фильм",
+    "riki"
+   ],
+   [
+    "Рики",
+    2009,
+    "Фильм",
+    "riki-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 13,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "riki",
+   "riki-2",
+   "riki-steniki",
+   "riki-dzherveys-armageddon-2023",
+   "riki-dzherveys-sverhestestvennoe"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "сердце зверя",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Сердце зверя",
+    2026,
+    "Фильм",
+    "serdce-zverya"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "serdce-zverya"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "сумерки 2",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Сумерки",
+    1998,
+    "Фильм",
+    "sumerki-5"
+   ],
+   [
+    "Сумерки",
+    2025,
+    "Фильм",
+    "sumerki-4"
+   ],
+   [
+    "Сумерки",
+    null,
+    "Сериал",
+    "sumerki"
+   ],
+   [
+    "Сумерки",
+    2020,
+    "Сериал",
+    "sumerki-2"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [
+   "сумерки"
+  ],
+  "results_total": 20,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sumerki-2008",
+   "sumerki-4",
+   "sumerki-2",
+   "sumerki-3",
+   "sumerki-5"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "сумерки затмение",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Сумерки. Сага. Затмение",
+    2010,
+    "Фильм",
+    "sumerki-saga-zatmenie"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "сумерки сага затмение"
+  ],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sumerki-saga-zatmenie"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "телохранители",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Телохранители",
+    2009,
+    "Сериал",
+    "telohraniteli"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 16,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "telohraniteli",
+   "telohraniteli-i-ubiycy",
+   "hrabrye-telohraniteli",
+   "telohranitel-13",
+   "telohranitel-7"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 20
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "универ",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Универ с привидениями 3",
+    2024,
+    "Фильм",
+    "univer-s-privideniyami-3"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 13,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "univer-s-privideniyami-3",
+   "universitet-monstrov",
+   "universalnyy-soldat-4",
+   "universalnoe-podrazdelenie",
+   "universitetskiy-vampir"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "чернобыль",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Чернобыль. Хроника трудных недель",
+    1986,
+    "Фильм",
+    "chernobyl-hronika-trudnyh-nedel"
+   ],
+   [
+    "Чернобыль: Последнее предупреждение",
+    1991,
+    "Фильм",
+    "chernobyl-poslednee-preduprezhdenie"
+   ],
+   [
+    "Чернобыль: в эпицентре катастрофы",
+    2026,
+    "Сериал",
+    "chernobyl-v-epicentre-katastrofy"
+   ],
+   [
+    "Чернобыль: 30 лет спустя",
+    2015,
+    "Фильм",
+    "chernobyl-30-let-spustya"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [],
+  "results_total": 8,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "chernobyl-v-epicentre-katastrofy",
+   "chernobyl-uteryannye-zapisi",
+   "chernobyl-30-let-spustya",
+   "chernobyl-poslednee-preduprezhdenie",
+   "chernobyl-hronika-trudnyh-nedel"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 4
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Ральф",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Ральф",
+    2012,
+    "Мультфильм",
+    "ralf"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "ralf",
+   "ralf-protiv-interneta-2018",
+   "svyatoy-ralf",
+   "korol-ralf"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "2 брак сериал",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "idealnyy-brak-serial-2023",
+   "tretiy-brak-serial-2023",
+   "boginya-braka-serial-2013"
+  ],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Веном",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Веном (2018)",
+    2018,
+    "Фильм",
+    "venom-2018"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "venom-posledniy-tanec",
+   "venom-2",
+   "venom-2018"
+  ],
+  "pos": 3,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Вечное сияние разума",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Вечное сияние чистого разума",
+    2004,
+    "Фильм",
+    "vechnoe-siyanie-chistogo-razuma"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "вечное сияние чистого разума"
+  ],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "vechnoe-siyanie-chistogo-razuma"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Гарри поттер и философский камень",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Гарри Поттер и философский камень",
+    2001,
+    "Фильм",
+    "garri-potter-i-filosofskiy-kamen"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "garri-potter-i-filosofskiy-kamen"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Древние",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Древние империи",
+    2023,
+    "Сериал",
+    "drevnie-imperii"
+   ],
+   [
+    "Древние боги",
+    2024,
+    "Фильм",
+    "drevnie-bogi"
+   ],
+   [
+    "Древние ритуалы",
+    2020,
+    "Фильм",
+    "drevnie-ritualy"
+   ],
+   [
+    "Древние пришельцы",
+    2009,
+    "Сериал",
+    "drevnie-prishelcy"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "drevnie-bogi",
+   "drevnie-imperii",
+   "drevnie-ritualy",
+   "drevnie-prishelcy",
+   "uzhasnye-istorii-drevnie-rimlyane"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Мстители",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Мстители",
+    1998,
+    "Фильм",
+    "mstiteli-2"
+   ],
+   [
+    "Мстители",
+    2007,
+    "Фильм",
+    "mstiteli"
+   ],
+   [
+    "Мстители (2012)",
+    2012,
+    "Фильм",
+    "mstiteli-2012"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 41,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "mstiteli",
+   "mstiteli-2",
+   "mstiteli-final",
+   "mstiteli-voyna-beskonechnosti",
+   "mstiteli-grimm-vremennye-voyny"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Начало",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Начало",
+    2021,
+    "Фильм",
+    "nachalo-3"
+   ],
+   [
+    "Начало",
+    2013,
+    "Фильм",
+    "nachalo-4"
+   ],
+   [
+    "Начало",
+    2020,
+    "Фильм",
+    "nachalo"
+   ],
+   [
+    "Начало",
+    2010,
+    "Фильм",
+    "nachalo-2"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 111,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "nachalo-3",
+   "nachalo",
+   "nachalo-4",
+   "nachalo-2",
+   "nachalo-sintveyva"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Одиночка",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Одиночка",
+    1986,
+    "Фильм",
+    "odinochka-9"
+   ],
+   [
+    "Одиночка",
+    2025,
+    "Фильм",
+    "odinochka"
+   ],
+   [
+    "#Одиночка",
+    2025,
+    "Фильм",
+    "odinochka-2"
+   ],
+   [
+    "Одиночка",
+    2025,
+    "Фильм",
+    "odinochka-3"
+   ]
+  ],
+  "n_targets": 9,
+  "near": [],
+  "results_total": 19,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "odinochka",
+   "odinochka-3",
+   "odinochka-8",
+   "odinochka-7",
+   "odinochka-5"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Папины дочки",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Папина дочка",
+    2008,
+    "Фильм",
+    "papina-dochka"
+   ],
+   [
+    "Папина дочка",
+    2018,
+    "Фильм",
+    "papina-dochka-2"
+   ],
+   [
+    "Папина дочка",
+    2020,
+    "Фильм",
+    "papina-dochka-3"
+   ],
+   [
+    "Папина дочка",
+    2007,
+    "Фильм",
+    "papina-dochka-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [
+   "папина дочка"
+  ],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "papina-dochka",
+   "papina-dochka-2",
+   "papina-dochka-3",
+   "papina-dochka-4"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Под подозрением",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Под подозрением",
+    1999,
+    "Фильм",
+    "pod-podozreniem"
+   ],
+   [
+    "Под подозрением",
+    2019,
+    "Сериал",
+    "pod-podozreniem-2"
+   ],
+   [
+    "Под подозрением",
+    2018,
+    "Фильм",
+    "pod-podozreniem-3"
+   ],
+   [
+    "Под подозрением",
+    2014,
+    "Сериал",
+    "pod-podozreniem-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "pod-podozreniem-2",
+   "pod-podozreniem-3",
+   "pod-podozreniem-4",
+   "pod-podozreniem",
+   "pod-podozreniem-2-2"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 6
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Подземелье",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Подземелье",
+    2024,
+    "Фильм",
+    "podzemele"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 25,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "podzemele",
+   "podzemele-vkusnostey",
+   "podzemele-i-devushka-voin-preodolevayuschaya-granicy",
+   "podzemele-drakonov-3-kniga-zaklinaniy",
+   "podzemele-mertvyh"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Рик и Морти",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Рик и Морти",
+    2013,
+    "Мультфильм",
+    "rik-i-morti"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "rik-i-morti",
+   "rik-i-morti-anime",
+   "rik-i-morti-protiv-genocidera",
+   "rik-i-morti-samuray-i-segun"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 91
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Слово пацана кровь на асфальте",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Холод",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Холод",
+    2016,
+    "Сериал",
+    "holod"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 54,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "holod",
+   "holodnaya-voyna-1994-god",
+   "holodnyy-sezon",
+   "holodilnik",
+   "holodnaya-mest"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 10
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Чикатило",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Чикати Ло",
+    2026,
+    "Фильм",
+    "chikati-lo"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "чикати ло"
+  ],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "chikati-lo"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "властелинт колнц",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "vlastelin-kolec-dve-kreposti",
+   "vlastelin-kolec-kolca-vlasti"
+  ],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "гравити",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Гравити Фолз: Между сосен (ТВ, 2016)",
+    2016,
+    "Мультфильм",
+    "graviti-folz-mezhdu-sosen-tv-2016"
+   ],
+   [
+    "Гравити Фолз: Короткие истории",
+    2013,
+    "Мультфильм",
+    "graviti-folz-korotkie-istorii"
+   ],
+   [
+    "Гравити Фолз",
+    2012,
+    "Мультфильм",
+    "graviti-folz"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "graviti-folz-mezhdu-sosen-tv-2016",
+   "graviti-folz-korotkie-istorii",
+   "graviti-folz"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "джиперс скриперс",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Джиперс Криперс",
+    2001,
+    "Фильм",
+    "dzhipers-kripers"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "джиперс криперс",
+   "джиперс криперс 2"
+  ],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "dzhipers-kripers-vozvraschaetsya",
+   "dzhipers-kripers-2",
+   "dzhipers-kripers"
+  ],
+  "pos": 3,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "дневники вампира",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Дневники вампира",
+    1997,
+    "Фильм",
+    "dnevniki-vampira-2"
+   ],
+   [
+    "Дневники вампира",
+    2009,
+    "Сериал",
+    "dnevniki-vampira"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "dnevniki-vampira",
+   "dnevniki-vampira-2",
+   "o-moem-pererozhdenii-v-sliz-dnevnik-slizi",
+   "dnevnik-poezdki-v-iokogamu-za-pokupkami-ova-1"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 171
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "доктор икс",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Доктор Икс",
+    2026,
+    "Сериал",
+    "doktor-iks"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 14,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "doktor-iks",
+   "van-pis-zapis-priklyucheniy-doktora-choppera-ballada-otca-i-docheri",
+   "doktor-dzhekil-i-mister-akula",
+   "doktor-dzheyson-2-svet-i-tma",
+   "doktor-proktor-i-ego-mashina-vremeni"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 6
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "жена принца 2- века",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Жена принца XXI века",
+    2026,
+    "Сериал",
+    "zhena-princa-xxi-veka"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "жена принца xxi века"
+  ],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zhena-princa-xxi-veka"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 12
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "жизнб по вызову",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Мужчина по вызову",
+    1999,
+    "Фильм",
+    "muzhchina-po-vyzovu"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "мужчина по вызову"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "зачем мы женимся",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Зачем мы женимся?",
+    2007,
+    "Фильм",
+    "zachem-my-zhenimsya"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zachem-my-zhenimsya",
+   "zachem-my-zhenimsya-snova",
+   "zachem-my-opyat-zhenimsya"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "маска",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Маска",
+    1938,
+    "Фильм",
+    "maska-5"
+   ],
+   [
+    "Маска",
+    2020,
+    "Фильм",
+    "maska-4"
+   ],
+   [
+    "Маска",
+    2025,
+    "Фильм",
+    "maska"
+   ],
+   [
+    "Маска",
+    2018,
+    "Сериал",
+    "maska-2"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [],
+  "results_total": 39,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "maska",
+   "maska-4",
+   "maska-2",
+   "maska-3",
+   "maska-5"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "мылодрамма",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Мелодрама",
+    2025,
+    "Сериал",
+    "melodrama"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "мелодрама"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 10
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "на игле",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "На игле",
+    1996,
+    "Фильм",
+    "na-igle"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "na-igle",
+   "t2-treynspotting-na-igle-2",
+   "nash-uchitel-gabriel-iglesias"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "надежда",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Надежда",
+    2026,
+    "Фильм",
+    "nadezhda"
+   ],
+   [
+    "Надежда",
+    2024,
+    "Фильм",
+    "nadezhda-2"
+   ],
+   [
+    "Надежда",
+    2019,
+    "Фильм",
+    "nadezhda-3"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 22,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "nadezhda",
+   "nadezhda-2",
+   "nadezhda-3",
+   "nadezhda-na-spasenie",
+   "nadezhda-zhiva"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "ненормальный",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Ненормальный: Самые тёмные дни",
+    2024,
+    "Фильм",
+    "nenormalnyy-samye-temnye-dni"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "nenormalnyy-samye-temnye-dni",
+   "nenormalnye"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "острова о",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Острова",
+    2025,
+    "Фильм",
+    "ostrova"
+   ],
+   [
+    "Острова",
+    2025,
+    "Фильм",
+    "ostrova-2"
+   ],
+   [
+    "Острова",
+    2024,
+    "Сериал",
+    "ostrova-3"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [
+   "острова",
+   "остров ноя",
+   "остров"
+  ],
+  "results_total": 66,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "proklyatie-ostrova-ouk",
+   "pobeg-s-ostrova-ognya",
+   "tikava-tayna-ostrova-rusalok",
+   "tri-dyavolskih-ostrova",
+   "ostrov-andrea"
+  ],
+  "pos": 6,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "призраки комнаты 203",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Призраки квартиры 203",
+    2022,
+    "Фильм",
+    "prizraki-kvartiry-203"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "призраки квартиры 203"
+  ],
+  "results_total": 3,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "prizrak-v-komnate",
+   "ya-i-prizrak-v-moey-komnate",
+   "prizraki-kvartiry-203"
+  ],
+  "pos": 3,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "тачки",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Тачки (2006)",
+    2006,
+    "Мультфильм",
+    "tachki-2006"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 5,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "tachki-na-doroge",
+   "tachki-3-2017",
+   "tachki-2",
+   "tachki-2006",
+   "samye-bystrye-tachki-gryaznogo-yuga"
+  ],
+  "pos": 4,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "трёшка",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Река",
+    2018,
+    "Фильм",
+    "reka-5"
+   ],
+   [
+    "Река",
+    2012,
+    "Сериал",
+    "reka-4"
+   ],
+   [
+    "Река",
+    1984,
+    "Фильм",
+    "reka-6"
+   ],
+   [
+    "Река",
+    2015,
+    "Фильм",
+    "reka"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [
+   "река"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Элвин",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Элвин и бурундуки встречают Франкенштейна",
+    1999,
+    "Мультфильм",
+    "elvin-i-burunduki-vstrechayut-frankenshteyna"
+   ],
+   [
+    "Элвин и бурундуки встречают оборотня",
+    2000,
+    "Мультфильм",
+    "elvin-i-burunduki-vstrechayut-oborotnya"
+   ],
+   [
+    "Элвин и бурундуки: Грандиозное бурундуключение",
+    2015,
+    "Фильм",
+    "elvin-i-burunduki-grandioznoe-burunduklyuchenie"
+   ],
+   [
+    "Элвин и Бурундуки 3",
+    2011,
+    "Фильм",
+    "elvin-i-burunduki-3"
+   ]
+  ],
+  "n_targets": 6,
+  "near": [],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "elvin-i-burunduki-grandioznoe-burunduklyuchenie",
+   "elvinnn-i-burunduki",
+   "elvin-i-burunduki-3",
+   "elvin-i-burunduki-2",
+   "elvin-i-burunduki"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "гнев улья",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Matchbox",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Matchbox. Фильм",
+    2026,
+    "Фильм",
+    "matchbox-film"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "matchbox-film"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Балтийское море",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Вышка",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Вспышка",
+    2023,
+    "Фильм",
+    "vspyshka"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "вспышка",
+   "пышка"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Ничего не случается дважды",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Ольга",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Ольга",
+    2004,
+    "Фильм",
+    "olga"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "olga"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Отчаянные домохозяйки",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Отчаянные домохозяева",
+    2012,
+    "Сериал",
+    "otchayannye-domohozyaeva"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "отчаянные домохозяева",
+   "отчаянная домохозяйка"
+  ],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "otchayannaya-domohozyayka",
+   "otchayannye-domohozyaeva"
+  ],
+  "pos": 2,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 58
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Путешествие к бессмертию",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Путешествие к бессмертию: Мчась в Синхай — Пролог",
+    2023,
+    "Мультфильм",
+    "puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "puteshestvie-k-bessmertiyu-mchas-v-sinhay-prolog"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 4
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Самый лучший день",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Самый лучший тренер",
+    2009,
+    "Фильм",
+    "samyy-luchshiy-trener"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "самый лучший тренер",
+   "самый лучший",
+   "самый длинный день"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Твоё сердце будет разбито",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Тихий океан",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "ng-morskie-odissei-otkryvaya-tihiy-okean",
+   "operaciya-tihiy-okean"
+  ],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "Химера",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Химера",
+    2009,
+    "Фильм",
+    "himera"
+   ],
+   [
+    "Химера",
+    2018,
+    "Фильм",
+    "himera-2"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "himera-2",
+   "himera"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "Холодные берега",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Родные берега",
+    1943,
+    "Фильм",
+    "rodnye-berega"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "родные берега"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "Чепелуэйт",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Чепелуэйт",
+    2021,
+    "Сериал",
+    "chepelueyt"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "chepelueyt"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 10
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "ван хельсинг",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Ван Хельсинг",
+    2004,
+    "Фильм",
+    "van-helsing"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 2,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "van-helsing",
+   "van-helsing-londonskoe-zadanie"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "вдали от",
+  "visits": 1.0,
+  "class": "франшиза/начало названия",
+  "targets": [
+   [
+    "Вдали от Родины",
+    1960,
+    "Фильм",
+    "vdali-ot-rodiny"
+   ],
+   [
+    "Вдали от рая",
+    2002,
+    "Фильм",
+    "vdali-ot-raya"
+   ],
+   [
+    "Вдали от неё",
+    2006,
+    "Фильм",
+    "vdali-ot-nee"
+   ],
+   [
+    "Вдали от обезумевшей толпы",
+    2015,
+    "Фильм",
+    "vdali-ot-obezumevshey-tolpy"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [],
+  "results_total": 9,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "vdali-oto-vseh",
+   "vdali-ot-obezumevshey-tolpy",
+   "vdali-ot-nee",
+   "vdali-ot-linii-fronta",
+   "vdali-ot-raya"
+  ],
+  "pos": 2,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "впритык",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Впритык (2010)",
+    2010,
+    "Фильм",
+    "vprityk-2010"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "vprityk-2010"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "вышка",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Вспышка",
+    2023,
+    "Фильм",
+    "vspyshka"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "вспышка",
+   "пышка"
+  ],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "ошибка поиска"
+ },
+ {
+  "q": "дневники вампиров",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Дневники вампира",
+    1997,
+    "Фильм",
+    "dnevniki-vampira-2"
+   ],
+   [
+    "Дневники вампира",
+    2009,
+    "Сериал",
+    "dnevniki-vampira"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [
+   "дневники вампира"
+  ],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "dnevniki-vampira",
+   "dnevniki-vampira-2",
+   "o-moem-pererozhdenii-v-sliz-dnevnik-slizi",
+   "dnevnik-poezdki-v-iokogamu-za-pokupkami-ova-1"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 171
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "загон для собак",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Загон для собак",
+    2010,
+    "Фильм",
+    "zagon-dlya-sobak"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "zagon-dlya-sobak"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "лол",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Лола",
+    1961,
+    "Фильм",
+    "lola-3"
+   ],
+   [
+    "Лола",
+    2022,
+    "Фильм",
+    "lola"
+   ],
+   [
+    "Лола",
+    2024,
+    "Фильм",
+    "lola-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [
+   "лола",
+   "ло"
+  ],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "lola-2",
+   "lola-dast",
+   "lolo-i-vnuk",
+   "lola",
+   "lolita-lobosko-rassleduet"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "недетское кино",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "новичок",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Новичок",
+    1990,
+    "Фильм",
+    "novichok-5"
+   ],
+   [
+    "Новичок",
+    2002,
+    "Фильм",
+    "novichok"
+   ],
+   [
+    "Новичок",
+    2005,
+    "Фильм",
+    "novichok-2"
+   ],
+   [
+    "Новичок",
+    null,
+    "Сериал",
+    "novichok-3"
+   ]
+  ],
+  "n_targets": 5,
+  "near": [],
+  "results_total": 14,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "novichok-4",
+   "novichok-2",
+   "novichok",
+   "novichok-5",
+   "novichok-3"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "олдску",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "папины дочки",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Папина дочка",
+    2008,
+    "Фильм",
+    "papina-dochka"
+   ],
+   [
+    "Папина дочка",
+    2018,
+    "Фильм",
+    "papina-dochka-2"
+   ],
+   [
+    "Папина дочка",
+    2020,
+    "Фильм",
+    "papina-dochka-3"
+   ],
+   [
+    "Папина дочка",
+    2007,
+    "Фильм",
+    "papina-dochka-4"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [
+   "папина дочка"
+  ],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "papina-dochka",
+   "papina-dochka-2",
+   "papina-dochka-3",
+   "papina-dochka-4"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "патриот",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Патриот",
+    1939,
+    "Фильм",
+    "patriot-4"
+   ],
+   [
+    "Патриот",
+    1998,
+    "Фильм",
+    "patriot-3"
+   ],
+   [
+    "Патриот",
+    null,
+    "Сериал",
+    "patriot"
+   ],
+   [
+    "Патриот",
+    2000,
+    "Фильм",
+    "patriot-2"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [],
+  "results_total": 10,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "patriot-2",
+   "patriot-3",
+   "patriot-4",
+   "patriot",
+   "patriotizm-moriarti-ova"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "побег",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Побег",
+    1940,
+    "Фильм",
+    "pobeg-15"
+   ],
+   [
+    "Побег",
+    1972,
+    "Фильм",
+    "pobeg-14"
+   ],
+   [
+    "Побег",
+    1994,
+    "Фильм",
+    "pobeg"
+   ],
+   [
+    "Побег",
+    null,
+    "Сериал",
+    "pobeg-2"
+   ]
+  ],
+  "n_targets": 15,
+  "near": [],
+  "results_total": 109,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "pobeg-3",
+   "pobeg-5",
+   "pobeg-12",
+   "pobeg-8",
+   "pobeg-9"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 8
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "приведение",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Привидение",
+    2019,
+    "Фильм",
+    "prividenie-3"
+   ],
+   [
+    "Привидение",
+    2018,
+    "Фильм",
+    "prividenie"
+   ],
+   [
+    "Привидение",
+    2004,
+    "Фильм",
+    "prividenie-2"
+   ],
+   [
+    "Привидение (1990)",
+    1990,
+    "Фильм",
+    "prividenie-1990"
+   ]
+  ],
+  "n_targets": 4,
+  "near": [
+   "привидение",
+   "поведение",
+   "провидение"
+  ],
+  "results_total": 0,
+  "maybe": true,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "prividenie-3",
+   "prividenie",
+   "prividenie-2",
+   "u-nas-prividenie",
+   "prividenie-1990"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "свадьба светлячковкоа",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Свадьба светлячков",
+    2026,
+    "Сериал",
+    "svadba-svetlyachkov"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "свадьба светлячков"
+  ],
+  "results_total": 4,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "svadba-s-zolotoy-shpilkoy",
+   "svadba-svetlyachkov",
+   "svadba-s-idealnymi-fotografiyami",
+   "svadba-s-vladykoy-carstva-teney"
+  ],
+  "pos": 2,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 3
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "слово пацаслово пацана",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "стерлинг поинт",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "судья",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Судья",
+    2025,
+    "Сериал",
+    "sudya"
+   ],
+   [
+    "Судья",
+    2017,
+    "Сериал",
+    "sudya-2"
+   ],
+   [
+    "Судья",
+    2014,
+    "Фильм",
+    "sudya-3"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 15,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sudya",
+   "sudya-2",
+   "sudya-3",
+   "sudya-di-gnev-buddy",
+   "sudya-iz-ada"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 20
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "форсаж 7",
+  "visits": 1.0,
+  "class": "точное название",
+  "targets": [
+   [
+    "Форсаж 7",
+    2015,
+    "Фильм",
+    "forsazh-7"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 17,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "forsazh-7",
+   "forsazh-10-2023",
+   "forsazh-9",
+   "forsazh-8",
+   "forsazh-6"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "холод",
+  "visits": 1.0,
+  "class": "франшиза",
+  "targets": [
+   [
+    "Холод",
+    2016,
+    "Сериал",
+    "holod"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [],
+  "results_total": 54,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "holod",
+   "holodnaya-voyna-1994-god",
+   "holodnyy-sezon",
+   "holodilnik",
+   "holodnaya-mest"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 10
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "элвин из",
+  "visits": 1.0,
+  "class": "неясно",
+  "targets": [],
+  "n_targets": 0,
+  "near": [],
+  "results_total": 0,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [],
+  "pos": null,
+  "card": null,
+  "verdict": "нет в каталоге"
+ },
+ {
+  "q": "истребители",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Истребители",
+    1992,
+    "Фильм",
+    "istrebiteli-2"
+   ],
+   [
+    "Истребители",
+    1939,
+    "Фильм",
+    "istrebiteli"
+   ]
+  ],
+  "n_targets": 2,
+  "near": [],
+  "results_total": 9,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "istrebiteli-2",
+   "istrebiteli",
+   "istrebiteli-nasekomyh-ova",
+   "istrebiteli-nasekomyh",
+   "istrebiteli-duhov"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "сорвиголова",
+  "visits": 1.0,
+  "class": "неоднозначное название",
+  "targets": [
+   [
+    "Сорвиголова",
+    2013,
+    "Фильм",
+    "sorvigolova-3"
+   ],
+   [
+    "Сорвиголова",
+    2003,
+    "Фильм",
+    "sorvigolova"
+   ],
+   [
+    "Сорвиголова",
+    2015,
+    "Сериал",
+    "sorvigolova-2"
+   ]
+  ],
+  "n_targets": 3,
+  "near": [],
+  "results_total": 7,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "sorvigolova-2",
+   "sorvigolova-3",
+   "sorvigolova",
+   "sorvigolova-rozhdennyy-zanovo",
+   "sorvigolova-dlya-chego-ugodno"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 39
+  },
+  "verdict": "неисправна карточка"
+ },
+ {
+  "q": "брильянтовый полицейский",
+  "visits": 1.0,
+  "class": "опечатка",
+  "targets": [
+   [
+    "Бриллиантовый полицейский",
+    1999,
+    "Фильм",
+    "brilliantovyy-policeyskiy"
+   ]
+  ],
+  "n_targets": 1,
+  "near": [
+   "бриллиантовый полицейский"
+  ],
+  "results_total": 1,
+  "maybe": false,
+  "maybe_links": [],
+  "nothing": false,
+  "first_results": [
+   "brilliantovyy-policeyskiy"
+  ],
+  "pos": 1,
+  "card": {
+   "status": 200,
+   "player": false,
+   "episodes": 0
+  },
+  "verdict": "неисправна карточка"
+ }
+]

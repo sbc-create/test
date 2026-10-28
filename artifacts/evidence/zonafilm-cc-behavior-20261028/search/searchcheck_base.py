@@ -11,7 +11,9 @@ S, INP, OUT = sys.argv[1], sys.argv[2], sys.argv[3]
 UA = "Mozilla/5.0 factory-seo-acceptance"
 queries = json.load(open(INP))
 cat = json.load(open("/srv/zonafilm-cc/data/zona-02-catalog.json"))["items"]
-facets = json.load(open(S + "/zcc/facets.json"))
+# Жанровые подписи: рабочая копия zcc/ (первые прогоны) или закоммиченная рядом со сценарием.
+_F = S + "/zcc/facets.json"
+facets = json.load(open(_F if os.path.exists(_F) else os.path.join(os.path.dirname(os.path.abspath(__file__)), "facets.json")))
 def norm(s):
     s = s.lower().replace("ё", "е"); s = re.sub(r"\(\d{4}\)?|\(\d{4}$", " ", s)
     return re.sub(r"\s+", " ", re.sub(r"[^\w\s]", " ", s)).strip()
