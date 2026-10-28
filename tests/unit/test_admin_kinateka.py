@@ -90,7 +90,7 @@ def doc(items=(A, B), accent="#E3B26B"):
 
 def save(api, channel, document):
     version = call(api, "GET", f"/api/v1/apps/kinateka/channels/{channel}").body["draftVersion"]
-    r = call(api, "PUT", f"/api/v1/apps/kinateka/channels/{channel}/draft",
+    r = call(api, "POST", f"/api/v1/apps/kinateka/channels/{channel}/draft",
              {"draft": document, "expectedVersion": version})
     assert r.status == 200, r.body
     return r.body["draftVersion"]
@@ -107,7 +107,7 @@ def publish(api, channel, document, expected=None):
 
 def test_выключенная_запись_не_существует(root):
     api = ControlApi(root=root, env=env(root / "data", app_writes=""))
-    r = call(api, "PUT", "/api/v1/apps/kinateka/channels/sandbox/draft", {"draft": doc(), "expectedVersion": "x"})
+    r = call(api, "POST", "/api/v1/apps/kinateka/channels/sandbox/draft", {"draft": doc(), "expectedVersion": "x"})
     assert r.status == 404
     assert call(api, "GET", "/api/v1/apps/kinateka").status == 200, "чтение остаётся"
 
@@ -118,7 +118,7 @@ def test_запись_приложения_не_включает_настрой�
 
 
 def test_право_настроек_не_даёт_права_на_подборки(api):
-    r = call(api, "PUT", "/api/v1/apps/kinateka/channels/sandbox/draft",
+    r = call(api, "POST", "/api/v1/apps/kinateka/channels/sandbox/draft",
              {"draft": doc(), "expectedVersion": "x"}, token=SETTINGS)
     assert r.status == 403 and r.body["error"]["required_scope"] == "app:write"
 
@@ -130,7 +130,7 @@ def test_неизвестный_канал(api):
 
 def test_черновик_со_сверкой_версии(api):
     version = save(api, "sandbox", doc())
-    r = call(api, "PUT", "/api/v1/apps/kinateka/channels/sandbox/draft",
+    r = call(api, "POST", "/api/v1/apps/kinateka/channels/sandbox/draft",
              {"draft": doc(accent="#FF0000"), "expectedVersion": "устаревшая"})
     assert r.status == 409 and r.body["error"]["current_version"] == version
 
@@ -357,3 +357,41 @@ def test_после_отката_черновик_помечен_и_берётс
     assert "Черновик отличается" not in html
     черновик = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body["draft"]
     assert [i["contentId"] for i in черновик["collections"][0]["items"]] == [A, B]
+
+
+def test_через_http_слой_фабрики(root):
+    """Проверки выше зовут ControlApi напрямую и не видели, что HTTP-слой отвечает
+    405 на любой PUT (установка 28.10: черновик не сохранился, а публикация прошла
+    с черновиком по умолчанию). Здесь — тот же путь через настоящий сервер."""
+    import threading
+    import urllib.request
+
+    from factory.site_engine.api.server import ServerConfig, build_server
+    control = ControlApi(root=root, env=env(root / "data"))
+    read = create_api([], root=root, env={"SITE_ENGINE_API_ENABLED": "1", "SITE_ENGINE_ENVIRONMENT": "test"})
+    srv = build_server(ServerConfig(host="127.0.0.1", port=0), read, control, None)
+    поток = threading.Thread(target=srv.serve_forever, kwargs={"poll_interval": 0.05}, daemon=True)
+    поток.start()
+    база = f"http://127.0.0.1:{srv.server_address[1]}/api/v1/apps/kinateka/channels/sandbox"
+
+    def http(метод, путь="", тело=None):
+        req = urllib.request.Request(база + путь, method=метод,
+                                     data=json.dumps(тело).encode() if тело is not None else None,
+                                     headers={"Authorization": f"Bearer {EDITOR}", "Content-Type": "application/json"})
+        try:
+            with urllib.request.urlopen(req, timeout=10) as о:
+                return о.status, json.loads(о.read())
+        except urllib.error.HTTPError as e:
+            return e.code, json.loads(e.read())
+    try:
+        _, канал = http("GET")
+        код, ответ = http("POST", "/draft", {"draft": doc(), "expectedVersion": канал["draftVersion"]})
+        assert код == 200, ответ
+        код, ответ = http("POST", "/publish", {"expectedVersion": ответ["draftVersion"], "expectedRevision": None})
+        assert код == 200, ответ
+        _, канал = http("GET")
+        assert канал["currentRevision"]["collections"][0]["id"] == "week", "опубликован сохранённый черновик"
+    finally:
+        srv.shutdown()
+        поток.join(timeout=5)
+        srv.server_close()

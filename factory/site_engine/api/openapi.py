@@ -240,7 +240,7 @@ from factory.site_engine.api.ratelimit import DEFAULT_LIMITS
         "errors": {"404": "нет такого канала"},
     },
     "/api/v1/apps/{appId}/channels/{channel}/draft": {
-        "method": "put", "summary": "Сохранить черновик канала со сверкой версии",
+        "method": "post", "summary": "Сохранить черновик канала со сверкой версии",
         "scope": "app:write", "idempotent": True,
         "body": {"type": "object", "required": ["draft", "expectedVersion"],
                  "properties": {"draft": {"type": "object"},

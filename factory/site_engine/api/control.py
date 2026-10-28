@@ -812,7 +812,10 @@ class ControlApi:
                 if method == "GET" and not action:
                     principal.require(SCOPE_READ)
                     return self._app_channel(app_id, channel)
-                if method == "PUT" and action == ["draft"]:
+                # POST, а не PUT: HTTP-слой фабрики отвечает 405 на любой PUT
+                # («замена целиком не предусмотрена»), и черновик сохраняется так же,
+                # как остальные записи. Найдено при установке 28.10.
+                if method == "POST" and action == ["draft"]:
                     principal.require(SCOPE_APP)
                     return self._app_save_draft(principal, app_id, channel, body, correlation_id)
                 if method == "POST" and action == ["publish"]:

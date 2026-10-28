@@ -114,7 +114,7 @@ class AppSection:
         except ValueError as exc:
             session.flash = {"ok": False, "message": str(exc), "detail": None}
             return _redirect(back)
-        r = self.admin._call("PUT", f"{API}/channels/{channel}/draft", session,
+        r = self.admin._call("POST", f"{API}/channels/{channel}/draft", session,
                              {"draft": draft, "expectedVersion": form.get("draftVersion", "")})
         problems = (r.body or {}).get("problems") if r.status == 200 else None
         success = "Черновик сохранён." + (

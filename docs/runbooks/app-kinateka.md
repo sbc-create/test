@@ -35,21 +35,29 @@
    sudo bash automation/host/deploy-control-api.sh deploy <sha>
    ```
    Ветка начата от развёрнутого `e698e2ad` и не меняет credentials/changeset/audit — поколение безопасности то же.
-3. Окружение `/etc/site-factory/control-api.env` (значения токенов в чат, журналы и git не попадают):
-   - `SITE_ENGINE_APP_CONFIG_WRITES=1` — запись раздела; общая `SITE_ENGINE_CONTROL_WRITES` не нужна и не включается;
-   - в `SITE_ENGINE_CONTROL_TOKENS` добавить токен редактора: `<новый токен>=read,app:write`
-     (сгенерировать, например, `python3 -c "import secrets;print(secrets.token_urlsafe(32))"` прямо в файл);
-   - по желанию `SITE_ENGINE_APP_CATALOG_DIR_ANIMEDIA_01` (по умолчанию `/srv/animedia-icu/data`).
-   Затем `sudo systemctl restart site-factory-control-api`.
+3. Окружение. Внимание: drop-in `10-credentials.conf` сбрасывает `EnvironmentFile=` и оставляет только
+   `/etc/site-factory/control-plane.env` (0644, читается всеми) — `control-api.env` службой **не читается**, а в
+   общедоступный файл токены класть нельзя. Поэтому свой drop-in и свой файл:
+   - `/etc/systemd/system/site-factory-control-api.service.d/20-kinateka.conf`:
+     `[Service]` + `EnvironmentFile=-/etc/site-factory/kinateka-admin.env`;
+   - `/etc/site-factory/kinateka-admin.env` (0600 root): `SITE_ENGINE_APP_CONFIG_WRITES=1` и
+     `SITE_ENGINE_CONTROL_TOKENS=<редактор>=read,app:write,audit:read|<сессия приложения>=read,app:write`
+     (значения генерируются `secrets.token_urlsafe(32)` прямо в файл и нигде не печатаются);
+   - токен редактора отдельно: `/etc/site-factory/kinateka-editor-token` (0600 root).
+   Общая `SITE_ENGINE_CONTROL_WRITES` остаётся `0`: запись настроек витрин не включается.
+   Затем `sudo systemctl daemon-reload && sudo systemctl restart site-factory-control-api`.
+   **Порядок:** сначала код (шаг 2), потом окружение — прежний код не знает области `app:write` и не стартует с таким
+   токеном. При откате кода на релиз без раздела — сначала убрать `20-kinateka.conf` и `daemon-reload`.
 
 ## Вход в панель (редактор, владелец)
 
 Панель слушает только петлю сервера; наружу не выведена.
 
 1. Туннель с своего компьютера: `ssh -N -L 8790:127.0.0.1:8790 <пользователь>@<сервер фабрики>`.
-2. Браузер: `http://127.0.0.1:8790/admin` → «Вход по токену Control API» → токен с областью `app:write`
-   (выдаёт Архитектор/владелец; токен только `read` даёт просмотр без кнопок).
-3. В шапке — «Приложение „Кинатека“». Обзор: каналы `sandbox` и `production`, действующие ревизии, история.
+2. Токен редактора — на сервере: `sudo cat /etc/site-factory/kinateka-editor-token` (в чат и почту не пересылать).
+3. Браузер: `http://127.0.0.1:8790/admin` → «Вход по токену Control API» → вставить токен. Токен только `read` даёт
+   просмотр без кнопок.
+4. В шапке — «Приложение „Кинатека“». Обзор: каналы `sandbox` и `production`, действующие ревизии, история.
 
 ## Работа редактора
 
@@ -85,5 +93,5 @@
 |---|---|---|
 | Конфигурация главной | «Вернуть ревизию N» в истории канала (или `POST .../channels/{канал}/rollback`) | только указатель канала |
 | Код службы чтения | `sudo bash automation/host/install-app-read-api.sh --rollback-release` | прежний код и юнит из `*.previous`; ревизии и ключ на месте |
-| Код Control API/админки | `sudo bash automation/host/deploy-control-api.sh rollback` | ссылка `current` → `previous`; ревизии в `var/` на месте |
+| Код Control API/админки | убрать `20-kinateka.conf`, `daemon-reload`, затем `sudo bash automation/host/deploy-control-api.sh rollback` | ссылка `current` → `previous`; ревизии в `var/` на месте |
 | APK | восстановительный выпуск вперёд (код прежней версии, новый `versionCode`, та же подпись) | приложение; данные пользователя сохраняются |

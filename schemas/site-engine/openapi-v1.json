@@ -3086,7 +3086,7 @@
       }
     },
     "/api/v1/apps/{appId}/channels/{channel}/draft": {
-      "put": {
+      "post": {
         "summary": "Сохранить черновик канала со сверкой версии",
         "parameters": [
           {
