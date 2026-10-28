@@ -35,7 +35,9 @@ def card(host, slug):
     # Поиск сайта по точному названию: карточка среди совпадений (до «Возможно, вы искали» не считаем).
     q = name or slug
     sst, shtml = get(f"https://{host}/search/?q={urllib.parse.quote(q)}")
-    res = shtml.split("Совпадений:", 1)[1] if "Совпадений:" in shtml else ""
+    # Zona/Animedia: «Совпадений: N» (выше — «Возможно, вы искали»); AnimeGo: «Найдено N произведений».
+    mark = "Совпадений:" if "Совпадений:" in shtml else ("Найдено " if "Найдено " in shtml else None)
+    res = shtml.split(mark, 1)[1] if mark else ""
     links = re.findall(r'href="/title/([^/"]+)/"', res)
     order = list(dict.fromkeys(links))
     return {

@@ -1,0 +1,1861 @@
+{
+ "host": "zonafilm.space",
+ "started": "2026-10-28T16:16:08Z",
+ "finished": "2026-10-28T16:16:32Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm.space/title/izvne-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/izvne-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Извне (2022) — смотреть онлайн — Zona Cinema",
+   "h1": "Извне",
+   "description": "Затерянный в лесу городок пленяет каждого, кому не посчастливилось туда попасть — покинуть это место невозможно. Днем невольные жители пытаются выстроить подобие нормального…",
+   "player": true,
+   "search": {
+    "query": "Извне",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/vne-kampusa/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/vne-kampusa/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Вне кампуса — смотреть онлайн — Zona Cinema",
+   "h1": "Вне кампуса",
+   "description": "События развиваются в вымышленном Брайарском университете. Отличница и поп-певица Ханна Уэллс влюблена в местную знаменитость, звезду футбола Джастина Кола, но тот не замечает…",
+   "player": true,
+   "search": {
+    "query": "Вне кампуса",
+    "status": 200,
+    "position": 1,
+    "results_seen": 14
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/gangsterlend/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/gangsterlend/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Гангстерленд — смотреть онлайн — Zona Cinema",
+   "h1": "Гангстерленд",
+   "description": "Лондон. Две могущественных криминальных семьи, Харриганы и Стивенсоны, ведут войну за власть, избегая прямой конфронтации. Но шаткое перемирие может нарушить исчезновение Томми…",
+   "player": true,
+   "search": {
+    "query": "Гангстерленд",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/odisseya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/odisseya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Одиссея (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Одиссея",
+   "description": "После Троянской войны Одиссей, царь Итаки, во главе небольшого войска возвращается домой к своей жене Пенелопе. На своём пути Одиссей сталкивается со множеством испытаний…",
+   "player": true,
+   "search": {
+    "query": "Одиссея",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ostrye-kozyrki/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ostrye-kozyrki/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Острые козырьки — смотреть онлайн — Zona Cinema",
+   "h1": "Острые козырьки",
+   "description": "Британский сериал о криминальном мире Бирмингема 20-х годов прошлого века, в котором многолюдная семья Шелби стала одной из самых жестоких и влиятельных гангстерских банд…",
+   "player": true,
+   "search": {
+    "query": "Острые козырьки",
+    "status": 200,
+    "position": 1,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/dzhek-richer-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/dzhek-richer-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Джек Ричер (2022) — смотреть онлайн — Zona Cinema",
+   "h1": "Джек Ричер",
+   "description": "Джек Ричер, бывший майор военной полиции, посещает небольшой городок, где его арестовывают по подозрению в убийстве. Вскоре местные полицейские понимают, что этот здоровяк с…",
+   "player": true,
+   "search": {
+    "query": "Джек Ричер",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/fonari/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/fonari/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Фонари — смотреть онлайн — Zona Cinema",
+   "h1": "Фонари",
+   "description": "Начинающий Джон Стюарт и опытный страж Хэл Джордан, межгалактические полицейские из Корпуса Зелёных Фонарей, оказываются втянуты в расследование убийства в американской глубинке.",
+   "player": true,
+   "search": {
+    "query": "Фонари",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/grimm/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/grimm/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Гримм (2011) — смотреть онлайн — Zona Cinema",
+   "h1": "Гримм",
+   "description": "Действие происходит в современном Портленде, где детектив из отдела убийств узнаёт, что он является потомком группы охотников, известных как «Гриммы», которые сражаются, чтобы…",
+   "player": true,
+   "search": {
+    "query": "Гримм",
+    "status": 200,
+    "position": 2,
+    "results_seen": 11
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/rancho-dattonov/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/rancho-dattonov/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ранчо Даттонов — смотреть онлайн — Zona Cinema",
+   "h1": "Ранчо Даттонов",
+   "description": "Рип Уилер и Бет Даттон отправляются в Южный Техас, рассчитывая построить новый дивный дом и наконец-то начать всё сначала. Но на этой земле больше не действуют старые правила, и…",
+   "player": true,
+   "search": {
+    "query": "Ранчо Даттонов",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ukrytie-5/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ukrytie-5/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Укрытие (2023) — смотреть онлайн — Zona Cinema",
+   "h1": "Укрытие",
+   "description": "В недалёком будущем выжившие 10 тысяч человек живут в огромном бункере глубиной в 144 этажа. Люди верят, что мир мёртв, воздух снаружи отравлен и выходить на поверхность…",
+   "player": true,
+   "search": {
+    "query": "Укрытие",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/chelovek-pauk-novyy-den/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chelovek-pauk-novyy-den/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Человек-паук: Новый день — смотреть онлайн — Zona Cinema",
+   "h1": "Человек-паук: Новый день",
+   "description": "Одинокий и повзрослевший Питер Паркер полностью посвящает себя борьбе с преступностью в Нью-Йорке, поскольку 4 года назад после заклинания Доктора Стренджа мир и все близкие…",
+   "player": true,
+   "search": {
+    "query": "Человек-паук: Новый день",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mandalorec-i-grogu/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mandalorec-i-grogu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мандалорец и Грогу — смотреть онлайн — Zona Cinema",
+   "h1": "Мандалорец и Грогу",
+   "description": "Империя пала, но её военачальники всё ещё держат под своим контролем части галактики. Зарождающаяся Новая Республика пытается защитить идеалы, за которые сражались повстанцы, и…",
+   "player": true,
+   "search": {
+    "query": "Мандалорец и Грогу",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kasl/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kasl/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Касл (2009) — смотреть онлайн — Zona Cinema",
+   "h1": "Касл",
+   "description": "Знакомьтесь, Ричард Касл - успешный писатель детективного жанра, который в последней книге убил своего главного героя. Но кажется, что одному из почитателей его таланта книги…",
+   "player": true,
+   "search": {
+    "query": "Касл",
+    "status": 200,
+    "position": 2,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/dyavol-nosit-prada-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/dyavol-nosit-prada-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Дьявол носит Prada 2 — смотреть онлайн — Zona Cinema",
+   "h1": "Дьявол носит Prada 2",
+   "description": "Миранда Пристли борется за выживание журнала в эпоху новых медиа. Мэрил Стрип в сиквеле культового драмеди",
+   "player": true,
+   "search": {
+    "query": "Дьявол носит Prada 2",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ochen-strashnoe-kino/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ochen-strashnoe-kino/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Очень страшное кино (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Очень страшное кино",
+   "description": "На Тьюздей, младшую дочь Синди Кэмпбелл, нападает Призрачное Лицо. Старшая дочь Сара разыскивает ставшую отшельницей мать, и они пытаются остановить очередную волну убийств в…",
+   "player": true,
+   "search": {
+    "query": "Очень страшное кино",
+    "status": 200,
+    "position": 1,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/buhta-vdov/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/buhta-vdov/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Бухта вдов — смотреть онлайн — Zona Cinema",
+   "h1": "Бухта вдов",
+   "description": "Том Лофтис, мэр города на небольшом острове в Новой Англии, противостоит суеверным местным жителям, которые считают свой остров проклятым. Том всеми силами старается развивать…",
+   "player": true,
+   "search": {
+    "query": "Бухта вдов",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/myslit-kak-prestupnik/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/myslit-kak-prestupnik/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мыслить как преступник (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Мыслить как преступник",
+   "description": "В Сиэтле за короткое время пропали без вести четыре молодые девушки. Возникает версия, что в городе появился серийный маньяк-убийца. За расследование этого криминального случая…",
+   "player": true,
+   "search": {
+    "query": "Мыслить как преступник",
+    "status": 200,
+    "position": 2,
+    "results_seen": 5
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/bolshoy-potencial/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/bolshoy-potencial/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Большой потенциал — смотреть онлайн — Zona Cinema",
+   "h1": "Большой потенциал",
+   "description": "Морган, мать-одиночка с тремя детьми, работает уборщицей в полицейском участке. Однажды она становится свидетельницей преступления. Ее исключительный ум позволяет ей быстро…",
+   "player": true,
+   "search": {
+    "query": "Большой потенциал",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/medlennye-loshadi/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/medlennye-loshadi/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Медленные лошади — смотреть онлайн — Zona Cinema",
+   "h1": "Медленные лошади",
+   "description": "После неудачной миссии агента британской разведки Ривера Картрайта ссылают в Слоу-Хаус. Там собраны такие же провинившиеся агенты, которые выполняют скучные задачи для…",
+   "player": true,
+   "search": {
+    "query": "Медленные лошади",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/nadezhda/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/nadezhda/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Надежда (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Надежда",
+   "description": "Охотничья находка в лесу близ портового городка запускает обратный отсчет для человечества. Жители оказываются один на один с инопланетным кошмаром, не поддающимся земной логике.",
+   "player": true,
+   "search": {
+    "query": "Надежда",
+    "status": 200,
+    "position": 1,
+    "results_seen": 22
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mortal-kombat-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mortal-kombat-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мортал Комбат 2 — смотреть онлайн — Zona Cinema",
+   "h1": "Мортал Комбат 2",
+   "description": "Отставной звезде боевиков суждено стать защитником Земли. Карл Урбан в экранизации культового файтинга",
+   "player": true,
+   "search": {
+    "query": "Мортал Комбат 2",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ty/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ty/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ты — смотреть онлайн — Zona Cinema",
+   "h1": "Ты",
+   "description": "На что вы готовы ради любви? Когда успешный менеджер книжного магазина встречает талантливую начинающую писательницу, для него ответ очевиден: абсолютно на все. Используя…",
+   "player": true,
+   "search": {
+    "query": "Ты",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/laki/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/laki/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Лаки — смотреть онлайн — Zona Cinema",
+   "h1": "Лаки",
+   "description": "Бывшая мошенница Лаки под влиянием обстоятельств вынуждена вернуться к своему криминальному прошлому и принять участие в крупном ограблении. Она надеется обрести свободу и…",
+   "player": true,
+   "search": {
+    "query": "Лаки",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mys-straha/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mys-straha/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мыс страха (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Мыс страха",
+   "description": "Опасный убийца Макс Кейди выходит на свободу и намеревается отомстить адвокатам Анне и Тому Боуденам — счастливой супружеской паре, которая помогла отправить его в тюрьму.",
+   "player": true,
+   "search": {
+    "query": "Мыс страха",
+    "status": 200,
+    "position": 1,
+    "results_seen": 13
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/vlastelin-kolec-kolca-vlasti/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/vlastelin-kolec-kolca-vlasti/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Властелин колец: Кольца власти — смотреть онлайн — Zona Cinema",
+   "h1": "Властелин колец: Кольца власти",
+   "description": "Несмотря на то, что наступили времена относительного мира, разрозненным королевствам предстоит противостоять возрождению зла в Средиземье.",
+   "player": true,
+   "search": {
+    "query": "Властелин колец: Кольца власти",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/styuart-blum-ne-smog-spasti-vselennuyu/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/styuart-blum-ne-smog-spasti-vselennuyu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Стюарт Блум не смог спасти вселенную — смотреть онлайн — Zona Cinema",
+   "h1": "Стюарт Блум не смог спасти вселенную",
+   "description": "Владелец магазина комиксов Стюарт Блум должен восстановить реальность после того, как он сломал построенное Шелдоном и Леонардом устройство, случайно вызвав Армагеддон…",
+   "player": true,
+   "search": {
+    "query": "Стюарт Блум не смог спасти вселенную",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mentalist/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mentalist/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Менталист — смотреть онлайн — Zona Cinema",
+   "h1": "Менталист",
+   "description": "Патрик Джейн - детектив и независимый консультант из Калифорнийского Бюро Расследований (КБР), он использует свои отточенные, как лезвие, навыки наблюдения для раскрытия тяжких…",
+   "player": true,
+   "search": {
+    "query": "Менталист",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/den-razoblacheniya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/den-razoblacheniya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "День разоблачения — смотреть онлайн — Zona Cinema",
+   "h1": "День разоблачения",
+   "description": "Как человечество отреагирует на правду о внеземных цивилизациях? Эмили Блант в блокбастере Стивена Спилберга",
+   "player": true,
+   "search": {
+    "query": "День разоблачения",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/moana/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/moana/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Моана — смотреть онлайн — Zona Cinema",
+   "h1": "Моана",
+   "description": "Моана откликается на зов океана. Впервые в жизни она отправляется за риф своего острова Мотунуи вместе с прославленным полубогом Мауи. Их ждёт незабываемое путешествие, которое…",
+   "player": true,
+   "search": {
+    "query": "Моана",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/zavety/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/zavety/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Заветы — смотреть онлайн — Zona Cinema",
+   "h1": "Заветы",
+   "description": "Государство Гилеад, занимающее бывшую территорию США, спустя 15 лет после восстания стало ещё более закрытым, а его законы стали ещё более жёсткими. Агнес Маккензи, ученице…",
+   "player": true,
+   "search": {
+    "query": "Заветы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/vneshnie-otmeli/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/vneshnie-otmeli/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Внешние отмели — смотреть онлайн — Zona Cinema",
+   "h1": "Внешние отмели",
+   "description": "Внешние отмели — 320-километровая полоса узких песчаных барьерных островов побережья Северной Каролины, начинающихся у юго-восточного края Вирджиния-Бич восточного побережья…",
+   "player": true,
+   "search": {
+    "query": "Внешние отмели",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mumiya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mumiya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мумия (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Мумия",
+   "description": "Пропавшую девочку обнаруживают в древнем саркофаге. Шокирующий хоррор режиссёра «Восстания зловещих мертвецов»",
+   "player": true,
+   "search": {
+    "query": "Мумия",
+    "status": 200,
+    "position": 1,
+    "results_seen": 17
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/realnye-pacany/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/realnye-pacany/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Реальные пацаны — смотреть онлайн — Zona Cinema",
+   "h1": "Реальные пацаны",
+   "description": "Три парня поступили в университет, который уделяет большое внимание американскому футболу. Троица должна быстро адаптироваться к новой жизни, совмещая футбол, девушек, занятия и…",
+   "player": true,
+   "search": {
+    "query": "Реальные пацаны",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/snegopad/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/snegopad/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Снегопад — смотреть онлайн — Zona Cinema",
+   "h1": "Снегопад",
+   "description": "Рассказ о начале кокаиновой эпидемии в Лос-Анджелесе начала 1980-х, когда на улицах Америки появился дешёвый крэк из Доминиканы, и страну захлестнул неконтролируемый рост…",
+   "player": true,
+   "search": {
+    "query": "Снегопад",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kashtanovyy-chelovechek/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kashtanovyy-chelovechek/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Каштановый человечек — смотреть онлайн — Zona Cinema",
+   "h1": "Каштановый человечек",
+   "description": "На месте страшного убийства находят куколку из каштанов. По этой жутковатой улике два детектива пытаются разыскать убийцу, причастного к пропаже ребенка политика.",
+   "player": true,
+   "search": {
+    "query": "Каштановый человечек",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/supergerl/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/supergerl/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Супергёрл — смотреть онлайн — Zona Cinema",
+   "h1": "Супергёрл",
+   "description": "Во время празднования своего 21-го дня рождения Кара Зор-Эл отправляется в путешествие по галактике вместе со своим псом Крипто. В ходе этого путешествия она знакомится с юной…",
+   "player": true,
+   "search": {
+    "query": "Супергёрл",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/csi-mesto-prestupleniya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/csi-mesto-prestupleniya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "CSI: Место преступления — смотреть онлайн — Zona Cinema",
+   "h1": "CSI: Место преступления",
+   "description": "Лас-Вегас… Своими яркими неоновыми огнями, сотнями игровых клубов и казино он манит всё новых и новых людей. Но далеко не все из них оказываются добропорядочными гражданами. В…",
+   "player": true,
+   "search": {
+    "query": "CSI: Место преступления",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kerri-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kerri-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Кэрри (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Кэрри",
+   "description": "Ограждённая от мира девушка с телекинетическими способностями подвергается травле, и под влиянием своей властной матери всё заканчивается жуткой кровавой трагедией.",
+   "player": true,
+   "search": {
+    "query": "Кэрри",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kovcheg/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kovcheg/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ковчег (2023) — смотреть онлайн — Zona Cinema",
+   "h1": "Ковчег",
+   "description": "В будущем люди ради выживания начинают осваивать другие планеты. Во время полёта на космическом корабле «Ковчег» происходит авария, в результате капитан погибает, системы…",
+   "player": true,
+   "search": {
+    "query": "Ковчег",
+    "status": 200,
+    "position": 1,
+    "results_seen": 12
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/vlasteliny-vselennoy/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/vlasteliny-vselennoy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Властелины вселенной — смотреть онлайн — Zona Cinema",
+   "h1": "Властелины вселенной",
+   "description": "Адам, 10-летний принц с планеты Этерния, терпит крушение на космическом корабле и попадает на Землю. Спустя 15 лет принц отправляется на родную планету, которая теперь находится…",
+   "player": true,
+   "search": {
+    "query": "Властелины вселенной",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/to-leto-kogda-ya-pohoroshela/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/to-leto-kogda-ya-pohoroshela/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "То лето, когда я похорошела — смотреть онлайн — Zona Cinema",
+   "h1": "То лето, когда я похорошела",
+   "description": "О любовном треугольнике между одной девушкой и двумя братьями.",
+   "player": true,
+   "search": {
+    "query": "То лето, когда я похорошела",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ferma-klarksona/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ferma-klarksona/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ферма Кларксона — смотреть онлайн — Zona Cinema",
+   "h1": "Ферма Кларксона",
+   "description": "Джереми Кларксон пробует себя в роли фермера — ему предстоит столкнуться со всеми трудностями сельского хозяйства.",
+   "player": true,
+   "search": {
+    "query": "Ферма Кларксона",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/temnaya-materiya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/temnaya-materiya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Тёмная материя — смотреть онлайн — Zona Cinema",
+   "h1": "Тёмная материя",
+   "description": "Физик Джейсон Дессен из Чикаго оказывается в альтернативной версии своей жизни. Чтобы вернуться к семье, он должен будет пройти через ряд параллельных реальностей и столкнуться…",
+   "player": true,
+   "search": {
+    "query": "Тёмная материя",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/one-piece-bolshoy-kush/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/one-piece-bolshoy-kush/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "One Piece. Большой куш — смотреть онлайн — Zona Cinema",
+   "h1": "One Piece. Большой куш",
+   "description": "Молодой отчаянный капитан набирает команду и отправляется в путь, чтобы получить титул Короля пиратов и найти мифическое сокровище One Piece.",
+   "player": true,
+   "search": {
+    "query": "One Piece. Большой куш",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/yelloustoun-marshaly/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/yelloustoun-marshaly/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Йеллоустоун: Маршалы — смотреть онлайн — Zona Cinema",
+   "h1": "Йеллоустоун: Маршалы",
+   "description": "Кейси Даттон, бывший «морской котик», решает оставить ранчо Йеллоустоун и начать службу в рядах маршалов США. Его военная закалка и ковбойская выдержка оказываются незаменимыми…",
+   "player": true,
+   "search": {
+    "query": "Йеллоустоун: Маршалы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/zakon-i-poryadok-specialnyy-korpus/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/zakon-i-poryadok-specialnyy-korpus/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Закон и порядок. Специальный корпус — смотреть онлайн — Zona Cinema",
+   "h1": "Закон и порядок. Специальный корпус",
+   "description": "В системе судопроизводства преступления на сексуальной почве считаются особенно тяжкими. В Нью-Йорке подобные преступления расследуют детективы элитного подразделения…",
+   "player": true,
+   "search": {
+    "query": "Закон и порядок. Специальный корпус",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sherlok/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sherlok/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Шерлок (2010) — смотреть онлайн — Zona Cinema",
+   "h1": "Шерлок",
+   "description": "События разворачиваются в наши дни. Он прошел Афганистан, остался инвалидом. По возвращении в родные края встречается с загадочным, но своеобразным гениальным человеком. Тот в…",
+   "player": true,
+   "search": {
+    "query": "Шерлок",
+    "status": 200,
+    "position": 2,
+    "results_seen": 20
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/korol-talsy/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/korol-talsy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Король Талсы — смотреть онлайн — Zona Cinema",
+   "h1": "Король Талсы",
+   "description": "Осужденный нью-йоркский мафиози Дуайт Манфреди по прозвищу Генерал спустя четверть века выходит на свободу. Босс отправляет его в глушь — в Талсу, штат Оклахома — для…",
+   "player": true,
+   "search": {
+    "query": "Король Талсы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/byvaet-i-huzhe/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/byvaet-i-huzhe/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Бывает и хуже — смотреть онлайн — Zona Cinema",
+   "h1": "Бывает и хуже",
+   "description": "Семья среднего достатка, Хэки, живет в самом сердце Индианы и старается изо всех сил держаться на плаву в пучине сумасшедших будней. Этот сериал о несбыточных ожиданиях и…",
+   "player": true,
+   "search": {
+    "query": "Бывает и хуже",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/shugar/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/shugar/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Шугар — смотреть онлайн — Zona Cinema",
+   "h1": "Шугар",
+   "description": "Частный детектив Джон Шугар специализируется на розыске пропавших, не любит применять насилие и страдает от внезапных приступов. Известный кинопродюсер Джонатан Сигел нанимает…",
+   "player": true,
+   "search": {
+    "query": "Шугар",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/makston-holl/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/makston-holl/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Макстон-холл — смотреть онлайн — Zona Cinema",
+   "h1": "Макстон-холл",
+   "description": "Простая девушка Руби Белл попадает в элитный колледж, получив стипендию. Вскоре она случайно узнает секрет высокомерного однокурсника Джеймса Бофорта. Он пытается всеми…",
+   "player": true,
+   "search": {
+    "query": "Макстон-холл",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/detstvo-sheldona/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/detstvo-sheldona/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Детство Шелдона — смотреть онлайн — Zona Cinema",
+   "h1": "Детство Шелдона",
+   "description": "История о непростом детстве вундеркинда Шелдона Купера. Родители юного гения не разделяют увлечения сына наукой: его мать очень религиозна, а отец, бывший футбольный тренер…",
+   "player": true,
+   "search": {
+    "query": "Детство Шелдона",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/oskolki/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/oskolki/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Осколки (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Осколки",
+   "description": "Лос-Анджелес, 1981 год. 17-летний старшеклассник Эллис и его компания друзей учатся в престижной частной школе. Жизнь подростков переворачивается, когда в школе появляется новый…",
+   "player": true,
+   "search": {
+    "query": "Осколки",
+    "status": 200,
+    "position": 1,
+    "results_seen": 12
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/u-margo-problemy-s-dengami/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/u-margo-problemy-s-dengami/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "У Марго проблемы с деньгами — смотреть онлайн — Zona Cinema",
+   "h1": "У Марго проблемы с деньгами",
+   "description": "«У Марго проблемы с деньгами» — сериал. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "У Марго проблемы с деньгами",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/voennaya-mashina/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/voennaya-mashina/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Военная машина — смотреть онлайн — Zona Cinema",
+   "h1": "Военная машина",
+   "description": "Кандагар, Афганистан. Во время ремонта боевой машины отряд армии США попадает под артобстрел талибов. Выживает лишь сапёр инженерной бригады, получив серьёзную травму ноги и…",
+   "player": true,
+   "search": {
+    "query": "Военная машина",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/molodoy-sherlok-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/molodoy-sherlok-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Молодой Шерлок (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Молодой Шерлок",
+   "description": "1870-е годы. Шерлок Холмс, 19-летний студент Оксфордского университета, оказывается вовлечён в убийство. Шерлок берётся за своё первое расследование, чтобы избежать заключения…",
+   "player": true,
+   "search": {
+    "query": "Молодой Шерлок",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/karatel-poslednee-ubiystvo/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/karatel-poslednee-ubiystvo/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Каратель: Последнее убийство — смотреть онлайн — Zona Cinema",
+   "h1": "Каратель: Последнее убийство",
+   "description": "Нью-Йорк. После того, как бывший морпех Фрэнк Касл по прозвищу Каратель отомстил за убийство близких и расправился с криминальной семьёй Ньюччи, район Маленькая Сицилия…",
+   "player": true,
+   "search": {
+    "query": "Каратель: Последнее убийство",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/lendmen/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/lendmen/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Лэндмен — смотреть онлайн — Zona Cinema",
+   "h1": "Лэндмен",
+   "description": "Мидленд-Одесса, Техас. Лэндмен Томми Норрис работает на нефтяную компанию M-TEX Oil. Каждый день ему приходится решать различные проблемы, разбираясь с мексиканскими картелями…",
+   "player": true,
+   "search": {
+    "query": "Лэндмен",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/yarostnaya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/yarostnaya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Яростная — смотреть онлайн — Zona Cinema",
+   "h1": "Яростная",
+   "description": "Агент ФБР Элис Блэк, переживающая личную драму, начинает охоту за хладнокровной убийцей Кэтрин, чьи жертвы — исключительно состоятельные мужчины. В процессе расследования судьбы…",
+   "player": true,
+   "search": {
+    "query": "Яростная",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/chisto-angliyskie-ubiystva/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chisto-angliyskie-ubiystva/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Чисто английские убийства — смотреть онлайн — Zona Cinema",
+   "h1": "Чисто английские убийства",
+   "description": "Чисто английский сериал по чисто английским романам Каролины Грэм. От перемены мест слагаемых сумма английского детектива не меняется, и время не властно над истинными…",
+   "player": true,
+   "search": {
+    "query": "Чисто английские убийства",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/obitel-zla-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/obitel-zla-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Обитель зла (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Обитель зла",
+   "description": "Незадачливому курьеру поручено доставить посылку в отдалённую больницу. Вскоре он оказывается в эпицентре вспышки неизвестного вируса, где вынужден сражаться с ордами…",
+   "player": true,
+   "search": {
+    "query": "Обитель зла",
+    "status": 200,
+    "position": 1,
+    "results_seen": 27
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/passazhir/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/passazhir/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Пассажир (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Пассажир",
+   "description": "Через несколько недель после начала жизни в доме на колёсах молодая пара становится свидетелями страшной аварии, в которой погибает водитель. Вскоре их начинает преследовать…",
+   "player": true,
+   "search": {
+    "query": "Пассажир",
+    "status": 200,
+    "position": 1,
+    "results_seen": 20
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/skoraya-pomosch/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/skoraya-pomosch/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Скорая помощь (1994) — смотреть онлайн — Zona Cinema",
+   "h1": "Скорая помощь",
+   "description": "Герои остросюжетного сериала «Скорая помощь» - врачи чикагской городской больницы. Они оказывают экстренную помощь пациентам, спасают человеческие жизни, забывая порой о себе и…",
+   "player": true,
+   "search": {
+    "query": "Скорая помощь",
+    "status": 200,
+    "position": 1,
+    "results_seen": 26
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sverhestestvennoe-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сверхъестественное (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Сверхъестественное",
+   "description": "Сериал рассказывает о приключениях братьев Сэма и Дина Винчестеров, которые путешествуют по Соединённым Штатам на чёрном автомобиле Chevrolet Impala 1967 года, расследуют…",
+   "player": true,
+   "search": {
+    "query": "Сверхъестественное",
+    "status": 200,
+    "position": 3,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ty-tot-kogo-ya-lyublyu/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ty-tot-kogo-ya-lyublyu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Ты тот, кого я люблю — смотреть онлайн — Zona Cinema",
+   "h1": "Ты тот, кого я люблю",
+   "description": "Эркан Алдур, наследник влиятельной стамбульской семьи, проходит срочную службу в отдалённой деревне. После землетрясения он помогает местным жителям и встречает Диджле — девушку…",
+   "player": true,
+   "search": {
+    "query": "Ты тот, кого я люблю",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/dnevniki-vampira/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/dnevniki-vampira/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Дневники вампира (2009) — смотреть онлайн — Zona Cinema",
+   "h1": "Дневники вампира",
+   "description": "Прошло всего четыре месяца после трагической аварии, в которой погибли их родители, и 17-летняя Елена Гилберт и ее 15-летний брат Джереми все еще пытаются оправиться от потери и…",
+   "player": true,
+   "search": {
+    "query": "Дневники вампира",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/luchshe-zvonite-solu/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/luchshe-zvonite-solu/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Лучше звоните Солу — смотреть онлайн — Zona Cinema",
+   "h1": "Лучше звоните Солу",
+   "description": "История об испытаниях и невзгодах, которые приходится преодолеть Солу Гудману, адвокату по уголовным делам, в тот период, когда он пытается открыть свою собственную адвокатскую…",
+   "player": true,
+   "search": {
+    "query": "Лучше звоните Солу",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mechta-eshrefa/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mechta-eshrefa/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мечта Эшрефа — смотреть онлайн — Zona Cinema",
+   "h1": "Мечта Эшрефа",
+   "description": "Влиятельный богач Эшреф, потерявший веру в любовь, влюбляется в молодую певицу. Он не знает, что девушка скрывает секреты, связанные с его собственным прошлым.",
+   "player": true,
+   "search": {
+    "query": "Мечта Эшрефа",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/zakon-prirody/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/zakon-prirody/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Закон природы — смотреть онлайн — Zona Cinema",
+   "h1": "Закон природы",
+   "description": "Яман — молодой, умный мужчина, который очень любит природу и мечтает найти хорошую работу. Он решает устроиться в крупный холдинг, но терпит неудачу. Спустя 5 лет судьба…",
+   "player": true,
+   "search": {
+    "query": "Закон природы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ochen-strannye-dela/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ochen-strannye-dela/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Очень странные дела — смотреть онлайн — Zona Cinema",
+   "h1": "Очень странные дела",
+   "description": "«Очень странные дела» — сериал 2016 года. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Очень странные дела",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/preemnik-zov-predkov-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/preemnik-zov-predkov-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Преемник: зов предков (2025) — смотреть онлайн — Zona Cinema",
+   "h1": "Преемник: зов предков",
+   "description": "«Преемник: зов предков» (Halef: Köklerin Çagrisi) — сериал 2025 года. Жанры: турецкий сериал, драма. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Преемник: зов предков",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/pauk-nuar/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/pauk-nuar/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Паук-Нуар — смотреть онлайн — Zona Cinema",
+   "h1": "Паук-Нуар",
+   "description": "Частный сыщик скрывает, что он супергерой в отставке. Николас Кейдж в стильном ретродетективе",
+   "player": true,
+   "search": {
+    "query": "Паук-Нуар",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/chuzhestranka/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chuzhestranka/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Чужестранка — смотреть онлайн — Zona Cinema",
+   "h1": "Чужестранка",
+   "description": "История Клэр Рэндалл, военной медсестры из 1940-х годов, которая во время прогулки у легендарных шотландских каменных кругов внезапно перемещается в 1743 год. Клэр оказывается в…",
+   "player": true,
+   "search": {
+    "query": "Чужестранка",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/bumazhnyy-dom/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/bumazhnyy-dom/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Бумажный дом (2017) — смотреть онлайн — Zona Cinema",
+   "h1": "Бумажный дом",
+   "description": "История о преступниках, решивших ограбить Королевский монетный двор Испании и украсть 2,4 млрд евро.",
+   "player": true,
+   "search": {
+    "query": "Бумажный дом",
+    "status": 200,
+    "position": 1,
+    "results_seen": 6
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/golyak/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/golyak/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Голяк — смотреть онлайн — Zona Cinema",
+   "h1": "Голяк",
+   "description": "Мелкий воришка Винни и его друзья живут в английской глубинке и ежедневно промышляют нелегальными делами, приносящими небольшой доход. Все меняется, когда компания переходит…",
+   "player": true,
+   "search": {
+    "query": "Голяк",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/yelloustoun/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/yelloustoun/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Йеллоустоун — смотреть онлайн — Zona Cinema",
+   "h1": "Йеллоустоун",
+   "description": "Йеллоустоун – первый в мире национальный парк, одно из самых посещаемых мест в США. Но здесь, на границе цивилизации, происходит много такого, чего не видят туристы, что не…",
+   "player": true,
+   "search": {
+    "query": "Йеллоустоун",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/teoriya-bolshogo-vzryva/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/teoriya-bolshogo-vzryva/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Теория большого взрыва — смотреть онлайн — Zona Cinema",
+   "h1": "Теория большого взрыва",
+   "description": "Два блестящих физика Леонард и Шелдон — великие умы, которые понимают, как устроена вселенная. Но их гениальность ничуть не помогает им общаться с людьми, особенно с женщинами.…",
+   "player": true,
+   "search": {
+    "query": "Теория большого взрыва",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/lyubovnaya-rana/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/lyubovnaya-rana/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Любовная рана — смотреть онлайн — Zona Cinema",
+   "h1": "Любовная рана",
+   "description": "«Любовная рана» (Ask Yarasi) — сериал, Турция. Жанры: турецкий сериал, драма. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Любовная рана",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sotnya-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sotnya-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сотня (2014) — смотреть онлайн — Zona Cinema",
+   "h1": "Сотня",
+   "description": "События в сериале начинают разворачиваться по прошествии девяносто семи лет после того, как всю цивилизацию уничтожила страшная атомная война. Высоко в космосе на орбите Земли…",
+   "player": true,
+   "search": {
+    "query": "Сотня",
+    "status": 200,
+    "position": 3,
+    "results_seen": 9
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/durnushka/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/durnushka/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Дурнушка — смотреть онлайн — Zona Cinema",
+   "h1": "Дурнушка",
+   "description": "«Дурнушка» — сериал. Жанр: турецкий сериал. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Дурнушка",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/osnovanie-orhan/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/osnovanie-orhan/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Основание: Орхан — смотреть онлайн — Zona Cinema",
+   "h1": "Основание: Орхан",
+   "description": "XIV век. Второй османский правитель Орхан Гази продолжает дело бесстрашного отца и деда, укрепляя свою державу и династию. Ему предстоит вступить в ожесточённую борьбу с…",
+   "player": true,
+   "search": {
+    "query": "Основание: Орхан",
+    "status": 200,
+    "position": 1,
+    "results_seen": 5
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/korallovyy-dvorec/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/korallovyy-dvorec/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Коралловый дворец — смотреть онлайн — Zona Cinema",
+   "h1": "Коралловый дворец",
+   "description": "После исчезновения мужа Джемре оказывается в таинственном особняке «Коралл», где тайны прошлого, семейные распри и запретная любовь меняют её судьбу.",
+   "player": true,
+   "search": {
+    "query": "Коралловый дворец",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sekretnye-materialy/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sekretnye-materialy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Секретные материалы — смотреть онлайн — Zona Cinema",
+   "h1": "Секретные материалы",
+   "description": "Агентам ФБР Дане Скалли и Фоксу Малдеру поручают работу над проектом «Секретные материалы». Это архив нераскрытых дел, связанных с паранормальными явлениями. Малдер верит в…",
+   "player": true,
+   "search": {
+    "query": "Секретные материалы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 13
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/bolnica-pitt/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/bolnica-pitt/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Больница Питт — смотреть онлайн — Zona Cinema",
+   "h1": "Больница Питт",
+   "description": "Будни сотрудников отделения неотложной помощи больницы в Питтсбурге.",
+   "player": true,
+   "search": {
+    "query": "Больница Питт",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/doktor-kto/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/doktor-kto/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Доктор Кто — смотреть онлайн — Zona Cinema",
+   "h1": "Доктор Кто",
+   "description": "Британский научно-фантастический телесериал компании Би-Би-Си о загадочном путешественнике во времени, известном как «Доктор», который вместе со своими спутниками исследует…",
+   "player": true,
+   "search": {
+    "query": "Доктор Кто",
+    "status": 200,
+    "position": 1,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/zavist/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/zavist/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Зависть (2025) — смотреть онлайн — Zona Cinema",
+   "h1": "Зависть",
+   "description": "Сениха не знала материнской заботы, ведь всё лучшее с детства доставалось её брату Халиту. Только в его будущее вливались семейные деньги: он учился в элитных школах, добился…",
+   "player": true,
+   "search": {
+    "query": "Зависть",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mister-robot-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mister-robot-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мистер Робот — смотреть онлайн — Zona Cinema",
+   "h1": "Мистер Робот",
+   "description": "История молодого программиста Эллиота, страдающего социофобией и решившего, что единственный приемлемый для него способ взаимодействия с людьми — это профессия хакера. Таким…",
+   "player": true,
+   "search": {
+    "query": "Мистер Робот",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/emili-v-parizhe/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/emili-v-parizhe/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Эмили в Париже — смотреть онлайн — Zona Cinema",
+   "h1": "Эмили в Париже",
+   "description": "Американка Эмили получает неожиданное предложение отправиться в Париж по работе. Ей предстоит столкнуться с местной культурой, найти новых друзей и любовь.",
+   "player": true,
+   "search": {
+    "query": "Эмили в Париже",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/uensdey/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/uensdey/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Уэнсдэй — смотреть онлайн — Zona Cinema",
+   "h1": "Уэнсдэй",
+   "description": "Уэнздей, дочь Гомеса и Мортиши Аддамс, учится в академии Nevermore. Ей предстоит освоить экстрасенсорные способности, чтобы остановить местного серийного убийцу и раскрыть тайну…",
+   "player": true,
+   "search": {
+    "query": "Уэнсдэй",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/flesh-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/flesh-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Флэш (2014) — смотреть онлайн — Zona Cinema",
+   "h1": "Флэш",
+   "description": "Когда Барри Аллен был маленьким, больше всего на свете ему хотелось быть супергероем — тем, кто превосходит лимиты человеческого организма и использует во благо данную ему силу.…",
+   "player": true,
+   "search": {
+    "query": "Флэш",
+    "status": 200,
+    "position": 2,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ofis-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ofis-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Офис (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Офис",
+   "description": "Сериал о трудовых буднях небольшого регионального офиса крупной компании, обитатели которого целыми днями должны терпеть закидоны своего непутевого босса.",
+   "player": true,
+   "search": {
+    "query": "Офис",
+    "status": 200,
+    "position": 2,
+    "results_seen": 21
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/tayny-smolvilya/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/tayny-smolvilya/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Тайны Смолвиля — смотреть онлайн — Zona Cinema",
+   "h1": "Тайны Смолвиля",
+   "description": "1989 год, метеоритный дождь в городе Смолвиль наносит невиданные разрушения, а в бездетной семье жителей Смолвиля странным образом появляется маленький ребёнок - Кларк Кент.…",
+   "player": true,
+   "search": {
+    "query": "Тайны Смолвиля",
+    "status": 200,
+    "position": 1,
+    "results_seen": 8
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/karatel-6/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/karatel-6/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Каратель (2017) — смотреть онлайн — Zona Cinema",
+   "h1": "Каратель",
+   "description": "После того, как семья Фрэнка Касла была убита во время перестрелки между бандами Нью-Йорка, он решает отомстить и начинает охоту на преступников города. В криминальном мире он…",
+   "player": true,
+   "search": {
+    "query": "Каратель",
+    "status": 200,
+    "position": 4,
+    "results_seen": 20
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mehmed-sultan-zavoevateley/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mehmed-sultan-zavoevateley/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мехмед: Султан Завоевателей — смотреть онлайн — Zona Cinema",
+   "h1": "Мехмед: Султан Завоевателей",
+   "description": "«Мехмед: Султан Завоевателей» (Mehmed: Fetihler Sultani) — сериал 2024 года, Турция. Жанры: турецкий сериал, военный, драма. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Мехмед: Султан Завоевателей",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sorvigolova-rozhdennyy-zanovo/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sorvigolova-rozhdennyy-zanovo/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сорвиголова: Рожденный заново — смотреть онлайн — Zona Cinema",
+   "h1": "Сорвиголова: Рожденный заново",
+   "description": "Слепому адвокату Мэтту Мёрдоку снова приходится облачиться в костюм Сорвиголовы, чтобы противостоять криминальному авторитету Уилсону Фиску, который решил занять пост мэра…",
+   "player": true,
+   "search": {
+    "query": "Сорвиголова: Рожденный заново",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kosti-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kosti-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Кости (2005) — смотреть онлайн — Zona Cinema",
+   "h1": "Кости",
+   "description": "Доктор Темперанс Бреннан - блестящий, но одинокий антрополог, получает то, чего она меньше всего желала – напарника. Бюро посылает ей амбициозного агента ФБР Сили Бута, чтобы…",
+   "player": true,
+   "search": {
+    "query": "Кости",
+    "status": 200,
+    "position": 3,
+    "results_seen": 21
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/zvezdnye-voyny-dart-mol-povelitel-teney/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/zvezdnye-voyny-dart-mol-povelitel-teney/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Звёздные войны. Дарт Мол: Повелитель теней — смотреть онлайн — Zona Cinema",
+   "h1": "Звёздные войны. Дарт Мол: Повелитель теней",
+   "description": "«Звёздные войны. Дарт Мол: Повелитель теней» — сериал. Смотреть онлайн на Zona Cinema.",
+   "player": true,
+   "search": {
+    "query": "Звёздные войны. Дарт Мол: Повелитель теней",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/sorvigolova-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/sorvigolova-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сорвиголова (2015) — смотреть онлайн — Zona Cinema",
+   "h1": "Сорвиголова",
+   "description": "В результате несчастного случая юный Мэтт Мердок теряет зрение, но зато все остальные его чувства усиливаются в десятки раз. Повзрослев, Мердок понимает, что хочет посвятить…",
+   "player": true,
+   "search": {
+    "query": "Сорвиголова",
+    "status": 200,
+    "position": 1,
+    "results_seen": 7
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/klinika-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/klinika-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Клиника (2001) — смотреть онлайн — Zona Cinema",
+   "h1": "Клиника",
+   "description": "Отучившись четыре года в медицинской школе, Джон Дориан приходит работать интерном в клинику. Вместе с ним здесь же будет применять полученные знания и его лучший друг со времен…",
+   "player": true,
+   "search": {
+    "query": "Клиника",
+    "status": 200,
+    "position": 3,
+    "results_seen": 14
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/druzya-3/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/druzya-3/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Друзья (1994) — смотреть онлайн — Zona Cinema",
+   "h1": "Друзья",
+   "description": "Шестеро друзей – Рейчел, Моника, Фиби, Джоуи, Чендлер и Росс – живут по соседству, вместе убивают время, делятся секретами и иногда очень сильно влюбляются.",
+   "player": true,
+   "search": {
+    "query": "Друзья",
+    "status": 200,
+    "position": 5,
+    "results_seen": 28
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mesto-gde-voshodit-solnce/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mesto-gde-voshodit-solnce/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Место, где восходит солнце — смотреть онлайн — Zona Cinema",
+   "h1": "Место, где восходит солнце",
+   "description": "Кенан — видный наследник именитой семьи Козан, во главе которой стоит его мать Джеладет. Этот умный, проницательный и привлекательный молодой мужчина — завидный и состоятельный…",
+   "player": true,
+   "search": {
+    "query": "Место, где восходит солнце",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kobra-kay/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kobra-kay/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Кобра Кай — смотреть онлайн — Zona Cinema",
+   "h1": "Кобра Кай",
+   "description": "В прошлом хулиган, а ныне разорившийся неудачник, Джонни Лоуренс считает, что единственный его шанс вернуться к нормальной жизни — заново открыть печально известную школу карате…",
+   "player": true,
+   "search": {
+    "query": "Кобра Кай",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/dostoinstvo/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/dostoinstvo/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Достоинство (2026) — смотреть онлайн — Zona Cinema",
+   "h1": "Достоинство",
+   "description": "Мехмет — парень из бедного квартала, трудолюбивый и принципиальный. Его жизнь круто меняется после встречи с Симай — девушкой из влиятельной богатой семьи. Их любовь вспыхивает…",
+   "player": true,
+   "search": {
+    "query": "Достоинство",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/polovina-materi/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/polovina-materi/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Половина матери — смотреть онлайн — Zona Cinema",
+   "h1": "Половина матери",
+   "description": "После того как сестра Зейнеп — Зерен — трагически погибает в Германии, учительница берёт под свою опеку её дочь, маленькую Эге. Стремясь отыскать отца девочки, Али, Зейнеп…",
+   "player": true,
+   "search": {
+    "query": "Половина матери",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/mandalorec/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/mandalorec/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Мандалорец — смотреть онлайн — Zona Cinema",
+   "h1": "Мандалорец",
+   "description": "Одинокий мандалорец-наёмник живёт на краю обитаемой галактики, куда не дотягивается закон Новой Республики. Представитель некогда могучей расы благородных воинов теперь вынужден…",
+   "player": true,
+   "search": {
+    "query": "Мандалорец",
+    "status": 200,
+    "position": 1,
+    "results_seen": 4
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/syny-anarhii/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/syny-anarhii/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сыны анархии — смотреть онлайн — Zona Cinema",
+   "h1": "Сыны анархии",
+   "description": "Сериал рассказывает о клубе байкеров, которые пытаются защитить свой городок от наркотиков и влияния извне, хотя сами грешат торговлей оружием. Молодой лидер клуба не слишком…",
+   "player": true,
+   "search": {
+    "query": "Сыны анархии",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/chernyy-spisok-2/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/chernyy-spisok-2/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Чёрный список (2013) — смотреть онлайн — Zona Cinema",
+   "h1": "Чёрный список",
+   "description": "На протяжении десятилетий бывший правительственный агент Рэймонд Реддингтон был одним из самых разыскиваемых беглецов ФБР. Неожиданно он решает сдаться...",
+   "player": true,
+   "search": {
+    "query": "Чёрный список",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/lyubov-i-tron/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/lyubov-i-tron/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Любовь и трон — смотреть онлайн — Zona Cinema",
+   "h1": "Любовь и трон",
+   "description": "Турецкий сериал «Любовь и трон» погрузит нас в эпоху средневековья, когда все самые важные решения принимались во дворцах. Эпоха средневековья прославлена своими постоянными…",
+   "player": true,
+   "search": {
+    "query": "Любовь и трон",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/kvest-vizhna/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/kvest-vizhna/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Квест Вижна — смотреть онлайн — Zona Cinema",
+   "h1": "Квест Вижна",
+   "description": "После событий &quot;ВандаВижн&quot; Вижн пытается восстановить свою личность.",
+   "player": true,
+   "search": {
+    "query": "Квест Вижна",
+    "status": 200,
+    "position": 1,
+    "results_seen": 14
+   }
+  }
+ ]
+}
