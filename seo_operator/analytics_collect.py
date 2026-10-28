@@ -244,6 +244,59 @@ def collect_domain(
             except FactoryError as exc:
                 out.measurements.append(_unmeasured(key, title, exc.reason, dimension))
 
+        # --- Разбор поведения zonafilm.cc (поручение владельца 28.10) ---
+        #
+        # Четыре отчёта по спецификации линии SEO. Они отвечают на её гипотезы:
+        # адрес с параметрами — на H3 (на /movies/ листают и не выбирают),
+        # переход «откуда → куда» — на H4 (порядок выдачи поиска мешает дойти
+        # до карточки), страница выхода — на H1 (телефон уходит до плеера),
+        # разбивка по устройству и часу — на пробел, названный ею самой: в
+        # выгрузке нет разбивки по часам, и неполные сутки сравнивать не с чем.
+        #
+        # ЧЕСТНО ОБ ИМЕНАХ ИЗМЕРЕНИЙ. Из них в этом дереве раньше
+        # использовалось только `ym:s:deviceCategory`. Остальные взяты из
+        # спецификации линии SEO и из этой сессии НЕ ПРОВЕРЕНЫ обращением к
+        # API: токен Метрики читает служба, а не сессия агента
+        # (`BLOCKED_SECRET`). Выдумывать имена нельзя, бросать задачу — тоже,
+        # поэтому они идут как есть: при неверном имени API ответит отказом, и
+        # строка станет «не измерено» с ЕГО причиной, а не тихо исчезнет и не
+        # превратится в ноль. Это и есть проверяемый способ узнать имя.
+        for ключ, титул, метрики, измерения in (
+            ("pages_with_params", "Адреса с параметрами",
+             ["ym:pv:pageviews"], ["ym:pv:URL"]),
+            ("referer_to_page", "Откуда пришли на страницу",
+             ["ym:pv:pageviews"], ["ym:pv:referer", "ym:pv:URL"]),
+        ):
+            try:
+                отчёт = provider.get_metrica_report(
+                    counter_id, date1=date1, date2=date2,
+                    metrics=метрики, dimensions=измерения, limit=BREAKDOWN_LIMIT)
+                out.measurements.append(Measurement(
+                    key=ключ, title=титул, measured=True,
+                    value=отчёт.get("data"), source=метрики[0],
+                    sampled=отчёт.get("sampled"),
+                    sample_share=отчёт.get("sample_share"), top_n=BREAKDOWN_LIMIT))
+            except FactoryError as сбой:
+                out.measurements.append(
+                    _unmeasured(ключ, титул, сбой.reason, измерения[0]))
+        for ключ, титул, измерения in (
+            ("exit_pages", "Страницы выхода", ["ym:s:endURL"]),
+            ("device_hour", "Устройство и час", ["ym:s:deviceCategory", "ym:s:hour"]),
+        ):
+            try:
+                отчёт = provider.get_metrica_report(
+                    counter_id, date1=date1, date2=date2,
+                    metrics=["ym:s:visits"], dimensions=измерения,
+                    limit=BREAKDOWN_LIMIT)
+                out.measurements.append(Measurement(
+                    key=ключ, title=титул, measured=True,
+                    value=отчёт.get("data"), source="ym:s:visits",
+                    sampled=отчёт.get("sampled"),
+                    sample_share=отчёт.get("sample_share"), top_n=BREAKDOWN_LIMIT))
+            except FactoryError as сбой:
+                out.measurements.append(
+                    _unmeasured(ключ, титул, сбой.reason, измерения[0]))
+
         # Просмотры используют префикс ym:pv: и не смешиваются с ym:s: в одном
         # запросе — это правило контракта, а не стилистика.
         try:
