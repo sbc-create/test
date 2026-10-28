@@ -115,14 +115,20 @@ def _каталог_снимков() -> str:
 '''
 
 
-def _после_документации(текст: str) -> int:
+def _место_вставки(текст: str) -> int:
     """Номер строки, после которой можно вставить определение.
 
-    Сразу за строкой документации модуля, а если её нет — в самое начало.
-    Середину файла не трогаем вовсе: первая версия считала конец блока
-    импортов и вставила определение ВНУТРЬ блока `except`, перед
-    `sys.exit(2)`. Тот стал недостижимым, исполнение пошло дальше, и проверка
-    упала с `NameError` — измерено на unavailable_episode_noindex.py.
+    После строки документации модуля И после всех импортов из `__future__`.
+    Это третья версия, и каждая правилась по прогону, а не по рассуждению:
+
+    1. «конец блока импортов» указал ВНУТРЬ блока `except`: определение встало
+       между `print()` и `sys.exit(2)`, тот стал недостижимым, исполнение
+       пошло дальше — `NameError` (unavailable_episode_noindex.py);
+    2. «сразу за строкой документации» ломало файлы, где следом идёт
+       `from __future__ import annotations`: такой импорт обязан быть первым,
+       иначе `SyntaxError: from __future__ imports must occur at the beginning
+       of the file` (indexing_live_switch.py, indexing_mode_rules.py);
+    3. теперь — после документации и после `__future__`.
 
     Помощник самодостаточен (свои импорты внутри), поэтому верх файла для него
     безопасен всегда.
@@ -131,12 +137,19 @@ def _после_документации(текст: str) -> int:
         дерево = ast.parse(текст)
     except SyntaxError:
         return -1
-    тело = дерево.body
-    if тело and isinstance(тело[0], ast.Expr) and isinstance(
-            getattr(тело[0], "value", None), ast.Constant) and isinstance(
-            тело[0].value.value, str):
-        return getattr(тело[0], "end_lineno", тело[0].lineno)
-    return 0
+    строка = 0
+    for узел in дерево.body:
+        if (isinstance(узел, ast.Expr)
+                and isinstance(getattr(узел, "value", None), ast.Constant)
+                and isinstance(узел.value.value, str)
+                and строка == 0):
+            строка = getattr(узел, "end_lineno", узел.lineno)
+            continue
+        if isinstance(узел, ast.ImportFrom) and узел.module == "__future__":
+            строка = max(строка, getattr(узел, "end_lineno", узел.lineno))
+            continue
+        break
+    return строка
 
 
 def _правка_файла(путь: pathlib.Path, писать: bool) -> tuple[bool, str]:
@@ -149,7 +162,7 @@ def _правка_файла(путь: pathlib.Path, писать: bool) -> tupl
         return False, "якорь встречается больше одного раза"
     if not подошли:
         return False, "ни одна известная форма адреса данных не найдена"
-    после = _после_документации(текст)
+    после = _место_вставки(текст)
     if после < 0:
         return False, "файл не разбирается, вставлять нечего"
     новый = текст
