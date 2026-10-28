@@ -1,0 +1,51 @@
+{
+ "ZONAFILM_SPACE_COLLECTIONS_20261026.json": {
+  "site": "zonafilm.space",
+  "snapshot": "/srv/zonafilm-space/data/zona-01-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 22,
+  "problems": []
+ },
+ "ZONAFILM12_SITE_COLLECTIONS_20261026.json": {
+  "site": "zonafilm12.site",
+  "snapshot": "/srv/lords/.frontend/zona-03-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 27,
+  "problems": []
+ },
+ "ZONAFILM_CC_COLLECTIONS_20261026.json": {
+  "site": "zonafilm.cc",
+  "snapshot": "/srv/zonafilm-cc/data/zona-02-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 63,
+  "problems": []
+ },
+ "ANIMEDIA_ICU_COLLECTIONS_20261026.json": {
+  "site": "animedia.icu",
+  "snapshot": "/srv/animedia-icu/data/animedia-01-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 40,
+  "problems": []
+ },
+ "HOME_ZONAFILM_SPACE_20261027.json": {
+  "site": "zonafilm.space",
+  "snapshot": "/srv/zonafilm-space/data/zona-01-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 40,
+  "problems": []
+ },
+ "HOME_ZONAFILM12_SITE_20261027.json": {
+  "site": "zonafilm12.site",
+  "snapshot": "/srv/lords/.frontend/zona-03-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 64,
+  "problems": []
+ },
+ "HOME_ANIMEDIA_ICU_20261027.json": {
+  "site": "animedia.icu",
+  "snapshot": "/srv/animedia-icu/data/animedia-01-details.json",
+  "catalog_built_at": "2026-10-28T03:17:49Z",
+  "ids": 32,
+  "problems": []
+ }
+}
