@@ -1,0 +1,19 @@
+{
+ "/movies/": {
+  "stand": 36,
+  "live_good": 34,
+  "stand_not_live_good": {
+   "aziatskiykontent": "азиатский контент (3)",
+   "zapadnyykontent": "западный контент (34541)"
+  },
+  "live_good_not_stand": {}
+ },
+ "/series/": {
+  "stand": 33,
+  "live_good": 32,
+  "stand_not_live_good": {
+   "zapadnyykontent": "западный контент (7997)"
+  },
+  "live_good_not_stand": {}
+ }
+}
