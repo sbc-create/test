@@ -1,0 +1,10 @@
+{
+  "watch": [
+    {
+      "slug": "example-title",
+      "title": "Пример",
+      "pages": [],
+      "catalogs": ["data/catalog.json"]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "about": "Пример реестра наблюдения за пропавшими записями.",
+  "watch": [
+    {
+      "slug": "example-title",
+      "title": "Пример",
+      "lost_at": "2026-10-25",
+      "pages": ["https://example.site/title/example-title/"],
+      "catalogs": ["/srv/example/data/catalog.json"]
+    }
+  ]
+}
