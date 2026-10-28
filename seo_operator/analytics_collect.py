@@ -546,32 +546,72 @@ BEHAVIOR_DOMAINS = frozenset({"zonafilm.cc"})
 BEHAVIOR_LIMIT = 10000
 
 
-def _behavior_reports(provider, counter_id: int) -> list[Measurement]:
-    """Адреса с параметрами, переходы, выходы и часы — для гипотез H1–H5. Только чтение.
+#: Сколько последних полных суток запрашивать поштучно. Двое: прогон 05:00Z видит
+#: вчерашние сутки целиком, позавчерашние — с дозревшими данными Метрики.
+BEHAVIOR_DAYS = 2
+#: Часовой пояс счётчика zonafilm.cc — Europe/Moscow, +180 мин (паспорт счётчика).
+BEHAVIOR_TZ = _dt.timezone(_dt.timedelta(minutes=180))
+#: Метка контрольных визитов приёмки (utm_source). Их визиты отделяются от аудитории
+#: и подтверждают ПОЛУЧЕНИЕ Метрикой, а не только отправку из браузера.
+CONTROL_UTM_SOURCE = "factory-control"
 
-    Отчёты просмотров — за вчерашние сутки: недельное окно уже получало отказ
-    «Query is too complicated», а суточные срезы копятся в ежедневных выгрузках.
-    Просмотры (ym:pv:) роботов не размечают — это сказано в заголовке. Часы — с датой
-    за вчера и сегодня, чтобы неполные сутки сравнивались с теми же часами вчера.
+#: (ключ, заголовок, метрики, измерения, фильтр). Просмотры (ym:pv:) признака робота
+#: не имеют — это сказано в заголовке, а не подразумевается.
+BEHAVIOR_DAILY = (
+    ("pages_with_params", "Просмотры по адресам с параметрами (роботы не отделены)",
+     ["ym:pv:pageviews"], ["ym:pv:URL"], None),
+    ("internal_search", "Внутренний поиск: просмотры /search/ с запросом (роботы не отделены)",
+     ["ym:pv:pageviews"], ["ym:pv:URL"], "ym:pv:URLPath=='/search/'"),
+    ("referer_to_page", "Просмотры: предыдущая страница → страница (роботы не отделены)",
+     ["ym:pv:pageviews"], ["ym:pv:referer", "ym:pv:URL"], None),
+    ("pages_by_device", "Просмотры по пути и устройству (роботы не отделены)",
+     ["ym:pv:pageviews"], ["ym:pv:URLPath", "ym:pv:deviceCategory"], None),
+    ("exit_pages", "Страницы выхода по устройству, с признаком робота",
+     ["ym:s:visits"], ["ym:s:endURL", "ym:s:deviceCategory", "ym:s:isRobot"], None),
+    ("landings_by_source", "Входы по странице, источнику и устройству, с признаком робота",
+     ["ym:s:visits", "ym:s:pageviews"],
+     ["ym:s:startURL", "ym:s:lastsignTrafficSource", "ym:s:deviceCategory", "ym:s:isRobot"], None),
+)
+
+
+def _behavior_dates(now: _dt.datetime | None = None) -> list[str]:
+    """Последние BEHAVIOR_DAYS полных суток в часовом поясе счётчика, от новых к старым."""
+    today = (now or _dt.datetime.now(_dt.timezone.utc)).astimezone(BEHAVIOR_TZ).date()
+    return [(today - _dt.timedelta(days=n)).isoformat() for n in range(1, BEHAVIOR_DAYS + 1)]
+
+
+def _behavior_reports(provider, counter_id: int, now: _dt.datetime | None = None) -> list[Measurement]:
+    """Адреса с параметрами, внутренний поиск, переходы, выходы, входы, устройства и часы
+    — для гипотез H1–H5 (ZONAFILM_CC_BEHAVIOR_20261028.md). Только чтение.
+
+    Суточные отчёты — поштучно за каждые из последних полных суток, ключ `<отчёт>@<дата>`:
+    недельное окно уже получало отказ «Query is too complicated». Часы — с датой за
+    вчера и сегодня, чтобы неполные сутки сравнивались с теми же часами вчера.
+    Контрольные визиты приёмки — отдельной строкой по utm_source.
     """
-    отсечка = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    out: list[Measurement] = []
-    for key, title, date1, date2, metrics, dims in (
-        ("pages_with_params", "Просмотры по адресам с параметрами за вчера (роботы не отделены)",
-         "yesterday", "yesterday", ["ym:pv:pageviews"], ["ym:pv:URL"]),
-        ("referer_to_page", "Просмотры: предыдущая страница → страница, за вчера (роботы не отделены)",
-         "yesterday", "yesterday", ["ym:pv:pageviews"], ["ym:pv:referer", "ym:pv:URL"]),
-        ("exit_pages", "Страницы выхода за вчера, с признаком робота",
-         "yesterday", "yesterday", ["ym:s:visits"], ["ym:s:endURL", "ym:s:deviceCategory", "ym:s:isRobot"]),
+    now = now or _dt.datetime.now(_dt.timezone.utc)
+    отсечка = now.strftime("%Y-%m-%dT%H:%M:%SZ")
+    specs = [
+        (f"{key}@{day}", f"{title}, {day}", day, day, metrics, dims, filters)
+        for day in _behavior_dates(now)
+        for key, title, metrics, dims, filters in BEHAVIOR_DAILY
+    ]
+    specs += [
         ("device_hour", f"Визиты и просмотры по дате, часу и устройству за вчера и сегодня, отсечка {отсечка}",
          "yesterday", "today", ["ym:s:visits", "ym:s:users", "ym:s:pageviews"],
-         ["ym:s:date", "ym:s:hour", "ym:s:deviceCategory", "ym:s:isRobot"]),
-    ):
-        source = f"{', '.join(metrics)} × {' × '.join(dims)}"
+         ["ym:s:date", "ym:s:hour", "ym:s:deviceCategory", "ym:s:isRobot"], None),
+        ("control_visits", f"Контрольные визиты приёмки (utm_source={CONTROL_UTM_SOURCE}), отсечка {отсечка}",
+         f"{BEHAVIOR_DAYS}daysAgo", "today", ["ym:s:visits", "ym:s:pageviews"],
+         ["ym:s:date", "ym:s:UTMSource", "ym:s:deviceCategory", "ym:s:isRobot"],
+         f"ym:s:UTMSource=='{CONTROL_UTM_SOURCE}'"),
+    ]
+    out: list[Measurement] = []
+    for key, title, date1, date2, metrics, dims, filters in specs:
+        source = f"{', '.join(metrics)} × {' × '.join(dims)}" + (f"; фильтр {filters}" if filters else "")
         try:
             report = provider.get_metrica_report(
                 counter_id, date1=date1, date2=date2, metrics=metrics, dimensions=dims,
-                limit=BEHAVIOR_LIMIT,
+                limit=BEHAVIOR_LIMIT, filters=filters,
             )
             total = report.get("total_rows")
             out.append(
