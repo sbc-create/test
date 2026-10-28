@@ -26,11 +26,24 @@ pause_to_tick() {
   printf 'ПАУЗА: такт пройден в %sZ\n' "$(date -u +%H:%M:%S)"
 }
 cd /home/claude/wt-nova-publish-memory-02
+prervano=""
 for name in "$@"; do
   python3 automation/host/apply-animedia-data-dir-codes.py --repo "var/site-repos/$repo" --only "$name"
+  rc=$?
+  # Снятая окном проверка НЕ доставлена, и молчать об этом нельзя: измерено
+  # 28.10 — окно сняло section_description на полпути, прогонщик пошёл дальше,
+  # и в итоге «проверок 7» выглядело как семь доставленных.
+  if [ "$rc" -ge 128 ]; then
+    printf 'ПРЕРВАНА: %s снята сигналом (код %s) — НЕ доставлена, нужен повтор\n' "$name" "$rc"
+    prervano="$prervano $name"
+  fi
   done_count=$((done_count + 1))
   if [ "$done_count" -lt "$#" ] && [ $((done_count % pause_after)) -eq 0 ]; then
     pause_to_tick
   fi
 done
-echo "ЭТАП с паузами завершён: $repo, проверок $done_count"
+if [ -n "$prervano" ]; then
+  printf 'ЭТАП с паузами завершён: %s, обработано %s, но ПРЕРВАНЫ и не доставлены:%s\n' "$repo" "$done_count" "$prervano"
+else
+  printf 'ЭТАП с паузами завершён: %s, проверок %s, прерванных нет\n' "$repo" "$done_count"
+fi
