@@ -119,7 +119,9 @@ BLOCKED_ANALYTICS_ACCESS | BLOCKED_SITE_EXTRACTED | QA_FAILED | DEPLOY_FAILED | 
 
 `.claude/rules/` (подгружаются по путям): `dle-php.md`, `frontend.md`, `content.md`,
 `security.md`, `tests.md`, `infrastructure.md`, `deployment.md`, `seo.md`; аналитика — `docs/YANDEX_ANALYTICS.md`.
-Повторяемые процессы — skills в `.claude/skills/`. Экономный режим — `docs/TOKEN_ECONOMY.md`:
+Порядок аналитического разбора и переноса подтверждённых
+улучшений — `docs/ANALYSIS_ORDER.md` (обязателен для каждого наблюдения о
+поведении и трафике). Повторяемые процессы — skills в `.claude/skills/`. Экономный режим — `docs/TOKEN_ECONOMY.md`:
 задание, источники и ресурсы проверяет обычный код ДО модели, повтор отказа ограничен.
 
 ---
