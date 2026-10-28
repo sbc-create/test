@@ -1,0 +1,93 @@
+{
+ "host": "zonafilm.space",
+ "started": "2026-10-28T16:08:50Z",
+ "finished": "2026-10-28T16:08:51Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://zonafilm.space/title/gangsterlend/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/gangsterlend/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Гангстерленд — смотреть онлайн — Zona Cinema",
+   "h1": "Гангстерленд",
+   "description": "Лондон. Две могущественных криминальных семьи, Харриганы и Стивенсоны, ведут войну за власть, избегая прямой конфронтации. Но шаткое перемирие может нарушить исчезновение Томми…",
+   "player": true,
+   "search": {
+    "query": "Гангстерленд",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/ostrye-kozyrki/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/ostrye-kozyrki/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Острые козырьки — смотреть онлайн — Zona Cinema",
+   "h1": "Острые козырьки",
+   "description": "Британский сериал о криминальном мире Бирмингема 20-х годов прошлого века, в котором многолюдная семья Шелби стала одной из самых жестоких и влиятельных гангстерских банд…",
+   "player": true,
+   "search": {
+    "query": "Острые козырьки",
+    "status": 200,
+    "position": 1,
+    "results_seen": 10
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/korol-talsy/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/korol-talsy/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Король Талсы — смотреть онлайн — Zona Cinema",
+   "h1": "Король Талсы",
+   "description": "Осужденный нью-йоркский мафиози Дуайт Манфреди по прозвищу Генерал спустя четверть века выходит на свободу. Босс отправляет его в глушь — в Талсу, штат Оклахома — для…",
+   "player": true,
+   "search": {
+    "query": "Король Талсы",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/syny-anarhii/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/syny-anarhii/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Сыны анархии — смотреть онлайн — Zona Cinema",
+   "h1": "Сыны анархии",
+   "description": "Сериал рассказывает о клубе байкеров, которые пытаются защитить свой городок от наркотиков и влияния извне, хотя сами грешат торговлей оружием. Молодой лидер клуба не слишком…",
+   "player": true,
+   "search": {
+    "query": "Сыны анархии",
+    "status": 200,
+    "position": 1,
+    "results_seen": 3
+   }
+  },
+  {
+   "url": "https://zonafilm.space/title/yelloustoun/",
+   "status": 200,
+   "canonical": "https://zonafilm.space/title/yelloustoun/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Йеллоустоун — смотреть онлайн — Zona Cinema",
+   "h1": "Йеллоустоун",
+   "description": "Йеллоустоун – первый в мире национальный парк, одно из самых посещаемых мест в США. Но здесь, на границе цивилизации, происходит много такого, чего не видят туристы, что не…",
+   "player": true,
+   "search": {
+    "query": "Йеллоустоун",
+    "status": 200,
+    "position": 1,
+    "results_seen": 2
+   }
+  }
+ ]
+}

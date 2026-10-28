@@ -7,7 +7,8 @@
  "site_id": "zona-01",
  "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
  "overlaps": [
-  "uensdey — также в netflix-serialy (подборка платформы)"
+  "uensdey — также в netflix-serialy (подборка платформы)",
+  "gangsterlend и ostrye-kozyrki — также в serialy-kotorye-stoit-posmotret (выбор редакции; здесь — тематическая подборка)"
  ],
  "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
  "collections": [
@@ -147,6 +148,109 @@
      "basis": "строка 57 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
      "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
      "checked": "2026-10-28 (live/pilot-mistika-zonafilm.space.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  },
+  {
+   "key": "kriminalnye-semi-i-borba-za-vlast",
+   "title": "Криминальные семьи и борьба за власть",
+   "viewer_request": "Хочу сериал про кланы, банды и семьи, которые воюют за власть.",
+   "intro": "Сериалы о семьях и кланах, для которых власть — семейное дело: гангстерские войны Лондона и Бирмингема, мафиози, строящий империю с нуля, байкерский клуб и династия владельцев ранчо. Одна франшиза — одна работа.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "0195e6c3-3b46-7b4f-a137-a25714189113",
+     "slug": "gangsterlend",
+     "url": "https://zonafilm.space/title/gangsterlend/",
+     "name": "Гангстерленд",
+     "original_name": "MobLand",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "31510819",
+      "kinopoisk": "5512084"
+     },
+     "reason": "Две лондонские криминальные семьи, Харриганы и Стивенсоны, держат шаткое перемирие — пока не пропадает сын главы клана Стивенсонов.",
+     "basis": "строка 6 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-crime-families-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01916711-6492-7090-8781-703ad1852af4",
+     "slug": "ostrye-kozyrki",
+     "url": "https://zonafilm.space/title/ostrye-kozyrki/",
+     "name": "Острые козырьки",
+     "original_name": "Peaky Blinders",
+     "year": 2013,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "2442560",
+      "kinopoisk": "716587"
+     },
+     "reason": "Бирмингем 1920-х: многолюдная семья Шелби превращается в одну из самых жестоких и влиятельных банд послевоенной Англии.",
+     "basis": "строка 9 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-crime-families-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "019154c7-4ca1-7ec1-9889-77e4b280fdbc",
+     "slug": "korol-talsy",
+     "url": "https://zonafilm.space/title/korol-talsy/",
+     "name": "Король Талсы",
+     "original_name": "Tulsa King",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "16358384",
+      "kinopoisk": "4760854"
+     },
+     "reason": "Нью-йоркский мафиози по прозвищу Генерал после четверти века в тюрьме отправлен в Талсу — и начинает строить там новую криминальную империю.",
+     "basis": "строка 69 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-crime-families-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "01916726-5e64-7cc7-b9fd-2c5763010fdd",
+     "slug": "syny-anarhii",
+     "url": "https://zonafilm.space/title/syny-anarhii/",
+     "name": "Сыны анархии",
+     "original_name": "Sons of Anarchy",
+     "year": 2008,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "1124373",
+      "kinopoisk": "417846"
+     },
+     "reason": "Байкерский клуб защищает свой городок от чужого влияния, торгуя оружием; молодой лидер сомневается в выбранном пути — к неудовольствию матери и отчима.",
+     "basis": "строка 381 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-crime-families-zonafilm.space.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01916795-98c5-79d6-bc11-819c7430c895",
+     "slug": "yelloustoun",
+     "url": "https://zonafilm.space/title/yelloustoun/",
+     "name": "Йеллоустоун",
+     "original_name": "Yellowstone",
+     "year": 2018,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "4236770",
+      "kinopoisk": "1045172"
+     },
+     "reason": "Семья Даттон владеет огромным ранчо на границе Йеллоустоуна и удерживает его любой ценой.",
+     "basis": "строка 321 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-crime-families-zonafilm.space.json): 200, canonical на себя, index, follow"
     }
    ]
   }
