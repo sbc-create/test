@@ -59,7 +59,7 @@ for q, visits in sorted(queries.items(), key=lambda x: -x[1]):
     elif c and (c["status"] != 200 or not c["player"]): verdict = "неисправна карточка"
     elif pos > 3: verdict = "ранжирование"
     else: verdict = "ok"
-    row = {"q": q, "visits": visits, "class": kind or "неясно", "targets": [(i["title"], i["year"], i["kind"], i["slug"]) for i in targets[:4]], "n_targets": len(targets),
+    row = {"q": q, "visits": visits, "class": kind or "неясно", "targets": [(i["title"], i["year"], i["kind"], i["slug"]) for i in targets]  # все цели: при обрезке до 4 сверка по одноимённым теряла работы (T347, 28.10), "n_targets": len(targets),
            "near": near, "results_total": total, "first_results": res[:5], "pos": pos, "card": c, "verdict": verdict}
     R.append(row); print(json.dumps({k: row[k] for k in ("q", "visits", "class", "n_targets", "results_total", "pos", "verdict")}, ensure_ascii=False), flush=True)
     time.sleep(0.4)
