@@ -70,6 +70,23 @@ import tempfile
 #: замена на все формы меняла бы смысл.
 ФОРМЫ_АДРЕСА = (
     (
+        '''ИСТОЧНИК = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
+        '''# Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+ИСТОЧНИК = Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()
+                or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
+        '''ЖИВЫЕ = Path(os.environ.get("ZONA_FIXTURE_DIR", f"/srv/{КОРЕНЬ.name}/data"))''',
+        '''# Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+ЖИВЫЕ = Path(os.environ.get("ZONA_FIXTURE_DIR") or _каталог_снимков()
+             or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
+        '''    живые = pathlib.Path(f"/srv/{КОРЕНЬ.name}/data")''',
+        '''    # Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+    живые = pathlib.Path(_каталог_снимков() or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
         '''    данные_живые = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
         '''    # Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
     данные_живые = Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()
