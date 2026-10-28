@@ -1,0 +1,297 @@
+{
+ "site": "animedia.icu",
+ "checked_at": "2026-10-28T05:30:28Z",
+ "live": {
+  "unesennye-prizrakami": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0194b281-5ea8-71fc-8805-6a8341100830",
+   "ok": true
+  },
+  "moy-sosed-totoro-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01916739-698e-7b1b-bdcb-d5c4707021fd",
+   "ok": true
+  },
+  "hodyachiy-zamok-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01916718-7e1b-729c-9c23-d7c5938415ec",
+   "ok": true
+  },
+  "princessa-mononoke": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01916711-ca7c-7c72-b02b-1e7e25cd4bb8",
+   "ok": true
+  },
+  "volchi-deti-ame-i-yuki-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "019169d4-7aaa-7a07-81f1-99aa82e9a97c",
+   "ok": true
+  },
+  "tvoe-imya-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915254-3c51-7ca4-af35-450b20fca367",
+   "ok": true
+  },
+  "forma-golosa-2016": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915254-3cf4-7e40-a6b3-a7e71a6b8564",
+   "ok": true
+  },
+  "sudzume-zakryvayuschaya-dveri": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191524c-5858-7007-a77c-8d82d1f60220",
+   "ok": true
+  },
+  "paprika-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0192882c-4e3b-79a8-843d-3918f257bfa0",
+   "ok": true
+  },
+  "letnie-voyny": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01928bcf-c346-7cc9-9fb5-8ab3091ab06a",
+   "ok": true
+  },
+  "zhelezobeton": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191ae21-dc04-7ad9-bde8-424cfc28973d",
+   "ok": true
+  },
+  "mech-chuzhaka": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915142-8f15-799d-8ad8-d4a153cf925f",
+   "ok": true
+  },
+  "pervyy-slem-dank": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191d23b-5741-7e0c-9096-5865ec489489",
+   "ok": true
+  },
+  "v-etom-ugolke-mira": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191877f-67cc-7b62-8a0e-e7b0d80a2076",
+   "ok": true
+  },
+  "bosonogiy-gen": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "019156d3-2159-7db6-b19e-96fbcbca0e3c",
+   "ok": true
+  },
+  "nevidannyy-cvetok-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191514f-4c10-7c04-8817-cbef5fc90074",
+   "eps_page": 11,
+   "eps_catalog": 11,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "odinokiy-roker": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191512d-1988-735d-8e55-324eeea369d0",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "parad-smerti": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191686b-655f-7df4-bc4e-e3b6e2a26e87",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "lyubov-s-igolochki": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191512d-2347-7609-8d35-9e1f3fb4b846",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "91-den": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "019174c2-da11-7445-b5b4-1d073bf4fb17",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "igra-druzey-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915142-8f26-7cd7-aac1-a1e90be0f4a2",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "na-skeyte-v-beskonechnost": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191c92e-70e3-7cc3-8c15-590f7a59ac33",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "kotaro-kotoryy-zhivet-sam-po-sebe-2": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191ae23-534f-795d-bc10-ace8c3cb156b",
+   "eps_page": 10,
+   "eps_catalog": 10,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "predsmertnyy-spisok-zombi": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191526e-b021-7fbc-9e95-8f1dbe18653f",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "bolshe-chem-para-menshe-chem-lyubovniki": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915149-29a1-7505-b248-b6646c6549df",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "devochka-iz-krasnoy-knigi": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "01915131-42a0-7f47-96b2-f55498f919ca",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  },
+  "doroga-yunosti": {
+   "status": 200,
+   "canonical_self": true,
+   "robots": "index, follow",
+   "poster_match": true,
+   "player": true,
+   "id": "0191511e-55e0-7ba3-89a5-65e1335f3099",
+   "eps_page": 12,
+   "eps_catalog": 12,
+   "all_episodes": true,
+   "seasons": 1,
+   "ok": true
+  }
+ }
+}
