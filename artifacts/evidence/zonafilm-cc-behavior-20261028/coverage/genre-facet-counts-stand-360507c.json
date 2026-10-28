@@ -1,0 +1,1727 @@
+{
+ "sample_html": " Драма Результаты по фильтрам: 18024 · Сортировка: Сначала новые Фильмы × драма × Фильтры 2 Фильмы Сериалы Анимация Дорамы Год Все годы 2026 (486) 2025 (1122) 2024 (1141) 2023 (1029) 2022 (1231) 2021 (855) 2020 (464) 2019 (643) 2018 (696) 2017 (689) 2016 (595) 2015 (557) 2014 (526) 2013 (517) 2012 (411) 2011 (453) 2010 (428) 2009 (378) 2008 (417) 2007 (412) 2006 (303) 2005 (304) 2004 (466) 2003 (220) 2002 (211) 2001 (214) 2000 (192) 1999 (145) 1998 (107) 1997 (111) 1996 (101) 1995 (109) 1994 (90) 1993 (103) 1992 (78) 1991 (110) 1990 (110) 1989 (100) 1988 (72) 1987 (81) 1986 (79) 1985 (74) 1984 (56) 1983 (58) 1982 (67) 1981 (56) 1980 (52) 1979 (43) 1978 (52) 1977 (49) 1976 (55) 1975 (54) 1974 (47) 1973 (39) 1972 (43) 1971 (49) 1970 (47) 1969 (40) 1968 (49) 1967 (28) 1966 (29) 1965 (30) 1964 (27) 1963 (28) 1962 (36) 1961 (26) 1960 (40) 1959 (36) 1958 (49) 1957 (35) 1956 (36) 1955 (31) 1954 (23) 1953 (24) 1952 (19) 1951 (21) 1950 (19) 1949 (13) 1948 (10) 1947 (14) 1946 (9) 1945 (6) 1944 (8) 1943 (12) 1942 (8) 1941 (8) 1940 (11) 1939 (12) 1938 (11) 1937 (9) 1936 (5) 1935 (7) 1934 (8) 1932 (7) 1931 (5) 1930 (1) 1929 (4) 1928 (5) 1927 (6) 1926 (8) 1925 (4) 1924 (1) 1922 (1) 1921 (1) 1919 (1) 1913 (1) 1912 (1) 1910 (1) Жанр Все жанры драма (18024) комедия (10638) мелодрама (6411) боевик (6250) триллер (9295) криминал (4941) фэнтези (2156) приключения (2843) ужасы (5523) детектив (3063) фантастика (2751) семейный (1937) исторический (990) документальный (1455) биография (1617) военны",
+ "rows": [
+  {
+   "sec": "/movies/",
+   "label": "драма (18024)",
+   "url": "/movies/?genre=drama&sort=newest",
+   "label_n": 18024,
+   "status": 200,
+   "page_totals": [
+    18024
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "комедия (10638)",
+   "url": "/movies/?genre=comedy&sort=newest",
+   "label_n": 10638,
+   "status": 200,
+   "page_totals": [
+    10638
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "мелодрама (6411)",
+   "url": "/movies/?genre=melodrama&sort=newest",
+   "label_n": 6411,
+   "status": 200,
+   "page_totals": [
+    6411
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "боевик (6250)",
+   "url": "/movies/?genre=action&sort=newest",
+   "label_n": 6250,
+   "status": 200,
+   "page_totals": [
+    6250
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "триллер (9295)",
+   "url": "/movies/?genre=triller&sort=newest",
+   "label_n": 9295,
+   "status": 200,
+   "page_totals": [
+    9295
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "криминал (4941)",
+   "url": "/movies/?genre=kriminal&sort=newest",
+   "label_n": 4941,
+   "status": 200,
+   "page_totals": [
+    4941
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "фэнтези (2156)",
+   "url": "/movies/?genre=fentezi&sort=newest",
+   "label_n": 2156,
+   "status": 200,
+   "page_totals": [
+    2156
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "приключения (2843)",
+   "url": "/movies/?genre=priklyucheniya&sort=newest",
+   "label_n": 2843,
+   "status": 200,
+   "page_totals": [
+    2843
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "ужасы (5523)",
+   "url": "/movies/?genre=uzhasy&sort=newest",
+   "label_n": 5523,
+   "status": 200,
+   "page_totals": [
+    5523
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "детектив (3063)",
+   "url": "/movies/?genre=detective&sort=newest",
+   "label_n": 3063,
+   "status": 200,
+   "page_totals": [
+    3063
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "фантастика (2751)",
+   "url": "/movies/?genre=fantastika&sort=newest",
+   "label_n": 2751,
+   "status": 200,
+   "page_totals": [
+    2751
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "семейный (1937)",
+   "url": "/movies/?genre=semeynyy&sort=newest",
+   "label_n": 1937,
+   "status": 200,
+   "page_totals": [
+    1937
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "исторический (990)",
+   "url": "/movies/?genre=history&sort=newest",
+   "label_n": 990,
+   "status": 200,
+   "page_totals": [
+    990
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "документальный (1455)",
+   "url": "/movies/?genre=dokumentalnyy&sort=newest",
+   "label_n": 1455,
+   "status": 200,
+   "page_totals": [
+    1455
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "биография (1617)",
+   "url": "/movies/?genre=biografiya&sort=newest",
+   "label_n": 1617,
+   "status": 200,
+   "page_totals": [
+    1617
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "военный (1333)",
+   "url": "/movies/?genre=voennyy&sort=newest",
+   "label_n": 1333,
+   "status": 200,
+   "page_totals": [
+    1333
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "спорт (794)",
+   "url": "/movies/?genre=sport&sort=newest",
+   "label_n": 794,
+   "status": 200,
+   "page_totals": [
+    794
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "музыка (848)",
+   "url": "/movies/?genre=muzyka&sort=newest",
+   "label_n": 848,
+   "status": 200,
+   "page_totals": [
+    848
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "короткометражка (374)",
+   "url": "/movies/?genre=korotkometrazhka&sort=newest",
+   "label_n": 374,
+   "status": 200,
+   "page_totals": [
+    374
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "турецкий сериал (452)",
+   "url": "/movies/?genre=tureckiyserial&sort=newest",
+   "label_n": 452,
+   "status": 200,
+   "page_totals": [
+    452
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "мюзикл (521)",
+   "url": "/movies/?genre=myuzikl&sort=newest",
+   "label_n": 521,
+   "status": 200,
+   "page_totals": [
+    521
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "научная фантастика (1)",
+   "url": "/movies/?genre=nauchnayafantastika&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/movies/",
+   "label": "вестерн (472)",
+   "url": "/movies/?genre=vestern&sort=newest",
+   "label_n": 472,
+   "status": 200,
+   "page_totals": [
+    472
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "мистика (1)",
+   "url": "/movies/?genre=mistika&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/movies/",
+   "label": "детское (5)",
+   "url": "/movies/?genre=detskoe&sort=newest",
+   "label_n": 5,
+   "status": 200,
+   "page_totals": [
+    5
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 5
+  },
+  {
+   "sec": "/movies/",
+   "label": "болливуд (142)",
+   "url": "/movies/?genre=bollivud&sort=newest",
+   "label_n": 142,
+   "status": 200,
+   "page_totals": [
+    142
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "реальное тв (12)",
+   "url": "/movies/?genre=realnoetv&sort=newest",
+   "label_n": 12,
+   "status": 200,
+   "page_totals": [
+    12
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 12
+  },
+  {
+   "sec": "/movies/",
+   "label": "игра (1)",
+   "url": "/movies/?genre=igra&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/movies/",
+   "label": "концерт (51)",
+   "url": "/movies/?genre=koncert&sort=newest",
+   "label_n": 51,
+   "status": 200,
+   "page_totals": [
+    51
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "фильм-нуар (44)",
+   "url": "/movies/?genre=filmnuar&sort=newest",
+   "label_n": 44,
+   "status": 200,
+   "page_totals": [
+    44
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/movies/",
+   "label": "ток-шоу (4)",
+   "url": "/movies/?genre=tokshou&sort=newest",
+   "label_n": 4,
+   "status": 200,
+   "page_totals": [
+    4
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 4
+  },
+  {
+   "sec": "/movies/",
+   "label": "Обучение (22)",
+   "url": "/movies/?genre=obuchenie&sort=newest",
+   "label_n": 22,
+   "status": 200,
+   "page_totals": [
+    22
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 22
+  },
+  {
+   "sec": "/movies/",
+   "label": "новости (15)",
+   "url": "/movies/?genre=novosti&sort=newest",
+   "label_n": 15,
+   "status": 200,
+   "page_totals": [
+    15
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 15
+  },
+  {
+   "sec": "/movies/",
+   "label": "церемония (10)",
+   "url": "/movies/?genre=ceremoniya&sort=newest",
+   "label_n": 10,
+   "status": 200,
+   "page_totals": [
+    10
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 10
+  },
+  {
+   "sec": "/series/",
+   "label": "драма (5154)",
+   "url": "/series/?genre=drama&sort=newest",
+   "label_n": 5154,
+   "status": 200,
+   "page_totals": [
+    5154
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "комедия (2023)",
+   "url": "/series/?genre=comedy&sort=newest",
+   "label_n": 2023,
+   "status": 200,
+   "page_totals": [
+    2023
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "мелодрама (1080)",
+   "url": "/series/?genre=melodrama&sort=newest",
+   "label_n": 1080,
+   "status": 200,
+   "page_totals": [
+    1080
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "боевик (965)",
+   "url": "/series/?genre=action&sort=newest",
+   "label_n": 965,
+   "status": 200,
+   "page_totals": [
+    965
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "триллер (1834)",
+   "url": "/series/?genre=triller&sort=newest",
+   "label_n": 1834,
+   "status": 200,
+   "page_totals": [
+    1834
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "криминал (2077)",
+   "url": "/series/?genre=kriminal&sort=newest",
+   "label_n": 2077,
+   "status": 200,
+   "page_totals": [
+    2077
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "фэнтези (594)",
+   "url": "/series/?genre=fentezi&sort=newest",
+   "label_n": 594,
+   "status": 200,
+   "page_totals": [
+    594
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "приключения (699)",
+   "url": "/series/?genre=priklyucheniya&sort=newest",
+   "label_n": 699,
+   "status": 200,
+   "page_totals": [
+    699
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "ужасы (377)",
+   "url": "/series/?genre=uzhasy&sort=newest",
+   "label_n": 377,
+   "status": 200,
+   "page_totals": [
+    377
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "детектив (1470)",
+   "url": "/series/?genre=detective&sort=newest",
+   "label_n": 1470,
+   "status": 200,
+   "page_totals": [
+    1470
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "фантастика (701)",
+   "url": "/series/?genre=fantastika&sort=newest",
+   "label_n": 701,
+   "status": 200,
+   "page_totals": [
+    701
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "семейный (404)",
+   "url": "/series/?genre=semeynyy&sort=newest",
+   "label_n": 404,
+   "status": 200,
+   "page_totals": [
+    404
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "исторический (555)",
+   "url": "/series/?genre=history&sort=newest",
+   "label_n": 555,
+   "status": 200,
+   "page_totals": [
+    555
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "документальный (860)",
+   "url": "/series/?genre=dokumentalnyy&sort=newest",
+   "label_n": 860,
+   "status": 200,
+   "page_totals": [
+    860
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "биография (327)",
+   "url": "/series/?genre=biografiya&sort=newest",
+   "label_n": 327,
+   "status": 200,
+   "page_totals": [
+    327
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "военный (236)",
+   "url": "/series/?genre=voennyy&sort=newest",
+   "label_n": 236,
+   "status": 200,
+   "page_totals": [
+    236
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "спорт (176)",
+   "url": "/series/?genre=sport&sort=newest",
+   "label_n": 176,
+   "status": 200,
+   "page_totals": [
+    176
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "музыка (119)",
+   "url": "/series/?genre=muzyka&sort=newest",
+   "label_n": 119,
+   "status": 200,
+   "page_totals": [
+    119
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "короткометражка (43)",
+   "url": "/series/?genre=korotkometrazhka&sort=newest",
+   "label_n": 43,
+   "status": 200,
+   "page_totals": [
+    43
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "турецкий сериал (764)",
+   "url": "/series/?genre=tureckiyserial&sort=newest",
+   "label_n": 764,
+   "status": 200,
+   "page_totals": [
+    764
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "мюзикл (46)",
+   "url": "/series/?genre=myuzikl&sort=newest",
+   "label_n": 46,
+   "status": 200,
+   "page_totals": [
+    46
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "вестерн (68)",
+   "url": "/series/?genre=vestern&sort=newest",
+   "label_n": 68,
+   "status": 200,
+   "page_totals": [
+    68
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "мистика (4)",
+   "url": "/series/?genre=mistika&sort=newest",
+   "label_n": 4,
+   "status": 200,
+   "page_totals": [
+    4
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 4
+  },
+  {
+   "sec": "/series/",
+   "label": "детское (7)",
+   "url": "/series/?genre=detskoe&sort=newest",
+   "label_n": 7,
+   "status": 200,
+   "page_totals": [
+    7
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 7
+  },
+  {
+   "sec": "/series/",
+   "label": "болливуд (10)",
+   "url": "/series/?genre=bollivud&sort=newest",
+   "label_n": 10,
+   "status": 200,
+   "page_totals": [
+    10
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 10
+  },
+  {
+   "sec": "/series/",
+   "label": "реальное тв (103)",
+   "url": "/series/?genre=realnoetv&sort=newest",
+   "label_n": 103,
+   "status": 200,
+   "page_totals": [
+    103
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "игра (30)",
+   "url": "/series/?genre=igra&sort=newest",
+   "label_n": 30,
+   "status": 200,
+   "page_totals": [
+    30
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/series/",
+   "label": "концерт (3)",
+   "url": "/series/?genre=koncert&sort=newest",
+   "label_n": 3,
+   "status": 200,
+   "page_totals": [
+    3
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 3
+  },
+  {
+   "sec": "/series/",
+   "label": "фильм-нуар (2)",
+   "url": "/series/?genre=filmnuar&sort=newest",
+   "label_n": 2,
+   "status": 200,
+   "page_totals": [
+    2
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 2
+  },
+  {
+   "sec": "/series/",
+   "label": "ток-шоу (18)",
+   "url": "/series/?genre=tokshou&sort=newest",
+   "label_n": 18,
+   "status": 200,
+   "page_totals": [
+    18
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 18
+  },
+  {
+   "sec": "/series/",
+   "label": "Обучение (18)",
+   "url": "/series/?genre=obuchenie&sort=newest",
+   "label_n": 18,
+   "status": 200,
+   "page_totals": [
+    18
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 18
+  },
+  {
+   "sec": "/series/",
+   "label": "новости (8)",
+   "url": "/series/?genre=novosti&sort=newest",
+   "label_n": 8,
+   "status": 200,
+   "page_totals": [
+    8
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 8
+  },
+  {
+   "sec": "/animation/",
+   "label": "драма (1920)",
+   "url": "/animation/?genre=drama&sort=newest",
+   "label_n": 1920,
+   "status": 200,
+   "page_totals": [
+    1920
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "комедия (4525)",
+   "url": "/animation/?genre=comedy&sort=newest",
+   "label_n": 4525,
+   "status": 200,
+   "page_totals": [
+    4525
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "мелодрама (1533)",
+   "url": "/animation/?genre=melodrama&sort=newest",
+   "label_n": 1533,
+   "status": 200,
+   "page_totals": [
+    1533
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "боевик (3712)",
+   "url": "/animation/?genre=action&sort=newest",
+   "label_n": 3712,
+   "status": 200,
+   "page_totals": [
+    3712
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "триллер (309)",
+   "url": "/animation/?genre=triller&sort=newest",
+   "label_n": 309,
+   "status": 200,
+   "page_totals": [
+    309
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "дорама (22)",
+   "url": "/animation/?genre=dorama&sort=newest",
+   "label_n": 22,
+   "status": 200,
+   "page_totals": [
+    22
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 22
+  },
+  {
+   "sec": "/animation/",
+   "label": "криминал (257)",
+   "url": "/animation/?genre=kriminal&sort=newest",
+   "label_n": 257,
+   "status": 200,
+   "page_totals": [
+    257
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "аниме (8390)",
+   "url": "/animation/?genre=anime&sort=newest",
+   "label_n": 8390,
+   "status": 200,
+   "page_totals": [
+    8390
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "фэнтези (3848)",
+   "url": "/animation/?genre=fentezi&sort=newest",
+   "label_n": 3848,
+   "status": 200,
+   "page_totals": [
+    3848
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "приключения (3377)",
+   "url": "/animation/?genre=priklyucheniya&sort=newest",
+   "label_n": 3377,
+   "status": 200,
+   "page_totals": [
+    3377
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "ужасы (396)",
+   "url": "/animation/?genre=uzhasy&sort=newest",
+   "label_n": 396,
+   "status": 200,
+   "page_totals": [
+    396
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "мультфильм (6374)",
+   "url": "/animation/?genre=animation&sort=newest",
+   "label_n": 6374,
+   "status": 200,
+   "page_totals": [
+    6374
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "детектив (485)",
+   "url": "/animation/?genre=detective&sort=newest",
+   "label_n": 485,
+   "status": 200,
+   "page_totals": [
+    485
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "фантастика (1773)",
+   "url": "/animation/?genre=fantastika&sort=newest",
+   "label_n": 1773,
+   "status": 200,
+   "page_totals": [
+    1773
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "семейный (1768)",
+   "url": "/animation/?genre=semeynyy&sort=newest",
+   "label_n": 1768,
+   "status": 200,
+   "page_totals": [
+    1768
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "исторический (539)",
+   "url": "/animation/?genre=history&sort=newest",
+   "label_n": 539,
+   "status": 200,
+   "page_totals": [
+    539
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "документальный (23)",
+   "url": "/animation/?genre=dokumentalnyy&sort=newest",
+   "label_n": 23,
+   "status": 200,
+   "page_totals": [
+    23
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 23
+  },
+  {
+   "sec": "/animation/",
+   "label": "биография (20)",
+   "url": "/animation/?genre=biografiya&sort=newest",
+   "label_n": 20,
+   "status": 200,
+   "page_totals": [
+    20
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 20
+  },
+  {
+   "sec": "/animation/",
+   "label": "военный (277)",
+   "url": "/animation/?genre=voennyy&sort=newest",
+   "label_n": 277,
+   "status": 200,
+   "page_totals": [
+    277
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "спорт (416)",
+   "url": "/animation/?genre=sport&sort=newest",
+   "label_n": 416,
+   "status": 200,
+   "page_totals": [
+    416
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "музыка (407)",
+   "url": "/animation/?genre=muzyka&sort=newest",
+   "label_n": 407,
+   "status": 200,
+   "page_totals": [
+    407
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "короткометражка (983)",
+   "url": "/animation/?genre=korotkometrazhka&sort=newest",
+   "label_n": 983,
+   "status": 200,
+   "page_totals": [
+    983
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "турецкий сериал (3)",
+   "url": "/animation/?genre=tureckiyserial&sort=newest",
+   "label_n": 3,
+   "status": 200,
+   "page_totals": [
+    3
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 3
+  },
+  {
+   "sec": "/animation/",
+   "label": "мюзикл (322)",
+   "url": "/animation/?genre=myuzikl&sort=newest",
+   "label_n": 322,
+   "status": 200,
+   "page_totals": [
+    322
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "сёнен (836)",
+   "url": "/animation/?genre=senen&sort=newest",
+   "label_n": 836,
+   "status": 200,
+   "page_totals": [
+    836
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "школа (716)",
+   "url": "/animation/?genre=shkola&sort=newest",
+   "label_n": 716,
+   "status": 200,
+   "page_totals": [
+    716
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "научная фантастика (687)",
+   "url": "/animation/?genre=nauchnayafantastika&sort=newest",
+   "label_n": 687,
+   "status": 200,
+   "page_totals": [
+    687
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "дунхуа (715)",
+   "url": "/animation/?genre=dunhua&sort=newest",
+   "label_n": 715,
+   "status": 200,
+   "page_totals": [
+    715
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "вестерн (30)",
+   "url": "/animation/?genre=vestern&sort=newest",
+   "label_n": 30,
+   "status": 200,
+   "page_totals": [
+    30
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "сверхъестественное (477)",
+   "url": "/animation/?genre=sverhestestvennoe&sort=newest",
+   "label_n": 477,
+   "status": 200,
+   "page_totals": [
+    477
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "мистика (255)",
+   "url": "/animation/?genre=mistika&sort=newest",
+   "label_n": 255,
+   "status": 200,
+   "page_totals": [
+    255
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "меха (340)",
+   "url": "/animation/?genre=meha&sort=newest",
+   "label_n": 340,
+   "status": 200,
+   "page_totals": [
+    340
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "сэйнэн (332)",
+   "url": "/animation/?genre=seynen&sort=newest",
+   "label_n": 332,
+   "status": 200,
+   "page_totals": [
+    332
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "детское (252)",
+   "url": "/animation/?genre=detskoe&sort=newest",
+   "label_n": 252,
+   "status": 200,
+   "page_totals": [
+    252
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "этти (254)",
+   "url": "/animation/?genre=etti&sort=newest",
+   "label_n": 254,
+   "status": 200,
+   "page_totals": [
+    254
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "уся (131)",
+   "url": "/animation/?genre=usya&sort=newest",
+   "label_n": 131,
+   "status": 200,
+   "page_totals": [
+    131
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "повседневность (74)",
+   "url": "/animation/?genre=povsednevnost&sort=newest",
+   "label_n": 74,
+   "status": 200,
+   "page_totals": [
+    74
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "Молодёжное (1)",
+   "url": "/animation/?genre=molodezhnoe&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/animation/",
+   "label": "психология (131)",
+   "url": "/animation/?genre=psihologiya&sort=newest",
+   "label_n": 131,
+   "status": 200,
+   "page_totals": [
+    131
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "гарем (167)",
+   "url": "/animation/?genre=garem&sort=newest",
+   "label_n": 167,
+   "status": 200,
+   "page_totals": [
+    167
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "сёдзё (165)",
+   "url": "/animation/?genre=sedze&sort=newest",
+   "label_n": 165,
+   "status": 200,
+   "page_totals": [
+    165
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "пародия (162)",
+   "url": "/animation/?genre=parodiya&sort=newest",
+   "label_n": 162,
+   "status": 200,
+   "page_totals": [
+    162
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "космос (161)",
+   "url": "/animation/?genre=kosmos&sort=newest",
+   "label_n": 161,
+   "status": 200,
+   "page_totals": [
+    161
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "болливуд (1)",
+   "url": "/animation/?genre=bollivud&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/animation/",
+   "label": "полиция (76)",
+   "url": "/animation/?genre=policiya&sort=newest",
+   "label_n": 76,
+   "status": 200,
+   "page_totals": [
+    76
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "демоны (84)",
+   "url": "/animation/?genre=demony&sort=newest",
+   "label_n": 84,
+   "status": 200,
+   "page_totals": [
+    84
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "самураи (73)",
+   "url": "/animation/?genre=samurai&sort=newest",
+   "label_n": 73,
+   "status": 200,
+   "page_totals": [
+    73
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "игра (31)",
+   "url": "/animation/?genre=igra&sort=newest",
+   "label_n": 31,
+   "status": 200,
+   "page_totals": [
+    31
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "вампиры (62)",
+   "url": "/animation/?genre=vampiry&sort=newest",
+   "label_n": 62,
+   "status": 200,
+   "page_totals": [
+    62
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "концерт (1)",
+   "url": "/animation/?genre=koncert&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/animation/",
+   "label": "гурман (52)",
+   "url": "/animation/?genre=gurman&sort=newest",
+   "label_n": 52,
+   "status": 200,
+   "page_totals": [
+    52
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "фильм-нуар (1)",
+   "url": "/animation/?genre=filmnuar&sort=newest",
+   "label_n": 1,
+   "status": 200,
+   "page_totals": [
+    1
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 1
+  },
+  {
+   "sec": "/animation/",
+   "label": "дзёсей (47)",
+   "url": "/animation/?genre=dzesey&sort=newest",
+   "label_n": 47,
+   "status": 200,
+   "page_totals": [
+    47
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "ток-шоу (4)",
+   "url": "/animation/?genre=tokshou&sort=newest",
+   "label_n": 4,
+   "status": 200,
+   "page_totals": [
+    4
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 4
+  },
+  {
+   "sec": "/animation/",
+   "label": "деменция (37)",
+   "url": "/animation/?genre=demenciya&sort=newest",
+   "label_n": 37,
+   "status": 200,
+   "page_totals": [
+    37
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 28
+  },
+  {
+   "sec": "/animation/",
+   "label": "боевые искусства (2)",
+   "url": "/animation/?genre=boevyeiskusstva&sort=newest",
+   "label_n": 2,
+   "status": 200,
+   "page_totals": [
+    2
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 2
+  },
+  {
+   "sec": "/animation/",
+   "label": "Ai (9)",
+   "url": "/animation/?genre=ai&sort=newest",
+   "label_n": 9,
+   "status": 200,
+   "page_totals": [
+    9
+   ],
+   "robots": [
+    "index, follow"
+   ],
+   "cards": 9
+  }
+ ]
+}

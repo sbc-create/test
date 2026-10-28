@@ -1,0 +1,14 @@
+{
+ "/movies/": {
+  "stand": 34,
+  "live_good": 34,
+  "stand_not_live_good": {},
+  "live_good_not_stand": {}
+ },
+ "/series/": {
+  "stand": 32,
+  "live_good": 32,
+  "stand_not_live_good": {},
+  "live_good_not_stand": {}
+ }
+}
