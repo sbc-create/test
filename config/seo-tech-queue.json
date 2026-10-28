@@ -8953,6 +8953,27 @@
       "verify_live": true,
       "status": "session",
       "owner_action": "ведёт Архитектор; SEO — приёмка"
+    },
+    {
+      "id": "T345",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/movies/",
+        "https://zonafilm.cc/series/",
+        "https://zonafilm.cc/movies/?genre=animation&sort=newest",
+        "https://zonafilm.cc/series/?genre=anime&sort=newest"
+      ],
+      "problem": "Фильтр «Жанр» на /movies/ предлагает 98 жанров, из них 64 ведут на 404 с нулём карточек; на /series/ — 66 из 98. Список берётся из всего каталога, а не из раздела: «мультфильм», «аниме», «дорама» на /movies/ пусты по определению (отдельные виды), прочие — жанры без единой записи вида. Посетители в тупик попадают: /movies/?genre=animation&sort=newest — в выгрузках 27–28.10 (T344).",
+      "norm": "docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md §6 (H3: трудность выбора); решение SEO по T344 (вариант а)",
+      "expected": "(1) в фильтре раздела — только жанры с ненулевым числом записей этого раздела (с числом, как у фильтра года); (2) жанры другого вида (мультфильм, аниме, дорама) — не пунктом фильтра, а ссылкой на свой раздел (/animation/, /catalog/?genre=anime, /doramas/); (3) сами 404-адреса фильтров остаются 404 (T344, вариант а: 404 с видимой ссылкой на раздел, где жанр есть) — без 308 и без 200 с пустой выборкой; правила индексации не меняются. Выпускать отдельно от подписи у плеера (эксперимент H2), чтобы различить вклад.",
+      "check": "SEO: повтор genre-filter-scan по /movies/ и /series/ — 0 пунктов с 404 или нулём карточек; ссылки на разделы других видов ведут на 200 с карточками; 404-адреса фильтров — 404 со ссылкой; телефон и компьютер.",
+      "evidence": "artifacts/evidence/zonafilm-cc-behavior-20261028/coverage/genre-filter-scan.json",
+      "live_check": "фильтр жанра на /movies/ и /series/, телефон 390 и компьютер 1440",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор; SEO — приёмка и оценка по referer_to_page (/movies/ → /title/) и exit_pages"
     }
   ]
 }
