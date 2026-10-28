@@ -133,6 +133,163 @@
      "checked": "2026-10-28 (live/pilot-isekai-animedia.icu.json): 200, canonical на себя, index, follow"
     }
    ]
+  },
+  {
+   "key": "kitayskoe-fentezi-put-k-sile",
+   "title": "Китайское фэнтези: путь к силе",
+   "viewer_request": "Хочу длинный китайский сериал о культивации, где герой с нуля поднимается к вершине.",
+   "intro": "Китайские анимационные сериалы (дунхуа) о культивации: герой теряет силу или начинает с нуля и шаг за шагом поднимается в мире, где уважают только сильных. Сначала начала больших саг, затем — сериалы 2023–2025 годов. В подборке — первый сезон каждой истории.",
+   "section": "/series/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "0195686e-448a-7fee-b58f-7a7a4d08398a",
+     "slug": "raskolotaya-bitvoy-sineva-nebes",
+     "url": "https://animedia.icu/title/raskolotaya-bitvoy-sineva-nebes/",
+     "name": "Расколотая битвой синева небес",
+     "original_name": "Fights Break Sphere",
+     "year": 2017,
+     "type": "tv",
+     "external_ids": {
+      "mal": "36491"
+     },
+     "reason": "Юный талант Сяо Янь за три года теряет силу, репутацию и обещание, данное матери, — с этого начинается одна из самых долгих саг о культивации.",
+     "basis": "строка 223 (в списке — 5-й сезон) списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "01915137-54e2-771c-ac86-4b21eac99074",
+     "slug": "bezuprechnyy-mir",
+     "url": "https://animedia.icu/title/bezuprechnyy-mir/",
+     "name": "Безупречный мир",
+     "original_name": "Wan mei shi jie",
+     "year": 2021,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14986786",
+      "kinopoisk": "5357385",
+      "mal": "47405"
+     },
+     "reason": "В мире, где у каждого растения и зверя есть дух, рождается мальчик с редчайшей Духовной костью — силой, которую другие хотят отнять.",
+     "basis": "строка 239 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "01915137-083b-738b-9791-5025cf1327da",
+     "slug": "boevoy-master-2",
+     "url": "https://animedia.icu/title/boevoy-master-2/",
+     "name": "Боевой мастер",
+     "original_name": "The God of War Dominates",
+     "year": 2020,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "20769560",
+      "kinopoisk": "4291417",
+      "mal": "41409"
+     },
+     "reason": "Гений боевых искусств Цинь Чэнь гибнет от предательства, а через триста лет его наследие получает юноша с тем же именем, отвергнутый в доме деда.",
+     "basis": "строка 271 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019218fb-3b17-79ef-8bf2-d49ea0d08a38",
+     "slug": "pozhiratel-zvezd",
+     "url": "https://animedia.icu/title/pozhiratel-zvezd/",
+     "name": "Пожиратель звёзд",
+     "original_name": "Swallowed Star",
+     "year": 2020,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "17050076",
+      "kinopoisk": "4519776",
+      "mal": "44218"
+     },
+     "reason": "Земля после вируса, породившего чудовищ: выпускник Ло Фэн мечтает стать Борцом — одним из людей со сверхсилой, которые защищают города.",
+     "basis": "строка 290 (в списке — 4-й сезон) списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01918ca7-93e4-73a3-a2b8-26366399fbf3",
+     "slug": "okutyvaya-nebesa",
+     "url": "https://animedia.icu/title/okutyvaya-nebesa/",
+     "name": "Окутывая небеса",
+     "original_name": "Shrouding the Heavens",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "27617390",
+      "kinopoisk": "7679842",
+      "mal": "51289"
+     },
+     "reason": "Встреча выпускников заканчивается для Е Фаня и его одноклассников в саркофаге, запряжённом драконами, — он переносит их между мирами.",
+     "basis": "строка 249 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "01918cd8-fb6c-75f2-ad95-25a4aef94cee",
+     "slug": "kontinent-sily-i-duha",
+     "url": "https://animedia.icu/title/kontinent-sily-i-duha/",
+     "name": "Континент силы и духа",
+     "original_name": "Lingwu Continent",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "mal": "59410"
+     },
+     "reason": "Бывший гений Чэнь Тянь в десять лет теряет боевой дух, а падение со скалы приводит его к наследию древнего императора меча.",
+     "basis": "строка 268 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "019ab216-6dcd-7cde-bd46-bfa3d3995481",
+     "slug": "voinstvennyy-bog-devyati-solnc",
+     "url": "https://animedia.icu/title/voinstvennyy-bog-devyati-solnc/",
+     "name": "Воинственный бог девяти солнц",
+     "original_name": "Jiu Yang Wushen",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "mal": "61567"
+     },
+     "reason": "Самый молодой император в истории гибнет и возрождается юношей с закрытыми боевыми венами — и с памятью прошлой жизни начинает путь заново.",
+     "basis": "строка 282 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 8,
+     "id": "019b6489-0579-7780-9545-b1d20d7de563",
+     "slug": "za-granyu-vremeni-2",
+     "url": "https://animedia.icu/title/za-granyu-vremeni-2/",
+     "name": "За гранью времени",
+     "original_name": "Guangyin Zhi Wai",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "mal": "62340"
+     },
+     "reason": "Мир, где энергия ци давала силу, гибнет под «Бледным небом»; подросток Сюй Цин выживает в трущобах и находит табличку с древней техникой культивации.",
+     "basis": "строка 238 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог animedia-01 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/pilot-donghua-animedia.icu.json): 200, canonical на себя, index, follow"
+    }
+   ]
   }
  ]
 }

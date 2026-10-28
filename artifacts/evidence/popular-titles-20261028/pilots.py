@@ -64,6 +64,31 @@ PILOTS = {
 }
 
 
+#: Вторая и следующие подборки сайта (поручение 28.10 п. 5: «после партии — следующая доступная задача»).
+#: Строка списка с поздним сезоном представлена ПЕРВЫМ сезоном: в общей подборке — одна карточка на работу,
+#: порядок сезонов раскрывается на карточке.
+EXTRA = {
+    "animedia.icu": [{
+        "key": "kitayskoe-fentezi-put-k-sile", "title": "Китайское фэнтези: путь к силе", "section": "/series/",
+        "probe": "pilot-donghua-animedia.icu.json",
+        "viewer_request": "Хочу длинный китайский сериал о культивации, где герой с нуля поднимается к вершине.",
+        "intro": "Китайские анимационные сериалы (дунхуа) о культивации: герой теряет силу или начинает с нуля и шаг за шагом "
+                 "поднимается в мире, где уважают только сильных. Сначала начала больших саг, затем — сериалы 2023–2025 годов. "
+                 "В подборке — первый сезон каждой истории.",
+        "items": [
+            ("223 (в списке — 5-й сезон)", "raskolotaya-bitvoy-sineva-nebes", "Юный талант Сяо Янь за три года теряет силу, репутацию и обещание, данное матери, — с этого начинается одна из самых долгих саг о культивации."),
+            (239, "bezuprechnyy-mir", "В мире, где у каждого растения и зверя есть дух, рождается мальчик с редчайшей Духовной костью — силой, которую другие хотят отнять."),
+            (271, "boevoy-master-2", "Гений боевых искусств Цинь Чэнь гибнет от предательства, а через триста лет его наследие получает юноша с тем же именем, отвергнутый в доме деда."),
+            ("290 (в списке — 4-й сезон)", "pozhiratel-zvezd", "Земля после вируса, породившего чудовищ: выпускник Ло Фэн мечтает стать Борцом — одним из людей со сверхсилой, которые защищают города."),
+            (249, "okutyvaya-nebesa", "Встреча выпускников заканчивается для Е Фаня и его одноклассников в саркофаге, запряжённом драконами, — он переносит их между мирами."),
+            (268, "kontinent-sily-i-duha", "Бывший гений Чэнь Тянь в десять лет теряет боевой дух, а падение со скалы приводит его к наследию древнего императора меча."),
+            (282, "voinstvennyy-bog-devyati-solnc", "Самый молодой император в истории гибнет и возрождается юношей с закрытыми боевыми венами — и с памятью прошлой жизни начинает путь заново."),
+            (238, "za-granyu-vremeni-2", "Мир, где энергия ци давала силу, гибнет под «Бледным небом»; подросток Сюй Цин выживает в трущобах и находит табличку с древней техникой культивации."),
+        ],
+    }],
+}
+
+
 #: Работы, уже стоящие в других подборках сайта (сверка с config/collections.json витрины 28.10).
 #: Оставлены намеренно: тематическая подборка отвечает другому запросу, чем подборка платформы или сезона.
 OVERLAPS = {
@@ -74,9 +99,11 @@ OVERLAPS = {
 
 
 def main():
-    for site, p in PILOTS.items():
-        det = json.loads(pathlib.Path(SNAP[site]).read_text(encoding="utf-8"))
-        probe = {c["url"]: c for c in json.loads((HERE / "live" / PROBE[site]).read_text(encoding="utf-8"))["cards"]}
+    for site, first in PILOTS.items():
+      det = json.loads(pathlib.Path(SNAP[site]).read_text(encoding="utf-8"))
+      colls = []
+      for p in [{**first, "probe": PROBE[site]}] + EXTRA.get(site, []):
+        probe = {c["url"]: c for c in json.loads((HERE / "live" / p["probe"]).read_text(encoding="utf-8"))["cards"]}
         items = []
         for order, (row, slug, reason) in enumerate(p["items"], 1):
             v = det["details"][slug]
@@ -91,25 +118,26 @@ def main():
                 "basis": (f"строка {row} списка владельца 28.10; " if row else "дополнение из каталога (поручение 28.10 п. 5: обоснованное дополнение); ")
                          + "тема подтверждена описанием каталога; воспроизведение есть (playable)",
                 "source": f"каталог {SITE_ID[site]} (description), сборка {det['catalog_built_at']}",
-                "checked": f"2026-10-28 (live/{PROBE[site]}): {c['status']}, canonical на себя, {c['robots']}",
+                "checked": f"2026-10-28 (live/{p['probe']}): {c['status']}, canonical на себя, {c['robots']}",
             })
-        doc = {
+        colls.append({
+            "key": p["key"], "title": p["title"], "viewer_request": p["viewer_request"], "intro": p["intro"],
+            "section": p["section"],
+            "indexing": {"open": True, "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"},
+            "items": items,
+        })
+      doc = {
             "schema": "popular-titles-pilot.collections/1", "prepared_at": "2026-10-28", "status": "PREPARED_NOT_RELEASED",
             "key": "id = details[].id", "site": site, "site_id": SITE_ID[site],
             "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
             "overlaps": OVERLAPS[site],
             "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
-            "collections": [{
-                "key": p["key"], "title": p["title"], "viewer_request": p["viewer_request"], "intro": p["intro"],
-                "section": p["section"],
-                "indexing": {"open": True, "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"},
-                "items": items,
-            }],
-        }
-        name = site.upper().replace(".", "_")
-        out = ROOT / "docs" / "seo-operator" / f"{name}_COLLECTIONS_20261028.json"
-        out.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
-        print(out.relative_to(ROOT), len(items))
+            "collections": colls,
+      }
+      name = site.upper().replace(".", "_")
+      out = ROOT / "docs" / "seo-operator" / f"{name}_COLLECTIONS_20261028.json"
+      out.write_text(json.dumps(doc, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+      print(out.relative_to(ROOT), [len(c["items"]) for c in colls])
 
 
 main()
