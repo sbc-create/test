@@ -49,6 +49,7 @@
 from __future__ import annotations
 
 import argparse
+import ast
 import pathlib
 import shutil
 import sys
@@ -60,6 +61,11 @@ import sys
 ЯКОРЬ = 'Path(os.environ.get("SITE_DATA_DIR") or "/nonexistent-site-data")'
 ЗАМЕНА = ('Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()\n'
           '                   or "/nonexistent-site-data")')
+
+#: Вторая стража у части проверок: смотрит прямо на переменную окружения, и
+#: найденный адрес её не убеждает. Измерено на sitemap_index_lastmod.py:169.
+ЯКОРЬ_СТРАЖИ = 'if not os.environ.get("SITE_DATA_DIR") or not ИСТОЧНИК.is_dir():'
+ЗАМЕНА_СТРАЖИ = 'if not ИСТОЧНИК.is_dir():'
 
 ВСТАВКА_ИМПОРТА = '''
 
@@ -87,6 +93,32 @@ def _каталог_снимков() -> str:
 '''
 
 
+def _после_импортов(текст: str) -> int:
+    """Номер строки (1-based), после которой можно вставить определение.
+
+    Считается по РАЗБОРУ дерева, а не по виду строки: якорь бывает внутри
+    блока `try:` с отступом, и вставка определения на его строку даёт
+    SyntaxError. Измерено на unavailable_episode_noindex.py:33 — первый
+    прогон инструмента сломал этот файл именно так.
+    """
+    try:
+        дерево = ast.parse(текст)
+    except SyntaxError:
+        return 0
+    последняя = 0
+    for узел in дерево.body:
+        if isinstance(узел, (ast.Import, ast.ImportFrom)):
+            последняя = max(последняя, getattr(узел, "end_lineno", узел.lineno))
+        elif isinstance(узел, (ast.Try, ast.If, ast.With)):
+            # Импорты бывают внутри try: тогда годится конец всего блока.
+            если_импорт = any(
+                isinstance(в, (ast.Import, ast.ImportFrom))
+                for в in ast.walk(узел))
+            if если_импорт:
+                последняя = max(последняя, getattr(узел, "end_lineno", узел.lineno))
+    return последняя
+
+
 def _правка_файла(путь: pathlib.Path, писать: bool) -> tuple[bool, str]:
     текст = путь.read_text(encoding="utf-8")
     if "_каталог_снимков()" in текст:
@@ -94,11 +126,20 @@ def _правка_файла(путь: pathlib.Path, писать: bool) -> tupl
     n = текст.count(ЯКОРЬ)
     if n != 1:
         return False, f"якорь найден {n} раз(а)"
+    после = _после_импортов(текст)
+    if после <= 0:
+        return False, "не удалось найти конец импортов по разбору дерева"
     новый = текст.replace(ЯКОРЬ, ЗАМЕНА, 1)
-    # Определение вставляется перед первым использованием, после импортов.
-    место = новый.index(ЗАМЕНА)
-    начало_строки = новый.rfind("\n", 0, место) + 1
-    новый = новый[:начало_строки] + ВСТАВКА_ИМПОРТА.lstrip("\n") + "\n" + новый[начало_строки:]
+    # Вторая стража, если она есть: найденный адрес должен её убеждать.
+    if ЯКОРЬ_СТРАЖИ in новый:
+        новый = новый.replace(ЯКОРЬ_СТРАЖИ, ЗАМЕНА_СТРАЖИ)
+    строки = новый.splitlines(keepends=True)
+    строки.insert(после, ВСТАВКА_ИМПОРТА.lstrip("\n") + "\n")
+    новый = "".join(строки)
+    try:
+        ast.parse(новый)
+    except SyntaxError as сбой:
+        return False, f"правка дала бы SyntaxError: {сбой.msg} (строка {сбой.lineno})"
     if писать:
         путь.write_text(новый, encoding="utf-8")
     return True, "правится"
