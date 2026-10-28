@@ -287,6 +287,8 @@ def collect_domain(
         out.measurements.extend(_metrika_daily_and_search(provider, counter_id, date1, date2))
         out.measurements.append(_counter_passport(provider, counter_id))
         out.measurements.extend(_metrika_today(provider, counter_id))
+        if domain in BEHAVIOR_DOMAINS:
+            out.measurements.extend(_behavior_reports(provider, counter_id))
 
     # -------------------------------------------------------- Вебмастер
     if not host_id:
@@ -533,6 +535,60 @@ def _metrika_daily_and_search(
         out.append(
             _unmeasured("daily_search_landing_pages", EXTRA_METRIKA[4][1], exc.reason, EXTRA_METRIKA[4][2])
         )
+    return out
+
+
+#: Домены разбора поведения (ANALYSIS_ORDER, поручение владельца 28.10). Остальные
+#: витрины этих запросов не делают: квота и размер выгрузки не тратятся без гипотезы.
+BEHAVIOR_DOMAINS = frozenset({"zonafilm.cc"})
+#: Хвост, а не первые 20 строк: первые 20 строк и скрыли карточки на дашборде.
+#: Усечение видно по `total_rows`.
+BEHAVIOR_LIMIT = 10000
+
+
+def _behavior_reports(provider, counter_id: int) -> list[Measurement]:
+    """Адреса с параметрами, переходы, выходы и часы — для гипотез H1–H5. Только чтение.
+
+    Отчёты просмотров — за вчерашние сутки: недельное окно уже получало отказ
+    «Query is too complicated», а суточные срезы копятся в ежедневных выгрузках.
+    Просмотры (ym:pv:) роботов не размечают — это сказано в заголовке. Часы — с датой
+    за вчера и сегодня, чтобы неполные сутки сравнивались с теми же часами вчера.
+    """
+    отсечка = _dt.datetime.now(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    out: list[Measurement] = []
+    for key, title, date1, date2, metrics, dims in (
+        ("pages_with_params", "Просмотры по адресам с параметрами за вчера (роботы не отделены)",
+         "yesterday", "yesterday", ["ym:pv:pageviews"], ["ym:pv:URL"]),
+        ("referer_to_page", "Просмотры: предыдущая страница → страница, за вчера (роботы не отделены)",
+         "yesterday", "yesterday", ["ym:pv:pageviews"], ["ym:pv:referer", "ym:pv:URL"]),
+        ("exit_pages", "Страницы выхода за вчера, с признаком робота",
+         "yesterday", "yesterday", ["ym:s:visits"], ["ym:s:endURL", "ym:s:deviceCategory", "ym:s:isRobot"]),
+        ("device_hour", f"Визиты и просмотры по дате, часу и устройству за вчера и сегодня, отсечка {отсечка}",
+         "yesterday", "today", ["ym:s:visits", "ym:s:users", "ym:s:pageviews"],
+         ["ym:s:date", "ym:s:hour", "ym:s:deviceCategory", "ym:s:isRobot"]),
+    ):
+        source = f"{', '.join(metrics)} × {' × '.join(dims)}"
+        try:
+            report = provider.get_metrica_report(
+                counter_id, date1=date1, date2=date2, metrics=metrics, dimensions=dims,
+                limit=BEHAVIOR_LIMIT,
+            )
+            total = report.get("total_rows")
+            out.append(
+                Measurement(
+                    key=key,
+                    title=title,
+                    measured=True,
+                    value=report.get("data"),
+                    source=source,
+                    sampled=report.get("sampled"),
+                    sample_share=report.get("sample_share"),
+                    top_n=BEHAVIOR_LIMIT,
+                    total_rows=int(total) if isinstance(total, (int, float)) else None,
+                )
+            )
+        except FactoryError as exc:
+            out.append(_unmeasured(key, title, exc.reason, source))
     return out
 
 
