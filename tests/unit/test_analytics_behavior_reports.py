@@ -42,8 +42,10 @@ def _by_key(provider, entry):
     return {m["key"]: m for m in payload["measurements"]}
 
 
-def test_behavior_reports_present_for_zonafilm_cc_only():
-    assert any(k.startswith("pages_with_params@") for k in _by_key(Recorder(), ZONA_CC))
+def test_behavior_reports_present_for_listed_zona_domains_only():
+    for domain in ("zonafilm.cc", "zonafilm.space", "zonafilm12.site"):
+        entry = {**LIVE_ENTRY, "domain": domain}
+        assert any(k.startswith("pages_with_params@") for k in _by_key(Recorder(), entry)), domain
     assert not any(k.startswith(("pages_with_params", "device_hour", "control_visits"))
                    for k in _by_key(Recorder(), LIVE_ENTRY))
 
