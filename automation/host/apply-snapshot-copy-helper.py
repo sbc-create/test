@@ -216,6 +216,28 @@ def _наложить(репо: pathlib.Path,
     return правлены, отказы
 
 
+def _погасить_сирот() -> None:
+    """Снять свои осиротевшие стенды ПЕРЕД прогоном проверок.
+
+    Проверки поднимают стенды сами, и сирота переживает любой `finally`:
+    когда родитель умирает раньше, `finally` не исполняется вообще. Измерено
+    28.10 — стенд прожил 409 минут и держал 598 МиБ.
+    """
+    import importlib.util as _иу
+    путь = pathlib.Path(__file__).resolve().parent / "_orphan_stands.py"
+    if not путь.is_file():
+        return
+    спец = _иу.spec_from_file_location("_orphan_stands", путь)
+    if спец is None or спец.loader is None:
+        return
+    модуль = _иу.module_from_spec(спец)
+    try:
+        спец.loader.exec_module(модуль)
+        модуль.погасить(pathlib.Path("/home/claude/wt-nova-publish-memory-02"))
+    except Exception:  # noqa: BLE001 — уборка не обязана мешать прогону
+        return
+
+
 def применить(репо: pathlib.Path, писать: bool,
               только: str = "") -> tuple[str, str]:
     if not ИСТОЧНИК.is_file():
@@ -236,6 +258,7 @@ def применить(репо: pathlib.Path, писать: bool,
             return "skip", ("копирующих циклов известной формы не нашлось"
                         + (f" среди «{только}*»" if только else ""))
         беды = []
+        _погасить_сирот()
         for имя in правлены:
             готово = subprocess.run(  # noqa: S603
                 [sys.executable, f"checks/{имя}"], cwd=копия,

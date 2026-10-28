@@ -221,7 +221,31 @@ def _обход(дай, слаги: list) -> tuple[int, int, list, dict]:
     return первыми, проверено, беды, распределение
 
 
+def _погасить_сирот() -> None:
+    """Снять свои осиротевшие стенды ПЕРЕД подъёмом нового.
+
+    Сирота переживает `finally` по определению: когда родитель умирает раньше
+    (timeout, kill, конец хода), `finally` не исполняется вообще. Измерено
+    28.10: стенд прожил 409 минут с ppid 1 и держал 598 МиБ, из-за чего шлюз
+    фонового редактора трижды не запустился. Поэтому уборка — перед подъёмом.
+    """
+    import importlib.util as _иу
+    путь = pathlib.Path(__file__).resolve().parent / "_orphan_stands.py"
+    if not путь.is_file():
+        return
+    спец = _иу.spec_from_file_location("_orphan_stands", путь)
+    if спец is None or спец.loader is None:
+        return
+    модуль = _иу.module_from_spec(спец)
+    try:
+        спец.loader.exec_module(модуль)
+        модуль.погасить(pathlib.Path("/home/claude/wt-nova-publish-memory-02"))
+    except Exception:  # noqa: BLE001 — уборка не обязана мешать прогону
+        return
+
+
 def _прогнать(репо: pathlib.Path, слаги: list | None = None) -> tuple[int, str]:
+    _погасить_сирот()
     данные_ист = _данные(репо)
     if данные_ист is None:
         return 2, "каталог данных не разрешился — проверка идёт на хосте площадки"

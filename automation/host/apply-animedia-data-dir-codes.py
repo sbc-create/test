@@ -70,6 +70,24 @@ import tempfile
 #: замена на все формы меняла бы смысл.
 ФОРМЫ_АДРЕСА = (
     (
+        '''    данные_живые = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
+        '''    # Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+    данные_живые = Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()
+                   or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
+        '''    данные = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
+        '''    # Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+    данные = Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()
+             or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
+        '''    ДАННЫЕ = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
+        '''    # Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220).
+    ДАННЫЕ = Path(os.environ.get("SITE_DATA_DIR") or _каталог_снимков()
+             or f"/srv/{КОРЕНЬ.name}/data")''',
+    ),
+    (
         '''ДАННЫЕ = Path(os.environ.get("SITE_DATA_DIR") or f"/srv/{КОРЕНЬ.name}/data")''',
         '''# Адрес из НАСТРОЙКИ витрины, имя каталога последним (MOD-220): со каталогом
 # в /srv имя репозитория совпадает случайно.
@@ -128,6 +146,12 @@ def _каталог_снимков() -> str:
 #: правило MOD-221 обязано его валить. Форм две, потому что часть проверок
 #: выходит из модуля (sys.exit), а часть — из main (return).
 КОДЫ_НЕТ_СНИМКА = (
+    (
+        '''    print(f"НЕ ИЗМЕРЕНО: снимка в {ДАННЫЕ} нет — сравнение выполняется на хосте площадки")
+    sys.exit(0)''',
+        '''    print(f"НЕ ИЗМЕРЕНО: снимка в {ДАННЫЕ} нет — сравнение выполняется на хосте площадки")
+    sys.exit(2)''',
+    ),
     (
         '''    print(f"НЕ ИЗМЕРЕНО: снимка в {ДАННЫЕ} нет — проверка выполняется на хосте площадки")
     sys.exit(0)''',
@@ -206,7 +230,31 @@ def _правка(путь: pathlib.Path) -> tuple[bool, str]:
     return True, f"правлено (участков кода: {сделано_кодов})"
 
 
+def _погасить_сирот() -> None:
+    """Снять свои осиротевшие стенды ПЕРЕД подъёмом нового.
+
+    Сирота переживает `finally` по определению: когда родитель умирает раньше
+    (timeout, kill, конец хода), `finally` не исполняется вообще. Измерено
+    28.10: стенд прожил 409 минут с ppid 1 и держал 598 МиБ, из-за чего шлюз
+    фонового редактора трижды не запустился. Поэтому уборка — перед подъёмом.
+    """
+    import importlib.util as _иу
+    путь = pathlib.Path(__file__).resolve().parent / "_orphan_stands.py"
+    if not путь.is_file():
+        return
+    спец = _иу.spec_from_file_location("_orphan_stands", путь)
+    if спец is None or спец.loader is None:
+        return
+    модуль = _иу.module_from_spec(спец)
+    try:
+        спец.loader.exec_module(модуль)
+        модуль.погасить(pathlib.Path("/home/claude/wt-nova-publish-memory-02"))
+    except Exception:  # noqa: BLE001 — уборка не обязана мешать прогону
+        return
+
+
 def _прогон(корень: pathlib.Path, имя: str, среда: dict) -> tuple[int, str]:
+    _погасить_сирот()
     готово = subprocess.run(  # noqa: S603
         [sys.executable, f"checks/{имя}.py"], cwd=корень,
         capture_output=True, text=True, timeout=900,
