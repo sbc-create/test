@@ -1,0 +1,393 @@
+{
+ "schema": "popular-titles-pilot.collections/1",
+ "prepared_at": "2026-10-28",
+ "status": "PREPARED_NOT_RELEASED",
+ "key": "id = details[].id",
+ "site": "zonafilm.cc",
+ "site_id": "zona-02",
+ "direction_rule": "аниме — только на аниме-сайте; турецкие и игровые сериалы — на Zona (films_series); одна работа — одна карточка, без сезонов одной франшизы",
+ "overlaps": [],
+ "release_note": "Пилот списка популярных тайтлов владельца (T348). Состав держится по id; исчезнувший id не заменяется автоматически.",
+ "collections": [
+  {
+   "key": "romanticheskie-doramy",
+   "title": "Романтические дорамы",
+   "viewer_request": "Хочу дораму про любовь — с офисом, свиданиями и долгой дорогой друг к другу.",
+   "intro": "Корейские и китайские сериалы о любви: свидание вслепую с собственным директором, строгий начальник, соседи по дому, стюардесса и вице-президент авиакомпании, врач и пациент. Сначала офисные истории, затем — о любви через годы.",
+   "section": "/doramas/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "01915258-0a1b-7dc4-946d-3f54b4e8c064",
+     "slug": "delovoe-predlozhenie",
+     "url": "https://zonafilm.cc/title/delovoe-predlozhenie/",
+     "name": "Деловое предложение",
+     "original_name": "Sanae matseon",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "14819828",
+      "kinopoisk": "4522058"
+     },
+     "reason": "Ха-ри идёт на свидание вслепую вместо богатой подруги — и встречает там молодого генерального директора собственной компании.",
+     "basis": "строка 172 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "019eeeca-6c50-7bea-b1e6-0900c33f3ddd",
+     "slug": "zavtra-snova-na-rabotu",
+     "url": "https://zonafilm.cc/title/zavtra-snova-na-rabotu/",
+     "name": "Завтра снова на работу!",
+     "original_name": "내일도 출근!",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "38960812",
+      "kinopoisk": "8732499"
+     },
+     "reason": "Опытная сотрудница Ча Джи Юн семь лет держится на работе, но вспыльчивый новый руководитель отдела рушит её привычную жизнь.",
+     "basis": "строка 125 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "01a03327-e9f0-736d-b5d7-1a7f64fca639",
+     "slug": "yasnoe-utro-ranney-vesny",
+     "url": "https://zonafilm.cc/title/yasnoe-utro-ranney-vesny/",
+     "name": "Ясное утро ранней весны",
+     "original_name": "早春晴朗",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "37884717",
+      "kinopoisk": "14069956"
+     },
+     "reason": "Новичок рекламной компании влюбляется в язвительного начальника, уходит после шести лет вместе — и встречает его снова.",
+     "basis": "строка 105 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019ecc27-2b97-774d-b5c6-35c6a9414d10",
+     "slug": "feyerverk-lyubvi",
+     "url": "https://zonafilm.cc/title/feyerverk-lyubvi/",
+     "name": "Фейерверк любви",
+     "original_name": "爱情有烟火",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "28131816",
+      "kinopoisk": "12935648"
+     },
+     "reason": "Брошенная женихом сотрудница банка снимает комнату в доме богатого наследника, у которого свой взгляд на любовь.",
+     "basis": "строка 126 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "01a05696-0853-767e-a637-c6c2109fb6d7",
+     "slug": "polet-k-moemu-serdcu",
+     "url": "https://zonafilm.cc/title/polet-k-moemu-serdcu/",
+     "name": "Полет к моему сердцу",
+     "original_name": "飞到我心上",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "36982718"
+     },
+     "reason": "Стюардесса, мечтающая стать пилотом, после ссоры с вице-президентом авиакомпании уходит учиться и через три года с отличием оканчивает лётную академию — на пути к мечте стать капитаном.",
+     "basis": "строка 156 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "01967cce-8ca4-7f2c-8a60-f50370dc396e",
+     "slug": "samoe-luchshee",
+     "url": "https://zonafilm.cc/title/samoe-luchshee/",
+     "name": "Самое лучшее",
+     "original_name": "Ai ni",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "31840873",
+      "kinopoisk": "7447221"
+     },
+     "reason": "Управляющий отелем с бессонницей обращается к врачу китайской медицины — и оба, раненные прошлой любовью, медленно открывают сердца.",
+     "basis": "строка 185 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 7,
+     "id": "019f3203-5a69-7465-8195-be9dfc7fb7ea",
+     "slug": "s-lyubovyu-k-tebe",
+     "url": "https://zonafilm.cc/title/s-lyubovyu-k-tebe/",
+     "name": "С любовью к тебе",
+     "original_name": "野狗骨头",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "36979936",
+      "kinopoisk": "13539329"
+     },
+     "reason": "Знакомые с детства в 1990-х Чэнь И и Мяо Цзин выживают вдвоём, расстаются из-за опасности и встречаются через много лет.",
+     "basis": "строка 120 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 8,
+     "id": "019f5c70-1a34-796b-9317-13caf27b4b71",
+     "slug": "mechtayu-o-tebe",
+     "url": "https://zonafilm.cc/title/mechtayu-o-tebe/",
+     "name": "Мечтаю о тебе",
+     "original_name": "그대에게 드림",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "39028251",
+      "kinopoisk": "9178109"
+     },
+     "reason": "Признанный режиссёр через одиннадцать лет возвращается в Корею ради подруги юности, которая когда-то мечтала снимать кино вместе с ним.",
+     "basis": "строка 103 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  },
+  {
+   "key": "doramy-o-mesti-i-spravedlivosti",
+   "title": "Дорамы о мести и справедливости",
+   "viewer_request": "Хочу дораму, где героиня или герой мстят и восстанавливают справедливость.",
+   "intro": "Сериалы о расплате: женщина возвращается на десять лет назад, чтобы отомстить мужу, жена-киллер наказывает тех, до кого не дотянулось правосудие, боксёр идёт против коллекторов, выжившая принцесса — в игре за власть.",
+   "section": "/doramas/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019168c1-1070-7dde-ad81-6da87ef03460",
+     "slug": "vyhodi-zamuzh-za-moego-supruga",
+     "url": "https://zonafilm.cc/title/vyhodi-zamuzh-za-moego-supruga/",
+     "name": "Выходи замуж за моего супруга!",
+     "original_name": "Nae nampyeongwa gyeolhonhaejwo",
+     "year": 2024,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "26628595",
+      "kinopoisk": "5379471"
+     },
+     "reason": "Убитая мужем и лучшей подругой женщина возвращается на десять лет назад, чтобы отомстить.",
+     "basis": "строка 168 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "019fb730-d8c4-794a-aa58-009d5b466dd0",
+     "slug": "zamuzhnyaya-zhenschina-ubiyca",
+     "url": "https://zonafilm.cc/title/zamuzhnyaya-zhenschina-ubiyca/",
+     "name": "Замужняя женщина-убийца",
+     "original_name": "A Bona fide Killer",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "43616775",
+      "kinopoisk": "10372988"
+     },
+     "reason": "Для всех Ю Бо На — офисная сотрудница и мама, а на деле киллер «Зимородок», устраняющая преступников, до которых не добралось правосудие.",
+     "basis": "строка 160 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "01915124-843e-71f1-8020-c2b4dde4b4a0",
+     "slug": "ohotnichi-psy",
+     "url": "https://zonafilm.cc/title/ohotnichi-psy/",
+     "name": "Охотничьи псы",
+     "original_name": "Sayanggaedeul",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "26315487",
+      "kinopoisk": "4493049"
+     },
+     "reason": "Боксёр и бывший морпех Кон-у покрывает долги матери, разорённой мошенниками-коллекторами, но мысль о мести не оставляет.",
+     "basis": "строка 155 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019154ca-44d7-7a31-8c2f-b59fa50e54d8",
+     "slug": "vinchenco",
+     "url": "https://zonafilm.cc/title/vinchenco/",
+     "name": "Винченцо",
+     "original_name": "Vincenzo",
+     "year": 2021,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "13433812",
+      "kinopoisk": "1398913"
+     },
+     "reason": "Усыновлённый итальянской семьёй Винченцо Касано, адвокат и советник мафии, из-за войны кланов возвращается в Корею.",
+     "basis": "строка 195 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "019f47d5-0fa5-76d9-95f2-b7e63bede42d",
+     "slug": "rascvet-sily",
+     "url": "https://zonafilm.cc/title/rascvet-sily/",
+     "name": "Расцвет силы",
+     "original_name": "百花杀",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "36204806",
+      "kinopoisk": "13165242"
+     },
+     "reason": "Единственная выжившая после резни просыпается под чужим именем принцессой Северо-Запада и вступает в игру за власть при дворе.",
+     "basis": "строка 112 списка владельца 28.10; тема — жанр «Месть» в каталоге; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  },
+  {
+   "key": "doramy-s-magiey-i-mifologiey",
+   "title": "Дорамы с магией и мифологией",
+   "viewer_request": "Хочу дораму с демонами, призраками и мифическими мирами.",
+   "intro": "Сериалы, где в обычную жизнь или во дворец приходят демоны, призраки и бессмертные: брачный контракт с демоном, проклятие дворца наследного принца, душа воительницы в чужом теле и войны Шести Царств.",
+   "section": "/doramas/",
+   "indexing": {
+    "open": true,
+    "reason": "устойчивый адрес, своё вступление и пояснение к каждой работе; тема утверждена владельцем 28.10"
+   },
+   "items": [
+    {
+     "order": 1,
+     "id": "019151db-9835-767f-89ca-b0f9a66ef98a",
+     "slug": "moy-demon-serial-2023-2024",
+     "url": "https://zonafilm.cc/title/moy-demon-serial-2023-2024/",
+     "name": "Мой демон (сериал 2023 – 2024)",
+     "original_name": "Mai demon",
+     "year": 2023,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "29569035",
+      "kinopoisk": "5396315"
+     },
+     "reason": "Демон теряет силы из-за встречи с наследницей богатой семьи и, чтобы вернуть их, заключает с ней брачный контракт.",
+     "basis": "строка 170 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 2,
+     "id": "019f6f8f-4325-7dae-b230-2330c4ba4941",
+     "slug": "vostochnyy-dvorec",
+     "url": "https://zonafilm.cc/title/vostochnyy-dvorec/",
+     "name": "Восточный дворец",
+     "original_name": "동궁",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "35051401",
+      "kinopoisk": "6713224"
+     },
+     "reason": "Охотник на призраков и придворная дама, слышащая их голоса, по тайному поручению короля снимают проклятие с дворца наследного принца.",
+     "basis": "строка 164 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 3,
+     "id": "019f753b-d2f9-7eaa-8a1b-948c83ecb758",
+     "slug": "pugayuschiy-roman",
+     "url": "https://zonafilm.cc/title/pugayuschiy-roman/",
+     "name": "Пугающий роман",
+     "original_name": "오싹한 연애",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "40247521",
+      "kinopoisk": "10282733"
+     },
+     "reason": "Наследница, которая видит призраков, и прокурор с обострённым чувством справедливости вместе раскрывают дела.",
+     "basis": "строка 132 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 4,
+     "id": "019151fa-a715-7fa3-80ea-98ea8ca15893",
+     "slug": "alhimiya-dush",
+     "url": "https://zonafilm.cc/title/alhimiya-dush/",
+     "name": "Алхимия душ",
+     "original_name": "Hwanhon",
+     "year": 2022,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "20859920",
+      "kinopoisk": "4872515"
+     },
+     "reason": "Душа великой воительницы оказывается заперта в теле слабой девушки — служанки заносчивого дворянина.",
+     "basis": "строка 174 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 5,
+     "id": "019f08bd-fce8-7593-8e50-d8a0392c9a62",
+     "slug": "tysyacha-aromatov",
+     "url": "https://zonafilm.cc/title/tysyacha-aromatov/",
+     "name": "Тысяча ароматов",
+     "original_name": "千香",
+     "year": 2026,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "36872458",
+      "kinopoisk": "13733535"
+     },
+     "reason": "Бессмертные, демоны и люди сто лет воюют за плод Древа Жизни; юноша сближается с сиротой, чтобы спасти брата.",
+     "basis": "строка 163 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    },
+    {
+     "order": 6,
+     "id": "0199c39e-a9f9-73e5-8de6-05f8880c6b64",
+     "slug": "lyubov-v-oblakah",
+     "url": "https://zonafilm.cc/title/lyubov-v-oblakah/",
+     "name": "Любовь в облаках",
+     "original_name": "Love in the Clouds",
+     "year": 2025,
+     "type": "tv",
+     "external_ids": {
+      "imdb": "32750951",
+      "kinopoisk": "10001296"
+     },
+     "reason": "Богиня-воительница Шести Царств, проиграв бывшему заключённому, под чужой личиной танцовщицы приближается к победителю.",
+     "basis": "строка 175 списка владельца 28.10; тема подтверждена описанием каталога; воспроизведение есть (playable)",
+     "source": "каталог zona-02 (description), сборка 2026-10-28T03:17:49Z",
+     "checked": "2026-10-28 (live/coll-doramas-zonafilm.cc.json): 200, canonical на себя, index, follow"
+    }
+   ]
+  }
+ ]
+}

@@ -9231,6 +9231,31 @@
       "verify_live": "три адреса /collection/<key>/ — 200 после выпуска; сейчас 404 (подборок ещё нет)",
       "status": "session",
       "owner_action": "выпуск — Архитектор; составы, порядок и тексты — SEO; на zonafilm.space учесть действующие опыты витрины (exp-country-links-cards до 01.11)"
+    },
+    {
+      "id": "T349",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/collection/romanticheskie-doramy/",
+        "https://zonafilm.cc/collection/doramy-o-mesti-i-spravedlivosti/",
+        "https://zonafilm.cc/collection/doramy-s-magiey-i-mifologiey/"
+      ],
+      "problem": "Три утверждённые владельцем темы дорам (поручение 28.10 п. 5) подготовлены для единственного совместимого активного сайта с разделом дорам — zonafilm.cc /doramas/: «Романтические дорамы» (8), «Дорамы о мести и справедливости» (5), «Дорамы с магией и мифологией» (6) — все 19 работ из списка владельца, все карточки живые: 200, canonical на себя, index (live/coll-doramas-zonafilm.cc.json). Механизма подборок в репозитории zonafilm-cc нет (составы 26.10 не выпущены).",
+      "norm": "Поручение владельца 28.10 п. 5; правило владельца 26.10: дорамы на zonafilm.cc — в /doramas/; механизм T340/T341",
+      "expected": "После снятия паузы zonafilm.cc и восстановления CI (T342–T345) — подборки из docs/seo-operator/ZONAFILM_CC_COLLECTIONS_20261028.json (sha256 36a84d5b…), тексты фиксированной версии, независимая вычитка до выпуска; вход из /doramas/ и с главной; переход в карточку на 390 и 1440; состав по id переживает обновление каталога.",
+      "check": "SEO: публичный сценарий /doramas/ → подборка → карточка → плеер на 390 и 1440; состав = файлу по id; повтор после следующего обновления каталога.",
+      "evidence": "artifacts/evidence/popular-titles-20261028/pilots.py, artifacts/evidence/popular-titles-20261028/live/coll-doramas-zonafilm.cc.json",
+      "live_check": [
+        {
+          "url": "https://zonafilm.cc/doramas/",
+          "status": 200
+        }
+      ],
+      "verify_live": "три адреса /collection/<key>/ zonafilm.cc — 200 после выпуска; сейчас подборок нет",
+      "status": "session",
+      "owner_action": "ждёт снятия паузы zonafilm.cc и CI (как T342–T345); выпуск — Архитектор, составы и тексты — SEO"
     }
   ]
 }
