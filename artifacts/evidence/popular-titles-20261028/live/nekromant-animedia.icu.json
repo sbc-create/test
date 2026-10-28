@@ -1,0 +1,25 @@
+{
+ "host": "animedia.icu",
+ "started": "2026-10-28T16:04:06Z",
+ "finished": "2026-10-28T16:04:07Z",
+ "user_agent": "Mozilla/5.0 (factory-seo-acceptance; popular-titles-20261028)",
+ "cards": [
+  {
+   "url": "https://animedia.icu/title/nekromant-ya-katastrofa/",
+   "status": 200,
+   "canonical": "https://animedia.icu/title/nekromant-ya-katastrofa/",
+   "canonical_self": true,
+   "robots": "index, follow",
+   "title": "Некромант: Я катастрофа — смотреть онлайн — Animedia",
+   "h1": "Некромант: Я катастрофа",
+   "description": "«Некромант: Я катастрофа» (Si Ling Fashi Wo Ji Shi Tianzai) — китайский анимационный сериал 2026 года в жанре фэнтези. Мир живёт по игровым правилам, и на ритуале выбора класса…",
+   "player": true,
+   "search": {
+    "query": "Некромант: Я катастрофа",
+    "status": 200,
+    "position": 1,
+    "results_seen": 1
+   }
+  }
+ ]
+}

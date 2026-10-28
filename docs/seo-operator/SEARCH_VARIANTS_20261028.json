@@ -1,0 +1,87 @@
+{
+ "prepared_at": "2026-10-28",
+ "for": "T347",
+ "rule": "Синоним ищется как название работы с этим id; пара подтверждена original_name/сезоном каталога (match-decisions-20261028.json, статус matched_variant). Неподтверждённые пары (Наруто 2, Председатель Кан, Чудо-дураки/Суперглупцы, Киберкраш) сюда не входят.",
+ "aliases": [
+  {
+   "id": "019e9156-f4d2-7d42-ada5-335887a0014e",
+   "slug": "ochen-strashnoe-kino",
+   "name": "Очень страшное кино",
+   "alias": "Очень страшное кино 6",
+   "source_row": 24,
+   "proof": "Scary Movie (2026) — шестой фильм серии; в каталоге без номера, original_name «Scary Movie», 2026"
+  },
+  {
+   "id": "0192ab94-2052-72d2-81ef-46a0673f8066",
+   "slug": "csi-mesto-prestupleniya",
+   "name": "CSI: Место преступления",
+   "alias": "C.S.I. Место преступления",
+   "source_row": 54,
+   "proof": "CSI: Crime Scene Investigation, 2000"
+  },
+  {
+   "id": "0191512f-a2a8-7336-9d20-fa0acd3d829a",
+   "slug": "to-leto-kogda-ya-pohoroshela",
+   "name": "То лето, когда я похорошела",
+   "alias": "Этим летом я стала красивой",
+   "source_row": 60,
+   "proof": "The Summer I Turned Pretty — в каталоге «То лето, когда я похорошела»"
+  },
+  {
+   "id": "019167d1-721f-71a8-a411-4060797f73f1",
+   "slug": "legenda-o-vox-machina",
+   "name": "Легенда о Vox Machina",
+   "alias": "Легенда Вокс Машины",
+   "source_row": 76,
+   "proof": "«Легенда Вокс Машины» = «Легенда о Vox Machina» (original_name The Legend of Vox Machina) — та же работа, что строка 352"
+  },
+  {
+   "id": "0191517d-e930-7b59-be48-df42df5763fb",
+   "slug": "zadornye-druzya",
+   "name": "Задорные друзья",
+   "alias": "Улыбающиеся друзья",
+   "source_row": 96,
+   "proof": "Smiling Friends — в каталоге «Задорные друзья» (строка 353)"
+  },
+  {
+   "id": "019151db-9835-767f-89ca-b0f9a66ef98a",
+   "slug": "moy-demon-serial-2023-2024",
+   "name": "Мой демон (сериал 2023 – 2024)",
+   "alias": "Мой демон",
+   "source_row": 170,
+   "proof": "в каталоге «Мой демон (сериал 2023 – 2024)»"
+  },
+  {
+   "id": "019d495f-d54f-7a84-9b02-81a411771455",
+   "slug": "dobro-pozhalovat-v-klass-prevoshodstva-4-vtoroy-god-pervyy-semestr",
+   "name": "Добро пожаловать в класс превосходства 4: Второй год — Первый семестр",
+   "alias": "Добро пожаловать в класс превосходства 4: Второй год",
+   "source_row": 209,
+   "proof": "в каталоге «…4: Второй год — Первый семестр»"
+  },
+  {
+   "id": "01915146-fd7f-7f38-a5da-57a04710f14b",
+   "slug": "mir-otome-igr-eto-tyazhelyy-mir-dlya-mobov",
+   "name": "Мир отомэ-игр — это тяжёлый мир для мобов",
+   "alias": "Мир отомэ-игр",
+   "source_row": 225,
+   "proof": "полное название; первый сезон 2022 (второй — отдельной записью)"
+  },
+  {
+   "id": "019d7298-a4d8-7fb6-822d-87f28752b662",
+   "slug": "princessa-rycar-nevesta-varvara",
+   "name": "Принцесса-рыцарь — невеста варвара",
+   "alias": "Принцесса-рыцарь",
+   "source_row": 230,
+   "proof": "«Принцесса-рыцарь — невеста варвара», Himekishi wa Barbaroi no Yome, 2026"
+  },
+  {
+   "id": "0191518c-d35d-7f4e-81c8-fef002eea66c",
+   "slug": "lyubov-smert-roboty",
+   "name": "Любовь. Смерть. Роботы",
+   "alias": "Любовь, смерть и роботы",
+   "source_row": 369,
+   "proof": "Love, Death & Robots — «Любовь. Смерть. Роботы»"
+  }
+ ]
+}
