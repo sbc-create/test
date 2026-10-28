@@ -78,7 +78,8 @@ def _каталог_снимков() -> str:
     этого шага проверка молчала на каждой активации.
     """
     import importlib.util as _иу
-    путь = Path(__file__).resolve().parent / "_snapshot_dir.py"
+    import pathlib as _пл
+    путь = _пл.Path(__file__).resolve().parent / "_snapshot_dir.py"
     if not путь.is_file():
         return ""
     спец = _иу.spec_from_file_location("_snapshot_dir", путь)
@@ -93,30 +94,28 @@ def _каталог_снимков() -> str:
 '''
 
 
-def _после_импортов(текст: str) -> int:
-    """Номер строки (1-based), после которой можно вставить определение.
+def _после_документации(текст: str) -> int:
+    """Номер строки, после которой можно вставить определение.
 
-    Считается по РАЗБОРУ дерева, а не по виду строки: якорь бывает внутри
-    блока `try:` с отступом, и вставка определения на его строку даёт
-    SyntaxError. Измерено на unavailable_episode_noindex.py:33 — первый
-    прогон инструмента сломал этот файл именно так.
+    Сразу за строкой документации модуля, а если её нет — в самое начало.
+    Середину файла не трогаем вовсе: первая версия считала конец блока
+    импортов и вставила определение ВНУТРЬ блока `except`, перед
+    `sys.exit(2)`. Тот стал недостижимым, исполнение пошло дальше, и проверка
+    упала с `NameError` — измерено на unavailable_episode_noindex.py.
+
+    Помощник самодостаточен (свои импорты внутри), поэтому верх файла для него
+    безопасен всегда.
     """
     try:
         дерево = ast.parse(текст)
     except SyntaxError:
-        return 0
-    последняя = 0
-    for узел in дерево.body:
-        if isinstance(узел, (ast.Import, ast.ImportFrom)):
-            последняя = max(последняя, getattr(узел, "end_lineno", узел.lineno))
-        elif isinstance(узел, (ast.Try, ast.If, ast.With)):
-            # Импорты бывают внутри try: тогда годится конец всего блока.
-            если_импорт = any(
-                isinstance(в, (ast.Import, ast.ImportFrom))
-                for в in ast.walk(узел))
-            if если_импорт:
-                последняя = max(последняя, getattr(узел, "end_lineno", узел.lineno))
-    return последняя
+        return -1
+    тело = дерево.body
+    if тело and isinstance(тело[0], ast.Expr) and isinstance(
+            getattr(тело[0], "value", None), ast.Constant) and isinstance(
+            тело[0].value.value, str):
+        return getattr(тело[0], "end_lineno", тело[0].lineno)
+    return 0
 
 
 def _правка_файла(путь: pathlib.Path, писать: bool) -> tuple[bool, str]:
@@ -126,9 +125,9 @@ def _правка_файла(путь: pathlib.Path, писать: bool) -> tupl
     n = текст.count(ЯКОРЬ)
     if n != 1:
         return False, f"якорь найден {n} раз(а)"
-    после = _после_импортов(текст)
-    if после <= 0:
-        return False, "не удалось найти конец импортов по разбору дерева"
+    после = _после_документации(текст)
+    if после < 0:
+        return False, "файл не разбирается, вставлять нечего"
     новый = текст.replace(ЯКОРЬ, ЗАМЕНА, 1)
     # Вторая стража, если она есть: найденный адрес должен её убеждать.
     if ЯКОРЬ_СТРАЖИ in новый:
