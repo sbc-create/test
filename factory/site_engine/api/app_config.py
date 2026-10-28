@@ -50,12 +50,19 @@ MAX_ITEMS = 60
 MAX_BLOCKS = 20
 MAX_REASON = 140
 
-# Жанры, с которыми тайтл не попадает на ОБЩУЮ главную. Возрастной метки в
-# каталоге нет; жанр — единственный признак откровенной обложки, который у нас
-# есть. Наблюдение 27.10: «этти» оказалось в «Популярном за неделю», потому что
-# подборка повторяла запуски плеера без проверки. Тот же список держит
-# app-read-api при отдаче — на случай, если жанр появился после публикации.
-GENRES_NOT_FOR_HOME = frozenset({"этти", "хентай", "эротика", "гарем"})
+# Общая витрина (баннер, ряды и подборки главной) не показывает откровенных
+# изображений. Пригодность ИЗОБРАЖЕНИЯ — редакционное решение по конкретной
+# картинке (`artwork.reviews`: адрес изображения → «ok» или «explicit»), а не
+# свойство произведения: возрастная маркировка и жанры вроде «гарем» о самой
+# обложке ничего не доказывают и витрину не фильтруют. Жанры ниже — только
+# признак риска: обложка такого тайтла попадает на витрину после того, как
+# редактор её посмотрел и отметил «ok». Обложка с отметкой «explicit» не
+# попадает никогда, какого бы жанра ни был тайтл. Поиск и карточки тайтлов
+# правило не трогает. Те же правила — в app-read-api при отдаче и в клиенте.
+COVER_RISK_GENRES = frozenset({"этти", "хентай", "эротика"})
+VERDICTS = ("ok", "explicit")
+MAX_REVIEWS = 500
+MAX_NOTE = 140
 
 # Приложение → витрина, чей каталог оно показывает. Закрытый список: имя в пути
 # не должно выбирать произвольный каталог на диске.
@@ -180,6 +187,60 @@ class CatalogIndex:
         return found[:limit]
 
 
+# ---- пригодность изображений для общей витрины -------------------------------
+
+def artwork_reviews(doc: Any) -> dict[tuple[str, str], str]:
+    """(contentId, адрес изображения) → вердикт редактора; неверные записи пропущены."""
+    art = doc.get("artwork") if isinstance(doc, dict) else None
+    reviews = art.get("reviews") if isinstance(art, dict) else None
+    out: dict[tuple[str, str], str] = {}
+    for r in reviews if isinstance(reviews, list) else []:
+        if isinstance(r, dict) and r.get("verdict") in VERDICTS:
+            out[(str(r.get("contentId") or ""), str(r.get("imageUrl") or ""))] = r["verdict"]
+    return out
+
+
+def showcase_problem(t: Title, reviews: dict[tuple[str, str], str]) -> str | None:
+    """Почему изображение тайтла не идёт на общую витрину, или None — идёт."""
+    if not t.poster:
+        return "в каталоге нет постера"
+    verdict = reviews.get((t.content_id, t.poster))
+    if verdict == "explicit":
+        return "обложка отмечена редактором как откровенная"
+    risk = COVER_RISK_GENRES.intersection(t.genres)
+    if risk and verdict != "ok":
+        return (f"обложка не проверена (жанр {', '.join(sorted(risk))}) — посмотрите её "
+                "в разделе «Обложки» и отметьте")
+    return None
+
+
+def artwork_overview(doc: Any, catalog: CatalogIndex) -> dict[str, Any]:
+    """Для раздела «Обложки»: отметки черновика с текущим постером тайтла и
+    очередь — позиции подборок, чью обложку редактор ещё не смотрел."""
+    reviews = artwork_reviews(doc)
+    rows = []
+    art = doc.get("artwork") if isinstance(doc, dict) else None
+    for r in (art.get("reviews") if isinstance(art, dict) else None) or []:
+        if not isinstance(r, dict):
+            continue
+        t = catalog.get(str(r.get("contentId") or ""))
+        rows.append({**r, "title": t.title if t else None, "currentPosterUrl": t.poster if t else None,
+                     # Отметка относится к картинке: сменился постер — смотреть заново.
+                     "applies": bool(t and t.poster == r.get("imageUrl"))})
+    queue, seen = [], set()
+    for c in (doc.get("collections") if isinstance(doc, dict) else None) or []:
+        for it in (c.get("items") if isinstance(c, dict) else None) or []:
+            cid = str((it or {}).get("contentId") or "")
+            t = catalog.get(cid)
+            if t is None or not t.poster or cid in seen:
+                continue
+            risk = COVER_RISK_GENRES.intersection(t.genres)
+            if risk and (cid, t.poster) not in reviews:
+                seen.add(cid)
+                queue.append({**t.as_dict(), "risk": sorted(risk), "collection": c.get("id")})
+    return {"reviews": rows, "queue": queue, "coverRiskGenres": sorted(COVER_RISK_GENRES)}
+
+
 # ---- проверка ---------------------------------------------------------------
 
 def check(doc: Any, catalog: CatalogIndex | None, *, now: float) -> list[dict[str, str]]:
@@ -216,6 +277,31 @@ def check(doc: Any, catalog: CatalogIndex | None, *, now: float) -> list[dict[st
         fs = ap["focusScale"]
         if isinstance(fs, bool) or not isinstance(fs, (int, float)) or not 1.0 <= fs <= 1.12:
             bad("appearance.focusScale", "число от 1.00 до 1.12")
+
+    reviews = artwork_reviews(doc)
+    art = doc.get("artwork")
+    if art is not None:
+        rows = art.get("reviews") if isinstance(art, dict) else None
+        if not isinstance(rows, list):
+            bad("artwork", "нужен объект с отзывами reviews: []")
+            rows = []
+        if len(rows) > MAX_REVIEWS:
+            bad("artwork", f"не больше {MAX_REVIEWS} отметок")
+        for n, r in enumerate(rows, 1):
+            rw = f"обложки, отметка {n}"
+            if not isinstance(r, dict):
+                bad(rw, "нужен объект")
+                continue
+            if not str(r.get("contentId") or "").strip():
+                bad(rw, "нет contentId")
+            if not str(r.get("imageUrl") or "").startswith("https://"):
+                bad(rw, "адрес изображения https://")
+            if r.get("verdict") not in VERDICTS:
+                bad(rw, "вердикт ok или explicit")
+            if not ISO_RE.match(str(r.get("reviewedAt") or "")):
+                bad(rw, "дата просмотра reviewedAt в ISO 8601 с зоной")
+            if len(str(r.get("note") or "")) > MAX_NOTE:
+                bad(rw, f"примечание длиннее {MAX_NOTE} знаков")
 
     collections = doc.get("collections") or []
     if not isinstance(collections, list):
@@ -286,11 +372,9 @@ def check(doc: Any, catalog: CatalogIndex | None, *, now: float) -> list[dict[st
                 elif t is None:
                     bad(iw, f"{content_id} нет в каталоге")
                 else:
-                    if not t.poster:
-                        bad(iw, f"«{t.title}»: в каталоге нет постера")
-                    hit = GENRES_NOT_FOR_HOME.intersection(t.genres)
-                    if hit:
-                        bad(iw, f"«{t.title}»: жанр {', '.join(sorted(hit))} — не для общей главной")
+                    problem = showcase_problem(t, reviews)
+                    if problem:
+                        bad(iw, f"«{t.title}»: {problem}")
 
     home = doc.get("home") or {}
     blocks = home.get("blocks") if isinstance(home, dict) else None
@@ -323,8 +407,8 @@ def check(doc: Any, catalog: CatalogIndex | None, *, now: float) -> list[dict[st
             bad(where, "нет заголовка")
         if kind == "genre" and not str(b.get("genre") or "").strip():
             bad(where, "не указан жанр")
-        if kind == "genre" and str(b.get("genre") or "").strip().lower() in GENRES_NOT_FOR_HOME:
-            bad(where, "этот жанр не для общей главной")
+        if kind == "genre" and str(b.get("genre") or "").strip().lower() in COVER_RISK_GENRES:
+            bad(where, "строка этого жанра состояла бы из непроверенных обложек — соберите подборку")
         if "cardStyle" in b and b["cardStyle"] not in CARD_STYLES:
             bad(where, f"карточки одно из {', '.join(CARD_STYLES)}")
         if "visible" in b and not isinstance(b["visible"], bool):
@@ -337,13 +421,14 @@ def check(doc: Any, catalog: CatalogIndex | None, *, now: float) -> list[dict[st
 
 def preview(doc: dict[str, Any], catalog: CatalogIndex) -> dict[str, Any]:
     """Документ в том виде, в каком его отдаст служба чтения: позиции дополнены
-    из текущего снимка, отсутствующие и запрещённые — в `missing`."""
+    из текущего снимка, отсутствующие и с обложкой не для витрины — в `missing`."""
     out = json.loads(json.dumps(doc))
+    reviews = artwork_reviews(doc)
     for c in out.get("collections") or []:
         kept, missing = [], []
         for it in c.get("items") or []:
             t = catalog.get(str(it.get("contentId") or ""))
-            if t is None or GENRES_NOT_FOR_HOME.intersection(t.genres):
+            if t is None or showcase_problem(t, reviews):
                 missing.append(it.get("contentId"))
                 continue
             kept.append({**it, "title": t.title, "type": t.type, "posterUrl": t.poster,
@@ -389,7 +474,8 @@ class ConfigStore:
 
     @staticmethod
     def document_of(revision: dict[str, Any]) -> dict[str, Any]:
-        return {k: revision[k] for k in ("schema", "appearance", "home", "collections") if k in revision}
+        return {k: revision[k] for k in ("schema", "appearance", "home", "collections", "artwork")
+                if k in revision}
 
     def history(self, limit: int = 100) -> list[dict[str, Any]]:
         path = self.root / "history.jsonl"

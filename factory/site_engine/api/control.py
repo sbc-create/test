@@ -887,7 +887,8 @@ class ControlApi:
                                         != version) if current else True,
             "revisions": [r for r in store.history(200) if r.get("channel") == channel],
             "catalogRevision": catalog.revision, "catalogError": catalog.error,
-            "genresNotForHome": sorted(app_config.GENRES_NOT_FOR_HOME)})
+            "artwork": app_config.artwork_overview(doc, catalog) if isinstance(doc, dict) else None,
+            "coverRiskGenres": sorted(app_config.COVER_RISK_GENRES)})
 
     def _app_catalog_search(self, app_id: str, body: dict[str, Any]) -> ApiResponse:
         needle = str(body.get("q") or "").strip()
@@ -895,7 +896,7 @@ class ControlApi:
             raise ControlDenied(400, "bad_request", "q от 2 до 100 знаков")
         found = self._app_catalog(app_id).search(needle)
         return ApiResponse(status=200, body={"items": [
-            {**t.as_dict(), "notForHome": sorted(app_config.GENRES_NOT_FOR_HOME.intersection(t.genres))}
+            {**t.as_dict(), "coverRisk": sorted(app_config.COVER_RISK_GENRES.intersection(t.genres))}
             for t in found]})
 
     def _app_locked(self, app_id: str, channel: str):

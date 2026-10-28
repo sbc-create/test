@@ -10,6 +10,7 @@
 """
 from __future__ import annotations
 
+import datetime
 import json
 from typing import Any
 
@@ -109,6 +110,13 @@ class AppSection:
             session.flash = self.admin._flash_from(current, success="")
             return _redirect(back)
         draft = json.loads(json.dumps(current.body.get("draft") or {}))
+        if tail == ["artwork", "mark"] and not (form.get("imageUrl") or "").strip():
+            # Отметка по contentId: картинка — нынешний постер тайтла в каталоге.
+            cid = (form.get("contentId") or "").strip()
+            s = self.admin._call("GET", f"{API}/catalog", session, {"q": cid}) if len(cid) >= 2 else None
+            hit = next((t for t in (s.body.get("items", []) if s and s.status == 200 else [])
+                        if t.get("contentId") == cid), None)
+            form = {**form, "imageUrl": (hit or {}).get("posterUrl") or ""}
         try:
             target = self._apply(draft, tail, form)
         except ValueError as exc:
@@ -218,6 +226,30 @@ class AppSection:
                                        "source": parts[2] if len(parts) > 2 else c.get("source", ""),
                                        "checkedAt": c.get("checkedAt", "")})
                 return f"/collections/{cid}"
+        if tail[:1] == ["artwork"]:
+            # Пригодность изображения для общей витрины — отметка по конкретной
+            # картинке, а не по тайтлу: сменится постер — отметка перестанет действовать.
+            reviews = draft.setdefault("artwork", {}).setdefault("reviews", [])
+            cid = (form.get("contentId") or "").strip()
+            url = (form.get("imageUrl") or "").strip()
+            if not cid or not url:
+                raise ValueError("Нет такого тайтла в каталоге или у него нет постера.")
+            reviews[:] = [r for r in reviews
+                          if not (r.get("contentId") == cid and r.get("imageUrl") == url)]
+            if tail == ["artwork", "mark"]:
+                verdict = form.get("verdict") or ""
+                if verdict not in ("ok", "explicit"):
+                    raise ValueError("Вердикт: «подходит» или «откровенная».")
+                entry = {"contentId": cid, "imageUrl": url, "verdict": verdict,
+                         "reviewedAt": datetime.datetime.now(datetime.timezone.utc)
+                         .strftime("%Y-%m-%dT%H:%M:%SZ")}
+                note = (form.get("note") or "").strip()
+                if note:
+                    entry["note"] = note[:140]
+                reviews.append(entry)
+            elif tail != ["artwork", "remove"]:
+                raise ValueError("Нет такого действия.")
+            return "#artwork"
         if tail == ["json"]:
             try:
                 replacement = json.loads(form.get("document") or "")

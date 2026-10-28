@@ -6,7 +6,9 @@
   на настройки витрин, выключенная запись не существует как маршрут;
 * черновик правится со сверкой версии (409 вместо тихой перезаписи);
 * публикация проверяет весь документ: состав по каталогу, причины, источники,
-  даты и жанры не для общей главной (наблюдение 27.10: «этти» в подборке);
+  даты и пригодность обложки для общей витрины: решает отметка редактора по
+  картинке; жанр из списка риска требует отметки «подходит», а «гарем» и
+  возрастная маркировка обложку не оценивают (наблюдение 27.10: «этти» в подборке);
 * каналы раздельны: публикация в sandbox не трогает production;
 * откат — перевод указателя на прежнюю ревизию своего канала, с записью в истории;
 * перенос в production — копия в черновик, публикация отдельно;
@@ -30,6 +32,7 @@ SETTINGS = "settings-token"
 READER = "reader-token"
 A, B, ECCHI = "01aaaaaa-0000-7000-8000-000000000001", "01aaaaaa-0000-7000-8000-000000000002", \
     "01aaaaaa-0000-7000-8000-000000000003"
+HAREM = "01aaaaaa-0000-7000-8000-000000000004"
 NOW = "2026-10-28T10:00:00Z"
 
 
@@ -56,6 +59,8 @@ def root(tmp_path, monkeypatch):
               "poster_url": "https://poster.example/b.webp"},
         "e": {"id": ECCHI, "name": "Откровенный", "type": "tv", "year": 2026, "genres": ["комедия", "этти"],
               "poster_url": "https://poster.example/e.webp"},
+        "h": {"id": HAREM, "name": "Гаремный", "type": "tv", "year": 2026, "genres": ["гарем", "комедия"],
+              "poster_url": "https://poster.example/h.webp"},
     }}, ensure_ascii=False), encoding="utf-8")
     return tmp_path
 
@@ -142,7 +147,7 @@ def test_публикация_проверяет_весь_документ(api):
     r = publish(api, "sandbox", плохой)
     assert r.status == 422
     текст = json.dumps(r.body["error"]["problems"], ensure_ascii=False)
-    assert "этти" in текст and "не для общей главной" in текст
+    assert "обложка не проверена (жанр этти)" in текст
     assert "нет-такого нет в каталоге" in текст
     assert "нет причины" in текст
     assert "1.00 до 1.12" in текст
@@ -206,6 +211,58 @@ def test_перенос_в_рабочий_канал_отдельным_шаго
     assert r.status == 200 and r.body["revision"] == 2
 
 
+def отметка(cid, verdict, url=None):
+    return {"contentId": cid, "imageUrl": url or f"https://poster.example/{ {A: 'a', B: 'b', ECCHI: 'e', HAREM: 'h'}[cid] }.webp",
+            "verdict": verdict, "reviewedAt": NOW}
+
+
+def test_гарем_не_оценивает_обложку(api):
+    r = publish(api, "sandbox", doc(items=(A, HAREM)))
+    assert r.status == 200, r.body
+
+
+def test_отметка_откровенной_обложки_убирает_тайтл_любого_жанра(api):
+    d = doc(items=(A, B))
+    d["artwork"] = {"reviews": [отметка(B, "explicit")]}
+    r = publish(api, "sandbox", d)
+    assert r.status == 422
+    assert "«Второй фильм»: обложка отмечена редактором как откровенная" in json.dumps(
+        r.body["error"]["problems"], ensure_ascii=False)
+
+
+def test_жанр_риска_проходит_после_отметки_подходит(api):
+    d = doc(items=(ECCHI, A))
+    d["artwork"] = {"reviews": [отметка(ECCHI, "ok")]}
+    save(api, "sandbox", d)
+    канал = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body
+    assert канал["publishable"] is True, канал["problems"]
+    assert [i["contentId"] for i in канал["preview"]["collections"][0]["items"]] == [ECCHI, A]
+    assert канал["artwork"]["queue"] == [] and канал["artwork"]["reviews"][0]["applies"] is True
+    r = call(api, "POST", "/api/v1/apps/kinateka/channels/sandbox/publish",
+             {"expectedVersion": канал["draftVersion"], "expectedRevision": None})
+    assert r.status == 200
+    # Отметка — часть ревизии: служба чтения применяет её так же.
+    assert call(api, "GET", "/api/v1/apps/kinateka/revisions/1").body["artwork"]["reviews"][0]["verdict"] == "ok"
+
+
+def test_отметка_относится_к_картинке_а_не_к_тайтлу(api):
+    d = doc(items=(ECCHI, A))
+    d["artwork"] = {"reviews": [отметка(ECCHI, "ok", url="https://poster.example/old.webp")]}
+    save(api, "sandbox", d)
+    канал = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body
+    assert канал["publishable"] is False
+    assert канал["artwork"]["reviews"][0]["applies"] is False
+    assert [q["contentId"] for q in канал["artwork"]["queue"]] == [ECCHI]
+
+
+def test_неверная_отметка_не_публикуется(api):
+    d = doc()
+    d["artwork"] = {"reviews": [{"contentId": A, "imageUrl": "http://x", "verdict": "maybe"}]}
+    r = publish(api, "sandbox", d)
+    текст = json.dumps(r.body["error"]["problems"], ensure_ascii=False)
+    assert r.status == 422 and "вердикт ok или explicit" in текст and "https://" in текст and "reviewedAt" in текст
+
+
 def test_предпросмотр_из_каталога_и_запрет_жанров(api):
     save(api, "sandbox", doc(items=(ECCHI, A)))
     канал = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body
@@ -219,7 +276,7 @@ def test_предпросмотр_из_каталога_и_запрет_жанр
 def test_поиск_в_каталоге_помечает_жанры(api):
     r = call(api, "GET", "/api/v1/apps/kinateka/catalog", {"q": "откров"})
     assert r.status == 200
-    assert r.body["items"][0]["notForHome"] == ["этти"]
+    assert r.body["items"][0]["coverRisk"] == ["этти"]
 
 
 # ---- админка -----------------------------------------------------------------
@@ -291,6 +348,35 @@ def test_полный_путь_через_панель(admin, api):
     assert "Действует ревизия <b>1</b>" in html
 
 
+def test_обложки_отмечаются_в_панели(admin, api):
+    cookies, csrf = войти(admin)
+    save(api, "sandbox", doc(items=(ECCHI, A)))
+    html = страница(admin, cookies)
+    assert "Ждут просмотра" in html and "poster.example/e.webp" in html
+    r = admin.handle("POST", "/admin/apps/kinateka/sandbox/artwork/mark", cookies=cookies, form={
+        CSRF_FIELD: csrf, "draftVersion": версия(html), "contentId": ECCHI,
+        "imageUrl": "https://poster.example/e.webp", "verdict": "ok"})
+    assert r.status == 303
+    html = страница(admin, cookies)
+    assert "Ждут просмотра" not in html and "черновик готов к публикации" in html
+    # по contentId — берётся нынешний постер из каталога
+    r = admin.handle("POST", "/admin/apps/kinateka/sandbox/artwork/mark", cookies=cookies, form={
+        CSRF_FIELD: csrf, "draftVersion": версия(html), "contentId": A, "verdict": "explicit",
+        "note": "кадр с обнажением"})
+    assert r.status == 303
+    черновик = call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body["draft"]
+    assert черновик["artwork"]["reviews"][1] == {**черновик["artwork"]["reviews"][1], "contentId": A,
+                                                 "imageUrl": "https://poster.example/a.webp",
+                                                 "verdict": "explicit", "note": "кадр с обнажением"}
+    html = страница(admin, cookies)
+    assert "обложка отмечена редактором как откровенная" in html
+    r = admin.handle("POST", "/admin/apps/kinateka/sandbox/artwork/remove", cookies=cookies, form={
+        CSRF_FIELD: csrf, "draftVersion": версия(html), "contentId": A,
+        "imageUrl": "https://poster.example/a.webp"})
+    assert r.status == 303
+    assert len(call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body["draft"]["artwork"]["reviews"]) == 1
+
+
 def test_устаревшая_форма_даёт_конфликт_а_не_перезапись(admin, api):
     cookies, csrf = войти(admin)
     save(api, "sandbox", doc())
@@ -341,7 +427,7 @@ def test_поиск_тайтла_на_странице_подборки(admin, a
     save(api, "sandbox", doc())
     r = admin.handle("GET", "/admin/apps/kinateka/sandbox/collections/week", form={"q": "откров"},
                      cookies=cookies)
-    assert ECCHI in r.html and "не для общей главной" in r.html
+    assert ECCHI in r.html and "обложку нужно посмотреть: жанр этти" in r.html
 
 
 def test_после_отката_черновик_помечен_и_берётся_из_ревизии(admin, api):

@@ -290,6 +290,8 @@ def channel(body: dict, *, flash, session_label: str, csrf: str, can_write: bool
                   f'value="{_e(ap.get("focusScale", 1.08))}" inputmode="decimal"{dis}></div>'
                   f'<button type="submit"{dis}>Сохранить</button></div></form>{_problems(problems, "appearance")}</div>')
 
+    artwork = _artwork(body.get("artwork") or {}, base, csrf, version, dis)
+
     raw = json.dumps(draft, ensure_ascii=False, indent=1)
     advanced = (f'<div class="card" id="json"><details><summary>Документ черновика целиком (JSON)</summary>'
                 f'<form method="post" action="{base}/json">{_hidden(csrf, version)}'
@@ -298,8 +300,63 @@ def channel(body: dict, *, flash, session_label: str, csrf: str, can_write: bool
                 "</form></details></div>")
     history = _history(body.get("revisions") or [], ch, csrf, can_write=can_write, current=current)
     return page(f"Кинатека · {ch}", STYLE + _nav() + _flash(flash) + head + _preview(body.get("preview"))
-                + blocks + collections + appearance + history + advanced,
+                + blocks + collections + artwork + appearance + history + advanced,
                 session_label=session_label, csrf=csrf)
+
+
+VERDICT_WORDS = {"ok": "подходит для общей витрины", "explicit": "откровенная — не показывать на витрине"}
+
+
+def _mark_form(base: str, csrf: str, version: str, dis: str, cid: str, url: str, verdict: str,
+               label: str, cls: str = "ghost") -> str:
+    return (f'<form method="post" action="{base}/artwork/mark" style="display:inline;margin:0">'
+            f'{_hidden(csrf, version)}<input type="hidden" name="contentId" value="{_e(cid)}">'
+            f'<input type="hidden" name="imageUrl" value="{_e(url)}">'
+            f'<input type="hidden" name="verdict" value="{_e(verdict)}">'
+            f'<button class="{cls}" type="submit"{dis}>{_e(label)}</button></form>')
+
+
+def _artwork(art: dict, base: str, csrf: str, version: str, dis: str) -> str:
+    """Отметки пригодности изображений для общей витрины и очередь на просмотр."""
+    risk = ", ".join(art.get("coverRiskGenres") or [])
+    queue = "".join(
+        f'<tr><td><a href="{_e(q.get("posterUrl"))}" target="_blank" rel="noopener">'
+        f'<img class="thumb" alt="" src="{_e(q.get("posterUrl"))}"></a></td>'
+        f'<td><b>{_e(q.get("title"))}</b><br><code>{_e(q.get("contentId"))}</code><br>'
+        f'<span class="mut">подборка {_e(q.get("collection"))} · жанр {_e(", ".join(q.get("risk") or []))}</span></td>'
+        f'<td>{_mark_form(base, csrf, version, dis, q.get("contentId"), q.get("posterUrl"), "ok", "Подходит", "")} '
+        f'{_mark_form(base, csrf, version, dis, q.get("contentId"), q.get("posterUrl"), "explicit", "Откровенная")}</td></tr>'
+        for q in art.get("queue") or [])
+    queue_html = (('<h3>Ждут просмотра</h3><p class="hint">Позиции подборок с жанром из списка риска, чью обложку '
+                   'ещё никто не смотрел. До отметки «подходит» они не опубликуются.</p><table>' + queue + "</table>")
+                  if queue else "")
+    rows = []
+    for r in art.get("reviews") or []:
+        stale = ("" if r.get("applies") else
+                 ' <span class="pill bad">постер в каталоге сменился — отметка не действует</span>')
+        rows.append(
+            f'<tr><td><img class="thumb" alt="" src="{_e(r.get("imageUrl"))}"></td>'
+            f'<td><b>{_e(r.get("title") or "")}</b><br><code>{_e(r.get("contentId"))}</code>{stale}</td>'
+            f'<td><span class="pill {"ok" if r.get("verdict") == "ok" else "bad"}">'
+            f'{_e(VERDICT_WORDS.get(r.get("verdict"), r.get("verdict")))}</span>'
+            f'<br><span class="mut">{_e(r.get("reviewedAt"))} {_e(r.get("note") or "")}</span></td>'
+            f'<td><form method="post" action="{base}/artwork/remove" style="margin:0">{_hidden(csrf, version)}'
+            f'<input type="hidden" name="contentId" value="{_e(r.get("contentId"))}">'
+            f'<input type="hidden" name="imageUrl" value="{_e(r.get("imageUrl"))}">'
+            f'<button class="ghost" type="submit"{dis}>Снять отметку</button></form></td></tr>')
+    reviews_html = ("<h3>Отметки</h3><table>" + "".join(rows) + "</table>") if rows else (
+        '<p class="mut">Отметок нет.</p>')
+    add = (f'<form method="post" action="{base}/artwork/mark">{_hidden(csrf, version)}<div class="row">'
+           '<div><label>Отметить обложку тайтла: contentId</label><input name="contentId" required></div>'
+           '<div><label>Вердикт</label>' + _select("verdict", "explicit", list(VERDICT_WORDS.items()), dis) + "</div>"
+           '<div><label>Примечание (по желанию)</label><input name="note" maxlength="140"></div>'
+           f'<button class="ghost" type="submit"{dis}>Отметить нынешний постер</button></div></form>')
+    return ('<div class="card" id="artwork"><h2>Обложки</h2><p class="hint">Общая витрина — баннер, подборки и ряды '
+            'главной — не показывает откровенных изображений. Решает отметка по конкретной картинке, а не '
+            'возрастная маркировка или жанр произведения: «откровенная» убирает тайтл с витрины при любом жанре, '
+            f'а тайтлам с жанром {_e(risk)} нужна отметка «подходит». Поиск и карточка тайтла показывают его '
+            'как обычно. Отметка относится к картинке: сменится постер — её нужно поставить заново.</p>'
+            + queue_html + reviews_html + add + "</div>")
 
 
 def collection(body: dict, cid: str, *, flash, session_label: str, csrf: str, can_write: bool,
@@ -333,7 +390,8 @@ def collection(body: dict, cid: str, *, flash, session_label: str, csrf: str, ca
     for n, it in enumerate(c.get("items") or [], 1):
         key = _e(it.get("contentId"))
         live = by_id.get(it.get("contentId")) or {}
-        flag = ('<span class="pill bad">не покажется: нет в каталоге или жанр не для главной</span>'
+        flag = ('<span class="pill bad">не покажется: нет в каталоге или обложка не для витрины '
+                f'(<a href="{base}#artwork">Обложки</a>)</span>'
                 if it.get("contentId") in missing else "")
         rows.append(f'<tr><td class="n"><input name="order_{key}" value="{n}" inputmode="numeric"{dis}></td>'
                     f'<td><img class="thumb" alt="" src="{_e(live.get("posterUrl") or "")}"></td>'
@@ -359,8 +417,8 @@ def collection(body: dict, cid: str, *, flash, session_label: str, csrf: str, ca
         lines = "".join(
             f'<tr><td><img class="thumb" alt="" src="{_e(t.get("posterUrl") or "")}"></td>'
             f'<td><b>{_e(t.get("title"))}</b> {_e(t.get("year") or "")}<br><code>{_e(t.get("contentId"))}</code>'
-            + (f' <span class="pill bad">не для общей главной: {_e(", ".join(t.get("notForHome")))}</span>'
-               if t.get("notForHome") else "")
+            + (f' <span class="pill bad">обложку нужно посмотреть: жанр {_e(", ".join(t.get("coverRisk")))}</span>'
+               if t.get("coverRisk") else "")
             + f'</td><td class="mut">{_e(", ".join(t.get("genres") or []))}</td></tr>'
             for t in found)
         results = ("<table>" + lines + "</table>") if lines else '<p class="mut">Ничего не найдено.</p>'
