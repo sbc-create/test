@@ -8891,6 +8891,68 @@
       "verify_live": true,
       "status": "session",
       "owner_action": "ведёт Архитектор (механизм, данные, постеры, вёрстка, выпуск, автообновление); SEO — идентификация, составы, порядок, источники, названия, описания, публичная приёмка и измерение"
+    },
+    {
+      "id": "T342",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/yarost-na-predele/",
+        "https://zonafilm.cc/title/tyurma-chernyy-ostrov/",
+        "https://zonafilm.cc/title/tyurma-chernyy-ostrov/season-1/episode-9/"
+      ],
+      "problem": "Поручение владельца 28.10 п. 4: на zonafilm.cc не отправляется ни одна цель (нет reachGoal/__sfGoal на 1881 проверенном адресе; 9 целей счётчика 113110481 = 0 при живом трафике). Путь «карточка → намерение → готовность → основное видео» не измеряется. Цели zona-03 копировать нельзя: там player_start = requestPlay (намерение), player_ready срабатывает и на playing<3 с, начало основного видео цели не имеет.",
+      "norm": "docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md §4; ANALYSIS_ORDER.md; owner 28.10",
+      "expected": "Один раз за загрузку страницы, через сообщения поставщика (window message eventType), с параметром title_id = details[].id: (1) title_view — открыта /title/ (карточка, сезон, серия); (2) player_start — eventType requestPlay (намерение; смысл как на zona-03); (3) player_ready — ТОЛЬКО statechange:'ready'; (4) реклама — adStart/rollState start и adComplete/adClosed/adFailed: отдельные цели, если владелец создаст их в счётчике, иначе не отправлять под чужими именами; (5) начало основного видео — первый timeupdate с position ≥ 3 с вне рекламы (после adClosed/adComplete/adFailed или без рекламы) — отдельная цель с названием, говорящим «наблюдаемое», только после создания цели владельцем; до ответа поставщика по T338 (вопрос 2) это НЕ подтверждённый старт; (6) клик «К плееру» (a[data-cta=to-player]) — отдельно от нажатия по плееру. Новые цели в счётчике — запись в Метрику, решение владельца; без неё — только (1)–(3). Записанная последовательность сообщений: artifacts/evidence/zonafilm-cc-behavior-20261028/player/pm.json, pm-onetap.json",
+      "check": "SEO после выпуска: контрольные визиты utm_source=factory-control на 14 шаблонах × телефон/компьютер; в браузере — каждая цель уходит ровно один раз в нужный момент (requestPlay ≠ старт, реклама ≠ старт); получение — goal_reaches/control_visits в выгрузке следующего дня. Начало сбора записывается временем выпуска; исторические значения — «не измерено», не восстанавливаются из просмотров.",
+      "evidence": "docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md; artifacts/evidence/zonafilm-cc-behavior-20261028/coverage/, player/",
+      "live_check": "карточка фильма, карточка сериала, серия — телефон 390 и компьютер 1440",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор (код, выпуск — после восстановления CI); владелец — создание недостающих целей в счётчике; SEO — смысл целей, приёмка, базовый период 7 суток"
+    },
+    {
+      "id": "T343",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/search/?q=%D1%84%D0%BE%D1%80%D1%81%D0%B0%D0%B6%207",
+        "https://zonafilm.cc/search/?q=%D0%B4%D0%BD%D0%B5%D0%B2%D0%BD%D0%B8%D0%BA%D0%B8%20%D0%B2%D0%B0%D0%BC%D0%BF%D0%B8%D1%80%D0%BE%D0%B2",
+        "https://zonafilm.cc/search/?q=%D0%B3%D0%B0%D1%80%D1%80%D0%B8%20%D0%BF%D0%BE%D1%82%D1%82%D0%B5%D1%80",
+        "https://zonafilm.cc/search/?q=%D0%A5%D0%BE%D0%BB%D0%BE%D0%BF%203"
+      ],
+      "problem": "Проверка 161 доступного внутреннего запроса (207 визитов, 15–27.10): 6 ошибок поиска при произведении в каталоге (дневники вампиров; брильянтовый полицейский; призраки комнаты 203; Отчаянные домохозяйки ↔ «домохозяева»; властелинт колнц; мылодрамма), 4 ранжирования (форсаж 7 — точное на 9-м; трасса 60 — 5-е; тачки — 4-е; гарри поттер — основные фильмы 5–12 после побочных), выдача без совпадения показывает посторонние результаты (Холоп 3 → «Холод»).",
+      "norm": "docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md §3",
+      "expected": "(1) точное совпадение названия (с учётом ё/е, пунктуации, года) — первым; основные части франшизы выше побочных; (2) морфология и одна-две опечатки находят произведение; (3) без совпадения — честное «ничего не найдено» + близкие названия, без посторонней выдачи; (4) запрос-жанр/год — ссылка на соответствующий раздел. Изменения выпускать отдельно от подписи у плеера (эксперимент H2), чтобы различить вклад.",
+      "check": "SEO: повторный прогон search/searchcheck.py + ручная сверка на том же списке и на полном internal_search за 27–28.10: 0 из 6 ошибок, точные названия на 1-м месте, без посторонней выдачи; найденные карточки 200 с плеером.",
+      "evidence": "artifacts/evidence/zonafilm-cc-behavior-20261028/search/search-final.json, search/searchcheck.py",
+      "live_check": "/search/?q=… на телефоне и компьютере",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор; SEO — список запросов, приёмка, оценка по internal_search и referer_to_page (/search/ → /title/)"
+    },
+    {
+      "id": "T344",
+      "site": "zonafilm.cc",
+      "direction": "zona",
+      "repo": "var/site-repos/zonafilm-cc",
+      "urls": [
+        "https://zonafilm.cc/title/voennyy-povar-stanovitsya-legendoy/",
+        "https://zonafilm.cc/title/chrezvychayno-angliyskiy-skandal/",
+        "https://zonafilm.cc/title/chuzhaya-zhizn/season-1/",
+        "https://zonafilm.cc/movies/?genre=animation&sort=newest"
+      ],
+      "problem": "11 адресов, которые открывали посетители (выгрузки 27–28.10), отвечают 404: снятое произведение «Военный повар становится легендой» — карточка и 8 серий (14 поисковых входов за 21–27.10), ещё одна карточка, один сезон и фильтр /movies/?genre=animation.",
+      "norm": "docs/seo-operator/ZONAFILM_CC_MEASUREMENT_20261028.md §2",
+      "expected": "страница снятого произведения — 404/410 для поисковика без изменений правил индексации, но посетителю — понятное сообщение, поиск и похожие доступные произведения; фильтр с несуществующим жанром — на раздел. Постоянные данные сайта не трогаются.",
+      "check": "SEO: 11 адресов — код ответа, содержимое для посетителя, счётчик; входы на них в landings_by_source.",
+      "evidence": "artifacts/evidence/zonafilm-cc-behavior-20261028/coverage/htmlcheck.json",
+      "live_check": "11 адресов, телефон",
+      "verify_live": true,
+      "status": "session",
+      "owner_action": "ведёт Архитектор; SEO — приёмка"
     }
   ]
 }

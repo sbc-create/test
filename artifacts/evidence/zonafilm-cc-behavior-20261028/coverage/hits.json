@@ -1,0 +1,1544 @@
+[
+ {
+  "dev": "phone",
+  "label": "главная",
+  "start": "/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "раздел фильмов",
+  "start": "/movies/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "пагинация",
+  "start": "/movies/?page=2",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "фильтр",
+  "start": "/movies/?genre=action",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "раздел сериалов",
+  "start": "/series/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "каталог по жанру",
+  "start": "/catalog/?genre=action",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "поиск",
+  "start": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "список подборок",
+  "start": "/collections/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "подборка",
+  "start": "/collection/genre_comedy/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "карточка фильма",
+  "start": "/title/yarost-na-predele/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "карточка сериала",
+  "start": "/title/tyurma-chernyy-ostrov/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "сезон",
+  "start": "/title/tyurma-chernyy-ostrov/season-1/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "серия",
+  "start": "/title/tyurma-chernyy-ostrov/season-1/episode-9/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "404",
+  "start": "/no-such-page-factory-check/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "phone",
+  "label": "главная → карточка",
+  "start": "/",
+  "start_status": null,
+  "to": "/title/most-plachuschih-detey/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/most-plachuschih-detey/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/most-plachuschih-detey/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/most-plachuschih-detey/"
+ },
+ {
+  "dev": "phone",
+  "label": "фильмы → карточка",
+  "start": "/movies/",
+  "start_status": null,
+  "to": "/title/prizrak-gilmor-haus/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/prizrak-gilmor-haus/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/prizrak-gilmor-haus/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/prizrak-gilmor-haus/"
+ },
+ {
+  "dev": "phone",
+  "label": "поиск → карточка",
+  "start": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F",
+  "start_status": null,
+  "to": "/title/odisseya/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/odisseya/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/odisseya/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/odisseya/"
+ },
+ {
+  "dev": "phone",
+  "label": "подборки → подборка",
+  "start": "/collections/",
+  "start_status": null,
+  "to": "/collection/recently_added/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collection/recently_added/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collection/recently_added/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collection/recently_added/"
+ },
+ {
+  "dev": "phone",
+  "label": "сериал → серия",
+  "start": "/title/tyurma-chernyy-ostrov/",
+  "start_status": null,
+  "to": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/episode-2/"
+ },
+ {
+  "dev": "desktop",
+  "label": "главная",
+  "start": "/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "раздел фильмов",
+  "start": "/movies/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "пагинация",
+  "start": "/movies/?page=2",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?page=2&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "фильтр",
+  "start": "/movies/?genre=action",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/movies/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "раздел сериалов",
+  "start": "/series/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/series/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "каталог по жанру",
+  "start": "/catalog/?genre=action",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/catalog/?genre=action&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "поиск",
+  "start": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "список подборок",
+  "start": "/collections/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "подборка",
+  "start": "/collection/genre_comedy/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collection/genre_comedy/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "карточка фильма",
+  "start": "/title/yarost-na-predele/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/yarost-na-predele/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "карточка сериала",
+  "start": "/title/tyurma-chernyy-ostrov/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "сезон",
+  "start": "/title/tyurma-chernyy-ostrov/season-1/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "серия",
+  "start": "/title/tyurma-chernyy-ostrov/season-1/episode-9/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/episode-9/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "404",
+  "start": "/no-such-page-factory-check/",
+  "start_status": null,
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/no-such-page-factory-check/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028"
+ },
+ {
+  "dev": "desktop",
+  "label": "главная → карточка",
+  "start": "/",
+  "start_status": null,
+  "to": "/title/most-plachuschih-detey/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/most-plachuschih-detey/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/most-plachuschih-detey/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/most-plachuschih-detey/"
+ },
+ {
+  "dev": "desktop",
+  "label": "фильмы → карточка",
+  "start": "/movies/",
+  "start_status": null,
+  "to": "/title/prizrak-gilmor-haus/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/movies/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/prizrak-gilmor-haus/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/prizrak-gilmor-haus/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/prizrak-gilmor-haus/"
+ },
+ {
+  "dev": "desktop",
+  "label": "поиск → карточка",
+  "start": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F",
+  "start_status": null,
+  "to": "/title/odisseya/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/search/?q=%D0%BE%D0%B4%D0%B8%D1%81%D1%81%D0%B5%D1%8F&utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/odisseya/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/odisseya/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/odisseya/"
+ },
+ {
+  "dev": "desktop",
+  "label": "подборки → подборка",
+  "start": "/collections/",
+  "start_status": null,
+  "to": "/collection/recently_added/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collections/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/collection/recently_added/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/collection/recently_added/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/collection/recently_added/"
+ },
+ {
+  "dev": "desktop",
+  "label": "сериал → серия",
+  "start": "/title/tyurma-chernyy-ostrov/",
+  "start_status": null,
+  "to": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+  "hits": [
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/?utm_source=factory-control&utm_medium=acceptance&utm_campaign=coverage-20261028",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "tag",
+    "status": 200,
+    "id": "tag.js",
+    "page": "",
+    "pv": false,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 302,
+    "id": "113110481",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+    "pv": true,
+    "ar": false
+   },
+   {
+    "kind": "watch",
+    "status": 200,
+    "id": "1",
+    "page": "/title/tyurma-chernyy-ostrov/season-1/episode-2/",
+    "pv": true,
+    "ar": false
+   }
+  ],
+  "mc_failed": [],
+  "final": "/title/tyurma-chernyy-ostrov/season-1/episode-2/"
+ }
+]
