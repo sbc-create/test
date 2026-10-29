@@ -449,6 +449,21 @@ location /api/app/v1/ {
     client_max_body_size 1k;
     limit_except GET HEAD { deny all; }
 }
+
+# Единственная запись: обмен кода из панели на ключ устройства (D-029 приложения,
+# ключ на устройство без adb и без ключа в APK). Только POST и только этот адрес;
+# остальной префикс остаётся только для чтения.
+location = /api/app/v1/activate {
+    proxy_pass http://${BIND}:${PORT};
+    proxy_http_version 1.1;
+    proxy_set_header Host \$host;
+    proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto \$scheme;
+    proxy_read_timeout 15s;
+    add_header X-Robots-Tag "noindex, nofollow" always;
+    client_max_body_size 1k;
+    limit_except POST { deny all; }
+}
 SNIPFILE
 if [ "$dry_run" = 1 ]; then
   printf '   [сухой прогон] записать %s:\n' "$SNIPPET"

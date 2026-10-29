@@ -75,6 +75,14 @@ def test_маршрут_только_на_чтение(сухой):
     assert 'add_header X-Robots-Tag "noindex, nofollow" always;' in сухой
 
 
+def test_запись_только_обмен_кода_на_ключ(сухой):
+    """POST пропускается на одном точном адресе — обмене кода устройства на ключ; префикс остаётся на чтение."""
+    блок = сухой.split("location = /api/app/v1/activate {", 1)[1].split("\n      }", 1)[0]
+    assert "limit_except POST { deny all; }" in блок
+    assert "client_max_body_size 1k;" in блок
+    assert сухой.count("limit_except") == 2
+
+
 def test_копия_конфигурации_сайта_снимается_до_правки(сухой):
     """Вывод сухого прогона зависит от состояния ХОСТА, и это учтено.
 
