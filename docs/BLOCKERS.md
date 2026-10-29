@@ -771,7 +771,42 @@ RELEASE-CI-TOKEN ниже.
 три контрольных домена закрыты, оба Animedia открыты, два домена Yummy открыты
 своим механизмом. Ни один режим этой работой не изменён.
 
-### INDEXING-RELEASE-PERMISSION — выложенные выпуски ЗАПРЕЩАЮТ открытие
+### INDEXING-RELEASE-PERMISSION — ЗАКРЫТО 2026-10-29: все четыре слоя сошлись, домены открыты владельцем
+
+**Перемерено 29.10 (23:1x UTC) по всем ячейкам реестра.** Запись от 03.10
+(«выложенные выпуски ЗАПРЕЩАЮТ открытие», `open_authorized` не объявлен ни у
+одного домена Lords, Zona, AnimeGo) описывает прошлое состояние. Сейчас:
+
+| ячейка | домен | владелец (`open_authorized`) | выпуск (`release_permits_open`) | состояние | живой `X-Robots-Tag` |
+| --- | --- | --- | --- | --- | --- |
+| animedia-01 | animedia.icu | true | true | OPEN | `index, follow` |
+| animedia-02 | animedia.space | true | true | OPEN | `index, follow` |
+| animego-02 | an1mego.site | true | true | OPEN | `index, follow` |
+| animego-03 | animeg0.site | true | true | OPEN | `index, follow` |
+| animego-04 | an1meg0.site | true | true | OPEN | `index, follow` |
+| lords-02 | lordserial33.biz | true | true | OPEN | `index, follow` |
+| lords-03 | 1lordserials1.online | true | true | OPEN | `index, follow` |
+| lords-05 | lordserials22.info | true | true | OPEN | `index, follow` |
+| zona-01 | zonafilm.space | true | true | OPEN | `index, follow` |
+| zona-02 | zonafilm.cc | true | true | OPEN | `index, follow` |
+| zona-03 | zonafilm12.site | true | true | OPEN | `index, follow` |
+| lords-01 | lordfilm47.space | true | true | OPEN | **домен не отвечает** (перенос на `lords3rial.site`, см. очередь целей) |
+| yummy-07, yummy-08, yummy-biz | yummyani7.site, yummyani7.info, yummyani.biz | true | true | файла нет | заголовка нет вовсе — режим у приложения |
+| yummy-org, yummy-site | yummyani.org, yummyani.site | не объявлено | не объявлено | файла нет | то же |
+| lords-06…09 | четыре домена | не объявлено | выпуска нет | — | домены не запущены |
+
+**Чья это работа.** Открытие — решение и действия владельца: разрешение в
+реестре, разрешение в выпуске и состояние `OPEN` выставлены не этой сессией.
+Моя часть — механизм и доказательство, что он этими слоями управляется
+(см. выше, девять ячеек, пять случаев каждая). Прежнее утверждение
+«открытие невозможно даже по команде владельца» больше не описывает систему:
+оно описывало выпуски, которые с тех пор заменены.
+
+**Что осталось верным из прежней записи:** разрешением считается только булево
+`true`; оба разрешения выставляются владельцем и содержимым выпуска, а не
+Claude. Это не изменилось и менять нечего.
+
+### История — запись 03.10
 
 **Измерено 2026-10-03** вердиктом обоих контрольных доменов:
 
