@@ -968,8 +968,8 @@ worktree нет), модуля не было — `import webauthn` отвеча�
 
 | состояние | домены |
 | --- | --- |
-| отправщик целей есть | `animedia.icu`, `animedia.space` (выпуск `244ed5fdd002`, 29.10), `1lordserials1.online`, `zonafilm.space`, `zonafilm12.site` |
-| счётчик в разметке есть, **отправщика нет** | `an1meg0.site`, `an1mego.site`, `animeg0.site`, `lordfilm47.space`, `lordserial33.biz`, `lordserials22.info`, `zonafilm.cc` |
+| отправщик целей есть | `animedia.icu`, `animedia.space` (выпуск `244ed5fdd002`, 29.10), `lordserials22.info` (выпуск `be611260d16b`, 29.10), `1lordserials1.online`, `zonafilm.space`, `zonafilm12.site` |
+| счётчик в разметке есть, **отправщика нет** | `an1meg0.site`, `an1mego.site`, `animeg0.site`, `lordfilm47.space`, `lordserial33.biz`, `zonafilm.cc` |
 | разметки счётчика нет вовсе (её отдаёт приложение выше по потоку) | пять витрин Yummy |
 | домен не отвечает (DNS не делегирован, `DNS-LORDSERIALS22`) | `lordserials22.site`, `lordserials22.space` |
 
@@ -998,7 +998,7 @@ test_источник_шаблона_несёт_отправщик_целей_м
 
 | домен | состояние |
 | --- | --- |
-| `lordserials22.info` (lords-05, контрольный) | перенос в репозитории, коммиты `f9868d1` и `be61126`, набор 47 PASS, CI запущен 29.10 |
+| `lordserials22.info` (lords-05, контрольный) | **выпущено и проверено**: выпуск `be611260d16b` (`activated`, `live_verified`), на публичной странице браузер отправляет `goal://lordserials22.info/title_view` и `.../player_ready` на счётчик 113109083; режим OPEN и `revision 2` не тронуты, publisher-id 10368, плеер на месте |
 | `lordfilm47.space`, `lordserial33.biz` | ждут: тот же перенос в своих репозиториях |
 | `an1meg0.site` | ждёт: семейство animego, свой рантайм |
 | `an1mego.site`, `animeg0.site` | ждут и вне реестра ячеек (`REGISTRY-GAP-ANIMEGO`): штатного выпуска у них нет |
