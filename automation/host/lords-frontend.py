@@ -513,6 +513,7 @@ def цели_метрики(номер: str) -> str:
         "var f=e&&e.target; if(!f||!f.getAttribute){return;}"
         "var a=f.getAttribute('action')||'';"
         "if(f.getAttribute('role')==='search'||/\\/search\\//.test(a)){g('search');}"
+        "else if(f.closest&&f.closest('[data-filter-contract]')){g('filter_apply');}"
         "},true);"
         "document.addEventListener('click',function(e){"
         "var n=e&&e.target,a=null;"

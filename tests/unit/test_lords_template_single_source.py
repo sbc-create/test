@@ -440,3 +440,40 @@ def test_источник_шаблона_отправляет_player_start_от_
     assert not re.search(r"statechange.{0,200}?__sfGoalOnce\('player_ready'\)", рантайм, re.S), (
         "player_ready переведён на событие поставщика: это смена смысла "
         "опубликованной метрики, она принимается решением, а не правкой теста")
+
+def test_источник_шаблона_отправляет_filter_apply_при_отборе():
+    """Цель «применён фильтр каталога» не висит объявлением без отправки.
+
+    Замер 29.10: в кабинете `filter_apply` равен нулю у всех витрин Animedia и
+    Lords при 175 у `yummyani.site`, где цель отправляет приложение. Статика
+    объяснила ноль: имя стояло в закрытом списке `ЦЕЛИ_МЕТРИКИ`, а вызова не
+    было нигде.
+
+    У Lords отбор — ФОРМА (`form.filt__form` внутри `[data-filter-contract]`,
+    `select` с `onchange="this.form.submit()"`), а не ссылки с параметрами:
+    на `lordserials22.info/catalog/` ссылок с запросом три, и все `page`.
+    Поэтому зацепка обязана стоять на отправке формы отбора и обязана
+    отличать её от поиска.
+    """
+    import re
+    from pathlib import Path
+
+    корень = Path(__file__).resolve().parents[2]
+    рантайм = (корень / "automation" / "host" / "lords-frontend.py").read_text(
+        encoding="utf-8")
+
+    assert "g('filter_apply')" in рантайм, (
+        "цель filter_apply объявлена в списке, но не отправляется ни одной зацепкой")
+
+    отправка = re.search(
+        r"addEventListener\('submit'.{0,600}?data-filter-contract.{0,120}?g\('filter_apply'\)",
+        рантайм, re.S)
+    assert отправка, (
+        "зацепка отбора не висит на отправке формы в контейнере "
+        "[data-filter-contract]: у этого семейства отбор отправляет форму, а не "
+        "переходит по ссылке с параметрами")
+
+    # Поиск и отбор не должны схлопнуться в одну цель.
+    блок = re.search(r"addEventListener\('submit'.{0,800}?\},true\);", рантайм, re.S)
+    assert блок and блок.group(0).count("g('search')") == 1, (
+        "отправка цели поиска из обработчика формы исчезла или размножилась")
