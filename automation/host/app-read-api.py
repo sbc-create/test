@@ -41,6 +41,7 @@ from __future__ import annotations
 import argparse
 import datetime
 import gc
+import hashlib
 import hmac
 import json
 import os
@@ -74,6 +75,15 @@ from urllib.parse import parse_qs, unquote, urlparse
 ЖАНРЫ_РИСКА_ОБЛОЖКИ = frozenset({"этти", "хентай", "эротика"})
 # Как часто сверять, не обновила ли витрина снимок.
 ПРОВЕРКА_СНИМКА_СЕК = 60
+
+# Ключи устройств (выдаёт редактор в панели, Control API `app_devices.py`):
+# `devices.json` в каталоге ревизий, схема и формулы — как там (общий тестовый
+# вектор в тестах обеих сторон). Попытки активации — свой общий предел: код из
+# 8 знаков (31^8 вариантов) не подбирается при десятках попыток в минуту.
+СХЕМА_УСТРОЙСТВ = "kinateka-devices/1"
+ПРЕФИКС_КЛЮЧА_УСТРОЙСТВА = "dk_"
+ПРЕДЕЛ_АКТИВАЦИЙ_В_МИНУТУ = 30
+ПРЕДЕЛ_ТЕЛА_АКТИВАЦИИ = 1024
 
 
 def _нормализовать(с: str) -> str:
@@ -469,14 +479,124 @@ class ОбновительСнимка:
         gc.collect()
 
 
+def нормальный_код(сырой) -> str:
+    """Как вводит человек: строчные, пробелы и дефисы — то же самое."""
+    return re.sub(r"[\s-]+", "", str(сырой or "")).upper()
+
+
+def _хэш_кода(соль: bytes, код: str) -> str:
+    return hashlib.sha256(b"code" + соль + код.encode("ascii", "replace")).hexdigest()
+
+
+def _распечатать(запечатан: str, соль: bytes, код: str) -> str:
+    накладка = hashlib.sha256(b"seal" + соль + код.encode("ascii", "replace")).digest()
+    сырой = bytes(a ^ b for a, b in zip(bytes.fromhex(запечатан), накладка))
+    return ПРЕФИКС_КЛЮЧА_УСТРОЙСТВА + сырой.hex()
+
+
+def хэш_ключа(ключ: str) -> str:
+    return hashlib.sha256(ключ.encode("utf-8")).hexdigest()
+
+
+class ХранилищеУстройств:
+    """Ключи устройств — только чтение `devices.json` (пишет Control API).
+
+    Файл перечитывается по изменению, поэтому отзыв в панели действует со
+    следующего запроса. Нет файла — устройств нет; файл не читается — ключи
+    устройств не принимаются (служебный ключ работает как прежде): сломанный
+    файл не должен открывать доступ.
+    """
+
+    def __init__(self, корень: pathlib.Path | None, *, сейчас=time.time) -> None:
+        self.путь = корень / "devices.json" if корень else None
+        self._сейчас = сейчас
+        self._метка: tuple | None = None
+        self._действующие: set[str] = set()
+        self._коды: list[dict] = []
+        self.ошибка: str | None = None
+        self._использованные: set[str] = set()
+        self._замок = threading.Lock()
+
+    def _сверить(self) -> None:
+        if self.путь is None:
+            return
+        try:
+            ст = self.путь.stat()
+        except FileNotFoundError:
+            self._метка, self._действующие, self._коды, self.ошибка = None, set(), [], None
+            return
+        except OSError as ош:
+            self._действующие, self._коды, self.ошибка = set(), [], type(ош).__name__
+            return
+        метка = (ст.st_mtime_ns, ст.st_size)
+        if метка == self._метка:
+            return
+        try:
+            док = json.loads(self.путь.read_text(encoding="utf-8"))
+            if док.get("schema") != СХЕМА_УСТРОЙСТВ or not isinstance(док.get("devices"), list):
+                raise ValueError("не та схема")
+            действующие, коды = set(), []
+            for у in док["devices"]:
+                if not isinstance(у, dict) or у.get("revokedAt"):
+                    continue
+                if isinstance(у.get("keyHash"), str):
+                    действующие.add(у["keyHash"])
+                к = у.get("code")
+                if isinstance(к, dict) and all(isinstance(к.get(п), str) for п in ("salt", "hash", "sealed")):
+                    коды.append({"id": у.get("id"), "name": у.get("name"), "keyHash": у.get("keyHash"), **к})
+        except (OSError, ValueError, TypeError) as ош:
+            self._метка, self._действующие, self._коды = метка, set(), []
+            self.ошибка = f"{type(ош).__name__}: {ош}"
+            return
+        self._метка, self._действующие, self._коды, self.ошибка = метка, действующие, коды, None
+
+    def ключ_действует(self, ключ: str) -> bool:
+        if not ключ.startswith(ПРЕФИКС_КЛЮЧА_УСТРОЙСТВА):
+            return False
+        with self._замок:
+            self._сверить()
+            return хэш_ключа(ключ) in self._действующие
+
+    def активировать(self, код: str) -> dict | None:
+        """Ключ устройства по коду или None (нет такого, истёк, использован, отозван)."""
+        код = нормальный_код(код)
+        if not re.fullmatch(r"[23456789A-HJKMNP-Z]{8}", код):
+            return None
+        with self._замок:
+            self._сверить()
+            сейчас = self._сейчас()
+            for к in self._коды:
+                try:
+                    соль = bytes.fromhex(к["salt"])
+                except ValueError:
+                    continue
+                if not hmac.compare_digest(_хэш_кода(соль, код), к["hash"]):
+                    continue
+                if к["hash"] in self._использованные or (_момент(к.get("expiresAt")) or 0) <= сейчас:
+                    return None
+                ключ = _распечатать(к["sealed"], соль, код)
+                if хэш_ключа(ключ) != к.get("keyHash") or к["keyHash"] not in self._действующие:
+                    return None
+                self._использованные.add(к["hash"])
+                return {"key": ключ, "deviceId": к.get("id"), "name": к.get("name")}
+            return None
+
+    def сколько(self) -> int:
+        with self._замок:
+            self._сверить()
+            return len(self._действующие)
+
+
 class Обработчик(BaseHTTPRequestHandler):
     server_version = ВЕРСИЯ
     каталог: Каталог
     предложения: ХранилищеПредложений | None = None
     конфигурация: ХранилищеКонфигурации | None = None
     обновитель: "ОбновительСнимка | None" = None
+    устройства: ХранилищеУстройств | None = None
     ключ: str = ""
     счётчик: dict = {}
+    активации: dict = {}
 
     def log_message(self, формат, *арг):  # noqa: N802 — подпись из базового класса
         return
@@ -512,10 +632,14 @@ class Обработчик(BaseHTTPRequestHandler):
         Сравнение постоянное по времени: длина и совпадение ключа не должны
         угадываться по времени ответа.
         """
-        if not self.ключ:
-            return False
         прислан = self.headers.get("X-App-Key", "")
         if not прислан:
+            return False
+        # Ключ устройства, выданный в панели (ХранилищеУстройств), — свой у
+        # каждого телефона и телевизора, отзывается по одному.
+        if self.устройства is not None and self.устройства.ключ_действует(прислан):
+            return True
+        if not self.ключ:
             return False
         return hmac.compare_digest(прислан, self.ключ)
 
@@ -599,6 +723,8 @@ class Обработчик(BaseHTTPRequestHandler):
                 "catalogBuiltAt": self.каталог.built_at,
                 "catalogReloadedAt": self.обновитель.перечитано if self.обновитель else None,
                 "catalogReloadError": self.обновитель.ошибка if self.обновитель else None,
+                "devicesActive": self.устройства.сколько() if self.устройства else 0,
+                "devicesError": self.устройства.ошибка if self.устройства else None,
                 "configChannels": {к: (р or {}).get("revisionId") if not ош else "error"
                                    for к in КАНАЛЫ
                                    for р, ош in [self.конфигурация.действующая(к)
@@ -763,6 +889,46 @@ class Обработчик(BaseHTTPRequestHandler):
         return self._отказ(404, "not_found", "нет такого маршрута")
 
 
+    def do_POST(self) -> None:  # noqa: N802 — подпись из базового класса
+        """`POST /api/app/v1/activate` {"code"} → ключ этого устройства.
+
+        Единственный маршрут без ключа, кроме состояния: ключа у устройства ещё
+        нет, его и получают по коду из панели. Ответ на любой неподходящий код
+        один и тот же — не подсказывает, существовал ли код. Попытки — свой
+        общий предел в минуту (за прокси все клиенты — один адрес).
+        """
+        путь = (self._путь(urlparse(self.path).path) or "").rstrip("/")
+        if путь != "/api/app/v1/activate":
+            return self._отказ(404, "not_found", "нет такого маршрута")
+        без_кэша = {"Cache-Control": "no-store"}
+        окно = int(time.time() // 60)
+        Обработчик.активации = {к: v for к, v in Обработчик.активации.items() if к >= окно - 1}
+        Обработчик.активации[окно] = Обработчик.активации.get(окно, 0) + 1
+        if Обработчик.активации[окно] > ПРЕДЕЛ_АКТИВАЦИЙ_В_МИНУТУ:
+            return self._отказ(429, "rate_limited", "слишком много попыток ввода кода, повторите через минуту",
+                               {**без_кэша, "Retry-After": "60"})
+        try:
+            длина = int(self.headers.get("Content-Length") or 0)
+        except ValueError:
+            длина = -1
+        if not 0 < длина <= ПРЕДЕЛ_ТЕЛА_АКТИВАЦИИ:
+            return self._отказ(400, "bad_request", "нужно тело JSON {\"code\": \"…\"}", без_кэша)
+        try:
+            тело = json.loads(self.rfile.read(длина).decode("utf-8"))
+            код = тело.get("code") if isinstance(тело, dict) else None
+        except (UnicodeDecodeError, ValueError):
+            код = None
+        if not isinstance(код, str):
+            return self._отказ(400, "bad_request", "нужно тело JSON {\"code\": \"…\"}", без_кэша)
+        выдано = self.устройства.активировать(код) if self.устройства else None
+        if выдано is None:
+            return self._отказ(403, "invalid_code",
+                               "код не подходит: проверьте его или получите новый в панели "
+                               "(код действует сутки и один раз)", без_кэша)
+        print(f"[app-api] активировано устройство {выдано.get('deviceId')}", flush=True)
+        return self._ответ(200, выдано, без_кэша)
+
+
 def главное(argv=None) -> int:
     ap = argparse.ArgumentParser(description="читающее API каталога для клиента")
     ap.add_argument("--site", required=True)
@@ -776,6 +942,7 @@ def главное(argv=None) -> int:
     Обработчик.каталог = Каталог(a.site, a.data_dir)
     Обработчик.предложения = ХранилищеПредложений(a.data_dir / f"{a.site}-offers.json")
     Обработчик.конфигурация = ХранилищеКонфигурации(a.config_dir)
+    Обработчик.устройства = ХранилищеУстройств(a.config_dir)
     Обработчик.обновитель = ОбновительСнимка(a.site, a.data_dir)
     if a.key_file and a.key_file.is_file():
         Обработчик.ключ = a.key_file.read_text(encoding="utf-8").strip()
