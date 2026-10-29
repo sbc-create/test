@@ -377,6 +377,19 @@ def test_обложки_отмечаются_в_панели(admin, api):
     assert len(call(api, "GET", "/api/v1/apps/kinateka/channels/sandbox").body["draft"]["artwork"]["reviews"]) == 1
 
 
+def test_испорченное_поле_обложек_даёт_сообщение_а_не_сбой(admin, api):
+    cookies, csrf = войти(admin)
+    d = doc()
+    d["artwork"] = []
+    save(api, "sandbox", d)
+    html = страница(admin, cookies)
+    r = admin.handle("POST", "/admin/apps/kinateka/sandbox/artwork/mark", cookies=cookies, form={
+        CSRF_FIELD: csrf, "draftVersion": версия(html), "contentId": A,
+        "imageUrl": "https://poster.example/a.webp", "verdict": "ok"})
+    assert r.status == 303
+    assert "artwork черновика не по форме" in страница(admin, cookies)
+
+
 def test_устаревшая_форма_даёт_конфликт_а_не_перезапись(admin, api):
     cookies, csrf = войти(admin)
     save(api, "sandbox", doc())

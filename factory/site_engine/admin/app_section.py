@@ -229,13 +229,16 @@ class AppSection:
         if tail[:1] == ["artwork"]:
             # Пригодность изображения для общей витрины — отметка по конкретной
             # картинке, а не по тайтлу: сменится постер — отметка перестанет действовать.
-            reviews = draft.setdefault("artwork", {}).setdefault("reviews", [])
+            art = draft.setdefault("artwork", {})
+            if not isinstance(art, dict) or not isinstance(art.setdefault("reviews", []), list):
+                raise ValueError("Поле artwork черновика не по форме — поправьте его в «Документ черновика целиком».")
+            reviews = art["reviews"]
             cid = (form.get("contentId") or "").strip()
             url = (form.get("imageUrl") or "").strip()
             if not cid or not url:
                 raise ValueError("Нет такого тайтла в каталоге или у него нет постера.")
-            reviews[:] = [r for r in reviews
-                          if not (r.get("contentId") == cid and r.get("imageUrl") == url)]
+            reviews[:] = [r for r in reviews if not (isinstance(r, dict) and r.get("contentId") == cid
+                                                     and r.get("imageUrl") == url)]
             if tail == ["artwork", "mark"]:
                 verdict = form.get("verdict") or ""
                 if verdict not in ("ok", "explicit"):

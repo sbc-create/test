@@ -333,6 +333,8 @@ def _artwork(art: dict, base: str, csrf: str, version: str, dis: str) -> str:
     rows = []
     for r in art.get("reviews") or []:
         stale = ("" if r.get("applies") else
+                 ' <span class="pill bad">тайтла нет в каталоге — отметка не действует</span>'
+                 if r.get("currentPosterUrl") is None and r.get("title") is None else
                  ' <span class="pill bad">постер в каталоге сменился — отметка не действует</span>')
         rows.append(
             f'<tr><td><img class="thumb" alt="" src="{_e(r.get("imageUrl"))}"></td>'
