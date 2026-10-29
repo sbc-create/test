@@ -3519,6 +3519,30 @@ def разметка_плеера(вид, запись: dict, деталь: dict
 
 СКРИПТ_ПЛЕЕРА_КЛИЕНТ = """
 (function(){
+ /* Цель «запуск» берётся от ПОСТАВЩИКА, а не от прогресса нашего <video>.
+    Измерено 29.10 на двух семействах, а не предположено. Данные кабинета
+    animedia.icu за 22-28.10: title_view 788, player_ready 720, player_start
+    РОВНО НОЛЬ. Трасса живой страницы: провайдер отдаёт iframe внутрь теневого
+    дерева <video-player>, элемента video в документе нет, observeProgress ниже
+    не привязывается — и единственная отправка player_start в ветке ct>0.05
+    недостижима. На Lords то же: lordserials22.info 29.10 после выпуска
+    отправщика шлёт title_view и player_ready, а player_start не шлёт.
+    Сигнал снят с живой страницы: postMessage от cdnvideohub вида
+    {eventType:'timeupdate',data:{duration,position}}; на том же событии стоит
+    маячок реального просмотра, то есть сигнал проверен работающим механизмом.
+    Слушатель ОТДЕЛЬНЫЙ и молчаливый: отказ в целях не должен задеть ни
+    управление плеером, ни маячок. player_ready здесь не меняется — он отвечает
+    за состояние оболочки, и смена смысла опубликованной метрики это решение. */
+ try{ window.addEventListener('message', function(e){
+  if(!e.origin || e.origin.indexOf('cdnvideohub')<0) return;
+  var d=e.data; try{ if(typeof d==='string') d=JSON.parse(d); }catch(err){ return; }
+  if(!d || !d.eventType) return;
+  var поехало = (d.eventType==='started') ||
+   (d.eventType==='timeupdate' && d.data && typeof d.data.position==='number'
+    && d.data.position>0.05);
+  if(!поехало) return;
+  try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_start'); } }catch(err){}
+ }, false); }catch(e){}
  var f=document.querySelector('[data-player]'); if(!f) return;
  f.setAttribute('data-player-layout-contract','full-bleed-v1');
  var host=f.querySelector('[data-player-host]');
