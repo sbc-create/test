@@ -280,6 +280,18 @@
         ]
       }
     ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 ${CLAUDE_PROJECT_DIR}/automation/hooks/stop_guard.py",
+            "timeout": 20,
+            "statusMessage": "factory: цель открыта — продолжаю очередь"
+          }
+        ]
+      }
+    ],
     "SessionStart": [
       {
         "matcher": "*",
