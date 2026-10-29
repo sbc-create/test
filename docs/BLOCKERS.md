@@ -968,8 +968,8 @@ worktree нет), модуля не было — `import webauthn` отвеча�
 
 | состояние | домены |
 | --- | --- |
-| отправщик целей есть | `animedia.icu`, `animedia.space` (выпуск `244ed5fdd002`, 29.10), `lordserials22.info` (выпуск `be611260d16b`, 29.10), `1lordserials1.online`, `zonafilm.space`, `zonafilm12.site` |
-| счётчик в разметке есть, **отправщика нет** | `an1meg0.site`, `an1mego.site`, `animeg0.site`, `lordfilm47.space`, `lordserial33.biz`, `zonafilm.cc` |
+| отправщик целей есть | `animedia.icu`, `animedia.space` (выпуск `244ed5fdd002`), `lordserials22.info` (`be611260d16b`), `lordserial33.biz` (`682e779f4e86`) — все 29.10; `1lordserials1.online`, `zonafilm.space`, `zonafilm12.site` |
+| счётчик в разметке есть, **отправщика нет** | `an1meg0.site`, `an1mego.site`, `animeg0.site`, `lordfilm47.space`, `zonafilm.cc` |
 | разметки счётчика нет вовсе (её отдаёт приложение выше по потоку) | пять витрин Yummy |
 | домен не отвечает (DNS не делегирован, `DNS-LORDSERIALS22`) | `lordserials22.site`, `lordserials22.space` |
 
@@ -999,7 +999,8 @@ test_источник_шаблона_несёт_отправщик_целей_м
 | домен | состояние |
 | --- | --- |
 | `lordserials22.info` (lords-05, контрольный) | **выпущено и проверено**: выпуск `be611260d16b` (`activated`, `live_verified`), на публичной странице браузер отправляет `goal://lordserials22.info/title_view` и `.../player_ready` на счётчик 113109083; режим OPEN и `revision 2` не тронуты, publisher-id 10368, плеер на месте |
-| `lordfilm47.space`, `lordserial33.biz` | ждут: тот же перенос в своих репозиториях |
+| `lordserial33.biz` (lords-02) | **выпущено и проверено**: выпуск `682e779f4e86` (`activated`, `live_verified`), на публичной странице браузер отправляет `goal://lordserial33.biz/title_view` и `.../player_ready` на счётчик 112010274; режим OPEN и `revision 1` не тронуты, publisher-id 10378, плеер на месте. Перенос шёл в `src/lords-frontend.py` — точка входа `lords02-frontend.py` его импортирует |
+| `lordfilm47.space` (lords-01) | **выпуск не выполнен намеренно**, три измеренных причины: (1) HEAD репозитория — неразвёрнутый перенос домена на `lords3rial.site` по распоряжению владельца 25.10, живёт выпуск `479698c0480b` от 19.10; (2) ветка переноса не проходит свою `verify_pins` (код 1: четыре закреплённых файла изменены, замок не пересчитан) — CI не пройдёт независимо от целей; (3) `lords3rial.site` отсутствует и в реестре ячеек, и в реестре аналитики, публично отвечает 421. Патч готов и применяется на их HEAD: `coordination/v1/patches/metrika-goals-lordfilm47-space.patch`, передача 141 |
 | `an1meg0.site` | ждёт: семейство animego, свой рантайм |
 | `an1mego.site`, `animeg0.site` | ждут и вне реестра ячеек (`REGISTRY-GAP-ANIMEGO`): штатного выпуска у них нет |
 | `zonafilm.cc` | ждёт: правка поверх закреплённого артефакта |
