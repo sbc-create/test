@@ -466,6 +466,86 @@ SITEMAP_DIR = os.environ.get("LORDS_SITEMAP_DIR", "").strip()
 СЧЁТЧИК_МЕТРИКИ = os.environ.get("LORDS_METRIKA_COUNTER", "").strip()
 
 
+#: Закрытый список целей — тот же, что в каноническом рантайме. Имя вне списка
+#: не отправляется: опечатка в вызове не должна заводить в кабинете
+#: цель-призрак, которой нет в реестре аналитики.
+ЦЕЛИ_МЕТРИКИ = (
+    "title_view",       # открыта страница произведения
+    "search",           # поисковый запрос отправлен (сама фраза не передаётся)
+    "filter_apply",     # применён фильтр каталога (значения не передаются)
+    "season_select",    # выбран сезон
+    "episode_select",   # выбрана серия
+    "player_start",     # площадка запросила воспроизведение
+    "player_ready",     # плеер поднялся
+    "player_error",     # запуск не состоялся
+    "block_view",       # рекомендательный блок показан (ключ блока не передаётся)
+    "block_click",      # из рекомендательного блока перешли в карточку
+)
+
+
+def цели_метрики(номер: str) -> str:
+    """Отправка целей. Ни одного параметра — только имя из закрытого списка.
+
+    Почему параметров нет вовсе. Метрика позволяет передать с целью
+    произвольные данные, и один такой вызов из обработчика поиска вынес бы
+    поисковую фразу в отчёт. Единственная точка отправки — `window.__sfGoal`,
+    и третьего аргумента у неё не существует.
+
+    Почему тип страницы определяется по адресу, а не по разметке: маршруты
+    витрины свои и стабильные, а метку в разметку пришлось бы добавить в
+    четыре оболочки — четыре места, где легко разойтись.
+    """
+    имена = ",".join(f'"{и}"' for и in ЦЕЛИ_МЕТРИКИ)
+    return (
+        "<script>(function(){"
+        "if(window.__sfGoal){return;}"
+        f"var C={номер},L=[{имена}],S={{}};"
+        "function g(n){try{"
+        "if(L.indexOf(n)<0){return;}"
+        "if(typeof window.ym!=='function'){return;}"
+        "window.ym(C,'reachGoal',n);"
+        "}catch(e){}}"
+        "window.__sfGoal=g;"
+        "window.__sfGoalOnce=function(n){if(S[n]){return;}S[n]=1;g(n);};"
+        "var p=location.pathname||'';"
+        "if(/^\\/title\\//.test(p)){window.__sfGoalOnce('title_view');}"
+        "document.addEventListener('submit',function(e){"
+        "var f=e&&e.target; if(!f||!f.getAttribute){return;}"
+        "var a=f.getAttribute('action')||'';"
+        "if(f.getAttribute('role')==='search'||/\\/search\\//.test(a)){g('search');}"
+        "},true);"
+        "document.addEventListener('click',function(e){"
+        "var n=e&&e.target,a=null;"
+        "while(n&&n!==document){if(n.tagName==='A'&&n.getAttribute('href')){a=n;break;}n=n.parentNode;}"
+        "if(!a){return;}"
+        "var h=a.getAttribute('href')||'';"
+        "if(/\\/season-\\d+\\/episode-\\d+\\/?$/.test(h)){g('episode_select');}"
+        "else if(/\\/season-\\d+\\/?$/.test(h)){g('season_select');}"
+        # Переход ИЗ рекомендательного блока: ключ блока остаётся в разметке,
+        # в цель он не уходит — третьего аргумента у точки отправки нет.
+        "var b=a.closest&&a.closest('[data-block-key]');"
+        "if(b){g('block_click');}"
+        "},true);"
+        # Показ блока: половина высоты в экране. Одна отправка на загрузку
+        # страницы, иначе прокрутка туда-сюда накрутила бы показы.
+        "function начать(){try{if(!window.IntersectionObserver){return;}"
+        "var o=new IntersectionObserver(function(es){"
+        "for(var i=0;i<es.length;i++){if(es[i].isIntersecting){"
+        "window.__sfGoalOnce('block_view');o.disconnect();return;}}},"
+        "{threshold:0.5});"
+        "var бл=document.querySelectorAll('[data-block-key]');"
+        "if(!бл.length){return;}"
+        "for(var j=0;j<бл.length;j++){o.observe(бл[j]);}"
+        "}catch(e){}}"
+        # Скрипт стоит в head и исполняется ДО разбора body: в этот момент
+        # блоков в документе ещё нет, и наблюдать нечего. Поэтому установка
+        # откладывается до готовности разметки.
+        "if(document.readyState==='loading'){"
+        "document.addEventListener('DOMContentLoaded',начать);}else{начать();}"
+        "})();</script>"
+    )
+
+
 def тег_метрики() -> str:
     """Официальный тег Метрики или пустая строка.
 
@@ -500,6 +580,9 @@ def тег_метрики() -> str:
         "</script>"
         f'<noscript><div><img src="https://mc.yandex.ru/watch/{н}" '
         'style="position:absolute;left:-9999px" alt=""></div></noscript>'
+        # Отправка целей идёт ЗДЕСЬ, а не в оболочках страниц: у тега метрики
+        # один вызов на каждую из них, и правка в четырёх местах разошлась бы.
+        + цели_метрики(н)
     )
 
 #: Контракт многоисточниковых оценок. Единственное место, где объявлено,
@@ -1106,12 +1189,19 @@ def оболочка(тело: str, титул: str, д: Данные, акти�
 #: оформление СВОИМ манифестом, а витрины на 1.3.0 остаются на 1.3.0.
 ОФОРМЛЕНИЕ_1_4 = "1.4.0"
 
+#: Версия с отправщиком целей Метрики в источнике шаблона. Добавлена в набор
+#: ОДНОВРЕМЕННО с объявлением версии в `status/lords-template-version.json` —
+#: по тому же уроку 1.3.0: объявить версию и не внести её сюда значит отдать
+#: каждому новому сайту 404 на любой карточке при исправной главной.
+ОФОРМЛЕНИЕ_1_5 = "1.5.0"
+
 #: Версии, несущие оформление 1.1+. Набор, а не одно значение: витрина
 #: включает оформление СВОИМ манифестом, и добавление следующей версии не
 #: должно переводить на неё соседей. Свойство «переход по одной витрине»
 #: сохраняется — меняется только то, сколько версий код умеет исполнять.
 ОФОРМЛЕНИЕ_ВЕРСИИ = {ОФОРМЛЕНИЕ_1_1, ОФОРМЛЕНИЕ_1_2, ОФОРМЛЕНИЕ_1_2_1,
-                     ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_3, ОФОРМЛЕНИЕ_1_4}
+                     ОФОРМЛЕНИЕ_1_2_2, ОФОРМЛЕНИЕ_1_3, ОФОРМЛЕНИЕ_1_4,
+                     ОФОРМЛЕНИЕ_1_5}
 
 #: Семейства, переработанные по измеренным эталонам, и версии, с которых
 #: переработка включается. Ниже этого набора витрина исполняет прежние ветки.
@@ -3574,11 +3664,15 @@ def разметка_плеера(вид, запись: dict, деталь: dict
   if(отказ&&k==='ok') return;
   /* Hard failures hide the component. Soft/active states never cover a live iframe. */
   var hard=(k==='provider'||k==='error'||k==='nosource'||k==='noaccess'||k==='unavailable');
-  if(hard){ отказ=true; clearTimers(); }
+  if(hard){ отказ=true; clearTimers();
+   try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_error'); } }catch(e){} }
   f.setAttribute('data-state',k);
   syncNote(k);
   var node=el();
   if(k==='ok'||k==='resolving'||k==='active'){
+   if(k==='ok'||k==='active'){
+    try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_ready'); } }catch(e){}
+   }
    hideOverlay();
    if(node){ node.hidden=false; fitPlayerTree(node); }
    if(k==='ok') поднялся=true;
@@ -3651,6 +3745,7 @@ def разметка_плеера(вид, запись: dict, деталь: dict
     progress.ok=true;
     markPlaying('progress+3s', ct);
    } else if(ct>0.05){
+    try{ if(window.__sfGoalOnce){ window.__sfGoalOnce('player_start'); } }catch(e){}
     /* Shell is alive; never cover it while media advances. */
     state('active');
    }
