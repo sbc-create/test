@@ -348,7 +348,7 @@ def _artwork(art: dict, base: str, csrf: str, version: str, dis: str) -> str:
         '<p class="mut">Отметок нет.</p>')
     add = (f'<form method="post" action="{base}/artwork/mark">{_hidden(csrf, version)}<div class="row">'
            '<div><label>Отметить обложку тайтла: contentId</label><input name="contentId" required></div>'
-           '<div><label>Вердикт</label>' + _select("verdict", "explicit", list(VERDICT_WORDS.items()), dis) + "</div>"
+           '<div><label>Вердикт</label>' + _select("verdict", "explicit", [("explicit", "откровенная"), ("ok", "подходит")], dis) + "</div>"
            '<div><label>Примечание (по желанию)</label><input name="note" maxlength="140"></div>'
            f'<button class="ghost" type="submit"{dis}>Отметить нынешний постер</button></div></form>')
     return ('<div class="card" id="artwork"><h2>Обложки</h2><p class="hint">Общая витрина — баннер, подборки и ряды '
