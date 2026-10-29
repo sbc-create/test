@@ -494,3 +494,78 @@ def test_через_http_слой_фабрики(root):
         srv.shutdown()
         поток.join(timeout=5)
         srv.server_close()
+
+
+# ---- устройства: доступ к каталогу без ключа в APK ---------------------------
+
+from factory.site_engine.api import app_devices  # noqa: E402
+
+# Общий вектор с app-read-api (tests/unit/test_app_read_api_devices.py): формулы обязаны совпадать.
+ВЕКТОР = {"salt": bytes(range(16)), "raw": bytes(range(100, 124)), "code": "KQ7M4TXP",
+          "codeHash": "4d6be1c1f88b12fa162d0e39bfa95dd40c335d9fb89df2f189f4f9567d08bab5",
+          "sealed": "d252fd4e6c9397610adb6273dfd834c4a4957e744c348c42",
+          "keyHash": "d58a90fb7915022bfc0a36efbc80eb3b938bb72e32e0bfd0d30572012cafbe05"}
+
+
+def test_формулы_устройств_по_общему_вектору():
+    v = ВЕКТОР
+    assert app_devices.code_hash(v["salt"], v["code"]) == v["codeHash"]
+    assert app_devices.seal(v["raw"], v["salt"], v["code"]) == v["sealed"]
+    key = app_devices.unseal(v["sealed"], v["salt"], v["code"])
+    assert key == "dk_" + v["raw"].hex() and app_devices.key_hash(key) == v["keyHash"]
+    assert app_devices.normalize_code(" kq7m-4txp ") == "KQ7M4TXP"
+
+
+def test_устройство_код_ключ_и_отзыв(api, root):
+    r = call(api, "POST", "/api/v1/apps/kinateka/devices", {"name": "  Телевизор   в гостиной "})
+    assert r.status == 200, r.body
+    code = app_devices.normalize_code(r.body["code"])
+    assert len(code) == 8 and set(code) <= set(app_devices.CODE_ALPHABET)
+    stored = json.loads((root / "var/app-config/animedia-01/devices.json").read_text(encoding="utf-8"))
+    d = stored["devices"][0]
+    assert d["name"] == "Телевизор в гостиной"
+    # открытым текстом ни кода, ни ключа
+    raw_text = json.dumps(stored)
+    assert code not in raw_text and "dk_" not in raw_text
+    key = app_devices.unseal(d["code"]["sealed"], bytes.fromhex(d["code"]["salt"]), code)
+    assert app_devices.key_hash(key) == d["keyHash"]
+    assert app_devices.code_hash(bytes.fromhex(d["code"]["salt"]), code) == d["code"]["hash"]
+    listing = call(api, "GET", "/api/v1/apps/kinateka/devices").body["devices"]
+    assert listing[0]["codeActive"] and "keyHash" not in listing[0] and "code" not in listing[0]
+    # новый код — новый ключ
+    r2 = call(api, "POST", f"/api/v1/apps/kinateka/devices/{d['id']}/code")
+    d2 = json.loads((root / "var/app-config/animedia-01/devices.json").read_text())["devices"][0]
+    assert r2.status == 200 and d2["keyHash"] != d["keyHash"]
+    # отзыв
+    r3 = call(api, "POST", f"/api/v1/apps/kinateka/devices/{d['id']}/revoke")
+    d3 = json.loads((root / "var/app-config/animedia-01/devices.json").read_text())["devices"][0]
+    assert r3.status == 200 and d3["revokedAt"] and d3["code"] is None
+    assert call(api, "POST", f"/api/v1/apps/kinateka/devices/{d['id']}/code").status == 422
+
+
+def test_устройства_только_с_правом_записи_и_с_выключателем(api, root):
+    assert call(api, "POST", "/api/v1/apps/kinateka/devices", {"name": "x"}, token=READER).status == 403
+    assert call(api, "POST", "/api/v1/apps/kinateka/devices", {"name": ""}).status == 400
+    assert call(api, "POST", "/api/v1/apps/kinateka/devices/d-000000000000/revoke").status == 404
+    assert call(api, "POST", "/api/v1/apps/kinateka/devices/../../x/revoke").status == 404
+    off = ControlApi(root=root, env=env(root / "data", app_writes=""), now=lambda: 1_793_000_000.0)
+    assert call(off, "POST", "/api/v1/apps/kinateka/devices", {"name": "x"}).status == 404
+
+
+def test_код_в_панели_показывается_один_раз(admin, api, root):
+    cookies, csrf = войти(admin)
+    assert "Устройства" in страница(admin, cookies, "/admin/apps/kinateka")
+    html = страница(admin, cookies, "/admin/apps/kinateka/devices")
+    assert "Устройств ещё нет" in html
+    admin.handle("POST", "/admin/apps/kinateka/devices/add", cookies=cookies,
+                 form={CSRF_FIELD: csrf, "name": "Телефон <b>"})
+    html = страница(admin, cookies, "/admin/apps/kinateka/devices")
+    shown = html.split("Код для «", 1)[1].split("»: ", 1)[1][:9]
+    assert len(app_devices.normalize_code(shown)) == 8
+    assert "Телефон &lt;b&gt;" in html and "<b>»" not in html
+    again = страница(admin, cookies, "/admin/apps/kinateka/devices")
+    assert shown not in again and "действует" in again
+    did = json.loads((root / "var/app-config/animedia-01/devices.json").read_text())["devices"][0]["id"]
+    admin.handle("POST", f"/admin/apps/kinateka/devices/{did}/revoke", cookies=cookies, form={CSRF_FIELD: csrf})
+    html = страница(admin, cookies, "/admin/apps/kinateka/devices")
+    assert "отозван" in html and "Новый код" not in html.split('id="devices"')[1]

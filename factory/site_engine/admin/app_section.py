@@ -52,6 +52,8 @@ class AppSection:
             return AdminResponse(status=200, html=ui_app.overview(
                 r.body, flash=flash, session_label=label, csrf=csrf,
                 can_write=self._can_write(session)))
+        if rest[0] == "devices":
+            return self._devices(session, method, rest[1:], form, label, csrf, flash)
         channel = rest[0]
         if channel not in CHANNELS:
             return None
@@ -129,6 +131,37 @@ class AppSection:
             f" До публикации исправить: {len(problems)}." if problems else " Готов к публикации.")
         session.flash = self.admin._flash_from(r, success=success)
         return _redirect(f"{back}{target}")
+
+    def _devices(self, session, method: str, tail: list[str], form: dict[str, str], label: str, csrf: str,
+                 flash):
+        """Устройства с доступом к каталогу; код из ответа API — только во вспышку, один раз."""
+        from factory.site_engine.admin.app import AdminResponse, _redirect
+
+        back = f"{BASE}/devices"
+        if method == "GET" and not tail:
+            r = self.admin._call("GET", f"{API}/devices", session)
+            if r.status != 200:
+                return AdminResponse(status=r.status, html=ui_app.unavailable(r, label, csrf))
+            return AdminResponse(status=200, html=ui_app.devices(
+                r.body, flash=flash, session_label=label, csrf=csrf, can_write=self._can_write(session)))
+        if method != "POST":
+            return None
+        if tail == ["add"]:
+            r = self.admin._call("POST", f"{API}/devices", session, {"name": form.get("name", "")})
+        elif len(tail) == 2 and tail[1] in ("code", "revoke"):
+            r = self.admin._call("POST", f"{API}/devices/{tail[0]}/{tail[1]}", session, {})
+        else:
+            return None
+        if r.status == 200 and r.body.get("code"):
+            session.flash = {"ok": True, "detail": None, "message":
+                             f"Код для «{r.body.get('name')}»: {r.body['code']} — введите его в приложении "
+                             f"до {r.body.get('codeExpiresAt')} (UTC). Код показывается один раз и действует "
+                             "один раз."}
+        else:
+            flash_ = self.admin._flash_from(r, success=f"Доступ «{r.body.get('name')}» отозван.")
+            flash_["detail"] = None if r.status == 200 else flash_["detail"]
+            session.flash = flash_
+        return _redirect(back)
 
     def _can_write(self, session) -> bool:
         return "app:write" in self.admin._scopes(session)

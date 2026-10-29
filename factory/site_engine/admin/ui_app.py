@@ -99,7 +99,10 @@ def overview(body: dict, *, flash, session_label: str, csrf: str, can_write: boo
                   'опубликованную ревизию (на следующем запуске или возврате на главную). Откат — переводом '
                   'канала на прежнюю ревизию. Схема '
                 + f'<code>{_e(body.get("schema"))}</code>, каталог витрины <code>{_e(body.get("site"))}</code>.</p></div>'
-                + '<div class="grid">' + "".join(cards) + "</div>"
+                + '<div class="grid">' + "".join(cards)
+                + '<div class="card"><h2>Устройства</h2><p class="hint">Доступ телефонов и телевизоров к каталогу: '
+                  'код для входа в приложение, отзыв доступа.</p>'
+                + f'<p><a href="{BASE}/devices">Открыть: устройства и коды →</a></p></div>' + "</div>"
                 + _history(body.get("history") or [], None, csrf, can_write=False),
                 session_label=session_label, csrf=csrf)
 
@@ -431,4 +434,39 @@ def collection(body: dict, cid: str, *, flash, session_label: str, csrf: str, ca
     return page(f"Подборка {cid}", STYLE + _nav(ch) + _flash(flash)
                 + f'<div class="card"><h2>Подборка {_e(c.get("title"))} <code>{_e(cid)}</code></h2>'
                 + _problems(problems) + form + "</div>" + search,
+                session_label=session_label, csrf=csrf)
+
+
+def devices(body: dict, *, flash, session_label: str, csrf: str, can_write: bool) -> str:
+    """Устройства с доступом к каталогу. Код показывается один раз — во вспышке после добавления."""
+    dis = "" if can_write else " disabled"
+    rows = []
+    for d in sorted(body.get("devices") or [], key=lambda x: (bool(x.get("revokedAt")), x.get("createdAt") or "")):
+        if d.get("revokedAt"):
+            state = f'<span class="pill bad">отозвано {_e(d["revokedAt"])}</span>'
+            actions = ""
+        else:
+            state = ('<span class="pill ok">действует</span>'
+                     + (f'<br><span class="mut">код до {_e(d.get("codeExpiresAt"))}</span>' if d.get("codeActive")
+                        else '<br><span class="mut">срок кода вышел</span>'))
+            actions = (f'<form method="post" action="{BASE}/devices/{_e(d["id"])}/code" style="display:inline;margin:0">'
+                       f'{_hidden(csrf)}<button class="ghost" type="submit"{dis}>Новый код</button></form> '
+                       f'<form method="post" action="{BASE}/devices/{_e(d["id"])}/revoke" style="display:inline;margin:0">'
+                       f'{_hidden(csrf)}<button class="ghost" type="submit"{dis}>Отозвать</button></form>')
+        rows.append(f"<tr><td><b>{_e(d.get('name'))}</b><br><code>{_e(d.get('id'))}</code></td>"
+                    f"<td>{_e(d.get('createdAt'))}<br><span class=\"mut\">{_e(d.get('createdBy'))}</span></td>"
+                    f"<td>{state}</td><td>{actions}</td></tr>")
+    table = ('<table><tr><th>Устройство</th><th>Добавлено</th><th>Состояние</th><th></th></tr>'
+             + "".join(rows) + "</table>") if rows else '<p class="mut">Устройств ещё нет.</p>'
+    ttl = body.get("codeTtlHours") or 24
+    return page("Кинатека · устройства", STYLE + _nav() + _flash(flash)
+                + '<div class="card"><h2>Добавить устройство</h2><p class="hint">Панель покажет код из 8 знаков — '
+                  'введите его в приложении на экране «Нет доступа к каталогу» → «Ввести код». Код действует '
+                + f'{_e(ttl)} ч и один раз; приложение получает свой ключ, служебный ключ на устройство не попадает. '
+                  '«Новый код» выдаёт устройству новый ключ (прежняя установка с ним перестанет открывать каталог), '
+                  '«Отозвать» закрывает доступ сразу.</p>'
+                + f'<form method="post" action="{BASE}/devices/add">{_hidden(csrf)}'
+                  '<label>Название <input name="name" maxlength="60" placeholder="Телевизор в гостиной" required></label> '
+                + f'<button type="submit"{dis}>Добавить и получить код</button></form></div>'
+                + f'<div class="card" id="devices"><h2>Устройства</h2>{table}</div>',
                 session_label=session_label, csrf=csrf)

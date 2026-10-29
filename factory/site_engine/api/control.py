@@ -34,7 +34,7 @@ from pathlib import Path
 from typing import Any
 
 from factory import audit, locks, queue
-from factory.site_engine.api import app_config, compat, content_health, reasons
+from factory.site_engine.api import app_config, app_devices, compat, content_health, reasons
 from factory.site_engine.api.app import ApiResponse, error
 from factory.site_engine.api.idempotency import (
     CONFLICT,
@@ -803,6 +803,8 @@ class ControlApi:
                 if not tail[1].isdigit():
                     raise ControlDenied(400, "invalid_revision", "номер ревизии — целое")
                 return ApiResponse(status=200, body=self._app_store(app_id).revision(int(tail[1])))
+            if tail[:1] == ["devices"]:
+                return self._app_devices(principal, app_id, method, tail[1:], body, correlation_id)
             if len(tail) >= 2 and tail[0] == "channels":
                 channel = tail[1]
                 if channel not in app_config.CHANNELS:
@@ -829,11 +831,53 @@ class ControlApi:
                     return self._app_import(principal, app_id, channel, body, correlation_id)
         except app_config.AppConfigError as exc:
             raise ControlDenied(exc.status, exc.code, exc.message, **exc.extra) from exc
+        except app_devices.DeviceError as exc:
+            raise ControlDenied(exc.status, exc.code, exc.message) from exc
         except (OSError, ValueError) as exc:
             raise ControlDenied(503, "app_config_unavailable",
                                 "хранилище конфигурации приложения недоступно",
                                 reason=type(exc).__name__) from exc
         raise ControlDenied(404, "not_found", "маршрут не найден")
+
+    def _app_devices(self, principal: Principal, app_id: str, method: str, tail: list[str],
+                     body: dict[str, Any], correlation_id: str) -> ApiResponse:
+        """Устройства с доступом к каталогу (app_devices): список, добавление с кодом, новый код, отзыв.
+
+        Код показывается только в ответе на добавление/новый код — в журнал аудита и
+        в файл он не попадает (в файле — хэш и запечатанный ключ).
+        """
+        store = app_devices.DeviceStore(self._root / "var" / "app-config" / self._app_site(app_id),
+                                        now=self._now)
+        if method == "GET" and not tail:
+            principal.require(SCOPE_READ)
+            return ApiResponse(status=200, body={"devices": store.listing(),
+                                                 "codeTtlHours": app_devices.CODE_TTL_S // 3600})
+        if method != "POST":
+            raise ControlDenied(404, "not_found", "маршрут не найден")
+        principal.require(SCOPE_APP)
+        if tail and not app_devices.ID_RE.match(tail[0]):
+            raise ControlDenied(404, "device_not_found", "нет такого устройства")
+        try:
+            with self._app_locked(app_id, "devices"):
+                if not tail:
+                    device, code = store.add(str(body.get("name") or ""), by=principal.token_id)
+                    action = "device.add"
+                elif tail[1:] == ["code"]:
+                    device, code = store.reissue(tail[0])
+                    action = "device.code"
+                elif tail[1:] == ["revoke"]:
+                    device, code = store.revoke(tail[0]), None
+                    action = "device.revoke"
+                else:
+                    raise ControlDenied(404, "not_found", "маршрут не найден")
+        except locks.LockBusy as exc:
+            raise ControlDenied(409, "app_busy", "по устройствам уже идёт операция") from exc
+        self._app_audit(principal, app_id, "devices", action, correlation_id,
+                        {"device": device["id"], "name": device.get("name")})
+        out = {"id": device["id"], "name": device.get("name"), "revokedAt": device.get("revokedAt")}
+        if code:
+            out.update(code=app_devices.shown_code(code), codeExpiresAt=device["code"]["expiresAt"])
+        return ApiResponse(status=200, body=out)
 
     def _app_site(self, app_id: str) -> str:
         return app_config.APPS[app_id]["site"]
