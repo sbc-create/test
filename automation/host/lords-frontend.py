@@ -116,7 +116,16 @@ def _сходимость_кода(runtime_path, runtime_sha: str):
                          («не измерено»), а не `False` («не совпало»).
     """
     замок = _замок_выпуска()
-    запись = (замок.get("files") or {}).get(Path(runtime_path).name) or {}
+    файлы = замок.get("files") or {}
+    # Ключи замков у витрин семейства записаны по-разному: у одних просто
+    # `animedia-frontend.py`, у других `src/animedia-frontend.py` (измерено
+    # 30.10 на трёх ячейках). Искать только по одному виду значило бы на
+    # половине витрин отвечать «сравнивать нечем» при полностью исправном
+    # замке — то есть снова прятать измерение за `null`.
+    имя = Path(runtime_path).name
+    запись = (файлы.get(имя) or файлы.get(f"src/{имя}")
+              or next((з for к, з in файлы.items()
+                       if str(к).rsplit("/", 1)[-1] == имя), None) or {})
     ожидание = str(запись.get("sha256") or "")
     if ожидание and runtime_sha:
         return (ожидание == runtime_sha), "pins_lock"

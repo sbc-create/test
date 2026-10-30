@@ -157,6 +157,31 @@ def test_сходимость_кода_считается_по_замку_вып
     h.выгрузить(модуль)
 
 
+def test_ключ_замка_с_приставкой_src_тоже_находится(tmp_path, monkeypatch):
+    """У витрин семейства ключи замка записаны по-разному — оба вида рабочие.
+
+    Измерено 30.10 на трёх ячейках: `animedia-icu` и `lordserial33-biz` держат
+    в `pins.lock.json` просто имя файла, а `animedia-space` — путь
+    `src/animedia-frontend.py`. Поиск только по одному виду означал бы, что на
+    половине витрин поле отвечает «сравнивать нечем» при исправном замке.
+    """
+    замок = tmp_path / "pins.lock.json"
+    замок.write_text(json.dumps({
+        "schema_version": 1,
+        "files": {f"src/{h.ЯДРО.name}": {"sha256": _сумма(h.ЯДРО), "bytes": 1}},
+    }, ensure_ascii=False), encoding="utf-8")
+    monkeypatch.setenv("LORDS_PINS_LOCK", str(замок))
+    с = h.Стенд(tmp_path)
+    с.записать_каталог([h.запись("a", title="Первый")])
+    с.записать_подробности([h.подробность("a")])
+    с.записать_плеер("10555")
+    модуль = h.загрузить(с, monkeypatch)
+    тело = _тело_healthz(модуль, с)
+    assert тело["runtime_digest_scope"] == "pins_lock", тело["runtime_digest_scope"]
+    assert тело["runtime_digest_match"] is True, тело
+    h.выгрузить(модуль)
+
+
 def test_подменённый_файл_даёт_честное_несовпадение(стенд_с_замком):
     """Замок называет другую сумму — вот это и значит «код не тот»."""
     с, модуль = стенд_с_замком(lambda ф: "0" * 64)
