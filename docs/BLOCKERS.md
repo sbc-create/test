@@ -2904,6 +2904,44 @@ excluded_urls=1, site_problems={'POSSIBLE_PROBLEM': 1, 'RECOMMENDATION': 1})`.
 а не 500. Шесть остальных падений не трогал: они про снятый с делегирования
 `lordfilm47.space` и падать должны. Передача линии SEO — 148.
 
+## GOALS-RECEPTION-FLEET-30-10 — снимок 30.10 по всем доменам: где достижения есть и где нулей ждать правильно
+
+**Прочитано из снимка `var/analytics/cabinet-latest.json` (30.10, 05:07:12Z),
+секрет не читался.** Период снимка — «7daysAgo…yesterday», то есть он
+НЕ может содержать достижения от выпусков 29–30.10; это главное при чтении нулей.
+
+| домен | счётчик | достижения |
+| --- | --- | --- |
+| `yummyani.site` | 111881037 | player_start 29324, player_ready 28623, title_view 24071, episode_select 1502, filter_apply 132, search 740 |
+| `yummyani7.site` | 113109087 | player_start 14764, player_ready 14442, title_view 11848, filter_apply 45 |
+| `yummyani7.info` | 113109089 | player_start 521, player_ready 512, title_view 434, filter_apply 7 |
+| `yummyani.org` | 111881038 | player_start 119, player_ready 118, title_view 106, filter_apply 20 |
+| `yummyani.biz` | 111881039 | player_start 80, player_ready 77, title_view 72 |
+| `animedia.icu` | 113288667 | title_view 1112, player_ready 1022, episode_select 235, search 22, **player_start 18**, player_error 13 |
+| `zonafilm12.site` | 113109081 | title_view 51, player_ready 37, player_start 28 |
+| `lordserials22.info` | 113109083 | player_ready 42, title_view 42, episode_select 5 |
+| `1lordserials1.online` | 112010277 | title_view 10, **player_start 10**, search 6 |
+| `lordserial33.biz` | 112010274 | player_ready 7, title_view 7, search 6 |
+| `zonafilm.cc` | 113110481 | player_ready 1, title_view 1 |
+| `an1meg0.site` | 113121466 | title_view 1 |
+| `an1mego.site`, `animeg0.site`, `zonafilm.space` | — | целей в кабинете нет (`ANALYTICS-GOAL-IDS`) |
+
+**Что из этого читается правильно, а что нет.**
+
+- `player_start` ПРИНИМАЕТСЯ уже на пяти доменах Yummy, на `animedia.icu` (18),
+  `zonafilm12.site` (28) и `1lordserials1.online` (10). То есть сам контракт
+  события работает, и это не предмет спора.
+- У `lordserial33.biz` `player_start` в этом снимке НЕТ, и это ожидаемо: правка
+  туда выпущена 29–30.10, а снимок кончается «вчера». Ноль здесь — не отказ
+  приёма, а граница периода. Приёмка остаётся за снимком 31.10.
+- `filter_apply` виден у четырёх витрин Yummy и НЕ виден у Animedia — по той же
+  границе периода. Утверждать «не принимается» по этому снимку нельзя.
+- `player_ready` 1022 против `player_start` 18 на `animedia.icu` — это не
+  поломка: готовность плеера наступает на каждом открытии карточки, а запуск —
+  только когда посетитель нажал. Соотношение 1:57 стоит проверить отдельно
+  (слишком мало запусков для 1112 просмотров), но это вопрос поведения
+  посетителей и плеера, а не контракта цели; записываю как наблюдение.
+
 ## GOALS-RECEPTION-30-10 — ПРИЁМ `player_start` ПОДТВЕРЖДЁН, остальное ждёт следующего снимка
 
 **Снимок есть и свеж:** `artifacts/analytics/analytics-2026-10-30.json`, собран
