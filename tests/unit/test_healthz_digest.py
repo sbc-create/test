@@ -108,6 +108,32 @@ def test_поле_false_это_mismatch():
     assert исход == "mismatch"
 
 
+def test_null_это_не_измерено_а_не_несовпадение():
+    """`null` значит «сравнивать было нечем» — и это пятый исход, не `mismatch`.
+
+    Витрина отвечает `null` там, где сравнимой величины нет (область `none`):
+    у ячейки без замка выпуска и без списка файлов в манифесте. Прежний разбор
+    считал всё, кроме `true`, несовпадением — то есть снова выдавал отсутствие
+    измерения за установленный факт, ровно как однострочник из установщика.
+    """
+    м = _модуль()
+    тело = json.dumps({"runtime_digest_match": None, "runtime_digest_scope": "none"})
+    with _Стенд(тело.encode()) as с:
+        исход, подробно = м.опросить(str(с.порт), 5)
+    assert исход == "not-measured", подробно
+    assert "scope=none" in подробно
+
+
+def test_код_возврата_у_не_измерено_не_ноль():
+    """Ноль остаётся только у `ok`: «не измерено» — не разрешение выкладывать."""
+    тело = json.dumps({"runtime_digest_match": None, "runtime_digest_scope": "none"})
+    with _Стенд(тело.encode()) as с:
+        готово = subprocess.run([sys.executable, str(РАЗБОРЩИК), str(с.порт), "5"],
+                                capture_output=True, text=True, timeout=30)
+    assert готово.returncode == 1, готово.stdout + готово.stderr
+    assert готово.stdout.startswith("not-measured"), готово.stdout
+
+
 def test_нет_поля_это_не_mismatch():
     м = _модуль()
     with _Стенд(json.dumps({"ok": True}).encode()) as с:

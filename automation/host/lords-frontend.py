@@ -69,6 +69,77 @@ def _манифест() -> dict:
     return м
 
 
+#: Замок исходников выпуска. В нём записана сумма КАЖДОГО файла отдельно, и
+#: пишет её сборщик (`tools/relock.py` витрины), а не рука — значит это та
+#: самая сравнимая величина, которой у `/healthz` не было.
+ЗАМОК_ФАЙЛ = os.environ.get("LORDS_PINS_LOCK", "")
+
+
+def _замок_выпуска() -> dict:
+    """Замок выпуска, если он есть рядом с исполняемым файлом.
+
+    Ищется у самого файла и на уровень выше (`<выпуск>/src/x.py` →
+    `<выпуск>/pins.lock.json`). Нет замка — пустой словарь, и это НЕ отказ:
+    отсутствие величины не повод называть код подменённым.
+    """
+    if ЗАМОК_ФАЙЛ:
+        пути = [Path(ЗАМОК_ФАЙЛ)]
+    else:
+        свой = Path(__file__).resolve()
+        пути = [свой.parent / "pins.lock.json", свой.parent.parent / "pins.lock.json"]
+    for п in пути:
+        try:
+            д = json.loads(п.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if isinstance(д, dict) and isinstance(д.get("files"), dict):
+            return д
+    return {}
+
+
+def _сходимость_кода(runtime_path, runtime_sha: str):
+    """Сошёлся ли исполняемый код с объявленным — и ЧЕМ это измерено.
+
+    Прежде поле `runtime_digest_match` сравнивало сумму ОДНОГО файла витрины с
+    `artifact_sha256` манифеста ШАБЛОНА. Это величины разной природы: артефакт
+    считается по всем файлам шаблона вместе с их именами. Совпадали они только
+    там, где артефакт и есть этот один файл; у lords-02 точка входа тонкая, а
+    работу делает общий `lords-frontend.py`, и поле отвечало `false` на
+    правильно выложенном коде. Ложный признак хуже отсутствующего: по нему
+    принимают решения о выкладке.
+
+    Теперь сравнивается сравнимое, и ответ говорит, чем именно:
+
+      `pins_lock`      — сумма файла против суммы ТОГО ЖЕ файла в замке выпуска;
+      `artifact_files` — пересчёт по списку файлов манифеста (уклад AnimeGo);
+      `none`           — сравнимой величины нет, и тогда ответ `None`
+                         («не измерено»), а не `False` («не совпало»).
+    """
+    замок = _замок_выпуска()
+    запись = (замок.get("files") or {}).get(Path(runtime_path).name) or {}
+    ожидание = str(запись.get("sha256") or "")
+    if ожидание and runtime_sha:
+        return (ожидание == runtime_sha), "pins_lock"
+    список = МАНИФЕСТ.get("artifact_files") or []
+    объявлено = str(МАНИФЕСТ.get("artifact_sha256") or "")
+    if список and объявлено:
+        корень = Path(runtime_path).resolve().parent.parent
+        сумма = hashlib.sha256()
+        for имя in список:
+            try:
+                содержимое = (корень / имя).read_bytes()
+            except OSError:
+                # Файла из объявленного списка нет на диске — это уже
+                # несовпадение, и названо оно той же областью.
+                return False, "artifact_files"
+            сумма.update(str(имя).encode("utf-8"))
+            сумма.update(b"\0")
+            сумма.update(содержимое)
+            сумма.update(b"\0")
+        return (сумма.hexdigest() == объявлено), "artifact_files"
+    return None, "none"
+
+
 МАНИФЕСТ = _манифест()
 ВЕРСИЯ = МАНИФЕСТ["design_version"]
 СЕМЕЙСТВО = МАНИФЕСТ["template_family"]
@@ -7841,6 +7912,9 @@ class Обработчик(BaseHTTPRequestHandler):
                 runtime_sha = hashlib.sha256(runtime_path.read_bytes()).hexdigest()
             except OSError:
                 runtime_sha = ""
+            # Считается ОДИН раз: ответ /healthz не должен хешировать файлы
+            # дважды только потому, что в теле два поля.
+            сошлось, область_сходимости = _сходимость_кода(runtime_path, runtime_sha)
             cat_path = Path(КАТАЛОГ_ФАЙЛ)
             det_path = Path(ПОДРОБНОСТИ_ФАЙЛ) if ПОДРОБНОСТИ_ФАЙЛ else None
             assets_path = runtime_path  # CSS/JS embedded in runtime for nova
@@ -7924,11 +7998,9 @@ class Обработчик(BaseHTTPRequestHandler):
                 "catalog_revision": getattr(self.данные, "revision", "") or "",
                 "details_revision": getattr(self.подробности, "catalog_revision", "") or "",
                 "artifact_sha256": МАНИФЕСТ.get("artifact_sha256", ""),
-                "runtime_digest_match": bool(
-                    МАНИФЕСТ.get("artifact_sha256")
-                    and runtime_sha
-                    and МАНИФЕСТ.get("artifact_sha256") == runtime_sha
-                ),
+                # `None` значит «не измерено»: см. _сходимость_кода.
+                "runtime_digest_match": сошлось,
+                "runtime_digest_scope": область_сходимости,
             }
             return self._отдать(json.dumps(тело, ensure_ascii=False).encode("utf-8"),
                                 "application/json; charset=utf-8")

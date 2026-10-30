@@ -94,8 +94,8 @@ markers_present() {
 #: 2026-09-30 07:10. Чужой язык внутри строки оболочки больше не живёт.
 HEALTHZ_PY="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)/healthz-digest.py"
 
-#: Один ответ, четыре различимых исхода: ok | mismatch | no-field | bad-json |
-#: no-answer. Вызывающая сторона обязана их РАЗЛИЧАТЬ: «ответа нет» и «код не
+#: Один ответ, пять различимых исходов: ok | mismatch | not-measured |
+#: no-field | bad-json | no-answer. Вызывающая сторона обязана их РАЗЛИЧАТЬ: «ответа нет» и «код не
 #: тот» — разные утверждения, и второе требует измерения.
 healthz_state() {
   local port="$1"
@@ -120,7 +120,11 @@ healthz_wait() {
   while : ; do
     state=$(healthz_state "$port")
     verdict=$(healthz_verdict "$state")
-    { [ "$verdict" = "ok" ] || [ "$verdict" = "mismatch" ]; } && break
+    # `not-measured` — тоже ОКОНЧАТЕЛЬНЫЙ ответ витрины («сравнивать нечем»),
+    # а не признак того, что она ещё поднимается: ждать его исчезновения
+    # бессмысленно, он не изменится со временем.
+    { [ "$verdict" = "ok" ] || [ "$verdict" = "mismatch" ] \
+      || [ "$verdict" = "not-measured" ]; } && break
     [ "$waited" -ge "$limit" ] && break
     sleep 3; waited=$((waited + 3))
   done
