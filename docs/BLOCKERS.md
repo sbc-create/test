@@ -1711,6 +1711,16 @@ Animedia, а в передаче 150 это сказано линии произ
 основу семейства правку стоит внести ради новых сайтов и Animedia, но у Lords и
 Zona она ничего не ускорит.
 
+**Нормализация перенесена на `animedia.space` и проверена живьём (30.10, 09:42 UTC).**
+Выпуск `animedia-02-code-872fd4a5fc3a` (CI `41033977742`) → `activated` /
+`live_verified`. Живой замер: `?utm_source=live-a` 575 мс (первая запись), затем
+`?utm_source=live-b` **35 мс** и `?gclid=zzz` **69 мс** при одном и том же теле;
+`/` — 370 мс первый и 51–161 мс повторы.
+
+Итого по задаче — четыре выпуска, каждый с живой проверкой: `animedia.icu`
+`007dcebe75b8` и `5dcfeb63a737`, `animedia.space` `5417aa1c9c8e` и
+`872fd4a5fc3a`.
+
 **Остаток переноса**
 (`animedia.space`, `zonafilm.cc` — у них тот же `src/perf_memo.py`). Файл
 семейства `automation/host/lords_perf_memo.py` живёт на ветке
