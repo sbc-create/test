@@ -43,11 +43,32 @@ import urllib.request
            ("устарело", 9), ("вытеснено", 10), ("вернувшихся", 12), ("сбросов", 8))
 
 
-def забрать(домен: str) -> dict:
+#: Где искать счётчики. Сводка нагрузки `/__load` есть не у всех витрин
+#: семейства (T325 стоит у animedia.icu), а служебная `/__template_version` —
+#: у всех. Инструмент обязан читать обе: иначе «счётчиков нет» означало бы
+#: «витрина не показывает сводку нагрузки», а это другое утверждение.
+ИСТОЧНИКИ = ("/__load", "/__template_version")
+
+
+def забрать(домен: str) -> tuple[dict, str]:
+    """Сводка и путь, с которого она взята. Пробуются оба источника по порядку."""
     адрес = домен if домен.startswith("http") else f"https://{домен}"
-    запрос = urllib.request.Request(f"{адрес}/__load", headers=ЗАГОЛОВКИ)
-    с = urllib.request.urlopen(запрос, timeout=60)
-    return json.loads(с.read().decode("utf-8", "replace"))
+    # Причина по КАЖДОМУ источнику, а не только последняя: «308 с /__load»
+    # и «в /__template_version нет счётчиков» — разные утверждения, и
+    # склеивать их в одно значит прятать второе.
+    причины = []
+    for путь in ИСТОЧНИКИ:
+        try:
+            запрос = urllib.request.Request(f"{адрес}{путь}", headers=ЗАГОЛОВКИ)
+            с = urllib.request.urlopen(запрос, timeout=60)
+            сводка = json.loads(с.read().decode("utf-8", "replace"))
+        except (urllib.error.URLError, OSError, ValueError) as ош:
+            причины.append(f"{путь}: {type(ош).__name__}: {ош}")
+            continue
+        if строки_памяти(сводка):
+            return сводка, путь
+        причины.append(f"{путь}: ответ получен, счётчиков памяти в нём нет")
+    raise ValueError("счётчики не получены — " + "; ".join(причины))
 
 
 def строки_памяти(сводка: dict) -> list:
@@ -88,10 +109,18 @@ def главная_причина(запись: dict) -> str:
     return "—"
 
 
-def напечатать(домен: str, сводка: dict) -> int:
+def напечатать(домен: str, сводка: dict, источник: str = "") -> int:
     записи = строки_памяти(сводка)
     группы = (сводка.get("totals") or {}).get("by_path_group") or {}
-    print(f"{домен} | окно {сводка.get('window_minutes')} мин на {сводка.get('generated_at')}")
+    окно = сводка.get("window_minutes")
+    голова = f"{домен} | источник {источник or '—'}"
+    if окно:
+        голова += f" | окно {окно} мин на {сводка.get('generated_at')}"
+    else:
+        # У `/__template_version` окна нет: это состояние процесса, а не сводка
+        # за период. Писать «окно None» значило бы придумать величину.
+        голова += " | сводки за период нет (состояние процесса)"
+    print(голова)
     for имя in ("home", "catalog"):
         г = группы.get(имя) or {}
         счёт = int(г.get("count", 0) or 0)
@@ -117,14 +146,14 @@ def main(argv: list[str] | None = None) -> int:
         return 2
     домен = а[0]
     try:
-        сводка = забрать(домен)
+        сводка, источник = забрать(домен)
     except (urllib.error.URLError, OSError, ValueError) as ош:
         print(f"сводка не получена: {type(ош).__name__}: {ош}", file=sys.stderr)
         return 2
     if "--json" in а:
         print(json.dumps(строки_памяти(сводка), ensure_ascii=False, indent=1))
         return 0 if строки_памяти(сводка) else 2
-    return напечатать(домен, сводка)
+    return напечатать(домен, сводка, источник)
 
 
 if __name__ == "__main__":
