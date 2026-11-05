@@ -7,7 +7,7 @@ from pathlib import Path
 import sys
 
 for name in list(os.environ):
-    if name.startswith(('SITE_','CELL_','LORDS_','GIT_','PYTHON')):os.environ.pop(name)
+    if name.startswith(('SITE_','CELL_','LORDS_','GIT_','PYTHON','FACTORY_','QWEN_','NOVA_')):os.environ.pop(name)
 os.environ['PATH']='/usr/sbin:/usr/bin:/sbin:/bin'
 os.environ['PYTHONDONTWRITEBYTECODE']='1'
 package=Path(__file__).resolve().parent.parent
