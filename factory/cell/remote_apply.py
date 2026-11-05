@@ -177,7 +177,7 @@ class NativeBackend:
         return self.current_record().get('source_commit')==request.commit
     def verify_replay(self,request,outcome):
         if not self.is_current(request):raise ValueError('Receipt no longer matches current runtime')
-        if not self.candidate_stopped():raise ValueError('Candidate termination not proven; keep private copy and reconcile')
+        if not self.candidate_stopped():raise ValueError('Candidate termination not proven; reconcile before successful replay')
         record=self.current_record()
         if record.get('digest',record.get('artifact_digest'))!=request.digest:
             raise ValueError('Current installed digest differs from receipt')
