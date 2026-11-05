@@ -1,0 +1,24 @@
+--- installed/executor.py
++++ guarded/executor.py
+@@ -1228,6 +1228,21 @@
+         return []
+     итоги = []
+     for файл in sorted(очередь.glob("*.json"), key=lambda p: p.stat().st_mtime)[:предел]:
++        # K2 scoped remote activation guard. The original executor remains
++        # authoritative for every other operation; no remote request is claimed.
++        try:
++            bridge_raw = json.loads(файл.read_text(encoding="utf-8"))
++            if (isinstance(bridge_raw, dict)
++                    and bridge_raw.get("operation") == "activate"
++                    and isinstance(bridge_raw.get("site_id"), str)
++                    and bridge_raw.get("site_id") in {
++                        "lords-02", "lords-03", "lords-05",
++                        "zona-01", "zona-02", "zona-03"}):
++                bridge_cell = registry.resolve(bridge_raw["site_id"])
++                if ((bridge_cell.runtime or {}).get("code_delivery") or {}).get("role") == "local-ssh-bridge":
++                    continue
++        except (ValueError, OSError, registry.RegistryError):
++            pass  # Preserve the original parser/error handling below.
+         try:
+             заявка = queue.разобрать(json.loads(файл.read_text(encoding="utf-8")))
+         except (queue.RequestRejected, ValueError) as exc:

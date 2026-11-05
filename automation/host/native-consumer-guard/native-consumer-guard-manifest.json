@@ -1,0 +1,7 @@
+{
+  "before_sha256": "5cb25f957367886fe8d71e26262bd0cda9a754a59e78329b9e06571817b6ae35",
+  "after_sha256": "19405a9a20b01d692e8f158493278ecfff39ec856541b8331efea2e355fa06be",
+  "target": "/usr/local/lib/site-factory-cell/factory/cell/executor.py",
+  "scope": "Only skip six canonical bridge-role activate requests before native parse; all other original code bytes unchanged",
+  "production_installed": false
+}
