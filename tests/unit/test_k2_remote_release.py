@@ -362,12 +362,12 @@ class GatewayRoundTrip(NativeControl):
     def configure_gateway(self):
         from factory.cell.remote_gateway import immutable_request
         p=profile();cell=json.loads(json.dumps(p['cell']))
-        cell['runtime']['code_delivery']={'role':'local-ssh-bridge','expected_current':'1'*40,'profile':p}
+        cell['runtime']['code_delivery']={'role':'local-ssh-bridge','expected_current':'1'*40,'profile':p,'source_path':'/nonexistent/sealed-fixture-source'}
         self.projection.chmod(0o600);self.projection.write_text(json.dumps({'cells':[cell]}));self.projection.chmod(0o400)
         for name in ['state','packages']:(self.root/name).mkdir(exist_ok=True)
         data=b'fixture frozen source capsule';cached=self.root/'packages'/(self.req.request_id+'.source.tar.gz');cached.write_bytes(data);cached.chmod(0o400)
         raw=self.file.read_bytes()
-        saved={'stable':{'request':immutable_request(self.req),'profile_sha256':fingerprint(p),'package_sha256':p['package_sha256'],'expected_old_commit':'1'*40},'nonce':'d'*64,'request_sha256':hashlib.sha256(raw).hexdigest(),'original_request_utf8':raw.decode(),'capsule_sha256':hashlib.sha256(data).hexdigest()}
+        saved={'stable':{'source_binding':{'path':'/nonexistent/sealed-fixture-source','commit':self.req.commit,'origin':p['cell']['repo']['remote']},'request':immutable_request(self.req),'profile_sha256':fingerprint(p),'package_sha256':p['package_sha256'],'expected_old_commit':'1'*40},'nonce':'d'*64,'request_sha256':hashlib.sha256(raw).hexdigest(),'original_request_utf8':raw.decode(),'capsule_sha256':hashlib.sha256(data).hexdigest()}
         (self.root/'state'/(self.req.request_id+'.remote.json')).write_text(json.dumps(saved))
         return p
     def process(self,request_id=None):

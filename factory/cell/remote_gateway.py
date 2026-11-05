@@ -8,6 +8,8 @@ import json
 import os
 from pathlib import Path
 import secrets
+import pwd
+import subprocess
 import sys
 import tempfile
 from factory.cell import executor, queue, registry
@@ -34,6 +36,31 @@ def immutable_request(request):
     return value
 
 
+def activation_source(cell,request,*,check_live=True):
+    """Explicit root-registry binding; never repoint the ordinary repo fields."""
+    declared=((cell.runtime or {}).get('code_delivery') or {}).get('source_path')
+    if not isinstance(declared,str) or not declared:
+        raise ValueError('Canonical code_delivery.source_path binding is required')
+    source=Path(declared)
+    if not source.is_absolute() or '..' in source.parts:
+        raise ValueError('Activation source must be an absolute canonical path')
+    from factory.cell.remote_capsule import normalized_remote
+    origin=(cell.repo or {}).get('remote') or ''
+    identity={'path':str(source),'commit':request.commit,'origin':origin}
+    if not check_live:return source,identity
+    if source.resolve()!=source or not source.is_dir():raise ValueError('Activation source must be an existing real directory')
+    owner=pwd.getpwuid(source.stat().st_uid)
+    if owner.pw_uid==0:raise ValueError('Activation source must belong to a nonroot source account')
+    def git(*args):
+        return subprocess.run(['sudo','-u',owner.pw_name,'--','git','-C',str(source),*args],
+            capture_output=True,text=True,check=True,env=dict(os.environ,GIT_TERMINAL_PROMPT='0',GIT_OPTIONAL_LOCKS='0')).stdout.strip()
+    if git('rev-parse','HEAD')!=request.commit or git('status','--porcelain'):
+        raise ValueError('Bound source must be clean at the exact requested commit')
+    if normalized_remote(git('remote','get-url','origin'))!=normalized_remote(origin):
+        raise ValueError('Bound worktree origin differs from declared repository')
+    return source,identity
+
+
 class Gateway:
     def __init__(self,request_bytes,wire_out,wire_in):
         self.request_bytes=request_bytes;self.output=wire_out;self.input=wire_in
@@ -46,7 +73,8 @@ class Gateway:
         # One native CONTROL owner, including across different target sites.
         with exclusive(queue.БАЗА/'locks'/'local-ssh-bridge.guard',busy_error=executor.SiteBusy):
             state=queue.БАЗА/'state'/(request.request_id+'.remote.json')
-            stable={'request':immutable_request(request),'profile_sha256':fingerprint(profile),'package_sha256':profile['package_sha256'],
+            source,source_binding=activation_source(cell,request,check_live=False)
+            stable={'source_binding':source_binding,'request':immutable_request(request),'profile_sha256':fingerprint(profile),'package_sha256':profile['package_sha256'],
                     'expected_old_commit':delivery['expected_current']}
             if state.exists():
                 saved=json.loads(state.read_bytes())
@@ -58,8 +86,9 @@ class Gateway:
                 queue.записать_атомарно(state,saved)
             cached=queue.БАЗА/'packages'/(request.request_id+'.source.tar.gz')
             if not saved.get('capsule_sha256'):
+                activation_source(cell,request,check_live=True)
                 with tempfile.TemporaryDirectory(prefix='native-bridge-') as tmp:
-                    generated,metadata=prepare(cell.repo_path,request,(cell.repo or {})['remote'],stable['expected_old_commit'],Path(tmp)/'prepared')
+                    generated,metadata=prepare(source,request,(cell.repo or {})['remote'],stable['expected_old_commit'],Path(tmp)/'prepared')
                     from factory.cell.rollback_state import atomic
                     atomic(cached,generated.read_bytes(),0o400)
                 saved['capsule_sha256']=hashlib.sha256(cached.read_bytes()).hexdigest()

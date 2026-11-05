@@ -469,6 +469,11 @@
                         }
                       }
                     }
+                  },
+                  "source_path": {
+                    "type": "string",
+                    "pattern": "^/",
+                    "description": "Root-controlled clean exact activation worktree; canonical repo fields are unchanged."
                   }
                 }
               }
