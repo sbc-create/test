@@ -1,6 +1,6 @@
 {
   "name": "k2-episode-feed",
-  "version": "2026.11.05.3",
+  "version": "2026.11.05.4",
   "ownership": "Shared source component, with exact versioned renderer variants; not site overlays.",
   "variant_reason": "Deployed pinned renderer baselines differ. Preserve exact accepted changes and existing domain behavior; do not normalize the cores.",
   "variants": [
@@ -57,5 +57,12 @@
     "legacy_behavior": "union with existing updates-feed; unchanged when cache absent/invalid",
     "writer": "none; read same source cache only",
     "canonical_source": "automation/host/episode_sync.py"
+  },
+  "candidate_role": {
+    "schema": "k2.episode-sync-role/1",
+    "environment": "SITE_CELL_ROLE",
+    "candidate_value": "candidate",
+    "background_episode_sync": false,
+    "authoritative_data": "live"
   }
 }
