@@ -35,11 +35,10 @@ def prepare(manifest,package_id,output):
     package=CANONICAL/'bridge-packages'/package_id
     plan={'status':'STAGED_ONLY_NOT_INSTALLED','package_root':str(package),'canonical_registry_sha256':hashlib.sha256((CANONICAL/'config/site-cells.json').read_bytes()).hexdigest(),
           'original_repo_root':installed['site_repos_root'],'links':[{'link':str(package/name),'target':str(CANONICAL/name),'owner':'root:root'} for name in ['config/site-cells.json','cell-install.json']],
-          'source_bindings':proposed,'order':['Review exact package and this proposal','Install package into NEW immutable versioned directory; do not overwrite installed core','Create and verify the two explicit canonical links','Install separately reviewed tiny consumer guard first; it imports ONLY ORIGINAL installed modules for ordinary work, preserves existing credential/security drop-ins, and skips six canonical remote activation entries','Only then main-owned registry writer may enable remote role/profile/source_path metadata','Only then enqueue or dispatch remote requests'],
+          'source_bindings':proposed,'order':['Review exact package and this proposal','Install package into NEW immutable versioned directory; do not overwrite installed core','Create and verify the two explicit canonical links','MAIN installs its independently reviewed minimal skip-only patch in ORIGINAL installed consumer batch first; ordinary original modules/invocation remain unchanged','Only then main-owned registry writer may enable remote role/profile/source_path metadata','Only then enqueue or dispatch remote requests'],
           'production_writes_performed':False,'canonical_repo_fields_modified':False}
     output.mkdir(parents=True,exist_ok=True)
     (output/'binding-plan.json').write_text(json.dumps(plan,ensure_ascii=False,indent=2)+'\n')
-    (output/'guarded-consumer.conf').write_text('[Service]\nWorkingDirectory='+str(package)+'\nExecStart=\nExecStart='+str(package/'bin/k2-native-consumer')+'\n')
     print(json.dumps(plan,ensure_ascii=False,indent=2))
 
 

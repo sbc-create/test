@@ -32,18 +32,3 @@ class BindingTests(unittest.TestCase):
             self.assertEqual(activation_source(cell,request,check_live=False)[0],source)
             (source/'untracked').unlink();git('remote','set-url','origin','https://github.com/sbc-create/wrong.git')
             with self.assertRaises(ValueError):activation_source(cell,request)
-    def test_consumer_skips_only_remote_activations_and_preserves_busy(self):
-        path=Path(__file__).resolve().parents[2]/'automation/host/k2-native-consumer.py'
-        spec=importlib.util.spec_from_file_location('tiny_guard',path);guard=importlib.util.module_from_spec(spec);spec.loader.exec_module(guard)
-        with tempfile.TemporaryDirectory() as tmp:
-            base=Path(tmp);(base/'requests').mkdir();calls=[]
-            for name,site,operation in [('remote','lords-02','activate'),('ordinary','lords-02','deliver'),('busy','zona-01','deliver')]:
-                (base/'requests'/(name+'.json')).write_text(json.dumps({'request_id':name,'site_id':site,'operation':operation}))
-            def write(p,value):p.parent.mkdir(exist_ok=True);p.write_text(json.dumps(value))
-            queue=SimpleNamespace(разобрать=lambda value:SimpleNamespace(**value),RequestRejected=ValueError,записать_атомарно=write)
-            def perform(request,**kwargs):calls.append(request.request_id);return {'status':'busy' if request.request_id=='busy' else 'ok'}
-            executor=SimpleNamespace(выполнить=perform)
-            registry=SimpleNamespace(resolve=lambda _:SimpleNamespace(runtime={'code_delivery':{'role':'local-ssh-bridge'}}))
-            guard.consume(queue,executor,registry,base)
-            self.assertEqual(set(calls),{'ordinary','busy'});self.assertTrue((base/'requests/remote.json').exists());self.assertTrue((base/'requests/busy.json').exists())
-            self.assertFalse((base/'results/remote.json').exists());self.assertFalse((base/'results/busy.json').exists());self.assertTrue((base/'results/ordinary.json').exists())
