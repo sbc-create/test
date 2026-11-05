@@ -1,0 +1,43 @@
+{
+  "name": "k2-episode-feed",
+  "version": "2026.11.05.1",
+  "ownership": "Shared source component, with exact versioned renderer variants; not site overlays.",
+  "variant_reason": "Deployed pinned renderer baselines differ. Preserve exact accepted changes and existing domain behavior; do not normalize the cores.",
+  "variants": [
+    {
+      "domain": "lordserials22.info",
+      "site_id": "lords-05",
+      "upstream_site_commit": "05d467848639bbf3ca46a37a560e8e5b653f339b",
+      "base_sha256": "2690266eec4fc4b9ae0babdeb3af23b3153d4040d96a2c1081ae2aaa6659cda6",
+      "source_path": "variants/lordserials22.info/src/lords-frontend.py",
+      "site_path": "src/lords-frontend.py",
+      "sha256": "b08a7b494361609e036dcd867e47465f4c6e3989f487c2b76edcc52be03c8050"
+    },
+    {
+      "domain": "zonafilm.space",
+      "site_id": "zona-01",
+      "upstream_site_commit": "82a07162edde8e3dde0e0a766e5db3dbf8aa8225",
+      "base_sha256": "dd111ee18f2dede8356dc7a2c5bceb7a11be5219f6da76290b960551da7eca29",
+      "source_path": "variants/zonafilm.space/src/lords-frontend.py",
+      "site_path": "src/lords-frontend.py",
+      "sha256": "15bd352cd389871d8391629e4195430080cfec88eea8de197c5215b79672aa41"
+    },
+    {
+      "domain": "zonafilm12.site",
+      "site_id": "zona-03",
+      "upstream_site_commit": "1b61ab0061268cabb99af92bc9958e9e600f1f9e",
+      "base_sha256": "bed95d4737061c49ad126308d32dad9fc2397950cfa93ab03727394ec81078b5",
+      "source_path": "variants/zonafilm12.site/src/lords-frontend.py",
+      "site_path": "src/lords-frontend.py",
+      "sha256": "da7bd6dde7094bb7142c96c7b62cb9b4d7b66c5af0fecd8e13467d094cef2bf2"
+    }
+  ],
+  "site_patch_sha256": {
+    "lordserial33.biz": "ab4ce3d77e6760f5d7cb6c3e6824bf5e1706602431cb9601b7ba19fcc96bb977",
+    "1lordserials1.online": "48a70121759ea3f0d62b19720530b3ff07d0621940d3d314ae2539ce6f89a0d4",
+    "lordserials22.info": "860a667da5577bd1319d855179d1bb30addc58b3a2c5ac11e237dbda2e9396dd",
+    "zonafilm.space": "6a0a918fcb519fab61b55eee978b395597be64b111b2d9ab1c72f469f448d379",
+    "zonafilm12.site": "ad7b5d4d7e539ac29484bc4ff31689ec9a5439111622790ac72bc3c6877ff328",
+    "zonafilm.cc": "25f5c7998f5800c1d0d04a5558289b835b19e80b9faa5616601f5c13ce561405"
+  }
+}
