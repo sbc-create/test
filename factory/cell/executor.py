@@ -44,6 +44,14 @@ class ExecutorError(Exception):
     """Операция не выполнена. Витрина не тронута либо возвращена."""
 
 
+class SiteBusy(ExecutorError):
+    """Live native owner; the queued request must remain untouched."""
+
+
+class BridgeUncertain(ExecutorError):
+    """Target may have committed; retain same queued request for reconciliation."""
+
+
 def _сейчас() -> str:
     return datetime.now(timezone.utc).isoformat()
 
@@ -67,7 +75,7 @@ class Замок:
             self.путь.unlink()
 
 
-def взять_замок(site_id: str, *, база: Path, операция: str) -> Замок:
+def _взять_замок_под_guard(site_id: str, *, база: Path, операция: str) -> Замок:
     """Живая блокировка на сайт. Возраст не является разрешением на захват."""
     каталог = база / "locks"
     каталог.mkdir(parents=True, exist_ok=True)
@@ -92,7 +100,7 @@ def взять_замок(site_id: str, *, база: Path, операция: str
             except OSError:
                 живой = False
         if живой:
-            raise ExecutorError(
+            raise SiteBusy(
                 f"{site_id}: операцию {чужой.get('operation')} держит живой процесс "
                 f"{pid} с {чужой.get('at')}. Ждём его, а не отнимаем")
         if not чужой.get("starttime"):
@@ -105,6 +113,24 @@ def взять_замок(site_id: str, *, база: Path, операция: str
 
     queue.записать_атомарно(файл, мой)
     return Замок(путь=файл, владелец=мой)
+
+
+def взять_замок(site_id: str, *, база: Path, операция: str) -> Замок:
+    import fcntl
+    каталог = база / "locks"
+    каталог.mkdir(parents=True, exist_ok=True)
+    guard = каталог / (site_id + ".guard")
+    fd = os.open(guard, os.O_CREAT | os.O_RDWR | os.O_NOFOLLOW, 0o600)
+    try:
+        fcntl.flock(fd, fcntl.LOCK_EX)
+        return _взять_замок_под_guard(site_id, база=база, операция=операция)
+    finally:
+        os.close(fd)
+
+
+def remote_bridge_required(site_id: str) -> bool:
+    block = (registry.resolve(site_id).runtime or {}).get("code_delivery") or {}
+    return block.get("role") == "local-ssh-bridge"
 
 
 #: Команда владельца, которая единственная создаёт якорь согласия. Путь
@@ -965,35 +991,42 @@ def активировать(заявка: queue.Заявка, *, файл: Path
         queue.отметить(файл, "candidate_ready", {"build_id": build_id})
 
     порт_кандидата = privileged.Площадка.из_реестра(заявка.site_id).candidate_port
-    шаги["switch_route"] = privileged.switch_route(
-        заявка.site_id, порт_кандидата, dry_run=dry_run)
-    if файл.is_file() and not dry_run:
-        queue.отметить(файл, "switched")
+    try:
+        if not dry_run:
+            шаги["rollback_checkpoint"] = privileged.capture_release_state(заявка.site_id)
+        шаги["switch_route"] = privileged.switch_route(
+            заявка.site_id, порт_кандидата, dry_run=dry_run)
+        if файл.is_file() and not dry_run:
+            queue.отметить(файл, "switched")
 
-    шаги["promote"] = privileged.promote(
-        заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
-    повышено = dry_run or (шаги["promote"].get("verify") or {}).get("ok")
-    if not повышено:
-        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
-        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
-                "build_id": build_id}
+        шаги["promote"] = privileged.promote(
+            заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
+        повышено = dry_run or (шаги["promote"].get("verify") or {}).get("ok")
+        if not повышено:
+            шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=dry_run)
+            return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                    "build_id": build_id}
 
-    шаги["verify"] = privileged.verify(заявка.site_id, ожидаемый_build=build_id)
-    if not dry_run and not шаги["verify"].get("ok"):
-        шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
-        return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
-                "build_id": build_id}
-    обработчик = (шаги["promote"] or {}).get("updater") or {}
-    if not dry_run and обработчик.get("declared") and not обработчик.get("ok"):
-        # Витрина уже на новом выпуске и исправна, откатывать её незачем. Но
-        # «выложено» без обработчика на том же коде — неправда, и итог
-        # называет это прямо, а не live_verified.
-        return {"status": "activated", "stage": "updater_failed", "steps": шаги,
-                "build_id": build_id,
-                "error": f"обработчик обновлений не установлен: {обработчик.get('error')}"}
-    return {"status": "dry-run" if dry_run else "activated",
-            "stage": "validated" if dry_run else "live_verified",
-            "steps": шаги, "digest": заявка.digest, "build_id": build_id}
+        шаги["verify"] = privileged.verify(заявка.site_id, ожидаемый_build=build_id)
+        if not dry_run and not шаги["verify"].get("ok"):
+            шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
+            return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                    "build_id": build_id}
+        обработчик = (шаги["promote"] or {}).get("updater") or {}
+        if not dry_run and обработчик.get("declared") and not обработчик.get("ok"):
+            # Код и обработчик должны быть одним выпуском: отказ после
+            # promote восстанавливает прежний current, юниты и маршрут.
+            шаги["rollback"] = privileged.rollback(заявка.site_id, dry_run=False)
+            return {"status": "rolled-back", "stage": "rolled_back", "steps": шаги,
+                    "build_id": build_id,
+                    "error": f"обработчик обновлений не установлен: {обработчик.get('error')}"}
+        return {"status": "dry-run" if dry_run else "activated",
+                "stage": "validated" if dry_run else "live_verified",
+                "steps": шаги, "digest": заявка.digest, "build_id": build_id}
+    except Exception:
+        if not dry_run:
+            privileged.rollback(заявка.site_id, dry_run=False)
+        raise
 
 
 def обновить_данные(заявка: queue.Заявка, *, файл: Path,
@@ -1126,7 +1159,8 @@ def опубликовать_комментарий(заявка: queue.Заяв
             "steps": {"publish_comment": шаг}}
 
 
-def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True) -> dict[str, Any]:
+def выполнить(заявка: queue.Заявка, *, база: Path, dry_run: bool = True,
+              activate_handler=None) -> dict[str, Any]:
     """Одна операция целиком, с журналом переходов."""
     файл = база / "requests" / f"{заявка.request_id}.json"
     результат: dict[str, Any] = {"request_id": заявка.request_id,
@@ -1137,6 +1171,11 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
                                  "started_at": _сейчас()}
     замок = None
     try:
+        bridge = заявка.operation == "activate" and remote_bridge_required(заявка.site_id)
+        if activate_handler is not None and not bridge:
+            raise ExecutorError("activate_handler is only allowed for canonical local-ssh-bridge runtime")
+        if bridge and activate_handler is None:
+            return dict(результат, status="waiting-bridge", finished_at=_сейчас())
         проверено = проверить_заявку(заявка)
         if файл.is_file():
             queue.отметить(файл, "validated", {"remote": проверено["remote"]})
@@ -1153,7 +1192,8 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
             результат["outcome"] = итог
             этап = итог["stage"]
         elif заявка.operation == "activate":
-            итог = активировать(заявка, файл=файл, dry_run=dry_run)
+            handler = activate_handler if bridge else активировать
+            итог = handler(заявка, файл=файл, dry_run=dry_run)
             результат["outcome"] = итог
             этап = итог["stage"]
         elif заявка.operation == "deliver":
@@ -1191,7 +1231,15 @@ def выполнить(заявка: queue.Заявка, *, база: Path, dry_
         # `ok` значит объявить применённым то, что откатили.
         применено = (итог.get("status") in queue.ПРИМЕНЁННЫЕ_ИСХОДЫ
                      if isinstance(итог, dict) else False)
+        if заявка.operation == "activate":
+            применено = применено and этап == "live_verified"
         результат["status"] = "ok" if применено else "failed"
+    except BridgeUncertain as exc:
+        результат["status"] = "reconcile"
+        результат["error"] = str(exc)
+    except SiteBusy as exc:
+        результат["status"] = "busy"
+        результат["error"] = str(exc)
     except (ExecutorError, privileged.PrivilegedRefused, protected.ЗащитаДанных,
             registry.RegistryError) as exc:
         результат["status"] = "rejected"
@@ -1238,6 +1286,9 @@ def обслужить_очередь(*, база: Path | None = None, dry_run: 
             файл.unlink()
             continue
         итог = выполнить(заявка, база=корень, dry_run=dry_run)
+        if итог.get("status") in {"busy", "waiting-bridge", "reconcile"}:
+            итоги.append(итог)
+            continue
         queue.записать_атомарно(корень / "results" / файл.name, итог)
         # Заявка уходит из очереди только после записи результата: обратный
         # порядок терял бы операцию при гибели процесса между двумя шагами.

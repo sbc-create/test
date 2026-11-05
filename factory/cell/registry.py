@@ -18,6 +18,9 @@
 from __future__ import annotations
 
 import json
+import contextlib
+import contextvars
+import stat
 import os
 import re
 from dataclasses import dataclass, field
@@ -233,8 +236,28 @@ def _cell(raw: dict[str, Any]) -> Cell:
     )
 
 
+_projection = contextvars.ContextVar("cell_registry_projection", default=None)
+
+
+@contextlib.contextmanager
+def scoped_projection(path: Path, site_id: str):
+    """A root-sealed one-site projection; never changes canonical registry."""
+    path = Path(path)
+    st = path.lstat()
+    if not stat.S_ISREG(st.st_mode) or st.st_uid != 0 or st.st_mode & 0o222:
+        raise RegistryError("projection must be a read-only root-owned regular file")
+    value = ledger.read(path, default={})
+    if len(value.get("cells", [])) != 1 or value['cells'][0].get('site_id') != site_id:
+        raise RegistryError("projection is not scoped to the requested site")
+    token = _projection.set(path)
+    try:
+        yield
+    finally:
+        _projection.reset(token)
+
+
 def load(path: Path | None = None) -> dict[str, Any]:
-    target = path or registry_path()
+    target = path or _projection.get() or registry_path()
     return ledger.read(target, default={"schema_version": SCHEMA_VERSION, "cells": []})
 
 

@@ -419,6 +419,58 @@
                   "unknown"
                 ],
                 "description": "Чем КОД этой витрины попадает на площадку. `release-queue` — заявка очереди и привилегированный исполнитель: у витрины есть tools/build_release.py. `own-installer` — собственный deploy/install.sh (rsync + юниты + restart) от root, очереди выпусков у витрины нет вовсе. `unknown` — не проверено; разрешением считать любой путь это НЕ является. Измерено 2026-10-05: у an1mego.site и animeg0.site сборщика нет, и отсутствие объявления заставляло проверку выпускаемости требовать от них сборщик, которого у них не будет."
+              },
+              "code_delivery": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "role"
+                ],
+                "properties": {
+                  "role": {
+                    "const": "local-ssh-bridge"
+                  },
+                  "expected_current": {
+                    "type": "string",
+                    "pattern": "^[0-9a-f]{40}$"
+                  },
+                  "profile": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "required": [
+                      "package_sha256",
+                      "cell",
+                      "target"
+                    ],
+                    "properties": {
+                      "package_sha256": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      },
+                      "cell": {
+                        "$ref": "#/properties/cells/items"
+                      },
+                      "target": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "host",
+                          "catalog"
+                        ],
+                        "properties": {
+                          "host": {
+                            "type": "string",
+                            "format": "ipv4"
+                          },
+                          "catalog": {
+                            "type": "string",
+                            "pattern": "^/"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },

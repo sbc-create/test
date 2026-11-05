@@ -327,6 +327,8 @@ def install_release(site_id: str, артефакт: Path, digest: str, *,
 
     имя = (commit or факт.split(":")[1])[:12]
     выпуск = п.releases / имя
+    if not dry_run and выпуск.exists():
+        raise PrivilegedRefused("release directory already exists; reconcile durable receipt, never delete/reinstall it")
     if dry_run:
         with tarfile.open(артефакт) as tf:
             имена = [ч.name for ч in безопасные_члены(tf, выпуск)]
@@ -1001,6 +1003,14 @@ def вернуть_прежнюю(п: Площадка, *, предел: int) ->
     return {"restored": True, "unit": п.previous_unit, "ready": состояние}
 
 
+def capture_release_state(site_id: str, *, path: Path | None = None) -> dict[str, Any]:
+    _нужен_root()
+    from factory.cell import rollback_state
+    return rollback_state.capture(
+        Площадка.из_реестра(site_id, path=path), _каталог_юнитов(),
+        UPSTREAM_КАТАЛОГ, _объявление_обработчика(site_id, path), _systemctl)
+
+
 def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
             ожидаемый_build: str = "", path: Path | None = None) -> dict[str, Any]:
     """Перевести основную службу на выпуск кандидата и вернуть ей трафик.
@@ -1020,6 +1030,11 @@ def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
 
     _нужен_root()
     цель = п.candidate.resolve()
+    from factory.cell import rollback_state
+    checkpoint = rollback_state.STATE_ROOT / (site_id + ".json")
+    existing = json.loads(checkpoint.read_bytes()) if checkpoint.is_file() else {}
+    if existing.get("new_current") != str(цель) or existing.get("old_current") != str(п.current.resolve()):
+        capture_release_state(site_id, path=path)
     врем = п.root / ".current.new"
     if врем.exists() or врем.is_symlink():
         врем.unlink()
@@ -1320,8 +1335,22 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
     _нужен_root()
     # Сначала прежняя служба отвечает, и только потом трафик идёт обратно.
     # Обратный порядок вернул бы посетителей на порт, где уже никого нет.
-    восстановление = вернуть_прежнюю(п, предел=предел)
-    switch_route(site_id, п.port, dry_run=False, path=path)
+    from factory.cell import rollback_state
+    восстановление = rollback_state.restore(
+        п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ, _systemctl)
+    if восстановление is not None:
+        nginx = os.environ.get("SITE_NGINX", "nginx")
+        subprocess.run([nginx, "-t"], capture_output=True, text=True, check=True)
+        subprocess.run([nginx, "-s", "reload"], capture_output=True, text=True, check=True)
+    elif п.current.is_dir():
+        # Candidate failed before promotion: preserve the existing native main.
+        if _systemctl("is-active", "--quiet", п.unit, проверять=False).returncode != 0:
+            _systemctl("restart", п.unit)
+        switch_route(site_id, п.port, dry_run=False, path=path)
+        восстановление = {"current_preserved": str(п.current.resolve())}
+    else:
+        восстановление = вернуть_прежнюю(п, предел=предел)
+        switch_route(site_id, п.port, dry_run=False, path=path)
     _systemctl("stop", п.candidate_unit, проверять=False)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
