@@ -159,8 +159,8 @@ def transact(binding,profile,backend,*,state_root=RECEIPTS):
 
 class NativeBackend:
     """Only trusted native functions; registry projection is root-sealed."""
-    def __init__(self,site_id,source,profile,*,systemctl=privileged._systemctl,request_path=RECEIPTS/'never-request.json', candidate_nonce=None):
-        self.site_id=site_id;self.source=Path(source);self.profile=profile;self.systemctl=systemctl;self.request_path=Path(request_path);self.candidate_nonce=candidate_nonce
+    def __init__(self,site_id,source,profile,*,systemctl=privileged._systemctl,request_path=RECEIPTS/'never-request.json'):
+        self.site_id=site_id;self.source=Path(source);self.profile=profile;self.systemctl=systemctl;self.request_path=Path(request_path)
     def platform(self):return privileged.Площадка.из_реестра(self.site_id)
     def current_record(self):
         p=self.platform()
@@ -191,9 +191,9 @@ class NativeBackend:
         out={'status':'activated','stage':'live_verified','build_id':build,'digest':request.digest,
              'steps':{'reconciled':True}}
         self.verify_replay(request,out)
-        out['steps']['candidate_data']=self.finish_candidate_copy()
         return out
     def preflight(self,request,expected_old,profile):
+        require_candidate_role_support(self.source)
         p=self.platform();runtime=profile['cell']['runtime']
         import ipaddress,subprocess
         expected_host=str(ipaddress.ip_address(profile['target']['host']))
@@ -224,21 +224,15 @@ class NativeBackend:
             raise ValueError('Profile does not bind catalog identity')
     def activate(self,request):
         if self.request_path.exists():raise ValueError('Remote native request path must not exist')
-        from factory.cell import candidate_data
-        if not self.candidate_nonce:raise ValueError('Nonce-bound candidate data required for remote activation')
-        p=self.platform()
-        data=candidate_data.prepare(p.data,self.site_id,self.candidate_nonce,p.account)
-        outcome=executor.активировать(request,файл=self.request_path,dry_run=False,candidate_data=data)
-        outcome.setdefault('steps',{})['candidate_data']=self.finish_candidate_copy()
-        if not self.candidate_stopped():raise ValueError('Candidate still running; copy retained for reconciliation')
+        outcome=executor.активировать(request,файл=self.request_path,dry_run=False,candidate_role_guard=True)
+        if not self.candidate_stopped():raise ValueError('Candidate still running; reconcile before successful activation')
         return outcome
     def recover(self,request):
         p=self.platform()
         if p.candidate.exists() and p.candidate.resolve().name==request.commit[:12]:
             outcome=privileged.rollback(self.site_id,dry_run=False)
-            outcome['candidate_data']=self.finish_candidate_copy()
             return outcome
-        return {'no_live_mutation_detected':True,'candidate_data':self.finish_candidate_copy()}
+        return {'no_live_mutation_detected':True}
 
     def candidate_stopped(self):
         p=self.platform()
@@ -253,6 +247,29 @@ class NativeBackend:
             events=Path('/sys/fs/cgroup')/group.lstrip('/')/'cgroup.events'
             if events.exists() and 'populated 0' not in events.read_text().splitlines():return False
         return True
-    def finish_candidate_copy(self):
-        from factory.cell import candidate_data
-        return candidate_data.cleanup(self.site_id,self.candidate_nonce,stopped=self.candidate_stopped)
+
+
+ROLE_CAPABILITY={'schema':'k2.episode-sync-role/1','environment':'SITE_CELL_ROLE','candidate_value':'candidate','background_episode_sync':False,'authoritative_data':'live'}
+
+
+def require_candidate_role_support(source):
+    import ast
+    source=Path(source)
+    if json.loads((source/'config/episode-sync-role.json').read_bytes())!=ROLE_CAPABILITY:
+        raise ValueError('Accepted source must declare candidate sync suppression with authoritative live data')
+    pins=json.loads((source/'pins.lock.json').read_bytes())
+    meta=(pins.get('pins') or {}).get('episode_sync_component') or (pins.get('files') or {}).get('episode_sync.py') or {}
+    relative=Path(meta.get('site_path') or 'src/episode_sync.py')
+    if relative.is_absolute() or '..' in relative.parts:raise ValueError('Unsafe declared episode sync path')
+    content=(source/relative).read_bytes()
+    if hashlib.sha256(content).hexdigest()!=meta.get('sha256'):raise ValueError('Declared sync guard does not match pinned source bytes')
+    function=next((node for node in ast.parse(content).body if isinstance(node,ast.FunctionDef) and node.name=='запустить'),None)
+    body=function.body if function else []
+    if body and isinstance(body[0],ast.Expr) and isinstance(body[0].value,ast.Constant) and isinstance(body[0].value.value,str):body=body[1:]
+    test=ast.parse('os.environ.get("SITE_CELL_ROLE") == "candidate"',mode='eval').body
+    if not body or not isinstance(body[0],ast.If) or ast.dump(body[0].test)!=ast.dump(test):
+        raise ValueError('Pinned sync does not guard candidate before background startup')
+    guard=body[0].body
+    if not guard or not isinstance(guard[-1],ast.Return) or not isinstance(guard[-1].value,ast.Constant) or guard[-1].value.value is not False:
+        raise ValueError('Pinned candidate sync guard must return False')
+    return {'schema':ROLE_CAPABILITY['schema'],'sync_sha256':meta['sha256'],'data':'live'}

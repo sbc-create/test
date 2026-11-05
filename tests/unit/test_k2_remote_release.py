@@ -412,63 +412,6 @@ class GatewayRoundTrip(NativeControl):
                 self.assertEqual(child.wait(timeout=5),0,child.stderr.read())
         self.assertTrue(self.file.exists());self.assertTrue(file2.exists());self.assertFalse((self.root/'results').exists())
 
-class CandidateCopy(unittest.TestCase):
-    def setUp(self):
-        import pwd
-        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.root.chmod(0o711)
-        self.live=self.root/'live';self.live.mkdir();(self.live/'lords-02-catalog.json').write_text('{"public":true}')
-        (self.live/'editorial-overrides.json').write_text('{"protected":"keep"}')
-        self.copy_root=self.root/'copies';self.account=pwd.getpwuid(os.getuid()).pw_name
-    def prepare(self,**kwargs):
-        from factory.cell.candidate_data import prepare
-        return prepare(self.live,'lords-02','a'*64,self.account,root=self.copy_root,**kwargs)
-    def test_writes_are_private_and_uncertain_stop_retains_copy(self):
-        from factory.cell.candidate_data import cleanup
-        before={p.name:p.read_bytes() for p in self.live.iterdir()};copy=self.prepare()
-        (copy/'lords-02-catalog.json').write_text('{"candidate_only":true}')
-        (copy/'lords-02-num-correction.json').write_text('new nums')
-        self.assertEqual(before,{p.name:p.read_bytes() for p in self.live.iterdir()})
-        out=cleanup('lords-02','a'*64,stopped=lambda:False,root=self.copy_root)
-        self.assertIn('copy_retained',out);self.assertTrue(copy.is_dir())
-        out=cleanup('lords-02','a'*64,stopped=lambda:True,root=self.copy_root)
-        self.assertTrue(out['copy_removed_after_candidate_stopped']);self.assertTrue(self.live.is_dir())
-    def test_symlink_special_and_low_disk_fail_before_candidate(self):
-        link=self.live/'escape';link.symlink_to('/etc')
-        with self.assertRaises(ValueError):self.prepare()
-        link.unlink();os.mkfifo(link)
-        with self.assertRaises(ValueError):self.prepare()
-        link.unlink()
-        with self.assertRaises(ValueError):self.prepare(disk_free=lambda _:0)
-        self.assertFalse((self.copy_root/'lords-02'/('a'*64)).exists())
-    def test_same_nonce_never_overwrites_private_or_live_data(self):
-        copy=self.prepare();(copy/'editorial-overrides.json').write_text('candidate-only')
-        with self.assertRaises(ValueError):self.prepare()
-        self.assertEqual((copy/'editorial-overrides.json').read_text(),'candidate-only')
-        self.assertEqual((self.live/'editorial-overrides.json').read_text(),'{"protected":"keep"}')
-    def test_original_ownership_modes_and_private_traversal_preserved(self):
-        import pwd,stat
-        web=pwd.getpwnam('nobody')
-        self.live.chmod(0o755);os.chown(self.live,web.pw_uid,web.pw_gid)
-        private=self.live/'root-backup.json';private.write_text('must not become public');private.chmod(0o600)
-        directory=self.live/'root-private';directory.mkdir(mode=0o700);(directory/'secret').write_text('private')
-        executable=self.live/'special';executable.write_text('fixture');executable.chmod(0o6755)
-        copy=self.prepare()
-        self.assertEqual(copy.stat().st_uid,self.live.stat().st_uid);self.assertEqual(stat.S_IMODE(copy.stat().st_mode),0o755)
-        self.assertEqual((copy/'root-backup.json').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy/'root-backup.json').stat().st_mode),0o600)
-        self.assertEqual((copy/'root-private').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy/'root-private').stat().st_mode),0o700)
-        self.assertEqual(stat.S_IMODE((copy/'special').stat().st_mode),0o755)
-        def unprivileged():os.setgroups([]);os.setgid(web.pw_gid);os.setuid(web.pw_uid)
-        for path in [private,copy/'root-backup.json',directory/'secret',copy/'root-private/secret']:
-            result=subprocess.run(['/usr/bin/python3','-c','from pathlib import Path;import sys;Path(sys.argv[1]).read_bytes()',str(path)],capture_output=True,preexec_fn=unprivileged)
-            self.assertNotEqual(result.returncode,0)
-        self.assertEqual((copy.parent/'copy.json').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy.parent/'copy.json').stat().st_mode),0o400)
-    def test_cleanup_symlink_cannot_escape_owned_copy(self):
-        from factory.cell.candidate_data import cleanup
-        copy=self.prepare();outside=self.root/'outside';outside.mkdir();(outside/'keep').write_text('protected')
-        (copy/'escape').symlink_to(outside,target_is_directory=True)
-        cleanup('lords-02','a'*64,stopped=lambda:True,root=self.copy_root)
-        self.assertEqual((outside/'keep').read_text(),'protected')
-
 
 class CredentialRole(unittest.TestCase):
     def test_relay_uses_pinned_transient_native_credential_role_without_pty(self):
@@ -515,7 +458,7 @@ class CandidateStopProof(unittest.TestCase):
             path=Path(tmp)/'registry.json';path.write_text(json.dumps({'cells':[profile()['cell']]}));path.chmod(0o400)
             values={'ActiveState':'inactive','SubState':'dead','MainPID':'0','ControlPID':'0','ControlGroup':''}
             def ctl(*args,**kw):return SimpleNamespace(returncode=0,stdout='\n'.join(k+'='+v for k,v in values.items()))
-            backend=NativeBackend('lords-02','/unused',profile(),systemctl=ctl,candidate_nonce='a'*64)
+            backend=NativeBackend('lords-02','/unused',profile(),systemctl=ctl)
             with registry.scoped_projection(path,'lords-02'):
                 self.assertTrue(backend.candidate_stopped())
                 for key,value in [('ActiveState','activating'),('SubState','auto-restart'),('MainPID','123'),('ControlPID','124')]:
@@ -577,3 +520,25 @@ class GatewayRoleRefusal(GatewayRoundTrip):
         before=self.file.read_bytes();child=self.process();result=read_packet(child.stdout)
         self.assertEqual(child.wait(timeout=5),0,child.stderr.read());self.assertEqual(result['result']['status'],'rejected')
         self.assertEqual(self.file.read_bytes(),before);self.assertFalse((self.root/'results').exists())
+
+class AuthoritativeCandidateRole(unittest.TestCase):
+    def test_candidate_only_unit_role_with_live_data(self):
+        main=privileged.ЮНИТ_ШАБЛОН.format(domain='fixture.invalid',site_id='lords-02',account='nobody',link='/srv/fixture/current',data='/srv/fixture/data',port=9111)
+        candidate=privileged.candidate_unit_text(main)
+        self.assertNotIn('SITE_CELL_ROLE',main);self.assertIn('Environment=SITE_CELL_ROLE=candidate\n',candidate)
+        self.assertIn('--data-dir /srv/fixture/data',candidate);self.assertIn('ReadWritePaths=/srv/fixture/data',candidate)
+    def test_declared_pinned_guard_required_without_executing_source(self):
+        from factory.cell.remote_apply import ROLE_CAPABILITY,require_candidate_role_support
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);(root/'config').mkdir();(root/'src').mkdir()
+            module=root/'src/episode_sync.py'
+            content=b'raise RuntimeError("must never execute as root")\nimport os\ndef \xd0\xb7\xd0\xb0\xd0\xbf\xd1\x83\xd1\x81\xd1\x82\xd0\xb8\xd1\x82\xd1\x8c(runtime):\n    if os.environ.get("SITE_CELL_ROLE") == "candidate":\n        return False\n    return True\n'
+            module.write_bytes(content)
+            pins=root/'pins.lock.json';pins.write_text(json.dumps({'files':{'episode_sync.py':{'sha256':hashlib.sha256(content).hexdigest()}}}))
+            with self.assertRaises(FileNotFoundError):require_candidate_role_support(root)
+            cap=root/'config/episode-sync-role.json';cap.write_text(json.dumps(ROLE_CAPABILITY))
+            self.assertEqual(require_candidate_role_support(root)['data'],'live')
+            module.write_bytes(content.replace(b'return False',b'return True'))
+            with self.assertRaises(ValueError):require_candidate_role_support(root)
+            pins.write_text(json.dumps({'files':{'episode_sync.py':{'sha256':hashlib.sha256(module.read_bytes()).hexdigest()}}}))
+            with self.assertRaises(ValueError):require_candidate_role_support(root)

@@ -61,7 +61,7 @@ def main(profile_path,package_path):
         os.chmod(source,0o555);os.chmod(source.parent,0o711)
         cell=json.loads(json.dumps(profile['cell']));cell['repo']['path']=str(source)
         projection=root/'projection.json';projection.write_text(json.dumps({'schema_version':'1.0','cells':[cell]}));projection.chmod(0o400)
-        backend=NativeBackend(native_request.site_id,source,profile,request_path=root/'.no-target-queue-request',candidate_nonce=binding['nonce'])
+        backend=NativeBackend(native_request.site_id,source,profile,request_path=root/'.no-target-queue-request')
         with registry.scoped_projection(projection,native_request.site_id),redirect_stdout(sys.stderr):
             outcome=transact(binding,profile,backend)
         # Receipt is fsynced by transact BEFORE any ACK is written.

@@ -890,7 +890,7 @@ def _засеять_хранилище(site_id: str, *, dry_run: bool) -> dict[s
 
 
 def активировать(заявка: queue.Заявка, *, файл: Path,
-                 dry_run: bool = True, candidate_data: Path | None = None) -> dict[str, Any]:
+                 dry_run: bool = True, candidate_role_guard: bool = False) -> dict[str, Any]:
     """Выпуск без остановки работающего сайта и без кода репозитория от root.
 
     Порядок проверен на стенде с настоящими systemd и nginx:
@@ -979,9 +979,9 @@ def активировать(заявка: queue.Заявка, *, файл: Path
                     f"выложенный код — {план.get('причина')}")
 
     шаги["warm_up"] = privileged.warm_up(
-        заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id, данные=candidate_data)
-    if candidate_data is not None and not dry_run:
-        шаги["candidate_data_identity"] = privileged.verify_candidate_data(заявка.site_id, candidate_data)
+        заявка.site_id, dry_run=dry_run, ожидаемый_build=build_id)
+    if candidate_role_guard and not dry_run:
+        шаги["candidate_role"] = privileged.verify_candidate_role(заявка.site_id)
     прогрет = dry_run or (шаги["warm_up"].get("ready") or {}).get("ready")
     проверен = dry_run or (шаги["warm_up"].get("verify") or {}).get("ok")
     if not (прогрет and проверен):

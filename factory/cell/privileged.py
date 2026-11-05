@@ -1411,15 +1411,21 @@ def порт_кандидата(основной: int) -> int:
     return основной + 1000
 
 
-def verify_candidate_data(site_id: str, data: Path) -> dict[str, Any]:
+def verify_candidate_role(site_id: str) -> dict[str, Any]:
     п = Площадка.из_реестра(site_id)
     pid = int(_systemctl("show", п.candidate_unit, "-p", "MainPID", "--value").stdout.strip())
     if pid <= 0:raise PrivilegedRefused("Candidate has no process for data identity proof")
     env = dict(part.split(b"=", 1) for part in Path(f"/proc/{pid}/environ").read_bytes().split(b"\0") if b"=" in part)
-    expected = str(Path(data) / (site_id + "-catalog.json"))
+    expected = str(п.data / (site_id + "-catalog.json"))
     if env.get(b"LORDS_CATALOG", b"").decode() != expected:
-        raise PrivilegedRefused("Candidate process does not use its private catalog copy")
-    return {"catalog": expected, "pid": pid, "private_data_verified": True}
+        raise PrivilegedRefused("Candidate process does not use authoritative live catalog")
+    if env.get(b"SITE_CELL_ROLE") != b"candidate":
+        raise PrivilegedRefused("Candidate process is missing the background-sync suppression role")
+    return {"catalog": expected, "pid": pid, "candidate_role_verified": True}
+
+
+def candidate_unit_text(text: str) -> str:
+    return text.replace('[Service]\n','[Service]\nEnvironment=SITE_CELL_ROLE=candidate\n',1)
 
 
 def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
@@ -1439,6 +1445,7 @@ def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,
         domain=runtime.размещение(site_id, path=path).domain, site_id=site_id,
         account=п.account, link=п.candidate, data=данные or п.data,
         port=кандидат)
+    текст = candidate_unit_text(текст)
     if dry_run:
         return {"operation": "warm_up", "site_id": site_id, "dry_run": True,
                 "candidate_unit": юнит, "candidate_port": кандидат}
