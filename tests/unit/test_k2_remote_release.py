@@ -445,6 +445,23 @@ class CandidateCopy(unittest.TestCase):
         with self.assertRaises(ValueError):self.prepare()
         self.assertEqual((copy/'editorial-overrides.json').read_text(),'candidate-only')
         self.assertEqual((self.live/'editorial-overrides.json').read_text(),'{"protected":"keep"}')
+    def test_original_ownership_modes_and_private_traversal_preserved(self):
+        import pwd,stat
+        web=pwd.getpwnam('nobody')
+        self.live.chmod(0o755);os.chown(self.live,web.pw_uid,web.pw_gid)
+        private=self.live/'root-backup.json';private.write_text('must not become public');private.chmod(0o600)
+        directory=self.live/'root-private';directory.mkdir(mode=0o700);(directory/'secret').write_text('private')
+        executable=self.live/'special';executable.write_text('fixture');executable.chmod(0o6755)
+        copy=self.prepare()
+        self.assertEqual(copy.stat().st_uid,self.live.stat().st_uid);self.assertEqual(stat.S_IMODE(copy.stat().st_mode),0o755)
+        self.assertEqual((copy/'root-backup.json').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy/'root-backup.json').stat().st_mode),0o600)
+        self.assertEqual((copy/'root-private').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy/'root-private').stat().st_mode),0o700)
+        self.assertEqual(stat.S_IMODE((copy/'special').stat().st_mode),0o755)
+        def unprivileged():os.setgroups([]);os.setgid(web.pw_gid);os.setuid(web.pw_uid)
+        for path in [private,copy/'root-backup.json',directory/'secret',copy/'root-private/secret']:
+            result=subprocess.run(['/usr/bin/python3','-c','from pathlib import Path;import sys;Path(sys.argv[1]).read_bytes()',str(path)],capture_output=True,preexec_fn=unprivileged)
+            self.assertNotEqual(result.returncode,0)
+        self.assertEqual((copy.parent/'copy.json').stat().st_uid,0);self.assertEqual(stat.S_IMODE((copy.parent/'copy.json').stat().st_mode),0o400)
     def test_cleanup_symlink_cannot_escape_owned_copy(self):
         from factory.cell.candidate_data import cleanup
         copy=self.prepare();outside=self.root/'outside';outside.mkdir();(outside/'keep').write_text('protected')

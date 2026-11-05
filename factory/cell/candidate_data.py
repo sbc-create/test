@@ -72,13 +72,14 @@ def prepare(source,site_id,nonce,account,*,root=ROOT,disk_free=None):
     if parent.exists() or parent.is_symlink():raise ValueError('Candidate copy already exists; reconcile transaction instead of overwrite')
     fd=os.open(source,os.O_RDONLY|os.O_DIRECTORY|os.O_NOFOLLOW)
     try:
-        entries=inventory(fd,os.fstat(fd).st_dev)
+        live_root=os.fstat(fd)
+        entries=inventory(fd,live_root.st_dev)
         total=sum(st.st_size for _,st in entries if stat.S_ISREG(st.st_mode))
         if total>MAX_BYTES:raise ValueError('Candidate data exceeds bounded copy size')
         available=disk_free(parent.parent) if disk_free else shutil.disk_usage(parent.parent).free
         if available<total+256*1024*1024:raise ValueError('Insufficient free space for private candidate copy and reserve')
         parent.mkdir(mode=0o711);data=parent/'data';data.mkdir(mode=0o700)
-        owner=pwd.getpwnam(account)
+        pwd.getpwnam(account)  # Validate declared runtime account without granting it extra access.
         for parts,before in entries:
             target=data.joinpath(*parts)
             if stat.S_ISDIR(before.st_mode):target.mkdir(mode=0o700)
@@ -87,6 +88,8 @@ def prepare(source,site_id,nonce,account,*,root=ROOT,disk_free=None):
                 with os.fdopen(incoming,'rb') as stream,target.open('xb') as out:
                     if mount_id(stream.fileno())!=mount_id(fd):raise ValueError('Mounted candidate input file forbidden')
                     actual=os.fstat(stream.fileno())
+                    if (actual.st_uid,actual.st_gid,stat.S_IMODE(actual.st_mode))!=(before.st_uid,before.st_gid,stat.S_IMODE(before.st_mode)):
+                        raise ValueError('Live data access permissions changed before copy')
                     if (actual.st_dev,actual.st_ino,actual.st_size)!=(before.st_dev,before.st_ino,before.st_size):
                         raise ValueError('Live data changed before copy; candidate not started')
                     copied=0
@@ -102,8 +105,12 @@ def prepare(source,site_id,nonce,account,*,root=ROOT,disk_free=None):
         # Root-owned marker lives outside the account-writable copy.
         marker=parent/'copy.json';atomic(marker,(json.dumps({'site_id':site_id,'nonce':nonce,'source':str(source),'bytes':total})+'\n').encode(),0o400)
         # Keep the entire tree inaccessible to the web account until complete.
-        for parts,_ in entries:os.chown(data.joinpath(*parts),owner.pw_uid,owner.pw_gid)
-        os.chown(data,owner.pw_uid,owner.pw_gid)
+        for parts,original in reversed(entries):
+            copied=data.joinpath(*parts)
+            os.chown(copied,original.st_uid,original.st_gid)
+            copied.chmod(stat.S_IMODE(original.st_mode) & ~(stat.S_ISUID|stat.S_ISGID))
+        os.chown(data,live_root.st_uid,live_root.st_gid)
+        data.chmod(stat.S_IMODE(live_root.st_mode) & ~(stat.S_ISUID|stat.S_ISGID))
         return data
     finally:os.close(fd)
 
