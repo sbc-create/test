@@ -1346,6 +1346,8 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
     saved = json.loads(checkpoint.read_bytes()) if checkpoint.is_file() else {}
     applicable = saved.get("new_current") == str(п.candidate.resolve())
     if applicable:
+        if saved.get("site_id") != site_id or str(п.current.resolve()) not in (saved.get("old_current"), saved.get("new_current")):
+            raise PrivilegedRefused("Rollback identity/current changed; no route mutation permitted")
         # A post-promote failure may arrive after promote stopped the candidate.
         # Re-establish its verified route before restarting the previous main.
         if _systemctl("is-active", "--quiet", п.candidate_unit, проверять=False).returncode != 0:
