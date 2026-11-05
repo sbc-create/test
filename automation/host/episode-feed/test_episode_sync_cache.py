@@ -106,3 +106,20 @@ class CacheTests(unittest.TestCase):
 
 
 if __name__=='__main__':unittest.main()
+
+
+class CandidateRoleTests(unittest.TestCase):
+    def test_candidate_returns_before_runtime_access_or_thread(self):
+        import contextlib,io
+        for module in MODULES:
+            output=io.StringIO()
+            with patch.dict(module.os.environ,{'SITE_CELL_ROLE':'candidate'}),patch.object(module.threading,'Thread',side_effect=AssertionError('candidate must not start thread')),contextlib.redirect_stdout(output):
+                self.assertFalse(module.запустить(object()))
+            self.assertIn('SITE_CELL_ROLE=candidate',output.getvalue())
+    def test_main_and_unset_keep_existing_start_behavior(self):
+        from types import SimpleNamespace
+        runtime=SimpleNamespace(ПЛЕЕР={'publisher_id':'fixture','source_mode':'provider-id'})
+        for module in MODULES:
+            for role in ['main','']:
+                with patch.dict(module.os.environ,{'SITE_CELL_ROLE':role,'LORDS_SITE_HOST':'fixture.invalid'}),patch.object(module.threading,'Thread') as thread:
+                    self.assertTrue(module.запустить(runtime));thread.return_value.start.assert_called_once()

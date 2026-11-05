@@ -1,0 +1,7 @@
+{
+  "schema": "k2.episode-sync-role/1",
+  "environment": "SITE_CELL_ROLE",
+  "candidate_value": "candidate",
+  "background_episode_sync": false,
+  "authoritative_data": "live"
+}

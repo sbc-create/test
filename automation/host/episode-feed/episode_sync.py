@@ -857,6 +857,10 @@ def запустить(рантайм) -> bool:
     знает единственный ключ, и спрашивать по остальным значило бы судить о
     доступности по источнику, которого на странице не будет.
     """
+    if os.environ.get("SITE_CELL_ROLE") == "candidate":
+        print("[nova] согласование не заведено: SITE_CELL_ROLE=candidate; "
+              "фоновое согласование выполняет основная служба", flush=True)
+        return False
     домен = (os.environ.get("LORDS_SITE_HOST")
              or os.environ.get("ANIMEDIA_SITE_HOST")
              or os.environ.get("ANIMEGO_SITE_HOST") or "").strip()
