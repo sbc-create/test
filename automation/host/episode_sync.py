@@ -420,6 +420,52 @@ def _состав(деталь: dict) -> list:
     return итог
 
 
+def _подтверждённые_серии(рядом: Path) -> set:
+    """Read at most 8 MiB from the SAME source cache; never write a cue.
+
+    Inspect at most 200 confirmation records. Current detail membership is
+    checked by слои, exactly as for the existing legacy updates-feed slugs.
+    """
+    from datetime import datetime, timezone
+
+    suffix = "-details.json"
+    if not рядом.name.endswith(suffix):
+        return set()
+    путь = рядом.with_name(рядом.name[:-len(suffix)] + "-new-series.json")
+    try:
+        with путь.open("rb") as поток:
+            raw = поток.read(8 * 1024 * 1024 + 1)
+        if len(raw) > 8 * 1024 * 1024:
+            return set()
+        cache = json.loads(raw)
+        if not isinstance(cache, dict) or cache.get("schema") != "k2.episode-feed/1":
+            return set()
+        records = cache.get("confirmed_episode_slugs")
+        if not isinstance(records, list):
+            return set()
+        сейчас = datetime.fromtimestamp(time.time(), timezone.utc)
+    except (OSError, ValueError, TypeError, OverflowError, RecursionError):
+        return set()
+    slugs = set()
+    for record in records[:200]:
+        if not isinstance(record, dict):
+            continue
+        slug, observed = record.get("slug"), record.get("source_observed_at")
+        if not isinstance(slug, str) or not slug.strip() or not isinstance(observed, str):
+            continue
+        try:
+            stamp = datetime.fromisoformat(observed.replace("Z", "+00:00"))
+            if stamp.utcoffset() is None:
+                continue
+            stamp = stamp.astimezone(timezone.utc)
+            age = (сейчас - stamp).total_seconds()
+        except (ValueError, TypeError, OverflowError):
+            continue
+        if 0 <= age <= 86400:
+            slugs.add(slug)
+    return slugs
+
+
 def лента_изменений(рядом: Path) -> set:
     """Слаги из ленты изменений источника, если конвейер её доставил.
 
@@ -432,17 +478,18 @@ def лента_изменений(рядом: Path) -> set:
     Нет ленты — ничего не меняется: слои работают как раньше. Лента старше
     суток не берётся: она описывает окно, которое давно закрыто снимком.
     """
+    подтверждённые = _подтверждённые_серии(рядом)
     путь = рядом.with_name("updates-feed.json")
     try:
         d = json.loads(путь.read_text(encoding="utf-8"))
         if d.get("schema") != "nova.updates-feed/1":
-            return set()
+            return подтверждённые
         собрана = time.mktime(time.strptime(str(d.get("built_at")), "%Y-%m-%dT%H:%M:%SZ"))
         if time.time() - собрана + time.timezone > 86400:
-            return set()
-        return {str(з.get("slug") or "") for з in (d.get("items") or []) if з.get("slug")}
+            return подтверждённые
+        return {str(з.get("slug") or "") for з in (d.get("items") or []) if з.get("slug")} | подтверждённые
     except (OSError, ValueError, TypeError, KeyError):
-        return set()
+        return подтверждённые
 
 
 def обещание_не_сошлось(сезоны: list, помнили: dict) -> bool:

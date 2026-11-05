@@ -1,6 +1,6 @@
 {
   "name": "k2-episode-feed",
-  "version": "2026.11.05.2",
+  "version": "2026.11.05.3",
   "ownership": "Shared source component, with exact versioned renderer variants; not site overlays.",
   "variant_reason": "Deployed pinned renderer baselines differ. Preserve exact accepted changes and existing domain behavior; do not normalize the cores.",
   "variants": [
@@ -44,5 +44,18 @@
     "Always use matched canonical catalog URL; ignore episode_url.",
     "Compact domain-styled Lords cards.",
     "Fail closed on UTC conversion overflow."
-  ]
+  ],
+  "core_task": "K2-EPISODE-FEED-CORE-20261105",
+  "confirmation_cache": {
+    "schema": "k2.episode-feed/1",
+    "field": "confirmed_episode_slugs",
+    "read_limit_bytes": 8388608,
+    "record_limit": 200,
+    "max_age_seconds": 86400,
+    "aware_dates_only": true,
+    "future_dates": false,
+    "legacy_behavior": "union with existing updates-feed; unchanged when cache absent/invalid",
+    "writer": "none; read same source cache only",
+    "canonical_source": "automation/host/episode_sync.py"
+  }
 }
