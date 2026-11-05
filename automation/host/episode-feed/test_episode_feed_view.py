@@ -80,11 +80,18 @@ class FeedTests(unittest.TestCase):
             self.catalog[0]['url'] = url
             self.assertEqual(self.select(), [])
 
-    def test_explicit_relative_episode_url(self):
+    def test_event_urls_never_override_matched_catalog(self):
         row = self.select([dict(self.event, episode_url='/watch/2?a=1&b=2')])[0]
-        self.assertIn('href="/watch/2?a=1&amp;b=2"', render_section([row]))
+        self.assertNotIn('episode_url', row)
+        self.assertIn('href="/series/a"', render_section([row]))
+        self.assertIn('href="/series/a"', render_section([dict(row, episode_url='/title/other/')]))
         row = self.select([dict(self.event, episode_url='https://evil.test/2')])[0]
         self.assertNotIn('episode_url', row)
+
+    def test_utc_conversion_underflow_fails_closed(self):
+        event = dict(self.event, observedAt='0001-01-01T00:00:00+01:00')
+        self.assertEqual(self.select([event]), [])
+        self.assertNotIn('<li', render_section([event]))
 
     def test_equal_timestamp_stable(self):
         rows = self.select([self.event, dict(self.event, episode=9), dict(self.event, titleId=B)])

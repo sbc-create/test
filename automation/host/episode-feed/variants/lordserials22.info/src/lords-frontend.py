@@ -5610,7 +5610,7 @@ class ВидЛордс(Вид):
                 полосы.append(полоса_ленты)
 
         if episode_rows:
-            полосы.append(render_rows(episode_rows, style='lords'))
+            полосы.append(render_rows(episode_rows, style='lords05', grid_class=_лорды_класс_сетки('grid')))
         дизайн = ДИЗАЙН_ID
         if дизайн == "lords-series-feed-v2":
             # Series feed: series/updates first. No "ongoing" claim without provenance.

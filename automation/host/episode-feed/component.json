@@ -1,6 +1,6 @@
 {
   "name": "k2-episode-feed",
-  "version": "2026.11.05.1",
+  "version": "2026.11.05.2",
   "ownership": "Shared source component, with exact versioned renderer variants; not site overlays.",
   "variant_reason": "Deployed pinned renderer baselines differ. Preserve exact accepted changes and existing domain behavior; do not normalize the cores.",
   "variants": [
@@ -11,7 +11,7 @@
       "base_sha256": "2690266eec4fc4b9ae0babdeb3af23b3153d4040d96a2c1081ae2aaa6659cda6",
       "source_path": "variants/lordserials22.info/src/lords-frontend.py",
       "site_path": "src/lords-frontend.py",
-      "sha256": "b08a7b494361609e036dcd867e47465f4c6e3989f487c2b76edcc52be03c8050"
+      "sha256": "f687ad403c6d7ac79af717c0ae450bcea20a5ab269ed7fb119f269b99e69a40c"
     },
     {
       "domain": "zonafilm.space",
@@ -33,11 +33,16 @@
     }
   ],
   "site_patch_sha256": {
-    "lordserial33.biz": "ab4ce3d77e6760f5d7cb6c3e6824bf5e1706602431cb9601b7ba19fcc96bb977",
-    "1lordserials1.online": "48a70121759ea3f0d62b19720530b3ff07d0621940d3d314ae2539ce6f89a0d4",
-    "lordserials22.info": "860a667da5577bd1319d855179d1bb30addc58b3a2c5ac11e237dbda2e9396dd",
-    "zonafilm.space": "6a0a918fcb519fab61b55eee978b395597be64b111b2d9ab1c72f469f448d379",
-    "zonafilm12.site": "ad7b5d4d7e539ac29484bc4ff31689ec9a5439111622790ac72bc3c6877ff328",
-    "zonafilm.cc": "25f5c7998f5800c1d0d04a5558289b835b19e80b9faa5616601f5c13ce561405"
-  }
+    "lordserial33.biz": "ffc38361804991edadc556a2aac3c7b9278bb31209b9e398e7d0e81392174040",
+    "1lordserials1.online": "2573c10b5f746ea5bba2cd7b391c68113961a13cb57f4747581ba458ae2828a1",
+    "lordserials22.info": "54abee10d32b35ea2e8a43d8fbd39244c8d51977654a1e920ac2628b6ca0fc31",
+    "zonafilm.space": "d1fdc1d3f13132ecd2e0252c164cbd0d4eacefc4df05a8565d9df1dd67062efc",
+    "zonafilm12.site": "1aabaea6a15cf6621942283bd22234955b10e22ad6ce77efc0554c66f1a21062",
+    "zonafilm.cc": "27a71aa1a8d5c56745068608d7c04504c874eaf48618f61b4cb1744033f030f0"
+  },
+  "review_fixes": [
+    "Always use matched canonical catalog URL; ignore episode_url.",
+    "Compact domain-styled Lords cards.",
+    "Fail closed on UTC conversion overflow."
+  ]
 }

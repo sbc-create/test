@@ -78,7 +78,7 @@ def load_rows(view, runtime, site_id, catalog, *, eligible=None,
     return [dict(row, slug=slugs[row['titleId']]) for row in rows]
 
 
-def render_rows(rows, *, style='generic', heading='Новые серии'):
+def render_rows(rows, *, style='generic', heading='Новые серии', grid_class=None):
     """Reuse existing structural CSS classes; add no CSS or JavaScript.
 
     Inputs are selected rows from load_rows, not unvalidated watcher payloads.
@@ -86,12 +86,13 @@ def render_rows(rows, *, style='generic', heading='Новые серии'):
     """
     if not rows:
         return ''
-    if style not in ('lords', 'zona', 'zona-cc'):
+    lords = style in ('lords', 'lords02', 'lords03', 'lords05')
+    if not lords and style not in ('zona', 'zona-cc'):
         return render_section(rows, heading)
     esc = lambda value: escape(str(value), quote=True)
     cards = []
     for row in rows:
-        url = _url(row.get('episode_url'), relative=True) or _url(row.get('url'))
+        url = _url(row.get('url'))
         poster = _url(row.get('poster'))
         if (not url or _time(row.get('observedAt')) is None
                 or not _positive(row.get('season')) or not _positive(row.get('episode'))):
@@ -102,11 +103,14 @@ def render_rows(rows, *, style='generic', heading='Новые серии'):
         observed = ('<time datetime="' + esc(row['observedAt']) + '">'
                     + 'Обнаружено у источника: ' + esc(local) + ' МСК</time>')
         image = ('<img src="' + esc(poster) + '" alt="" loading="lazy" width="400" height="600">') if poster else ''
-        if style == 'lords':
-            cards.append('<a class="c" href="' + esc(url) + '"><span class="c__p">'
+        if lords:
+            meta_class = 'c__meta' if style in ('lords', 'lords02') else 'c__meta c__y'
+            eps_class = 'c__eps' if style in ('lords', 'lords02') else 'c__eps c__badge c__badge--meta'
+            cards.append('<a class="c c--episode" href="' + esc(url) + '"><span class="c__p">'
                          + image + '</span><span class="c__cap"><span class="c__t">'
-                         + esc(row['title']) + '</span><span class="c__m">' + esc(label)
-                         + '</span>' + observed + '</span></a>')
+                         + esc(row['title']) + '</span><span class="' + meta_class + '"><span class="'
+                         + eps_class + '">' + esc(label) + '</span></span>'
+                         + '<span class="' + meta_class + '">' + observed + '</span></span></a>')
         elif style == 'zona':
             cards.append('<a class="zr" href="' + esc(url) + '"><span class="zr__p">'
                          + image + '</span><span class="zr__body"><span class="zr__t">'
@@ -119,9 +123,12 @@ def render_rows(rows, *, style='generic', heading='Новые серии'):
                          + observed + '</span></a>')
     if not cards:
         return ''
+    layout = 'lords' if lords else style
     section, head, grid = {'lords': ('sec-rail', 'sec-rail__h', 'grid'),
                            'zona': ('zsec zsec--eps', 'zsec__h', 'zl'),
-                           'zona-cc': ('zxsec', 'zxsec__h', 'zxeps')}[style]
+                           'zona-cc': ('zxsec', 'zxsec__h', 'zxeps')}[layout]
+    if grid_class is not None:
+        grid = esc(grid_class)
     return ('<section class="' + section + '"><div class="' + head + '"><h2>'
             + esc(heading) + '</h2></div><div class="' + grid + '">'
             + ''.join(cards) + '</div></section>')

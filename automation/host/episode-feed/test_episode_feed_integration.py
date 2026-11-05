@@ -137,11 +137,38 @@ class IntegrationTests(unittest.TestCase):
                 self.assertNotIn('style=', html)
                 self.assertEqual(adapter.render_rows([], style=style), '')
         row['episode_url'] = '/watch/2?x=1&y=2'
-        self.assertIn('href="/watch/2?x=1&amp;y=2"', adapter.render_rows([row], style='zona-cc'))
+        self.assertIn('href="/canonical/a/"', adapter.render_rows([row], style='zona-cc'))
+        self.assertNotIn('/watch/2', adapter.render_rows([row], style='zona-cc'))
         row['url'] = 'javascript:bad'
         row.pop('episode_url')
         self.assertEqual(adapter.render_rows([row], style='lords'), '')
 
+
+    def test_cross_title_event_url_is_discarded_everywhere(self):
+        for url in ['/title/other/', '/watch/other/season-99/episode-99/', 'https://evil.test/']:
+            self.write([dict(self.event, episode_url=url)])
+            row = self.load()[0]
+            self.assertNotIn('episode_url', row)
+            for style in ('lords02', 'lords03', 'lords05', 'zona', 'zona-cc', 'generic'):
+                html = adapter.render_rows([dict(row, episode_url=url)], style=style)
+                self.assertIn('href="/canonical/a/"', html)
+                self.assertNotIn(url, html)
+
+    def test_compact_lords_classes_and_custom_grid(self):
+        row = self.load()[0]
+        for style in ('lords', 'lords02', 'lords03', 'lords05'):
+            html = adapter.render_rows([row], style=style, grid_class='grid existing-domain-grid')
+            self.assertIn('class="c c--episode"', html)
+            self.assertIn('class="c__meta', html)
+            self.assertIn('class="c__eps', html)
+            self.assertIn('class="grid existing-domain-grid"', html)
+            if style in ('lords03', 'lords05'):
+                self.assertIn('c__meta c__y', html)
+                self.assertIn('c__eps c__badge c__badge--meta', html)
+
+    def test_timestamp_underflow_in_cache_omits_event(self):
+        self.write([dict(self.event, observedAt='0001-01-01T00:00:00+01:00')])
+        self.assertEqual(self.load(), [])
 
 
 

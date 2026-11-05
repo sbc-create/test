@@ -26,7 +26,7 @@ def _time(value):
         value = datetime.fromisoformat(value.replace('Z', '+00:00'))
         if value.utcoffset() is not None:
             return value.astimezone(timezone.utc)
-    except (ValueError, TypeError, AttributeError):
+    except (ValueError, TypeError, AttributeError, OverflowError):
         pass
     return None
 
@@ -59,7 +59,7 @@ def select_events(events, catalog, details, allowed=None, now=None, limit=10,
 
     Equal timestamps retain input order. Missing/invalid IDs, dates, paths, and
     availability fail closed. Source observation strings are retained verbatim.
-    Catalog metadata is authoritative; watcher titles/posters are ignored.
+    Catalog metadata is authoritative; watcher titles/posters/URLs are ignored.
     ``avail`` explicitly False or zero rejects a season even with listed nums.
     """
     if type(limit) is not int or limit <= 0:
@@ -118,9 +118,8 @@ def select_events(events, catalog, details, allowed=None, now=None, limit=10,
             'season': season, 'episode': episode,
             'observedAt': event['observedAt'],
         }
-        episode_url = _url(event.get('episode_url'), relative=True)
-        if episode_url:
-            row['episode_url'] = episode_url
+        # Watcher URLs are not bound to the matched provider UUID. Always
+        # retain the canonical URL from this catalog entry.
         selected[ident] = (stamp, row)
     return [row for stamp, row in sorted(selected.values(), key=lambda pair: pair[0], reverse=True)][:limit]
 
@@ -142,7 +141,7 @@ def render_section(rows, heading='Новые серии', *, classes=None):
 
     cards = []
     for row in rows:
-        url = _url(row.get('episode_url'), relative=True) or _url(row.get('url'))
+        url = _url(row.get('url'))
         stamp = _time(row.get('observedAt'))
         if not url or stamp is None or not _positive(row.get('season')) or not _positive(row.get('episode')):
             continue
