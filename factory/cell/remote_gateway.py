@@ -28,6 +28,12 @@ def read_packet(stream):
     return json.loads(line)
 
 
+def immutable_request(request):
+    # Native stage history changes on retry; release identity must not.
+    value=asdict(request);value['stages']=[]
+    return value
+
+
 class Gateway:
     def __init__(self,request_bytes,wire_out,wire_in):
         self.request_bytes=request_bytes;self.output=wire_out;self.input=wire_in
@@ -40,15 +46,15 @@ class Gateway:
         # One native CONTROL owner, including across different target sites.
         with exclusive(queue.БАЗА/'locks'/'local-ssh-bridge.guard'):
             state=queue.БАЗА/'state'/(request.request_id+'.remote.json')
-            stable={'request':asdict(request),'profile_sha256':fingerprint(profile),'package_sha256':profile['package_sha256'],
+            stable={'request':immutable_request(request),'profile_sha256':fingerprint(profile),'package_sha256':profile['package_sha256'],
                     'expected_old_commit':delivery['expected_current']}
             if state.exists():
                 saved=json.loads(state.read_bytes())
-                if saved['request_sha256']!=hashlib.sha256(self.request_bytes).hexdigest():raise ValueError('Original queued request bytes changed during retry')
                 if saved['stable']!=stable:raise ValueError('Immutable queued request/profile changed during retry')
             else:
                 saved={'stable':stable,'nonce':secrets.token_hex(32),
-                       'request_sha256':hashlib.sha256(self.request_bytes).hexdigest()}
+                       'request_sha256':hashlib.sha256(self.request_bytes).hexdigest(),
+                       'original_request_utf8':self.request_bytes.decode('utf-8')}
                 queue.записать_атомарно(state,saved)
             cached=queue.БАЗА/'packages'/(request.request_id+'.source.tar.gz')
             if not saved.get('capsule_sha256'):
@@ -63,7 +69,7 @@ class Gateway:
             if hashlib.sha256(cached.read_bytes()).hexdigest()!=saved['capsule_sha256']:
                 raise ValueError('Frozen source capsule changed during retry')
             capsule=cached
-            binding=dict(schema=VERSION,nonce=saved['nonce'],request=asdict(request),request_sha256=saved['request_sha256'],
+            binding=dict(schema=VERSION,nonce=saved['nonce'],request=stable['request'],request_sha256=saved['request_sha256'],
                          profile_sha256=stable['profile_sha256'],package_sha256=stable['package_sha256'],
                          expected_old_commit=stable['expected_old_commit'],capsule_sha256=saved['capsule_sha256'])
             packet(self.output,{'method':'активировать','binding':binding,'profile':profile,'bytes':capsule.stat().st_size})
@@ -72,12 +78,12 @@ class Gateway:
             self.output.flush()
             try:
                 response=read_packet(self.input)
-            except (ConnectionError,OSError,EOFError,json.JSONDecodeError) as error:
+            except (ConnectionError,OSError,EOFError,ValueError) as error:
                 raise executor.BridgeUncertain('Target receipt uncertain; replay same nonce: '+str(error)) from error
             if set(response)!={'nonce','binding_sha256','outcome'} or response['nonce']!=binding['nonce'] or response['binding_sha256']!=fingerprint(binding):
                 raise executor.BridgeUncertain('RPC receipt identity mismatch; retain original request and reconcile')
             outcome=response['outcome']
-            if not isinstance(outcome,dict):raise ValueError('RPC outcome is not native structured outcome')
+            if not isinstance(outcome,dict):raise executor.BridgeUncertain('RPC outcome malformed; retain request for reconciliation')
             return outcome
 
 

@@ -272,3 +272,12 @@ class ExactSourceProof(unittest.TestCase):
             path=self.source/'.git'/name;path.parent.mkdir(parents=True,exist_ok=True);path.write_text('')
             with self.assertRaises(ValueError):self.validate()
             path.unlink()
+
+
+class GatewayIdentity(unittest.TestCase):
+    def test_native_journal_changes_do_not_change_release_binding(self):
+        from dataclasses import replace
+        from factory.cell.remote_gateway import immutable_request
+        original=request();retry=replace(original,stages=[{'stage':'validated','at':'fixture'}])
+        self.assertEqual(immutable_request(original),immutable_request(retry))
+        self.assertNotEqual(immutable_request(original),immutable_request(replace(retry,digest='sha256:'+'0'*64)))
