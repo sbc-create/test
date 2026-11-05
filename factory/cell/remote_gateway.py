@@ -93,6 +93,11 @@ def serve(request_id,*,dry_run=False):
     path=queue.БАЗА/'requests'/(request_id+'.json')
     raw=path.read_bytes();request=queue.разобрать(json.loads(raw))
     if request.request_id!=request_id or request.operation!='activate':raise ValueError('Only exact existing activate requests may be bridged')
+    if not executor.remote_bridge_required(request.site_id):
+        outcome={'request_id':request_id,'site_id':request.site_id,'commit':request.commit,
+                 'status':'rejected','error':'Gateway only serves canonical local-ssh-bridge activation requests'}
+        packet(sys.stdout.buffer,{'method':'result','result':outcome})
+        return outcome
     gateway=Gateway(raw,sys.stdout.buffer,sys.stdin.buffer)
     with redirect_stdout(sys.stderr):
         outcome=executor.выполнить(request,база=queue.БАЗА,dry_run=dry_run,activate_handler=gateway.activate)

@@ -503,3 +503,60 @@ class CandidateStopProof(unittest.TestCase):
                 self.assertTrue(backend.candidate_stopped())
                 for key,value in [('ActiveState','activating'),('SubState','auto-restart'),('MainPID','123'),('ControlPID','124')]:
                     old=values[key];values[key]=value;self.assertFalse(backend.candidate_stopped());values[key]=old
+
+class RelayBoundaries(unittest.TestCase):
+    def setUp(self):
+        import importlib.util
+        self.path=Path(__file__).resolve().parents[2]/'automation/local/cell-remote-bridge.py'
+        spec=importlib.util.spec_from_file_location('bounded_relay',self.path);self.module=importlib.util.module_from_spec(spec);spec.loader.exec_module(self.module)
+        self.args=SimpleNamespace(expected_site='lords-02',expected_host='107.189.23.212',expected_commit='a'*40,expected_digest='sha256:'+'b'*64,package_id='c'*64)
+    def header(self):
+        p=profile();p['target']['host']=self.args.expected_host
+        value=binding();value['profile_sha256']=fingerprint(p);value['capsule_sha256']=hashlib.sha256(b'x').hexdigest()
+        return {'method':'активировать','binding':value,'profile':p,'bytes':1}
+    def test_closed_site_host_commit_digest_package_binding(self):
+        self.assertEqual(self.module.validate_header(self.header(),self.args),self.args.expected_host)
+        for bad in ['145.63.129.86','192.0.2.1','107.189.23.234']:
+            value=self.header();value['profile']['target']['host']=bad
+            with self.assertRaises(ValueError):self.module.validate_header(value,self.args)
+        for key,value in [('site_id','zona-02'),('commit','0'*40),('digest','sha256:'+'0'*64)]:
+            h=self.header();h['binding']['request'][key]=value
+            with self.assertRaises(ValueError):self.module.validate_header(h,self.args)
+        self.assertIn('ConnectTimeout=10',self.module.SSH);self.assertIn('IdentityAgent=none',self.module.SSH)
+    def result(self,status,stage='live_verified',outcome_status='activated'):
+        return {'method':'result','result':{'site_id':'lords-02','commit':'a'*40,'status':status,'outcome':{'status':outcome_status,'stage':stage,'digest':self.args.expected_digest}}}
+    def test_only_verified_activated_success_is_exit_zero(self):
+        self.assertEqual(self.module.result_code(self.result('ok'),self.args),0)
+        for value in [self.result('rejected'),self.result('failed'),self.result('ok','updater_failed'),self.result('ok',outcome_status='rolled-back')]:
+            self.assertEqual(self.module.result_code(value,self.args),1)
+        for status in ['busy','reconcile','waiting-bridge']:self.assertEqual(self.module.result_code(self.result(status),self.args),75)
+    def cli(self,message):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);key=root/'fixture-key';key.write_text('not a real key')
+            calls=root/'calls.jsonl';terminated=root/'terminated';ssh=root/'ssh'
+            ssh.write_text('#!/usr/bin/python3\nimport json,sys,time,signal\nfrom pathlib import Path\n'
+                +'p=Path('+repr(str(calls))+');p.open("a").write(json.dumps(sys.argv[1:])+"\\n")\n'
+                +'signal.signal(signal.SIGTERM,lambda *a:(Path('+repr(str(terminated))+').write_text("terminated"),sys.exit(99)))\n'
+                +'print('+repr(json.dumps(message))+',flush=True)\ntime.sleep(.15)\n');ssh.chmod(0o755)
+            env=dict(os.environ,PATH=str(root)+':/usr/bin:/bin')
+            out=subprocess.run(['/usr/bin/python3',str(self.path),'--request','fixture-request','--admin-key',str(key),'--package-id',self.args.package_id,
+                '--expected-site',self.args.expected_site,'--expected-host',self.args.expected_host,'--expected-commit',self.args.expected_commit,'--expected-digest',self.args.expected_digest],capture_output=True,text=True,env=env,timeout=5)
+            return out,[json.loads(line) for line in calls.read_text().splitlines()],terminated.exists()
+    def test_mispointed_control_never_opens_k2_ssh(self):
+        message=self.header();message['profile']['target']['host']='145.63.129.86'
+        out,calls,_=self.cli(message);self.assertNotEqual(out.returncode,0);self.assertEqual(len(calls),1)
+        self.assertIn('claude-control-01',calls[0]);self.assertFalse(any(x.startswith('root@') for x in calls[0]))
+    def test_early_results_exit_nonzero_and_wait_for_control(self):
+        for status,stage,expected in [('rejected','failed',1),('busy','validated',75),('reconcile','validated',75),('ok','updater_failed',1),('ok','live_verified',1)]:
+            out,calls,terminated=self.cli(self.result(status,stage));self.assertEqual(out.returncode,expected,out.stderr)
+            self.assertEqual(len(calls),1);self.assertFalse(terminated)
+
+
+class GatewayRoleRefusal(GatewayRoundTrip):
+    def test_nonremote_request_refused_before_native_execution(self):
+        from factory.cell.remote_gateway import read_packet
+        self.configure_gateway();value=json.loads(self.projection.read_text());value['cells'][0]['runtime'].pop('code_delivery')
+        self.projection.chmod(0o600);self.projection.write_text(json.dumps(value));self.projection.chmod(0o400)
+        before=self.file.read_bytes();child=self.process();result=read_packet(child.stdout)
+        self.assertEqual(child.wait(timeout=5),0,child.stderr.read());self.assertEqual(result['result']['status'],'rejected')
+        self.assertEqual(self.file.read_bytes(),before);self.assertFalse((self.root/'results').exists())
