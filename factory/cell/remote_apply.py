@@ -43,11 +43,14 @@ def validate_binding(binding, profile):
 
 
 @contextmanager
-def exclusive(path):
+def exclusive(path, *, busy_error=None):
     path.parent.mkdir(parents=True,exist_ok=True,mode=0o700)
     fd=os.open(path,os.O_CREAT|os.O_RDWR|os.O_NOFOLLOW,0o600)
     try:
-        fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        try:fcntl.flock(fd,fcntl.LOCK_EX|fcntl.LOCK_NB)
+        except BlockingIOError as error:
+            if busy_error is not None:raise busy_error("Another CONTROL bridge owns the global candidate lease") from error
+            raise
         yield
     finally:os.close(fd)
 
@@ -76,22 +79,41 @@ def unpack_capsule(archive: Path, destination: Path, expected_sha: str):
 
 
 def _extract(decoded,destination):
-    with tarfile.open(fileobj=decoded,mode='r:') as tar:
-        members=tar.getmembers()
-        if len(members)>20000 or sum(x.size for x in members)>MAX_BYTES:
-            raise ValueError('Capsule exceeds expanded bound')
-        seen=set()
-        for m in members:
-            if len(m.name)>1024:raise ValueError('Capsule path exceeds bound')
-            p=Path(m.name)
-            if str(p) in seen:raise ValueError('Duplicate capsule member')
-            seen.add(str(p))
-            m.mode &= 0o777
-            m.uid=m.gid=0;m.uname=m.gname=''
-            if p.is_absolute() or '..' in p.parts or not (m.isfile() or m.isdir()):
-                raise ValueError('Unsafe capsule member')
-            if not p.parts or p.parts[0] not in {'source','capsule.json'}:raise ValueError('Unexpected capsule member')
-        tar.extractall(destination,members=members)
+    # Closed USTAR policy. Read/count each physical header before allocating
+    # TarInfo records; PAX, GNU longname/sparse, links and extensions are denied.
+    members=[];seen=set();expanded=0
+    decoded.seek(0,2);length=decoded.tell();decoded.seek(0)
+    while True:
+        header=decoded.read(512)
+        if not header or header==b'\0'*512:break
+        if len(header)!=512:raise ValueError('Truncated capsule header')
+        if len(members)>=20000:raise ValueError('Capsule member count exceeds bound')
+        if header[156:157] not in (b'0',b'\0',b'5'):
+            raise ValueError('Unsupported capsule header extension or type')
+        m=tarfile.TarInfo.frombuf(header,'utf-8','surrogateescape')
+        if m.size<0 or (m.isdir() and m.size):raise ValueError('Invalid capsule member size')
+        expanded+=m.size
+        if expanded>MAX_BYTES:raise ValueError('Capsule exceeds expanded bound')
+        if len(m.name)>1024:raise ValueError('Capsule path exceeds bound')
+        p=Path(m.name)
+        if p.is_absolute() or '..' in p.parts or not p.parts or p.parts[0] not in {'source','capsule.json'}:
+            raise ValueError('Unsafe capsule member path')
+        if str(p) in seen:raise ValueError('Duplicate capsule member')
+        seen.add(str(p));offset=decoded.tell()
+        end=offset+((m.size+511)//512)*512
+        if end>length:raise ValueError('Truncated capsule member data')
+        members.append((m,offset));decoded.seek(end)
+    # Nothing is materialized until the complete bounded header scan succeeds.
+    for m,offset in members:
+        target=destination/m.name
+        if m.isdir():target.mkdir(parents=True,exist_ok=True);continue
+        target.parent.mkdir(parents=True,exist_ok=True)
+        decoded.seek(offset)
+        with target.open('xb') as out:
+            left=m.size
+            while left:
+                chunk=decoded.read(min(left,1048576));out.write(chunk);left-=len(chunk)
+        target.chmod(m.mode & 0o777)
     metadata=json.loads((destination/'capsule.json').read_bytes())
     if metadata.get('schema')!=VERSION:raise ValueError('Wrong capsule version')
     return destination/'source',metadata
@@ -137,8 +159,8 @@ def transact(binding,profile,backend,*,state_root=RECEIPTS):
 
 class NativeBackend:
     """Only trusted native functions; registry projection is root-sealed."""
-    def __init__(self,site_id,source,profile,*,systemctl=privileged._systemctl,request_path=RECEIPTS/'never-request.json'):
-        self.site_id=site_id;self.source=Path(source);self.profile=profile;self.systemctl=systemctl;self.request_path=Path(request_path)
+    def __init__(self,site_id,source,profile,*,systemctl=privileged._systemctl,request_path=RECEIPTS/'never-request.json', candidate_nonce=None):
+        self.site_id=site_id;self.source=Path(source);self.profile=profile;self.systemctl=systemctl;self.request_path=Path(request_path);self.candidate_nonce=candidate_nonce
     def platform(self):return privileged.Площадка.из_реестра(self.site_id)
     def current_record(self):
         p=self.platform()
@@ -155,6 +177,7 @@ class NativeBackend:
         return self.current_record().get('source_commit')==request.commit
     def verify_replay(self,request,outcome):
         if not self.is_current(request):raise ValueError('Receipt no longer matches current runtime')
+        if not self.candidate_stopped():raise ValueError('Candidate termination not proven; keep private copy and reconcile')
         record=self.current_record()
         if record.get('digest',record.get('artifact_digest'))!=request.digest:
             raise ValueError('Current installed digest differs from receipt')
@@ -167,7 +190,9 @@ class NativeBackend:
         if not build:raise ValueError('Cannot prove active build identity')
         out={'status':'activated','stage':'live_verified','build_id':build,'digest':request.digest,
              'steps':{'reconciled':True}}
-        self.verify_replay(request,out);return out
+        self.verify_replay(request,out)
+        out['steps']['candidate_data']=self.finish_candidate_copy()
+        return out
     def preflight(self,request,expected_old,profile):
         p=self.platform();runtime=profile['cell']['runtime']
         import ipaddress,subprocess
@@ -199,9 +224,35 @@ class NativeBackend:
             raise ValueError('Profile does not bind catalog identity')
     def activate(self,request):
         if self.request_path.exists():raise ValueError('Remote native request path must not exist')
-        return executor.активировать(request,файл=self.request_path,dry_run=False)
+        from factory.cell import candidate_data
+        if not self.candidate_nonce:raise ValueError('Nonce-bound candidate data required for remote activation')
+        p=self.platform()
+        data=candidate_data.prepare(p.data,self.site_id,self.candidate_nonce,p.account)
+        outcome=executor.активировать(request,файл=self.request_path,dry_run=False,candidate_data=data)
+        outcome.setdefault('steps',{})['candidate_data']=self.finish_candidate_copy()
+        if not self.candidate_stopped():raise ValueError('Candidate still running; copy retained for reconciliation')
+        return outcome
     def recover(self,request):
         p=self.platform()
         if p.candidate.exists() and p.candidate.resolve().name==request.commit[:12]:
-            return privileged.rollback(self.site_id,dry_run=False)
-        return {'no_live_mutation_detected':True}
+            outcome=privileged.rollback(self.site_id,dry_run=False)
+            outcome['candidate_data']=self.finish_candidate_copy()
+            return outcome
+        return {'no_live_mutation_detected':True,'candidate_data':self.finish_candidate_copy()}
+
+    def candidate_stopped(self):
+        p=self.platform()
+        result=self.systemctl('show',p.candidate_unit,'-p','ActiveState','-p','SubState','-p','MainPID','-p','ControlPID','-p','ControlGroup',проверять=False)
+        if result.returncode:return False
+        values=dict(line.split('=',1) for line in result.stdout.splitlines() if '=' in line)
+        if any(values.get(key)!=expected for key,expected in [('ActiveState','inactive'),('SubState','dead'),('MainPID','0'),('ControlPID','0')]):return False
+        group=values.get('ControlGroup','')
+        if group:
+            path=Path(group)
+            if not path.is_absolute() or '..' in path.parts:return False
+            events=Path('/sys/fs/cgroup')/group.lstrip('/')/'cgroup.events'
+            if events.exists() and 'populated 0' not in events.read_text().splitlines():return False
+        return True
+    def finish_candidate_copy(self):
+        from factory.cell import candidate_data
+        return candidate_data.cleanup(self.site_id,self.candidate_nonce,stopped=self.candidate_stopped)

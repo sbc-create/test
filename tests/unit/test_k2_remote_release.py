@@ -123,11 +123,11 @@ class NativeRollback(unittest.TestCase):
             self.calls.append(args);return SimpleNamespace(returncode=0 if args[0] in ['is-active','is-enabled'] else 0)
         self.systemctl=systemctl;self.updater=SimpleNamespace(service='update.service',timer='update.timer');self.state=self.root/'state'
     def test_post_promote_restores_current_main_updater_route_no_previous_unit(self):
-        capture(self.p,self.units,self.route,self.updater,self.systemctl,state_root=self.state)
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
         self.p.current.unlink();self.p.current.symlink_to(self.p.candidate.resolve())
         for f in self.units.iterdir():f.write_text('new')
         (self.route/'lords-02.upstream').write_text('server 127.0.0.1:9999;')
-        out=restore(self.p,self.units,self.route,self.systemctl,state_root=self.state)
+        out=restore(self.p,self.units,self.route,self.systemctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state)
         self.assertEqual(self.p.current.resolve().name,'old')
         self.assertEqual((self.units/'main.service').read_text(),'old main.service')
         self.assertEqual((self.units/'update.timer').read_text(),'old update.timer')
@@ -138,18 +138,27 @@ class NativeRollback(unittest.TestCase):
         self.p.previous_unit='previous.service'
         previous=self.units/'previous.service';previous.symlink_to('/dev/null')
         old=self.units/'update.service.d';old.mkdir();(old/'override.conf').write_text('old override')
-        capture(self.p,self.units,self.route,self.updater,self.systemctl,state_root=self.state)
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
         previous.unlink();previous.write_text('new unmasked unit')
         (old/'override.conf').write_text('new override');(old/'new.conf').write_text('new')
         added=self.units/'previous.service.d';added.mkdir();(added/'cell-port-owner.conf').write_text('RefuseManualStart=yes')
-        restore(self.p,self.units,self.route,self.systemctl,state_root=self.state)
+        restore(self.p,self.units,self.route,self.systemctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state)
         self.assertTrue(previous.is_symlink());self.assertEqual(os.readlink(previous),'/dev/null')
         self.assertEqual((old/'override.conf').read_text(),'old override');self.assertFalse((old/'new.conf').exists())
         self.assertFalse(added.exists())
+    def test_exact_enable_links_restored(self):
+        directory=self.units/'timers.target.wants';directory.mkdir()
+        (directory/'update.timer').symlink_to('../update.timer')
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
+        (directory/'update.timer').unlink()
+        new=self.units/'multi-user.target.wants';new.mkdir();(new/'update.timer').symlink_to('../update.timer')
+        restore(self.p,self.units,self.route,self.systemctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state)
+        self.assertEqual(os.readlink(directory/'update.timer'),'../update.timer')
+        self.assertFalse((new/'update.timer').is_symlink())
     def test_unrelated_candidate_cannot_use_old_checkpoint(self):
-        capture(self.p,self.units,self.route,self.updater,self.systemctl,state_root=self.state)
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
         other=self.p.releases/'other';other.mkdir();self.p.candidate.unlink();self.p.candidate.symlink_to(other)
-        self.assertIsNone(restore(self.p,self.units,self.route,self.systemctl,state_root=self.state))
+        self.assertIsNone(restore(self.p,self.units,self.route,self.systemctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state))
         self.assertEqual(self.p.current.resolve().name,'old')
 
 
@@ -281,3 +290,216 @@ class GatewayIdentity(unittest.TestCase):
         original=request();retry=replace(original,stages=[{'stage':'validated','at':'fixture'}])
         self.assertEqual(immutable_request(original),immutable_request(retry))
         self.assertNotEqual(immutable_request(original),immutable_request(replace(retry,digest='sha256:'+'0'*64)))
+
+class RollbackReadiness(NativeRollback):
+    def test_delayed_old_build_keeps_candidate_route(self):
+        from factory.cell.rollback_state import wait_for_build
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
+        route=self.route/'lords-02.upstream';route.write_text('server 127.0.0.1:10111;')
+        self.p.current.unlink();self.p.current.symlink_to(self.p.candidate.resolve())
+        replies=iter([{'ok':False},{'ok':True,'build_id':'WRONG'},{'ok':True,'build_id':'old-fixture'}]);calls=[]
+        def probe():
+            self.assertEqual(route.read_text(),'server 127.0.0.1:10111;')
+            self.assertTrue(self.p.candidate.exists());calls.append(True);return next(replies)
+        def ready(build):return wait_for_build(probe,build,timeout=10,interval=0,sleep=lambda _:None)
+        restore(self.p,self.units,self.route,self.systemctl,wait_ready=ready,state_root=self.state)
+        self.assertEqual(len(calls),3);self.assertEqual(route.read_text(),'server 127.0.0.1:9111;\n')
+    def test_wrong_old_build_retains_route_and_pending_checkpoint(self):
+        capture(self.p,self.units,self.route,self.updater,self.systemctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
+        route=self.route/'lords-02.upstream';route.write_text('candidate still serving')
+        with self.assertRaises(ValueError):restore(self.p,self.units,self.route,self.systemctl,wait_ready=lambda _: {'ok':True,'build_id':'wrong'},state_root=self.state)
+        self.assertEqual(route.read_text(),'candidate still serving')
+        self.assertEqual(json.loads((self.state/'lords-02.json').read_text())['phase'],'waiting_old_http')
+    def test_previous_restart_enforces_mask_and_refuse_manual_start(self):
+        self.p.previous_unit='previous.service'
+        previous=self.units/'previous.service';previous.write_text('old previous unit')
+        restarted=[]
+        def ctl(*args,**kw):
+            if args[0]=='restart':
+                name=args[-1];unit=self.units/name;drop=self.units/(name+'.d')
+                if unit.is_symlink() and os.readlink(unit)=='/dev/null':raise RuntimeError('unit masked')
+                if drop.is_dir() and any('RefuseManualStart=yes' in p.read_text() for p in drop.glob('*.conf')):
+                    raise RuntimeError('manual start refused')
+                restarted.append(name)
+            return SimpleNamespace(returncode=0)
+        capture(self.p,self.units,self.route,self.updater,ctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
+        previous.unlink();previous.symlink_to('/dev/null')
+        drop=self.units/'previous.service.d';drop.mkdir();(drop/'cell-port-owner.conf').write_text('RefuseManualStart=yes')
+        restore(self.p,self.units,self.route,ctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state)
+        self.assertIn('previous.service',restarted);self.assertFalse(drop.exists())
+    def test_absent_unit_stop_before_remove_nonzero_tolerated(self):
+        self.p.previous_unit='previous.service';calls=[]
+        def ctl(*args,**kw):
+            calls.append(args)
+            if args[0] in ['is-active','is-enabled'] and args[-1]=='previous.service':return SimpleNamespace(returncode=4)
+            if args[0]=='stop' and args[-1]=='previous.service':
+                self.assertFalse(kw.get('проверять',True));return SimpleNamespace(returncode=5)
+            if args[0]=='restart' and args[-1]=='previous.service':raise AssertionError('Absent inactive unit must not restart')
+            return SimpleNamespace(returncode=0)
+        capture(self.p,self.units,self.route,self.updater,ctl,old_build_id='old-fixture',new_build_id='new-fixture',state_root=self.state)
+        new=self.units/'previous.service';new.write_text('newly created unit')
+        drop=self.units/'previous.service.d';drop.mkdir();(drop/'cell-port-owner.conf').write_text('RefuseManualStart=yes')
+        restore(self.p,self.units,self.route,ctl,wait_ready=lambda build:{'ok':True,'build_id':build},state_root=self.state)
+        self.assertFalse(new.exists());self.assertFalse(drop.exists());self.assertIn(('stop','previous.service'),calls)
+
+
+class CapsuleHeaderBudget(unittest.TestCase):
+    def check_bad(self,data):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);path=root/'bad.tar';path.write_bytes(data)
+            with self.assertRaises(ValueError):unpack_capsule(path,root/'out',hashlib.sha256(data).hexdigest())
+            self.assertFalse(any((root/'out').rglob('*')))
+    def test_incremental_member_limit_before_extraction(self):
+        headers=[]
+        for n in range(20001):headers.append(tarfile.TarInfo('source/dir'+str(n)).tobuf(format=tarfile.USTAR_FORMAT))
+        self.check_bad(b''.join(headers)+b'\0'*1024)
+    def test_pax_longname_sparse_metadata_rejected_at_header(self):
+        for kind in [b'x',b'g',b'L',b'K',b'S']:
+            info=tarfile.TarInfo('source/metadata');info.type=kind;info.size=32*1024*1024
+            self.check_bad(info.tobuf(format=tarfile.USTAR_FORMAT)+b'\0'*1024)
+
+class GatewayRoundTrip(NativeControl):
+    def configure_gateway(self):
+        from factory.cell.remote_gateway import immutable_request
+        p=profile();cell=json.loads(json.dumps(p['cell']))
+        cell['runtime']['code_delivery']={'role':'local-ssh-bridge','expected_current':'1'*40,'profile':p}
+        self.projection.chmod(0o600);self.projection.write_text(json.dumps({'cells':[cell]}));self.projection.chmod(0o400)
+        for name in ['state','packages']:(self.root/name).mkdir(exist_ok=True)
+        data=b'fixture frozen source capsule';cached=self.root/'packages'/(self.req.request_id+'.source.tar.gz');cached.write_bytes(data);cached.chmod(0o400)
+        raw=self.file.read_bytes()
+        saved={'stable':{'request':immutable_request(self.req),'profile_sha256':fingerprint(p),'package_sha256':p['package_sha256'],'expected_old_commit':'1'*40},'nonce':'d'*64,'request_sha256':hashlib.sha256(raw).hexdigest(),'original_request_utf8':raw.decode(),'capsule_sha256':hashlib.sha256(data).hexdigest()}
+        (self.root/'state'/(self.req.request_id+'.remote.json')).write_text(json.dumps(saved))
+        return p
+    def process(self,request_id=None):
+        env=dict(os.environ,SITE_CELL_QUEUE=str(self.root),SITE_CELLS_REGISTRY=str(self.projection),K2_TEST_CI='success',PYTHONDONTWRITEBYTECODE='1')
+        child=subprocess.Popen(['/usr/bin/python3','-m','factory.cell.remote_gateway','--request',request_id or self.req.request_id],stdin=subprocess.PIPE,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env)
+        def finish():
+            if child.poll() is None:child.kill();child.wait()
+            for pipe in [child.stdin,child.stdout,child.stderr]:
+                if pipe and not pipe.closed:pipe.close()
+        self.addCleanup(finish)
+        return child
+    def test_full_control_journal_lost_ack_retry_installs_once(self):
+        from factory.cell.remote_gateway import read_packet,packet
+        p=self.configure_gateway();backend=Backend();receipts=self.root/'target-receipts'
+        first=self.process();header=read_packet(first.stdout)
+        self.assertEqual(header['method'],'активировать');first.stdout.read(header['bytes'])
+        outcome=transact(header['binding'],p,backend,state_root=receipts)
+        # Target receipt is durable, but the ACK never reaches CONTROL.
+        first.stdin.close();result=read_packet(first.stdout);self.assertEqual(first.wait(timeout=5),0,first.stderr.read())
+        self.assertEqual(result['result']['status'],'reconcile');self.assertTrue(self.file.exists())
+        self.assertTrue(json.loads(self.file.read_text())['stages']);self.assertFalse((self.root/'results'/self.file.name).exists())
+        second=self.process();replay=read_packet(second.stdout);second.stdout.read(replay['bytes'])
+        self.assertEqual(header['binding'],replay['binding'])
+        repeated=transact(replay['binding'],p,backend,state_root=receipts)
+        packet(second.stdin,{'nonce':replay['binding']['nonce'],'binding_sha256':fingerprint(replay['binding']),'outcome':repeated})
+        final=read_packet(second.stdout);self.assertEqual(second.wait(timeout=5),0,second.stderr.read())
+        self.assertEqual(final['result']['status'],'ok');self.assertEqual(final['result']['outcome'],outcome)
+        self.assertEqual(backend.applied,1);self.assertFalse(self.file.exists())
+        self.assertEqual(json.loads((self.root/'results'/self.file.name).read_text())['outcome'],outcome)
+    def test_cross_site_gateway_claim_contention_retains_both_requests(self):
+        from dataclasses import replace
+        from factory.cell.remote_gateway import read_packet
+        self.configure_gateway();cells=json.loads(self.projection.read_text())['cells'];second=json.loads(json.dumps(cells[0]));second['site_id']='lords-03';second['domain']='fixture.example';second['runtime']['port']=9112
+        second['runtime']['code_delivery']['profile']['cell']['site_id']='lords-03';cells.append(second)
+        self.projection.chmod(0o600);self.projection.write_text(json.dumps({'cells':cells}));self.projection.chmod(0o400)
+        req2=replace(self.req,site_id='lords-03',request_id='lords-03-'+self.req.commit[:12]);file2=self.root/'requests'/(req2.request_id+'.json');file2.write_text(json.dumps(asdict(req2)))
+        guard=self.root/'locks'/'local-ssh-bridge.guard'
+        with exclusive(guard):
+            children=[self.process(),self.process(req2.request_id)]
+            for child in children:
+                response=read_packet(child.stdout);self.assertEqual(response['result']['status'],'busy')
+                self.assertEqual(child.wait(timeout=5),0,child.stderr.read())
+        self.assertTrue(self.file.exists());self.assertTrue(file2.exists());self.assertFalse((self.root/'results').exists())
+
+class CandidateCopy(unittest.TestCase):
+    def setUp(self):
+        import pwd
+        self.tmp=tempfile.TemporaryDirectory();self.addCleanup(self.tmp.cleanup);self.root=Path(self.tmp.name);self.root.chmod(0o711)
+        self.live=self.root/'live';self.live.mkdir();(self.live/'lords-02-catalog.json').write_text('{"public":true}')
+        (self.live/'editorial-overrides.json').write_text('{"protected":"keep"}')
+        self.copy_root=self.root/'copies';self.account=pwd.getpwuid(os.getuid()).pw_name
+    def prepare(self,**kwargs):
+        from factory.cell.candidate_data import prepare
+        return prepare(self.live,'lords-02','a'*64,self.account,root=self.copy_root,**kwargs)
+    def test_writes_are_private_and_uncertain_stop_retains_copy(self):
+        from factory.cell.candidate_data import cleanup
+        before={p.name:p.read_bytes() for p in self.live.iterdir()};copy=self.prepare()
+        (copy/'lords-02-catalog.json').write_text('{"candidate_only":true}')
+        (copy/'lords-02-num-correction.json').write_text('new nums')
+        self.assertEqual(before,{p.name:p.read_bytes() for p in self.live.iterdir()})
+        out=cleanup('lords-02','a'*64,stopped=lambda:False,root=self.copy_root)
+        self.assertIn('copy_retained',out);self.assertTrue(copy.is_dir())
+        out=cleanup('lords-02','a'*64,stopped=lambda:True,root=self.copy_root)
+        self.assertTrue(out['copy_removed_after_candidate_stopped']);self.assertTrue(self.live.is_dir())
+    def test_symlink_special_and_low_disk_fail_before_candidate(self):
+        link=self.live/'escape';link.symlink_to('/etc')
+        with self.assertRaises(ValueError):self.prepare()
+        link.unlink();os.mkfifo(link)
+        with self.assertRaises(ValueError):self.prepare()
+        link.unlink()
+        with self.assertRaises(ValueError):self.prepare(disk_free=lambda _:0)
+        self.assertFalse((self.copy_root/'lords-02'/('a'*64)).exists())
+    def test_same_nonce_never_overwrites_private_or_live_data(self):
+        copy=self.prepare();(copy/'editorial-overrides.json').write_text('candidate-only')
+        with self.assertRaises(ValueError):self.prepare()
+        self.assertEqual((copy/'editorial-overrides.json').read_text(),'candidate-only')
+        self.assertEqual((self.live/'editorial-overrides.json').read_text(),'{"protected":"keep"}')
+    def test_cleanup_symlink_cannot_escape_owned_copy(self):
+        from factory.cell.candidate_data import cleanup
+        copy=self.prepare();outside=self.root/'outside';outside.mkdir();(outside/'keep').write_text('protected')
+        (copy/'escape').symlink_to(outside,target_is_directory=True)
+        cleanup('lords-02','a'*64,stopped=lambda:True,root=self.copy_root)
+        self.assertEqual((outside/'keep').read_text(),'protected')
+
+
+class CredentialRole(unittest.TestCase):
+    def test_relay_uses_pinned_transient_native_credential_role_without_pty(self):
+        import importlib.util
+        path=Path(__file__).resolve().parents[2]/'automation/local/cell-remote-bridge.py'
+        spec=importlib.util.spec_from_file_location('isolated_relay',path);module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
+        command=module.gateway_command('a'*64,'fixture-request')
+        self.assertEqual(command[0],'systemd-run');self.assertIn('--pipe',command);self.assertNotIn('--pty',command)
+        self.assertIn('LoadCredential=gh-token:/etc/site-factory/gh-token',command)
+        self.assertIn('ProtectHome=read-only',command);self.assertIn('/'+'a'*64+'/',command[-3])
+        with self.assertRaises(ValueError):module.gateway_command('current','fixture-request')
+
+class KillDuringReceipt(unittest.TestCase):
+    def test_sigkill_after_activation_reconciles_without_second_install(self):
+        import signal
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);current=root/'current.json';ready=multiprocessing.Event();release=multiprocessing.Event()
+            class PersistentBackend(Backend):
+                def is_current(self,r):return current.exists()
+                def activate(self,r):
+                    self.applied+=1
+                    current.write_text(json.dumps({'commit':r.commit,'installs':1}))
+                    ready.set();release.wait(30)
+                    return {'status':'activated','stage':'live_verified','build_id':'fixture','steps':{}}
+                def reconcile(self,r):
+                    if json.loads(current.read_text())['commit']!=r.commit:raise ValueError('wrong current')
+                    return {'status':'activated','stage':'live_verified','build_id':'fixture','steps':{'reconciled_after_sigkill':True}}
+            def worker():transact(binding(),profile(),PersistentBackend(),state_root=root/'receipts')
+            child=multiprocessing.get_context('fork').Process(target=worker);child.start()
+            try:
+                self.assertTrue(ready.wait(5));os.kill(child.pid,signal.SIGKILL);child.join(5)
+                receipt=json.loads((root/'receipts'/('d'*64+'.json')).read_text());self.assertIsNone(receipt['outcome'])
+                backend=PersistentBackend();out=transact(binding(),profile(),backend,state_root=root/'receipts')
+                self.assertTrue(out['steps']['reconciled_after_sigkill']);self.assertEqual(backend.applied,0)
+                self.assertEqual(json.loads(current.read_text())['installs'],1)
+            finally:
+                if child.is_alive():child.kill();child.join(5)
+
+
+class CandidateStopProof(unittest.TestCase):
+    def test_inactive_dead_zero_pids_required(self):
+        from factory.cell.remote_apply import NativeBackend
+        with tempfile.TemporaryDirectory() as tmp:
+            path=Path(tmp)/'registry.json';path.write_text(json.dumps({'cells':[profile()['cell']]}));path.chmod(0o400)
+            values={'ActiveState':'inactive','SubState':'dead','MainPID':'0','ControlPID':'0','ControlGroup':''}
+            def ctl(*args,**kw):return SimpleNamespace(returncode=0,stdout='\n'.join(k+'='+v for k,v in values.items()))
+            backend=NativeBackend('lords-02','/unused',profile(),systemctl=ctl,candidate_nonce='a'*64)
+            with registry.scoped_projection(path,'lords-02'):
+                self.assertTrue(backend.candidate_stopped())
+                for key,value in [('ActiveState','activating'),('SubState','auto-restart'),('MainPID','123'),('ControlPID','124')]:
+                    old=values[key];values[key]=value;self.assertFalse(backend.candidate_stopped());values[key]=old

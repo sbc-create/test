@@ -3,14 +3,25 @@
 import argparse
 import ipaddress
 import json
+import re
 from pathlib import Path
 import shlex
 import subprocess
 import tempfile
 
 MAX=64*1024*1024
-GATEWAY='/usr/local/lib/site-factory-cell/bridge-current/bin/k2-native-gateway'
-WORKER='/usr/local/lib/site-factory-cell/bridge-current/bin/k2-native-worker'
+PACKAGE_ROOT='/usr/local/lib/site-factory-cell/bridge-packages'
+NATIVE_PROPERTIES=['LoadCredential=gh-token:/etc/site-factory/gh-token','NoNewPrivileges=no',
+    'ProtectHome=read-only','ProtectKernelTunables=yes','ProtectKernelModules=yes',
+    'RestrictSUIDSGID=yes','RestrictRealtime=yes','LockPersonality=yes','TimeoutStartSec=0',
+    'ReadWritePaths=/home/claude/wt-portable-site-cell-01/config /usr/local/lib/site-factory-cell/config']
+
+def gateway_command(package_id,request_id):
+    if not re.fullmatch('[0-9a-f]{64}',package_id):raise ValueError('Exact reviewed package identity required')
+    package=PACKAGE_ROOT+'/'+package_id
+    command=['systemd-run','--pipe','--wait','--collect','--quiet','--working-directory='+package]
+    for value in NATIVE_PROPERTIES:command.extend(['-p',value])
+    return command+[package+'/bin/k2-native-gateway','--request',request_id]
 SSH=['ssh','-o','BatchMode=yes','-o','StrictHostKeyChecking=yes','-o','UpdateHostKeys=no','-o','ForwardAgent=no','-o','ConnectTimeout=15']
 
 
@@ -21,10 +32,10 @@ def line(stream):
 
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--control',default='claude-control-01');parser.add_argument('--request',required=True);parser.add_argument('--admin-key',type=Path,required=True)
+    parser=argparse.ArgumentParser();parser.add_argument('--control',default='claude-control-01');parser.add_argument('--request',required=True);parser.add_argument('--admin-key',type=Path,required=True);parser.add_argument('--package-id',required=True)
     args=parser.parse_args()
     if not args.admin_key.is_file():raise ValueError('LOCAL admin identity does not exist')
-    control=subprocess.Popen(SSH+[args.control,shlex.join([GATEWAY,'--request',args.request])],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+    control=subprocess.Popen(SSH+[args.control,shlex.join(gateway_command(args.package_id,args.request))],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
     try:
         raw,message=line(control.stdout)
         if message.get('method')=='result':print(json.dumps(message));return
@@ -39,7 +50,7 @@ def main():
                 if not chunk:raise EOFError('CONTROL capsule stream truncated')
                 capsule.write(chunk);left-=len(chunk)
             capsule.seek(0)
-            target=subprocess.Popen(SSH+['-o','IdentitiesOnly=yes','-i',str(args.admin_key),'root@'+address,WORKER],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
+            target=subprocess.Popen(SSH+['-o','IdentitiesOnly=yes','-i',str(args.admin_key),'root@'+address,PACKAGE_ROOT+'/'+args.package_id+'/bin/k2-native-worker'],stdin=subprocess.PIPE,stdout=subprocess.PIPE)
             try:
                 target.stdin.write(raw)
                 while chunk:=capsule.read(1048576):target.stdin.write(chunk)

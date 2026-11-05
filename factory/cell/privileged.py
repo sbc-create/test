@@ -1006,9 +1006,15 @@ def вернуть_прежнюю(п: Площадка, *, предел: int) ->
 def capture_release_state(site_id: str, *, path: Path | None = None) -> dict[str, Any]:
     _нужен_root()
     from factory.cell import rollback_state
+    п = Площадка.из_реестра(site_id, path=path)
+    old = verify(site_id, порт=п.port, path=path)
+    new = verify(site_id, порт=п.candidate_port, path=path)
+    if not old.get('ok') or not old.get('build_id') or not new.get('ok') or not new.get('build_id'):
+        raise PrivilegedRefused('Cannot checkpoint unverified old/candidate HTTP build identities')
     return rollback_state.capture(
-        Площадка.из_реестра(site_id, path=path), _каталог_юнитов(),
-        UPSTREAM_КАТАЛОГ, _объявление_обработчика(site_id, path), _systemctl)
+        п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ,
+        _объявление_обработчика(site_id, path), _systemctl,
+        old_build_id=old['build_id'], new_build_id=new['build_id'])
 
 
 def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
@@ -1336,8 +1342,25 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
     # Сначала прежняя служба отвечает, и только потом трафик идёт обратно.
     # Обратный порядок вернул бы посетителей на порт, где уже никого нет.
     from factory.cell import rollback_state
+    checkpoint = rollback_state.STATE_ROOT / (site_id + ".json")
+    saved = json.loads(checkpoint.read_bytes()) if checkpoint.is_file() else {}
+    applicable = saved.get("new_current") == str(п.candidate.resolve())
+    if applicable:
+        # A post-promote failure may arrive after promote stopped the candidate.
+        # Re-establish its verified route before restarting the previous main.
+        if _systemctl("is-active", "--quiet", п.candidate_unit, проверять=False).returncode != 0:
+            _systemctl("restart", п.candidate_unit)
+        candidate_ready = готов(п.candidate_port, предел=предел)
+        candidate_verify = verify(site_id, порт=п.candidate_port,
+                                  ожидаемый_build=saved.get("new_build_id") or "", path=path)
+        if not candidate_ready.get("ready") or not saved.get("new_build_id") or not candidate_verify.get("ok"):
+            raise PrivilegedRefused("Rollback candidate is not ready; no cold-main route switch")
+        switch_route(site_id, п.candidate_port, dry_run=False, path=path)
+    def previous_ready(build):
+        return rollback_state.wait_for_build(
+            lambda: verify(site_id, порт=п.port, ожидаемый_build=build, path=path), build, timeout=предел)
     восстановление = rollback_state.restore(
-        п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ, _systemctl)
+        п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ, _systemctl, wait_ready=previous_ready)
     if восстановление is not None:
         nginx = os.environ.get("SITE_NGINX", "nginx")
         subprocess.run([nginx, "-t"], capture_output=True, text=True, check=True)
@@ -1346,18 +1369,26 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
         # Candidate failed before promotion: preserve the existing native main.
         if _systemctl("is-active", "--quiet", п.unit, проверять=False).returncode != 0:
             _systemctl("restart", п.unit)
+        if not готов(п.port, предел=предел).get("ready") or not verify(site_id, порт=п.port, path=path).get("ok"):
+            raise PrivilegedRefused("Existing main not HTTP-ready; retain candidate")
         switch_route(site_id, п.port, dry_run=False, path=path)
         восстановление = {"current_preserved": str(п.current.resolve())}
     else:
         восстановление = вернуть_прежнюю(п, предел=предел)
         switch_route(site_id, п.port, dry_run=False, path=path)
-    _systemctl("stop", п.candidate_unit, проверять=False)
+    expected_old = saved.get("old_build_id") if applicable else ""
+    old_verdict = verify(site_id, порт=п.port, ожидаемый_build=expected_old or "", path=path)
+    if not old_verdict.get("ok"):
+        if applicable:switch_route(site_id, п.candidate_port, dry_run=False, path=path)
+        raise PrivilegedRefused("Old main failed verification after route reload; candidate retained")
+    time.sleep(float(os.environ.get("SITE_DRAIN_SEC", "5")))
+    _systemctl("stop", п.candidate_unit)
     состояние = готов(п.port, предел=предел,
                       жив=lambda: _systemctl("is-active", "--quiet", п.unit,
                                              проверять=False).returncode == 0)
     итог = {"operation": "rollback", "site_id": site_id, "dry_run": False,
             "steps": шаги, "ready": состояние, "previous_unit": восстановление}
-    итог["verify"] = verify(site_id, порт=п.port, path=path)
+    итог["verify"] = verify(site_id, порт=п.port, ожидаемый_build=expected_old or "", path=path)
     return итог
 
 
@@ -1376,6 +1407,17 @@ def порт_кандидата(основной: int) -> int:
     правиле firewall.
     """
     return основной + 1000
+
+
+def verify_candidate_data(site_id: str, data: Path) -> dict[str, Any]:
+    п = Площадка.из_реестра(site_id)
+    pid = int(_systemctl("show", п.candidate_unit, "-p", "MainPID", "--value").stdout.strip())
+    if pid <= 0:raise PrivilegedRefused("Candidate has no process for data identity proof")
+    env = dict(part.split(b"=", 1) for part in Path(f"/proc/{pid}/environ").read_bytes().split(b"\0") if b"=" in part)
+    expected = str(Path(data) / (site_id + "-catalog.json"))
+    if env.get(b"LORDS_CATALOG", b"").decode() != expected:
+        raise PrivilegedRefused("Candidate process does not use its private catalog copy")
+    return {"catalog": expected, "pid": pid, "private_data_verified": True}
 
 
 def warm_up(site_id: str, *, dry_run: bool = True, предел: int = 600,

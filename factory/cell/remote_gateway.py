@@ -44,7 +44,7 @@ class Gateway:
         profile=delivery.get('profile')
         if not isinstance(profile,dict) or profile['cell']['site_id']!=request.site_id:raise ValueError('Missing exact canonical host projection')
         # One native CONTROL owner, including across different target sites.
-        with exclusive(queue.БАЗА/'locks'/'local-ssh-bridge.guard'):
+        with exclusive(queue.БАЗА/'locks'/'local-ssh-bridge.guard',busy_error=executor.SiteBusy):
             state=queue.БАЗА/'state'/(request.request_id+'.remote.json')
             stable={'request':immutable_request(request),'profile_sha256':fingerprint(profile),'package_sha256':profile['package_sha256'],
                     'expected_old_commit':delivery['expected_current']}

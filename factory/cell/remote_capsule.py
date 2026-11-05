@@ -101,11 +101,14 @@ def prepare(repo,request,remote,expected_old,destination):
               'artifact_digest':digest,'live_build_id':manifest.get('live_build_id')}
     (destination/'capsule.json').write_text(json.dumps(metadata,sort_keys=True)+'\n')
     capsule=destination/'capsule.tar.gz'
-    with tarfile.open(capsule,'w:gz') as tar:
-        tar.add(destination/'capsule.json',arcname='capsule.json')
+    def regular_header(info):
+        info.mtime=int(info.mtime);info.pax_headers={}
+        return info
+    with tarfile.open(capsule,'w:gz',format=tarfile.USTAR_FORMAT) as tar:
+        tar.add(destination/'capsule.json',arcname='capsule.json',filter=regular_header)
         for path in sorted(source.rglob('*')):
             if path.is_symlink():raise ValueError('Source symlinks require separate review')
             if '__pycache__' in path.parts:continue
-            tar.add(path,arcname='source/'+str(path.relative_to(source)),recursive=False)
+            tar.add(path,arcname='source/'+str(path.relative_to(source)),recursive=False,filter=regular_header)
     if capsule.stat().st_size>MAX_BYTES:raise ValueError('Capsule exceeds bound')
     return capsule,metadata
