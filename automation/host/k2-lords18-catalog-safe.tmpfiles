@@ -1,0 +1,3 @@
+f /run/lock/k2-lords18-catalog.lock 0644 root root -
+d /var/lib/k2-lords18-catalog 0700 root root -
+d /home/k2deploy/stage/incoming-lords18 0755 k2deploy k2deploy -
