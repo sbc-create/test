@@ -65,7 +65,8 @@ def apply_locked():
  private=job/'incoming';(private/SID).mkdir(parents=True)
  for n in NAMES+['SHA256SUMS']:shutil.copy2(box/n,private/SID/n)
  assert all(sha(private/SID/n)==h for n,h in hashes.items()),'incoming mutated during snapshot'
- env={**os.environ,'K2_INCOMING':str(private),'K2_MANIFEST':str(MANIFEST)}
+ frozen_manifest=job/'manifest.json';frozen_manifest.write_text(json.dumps({'cells':{SID:c}},sort_keys=True))
+ env={**os.environ,'K2_INCOMING':str(private),'K2_MANIFEST':str(frozen_manifest)}
  run(APPLY,'--check-only',SID,env=env)
  backup=job/'before';backup.mkdir();present=[]
  for n in NAMES:

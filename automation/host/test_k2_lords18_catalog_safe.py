@@ -55,6 +55,16 @@ class SafeApply(unittest.TestCase):
   m.STATE.mkdir()
   for n in range(10):(m.STATE/('20261111T0000%02d.000000Z'%n)).mkdir()
   m.prune_jobs();self.assertEqual(len(list(m.STATE.iterdir())),5)
+ def test_native_apply_uses_frozen_validated_manifest(self):
+  original=self.fake_run;seen=[]
+  def changed(*args,**kw):
+   if args[0]==m.APPLY:
+    manifest=pathlib.Path(kw['env']['K2_MANIFEST']);self.assertNotEqual(manifest,m.MANIFEST)
+    self.assertEqual(json.loads(manifest.read_text())['cells'][m.SID]['account'],'lordserials1-cc');seen.append(manifest)
+    m.MANIFEST.write_text(json.dumps({'cells':{m.SID:{'account':'wrong-target'}}}))
+   original(*args,**kw)
+  with mock.patch.object(m,'run',changed):self.assertEqual(m.apply_locked(),'applied')
+  self.assertEqual(len(seen),2);self.assertEqual(seen[0],seen[1])
  def test_missing_provenance_refused(self):
   (m.INCOMING/m.SID/m.NAMES[-1]).unlink()
   with self.assertRaises(AssertionError):m.apply_locked()
