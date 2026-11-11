@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Attach verified direct-publisher provenance to explicit lords-19/lords-20 delivery only."""
+"""Attach verified direct-publisher provenance to explicit lords-18/lords-19/lords-20 delivery only."""
 import argparse,datetime,hashlib,json,pathlib
 
 def digest(p):
@@ -8,7 +8,7 @@ def digest(p):
   for chunk in iter(lambda:f.read(1048576),b''):h.update(chunk)
  return h.hexdigest()
 def create(box,snapshot,reports,site='lords-19'):
- assert site in {'lords-19','lords-20'},'provenance site outside approved scope'
+ assert site in {'lords-18','lords-19','lords-20'},'provenance site outside approved scope'
  files={};revisions=[]
  for kind,holder in [('catalog','items'),('details','details')]:
   p=box/f'{site}-{kind}.json';d=json.loads(p.read_text());assert d.get('site')==site
@@ -26,4 +26,4 @@ def create(box,snapshot,reports,site='lords-19'):
  target=box/f'{site}-data-provenance.json';tmp=target.with_suffix('.tmp');tmp.write_text(json.dumps(out,ensure_ascii=False,indent=2)+'\n');tmp.replace(target)
  return out
 if __name__=='__main__':
- p=argparse.ArgumentParser();p.add_argument('--site',choices=['lords-19','lords-20'],default='lords-19');p.add_argument('--box',required=True,type=pathlib.Path);p.add_argument('--snapshot',required=True,type=pathlib.Path);p.add_argument('--reports',required=True,type=pathlib.Path);a=p.parse_args();o=create(a.box,a.snapshot,a.reports,a.site);print(a.site+' provenance: publisher report digests/revision/count verified')
+ p=argparse.ArgumentParser();p.add_argument('--site',choices=['lords-18','lords-19','lords-20'],default='lords-19');p.add_argument('--box',required=True,type=pathlib.Path);p.add_argument('--snapshot',required=True,type=pathlib.Path);p.add_argument('--reports',required=True,type=pathlib.Path);a=p.parse_args();o=create(a.box,a.snapshot,a.reports,a.site);print(a.site+' provenance: publisher report digests/revision/count verified')

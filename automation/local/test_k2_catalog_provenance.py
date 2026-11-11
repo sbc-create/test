@@ -2,7 +2,7 @@ import importlib.util,tempfile,pathlib,json,unittest
 s=importlib.util.spec_from_file_location('prov',pathlib.Path(__file__).with_name('k2-catalog-provenance.py'));m=importlib.util.module_from_spec(s);s.loader.exec_module(m)
 class Provenance(unittest.TestCase):
  def test_exact_sites_report_hashes(self):
-  for site in ['lords-19','lords-20']:
+  for site in ['lords-18','lords-19','lords-20']:
    with self.subTest(site=site),tempfile.TemporaryDirectory() as t:
     p=pathlib.Path(t);box=p/'box';box.mkdir();reports=p/'reports';reports.mkdir();snap=p/'snapshot';snap.write_text('{}')
     for k,h in [('catalog','items'),('details','details')]: (box/f'{site}-{k}.json').write_text(json.dumps({'site':site,'revision':'abc',h:[1,2]}))
