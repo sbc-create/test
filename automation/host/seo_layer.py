@@ -214,6 +214,39 @@ def _сущность(хост: str, з: dict[str, Any]) -> dict[str, Any]:
 # Единая точка обогащения
 # ---------------------------------------------------------------------------
 
+def пагинация_seo(тело: bytes, хост: str, путь: str) -> bytes:
+    """Keep list-page metadata and canonical tied to the actual page number."""
+    from urllib.parse import parse_qs, urlsplit
+    url = urlsplit(путь)
+    if not re.fullmatch(r"/(?:catalog|movies|series|animation|anime|dorama|new)/|/(?:genre|country|year|collection)/[^/]+/", url.path):
+        return тело
+    pages = parse_qs(url.query).get("page", [])
+    if len(pages) != 1 or not pages[0].isascii() or not pages[0].isdigit():
+        return тело
+    page = int(pages[0])
+    if page <= 1:
+        return тело
+    text = тело.decode("utf-8")
+    suffix = f" — страница {page}"
+    for tag in ("title", "h1"):
+        text = re.sub(r"(<" + tag + r"\b[^>]*>)(.*?)(</" + tag + r">)",
+                      lambda m: m[1] + m[2] + ("" if suffix in m[2] else suffix) + m[3],
+                      text, count=1, flags=re.I | re.S)
+    def description(m):
+        tag = m[0]
+        if not re.search(r'''\bname\s*=\s*["']description["']''', tag, re.I):
+            return tag
+        return re.sub(r'''(\bcontent\s*=\s*)(["'])(.*?)\2''',
+                      lambda a: a[1] + a[2] + a[3] + ("" if suffix in a[3] else suffix) + a[2],
+                      tag, count=1, flags=re.I | re.S)
+    text = re.sub(r"<meta\b[^>]*>", description, text, flags=re.I)
+    canonical = тег_каноникал(хост, путь)
+    if canonical:
+        text = re.sub(r'''<link\b(?=[^>]*\brel\s*=\s*["']canonical["'])[^>]*>''',
+                      lambda m: canonical, text, flags=re.I)
+    return text.encode("utf-8")
+
+
 def обогатить(тело: bytes, тип: str, *, хост: str = "", путь: str = "/",
               counter: str = "", имя_сайта: str = "",
               сущность: dict[str, Any] | None = None,
@@ -228,6 +261,8 @@ def обогатить(тело: bytes, тип: str, *, хост: str = "", пу
     """
     if "text/html" not in тип or b"</head>" not in тело:
         return тело
+    if код == 200:
+        тело = пагинация_seo(тело, хост, путь)
     вставка = ""
     if МЕТКА_МЕТРИКИ.encode("utf-8") not in тело:
         вставка += тег_метрики(counter)
