@@ -28,7 +28,7 @@ def site(domain):
  (O/(domain+'-targets-plan.json')).write_text(json.dumps(plan,ensure_ascii=False,indent=2))
  for path in set(targets.values()):
   ids=[r['id'] for r in before if targets[r['name']]==path and r.get('target')!='https://'+domain+path]
-  if ids:api.call('edit/keywords_2/keywords/target',{'project_id':pid,'target':'https://'+domain+path,'target_type':'keywords','filters':[{'name':'id','operator':'EQUALS','values':ids}]})
+  for keyword_id in ids:api.call('edit/keywords_2/keywords/target',{'project_id':pid,'target':'https://'+domain+path,'target_type':'keywords','filters':[{'name':'id','operator':'EQUALS','values':[keyword_id]}]})
  after=api.call('get/keywords_2/keywords',{'project_id':pid,'fields':['id','name','target','group_id'],'limit':1000})
  if '--apply' in sys.argv:assert all(r['target']=='https://'+domain+targets[r['name']] for r in after)
  plan['after']=after;plan['result']='applied_verified' if '--apply' in sys.argv else 'dry_run';(O/(domain+'-targets-result.json')).write_text(json.dumps(plan,ensure_ascii=False,indent=2));print(domain,plan['result'],len(after),flush=True)
