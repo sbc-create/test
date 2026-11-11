@@ -199,7 +199,7 @@ def test_empty_file_is_not_permission_to_work_without_a_value(monkeypatch, tmp_p
 # -- bank_2/info -------------------------------------------------------------
 
 def test_bank_info_accepts_object_and_single_element_list():
-    for payload in ({"balance": 100, "tariff": "pro"}, [{"balance": 100, "tariff": "pro"}]):
+    for payload in ({"balance_all": 100, "tariff": "pro"}, [{"balance_all": 100, "tariff": "pro"}]):
         client = TopvisorClient(credentials=CRED, opener=make_opener([(200, {"result": payload})]), sleep=lambda _: None)
         assert client.bank_info()["balance"] == 100
 
@@ -439,22 +439,23 @@ def test_project_listing_asks_for_the_columns_it_needs():
         assert column in body["fields"], f"без {column} проект не опознать"
 
 
-def test_bank_info_asks_for_the_only_accepted_field():
+def test_bank_info_requests_documented_total_and_account_fields():
     log = []
     client = TopvisorClient(credentials=CRED, opener=make_opener([(200, {"result": []})], log),
                             sleep=lambda _: None)
     client.bank_info()
-    assert log[0]["body"].get("fields") == ["tariff"]
+    assert log[0]["body"].get("fields") == ["balance_all", "balance_personal", "balance_bonus", "balance_tariff", "tariff"]
 
 
-def test_bank_info_unwraps_the_nested_tariff():
+def test_bank_info_keeps_tariff_separate_from_unknown_total():
     client = TopvisorClient(
         credentials=CRED,
         opener=make_opener([(200, {"result": {"tariff": {"balance": 0, "name": "XS", "price": 0}}})]),
         sleep=lambda _: None,
     )
     info = client.bank_info()
-    assert info["balance"] == 0
+    assert info["balance"] is None
+    assert info["tariff"]["balance"] == 0
     assert info["name"] == "XS"
 
 
