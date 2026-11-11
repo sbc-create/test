@@ -221,7 +221,7 @@ def пагинация_seo(тело: bytes, хост: str, путь: str) -> byt
     if not re.fullmatch(r"/(?:catalog|movies|series|animation|anime|dorama|new)/|/(?:genre|country|year|collection)/[^/]+/", url.path):
         return тело
     pages = parse_qs(url.query).get("page", [])
-    if len(pages) != 1 or not pages[0].isascii() or not pages[0].isdigit():
+    if len(pages) != 1 or len(pages[0]) > 9 or not pages[0].isascii() or not pages[0].isdigit():
         return тело
     page = int(pages[0])
     if page <= 1:

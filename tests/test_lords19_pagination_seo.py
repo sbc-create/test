@@ -13,6 +13,8 @@ class Pagination(unittest.TestCase):
  def test_error_nonlist_first_untouched(self):
   for path,code in [('/catalog/?page=1',200),('/catalog/?page=abc',200),('/catalog/?page=2&page=3',200),('/title/example/?page=2',200),('/catalog/?page=2',404)]:
    self.assertNotIn(' — страница ',self.enrich(path,код=code))
+ def test_unbounded_page(self):
+  self.assertNotIn(" — страница ",self.enrich("/catalog/?page="+"9"*5000))
  def test_idempotent(self):
   a=seo.обогатить(BASE,'text/html',хост='lordserials1.info',путь='/genre/drama/?page=2')
   b=seo.обогатить(a,'text/html',хост='lordserials1.info',путь='/genre/drama/?page=2');self.assertEqual(a,b)
