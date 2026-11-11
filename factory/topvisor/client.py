@@ -293,32 +293,33 @@ class TopvisorClient:
 
     # -- удобные обёртки -------------------------------------------------
 
-    #: Единственное значение `fields`, которое метод принимает. Проверено
-    #: перебором по живому API: остальные имена дают код 2003.
-    BANK_FIELDS = ("tariff",)
+    # Official bank_2/info contract: tariff.balance is only the plan account.
+    # https://topvisor.com/ru/api/v2-services/bank_2/info/
+    BANK_FIELDS = ("balance_all", "balance_personal", "balance_bonus", "balance_tariff", "tariff")
 
     def bank_info(self) -> dict:
-        """Тариф и баланс — плоским словарём.
-
-        Без `fields` метод отвечает `{"result": [], "total": 1}`: запись есть,
-        но ни одна колонка не выбрана. Прошлая проверка печатала для этого
-        «получено записей: 0» — надпись была буквально верна и потому особенно
-        обманчива: выглядело как отсутствие доступа, хотя доступ был.
-
-        Сведения приходят вложенными в `tariff`; разворачиваем их здесь, чтобы
-        вызывающий не знал о форме ответа.
-        """
+        """Read total funds explicitly; never substitute the tariff balance."""
+        import math
         result = self.call("get/bank_2/info", {"fields": list(self.BANK_FIELDS)})
         if isinstance(result, list):
             result = result[0] if result else {}
-        if not isinstance(result, dict):
+        if not isinstance(result, dict) or not result:
             return {}
+        merged = dict(result)
         tariff = result.get("tariff")
         if isinstance(tariff, dict):
-            merged = {k: v for k, v in result.items() if k != "tariff"}
-            merged.update(tariff)
-            return merged
-        return result
+            # Preserve existing descriptive tariff fields and the original
+            # nested account, but never let tariff values override totals.
+            for key, value in tariff.items():
+                if key != "balance":
+                    merged.setdefault(key, value)
+        total = result.get("balance_all")
+        try:
+            balance = float(total) if total is not None and not isinstance(total, bool) else None
+        except (ValueError, TypeError):
+            balance = None
+        merged["balance"] = balance if balance is not None and math.isfinite(balance) else None
+        return merged
 
     #: Колонки списка проектов. Проверено перебором по живому API: без явного
     #: `fields` метод возвращает только `id`, а `url` и `name` приходят пустыми.
