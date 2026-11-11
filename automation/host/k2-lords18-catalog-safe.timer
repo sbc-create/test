@@ -1,0 +1,10 @@
+[Unit]
+Description=K2 lords-18 isolated catalog queue receiver
+[Timer]
+OnBootSec=4min
+OnUnitActiveSec=15min
+Persistent=true
+AccuracySec=30s
+Unit=k2-lords18-catalog-safe.service
+[Install]
+WantedBy=timers.target

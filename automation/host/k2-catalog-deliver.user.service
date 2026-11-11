@@ -27,10 +27,9 @@ Type=oneshot
 # (--provision / --verify): в каталоге лежит опись INSTALL.json с
 # коммитом источника и суммами файлов.
 WorkingDirectory=/srv/site-factory/k2-delivery
-# Состав витрин — из реестра по `deploy_target.ref`, а не строкой здесь:
-# перечисление стоило бы того, что новая ячейка узла молча осталась бы
-# без обновлений каталога (класс 47 в docs/RECURRING_FAILURES.md).
-ExecStart=/bin/bash automation/local/k2-deliver-catalog.sh lords-10 lords-11 lords-12 lords-13 lords-14 lords-15 lords-16 lords-17 lords-19 lords-20
+# Только принятые витрины: будущие сайты реестра не запускаются доставкой.
+# lords-18 получает отдельную очередь и приёмщик с резервным маршрутом.
+ExecStart=/bin/bash automation/local/k2-deliver-catalog.sh lords-10 lords-11 lords-12 lords-13 lords-14 lords-15 lords-16 lords-17 lords-18 lords-19 lords-20
 # Издатель держит в памяти снимок поставщика целиком: измерено 1,197 ГиБ пика
 # на восьми витринах. Предел выше измеренного, но ниже того, при котором на
 # разделе не останется места работающим витринам.

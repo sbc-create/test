@@ -1,0 +1,16 @@
+[Unit]
+Description=K2 lords-18 verified catalog update with continuous public service
+After=network-online.target
+ConditionPathIsDirectory=/home/k2deploy/stage/incoming-lords18/lords-18
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/python3 /usr/local/sbin/k2-lords18-catalog-safe.py
+ProtectSystem=strict
+ReadWritePaths=/srv/lordserials1-cc /home/k2deploy/stage/incoming-lords18 /var/lib/k2-lords18-catalog /etc/nginx/cells /run/lock /var/log/nginx
+ProtectHome=false
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectKernelTunables=true
+RestrictSUIDSGID=true
+TimeoutStartSec=900

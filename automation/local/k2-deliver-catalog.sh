@@ -149,7 +149,7 @@ for site in $sites; do
     failed="$failed $site"
     continue
   fi
-  if [ "$site" = lords-19 ] || [ "$site" = lords-20 ]; then
+  if [ "$site" = lords-18 ] || [ "$site" = lords-19 ] || [ "$site" = lords-20 ]; then
     if ! python3 automation/local/k2-catalog-provenance.py --site "$site" --box "$box" --snapshot "$snapshot" --reports "${K2_PROVENANCE_REPORT_DIR:-$repo_root/var/k2-data/publish-reports}"; then
       echo "[x] $site: provenance verification failed; not delivered"
       failed="$failed $site"
@@ -164,9 +164,14 @@ for site in $sites; do
   # не оставили ни одной строки о причине — в журнале юнита есть только «==>
   # lords-10: комплект 111 МиБ» и «[x] доставка не удалась». Шаг, на котором
   # стоит вся цепочка, был единственным, чей вывод уничтожался.
+  # lords-18 has an isolated receiver: default native timer must never restart it.
+  destination="/home/k2deploy/stage/incoming/$site"
+  if [ "$site" = lords-18 ]; then
+    destination="/home/k2deploy/stage/incoming-lords18/.upload-$$"
+  fi
   copy_log="$work/$site-copy.log"
   if ! "$ansible_bin" -i "$inventory" "$host_ref" -m copy \
-      -a "src=$box/ dest=/home/k2deploy/stage/incoming/$site/ mode=0644 directory_mode=0755" \
+      -a "src=$box/ dest=$destination/ mode=0644 directory_mode=0755" \
       > "$copy_log" 2>&1; then
     echo "[x] доставка не удалась; причина из ansible:"
     tail -25 "$copy_log" | sed 's/^/   /'
@@ -178,12 +183,22 @@ for site in $sites; do
   fi
 
   out="$("$ansible_bin" -i "$inventory" "$host_ref" -m raw \
-         -a "cd /home/k2deploy/stage/incoming/$site; sha256sum -c SHA256SUMS --quiet; echo rc=\$?" 2>&1)"
+         -a "cd $destination; sha256sum -c SHA256SUMS --quiet; echo rc=\$?" 2>&1)"
   printf '%s\n' "$out" | grep -E "rc=|FAILED" | sed 's/^/   /'
   if ! printf '%s\n' "$out" | grep -q "rc=0"; then
     echo "[x] $site: суммы на узле не сошлись — ящик НЕ убран, он нужен разбору"
     failed="$failed $site"
     continue
+  fi
+
+  if [ "$site" = lords-18 ]; then
+    # Atomic publication after checksum verification; never replace an unconsumed job.
+    if ! "$ansible_bin" -i "$inventory" "$host_ref" -m raw \
+       -a "test ! -e /home/k2deploy/stage/incoming-lords18/lords-18 && mv -T $destination /home/k2deploy/stage/incoming-lords18/lords-18"; then
+      echo "[x] lords-18: isolated queue busy or atomic publication failed"
+      failed="$failed $site"
+      continue
+    fi
   fi
 
   rm -rf "$box"

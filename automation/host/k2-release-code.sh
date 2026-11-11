@@ -60,6 +60,13 @@ set -uo pipefail
 
 site="${1:?нужен site_id}"
 mode="${2:-full}"
+# Same fixed lock as the zero-downtime catalog receiver. Open read-only so
+# ordinary deployment can lock the root-owned 0644 file without write rights.
+if [ "$site" = lords-18 ]; then
+  exec 9</run/lock/k2-lords18-catalog.lock || exit 1
+  flock -n 9 || { echo "lords-18: catalog/code operation already active" >&2; exit 1; }
+fi
+
 case "$mode" in
   full|--dry-run|--verify|--rollback) : ;;
   *) echo "[x] неизвестный режим $mode" >&2; exit 2 ;;
