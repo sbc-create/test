@@ -98,6 +98,8 @@ def путь_ключа(корень: Path) -> str:
 #: Файлы, которые нужны доставке. Пути относительные: сценарии вычисляют
 #: корень как `parents[2]` от себя, поэтому раскладка обязана совпадать.
 НАБОР_УСТАНОВКИ = (
+    "automation/local/node-cell-list.py",
+    "automation/local/k2-catalog-provenance.py",
     "automation/local/k2-deliver-catalog.sh",
     "automation/local/make-k2-publisher.py",
     "automation/local/run-k2-publisher.py",

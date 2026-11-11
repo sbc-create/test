@@ -149,6 +149,13 @@ for site in $sites; do
     failed="$failed $site"
     continue
   fi
+  if [ "$site" = lords-19 ]; then
+    if ! python3 automation/local/k2-catalog-provenance.py --box "$box" --snapshot "$snapshot" --reports "${K2_PROVENANCE_REPORT_DIR:-$repo_root/var/k2-data/publish-reports}"; then
+      echo "[x] lords-19: provenance verification failed; not delivered"
+      failed="$failed $site"
+      continue
+    fi
+  fi
   ( cd "$box" && sha256sum ./*.json > SHA256SUMS )
   echo "==> $site: комплект $(du -sm "$box" | cut -f1) МиБ, файлов $(ls -1 "$box" | wc -l)"
 
