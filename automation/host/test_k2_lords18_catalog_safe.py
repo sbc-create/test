@@ -38,6 +38,23 @@ class SafeApply(unittest.TestCase):
    m.fcntl.flock(held,m.fcntl.LOCK_EX|m.fcntl.LOCK_NB)
    with mock.patch.object(m,'apply_locked') as apply, mock.patch.object(m.os,'geteuid',return_value=0):
     m.main();apply.assert_not_called()
+ def test_unchanged_package_acknowledged_without_restart(self):
+  for n in m.NAMES:(m.ROOT/'data'/n).write_text('new '+n)
+  self.assertEqual(m.apply_locked(),'unchanged');self.assertFalse(self.calls);self.assertFalse((m.INCOMING/m.SID).exists())
+ def test_mutated_ack_keeps_valid_installation(self):
+  original=self.fake_run
+  def changed(*args,**kw):
+   original(*args,**kw)
+   if args==('systemctl','stop',m.CANDIDATE):(m.INCOMING/m.SID/m.NAMES[0]).write_text('different queued file')
+  with mock.patch.object(m,'run',changed):self.assertEqual(m.apply_locked(),'applied; queue retained')
+  self.assertTrue((m.INCOMING/m.SID).exists());self.assertEqual((m.ROOT/'data'/m.NAMES[0]).read_text(),'new '+m.NAMES[0]);self.assertNotIn(('systemctl','restart',m.UNIT),self.calls)
+ def test_extra_symlink_not_copied(self):
+  (m.INCOMING/m.SID/'unexpected').symlink_to('/etc/shadow')
+  self.assertEqual(m.apply_locked(),'applied')
+ def test_retention_is_bounded(self):
+  m.STATE.mkdir()
+  for n in range(10):(m.STATE/('20261111T0000%02d.000000Z'%n)).mkdir()
+  m.prune_jobs();self.assertEqual(len(list(m.STATE.iterdir())),5)
  def test_missing_provenance_refused(self):
   (m.INCOMING/m.SID/m.NAMES[-1]).unlink()
   with self.assertRaises(AssertionError):m.apply_locked()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fixed lords-18 native catalog receiver; old process serves during restart."""
-import datetime,fcntl,hashlib,json,os,pathlib,shutil,subprocess,time,urllib.request
+import datetime,fcntl,hashlib,json,os,pathlib,re,shutil,subprocess,time,urllib.request
 P=pathlib.Path
 SID='lords-18';ROOT=P('/srv/lordserials1-cc');INCOMING=P('/home/k2deploy/stage/incoming-lords18');STATE=P('/var/lib/k2-lords18-catalog');LOCK=P('/run/lock/k2-lords18-catalog.lock');UP=P('/etc/nginx/cells/lords-18.upstream')
 UNIT='nova-lordserials1-cc.service';CANDIDATE='nova-lordserials1-cc-candidate.service';APPLY='/usr/local/sbin/k2-catalog-apply.sh';MANIFEST=P('/home/k2deploy/stage/MANIFEST.json')
@@ -35,6 +35,18 @@ def route(data):
  except Exception:
   UP.write_bytes(previous);run('nginx','-t');run('systemctl','reload','nginx');raise
 
+def acknowledge(box,hashes):
+ # A changed/failed queue acknowledgement never rolls back a healthy installation.
+ try:
+  if not all((box/n).is_file() and not (box/n).is_symlink() and sha(box/n)==h for n,h in hashes.items()):return False
+  shutil.rmtree(box);return True
+ except OSError:return False
+
+def prune_jobs():
+ # Lock excludes other writers; keep at most six attempts, including failures.
+ jobs=sorted(p for p in STATE.iterdir() if p.is_dir() and not p.is_symlink() and re.fullmatch(r"[0-9]{8}T[0-9]{6}\.[0-9]{6}Z",p.name))
+ for p in jobs[:-5]:shutil.rmtree(p)
+
 def apply_locked():
  box=INCOMING/SID
  if not box.exists():return 'empty'
@@ -45,9 +57,14 @@ def apply_locked():
  original=UP.read_bytes();assert original==b'server 127.0.0.1:9136;\n'
  assert subprocess.run(['systemctl','is-active','--quiet',CANDIDATE]).returncode!=0
  link=ROOT/'candidate';assert not link.exists() and not link.is_symlink()
+ hashes={n:sha(box/n) for n in NAMES}
+ if all((ROOT/'data'/n).is_file() and sha(ROOT/'data'/n)==h for n,h in hashes.items()):
+  return 'unchanged' if acknowledge(box,hashes) else 'unchanged; queue retained'
  old=(ROOT/'current').resolve();health(9136,old);before=protected()
- STATE.mkdir(parents=True,exist_ok=True);job=STATE/datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ');job.mkdir(mode=0o700)
- private=job/'incoming';private.mkdir();shutil.copytree(box,private/SID);hashes={n:sha(private/SID/n) for n in NAMES}
+ STATE.mkdir(parents=True,exist_ok=True);prune_jobs();job=STATE/datetime.datetime.now(datetime.timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ');job.mkdir(mode=0o700)
+ private=job/'incoming';(private/SID).mkdir(parents=True)
+ for n in NAMES+['SHA256SUMS']:shutil.copy2(box/n,private/SID/n)
+ assert all(sha(private/SID/n)==h for n,h in hashes.items()),'incoming mutated during snapshot'
  env={**os.environ,'K2_INCOMING':str(private),'K2_MANIFEST':str(MANIFEST)}
  run(APPLY,'--check-only',SID,env=env)
  backup=job/'before';backup.mkdir();present=[]
@@ -62,10 +79,7 @@ def apply_locked():
   assert all(sha(ROOT/'data'/n)==h for n,h in hashes.items()),'installed digest mismatch'
   after=protected();assert after==before,'protected data changed'
   route(original);run('systemctl','stop',CANDIDATE);link.unlink()
-  assert all(sha(box/n)==h for n,h in hashes.items()),'incoming mutated during apply'
-  shutil.rmtree(box)
-  (job/'success.json').write_text(json.dumps({'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'installed':hashes,'protected_unchanged':True,'release':str(old)},indent=2))
-  return 'applied'
+
  except Exception as e:
   (job/'failure.txt').write_text(str(e))
   run('systemctl','start',CANDIDATE);health(10136,old);route(b'server 127.0.0.1:10136;\n')
@@ -75,6 +89,9 @@ def apply_locked():
   run('systemctl','restart',UNIT);health(9136,old);route(original);run('systemctl','stop',CANDIDATE)
   if link.is_symlink():link.unlink()
   raise
+ acknowledged=acknowledge(box,hashes)
+ (job/'success.json').write_text(json.dumps({'at':datetime.datetime.now(datetime.timezone.utc).isoformat(),'installed':hashes,'protected_unchanged':True,'release':str(old),'queue_acknowledged':acknowledged},indent=2))
+ return 'applied' if acknowledged else 'applied; queue retained'
 
 def main():
  assert os.geteuid()==0
