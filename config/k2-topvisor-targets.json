@@ -1,0 +1,27 @@
+{
+  "scope": "Owner approved exact launched domains; existing manifest keywords only",
+  "basis": "Canonical HTTP200 public pages; no measured search demand claim",
+  "paid_requests": false,
+  "sites": {
+    "lordserials1.cc": {
+      "сезон целиком смотреть онлайн": "/series/",
+      "все серии сезона подряд": "/series/",
+      "новые серии сериалов онлайн": "/new/",
+      "что вышло сегодня сериалы": "/new/",
+      "последние серии смотреть": "/new/"
+    },
+    "lordserials1.info": {
+      "старые сериалы смотреть онлайн": "/series/",
+      "сериалы прошлых лет": "/series/",
+      "сериалы 2026 года смотреть": "/year/2026/",
+      "сериалы 2025 онлайн": "/year/2025/",
+      "сериалы по годам выпуска": "/catalog/"
+    },
+    "lordserials21.cc": {
+      "мультсериалы онлайн смотреть": "/animation/",
+      "мультфильмы и мультсериалы": "/animation/",
+      "сериалы и фильмы на одном сайте": "/catalog/",
+      "мультсериалы и сериалы онлайн": "/catalog/"
+    }
+  }
+}
