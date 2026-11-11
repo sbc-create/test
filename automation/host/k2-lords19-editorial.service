@@ -1,0 +1,17 @@
+[Unit]
+Description=Exact lords19 native editorial queue transport
+After=network-online.target
+[Service]
+Type=oneshot
+User=claude
+Group=claude
+WorkingDirectory=/home/claude/wt-portable-site-cell-01
+Environment=PYTHONPATH=/home/claude/wt-portable-site-cell-01
+Environment=PYTHONDONTWRITEBYTECODE=1
+ExecStart=/usr/bin/python3 -m factory.cell.k2_lords19_editorial
+TimeoutStartSec=240
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=read-only
+ReadWritePaths=/var/lib/site-cells-k2-lords19 /home/claude/.ssh

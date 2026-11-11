@@ -1,0 +1,14 @@
+[Unit]
+Description=Exact lords19 native editorial receiver
+After=network-online.target
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/k2-lords19-editorial-receiver
+TimeoutStartSec=20
+User=root
+Group=root
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=read-only
+ProtectSystem=strict
+ReadWritePaths=/srv/lordserials1-info/data /var/lib/k2-lords19-editorial

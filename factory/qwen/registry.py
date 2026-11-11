@@ -429,6 +429,13 @@ def возможности(s: "Сайт") -> dict[str, str]:
     пообещать публикацию шести сайтам, где текст не появится.
     """
     умеет = dict(ВОЗМОЖНОСТИ_АДАПТЕРА.get(s.adapter, {}))
+    if s.site_id == "lords-19" and s.domain == "lordserials1.info":
+        from factory.cell import k2_lords19_editorial as remote
+        if remote.ready():
+            умеет.update(facts="authenticated remote details snapshot",
+                         deliver="dedicated native editorial queue to fixed K2 receiver",
+                         display="authenticated live runtime digest and reader contract")
+        return умеет
     if s.adapter == "yummy":
         путь = наложение_в_контейнере(s.domain)
         if путь:
@@ -466,6 +473,9 @@ def возможности(s: "Сайт") -> dict[str, str]:
 
 def механизм(s: "Сайт") -> str:
     """Каким путём материал попадает на сайт. Пусто — пути нет."""
+    if s.site_id == "lords-19" and s.domain == "lordserials1.info":
+        from factory.cell import k2_lords19_editorial as remote
+        return "editorial-queue" if remote.ready() else ""
     if s.adapter in ("animedia", "yummy"):
         return "overlay"
     if s.adapter in СЕМЕЙСТВА_ПРАВОК and читатель_правок(s.account) is not None:
@@ -477,6 +487,10 @@ def механизм(s: "Сайт") -> str:
 
 def путь_доставки(s: "Сайт") -> str:
     """Файл, который читает ВЫПУЩЕННЫЙ рантайм этого сайта."""
+    if s.site_id == "lords-19" and s.domain == "lordserials1.info":
+        from factory.cell import k2_lords19_editorial as remote
+        remote.refresh()
+        return str(remote.CACHE / "editorial-overrides.json")
     if механизм(s) == "editorial-queue":
         return f"/srv/{s.account}/data/{ИМЯ_ПРАВОК}"
     return str(корень_хранилища(s.adapter) / s.domain / "title-overlays.json")
@@ -718,6 +732,14 @@ def собрать(*, опрашивать_сеть: bool = True) -> list[Сай
         else:
             s.published_release = ""
 
+        if s.site_id == "lords-19" and s.domain == "lordserials1.info":
+            from factory.cell import k2_lords19_editorial as remote
+            try:
+                proof = remote.refresh()
+                remote.source_identity(proof)
+                s.published_release = proof["release"]
+            except (OSError, ValueError, remote.Refused, remote.subprocess.SubprocessError):
+                s.published_release = ""
         if опрашивать_сеть:
             код, тело = _страница(f"https://{домен}/")
             s.public_http = код

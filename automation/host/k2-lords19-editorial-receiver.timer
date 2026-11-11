@@ -1,0 +1,9 @@
+[Unit]
+Description=Exact lords19 editorial incoming scan
+[Timer]
+OnBootSec=20
+OnUnitInactiveSec=20
+AccuracySec=1
+Unit=k2-lords19-editorial-receiver.service
+[Install]
+WantedBy=timers.target
