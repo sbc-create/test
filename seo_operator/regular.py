@@ -168,6 +168,7 @@ def off_direction(domain: str, mine: dict) -> bool:
 
 
 EDITOR_SITES = {
+    "lordserials21.cc": "lords-20",  # authenticated exact20 remote editorial route
     "lordserials1.info": "lords-19",  # authenticated remote editorial route
     **ANIMEDIA,
     "zonafilm.space": "zona-01",
@@ -2770,6 +2771,10 @@ def blocked_slugs(events_path: Path, now: dt.datetime) -> set[str]:
 
 def _details_path(facts_dir: Path, sid: str) -> Path:
     """Снимок подробностей: общий каталог, иначе каталог данных ячейки (AnimeGo)."""
+    if sid == "lords-20" and facts_dir == SOURCES["facts_snapshots"]:
+        from factory.cell import k2_lords20_editorial as remote
+        remote.refresh()
+        return remote.CACHE / "lords-20-details.json"
     if sid == "lords-19" and facts_dir == SOURCES["facts_snapshots"]:
         from factory.cell import k2_lords19_editorial as remote
         remote.refresh()

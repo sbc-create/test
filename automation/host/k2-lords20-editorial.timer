@@ -1,0 +1,9 @@
+[Unit]
+Description=Exact lords20 native editorial queue polling
+[Timer]
+OnBootSec=20
+OnUnitInactiveSec=20
+AccuracySec=1
+Unit=k2-lords20-editorial.service
+[Install]
+WantedBy=timers.target

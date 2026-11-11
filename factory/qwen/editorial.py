@@ -470,6 +470,10 @@ def _снимок_подробностей(sid: str) -> pathlib.Path:
     `/srv/lords/.frontend`, отказывал в фактах и подготовке при объявленных
     операциях (измерено 2026-10-09).
     """
+    if sid == "lords-20":
+        from factory.cell import k2_lords20_editorial as remote
+        remote.refresh()
+        return remote.CACHE / "lords-20-details.json"
     if sid == "lords-19":
         from factory.cell import k2_lords19_editorial as remote
         remote.refresh()
@@ -1123,6 +1127,17 @@ def _подать_правки(s: registry.Сайт, правки: dict, *, auth
     """
     from factory.cell import editorial_store, queue as q
 
+    if s.site_id == "lords-20" and s.domain == "lordserials21.cc":
+        from factory.cell import k2_lords20_editorial as remote
+        doc = editorial_store.собрать(s.site_id, правки, actor=author, reason=reason)
+        result = remote.submit(s.site_id, doc, _коммит_выпуска(s))
+        live = remote.CACHE / "editorial-overrides.json"
+        _записать_атомарно(_каталог(s) / ДОСТАВЛЕНО, {
+            "site": s.domain, "at": _сейчас(), "request_id": result["request_id"],
+            "content_digest": result["content_digest"], "file_digest": _цифра_файла(live),
+            "entries": result["entries"],
+        })
+        return result
     if s.site_id == "lords-19" and s.domain == "lordserials1.info":
         from factory.cell import k2_lords19_editorial as remote
         doc = editorial_store.собрать(s.site_id, правки, actor=author, reason=reason)
