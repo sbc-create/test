@@ -1007,14 +1007,23 @@ def capture_release_state(site_id: str, *, path: Path | None = None) -> dict[str
     _нужен_root()
     from factory.cell import rollback_state
     п = Площадка.из_реестра(site_id, path=path)
-    old = verify(site_id, порт=п.port, path=path)
+    from factory.cell import legacy_checkpoint
+    old, fence = legacy_checkpoint.primary(п, verify, path=path)
     new = verify(site_id, порт=п.candidate_port, path=path)
     if not old.get('ok') or not old.get('build_id') or not new.get('ok') or not new.get('build_id'):
         raise PrivilegedRefused('Cannot checkpoint unverified old/candidate HTTP build identities')
-    return rollback_state.capture(
+    if fence is not None:
+        if new.get("build_id") != legacy_checkpoint.NEW[:12] + "-" + site_id:
+            raise PrivilegedRefused("Legacy migration candidate build differs")
+        fence()
+    result = rollback_state.capture(
         п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ,
         _объявление_обработчика(site_id, path), _systemctl,
         old_build_id=old['build_id'], new_build_id=new['build_id'])
+
+    if fence is not None:
+        result["primary_checkpoint_proof"] = old["primary_checkpoint_proof"]
+    return result
 
 
 def promote(site_id: str, *, dry_run: bool = True, предел: int = 600,
@@ -1358,9 +1367,31 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
         if not candidate_ready.get("ready") or not saved.get("new_build_id") or not candidate_verify.get("ok"):
             raise PrivilegedRefused("Rollback candidate is not ready; no cold-main route switch")
         switch_route(site_id, п.candidate_port, dry_run=False, path=path)
+    from factory.cell import legacy_checkpoint
+    def old_probe(build=""):
+        # The same identity proof must protect rollback, not just promotion.
+        if site_id != legacy_checkpoint.SITE or п.current.resolve().name != legacy_checkpoint.OLD[:12]:
+            return verify(site_id, порт=п.port, ожидаемый_build=build, path=path)
+        try:
+            verdict, fence = legacy_checkpoint.primary(п, verify, path=path)
+            if fence is not None:
+                fence()
+            if build and verdict.get("build_id") != build:
+                verdict = dict(verdict, ok=False, build_matches=False)
+            return verdict
+        except Exception as exc:
+            return {"ok": False, "error": type(exc).__name__ + ": " + str(exc)[:200]}
     def previous_ready(build):
-        return rollback_state.wait_for_build(
-            lambda: verify(site_id, порт=п.port, ожидаемый_build=build, path=path), build, timeout=предел)
+        return rollback_state.wait_for_build(lambda: old_probe(build), build, timeout=предел)
+    def old_ready(*, check_alive=False):
+        if site_id == legacy_checkpoint.SITE and п.current.resolve().name == legacy_checkpoint.OLD[:12]:
+            verdict = previous_ready(legacy_checkpoint.OLD[:12] + "-" + site_id)
+            return {"ready": verdict.get("ok") is True, "verification": "bounded_legacy_identity"}
+        options = {}
+        if check_alive:
+            options["жив"] = lambda: _systemctl("is-active", "--quiet", п.unit,
+                                                проверять=False).returncode == 0
+        return готов(п.port, предел=предел, **options)
     восстановление = rollback_state.restore(
         п, _каталог_юнитов(), UPSTREAM_КАТАЛОГ, _systemctl, wait_ready=previous_ready)
     if восстановление is not None:
@@ -1371,7 +1402,7 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
         # Candidate failed before promotion: preserve the existing native main.
         if _systemctl("is-active", "--quiet", п.unit, проверять=False).returncode != 0:
             _systemctl("restart", п.unit)
-        if not готов(п.port, предел=предел).get("ready") or not verify(site_id, порт=п.port, path=path).get("ok"):
+        if not old_ready().get("ready") or not old_probe().get("ok"):
             raise PrivilegedRefused("Existing main not HTTP-ready; retain candidate")
         switch_route(site_id, п.port, dry_run=False, path=path)
         восстановление = {"current_preserved": str(п.current.resolve())}
@@ -1379,18 +1410,16 @@ def rollback(site_id: str, *, dry_run: bool = True, предел: int = 600,
         восстановление = вернуть_прежнюю(п, предел=предел)
         switch_route(site_id, п.port, dry_run=False, path=path)
     expected_old = saved.get("old_build_id") if applicable else ""
-    old_verdict = verify(site_id, порт=п.port, ожидаемый_build=expected_old or "", path=path)
+    old_verdict = old_probe(expected_old or "")
     if not old_verdict.get("ok"):
         if applicable:switch_route(site_id, п.candidate_port, dry_run=False, path=path)
         raise PrivilegedRefused("Old main failed verification after route reload; candidate retained")
     time.sleep(float(os.environ.get("SITE_DRAIN_SEC", "5")))
     _systemctl("stop", п.candidate_unit)
-    состояние = готов(п.port, предел=предел,
-                      жив=lambda: _systemctl("is-active", "--quiet", п.unit,
-                                             проверять=False).returncode == 0)
+    состояние = old_ready(check_alive=True)
     итог = {"operation": "rollback", "site_id": site_id, "dry_run": False,
             "steps": шаги, "ready": состояние, "previous_unit": восстановление}
-    итог["verify"] = verify(site_id, порт=п.port, ожидаемый_build=expected_old or "", path=path)
+    итог["verify"] = old_probe(expected_old or "")
     return итог
 
 
