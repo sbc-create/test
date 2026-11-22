@@ -2487,11 +2487,10 @@ object-fit:cover;display:block}
 .plot p{margin:0 0 10px;font-size:13.5px;line-height:1.62;color:@INK@}
 .plot .none{color:@DIM@;font-style:italic}
 .plot a{display:inline-block;padding:5px 2px;color:@ACCDK@;font-weight:600}
-.facts{display:grid;grid-template-columns:1fr;gap:4px 26px;margin:14px 0 0;font-size:13px}
-@media(min-width:720px){.facts{grid-template-columns:1fr 1fr}}
-.facts div{display:flex;gap:6px;padding:3px 0;border-bottom:1px dotted @LINE@}
-.facts dt{font-weight:700;color:@INK@;flex:0 0 auto}
-.facts dd{margin:0;color:@DIM@}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,20rem),1fr));gap:4px 26px;margin:14px 0 0;font-size:13px}
+.facts div{display:flex;flex-wrap:wrap;min-width:0;gap:6px;padding:3px 0;border-bottom:1px dotted @LINE@}
+.facts dt{font-weight:700;color:@INK@;flex:0 1 auto;max-width:100%;overflow-wrap:anywhere}
+.facts dd{margin:0;min-width:0;flex:1 1 9rem;overflow-wrap:anywhere;color:@DIM@}
 .facts a{color:@ACCDK@;font-weight:600;display:inline-block;padding:5px 2px}
 /* Высота ссылки жанра — 14 px по строке, и пальцем в неё не попасть.
    Измерено пробой целей касания: 238 попаданий ниже 24 px, и все —
