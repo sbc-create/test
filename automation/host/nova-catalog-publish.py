@@ -41,7 +41,9 @@ import hashlib
 import json
 import os
 import shutil
+import stat
 import sys
+import tempfile
 import time
 import uuid
 from dataclasses import dataclass
@@ -49,6 +51,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]))
 from factory.lords import rating_gateway  # noqa: E402
+from factory.lords.source_coordination import source_lease, SourceLeaseTimeout  # noqa: E402
 from factory.lords.nova_publish import (  # noqa: E402
     PublishError, РеестрСлагов, загрузить_снимок, контрольная_сумма,
     покрытие, причины_отсутствия, проверить_контракт_рендерера, собрать_сайт)
@@ -72,6 +75,24 @@ from factory.lords.nova_publish import (  # noqa: E402
                  "port": 9110},
     "zona-01": {"unit": "nova-zona-01.service", "host": "zonafilm.space",
                 "port": 9120},
+    # Lord Serial: то же семейство и тот же профиль поставщика, что и lords-01.
+    # До сих пор их каталог собирался обходом отрисованного релиза, а бокового
+    # файла не было вовсе — стартовая строка показывала «подробностей 0».
+    # Отсюда и пустые карточки: маршрут открывался, а показать на нём было
+    # нечего. Каталог тот же, значит и набор идентификаторов тот же.
+    "lords-02": {"unit": "nova-lords-02.service", "host": "lordserial33.biz",
+                 "port": 9111},
+    "lords-03": {"unit": "nova-lords-03.service", "host": "1lordserials1.online",
+                 "port": 9112},
+    # zonafilm.cc. Витрины здесь не было вовсе, поэтому её каталог не
+    # собирался и не доставлялся ни этим издателем, ни пятиминутным проходом:
+    # в его ВИТРИНЫ и КАНОНИЧЕСКИЕ она тоже не значится. Измерено 25.09 —
+    # /srv/lords/.frontend/zona-02-catalog.json от 22.09 14:34, ревизия
+    # 0b59f77bb3c7, тогда как у всех остальных витрин 25.09 03:51 и
+    # e2c18b52546c. Посетитель третьи сутки видел снимок трёхдневной
+    # давности, и ни одна проверка этого не называла: сайт отвечал 200.
+    "zona-02": {"unit": "nova-zona-02.service", "host": "zonafilm.cc",
+                "port": 9123},
     # Аниме-витрины. Каталог у них — аниме-подмножество того же снимка
     # поставщика, а не срез каталога Zona: сегодня там лежит именно срез, и
     # аниме в нём 131 из 3999.
@@ -90,6 +111,66 @@ from factory.lords.nova_publish import (  # noqa: E402
                     "известный_дефект_шаблона":
                         "у семейства animedia нет раскладки страницы тайтла: "
                         "ВИДЫ_1_1 = {lords, zona}, все /title/ отдают 503"},
+    # zonafilm12.site — ячейка с первого дня. Каталог тот же снимок поставщика,
+    # что у остальных витрин семейства: производитель пишет им
+    # байт-идентичные файлы. Без этой записи `опубликовать` отвечает
+    # «витрина zona-03 не входит в профиль публикации», снимка не
+    # возникает, и первый выпуск домена падает на stage_snapshot.
+    #
+    # Доставку добавлять не нужно: `доставить_ячейкам` берёт адреса из
+    # реестра ячеек фабрики.
+    "zona-03": {"unit": "nova-zonafilm12-site.service", "host": "zonafilm12.site",
+                "port": 9124},
+    # lordserials22.info — ячейка с первого дня. Каталог тот же снимок поставщика,
+    # что у остальных витрин семейства: производитель пишет им
+    # байт-идентичные файлы. Без этой записи `опубликовать` отвечает
+    # «витрина lords-05 не входит в профиль публикации», снимка не
+    # возникает, и первый выпуск домена падает на stage_snapshot.
+    #
+    # Доставку добавлять не нужно: `доставить_ячейкам` берёт адреса из
+    # реестра ячеек фабрики.
+    "lords-05": {"unit": "nova-lordserials22-info.service", "host": "lordserials22.info",
+                "port": 9113},
+    # lordserials22.site — ячейка с первого дня. Каталог тот же снимок поставщика,
+    # что у остальных витрин семейства: производитель пишет им
+    # байт-идентичные файлы. Без этой записи `опубликовать` отвечает
+    # «витрина lords-06 не входит в профиль публикации», снимка не
+    # возникает, и первый выпуск домена падает на stage_snapshot.
+    #
+    # Доставку добавлять не нужно: `доставить_ячейкам` берёт адреса из
+    # реестра ячеек фабрики.
+    "lords-06": {"unit": "nova-lordserials22-site.service", "host": "lordserials22.site",
+                "port": 9116},
+    # lordserials22.space — ячейка с первого дня. Каталог тот же снимок поставщика,
+    # что у остальных витрин семейства: производитель пишет им
+    # байт-идентичные файлы. Без этой записи `опубликовать` отвечает
+    # «витрина lords-07 не входит в профиль публикации», снимка не
+    # возникает, и первый выпуск домена падает на stage_snapshot.
+    #
+    # Доставку добавлять не нужно: `доставить_ячейкам` берёт адреса из
+    # реестра ячеек фабрики.
+    "lords-07": {"unit": "nova-lordserials22-space.service", "host": "lordserials22.space",
+                "port": 9117},
+    # lordserial101.site и lordfilm077.site — ячейки с первого дня, заведены
+    # 2026-10-06. Каталог тот же снимок поставщика, что у остальных витрин
+    # семейства: производитель пишет им байт-идентичные файлы, а направление
+    # витрины (общие сериалы и общие фильмы) задаёт её профиль, а не отдельный
+    # снимок. Без этих записей `опубликовать` отвечает «витрина lords-08 не
+    # входит в профиль публикации», снимка не возникает, и первый выпуск
+    # домена падает на stage_snapshot.
+    #
+    # Доставку добавлять не нужно: `доставить_ячейкам` берёт адреса из реестра
+    # ячеек фабрики, а ячейка без каталога данных пропускается — это её
+    # нормальное состояние до активации, а не отказ доставки.
+    #
+    # Юнит и порт взяты из реестра ячеек (config/site-cells.json), а не
+    # назначены здесь: на хосте этих служб ещё нет, их создаёт
+    # launch-new-site.sh под root. В сборке каталога юнит не участвует — он
+    # нужен только для подсказки о перезапуске в конце отчёта.
+    "lords-08": {"unit": "nova-lordserial101-site.service", "host": "lordserial101.site",
+                "port": 9118},
+    "lords-09": {"unit": "nova-lordfilm077-site.service", "host": "lordfilm077.site",
+                "port": 9119},
 }
 
 #: Обвал каталога больше чем на эту долю считается порчей источника, а не
@@ -100,6 +181,26 @@ from factory.lords.nova_publish import (  # noqa: E402
 #: Нижняя граница публикуемого каталога. Меньше — это не «мало контента», а
 #: неполный обход источника, и публиковать такое нельзя.
 МИНИМУМ_КАТАЛОГА = 52000
+
+
+def пиковая_память() -> dict:
+    """Пик своей памяти и памяти детей — в отчёт прогона.
+
+    Почему это поле появилось. 9 и 10 октября шаг публикации убивал OOM killer,
+    и на вопрос «сколько он съел» ответить было НЕЧЕМ: cgroup исчезает вместе с
+    завершением юнита, а журнал ядра доступен только root. Пик приходилось
+    измерять отдельными прогонами на стенде и переносить вывод на боевой — то
+    есть доказывать измерением не того прогона, о котором отчёт.
+
+    `ru_maxrss` ядро ведёт само за весь срок жизни процесса, так что это именно
+    пик, а не мгновенное значение, и стоит он один системный вызов.
+    """
+    import resource
+
+    сам = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss * 1024
+    дети = resource.getrusage(resource.RUSAGE_CHILDREN).ru_maxrss * 1024
+    return {"self_bytes": сам, "children_bytes": дети,
+            "self_gib": round(сам / 2**30, 3), "children_gib": round(дети / 2**30, 3)}
 
 
 @dataclass
@@ -145,6 +246,91 @@ def засеять_реестр(реестр: РеестрСлагов) -> int:
     return реестр.засеять(пары)
 
 
+#: Реестр выделенных ячеек. До него производитель знал только общий каталог
+#: /srv/lords/.frontend, и перенесённая витрина, читающая своё хранилище,
+#: оставалась на снимке момента переключения. Это выглядело не поломкой, а
+#: сайтом, который перестал пополняться.
+РЕЕСТР_ЯЧЕЕК = Path(os.environ.get(
+    "SITE_CELLS_REGISTRY",
+    "/home/claude/wt-portable-site-cell-01/config/site-cells.json"))
+
+
+def размещения() -> dict:
+    """Кому производитель доставляет напрямую. Формат — factory/cell/runtime.py."""
+    if not РЕЕСТР_ЯЧЕЕК.is_file():
+        return {}
+    данные = json.loads(РЕЕСТР_ЯЧЕЕК.read_text(encoding="utf-8"))
+    итог = {}
+    for c in данные.get("cells") or []:
+        блок = c.get("runtime") or {}
+        if блок:
+            итог[c["site_id"]] = блок
+    return итог
+
+
+def доставить_ячейкам(сайты, собранное: dict, отчёт: dict) -> dict:
+    """Положить ту же проверенную пару в хранилище выделенной ячейки.
+
+    Каталог и подробности доставляются вместе и только после того, как
+    production-запись проверена: витрина читает их как одно целое, и снимок из
+    нового каталога со старыми подробностями показал бы карточки без описаний.
+
+    Доставляются те же байты, что уже проверены выше, а не перечитанный
+    production-файл: между записью и копированием производитель мог бы успеть
+    обновиться, и в ячейку уехала бы пара от разных прогонов. Источником служит
+    промежуточная площадка этого прогона — она и есть «те же байты», просто
+    лежащие на диске, а не в памяти (см. комментарий о пиковом потреблении
+    в `выполнить`).
+    """
+    карта = размещения()
+    доставлено = {}
+    for site_id in сайты:
+        блок = карта.get(site_id) or {}
+        if блок.get("managed_by") != "cell" or блок.get("data_owner") != "pipeline":
+            continue
+        каталог_данных = блок.get("data_dir")
+        if not каталог_данных:
+            доставлено[site_id] = {"skipped": "в реестре нет каталога данных"}
+            continue
+        цель_ = Path(каталог_данных)
+        if not цель_.is_dir():
+            доставлено[site_id] = {"skipped": f"{цель_} не существует"}
+            continue
+        пара = собранное[site_id]
+        записи = {}
+        # Отказ ОДНОЙ ячейки не отменяет доставку остальным. Так было не
+        # всегда: OSError из записи уходил наверх и валил весь прогон. Порядок
+        # доставки — sorted(ВИТРИНЫ), первым идёт lords-01, и когда его
+        # каталог данных не попал в ReadWritePaths песочницы, до остальных
+        # витрин очередь не доходила ни разу. Наружу это выглядело как «прогон
+        # не отработал», хотя у пяти витрин всё было готово к записи.
+        #
+        # Ошибка называется по ячейке и уносится в отчёт, а прогон получает
+        # ненулевой код возврата: «доставлено не всем» — не успех, но и не
+        # повод не доставить тем, кому можно.
+        try:
+            for имя in ("catalog", "details"):
+                путь = цель_ / f"{site_id}-{имя}.json"
+                записи[имя] = записать_атомарно_из_файла(путь, пара[имя])
+        except OSError as ош:
+            доставлено[site_id] = {
+                "data_dir": str(цель_), "error": f"{type(ош).__name__}: {ош}",
+                "written": sorted(записи),
+                "hint": "каталог данных ячейки не в ReadWritePaths юнита либо "
+                        "недоступен на запись; список путей ставит "
+                        "automation/host/install-publisher-cell-paths.sh"}
+            continue
+        ож = отчёт["sites"][site_id]["expected_sha256"]
+        if записи["catalog"] != ож["catalog"] or записи["details"] != ож["details"]:
+            # Это НЕ про среду, а про содержимое: в ячейку легло не то, что
+            # проверено. Такой прогон продолжать нельзя.
+            raise PublishError(
+                f"{site_id}: в ячейку записано не то, что проверено")
+        доставлено[site_id] = {"data_dir": str(цель_), "sha256": записи,
+                               "restart_required": блок.get("reload") != "mtime"}
+    return доставлено
+
+
 def записать_атомарно(путь: Path, текст: str) -> str:
     путь.parent.mkdir(parents=True, exist_ok=True)
     врем = путь.with_suffix(путь.suffix + f".{os.getpid()}.tmp")
@@ -156,13 +342,119 @@ def записать_атомарно(путь: Path, текст: str) -> str:
     return hashlib.sha256(путь.read_bytes()).hexdigest()
 
 
-def выполнить(*, снимок_путь: Path = СНИМОК, детали: Path = ДЕТАЛИ,
-              хранилище: Path = ХРАНИЛИЩЕ_ОЦЕНОК,
-              реестр_путь: Path = РЕЕСТР, корень: Path = ФРОНТ,
-              сайты: list[str] | None = None, применить: bool = False,
-              черновик: Path | None = None, копии: Path = КОПИИ,
-              run_id: str | None = None, минимум: int = МИНИМУМ_КАТАЛОГА,
-              читатель=None) -> dict:
+#: Сколько читать за раз при переносе готовых байтов. Мегабайт: подробности
+#: витрины это 81 МиБ, и читать их одной строкой — ровно то, из-за чего прогон
+#: убивал OOM killer.
+КУСОК = 1024 * 1024
+
+
+def записать_атомарно_из_файла(путь: Path, источник: Path) -> str:
+    """Положить готовые байты по месту, не поднимая их в память целиком.
+
+    Отличие от `записать_атомарно` только в источнике: там строка в памяти,
+    здесь файл промежуточной площадки. Атомарность та же — запись во временный
+    файл рядом, fsync, `os.replace`; возвращается отпечаток ТОГО, ЧТО ЛЕГЛО,
+    посчитанный чтением цели кусками.
+    """
+    путь.parent.mkdir(parents=True, exist_ok=True)
+    врем = путь.with_suffix(путь.suffix + f".{os.getpid()}.tmp")
+    отпечаток = hashlib.sha256()
+    with open(источник, "rb") as вход, open(врем, "wb") as выход:
+        while True:
+            кусок = вход.read(КУСОК)
+            if not кусок:
+                break
+            выход.write(кусок)
+            отпечаток.update(кусок)
+        выход.flush()
+        os.fsync(выход.fileno())
+    os.replace(врем, путь)
+    # Отпечаток считается по записанному файлу, а не по источнику: это та же
+    # проверка «легло именно то», что была прежде, и она обязана читать цель.
+    проверка = hashlib.sha256()
+    with open(путь, "rb") as ф:
+        while True:
+            кусок = ф.read(КУСОК)
+            if not кусок:
+                break
+            проверка.update(кусок)
+    if проверка.hexdigest() != отпечаток.hexdigest():
+        raise PublishError(
+            f"{путь}: записанное не совпало с перенесённым — запись оборвалась")
+    return проверка.hexdigest()
+
+
+def выполнить(*, копии: Path = КОПИИ, run_id: str | None = None, **остальное) -> dict:
+    """Публикация с промежуточной площадкой на диске и её уборкой.
+
+    Площадка создаётся здесь, а не внутри: у работы несколько выходов —
+    обычный возврат, `PublishError`, отказ доставки, — и каталог на два
+    гигабайта обязан исчезнуть при любом из них. Поэтому `try/finally`, а не
+    удаление в конце тела.
+    """
+    run_id = run_id or f"pub-{uuid.uuid4().hex[:12]}"
+    копии.mkdir(parents=True, exist_ok=True)
+    каталог_площадки = os.environ.get("NOVA_CATALOG_STAGING_DIR") or str(копии)
+    площадка = Path(tempfile.mkdtemp(prefix=f"nova-publish-{run_id}-", dir=каталог_площадки))
+    try:
+        if not остальное.get("применить", False):
+            return _выполнить(копии=копии, run_id=run_id, площадка=площадка, **остальное)
+        try:
+            with source_lease(остальное.get("снимок_путь", СНИМОК), exclusive=False):
+                return _выполнить(копии=копии, run_id=run_id, площадка=площадка, **остальное)
+        except SourceLeaseTimeout as error:
+            raise PublishError(str(error)) from error
+    finally:
+        shutil.rmtree(площадка, ignore_errors=True)
+
+
+CREW_POLICY = Path("/srv/site-factory/repo/config/nova-crew-enrichment.json")
+
+
+def load_crew_policy(path: Path = CREW_POLICY) -> dict:
+    """Explicit single-site pilot policy; absent policy leaves normal publication unchanged."""
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    except FileNotFoundError:
+        if path.is_symlink():
+            raise PublishError("crew policy is a broken symlink")
+        return {"sites": {}, "sha256": None}
+    except OSError as error:
+        raise PublishError("crew policy cannot be safely opened") from error
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 16384:
+            raise PublishError("crew policy must be a bounded regular file")
+        raw = stream.read(16385)
+        if len(raw) != info.st_size:
+            raise PublishError("crew policy changed during read")
+    try:
+        policy = json.loads(raw)
+        if set(policy) != {"schema_version", "sites"} or type(policy["schema_version"]) is not int or policy["schema_version"] != 1:
+            raise ValueError("invalid policy schema")
+        sites = policy["sites"]
+        if not isinstance(sites, dict) or len(sites) > 1:
+            raise ValueError("crew pilot allows at most one site")
+        for site, ids in sites.items():
+            if site not in ВИТРИНЫ or not isinstance(ids, list) or not 1 <= len(ids) <= 20:
+                raise ValueError("invalid crew pilot site or IDs")
+            if any(not isinstance(value, str) or str(uuid.UUID(value)) != value for value in ids) or len(set(ids)) != len(ids):
+                raise ValueError("invalid or duplicate canonical title ID")
+    except (ValueError, TypeError, AttributeError, KeyError) as error:
+        raise PublishError("invalid crew enrichment policy") from error
+    return {"sites": {site: tuple(ids) for site, ids in sites.items()},
+            "sha256": hashlib.sha256(raw).hexdigest()}
+
+
+def _выполнить(*, снимок_путь: Path = СНИМОК, детали: Path = ДЕТАЛИ,
+               хранилище: Path = ХРАНИЛИЩЕ_ОЦЕНОК,
+               реестр_путь: Path = РЕЕСТР, корень: Path = ФРОНТ,
+               сайты: list[str] | None = None, применить: bool = False,
+               черновик: Path | None = None, копии: Path = КОПИИ,
+               run_id: str | None = None, минимум: int = МИНИМУМ_КАТАЛОГА,
+               читатель=None, площадка: Path | None = None,
+               crew_title_ids: tuple[str, ...] = (), crew_policy: dict | None = None) -> dict:
+    crew_policy = crew_policy or {"sites": {}, "sha256": None}
     начало = time.time()
     run_id = run_id or f"pub-{uuid.uuid4().hex[:12]}"
     сайты = сайты or [s for s in sorted(ВИТРИНЫ)
@@ -189,9 +481,34 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
         "ratings_store": {"path": str(хранилище), "entries": len(хранилище_оценок)},
         "sites": {},
         "production_mutations": 0,
+        "crew_enrichment_policy": crew_policy,
     }
 
-    собранное: dict[str, tuple[dict, dict]] = {}
+    # СОБРАННОЕ НЕ ДЕРЖИТСЯ В ПАМЯТИ ЦЕЛИКОМ.
+    #
+    # Прежде здесь копились две вещи сразу: `собранное` — разобранные каталог и
+    # подробности ВСЕХ двадцати витрин, и следом `тексты` — их же сериализация
+    # строками. Подробности одной витрины это 81 МиБ JSON, то есть несколько
+    # сотен мегабайт объектов Python; двадцать витрин плюс их строки давали
+    # пиковое потребление в несколько гигабайт поверх снимка поставщика.
+    #
+    # Чем это кончилось: 9 и 10 октября прогон убивал OOM killer на шаге
+    # публикации (10 октября — 08:42:36). Лимита у службы нет (`MemoryMax` не
+    # задан ни в юните, ни в drop-in), то есть памяти не хватало СИСТЕМЕ: на
+    # хосте 29,4 ГиБ, swap 4 ГиБ исчерпан полностью, и одновременно работают
+    # около двадцати витрин, каждая из которых держит свой каталог в памяти
+    # (измерено: от 0,42 до 1,44 ГиБ на процесс, в сумме больше 12 ГиБ).
+    #
+    # Поэтому витрины обрабатываются ПОСЛЕДОВАТЕЛЬНО, а готовые байты уходят в
+    # промежуточный каталог на диске. В памяти живёт одна витрина за раз.
+    # Свойство «одно поколение на все витрины» сохранено: production-файлы
+    # по-прежнему заменяются только после того, как собраны и проверены ВСЕ.
+    if площадка is None:  # прямой вызов внутренней работы — только в проверках
+        копии.mkdir(parents=True, exist_ok=True)
+        площадка = Path(tempfile.mkdtemp(prefix=f"nova-publish-{run_id}-", dir=str(копии)))
+    отчёт["staging_area"] = str(площадка)
+    собранное: dict[str, dict[str, Path]] = {}
+    наборы_ид: dict[str, set] = {}
     for site_id in сайты:
         т = цели(site_id, корень)
         прежние = _прочитать(т.подробности, "details")
@@ -199,7 +516,9 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
             снимок=снимок, реестр=реестр, детали_кэш=детали, site_id=site_id,
             прежние_подробности=прежние, читатель=читатель,
             только_аниме=bool(ВИТРИНЫ[site_id].get("только_аниме")),
-            аниме_видом=bool(ВИТРИНЫ[site_id].get("аниме_видом")))
+            аниме_видом=bool(ВИТРИНЫ[site_id].get("аниме_видом")),
+            crew_title_ids=tuple(sorted(set(crew_title_ids) |
+                set(crew_policy["sites"].get(site_id, ())))))
 
         # Накопленные внешние оценки. Публикация берёт готовое из хранилища и
         # в сеть не ходит: иначе временный отказ источника означал бы витрину
@@ -247,7 +566,30 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
             "anime_by_signal": ст.get("аниме_по_признаку") or {},
             "production_blocked": ВИТРИНЫ[site_id].get("production_заблокирована"),
         }
-        собранное[site_id] = (каталог, подробности)
+
+        # Сериализация и отпечаток — здесь же, пока структуры этой витрины ещё
+        # в памяти, и сразу на диск. Отпечаток считается по тем самым байтам,
+        # которые потом и уедут в production и в ячейку: сравнивать нечего с
+        # чем-то, что сериализовали второй раз.
+        собранное[site_id] = {}
+        for имя, значение in (("catalog", каталог), ("details", подробности)):
+            байты = json.dumps(значение, ensure_ascii=False,
+                               sort_keys=True).encode("utf-8")
+            путь = площадка / f"{site_id}-{имя}.json"
+            путь.write_bytes(байты)
+            собранное[site_id][имя] = путь
+            отчёт["sites"][site_id].setdefault("expected_sha256", {})[имя] = \
+                hashlib.sha256(байты).hexdigest()
+            del байты
+
+        # Набор идентификаторов для сверки равенства витрин: строки, а не
+        # структуры. Двадцать наборов по 62 тысячи строк — десятки мегабайт
+        # вместо гигабайтов, и этого достаточно для той проверки, ради которой
+        # прежде держались все подробности.
+        if not ВИТРИНЫ[site_id].get("только_аниме"):
+            наборы_ид[site_id] = {з["id"] for з in подробности["details"].values()
+                                  if з.get("id")}
+        del каталог, подробности, прежние, прежний_каталог, идентификаторы
 
     # Равенство наборов — следствие устройства, но проверяется всё равно:
     # свойство, которое никто не измеряет, однажды перестаёт выполняться.
@@ -258,8 +600,9 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
         "identical": len(set(суммы.values())) == 1,
     }
     if len(киновитрины) > 1:
-        наборы = {s: {з["id"] for з in собранное[s][1]["details"].values() if з.get("id")}
-                  for s in киновитрины}
+        # Наборы собраны по ходу, из подробностей каждой витрины, пока они были
+        # в памяти. Держать для этого все подробности целиком не нужно.
+        наборы = {s: наборы_ид[s] for s in киновитрины if s in наборы_ид}
         первый = киновитрины[0]
         for s in киновитрины[1:]:
             отчёт["parity"][f"{первый}_only"] = len(наборы[первый] - наборы[s])
@@ -267,27 +610,18 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
         отчёт["parity"]["parity_pct"] = 100.0 if отчёт["parity"]["identical"] else round(
             len(set.intersection(*наборы.values())) * 100
             / max(len(set.union(*наборы.values())), 1), 4)
-
-    тексты = {}
-    for site_id, (каталог, подробности) in собранное.items():
-        тексты[site_id] = {
-            "catalog": json.dumps(каталог, ensure_ascii=False, sort_keys=True),
-            "details": json.dumps(подробности, ensure_ascii=False, sort_keys=True),
-        }
-        отчёт["sites"][site_id]["expected_sha256"] = {
-            "catalog": hashlib.sha256(тексты[site_id]["catalog"].encode()).hexdigest(),
-            "details": hashlib.sha256(тексты[site_id]["details"].encode()).hexdigest(),
-        }
+    наборы_ид.clear()
 
     if черновик is not None:
         черновик.mkdir(parents=True, exist_ok=True)
-        for site_id, пара in тексты.items():
-            (черновик / f"{site_id}-catalog.json").write_text(пара["catalog"], encoding="utf-8")
-            (черновик / f"{site_id}-details.json").write_text(пара["details"], encoding="utf-8")
+        for site_id, пара in собранное.items():
+            for имя, источник in пара.items():
+                shutil.copyfile(источник, черновик / f"{site_id}-{имя}.json")
         отчёт["staging_dir"] = str(черновик)
 
     if not применить:
         отчёт["note"] = ("без --apply production не изменяется")
+        отчёт["peak_rss"] = пиковая_память()
         отчёт["duration_sec"] = round(time.time() - начало, 2)
         отчёт["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
         return отчёт
@@ -304,6 +638,20 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
         if загрузить_снимок(снимок_путь).отпечаток != снимок.отпечаток:
             raise PublishError("снимок изменился во время прогона")
 
+        # Staging may live on tmpfs. The durable before-images and final
+        # destination still need a disk budget before the first copy is made.
+        if os.environ.get("NOVA_CATALOG_STAGING_DIR"):
+            объём_отката = 0
+            for site_id in сайты:
+                т = цели(site_id, корень)
+                объём_отката += sum(
+                    путь.stat().st_size for путь in (т.каталог, т.подробности) if путь.is_file()
+                )
+            запас_доставки = 1152 * 1024**2
+            if shutil.disk_usage(копии).free < объём_отката + запас_доставки:
+                raise PublishError(
+                    f"недостаточно места до создания копий: откат {объём_отката} байт "
+                    f"и резерв доставки {запас_доставки} байт")
         образы = {}
         for site_id in сайты:
             т = цели(site_id, корень)
@@ -318,23 +666,34 @@ def выполнить(*, снимок_путь: Path = СНИМОК, детал
         отчёт["rollback_command"] = " && ".join(
             [f"cp -p {v['backup']} {цели(k.split('.')[0], корень).каталог if k.endswith('.catalog') else цели(k.split('.')[0], корень).подробности}"
              for k, v in образы.items()]
-            + [f"sudo -n systemctl restart {ВИТРИНЫ[s]['unit']}" for s in сайты])
+            # Прежний unit перенесённой витрины звать нельзя: он закрыт от
+            # ручного запуска. Имя берётся из реестра, а витрина, умеющая
+            # перечитывать снимок сама, в перезапуске не нуждается вовсе.
+            + [f"sudo -n systemctl restart {(размещения().get(s) or {}).get('unit') or ВИТРИНЫ[s]['unit']}"
+               for s in сайты
+               if (размещения().get(s) or {}).get("reload") != "mtime"])
 
         записано = {}
         for site_id in сайты:
             т = цели(site_id, корень)
-            записано[f"{site_id}.catalog"] = записать_атомарно(т.каталог, тексты[site_id]["catalog"])
-            записано[f"{site_id}.details"] = записать_атомарно(т.подробности, тексты[site_id]["details"])
+            записано[f"{site_id}.catalog"] = записать_атомарно_из_файла(
+                т.каталог, собранное[site_id]["catalog"])
+            записано[f"{site_id}.details"] = записать_атомарно_из_файла(
+                т.подробности, собранное[site_id]["details"])
         отчёт["written_sha256"] = записано
         for site_id in сайты:
             ож = отчёт["sites"][site_id]["expected_sha256"]
             if записано[f"{site_id}.catalog"] != ож["catalog"] or \
                записано[f"{site_id}.details"] != ож["details"]:
                 raise PublishError(f"{site_id}: записано не то, что проверено")
+        # Доставка в ячейки — внутри того же замка: иначе между проверкой
+        # production и копированием успел бы начаться следующий прогон.
+        отчёт["cell_delivery"] = доставить_ячейкам(сайты, собранное, отчёт)
         реестр.сохранить(реестр_путь)
         отчёт["production_mutations"] = len(записано)
         fcntl.flock(ф, fcntl.LOCK_UN)
 
+    отчёт["peak_rss"] = пиковая_память()
     отчёт["duration_sec"] = round(time.time() - начало, 2)
     отчёт["finished_at"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
     return отчёт
@@ -353,6 +712,8 @@ def main(argv=None) -> int:
     ap.add_argument("--report-dir", type=Path, default=ОТЧЁТЫ)
     ap.add_argument("--run-id", default=None)
     ap.add_argument("--min-catalog", type=int, default=МИНИМУМ_КАТАЛОГА)
+    ap.add_argument("--crew-title-id", action="append", default=[],
+                    help="Opt-in accepted crew enrichment for an exact title ID; repeatable")
     ap.add_argument("--apply", action="store_true")
     a = ap.parse_args(argv)
     run_id = a.run_id or f"pub-{uuid.uuid4().hex[:12]}"
@@ -363,7 +724,8 @@ def main(argv=None) -> int:
                           сайты=[s for s in a.sites.split(",") if s],
                           применить=a.apply, черновик=a.staging_out,
                           копии=a.backup_dir, run_id=run_id,
-                          минимум=a.min_catalog)
+                          минимум=a.min_catalog, crew_title_ids=tuple(a.crew_title_id),
+                          crew_policy=load_crew_policy())
     except PublishError as ош:
         вывод = {"run_id": run_id, "status": "PUBLISH_REFUSED", "detail": str(ош)}
         print(json.dumps(вывод, ensure_ascii=False, indent=2))
@@ -375,6 +737,15 @@ def main(argv=None) -> int:
     except OSError:
         pass
     print(json.dumps(отчёт, ensure_ascii=False, indent=2))
+    # Ячейка, которой не доставили, обязана делать прогон неуспешным: иначе
+    # «витрина третьи сутки на старом каталоге» останется без единого сигнала,
+    # а именно так эта неисправность и прожила трое суток.
+    неудачи = sorted(s for s, и in (отчёт.get("cell_delivery") or {}).items()
+                     if isinstance(и, dict) and и.get("error"))
+    if неудачи:
+        print(json.dumps({"run_id": run_id, "status": "CELL_DELIVERY_FAILED",
+                          "sites": неудачи}, ensure_ascii=False, indent=2))
+        return 3
     return 0
 
 
