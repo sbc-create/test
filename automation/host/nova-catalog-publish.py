@@ -282,6 +282,7 @@ def доставить_ячейкам(сайты, собранное: dict, от
     лежащие на диске, а не в памяти (см. комментарий о пиковом потреблении
     в `выполнить`).
     """
+    check_description_baselines(отчёт.get("description_baselines", {}), ФРОНТ)
     карта = размещения()
     доставлено = {}
     for site_id in сайты:
@@ -484,6 +485,29 @@ def load_description_policy(path: Path = DESCRIPTION_POLICY) -> dict:
 
 
 
+
+def description_baseline_targets(site_id: str, root: Path) -> Цели:
+    runtime = размещения().get(site_id) or {}
+    if runtime.get("managed_by") != "cell":
+        raise PublishError("description-only requires a registered cell baseline")
+    if runtime.get("managed_by") == "cell":
+        if runtime.get("data_owner") != "pipeline" or not runtime.get("data_dir"):
+            raise PublishError("description-only requires a pipeline-owned registered baseline")
+        root = Path(runtime["data_dir"])
+        if not root.is_absolute() or not root.is_dir():
+            raise PublishError("invalid registered description baseline")
+    return цели(site_id, root)
+
+
+def check_description_baselines(baselines: dict, root: Path) -> None:
+    for site, files in baselines.items():
+        targets = description_baseline_targets(site, root)
+        for name, path in (("catalog", targets.каталог), ("details", targets.подробности)):
+            expected = files[name]
+            if str(path) != expected["path"] or hashlib.sha256(path.read_bytes()).hexdigest() != expected["sha256"]:
+                raise PublishError("description-only baseline changed during publication")
+
+
 def description_only_projection(previous_catalog: dict, previous_details: dict,
                                 generated_details: dict) -> tuple[dict, dict, list[str]]:
     """Fill verified synopsis gaps through the existing publisher, preserving all other data."""
@@ -552,6 +576,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         "crew_enrichment_policy": crew_policy,
         "description_policy": description_policy,
         "description_only": description_only,
+        "description_baselines": {},
     }
 
     # СОБРАННОЕ НЕ ДЕРЖИТСЯ В ПАМЯТИ ЦЕЛИКОМ.
@@ -600,9 +625,15 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
 
         description_ids = []
         if description_only:
+            baseline_targets = description_baseline_targets(site_id, корень)
+            baseline_catalog = baseline_targets.каталог.read_bytes()
+            baseline_details = baseline_targets.подробности.read_bytes()
+            отчёт["description_baselines"][site_id] = {
+                "catalog": {"path": str(baseline_targets.каталог), "sha256": hashlib.sha256(baseline_catalog).hexdigest()},
+                "details": {"path": str(baseline_targets.подробности), "sha256": hashlib.sha256(baseline_details).hexdigest()}}
             каталог, подробности, description_ids = description_only_projection(
-                json.loads(т.каталог.read_text(encoding="utf-8")),
-                json.loads(т.подробности.read_text(encoding="utf-8")), подробности)
+                json.loads(baseline_catalog), json.loads(baseline_details), подробности)
+            del baseline_catalog, baseline_details
 
         беды = проверить_контракт_рендерера(подробности["details"])
         if беды:
@@ -712,6 +743,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
             fcntl.flock(ф, fcntl.LOCK_EX | fcntl.LOCK_NB)
         except OSError:
             raise PublishError(f"другой прогон уже идёт (замок {ЗАМОК})") from None
+        check_description_baselines(отчёт["description_baselines"], корень)
         # Снимок сверяется ещё раз непосредственно перед записью: между
         # сборкой и выкладкой поставщик мог обновиться.
         if загрузить_снимок(снимок_путь).отпечаток != снимок.отпечаток:

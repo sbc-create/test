@@ -67,6 +67,24 @@ class DescriptionOnlyTest(unittest.TestCase):
         spec=importlib.util.spec_from_file_location('scoped_publisher',ROOT/'automation/host/nova-catalog-publish.py')
         self.m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=self.m;spec.loader.exec_module(self.m)
 
+    def test_registered_baseline_and_cas(self):
+        import hashlib
+        from unittest.mock import patch
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp); data=root/'cell';data.mkdir()
+            runtime={'lords-05':{'managed_by':'cell','data_owner':'pipeline','data_dir':str(data)}}
+            with patch.object(self.m,'размещения',return_value=runtime):
+                targets=self.m.description_baseline_targets('lords-05',root/'central')
+                self.assertEqual(targets.каталог,data/'lords-05-catalog.json')
+                pins={'lords-05':{}}
+                for name,path in (('catalog',targets.каталог),('details',targets.подробности)):
+                    path.write_text('{}');pins['lords-05'][name]={'path':str(path),'sha256':hashlib.sha256(path.read_bytes()).hexdigest()}
+                self.m.check_description_baselines(pins,root/'central')
+                targets.подробности.write_text('{"changed":true}')
+                with self.assertRaises(PublishError):self.m.check_description_baselines(pins,root/'central')
+            with patch.object(self.m,'размещения',return_value={}):
+                with self.assertRaises(PublishError):self.m.description_baseline_targets('lords-05',root)
+
     def test_preserves_all_other_data(self):
         import copy
         catalog={'items':[{'slug':'test','title':'Тест'}],'revision':'old'}
