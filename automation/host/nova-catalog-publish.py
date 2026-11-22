@@ -483,6 +483,31 @@ def load_description_policy(path: Path = DESCRIPTION_POLICY) -> dict:
             "sha256": hashlib.sha256(raw).hexdigest()}
 
 
+
+def description_only_projection(previous_catalog: dict, previous_details: dict,
+                                generated_details: dict) -> tuple[dict, dict, list[str]]:
+    """Fill verified synopsis gaps through the existing publisher, preserving all other data."""
+    from factory.lords.canonical_projection import описание_годное
+    old = previous_details.get("details")
+    new = generated_details.get("details")
+    if not isinstance(old, dict) or not isinstance(new, dict) or set(old) != set(new):
+        raise PublishError("description-only requires the exact existing slug set")
+    changed = []
+    for slug, candidate in new.items():
+        current = old[slug]
+        if not current.get("id") or current["id"] != candidate.get("id"):
+            raise PublishError("description-only refuses entity rebind")
+        if (str(current.get("description") or "").strip()
+                or candidate.get("description_source") not in
+                ("detail.short_description", "catalog.short_description")
+                or not описание_годное(candidate.get("description"))):
+            continue
+        current["description"] = candidate["description"]
+        current["description_source"] = candidate["description_source"]
+        changed.append(current["id"])
+    return previous_catalog, previous_details, changed
+
+
 def _выполнить(*, снимок_путь: Path = СНИМОК, детали: Path = ДЕТАЛИ,
                хранилище: Path = ХРАНИЛИЩЕ_ОЦЕНОК,
                реестр_путь: Path = РЕЕСТР, корень: Path = ФРОНТ,
@@ -491,9 +516,13 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
                run_id: str | None = None, минимум: int = МИНИМУМ_КАТАЛОГА,
                читатель=None, площадка: Path | None = None,
                crew_title_ids: tuple[str, ...] = (), crew_policy: dict | None = None,
-               description_policy: dict | None = None) -> dict:
+               description_policy: dict | None = None,
+               description_only: bool = False) -> dict:
     crew_policy = crew_policy or {"sites": {}, "sha256": None}
     description_policy = description_policy or {"sites": {}, "sha256": None}
+    if description_only and (not сайты or len(сайты) != 1 or
+            not description_policy["sites"].get(сайты[0], {}).get("short_description_fallback", False)):
+        raise PublishError("description-only requires one explicit enabled site")
     начало = time.time()
     run_id = run_id or f"pub-{uuid.uuid4().hex[:12]}"
     сайты = сайты or [s for s in sorted(ВИТРИНЫ)
@@ -522,6 +551,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         "production_mutations": 0,
         "crew_enrichment_policy": crew_policy,
         "description_policy": description_policy,
+        "description_only": description_only,
     }
 
     # СОБРАННОЕ НЕ ДЕРЖИТСЯ В ПАМЯТИ ЦЕЛИКОМ.
@@ -568,6 +598,12 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         подробности["details"], отчёт_оценок = rating_gateway.применить_хранилище(
             подробности["details"], хранилище_оценок)
 
+        description_ids = []
+        if description_only:
+            каталог, подробности, description_ids = description_only_projection(
+                json.loads(т.каталог.read_text(encoding="utf-8")),
+                json.loads(т.подробности.read_text(encoding="utf-8")), подробности)
+
         беды = проверить_контракт_рендерера(подробности["details"])
         if беды:
             raise PublishError(
@@ -592,6 +628,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         идентификаторы = [з["id"] for з in подробности["details"].values() if з.get("id")]
         отчёт["sites"][site_id] = {
             "catalog_items": стало,
+            "description_only_changed_ids": description_ids,
             "catalog_items_before": было,
             "details_entries": подробности["details_total"],
             "distinct_canonical_ids": len(set(идентификаторы)),
@@ -743,6 +780,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description="публикация каталога витрин Nova")
+    ap.add_argument("--description-only", action="store_true", help="fill only empty descriptions for one explicitly enabled site")
     ap.add_argument("--sites", default=",".join(sorted(ВИТРИНЫ)))
     ap.add_argument("--snapshot", type=Path, default=СНИМОК)
     ap.add_argument("--detail-cache", type=Path, default=ДЕТАЛИ)
@@ -768,7 +806,8 @@ def main(argv=None) -> int:
                           копии=a.backup_dir, run_id=run_id,
                           минимум=a.min_catalog, crew_title_ids=tuple(a.crew_title_id),
                           crew_policy=load_crew_policy(),
-                          description_policy=load_description_policy())
+                          description_policy=load_description_policy(),
+                          description_only=a.description_only)
     except PublishError as ош:
         вывод = {"run_id": run_id, "status": "PUBLISH_REFUSED", "detail": str(ош)}
         print(json.dumps(вывод, ensure_ascii=False, indent=2))

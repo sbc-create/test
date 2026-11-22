@@ -62,4 +62,37 @@ class DescriptionFallbackTest(unittest.TestCase):
                 path.write_text(json.dumps(bad))
                 with self.assertRaises(PublishError):module.load_description_policy(path)
 
+class DescriptionOnlyTest(unittest.TestCase):
+    def setUp(self):
+        spec=importlib.util.spec_from_file_location('scoped_publisher',ROOT/'automation/host/nova-catalog-publish.py')
+        self.m=importlib.util.module_from_spec(spec);sys.modules[spec.name]=self.m;spec.loader.exec_module(self.m)
+
+    def test_preserves_all_other_data(self):
+        import copy
+        catalog={'items':[{'slug':'test','title':'Тест'}],'revision':'old'}
+        before={'details':{'test':{'id':ID,'seasons':[{'n':2,'nums':[3,4],'eps':2,'avail':0}],
+            'crew':['known'],'unknown_field':'keep'}},'revision':'old'}
+        expected=copy.deepcopy(before)
+        generated={'details':{'test':{'id':ID,'description':TEXT,'description_source':'detail.short_description',
+             'seasons':[{'n':2,'eps':2,'avail':2}],'crew':[]}},'revision':'new'}
+        got_catalog,got,ids=self.m.description_only_projection(catalog,before,generated)
+        expected['details']['test'].update(description=TEXT,description_source='detail.short_description')
+        self.assertEqual(got,expected);self.assertEqual(got_catalog,catalog);self.assertEqual(ids,[ID])
+        self.assertEqual(self.m.description_only_projection(catalog,got,generated)[2],[])
+
+    def test_rejects_scope_and_identity(self):
+        for sites,policy in ((None,{}),(['lords-05'],{}),(['lords-05','lords-06'],{'lords-05':{'short_description_fallback':True}})):
+            with self.assertRaises(PublishError):
+                self.m._выполнить(сайты=sites,description_only=True,description_policy={'sites':policy})
+        for generated in ({'details':{}},{'details':{'test':{'id':'other'}}}):
+            with self.assertRaises(PublishError):
+                self.m.description_only_projection({}, {'details':{'test':{'id':ID}}},generated)
+
+    def test_never_replaces_nonempty_or_uses_full_source(self):
+        for text,source in ((FULL,'detail.short_description'),('', 'detail')):
+            old={'details':{'test':{'id':ID,'description':text}}}
+            result=self.m.description_only_projection({},old,{'details':{'test':{'id':ID,'description':TEXT,'description_source':source}}})
+            self.assertEqual(result[1]['details']['test']['description'],text)
+            self.assertEqual(result[2],[])
+
 if __name__=='__main__':unittest.main()
