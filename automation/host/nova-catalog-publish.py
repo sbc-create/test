@@ -446,6 +446,43 @@ def load_crew_policy(path: Path = CREW_POLICY) -> dict:
             "sha256": hashlib.sha256(raw).hexdigest()}
 
 
+DESCRIPTION_POLICY = Path("/srv/site-factory/repo/config/lords-description-policy.json")
+
+def load_description_policy(path: Path = DESCRIPTION_POLICY) -> dict:
+    """Explicit site opt-in; absent policy leaves normal publication unchanged."""
+    try:
+        fd = os.open(path, os.O_RDONLY | os.O_NOFOLLOW | os.O_NONBLOCK)
+    except FileNotFoundError:
+        if path.is_symlink():
+            raise PublishError("description policy is a broken symlink")
+        return {"sites": {}, "sha256": None}
+    except OSError as error:
+        raise PublishError("description policy cannot be safely opened") from error
+    with os.fdopen(fd, "rb") as stream:
+        info = os.fstat(stream.fileno())
+        if not stat.S_ISREG(info.st_mode) or info.st_size > 16384:
+            raise PublishError("description policy must be a bounded regular file")
+        raw = stream.read(16385)
+        if len(raw) != info.st_size:
+            raise PublishError("description policy changed during read")
+    try:
+        policy = json.loads(raw)
+        if set(policy) != {"schema_version", "sites"} or type(policy["schema_version"]) is not int or policy["schema_version"] != 1:
+            raise ValueError("invalid policy schema")
+        sites = policy["sites"]
+        if not isinstance(sites, dict):
+            raise ValueError("sites must be an object")
+        for site, flags in sites.items():
+            if site not in ВИТРИНЫ or not isinstance(flags, dict):
+                raise ValueError("unknown description policy site")
+            if set(flags) != {"short_description_fallback"} or type(flags["short_description_fallback"]) is not bool:
+                raise ValueError("invalid description policy flags")
+    except (ValueError, TypeError, AttributeError, KeyError) as error:
+        raise PublishError("invalid description policy") from error
+    return {"sites": sites,
+            "sha256": hashlib.sha256(raw).hexdigest()}
+
+
 def _выполнить(*, снимок_путь: Path = СНИМОК, детали: Path = ДЕТАЛИ,
                хранилище: Path = ХРАНИЛИЩЕ_ОЦЕНОК,
                реестр_путь: Path = РЕЕСТР, корень: Path = ФРОНТ,
@@ -453,8 +490,10 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
                черновик: Path | None = None, копии: Path = КОПИИ,
                run_id: str | None = None, минимум: int = МИНИМУМ_КАТАЛОГА,
                читатель=None, площадка: Path | None = None,
-               crew_title_ids: tuple[str, ...] = (), crew_policy: dict | None = None) -> dict:
+               crew_title_ids: tuple[str, ...] = (), crew_policy: dict | None = None,
+               description_policy: dict | None = None) -> dict:
     crew_policy = crew_policy or {"sites": {}, "sha256": None}
+    description_policy = description_policy or {"sites": {}, "sha256": None}
     начало = time.time()
     run_id = run_id or f"pub-{uuid.uuid4().hex[:12]}"
     сайты = сайты or [s for s in sorted(ВИТРИНЫ)
@@ -482,6 +521,7 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
         "sites": {},
         "production_mutations": 0,
         "crew_enrichment_policy": crew_policy,
+        "description_policy": description_policy,
     }
 
     # СОБРАННОЕ НЕ ДЕРЖИТСЯ В ПАМЯТИ ЦЕЛИКОМ.
@@ -518,7 +558,9 @@ def _выполнить(*, снимок_путь: Path = СНИМОК, дета�
             только_аниме=bool(ВИТРИНЫ[site_id].get("только_аниме")),
             аниме_видом=bool(ВИТРИНЫ[site_id].get("аниме_видом")),
             crew_title_ids=tuple(sorted(set(crew_title_ids) |
-                set(crew_policy["sites"].get(site_id, ())))))
+                set(crew_policy["sites"].get(site_id, ())))),
+            short_description_fallback=description_policy["sites"].get(site_id, {}).get(
+                "short_description_fallback", False))
 
         # Накопленные внешние оценки. Публикация берёт готовое из хранилища и
         # в сеть не ходит: иначе временный отказ источника означал бы витрину
@@ -725,7 +767,8 @@ def main(argv=None) -> int:
                           применить=a.apply, черновик=a.staging_out,
                           копии=a.backup_dir, run_id=run_id,
                           минимум=a.min_catalog, crew_title_ids=tuple(a.crew_title_id),
-                          crew_policy=load_crew_policy())
+                          crew_policy=load_crew_policy(),
+                          description_policy=load_description_policy())
     except PublishError as ош:
         вывод = {"run_id": run_id, "status": "PUBLISH_REFUSED", "detail": str(ош)}
         print(json.dumps(вывод, ensure_ascii=False, indent=2))

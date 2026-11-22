@@ -41,7 +41,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from factory.lords.canonical_projection import спроецировать
+from factory.lords.canonical_projection import спроецировать, описание_годное
 from factory.lords.live_catalog import slugify
 
 СХЕМА_КАТАЛОГА = "nova-catalog/2.0.0"
@@ -357,7 +357,8 @@ def собрать_сайт(*, снимок: Снимок, реестр: Рее�
                  site_id: str, прежние_подробности: dict | None = None,
                  читатель=None, только_аниме: bool = False,
                  аниме_видом: bool = False,
-                 crew_title_ids: tuple[str, ...] = ()) -> tuple[dict, dict, dict]:
+                 crew_title_ids: tuple[str, ...] = (),
+                 short_description_fallback: bool = False) -> tuple[dict, dict, dict]:
     """Каталог и боковой файл одной витрины из общего снимка.
 
     Возвращает (каталог, подробности, статистика). Обе витрины вызывают это
@@ -379,7 +380,8 @@ def собрать_сайт(*, снимок: Снимок, реестр: Рее�
         запись = снимок.записи[ид]
         деталь = читать(детали_кэш, ид) or {}
         try:
-            п = спроецировать(запись, деталь)
+            п = спроецировать(запись, деталь,
+                               short_description_fallback=short_description_fallback)
         except (ValueError, TypeError):
             ст["отказы"]["projection_error"] = ст["отказы"].get("projection_error", 0) + 1
             continue
@@ -469,6 +471,12 @@ def собрать_сайт(*, снимок: Снимок, реестр: Рее�
             "genres": жанры,
             "countries": д.get("countries") or [],
         }
+        # A short synopsis fills a gap; it must not replace a known description.
+        if (тот_же and описание_годное(было.get("description"))
+                and д.get("description_source") in
+                ("detail.short_description", "catalog.short_description")):
+            новое.pop("description")
+            новое.pop("description_source")
         enrich_crew = str(ид) in crew_title_ids
         if enrich_crew:
             новое["crew"] = crew_for_renderer(деталь, ид)

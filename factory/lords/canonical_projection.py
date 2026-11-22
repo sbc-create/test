@@ -186,7 +186,8 @@ def _собрать_источники(запись: dict, деталь: dict | 
     return [Источник(провайдер, сид, плеер, состояние)]
 
 
-def спроецировать(запись: dict, деталь: dict | None = None) -> Проекция:
+def спроецировать(запись: dict, деталь: dict | None = None, *,
+                  short_description_fallback: bool = False) -> Проекция:
     """Объединить список и подробности в одну каноническую запись.
 
     Порядок предпочтения задан явно: где значение есть в обоих источниках,
@@ -238,6 +239,22 @@ def спроецировать(запись: dict, деталь: dict | None = N
             п.description_source = откуда
             п.description_language = "ru"
             break
+
+    # Some provider records have only a short synopsis. Preserve full-text
+    # priority and the existing placeholder/length gate; opt-in is per site
+    # at the publisher, never inferred from a title or an empty field.
+    if short_description_fallback and п.description is None:
+        same_detail = _внешний_ид(деталь.get("id")) == ид
+        candidates = []
+        if same_detail:
+            candidates.append((деталь.get("short_description"), "detail.short_description"))
+        candidates.append((запись.get("short_description"), "catalog.short_description"))
+        for text, source in candidates:
+            if описание_годное(text):
+                п.description = text.strip()
+                п.description_source = source
+                п.description_language = "ru"
+                break
 
     # --- постер -----------------------------------------------------------
     for источник, откуда in ((деталь.get("poster_url"), ИЗ_ДЕТАЛИ),

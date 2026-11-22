@@ -1,0 +1,6 @@
+{
+  "schema_version": 1,
+  "sites": {
+    "lords-05": {"short_description_fallback": true}
+  }
+}
