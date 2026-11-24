@@ -1,0 +1,36 @@
+{
+  "schema": "collections-refresh-bindings-v1",
+  "registry": "/home/claude/wt-portable-site-cell-01/config/site-cells.json",
+  "sites": [
+    {
+      "site_id": "lords-03",
+      "domain": "1lordserials1.online",
+      "enabled": true,
+      "reason": "Exact cfc4de4 native live_verified, scoped normal publisher and public browser acceptance24Nov.",
+      "sources": {
+        "catalog": "/srv/site-1lordserials1-online/data/lords-03-catalog.json",
+        "details": "/srv/site-1lordserials1-online/data/lords-03-details.json",
+        "events": "/srv/site-1lordserials1-online/data/site-state/newness-events.json",
+        "manual": "/srv/site-1lordserials1-online/data/editorial-overrides.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/site-1lordserials1-online/current",
+        "expected_commit": "cfc4de4f9a364d7521f6a747e751e238154c4094",
+        "public_commit_field": "site_repo_commit",
+        "readiness_path": "/__site"
+      },
+      "helper_path": "/srv/site-1lordserials1-online/current/overlay/collections_check.py",
+      "helper_sha256": "819bf88a5fc934fbf27a92efcbc85e1e2257a4072c0cbb816c5c049a1bd182fe"
+    }
+  ],
+  "coverage": {
+    "admitted_sites": [
+      "lords-03"
+    ],
+    "pending_candidates": [
+      "zona-02",
+      "zona-03"
+    ],
+    "network_complete": false
+  }
+}

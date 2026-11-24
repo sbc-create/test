@@ -106,6 +106,7 @@ SOURCES = {
     # Подборки и анонсы против ТЕКУЩЕГО снимка каталога (поручение владельца 27.10:
     # состав должен пережить обновление каталога). Сценарий и рантайм-конфиги
     # подборок — в дереве Архитектора; проверка только читает.
+    "collections_policy": _paths.registry("config", "collections-refresh-policy.json"),
     "editorial_validator": Path("/home/claude/wt-nova-publish-memory-02/automation/local/editorial-sets-validate.py"),
 }
 
@@ -2024,6 +2025,10 @@ def render_daily(report: dict) -> str:
     add(f"# SEO-сеть: отчёт владельцу — {report['date_msk']}")
     add("")
     add("## Кратко")
+    collections = report.get("collections") or {}
+    add("Подборки: " + ("проверены, без изменений" if collections.get("no_op")
+                        else "проверены" if collections.get("healthy")
+                        else "НЕ ИЗМЕРЕНО / требуется проверка") + ".")
     pubs = report.get("published_24h") or []
     # Источники — только у той же публикации (URL и время совпадают); правки из
     # сессии редактора описаны в журнале изменений config/seo-changes.json.
@@ -3400,9 +3405,62 @@ def editorial_sets_by_site(script: Path | None, sites: tuple[str, ...] = EDITORI
             "reason": "; ".join(f"{u['site']}: {u['reason']}" for u in unmeasured) or None}
 
 
+def daily_collections(script: Path | None, policy: Path | None, *, timeout: float = 120) -> dict:
+    """Deterministic read-only source/policy/public validation; never runs a writer."""
+    import subprocess
+    if not script or not policy or not script.is_file() or not policy.is_file():
+        return {"measured": False, "reason": "collections validator or trusted policy missing"}
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(script), "--json", "--policy-bindings", str(policy)],
+            cwd=str(script.resolve().parents[2]), capture_output=True, text=True,
+            timeout=timeout,
+        )
+        result = json.loads(proc.stdout)
+        if not isinstance(result, dict) or result.get("schema") != "collections-public-check-v1":
+            raise ValueError("invalid collections report schema")
+        rows = result.get("sites")
+        if not isinstance(rows, list) or not rows:
+            raise ValueError("empty collections coverage")
+        result["measured"] = (proc.returncode in (0, 1)
+                              and all(x.get("measured") is True for x in rows))
+        result["healthy"] = (result["measured"] and proc.returncode == 0
+                             and all(x.get("healthy") is True for x in rows))
+        result["rc"] = proc.returncode
+        return result
+    except (OSError, ValueError, TypeError, AttributeError, subprocess.TimeoutExpired) as exc:
+        return {"measured": False, "healthy": False,
+                "reason": f"collections validation failed: {type(exc).__name__}"}
+
+
 def step_editorial(ctx: Context) -> Any:
     # Отметка до вызова: если процесс прогона погибнет внутри шага, журнал покажет где.
     ctx.journal.write("editorial_started")
+    if ctx.mode == "daily":
+        res = daily_collections(ctx.sources.get("editorial_validator"),
+                                ctx.sources.get("collections_policy"),
+                                timeout=max(1, min(120, ctx.budget.remaining())))
+        previous = ctx.state.get("collections_last_good") or {}
+        res["no_op"] = bool(res.get("healthy") and previous.get("fingerprint")
+                            and previous.get("fingerprint") == res.get("fingerprint"))
+        # Persist every failure as a report before raising; never publish zero defects.
+        _write_json(ctx.step_path("editorial"), res)
+        ctx.journal.write("collections_checked", measured=res.get("measured"),
+                          healthy=res.get("healthy"), no_op=res["no_op"],
+                          reason=res.get("reason"), sites=res.get("sites"))
+        if not res.get("measured") or not res.get("healthy"):
+            # Independent daily steps keep running. The final run outcome and
+            # report still fail visibly; this step is not checkpointed as done.
+            return res
+        if not res["no_op"]:
+            ctx.state["collections_last_good"] = {
+                "fingerprint": res["fingerprint"], "checked_at": res.get("checked_at"),
+                "sites": [{"site_id": row["site_id"],
+                           "composition": row["composition"],
+                           "fingerprint": row["fingerprint"]}
+                          for row in res.get("sites", [])]}
+        # An unchanged healthy result remains in the journal; last-good is stable.
+        return res
     res = editorial_sets_by_site(ctx.sources.get("editorial_validator"))
     ctx.journal.write("editorial_checked", measured=res.get("measured"), rc=res.get("rc"),
                       defects=res.get("defects"), reason=res.get("reason"),
@@ -3508,6 +3566,7 @@ def step_daily_report(ctx: Context) -> Any:
         "generated_at": iso(utcnow()),
         "check": {"run_id": reuse.get("run_id"), "finished_at": reuse.get("finished_at")},
         "check_reused": reuse.get("reused"),
+        "collections": ctx.result("editorial"),
         "analytics": ctx.result("analytics"),
         "issues": issues,
         "week_over_week": week_over_week(
@@ -3760,6 +3819,7 @@ PLANS: dict[str, list[tuple[str, Callable[[Context], Any]]]] = {
         ("diff", step_diff),
     ],
     "daily": [
+        ("editorial", step_editorial),
         ("discover", step_discover),
         ("check", step_reuse_check),
         ("analytics", step_analytics),
@@ -3964,8 +4024,15 @@ def _run_locked(mode, root, run_id, now, journal, budget, sources, http, trigger
             _write_json(ctx.step_path(step), result)
             _commit_state(ctx, step, result)
             _write_json(state_path, state)
-            checkpoint.mark(run_id, step)
-            run_record["steps"][step] = "done"
+            collection_failure = (mode == "daily" and step in ("editorial", "report")
+                                  and not (ctx.result("editorial") or {}).get("healthy"))
+            if collection_failure:
+                run_record["steps"][step] = "nonfatal_failed"
+                journal.write("collections_nonfatal_failure", step=step,
+                              detail="independent daily steps continue; collections are not accepted")
+            else:
+                checkpoint.mark(run_id, step)
+                run_record["steps"][step] = "done"
             journal.write("step_done", step=step, attempt=attempt)
             error = ""
             break
@@ -4014,6 +4081,15 @@ def _run_locked(mode, root, run_id, now, journal, budget, sources, http, trigger
         run_record["new_critical"] = new_critical
         if new_critical:
             exit_code = EXIT_NEW_CRITICAL
+    if mode == "daily":
+        collections = ctx.result("editorial") or {}
+        run_record["collections_status"] = (
+            "healthy" if collections.get("healthy") else
+            "defective" if collections.get("measured") else "unmeasured")
+        if not collections.get("healthy") and final == "DONE":
+            final, exit_code = "FAILED", 1
+            error = "collections not accepted; see editorial.json (independent steps completed)"
+            run_record.update(state=final, error=error)
     _write_json(state_path, state)
     _write_json(root / "runs" / run_id / "run.json", run_record)
     history = state.setdefault("runs", [])
