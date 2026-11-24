@@ -21,14 +21,31 @@
       },
       "helper_path": "/srv/site-1lordserials1-online/current/overlay/collections_check.py",
       "helper_sha256": "819bf88a5fc934fbf27a92efcbc85e1e2257a4072c0cbb816c5c049a1bd182fe"
+    },
+    {
+      "site_id": "zona-02",
+      "domain": "zonafilm.cc",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/zonafilm-cc/data/zona-02-catalog.json",
+        "details": "/srv/zonafilm-cc/data/zona-02-details.json",
+        "manual": "/srv/zonafilm-cc/current/src/collection_themes.py"
+      },
+      "local_runtime": {
+        "current_path": "/srv/zonafilm-cc/current",
+        "expected_commit": "6ce9b7a26d81820a9aec639555ebc5a93faaa446",
+        "public_commit_field": "live_build_id"
+      },
+      "helper_path": "/srv/zonafilm-cc/current/src/collections_check.py",
+      "helper_sha256": "f31796590a1f597ee6256e0c008fe096bc35c810589c7386179373455d537a09"
     }
   ],
   "coverage": {
-    "admitted_sites": [
-      "lords-03"
+    "admitted": [
+      "lords-03",
+      "zona-02"
     ],
     "pending_candidates": [
-      "zona-02",
       "zona-03"
     ],
     "network_complete": false
