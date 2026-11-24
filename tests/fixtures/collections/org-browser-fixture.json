@@ -1,0 +1,218 @@
+{
+  "blocks": [
+    {
+      "heading": "Материалы редакции",
+      "key": "news-lead",
+      "links": []
+    },
+    {
+      "heading": "Жанры от редакции",
+      "key": "genre-bridges",
+      "links": []
+    },
+    {
+      "key": "split-rail",
+      "links": []
+    },
+    {
+      "heading": "Новые серии",
+      "key": "new-episodes",
+      "links": [
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/praktikuya-tsi-sto-tysyach-let",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/dyavolskiy-prints-enma-2011",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/vladyka-mnozhestva-mirov-3",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/povelitel-besstrashnogo-duha",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/proekt-vospitaniya-devochek-volshebnits-perezagruzka",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/rabota-3",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/velikiy-pravitel-2023-2",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/bezzhalostnaya-ledi-niya-liston-mini-anime",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/ya-vedma-kotoruyu-vozlyublennyy-poprosil-sozdat-lyubovnoe-zele",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/fasol",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/pozhiratel-zvezd-4",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/protivostoyaschiy-nebesam",
+          "role": "listitem"
+        }
+      ]
+    },
+    {
+      "heading": "Сейчас выходят",
+      "key": "ongoing",
+      "links": [
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/proekt-super-ruki",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/toriko",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/detektiv-konan",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/moy-wechat-svyazan-s-dvortsom-drakonov",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/put-domohozyaina",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/yugio-pospeshi",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/proslavlennyy-3",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/vechnoe-tsarstvo-bogov",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/kontinent-sily-i-duha",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/poschadi-menya-velikiy-gospodin",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/protivostoyanie-svyatogo",
+          "role": "listitem"
+        },
+        {
+          "cls": "portal-season-cell portal-top-cell",
+          "href": "/anime/boevaya-pesn-nebes",
+          "role": "listitem"
+        }
+      ]
+    },
+    {
+      "heading": "Добавлено в каталог",
+      "key": "new-on-site",
+      "links": [
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/po-veleniyu-neba-spetsvypuski",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/vsadniki-dzhi-on-spetsvypusk",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/zolotoe-bozhestvo-2-ova",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/milgram",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/sudba-velikiy-prikaz-ritsuka-fudzimaru-ne-ponimaet-etogo",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/docheri-mnemoziny",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/hvost-fei-ova-2",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/tetrad-druzhby-natsume-5",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/o-moem-pererozhdenii-v-sliz-mechta-koleusa",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/skrytoe-za-kadrom",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/den-gneva-vospominaniya-mari",
+          "role": null
+        },
+        {
+          "cls": "portal-preview-link",
+          "href": "/anime/tridtsatiletniy-devstvennik-mozhet-stat-volshebnikom",
+          "role": null
+        }
+      ]
+    }
+  ],
+  "scrollWidth": 1265,
+  "width": 1280
+}

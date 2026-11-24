@@ -227,7 +227,8 @@ class BindingsTest(unittest.TestCase):
             return '<section data-collection-policy="top_rated"></section>'
         r = module.проверить_суточные_подборки(self.path, now=self.now, fetch=fetch, retry_wait=lambda _: None)
         self.assertFalse(r['measured'])
-        self.assertEqual(r['sites'][0]['reason'], 'source data changed during check')
+        self.assertEqual(r['sites'][0]['reason'], 'local source pair differs')
+        self.assertEqual(r['sites'][0]['source_race_attempts'][0]['reason'], 'source data changed during check')
 
     def test_confirmation_budget_no_unbounded_wait(self):
         self.check()
