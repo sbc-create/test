@@ -3405,14 +3405,15 @@ def editorial_sets_by_site(script: Path | None, sites: tuple[str, ...] = EDITORI
             "reason": "; ".join(f"{u['site']}: {u['reason']}" for u in unmeasured) or None}
 
 
-def daily_collections(script: Path | None, policy: Path | None, *, timeout: float = 120) -> dict:
+def daily_collections(script: Path | None, policy: Path | None, *, timeout: float = 600) -> dict:
     """Deterministic read-only source/policy/public validation; never runs a writer."""
     import subprocess
     if not script or not policy or not script.is_file() or not policy.is_file():
         return {"measured": False, "reason": "collections validator or trusted policy missing"}
     try:
         proc = subprocess.run(
-            [sys.executable, str(script), "--json", "--policy-bindings", str(policy)],
+            [sys.executable, str(script), "--json", "--policy-bindings", str(policy),
+             "--policy-budget-seconds", str(max(1, min(590, timeout - 5)))],
             cwd=str(script.resolve().parents[2]), capture_output=True, text=True,
             timeout=timeout,
         )
@@ -3433,13 +3434,28 @@ def daily_collections(script: Path | None, policy: Path | None, *, timeout: floa
                 "reason": f"collections validation failed: {type(exc).__name__}"}
 
 
+def editorial_legacy_sites(policy: Path | None) -> tuple[str, ...]:
+    """Daily-admitted sites are measured once daily, not again by the six-hour step."""
+    try:
+        data = json.loads(Path(policy).read_text()) if policy else {}
+        if data.get("schema") != "collections-refresh-bindings-v1":
+            return EDITORIAL_SITES
+        rows = data.get("sites")
+        if not isinstance(rows, list) or any(not isinstance(row, dict) for row in rows):
+            return EDITORIAL_SITES
+        admitted = {row.get("site_id") for row in rows if row.get("enabled") is True}
+        return tuple(site for site in EDITORIAL_SITES if site not in admitted)
+    except (OSError, ValueError, TypeError):
+        return EDITORIAL_SITES
+
+
 def step_editorial(ctx: Context) -> Any:
     # Отметка до вызова: если процесс прогона погибнет внутри шага, журнал покажет где.
     ctx.journal.write("editorial_started")
     if ctx.mode == "daily":
         res = daily_collections(ctx.sources.get("editorial_validator"),
                                 ctx.sources.get("collections_policy"),
-                                timeout=max(1, min(120, ctx.budget.remaining())))
+                                timeout=max(1, min(600, ctx.budget.remaining())))
         previous = ctx.state.get("collections_last_good") or {}
         res["no_op"] = bool(res.get("healthy") and previous.get("fingerprint")
                             and previous.get("fingerprint") == res.get("fingerprint"))
@@ -3461,7 +3477,10 @@ def step_editorial(ctx: Context) -> Any:
                           for row in res.get("sites", [])]}
         # An unchanged healthy result remains in the journal; last-good is stable.
         return res
-    res = editorial_sets_by_site(ctx.sources.get("editorial_validator"))
+    legacy_sites = editorial_legacy_sites(ctx.sources.get("collections_policy"))
+    res = (editorial_sets_by_site(ctx.sources.get("editorial_validator"), sites=legacy_sites)
+           if legacy_sites else {"measured": True, "rc": 0, "sites": [], "defects": 0,
+                                 "reason": "legacy scope covered by existing daily check"})
     ctx.journal.write("editorial_checked", measured=res.get("measured"), rc=res.get("rc"),
                       defects=res.get("defects"), reason=res.get("reason"),
                       measured_sites=sorted({x["site"] for x in res.get("sites") or []}))
@@ -3938,7 +3957,7 @@ def run(
         float(os.environ.get("SEO_REGULAR_MAX_SECONDS", seconds)),
         int(os.environ.get("SEO_REGULAR_MAX_REQUESTS", requests)),
     )
-    lock = FileLock(root / "run.lock", stale_after=seconds * 3)
+    lock = FileLock(root / "run.lock", stale_after=max(limit[0] for limit in LIMITS.values()) * 3)
     try:
         lock.acquire(f"{mode}:{trigger}")
     except LockBusy as exc:

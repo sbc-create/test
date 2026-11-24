@@ -33,21 +33,181 @@
       },
       "local_runtime": {
         "current_path": "/srv/zonafilm-cc/current",
-        "expected_commit": "6ce9b7a26d81820a9aec639555ebc5a93faaa446",
+        "expected_commit": "dda4828ce6e9a86ce819c5f7f2d778b9760dc40e",
         "public_commit_field": "live_build_id"
       },
       "helper_path": "/srv/zonafilm-cc/current/src/collections_check.py",
-      "helper_sha256": "f31796590a1f597ee6256e0c008fe096bc35c810589c7386179373455d537a09"
+      "helper_sha256": "ecb4ceec3e81822a23b6627aec3d9f6ab50084d629756b05a0cd7ea52c9fde35",
+      "optional_sources": {
+        "events": "/srv/zonafilm-cc/data/zona-02-new-series.json",
+        "availability": "/srv/zonafilm-cc/data/zona-02-details.nums.json"
+      }
+    },
+    {
+      "site_id": "zona-03",
+      "domain": "zonafilm12.site",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/zonafilm12-site/data/zona-03-catalog.json",
+        "details": "/srv/zonafilm12-site/data/zona-03-details.json",
+        "manual": "/srv/zonafilm12-site/current/config/collections.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/zonafilm12-site/current",
+        "expected_commit": "a5c3189505a9d09428ffa2cd2bb831dee1c3b918",
+        "public_commit_field": "site_repo_commit"
+      },
+      "helper_path": "/srv/zonafilm12-site/current/src/collections_check.py",
+      "helper_sha256": "209c52d1370b401a2c0a576477de273cfdc40f8791b669839e786db55973ca60",
+      "optional_sources": {
+        "events": "/srv/zonafilm12-site/data/zona-03-new-series.json",
+        "availability": "/srv/zonafilm12-site/data/zona-03-details.nums.json"
+      }
+    },
+    {
+      "site_id": "yummy-org",
+      "domain": "yummyani.org",
+      "enabled": true,
+      "sources": {
+        "watcher": "/srv/sites/yummyani-staging/runtime/episode-state/watcher.json",
+        "events": "/srv/sites/yummyani-staging/runtime/episode-state/events.jsonl",
+        "manual": "/srv/sites/yummyani-staging/runtime/overlays/yummyani.org/editorial-posts.json"
+      },
+      "helper_path": "/srv/sites/yummyani-staging/runtime/org-home-policy/4e39509dc2598b1d2d8f06acab2cc690cece9634/collections_check.py",
+      "helper_sha256": "0fca738131d875c6ee9eb268f73c3f2c2676c558ef53ae9c5a4ed7dff8bf23d3",
+      "next_runtime": {
+        "manifest_path": "/srv/sites/yummyani-staging/runtime/org-home-policy-manifest.json",
+        "manifest_sha256": "16b98bb9c72376957c666253a057c63b5e784d4148b9148e9dbfb17ca6f0ee28",
+        "artifact_root": "/srv/sites/yummyani-staging/runtime/org-home-policy/4e39509dc2598b1d2d8f06acab2cc690cece9634",
+        "expected_commit": "4e39509dc2598b1d2d8f06acab2cc690cece9634",
+        "expected_image_digest": "sha256:e9b9fb5387d0a67f8ec8c03870066d89976287a938c047c7aaeb58542642f8bf",
+        "public_health_path": "/api/health?collections=1",
+        "policy_version": "org-home-v1"
+      }
+    },
+    {
+      "site_id": "zona-01",
+      "domain": "zonafilm.space",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/zonafilm-space/data/zona-01-catalog.json",
+        "details": "/srv/zonafilm-space/data/zona-01-details.json",
+        "manual": "/srv/zonafilm-space/current/config/collections.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/zonafilm-space/current",
+        "expected_commit": "95067a7be8a39783c93fd4467d9938d247d91b2a",
+        "public_commit_field": "site_repo_commit"
+      },
+      "helper_path": "/srv/zonafilm-space/current/src/collections_check.py",
+      "helper_sha256": "aa56c0f9dcb5419e54c5fac939342b6dce1553b9e8e42b863652eaf72641ff01",
+      "optional_sources": {
+        "events": "/srv/zonafilm-space/data/zona-01-new-series.json",
+        "availability": "/srv/zonafilm-space/data/zona-01-details.nums.json"
+      }
+    },
+    {
+      "site_id": "lords-02",
+      "domain": "lordserial33.biz",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/lordserial33-biz/data/lords-02-catalog.json",
+        "details": "/srv/lordserial33-biz/data/lords-02-details.json",
+        "manual": "/srv/lordserial33-biz/current/config/site.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/lordserial33-biz/current",
+        "expected_commit": "4098f21f7d662fc606cd4901488e2119edb554e0",
+        "public_commit_field": "site_repo_commit"
+      },
+      "helper_path": "/srv/lordserial33-biz/current/src/collections_check.py",
+      "helper_sha256": "bea555fa808071847ad093d633b8e1b3de8592319f3c85e8798b5197b29d0633",
+      "optional_sources": {
+        "events": "/srv/lordserial33-biz/data/lords-02-new-series.json",
+        "availability": "/srv/lordserial33-biz/data/lords-02-details.nums.json"
+      }
+    },
+    {
+      "site_id": "lords-05",
+      "domain": "lordserials22.info",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/lordserials22-info/data/lords-05-catalog.json",
+        "details": "/srv/lordserials22-info/data/lords-05-details.json",
+        "manual": "/srv/lordserials22-info/current/config/site.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/lordserials22-info/current",
+        "expected_commit": "0b608bb86dab4e3a016224ba4e32542d9b848ca6",
+        "public_commit_field": "site_repo_commit"
+      },
+      "helper_path": "/srv/lordserials22-info/current/src/collections_check.py",
+      "helper_sha256": "76c095bdbd061f1ae3e056ac5e0f8d263b52c7d1d5115c5a8332cb85c44672e6",
+      "optional_sources": {
+        "events": "/srv/lordserials22-info/data/lords-05-new-series.json",
+        "availability": "/srv/lordserials22-info/data/lords-05-details.nums.json"
+      }
+    },
+    {
+      "site_id": "animedia-01",
+      "domain": "animedia.icu",
+      "enabled": true,
+      "sources": {
+        "catalog": "/srv/animedia-icu/data/animedia-01-catalog.json",
+        "details": "/srv/animedia-icu/data/animedia-01-details.json",
+        "availability": "/srv/animedia-icu/data/animedia-01-details.nums.json",
+        "events": "/srv/animedia-icu/data/animedia-01-episode-events.json",
+        "manual": "/srv/animedia-icu/current/config/collections.json"
+      },
+      "local_runtime": {
+        "current_path": "/srv/animedia-icu/current",
+        "expected_commit": "c3ffae4e7ab70551f2d5cadca6b771768f332db4",
+        "public_commit_field": "site_repo_commit"
+      },
+      "helper_path": "/srv/animedia-icu/current/src/animedia_icu_collections_check.py",
+      "helper_sha256": "32a559cb465258af0824afdb01b6259a262db3cac3759a07ac5b5051d5ab065e"
     }
   ],
   "coverage": {
     "admitted": [
       "lords-03",
-      "zona-02"
+      "zona-02",
+      "zona-03",
+      "yummy-org",
+      "zona-01",
+      "lords-02",
+      "lords-05",
+      "animedia-01"
     ],
     "pending_candidates": [
-      "zona-03"
+      "animego-02",
+      "animego-03",
+      "animego-04",
+      "yummy-07",
+      "yummy-08",
+      "yummy-biz",
+      "yummy-site",
+      "lords-18",
+      "lords-19",
+      "lords-20"
     ],
-    "network_complete": false
+    "network_complete": false,
+    "blocked_routes": [
+      {
+        "site_id": "lords-18",
+        "domain": "lordserials1.cc",
+        "reason": "registry live; current native publisher route not yet reverified after migration; no obsolete-host access attempted"
+      },
+      {
+        "site_id": "lords-19",
+        "domain": "lordserials1.info",
+        "reason": "registry live; current native publisher route not yet reverified after migration; no obsolete-host access attempted"
+      },
+      {
+        "site_id": "lords-20",
+        "domain": "lordserials21.cc",
+        "reason": "registry live; current native publisher route not yet reverified after migration; no obsolete-host access attempted"
+      }
+    ]
   }
 }
